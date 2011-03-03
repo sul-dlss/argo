@@ -1,3 +1,3 @@
 require 'lib/service'
 
-run DorService
+run Sinatra::Application
