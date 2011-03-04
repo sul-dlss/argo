@@ -1,0 +1,5 @@
+xml.objects do
+  data.each do |values|
+    xml.object(values)
+  end
+end

@@ -1,8 +1,7 @@
-GIT
+PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
-  revision: 7ee3c7789d2ba8c01164a7bf103a7e98d81b4fb2
   specs:
-    dor-services (0.1.3)
+    dor-services (0.1.4)
       active-fedora (>= 1.2.6)
       nokogiri (= 1.4.3.1)
       om (>= 1.0.2)
@@ -14,9 +13,10 @@ GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
   specs:
-    active-fedora (1.2.9)
+    active-fedora (2.0.0)
       activeresource (< 3.0.0)
       activeresource (< 3.0.0)
+      equivalent-xml
       mediashelf-loggable
       mime-types (>= 1.16)
       mime-types (>= 1.16)
@@ -29,12 +29,14 @@ GEM
       solr-ruby (>= 0.0.6)
       solr-ruby (>= 0.0.6)
       solrizer (>= 0.3.0)
-      solrizer (>= 0.3.0)
+      solrizer (>= 1.0.0, < 2.0.0)
       xml-simple (>= 1.0.12)
       xml-simple (>= 1.0.12)
     activeresource (2.3.11)
       activesupport (= 2.3.11)
     activesupport (2.3.11)
+    equivalent-xml (0.1.6)
+      nokogiri
     facets (2.9.1)
     mediashelf-loggable (0.4.0)
     mime-types (1.16)
@@ -52,16 +54,19 @@ GEM
       mime-types (>= 1.16)
     shotgun (0.9)
       rack (>= 1.0)
-    sinatra (1.1.3)
+    sinatra (1.2.0)
       rack (~> 1.1)
       tilt (>= 1.2.2, < 2.0)
     solr-ruby (0.0.8)
-    solrizer (0.3.2)
+    solrizer (1.0.1)
+      mediashelf-loggable
       mediashelf-loggable
       nokogiri
       nokogiri
+      nokogiri
       om
-      solr-ruby
+      om (>= 1.0.0)
+      xml-simple
     tilt (1.2.2)
     validatable (1.6.7)
     xml-simple (1.0.14)
