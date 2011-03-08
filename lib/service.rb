@@ -5,6 +5,8 @@ require 'sinatra'
 
 class DorServicesApp < Sinatra::Base
   
+  VERSION = '2.0.0'
+  
   use(Rack::Conneg) do |conneg|
     conneg.set :accept_all_extensions, false
     conneg.set :fallback, :xml
@@ -50,6 +52,21 @@ class DorServicesApp < Sinatra::Base
   get '/config', :running_in => /development/ do
     content_type :json
     Dor::Config.to_hash.merge({:environment, options.environment}).to_json
+  end
+
+  get '/describe' do
+    resp = {
+      :version => VERSION,
+      :urls => [
+        { :method => 'POST', :endpoint => url('/objects'), :params => { :required => [ 'object_type', 'label' ], :optional => [ 'admin_policy', 'model', 'other_id', 'source_id', 'tag', 'parent' ] } },
+        { :method => 'GET', :endpoint => url('/query_by_id'), :params => { :required =>  [ 'id' ] } }
+      ]
+    }
+    respond_to do |wants|
+      wants.text { resp.inspect }
+      wants.xml  { nokogiri :describe, :locals => { :data => resp } }
+      wants.json { resp.to_json }
+    end
   end
 
   post '/objects' do
