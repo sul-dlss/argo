@@ -70,6 +70,8 @@ class DorServicesApp < Sinatra::Base
       status dor_response[:response].code
       headers "Location" => settings.fedora_base.merge("objects/#{dor_response[:pid]}").to_s
       body dor_response[:pid]
+    rescue Dor::ParameterError => e
+      halt 400, e.message
     rescue Dor::DuplicateIdError => e
       halt 409, e.message
     end
