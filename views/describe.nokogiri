@@ -1,0 +1,17 @@
+xml.describe do
+  xml.version data[:version]
+  data[:urls].each do |url|
+    xml.url(:href => url[:endpoint], :method => url[:method]) do
+      if url[:params][:required]
+        url[:params][:required].each do |param|
+          xml.param(:type => 'required') { xml.text(param) }
+        end
+      end
+      if url[:params][:optional]
+        url[:params][:optional].each do |param|
+          xml.param { xml.text(param) }
+        end
+      end
+    end
+  end
+end
