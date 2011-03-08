@@ -1,8 +1,9 @@
 PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
   specs:
-    dor-services (0.1.4)
+    dor-services (0.1.5)
       active-fedora (>= 1.2.6)
+      guid
       nokogiri (= 1.4.3.1)
       om (>= 1.0.2)
       rest-client
@@ -38,11 +39,12 @@ GEM
     equivalent-xml (0.1.6)
       nokogiri
     facets (2.9.1)
+    guid (0.1.1)
     mediashelf-loggable (0.4.0)
     mime-types (1.16)
     multipart-post (1.1.0)
     nokogiri (1.4.3.1)
-    om (1.0.2)
+    om (1.1.0)
       facets
       facets
       nokogiri
