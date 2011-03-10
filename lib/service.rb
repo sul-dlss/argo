@@ -58,7 +58,7 @@ class DorServicesApp < Sinatra::Base
     resp = {
       :version => VERSION,
       :urls => [
-        { :method => 'POST', :endpoint => url('/objects'), :params => { :required => [ 'object_type', 'label' ], :optional => [ 'admin_policy', 'model', 'other_id', 'source_id', 'tag', 'parent' ] } },
+        { :method => 'POST', :endpoint => url('/objects'), :params => { :required => [ 'objectType', 'label' ], :optional => [ 'adminPolicy', 'model', 'objectAdminClass', 'otherId', 'sourceId', 'tag', 'parent' ] } },
         { :method => 'GET', :endpoint => url('/query_by_id'), :params => { :required =>  [ 'id' ] } }
       ]
     }
@@ -71,14 +71,15 @@ class DorServicesApp < Sinatra::Base
 
   post '/objects' do
     dor_params = {
-      :admin_policy  => params[:admin_policy],
-      :content_model => params[:model],
-      :label         => params[:label],
-      :object_type   => params[:object_type],
-      :other_ids     => ids_to_hash(params[:other_id]),
-      :parent        => params[:parent],
-      :source_id     => ids_to_hash(params[:source_id]),
-      :tags          => params[:tag]
+      :admin_policy       => params[:admin_policy],
+      :content_model      => params[:model],
+      :label              => params[:label],
+      :object_admin_class => params[:object_admin_class],
+      :object_type        => params[:object_type],
+      :other_ids          => ids_to_hash(params[:other_id]),
+      :parent             => params[:parent],
+      :source_id          => ids_to_hash(params[:source_id]),
+      :tags               => params[:tag]
     }
   
     begin
