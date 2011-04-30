@@ -12,4 +12,7 @@ Dor::Config.configure do |config|
   config.suri_url = 'http://lyberservices-test.stanford.edu:8080'
   config.suri_user = 'hydra-etd'
   config.suri_password = 'lyberteam'
+  
+  config.exist_url = 'http://viewer:l3l%40nd@lyberapps-dev.stanford.edu/exist/rest/'
+  config.catalog_url = 'http://lyberservices-prod.stanford.edu/catalog/mods'
 end

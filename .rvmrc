@@ -1,1 +1,1 @@
-rvm gemset use sinatra-dor-services
+rvm use 1.8.7@ruby-dor-services

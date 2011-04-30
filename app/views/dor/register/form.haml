@@ -1,0 +1,25 @@
+- @title = "Register DOR Objects"
+
+%h1 Register DOR Objects
+- form_tag request.path do
+  %p
+    %label{:for => :apo_id} Admin. Policy Object
+    = select_tag :apo_id, :id => :apo_id, :options => apo_list
+  %p
+    %label{:for => :id_source} Metadata Source
+    = select_tag :id_source, :id => :id_source, :options => metadata_sources
+  %p
+    %label{:for => :id_list}
+      Identifiers
+      %br
+      (one per line)
+    = text_area_tag :id_list, :id => :id_list, :rows => 20, :cols => 30
+  %p
+    %label{:for => :tag_list}
+      Tags
+      %br
+      (one per line)
+    = text_area_tag :tag_list, :id => :tag_list, :rows => 7, :cols => 30
+  %p
+    %label
+    = submit_tag
