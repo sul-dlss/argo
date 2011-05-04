@@ -33,7 +33,7 @@ function DorRegistration() {
     if (data.druid) {
       params['pid'] = 'druid:' + data.druid;
     } else if (sourcePrefix == 'mdtoolkit') {
-      params['pid'] = "druid:" + identifier;
+      params['pid'] = "druid:" + data.identifier;
     }
 
     data.status = 'pending';
