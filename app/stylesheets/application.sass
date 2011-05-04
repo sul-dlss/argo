@@ -1,31 +1,46 @@
-body
+html, body
+  margin: 0
+  padding: 0
+  overflow: hidden
   font-family: sans-serif
-  font-size: .875em
-
+  font-size: 75%
+  
 #header
   background-image: url(/images/body_bg2.jpg)
   background-repeat: repeat-x
-  height: 100px
-  
-label
-  display: inline-block
-  width: 200px
-  vertical-align: top
-  font-weight: bold
+  padding: 10px 0px 0px 10px
+  height: 90px
 
-td
-  vertical-align: top
+#content
+  padding: 10px
   
-td.statusicon
-  width: 18px
-  
-td.index
-  width: 40px
+#data
+  thead
+    font-weight: bold
 
-td.identifier,td.druid
-  width: 150px
-
-td.label
+#t_data
+  height: 31px
   
-thead
-  font-weight: bold
+  input,select
+    margin: 4px
+
+ul#icons
+  margin: 0
+  padding: 0
+  float: right
+  
+  span.ui-icon
+    float: left
+    margin: 0 4px
+  li
+    margin: 2px
+    position: relative
+    padding: 4px 0
+    float: left
+    list-style: none
+
+#dialogs
+  display: none
+  
+.full-width
+  width: 100%

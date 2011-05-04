@@ -1,0 +1,28 @@
+- @title = "Register DOR Objects"
+
+- content_for :head do
+  = stylesheet_link_tag 'ui.jqgrid', 'smoothness/jquery-ui', 'ui-override'
+  = javascript_include_tag 'jquery-ui.min', 'grid.locale-en', 'jquery.jqGrid.min', 'jquery.defaultText'
+  = javascript_include_tag 'register', 'register-bulk'
+
+%form
+  #fields
+    %label{:for => :project}
+      = text_field_tag :project, :id => :project, :title => 'Project Name'
+    %label{:for => :apo_id}
+      = select_tag :apo_id, :id => :apo_id, :options => [['Admin. Policy','']] + apo_list, :class => 'default-text'
+    %label{:for => :id_source}
+      = select_tag :id_source, :id => :id_source, :options => [['Metadata Source','']] + metadata_sources
+  
+  #dialogs
+    #ids_dialog
+      = text_area_tag :id_list, :class => 'full-width', :id => :id_list, :rows => 7
+    #tag_dialog
+      = text_area_tag :tag_list, :class => 'full-width', :id => :tag_list, :rows => 7
+    #specify.ui-state-error.ui-corner-all
+      %div
+        Please specify both an Admin. Policy and a Metadata Source before continuing.
+      
+  #dynamic
+    %table#data
+    %div#pdata
