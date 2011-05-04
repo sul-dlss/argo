@@ -3,14 +3,16 @@
 - content_for :head do
   = stylesheet_link_tag 'ui.jqgrid', 'smoothness/jquery-ui', 'ui-override'
   = javascript_include_tag 'jquery-ui.min', 'grid.locale-en', 'jquery.jqGrid.min', 'jquery.defaultText'
-  = javascript_include_tag 'register', 'register-bulk'
+  = javascript_include_tag 'register', 'grid'
+  :javascript
+    var dor_path = "#{settings.fedora_base}";
 
 %form
   #fields
     %label{:for => :project}
       = text_field_tag :project, :id => :project, :title => 'Project Name'
     %label{:for => :apo_id}
-      = select_tag :apo_id, :id => :apo_id, :options => [['Admin. Policy','']] + apo_list, :class => 'default-text'
+      = select_tag :apo_id, :id => :apo_id, :options => [['Admin. Policy','']] + apo_list
     %label{:for => :id_source}
       = select_tag :id_source, :id => :id_source, :options => [['Metadata Source','']] + metadata_sources
   
