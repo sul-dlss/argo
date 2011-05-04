@@ -79,14 +79,6 @@ RubyDorServices.controllers :dor do
     when :json  then result.to_json
     end
   end
-
-  get :register do
-    render 'dor/register/form'
-  end
-
-  post :register do
-    render 'dor/register/result'
-  end
   
   post :label, :provides => [:json,:xml,:html] do
     result = params
@@ -97,5 +89,5 @@ RubyDorServices.controllers :dor do
     when :html  then (request.xhr? ? partial('dor/register/label') : render('dor/register/label'))
     end
   end
-  
+
 end

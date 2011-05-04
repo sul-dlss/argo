@@ -1,59 +1,80 @@
-function DorRegistration(apo, sourcePrefix, tags, identifiers, statusImages) {
-  this.apo = apo;
-  this.sourcePrefix = sourcePrefix;
-  this.tags = tags;
-  this.identifiers = identifiers;
-  this.statusImages = statusImages;
-  
-  $([this.statusImages.pending, this.statusImages.complete, this.statusImages.error]).preload();
-  
-  this.register = function(index) {
-    var statusImages = this.statusImages;
-    var table = $('#results').dataTable();
-    var row = $("#dor_"+index.toString())[0];
-    table.fnUpdate('<img src="'+statusImages['pending']+'">', row, 0);
+function DorRegistration() {
+
+  this.register = function(rowid) {
+    var apo = $('#apo_id').val();
+    var sourcePrefix = $('#id_source').val();
+    
+    if (apo == '' || sourcePrefix == '') {
+      $('#specify').dialog('open');
+      return(false);
+    }
+    
+    // Grab list of tags from textarea, split, and reject blanks
+    var tags = $.grep($('#tag_list').val().split('\n'), function(tag) { return tag.trim() == '' ? false : true })
+    var project = $('#project').val();
+    if (project) {
+      tags.unshift('Project : '+project);
+    }
+    
+    var data = $('#data').jqGrid('getRowData',rowid)
+    data.id = rowid
     
     var params = { 
       'object_type' : 'item',
-      'admin_policy' : this.apo, 
-      'label' : ':auto',
-      'source_id' : this.sourcePrefix + ':' + this.identifiers[index], 
-      'tags' : this.tags 
+      'admin_policy' : apo,
+      'label' : data.label || ':auto',
+      'tags' : tags 
     }
-    if (this.sourcePrefix == 'mdtoolkit') {
-      params['pid'] = "druid:" + this.identifiers[index];
+
+    if (sourcePrefix != 'label') {
+      params['source_id'] = sourcePrefix + ':' + data.identifier;
     }
+    
+    if (data.druid) {
+      params['pid'] = 'druid:' + data.druid;
+    } else if (sourcePrefix == 'mdtoolkit') {
+      params['pid'] = "druid:" + identifier;
+    }
+
+    data.status = 'pending';
+    $('#data').jqGrid('setRowData', data.id, data);
     
     $.ajax({
       type: 'POST',
-      url: 'objects',
+      url: '/dor/objects',
       data: params,
-      success: function(data,status,xhr) { 
-        var pid = data['pid'].split(':')[1];
-        table.fnUpdate('<img src="'+statusImages['complete']+'">', row, 0);
-        table.fnUpdate('<a href="' + data['location'] + '">' + pid + '</a>', row, 3);
-        table.fnUpdate(data['label'], row, 4);
+      success: function(response,status,xhr) { 
+        data.druid = response['pid'].split(':')[1];
+        data.status = 'complete';
+        data.label = response['label'];
+        $('#data').jqGrid('setRowData', data.id, data);
       },
       error: function(xhr,status,errorThrown) {
-        console.dir(xhr);
-        var row = $("#dor_"+index.toString())[0];
-        var table = $('#results').dataTable();
-        table.fnUpdate('<img src="'+statusImages['error']+'" title="'+xhr.status+" "+xhr.statusText+'">', row, 0);
-        table.fnUpdate(status, row, 3);
+        data.status = 'error';
         if (xhr.status < 500) {
-          table.fnUpdate(xhr.responseText, row, 4);
+          data.label = xhr.responseText;
         } else {
-          table.fnUpdate(xhr.statusText, row, 4);
+          data.label = xhr.statusText;
         }
+        $('#data').jqGrid('setRowData', data.id, data);
       },
       dataType: 'json'
     });
   }
 
   this.registerAll = function() {
-    for (var i = 0; i < this.identifiers.length; i++) {
-      this.register(i);
+    var apo = $('#apo_id').val();
+    var sourcePrefix = $('#id_source').val();
+    
+    if (apo == '' || sourcePrefix == '') {
+      $('#specify').dialog('open');
+      return(false);
     }
+    
+    var register = this.register;
+    $('#data').jqGrid('getDataIDs').map(function(rowid) {
+      register(rowid);
+    });
   }
-  
+
 }
