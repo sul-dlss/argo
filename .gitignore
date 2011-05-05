@@ -1,3 +1,5 @@
 .DS_Store
 public/stylesheets/application.css
+public/stylesheets/ui-override.css
 .sass-cache
+tmp
