@@ -1,7 +1,7 @@
 
 var gridContext = function() {
   var rc = new DorRegistration();
-
+    
   var druidFormatter = function(val, opts, rowObj) {
     if (val.trim() != '') {
       var href = dor_path + "objects/druid:" + val.trim();
@@ -12,8 +12,8 @@ var gridContext = function() {
   };
 
   var statusFormatter = function(val, opts, rowObj) {
-    if (val in gridContext.statusImages) {
-      var result = '<image src="'+gridContext.statusImages[val]+'" title="'+(rowObj.error||val)+'"/>';
+    if (val in $t.statusImages) {
+      var result = '<image src="'+$t.statusImages[val]+'" title="'+(rowObj.error||val)+'"/>';
       if (rowObj.druid) {
         var href = dor_path + "objects/druid:" + rowObj.druid;
         return '<a href="'+href+'" target="_blank">'+result+'</a>';
@@ -24,7 +24,7 @@ var gridContext = function() {
     }
   };
 
-  return({
+  var $t = {
     statusImages: { 
       pending: '/images/icons/spinner.gif', 
       success: '/images/icons/accept.png', 
@@ -33,13 +33,23 @@ var gridContext = function() {
     },
 
     toggleEditing: function(edit) {
+      this.stopEditing(true);
       $('#data').jqGrid('setColProp','source_id',{ editable: edit });
       $('#data').jqGrid('setColProp','metadata_id',{ editable: edit });
-      $('#data').jqGrid('setColProp','druid',{ editable: edit, formatter: edit ? null : druidFormatter });
+      $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
       $('#data').jqGrid('setColProp','label',{ editable: edit });
-      $('#data').trigger('reloadGrid');
+      $('.action-lock').closest('li').toggle(edit);
+      $('.action-unlock').closest('li').toggle(!edit);
     },
 
+    stopEditing: function(autoSave) {
+      var cells = $('#data').jqGrid('getGridParam','savedRow');
+      if (cells.length > 0) {
+        var method = autoSave ? 'saveCell' : 'restoreCell';
+        $('#data').jqGrid(method,cells[0].id,cells[0].ic);
+      }
+    },
+    
     addRow: function(column_data) {
       var newId = $('#data').data('nextId') || 0;
       var newRow = { id: newId };
@@ -56,7 +66,7 @@ var gridContext = function() {
       identifiers.map(function(newId) {
         if (newId.trim() != '') {
           var params = newId.split('\t');
-          gridContext.addRow(params);
+          $t.addRow(params);
         }
       })
     },
@@ -67,7 +77,7 @@ var gridContext = function() {
       $('#id_source').val('');
       $('#tag_list').val('');
       $('#data').jqGrid('clearGridData');
-      gridContext.toggleEditing(true);
+      $t.toggleEditing(true);
       $.defaultText();
     },
 
@@ -116,12 +126,25 @@ var gridContext = function() {
     },
 
     initializeToolbar: function() {
+      this.addToolbarButton('note','pdf','Generate Tracking Sheets').click(function() {
+        $t.stopEditing(true);
+        rc.getTrackingSheet();
+      });
+      
+      this.addToolbarButton('locked','lock','Lock Grid').click(function() {
+        $t.toggleEditing(false);
+      });
+      
+      this.addToolbarButton('unlocked','unlock','Unlock Grid').click(function() {
+        $t.toggleEditing(true);
+      }).closest('li').toggle(false);
+
       this.addToolbarButton('comment','edit-tags','Edit Tags').click(function() {
         $('#tag_dialog').dialog('open');
       });
 
       this.addToolbarButton('plus','add','Add Row').click(function() {
-        gridContext.addRow([]);
+        $t.addRow([]);
       });
 
       this.addToolbarButton('minus','delete','Delete Selected Rows').click(function() {
@@ -133,17 +156,17 @@ var gridContext = function() {
 
       this.addToolbarButton('arrowrefresh-1-w','clear','Reset Grid').click(function() {
         if (window.confirm('Are you sure you want to clear the grid?')) {
-          gridContext.reset();
+          $t.reset();
         }
       });
 
-      this.addToolbarButton('script','add-multiple','Add Multiple Identifiers').click(function() {
+      this.addToolbarButton('clipboard','add-multiple','Add Multiple Identifiers').click(function() {
         $('#ids_dialog').dialog('open');
       });
 
       this.addToolbarButton('transfer-e-w','register','Register Objects').click(function() {
+        $t.toggleEditing(false);
         rc.registerAll();
-//        gridContext.toggleEditing(false);
       });
 
       $('#t_data').append($('#fields'));
@@ -161,7 +184,7 @@ var gridContext = function() {
         autoOpen: false,
         buttons: { 
           "Ok": function() { 
-            gridContext.addIdentifiers($('#id_list').val().trim().split('\n'))
+            $t.addIdentifiers($('#id_list').val().trim().split('\n'))
             $(this).dialog('close');
             $('#id_list').val('');
           },
@@ -197,7 +220,8 @@ var gridContext = function() {
       this.initializeContext().initializeDialogs().
         initializeGrid().initializeToolbar();
     }
-  });
+  };
+  return($t);
 }();
 
 $(document).ready(function() {

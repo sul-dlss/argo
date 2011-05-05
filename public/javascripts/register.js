@@ -1,4 +1,11 @@
 function DorRegistration() {
+  this.getTrackingSheet = function() {
+    var druids = $('#data').getCol('druid');
+    var query = $.param({ druid : druids });
+    var url = "tracksheet?"+query;
+    document.location.href = url;
+  },
+  
   this.register = function(rowid, progressFunction) {
     var apo = $('#apo_id').val();
     var sourcePrefix = $('#id_source').val();
