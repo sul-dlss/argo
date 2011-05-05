@@ -1,7 +1,7 @@
 PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
   specs:
-    dor-services (0.3.0)
+    dor-services (1.0.0)
       active-fedora (>= 1.2.6)
       guid
       json

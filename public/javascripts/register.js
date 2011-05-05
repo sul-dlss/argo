@@ -1,8 +1,8 @@
 function DorRegistration() {
-
-  this.register = function(rowid) {
+  this.register = function(rowid, progressFunction) {
     var apo = $('#apo_id').val();
     var sourcePrefix = $('#id_source').val();
+    progressFunction = progressFunction || function() {}
     
     if (apo == '' || sourcePrefix == '') {
       $('#specify').dialog('open');
@@ -26,40 +26,52 @@ function DorRegistration() {
       'tags' : tags 
     }
 
+    if (data.source_id) {
+      params['source_id'] = data.source_id;
+    }
+    
     if (sourcePrefix != 'label') {
-      params['source_id'] = sourcePrefix + ':' + data.identifier;
+      params['other_id'] = sourcePrefix + ':' + data.metadata_id;
     }
     
     if (data.druid) {
       params['pid'] = 'druid:' + data.druid;
     } else if (sourcePrefix == 'mdtoolkit') {
-      params['pid'] = "druid:" + data.identifier;
+      params['pid'] = "druid:" + data.metadata_id;
+      if (!data.source_id) {
+        params['source_id'] = params['pid']
+      }
     }
 
     data.status = 'pending';
     $('#data').jqGrid('setRowData', data.id, data);
     
-    $.ajax({
+    var xhr = $.ajax({
       type: 'POST',
       url: '/dor/objects',
       data: params,
       success: function(response,status,xhr) { 
-        data.druid = response['pid'].split(':')[1];
-        data.status = 'complete';
-        data.label = response['label'];
-        $('#data').jqGrid('setRowData', data.id, data);
+        if (response) {
+          data.druid = response['pid'].split(':')[1];
+          data.label = response['label'];
+          progressFunction(xhr);
+        }
       },
       error: function(xhr,status,errorThrown) {
-        data.status = 'error';
         if (xhr.status < 500) {
-          data.label = xhr.responseText;
+          data.error = xhr.responseText;
         } else {
-          data.label = xhr.statusText;
+          data.error = xhr.statusText;
         }
+        progressFunction(xhr);
+      },
+      complete: function(xhr,status) {
+        data.status = status;
         $('#data').jqGrid('setRowData', data.id, data);
       },
       dataType: 'json'
     });
+    return(xhr);
   }
 
   this.registerAll = function() {
@@ -72,9 +84,20 @@ function DorRegistration() {
     }
     
     var register = this.register;
-    $('#data').jqGrid('getDataIDs').map(function(rowid) {
-      register(rowid);
-    });
+    var ids = $('#data').jqGrid('getDataIDs');
+    var progressStep = 100 / $('#data').jqGrid('getDataIDs').length;
+    var currentStep = 0;
+    $('#progress').progressbar('option','value',currentStep);
+    $('#progress_dialog').dialog('option','title','Registering '+ids.length+' items')
+    $('#progress_dialog').dialog('open');
+    for (var i = 0; i < ids.length; i++) {
+      var rowid = ids[i];
+      register(rowid, function(xhr) {
+        currentStep += progressStep;
+        $('#progress').progressbar('option','value',currentStep);
+        if (currentStep >= 100) { $('#progress_dialog').dialog('close'); }
+      });
+    }
   }
-
+  
 }

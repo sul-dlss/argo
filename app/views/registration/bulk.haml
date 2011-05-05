@@ -18,12 +18,14 @@
   
   #dialogs
     #ids_dialog
-      = text_area_tag :id_list, :class => 'full-width', :id => :id_list, :rows => 7
+      = text_area_tag :id_list, :class => 'full-width full-height', :id => :id_list, :rows => 7
     #tag_dialog
       = text_area_tag :tag_list, :class => 'full-width', :id => :tag_list, :rows => 7
     #specify.ui-state-error.ui-corner-all
       %div
         Please specify both an Admin. Policy and a Metadata Source before continuing.
+    #progress_dialog
+      %div#progress
       
   #dynamic
     %table#data
