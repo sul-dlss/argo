@@ -31,7 +31,10 @@ RubyDorServices.controllers :dor do
 
   post :objects, :provides => [:json,:xml,:txt,:text,:html] do
     if params[:label] == ':auto'
-      params[:label] = Dor::MetadataService.label_for(params[:source_id])
+      params.delete(:label)
+      params.delete('label')
+      metadata_id = Dor::MetadataService.resolvable(Array(params[:other_id])).first
+      params[:label] = Dor::MetadataService.label_for(metadata_id)
     end
   
     dor_params = {

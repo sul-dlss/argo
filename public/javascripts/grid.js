@@ -1,5 +1,7 @@
 
 var gridContext = function() {
+  var rc = new DorRegistration();
+
   var druidFormatter = function(val, opts, rowObj) {
     if (val.trim() != '') {
       var href = dor_path + "objects/druid:" + val.trim();
@@ -11,7 +13,12 @@ var gridContext = function() {
 
   var statusFormatter = function(val, opts, rowObj) {
     if (val in gridContext.statusImages) {
-      return '<image src="'+gridContext.statusImages[val]+'" title="'+val+'"/>';
+      var result = '<image src="'+gridContext.statusImages[val]+'" title="'+(rowObj.error||val)+'"/>';
+      if (rowObj.druid) {
+        var href = dor_path + "objects/druid:" + rowObj.druid;
+        return '<a href="'+href+'" target="_blank">'+result+'</a>';
+      }
+      return(result)
     } else {
       return ' ';
     }
@@ -20,20 +27,27 @@ var gridContext = function() {
   return({
     statusImages: { 
       pending: '/images/icons/spinner.gif', 
-      complete: '/images/icons/accept.png', 
-      error: '/images/icons/cancel.png' 
+      success: '/images/icons/accept.png', 
+      error: '/images/icons/exclamation.png',
+      abort: '/images/icons/cancel.png'
     },
 
     toggleEditing: function(edit) {
-      $('#data').jqGrid('setColProp','identifier',{ editable: edit });
+      $('#data').jqGrid('setColProp','source_id',{ editable: edit });
+      $('#data').jqGrid('setColProp','metadata_id',{ editable: edit });
       $('#data').jqGrid('setColProp','druid',{ editable: edit, formatter: edit ? null : druidFormatter });
       $('#data').jqGrid('setColProp','label',{ editable: edit });
       $('#data').trigger('reloadGrid');
     },
 
-    addRow: function(sIdentifier, sDruid, sLabel) {
+    addRow: function(column_data) {
       var newId = $('#data').data('nextId') || 0;
-      var newRow = { id: newId, status: '', identifier: sIdentifier, druid: sDruid, label: sLabel }
+      var newRow = { id: newId };
+      var columns = $('#data').jqGrid('getGridParam','colModel');
+      
+      for (var i = 2; i < columns.length; i++) {
+        newRow[columns[i].name] = column_data[i-2] || '';
+      }
       $('#data').jqGrid('addRowData',newId, newRow, 'last');
       $('#data').data('nextId',newId+1);
     },
@@ -41,8 +55,8 @@ var gridContext = function() {
     addIdentifiers: function(identifiers) {
       identifiers.map(function(newId) {
         if (newId.trim() != '') {
-          var params = newId.split('|');
-          gridContext.addRow(params[0],params[1]||'',params[2]||'');
+          var params = newId.split('\t');
+          gridContext.addRow(params);
         }
       })
     },
@@ -63,7 +77,7 @@ var gridContext = function() {
     },
 
     initializeContext: function() {
-      $([this.statusImages.pending, this.statusImages.complete, this.statusImages.error]).preload();
+      $([this.statusImages.pending, this.statusImages.success, this.statusImages.error, this.statusImages.abort]).preload();
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
         $('#data').setGridWidth($(window).attr('innerWidth') - 20,true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
@@ -80,12 +94,15 @@ var gridContext = function() {
         cellsubmit: 'clientArray',
         colModel: [
           {label:' ',name:'status',index:'status',width:18,sortable:false,formatter: statusFormatter },
-          {label:'Identifier',name:'identifier',index:'identifier',width:150,editable:true},
+          {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true},
+          {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true},
           {label:'DRUID',name:'druid',index:'druid',width:150,editable:true},
-          {label:'Label',name:'label',index:'label', width:($(window).attr('innerWidth') - 378),editable:true }
+          {label:'Label',name:'label',index:'label', width:($(window).attr('innerWidth') - 498),editable:true },
+          {label:'Error',name:'error',index:'error',hidden:true}
         ],
         loadonce: true,
         multiselect: true,
+        scroll: true,
         toolbar: [true, "top"],
         viewrecords: true
       });
@@ -104,7 +121,7 @@ var gridContext = function() {
       });
 
       this.addToolbarButton('plus','add','Add Row').click(function() {
-        gridContext.addRow('','','');
+        gridContext.addRow([]);
       });
 
       this.addToolbarButton('minus','delete','Delete Selected Rows').click(function() {
@@ -125,9 +142,8 @@ var gridContext = function() {
       });
 
       this.addToolbarButton('transfer-e-w','register','Register Objects').click(function() {
-        gridContext.toggleEditing(false);
-        var rc = new DorRegistration();
         rc.registerAll();
+//        gridContext.toggleEditing(false);
       });
 
       $('#t_data').append($('#fields'));
@@ -154,7 +170,9 @@ var gridContext = function() {
             $('#id_list').val('');
           } 
         },
-        title: 'Identifiers'
+        title: 'Identifiers',
+        width: window.innerWidth / 2,
+        height: window.innerHeight / 2
       });
 
       $('#specify').dialog({
@@ -163,6 +181,15 @@ var gridContext = function() {
         title: 'Error',
         resizable: false
       });
+      
+      $('#progress_dialog').dialog({
+        autoOpen: false,
+        height: 50,
+        title: 'Progress',
+        resizable: false
+      });
+      $('#progress').progressbar();
+      
       return(this);
     },
 
