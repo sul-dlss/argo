@@ -7,7 +7,7 @@ gem 'rack-flash'
 gem 'thin' # or mongrel
 gem 'prawn'
 gem 'barby'
-gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services"
+gem "dor-services", ">=1.0.1"
 
 # Component requirements
 gem 'haml'
