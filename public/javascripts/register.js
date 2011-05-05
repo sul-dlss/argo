@@ -55,7 +55,7 @@ function DorRegistration() {
     
     var xhr = $.ajax({
       type: 'POST',
-      url: '/dor/objects',
+      url: '../dor/objects',
       data: params,
       success: function(response,status,xhr) { 
         if (response) {

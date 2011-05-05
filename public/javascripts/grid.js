@@ -26,10 +26,10 @@ var gridContext = function() {
 
   var $t = {
     statusImages: { 
-      pending: '/images/icons/spinner.gif', 
-      success: '/images/icons/accept.png', 
-      error: '/images/icons/exclamation.png',
-      abort: '/images/icons/cancel.png'
+      pending: '../images/icons/spinner.gif', 
+      success: '../images/icons/accept.png', 
+      error: '../images/icons/exclamation.png',
+      abort: '../images/icons/cancel.png'
     },
 
     toggleEditing: function(edit) {
