@@ -10,7 +10,7 @@ Dor::Config.configure do |config|
   config.mint_suri_ids = true
   config.id_namespace = 'druid'
   config.suri_url = 'http://lyberservices-test.stanford.edu:8080'
-  config.suri_user = 'hydra-etd'
+  config.suri_user = 'labware'
   config.suri_password = 'lyberteam'
   
   config.exist_url = 'http://viewer:l3l%40nd@lyberapps-dev.stanford.edu/exist/rest/'

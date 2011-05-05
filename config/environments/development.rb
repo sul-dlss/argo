@@ -9,8 +9,8 @@ Dor::Config.configure do |config|
   config.gsearch_solr_url = 'http://dor-dev.stanford.edu/solr'
   config.mint_suri_ids = true
   config.id_namespace = 'druid'
-  config.suri_url = 'http://lyberservices-test.stanford.edu:8080'
-  config.suri_user = 'hydra-etd'
+  config.suri_url = 'http://lyberservices-dev.stanford.edu:8080'
+  config.suri_user = 'labware'
   config.suri_pass = 'lyberteam'
   
   config.exist_url = 'http://viewer:l3l%40nd@lyberapps-dev.stanford.edu/exist/rest'
