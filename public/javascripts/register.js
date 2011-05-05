@@ -23,7 +23,7 @@ function DorRegistration() {
       'object_type' : 'item',
       'admin_policy' : apo,
       'label' : data.label || ':auto',
-      'tags' : tags 
+      'tag' : tags 
     }
 
     if (data.source_id) {
