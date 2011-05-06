@@ -74,7 +74,7 @@ RubyDorServices.helpers do
     if doc['tag_field'].find { |tag| tag =~ /^Project\s*:\s*(.+)/ }
       table_data.push(['Project Name:',$1])
     end
-    table_data.push(['Date Printed',Time.now.strftime('%c')])
+    table_data.push(['Date Printed:',Time.now.strftime('%c')])
     table_data += ids
     puts "#{druid}: #{table_data.inspect}"
     pdf.table(table_data, :column_widths => [100,224],
