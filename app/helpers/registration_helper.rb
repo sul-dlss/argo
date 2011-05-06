@@ -51,7 +51,7 @@ RubyDorServices.helpers do
       return
     end
     
-    ids = doc['mods_id_field'].collect do |id| 
+    ids = Array(doc['mods_id_field']).collect do |id| 
       result = id.split(/:/,2)
       result[0] = result[0].titleize
       result
