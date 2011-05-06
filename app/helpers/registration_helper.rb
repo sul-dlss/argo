@@ -53,7 +53,7 @@ RubyDorServices.helpers do
     
     ids = Array(doc['mods_id_field']).collect do |id| 
       result = id.split(/:/,2)
-      result[0] = result[0].titleize
+      result[0] = "#{result[0].titleize}:"
       result
     end.reject { |id| id[0] =~ /DRUID/i }
     
