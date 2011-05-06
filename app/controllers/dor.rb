@@ -52,6 +52,12 @@ RubyDorServices.controllers :dor do
     begin
       dor_response = Dor::RegistrationService.register_object(dor_params)
       reg_response = dor_params.dup.merge({ :location => object_location(dor_response[:pid]), :pid => dor_response[:pid] })
+      if params[:seed_datastream]
+        dor_obj = Dor::Base.load_instance(dor_response[:pid])
+        Array(params[:seed_datastream]).each do |datastream_name|
+          dor_obj.build_datastream(datastream_name)
+        end
+      end
       headers "Location" => object_location(dor_response[:pid])
       status dor_response[:response].code
       case content_type

@@ -29,6 +29,7 @@ function DorRegistration() {
     var params = { 
       'object_type' : 'item',
       'admin_policy' : apo,
+      'seed_datastream' : ['descMetadata'],
       'label' : data.label || ':auto',
       'tag' : tags 
     }
@@ -102,7 +103,7 @@ function DorRegistration() {
       register(rowid, function(xhr) {
         currentStep += progressStep;
         $('#progress').progressbar('option','value',currentStep);
-        if (currentStep >= 100) { $('#progress_dialog').dialog('close'); }
+        if (currentStep >= 99.999) { $('#progress_dialog').dialog('close'); }
       });
     }
   }
