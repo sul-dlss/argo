@@ -1,7 +1,9 @@
 function DorRegistration() {
   this.getTrackingSheet = function() {
+    var project = $('#project').val();
     var druids = $('#data').getCol('druid');
-    var query = $.param({ druid : druids });
+    var sequence = 1;
+    var query = $.param({ druid : druids, name : project, sequence : sequence });
     var url = "tracksheet?"+query;
     document.location.href = url;
   },

@@ -11,7 +11,9 @@ RubyDorServices.controllers :registration do
 
   get :tracksheet, :provides => [:pdf] do
     druids = Array(params[:druid])
-    response['content-disposition'] = "attachment; filename=tracksheet.pdf"
+    name = params[:name] || 'tracksheet'
+    sequence = params[:sequence] || 1
+    response['content-disposition'] = "attachment; filename=#{name}-#{sequence}.pdf"
     pdf = generate_tracking_pdf(druids)
     pdf.render
   end
