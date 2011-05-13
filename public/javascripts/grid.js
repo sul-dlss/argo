@@ -1,4 +1,3 @@
-
 var gridContext = function() {
   var rc = new DorRegistration();
     
@@ -71,6 +70,23 @@ var gridContext = function() {
       })
     },
 
+    textToGrid: function() {
+      $('#data').jqGrid('clearGridData');
+      $('#data').data('nextId',0);
+      $t.addIdentifiers($('#id_list').val().trim().split('\n'));
+    },
+    
+    gridToText: function() {
+      var text = '';
+      var gridData = $('#data').jqGrid('getRowData');
+      for (var i = 0; i < gridData.length; i++) {
+        var rowData = gridData[i];
+        text += [rowData.metadata_id, rowData.source_id, rowData.druid, rowData.label].join("\t") + "\n"
+      }
+      console.debug(text);
+      $('#id_list').val(text);
+    },
+    
     reset: function() {
       $('#project').val('');
       $('#apo_id').val('');
@@ -90,6 +106,10 @@ var gridContext = function() {
       $([this.statusImages.pending, this.statusImages.success, this.statusImages.error, this.statusImages.abort]).preload();
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
+        var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
+        $('#tabs').height(tabDivHeight);
+        var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
+        $('#id_list').height(tabDivHeight - tabHeadHeight);
         $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
         // Make up for width calculation error in jqgrid header code.
         $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
@@ -101,7 +121,7 @@ var gridContext = function() {
       $('#data').jqGrid({
         data: [],
         datatype: "local",
-        caption: "Register DOR Items",
+//        caption: "Register DOR Items",
         cellEdit: true,
         cellsubmit: 'clientArray',
         colModel: [
@@ -109,7 +129,7 @@ var gridContext = function() {
           {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true},
           {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true},
           {label:'DRUID',name:'druid',index:'druid',width:150,editable:true},
-          {label:'Label',name:'label',index:'label', width:($(window).attr('innerWidth') - 498),editable:true },
+          {label:'Label',name:'label',index:'label', width:($('#tab-grid').width() - 498),editable:true },
           {label:'Error',name:'error',index:'error',hidden:true}
         ],
         loadonce: true,
@@ -162,10 +182,6 @@ var gridContext = function() {
         }
       });
 
-      this.addToolbarButton('clipboard','add-multiple','Add Multiple Identifiers').click(function() {
-        $('#ids_dialog').dialog('open');
-      });
-
       this.addToolbarButton('transfer-e-w','register','Register Objects').click(function() {
         $t.toggleEditing(false);
         rc.registerAll();
@@ -182,24 +198,6 @@ var gridContext = function() {
         title: 'Tags'
       });
 
-      $('#ids_dialog').dialog({ 
-        autoOpen: false,
-        buttons: { 
-          "Ok": function() { 
-            $t.addIdentifiers($('#id_list').val().trim().split('\n'))
-            $(this).dialog('close');
-            $('#id_list').val('');
-          },
-          "Cancel": function() { 
-            $(this).dialog("close");
-            $('#id_list').val('');
-          } 
-        },
-        title: 'Identifiers',
-        width: window.innerWidth / 2,
-        height: window.innerHeight / 2
-      });
-
       $('#specify').dialog({
         autoOpen: false,
         buttons: { "Ok": function() { $(this).dialog("close"); } },
@@ -214,6 +212,17 @@ var gridContext = function() {
         resizable: false
       });
       $('#progress').progressbar();
+      
+      $('#tabs').tabs({
+        select: function(event, ui) { 
+          if (ui.panel.id == 'tab-text') {
+            $t.gridToText();
+          } else {
+            $t.textToGrid();
+          }
+        }
+      });
+      $('#id_list').tabby();
       
       return(this);
     },
