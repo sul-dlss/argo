@@ -6,7 +6,7 @@ class RubyDorServices < Padrino::Application
   configure do
     set(:running_in) { |regex| condition { regex.match(settings.environment.to_s).nil? == false } }
     require File.join(File.dirname(__FILE__),"../config/environments/#{PADRINO_ENV}.rb")
-    fedora_base = URI.parse(Dor::Config[:fedora_url].sub(/\/*$/,'/'))
+    fedora_base = URI.parse(Dor::Config.fedora.url.sub(/\/*$/,'/'))
     fedora_base.user = fedora_base.password = nil
     set(:fedora_base,fedora_base)
   end
