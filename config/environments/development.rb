@@ -1,3 +1,8 @@
+unless ENV.has_key?('WEBAUTH_USER')
+  require 'rack-webauth/test'
+  RubyDorServices.use Rack::Webauth::Test, :user => 'labware', :email => 'labware@stanford.edu'
+end
+
 cert_dir = File.expand_path(File.join(File.dirname(__FILE__),"../certs"))
 
 Dor::Config.configure do

@@ -2,7 +2,7 @@ class RubyDorServices < Padrino::Application
   register SassInitializer
   register Padrino::Mailer
   register Padrino::Helpers
-
+  
   configure do
     set(:running_in) { |regex| condition { regex.match(settings.environment.to_s).nil? == false } }
     require File.join(File.dirname(__FILE__),"../config/environments/#{PADRINO_ENV}.rb")
@@ -10,6 +10,9 @@ class RubyDorServices < Padrino::Application
     fedora_base.user = fedora_base.password = nil
     set(:fedora_base,fedora_base)
   end
+
+  use Rack::Webauth
+  include Rack::Webauth::Helpers 
   
   ##
   # Application configuration options
