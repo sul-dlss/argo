@@ -28,7 +28,7 @@ RubyDorServices.helpers do
   end
 
   def generate_tracking_pdf(druids)
-    solr = Solr::Connection.new(Dor::Config.gsearch.url])
+    solr = Solr::Connection.new(Dor::Config.gsearch.url)
     
     pdf = Prawn::Document.new(:page_size => [5.5.in, 8.5.in])
     pdf.font('Courier')
