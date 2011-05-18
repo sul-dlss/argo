@@ -25,14 +25,7 @@
     #progress_dialog
       %div#progress
 
-  #tabs
-    %ul
-      %li
-        %a{:href => "#tab-grid"} Grid
-      %li
-        %a{:href => "#tab-text"} Text
-    #tab-grid
-      %table#data
-      %div#pdata
-    #tab-text
-      = text_area_tag :id_list, :class => 'full-width', :id => :id_list, :rows => 7
+  #dynamic
+    %table#data
+    %div#pdata
+    = text_area_tag :id_list, :class => 'full-width', :id => :id_list, :rows => 7
