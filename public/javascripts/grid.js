@@ -1,4 +1,3 @@
-
 var gridContext = function() {
   var rc = new DorRegistration();
     
@@ -32,6 +31,28 @@ var gridContext = function() {
       abort: '../images/icons/cancel.png'
     },
 
+    resizeIdList: function() {
+      $('#id_list').animate({
+        'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3, 
+        'left': 3,
+        'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4, 
+        'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + $('#gbox_data .ui-jqgrid-bdiv').height() - 4
+      }, 0);
+    },
+    
+    toggleText: function(textMode) {
+      if (textMode) {
+        $t.gridToText();
+        $t.resizeIdList();
+        $('#id_list').show();
+      } else {
+        $t.textToGrid();
+        $('#id_list').hide();
+      }
+      $('.action-grid-view').closest('li').toggle(textMode);
+      $('.action-text-view').closest('li').toggle(!textMode);
+    },
+    
     toggleEditing: function(edit) {
       this.stopEditing(true);
       $('#data').jqGrid('setColProp','source_id',{ editable: edit });
@@ -71,6 +92,22 @@ var gridContext = function() {
       })
     },
 
+    textToGrid: function() {
+      $('#data').jqGrid('clearGridData');
+      $('#data').data('nextId',0);
+      $t.addIdentifiers($('#id_list').val().trim().split('\n'));
+    },
+    
+    gridToText: function() {
+      var text = '';
+      var gridData = $('#data').jqGrid('getRowData');
+      for (var i = 0; i < gridData.length; i++) {
+        var rowData = gridData[i];
+        text += [rowData.metadata_id, rowData.source_id, rowData.druid, rowData.label].join("\t") + "\n"
+      }
+      $('#id_list').val(text);
+    },
+    
     reset: function() {
       $('#project').val('');
       $('#apo_id').val('');
@@ -90,9 +127,16 @@ var gridContext = function() {
       $([this.statusImages.pending, this.statusImages.success, this.statusImages.error, this.statusImages.abort]).preload();
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
+        var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
+        $('#tabs').height(tabDivHeight);
+        var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
+        $('#id_list').height(tabDivHeight - tabHeadHeight);
         $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
         // Make up for width calculation error in jqgrid header code.
         $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
+        if ($('#id_list').css('display') != 'none') {
+          $t.resizeIdList();
+        }
       });
       return(this);
     },
@@ -109,9 +153,10 @@ var gridContext = function() {
           {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true},
           {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true},
           {label:'DRUID',name:'druid',index:'druid',width:150,editable:true},
-          {label:'Label',name:'label',index:'label', width:($(window).attr('innerWidth') - 498),editable:true },
+          {label:'Label',name:'label',index:'label', width:($('#content').width() - 468),editable:true },
           {label:'Error',name:'error',index:'error',hidden:true}
         ],
+        hidegrid: false,
         loadonce: true,
         multiselect: true,
         scroll: true,
@@ -128,6 +173,14 @@ var gridContext = function() {
     },
 
     initializeToolbar: function() {
+      this.addToolbarButton('document-b','text-view','View as Text').click(function() {
+        $t.toggleText(true);
+      });
+      
+      this.addToolbarButton('calculator','grid-view','View as Grid').click(function() {
+        $t.toggleText(false);
+      }).closest('li').toggle(false);
+      
       this.addToolbarButton('note','pdf','Generate Tracking Sheets').click(function() {
         $t.stopEditing(true);
         rc.getTrackingSheet();
@@ -162,15 +215,11 @@ var gridContext = function() {
         }
       });
 
-      this.addToolbarButton('clipboard','add-multiple','Add Multiple Identifiers').click(function() {
-        $('#ids_dialog').dialog('open');
-      });
-
       this.addToolbarButton('transfer-e-w','register','Register Objects').click(function() {
         $t.toggleEditing(false);
         rc.registerAll();
       });
-
+      
       $('#t_data').append($('#fields'));
       return(this);
     },
@@ -180,24 +229,6 @@ var gridContext = function() {
         autoOpen: false,
         buttons: { "Ok": function() { $(this).dialog("close"); } },
         title: 'Tags'
-      });
-
-      $('#ids_dialog').dialog({ 
-        autoOpen: false,
-        buttons: { 
-          "Ok": function() { 
-            $t.addIdentifiers($('#id_list').val().trim().split('\n'))
-            $(this).dialog('close');
-            $('#id_list').val('');
-          },
-          "Cancel": function() { 
-            $(this).dialog("close");
-            $('#id_list').val('');
-          } 
-        },
-        title: 'Identifiers',
-        width: window.innerWidth / 2,
-        height: window.innerHeight / 2
       });
 
       $('#specify').dialog({
@@ -214,6 +245,8 @@ var gridContext = function() {
         resizable: false
       });
       $('#progress').progressbar();
+
+      $('#id_list').tabby();
       
       return(this);
     },
