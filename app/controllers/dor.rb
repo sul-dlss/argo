@@ -11,22 +11,15 @@ RubyDorServices.controllers :dor do
   
   get :config, :running_in => /development/ do
     content_type :json
-    Dor::Config.to_hash.merge({:environment, options.environment}).to_json
-  end
-
-  get :describe, :provides => [:html, :xml, :json] do
-    resp = {
-      :version => VERSION,
-      :urls => [
-        { :method => 'POST', :endpoint => url('/objects'), :params => { :required => [ 'objectType', 'label' ], :optional => [ 'adminPolicy', 'model', 'objectAdminClass', 'otherId', 'sourceId', 'tag', 'parent' ] } },
-        { :method => 'GET', :endpoint => url('/query_by_id'), :params => { :required =>  [ 'id' ] } }
-      ]
-    }
-    case content_type
-    when :html  then '<pre>'+resp.inspect+'</pre>'
-    when :xml   then render 'dor/describe', :locals => { :data => resp }
-    when :json  then resp.to_json
-    end
+    Dor::Config.to_hash.merge({
+      :environment => options.environment, 
+      :webauth => { 
+        :authrule => webauth.authrule,
+        :logged_in? => webauth.logged_in?,
+        :login => webauth.login,
+        :attributes => webauth.attributes
+      }
+    }).to_json
   end
 
   post :objects, :provides => [:json,:xml,:txt,:text,:html] do

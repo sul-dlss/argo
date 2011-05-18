@@ -4,6 +4,7 @@ source "http://sulair-rails-dev.stanford.edu"
 # Project requirements
 gem 'rake'
 gem 'rack-flash'
+gem 'rack-webauth'
 gem 'thin' # or mongrel
 gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
 gem 'barby'
