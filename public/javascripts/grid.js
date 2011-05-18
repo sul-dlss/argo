@@ -49,8 +49,7 @@ var gridContext = function() {
         $t.textToGrid();
         $('#id_list').hide();
       }
-      $('.action-grid-view').closest('li').toggle(textMode);
-      $('.action-text-view').closest('li').toggle(!textMode);
+      $('#icons button').button('option', 'disabled', textMode);
     },
     
     toggleEditing: function(edit) {
@@ -59,8 +58,11 @@ var gridContext = function() {
       $('#data').jqGrid('setColProp','metadata_id',{ editable: edit });
       $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
       $('#data').jqGrid('setColProp','label',{ editable: edit });
-      $('.action-lock').closest('li').toggle(edit);
-      $('.action-unlock').closest('li').toggle(!edit);
+
+      $('#icons *').button('option', 'disabled', !edit);
+      $('#icons .enabled-grid-locked').button('option', 'disabled', false);
+      $('.action-lock').toggle(edit);
+      $('.action-unlock').toggle(!edit);
     },
 
     stopEditing: function(autoSave) {
@@ -119,8 +121,10 @@ var gridContext = function() {
     },
 
     addToolbarButton: function(icon,action,title) {
-      var icons = $('#icons').append('<li class="ui-state-default ui-corner-all" title="'+title+'"><span class="ui-icon ui-icon-'+icon+' action-'+action+'"></span></li>')
-      return $('.action-'+action,icons);
+      var icons = $('#icons').append('<button class="action-'+action+'">'+title+'</button>');
+      var button = $('.action-'+action,icons);
+      button.button({ icons : { primary: 'ui-icon-'+icon }, text : false });
+      return button;
     },
 
     initializeContext: function() {
@@ -164,27 +168,34 @@ var gridContext = function() {
         viewrecords: true
       });
       $(window).trigger('resize')
-      $('#t_data').html('<ul id="icons"/>')
-      $('#icons li').
-        live('mouseover', function() { $(this).addClass('ui-state-hover') }).
-        live('mouseout', function() { $(this).removeClass('ui-state-hover') });
+      $('#t_data').html('<span id="icons"/>')
 
       return(this);
     },
 
     initializeToolbar: function() {
-      this.addToolbarButton('document-b','text-view','View as Text').click(function() {
-        $t.toggleText(true);
+      $('#icons').append('<span id="view-toggle"/>');
+      $('#view-toggle').append('<input type="radio" id="grid-view" name="view" checked="checked"/><label for="grid-view">Grid</label></span>');
+      $('#view-toggle').append('<input type="radio" id="text-view" name="view" /><label for="text-view">Text</label></span>');
+      $('#view-toggle').buttonset();
+      
+      $('#view-toggle input').change(function(e) { 
+        $t.toggleText(e.target.id == 'text-view');
+        console.debug(e.target.id)
       });
       
-      this.addToolbarButton('calculator','grid-view','View as Grid').click(function() {
-        $t.toggleText(false);
-      }).closest('li').toggle(false);
+//      this.addToolbarButton('document-b','text-view','View as Text').click(function() {
+//        $t.toggleText(true);
+//      });
+//      
+//      this.addToolbarButton('calculator','grid-view','View as Grid').click(function() {
+//        $t.toggleText(false);
+//      }).hide();
       
       this.addToolbarButton('note','pdf','Generate Tracking Sheets').click(function() {
         $t.stopEditing(true);
         rc.getTrackingSheet();
-      });
+      }).addClass('enabled-grid-locked');
       
       this.addToolbarButton('locked','lock','Lock Grid').click(function() {
         $t.toggleEditing(false);
@@ -192,7 +203,7 @@ var gridContext = function() {
       
       this.addToolbarButton('unlocked','unlock','Unlock Grid').click(function() {
         $t.toggleEditing(true);
-      }).closest('li').toggle(false);
+      }).addClass('enabled-grid-locked').hide();
 
       this.addToolbarButton('comment','edit-tags','Edit Tags').click(function() {
         $('#tag_dialog').dialog('open');
@@ -218,7 +229,7 @@ var gridContext = function() {
       this.addToolbarButton('transfer-e-w','register','Register Objects').click(function() {
         $t.toggleEditing(false);
         rc.registerAll();
-      });
+      }).addClass('enabled-grid-locked');
       
       $('#t_data').append($('#fields'));
       return(this);
