@@ -7,7 +7,7 @@
   %body
     #container
       #header
-        #header_text= webauth.login
-        #header_image
-          %img{:src => '../images/sulair_logo.png', :alt => 'Stanford University'}
+        %span.text.right= webauth.login
+        %img{:src => '../images/sulair_logo.png', :alt => 'Stanford University'}
+        %span.text= "Digital Library Systems and Services"
       #content= yield
