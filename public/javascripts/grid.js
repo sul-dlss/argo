@@ -90,7 +90,9 @@ var gridContext = function() {
       $([this.statusImages.pending, this.statusImages.success, this.statusImages.error, this.statusImages.abort]).preload();
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
-        $('#data').setGridWidth($(window).attr('innerWidth') - 20,true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
+        $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
+        // Make up for width calculation error in jqgrid header code.
+        $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
       });
       return(this);
     },
