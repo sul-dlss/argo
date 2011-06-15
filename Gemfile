@@ -1,21 +1,30 @@
 source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
-# Project requirements
 gem 'rake'
 gem 'rack-flash'
 gem 'rack-webauth'
 gem 'thin' # or mongrel
-gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
+gem 'prawn'
 gem 'barby'
-gem "dor-services", ">=1.0.1"
+gem "dor-services", ">=1.1.0"
+gem "haml"
+gem "sass"
 
-# Component requirements
-gem 'haml'
-gem 'sass'
+gem 'rails', '3.0.8'
 
-# Test requirements
+# Use unicorn as the web server
+# gem 'unicorn'
 
+# Deploy with Capistrano
+# gem 'capistrano'
+# To use debugger (ruby-debug for Ruby 1.8.7+, ruby-debug19 for Ruby 1.9.2+)
+# gem 'ruby-debug'
+# gem 'ruby-debug19', :require => 'ruby-debug'
 
-# Padrino
-gem 'padrino', "0.9.23"
+# Bundle gems for the local environment. Make sure to
+# put test-only gems in this group so their generators
+# and rake tasks are available in development mode:
+# group :development, :test do
+#   gem 'webrat'
+# end
