@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  before_filter :fedora_setup
+  
   include Rack::Webauth::Helpers
 
   attr_reader :help
@@ -26,6 +28,10 @@ class ApplicationController < ActionController::Base
     when 'application/json','text/json'
       help.merge_params(JSON.parse(request.body.read))
     end
+  end
+
+  def fedora_setup
+    Dor::Config.fedora.post_config
   end
   
 end
