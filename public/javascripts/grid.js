@@ -1,7 +1,4 @@
-
 var gridContext = function() {
-  var rc = new DorRegistration();
-    
   var druidFormatter = function(val, opts, rowObj) {
     if (val.trim() != '') {
       var href = dor_path + "objects/druid:" + val.trim();
@@ -25,21 +22,48 @@ var gridContext = function() {
   };
 
   var $t = {
+    rc: new DorRegistration(),
+
     statusImages: { 
       pending: '../images/icons/spinner.gif', 
       success: '../images/icons/accept.png', 
       error: '../images/icons/exclamation.png',
       abort: '../images/icons/cancel.png'
     },
-
+    
+    resizeIdList: function() {
+      $('#id_list').animate({
+        'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3, 
+        'left': 3,
+        'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4, 
+        'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + $('#gbox_data .ui-jqgrid-bdiv').height() - 4
+      }, 0);
+    },
+    
+    toggleText: function(textMode) {
+      if (textMode) {
+        $t.stopEditing(true);
+        $t.gridToText();
+        $t.resizeIdList();
+        $('#id_list').show();
+      } else {
+        $t.textToGrid();
+        $('#id_list').hide();
+      }
+      $('#icons button').button('option', 'disabled', textMode);
+    },
+    
     toggleEditing: function(edit) {
       this.stopEditing(true);
       $('#data').jqGrid('setColProp','source_id',{ editable: edit });
       $('#data').jqGrid('setColProp','metadata_id',{ editable: edit });
       $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
       $('#data').jqGrid('setColProp','label',{ editable: edit });
-      $('.action-lock').closest('li').toggle(edit);
-      $('.action-unlock').closest('li').toggle(!edit);
+
+      $('#icons *').button('option', 'disabled', !edit);
+      $('#icons .enabled-grid-locked').button('option', 'disabled', false);
+      $('.action-lock').toggle(edit);
+      $('.action-unlock').toggle(!edit);
     },
 
     stopEditing: function(autoSave) {
@@ -71,26 +95,55 @@ var gridContext = function() {
       })
     },
 
+    textToGrid: function() {
+      $('#data').jqGrid('clearGridData');
+      $('#data').data('nextId',0);
+      var textData = $('#id_list').val().replace(/^\t*\n$/,'');
+      $t.addIdentifiers(textData.split('\n'));
+    },
+    
+    gridToText: function() {
+      var text = '';
+      var gridData = $('#data').jqGrid('getRowData');
+      for (var i = 0; i < gridData.length; i++) {
+        var rowData = gridData[i];
+        text += [rowData.metadata_id, rowData.source_id, rowData.druid, rowData.label].join("\t") + "\n"
+      }
+      $('#id_list').val(text);
+    },
+    
     reset: function() {
-      $('#project').val('');
-      $('#apo_id').val('');
-      $('#id_source').val('');
-      $('#tag_list').val('');
+      $t.rc = new DorRegistration();
       $('#data').jqGrid('clearGridData');
       $t.toggleEditing(true);
       $.defaultText();
     },
 
     addToolbarButton: function(icon,action,title) {
-      var icons = $('#icons').append('<li class="ui-state-default ui-corner-all" title="'+title+'"><span class="ui-icon ui-icon-'+icon+' action-'+action+'"></span></li>')
-      return $('.action-'+action,icons);
+      var parent = $('#icons span[class="button-group"]:last');
+      if (parent.length == 0) {
+        parent = $('#icons');
+      }
+      var parent = parent.append('<button class="action-'+action+'">'+title+'</button>');
+      var button = $('.action-'+action,parent);
+      button.button({ icons : { primary: 'ui-icon-'+icon }, text : true });
+      return button;
     },
 
     initializeContext: function() {
       $([this.statusImages.pending, this.statusImages.success, this.statusImages.error, this.statusImages.abort]).preload();
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
-        $('#data').setGridWidth($(window).attr('innerWidth') - 20,true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
+        var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
+        $('#tabs').height(tabDivHeight);
+        var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
+        $('#id_list').height(tabDivHeight - tabHeadHeight);
+        $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
+        // Make up for width calculation error in jqgrid header code.
+        $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
+        if ($('#id_list').css('display') != 'none') {
+          $t.resizeIdList();
+        }
       });
       return(this);
     },
@@ -107,9 +160,10 @@ var gridContext = function() {
           {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true},
           {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true},
           {label:'DRUID',name:'druid',index:'druid',width:150,editable:true},
-          {label:'Label',name:'label',index:'label', width:($(window).attr('innerWidth') - 498),editable:true },
+          {label:'Label',name:'label',index:'label', width:($('#content').width() - 468),editable:true },
           {label:'Error',name:'error',index:'error',hidden:true}
         ],
+        hidegrid: false,
         loadonce: true,
         multiselect: true,
         scroll: true,
@@ -117,101 +171,157 @@ var gridContext = function() {
         viewrecords: true
       });
       $(window).trigger('resize')
-      $('#t_data').html('<ul id="icons"/>')
-      $('#icons li').
-        live('mouseover', function() { $(this).addClass('ui-state-hover') }).
-        live('mouseout', function() { $(this).removeClass('ui-state-hover') });
+      $('#t_data').html('<div id="icons"/>')
 
       return(this);
     },
 
     initializeToolbar: function() {
-      this.addToolbarButton('note','pdf','Generate Tracking Sheets').click(function() {
-        $t.stopEditing(true);
-        rc.getTrackingSheet();
-      });
+      $('#icons').append('<span class="button-group"></span>');
       
-      this.addToolbarButton('locked','lock','Lock Grid').click(function() {
+      this.addToolbarButton('locked','lock','Lock').click(function() {
         $t.toggleEditing(false);
       });
-      
-      this.addToolbarButton('unlocked','unlock','Unlock Grid').click(function() {
-        $t.toggleEditing(true);
-      }).closest('li').toggle(false);
 
-      this.addToolbarButton('comment','edit-tags','Edit Tags').click(function() {
-        $('#tag_dialog').dialog('open');
-      });
+      this.addToolbarButton('unlocked','unlock','Unlock').click(function() {
+        $t.toggleEditing(true);
+      }).addClass('enabled-grid-locked').hide();
+
+      $('#icons').append('<span class="button-group"></span>');
 
       this.addToolbarButton('plus','add','Add Row').click(function() {
         $t.addRow([]);
       });
 
-      this.addToolbarButton('minus','delete','Delete Selected Rows').click(function() {
+      this.addToolbarButton('minus','delete','Delete Rows').click(function() {
         var selection = $('#data').jqGrid('getGridParam','selarrrow');
         for (var i = selection.length-1; i >= 0; i--) {
           $('#data').jqGrid('delRowData',selection[i]);
         }
       });
 
-      this.addToolbarButton('arrowrefresh-1-w','clear','Reset Grid').click(function() {
-        if (window.confirm('Are you sure you want to clear the grid?')) {
-          $t.reset();
-        }
+      this.addToolbarButton('arrowrefresh-1-w','clear','Reset').click(function() {
+        $('#reset_dialog').dialog('open');
       });
 
-      this.addToolbarButton('clipboard','add-multiple','Add Multiple Identifiers').click(function() {
-        $('#ids_dialog').dialog('open');
+      $('#icons').append('<span class="button-group"></span>');
+
+      this.addToolbarButton('tag','edit-properties','Properties').click(function() {
+        $('#properties_dialog').dialog('open');
       });
 
-      this.addToolbarButton('transfer-e-w','register','Register Objects').click(function() {
+      this.addToolbarButton('transfer-e-w','register','Register').click(function() {
         $t.toggleEditing(false);
-        rc.registerAll();
+        $t.rc.registerAll();
+      }).addClass('enabled-grid-locked');
+      
+      this.addToolbarButton('note','pdf','Tracking Sheets').click(function() {
+        $t.stopEditing(true);
+        $t.rc.getTrackingSheet();
+      }).addClass('enabled-grid-locked');
+      
+      $('#icons').append('<span class="button-group" id="view-toggle"/>');
+      $('#view-toggle').append('<input type="radio" id="grid-view" name="view" checked="checked"/><label for="grid-view">Grid</label></span>');
+      $('#view-toggle').append('<input type="radio" id="text-view" name="view" /><label for="text-view">Text</label></span>');
+      $('#view-toggle').buttonset();
+      
+      $('#view-toggle input').change(function(e) { 
+        $t.toggleText(e.target.id == 'text-view');
       });
-
-      $('#t_data').append($('#fields'));
+      
       return(this);
     },
     
     initializeDialogs: function() {
-      $('#tag_dialog').dialog({ 
+      $('#properties_dialog').dialog({
         autoOpen: false,
-        buttons: { "Ok": function() { $(this).dialog("close"); } },
-        title: 'Tags'
-      });
-
-      $('#ids_dialog').dialog({ 
-        autoOpen: false,
+        open: function() {
+          $('#project').val($t.rc.projectName);
+          $('#apo_id').val($t.rc.apoId);
+          $('#workflow_id').val($t.rc.workflowId);
+          $('#mdform_id').val($t.rc.mdFormId);
+          $('#id_source').val($t.rc.metadataSource);
+          $('#tag_list').val($t.rc.tagList);
+        },
         buttons: { 
           "Ok": function() { 
-            $t.addIdentifiers($('#id_list').val().trim().split('\n'))
-            $(this).dialog('close');
-            $('#id_list').val('');
-          },
-          "Cancel": function() { 
+            $t.rc.projectName = $('#project').val();
+            $t.rc.apoId = $('#apo_id').val();
+            $t.rc.workflowId = $('#workflow_id').val();
+            $t.rc.mdFormId = $('#mdform_id').val();
+            $t.rc.metadataSource = $('#id_source').val();
+            $t.rc.tagList = $('#tag_list').val();
             $(this).dialog("close");
-            $('#id_list').val('');
-          } 
+          },
+          "Cancel": function() { $(this).dialog("close"); }
         },
-        title: 'Identifiers',
-        width: window.innerWidth / 2,
-        height: window.innerHeight / 2
+        title: 'Registration Properties'
       });
-
+      
+      // Update Workflow and Form lists when APO changes
+      $('#apo_id').change(function(e) {
+        $.ajax({
+          type: 'GET',
+          url: 'workflow_list',
+          dataType: 'json',
+          data: { apo_id: $('#apo_id').val() },
+          success: function(response,status,xhr) { 
+            if (response) {
+              var optionsHtml = response.map(function(v) { return '<option value="'+v+'">'+v+'</option>' }).join('');
+              $('#workflow_id').html(optionsHtml);
+            }
+          }
+        })
+        
+        $.ajax({
+          type: 'GET',
+          url: 'form_list',
+          dataType: 'json',
+          data: { apo_id: $('#apo_id').val() },
+          success: function(response,status,xhr) { 
+            if (response) {
+              var optionsHtml = '<option value="">None</option>'
+              optionsHtml += response.map(function(v) { return '<option value="'+v[0]+'">'+v[1]+'</option>' }).join('');
+              $('#mdform_id').html(optionsHtml);
+            }
+          }
+        })
+      });
+      
       $('#specify').dialog({
         autoOpen: false,
         buttons: { "Ok": function() { $(this).dialog("close"); } },
+        modal: true,
+        height: 140,
         title: 'Error',
+        resizable: false
+      });
+      
+      $('#reset_dialog').dialog({
+        autoOpen: false,
+        buttons: { 
+          "Ok": function() { 
+            $t.reset(); 
+            $(this).dialog("close"); 
+            $('#properties_dialog').dialog('open');
+          },
+          "Cancel": function() { $(this).dialog("close"); }
+        },
+        modal: true,
+        height: 140,
+        title: 'Confirm',
         resizable: false
       });
       
       $('#progress_dialog').dialog({
         autoOpen: false,
-        height: 50,
+        height: 56,
         title: 'Progress',
         resizable: false
       });
       $('#progress').progressbar();
+
+      $('#id_list').tabby();
       
       return(this);
     },
@@ -226,5 +336,6 @@ var gridContext = function() {
 
 $(document).ready(function() {
   gridContext.initialize();
+  $('#properties_dialog').dialog('open');
 });
   

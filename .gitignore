@@ -1,5 +1,4 @@
-.DS_Store
-public/stylesheets/application.css
-public/stylesheets/ui-override.css
-.sass-cache
-tmp
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/

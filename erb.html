@@ -1,0 +1,97 @@
+<html>
+<head>
+<title>Register DOR Objects</title>
+<link href="/stylesheets/application.css?1308120798" media="screen" rel="stylesheet" type="text/css" />
+<script src="/javascripts/jquery.js?1308119474" type="text/javascript"></script>
+<script src="/javascripts/jquery-ui.min.js?1308119474" type="text/javascript"></script>
+<script src="/javascripts/application.js?1308119474" type="text/javascript"></script>
+<link href="/stylesheets/ui.jqgrid.css?1308119487" media="screen" rel="stylesheet" type="text/css" />
+<script src="/javascripts/grid.locale-en.js?1308119474" type="text/javascript"></script>
+<script src="/javascripts/jquery.jqGrid.min.js?1308119474" type="text/javascript"></script>
+<script src="/javascripts/jquery.defaultText.js?1308119474" type="text/javascript"></script>
+<script src="/javascripts/jquery.textarea.js?1308119474" type="text/javascript"></script>
+<script src="/javascripts/register.js?1308119474" type="text/javascript"></script>
+<script src="/javascripts/grid.js?1308121174" type="text/javascript"></script>
+<script type="text/javascript">
+var dor_path = "#{fedora_base}";
+</script>
+<link href="/stylesheets/custom-theme/jquery-ui-1.8.13.custom.css?1308119487" media="screen" rel="stylesheet" type="text/css" />
+<link href="/stylesheets/ui-override.css?1308121367" media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id='container'>
+<div id='header'>
+<span class='text right'></span> 
+<img alt='Stanford University' src='../images/sulair_logo.png'> 
+<span class='text'>Digital Library Systems and Services</span>
+</div>
+<div id='content'>
+
+<div id='dialogs'>
+<div id='properties_dialog'>
+<table style='width: 100%'>
+<tr>
+<td class='label'>
+<label for='project'>Project Name</label>
+</td>
+<td class='control'>
+<input id="project" name="project" type="text" value="idproject" />
+</td>
+</tr>
+<tr>
+<td class='label'>
+<label for='apo_id'>Object Type</label>
+</td>
+<td class='control'>
+<select id="apo_id" name="apo_id"><option value="druid:hv992ry2431">Personal Papers</option>
+<option value="druid:nk327xn8125">Physical Map</option>
+<option value="druid:kw422qz8181">Scanned Book</option>
+<option value="druid:rd845kr7465">Topographical Map</option></select>
+</td>
+</tr>
+<tr>
+<td class='label'>
+<label for='workflow_id'>Workflow</label>
+</td>
+<td class='control'>
+<select id="workflow_id" name="workflow_id"></select>
+</td>
+</tr>
+<tr>
+<td class='label'>
+<label for='id_source'>Metadata Source</label>
+</td>
+<td class='control'>
+<select id="id_source" name="id_source"><option value="catkey">Symphony (catkey)</option>
+<option value="barcode">Symphony (barcode)</option>
+<option value="mdtoolkit">Metadata Toolkit (druid)</option>
+<option value="label">None (label only)</option></select>
+</td>
+</tr>
+</table>
+<p>
+<label for='tag_list'>Tags</label> <textarea class="full-width" id="tag_list" name="tag_list" rows="7"></textarea>
+</p>
+</div>
+<div id='specify'>
+<p>
+Please specify both an Admin. Policy and a Metadata Source before continuing.
+</p>
+</div>
+<div id='progress_dialog'>
+<div id='progress'></div>
+</div>
+<div id='reset_dialog'>
+<p>
+Are you sure you want to clear the grid?
+</p>
+</div>
+</div>
+<div id='dynamic'>
+<table id='data'></table>
+<div id='pdata'></div><textarea id="id_list" name="id_list">rows7classfull-widthidid_list</textarea>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<% @title = "Register DOR Objects" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'ui.jqgrid' %>
+  <%= javascript_include_tag 'grid.locale-en', 'jquery.jqGrid.min', 'jquery.defaultText', 'jquery.textarea' %>
+  <%= javascript_include_tag 'register', 'grid' %>
+  <script type="text/javascript">
+    var dor_path = "<%= fedora_base %>";
+  </script>
+<% end %>
+
+<div id='dialogs'>
+  <div id='properties_dialog'>
+    <table style='width: 100%'>
+      <tr>
+        <td class='label'>
+          <label for='project'>Project Name</label>
+        </td>
+        <td class='control'>
+          <%= text_field_tag :project, :id => :project %>
+        </td>
+      </tr>
+      <tr>
+        <td class='label'>
+          <label for='apo_id'>Object Type</label>
+        </td>
+        <td class='control'>
+          <%= select_tag :apo_id, options_for_select(apo_list("sunetid:#{webauth.login}")), :id => :apo_id %>
+        </td>
+      </tr>
+      <tr>
+        <td class='label'>
+          <label for='workflow_id'>Workflow</label>
+        </td>
+        <td class='control'>
+          <%= select_tag :workflow_id, '', :id => :workflow_id %>
+        </td>
+      </tr>
+      <tr>
+        <td class='label'>
+          <label for='id_source'>Metadata Source</label>
+        </td>
+        <td class='control'>
+          <%= select_tag :id_source, options_for_select(metadata_sources), :id => :id_source %>
+        </td>
+      </tr>
+      <tr>
+        <td class='label'>
+          <label for='mdform_id'>Editor Form</label>
+        </td>
+        <td class='control'>
+          <%= select_tag :mdform_id, '', :id => :mdform_id %>
+        </td>
+      </tr>
+    </table>
+    <p>
+      <label for='tag_list'>Tags</label> <%= text_area_tag :tag_list, '', :class => 'full-width', :id => :tag_list, :rows => 7 %>
+    </p>
+  </div>
+  <div id='specify'>
+    <p>
+      Please specify both an Admin. Policy and a Metadata Source before continuing.
+    </p>
+  </div>
+  <div id='progress_dialog'>
+    <div id='progress'></div>
+  </div>
+  <div id='reset_dialog'>
+    <p>
+      Are you sure you want to clear the grid?
+    </p>
+  </div>
+</div>
+<div id='dynamic'>
+  <table id='data'></table>
+  <div id='pdata'></div><%= text_area_tag :id_list, '', :class => 'full-width', :id => :id_list, :rows => 7 %>
+</div>
