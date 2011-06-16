@@ -1,7 +1,7 @@
 class RegistrationController < ApplicationController
 
-  def bulk
-    render :bulk
+  def form
+    render :form
   end
 
   def tracksheet
