@@ -262,7 +262,7 @@ var gridContext = function() {
       $('#apo_id').change(function(e) {
         $.ajax({
           type: 'GET',
-          url: 'workflow_list',
+          url: '/registration/workflow_list',
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) { 
@@ -275,7 +275,7 @@ var gridContext = function() {
         
         $.ajax({
           type: 'GET',
-          url: 'form_list',
+          url: '/registration/form_list',
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) { 
