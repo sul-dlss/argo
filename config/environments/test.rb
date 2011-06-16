@@ -44,6 +44,7 @@ RubyDorServices::Application.configure do
       key_pass ''
     end
 
+    workflow.url 'https://lyberservices-test.stanford.edu/workflow/'
     gsearch.url 'http://dor-test.stanford.edu/solr'
 
     suri do

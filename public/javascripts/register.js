@@ -42,6 +42,7 @@ function DorRegistration() {
       var params = { 
         'object_type' : 'item',
         'admin_policy' : apo,
+        'workflow_id' : $t.workflowId,
         'seed_datastream' : ['descMetadata'],
         'label' : data.label || ':auto',
         'tag' : tags 
