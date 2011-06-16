@@ -8,6 +8,7 @@ gem 'thin' # or mongrel
 gem 'prawn'
 gem 'barby'
 gem "dor-services", ">=1.1.0"
+gem "mod-cons", ">=0.2.0"
 gem "haml"
 gem "sass"
 
