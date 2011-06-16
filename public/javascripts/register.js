@@ -12,7 +12,7 @@ function DorRegistration() {
       var druids = $('#data').getCol('druid');
       var sequence = 1;
       var query = $.param({ druid : druids, name : project, sequence : sequence });
-      var url = "/registration/tracksheet?"+query;
+      var url = pathTo("/registration/tracksheet?"+query);
       document.location.href = url;
     },
 
@@ -70,7 +70,7 @@ function DorRegistration() {
 
       var xhr = $.ajax({
         type: 'POST',
-        url: '../dor/objects',
+        url: pathTo('/dor/objects'),
         data: params,
         success: function(response,status,xhr) { 
           if (response) {

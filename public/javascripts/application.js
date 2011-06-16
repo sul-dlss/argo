@@ -5,3 +5,8 @@ $.fn.preload = function() {
         $('<img/>')[0].src = this;
     });
 }
+
+function pathTo(path) {
+  var root = $('body').attr('data-application-root') || '';
+  return(root + path);
+}
