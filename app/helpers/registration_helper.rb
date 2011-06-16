@@ -17,10 +17,9 @@ module RegistrationHelper
 
   def metadata_sources
     [
-      ['Symphony (catkey)','catkey'], 
-      ['Symphony (barcode)','barcode'], 
-      ['Metadata Toolkit (druid)','mdtoolkit'], 
-      ['None (label only)','label']
+      ['None','label'],
+      ['Symphony','symphony'], 
+      ['Metadata Toolkit','mdtoolkit']
     ]
   end
 
