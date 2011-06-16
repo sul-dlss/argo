@@ -34,19 +34,26 @@ class Dor::ObjectsController < ApplicationController
     
     begin
       dor_response = Dor::RegistrationService.register_object(dor_params)
-      reg_response = dor_params.dup.merge({ :location => help.object_location(dor_response[:pid]), :pid => dor_response[:pid] })
-      if params[:seed_datastream]
-        dor_obj = help.class_for(params[:object_type]).load_instance(dor_response[:pid])
+      pid = dor_response[:pid]
+      reg_response = dor_params.dup.merge({ :location => help.object_location(pid), :pid => pid })
+      if params[:seed_datastream] or params[:workflow_id]
+        dor_obj = help.class_for(params[:object_type]).load_instance(pid)
         Array(params[:seed_datastream]).each do |datastream_name|
           dor_obj.build_datastream(datastream_name)
+        end
+        
+        if params[:workflow_id]
+          admin_ds = dor_obj.admin_policy_object.datastreams['administrativeMetadata'].ng_xml
+          workflow_xml = admin_ds.at(%{/administrativeMetadata/registration/workflow[@id="#{params[:workflow_id]}"]}).to_xml
+          Dor::WorkflowService.create_workflow('dor',pid,params[:workflow_id],workflow_xml)
         end
       end
       
       respond_to do |format|
-        format.json { render :json => reg_response, :location => help.object_location(dor_response[:pid]) }
-        format.xml  { render :xml  => reg_response, :location => help.object_location(dor_response[:pid]) }
-        format.text { render :text => dor_respond[:pid], :location => help.object_location(dor_response[:pid]) }
-        format.html { redirect_to help.object_location(dor_response[:pid]) }
+        format.json { render :json => reg_response, :location => help.object_location(pid) }
+        format.xml  { render :xml  => reg_response, :location => help.object_location(pid) }
+        format.text { render :text => pid, :location => help.object_location(pid) }
+        format.html { redirect_to help.object_location(pid) }
       end
     rescue Dor::ParameterError => e
       render :text => e.message, :status => 400
