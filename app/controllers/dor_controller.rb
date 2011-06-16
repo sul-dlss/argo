@@ -3,7 +3,7 @@ class DorController < ApplicationController
   respond_to :text, :only => :query_by_id
 
   def configuration
-    if Rails.env.development?
+    if Rails.env.development? or ENV['DOR_SERVICES_DEBUG_MODE']
       result = Dor::Config.to_hash.merge({
         :environment => Rails.env, 
         :webauth => { 

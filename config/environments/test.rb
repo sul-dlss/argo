@@ -38,25 +38,25 @@ RubyDorServices::Application.configure do
 
   Dor::Config.configure do
     fedora do
-      url 'http://fedoraAdmin:fedoraAdmin@dor-test.stanford.edu/fedora'
+      url 'https://fedoraAdmin:fedoraAdmin@dor-test.stanford.edu/fedora'
       cert_file File.join(cert_dir,"dlss-dev-test.crt")
       key_file File.join(cert_dir,"dlss-dev-test.key")
       key_pass ''
     end
 
     workflow.url 'https://lyberservices-test.stanford.edu/workflow/'
-    gsearch.url 'http://dor-test.stanford.edu/solr'
+    gsearch.url 'https://dor-test.stanford.edu/solr'
 
     suri do
       mint_ids true
       id_namespace 'druid'
-      url 'http://lyberservices-test.stanford.edu:8080'
+      url 'https://lyberservices-test.stanford.edu:8080'
       user 'labware'
       pass 'lyberteam'
     end
 
     metadata do
-      exist.url 'http://viewer:l3l%40nd@lyberapps-dev.stanford.edu/exist/rest'
+      exist.url 'http://viewer:l3l%40nd@lyberapps-prod.stanford.edu/exist/rest'
       catalog.url 'http://lyberservices-prod.stanford.edu/catalog/mods'
     end
   end
