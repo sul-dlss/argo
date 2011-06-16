@@ -1,7 +1,7 @@
 RubyDorServices::Application.routes.draw do
 
   namespace :registration do
-    get "/bulk"
+    get "/", :action => :form
     get "/tracksheet"
     get "/form_list"
     get "/workflow_list"
