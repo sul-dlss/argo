@@ -23,13 +23,7 @@ var gridContext = function() {
 
   var $t = {
     rc: new DorRegistration(),
-
-    statusImages: { 
-      pending: pathTo('/images/icons/spinner.gif'), 
-      success: pathTo('/images/icons/accept.png'), 
-      error: pathTo('/images/icons/exclamation.png'),
-      abort: pathTo('/images/icons/cancel.png')
-    },
+    statusImages: {},
     
     resizeIdList: function() {
       $('#id_list').animate({
@@ -131,6 +125,13 @@ var gridContext = function() {
     },
 
     initializeContext: function() {
+      $t.statusImages = { 
+        pending: pathTo('/images/icons/spinner.gif'), 
+        success: pathTo('/images/icons/accept.png'), 
+        error: pathTo('/images/icons/exclamation.png'),
+        abort: pathTo('/images/icons/cancel.png')
+      },
+      
       $([this.statusImages.pending, this.statusImages.success, this.statusImages.error, this.statusImages.abort]).preload();
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
