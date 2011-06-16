@@ -7,11 +7,11 @@
     <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.13.custom' %>
     <%= stylesheet_link_tag 'ui-override' %>
   </head>
-  <body>
+  <body data-application-root="<%= ENV['RACK_BASE_URI'] %>">
     <div id='container'>
       <div id='header'>
         <span class='text right'><%= webauth.login %></span> 
-        <img alt='Stanford University' src='/images/sulair_logo.png'> 
+        <%= image_tag 'sulair_logo.png', :alt => 'Stanford University' %>
         <span class='text'>Digital Library Systems and Services</span>
       </div>
       <div id='content'>

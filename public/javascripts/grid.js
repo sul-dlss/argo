@@ -25,10 +25,10 @@ var gridContext = function() {
     rc: new DorRegistration(),
 
     statusImages: { 
-      pending: '../images/icons/spinner.gif', 
-      success: '../images/icons/accept.png', 
-      error: '../images/icons/exclamation.png',
-      abort: '../images/icons/cancel.png'
+      pending: pathTo('/images/icons/spinner.gif'), 
+      success: pathTo('/images/icons/accept.png'), 
+      error: pathTo('/images/icons/exclamation.png'),
+      abort: pathTo('/images/icons/cancel.png')
     },
     
     resizeIdList: function() {
@@ -262,7 +262,7 @@ var gridContext = function() {
       $('#apo_id').change(function(e) {
         $.ajax({
           type: 'GET',
-          url: '/registration/workflow_list',
+          url: pathTo('/registration/workflow_list'),
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) { 
@@ -275,7 +275,7 @@ var gridContext = function() {
         
         $.ajax({
           type: 'GET',
-          url: '/registration/form_list',
+          url: pathTo('/registration/form_list'),
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) { 
