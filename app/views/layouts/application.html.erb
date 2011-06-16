@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title><%= @title %></title>
+    <%= stylesheet_link_tag 'application' %>
+    <%= javascript_include_tag 'jquery', 'jquery-ui.min', 'application' %>
+    <%= yield :head %>
+    <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.13.custom' %>
+    <%= stylesheet_link_tag 'ui-override' %>
+  </head>
+  <body>
+    <div id='container'>
+      <div id='header'>
+        <span class='text right'><%= webauth.login %></span> 
+        <img alt='Stanford University' src='../images/sulair_logo.png'> 
+        <span class='text'>Digital Library Systems and Services</span>
+      </div>
+      <div id='content'>
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>
