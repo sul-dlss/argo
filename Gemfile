@@ -5,7 +5,7 @@ gem 'rake'
 gem 'rack-flash'
 gem 'rack-webauth'
 gem 'thin' # or mongrel
-gem 'prawn'
+gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
 gem 'barby'
 gem "dor-services", ">=1.1.0"
 gem "mod-cons", ">=0.2.0"
