@@ -24,24 +24,22 @@ module RegistrationHelper
   end
 
   def generate_tracking_pdf(druids)
-    solr = Solr::Connection.new(Dor::Config.gsearch.url)
-    
     pdf = Prawn::Document.new(:page_size => [5.5.in, 8.5.in])
     pdf.font('Courier')
     druids.each_with_index do |druid,i|
-      generate_tracking_sheet(druid, pdf, solr)
+      generate_tracking_sheet(druid, pdf)
       pdf.start_new_page unless (i+1 == druids.length)
     end
     return pdf
   end
   
-  def generate_tracking_sheet(druid, pdf, solr)
+  def generate_tracking_sheet(druid, pdf)
     bc_width  = 2.25.in
     bc_height = 0.75.in
     
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
-    doc = solr.query(%{PID:"druid:#{druid}"}).hits.first
+    doc = Dor::SearchService.gsearch(:q => %{PID:"druid:#{druid}"})['response']['docs'].first
     if doc.nil?
       pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       return
