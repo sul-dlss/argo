@@ -25,9 +25,7 @@ class RegistrationController < ApplicationController
   
   def workflow_list
     docs = Dor::SearchService.gsearch(:q => %{PID:"#{params[:apo_id]}"})['response']['docs']
-    result = docs.collect do
-      |doc| doc['apo_registration_workflow_field']
-    end
+    result = docs.collect { |doc| doc['apo_registration_workflow_field'] }.compact
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result.flatten.sort }
     end
