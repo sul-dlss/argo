@@ -1,7 +1,8 @@
 RubyDorServices::Application.routes.draw do
 
-  resources :item do
+  resources :items do
     get :crop, :on => :member
+    get :register, :on => :collection
   end
   
   namespace :registration do

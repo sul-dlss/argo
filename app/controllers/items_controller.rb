@@ -1,4 +1,4 @@
-class ItemController < ApplicationController
+class ItemsController < ApplicationController
 
   def crop
     @druid = params[:id].sub(/^druid:/,'')
@@ -11,6 +11,10 @@ class ItemController < ApplicationController
       hash
     end
     render :crop, :layout => false
+  end
+  
+  def register
+    render :register
   end
   
 end

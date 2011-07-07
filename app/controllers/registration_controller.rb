@@ -1,9 +1,9 @@
 class RegistrationController < ApplicationController
 
   def form
-    render :form
+    redirect_to register_items_index_url
   end
-
+  
   def tracksheet
     druids = Array(params[:druid])
     name = params[:name] || 'tracksheet'
