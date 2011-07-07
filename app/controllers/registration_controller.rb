@@ -1,7 +1,7 @@
 class RegistrationController < ApplicationController
 
   def form
-    redirect_to register_items_index_url
+    redirect_to register_items_url
   end
   
   def tracksheet
