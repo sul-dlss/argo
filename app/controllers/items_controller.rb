@@ -15,7 +15,7 @@ class ItemsController < ApplicationController
       end
       hash
     end
-    render :crop, :layout => false
+    render :crop, :layout => 'webcrop'
   end
   
   def register
