@@ -1,5 +1,9 @@
 RubyDorServices::Application.routes.draw do
 
+  resources :item do
+    get :crop, :on => :member
+  end
+  
   namespace :registration do
     get "/", :action => :form
     get "/tracksheet"
