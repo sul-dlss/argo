@@ -1,13 +1,15 @@
 class ItemsController < ApplicationController
 
+  IMAGE_BASE = "https://sul-dl-dlib7.stanford.edu/ob_pool/"
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
     @image_data = files.collect do |file|
+      src_file = file.alternate('02') || file.alternate('01') || file
       hash = { 
         :origHeight => file.vert_pixels, 
         :origWidth => file.horiz_pixels, 
-        :fileSrc => "https://sul-dl-dlib7.stanford.edu/image.rb?id=#{file.alternate('02').id}",
+        :fileSrc => IMAGE_BASE + src_file.file_name,
         :fileName => File.basename(file.file_name)
       }
       unless file.crop_info.nil?
