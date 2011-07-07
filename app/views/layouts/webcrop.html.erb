@@ -4,7 +4,7 @@
     <title><%= @title %></title>
     <%= yield :head %>
   </head>
-  <body>
+  <body data-application-root="<%= ENV['RACK_BASE_URI'] %>">
     <%= image_tag 'webcrop.png', :id => 'logo', :alt => "WebCrop", :style => "margin: 6px 0 0 12px;" %>
     <%= yield %>
   </body>
