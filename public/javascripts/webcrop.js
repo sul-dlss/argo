@@ -48,7 +48,7 @@ $(document).ready(function() {
       
       $('<img>', {
         id: 'has_crop_coords_' + i,
-        src: '/images/icons/icon-crop-coords.png',
+        src: pathTo('/images/icons/icon-crop-coords.png'),
         'class': 'has-crop-coords',
         style: 'visibility: ' + visibility
       }).appendTo(slide);
