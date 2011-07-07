@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>WebCrop Tool</title>
+    <%= stylesheet_link_tag 'webcrop', 'jquery.Jcrop' %>
+    <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.13.custom' %>
+    <%= javascript_include_tag 'jquery', 'jquery-ui.min', 'application' %>
+    <%= javascript_include_tag 'jquery.Jcrop.min', 'jqueryRotate.min', 'jquery.shiftclick', 'json2', 'webcrop' %>
+    <script type="text/javascript">
+      var imgData = <%=raw @image_data.to_json %>
+    </script>
+  </head>
+  <body>
+    <%= image_tag 'webcrop.png', :id => 'logo', :alt => "WebCrop", :style => "margin: 6px 0 0 12px;" %>
+    <div id="contents">
+      <div id="sidebar">
+  
+        <div id="img-info">
+          <span class="box-title">Image Info:</span>
+          <dl>
+            <dt>Filename:</dt><dd id="md-filename"></dd>
+            <dt>Original Size:</dt><dd id="md-dimensions"></dd>
+          </dl>
+          <div id="img-nav">            
+            <input id="btn-img-nav-prev" type="button" value="&larr; Prev">
+            <input id="btn-img-nav-next" type="button" value="Next &rarr;"> 
+          </div>
+        </div>
+  
+        <div id="mode">
+          <span class="box-title">Mode:</span>
+          <div id="mode-box">
+            <div id="mode-crop" title="Crop Mode">Crop</div>
+            <div id="mode-rotate" class="mode-off" title="Rotate Mode">Rotate</div>  
+          </div>
+        </div>
+  
+        <div id="crop-dimensions">
+          <span class="box-title">Crop Attributes:</span>
+          <dl>
+            <dt>x1:</dt><dd><input type="text" id="x1-val" size="8"></dd>
+            <dt>y1:</dt><dd><input type="text" id="y1-val" size="8"></dd>
+            <dt>x2:</dt><dd><input type="text" id="x2-val" size="8"></dd>
+            <dt>y2:</dt><dd><input type="text" id="y2-val" size="8"></dd>
+            <dt>Width:</dt><dd><input type="text" id="width-val" size="8"></dd>
+            <dt>Height:</dt><dd><input type="text" id="height-val" size="8"></dd>
+          </dl>          
+          <div id="crop-locks">
+            <dl>
+              <dt>Lock/Unlock crop coordinates:</dt>
+              <dd><%= image_tag 'icons/icon-lock-disabled.png', :id => 'lock-crop-coords', :title => 'Lock/unlock crop coordinates', :alt => 'Lock/unlock crop coordinates' %></dd>              
+            </dl>
+          </div>
+        </div>
+  
+  
+        <div id="rotation">
+          <span class="box-title">Rotation:</span>
+          <dl>
+            <dt>Angle:</dt><dd><input type="text" id="rotation-angle" size="8"></dd>
+          </dl>  
+          <div id="slider"></div>
+        </div>
+        <div>          
+          <a id="json-data" href="" style="display:none;">JSON</a>
+        </div>
+
+      </div>
+
+      <div id="containers">
+        <div id="crop-container">
+          <img id="crop-img" src="" alt="" />
+        </div>
+        <div id="rotate-container" style="display: none;">
+          <img id="rotate-img" src="" alt="" />
+        </div>
+      </div>
+
+      <div id="slide-show">
+        <div id="multi-select-options">          
+          <a id="select-all-chkboxes" href="#">Select All</a> &bull;
+          <a id="unselect-all-chkboxes" href="#">UnSelect All</a> <br/>    
+          <input id="btn-apply-crop" type="button" value="Apply crop attributes" disabled="true">
+        </div>
+        <ul id="slide-show-list">          
+        </ul>    
+      </div>      
+    </div>
+  </body>
+</html>
