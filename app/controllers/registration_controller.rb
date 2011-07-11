@@ -31,4 +31,15 @@ class RegistrationController < ApplicationController
     end
   end
 
+  def autocomplete
+    response = Dor::SearchService.gsearch(:q => "*:*", :rows => '0', :facet => 'on', :'facet.field' => params[:field], :'facet.prefix' => params[:term].titlecase)
+    result = response['facet_counts']
+    result = result['facet_fields']
+    result = Hash[*(result['project_tag_facet'])].keys
+    result.sort!
+    respond_to do |format|
+      format.any(:json, :xml) { render request.format.to_sym => result }
+    end
+  end
+  
 end
