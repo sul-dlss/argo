@@ -5,6 +5,7 @@ RubyDorServices::Application.routes.draw do
     get "/tracksheet"
     get "/form_list"
     get "/workflow_list"
+    get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
   end
   
   namespace :dor do
