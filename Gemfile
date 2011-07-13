@@ -16,6 +16,13 @@ gem "sass"
 
 gem 'rails', '3.0.8'
 
+group :development do
+  if File.exists?(mygems = File.join(ENV['HOME'],'.gemfile'))
+    instance_eval(File.read(mygems))
+  end
+  gem "lyberteam-devel"
+end
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
