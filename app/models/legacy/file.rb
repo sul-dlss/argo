@@ -11,4 +11,30 @@ class Legacy::File < Legacy::Base
     self.class.find(role == :all ? :all : :first, :conditions => %{file_name LIKE "#{pattern}" ESCAPE "!"}, :order => 'file_role')
   end
   
+  def webcrop
+    src_file = alternate('02') || alternate('01') || self
+    result = { 
+      :id => self.id,
+      :origHeight => self.vert_pixels, 
+      :origWidth => self.horiz_pixels, 
+      :fileSrc => src_file.file_name,
+      :fileName => File.basename(self.file_name)
+    }
+    unless crop_info.nil?
+      result.merge!(crop_info.webcrop)
+    end
+    result
+  end
+  
+  def webcrop=(data)
+    if data.nil? or data.empty?
+      crop_info.destroy if crop_info
+      crop_info = nil
+    else
+      ci = self.crop_info || self.create_crop_info
+      ci.webcrop = data
+      ci.save
+    end
+  end
+  
 end

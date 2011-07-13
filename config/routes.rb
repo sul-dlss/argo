@@ -2,6 +2,7 @@ RubyDorServices::Application.routes.draw do
 
   resources :items do
     get :crop, :on => :member
+    put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
   end
   

@@ -6,6 +6,14 @@
     <%= javascript_include_tag 'jquery.Jcrop.min', 'jqueryRotate.min', 'jquery.shiftclick', 'json2', 'webcrop' %>
     <script type="text/javascript">
       var imgData = <%=raw @image_data.to_json %>
+      
+      function saveImgData() {
+        $.ajax({ 
+          type: 'PUT', 
+          contentType: 'application/json', 
+          data: JSON.stringify(imgData)
+        });
+      }
     </script>
 <% end %>
 
