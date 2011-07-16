@@ -1,230 +1,241 @@
-$(document).ready(function() {
-  var cropImgWidth = 475;
-  var rotateImgWidth = 350;
-  var thumbImgWidth = 100;
-  var currentCropRatio;
-  var apiJcrop;
+var WebCrop = function(imgData, autoSaver) {
   
+  // basic configuration options for the webcrop tool
   var config = {
+    cropRotateAreaLength: 700, 
+    thumbImgWidth: 100, 
+    autoSaveIntervalInMillisecs: 5000, 
     lockCropCoords: false,
-    lockCropSize: false,
-    jCropOpacity: 0.4    
-  }
+    lockRotationAngle: false
+  };
   
-  if(imgData !== undefined && imgData.length > 0) {    
-    setJcrop();
-    setCropRatios();
+  var img, autoSaveTimerId;
+  
+  /* method to initialize webcrop and its elements */
+  var init = function() {
+    var length, thumbImgHeight, slide;
+            
+    if (typeof imgData === 'undefined') {
+      return;
+    }
     
-    for (var i = 0; i < imgData.length; i++) {      
-      var thumbImgHeight = getHeight(thumbImgWidth, imgData[i].origWidth, imgData[i].origHeight);
-      var visibility = hasCropCoords(i) ? 'visible' : 'hidden';      
-      
-      var slide = $('<li></li>', { 'class': 'slide' });
+    $('#crop-rotate-background').css({
+      'height': config.cropRotateAreaLength + 'px',
+      'width': config.cropRotateAreaLength + 'px'
+    });
+    
+    length = imgData.length;
+    
+    for (var index = 0; index < length; index++) {               
+               
+      thumbImgHeight = util.getHeight(config.thumbImgWidth, imgData[index].origWidth, imgData[index].origHeight);
+            
+      slide = $('<li></li>', { 'class': 'slide' });
             
       $('<img>', {
-        id: 'img_' + i, 
-        height: thumbImgHeight + 'px',
-        src: imgData[i].fileSrc,
-        width: thumbImgWidth + 'px',
+        'id': 'wc-slide-img-' + index, 
+        'height': thumbImgHeight + 'px',
+        'src': getThumbnailImgSrc(index),
+        'width': config.thumbImgWidth + 'px',
         'class': 'slide-img', 
+        
         click: function() {
-          var index = parseInt($(this).attr('id').replace(/^img_/, ''), 10);
+          var imgIndex = parseInt(this.id.replace(/^wc-slide-img-/, ''), 10);
           
-          config.lockCropCoords ? storeCropAttrs(index) : clearCropAttrs();                             
-          loadImgs(cropImgWidth, rotateImgWidth, index);
-          updateMetadata(index);
-          updateNavButtons(index, imgData.length);
+          config.lockCropCoords ? storeCropCoords(imgIndex) : clearCropCoords();      
+          config.lockRotationAngle ? storeRotationAngle(imgIndex) : clearRotationAngle();      
+                                 
+          clearSlideBackgrounds();          
+          $(this).parent().addClass('slide-bg-selected');
+               
+          loadImg(imgIndex);          
+          updateSidebarMetadata(imgIndex);
+          updateNextPrevNavButtons(imgIndex, length);          
           
-          clearSlideBackgrounds();
-          $(this).parent().addClass('slide-bg-selected');     
+          $('#opacity-slider').slider('value', 1); // reset opacity slider to 1          
         }
       }).appendTo(slide);
       
       $('<br/>').appendTo(slide);
 
+      // select checkbox for each slide
       $('<input>', {
-        id: 'chkbox_' + i, type: 'checkbox', 'class': 'chk-box'
+        id: 'wc-slide-chkbox-' + index, type: 'checkbox', 'class': 'chk-box'
       }).appendTo(slide);                
       
       $('<img>', {
-        id: 'has_crop_coords_' + i,
-        src: pathTo('/images/icons/icon-crop-coords.png'),
+        'id': 'wc-has-crop-coords-' + index,
+        'src': pathTo('/images/icons/icon-crop-coords.png'),
         'class': 'has-crop-coords',
-        style: 'visibility: ' + visibility
+        'style': 'visibility: ' + (hasCropCoords(index) ? 'visible' : 'hidden') + ';'
+      }).appendTo(slide);
+
+      $('<img>', {
+        'id': 'wc-has-rotation-angle-' + index,
+        'src': pathTo('/images/icons/icon-rotation-angle.png'),
+        'class': 'has-rotation-angle',
+        'style': 'visibility: ' + (hasRotationAngle(index) ? 'visible' : 'hidden') + ';'
       }).appendTo(slide);
       
-      slide.appendTo($('#slide-show-list'));            
+      slide.appendTo($('#slide-show-list'));                  
     }
     
-    // load the first image
-    $('#img_0').click();
-  }  
-  
-  
-  // (re)load images for crop and rotate actions
-  function loadImgs(cropImgWidth, rotateImgWidth, index) {    
-    var imgAttrs = imgData[index];
+    setupSliders();
+    setupRotationButtons();    
+    setupMultiSelect();
+    bindMouseEvents();
     
-    $('#crop-img')
-    .css({ 
-      height: getHeight(cropImgWidth, imgAttrs.origWidth, imgAttrs.origHeight) + 'px', 
-      width: cropImgWidth + 'px' 
-    })
-    .attr('src', imgAttrs.fileSrc);
-
-    // remove existing image element 
-    $('#rotate-img').remove();
-
-    // create new image element for rotate action and attach it    
-    $('<img>', {
-      id: 'rotate-img',
-      src: imgAttrs.fileSrc, 
-      css: { 
-        height: getHeight(rotateImgWidth, imgAttrs.origWidth, imgAttrs.origHeight) + 'px', 
-        width: rotateImgWidth + 'px' 
-      }
-    }).appendTo('#rotate-container');    
-    
-    // disable this slide's checkbox
-    $('.chk-box').removeAttr('disabled');
-    $('#chkbox_' + index).attr('disabled', true);
-    
-    // initialize crop and rotation actions
-    apiJcrop.destroy();
-    setJcrop(index);  
-    $('#rotate-img').rotate(0);
-    currentCropRatio = imgAttrs.cropRatio;
+    autoSaveTimerId = setInterval(autoSave, config.autoSaveIntervalInMillisecs);
+          
+    $('#wc-slide-img-0').click();
   }
 
 
-  // set Jcrop and crop coordinates (if available)
-  function setJcrop(index) {
+  /* (re)load images for crop and rotate actions */
+  var loadImg = function(index) {    
+    var imgAttrs = imgData[index];        
+    var cropRotateImgSize, imgWidth, imgHeight;
+    var canvas, x, y;
+    
+    x = y = 0;
+
+    $('#img-container').html('');
+    
+    canvas = Raphael('img-container', config.cropRotateAreaLength, config.cropRotateAreaLength);
+
+    cropRotateImgSize = util.getCropRotateImgSize(config.cropRotateAreaLength, imgAttrs.origWidth, imgAttrs.origHeight);
+    
+    imgWidth  = cropRotateImgSize[0]; 
+    imgHeight = cropRotateImgSize[1]; 
+    
+    x = parseInt((config.cropRotateAreaLength - imgWidth) / 2, 10);
+    y = parseInt((config.cropRotateAreaLength - imgHeight) / 2, 10);
+
+    img = canvas.image(imgAttrs.fileSrc, x, y, imgWidth, imgHeight);
+    
+    imgData[index].cropRatioHeight = parseFloat((imgAttrs.origHeight / imgHeight ).toFixed(2));            
+    imgData[index].cropRatioWidth  = parseFloat((imgAttrs.origWidth / imgWidth ).toFixed(2));            
+
+    setupCrop(index);
+    setupRotation(index);
+    
+    // disable this slide's checkbox, and enable others
+    $('.chk-box').removeAttr('disabled');
+    $('#wc-slide-chkbox-' + index).attr('disabled', true);
+
+  };
+  
+  
+  /* setup crop plugin for a given images and draw crop area if crop coords are available */
+  var setupCrop = function(index) {
+    var cropCoords, x1, y1, x2, y2, width, height;
     var imgAttrs = imgData[index];
-            
-    apiJcrop = $.Jcrop('#crop-img', {
-      bgOpacity: config.jCropOpacity,
-      //onChange: showCoords, 
-      onSelect: showCoords
+        
+    $('#img-container').imgAreaSelect({
+      'instance': true, 
+      'handles': true,
+      'keys': true,
+      'maxHeight': config.cropRotateImgSize,
+      'maxWidth': config.cropRotateImgSize,
+      'minHeight': 1,
+      'minWidth': 1,      
+      'onSelectChange': function(img, crop) {
+        $('#x1-val').html(parseInt(crop.x1 * imgAttrs.cropRatioWidth, 10));
+        $('#y1-val').html(parseInt(crop.y1 * imgAttrs.cropRatioHeight, 10));
+        $('#x2-val').html(parseInt(crop.x2 * imgAttrs.cropRatioWidth, 10));
+        $('#y2-val').html(parseInt(crop.y2 * imgAttrs.cropRatioHeight, 10));
+  
+        $('#width-val').html(parseInt(crop.width * imgAttrs.cropRatioWidth, 10));
+        $('#height-val').html(parseInt(crop.height * imgAttrs.cropRatioHeight, 10));
+      },
+      'onSelectEnd': function(img, crop) {
+        var index = getActiveImgIndex();
+        storeCropCoords(index);
+      }      
     });
     
+    $('.imgareaselect-outer').click(function() {
+      clearCropCoords();
+    });
+            
     if (hasCropCoords(index)) {
-      var cropCoords = imgAttrs.cropCoords;
-
-      var x1 = parseInt(cropCoords.x1 / imgAttrs.cropRatio, 10);
-      var y1 = parseInt(cropCoords.y1 / imgAttrs.cropRatio, 10);
-      var x2 = parseInt(cropCoords.x2 / imgAttrs.cropRatio, 10);
-      var y2 = parseInt(cropCoords.y2 / imgAttrs.cropRatio, 10);
-
-      $('#x1-val').val(cropCoords.x1),
-      $('#y1-val').val(cropCoords.y1),
-      $('#x2-val').val(cropCoords.x2),
-      $('#y2-val').val(cropCoords.y2),
-      $('#width-val').val(cropCoords.x2 - cropCoords.x1);
-      $('#height-val').val(cropCoords.y2 - cropCoords.y1);
+      cropCoords = imgAttrs.cropCoords;
+            
+      width  = cropCoords.x2 - cropCoords.x1;
+      height = cropCoords.y2 - cropCoords.y1;
       
-      apiJcrop.setSelect([ x1, y1, x2, y2 ]);
-      apiJcrop.enable();      
-    }
-  }
+      showCropCoords([cropCoords.x1, cropCoords.y1, cropCoords.x2, cropCoords.y2, width, height]);
+
+      // calculate crop coords relative to the displayed image size
+      x1 = parseInt(cropCoords.x1 / imgAttrs.cropRatioWidth, 10);
+      y1 = parseInt(cropCoords.y1 / imgAttrs.cropRatioHeight, 10);
+      x2 = parseInt(cropCoords.x2 / imgAttrs.cropRatioWidth, 10);
+      y2 = parseInt(cropCoords.y2 / imgAttrs.cropRatioHeight, 10);
+      
+      $('#img-container').imgAreaSelect({ 
+        'x1': parseInt(x1, 10), 'y1': parseInt(y1, 10), 
+        'x2': parseInt(x2, 10), 'y2': parseInt(y2, 10) 
+      }); 
+    } else {      
+      if (!config.lockCropCoords) {
+        $('#img-container').imgAreaSelect({ instance: true }).cancelSelection();
+      }           
+    }           
+  };
   
-  // check if this image has crop coordinates
-  function hasCropCoords(index) {
+  
+  /* rotate image if rotation angle is available */
+  var setupRotation = function(index) {
+    var angle;
     var imgAttrs = imgData[index];
     
-    if (typeof imgAttrs != 'undefined' && typeof imgAttrs.cropCoords != 'undefined') {
-      var cropCoords = imgAttrs.cropCoords;
+    clearRotationAngle();
+    
+    if (hasRotationAngle(index)) {
+      rotateImg(imgAttrs.rotationAngle, true, false, false);
+    }
+  };
+    
+  
+  /* get thumbnail image source */
+  var getThumbnailImgSrc = function(index) {
+    var thumbnailSrc = imgData[index].fileSrc;
+    
+    if (typeof imgData[index].thumbnailSrc !== 'undefined') {
+      thumbnailSrc = imgData[index].thumbnailSrc;
+    }
+    
+    return thumbnailSrc;
+  };
+  
+  
+  /* update metadata fields (filename, dimensions etc.) */
+  var updateSidebarMetadata = function(index) {
+    var dimensions = imgData[index].origWidth + ' x ' + imgData[index].origHeight + ' px';
+    
+    var fileName = "-";
+    var regex = /id=(\w+)/i; // assuming id is a string with no spaces
+    var match;
+    
+    if (typeof imgData[index].fileName !== 'undefined') {
+      fileName = imgData[index].fileName; 
+    } else {
+      match = regex.exec(imgData[index].fileSrc); // get id value
       
-      if ('x1' in cropCoords && 'y1' in cropCoords && 'x2' in cropCoords && 'y2' in cropCoords) {
-        return true;
-      }
-    }    
-    
-    return false;
-  }
-  
-  // store currently cropped coordinates
-  function storeCropAttrs(index) {
-    var width = parseInt($('#width-val').val(), 10);
-    var height = parseInt($('#height-val').val(), 10);
-        
-    if (width > 0 && height > 0) {   
-      if (typeof imgData[index].cropCoords === 'undefined') {
-        imgData[index].cropCoords = {};
-      } 
-        
-      imgData[index].cropCoords.x1 = $('#x1-val').val();      
-      imgData[index].cropCoords.y1 = $('#y1-val').val();      
-      imgData[index].cropCoords.x2 = $('#x2-val').val();      
-      imgData[index].cropCoords.y2 = $('#y2-val').val();
-      
-      $('#has_crop_coords_' + index).css('visibility', 'visible');            
+      // display 'Id: ' label and id value (instead of file name)
+      if (match != null && match[1] != null && match[1].length > 0) {
+        fileName = match[1];
+        $('#md-filename-label').html('Id: ');   
+      }       
     }
-    
-    // if crop size is 0 x 0, delete crop coords 
-    if (height == 0 && width == 0) {
-      delete imgData[index].cropCoords;
-      clearCropAttrs();
-      $('#has_crop_coords_' + index).css('visibility', 'hidden');                  
-    }
-  }
-
-  // clear crop coordinates
-  function clearCropAttrs() {
-    $('#x1-val').attr('value', '');
-    $('#y1-val').attr('value', '');
-    $('#x2-val').attr('value', '');
-    $('#y2-val').attr('value', '');
-    $('#width-val').attr('value', '');
-    $('#height-val').attr('value', '');
-  }
-  
-
-  // calculate and store crop ratios for all images
-  function setCropRatios() {
-    if (imgData === undefined || imgData.length <= 0) return;
-    
-    for (var i = 0; i < imgData.length; i++) {
-      imgData[i].cropRatio = parseFloat((imgData[i].origWidth / cropImgWidth).toFixed(2));
-    }
-  }
-  
-  
-  // show crop co-ordinates
-  function showCoords(crop) {    
-    if (typeof currentCropRatio === 'undefined') {
-      currentCropRatio = 1;
-    }
-    
-    $('#x1-val').val(parseInt(crop.x * currentCropRatio, 10));
-    $('#y1-val').val(parseInt(crop.y * currentCropRatio, 10));
-    $('#x2-val').val(parseInt(crop.x2 * currentCropRatio, 10));
-    $('#y2-val').val(parseInt(crop.y2 * currentCropRatio, 10));
-    $('#width-val').val(parseInt(crop.w * currentCropRatio, 10));
-    $('#height-val').val(parseInt(crop.h * currentCropRatio, 10));
-    
-    storeCropAttrs(getActiveImgIndex());
-  }
-  
-  // get current, active image index
-  function getActiveImgIndex() {
-    var currentImgId = $('.slide.slide-bg-selected > .slide-img').attr('id');
-    var index = parseInt(currentImgId.replace(/^img_/, ''), 10);
-
-    return index;    
-  }
-  
-  // update metadata fields (filename, dimensions etc.)
-  function updateMetadata(index) {
-    var filename = imgData[index].fileSrc.replace(/^.*\//, '');
-    var dimensions = imgData[index].origWidth + ' x ' + imgData[index].origHeight + ' px'; 
-    
-    $('#md-filename').html(filename);
+         
+    $('#md-filename').html(fileName);
     $('#md-dimensions').html(dimensions);
-  }
-  
-  
-  // update image navigation button links
-  function updateNavButtons(index, maxValue) {
+  };
+
+
+  /* update sidebar image navigation button links */
+  var updateNextPrevNavButtons = function(index, maxValue) {
     var nextIndex = index + 1;
     var prevIndex = index - 1;
     
@@ -238,192 +249,446 @@ $(document).ready(function() {
     if (nextIndex >= maxValue) {
       $('#btn-img-nav-next').attr('disabled', true);      
     }
-  }
+  };
+
   
-	// setup previous nav button 
-  $('#btn-img-nav-prev').click(function() {
-		var prevIndex = getActiveImgIndex() - 1;
-    $('#img_' + prevIndex).click();
-  });
-
-	// setup next nav button 
-  $('#btn-img-nav-next').click(function() {
-		var nextIndex = getActiveImgIndex() + 1;
-    $('#img_' + nextIndex).click();
-  });
-
-  // apply crop attributes across selection
-  $('#btn-apply-crop').click(function() {
-    var index = getActiveImgIndex();
+  /* check if given image has crop coordinates */
+  var hasCropCoords = function(index) {
+    var imgAttrs = imgData[index];
+    var cropCoords;
     
-    if (hasCropCoords(index)) {
-      $('.chk-box').each(function(){
-        if ($(this).is(':checked')) {
-          var chkboxIndex = $(this).attr('id').replace(/^chkbox_/, '');
-          storeCropAttrs(chkboxIndex); 
-        }
+    if (typeof imgAttrs !== 'undefined' && typeof imgAttrs.cropCoords !== 'undefined') {
+      cropCoords = imgAttrs.cropCoords;
+      
+      if ('x1' in cropCoords && 'y1' in cropCoords && 'x2' in cropCoords && 'y2' in cropCoords) {
+        return true;
+      }
+    }    
+    
+    return false;
+  };  
+  
+  
+  /* store currently cropped coordinates to image */
+  var storeCropCoords = function(index) {
+    var width  = parseInt($('#width-val').html(), 10);
+    var height = parseInt($('#height-val').html(), 10);
+    var props  = [ 'x1', 'y1', 'x2', 'y2' ];
+    //var index = getActiveImgIndex();
+        
+    if (width > 0 && height > 0) {         
+      
+      if (typeof imgData[index].cropCoords === 'undefined') {
+        imgData[index].cropCoords = {};
+      } 
+      
+      // store values in the main hash
+      $.each(props, function(i, key) {
+        imgData[index].cropCoords[key] = parseInt($('#' + key + '-val').html(), 10);
+      });
+      
+      $('#wc-has-crop-coords-' + index).css('visibility', 'visible');            
+    }    
+    // if crop size is 0 x 0, delete crop coords 
+    else {
+      delete imgData[index].cropCoords;
+      clearCropCoords();
+      
+      $('#wc-has-crop-coords-' + index).css('visibility', 'hidden');                  
+    }
+  };
+
+  /* clear crop coordinates from sidebar */
+  var clearCropCoords = function() {
+    var props = [ 'x1', 'y1', 'x2', 'y2', 'width', 'height' ];
+    var index = getActiveImgIndex();
+
+    $.each(props, function(i, key) {
+      $('#' + key + '-val').html('');
+    });
+  }; 
+  
+  
+  /* show crop coordinates in sidebat */
+  var showCropCoords = function(values) {    
+    var props = ['x1', 'y1', 'x2', 'y2', 'width', 'height'];
+    
+    if (typeof values !== 'undefined') {       
+      $.each(props, function(i, key) {
+        if (typeof values[i] !== 'undefined') {
+          $('#' + key + '-val').html(values[i]);
+        }    
       });
     }
-    
-    $('#unselect-all-chkboxes').click();    
-  });
-  
-  // enable/disable 'Apply crop attributes' button
-  $('.chk-box').change(function() {
-    var index = getActiveImgIndex();
+  };
 
-    $('#btn-apply-crop').attr('disabled', true);
+  /* check if given image has rotation angle */
+  var hasRotationAngle = function(index) {
+    var imgAttrs = imgData[index];
     
-    $('.chk-box').each(function() {
-      if ($(this).is(':checked') && hasCropCoords(index)) {
-        $('#btn-apply-crop').attr('disabled', false);      
+    if (typeof imgAttrs !== 'undefined' && 'rotationAngle' in imgAttrs && imgAttrs.rotationAngle > 0) {
+      return true;      
+    }
+    
+    return false;
+  };
+
+  
+  /* store rotation angle in main hash */
+  var storeRotationAngle = function(index) {
+    var angle = util.clampAngle(parseInt($('#rotation-angle-slider').slider('value'), 10));
+    
+    imgData[index].rotationAngle = angle;
+    
+    if (angle > 0) {      
+      $('#wc-has-rotation-angle-' + index).css('visibility', 'visible');                
+    }
+  };
+  
+  
+  /* reset rotation angle slider and sidebar rotation angle value */
+  var clearRotationAngle = function() {
+    rotateImg(0, true, false);
+    
+    $('#rotation-angle-slider').slider('value', 0); // reset rotation slider to 0
+    $('#rotation-angle').html('0');
+  };
+  
+  
+  /* setup opacity and rotation sliders */
+  var setupSliders = function() {
+    // image opacity slider
+    $('#opacity-slider').slider({
+      'from': 0.0, 
+      'to': 1.0,
+      'step': 0.1, 
+      'scale': [0.0, '|', '|', '|', '|', 0.5, '|', '|', '|', '|', 1.0],
+      'limits': false, 
+      'round': 1,
+      'skin': 'plastic',
+      'calculate': function(value) {        
+        value = value.toString().replace(/,/, '.');
+        
+        if (typeof img !== 'undefined') {
+          img.attr('opacity', parseFloat(value));
+        }
+        
+        return value; 
       }
     });    
-  });
+
+    // rotation angle slider
+    $('#rotation-angle-slider').slider({
+      'from': 0, 
+      'to': 360,
+      'step': 1, 
+      'scale': ['0&deg;', '|', '90&deg;', '|', '180&deg;', '|', '270&deg;', '|', '360&deg;'],
+      'limits': false, 
+      'round': 1,
+      'skin': 'plastic',
+      'dimension': '&deg;', 
+      'calculate': function(value) {
+        value = value.toString().replace(/,/, '.');
+
+        if (typeof img !== 'undefined') {                    
+          rotateImg(value, true, true, true);
+          $('#rotation-angle').html(value);
+        }
+        
+        return value;
+       }
+    });    
+  };
   
-  // select all checkboxes
-  $('#select-all-chkboxes').click(function() {
+  
+  /* setup rotation buttons - 90 deg cw, ccw & 1 deg cw, ccw */
+  var setupRotationButtons = function() {
+    $('#btn-rotate-90-cw').click(function() { rotateImg(90.0, false, false, true); });
+    $('#btn-rotate-90-ccw').click(function() { rotateImg(-90.0, false, false, true); });
+
+    $('#btn-rotate-pt1-cw').click(function() { rotateImg(1, false, false, true); });
+    $('#btn-rotate-pt1-ccw').click(function() { rotateImg(-1, false, false, true); });
+  };  
+  
+
+  /* rotate image to a given angle */  
+  var rotateImg = function(angle, isAbsolute, isSliderCallback, storeAngle) {
+    var sliderValue;
     var index = getActiveImgIndex();
     
-    $('.chk-box').each(function() {
-      $(this).attr('checked', 'checked');
-      if (hasCropCoords(index)) {
-        $('#btn-apply-crop').attr('disabled', false);      
-      }
-    });    
-  });
-  
-  // unselect all checkboxes
-  $('#unselect-all-chkboxes').click(function() {
-    $('.chk-box').each(function() {
-      $(this).removeAttr('checked');
-      $('#btn-apply-crop').attr('disabled', true);      
-    });    
-  });
-  
-  // setup shift click for slide-show checkboxes
-  $('input.chk-box').shiftClick();  
+    if (typeof img === 'undefined') {
+      return;
+    }
+
+    if (typeof isSliderCallback === 'undefined') {
+      isSliderCallback = false;
+    }
+
+    if (typeof storeAngle === 'undefined') {
+      isSliderCallback = true;
+    }
+        
+    sliderValue = parseInt($('#rotation-angle-slider').slider('value'), 10); 
+    angle = util.clampAngle(angle);
+
+    img.rotate(angle, isAbsolute);
     
-  // setup lock crop coordinates toggle
-  $('#lock-crop-coords').click(function() {
-    if (config.lockCropCoords) {
-      config.lockCropCoords = false;
-      $('#lock-crop-coords').attr('src', 'images/icon-lock-disabled.png');
-    } else {
-      config.lockCropCoords = true;
-      $('#lock-crop-coords').attr('src', 'images/icon-lock-enabled.png');      
+    if (angle > 0 && storeAngle) {      
+      storeRotationAngle(index);
     }
-  });
-
-
-  // setup rotate slider
-  $("#slider").slider({
-    min: -90, max: 90, value: 0, 
-    slide: function(event, ui) {
-      $('#rotation-angle').val(ui.value);
-      $('#rotate-img').rotate({
-        angle: ui.value,
-      });        
-    }
-  });
-
-
-  // initial rotation value
-  $('#rotation-angle').val($('#slider').slider('value'));
-
-
-  // bind click event to 'crop' mode
-  $('#mode-crop').click(function() {
-    $('#mode-rotate').removeClass('mode-on').addClass('mode-off');  
-    $('#mode-crop').removeClass('mode-off').addClass('mode-on');  
-    $('#rotate-container').hide();
-    disableRotationControls();  
-    enableCropControls();  
-    $('#crop-container').show();  
-  }).click();  
-
-
-  // bind click event to 'rotate' mode
-  $('#mode-rotate').click(function() {
-    $('#mode-crop').removeClass('mode-on').addClass('mode-off');  
-    $('#mode-rotate').removeClass('mode-off').addClass('mode-on');
-    $('#crop-container').hide();  
-    $('#rotate-container').show();
-    disableCropControls();      
-    enableRotationControls();  
-  });
-
-  
-  // bind event listener for rotation angle text box
-  $('#rotation-angle').keyup(function(event) {
-    var code = (event.keyCode ? event.keyCode : event.which);
-    var angle = parseInt($('#rotation-angle').val(), 10);
     
-    // if 'Enter' keycode is pressed 
-    if(code == 13 && angle >= -90 && angle <= 90) {
-      $('#rotate-img').rotate(angle);
-      $('#slider').slider('value', angle); 
-    }
-  });      
-
-  function clearSlideBackgrounds() {
+    if (!isSliderCallback) {      
+      sliderValue += angle;
+      $('#rotation-angle-slider').slider('value', util.clampAngle(sliderValue));
+    }     
+  };
+  
+  
+  /* clear slide's 'selected' background */
+  var clearSlideBackgrounds = function() {
     $('.slide').each(function() {
       $(this).removeClass('slide-bg-selected');
     });
-  }
+  };  
   
-  // enable rotation controls
-  function enableRotationControls(bool) {
-    if (bool == undefined) {
-      bool = true;
+
+  /* get current, active image index */
+  var getActiveImgIndex = function() {
+    var currentImgId, index = 0;        
+    
+    currentImgId = $('.slide.slide-bg-selected > .slide-img').attr('id');
+    
+    if (typeof currentImgId !== 'undefined') {      
+      index = parseInt(currentImgId.replace(/^wc-slide-img-/, ''), 10);
+    }
+
+    return index;    
+  };  
+
+
+  /* set up multi-select dropdown actions */
+  var setupMultiSelect = function() {
+    var selection;
+    
+    $('#multi-select-dropdown').change(function() {
+      var index = getActiveImgIndex();
+      var selection = $('#multi-select-dropdown').val();      
+          
+      switch(selection) {        
+        case "SelectAll":          
+          $('.chk-box').each(function() {
+            $(this).attr('checked', 'checked');
+            
+            if (hasCropCoords(index)) { $('#btn-apply-crop').attr('disabled', false); }
+            if (hasRotationAngle(index)) { $('#btn-apply-rotation').attr('disabled', false); }
+          });    
+          break;
+        
+        case "UnSelectAll":
+          unSelectAllSlides();
+          break;
+        
+        case "SelectOddPages":
+          var i = 0;
+          
+          $('.chk-box').each(function() {
+            $(this).removeAttr('checked');
+            
+            if ((++i % 2) == 1) {
+              $(this).attr('checked', 'checked');
+            }
+            
+            if (hasCropCoords(index)) { $('#btn-apply-crop').attr('disabled', false); }
+            if (hasRotationAngle(index)) { $('#btn-apply-rotation').attr('disabled', false); }
+          });    
+
+        case "SelectEvenPages":
+          var i = 0;
+          
+          $('.chk-box').each(function() {
+            $(this).removeAttr('checked');
+            
+            if ((++i % 2) == 0) {
+              $(this).attr('checked', 'checked');
+            }
+            
+            if (hasCropCoords(index)) { $('#btn-apply-crop').attr('disabled', false); }
+            if (hasRotationAngle(index)) { $('#btn-apply-rotation').attr('disabled', false); }
+          });    
+          
+        default:        
+      }      
+    });
+  };
+
+  /* unselect all slides */
+  var unSelectAllSlides = function() {
+    $('.chk-box').each(function() {
+      $(this).removeAttr('checked');
+      $('#btn-apply-crop').attr('disabled', true);      
+      $('#btn-apply-rotation').attr('disabled', true);      
+    });        
+    
+    $('#multi-select-dropdown').val("");
+  };
+
+  /* bind mouse events on init() */
+  var bindMouseEvents = function() {
+    
+    // setup previous nav button 
+    $('#btn-img-nav-prev').click(function() {
+      var prevIndex = getActiveImgIndex() - 1;
+      $('#wc-slide-img-' + prevIndex).click();
+    });
+  
+    // setup next nav button 
+    $('#btn-img-nav-next').click(function() {
+      var nextIndex = getActiveImgIndex() + 1;
+      $('#wc-slide-img-' + nextIndex).click();
+    });
+  
+    // apply crop attributes across selection
+    $('#btn-apply-crop').click(function() {
+      var index = getActiveImgIndex();
+      
+      if (hasCropCoords(index)) {
+        $('.chk-box').each(function(){
+          if ($(this).is(':checked')) {
+            var chkboxIndex = $(this).attr('id').replace(/^wc-slide-chkbox-/, '');            
+            storeCropCoords(chkboxIndex);
+          }
+        });
+      }
+            
+      unSelectAllSlides();    
+    });  
+        
+    // apply rotation angle across selection
+    $('#btn-apply-rotation').click(function() {
+      var index = getActiveImgIndex();
+      
+      if (hasRotationAngle(index)) {
+        $('.chk-box').each(function(){
+          if ($(this).is(':checked')) {
+            var chkboxIndex = $(this).attr('id').replace(/^wc-slide-chkbox-/, '');            
+            storeRotationAngle(chkboxIndex);
+          }
+        });
+      }
+      
+      unSelectAllSlides();    
+    });  
+
+        
+    // enable/disable 'Apply crop attributes' & 'Apply rotation angle' buttons
+    $('.chk-box').change(function() {
+      var index = getActiveImgIndex();
+  
+      $('#btn-apply-crop').attr('disabled', true);
+      $('#btn-apply-rotation').attr('disabled', true);
+      
+      $('.chk-box').each(function() {
+        if ($(this).is(':checked')) {
+          if (hasCropCoords(index)) { $('#btn-apply-crop').attr('disabled', false); }
+          if (hasRotationAngle(index)) { $('#btn-apply-rotation').attr('disabled', false); }
+        }
+      });    
+    });
+        
+    // setup shift click for slide-show checkboxes
+    $('input.chk-box').shiftClick();      
+    
+    // setup lock crop coordinates toggle
+    $('#lock-crop-coords').click(function() {
+      if (config.lockCropCoords) {
+        config.lockCropCoords = false;
+        $('#lock-crop-coords').attr('src', pathTo('images/icon-lock-disabled.png'));
+      } else {
+        config.lockCropCoords = true;
+        $('#lock-crop-coords').attr('src', pathTo('images/icon-lock-enabled.png'));      
+      }
+    });    
+
+    // setup lock crop coordinates toggle
+    $('#lock-rotation-angle').click(function() {
+      if (config.lockRotationAngle) {
+        config.lockRotationAngle = false;
+        $('#lock-rotation-angle').attr('src', pathTo('images/icon-lock-disabled.png'));
+      } else {
+        config.lockRotationAngle = true;
+        $('#lock-rotation-angle').attr('src', pathTo('images/icon-lock-enabled.png'));      
+      }
+    });    
+  };
+
+
+  /* auto save method that runs forever (triggered by the setInterval function at the top) */
+  var autoSave = function() {
+    // imgData is the main JavaScript hash    
+    // To convert imgData has to string - 
+    // var str = JSON.stringify(imgData, null);
+    
+    if (autoSaver != null) {
+      autoSaver(imgData);
     }
     
-    if (bool) {
-      $('#rotation-angle').removeAttr('disabled');
-      $('#slider').slider('option', 'disabled', false);    
-    } else {
-      $('#slider').slider('option', 'disabled', true);
-      $('#rotation-angle').attr('disabled', true);    
-    } 
-  }
-  
-  // disable rotation controls
-  function disableRotationControls() {
-    enableRotationControls(false);
-  }
-  
-  // enable crop controls
-  function enableCropControls(bool) {
-    if (bool == undefined) {
-      bool = true;
-    }
-  
-    if (bool) {
-      $('#x1-val,#y1-val,#x2-val,#y2-val,#width-val,#height-val').removeAttr('disabled');
-    } else {
-      $('#x1-val,#y1-val,#x2-val,#y2-val,#width-val,#height-val').attr('disabled', true);
-    } 
-  }
-  
-  // disable crop controls
-  function disableCropControls() {
-    enableCropControls(false);
-  }
-  
-  // get height for a given width (maintaing aspect ratio)
-  function getHeight(width, origWidth, origHeight) {
-    var height = parseInt((origHeight/origWidth) * width, 10);
-    return height;
-  }
-  
-  // get width for a given height (maintaing aspect ratio)
-  function getWidth(height, origWidth, origHeight) {
-    var width = parseInt((origWidth/origHeight) * height, 10);
-    return width;
-  }
-  
-  $('#json-data').click(function() {
-    alert(JSON.stringify(imgData, null, 4));
-  });
-});
+    /*
+    $.ajax({
+      url: "url.html",
+      context: document.body,
+      success: function(){
+        var formattedDate = $.format.date((new Date()).toString(), 'MM/dd/yyyy hh:mm:ss a');    
+        $('#last-saved .date-value').html(formattedDate);        
+      }
+    });     
+    */
+  };
 
+  
+  /* utility methods - get proportional height, width etc. */
+  var util = {
+    
+    // get height for a given width (maintaing aspect ratio)
+    getHeight: function(width, origWidth, origHeight) {
+      var height = parseInt((origHeight / origWidth) * width, 10);
+      return height;
+    },
+      
+    // get width for a given height (maintaing aspect ratio)
+    getWidth: function(height, origWidth, origHeight) {
+      var width = parseInt((origWidth / origHeight) * height, 10);
+      return width;
+    },
+    
+    // calculate & store dimensions for the img to be placed in crop-rotate area 
+    getCropRotateImgSize: function(cropRotateAreaSide, origWidth, origHeight) {
+      var aspectRatio, height, width;      
+      
+      aspectRatio = (origWidth / origHeight).toFixed(2);
+      
+      /* 
+        1. aspectRatio = width/height
+        2. width^2 + height^2 = cropRotateAreaSide^2
+        
+        solving above two equations, we get, 
+          height = sqrt[(cropRotateAreaSide^2) / (aspectRatio^2 + 1)]
+          width  = aspectRatio * height       
+      */
+      height = parseInt(Math.sqrt(Math.pow(cropRotateAreaSide, 2) / (Math.pow(aspectRatio, 2) + 1.0)), 10);
+      width  = parseInt((aspectRatio * height), 10);
+
+      return [width, height];                   
+    },
+    
+    // clamp a given angle between 0 and 360 degrees
+    clampAngle: function(angle) {
+      if (parseFloat(angle) < 0.0) { angle = parseFloat(angle) + 360.0; }
+      if (parseFloat(angle) >= 360.0) { angle = parseFloat(angle) - 360.0; }
+      
+      return angle;      
+    }
+  };
+    
+  // run
+  init();
+};

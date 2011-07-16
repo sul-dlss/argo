@@ -1,29 +1,48 @@
 <% @title = "WebCrop Tool" %>
 <% content_for :head do %>
-    <%= stylesheet_link_tag 'webcrop', 'jquery.Jcrop' %>
+    <%= stylesheet_link_tag 'webcrop', 'imgareaselect-animated.css', 'jslider' %>
     <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.13.custom' %>
     <%= javascript_include_tag 'jquery', 'jquery-ui.min', 'application' %>
-    <%= javascript_include_tag 'jquery.Jcrop.min', 'jqueryRotate.min', 'jquery.shiftclick', 'json2', 'webcrop' %>
+    <%= javascript_include_tag 'raphael-min', 'jquery.imgareaselect.pack', 'jquery.dependClass', 'jquery.slider-min',
+                               'jquery.shiftclick', 'webcrop', 'json2', 'jquery.dateFormat' %>
     <script type="text/javascript">
-      var imgData = <%=raw @image_data.to_json %>
-      
-      function saveImgData() {
-        $.ajax({ 
-          type: 'PUT', 
-          contentType: 'application/json', 
-          data: JSON.stringify(imgData)
-        });
-      }
+      var imgDataJSON = <%=raw @image_data.to_json %>;
+      var lastSavedData;
+      var wc;
+
+      $(document).ready(function() {
+        var autoSaveHandler = function(data) {
+          var jsonData = JSON.stringify(data, null);
+          if (lastSavedData == null) {
+            lastSavedData = jsonData;
+          } else if (lastSavedData != jsonData) {
+            $.ajax({ 
+              type: 'PUT', 
+              contentType: 'application/json', 
+              context: document.body,
+              data: jsonData,
+              success: function(){
+                lastSavedData = jsonData;
+                var formattedDate = $.format.date((new Date()).toString(), 'MM/dd/yyyy hh:mm:ss a');            
+                $('#last-saved .date-value').html(formattedDate);
+              }
+            });
+          }
+        };
+
+        wc = new WebCrop(imgDataJSON, autoSaveHandler);
+      });
     </script>
 <% end %>
 
 <div id="contents">
-  <div id="sidebar">
-
+  
+  <div id="sidebar">        
+  
     <div id="img-info">
-      <span class="box-title">Image Info:</span>
+      <span class="bold">Image Info:</span>
       <dl>
-        <dt>Filename:</dt><dd id="md-filename"></dd>
+        <dt id="md-filename-label">File Name:</dt><dd id="md-filename"></dd>
         <dt>Original Size:</dt><dd id="md-dimensions"></dd>
       </dl>
       <div id="img-nav">            
@@ -31,63 +50,86 @@
         <input id="btn-img-nav-next" type="button" value="Next &rarr;"> 
       </div>
     </div>
-
-    <div id="mode">
-      <span class="box-title">Mode:</span>
-      <div id="mode-box">
-        <div id="mode-crop" title="Crop Mode">Crop</div>
-        <div id="mode-rotate" class="mode-off" title="Rotate Mode">Rotate</div>  
-      </div>
-    </div>
-
+    
     <div id="crop-dimensions">
-      <span class="box-title">Crop Attributes:</span>
+      <span class="bold">Crop Attributes:</span>
       <dl>
-        <dt>x1:</dt><dd><input type="text" id="x1-val" size="8"></dd>
-        <dt>y1:</dt><dd><input type="text" id="y1-val" size="8"></dd>
-        <dt>x2:</dt><dd><input type="text" id="x2-val" size="8"></dd>
-        <dt>y2:</dt><dd><input type="text" id="y2-val" size="8"></dd>
-        <dt>Width:</dt><dd><input type="text" id="width-val" size="8"></dd>
-        <dt>Height:</dt><dd><input type="text" id="height-val" size="8"></dd>
+        <dt>x1:</dt><dd><span id="x1-val"></span></dd>
+        <dt>y1:</dt><dd><span id="y1-val"></span></dd>
+        <dt>x2:</dt><dd><span id="x2-val"></span></dd>
+        <dt>y2:</dt><dd><span id="y2-val"></span></dd>
+        <dt>Width:</dt><dd><span id="width-val"></span></dd>
+        <dt>Height:</dt><dd><span id="height-val"></span></dd>
       </dl>          
-      <div id="crop-locks">
+      <div id="crop-rotate-locks">
         <dl>
           <dt>Lock/Unlock crop coordinates:</dt>
-          <dd><%= image_tag 'icons/icon-lock-disabled.png', :id => 'lock-crop-coords', :title => 'Lock/unlock crop coordinates', :alt => 'Lock/unlock crop coordinates' %></dd>              
+          <dd><%= image_tag 'icons/icon-lock-disabled.png', :id => 'lock-crop-coords', :title => 'Lock/unlock crop coordinates', :alt => 'Lock/unlock crop coordinates' %></dd>
         </dl>
       </div>
     </div>
-
-
+    
+    
     <div id="rotation">
-      <span class="box-title">Rotation:</span>
+      <span class="bold">Rotation:</span>
       <dl>
-        <dt>Angle:</dt><dd><input type="text" id="rotation-angle" size="8"></dd>
+        <dt>Angle:</dt><dd><span id="rotation-angle"></span>&deg;</dd>
       </dl>  
-      <div id="slider"></div>
+      <div id="crop-rotate-locks">
+        <dl>
+          <dt>Lock/Unlock rotation angle:</dt>
+          <dd><%= image_tag 'icons/icon-lock-disabled.png', :id => 'lock-rotation-angle', :title => 'Lock/unlock rotation angle', :alt => 'Lock/unlock rotation angle' %></dd>
+        </dl>
+      </div>
     </div>
-    <div>          
-      <a id="json-data" href="" style="display:none;">JSON</a>
+    
+    <div id="opacity">
+      <span class="bold">Image Opacity:</span> <br>
+      <div id="opacity-slider-box">            
+        <input id="opacity-slider" type="slider" name="opacity" value="1.0">
+      </div>
+    </div>
+    
+    <div id="last-saved">          
+      <span>Last saved at: </span>
+      <span class="date-value">-</span>
     </div>
 
   </div>
-
-  <div id="containers">
-    <div id="crop-container">
-      <img id="crop-img" src="" alt="" />
+  
+  <div id="crop-rotate-area">
+    <div id="crop-rotate-background">
+      <div id="img-container">          
+      </div>        
     </div>
-    <div id="rotate-container" style="display: none;">
-      <img id="rotate-img" src="" alt="" />
-    </div>
+    <div id="rotate-controls">        
+      <div id="rotation-angle-slider-box">            
+        <input id="rotation-angle-slider" type="slider" name="rotation-angle" value="0">
+      </div>
+      <div id="rotation-angle-buttons">
+        <input id="btn-rotate-90-cw" type="button" value="90&deg;">
+        <input id="btn-rotate-90-ccw" type="button" value="90&deg;">
+        &nbsp; &nbsp;
+        <input id="btn-rotate-pt1-cw" type="button" value="1&deg;">
+        <input id="btn-rotate-pt1-ccw" type="button" value="1&deg;">
+      </div>
+    </div>        
   </div>
 
   <div id="slide-show">
     <div id="multi-select-options">          
-      <a id="select-all-chkboxes" href="#">Select All</a> &bull;
-      <a id="unselect-all-chkboxes" href="#">UnSelect All</a> <br/>    
-      <input id="btn-apply-crop" type="button" value="Apply crop attributes" disabled="true">
+      <select id="multi-select-dropdown">
+        <option value=""></option>
+        <option value="SelectAll">Select All</option>
+        <option value="UnSelectAll">UnSelect All</option>
+        <option value="SelectOddPages">Select Odd Pages</option>
+        <option value="SelectEvenPages">Select Even Pages</option>
+      </select>    
+      <input id="btn-apply-crop" type="button" value="Apply crop attributes" disabled="true"> <br/>
+      <input id="btn-apply-rotation" type="button" value="Apply rotation angle" disabled="true">
     </div>
     <ul id="slide-show-list">          
     </ul>    
-  </div>      
-</div>
+  </div>            
+
+</div>    
