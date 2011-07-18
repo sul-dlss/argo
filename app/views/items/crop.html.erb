@@ -10,29 +10,20 @@
       var wc;
 
       $(document).ready(function() {
-        var autoSaveHandler = function(data) {
-          var updates = $.grep(data, function(item,index) {
-            return(item.dirty == true);
-          });
+        var autoSaveHandler = function(imgData, onSuccess) {
+          var updates = $.grep(imgData, function(item,index) { return(item.changed > 0); });
           if (updates.length > 0) {
-            var jsonData = JSON.stringify(updates, null);
-            $.ajax({ 
-              type: 'PUT', 
-              contentType: 'application/json', 
-              context: document.body,
-              data: jsonData,
-              success: function(){
-                $.each(data, function(index,item) {
-                  delete item.dirty;
-                });
-                var formattedDate = $.format.date((new Date()).toString(), 'MM/dd/yyyy hh:mm:ss a');            
-                $('#last-saved .date-value').html(formattedDate);
-              }
-            });
+           console.debug("Updating " + updates.length.toString() + " items.");
+           $.ajax({ 
+             type: 'PUT', 
+             contentType: 'application/json', 
+             context: document.body,
+             data: JSON.stringify(updates, null),
+             success: function() { onSuccess(updates); }
+           });
           }
-        };
-
-        wc = new WebCrop(imgDataJSON, autoSaveHandler);
+        }
+        wc = new WebCrop(imgDataJSON, autoSaveHandler, pathTo('/'));
       });
     </script>
 <% end %>
