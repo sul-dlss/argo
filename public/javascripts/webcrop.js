@@ -296,6 +296,7 @@ var WebCrop = function(imgData, autoSaver) {
       
       $('#wc-has-crop-coords-' + index).css('visibility', 'hidden');                  
     }
+    imgData[index].dirty = true;
   };
 
   /* clear crop coordinates from sidebar */
@@ -343,6 +344,7 @@ var WebCrop = function(imgData, autoSaver) {
     if (angle > 0) {      
       $('#wc-has-rotation-angle-' + index).css('visibility', 'visible');                
     }
+    imgData[index].dirty = true;
   };
   
   
