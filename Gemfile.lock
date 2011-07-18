@@ -25,7 +25,7 @@ GEM
       rack-mount (~> 0.6.14)
       rack-test (~> 0.5.7)
       tzinfo (~> 0.3.23)
-    active-fedora (2.2.2)
+    active-fedora (2.3.1)
       activeresource
       equivalent-xml
       facets
@@ -54,10 +54,9 @@ GEM
     awesome_print (0.4.0)
     barby (0.4.3)
     builder (2.1.2)
-    daemons (1.1.3)
-    dor-services (1.1.3)
+    daemons (1.1.4)
+    dor-services (1.2.1)
       active-fedora (>= 1.2.6)
-      guid
       json
       mod-cons
       nokogiri (= 1.4.3.1)
@@ -66,20 +65,20 @@ GEM
       ruby-cache
       solr-ruby (>= 0.0.8)
       systemu
+      uuidtools
       validatable
-    equivalent-xml (0.2.6)
+    equivalent-xml (0.2.7)
       nokogiri (>= 1.4.3)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     eventmachine (0.12.10)
     facets (2.9.1)
-    guid (0.1.1)
     haml (3.1.2)
     highline (1.6.2)
     i18n (0.5.0)
     interactive_editor (0.0.8)
       spoon (>= 0.0.1)
-    json (1.5.2)
+    json (1.5.3)
     lyberteam-devel (0.4.0)
       highline
       pony
@@ -130,14 +129,10 @@ GEM
     ruby-cache (0.3.0)
     sass (3.1.2)
     solr-ruby (0.0.8)
-    solrizer (1.0.4)
+    solrizer (1.1.0)
       daemons
       mediashelf-loggable
-      mediashelf-loggable
       nokogiri
-      nokogiri
-      nokogiri
-      om
       om (>= 1.0.0)
       stomp
       xml-simple
@@ -154,9 +149,10 @@ GEM
       polyglot (>= 0.3.1)
     ttfunk (1.0.1)
     tzinfo (0.3.28)
+    uuidtools (2.1.2)
     validatable (1.6.7)
     wirble (0.1.3)
-    xml-simple (1.0.16)
+    xml-simple (1.1.0)
 
 PLATFORMS
   ruby
