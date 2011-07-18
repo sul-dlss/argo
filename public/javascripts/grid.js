@@ -258,9 +258,10 @@ var gridContext = function() {
         },
         title: 'Registration Properties'
       });
-      
+
       $('#project').autocomplete({
-        source: pathTo('/registration/suggest_project')
+        source: pathTo('/registration/suggest_project'),
+        minLength: 0
       });
       
       // Update Workflow and Form lists when APO changes
