@@ -37,99 +37,99 @@
     </script>
 <% end %>
 
-<div id="contents">
+<div id="contents"> 
   
   <div id="sidebar">        
   
-    <div id="img-info">
-      <span class="bold">Image Info:</span>
-      <dl>
-        <dt id="md-filename-label">File Name:</dt><dd id="md-filename"></dd>
-        <dt>Original Size:</dt><dd id="md-dimensions"></dd>
-      </dl>
+    <div id="img-info"> 
+      <span class="bold">Image Info:</span> 
+      <dl> 
+        <dt id="md-filename-label">File Name:</dt><dd id="md-filename"></dd> 
+        <dt>Original Size:</dt><dd id="md-dimensions"></dd> 
+      </dl> 
       <div id="img-nav">            
-        <input id="btn-img-nav-prev" type="button" value="&larr; Prev">
+        <input id="btn-img-nav-prev" type="button" value="&larr; Prev"> 
         <input id="btn-img-nav-next" type="button" value="Next &rarr;"> 
-      </div>
-    </div>
+      </div> 
+    </div> 
     
-    <div id="crop-dimensions">
-      <span class="bold">Crop Attributes:</span>
-      <dl>
-        <dt>x1:</dt><dd><span id="x1-val"></span></dd>
-        <dt>y1:</dt><dd><span id="y1-val"></span></dd>
-        <dt>x2:</dt><dd><span id="x2-val"></span></dd>
-        <dt>y2:</dt><dd><span id="y2-val"></span></dd>
-        <dt>Width:</dt><dd><span id="width-val"></span></dd>
-        <dt>Height:</dt><dd><span id="height-val"></span></dd>
+    <div id="crop-dimensions"> 
+      <span class="bold">Crop Attributes:</span> 
+      <dl> 
+        <dt>x1:</dt><dd><span id="x1-val"></span></dd> 
+        <dt>y1:</dt><dd><span id="y1-val"></span></dd> 
+        <dt>x2:</dt><dd><span id="x2-val"></span></dd> 
+        <dt>y2:</dt><dd><span id="y2-val"></span></dd> 
+        <dt>Width:</dt><dd><span id="width-val"></span></dd> 
+        <dt>Height:</dt><dd><span id="height-val"></span></dd> 
       </dl>          
-      <div id="crop-rotate-locks">
-        <dl>
-          <dt>Lock/Unlock crop coordinates:</dt>
-          <dd><%= image_tag 'icons/icon-lock-disabled.png', :id => 'lock-crop-coords', :title => 'Lock/unlock crop coordinates', :alt => 'Lock/unlock crop coordinates' %></dd>
-        </dl>
-      </div>
-    </div>
+      <div id="crop-rotate-locks"> 
+        <dl> 
+          <dt>Lock/Unlock crop coordinates:</dt> 
+          <dd><img id="lock-crop-coords" src="/images/icon-lock-disabled.png" title="Lock/unlock crop coordinates" alt="Lock/unlock crop coordinates"></dd>              
+        </dl> 
+      </div> 
+    </div> 
     
     
-    <div id="rotation">
-      <span class="bold">Rotation:</span>
-      <dl>
-        <dt>Angle:</dt><dd><span id="rotation-angle"></span>&deg;</dd>
+    <div id="rotation"> 
+      <span class="bold">Rotation:</span> 
+      <dl> 
+        <dt>Angle:</dt><dd><span id="rotation-angle"></span>&deg;</dd> 
       </dl>  
-      <div id="crop-rotate-locks">
-        <dl>
-          <dt>Lock/Unlock rotation angle:</dt>
-          <dd><%= image_tag 'icons/icon-lock-disabled.png', :id => 'lock-rotation-angle', :title => 'Lock/unlock rotation angle', :alt => 'Lock/unlock rotation angle' %></dd>
-        </dl>
-      </div>
-    </div>
+      <div id="crop-rotate-locks"> 
+        <dl> 
+          <dt>Lock/Unlock rotation angle:</dt> 
+          <dd><img id="lock-rotation-angle" src="/images/icon-lock-disabled.png" title="Lock/unlock rotation angle" alt="Lock/unlock rotation angle"></dd>              
+        </dl> 
+      </div> 
+    </div> 
     
-    <div id="opacity">
-      <span class="bold">Image Opacity:</span> <br>
+    <div id="opacity"> 
+      <span class="bold">Image Opacity:</span> <br> 
       <div id="opacity-slider-box">            
-        <input id="opacity-slider" type="slider" name="opacity" value="1.0">
-      </div>
-    </div>
+        <input id="opacity-slider" type="slider" name="opacity" value="1.0"> 
+      </div> 
+    </div> 
     
     <div id="last-saved">          
-      <span>Last saved at: </span>
-      <span class="date-value">-</span>
-    </div>
+      <span>Last saved at: </span> 
+      <span class="date-value">-</span> 
+    </div> 
 
-  </div>
+  </div> 
   
-  <div id="crop-rotate-area">
-    <div id="crop-rotate-background">
+  <div id="crop-rotate-area"> 
+    <div id="crop-rotate-background"> 
       <div id="img-container">          
       </div>        
-    </div>
+    </div> 
     <div id="rotate-controls">        
       <div id="rotation-angle-slider-box">            
-        <input id="rotation-angle-slider" type="slider" name="rotation-angle" value="0">
-      </div>
-      <div id="rotation-angle-buttons">
-        <input id="btn-rotate-90-cw" type="button" value="90&deg;">
-        <input id="btn-rotate-90-ccw" type="button" value="90&deg;">
+        <input id="rotation-angle-slider" type="slider" name="rotation-angle" value="0"> 
+      </div> 
+      <div id="rotation-angle-buttons"> 
+        <input id="btn-rotate-90-cw" type="button" value="90&deg;"> 
+        <input id="btn-rotate-90-ccw" type="button" value="90&deg;"> 
         &nbsp; &nbsp;
-        <input id="btn-rotate-pt1-cw" type="button" value="1&deg;">
-        <input id="btn-rotate-pt1-ccw" type="button" value="1&deg;">
-      </div>
+        <input id="btn-rotate-pt1-cw" type="button" value="1&deg;"> 
+        <input id="btn-rotate-pt1-ccw" type="button" value="1&deg;"> 
+      </div> 
     </div>        
-  </div>
+  </div> 
 
-  <div id="slide-show">
+  <div id="slide-show"> 
     <div id="multi-select-options">          
-      <select id="multi-select-dropdown">
-        <option value=""></option>
-        <option value="SelectAll">Select All</option>
-        <option value="UnSelectAll">UnSelect All</option>
-        <option value="SelectOddPages">Select Odd Pages</option>
-        <option value="SelectEvenPages">Select Even Pages</option>
+      <select id="multi-select-dropdown"> 
+        <option value=""></option> 
+        <option value="SelectAll">Select All</option> 
+        <option value="UnSelectAll">UnSelect All</option> 
+        <option value="SelectOddPages">Select Odd Pages</option> 
+        <option value="SelectEvenPages">Select Even Pages</option> 
       </select>    
-      <input id="btn-apply-crop" type="button" value="Apply crop attributes" disabled="true"> <br/>
-      <input id="btn-apply-rotation" type="button" value="Apply rotation angle" disabled="true">
-    </div>
+      <input id="btn-apply-crop" type="button" value="Apply crop attributes" disabled="true"> <br/> 
+      <input id="btn-apply-rotation" type="button" value="Apply rotation angle" disabled="true"> 
+    </div> 
     <ul id="slide-show-list">          
     </ul>    
   </div>            
