@@ -8,6 +8,7 @@ gem 'thin' # or mongrel
 gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
 gem 'barby'
 gem "dor-services", ">=1.1.0"
+#gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services/"
 gem "mod-cons", ">=0.2.0"
 gem "mysql2", "~> 0.2.7"
 gem "sqlite3-ruby", "~> 1.2.5"
