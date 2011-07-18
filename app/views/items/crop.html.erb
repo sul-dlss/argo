@@ -7,22 +7,24 @@
                                'jquery.shiftclick', 'webcrop', 'json2', 'jquery.dateFormat' %>
     <script type="text/javascript">
       var imgDataJSON = <%=raw @image_data.to_json %>;
-      var lastSavedData;
       var wc;
 
       $(document).ready(function() {
         var autoSaveHandler = function(data) {
-          var jsonData = JSON.stringify(data, null);
-          if (lastSavedData == null) {
-            lastSavedData = jsonData;
-          } else if (lastSavedData != jsonData) {
+          var updates = $.grep(data, function(item,index) {
+            return(item.dirty == true);
+          });
+          if (updates.length > 0) {
+            var jsonData = JSON.stringify(updates, null);
             $.ajax({ 
               type: 'PUT', 
               contentType: 'application/json', 
               context: document.body,
               data: jsonData,
               success: function(){
-                lastSavedData = jsonData;
+                $.each(data, function(index,item) {
+                  delete item.dirty;
+                });
                 var formattedDate = $.format.date((new Date()).toString(), 'MM/dd/yyyy hh:mm:ss a');            
                 $('#last-saved .date-value').html(formattedDate);
               }
