@@ -9,10 +9,19 @@ gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
 gem 'barby'
 gem "dor-services", ">=1.1.0"
 gem "mod-cons", ">=0.2.0"
+gem "mysql2", "~> 0.2.7"
+gem "sqlite3-ruby", "~> 1.2.5"
 gem "haml"
 gem "sass"
 
 gem 'rails', '3.0.8'
+
+group :development do
+  if File.exists?(mygems = File.join(ENV['HOME'],'.gemfile'))
+    instance_eval(File.read(mygems))
+  end
+  gem "lyberteam-devel"
+end
 
 # Use unicorn as the web server
 # gem 'unicorn'

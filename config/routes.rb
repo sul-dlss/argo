@@ -1,10 +1,17 @@
 RubyDorServices::Application.routes.draw do
 
+  resources :items do
+    get :crop, :on => :member
+    put :crop, :on => :member, :action => :save_crop
+    get :register, :on => :collection
+  end
+  
   namespace :registration do
     get "/", :action => :form
     get "/tracksheet"
     get "/form_list"
     get "/workflow_list"
+    get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
   end
   
   namespace :dor do
