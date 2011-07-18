@@ -46,4 +46,32 @@ RubyDorServices::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  config.middleware.use(Rack::Webauth)
+  cert_dir = File.expand_path(File.join(File.dirname(__FILE__),"../certs"))
+
+  Dor::Config.configure do
+    fedora do
+      url 'https://fedoraAdmin:1y83r73am@dor.stanford.edu/fedora'
+      cert_file File.join(cert_dir,"argo-client.crt")
+      key_file File.join(cert_dir,"argo-client.key")
+      key_pass ''
+    end
+
+    workflow.url 'https://lyberservices-test.stanford.edu/workflow/'
+    gsearch.url 'https://dor-test.stanford.edu/solr'
+
+    suri do
+      mint_ids true
+      id_namespace 'druid'
+      url 'https://lyberservices-test.stanford.edu:8080'
+      user 'labware'
+      pass 'lyberteam'
+    end
+
+    metadata do
+      exist.url 'http://viewer:l3l%40nd@lyberapps-prod.stanford.edu/exist/rest'
+      catalog.url 'http://lyberservices-prod.stanford.edu/catalog/mods'
+    end
+  end
 end
