@@ -13,6 +13,10 @@ RubyDorServices::Application.routes.draw do
     get "/workflow_list"
     get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
   end
+
+  namespace :auth do
+    get '/login'
+  end
   
   namespace :dor do
     get '/configuration'

@@ -34,4 +34,8 @@ class ApplicationController < ActionController::Base
     Dor::Config.fedora.post_config
   end
   
+  def authorize!
+    redirect_to "#{auth_login_url}?return=#{fullpath}" unless webauth.logged_in?
+  end
+
 end

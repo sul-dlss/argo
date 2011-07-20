@@ -1,7 +1,8 @@
 class DorController < ApplicationController
+  before_filter :authorize!
   respond_to :json, :xml
   respond_to :text, :only => :query_by_id
-
+  
   def configuration
     if Rails.env.development? or ENV['DOR_SERVICES_DEBUG_MODE']
       result = Dor::Config.to_hash.merge({

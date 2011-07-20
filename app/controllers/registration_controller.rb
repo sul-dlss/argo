@@ -1,5 +1,6 @@
 class RegistrationController < ApplicationController
-
+  before_filter :authorize!
+  
   def form
     redirect_to register_items_url
   end
