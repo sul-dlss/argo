@@ -21,6 +21,10 @@ RubyDorServices::Application.routes.draw do
     resources :objects
   end
   
+  namespace :legacy do
+    resources :objects
+  end
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
