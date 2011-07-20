@@ -25,7 +25,7 @@ GEM
       rack-mount (~> 0.6.14)
       rack-test (~> 0.5.7)
       tzinfo (~> 0.3.23)
-    active-fedora (2.3.1)
+    active-fedora (2.3.3)
       activeresource
       equivalent-xml
       facets
@@ -55,7 +55,7 @@ GEM
     barby (0.4.3)
     builder (2.1.2)
     daemons (1.1.4)
-    dor-services (1.2.1)
+    dor-services (1.3.1)
       active-fedora (>= 1.2.6)
       json
       mod-cons
@@ -160,7 +160,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   barby
-  dor-services (>= 1.1.0)
+  dor-services (>= 1.3.0)
   haml
   interactive_editor
   lyberteam-devel
