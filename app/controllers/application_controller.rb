@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  before_filter :unpack_webauth
   before_filter :fedora_setup
   
   include Rack::Webauth::Helpers
@@ -33,9 +34,25 @@ class ApplicationController < ActionController::Base
   def fedora_setup
     Dor::Config.fedora.post_config
   end
+
+  def unpack_webauth
+    begin
+      unless session[:webauth_env].nil?
+        unless webauth.logged_in?
+          hash = JSON.parse(session[:webauth_env])
+          request.env[Rack::Webauth::NS] = Rack::Webauth::Info.new(request.env.merge(hash))
+        end
+      end
+    rescue JSON::ParserError
+    end
+  end
   
   def authorize!
-    redirect_to "#{auth_login_url}?return=#{fullpath}" unless webauth.logged_in?
+    unless webauth.logged_in?
+      redirect_to "#{auth_login_url}?return=#{request.fullpath}" 
+      return false
+    end
+    return true
   end
 
 end

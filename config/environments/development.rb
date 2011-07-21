@@ -23,7 +23,7 @@ RubyDorServices::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
   
-  unless ENV.has_key?('WEBAUTH_USER')
+  if ENV['SERVER_SOFTWARE'].to_s !~ /Apache/ and (ENV.has_key?('WEBAUTH_USER') == false)
     require 'rack-webauth/test'
     config.middleware.use(Rack::Webauth::Test, :user => 'labware', :email => 'labware@stanford.edu')
   end
