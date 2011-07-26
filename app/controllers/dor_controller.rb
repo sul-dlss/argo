@@ -11,7 +11,8 @@ class DorController < ApplicationController
           :authrule => webauth.authrule,
           :logged_in => webauth.logged_in?,
           :login => webauth.login,
-          :attributes => webauth.attributes
+          :attributes => webauth.attributes,
+          :privgroup => webauth.privgroup
         }
       })
       respond_with(result)
