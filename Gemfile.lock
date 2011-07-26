@@ -6,6 +6,13 @@ GIT
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.0)
 
+GIT
+  remote: git://github.com/sul-dlss/rack-webauth.git
+  revision: a8987c65240bcfa4ea2a69ec84b1e2ccb64e56f3
+  specs:
+    rack-webauth (0.1.3)
+      rack
+
 GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
@@ -108,8 +115,6 @@ GEM
       rack (>= 1.0.0)
     rack-test (0.5.7)
       rack (>= 1.0)
-    rack-webauth (0.1.3)
-      rack
     rails (3.0.8)
       actionmailer (= 3.0.8)
       actionpack (= 3.0.8)
@@ -168,7 +173,7 @@ DEPENDENCIES
   mysql2 (~> 0.2.7)
   prawn!
   rack-flash
-  rack-webauth
+  rack-webauth!
   rails (= 3.0.8)
   rake
   sass
