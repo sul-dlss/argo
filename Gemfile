@@ -3,11 +3,11 @@ source "http://sulair-rails-dev.stanford.edu"
 
 gem 'rake'
 gem 'rack-flash'
-gem 'rack-webauth'
+gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
 gem 'barby'
-gem "dor-services", ">=1.1.0"
+gem "dor-services", ">=1.3.0"
 #gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services/"
 gem "mod-cons", ">=0.2.0"
 gem "mysql2", "~> 0.2.7"

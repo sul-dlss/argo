@@ -4,6 +4,8 @@ RubyDorServices::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
+    get :reindex, :on => :member
+    get :reindex, :on => :collection
   end
   
   namespace :registration do
@@ -13,11 +15,19 @@ RubyDorServices::Application.routes.draw do
     get "/workflow_list"
     get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
   end
+
+  namespace :auth do
+    get '/login'
+  end
   
   namespace :dor do
     get '/configuration'
     get '/label'
     get '/query_by_id'
+    resources :objects
+  end
+  
+  namespace :legacy do
     resources :objects
   end
   
