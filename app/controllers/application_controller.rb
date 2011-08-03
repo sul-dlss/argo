@@ -47,6 +47,14 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def development_only!
+    if Rails.env.development? or ENV['DOR_SERVICES_DEBUG_MODE']
+      yield
+    else
+      render :text => 'Not Found', :status => :not_found
+    end
+  end
+  
   def authorize!
     unless webauth.logged_in?
       redirect_to "#{auth_login_url}?return=#{request.fullpath}" 
