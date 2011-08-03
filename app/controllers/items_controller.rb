@@ -25,7 +25,10 @@ class ItemsController < ApplicationController
   end
   
   def register
-    @perm_keys = ["sunetid:#{webauth.login}"] + webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
+    @perm_keys = ["sunetid:#{webauth.login}"] 
+    unless webauth.privgroup.nil?
+      @perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
+    end
     render :register
   end
 
