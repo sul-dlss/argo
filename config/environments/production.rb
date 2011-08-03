@@ -52,19 +52,19 @@ RubyDorServices::Application.configure do
 
   Dor::Config.configure do
     fedora do
-      url 'https://fedoraAdmin:1y83r73am@dor.stanford.edu/fedora'
+      url 'https://fedoraAdmin:1y83r73am@dor-prod.stanford.edu/fedora'
       cert_file File.join(cert_dir,"argo-client.crt")
       key_file File.join(cert_dir,"argo-client.key")
       key_pass ''
     end
 
-    workflow.url 'https://lyberservices-test.stanford.edu/workflow/'
-    gsearch.url 'https://dor-test.stanford.edu/solr'
+    workflow.url 'https://lyberservices-prod.stanford.edu/workflow/'
+    gsearch.url 'https://dor-prod.stanford.edu/solr'
 
     suri do
       mint_ids true
       id_namespace 'druid'
-      url 'https://lyberservices-test.stanford.edu:8080'
+      url 'https://lyberservices-prod.stanford.edu:8080'
       user 'labware'
       pass 'lyberteam'
     end
