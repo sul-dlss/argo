@@ -31,9 +31,9 @@ class ItemsController < ApplicationController
 
   def reindex
     @druids = Array(params[:id])
-    @druids.each { |druid| Dor::Base.load_instance(druid).reindex }
+    result = @druids.inject({}) { |hash,druid| hash[druid] = Dor::Base.load_instance(druid).reindex; hash }
     respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => @druids }
+      format.any(:json, :xml) { render request.format.to_sym => result }
     end
   end
   
