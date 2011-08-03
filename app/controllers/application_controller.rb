@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
       unless session[:webauth_env].nil?
         unless webauth.logged_in?
           hash = JSON.parse(session[:webauth_env])
-          request.env[Rack::Webauth::NS] = Rack::Webauth::Info.new(request.env.merge(hash))
+          request.env[Rack::Webauth::NS] = Rack::Webauth::Info.new(hash.merge(request.env))
         end
       end
     rescue JSON::ParserError
