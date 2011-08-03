@@ -28,5 +28,13 @@ class ItemsController < ApplicationController
     @perm_keys = ["sunetid:#{webauth.login}"] + webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
     render :register
   end
+
+  def reindex
+    @druids = Array(params[:id])
+    @druids.each { |druid| Dor::Base.load_instance(druid).reindex }
+    respond_to do |format|
+      format.any(:json, :xml) { render request.format.to_sym => @druids }
+    end
+  end
   
 end
