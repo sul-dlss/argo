@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  before_filter :unpack_webauth
   before_filter :fedora_setup
   
   include Rack::Webauth::Helpers
@@ -33,5 +34,43 @@ class ApplicationController < ActionController::Base
   def fedora_setup
     Dor::Config.fedora.post_config
   end
+
+  def htaccess_hash
+    result = Digest::MD5.new
+    result << File.read(File.expand_path('public/auth/.htaccess', Rails.root))
+    result.hexdigest
+  end
   
+  def unpack_webauth
+    if params[:reset_webauth] or (htaccess_hash != session[:privgroup_hash])
+      session.delete(:webauth_env)
+    end
+    
+    begin
+      unless session[:webauth_env].nil?
+        unless webauth.logged_in?
+          hash = JSON.parse(session[:webauth_env])
+          request.env[Rack::Webauth::NS] = Rack::Webauth::Info.new(hash.merge(request.env))
+        end
+      end
+    rescue JSON::ParserError
+    end
+  end
+  
+  def development_only!
+    if Rails.env.development? or ENV['DOR_SERVICES_DEBUG_MODE']
+      yield
+    else
+      render :text => 'Not Found', :status => :not_found
+    end
+  end
+  
+  def authorize!
+    unless webauth.logged_in?
+      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}" 
+      return false
+    end
+    return true
+  end
+
 end

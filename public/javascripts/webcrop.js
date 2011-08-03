@@ -1,4 +1,4 @@
-var WebCrop = function(imgData, autoSaver) {
+var WebCrop = function(imgData, autoSaveHandler, imgLoc) {
   
   // basic configuration options for the webcrop tool
   var config = {
@@ -65,14 +65,14 @@ var WebCrop = function(imgData, autoSaver) {
       
       $('<img>', {
         'id': 'wc-has-crop-coords-' + index,
-        'src': '/images/icon-crop-coords.png',
+        'src': imgLoc+'images/icon-crop-coords.png',
         'class': 'has-crop-coords',
         'style': 'visibility: ' + (hasCropCoords(index) ? 'visible' : 'hidden') + ';'
       }).appendTo(slide);
 
       $('<img>', {
         'id': 'wc-has-rotation-angle-' + index,
-        'src': '/images/icon-rotation-angle.png',
+        'src': imgLoc+'images/icon-rotation-angle.png',
         'class': 'has-rotation-angle',
         'style': 'visibility: ' + (hasRotationAngle(index) ? 'visible' : 'hidden') + ';'
       }).appendTo(slide);
@@ -267,7 +267,17 @@ var WebCrop = function(imgData, autoSaver) {
     
     return false;
   };  
+
   
+  /* tag the image for saving */
+  var imageChanged = function(index) {
+    if ('changed' in imgData[index]) {
+      imgData[index].changed++;
+    } else {
+      imgData[index].changed = 1;
+    }
+  }
+
   
   /* store currently cropped coordinates to image */
   var storeCropCoords = function(index) {
@@ -296,7 +306,7 @@ var WebCrop = function(imgData, autoSaver) {
       
       $('#wc-has-crop-coords-' + index).css('visibility', 'hidden');                  
     }
-    imgData[index].dirty = true;
+    imageChanged(index);
   };
 
   /* clear crop coordinates from sidebar */
@@ -344,7 +354,7 @@ var WebCrop = function(imgData, autoSaver) {
     if (angle > 0) {      
       $('#wc-has-rotation-angle-' + index).css('visibility', 'visible');                
     }
-    imgData[index].dirty = true;
+    imageChanged(index);
   };
   
   
@@ -604,10 +614,10 @@ var WebCrop = function(imgData, autoSaver) {
     $('#lock-crop-coords').click(function() {
       if (config.lockCropCoords) {
         config.lockCropCoords = false;
-        $('#lock-crop-coords').attr('src', '/images/icon-lock-disabled.png');
+        $('#lock-crop-coords').attr('src', imgLoc+'images/icon-lock-disabled.png');
       } else {
         config.lockCropCoords = true;
-        $('#lock-crop-coords').attr('src', '/images/icon-lock-enabled.png');      
+        $('#lock-crop-coords').attr('src', imgLoc+'images/icon-lock-enabled.png');
       }
     });    
 
@@ -615,10 +625,10 @@ var WebCrop = function(imgData, autoSaver) {
     $('#lock-rotation-angle').click(function() {
       if (config.lockRotationAngle) {
         config.lockRotationAngle = false;
-        $('#lock-rotation-angle').attr('src', '/images/icon-lock-disabled.png');
+        $('#lock-rotation-angle').attr('src', imgLoc+'images/icon-lock-disabled.png');
       } else {
         config.lockRotationAngle = true;
-        $('#lock-rotation-angle').attr('src', '/images/icon-lock-enabled.png');
+        $('#lock-rotation-angle').attr('src', imgLoc+'images/icon-lock-enabled.png');
       }
     });    
   };
@@ -630,9 +640,15 @@ var WebCrop = function(imgData, autoSaver) {
     // To convert imgData has to string - 
     // var str = JSON.stringify(imgData, null);
     
-    if (autoSaver != null) {
-      autoSaver(imgData);
+    if (typeof autoSaveHandler == 'function') {
+      autoSaveHandler(imgData, function(updated){
+        $.each(updated, function(index,item) {
+          if (item.changed == 1) { delete item.changed } else { item.changed-- }
+        });
+      });
     }
+    var formattedDate = $.format.date((new Date()).toString(), 'MM/dd/yyyy hh:mm:ss a');
+    $('#last-saved .date-value').html(formattedDate);
     
     /*
     $.ajax({

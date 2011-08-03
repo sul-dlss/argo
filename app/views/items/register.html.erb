@@ -24,7 +24,7 @@
           <label for='apo_id'>Object Type</label>
         </td>
         <td class='control'>
-          <%= select_tag :apo_id, options_for_select(apo_list("sunetid:#{webauth.login}")), :id => :apo_id %>
+          <%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :id => :apo_id %>
         </td>
       </tr>
       <tr>

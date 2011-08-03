@@ -1,0 +1,9 @@
+AuthType WebAuth
+Require privgroup stanford:staff
+WebAuthLdapAttribute suAffiliation
+WebAuthLdapAttribute displayName
+WebAuthLdapAttribute mail
+WebAuthLdapPrivgroup dlss:dor-admin
+WebAuthLdapPrivgroup dlss:dpg-staff
+WebAuthLdapPrivgroup dlss:pmag-staff
+WebAuthLdapPrivgroup dlss:smpl-staff

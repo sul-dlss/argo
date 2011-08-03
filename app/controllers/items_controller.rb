@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
-
+  before_filter :authorize!
+  
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
@@ -24,7 +25,16 @@ class ItemsController < ApplicationController
   end
   
   def register
+    @perm_keys = ["sunetid:#{webauth.login}"] + webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
     render :register
+  end
+
+  def reindex
+    @druids = Array(params[:id])
+    result = @druids.inject({}) { |hash,druid| hash[druid] = Dor::Base.load_instance(druid).reindex; hash }
+    respond_to do |format|
+      format.any(:json, :xml) { render request.format.to_sym => result }
+    end
   end
   
 end
