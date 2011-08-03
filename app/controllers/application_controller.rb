@@ -35,7 +35,17 @@ class ApplicationController < ActionController::Base
     Dor::Config.fedora.post_config
   end
 
+  def htaccess_hash
+    result = Digest::MD5.new
+    result << File.read(File.expand_path('public/auth/.htaccess', Rails.root))
+    result.hexdigest
+  end
+  
   def unpack_webauth
+    if params[:reset_webauth] or (htaccess_hash != session[:privgroup_hash])
+      session.delete(:webauth_env)
+    end
+    
     begin
       unless session[:webauth_env].nil?
         unless webauth.logged_in?
@@ -57,7 +67,7 @@ class ApplicationController < ActionController::Base
   
   def authorize!
     unless webauth.logged_in?
-      redirect_to "#{auth_login_url}?return=#{request.fullpath}" 
+      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}" 
       return false
     end
     return true
