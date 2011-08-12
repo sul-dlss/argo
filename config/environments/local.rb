@@ -1,3 +1,5 @@
+Rails.env = 'development'
+
 RubyDorServices::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -23,33 +25,35 @@ RubyDorServices::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
   
+  require 'rack-webauth/test'
+  config.middleware.use(Rack::Webauth::Test, :user => 'labware', :mail => 'labware@stanford.edu',
+    :ldapprivgroup => 'dlss:labstaff', :suaffiliation => 'stanford:test', :displayname => 'Labware User',
+    :ldapauthrule => 'valid-user')
   config.middleware.use(Rack::Webauth)
-
   cert_dir = File.expand_path(File.join(File.dirname(__FILE__),"../certs"))
 
   Dor::Config.configure do
     fedora do
-      url 'http://fedoraAdmin:fedoraAdmin@dor-dev.stanford.edu/fedora'
+      url 'https://fedoraAdmin:fedoraAdmin@dor-test.stanford.edu/fedora'
       cert_file File.join(cert_dir,"dlss-dev-test.crt")
       key_file File.join(cert_dir,"dlss-dev-test.key")
       key_pass ''
     end
 
-    workflow.url 'https://lyberservices-dev.stanford.edu/workflow/'
-    gsearch.url 'http://dor-dev.stanford.edu/solr'
+    workflow.url 'https://lyberservices-test.stanford.edu/workflow/'
+    gsearch.url 'https://dor-test.stanford.edu/solr'
 
     suri do
       mint_ids true
       id_namespace 'druid'
-      url 'http://lyberservices-dev.stanford.edu:8080'
+      url 'https://lyberservices-test.stanford.edu:8080'
       user 'labware'
       pass 'lyberteam'
     end
 
     metadata do
-      exist.url 'http://viewer:l3l%40nd@lyberapps-dev.stanford.edu/exist/rest'
+      exist.url 'http://viewer:l3l%40nd@lyberapps-prod.stanford.edu/exist/rest'
       catalog.url 'http://lyberservices-prod.stanford.edu/catalog/mods'
     end
   end
 end
-
