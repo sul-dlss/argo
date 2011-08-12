@@ -36,10 +36,14 @@ body {
   font-weight: bold; }
 
 #t_data {
-  height: 28px; }
+  height: 31px; }
+  #t_data input, #t_data select {
+    margin: 4px; }
 
 #icons {
-  padding: 0; }
+  margin: 2px;
+  padding: 0;
+  float: right; }
   #icons button {
     margin: 2px; }
 
@@ -59,19 +63,3 @@ body {
   position: absolute;
   display: none;
   resize: none; }
-
-#properties_dialog table {
-  font: inherit; }
-#properties_dialog td.label {
-  width: 100px; }
-#properties_dialog td.control {
-  width: auto; }
-#properties_dialog label {
-  font-weight: bold;
-  display: inline-block;
-  width: 100%; }
-#properties_dialog input, #properties_dialog select {
-  width: 100%; }
-
-.button-group {
-  margin-right: 4px; }

@@ -1,12 +1,18 @@
 <% @title = "Workflows" %>
 <% content_for :head do %>
-  <%= stylesheet_link_tag 'ui.jqgrid' %>
+  <%= javascript_include_tag 'jquery-simpleTreeMenu-1.1.0' %>
+  <%= stylesheet_link_tag 'jquery-simpleTreeMenu-1.1.0', 'ui-override' %>
+  <script type="text/javascript">
+    $(document).ready(function() { 
+      $('.collapsible').simpleTreeMenu();
+    });
+  </script>
 <% end %>
 
 <div id='dynamic' style='background:white; font-size: 1.2em'>
   <div id='wf_facets'>
-    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_swp_facet', :heading => 'By Status' } %>
-    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_wsp_facet', :heading => 'By Workflow/Status' } %>
-    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_wps_facet', :heading => 'By Workflow/Process' } %>
+    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_swp_facet', :heading => 'Status/Workflow/Process' } %>
+    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_wsp_facet', :heading => 'Workflow/Status/Process' } %>
+    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_wps_facet', :heading => 'Workflow/Process/Status' } %>
   </div>
 </div>
