@@ -15,7 +15,7 @@ module ApplicationHelper
     if elements.empty?
       "" 
     else
-      lis = elements.map { |x| content_tag("li", x, options, false) }
+      lis = elements.map { |x| content_tag("li", x, {}, false) }
       content_tag(type, lis, options, false)
     end
   end
