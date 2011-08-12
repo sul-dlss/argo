@@ -1,2 +1,12 @@
-<h1>Dor::Objects#index</h1>
-<p>Find me in app/views/dor/objects/index.html.erb</p>
+<% @title = "Workflows" %>
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'ui.jqgrid' %>
+<% end %>
+
+<div id='dynamic' style='background:white; font-size: 1.2em'>
+  <div id='wf_facets'>
+    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_swp_facet', :heading => 'By Status' } %>
+    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_wsp_facet', :heading => 'By Workflow/Status' } %>
+    <%= render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => 'wf_wps_facet', :heading => 'By Workflow/Process' } %>
+  </div>
+</div>

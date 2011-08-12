@@ -2,6 +2,12 @@ class Dor::ObjectsController < ApplicationController
   before_filter :munge_parameters
   
   def index
+    @statuses = help.workflow_facets(:q => params[:q].to_s)
+    if request.xhr?
+      render :partial => "workflow_facets", :locals => { :statuses => @statuses, :key => params[:wf_key], :heading => params[:wf_head] }
+    else
+      render :index
+    end
   end
 
   def create

@@ -13,6 +13,22 @@ GIT
     rack-webauth (0.1.3)
       rack
 
+PATH
+  remote: /Users/mbklein/Workspace/gems/dor-services
+  specs:
+    dor-services (1.4.0)
+      active-fedora (>= 1.2.6)
+      json
+      mod-cons
+      nokogiri (= 1.4.3.1)
+      om (>= 1.2.0)
+      rest-client
+      ruby-cache
+      solr-ruby (>= 0.0.8)
+      systemu
+      uuidtools
+      validatable
+
 GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
@@ -62,18 +78,6 @@ GEM
     barby (0.4.3)
     builder (2.1.2)
     daemons (1.1.4)
-    dor-services (1.4.0)
-      active-fedora (>= 1.2.6)
-      json
-      mod-cons
-      nokogiri (= 1.4.3.1)
-      om (>= 1.2.0)
-      rest-client
-      ruby-cache
-      solr-ruby (>= 0.0.8)
-      systemu
-      uuidtools
-      validatable
     equivalent-xml (0.2.7)
       nokogiri (>= 1.4.3)
     erubis (2.6.6)
@@ -165,7 +169,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   barby
-  dor-services (>= 1.3.0)
+  dor-services!
   haml
   interactive_editor
   lyberteam-devel
