@@ -4,6 +4,9 @@
 .edit-cell input {
   font-size: 11px; }
 
+.ui-dialog-title, .ui-dialog-content {
+  font-size: 1.2em; }
+
 .ui-jqgrid-title {
   font-size: 150%; }
 
@@ -13,3 +16,7 @@ ul.simpleTreeMenu a, ul.simpleTreeMenu a:visited {
 ul.simpletreemenu li.leaf {
   list-style-image: none;
   list-style-type: none; }
+
+.ui-button-text-icon-primary .ui-button-text {
+  padding-top: 0.5em !important;
+  padding-left: 2.2em !important; }

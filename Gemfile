@@ -7,13 +7,14 @@ gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
 gem 'barby'
-gem "dor-services", ">=1.3.0"
-#gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services/"
+#gem "dor-services", ">=1.3.0"
+gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services/"
 gem "mod-cons", ">=0.2.0"
 gem "mysql2", "~> 0.2.7"
 gem "sqlite3-ruby", "~> 1.2.5"
 gem "haml"
 gem "sass"
+gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :branch => "feature-facet-refactoring"
 
 gem 'rails', '3.0.8'
 

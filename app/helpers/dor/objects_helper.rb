@@ -25,9 +25,21 @@ module Dor::ObjectsHelper
     end
   end
   
+  def hierarchy(k, v, field_name, path)
+    result = path.nil? ? k : (link_to k, %{#{Dor::Config.gsearch.url}/select?q=#{field_name}:"#{path}"})
+    count, subset = v.is_a?(Hash) ? [nil, v] : Array(v)
+    result << " (#{count})" unless count.nil?
+    unless subset.nil?
+      subset.keys.select { |p| p.is_a?(String) }.sort.each { |k1| 
+        v1 = subset[k1]
+        result << (ul hierarchy(k1, v1, field_name, [path,k1].compact.join(':')))
+      }
+    end
+    result
+  end
+
   def workflow_facets(params)
-    query_params = params.merge({
-      :rows => '0', :facet => 'on', :'facet.field' => ['wf_wps_facet', 'wf_wsp_facet', 'wf_swp_facet'],
+    query_params = params.merge({:rows => '0', :facet => 'on', :'facet.field' => ['wf_wps_facet', 'wf_wsp_facet', 'wf_swp_facet'],
       :'facet.mincount' => 1, :'facet.limit' => -1 })
     puts query_params.inspect
     resp = Dor::SearchService.gsearch(query_params)
@@ -47,19 +59,6 @@ module Dor::ObjectsHelper
       }
     }
     cleanup_workflow_facets(hash)
-  end
-
-  def hierarchy(k, v, field_name, path)
-    result = path.nil? ? k : (link_to k, %{#{Dor::Config.gsearch.url}/select?q=#{field_name}:"#{path}"})
-    count, subset = v.is_a?(Hash) ? [nil, v] : Array(v)
-    result << " (#{count})" unless count.nil?
-    unless subset.nil?
-      subset.keys.select { |p| p.is_a?(String) }.sort.each { |k1| 
-        v1 = subset[k1]
-        result << (ul hierarchy(k1, v1, field_name, [path,k1].compact.join(':')))
-      }
-    end
-    result
   end
 
   private
