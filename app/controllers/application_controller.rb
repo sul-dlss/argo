@@ -15,12 +15,17 @@ class ApplicationController < ActionController::Base
     super
     
     klass_chain = self.class.name.sub(/Controller$/,'Helper').split(/::/)
-    klass = Module.const_get(klass_chain.shift)
-    while klass_chain.length > 0
-      klass = klass.const_get(klass_chain.shift)
+    klass = nil
+    begin
+      klass = Module.const_get(klass_chain.shift)
+      while klass_chain.length > 0
+        klass = klass.const_get(klass_chain.shift)
+      end
+    rescue NameError
+      klass = nil
     end
     @help = Class.new {
-      include klass
+      include klass unless klass.nil?
       include ApplicationHelper
     }.new
     self
