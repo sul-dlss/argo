@@ -24,5 +24,5 @@ module Dor::ObjectsHelper
       Hash[Array(ids).collect { |id| id.split(/:/) }]
     end
   end
-  
+    
 end
