@@ -8,8 +8,8 @@ class CatalogController < ApplicationController
 
   def default_html_head
     super
-    stylesheet_links << 'hierarchy'
-    javascript_includes << 'hierarchy'
+    stylesheet_links << 'hierarchy' << 'argonauta'
+    javascript_includes << 'hierarchy' << 'application'
   end
 
   def solr_doc_params(id=nil)

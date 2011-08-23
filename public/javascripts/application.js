@@ -10,3 +10,7 @@ function pathTo(path) {
   var root = $('body').attr('data-application-root') || '';
   return(root + path);
 }
+
+$(document).ready(function() {
+  $('#doc4').wrapInner('<div id="argonauta"/>');
+});

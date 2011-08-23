@@ -1,0 +1,9 @@
+h1.site_title {
+  background: none !important; }
+
+#argonauta {
+  background-image: url("../../images/blacklight/argonauta.png");
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-origin: padding-box;
+  background-position: 0px -40px; }
