@@ -1,0 +1,10 @@
+ul.facet-hierarchy ul {
+  border-bottom: none !important;
+  padding-bottom: 0 !important; }
+  ul.facet-hierarchy ul li {
+    margin-left: 8px !important; }
+
+ul.facet-hierarchy li.h-node {
+  list-style-image: url("hierarchy/collapsed.png") !important; }
+ul.facet-hierarchy li.h-node.twiddle-open {
+  list-style-image: url("hierarchy/expanded.png") !important; }
