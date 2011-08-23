@@ -29,7 +29,7 @@ class ItemsController < ApplicationController
     unless webauth.privgroup.nil?
       @perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
     end
-    render :register
+    render :register, :layout => 'application'
   end
 
   def reindex

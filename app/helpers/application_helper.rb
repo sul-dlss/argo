@@ -10,5 +10,5 @@ module ApplicationHelper
   def object_location(pid)
     fedora_base.merge("objects/#{pid}").to_s
   end
-  
+
 end

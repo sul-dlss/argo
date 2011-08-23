@@ -4,3 +4,5 @@ log/*.log
 tmp/
 .DS_Store
 dpg_pool
+.powenv
+public/images/.dpg_pool

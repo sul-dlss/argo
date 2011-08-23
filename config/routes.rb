@@ -1,5 +1,13 @@
 RubyDorServices::Application.routes.draw do
 
+  Blacklight.add_routes(self)
+
+  root :to => "catalog#index"
+
+  match 'login',          :to => 'auth/login',       :as => 'new_user_session'
+  match 'logout',         :to => 'auth/logout',      :as => 'destroy_user_session'
+  match 'profile',        :to => 'auth/profile',     :as => 'edit_user_registration'
+  
   resources :items do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
