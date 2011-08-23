@@ -1,0 +1,6 @@
+<% # main container for facets/limits menu -%>
+<div id="facets" class="facets">
+  <h2>Limit your search</h2>
+  <%= render_facets_partials %>
+</div>
+<% @footer = link_to 'Solr Query', Blacklight.solr_config[:url] + '/select?' + @response['responseHeader']['params'].collect { |k,v| Array(v).collect { |a| "#{k}=#{a}" } }.flatten.join('&').sub(/wt=ruby/,"wt=json") %>
