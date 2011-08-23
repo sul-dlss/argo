@@ -8,10 +8,15 @@ class CatalogController < ApplicationController
 
   def default_html_head
     super
-    stylesheet_links << 'ui-override'
+    stylesheet_links << 'hierarchy'
+    javascript_includes << 'hierarchy'
   end
 
-  def footer
-    "\n<!-- #{@response['responseHeader']['params'].collect { |k,v| Array(v).collect { |a| "#{k}=#{a}" } }.flatten.join('&')} -->\n"
+  def solr_doc_params(id=nil)
+    id ||= params[:id]
+    {
+      :q => %{PID:"#{id}"}
+    }
   end
+
 end 
