@@ -10,13 +10,12 @@
 .ui-jqgrid-title {
   font-size: 150%; }
 
-ul.simpleTreeMenu a, ul.simpleTreeMenu a:visited {
-  display: inline; }
-
-ul.simpletreemenu li.leaf {
-  list-style-image: none;
-  list-style-type: none; }
-
 .ui-button-text-icon-primary .ui-button-text {
   padding-top: 0.5em !important;
   padding-left: 2.2em !important; }
+
+ul.facet-hierarchy ul {
+  border-bottom: none !important;
+  padding-bottom: 0 !important; }
+  ul.facet-hierarchy ul li {
+    padding-left: 8px; }
