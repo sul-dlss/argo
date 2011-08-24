@@ -13,4 +13,9 @@ class CatalogController < ApplicationController
     }
   end
 
+  def workflows
+    delete_or_assign_search_session_params
+    (@response, @document_list) = get_search_results
+  end
+  
 end 

@@ -1,34 +1,50 @@
-html, body
-  margin: 0
-  padding: 0
-  overflow: hidden
-  font-family: sans-serif
-  font-size: 75%
+a.no-underline
+  text-decoration: none
+  border-bottom: none
+  
+#workflow_grid
+  margin-top: 1.5em
+  
+  .thumbnail
+    float: left
+    width: 65em
+    border: 1px solid #999
+    margin: 1em 1em 1em 1em
+    padding: 2px
+    text-align: left
+    img
+      border: 1px solid #aaa
+    p
+      margin: 0em 2em 0em 0em
 
-body
-  background-color: #4F4F4F
-  font-family: "Lucida Grande", "Lucida Sans Unicode", "Arial Unicode MS", Helvetica, sans-serif
-  
-#container
-  position: relative
-  width: 94%
-  margin: 0 auto
-  text-align: left
-  
-#header
-  height: 30px
-  overflow: hidden
-  img
-    vertical-align: text-bottom
-  .text
-    display: inline-block
-    color: white
-    font-size: 14px
-  .right
-    float: right
-    padding-top: 3px
-    font-weight: bold
+  .clearboth
+    clear: both
 
-#content
-  padding: 0px
-  
+  table
+    border-collapse: collapse
+    border-spacing: 0
+    width: 100%
+
+    th
+      font-weight: normal !important
+      font-size: 0.8em
+      padding: 5px
+      color: #ffffff
+      border-top: 1px solid #C2B7A1
+      border-left: 1px solid #EDE8DD
+      border-right: 1px solid #EDE8DD
+      border-bottom: 1px solid #EDE8DD
+
+    td
+      border-left: 1px solid #EDE8DD
+      border-right: 1px solid #EDE8DD
+      border-bottom: 1px solid #C2B7A1
+      font-size: 0.8em
+      padding: 5px
+
+  h2
+    color: #990000
+    font-weight: normal
+
+  a
+    color: #2E4F81
