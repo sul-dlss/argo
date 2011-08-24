@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
   def default_html_head
     super
     stylesheet_links << 'application' << 'hierarchy' << 'argonauta'
-    javascript_includes << 'application' << 'hierarchy' << 'application'
+    javascript_includes << 'application' << 'hierarchy'
   end
 
   protected
