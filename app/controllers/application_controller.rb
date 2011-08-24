@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
-    if webauth.logged_in?
+    if webauth.logged_in? and session[:webauth_env]
       User.find_or_create_by_webauth(webauth)
     else
       nil
