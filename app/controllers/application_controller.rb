@@ -43,6 +43,12 @@ class ApplicationController < ActionController::Base
     session
   end
   
+  def default_html_head
+    super
+    stylesheet_links << 'hierarchy' << 'argonauta'
+    javascript_includes << 'hierarchy' << 'application'
+  end
+
   protected
   def munge_parameters
     case request.content_type
