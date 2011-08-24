@@ -24,13 +24,40 @@ def hide_facet?(field_name)
   end
 end
 
+def rotate_facet_value(val, from, to)
+  components = Hash[from.split(//).zip(val.split(/:/))]
+  new_values = components.values_at(*(to.split(//)))
+  while new_values.last.nil?
+    new_values.pop
+  end
+  if new_values.include?(nil)
+    nil
+  else
+    new_values.compact.join(':')
+  end
+end
+
+def rotate_facet_params(prefix, from, to, p=params.dup)
+  return p if from == to
+  from_field = "#{prefix}_#{from}_facet"
+  to_field = "#{prefix}_#{to}_facet"
+  p[:f] = (p[:f] || {}).dup # the command above is not deep in rails3, !@#$!@#$
+  p[:f][from_field] = (p[:f][from_field] || []).dup
+  p[:f][to_field] = (p[:f][to_field] || []).dup
+  p[:f][from_field].reject! { |v| p[:f][to_field] << rotate_facet_value(v, from, to); true }
+  p[:f].delete(from_field)
+  p[:f][to_field].compact!
+  p[:f].delete(to_field) if p[:f][to_field].empty?
+  p
+end
+
 def render_facet_rotate(field_name)
   if is_hierarchical?(field_name)
     (prefix,order,suffix) = field_name.split(/_/)
     new_order = facet_after(prefix,order)
-    new_params = params.dup
+    new_params = rotate_facet_params(prefix,order,new_order)
     new_params["#{prefix}_facet_order"] = new_order
-    link_to '♺', new_params
+    link_to image_tag('icons/rotate.png', :title => new_order.upcase).html_safe, new_params, :class => 'no-underline'
   end
 end
 

@@ -1,0 +1,21 @@
+<p>
+  <font size="+1"><b>Workflow: <%= wf_name %></b></font>
+</p>
+<table border="1" cellspacing="0" cellpadding="3">
+  <tbody>
+    <tr bgcolor="#990000">
+    <!--	<th colspan="2"><font color="white" face="Arial">Process</font></th> -->
+    	<th><font color="white" face="Arial">Current queue</font></th>
+    	<th><font color="white" face="Arial">Errors</font></th>
+    	<th><font color="white" face="Arial">Completed</font></th>
+    </tr>
+    <% wf_data.keys.delete_if { |k,v| ! k.is_a?(String) }.sort.each do |wf_process| %>
+      <tr>
+        <!-- <td>1</td><td>Start Accessioning</td> -->
+        <td><%= render_workflow_item_count(wf_data,wf_name,wf_process,'waiting') %></td>
+        <td><%= render_workflow_item_count(wf_data,wf_name,wf_process,'error') %></td>
+        <td><%= render_workflow_item_count(wf_data,wf_name,wf_process,'completed') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
