@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/Papipo/hassle.git
+  revision: 3a12feb7ae8c94acde7bdf1cc8a34bb89ab39f44
+  specs:
+    hassle (0.0.1)
+      haml
+      rack
+
+GIT
   remote: git://github.com/mbklein/prawn.git
   revision: e2ee4e7f335e7490fefa26ce2c26acd7b74056d6
   specs:
@@ -190,6 +198,7 @@ DEPENDENCIES
   blacklight!
   dor-services (>= 1.5.0)
   haml
+  hassle!
   interactive_editor
   lyberteam-devel
   mod-cons (>= 0.2.0)

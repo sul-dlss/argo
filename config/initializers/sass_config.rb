@@ -1,1 +1,2 @@
-Sass::Plugin.options[:template_location] = File.join(Rails.root,'app/stylesheets')
+require 'hassle'
+Rails.configuration.middleware.use(Hassle)

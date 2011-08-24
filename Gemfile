@@ -14,6 +14,7 @@ gem "mysql2", "~> 0.2.7"
 gem "sqlite3-ruby", "~> 1.2.5"
 gem "haml"
 gem "sass"
+gem "hassle", :git => "git://github.com/Papipo/hassle.git"
 gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :branch => "feature-facet-refactoring"
 
 gem 'rails', '3.0.8'
