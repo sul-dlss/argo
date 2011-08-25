@@ -6,6 +6,8 @@ function DorRegistration() {
     mdFormId: null,
     metadataSource: null,
     tagList: "",
+    registrationQueue: [],
+    maxConcurrentRequests: 5,
     
     getTrackingSheet : function() {
       var project = $t.projectName;
@@ -15,7 +17,54 @@ function DorRegistration() {
       var url = pathTo("/registration/tracksheet?"+query);
       document.location.href = url;
     },
-
+    
+    clearQueue: function() {
+      while ($t.registrationQueue.length > 0) {
+        var context = $t.registrationQueue.shift();
+        $t.setStatus(context.data, 'abort');
+      }
+      return($t.registrationQueue.length);
+    },
+    
+    queueUp: function(data, params, progressFunction) {
+      return($t.registrationQueue.push({ data: data, params: params, progressFunction: progressFunction}));
+    },
+    
+    submitNext: function() {
+      var context = $t.registrationQueue.shift();
+      if (context) {
+        $t.setStatus(context.data, 'pending')
+        var xhr = $.ajax({
+          type: 'POST',
+          url: pathTo('/dor/objects'),
+          data: context.params,
+          success: function(response,status,xhr) { 
+            if (response) {
+              context.data.druid = response['pid'].split(':')[1];
+              context.data.label = response['label'];
+              context.progressFunction(xhr);
+            }
+          },
+          error: function(xhr,status,errorThrown) {
+            if (xhr.status < 500) {
+              context.data.error = xhr.responseText;
+            } else {
+              context.data.error = xhr.statusText;
+            }
+            context.progressFunction(xhr);
+          },
+          complete: function(xhr,status) {
+            $t.setStatus(context.data, status);
+            $t.submitNext();
+          },
+          dataType: 'json'
+        });
+        return(xhr);
+      } else {
+        return(false);
+      }
+    },
+    
     register : function(rowid, progressFunction) {
       var apo = $t.apoId;
       var sourcePrefix = $t.metadataSource;
@@ -65,35 +114,13 @@ function DorRegistration() {
         }
       }
 
-      data.status = 'pending';
+      $t.setStatus(data, 'queued');
+      return($t.queueUp(data, params, progressFunction));
+    },
+    
+    setStatus : function(data, status) {
+      data.status = status;
       $('#data').jqGrid('setRowData', data.id, data);
-
-      var xhr = $.ajax({
-        type: 'POST',
-        url: pathTo('/dor/objects'),
-        data: params,
-        success: function(response,status,xhr) { 
-          if (response) {
-            data.druid = response['pid'].split(':')[1];
-            data.label = response['label'];
-            progressFunction(xhr);
-          }
-        },
-        error: function(xhr,status,errorThrown) {
-          if (xhr.status < 500) {
-            data.error = xhr.responseText;
-          } else {
-            data.error = xhr.statusText;
-          }
-          progressFunction(xhr);
-        },
-        complete: function(xhr,status) {
-          data.status = status;
-          $('#data').jqGrid('setRowData', data.id, data);
-        },
-        dataType: 'json'
-      });
-      return(xhr);
     },
 
     registerAll : function() {
@@ -118,6 +145,9 @@ function DorRegistration() {
           $('#progress').progressbar('option','value',currentStep);
           if (currentStep >= 99.999) { $('#progress_dialog').dialog('close'); }
         });
+      }
+      for (var i = 1; i <= $t.maxConcurrentRequests; i++) {
+        $t.submitNext();
       }
     }
   };
