@@ -45,8 +45,9 @@ class ApplicationController < ActionController::Base
   
   def default_html_head
     super
-    stylesheet_links << 'application' << 'hierarchy' << 'argonauta'
-    javascript_includes << 'application' << 'hierarchy'
+    stylesheet_links << ['application', 'hierarchy', 'argonauta']
+    javascript_includes.first[0] = 'jquery-1.6.2.min'
+    javascript_includes << ['application', 'hierarchy']
   end
 
   protected

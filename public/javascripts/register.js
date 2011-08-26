@@ -17,54 +17,7 @@ function DorRegistration() {
       var url = pathTo("/registration/tracksheet?"+query);
       document.location.href = url;
     },
-    
-    clearQueue: function() {
-      while ($t.registrationQueue.length > 0) {
-        var context = $t.registrationQueue.shift();
-        $t.setStatus(context.data, 'abort');
-      }
-      return($t.registrationQueue.length);
-    },
-    
-    queueUp: function(data, params, progressFunction) {
-      return($t.registrationQueue.push({ data: data, params: params, progressFunction: progressFunction}));
-    },
-    
-    submitNext: function() {
-      var context = $t.registrationQueue.shift();
-      if (context) {
-        $t.setStatus(context.data, 'pending')
-        var xhr = $.ajax({
-          type: 'POST',
-          url: pathTo('/dor/objects'),
-          data: context.params,
-          success: function(response,status,xhr) { 
-            if (response) {
-              context.data.druid = response['pid'].split(':')[1];
-              context.data.label = response['label'];
-              context.progressFunction(xhr);
-            }
-          },
-          error: function(xhr,status,errorThrown) {
-            if (xhr.status < 500) {
-              context.data.error = xhr.responseText;
-            } else {
-              context.data.error = xhr.statusText;
-            }
-            context.progressFunction(xhr);
-          },
-          complete: function(xhr,status) {
-            $t.setStatus(context.data, status);
-            $t.submitNext();
-          },
-          dataType: 'json'
-        });
-        return(xhr);
-      } else {
-        return(false);
-      }
-    },
-    
+        
     register : function(rowid, progressFunction) {
       var apo = $t.apoId;
       var sourcePrefix = $t.metadataSource;
@@ -115,7 +68,32 @@ function DorRegistration() {
       }
 
       $t.setStatus(data, 'queued');
-      return($t.queueUp(data, params, progressFunction));
+      $.ajax({
+        type: 'POST',
+        url: pathTo('/dor/objects'),
+        data: context.params,
+        success: function(response,status,xhr) { 
+          if (response) {
+            context.data.druid = response['pid'].split(':')[1];
+            context.data.label = response['label'];
+            context.progressFunction(xhr);
+          }
+        },
+        error: function(xhr,status,errorThrown) {
+          if (xhr.status < 500) {
+            context.data.error = xhr.responseText;
+          } else {
+            context.data.error = xhr.statusText;
+          }
+          context.progressFunction(xhr);
+        },
+        complete: function(xhr,status) {
+          $t.setStatus(context.data, status);
+          $t.submitNext();
+        },
+        ajaxQ: 'register',
+        realDataType: 'json'
+      });
     },
     
     setStatus : function(data, status) {
@@ -151,6 +129,8 @@ function DorRegistration() {
       }
     }
   };
+  
+  $.ajaxQ('register', { maxRequests: 10 });
   
   return($t);
 }
