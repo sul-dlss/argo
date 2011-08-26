@@ -71,24 +71,24 @@ function DorRegistration() {
       $.ajax({
         type: 'POST',
         url: pathTo('/dor/objects'),
-        data: context.params,
+        data: params,
         success: function(response,status,xhr) { 
           if (response) {
-            context.data.druid = response['pid'].split(':')[1];
-            context.data.label = response['label'];
-            context.progressFunction(xhr);
+            data.druid = response['pid'].split(':')[1];
+            data.label = response['label'];
+            progressFunction(xhr);
           }
         },
         error: function(xhr,status,errorThrown) {
           if (xhr.status < 500) {
-            context.data.error = xhr.responseText;
+            data.error = xhr.responseText;
           } else {
-            context.data.error = xhr.statusText;
+            data.error = xhr.statusText;
           }
-          context.progressFunction(xhr);
+          progressFunction(xhr);
         },
         complete: function(xhr,status) {
-          $t.setStatus(context.data, status);
+          $t.setStatus(data, status);
         },
         ajaxQ: 'register',
         realDataType: 'json'
