@@ -87,10 +87,14 @@ function DorRegistration() {
           }
           progressFunction(xhr);
         },
+        dequeued: function(xhr) {
+          $t.setStatus(data, 'pending')
+        },
         complete: function(xhr,status) {
           $t.setStatus(data, status);
         },
         ajaxQ: 'register',
+        dataType: 'ajaxQ',
         realDataType: 'json'
       });
     },
