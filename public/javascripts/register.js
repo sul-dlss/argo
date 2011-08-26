@@ -89,7 +89,6 @@ function DorRegistration() {
         },
         complete: function(xhr,status) {
           $t.setStatus(context.data, status);
-          $t.submitNext();
         },
         ajaxQ: 'register',
         realDataType: 'json'
@@ -123,9 +122,6 @@ function DorRegistration() {
           $('#progress').progressbar('option','value',currentStep);
           if (currentStep >= 99.999) { $('#progress_dialog').dialog('close'); }
         });
-      }
-      for (var i = 1; i <= $t.maxConcurrentRequests; i++) {
-        $t.submitNext();
       }
     }
   };
