@@ -6,6 +6,8 @@ function DorRegistration() {
     mdFormId: null,
     metadataSource: null,
     tagList: "",
+    registrationQueue: [],
+    maxConcurrentRequests: 5,
     
     getTrackingSheet : function() {
       var project = $t.projectName;
@@ -15,7 +17,7 @@ function DorRegistration() {
       var url = pathTo("/registration/tracksheet?"+query);
       document.location.href = url;
     },
-
+        
     register : function(rowid, progressFunction) {
       var apo = $t.apoId;
       var sourcePrefix = $t.metadataSource;
@@ -65,35 +67,40 @@ function DorRegistration() {
         }
       }
 
-      data.status = 'pending';
-      $('#data').jqGrid('setRowData', data.id, data);
-
+      $t.setStatus(data, 'queued');
       var xhr = $.ajax({
         type: 'POST',
         url: pathTo('/dor/objects'),
         data: params,
-        success: function(response,status,xhr) { 
-          if (response) {
-            data.druid = response['pid'].split(':')[1];
-            data.label = response['label'];
-            progressFunction(xhr);
-          }
+        dequeued: function(xhr) {
+          $t.setStatus(data, 'pending')
         },
-        error: function(xhr,status,errorThrown) {
-          if (xhr.status < 500) {
-            data.error = xhr.responseText;
-          } else {
-            data.error = xhr.statusText;
-          }
-          progressFunction(xhr);
-        },
-        complete: function(xhr,status) {
-          data.status = status;
-          $('#data').jqGrid('setRowData', data.id, data);
-        },
+        ajaxQ: 'register',
         dataType: 'json'
+      })
+      xhr.success(function(response,status,xhr) { 
+        if (response) {
+          data.druid = response['pid'].split(':')[1];
+          data.label = response['label'];
+          progressFunction(xhr);
+        }
       });
-      return(xhr);
+      xhr.error(function(xhr,status,errorThrown) {
+        if (xhr.status < 500) {
+          data.error = xhr.responseText;
+        } else {
+          data.error = xhr.statusText;
+        }
+        progressFunction(xhr);
+      });
+      xhr.complete(function(xhr,status) {
+          $t.setStatus(data, status);
+      });
+    },
+    
+    setStatus : function(data, status) {
+      data.status = status;
+      $('#data').jqGrid('setRowData', data.id, data);
     },
 
     registerAll : function() {
@@ -121,6 +128,8 @@ function DorRegistration() {
       }
     }
   };
+  
+  $.ajaxQ('register', { maxRequests: 10 });
   
   return($t);
 }

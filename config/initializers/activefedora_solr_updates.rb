@@ -1,0 +1,1 @@
+::ENABLE_SOLR_UPDATES = false

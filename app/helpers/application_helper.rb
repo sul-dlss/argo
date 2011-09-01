@@ -1,6 +1,10 @@
 module ApplicationHelper
   include Rack::Webauth::Helpers
 
+  def application_name
+    'Argo'
+  end
+
   def fedora_base
     result = URI.parse(Dor::Config.fedora.url.sub(/\/*$/,'/'))
     result.user = result.password = nil

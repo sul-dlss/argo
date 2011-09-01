@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
-    if webauth.logged_in?
+    if webauth.logged_in? and session[:webauth_env]
       User.find_or_create_by_webauth(webauth)
     else
       nil
@@ -43,6 +43,13 @@ class ApplicationController < ActionController::Base
     session
   end
   
+  def default_html_head
+    super
+    stylesheet_links << ['application', 'hierarchy', 'argonauta']
+    javascript_includes.first[0] = 'jquery-1.6.2.min'
+    javascript_includes << ['application', 'hierarchy']
+  end
+
   protected
   def munge_parameters
     case request.content_type

@@ -13,4 +13,6 @@ function pathTo(path) {
 
 $(document).ready(function() {
   $('#doc4').wrapInner('<div id="argonauta"/>');
+  $('#hd div div.first').remove();
+  $('#hd div div.user_util_links').removeClass('yui-u');
 });

@@ -6,12 +6,6 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   helper HierarchyHelper
 
-  def default_html_head
-    super
-    stylesheet_links << 'hierarchy' << 'argonauta'
-    javascript_includes << 'hierarchy' << 'application'
-  end
-
   def solr_doc_params(id=nil)
     id ||= params[:id]
     {
@@ -19,4 +13,9 @@ class CatalogController < ApplicationController
     }
   end
 
+  def workflows
+    delete_or_assign_search_session_params
+    (@response, @document_list) = get_search_results
+  end
+  
 end 
