@@ -68,34 +68,33 @@ function DorRegistration() {
       }
 
       $t.setStatus(data, 'queued');
-      $.ajax({
+      var xhr = $.ajax({
         type: 'POST',
         url: pathTo('/dor/objects'),
         data: params,
-        success: function(response,status,xhr) { 
-          if (response) {
-            data.druid = response['pid'].split(':')[1];
-            data.label = response['label'];
-            progressFunction(xhr);
-          }
-        },
-        error: function(xhr,status,errorThrown) {
-          if (xhr.status < 500) {
-            data.error = xhr.responseText;
-          } else {
-            data.error = xhr.statusText;
-          }
-          progressFunction(xhr);
-        },
         dequeued: function(xhr) {
           $t.setStatus(data, 'pending')
         },
-        complete: function(xhr,status) {
-          $t.setStatus(data, status);
-        },
         ajaxQ: 'register',
-        dataType: 'ajaxQ',
-        realDataType: 'json'
+        dataType: 'json'
+      })
+      xhr.success(function(response,status,xhr) { 
+        if (response) {
+          data.druid = response['pid'].split(':')[1];
+          data.label = response['label'];
+          progressFunction(xhr);
+        }
+      });
+      xhr.error(function(xhr,status,errorThrown) {
+        if (xhr.status < 500) {
+          data.error = xhr.responseText;
+        } else {
+          data.error = xhr.statusText;
+        }
+        progressFunction(xhr);
+      });
+      xhr.complete(function(xhr,status) {
+          $t.setStatus(data, status);
       });
     },
     
