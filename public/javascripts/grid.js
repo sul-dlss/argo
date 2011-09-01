@@ -126,6 +126,7 @@ var gridContext = function() {
 
     initializeContext: function() {
       $t.statusImages = { 
+        queued: pathTo('/images/icons/queued.png'), 
         pending: pathTo('/images/icons/spinner.gif'), 
         success: pathTo('/images/icons/accept.png'), 
         error: pathTo('/images/icons/exclamation.png'),
