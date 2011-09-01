@@ -1,7 +1,7 @@
 namespace :argo do
   directives = [
     'AuthType WebAuth',
-    'Require privgroup stanford:staff',
+    'Require valid-user',
     'WebAuthLdapAttribute suAffiliation',
     'WebAuthLdapAttribute displayName',
     'WebAuthLdapAttribute mail'
