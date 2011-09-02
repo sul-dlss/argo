@@ -16,7 +16,7 @@ class RegistrationController < ApplicationController
 
   def form_list
     docs = Dor::SearchService.gsearch(:q => %{PID:"#{params[:apo_id]}"})['response']['docs']
-    format = docs.collect { |doc| doc['apo_metadata_format_field'] }.flatten.first
+    format = docs.collect { |doc| doc['apo_metadata_format_field'] }.flatten.first.to_s
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     result = forms[format.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
     respond_to do |format|
