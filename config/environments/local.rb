@@ -28,7 +28,7 @@ RubyDorServices::Application.configure do
   
   require 'rack-webauth/test'
   config.middleware.use(Rack::Webauth::Test, :user => 'labware', :mail => 'labware@stanford.edu',
-    :ldapprivgroup => 'dlss:labstaff', :suaffiliation => 'stanford:test', :displayname => 'Labware User',
+    :ldapprivgroup => 'dlss:dor-admin', :suaffiliation => 'stanford:test', :displayname => 'Labware User',
     :ldapauthrule => 'valid-user')
   config.middleware.use(Rack::Webauth)
   cert_dir = File.expand_path(File.join(File.dirname(__FILE__),"../certs"))

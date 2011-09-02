@@ -64,7 +64,7 @@ RubyDorServices::Application.configure do
     suri do
       mint_ids true
       id_namespace 'druid'
-      url 'https://lyberservices-prod.stanford.edu:8080'
+      url 'http://lyberservices-prod.stanford.edu'
       user 'labware'
       pass 'lyberteam'
     end
