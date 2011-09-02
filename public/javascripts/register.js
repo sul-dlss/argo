@@ -1,3 +1,5 @@
+$.ajaxQ('register', { maxRequests: 10 });
+
 function DorRegistration(initOpts) {
   var $t = {
     projectName: '',
@@ -117,8 +119,6 @@ function DorRegistration(initOpts) {
     }
   };
   
-  $.ajaxQ('register', { maxRequests: 10 });
-
   $.extend($t, initOpts);
 
   return($t);
