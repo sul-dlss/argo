@@ -1,4 +1,4 @@
-function DorRegistration() {
+function DorRegistration(initOpts) {
   var $t = {
     projectName: '',
     apoId: null,
@@ -9,9 +9,8 @@ function DorRegistration() {
     registrationQueue: [],
     maxConcurrentRequests: 5,
     
-    getTrackingSheet : function() {
+    getTrackingSheet : function(druids) {
       var project = $t.projectName;
-      var druids = $('#data').getCol('druid');
       var sequence = 1;
       var query = $.param({ druid : druids, name : project, sequence : sequence });
       var url = pathTo("/registration/tracksheet?"+query);
@@ -24,7 +23,7 @@ function DorRegistration() {
       progressFunction = progressFunction || function() {}
 
       if ($.isEmptyObject(apo) || $.isEmptyObject(sourcePrefix)) {
-        $('#specify').dialog('open');
+        $t.displayRequirements();
         return(false);
       }
 
@@ -38,7 +37,7 @@ function DorRegistration() {
         tags.unshift('MDForm : '+$t.mdFormId);
       }
 
-      var data = $('#data').jqGrid('getRowData',rowid)
+      var data = $t.getData(rowid);
       data.id = rowid
 
       var params = { 
@@ -97,39 +96,30 @@ function DorRegistration() {
           $t.setStatus(data, status);
       });
     },
-    
-    setStatus : function(data, status) {
-      data.status = status;
-      $('#data').jqGrid('setRowData', data.id, data);
-    },
 
     registerAll : function() {
       var apo = $t.apoId;
       var sourcePrefix = $t.metadataSource;
 
       if ($.isEmptyObject(apo) || $.isEmptyObject(sourcePrefix)) {
-        $('#specify').dialog('open');
+        $t.displayRequirements();
         return(false);
       }
 
-      var ids = $('#data').jqGrid('getDataIDs');
-      var progressStep = 100 / $('#data').jqGrid('getDataIDs').length;
-      var currentStep = 0;
-      $('#progress').progressbar('option','value',currentStep);
-      $('#progress_dialog').dialog('option','title','Registering '+ids.length+' items')
-      $('#progress_dialog').dialog('open');
+      var ids = $t.getDataIds();
+      $t.progress(true);
       for (var i = 0; i < ids.length; i++) {
         var rowid = ids[i];
         $t.register(rowid, function(xhr) {
-          currentStep += progressStep;
-          $('#progress').progressbar('option','value',currentStep);
-          if (currentStep >= 99.999) { $('#progress_dialog').dialog('close'); }
+          $t.progress();
         });
       }
     }
   };
   
   $.ajaxQ('register', { maxRequests: 10 });
-  
+
+  $.extend($t, initOpts);
+
   return($t);
 }

@@ -21,8 +21,42 @@ var gridContext = function() {
     }
   };
 
+  var createRegistrationContext = function() {
+    var progressStep = 1;
+    var currentStep = 0;
+    return new DorRegistration({
+      setStatus : function(data, status) {
+        data.status = status;
+        return $('#data').jqGrid('setRowData', data.id, data);
+      },
+      getDataIds : function() {
+        return $('#data').jqGrid('getDataIDs');
+      },
+      getData : function(rowid) {
+        return $('#data').jqGrid('getRowData',rowid);
+      },
+      progress : function(init) {
+        if (init) {
+          var numItems = $('#data').jqGrid('getDataIDs').length;
+          progressStep = 100 / numItems;
+          currentStep = 0;
+          $('#progress').progressbar('option','value',currentStep);
+          $('#progress_dialog').dialog('option','title','Registering '+numItems+' items')
+          $('#progress_dialog').dialog('open');
+        } else {
+          currentStep += progressStep;
+          $('#progress').progressbar('option','value',currentStep);
+          if (currentStep >= 99.999) { $('#progress_dialog').dialog('close'); }
+        }
+      },
+      displayRequirements : function() {
+        $('#specify').dialog('open');
+      }
+    });
+  };
+  
   var $t = {
-    rc: new DorRegistration(),
+    rc: createRegistrationContext(),
     statusImages: {},
     
     resizeIdList: function() {
@@ -107,7 +141,8 @@ var gridContext = function() {
     },
     
     reset: function() {
-      $t.rc = new DorRegistration();
+      $t.rc = createRegistrationContext();
+
       $('#data').jqGrid('clearGridData');
       $t.toggleEditing(true);
       $.defaultText();
@@ -130,10 +165,13 @@ var gridContext = function() {
         pending: pathTo('/images/icons/spinner.gif'), 
         success: pathTo('/images/icons/accept.png'), 
         error: pathTo('/images/icons/exclamation.png'),
-        abort: pathTo('/images/icons/cancel.png')
-      },
-      
-      $([this.statusImages.pending, this.statusImages.success, this.statusImages.error, this.statusImages.abort]).preload();
+        abort: pathTo('/images/icons/cancel.png'),
+        preloadImages: function() {
+          $([this.queued, this.pending, this.success, this.error, this.abort]).preload();
+        }
+      }
+      this.statusImages.preloadImages();
+
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
         var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
@@ -219,7 +257,7 @@ var gridContext = function() {
       
       this.addToolbarButton('note','pdf','Tracking Sheets').click(function() {
         $t.stopEditing(true);
-        $t.rc.getTrackingSheet();
+        $t.rc.getTrackingSheet($('#data').getCol('druid'));
       }).addClass('enabled-grid-locked');
       
       $('#icons').append('<span class="button-group" id="view-toggle"/>');
@@ -345,4 +383,3 @@ $(document).ready(function() {
   gridContext.initialize();
   $('#properties_dialog').dialog('open');
 });
-  
