@@ -79,7 +79,7 @@ GEM
     barby (0.5.0)
     builder (2.1.2)
     daemons (1.1.4)
-    dor-services (1.6.4)
+    dor-services (1.7.0)
       active-fedora (>= 1.2.6)
       json
       lyber-utils
