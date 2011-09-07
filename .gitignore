@@ -6,3 +6,5 @@ tmp/
 dpg_pool
 .powenv
 public/images/.dpg_pool
+config/certs
+config/environments
