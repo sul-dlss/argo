@@ -5,7 +5,7 @@ gem 'rake'
 gem 'rack-flash'
 gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
-gem 'prawn', :git => "git://github.com/mbklein/prawn.git"
+gem 'prawn', ">=0.12.0"
 gem 'barby'
 gem "dor-services", ">=1.5.0"
 #gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services/"
