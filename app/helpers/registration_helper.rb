@@ -45,7 +45,7 @@ module RegistrationHelper
       return
     end
     
-    ids = Array(doc['mods_id_field']).collect do |id| 
+    ids = Array(doc['mods_identifier_field']).collect do |id| 
       result = id.split(/:/,2)
       result[0] = "#{result[0].titleize}:"
       result
@@ -65,8 +65,8 @@ module RegistrationHelper
       label = label[0..110] + '...'
     end
     table_data = [['Object Label:',label]]
-    if doc['tag_field'].find { |tag| tag =~ /^Project\s*:\s*(.+)/ }
-      table_data.push(['Project Name:',$1])
+    if project_name = doc['project_tag_field']
+      table_data.push(['Project Name:',project_name.to_s])
     end
     table_data.push(['Date Printed:',Time.now.strftime('%c')])
     table_data += ids
