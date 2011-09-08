@@ -63,9 +63,6 @@ function DorRegistration(initOpts) {
         params['pid'] = 'druid:' + data.druid;
       } else if (sourcePrefix == 'mdtoolkit') {
         params['pid'] = "druid:" + data.metadata_id;
-        if (!data.source_id) {
-          params['source_id'] = params['pid']
-        }
       }
 
       $t.setStatus(data, 'queued');
