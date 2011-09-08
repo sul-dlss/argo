@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   # Please be sure to impelement current_user and user_session. Blacklight depends on 
   # these methods in order to perform user specific actions. 
 
-  before_filter :unpack_webauth
+  before_filter :authorize!
   before_filter :fedora_setup
   
   include Rack::Webauth::Helpers
@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
-    if webauth.logged_in? and session[:webauth_env]
+    if webauth.logged_in?
       User.find_or_create_by_webauth(webauth)
     else
       nil
@@ -64,28 +64,6 @@ class ApplicationController < ActionController::Base
     Dor::Config.fedora.post_config
   end
 
-  def htaccess_hash
-    result = Digest::MD5.new
-    result << File.read(File.expand_path('public/auth/.htaccess', Rails.root))
-    result.hexdigest
-  end
-  
-  def unpack_webauth
-    if params[:reset_webauth] or (htaccess_hash != session[:privgroup_hash])
-      session.delete(:webauth_env)
-    end
-    
-    begin
-      unless session[:webauth_env].nil?
-        unless webauth.logged_in?
-          hash = JSON.parse(session[:webauth_env])
-          request.env[Rack::Webauth::NS] = Rack::Webauth::Info.new(hash.merge(request.env))
-        end
-      end
-    rescue JSON::ParserError
-    end
-  end
-  
   def development_only!
     if Rails.env.development? or ENV['DOR_SERVICES_DEBUG_MODE']
       yield
