@@ -33,7 +33,7 @@ class RegistrationController < ApplicationController
   end
 
   def autocomplete
-    response = Dor::SearchService.gsearch(:q => "*:*", :rows => '0', :facet => 'on', :'facet.field' => params[:field], :'facet.prefix' => params[:term].titlecase)
+    response = Dor::SearchService.gsearch(:q => "*:*", :rows => '0', :facet => 'on', :'facet.field' => params[:field], :'facet.prefix' => params[:term].titlecase, :'facet.mincount' => 1, :'facet.limit' => 15)
     result = response['facet_counts']
     result = result['facet_fields']
     result = Hash[*(result['project_tag_facet'])].keys
