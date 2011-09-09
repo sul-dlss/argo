@@ -9,3 +9,4 @@ public/images/.dpg_pool
 config/certs
 config/environments
 config/solr.yml
+public/.htaccess

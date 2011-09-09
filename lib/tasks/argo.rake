@@ -6,7 +6,8 @@ namespace :argo do
     'WebAuthLdapAttribute displayName',
     'WebAuthLdapAttribute mail',
   ]
-  task :update_privgroups => :environment do
+  desc "Update the .htaccess file from indexed APOs"
+  task :htaccess => :environment do
     resp = Dor::SearchService.gsearch(:q=>'object_type_field:adminPolicy', :rows=>'0',
       :facet=>'on', :'facet.field'=>'apo_register_permissions_facet', :'facet.prefix'=>'workgroup:',
       :'facet.mincount'=>'1', :'facet.limit'=>'-1', :wt=>'json')
