@@ -13,6 +13,9 @@ RubyDorServices::Application.routes.draw do
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
   match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
 
+  match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  
   root :to => "catalog#index"
 
   match 'login',          :to => 'auth',       :as => 'new_user_session'
