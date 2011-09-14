@@ -35,7 +35,7 @@ Blacklight.configure(:shared) do |config|
 
   # solr fld values given special treatment in the index (search results) view
   config[:index] = {
-    :show_link => "dc_title_field",
+    :show_link => "link_text_display",
     :record_display_type => "format"
   }
 
