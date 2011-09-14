@@ -6,9 +6,7 @@ module ApplicationHelper
   end
 
   def fedora_base
-    result = URI.parse(Dor::Config.fedora.url.sub(/\/*$/,'/'))
-    result.user = result.password = nil
-    return result
+    URI.parse(Dor::Config.fedora.safeurl.sub(/\/*$/,'/'))
   end
   
   def object_location(pid)
