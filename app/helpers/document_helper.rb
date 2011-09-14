@@ -7,6 +7,24 @@ module DocumentHelper
     super(*args).to_s
   end
   
+  def get_search_results(user_params = params || {}, extra_controller_params = {})
+    # In later versions of Rails, the #benchmark method can do timing
+    # better for us. 
+    bench_start = Time.now
+    
+    solr_response = find(self.solr_search_params(user_params).merge(extra_controller_params))  
+    document_list = solr_response.docs.collect do |doc| 
+      unless doc.has_key?(Blacklight.config[:index][:show_link])
+        doc[Blacklight.config[:index][:show_link]] = doc['PID']
+        silently { Dor::Item.touch doc['PID'].to_s }
+      end
+      SolrDocument.new(doc, solr_response)
+    end
+    Rails.logger.debug("Solr fetch: #{self.class}#get_search_results (#{'%.1f' % ((Time.now.to_f - bench_start.to_f)*1000)}ms)")
+    
+    return [solr_response, document_list]
+  end
+
   def get_search_results *args
     (solr_response, document_list) = super(*args)
     document_list.each do |doc|
