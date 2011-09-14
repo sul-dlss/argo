@@ -1,6 +1,6 @@
 # Overrides for Blacklight helpers
  
-module DocumentHelper
+module ArgoHelper
 
   # TODO: Remove this after all documents are reindexed with id instead of PID
   def render_document_index_label *args
