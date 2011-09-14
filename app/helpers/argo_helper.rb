@@ -13,7 +13,7 @@ module ArgoHelper
     bench_start = Time.now
     
     solr_response = find(self.solr_search_params(user_params).merge(extra_controller_params))  
-    document_list = solr_response.docs.collect do |doc| 
+    document_list = solr_response['response']['docs'].collect do |doc| 
       unless doc.has_key?(Blacklight.config[:index][:show_link])
         doc[Blacklight.config[:index][:show_link]] = doc['PID']
         silently { Dor::Item.touch doc['PID'].to_s }
