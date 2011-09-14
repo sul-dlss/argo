@@ -1,8 +1,21 @@
+# Overrides for Blacklight helpers
+ 
 module DocumentHelper
 
   # TODO: Remove this after all documents are reindexed with id instead of PID
   def render_document_index_label *args
     super(*args).to_s
+  end
+  
+  def get_search_results *args
+    (solr_response, document_list) = super(*args)
+    document_list.each do |doc|
+      unless doc.has_key?(Blacklight.config[:index][:show_link])
+        doc[Blacklight.config[:index][:show_link]] = doc['PID']
+        silently { Dor::Item.touch doc['PID'].to_s }
+      end
+    end
+    return [solr_response, document_list]
   end
   
   def render_index_field_value args

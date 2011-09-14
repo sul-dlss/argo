@@ -13,4 +13,10 @@ module ApplicationHelper
     fedora_base.merge("objects/#{pid}").to_s
   end
 
+  protected
+  
+  def silently
+    begin; yield; rescue; end
+  end
+  
 end
