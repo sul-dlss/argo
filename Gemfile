@@ -7,8 +7,9 @@ gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'
-gem "dor-services", ">=1.7.2"
+#gem "dor-services", ">=1.7.2"
 #gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services/"
+gem "dor-services", :git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :branch => 'feature/reindex-item'
 gem "mod-cons", ">=0.2.0"
 gem "mysql2", "~> 0.2.7"
 gem "sqlite3-ruby", "~> 1.2.5"

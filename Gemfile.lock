@@ -1,4 +1,23 @@
 GIT
+  remote: /afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
+  revision: 05c7470ddb7c10a9418174a33abffd016fa8d8b7
+  branch: feature/reindex-item
+  specs:
+    dor-services (1.7.2)
+      active-fedora (>= 1.2.6)
+      json
+      lyber-utils
+      mod-cons (>= 0.2.0)
+      nokogiri (>= 1.4.3.1)
+      om (>= 1.2.0)
+      rest-client
+      ruby-cache
+      solr-ruby (>= 0.0.8)
+      systemu
+      uuidtools
+      validatable
+
+GIT
   remote: git://github.com/Papipo/hassle.git
   revision: 3a12feb7ae8c94acde7bdf1cc8a34bb89ab39f44
   specs:
@@ -79,19 +98,6 @@ GEM
     barby (0.5.0)
     builder (2.1.2)
     daemons (1.1.4)
-    dor-services (1.7.2)
-      active-fedora (>= 1.2.6)
-      json
-      lyber-utils
-      mod-cons (>= 0.2.0)
-      nokogiri (>= 1.4.3.1)
-      om (>= 1.2.0)
-      rest-client
-      ruby-cache
-      solr-ruby (>= 0.0.8)
-      systemu
-      uuidtools
-      validatable
     equivalent-xml (0.2.7)
       nokogiri (>= 1.4.3)
     erubis (2.6.6)
@@ -178,7 +184,7 @@ GEM
     spoon (0.0.1)
     sqlite3-ruby (1.2.5)
     stomp (1.1.9)
-    systemu (2.3.0)
+    systemu (2.4.0)
     thin (1.2.11)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -202,7 +208,7 @@ DEPENDENCIES
   awesome_print
   barby
   blacklight!
-  dor-services (>= 1.7.2)
+  dor-services!
   haml
   hassle!
   interactive_editor
