@@ -7,9 +7,6 @@ gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'
-#gem "dor-services", ">=1.7.2"
-#gem "dor-services", :path => "/Users/mbklein/Workspace/gems/dor-services/"
-gem "dor-services", :git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :branch => 'feature/reindex-item'
 gem "mod-cons", ">=0.2.0"
 gem "mysql2", "~> 0.2.7"
 gem "sqlite3-ruby", "~> 1.2.5"
@@ -20,12 +17,17 @@ gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :
 
 gem 'rails', '3.0.8'
 
-group :development do
-  if File.exists?(mygems = File.join(ENV['HOME'],'.gemfile'))
-    instance_eval(File.read(mygems))
-  end
-  gem "lyberteam-devel"
+dor_services_spec = ">= 1.7.2"
+group :test do
+  dor_services_spec = {:git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :branch => 'test'}
 end
+group :development do
+  dor_services_spec =
+    File.directory?("/Users/mbklein/Workspace/gems/dor-services") ? 
+      { :path => "/Users/mbklein/Workspace/gems/dor-services/" } : 
+      { :git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :branch => 'develop' }
+end
+gem "dor-services", dor_services_spec
 
 # Use unicorn as the web server
 # gem 'unicorn'

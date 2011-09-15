@@ -1,23 +1,4 @@
 GIT
-  remote: /afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git
-  revision: 05c7470ddb7c10a9418174a33abffd016fa8d8b7
-  branch: feature/reindex-item
-  specs:
-    dor-services (1.7.2)
-      active-fedora (>= 1.2.6)
-      json
-      lyber-utils
-      mod-cons (>= 0.2.0)
-      nokogiri (>= 1.4.3.1)
-      om (>= 1.2.0)
-      rest-client
-      ruby-cache
-      solr-ruby (>= 0.0.8)
-      systemu
-      uuidtools
-      validatable
-
-GIT
   remote: git://github.com/Papipo/hassle.git
   revision: 3a12feb7ae8c94acde7bdf1cc8a34bb89ab39f44
   specs:
@@ -45,6 +26,23 @@ GIT
   specs:
     rack-webauth (0.1.3)
       rack
+
+PATH
+  remote: /Users/mbklein/Workspace/gems/dor-services
+  specs:
+    dor-services (1.7.2)
+      active-fedora (>= 1.2.6)
+      json
+      lyber-utils
+      mod-cons (>= 0.2.0)
+      nokogiri (>= 1.4.3.1)
+      om (>= 1.2.0)
+      rest-client
+      ruby-cache
+      solr-ruby (>= 0.0.8)
+      systemu
+      uuidtools
+      validatable
 
 GEM
   remote: http://rubygems.org/
@@ -92,7 +90,6 @@ GEM
       activesupport (= 3.0.8)
     activesupport (3.0.8)
     arel (2.0.10)
-    awesome_print (0.4.0)
     bagit (0.2.0)
       validatable (~> 1.6)
     barby (0.5.0)
@@ -104,11 +101,8 @@ GEM
       abstract (>= 1.0.0)
     eventmachine (0.12.10)
     facets (2.9.2)
-    haml (3.1.2)
-    highline (1.6.2)
+    haml (3.1.3)
     i18n (0.5.0)
-    interactive_editor (0.0.10)
-      spoon (>= 0.0.1)
     json (1.6.0)
     kaminari (0.12.4)
       rails (>= 3.0.0)
@@ -117,10 +111,6 @@ GEM
       nokogiri (>= 1.4.3.1)
       systemu (>= 1.2.0)
       validatable
-    lyberteam-devel (0.4.1)
-      highline
-      pony
-      rake (>= 0.8.7)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -139,8 +129,6 @@ GEM
     pdf-reader (0.10.0)
       Ascii85 (~> 1.0.0)
     polyglot (0.3.2)
-    pony (1.3)
-      mail (> 2.0)
     prawn (0.12.0)
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.2)
@@ -181,7 +169,6 @@ GEM
       om (>= 1.0.0)
       stomp
       xml-simple
-    spoon (0.0.1)
     sqlite3-ruby (1.2.5)
     stomp (1.1.9)
     systemu (2.4.0)
@@ -198,21 +185,17 @@ GEM
     unicode (0.4.0)
     uuidtools (2.1.2)
     validatable (1.6.7)
-    wirble (0.1.3)
     xml-simple (1.1.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  awesome_print
   barby
   blacklight!
   dor-services!
   haml
   hassle!
-  interactive_editor
-  lyberteam-devel
   mod-cons (>= 0.2.0)
   mysql2 (~> 0.2.7)
   prawn (>= 0.12.0)
@@ -223,4 +206,3 @@ DEPENDENCIES
   sass
   sqlite3-ruby (~> 1.2.5)
   thin
-  wirble
