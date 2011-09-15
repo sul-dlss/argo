@@ -19,13 +19,13 @@ gem 'rails', '3.0.8'
 
 dor_services_spec = ">= 1.7.2"
 group :test do
-  dor_services_spec = {:git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :branch => 'test'}
+  dor_services_spec = {:git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :tag => 'test'}
 end
 group :development do
   dor_services_spec =
     File.directory?("/Users/mbklein/Workspace/gems/dor-services") ? 
       { :path => "/Users/mbklein/Workspace/gems/dor-services/" } : 
-      { :git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :branch => 'develop' }
+      { :git => "/afs/ir/dev/dlss/git/lyberteam/dor-services-gem.git", :tag => 'dev' }
 end
 gem "dor-services", dor_services_spec
 
