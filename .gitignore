@@ -10,3 +10,4 @@ config/certs
 config/environments
 config/solr.yml
 public/.htaccess
+.dor-services
