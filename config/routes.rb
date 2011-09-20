@@ -1,7 +1,21 @@
 RubyDorServices::Application.routes.draw do
 
-  Blacklight.add_routes(self)
+  Blacklight.add_routes(self, :except => [:catalog])
+  # Catalog stuff.
+  match 'view/opensearch', :to => 'catalog#opensearch', :as => "opensearch_catalog"
+  match 'view/citation', :to => 'catalog#citation', :as => "citation_catalog"
+  match 'view/email', :to => 'catalog#email', :as => "email_catalog"
+  match 'view/sms', :to => 'catalog#sms', :as => "sms_catalog"
+  match 'view/endnote', :to => 'catalog#endnote', :as => "endnote_catalog"
+  match 'view/send_email_record', :to => 'catalog#send_email_record', :as => "send_email_record_catalog"
+  match "view/facet/:id", :to => 'catalog#facet', :as => 'catalog_facet'
+  match 'view/unapi', :to => "catalog#unapi", :as => 'unapi'
+  resources :catalog, :path => '/view', :only => [:index, :show, :update]
+  match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
 
+  match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  
   root :to => "catalog#index"
 
   match 'login',          :to => 'auth',       :as => 'new_user_session'

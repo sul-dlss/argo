@@ -6,3 +6,8 @@ tmp/
 dpg_pool
 .powenv
 public/images/.dpg_pool
+config/certs
+config/environments
+config/solr.yml
+public/.htaccess
+.dor-services
