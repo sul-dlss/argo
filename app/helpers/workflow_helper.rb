@@ -16,6 +16,7 @@ module WorkflowHelper
     new_params = add_facet_params("wf_wps_facet", [name,process,status].compact.join(':'))
     rotate_facet_params('wf','wps',facet_order('wf'),new_params)
     new_params[:wf_grid] = 'false'
+    new_params[:action] = 'index'
     item_count = 0
     if wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_]
       item_count = item.hits
