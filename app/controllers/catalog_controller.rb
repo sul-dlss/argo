@@ -13,9 +13,10 @@ class CatalogController < ApplicationController
     }
   end
 
-  def workflows
+  def workflow_grid
     delete_or_assign_search_session_params
     (@response, @document_list) = get_search_results
+    render :partial => 'catalog/workflow_grid'
   end
   
 end 

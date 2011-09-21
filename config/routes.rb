@@ -10,6 +10,7 @@ RubyDorServices::Application.routes.draw do
   match 'view/send_email_record', :to => 'catalog#send_email_record', :as => "send_email_record_catalog"
   match "view/facet/:id", :to => 'catalog#facet', :as => 'catalog_facet'
   match 'view/unapi', :to => "catalog#unapi", :as => 'unapi'
+  match 'view/workflow_grid', :to => "catalog#workflow_grid", :as => "workflow_grid_catalog"
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
   match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
 
