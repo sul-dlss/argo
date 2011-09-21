@@ -88,6 +88,9 @@ Blacklight.configure(:shared) do |config|
   # handler defaults, or have no facets.
   config[:default_solr_params] ||= {}
   config[:default_solr_params][:"facet.field"] = facet_fields
+  config[:default_solr_params][:"f.wf_wps_facet.facet.limit"] = -1
+  config[:default_solr_params][:"f.wf_wsp_facet.facet.limit"] = -1
+  config[:default_solr_params][:"f.wf_swp_facet.facet.limit"] = -1
 
   # solr fields to be displayed in the index (search results) view
   #   The ordering of the field names is the order of the display 
