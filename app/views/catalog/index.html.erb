@@ -16,6 +16,15 @@
 	<% end %>
 
   <% if show_workflow_grid? %>
+    <% extra_head_content << capture do %>
+    <script type="text/javascript"/>
+      function updateGrid() {
+        $.get('/view/workflow_grid'+$(document).attr('location').search)
+        .success(function(data) { $('#workflow_grid').replaceWith(data) })
+      }
+      $(document).ready(function() { setInterval(updateGrid, 10000) });
+    </script>
+    <% end %>
   	<%= render :partial => 'workflow_grid' %>
   <% else %>
     <div class="pageEntriesInfo">
