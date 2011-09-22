@@ -1,0 +1,42 @@
+content-metadata:
+    prerequisite: start-accession
+    batch_limit: 1000
+    error_limit: 10
+
+descriptive-metadata:
+    prerequisite: start-accession
+    batch_limit: 1000
+    error_limit: 10
+    
+rights-metadata:
+    prerequisite: start-accession
+    batch_limit: 1000
+    error_limit: 10
+
+publish:
+    prerequisite: 
+      - content-metadata
+      - descriptive-metadata
+      - rights-metadata
+    batch_limit: 100
+    error_limit: 10
+      
+shelve:
+    prerequisite: publish
+    batch_limit: 1
+    error_limit: 5
+
+sdr-ingest-transfer:
+    prerequisite: publish
+    batch_limit: 1
+    error_limit: 5
+
+cleanup:
+    prerequisite:
+      - sdr:sdrIngestWF:complete-deposit
+      - dor:accessionWF:shelve
+    batch_limit: 1
+    error_limit: 5
+
+repository: dor
+
