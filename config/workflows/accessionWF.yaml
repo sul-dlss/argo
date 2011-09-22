@@ -1,3 +1,6 @@
+start-accession:
+    batch_limit: 1000
+
 content-metadata:
     prerequisite: start-accession
     batch_limit: 1000

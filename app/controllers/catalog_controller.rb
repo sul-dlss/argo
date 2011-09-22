@@ -29,9 +29,7 @@ class CatalogController < ApplicationController
   
   private
   def render_workflow_graph(rec,wf)
-    config_file = File.join(Rails.root,'config/workflows',wf)+'.yaml'
-    graph = File.exists?(config_file) ? WorkflowViz.from_config(wf,YAML.load(File.read(config_file))) : nil
-
+    graph = Workflow.find(wf).graph
     unless graph.nil?
       rec['wf_wps_facet'].each do |facet|
         (workflow,process,status) = facet.split(/:/)

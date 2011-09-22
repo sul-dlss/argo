@@ -2,7 +2,7 @@ require 'graphviz'
 
 class WorkflowViz < GraphViz
 
-  attr_reader :processes
+  attr_reader :name, :processes
   
   def self.from_config(name, config)
     wf = self.new(name)
@@ -25,6 +25,7 @@ class WorkflowViz < GraphViz
   
   def initialize(name)
     super(name)
+    @name = name
     @root = self.add_node(name)
     @processes = {}
   end
@@ -49,9 +50,10 @@ class WorkflowViz < GraphViz
   class Process
     
     STATUSES = { :waiting => "white", :error => "red", :completed => "green" }
-    attr_reader :status, :node, :dependents
+    attr_reader :name, :status, :node, :dependents
     
     def initialize(graph, name)
+      @name = name
       @graph = graph
       @node = @graph.add_node(name)
       @node.label = name
@@ -89,6 +91,10 @@ class WorkflowViz < GraphViz
       return self
     end
 
+    def all_dependents
+      dependents.collect { |p| p.all_dependents + [p.name] }.flatten.uniq
+    end
+    
   end
 
 end
