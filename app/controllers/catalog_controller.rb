@@ -21,15 +21,40 @@ class CatalogController < ApplicationController
   end
   
   def workflow_graph
-    @response, @document = get_solr_response_for_doc_id    
-    graph = render_workflow_graph(@document,params[:wf_name])
+    @response, @document = get_solr_response_for_doc_id
+    if params[:wf_name] == 'workflow'
+      @graph = GraphViz.new(params[:id])
+      root = @graph.add_node(params[:id])
+      root.style = 'invisible'
+      root.label = ''
+      root.fixedsize = true
+      root.width = root.height = root.margin = 0.0;
+      (@document['wf_wps_facet'].collect { |val| val.split(/:/).first }.uniq + ['sdrIngestWF']).each do |wf_name|
+        g = render_workflow_graph(@document,wf_name,@graph)
+        unless g.nil?
+          e = (root << g.root)
+          e.weight = 10.0
+          e.len = e.penwidth = e.minlen = 0.0
+          e.style = 'invisible'
+          e.label = ''
+          e.arrowhead = 'none'
+          e.arrowtail = 'none'
+        end
+      end
+    else
+      @graph = render_workflow_graph(@document,params[:wf_name])
+    end
+    @graph['rankdir'] = params[:dir] || 'TB'
+    raise ActionController::RoutingError.new('Not Found') if @graph.nil?
     format = params[:format].to_sym
-    send_data graph.output(format => String), :type => Rack::Mime.mime_type(".#{format}"), :disposition => 'inline'
+    send_data @graph.output(format => String), :type => Rack::Mime.mime_type(".#{format}"), :disposition => 'inline'
   end
   
   private
-  def render_workflow_graph(rec,wf)
-    graph = Workflow.find(wf).graph
+  def render_workflow_graph(rec,wf,g = nil)
+    workflow = Workflow.find(wf)
+    return nil if workflow.nil?
+    graph = workflow.graph(g)
     unless graph.nil?
       rec['wf_wps_facet'].each do |facet|
         (workflow,process,status) = facet.split(/:/)

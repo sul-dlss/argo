@@ -20,10 +20,17 @@ class Workflow
   def initialize(name, config)
     @name = name
     @config = config
+    @config.each_pair { |k,v|
+      if v.is_a?(Hash)
+        if v['prerequisite'].is_a?(String)
+          v['prerequisite'] = v['prerequisite'].split(/\s*,\s*/)
+        end
+      end
+    }
   end
 
-  def graph
-    @graph ||= WorkflowViz.from_config(self.name,config)
+  def graph(parent = nil)
+    WorkflowViz.from_config(self.name,config,parent)
   end
   
   def processes
