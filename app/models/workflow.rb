@@ -35,12 +35,12 @@ class Workflow
   
   def processes
     @processes ||= (config.keys - ['repository']).sort do |a,b|
-      if graph.processes[a].all_dependents.include?(b)
-        -1
-      elsif graph.processes[b].all_dependents.include?(a)
+      if graph.processes[a].all_prerequisites.include?(b)
         +1
+      elsif graph.processes[b].all_prerequisites.include?(a)
+        -1
       else
-        a <=> b
+        b <=> a
       end
     end
   end
@@ -49,8 +49,8 @@ end
 
 class Workflow::Graph
   
-  FILL_COLORS = { 'waiting' => "#FFFFFF", 'error' => "#FF0000", 'completed' => "#00CF00", 'unknown' => "#CFCFCF" }
-  TEXT_COLORS = { 'waiting' => "black", 'error' => "black", 'completed' => "black", 'unknown' => "black" }
+  FILL_COLORS = { 'waiting' => "white", 'error' => "#8B0000", 'completed' => "darkgreen", 'unknown' => "#CFCFCF" }
+  TEXT_COLORS = { 'waiting' => "black", 'error' => "white", 'completed' => "white", 'unknown' => "black" }
 
   attr_reader :repo, :name, :processes, :graph, :root
   
@@ -83,6 +83,7 @@ class Workflow::Graph
       @graph = parent.subgraph(qname)
       @root = parent.add_node(name)
     end
+    @graph[:truecolor => true]
     @root.shape = 'plaintext'
     @processes = {}
   end
@@ -101,12 +102,12 @@ class Workflow::Graph
   def finish
     @processes.values.each do |process|
       process.node.fontname = 'Helvetica'
-      if process.id =~ %r{^#{qname}} and process.dependents.length == 0
+      if process.id =~ %r{^#{qname}} and process.prerequisites.length == 0
         (@root << process.node)[:arrowhead => 'none', :arrowtail => 'none', :dir => 'both', :style => 'invisible']
       end
     end
     
-    if @processes.values.select { |p| p.dependents.length == 0 }.all? { |p| p.status == 'completed' }
+    if @processes.values.select { |p| p.prerequisites.length == 0 }.all? { |p| p.status == 'completed' }
       @root.color = FILL_COLORS['completed']
       @root.fontcolor = TEXT_COLORS['completed']
     end
@@ -123,7 +124,7 @@ class Workflow::Graph
   
   class Process
     
-    attr_reader :name, :status, :node, :dependents
+    attr_reader :name, :status, :node, :prerequisites
     
     def initialize(graph, id, name)
       $stderr.puts id
@@ -132,7 +133,7 @@ class Workflow::Graph
       @node = @graph.add_node(id)
       @node.shape = 'box'
       @node.label = name
-      @dependents = []
+      @prerequisites = []
       self.set_status('unknown')
     end
     
@@ -169,7 +170,7 @@ class Workflow::Graph
         if (wf1 != wf2)
           edge.style = 'dashed'
         end
-        self.dependents << process
+        self.prerequisites << process
       }
       return self
     end
@@ -178,8 +179,8 @@ class Workflow::Graph
       @node = process.node  
     end
     
-    def all_dependents
-      dependents.collect { |p| p.all_dependents + [p.name] }.flatten.uniq
+    def all_prerequisites
+      prerequisites.collect { |p| p.all_prerequisites + [p.name] }.flatten.uniq
     end
     
   end

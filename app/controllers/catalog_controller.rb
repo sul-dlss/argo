@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
-require 'wf_viz'
+require 'graphviz'
 
 class CatalogController < ApplicationController  
 
@@ -47,8 +47,8 @@ class CatalogController < ApplicationController
     graph = workflow.graph(g)
     unless graph.nil?
       rec['wf_wps_facet'].each do |facet|
-        (workflow,process,status) = facet.split(/:/)
-        if (workflow == wf) and not status.nil?
+        (wf_name,process,status) = facet.split(/:/)
+        if (wf_name == wf) and not status.nil?
           if graph.processes[process]
             graph.processes[process].status = status
           end
