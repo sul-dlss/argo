@@ -33,8 +33,8 @@ class CatalogController < ApplicationController
     else
       @graph = render_workflow_graph(@document,params[:wf_name])
     end
-    @graph['rankdir'] = params[:dir] || 'TB'
     raise ActionController::RoutingError.new('Not Found') if @graph.nil?
+    @graph['rankdir'] = params[:dir] || 'TB'
     format = params[:format].to_sym
     @graph.output(:none => "#{params[:format]}.gv")
     send_data @graph.output(format => String), :type => Rack::Mime.mime_type(".#{format}"), :disposition => 'inline'
@@ -55,7 +55,7 @@ class CatalogController < ApplicationController
         end
       end
     end
-    graph
+    graph.finish
   end
   
 end 

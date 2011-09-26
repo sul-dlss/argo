@@ -105,6 +105,9 @@ class Workflow::Graph
       if process.id =~ %r{^#{qname}} and process.prerequisites.length == 0
         (@root << process.node)[:arrowhead => 'none', :arrowtail => 'none', :dir => 'both', :style => 'invisible']
       end
+      if process.all_prerequisites.any? { |p| processes[p].status == 'error' }
+        process.node[:fontcolor => 'black', :color => FILL_COLORS['error'], :style => 'diagonals']
+      end
     end
     
     if @processes.values.select { |p| p.prerequisites.length == 0 }.all? { |p| p.status == 'completed' }
@@ -112,6 +115,7 @@ class Workflow::Graph
       @root.fontcolor = TEXT_COLORS['completed']
     end
     @root.fontname = 'Helvetica'
+    return self
   end
   
   def method_missing(sym,*args)
@@ -166,7 +170,7 @@ class Workflow::Graph
         edge = (process.node << @node)
         edge.dir = 'both'
         edge.arrowhead = 'none'
-        edge.arrowtail = 'vee'
+        edge.arrowtail = 'none'
         if (wf1 != wf2)
           edge.style = 'dashed'
         end
