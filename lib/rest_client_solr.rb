@@ -5,7 +5,6 @@ module RSolr
 class DorConnection
 
   def execute client, request_context
-    $stderr.puts request_context.inspect
     resource = RestClient::Resource.new(
       request_context[:uri].to_s,
       :ssl_client_cert  =>  OpenSSL::X509::Certificate.new(File.read(Dor::Config.fedora.cert_file)),
