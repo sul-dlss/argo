@@ -36,4 +36,22 @@ module ArgoHelper
     end
   end
   
+  def render_document_class(document = @document)
+#    result = super(document)
+#    if document['shelved_content_file_field']
+#      result += " has-thumbnail"
+#    end
+#    result
+    "has-thumbnail"
+  end
+  
+  def render_index_thumbnail doc
+    if doc['shelved_content_file_field']
+      druid = doc['id'].to_s.split(/:/).last
+      fname = doc['shelved_content_file_field'].first
+      fname = File.basename(fname,File.extname(fname))
+      image_tag "#{Dor::Config.argo.stacks.url}/#{druid}/#{fname}_square", :class => 'index-thumb'
+    end
+  end
+  
 end

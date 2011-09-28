@@ -36,7 +36,7 @@ Blacklight.configure(:shared) do |config|
   # solr fld values given special treatment in the index (search results) view
   config[:index] = {
     :show_link => "link_text_display",
-    :record_display_type => "format"
+    :record_display_type => "content_type_facet"
   }
 
   # solr fields that will be treated as facets by the blacklight application
@@ -97,11 +97,13 @@ Blacklight.configure(:shared) do |config|
   config[:index_fields] = {
     :field_names => [
       "PID",
-      "dc_title_field"
+      "dc_creator_field",
+      "project_tag_field"
     ],
     :labels => {
       "PID"                     => "DRUID:",
-      "dc_title_field"          => "Title:"
+      "dc_creator_field"        => "Creator:",
+      "project_tag_field"       => "Project:"
     }
   }
 
@@ -109,12 +111,10 @@ Blacklight.configure(:shared) do |config|
   #   The ordering of the field names is the order of the display 
   config[:show_fields] = {
     :field_names => [
-      "PID",
-      "dc_title_field"
+      "PID"
     ],
     :labels => {
       "PID"                     => "DRUID:",
-      "dc_title_field"          => "Title:",
       "project_tag_field"       => "Project:"
     }
   }
@@ -146,46 +146,46 @@ Blacklight.configure(:shared) do |config|
   # Now we see how to over-ride Solr request handler defaults, in this
   # case for a BL "search field", which is really a dismax aggregate
   # of Solr search fields. 
-  config[:search_fields] << {
-    :key => 'title',     
-    # solr_parameters hash are sent to Solr as ordinary url query params. 
-    :solr_parameters => {
-      :"spellcheck.dictionary" => "title"
-    },
-    # :solr_local_parameters will be sent using Solr LocalParams
-    # syntax, as eg {! qf=$title_qf }. This is neccesary to use
-    # Solr parameter de-referencing like $title_qf.
-    # See: http://wiki.apache.org/solr/LocalParams
-    :solr_local_parameters => {
-      :qf => "$title_qf",
-      :pf => "$title_pf"
-    }
-  }
-  config[:search_fields] << {
-    :key =>'author',     
-    :solr_parameters => {
-      :"spellcheck.dictionary" => "author" 
-    },
-    :solr_local_parameters => {
-      :qf => "$author_qf",
-      :pf => "$author_pf"
-    }
-  }
-
-  # Specifying a :qt only to show it's possible, and so our internal automated
-  # tests can test it. In this case it's the same as 
-  # config[:default_solr_parameters][:qt], so isn't actually neccesary. 
-  config[:search_fields] << {
-    :key => 'subject', 
-    :qt=> 'select',
-    :solr_parameters => {
-      :"spellcheck.dictionary" => "subject"
-    },
-    :solr_local_parameters => {
-      :qf => "$subject_qf",
-      :pf => "$subject_pf"
-    }
-  }
+#  config[:search_fields] << {
+#    :key => 'title',     
+#    # solr_parameters hash are sent to Solr as ordinary url query params. 
+#    :solr_parameters => {
+#      :"spellcheck.dictionary" => "title"
+#    },
+#    # :solr_local_parameters will be sent using Solr LocalParams
+#    # syntax, as eg {! qf=$title_qf }. This is neccesary to use
+#    # Solr parameter de-referencing like $title_qf.
+#    # See: http://wiki.apache.org/solr/LocalParams
+#    :solr_local_parameters => {
+#      :qf => "$title_qf",
+#      :pf => "$title_pf"
+#    }
+#  }
+#  config[:search_fields] << {
+#    :key =>'author',     
+#    :solr_parameters => {
+#      :"spellcheck.dictionary" => "author" 
+#    },
+#    :solr_local_parameters => {
+#      :qf => "$author_qf",
+#      :pf => "$author_pf"
+#    }
+#  }
+#
+#  # Specifying a :qt only to show it's possible, and so our internal automated
+#  # tests can test it. In this case it's the same as 
+#  # config[:default_solr_parameters][:qt], so isn't actually neccesary. 
+#  config[:search_fields] << {
+#    :key => 'subject', 
+#    :qt=> 'select',
+#    :solr_parameters => {
+#      :"spellcheck.dictionary" => "subject"
+#    },
+#    :solr_local_parameters => {
+#      :qf => "$subject_qf",
+#      :pf => "$subject_pf"
+#    }
+#  }
   
   # "sort results by" select (pulldown)
   # label in pulldown is followed by the name of the SOLR field to sort by and
