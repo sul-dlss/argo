@@ -131,7 +131,6 @@ class Workflow::Graph
     attr_reader :name, :status, :node, :prerequisites
     
     def initialize(graph, id, name)
-      $stderr.puts id
       @name = name
       @graph = graph
       @node = @graph.add_node(id)
