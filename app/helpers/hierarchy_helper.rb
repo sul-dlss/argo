@@ -63,8 +63,9 @@ end
 
 def render_hierarchy(field)
   prefix = field.name.split(/_/).first
-  facet_tree(prefix)[field.name].keys.sort.collect do |key|
-    render :partial => 'facet_hierarchy_item', :locals => { :field_name => field.name, :data => facet_tree(prefix)[field.name][key] }
+  tree = facet_tree(prefix)[field.name]
+  tree.keys.sort.collect do |key|
+    render :partial => 'facet_hierarchy_item', :locals => { :field_name => field.name, :data => tree[key], :key => key }
   end
 end
 
@@ -85,16 +86,16 @@ def facet_tree(prefix)
   if @facet_tree[prefix].nil?
     @facet_tree[prefix] = {}
     Blacklight.config[:facet][:hierarchy][prefix].each { |key|
-      facet_field = [prefix,key,'facet'].join('_')
+      facet_field = [prefix,key,'facet'].compact.join('_')
       @facet_tree[prefix][facet_field] ||= {}
       data = @response.facet_by_field_name(facet_field)
       data.items.each { |facet_item|
-        path = facet_item.value.split(/:/)
+        path = facet_item.value.split(/\s*:\s*/)
         loc = @facet_tree[prefix][facet_field]
         while path.length > 0
           loc = loc[path.shift] ||= {}
         end
-        loc[:_] = HierarchicalFacetItem.new(facet_item.value, facet_item.value.split(/:/).last, facet_item.hits)
+        loc[:_] = HierarchicalFacetItem.new(facet_item.value, facet_item.value.split(/\s*:\s*/).last, facet_item.hits)
       }
     }
   end

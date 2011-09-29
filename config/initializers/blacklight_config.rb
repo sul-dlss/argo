@@ -46,24 +46,26 @@ Blacklight.configure(:shared) do |config|
   # config[:facet] << {:field_name => "format", :label => "Format", :limit => 10}
   config[:facet] = {
     :field_names => (facet_fields = [
-      "project_tag_facet",
+#      "project_tag_facet",
       "content_type_facet",
-      "governing_apo_facet",
-      "owning_collection_facet",
+      "isGovernedBy_id_facet",
+      "isMemberOfCollection_id_facet",
       "object_type_field",
+      "tag_facet",
       "wf_wps_facet",
       "wf_wsp_facet",
       "wf_swp_facet"
     ]),
     :labels => {
-      "project_tag_facet"       => "Project Name",
-      "content_type_facet"      => "Content Type",
-      "governing_apo_facet"     => "Admin. Policy",
-      "owning_collection_facet" => "Owning Collection",
-      "object_type_field"       => "Object Type",
-      "wf_wps_facet"            => "Workflows (WPS)",
-      "wf_wsp_facet"            => "Workflows (WSP)",
-      "wf_swp_facet"            => "Workflows (SWP)"
+#      "project_tag_facet"             => "Project Name",
+      "content_type_facet"            => "Content Type",
+      "isGovernedBy_id_facet"         => "Admin. Policy",
+      "isMemberOfCollection_id_facet" => "Owning Collection",
+      "object_type_field"             => "Object Type",
+      "tag_facet"                     => "Tag",
+      "wf_wps_facet"                  => "Workflows (WPS)",
+      "wf_wsp_facet"                  => "Workflows (WSP)",
+      "wf_swp_facet"                  => "Workflows (SWP)"
     },
     # Setting a limit will trigger Blacklight's 'more' facet values link.
     # * If left unset, then all facet values returned by solr will be displayed.
@@ -84,10 +86,12 @@ Blacklight.configure(:shared) do |config|
     :partials => {
       :wf_wps_facet        => "facet_hierarchy",
       :wf_wsp_facet        => "facet_hierarchy",
-      :wf_swp_facet        => "facet_hierarchy"
+      :wf_swp_facet        => "facet_hierarchy",
+      :tag_facet           => "facet_hierarchy"
     },
     :hierarchy => {
-      'wf' => ['wps','wsp','swp']
+      'wf' => ['wps','wsp','swp'],
+      'tag' => [nil]
     }
   }
 
