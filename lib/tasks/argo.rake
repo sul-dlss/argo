@@ -26,21 +26,25 @@ namespace :argo do
   
   desc "Reindex all DOR objects"
   task :reindex_all, [:query] => [:environment] do |t, args|
-    q = args[:query] || '*:*'
-    puts q
     $stdout.sync = true
     start_time = Time.now
     $stdout.print "Discovering PIDs..."
     pids = []
-    start = 0
-    resp = Dor::SearchService.gsearch(:q => q, :sort => 'PID asc', :rows => 1000, :start => start, :fl => 'PID')
-    while resp['response']['docs'].length > 0
-      pids += resp['response']['docs'].collect { |doc| doc['PID'] }.flatten.select { |pid| pid =~ /^druid:/ }
-      start += 1000
-      $stdout.print "."
-      resp = Dor::SearchService.gsearch(:q=>q, :rows => 1000, :start => start, :fl => 'PID')
+    if args[:query] == ':ALL:'
+      Dor::SearchService.risearch("select $object from <#ri> where $object <info:fedora/fedora-system:def/model#label> $label", :limit => '1000000', :timeout => -1)
+    else
+      q = args[:query] || '*:*'
+      puts q
+      start = 0
+      resp = Dor::SearchService.gsearch(:q => q, :sort => 'PID asc', :rows => 1000, :start => start, :fl => 'PID')
+      while resp['response']['docs'].length > 0
+        pids += resp['response']['docs'].collect { |doc| doc['PID'] }.flatten.select { |pid| pid =~ /^druid:/ }
+        start += 1000
+        $stdout.print "."
+        resp = Dor::SearchService.gsearch(:q=>q, :rows => 1000, :start => start, :fl => 'PID')
+      end
+      $stdout.puts
     end
-    $stdout.puts
     time = Time.now - start_time
     $stdout.puts "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
 
