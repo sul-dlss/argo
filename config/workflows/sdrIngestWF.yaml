@@ -1,0 +1,35 @@
+start-ingest:
+  batch_limit: 1000
+  error_limit: 5
+
+register-sdr:
+   prerequisite: start-ingest
+   batch_limit: 1000
+   error_limit: 5
+
+transfer-object:
+  prerequisite: register-sdr  
+  batch_limit: 200
+  error_limit: 5
+  
+validate-bag:
+  prerequisite: transfer-object 
+  batch_limit: 200
+  error_limit: 5
+  
+populate-metadata:
+  prerequisite: validate-bag
+  batch_limit: 200
+  error_limit: 5
+  
+verify-agreement:
+  prerequisite: populate-metadata  
+  batch_limit: 200
+  error_limit: 5
+
+complete-deposit:
+  prerequisite: verify-agreement
+  batch_limit: 200
+  error_limit: 5  
+
+repository: sdr

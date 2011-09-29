@@ -1,0 +1,80 @@
+start-accession:
+    batch_limit: 5
+    error_limit: 5
+
+etd-transfer:
+    prerequisite: start-accession 
+    batch_limit: 1000
+    error_limit: 5
+    
+submit-marc:
+    prerequisite: etd-transfer
+    batch_limit: 1000
+    error_limit: 5
+
+check-marc:
+    prerequisite: submit-marc
+    batch_limit: 1000
+    error_limit: 10
+
+catalog-status:
+    prerequisite: check-marc
+    batch_limit: 1000
+    error_limit: 5
+
+descriptive-metadata:
+    prerequisite: catalog-status
+    batch_limit: 1000
+    error_limit: 10
+
+other-metadata:
+    prerequisite: catalog-status
+    batch_limit: 1000
+    error_limit: 10
+
+sdr-ingest-transfer:
+    prerequisite: descriptive-metadata, other-metadata
+    batch_limit: 1
+    error_limit: 5
+
+sdr-ingest-deposit:
+    prerequisite: sdr-ingest-transfer
+    batch_limit: 1
+    error_limit: 5
+
+shelve:
+    prerequisite: other-metadata
+    batch_limit: 500
+    error_limit: 5
+
+google-transfer:
+    prerequisite: shelve
+    batch_limit: 500
+    error_limit: 5
+
+google-confirm:
+    prerequisite: google-transfer
+    batch_limit: 1
+    error_limit: 5
+
+binder-transfer:
+    prerequisite: shelve
+    batch_limit: 500 
+    error_limit: 200
+
+binder-confirm:
+    prerequisite: binder-transfer
+    batch_limit: 1
+    error_limit: 5
+
+cleanup:
+    prerequisite: sdr-ingest-deposit, shelve
+    batch_limit: 1
+    error_limit: 5
+
+sdr-ingest-archive:
+    prerequisite: cleanup
+    batch_limit: 1
+    error_limit: 5
+
+repository: dor
