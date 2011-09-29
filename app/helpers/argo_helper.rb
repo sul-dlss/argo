@@ -36,9 +36,9 @@ module ArgoHelper
     end
   end
   
-  def render_document_class(document = @document)
-    result = super(document).to_s
-    if document['shelved_content_file_field']
+  def render_extended_document_class(document = @document)
+    result = render_document_class(document).to_s
+    if first_image(document['shelved_content_file_field'])
       result += " has-thumbnail"
     end
     result
@@ -46,10 +46,12 @@ module ArgoHelper
   
   def render_index_thumbnail doc
     if doc['shelved_content_file_field']
-      druid = doc['id'].to_s.split(/:/).last
-      fname = doc['shelved_content_file_field'].first
-      fname = File.basename(fname,File.extname(fname))
-      image_tag "#{Dor::Config.argo.stacks.url}/#{druid}/#{fname}_square", :class => 'index-thumb'
+      fname = first_image(doc['shelved_content_file_field'])
+      if fname
+        druid = doc['id'].to_s.split(/:/).last
+        fname = File.basename(fname,File.extname(fname))
+        image_tag "#{Dor::Config.argo.stacks.url}/#{druid}/#{fname}_square", :class => 'index-thumb'
+      end
     end
   end
   
@@ -63,4 +65,8 @@ module ArgoHelper
     (link_to_unless(options[:suppress_link], display_value, add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
   end
 
+  def first_image(a)
+    a.find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
+  end
+  
 end
