@@ -37,12 +37,11 @@ module ArgoHelper
   end
   
   def render_document_class(document = @document)
-#    result = super(document)
-#    if document['shelved_content_file_field']
-#      result += " has-thumbnail"
-#    end
-#    result
-    "has-thumbnail"
+    result = super(document).to_s
+    if document['shelved_content_file_field']
+      result += " has-thumbnail"
+    end
+    result
   end
   
   def render_index_thumbnail doc
@@ -54,4 +53,14 @@ module ArgoHelper
     end
   end
   
+  def render_facet_value(facet_solr_field, item, options ={})
+    display_value = item.value
+    if item.value =~ /^druid:.+$/
+      if ref = Reference.find(item.value)
+        display_value = ref['link_text_display'].to_s
+      end
+    end
+    (link_to_unless(options[:suppress_link], display_value, add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+  end
+
 end
