@@ -36,7 +36,12 @@ class CatalogController < ApplicationController
     raise ActionController::RoutingError.new('Not Found') if @graph.nil?
     @graph['rankdir'] = params[:dir] || 'TB'
     format = params[:format].to_sym
-    send_data @graph.output(format => String), :type => Rack::Mime.mime_type(".#{format}"), :disposition => 'inline'
+    if [:gv,:dot].include?(format)
+      send_data @graph.to_s, :type => 'text/x-graphviz'
+    else
+      mimetype = Rack::Mime.mime_type(".#{format}")
+      send_data @graph.output(format => String), :type => mimetype, :disposition => 'inline'
+    end
   end
   
   private
