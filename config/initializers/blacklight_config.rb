@@ -47,15 +47,23 @@ Blacklight.configure(:shared) do |config|
   config[:facet] = {
     :field_names => (facet_fields = [
       "project_tag_facet",
+      "content_type_facet",
+      "governing_apo_facet",
+      "owning_collection_facet",
+      "object_type_field",
       "wf_wps_facet",
       "wf_wsp_facet",
       "wf_swp_facet"
     ]),
     :labels => {
-      "project_tag_facet"   => "Project Name",
-      "wf_wps_facet"        => "Workflows (WPS)",
-      "wf_wsp_facet"        => "Workflows (WSP)",
-      "wf_swp_facet"        => "Workflows (SWP)"
+      "project_tag_facet"       => "Project Name",
+      "content_type_facet"      => "Content Type",
+      "governing_apo_facet"     => "Admin. Policy",
+      "owning_collection_facet" => "Owning Collection",
+      "object_type_field"       => "Object Type",
+      "wf_wps_facet"            => "Workflows (WPS)",
+      "wf_wsp_facet"            => "Workflows (WSP)",
+      "wf_swp_facet"            => "Workflows (SWP)"
     },
     # Setting a limit will trigger Blacklight's 'more' facet values link.
     # * If left unset, then all facet values returned by solr will be displayed.
