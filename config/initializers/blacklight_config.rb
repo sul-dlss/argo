@@ -47,22 +47,22 @@ Blacklight.configure(:shared) do |config|
   config[:facet] = {
     :field_names => (facet_fields = [
 #      "project_tag_facet",
+      "tag_facet",
+      "object_type_field",
       "content_type_facet",
       "isGovernedBy_id_facet",
       "isMemberOfCollection_id_facet",
-      "object_type_field",
-      "tag_facet",
       "wf_wps_facet",
       "wf_wsp_facet",
       "wf_swp_facet"
     ]),
     :labels => {
 #      "project_tag_facet"             => "Project Name",
+      "tag_facet"                     => "Tag",
+      "object_type_field"             => "Object Type",
       "content_type_facet"            => "Content Type",
       "isGovernedBy_id_facet"         => "Admin. Policy",
       "isMemberOfCollection_id_facet" => "Owning Collection",
-      "object_type_field"             => "Object Type",
-      "tag_facet"                     => "Tag",
       "wf_wps_facet"                  => "Workflows (WPS)",
       "wf_wsp_facet"                  => "Workflows (WSP)",
       "wf_swp_facet"                  => "Workflows (SWP)"
