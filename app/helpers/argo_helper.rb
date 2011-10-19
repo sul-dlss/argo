@@ -66,7 +66,7 @@ module ArgoHelper
   end
 
   def first_image(a)
-    a.find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
+    Array(a).find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
   end
   
 end

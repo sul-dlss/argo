@@ -46,7 +46,7 @@ class CatalogController < ApplicationController
   
   private
   def render_workflow_graph(rec,wf,g = nil)
-    workflow = Workflow.find(wf)
+    workflow = Dor::WorkflowObject.find_by_name(wf)
     return nil if workflow.nil?
     graph = workflow.graph(g)
     unless graph.nil?
