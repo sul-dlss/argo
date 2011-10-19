@@ -5,7 +5,7 @@ module RegistrationHelper
     unless permission_keys.empty?
       q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_field:"#{key}"} }.join(" OR ") + ')'
     end
-    result = Dor::SearchService.gsearch(:q => q)['response']['docs']
+    result = Dor::SearchService.gsearch(:q => q, :rows => 99999)['response']['docs']
     result.sort! do |a,b|
       a['tag_field'].include?('AdminPolicy : default') ? -1 : a['dc_title_field'].to_s <=> b['dc_title_field'].to_s
     end
