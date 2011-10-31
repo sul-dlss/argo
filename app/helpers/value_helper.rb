@@ -34,7 +34,7 @@ module ValueHelper
   def value_for_related_druid predicate, args
     target_id = args[:document].get("#{predicate}_id_field")
     target_name = args[:document].get("#{predicate}_field")
-    link_to target_name, add_facet_params_and_redirect("#{predicate}_id_facet", target_id)
+    link_to target_name, add_params_to_current_search_and_redirect("#{predicate}_id_facet" => target_id)
   end
   
   def value_for_isGovernedBy_field args
@@ -63,7 +63,7 @@ module ValueHelper
   def value_for_tag_field args
     val = args[:document][args[:field]]
     tags = Array(val).uniq.collect do |v| 
-      link_to v, add_facet_params_and_redirect("tag_facet", v) 
+      link_to v, add_params_to_current_search_and_redirect("tag_facet" => v) 
     end
     tags.join('<br/>').html_safe
   end
