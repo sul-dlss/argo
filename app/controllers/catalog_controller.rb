@@ -18,7 +18,17 @@ class CatalogController < ApplicationController
     @obj = Dor::Base.load_instance params[:id]
     if @obj.datastreams_in_fedora.keys.include?(params[:dsid])
       @ds = @obj.datastreams[params[:dsid]]
-      send_data @ds.content, :type => @ds.attributes['mimeType'], :disposition => 'inline'
+      data = @ds.content
+      if @ds.attributes['mimeType'] =~ /xml$/ and not params[:raw]
+        begin
+          doc = Nokogiri::XML(data)
+          xslt = Nokogiri::XSLT(File.read(File.join(Rails.root, 'lib/identity.xsl')))
+          data = xslt.transform(doc).to_xml
+        rescue
+          # Leave the data the way it is if it can't be transformed
+        end
+      end
+      send_data data, :type => @ds.attributes['mimeType'], :disposition => 'inline'
     else
       raise ActionController::RoutingError.new('Not Found')
     end
