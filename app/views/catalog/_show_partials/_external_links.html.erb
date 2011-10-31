@@ -1,0 +1,14 @@
+<div id="facets">
+  <h3 class="start-open">View in new window</h3>
+  <ul>
+    <li><%= render_purl_link document %></li>
+    <% if document.has? 'dor_catkey_id_field' %>
+    <li><%= render_searchworks_link document %></li>
+    <% end %>
+    <% if document.has? 'dor_mdtoolkit_id_field' %>
+    <li><%= render_mdtoolkit_link document %></li>
+    <% end %>
+    <li><%= render_dor_link document %></li>
+    <li><%= render_foxml_link document %></li>
+  </ul>
+</div>

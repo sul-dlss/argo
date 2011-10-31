@@ -6,6 +6,9 @@ a.no-underline
   background: url('/images/icon-external-link.png') right 3px no-repeat
   padding-right: 13px
   
+#facets
+  padding: 1em 0 0 0 !important
+  
 #workflow_grid
   margin-top: 1.5em
   
@@ -53,3 +56,61 @@ a.no-underline
 
 #doc4
   width: 100%
+
+div.document
+  h3.index_title
+    margin-left: 1.5em
+    text-indent: -1.5em
+  div.index-thumb-container
+    float: left
+    width: 100px
+    margin: 4px 2em 4px 0px
+  div.document-thumb-container
+    float: right
+    margin-bottom: 1em
+  #document-sections h4
+    font-size: 120%
+    color: #2A306C
+  dl.deflist
+    clear: left !important
+    dt
+      text-align: left
+      width: 7.5em
+    dd
+      width: 80%
+  &.has-thumbnail
+    min-height: 124px
+  div.field-list-column
+    float: left
+    width: 25em
+    dl.deflist
+      dd
+        width: 15em
+  
+h3.section-head
+  display: block
+  clear: both
+  width: 100%
+  padding: 2px
+  color: #2A306C
+  background-color: #D4E0E0
+  &.collapsible-section
+    padding-left: 18px
+    background-position: left center
+    background-repeat: no-repeat
+    background-image: url('hierarchy/expanded_lg.png') 
+    &.collapsed
+      background-image: url('hierarchy/collapsed_lg.png') 
+
+table.datastreams
+  td
+    padding: 0em 2em .5em 0em
+    
+.clear
+  clear: both
+  
+pre.prettyprint
+  border: none !important
+  white-space: pre-wrap
+  font-family: consolas,andale mono,monospace
+  font-size: 125%

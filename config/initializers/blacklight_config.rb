@@ -30,13 +30,17 @@ Blacklight.configure(:shared) do |config|
   config[:show] = {
     :html_title => "dc_title_field",
     :heading => "Title",
-    :display_type => "format"
+    :display_type => "object_type_field",
+    :sections => {
+      :default => ['identification','datastreams','history'],
+      :item    => ['identification','datastreams','history','contents','child_objects']
+    }
   }
 
   # solr fld values given special treatment in the index (search results) view
   config[:index] = {
     :show_link => "link_text_display",
-    :record_display_type => "format"
+    :record_display_type => "content_type_facet"
   }
 
   # solr fields that will be treated as facets by the blacklight application
@@ -46,16 +50,26 @@ Blacklight.configure(:shared) do |config|
   # config[:facet] << {:field_name => "format", :label => "Format", :limit => 10}
   config[:facet] = {
     :field_names => (facet_fields = [
-      "project_tag_facet",
+#      "project_tag_facet",
+      "tag_facet",
+      "object_type_field",
+      "content_type_facet",
+      "isGovernedBy_id_facet",
+      "isMemberOfCollection_id_facet",
       "wf_wps_facet",
       "wf_wsp_facet",
       "wf_swp_facet"
     ]),
     :labels => {
-      "project_tag_facet"   => "Project Name",
-      "wf_wps_facet"        => "Workflows (WPS)",
-      "wf_wsp_facet"        => "Workflows (WSP)",
-      "wf_swp_facet"        => "Workflows (SWP)"
+      "project_tag_facet"             => "Project Name",
+      "tag_facet"                     => "Tag",
+      "object_type_field"             => "Object Type",
+      "content_type_facet"            => "Content Type",
+      "isGovernedBy_id_facet"         => "Admin. Policy",
+      "isMemberOfCollection_id_facet" => "Owning Collection",
+      "wf_wps_facet"                  => "Workflows (WPS)",
+      "wf_wsp_facet"                  => "Workflows (WSP)",
+      "wf_swp_facet"                  => "Workflows (SWP)"
     },
     # Setting a limit will trigger Blacklight's 'more' facet values link.
     # * If left unset, then all facet values returned by solr will be displayed.
@@ -76,10 +90,12 @@ Blacklight.configure(:shared) do |config|
     :partials => {
       :wf_wps_facet        => "facet_hierarchy",
       :wf_wsp_facet        => "facet_hierarchy",
-      :wf_swp_facet        => "facet_hierarchy"
+      :wf_swp_facet        => "facet_hierarchy",
+      :tag_facet           => "facet_hierarchy"
     },
     :hierarchy => {
-      'wf' => ['wps','wsp','swp']
+      'wf' => ['wps','wsp','swp'],
+      'tag' => [nil]
     }
   }
 
@@ -94,29 +110,42 @@ Blacklight.configure(:shared) do |config|
 
   # solr fields to be displayed in the index (search results) view
   #   The ordering of the field names is the order of the display 
+  
+  config[:all_field_labels] = {
+    "content_type_facet"            => "Content Type:",
+    "dc_identifier_field"           => "IDs:",
+    "fgs_createdDate_date"          => "Created:",
+    "fgs_label_field"               => "Label:",
+    "isGovernedBy_field"            => "Admin. Policy:",
+    "isMemberOfCollection_field"    => "Collection:",
+    "item_status_field"             => "Status:",
+    "object_type_field"             => "Object Type:",
+    "PID"                           => "DRUID:",
+    "project_tag_field"             => "Project:",
+    "project_tag_field"             => "Project:",
+    "source_id_field"               => "Source:",
+    "tag_field"                     => "Tags:"
+  }
+  
   config[:index_fields] = {
     :field_names => [
       "PID",
-      "dc_title_field"
+      "dc_creator_field",
+      "project_tag_field"
     ],
-    :labels => {
-      "PID"                     => "DRUID:",
-      "dc_title_field"          => "Title:"
-    }
+    :labels => config[:all_field_labels]
   }
 
   # solr fields to be displayed in the show (single result) view
   #   The ordering of the field names is the order of the display 
   config[:show_fields] = {
     :field_names => [
-      "PID",
-      "dc_title_field"
+      "fgs_createdDate_date",
+      "fgs_label_field",
+      "dc_identifier_field",
+      "tag_field"
     ],
-    :labels => {
-      "PID"                     => "DRUID:",
-      "dc_title_field"          => "Title:",
-      "project_tag_field"       => "Project:"
-    }
+    :labels => config[:all_field_labels]
   }
 
 
@@ -146,46 +175,46 @@ Blacklight.configure(:shared) do |config|
   # Now we see how to over-ride Solr request handler defaults, in this
   # case for a BL "search field", which is really a dismax aggregate
   # of Solr search fields. 
-  config[:search_fields] << {
-    :key => 'title',     
-    # solr_parameters hash are sent to Solr as ordinary url query params. 
-    :solr_parameters => {
-      :"spellcheck.dictionary" => "title"
-    },
-    # :solr_local_parameters will be sent using Solr LocalParams
-    # syntax, as eg {! qf=$title_qf }. This is neccesary to use
-    # Solr parameter de-referencing like $title_qf.
-    # See: http://wiki.apache.org/solr/LocalParams
-    :solr_local_parameters => {
-      :qf => "$title_qf",
-      :pf => "$title_pf"
-    }
-  }
-  config[:search_fields] << {
-    :key =>'author',     
-    :solr_parameters => {
-      :"spellcheck.dictionary" => "author" 
-    },
-    :solr_local_parameters => {
-      :qf => "$author_qf",
-      :pf => "$author_pf"
-    }
-  }
-
-  # Specifying a :qt only to show it's possible, and so our internal automated
-  # tests can test it. In this case it's the same as 
-  # config[:default_solr_parameters][:qt], so isn't actually neccesary. 
-  config[:search_fields] << {
-    :key => 'subject', 
-    :qt=> 'select',
-    :solr_parameters => {
-      :"spellcheck.dictionary" => "subject"
-    },
-    :solr_local_parameters => {
-      :qf => "$subject_qf",
-      :pf => "$subject_pf"
-    }
-  }
+#  config[:search_fields] << {
+#    :key => 'title',     
+#    # solr_parameters hash are sent to Solr as ordinary url query params. 
+#    :solr_parameters => {
+#      :"spellcheck.dictionary" => "title"
+#    },
+#    # :solr_local_parameters will be sent using Solr LocalParams
+#    # syntax, as eg {! qf=$title_qf }. This is neccesary to use
+#    # Solr parameter de-referencing like $title_qf.
+#    # See: http://wiki.apache.org/solr/LocalParams
+#    :solr_local_parameters => {
+#      :qf => "$title_qf",
+#      :pf => "$title_pf"
+#    }
+#  }
+#  config[:search_fields] << {
+#    :key =>'author',     
+#    :solr_parameters => {
+#      :"spellcheck.dictionary" => "author" 
+#    },
+#    :solr_local_parameters => {
+#      :qf => "$author_qf",
+#      :pf => "$author_pf"
+#    }
+#  }
+#
+#  # Specifying a :qt only to show it's possible, and so our internal automated
+#  # tests can test it. In this case it's the same as 
+#  # config[:default_solr_parameters][:qt], so isn't actually neccesary. 
+#  config[:search_fields] << {
+#    :key => 'subject', 
+#    :qt=> 'select',
+#    :solr_parameters => {
+#      :"spellcheck.dictionary" => "subject"
+#    },
+#    :solr_local_parameters => {
+#      :qf => "$subject_qf",
+#      :pf => "$subject_pf"
+#    }
+#  }
   
   # "sort results by" select (pulldown)
   # label in pulldown is followed by the name of the SOLR field to sort by and
@@ -209,6 +238,13 @@ Blacklight.configure(:shared) do |config|
   #    :content-type => mime-content-type
   config[:unapi] = {
     'oai_dc_xml' => { :content_type => 'text/xml' } 
+  }
+  
+  config[:field_groups] = {
+    :identification => [
+      ['PID','object_type_field','content_type_facet','item_status_field'],
+      ['isGovernedBy_field','isMemberOfCollection_field','project_tag_field','source_id_field']
+    ]
   }
 end
 

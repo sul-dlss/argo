@@ -1,0 +1,10 @@
+<%# default partial to display solr document fields in catalog index view -%>
+<div class="index-thumb-container">
+  <%= render_index_thumbnail document %>
+</div>
+<% Blacklight.config[:field_groups][:identification].each do |field_names| %>
+  <div class="field-list-column">
+    <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => field_names } %>
+  </div>
+<% end %>
+<div class="clear"></div>

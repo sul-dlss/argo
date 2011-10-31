@@ -17,7 +17,7 @@
 
   <% if show_workflow_grid? %>
     <% extra_head_content << capture do %>
-    <script type="text/javascript"/>
+    <script type="text/javascript">
       var updateTimer;
       function updateGrid() {
         $.get('/view/workflow_grid'+$(document).attr('location').search)

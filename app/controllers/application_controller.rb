@@ -44,10 +44,10 @@ class ApplicationController < ActionController::Base
   end
   
   def default_html_head
-    super
-    stylesheet_links << ['application', 'hierarchy', 'argonauta']
-    javascript_includes.first[0] = 'jquery-1.6.2.min'
-    javascript_includes << ['application', 'hierarchy']
+    stylesheet_links << ['yui', 'custom-theme/jquery-ui-1.8.13.custom', 'blacklight/blacklight', {:media=>'all'}]
+    stylesheet_links << ['application', 'hierarchy', 'argonauta', 'prettify']
+    javascript_includes << ['jquery-1.6.2.min', 'jquery-ui.min', 'blacklight/blacklight' ]
+    javascript_includes << ['application', 'hierarchy', 'lightbox', 'prettify']
   end
 
   protected
