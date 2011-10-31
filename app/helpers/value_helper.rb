@@ -30,12 +30,7 @@ module ValueHelper
     dereference_id_field(doc, "isMemberOfCollection")
   end
 
-  # Renderers
-  def value_for_PID args
-    val = args[:document].get(args[:field])
-    link_to val, File.join(Dor::Config.fedora.safeurl, "objects/#{val}"), :class => 'ext-link', :target => 'dor', :title => 'View in DOR'
-  end
-  
+  # Renderers  
   def value_for_related_druid predicate, args
     target_id = args[:document].get("#{predicate}_id_field")
     target_name = args[:document].get("#{predicate}_field")
@@ -67,7 +62,10 @@ module ValueHelper
   
   def value_for_tag_field args
     val = args[:document][args[:field]]
-    Array(val).uniq.collect { |v| h v }.join('<br/>').html_safe
+    tags = Array(val).uniq.collect do |v| 
+      link_to v, add_facet_params_and_redirect("tag_facet", v) 
+    end
+    tags.join('<br/>').html_safe
   end
 
 end
