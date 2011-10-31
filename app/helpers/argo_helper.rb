@@ -4,7 +4,8 @@ module ArgoHelper
 
   # TODO: Remove this after all documents are reindexed with id instead of PID
   def render_document_index_label doc, opts
-    render_citation doc
+    opts[:label] ||= render_citation(doc)
+    super(doc, opts)
   end
   
   def get_search_results *args
@@ -28,6 +29,10 @@ module ArgoHelper
   end
   
   def render_document_heading
+    ''
+  end
+  
+  def render_show_doc_actions *args
     ''
   end
   
