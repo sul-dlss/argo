@@ -12,6 +12,7 @@ RubyDorServices::Application.routes.draw do
   match 'view/unapi', :to => "catalog#unapi", :as => 'unapi'
   match 'view/workflow_grid', :to => "catalog#workflow_grid", :as => "workflow_grid_catalog"
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
+  match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :as => "datastream_view_catalog"
   match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
   match 'view/:id/workflows/:wf_name.:format', :to => "catalog#workflow_graph", :as => "workflow_graph_catalog"
   match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }

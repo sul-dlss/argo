@@ -14,6 +14,16 @@ class CatalogController < ApplicationController
     }
   end
 
+  def datastream_view
+    @obj = Dor::Base.load_instance params[:id]
+    if @obj.datastreams_in_fedora.keys.include?(params[:dsid])
+      @ds = @obj.datastreams[params[:dsid]]
+      send_data @ds.content, :type => @ds.attributes['mimeType'], :disposition => 'inline'
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
+  
   def workflow_grid
     delete_or_assign_search_session_params
     (@response, @document_list) = get_search_results
