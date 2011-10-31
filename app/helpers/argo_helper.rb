@@ -110,5 +110,33 @@ module ArgoHelper
       return false
     end
   end
-    
+  
+  def render_purl_link document, link_text='PURL', opts={:target => '_blank'}
+    val = document.get('PID').split(/:/).last
+    link_to link_text, File.join(Dor::Config.argo.purl.url, val), opts
+  end
+  
+  def render_dor_link document, link_text='Fedora UI', opts={:target => '_blank'}
+    val = document.get('PID')
+    link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}"), opts
+  end
+  
+  def render_foxml_link document, link_text='FoXML', opts={:target => '_blank'}
+    val = document.get('PID')
+    link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}/objectXML"), opts
+  end
+  
+  def render_searchworks_link document, link_text='Searchworks', opts={:target => '_blank'}
+    val = document.get('dor_catkey_id_field')
+    link_to link_text, "http://searchworks.stanford.edu/view/#{val}", opts
+  end
+  
+  def render_mdtoolkit_link document, link_text='MD Toolkit', opts={:target => '_blank'}
+    val = document.get('dor_mdtoolkit_id_field')
+    forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
+    form = document.get('mdform_tag_field')
+    collection = forms.keys.find { |k| forms[k].keys.include?(form) }
+    link_to link_text, File.join(Dor::Config.argo.mdtoolkit.url, collection, form, 'edit', val), opts
+  end
+  
 end

@@ -6,6 +6,11 @@
 </script>
 <% end %>
 
+<% sidebar_items << capture do %>
+  <h4>View in new window</h4>
+  <%= render :partial => '/catalog/_show_partials/external_links', :locals => { :document => @document } %>
+<% end %>
+
 <div id="document-sections">
   <%= render_document_sections(@document,:show) %>
 </div>

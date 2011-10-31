@@ -2,9 +2,9 @@
 require File.expand_path('../application', __FILE__)
 
 Dor::Config.declare(:argo) do
-  stacks do
-    url nil
-  end
+  mdtoolkit { url nil }
+  purl      { url nil }
+  stacks    { url nil }
 end
 
 # Initialize the rails application
