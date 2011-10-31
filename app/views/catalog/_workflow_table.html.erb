@@ -15,7 +15,7 @@
       if wf.nil?
         proc_names.sort!
       else
-        proc_names.sort! { |a,b| (wf.processes.index(a)||1000) <=> (wf.processes.index(b)||1000) }
+        proc_names = wf.definition.processes.collect { |p| p.name }
       end
     %>
     <% proc_names.each do |wf_process| %>
