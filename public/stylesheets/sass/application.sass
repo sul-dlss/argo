@@ -54,22 +54,58 @@ a.no-underline
 #doc4
   width: 100%
 
-  
 div.document
   h3.index_title
-    white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
-  img.index-thumb
+    margin-left: 1.5em
+    text-indent: -1.5em
+  div.index-thumb-container
     float: left
-    height: 100px
     width: 100px
-    margin: 4px 0px
+    margin: 4px 2em 4px 0px
+  div.document-thumb-container
+    float: right
+    margin-bottom: 1em
+  #document-sections h4
+    font-size: 120%
+    color: #2A306C
   dl.deflist
-    margin-left: 108px
-    clear: right
+    clear: left !important
     dt
       text-align: left
-      width: 4.5em
+      width: 7.5em
   &.has-thumbnail
     min-height: 124px
+  div.field-list-column
+    float: left
+    width: 25em
+    dl.deflist
+      dd
+        width: 15em
+  
+h3.section-head
+  display: block
+  clear: both
+  width: 100%
+  padding: 2px
+  color: #2A306C
+  background-color: #D4E0E0
+  &.collapsible-section
+    padding-left: 18px
+    background-position: left center
+    background-repeat: no-repeat
+    background-image: url('hierarchy/expanded_lg.png') 
+    &.collapsed
+      background-image: url('hierarchy/collapsed_lg.png') 
+
+table.datastreams
+  td
+    padding: 0em 2em .5em 0em
+    
+.clear
+  clear: both
+  
+pre.prettyprint
+  border: none !important
+  white-space: pre-wrap
+  font-family: consolas,andale mono,monospace
+  font-size: 125%

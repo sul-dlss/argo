@@ -1,0 +1,14 @@
+<table class="datastreams">
+  <% 
+    object.datastreams_in_fedora.keys.sort.each do |ds_name| 
+      ds = object.datastreams[ds_name]
+  %>
+    <tr>
+      <td><%= render_ds_id ds %></td>
+      <td><%= render_ds_control_group ds %></td>
+      <td><%= render_ds_mime_type ds %></td>
+<!--      <td><%= render_ds_version ds %></td> -->
+      <td><%= render_ds_label ds %></td>
+    </tr>
+  <% end %>
+</table>

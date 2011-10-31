@@ -1,0 +1,14 @@
+<div class='document-thumb-container'>
+  <%= render_document_show_thumbnail document %>
+</div>
+<div>
+<h4><%= render_citation document %></h4>
+<% Blacklight.config[:field_groups][:identification].each do |field_names| %>
+  <div class="field-list-column">
+    <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => field_names } %>
+  </div>
+<% end %>
+<div style="clear:left">
+  <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => Blacklight.config[:show_fields][:field_names] } %>
+</div>
+</div>

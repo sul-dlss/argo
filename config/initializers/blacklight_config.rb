@@ -30,7 +30,11 @@ Blacklight.configure(:shared) do |config|
   config[:show] = {
     :html_title => "dc_title_field",
     :heading => "Title",
-    :display_type => "format"
+    :display_type => "object_type_field",
+    :sections => {
+      :default => ['identification','datastreams','history'],
+      :item    => ['identification','datastreams','history','contents','child_objects']
+    }
   }
 
   # solr fld values given special treatment in the index (search results) view
@@ -57,7 +61,7 @@ Blacklight.configure(:shared) do |config|
       "wf_swp_facet"
     ]),
     :labels => {
-#      "project_tag_facet"             => "Project Name",
+      "project_tag_facet"             => "Project Name",
       "tag_facet"                     => "Tag",
       "object_type_field"             => "Object Type",
       "content_type_facet"            => "Content Type",
@@ -106,29 +110,42 @@ Blacklight.configure(:shared) do |config|
 
   # solr fields to be displayed in the index (search results) view
   #   The ordering of the field names is the order of the display 
+  
+  config[:all_field_labels] = {
+    "content_type_facet"            => "Content Type:",
+    "dc_identifier_field"           => "IDs:",
+    "fgs_createdDate_date"          => "Created:",
+    "fgs_label_field"               => "Label:",
+    "isGovernedBy_field"            => "Admin. Policy:",
+    "isMemberOfCollection_field"    => "Collection:",
+    "item_status_field"             => "Status:",
+    "object_type_field"             => "Object Type:",
+    "PID"                           => "DRUID:",
+    "project_tag_field"             => "Project:",
+    "project_tag_field"             => "Project:",
+    "source_id_field"               => "Source:",
+    "tag_field"                     => "Tags:"
+  }
+  
   config[:index_fields] = {
     :field_names => [
       "PID",
       "dc_creator_field",
       "project_tag_field"
     ],
-    :labels => {
-      "PID"                     => "DRUID:",
-      "dc_creator_field"        => "Creator:",
-      "project_tag_field"       => "Project:"
-    }
+    :labels => config[:all_field_labels]
   }
 
   # solr fields to be displayed in the show (single result) view
   #   The ordering of the field names is the order of the display 
   config[:show_fields] = {
     :field_names => [
-      "PID"
+      "fgs_createdDate_date",
+      "fgs_label_field",
+      "dc_identifier_field",
+      "tag_field"
     ],
-    :labels => {
-      "PID"                     => "DRUID:",
-      "project_tag_field"       => "Project:"
-    }
+    :labels => config[:all_field_labels]
   }
 
 
@@ -221,6 +238,13 @@ Blacklight.configure(:shared) do |config|
   #    :content-type => mime-content-type
   config[:unapi] = {
     'oai_dc_xml' => { :content_type => 'text/xml' } 
+  }
+  
+  config[:field_groups] = {
+    :identification => [
+      ['PID','object_type_field','content_type_facet','item_status_field'],
+      ['isGovernedBy_field','isMemberOfCollection_field','project_tag_field','source_id_field']
+    ]
   }
 end
 

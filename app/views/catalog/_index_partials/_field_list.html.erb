@@ -1,0 +1,8 @@
+<dl class="defList">
+  <% field_names.each do |solr_fname| -%>
+    <% if document_has? document, solr_fname %>
+	    <dt class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_label :field => solr_fname %></dt>
+	    <dd class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_value :document => document, :field => solr_fname %></dd>
+    <% end -%>
+  <% end -%>
+</dl>
