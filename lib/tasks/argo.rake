@@ -50,10 +50,7 @@ namespace :argo do
 
     start_time = Time.now
     $stdout.print "Reindexing..."
-    pids.in_groups_of(20) do |group|
-      Dor::Base.touch(*group)
-      $stdout.print "."
-    end
+    Dor::SearchService.reindex(*pids) { |group| $stdout.print "." }
     $stdout.puts
     time = Time.now - start_time
     $stdout.puts "#{pids.length} objects reindexed in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
