@@ -12,7 +12,7 @@ gem "mod-cons", ">=0.2.0"
 if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
   instance_eval File.read(fn)
 else
-  gem 'dor-services', ">= 1.7.2"
+  gem 'dor-services', ">= 2.5.2"
 end
 gem "mysql2", "~> 0.2.7"
 gem "progressbar"

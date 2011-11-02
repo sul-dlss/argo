@@ -49,7 +49,21 @@ namespace :argo do
     $stdout.puts "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
 
     pbar = ProgressBar.new("Reindexing...", pids.length)
-    Dor::SearchService.reindex(*pids) { |group| pbar.inc(group.length) }
+    errors = 0
+    pids.each do |pid|
+      begin
+        Dor::SearchService.reindex(pid)
+      rescue Interrupt
+        raise
+      rescue Exception => e
+        errors += 1
+        Rails.logger.error("Consecutive Error ##{errors}:")
+        Rails.logger.error(e)
+        raise e if errors == 3
+      end
+      errors = 0
+      pbar.inc(1)
+    end
   end
   
 end
