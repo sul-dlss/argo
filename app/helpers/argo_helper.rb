@@ -88,7 +88,7 @@ module ArgoHelper
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))
-        image_tag "#{Dor::Config.argo.stacks.url}/#{druid}/#{fname}_thumb", :class => 'document-thumb'
+        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'document-thumb'
       end
     end
   end
@@ -99,7 +99,7 @@ module ArgoHelper
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))
-        image_tag "#{Dor::Config.argo.stacks.url}/#{druid}/#{fname}_square", :class => 'index-thumb'
+        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_square", :class => 'index-thumb'
       end
     end
   end
@@ -147,7 +147,7 @@ module ArgoHelper
   
   def render_purl_link document, link_text='PURL', opts={:target => '_blank'}
     val = document.get('PID').split(/:/).last
-    link_to link_text, File.join(Dor::Config.argo.purl.url, val), opts
+    link_to link_text, File.join(Argo::Config.urls.purl, val), opts
   end
   
   def render_dor_link document, link_text='Fedora UI', opts={:target => '_blank'}
@@ -170,7 +170,7 @@ module ArgoHelper
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     form = document.get('mdform_tag_field')
     collection = forms.keys.find { |k| forms[k].keys.include?(form) }
-    link_to link_text, File.join(Dor::Config.argo.mdtoolkit.url, collection, form, 'edit', val), opts
+    link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
   end
   
 end

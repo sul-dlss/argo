@@ -1,10 +1,20 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 
-Dor::Config.declare(:argo) do
-  mdtoolkit { url nil }
-  purl      { url nil }
-  stacks    { url nil }
+module Argo
+  Config = ModCons::Configuration.new(:'Argo::Config')
+
+  Config.declare do
+    urls do
+      mdtoolkit nil
+      purl nil
+      stacks nil
+    end
+  end
+  
+  def self.configure *args, &block
+    Argo::Config.configure *args, &block
+  end
 end
 
 # Initialize the rails application
