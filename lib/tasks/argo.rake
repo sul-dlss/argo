@@ -26,7 +26,6 @@ namespace :argo do
   
   desc "Reindex all DOR objects"
   task :reindex_all, [:query] => [:environment] do |t, args|
-    ftime = lambda { |time| [(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':') }
     $stdout.sync = true
     start_time = Time.now
     $stdout.print "Discovering PIDs..."
@@ -47,20 +46,10 @@ namespace :argo do
       $stdout.puts
     end
     time = Time.now - start_time
-    $stdout.puts "#{pids.length} PIDs discovered in #{ftime.call(time)}"
+    $stdout.puts "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
 
-    done = 0
-    start_time = Time.now
-    $stdout.puts "Reindexing..."
-    Dor::SearchService.reindex(*pids) do |group| 
-      time = Time.now - start_time
-      done += group.length
-      remain = (time / (done.to_f / pids.length)) - time
-      $stdout.puts "#{ftime.call(time)} elapsed / #{ftime.call(remain)} remaining"
-    end
-    $stdout.puts
-    time = Time.now - start_time
-    $stdout.puts "#{pids.length} objects reindexed in #{ftime.call(time)}"
+    pbar = ProgressBar.new("Reindexing...", pids.length)
+    Dor::SearchService.reindex(*pids) { |group| pbar.inc(group.length) }
   end
   
 end

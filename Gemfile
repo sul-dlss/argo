@@ -15,6 +15,7 @@ else
   gem 'dor-services', ">= 1.7.2"
 end
 gem "mysql2", "~> 0.2.7"
+gem "progressbar"
 gem "sqlite3-ruby", "~> 1.2.5"
 gem "haml"
 gem "sass"
