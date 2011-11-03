@@ -28,7 +28,7 @@ Blacklight.configure(:shared) do |config|
  
   # solr field values given special treatment in the show (single result) view
   config[:show] = {
-    :html_title => "dc_title_field",
+    :html_title => "fgs_label_field",
     :heading => "Title",
     :display_type => "object_type_field",
     :sections => {
