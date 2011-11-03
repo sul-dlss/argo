@@ -1,3 +1,8 @@
+<% 
+  ensure_current_document_version if Argo::Config[:reindex_on_the_fly]
+  @footer = "Argo v#{Argo.version} / DocIndex v#{@document.get('index_version_field')}"
+%>
+
 <% extra_head_content << capture do %>
 <script type="text/javascript">
   $(document).ready(function() {

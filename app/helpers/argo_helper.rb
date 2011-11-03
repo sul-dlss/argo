@@ -1,6 +1,12 @@
 # Overrides for Blacklight helpers
  
 module ArgoHelper
+  def ensure_current_document_version
+    if @document.get('index_version_field').to_s < Dor::SearchService.index_version
+      Dor::SearchService.reindex(@document.get('id'))
+      @response, @document = get_solr_response_for_doc_id
+    end
+  end
 
   # TODO: Remove this after all documents are reindexed with id instead of PID
   def render_document_index_label doc, opts
