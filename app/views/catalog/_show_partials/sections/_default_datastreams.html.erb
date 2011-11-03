@@ -4,11 +4,12 @@
       ds = object.datastreams[ds_name]
   %>
     <tr>
-      <td><%= render_ds_id ds %></td>
-      <td><%= render_ds_control_group ds %></td>
-      <td><%= render_ds_mime_type ds %></td>
-<!--      <td><%= render_ds_version ds %></td> -->
-      <td><%= render_ds_label ds %></td>
+      <td><%= render_ds_id ds, document %></td>
+      <td><%= render_ds_control_group ds, document %></td>
+      <td><%= render_ds_mime_type ds, document %></td>
+      <td><%= render_ds_version ds, document %></td>
+      <td><%= render_ds_size ds, document %></td>
+      <td><%= render_ds_label ds, document %></td>
     </tr>
   <% end %>
 </table>

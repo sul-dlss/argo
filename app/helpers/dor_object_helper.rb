@@ -35,24 +35,30 @@ module DorObjectHelper
   
   # Datastream helpers
   CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
-  def render_ds_control_group ds
+  def render_ds_control_group ds, document
     cg = ds.attributes[:controlGroup] || 'X'
     "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
   end
   
-  def render_ds_id ds
+  def render_ds_id ds, document
     link_to ds.dsid, datastream_view_catalog_path(ds.pid, ds.dsid), :class => 'xmlLink'
   end
   
-  def render_ds_mime_type ds
+  def render_ds_mime_type ds, document
     ds.attributes['mimeType']
   end
   
-  def render_ds_version ds
-    "v0"
+  def render_ds_version ds, document
+    val = Array(document['fedora_datastream_version_field']).find { |v| v.split(/\./).first == ds.dsid }
+    val ? "v#{val.split(/\./).last}" : ''
   end
   
-  def render_ds_label ds
+  def render_ds_size ds, document
+    val = ds.content.length.bytestring('%.1f%s').downcase
+    val.sub(/\.?0+([a-z]?b)$/,'\1')
+  end
+  
+  def render_ds_label ds, document
     ds.label
   end
   
