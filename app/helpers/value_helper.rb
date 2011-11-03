@@ -7,8 +7,8 @@ module ValueHelper
       nil
     else
       status = current_milestone.split(/:/,2).first
-      if embargo_status = doc['embargo_status_field']
-        status += " (#{embargo_status.first})"
+      if embargo_status = doc.get('embargo_status_field')
+        status += " (#{embargo_status})"
       end
       status
     end
