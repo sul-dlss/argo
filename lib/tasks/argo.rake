@@ -26,9 +26,13 @@ namespace :argo do
   
   desc "Reindex all DOR objects"
   task :reindex_all, [:query] => [:environment] do |t, args|
+    index_log = Logger.new(File.join(Rails.root,'log','reindex.log'))
+    index_log.formatter = Logger::Formatter.new
+    index_log.level = ENV['LOG_LEVEL'] ? Logger::SEV_LABEL.index(ENV['LOG_LEVEL']) : Logger::INFO
     $stdout.sync = true
     start_time = Time.now
     $stdout.print "Discovering PIDs..."
+    index_log.info "Discovering PIDs..."
     pids = []
     if args[:query] == ':ALL:'
       pids = Dor::SearchService.risearch("select $object from <#ri> where $object <info:fedora/fedora-system:def/model#label> $label", :limit => '1000000', :timeout => -1)
@@ -46,20 +50,26 @@ namespace :argo do
       $stdout.puts
     end
     time = Time.now - start_time
-    $stdout.puts "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
+    msg = "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
+    $stdout.puts msg
+    index_log.info msg
 
     pbar = ProgressBar.new("Reindexing...", pids.length)
     errors = 0
     pids.each do |pid|
       begin
+        index_log.debug "Indexing #{pid}"
         Dor::SearchService.reindex(pid)
       rescue Interrupt
         raise
       rescue Exception => e
         errors += 1
-        Rails.logger.error("Consecutive Error ##{errors}:")
-        Rails.logger.error(e)
-        raise e if errors == 3
+        index_log.warn("Error (#{errors}) indexing #{pid}")
+        index_log.error("#{e.class}: #{e.message}")
+        if errors == 3
+          index_log.fatal("Too many errors. Exiting.")
+          raise e 
+        end
       end
       errors = 0
       pbar.inc(1)
