@@ -16,8 +16,8 @@
   <% unless subset.empty? %>
   <ul>
     <%=
-      raw(subset.keys.sort.collect { |key| 
-        render :partial => 'facet_hierarchy_item', :locals => { :field_name => field_name, :data => subset[key] } 
+      raw(subset.keys.sort.collect { |subkey| 
+        render :partial => 'facet_hierarchy_item', :locals => { :field_name => field_name, :data => subset[subkey], :key => subkey } 
       })
     %>
   </ul>
