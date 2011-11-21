@@ -176,7 +176,9 @@ module ArgoHelper
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     form = document.get('mdform_tag_field')
     collection = forms.keys.find { |k| forms[k].keys.include?(form) }
-    link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
+    if form and collection
+      link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
+    end
   end
   
 end
