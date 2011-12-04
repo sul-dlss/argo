@@ -121,7 +121,7 @@ module ArgoHelper
   end
 
   def render_document_sections(doc, action_name)
-    dor_object = get_dor_object(doc['id'].to_s)
+    dor_object = Dor::Base.load(doc['id'].to_s, doc['object_type_field'].to_s)
     format = document_partial_name(doc)
     sections = Blacklight.config[:show][:sections][format.to_sym] || Blacklight.config[:show][:sections][:default]
     result = ''
@@ -179,6 +179,20 @@ module ArgoHelper
     if form and collection
       link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
     end
+  end
+  
+  def render_section_header_link section, document
+    section_header_method = Blacklight.config[:show][:section_links][section]
+    unless section_header_method.nil?
+      self.send(section_header_method, document)
+    end
+  end
+  
+  def render_full_dc_link document, link_text="View full Dublin Core"
+    link_to link_text, dc_aspect_view_catalog_path(document.get('PID')), :class => 'dialogLink'
+  end
+  
+  def render_dor_workspace_link document, link_text="View DOR workspace"
   end
   
 end

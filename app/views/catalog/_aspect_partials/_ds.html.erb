@@ -1,0 +1,7 @@
+<% 
+  content = params[:dsid] == 'full_dc' ? @obj.generate_dublin_core.to_xml : @obj.content(params[:dsid])
+  raise ActionController::RoutingError.new('Not Found') if content.nil?
+  encoder = CodeRay.encoder(:div, :css => :class)
+  output = encoder.encode(content, :xml)
+%>
+<%= output.html_safe %>

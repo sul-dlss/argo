@@ -14,7 +14,10 @@
 %>
 
 <% unless content.nil? %>
-  <h3 id="document-<%=section%>-head" class="<%=header_class%>"><%= section.humanize %></h3>
+  <h3 id="document-<%=section%>-head" class="<%=header_class%>">
+    <span class="section-head-link"><%= render_section_header_link(section,document) %></span>
+    <%= section.humanize %>
+  </h3>
   <div id="document-<%=section%>-section">
     <%= content %>
   </div>

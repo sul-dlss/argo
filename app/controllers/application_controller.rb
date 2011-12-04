@@ -45,9 +45,9 @@ class ApplicationController < ActionController::Base
   
   def default_html_head
     stylesheet_links << ['yui', 'custom-theme/jquery-ui-1.8.13.custom', 'blacklight/blacklight', {:media=>'all'}]
-    stylesheet_links << ['application', 'hierarchy', 'argonauta', 'prettify']
+    stylesheet_links << ['application', 'hierarchy', 'argonauta', 'coderay']
     javascript_includes << ['jquery-1.6.2.min', 'jquery-ui.min', 'blacklight/blacklight' ]
-    javascript_includes << ['application', 'hierarchy', 'lightbox', 'prettify']
+    javascript_includes << ['application', 'hierarchy', 'lightbox']
   end
 
   protected

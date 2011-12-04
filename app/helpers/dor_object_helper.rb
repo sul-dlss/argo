@@ -1,9 +1,4 @@
 module DorObjectHelper
-  def get_dor_object(pid)
-    @dor_object_cache ||= {}
-    @dor_object_cache[pid] ||= Dor::Base.load_instance(pid)
-  end
-  
   # Metadata helpers
   def render_citation doc
     creator = Array(doc['dc_creator_field'] || doc['mods_creator_field'] || doc['mods_name_field']).first
@@ -41,7 +36,7 @@ module DorObjectHelper
   end
   
   def render_ds_id ds, document
-    link_to ds.dsid, datastream_view_catalog_path(ds.pid, ds.dsid), :class => 'xmlLink'
+    link_to ds.dsid, ds_aspect_view_catalog_path(ds.pid, ds.dsid), :class => 'dialogLink'
   end
   
   def render_ds_mime_type ds, document

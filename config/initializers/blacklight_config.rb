@@ -34,6 +34,10 @@ Blacklight.configure(:shared) do |config|
     :sections => {
       :default => ['identification','datastreams','history'],
       :item    => ['identification','datastreams','history','contents','child_objects']
+    },
+    :section_links => {
+      'identification' => :render_full_dc_link,
+      'contents' => :render_dor_workspace_link
     }
   }
 
