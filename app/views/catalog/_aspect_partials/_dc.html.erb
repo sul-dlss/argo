@@ -1,8 +1,11 @@
 <% dc_xml = @obj.generate_dublin_core %>
-<h3>
+<div class="lightbox-head">
   <span class="section-head-link">
     <%= link_to "View XML", ds_aspect_view_catalog_path(@obj.pid, 'full_dc'), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)' %>
   </span>
+  <%= @obj.pid %>
+</div>
+<h3>
   <%= @obj.label %>
 </h3>
 <dl class="defList">
