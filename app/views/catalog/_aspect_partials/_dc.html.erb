@@ -1,0 +1,21 @@
+<% dc_xml = @obj.generate_dublin_core %>
+<h3>
+  <span class="section-head-link">
+    <%= link_to "View XML", ds_aspect_view_catalog_path(@obj.pid, 'full_dc'), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)' %>
+  </span>
+  <%= @obj.label %>
+</h3>
+<dl class="defList">
+  <% 
+    dc_xml.xpath('/oai_dc:dc/*').each do |node|
+      field_name = node.name.humanize
+      field_value = node.text
+      unless field_value.nil? or field_value.empty?
+  -%>
+        <dt class="blacklight-<%= field_name.parameterize %>"><%= field_name %></dt>
+        <dd class="blacklight-<%= field_name.parameterize %>"><%= field_value %></dd>
+  <%
+      end 
+    end
+  -%>
+</dl>

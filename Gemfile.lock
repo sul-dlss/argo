@@ -177,7 +177,7 @@ GEM
     rake (0.9.2.2)
     rest-client (1.6.7)
       mime-types (>= 1.16)
-    rsolr (1.0.6)
+    rsolr (1.0.2)
       builder (>= 2.1.2)
     rsolr-ext (1.0.3)
       rsolr (>= 1.0.2)
@@ -235,6 +235,7 @@ DEPENDENCIES
   rack-webauth!
   rails (= 3.0.8)
   rake
+  rsolr (= 1.0.2)
   ruby-graphviz
   sass
   sqlite3-ruby (~> 1.2.5)

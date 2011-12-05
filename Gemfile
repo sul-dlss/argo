@@ -20,9 +20,12 @@ gem "sqlite3-ruby", "~> 1.2.5"
 gem "haml"
 gem "sass"
 gem "hassle", :git => "git://github.com/Papipo/hassle.git"
-gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :branch => "feature-facet-refactoring"
 gem "coderay"
 
 gem 'rails', '3.0.8'
 
 gem 'pry-rails', :group => :development
+
+# TODO: get back on head Rails so rsolr can be updated
+gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :branch => "feature-facet-refactoring"
+gem "rsolr", '1.0.2'
