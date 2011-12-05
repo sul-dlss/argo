@@ -36,7 +36,7 @@ module DorObjectHelper
   end
   
   def render_ds_id ds, document
-    link_to ds.dsid, ds_aspect_view_catalog_path(ds.pid, ds.dsid), :class => 'dialogLink'
+    link_to ds.dsid, ds_aspect_view_catalog_path(ds.pid, ds.dsid), :class => 'dialogLink', :title => ds.dsid
   end
   
   def render_ds_mime_type ds, document

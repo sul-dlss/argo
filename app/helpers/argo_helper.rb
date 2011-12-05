@@ -189,7 +189,7 @@ module ArgoHelper
   end
   
   def render_full_dc_link document, link_text="View full Dublin Core"
-    link_to link_text, dc_aspect_view_catalog_path(document.get('PID')), :class => 'dialogLink'
+    link_to link_text, dc_aspect_view_catalog_path(document.get('PID')), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)'
   end
   
   def render_dor_workspace_link document, link_text="View DOR workspace"
