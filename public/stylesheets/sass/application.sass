@@ -71,21 +71,33 @@ div.document
   #document-sections h4
     font-size: 120%
     color: #2A306C
-  dl.deflist
-    clear: left !important
-    dt
-      text-align: left
-      width: 7.5em
-    dd
-      width: 80%
+
   &.has-thumbnail
     min-height: 124px
-  div.field-list-column
-    float: left
+
+dl.deflist
+  clear: left !important
+  dt
+    text-align: left
+    width: 7.5em
+  dd
+    width: 80%
+
+div.column
+  float: left
+  &.narrow
     width: 25em
-    dl.deflist
-      dd
-        width: 15em
+    dd
+      width: 15em
+  &.wide
+    width: 35em
+    dd
+      width: 25em
+  
+h1,h2,h3,h4,h5,h6
+  &.inline
+    display: inline
+    width: 2em
   
 h3.section-head
   display: block
@@ -109,9 +121,17 @@ h3.section-head
 .lightbox-head
   color: #868EAC
   
-table.datastreams
-  td
-    padding: 0em 2em .5em 0em
+.errortext
+  color: red
+  
+.document-section
+  table
+    thead
+      border-bottom: 1px solid
+    th,td
+      font-weight: normal
+      text-align: left
+      padding: 0em 2em .5em 0em 
     
 .clear
   clear: both

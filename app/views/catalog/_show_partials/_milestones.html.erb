@@ -1,0 +1,10 @@
+<table>
+  <thead>
+  <tr><th>what</th><th>when</th></tr>
+  </thead>
+  <tbody>
+  <% milestones.each_pair do |k,m| %>
+    <tr><td><%= m[:display] %></td><td><%= m[:time] %></td></tr>
+  <% end %>
+  </tbody>
+</table>

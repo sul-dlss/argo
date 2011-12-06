@@ -28,6 +28,55 @@ module DorObjectHelper
     end
   end
   
+  def render_events doc, obj
+    events = []
+    if obj.datastreams_in_fedora.has_key?('provenanceMetadata')
+      events = obj.datastreams['provenanceMetadata'].ng_xml.xpath('//event').collect do |node|
+        { :when => Time.parse(node['when']).strftime('%Y-%m-%d %I:%M%p'), :who => [node.parent.parent['name'],node['who']].join(':'), :what => node.text }
+      end
+    end
+    render :partial => 'catalog/_show_partials/events', :locals => { :document => doc, :object => obj, :events => events }
+  end
+  
+  def render_milestones doc, obj
+    milestones = ActiveSupport::OrderedHash[
+      'registered',  { :display => 'Registered',  :time => 'pending' },
+      'inprocess',   { :display => 'In Process',  :time => 'pending' },
+      'released',    { :display => 'Released',    :time => 'pending' },
+      'archived',    { :display => 'Archived',    :time => 'pending' },
+      'accessioned', { :display => 'Accessioned', :time => 'pending' }
+    ]
+    
+    Array(doc['lifecycle_field']).each do |m| 
+      (name,time) = m.split(/:/,2)
+      milestones[name][:time] = Time.parse(time).strftime('%Y-%m-%d %I:%M%p')
+    end
+    render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
+  end
+  
+  def render_workflows doc, obj
+    workflows = Array(doc['wf_wsp_facet']).inject({}) do |hash,val|
+      parts = val.split(/:/)
+      if parts.length == 2
+        hash[parts[0]] ||= {}
+        hash[parts[0]][parts[1]] ||= 0
+        hash[parts[0]][parts[1]] += 1
+      end
+      hash
+    end
+    
+    workflows.keys.each do |wf|
+      result = { :status => 'active', :errors => 0 }
+      if workflows[wf].keys == ['completed']
+        result[:status] = 'completed'
+      else
+        result[:errors] = workflows[wf]['error'].to_i
+      end
+      workflows[wf] = result
+    end
+    render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
+  end
+  
   # Datastream helpers
   CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
   def render_ds_control_group ds, document
