@@ -1,10 +1,13 @@
-<table>
+<table class="detail">
   <thead>
   <tr><th>name</th><th>status</th></tr>
   </thead>
   <tbody>
   <%- if workflows.length > 0 -%>
-    <%- workflows.each_pair do |wf,status| -%>
+    <%- 
+      workflows.keys.sort.each do |wf|
+        status = workflows[wf]
+    -%>
       <tr>
         <td><%= link_to wf, workflow_view_catalog_path(document.get('id'), wf), :class => 'dialogLink', :title => wf %></td>
         <td>

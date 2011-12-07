@@ -28,11 +28,21 @@ module DorObjectHelper
     end
   end
   
+  def render_datetime(datetime)
+    if datetime.nil?
+      ''
+    else
+      d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
+      d.strftime('%Y-%m-%d %I:%M%p')
+    end
+  end
+  
   def render_events doc, obj
     events = []
-    if obj.datastreams_in_fedora.has_key?('provenanceMetadata')
-      events = obj.datastreams['provenanceMetadata'].ng_xml.xpath('//event').collect do |node|
-        { :when => Time.parse(node['when']).strftime('%Y-%m-%d %I:%M%p'), :who => [node.parent.parent['name'],node['who']].join(':'), :what => node.text }
+    if obj.datastreams_in_fedora.has_key?('events')
+      doc = Nokogiri::XML(obj.datastreams['events'].content)
+      events = doc.xpath('//event').collect do |node|
+        { :when => render_datetime(node['when']), :who => node['who'], :what => node.text }
       end
     end
     render :partial => 'catalog/_show_partials/events', :locals => { :document => doc, :object => obj, :events => events }
@@ -49,30 +59,18 @@ module DorObjectHelper
     
     Array(doc['lifecycle_field']).each do |m| 
       (name,time) = m.split(/:/,2)
-      milestones[name][:time] = Time.parse(time).strftime('%Y-%m-%d %I:%M%p')
+      milestones[name][:time] = render_datetime(time)
     end
     render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
   end
   
   def render_workflows doc, obj
-    workflows = Array(doc['wf_wsp_facet']).inject({}) do |hash,val|
-      parts = val.split(/:/)
-      if parts.length == 2
-        hash[parts[0]] ||= {}
-        hash[parts[0]][parts[1]] ||= 0
-        hash[parts[0]][parts[1]] += 1
-      end
+    workflows = obj.workflows.inject({}) do |hash,wf_name|
+      wf = obj.datastreams[wf_name]
+      status = wf.processes.empty? ? 'empty' : (wf.processes.all? { |process| process.status == 'completed' } ? 'completed' : 'active')
+      errors = wf.processes.select { |process| process.status == 'error' }.count
+      hash[wf_name] = { :status => status, :errors => errors }
       hash
-    end
-    
-    workflows.keys.each do |wf|
-      result = { :status => 'active', :errors => 0 }
-      if workflows[wf].keys == ['completed']
-        result[:status] = 'completed'
-      else
-        result[:errors] = workflows[wf]['error'].to_i
-      end
-      workflows[wf] = result
     end
     render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
   end

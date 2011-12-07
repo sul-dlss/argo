@@ -17,7 +17,6 @@ RubyDorServices::Application.routes.draw do
   match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :as => "datastream_view_catalog"
   match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
   match 'view/:id/workflows/:wf_name', :to => "catalog#workflow_view", :as => "workflow_view_catalog"
-  match 'view/:id/workflows/:wf_name.:format', :to => "catalog#workflow_graph", :as => "workflow_graph_catalog"
   match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   

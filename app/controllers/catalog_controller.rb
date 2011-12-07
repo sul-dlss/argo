@@ -41,49 +41,35 @@ class CatalogController < ApplicationController
   def workflow_view
     @response, @document = get_solr_response_for_doc_id
     @obj = Dor::Base.load params[:id], @document['object_type_field'].to_s
-    @workflow = Dor::WorkflowObject.find_by_name(params[:wf_name])
+    @workflow = @obj.datastreams[params[:wf_name]]
+    format = params[:format]
+    if Constants::FORMATS.include?(format)
+      mimetype = Rack::Mime.mime_type(".#{format}")
+      graph = workflow_graph(params[:wf_name], params[:dir])
+      send_data graph.output(format.to_sym => String), :type => mimetype, :disposition => 'inline'
+    else
+      render
+    end
   end
   
-  def workflow_graph
-    @response, @document = get_solr_response_for_doc_id
-    if params[:wf_name] == 'workflow'
-      @graph = GraphViz.digraph(params[:id])
-      sg = @graph.add_graph('rank') { |g| g[:rank => 'same'] }
+  def workflow_graph(wf_name, dir)
+    if wf_name == 'workflow'
+      graph = GraphViz.digraph(@obj.pid)
+      sg = graph.add_graph('rank') { |g| g[:rank => 'same'] }
       document_workflows = @document['wf_wps_facet'].collect { |val| val.split(/:/).first }.uniq
       document_workflows.each do |wf_name|
-        g = render_workflow_graph(@document,wf_name,@graph)
-        sg.add_node(g.root.id) unless g.nil?
-      end
-    else
-      @graph = render_workflow_graph(@document,params[:wf_name])
-    end
-    raise ActionController::RoutingError.new('Not Found') if @graph.nil?
-    @graph['rankdir'] = params[:dir] || 'TB'
-    format = params[:format].to_sym
-    if [:gv,:dot].include?(format)
-      send_data @graph.to_s, :type => 'text/x-graphviz'
-    else
-      mimetype = Rack::Mime.mime_type(".#{format}")
-      send_data @graph.output(format => String), :type => mimetype, :disposition => 'inline'
-    end
-  end
-  
-  private
-  def render_workflow_graph(rec,wf,g = nil)
-    workflow = Dor::WorkflowObject.find_by_name(wf)
-    return nil if workflow.nil?
-    graph = workflow.graph(g)
-    unless graph.nil?
-      rec['wf_wps_facet'].each do |facet|
-        (wf_name,process,status) = facet.split(/:/)
-        if (wf_name == wf) and not status.nil?
-          if graph.processes[process]
-            graph.processes[process].status = status
-          end
+        wf = @obj.workflow(wf_name)
+        unless wf.nil?
+          g = wf.graph(graph)
+          sg.add_node(g.root.id) unless g.nil?
         end
       end
+    else
+      graph = @obj.datastreams[wf_name].graph
     end
-    graph.finish
+    raise ActionController::RoutingError.new('Not Found') if graph.nil?
+    graph['rankdir'] = dir || 'TB'
+    graph
   end
-  
+
 end 

@@ -1,1 +1,30 @@
-<span class="lightbox-title">Workflow <%= @workflow.definition.name %></span>
+<div class="lightbox-head">
+  <span class="section-head-link">
+    <%= link_to "View XML", ds_aspect_view_catalog_path(@obj.pid, @workflow.dsid), :class => 'dialogLink', :title => @workflow.dsid %>
+  </span>
+  <%= @obj.pid %>
+</div>
+<table class="detail">
+  <thead>
+  <tr><th></th><th>process</th><th>status</th><th>datetime</th><th>elapsed seconds</th><th>attempts</th><th>lifecycle</th></tr>
+  </thead>
+  <tbody>
+    <% @workflow.processes.each_with_index do |process,index| %>
+      <tr>
+        <td><%=index+1%>.</td>
+        <td><%=process.name%></td>
+        <td><%=process.status%></td>
+        <td><%=render_datetime(process.datetime)%></td>
+        <td><%=process.elapsed ? '%.3f' % process.elapsed : ''%></td>
+        <td><%=process.attempts%></td>
+        <td><%=process.lifecycle%></td>
+      </tr>
+      <% if process.status == 'error' %>
+        <tr>
+          <td>&nbsp;</td>
+          <td colspan="6" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
