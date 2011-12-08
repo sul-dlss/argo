@@ -35,7 +35,7 @@ PATH
 PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
   specs:
-    dor-services (2.5.4)
+    dor-services (2.6.0)
       active-fedora (= 3.0.4)
       json
       lyber-utils
