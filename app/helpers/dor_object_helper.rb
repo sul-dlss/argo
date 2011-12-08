@@ -1,11 +1,11 @@
 module DorObjectHelper
   # Metadata helpers
   def render_citation doc
-    creator = Array(doc['dc_creator_field'] || doc['mods_creator_field'] || doc['mods_name_field']).first
-    title = Array(doc['dc_title_field'] || doc['mods_titleInfo_field'] || doc['fgs_label_field']).first
+    creator = Array(doc['mods_creator_field'] || doc['mods_name_field'] || doc['dc_creator_field']).first
+    title = Array(doc['mods_titleInfo_field'] || doc['dc_title_field'] || doc['fgs_label_field']).first
     place = Array(doc['mods_origininfo_place_field']).first
-    publisher = Array(doc['dc_publisher_field'] || doc['mods_publisher_field']).first
-    date = Array(doc['dc_date_field'] || doc['mods_dateissued_field'] || doc['mods_datecreated_field']).first
+    publisher = Array(doc['mods_publisher_field'] || doc['dc_publisher_field']).first
+    date = Array(doc['mods_dateissued_field'] || doc['mods_datecreated_field'] || doc['dc_date_field']).first
     
     result = ''
     result += "#{h creator} " unless creator.nil?
