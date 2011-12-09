@@ -126,7 +126,22 @@ h3.section-head
   
 .clear
   clear: both
-  
+
+ul.resource-tree
+  margin: 0
+  li
+    padding-left: 16px
+    list-style-type: none
+    background-repeat: no-repeat
+    background-position: left top
+    background-image: url('bullets/bullet_go.png')
+    &.file
+      background-image: url('bullets/bullet_disk.png')
+    &.resource
+      background-image: url('bullets/bullet_star.png')
+    ul
+      margin: 0
+      
 pre.prettyprint
   border: none !important
   white-space: pre-wrap

@@ -1,0 +1,28 @@
+<% if object.datastreams_in_fedora.keys.include?('contentMetadata') %>
+<% content_ds = object.datastreams['contentMetadata'] %>
+<div style="clear:left">
+  <ul class="resource-tree">
+    <li>
+      <%= content_ds.ng_xml.root['type']%>
+      <ul>
+        <% content_ds.ng_xml.xpath('/contentMetadata/resource').each do |resource| %>
+          <li class="resource">
+            <%= resource['id'] %>
+            <% if resource.at('label') %>
+              (<%= resource.at('label').text %>)
+            <% end %>
+            <ul>
+              <% resource.xpath('file').each do |file| %>
+                <li class="file">
+                  <%= file['id'] %> 
+                  (<%= file['format'] %>, <%= file['mimetype'] %>, <%= file['size'].to_i.bytestring('%.1f%s') %>,
+                  <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
+                </li>
+              <% end %>
+            </ul>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+</div>
+<% end %>
