@@ -12,7 +12,7 @@ gem "mod-cons", ">=0.2.0"
 if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
   instance_eval File.read(fn)
 else
-  gem 'dor-services', ">= 1.7.2"
+  gem 'dor-services', ">= 2.5.2"
 end
 gem "mysql2", "~> 0.2.7"
 gem "progressbar"
@@ -20,6 +20,12 @@ gem "sqlite3-ruby", "~> 1.2.5"
 gem "haml"
 gem "sass"
 gem "hassle", :git => "git://github.com/Papipo/hassle.git"
-gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :branch => "feature-facet-refactoring"
+gem "coderay"
 
 gem 'rails', '3.0.8'
+
+gem 'pry-rails', :group => :development
+
+# TODO: get back on head Rails so rsolr can be updated
+gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :branch => "feature-facet-refactoring"
+gem "rsolr", '1.0.2'

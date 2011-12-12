@@ -28,12 +28,16 @@ Blacklight.configure(:shared) do |config|
  
   # solr field values given special treatment in the show (single result) view
   config[:show] = {
-    :html_title => "dc_title_field",
+    :html_title => "fgs_label_field",
     :heading => "Title",
     :display_type => "object_type_field",
     :sections => {
       :default => ['identification','datastreams','history'],
       :item    => ['identification','datastreams','history','contents','child_objects']
+    },
+    :section_links => {
+      'identification' => :render_full_dc_link,
+      'contents' => :render_dor_workspace_link
     }
   }
 
@@ -56,6 +60,7 @@ Blacklight.configure(:shared) do |config|
       "content_type_facet",
       "isGovernedBy_id_facet",
       "isMemberOfCollection_id_facet",
+      "lifecycle_facet",
       "wf_wps_facet",
       "wf_wsp_facet",
       "wf_swp_facet"
@@ -67,6 +72,7 @@ Blacklight.configure(:shared) do |config|
       "content_type_facet"            => "Content Type",
       "isGovernedBy_id_facet"         => "Admin. Policy",
       "isMemberOfCollection_id_facet" => "Owning Collection",
+      "lifecycle_facet"               => "Lifecycle",
       "wf_wps_facet"                  => "Workflows (WPS)",
       "wf_wsp_facet"                  => "Workflows (WSP)",
       "wf_swp_facet"                  => "Workflows (SWP)"

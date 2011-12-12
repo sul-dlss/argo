@@ -13,6 +13,10 @@ module ApplicationHelper
     fedora_base.merge("objects/#{pid}").to_s
   end
 
+  def inflect(str,num)
+    "%d %s" % [num, (num == 1 ? str.singularize : str.pluralize)]
+  end
+  
   protected
   
   def silently

@@ -1,0 +1,5 @@
+<% if document.get('embargo_status_field') == 'embargoed' %>
+<div id="embargo_sidebar" style="border: 1px solid gray; margin-top: 4px; padding: 2px">
+  This item is embargoed until <%= Time.parse(document.get('embargo_release_date')).strftime('%Y.%m.%d') %>
+</div>
+<% end %>

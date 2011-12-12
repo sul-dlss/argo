@@ -59,6 +59,18 @@ var gridContext = function() {
     rc: createRegistrationContext(),
     statusImages: {},
     
+    processValue: function(cellname, value) {
+      // Strip leading and trailing punctuation from everything but label
+      if (value) {
+        if (cellname == 'label')
+          return value.trim();
+        else
+          return value.replace(/(^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$)/g,"");
+      } else {
+        return ''
+      }
+    },
+    
     resizeIdList: function() {
       $('#id_list').animate({
         'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3, 
@@ -108,7 +120,8 @@ var gridContext = function() {
       var columns = $('#data').jqGrid('getGridParam','colModel');
       
       for (var i = 2; i < columns.length; i++) {
-        newRow[columns[i].name] = column_data[i-2] || '';
+        var value = $t.processValue(columns[i].name, column_data[i-2]);
+        newRow[columns[i].name] = value;
       }
       $('#data').jqGrid('addRowData',newId, newRow, 'last');
       $('#data').data('nextId',newId+1);
@@ -208,7 +221,10 @@ var gridContext = function() {
         multiselect: true,
         scroll: true,
         toolbar: [true, "top"],
-        viewrecords: true
+        viewrecords: true,
+        beforeSaveCell: function(rowid, cellname, value, row, col) { 
+          return $t.processValue(cellname, value);
+        }
       });
       $(window).trigger('resize')
       $('#t_data').html('<div id="icons"/>')

@@ -7,7 +7,7 @@ module RegistrationHelper
     end
     result = Dor::SearchService.gsearch(:q => q, :rows => 99999)['response']['docs']
     result.sort! do |a,b|
-      a['tag_field'].include?('AdminPolicy : default') ? -1 : a['dc_title_field'].to_s <=> b['dc_title_field'].to_s
+      Array(a['tag_field']).include?('AdminPolicy : default') ? -1 : a['dc_title_field'].to_s <=> b['dc_title_field'].to_s
     end
     result
     result.collect! do |doc|

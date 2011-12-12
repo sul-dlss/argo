@@ -1,0 +1,14 @@
+<table class="detail">
+  <thead>
+  <tr><th>when</th><th>who</th><th>what</th></tr>
+  </thead>
+  <tbody>
+  <% if events.length > 0 %>
+    <% events.each do |e| %>
+      <tr><td><%= e[:when] %></td><td><%= e[:who] %></td><td><%= e[:what] %></td></tr>
+    <% end %>
+  <% else %>
+    <tr><td colspan="3">No events recorded</td></tr>
+  <% end %>
+  </tbody>
+</table>
