@@ -8,7 +8,7 @@ gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'
 gem 'ruby-graphviz'
-gem "mod-cons", ">=0.2.0"
+#gem "mod-cons", ">=0.2.0"
 if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
   instance_eval File.read(fn)
 else
