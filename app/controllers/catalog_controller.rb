@@ -16,7 +16,7 @@ class CatalogController < ApplicationController
 
   def datastream_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor::Base.load params[:id], @document['object_type_field'].to_s
+    @obj = Dor::Base.load params[:id], @document['objectType_t'].to_s
     ds = @obj.datastreams[params[:dsid]]
     data = @obj.content params[:dsid], params[:raw]
     unless data.nil?
@@ -28,7 +28,7 @@ class CatalogController < ApplicationController
   
   def show_aspect
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor::Base.load params[:id], @document['object_type_field'].to_s
+    @obj = Dor::Base.load params[:id], @document['objectType_t'].to_s
     render :layout => request.xhr? ? false : true
   end
   
@@ -40,7 +40,7 @@ class CatalogController < ApplicationController
   
   def workflow_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor::Base.load params[:id], @document['object_type_field'].to_s
+    @obj = Dor::Base.load params[:id], @document['objectType_t'].to_s
     @workflow = @obj.datastreams[params[:wf_name]]
     format = params[:format]
     if Constants::FORMATS.include?(format)

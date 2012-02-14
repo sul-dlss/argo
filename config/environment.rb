@@ -12,10 +12,8 @@ module Argo
     end
   end
   
-  Config = ModCons::Configuration.new(:'Argo::Config')
-
-  Config.declare do
-    reindex_on_the_fly true
+  Config = Confstruct::Configuration.new do
+    reindex_on_the_fly false
     urls do
       mdtoolkit nil
       purl nil

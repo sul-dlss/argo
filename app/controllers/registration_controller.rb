@@ -14,8 +14,8 @@ class RegistrationController < ApplicationController
   end
 
   def form_list
-    docs = Dor::SearchService.gsearch(:q => %{PID:"#{params[:apo_id]}"})['response']['docs']
-    format = docs.collect { |doc| doc['apo_metadata_format_field'] }.flatten.first.to_s
+    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).hits
+    format = docs.collect { |doc| doc['administrativeMetadata_metadata_format_t'] }.flatten.first.to_s
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     result = forms[format.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
     respond_to do |format|
@@ -24,19 +24,16 @@ class RegistrationController < ApplicationController
   end
   
   def workflow_list
-    docs = Dor::SearchService.gsearch(:q => %{PID:"#{params[:apo_id]}"})['response']['docs']
-    result = docs.collect { |doc| doc['apo_registration_workflow_field'] }.compact
+    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).hits
+    result = docs.collect { |doc| doc['registration_workflow_id_t'] }.compact
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result.flatten.sort }
     end
   end
 
   def autocomplete
-    response = Dor::SearchService.gsearch(:q => "*:*", :rows => '0', :facet => 'on', :'facet.field' => params[:field], :'facet.prefix' => params[:term].titlecase, :'facet.mincount' => 1, :'facet.limit' => 15)
-    result = response['facet_counts']
-    result = result['facet_fields']
-    result = Hash[*(result['project_tag_facet'])].keys
-    result.sort!
+    response = Dor::SearchService.query('*:*', :rows => 0, :facets => { :fields => [params[:field]], :prefix => params[:term].titlecase, :mincount => 1, :limit => 15 })
+    result = response.field_facets(params[:field]).collect { |f| f.name }.sort
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
     end

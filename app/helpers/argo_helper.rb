@@ -2,7 +2,7 @@
  
 module ArgoHelper
   def ensure_current_document_version
-    if @document.get('index_version_field').to_s < Dor::SearchService.index_version
+    if @document.get('index_version_t').to_s < Dor::SearchService.index_version
       Dor::SearchService.reindex(@document.get('id'))
       @response, @document = get_solr_response_for_doc_id
     end
@@ -82,15 +82,15 @@ module ArgoHelper
   
   def render_extended_document_class(document = @document)
     result = render_document_class(document).to_s
-    if first_image(document['shelved_content_file_field'])
+    if first_image(document['shelved_content_file_t'])
       result += " has-thumbnail"
     end
     result
   end
   
   def render_document_show_thumbnail doc
-    if doc['shelved_content_file_field']
-      fname = first_image(doc['shelved_content_file_field'])
+    if doc['shelved_content_file_t']
+      fname = first_image(doc['shelved_content_file_t'])
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))
@@ -100,8 +100,8 @@ module ArgoHelper
   end
   
   def render_index_thumbnail doc
-    if doc['shelved_content_file_field']
-      fname = first_image(doc['shelved_content_file_field'])
+    if doc['shelved_content_file_t']
+      fname = first_image(doc['shelved_content_file_t'])
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))
@@ -121,7 +121,7 @@ module ArgoHelper
   end
 
   def render_document_sections(doc, action_name)
-    dor_object = Dor::Base.load(doc['id'].to_s, doc['object_type_field'].to_s)
+    dor_object = Dor::Base.load(doc['id'].to_s, doc['objectType_t'].to_s)
     format = document_partial_name(doc)
     sections = Blacklight.config[:show][:sections][format.to_sym] || Blacklight.config[:show][:sections][:default]
     result = ''
@@ -167,14 +167,14 @@ module ArgoHelper
   end
   
   def render_searchworks_link document, link_text='Searchworks', opts={:target => '_blank'}
-    val = document.get('dor_catkey_id_field')
+    val = document.get('catkey_id_t')
     link_to link_text, "http://searchworks.stanford.edu/view/#{val}", opts
   end
   
   def render_mdtoolkit_link document, link_text='MD Toolkit', opts={:target => '_blank'}
-    val = document.get('dor_mdtoolkit_id_field')
+    val = document.get('mdtoolkit_id_t')
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
-    form = document.get('mdform_tag_field')
+    form = document.get('mdform_tag_t')
     collection = forms.keys.find { |k| forms[k].keys.include?(form) }
     if form and collection
       link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts

@@ -1,17 +1,17 @@
 module RegistrationHelper
 
   def apo_list(*permission_keys)
-    q = 'object_type_field:adminPolicy'
+    q = 'objectType_t:adminPolicy'
     unless permission_keys.empty?
       q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_field:"#{key}"} }.join(" OR ") + ')'
     end
-    result = Dor::SearchService.gsearch(:q => q, :rows => 99999)['response']['docs']
+    result = Dor::SearchService.query(q, :rows => 99999, :field_list => ['id','tag_t','dc_title_t']).hits
     result.sort! do |a,b|
-      Array(a['tag_field']).include?('AdminPolicy : default') ? -1 : a['dc_title_field'].to_s <=> b['dc_title_field'].to_s
+      Array(a['tag_t']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
     result
     result.collect! do |doc|
-      [doc['dc_title_field'].to_s,doc['PID'].to_s]
+      [doc['dc_title_t'].to_s,doc['id'].to_s]
     end
   end
 
@@ -39,13 +39,13 @@ module RegistrationHelper
     
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
-    doc = Dor::SearchService.gsearch(:q => %{PID:"druid:#{druid}"})['response']['docs'].first
+    doc = Reference.find(druid)
     if doc.nil?
       pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       return
     end
     
-    ids = Array(doc['mods_identifier_field']).collect do |id| 
+    ids = Array(doc['mods_identifier_t']).collect do |id| 
       result = id.split(/:/,2)
       result[0] = "#{result[0].titleize}:"
       result
@@ -60,7 +60,7 @@ module RegistrationHelper
     pdf.y -= 0.5.in
 
     pdf.font('Courier', :size => 10)
-    label = doc['fgs_label_field'].first
+    label = doc['obj_label_t'].first
     if label.length > 110
       label = label[0..110] + '...'
     end

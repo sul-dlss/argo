@@ -1,11 +1,11 @@
 module DorObjectHelper
   # Metadata helpers
   def render_citation doc
-    creator = Array(doc['mods_creator_field'] || doc['mods_name_field'] || doc['dc_creator_field']).first
-    title = Array(doc['mods_titleInfo_field'] || doc['dc_title_field'] || doc['fgs_label_field']).first
-    place = Array(doc['mods_origininfo_place_field']).first
-    publisher = Array(doc['mods_publisher_field'] || doc['dc_publisher_field']).first
-    date = Array(doc['mods_dateissued_field'] || doc['mods_datecreated_field'] || doc['dc_date_field']).first
+    creator = Array(doc['mods_creator_t'] || doc['mods_name_t'] || doc['dc_creator_t']).first
+    title = Array(doc['mods_titleInfo_t'] || doc['dc_title_t'] || doc['obj_label_t']).first
+    place = Array(doc['mods_originInfo_place_placeTerm_t']).first
+    publisher = Array(doc['mods_originInfo_publisher_t'] || doc['dc_publisher_t']).first
+    date = Array(doc['mods_dateissued_t'] || doc['mods_datecreated_t'] || doc['dc_date_t']).first
     
     result = ''
     result += "#{h creator} " unless creator.nil?
@@ -16,7 +16,7 @@ module DorObjectHelper
   end
   
   def render_item_status doc
-    current_milestone = Array(doc['lifecycle_field']).last
+    current_milestone = Array(doc['lifecycle_t']).last
     if current_milestone.nil?
       nil
     else
@@ -53,6 +53,7 @@ module DorObjectHelper
       'registered',  { :display => 'Registered',  :time => 'pending' },
       'inprocess',   { :display => 'In Process',  :time => 'pending' },
       'released',    { :display => 'Released',    :time => 'pending' },
+      'published',   { :display => 'Published',   :time => 'pending' },
       'archived',    { :display => 'Archived',    :time => 'pending' },
       'accessioned', { :display => 'Accessioned', :time => 'pending' }
     ]

@@ -22,10 +22,8 @@ gem "sass"
 gem "hassle", :git => "git://github.com/Papipo/hassle.git"
 gem "coderay"
 
-gem 'rails', '3.0.8'
+gem 'rails', '3.2.0'
+gem "blacklight"
 
 gem 'pry-rails', :group => :development
 
-# TODO: get back on head Rails so rsolr can be updated
-gem "blacklight", :git => "git://github.com/projectblacklight/blacklight.git", :branch => "feature-facet-refactoring"
-gem "rsolr", '1.0.2'

@@ -248,7 +248,7 @@ Blacklight.configure(:shared) do |config|
   
   config[:field_groups] = {
     :identification => [
-      ['PID','object_type_field','content_type_facet','item_status_field'],
+      ['PID','objectType_t','content_type_facet','item_status_field'],
       ['isGovernedBy_field','isMemberOfCollection_field','project_tag_field','source_id_field']
     ]
   }
