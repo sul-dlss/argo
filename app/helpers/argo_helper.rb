@@ -46,9 +46,9 @@ module ArgoHelper
   def get_search_results *args
     (solr_response, document_list) = super(*args)
     document_list.each do |doc|
-      unless doc.has_key?(Blacklight.config[:index][:show_link])
-        doc[Blacklight.config[:index][:show_link]] = doc['PID']
-        silently { Dor::Item.touch doc['PID'].to_s }
+      unless doc.has_key?(blacklight_config[:index][:show_link])
+        doc[blacklight_config[:index][:show_link]] = doc['id']
+        silently { Dor::Item.touch doc['id'].to_s }
       end
     end
     return [solr_response, document_list]
@@ -121,9 +121,9 @@ module ArgoHelper
   end
 
   def render_document_sections(doc, action_name)
-    dor_object = Dor::Base.load(doc['id'].to_s, doc['objectType_t'].to_s)
+    dor_object = Dor.find doc['id'].to_s
     format = document_partial_name(doc)
-    sections = Blacklight.config[:show][:sections][format.to_sym] || Blacklight.config[:show][:sections][:default]
+    sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
     result = ''
     sections.each_with_index do |section_name,index|
       result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc,:object=>dor_object,:format=>format,:section=>section_name,:collapsible=>(index > 0)})
@@ -152,17 +152,17 @@ module ArgoHelper
   end
   
   def render_purl_link document, link_text='PURL', opts={:target => '_blank'}
-    val = document.get('PID').split(/:/).last
+    val = document.get('id').split(/:/).last
     link_to link_text, File.join(Argo::Config.urls.purl, val), opts
   end
   
   def render_dor_link document, link_text='Fedora UI', opts={:target => '_blank'}
-    val = document.get('PID')
+    val = document.get('id')
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}"), opts
   end
   
   def render_foxml_link document, link_text='FoXML', opts={:target => '_blank'}
-    val = document.get('PID')
+    val = document.get('id')
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}/objectXML"), opts
   end
   
@@ -182,14 +182,14 @@ module ArgoHelper
   end
   
   def render_section_header_link section, document
-    section_header_method = Blacklight.config[:show][:section_links][section]
+    section_header_method = blacklight_config[:show][:section_links][section]
     unless section_header_method.nil?
       self.send(section_header_method, document)
     end
   end
   
   def render_full_dc_link document, link_text="View full Dublin Core"
-    link_to link_text, dc_aspect_view_catalog_path(document.get('PID')), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)'
+    link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)'
   end
   
   def render_dor_workspace_link document, link_text="View DOR workspace"

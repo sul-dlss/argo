@@ -1,13 +1,5 @@
 module Dor::ObjectsHelper
 
-  def class_for(object_type)
-    case object_type
-    when 'item'         then Dor::Item
-    when 'admin_policy' then Dor::AdminPolicyObject
-    else                     Dor::Base
-    end
-  end
-  
   def merge_params(hash)
     # convert camelCase parameter names to under_score, and string keys to symbols
     # e.g., 'objectType' to :object_type

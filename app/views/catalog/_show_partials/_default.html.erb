@@ -1,15 +1,7 @@
 <% 
   ensure_current_document_version if Argo::Config[:reindex_on_the_fly]
-  @footer = "Argo v#{Argo.version} / DocIndex v#{@document.get('index_version_field')}"
+  @footer = "Argo v#{Argo.version} / DocIndex v#{@document.get('dor_services_version_t')}"
 %>
-
-<% extra_head_content << capture do %>
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.collapsible-section').click(function() { $(this).next('div').slideToggle(); $(this).toggleClass('collapsed') })
-  });
-</script>
-<% end %>
 
 <% sidebar_items << capture do %>
   <%= render :partial => '/catalog/_show_partials/external_links', :locals => { :document => @document } %>

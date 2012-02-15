@@ -21,7 +21,7 @@ module DorObjectHelper
       nil
     else
       status = current_milestone.split(/:/,2).first
-      if embargo_status = doc['embargo_status_field']
+      if embargo_status = doc['embargo_status_t']
         status += " (#{embargo_status.first})"
       end
       status
@@ -39,7 +39,7 @@ module DorObjectHelper
   
   def render_events doc, obj
     events = []
-    if obj.datastreams_in_fedora.has_key?('events')
+    if obj.datastreams.has_key?('events') and not obj.datastreams['events'].new?
       doc = Nokogiri::XML(obj.datastreams['events'].content)
       events = doc.xpath('//event').collect do |node|
         { :when => render_datetime(node['when']), :who => node['who'], :what => node.text }
@@ -58,7 +58,7 @@ module DorObjectHelper
       'accessioned', { :display => 'Accessioned', :time => 'pending' }
     ]
     
-    Array(doc['lifecycle_field']).each do |m| 
+    Array(doc['lifecycle_facet']).each do |m| 
       (name,time) = m.split(/:/,2)
       milestones[name][:time] = render_datetime(time)
     end
@@ -66,11 +66,10 @@ module DorObjectHelper
   end
   
   def render_workflows doc, obj
-    workflows = obj.workflows.inject({}) do |hash,wf_name|
-      wf = obj.datastreams[wf_name]
+    workflows = obj.workflows.workflows.inject({}) do |hash,wf|
       status = wf.processes.empty? ? 'empty' : (wf.processes.all? { |process| process.status == 'completed' } ? 'completed' : 'active')
       errors = wf.processes.select { |process| process.status == 'error' }.count
-      hash[wf_name] = { :status => status, :errors => errors }
+      hash[wf.workflowId.first] = { :status => status, :errors => errors }
       hash
     end
     render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
@@ -78,31 +77,34 @@ module DorObjectHelper
   
   # Datastream helpers
   CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
-  def render_ds_control_group ds, document
-    cg = ds.attributes[:controlGroup] || 'X'
+  def parse_specs spec_string
+    Hash[[:dsid,:control_group,:mime_type,:version,:size,:label].zip(spec_string.split(/\|/))]
+  end
+  
+  def render_ds_control_group doc, specs
+    cg = specs[:control_group] || 'X'
     "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
   end
   
-  def render_ds_id ds, document
-    link_to ds.dsid, ds_aspect_view_catalog_path(ds.pid, ds.dsid), :class => 'dialogLink', :title => ds.dsid
+  def render_ds_id doc, specs
+    link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :class => 'dialogLink', :title => specs[:dsid]
   end
   
-  def render_ds_mime_type ds, document
-    ds.attributes['mimeType']
+  def render_ds_mime_type doc, specs
+    specs[:mime_type]
   end
   
-  def render_ds_version ds, document
-    val = Array(document['fedora_datastream_version_field']).find { |v| v.split(/\./).first == ds.dsid }
-    val ? "v#{val.split(/\./).last}" : ''
+  def render_ds_version doc, specs
+    "v#{specs[:version]}"
   end
   
-  def render_ds_size ds, document
-    val = ds.content.length.bytestring('%.1f%s').downcase
+  def render_ds_size doc, specs
+    val = specs[:size].to_i.bytestring('%.1f%s').downcase
     val.sub(/\.?0+([a-z]?b)$/,'\1')
   end
   
-  def render_ds_label ds, document
-    ds.label
+  def render_ds_label doc, specs
+    specs[:label]
   end
   
 end

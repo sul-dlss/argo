@@ -1,4 +1,4 @@
-<% if object.datastreams_in_fedora.keys.include?('contentMetadata') %>
+<% if object.datastreams.keys.include?('contentMetadata') and not object.datastreams['contentMetadata'].new? %>
 <% content_ds = object.datastreams['contentMetadata'] %>
 <div style="clear:left">
   <ul class="resource-tree">

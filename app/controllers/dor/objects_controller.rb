@@ -37,7 +37,7 @@ class Dor::ObjectsController < ApplicationController
       pid = dor_response[:pid]
       reg_response = dor_params.dup.merge({ :location => help.object_location(pid), :pid => pid })
       if params[:seed_datastream] or params[:workflow_id]
-        dor_obj = help.class_for(params[:object_type]).load_instance(pid)
+        dor_obj = Dor.find pid
         Array(params[:seed_datastream]).each do |datastream_name|
           dor_obj.build_datastream(datastream_name)
         end

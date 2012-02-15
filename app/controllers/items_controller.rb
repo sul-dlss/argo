@@ -32,12 +32,4 @@ class ItemsController < ApplicationController
     render :register, :layout => 'application'
   end
 
-  def reindex
-    @druids = Array(params[:id])
-    result = @druids.inject({}) { |hash,druid| hash[druid] = Dor::Base.reindex(druid); hash }
-    respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => result }
-    end
-  end
-  
 end

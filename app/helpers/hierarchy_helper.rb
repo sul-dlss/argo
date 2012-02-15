@@ -2,16 +2,16 @@ module HierarchyHelper
 
 def is_hierarchical?(field_name)
   (prefix,order,suffix) = field_name.split(/_/)
-  list = Blacklight.config[:facet][:hierarchy][prefix] and list.include?(order)
+  list = blacklight_config[:facet][:hierarchy][prefix] and list.include?(order)
 end
     
 def facet_order(prefix)
   param_name = "#{prefix}_facet_order".to_sym
-  params[param_name] || Blacklight.config[:facet][:hierarchy][prefix].first
+  params[param_name] || blacklight_config[:facet][:hierarchy][prefix].first
 end
 
 def facet_after(prefix, order)
-  orders = Blacklight.config[:facet][:hierarchy][prefix]
+  orders = blacklight_config[:facet][:hierarchy][prefix]
   orders[orders.index(order)+1] || orders.first
 end
 
@@ -85,7 +85,7 @@ def facet_tree(prefix)
   @facet_tree ||= {}
   if @facet_tree[prefix].nil?
     @facet_tree[prefix] = {}
-    Blacklight.config[:facet][:hierarchy][prefix].each { |key|
+    blacklight_config[:facet][:hierarchy][prefix].each { |key|
       facet_field = [prefix,key,'facet'].compact.join('_')
       @facet_tree[prefix][facet_field] ||= {}
       data = @response.facet_by_field_name(facet_field)

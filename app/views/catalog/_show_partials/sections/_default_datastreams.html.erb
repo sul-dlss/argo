@@ -1,15 +1,15 @@
 <table class="detail">
   <% 
-    object.datastreams_in_fedora.keys.sort.each do |ds_name| 
-      ds = object.datastreams[ds_name]
+    document['ds_specs_display'].each do |dspecs| 
+      specs = parse_specs(dspecs)
   %>
     <tr>
-      <td><%= render_ds_id ds, document %></td>
-      <td><%= render_ds_control_group ds, document %></td>
-      <td><%= render_ds_mime_type ds, document %></td>
-      <td><%= render_ds_version ds, document %></td>
-      <td><%= render_ds_size ds, document %></td>
-      <td><%= render_ds_label ds, document %></td>
+      <td><%= render_ds_id document, specs %></td>
+      <td><%= render_ds_control_group document, specs %></td>
+      <td><%= render_ds_mime_type document, specs %></td>
+      <td><%= render_ds_version document, specs %></td>
+      <td><%= render_ds_size document, specs %></td>
+      <td><%= render_ds_label document, specs %></td>
     </tr>
   <% end %>
 </table>

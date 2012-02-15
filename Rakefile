@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-RubyDorServices::Application.load_tasks
+Argo::Application.load_tasks

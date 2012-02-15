@@ -40,12 +40,12 @@ namespace :argo do
       q = args[:query] || '*:*'
       puts q
       start = 0
-      resp = Dor::SearchService.gsearch(:q => q, :sort => 'PID asc', :rows => 1000, :start => start, :fl => 'PID')
+      resp = Dor::SearchService.gsearch(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :fl => 'id')
       while resp['response']['docs'].length > 0
-        pids += resp['response']['docs'].collect { |doc| doc['PID'] }.flatten.select { |pid| pid =~ /^druid:/ }
+        pids += resp['response']['docs'].collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
         start += 1000
         $stdout.print "."
-        resp = Dor::SearchService.gsearch(:q=>q, :rows => 1000, :start => start, :fl => 'PID')
+        resp = Dor::SearchService.gsearch(:q=>q, :rows => 1000, :start => start, :fl => 'id')
       end
       $stdout.puts
     end

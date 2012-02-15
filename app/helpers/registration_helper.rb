@@ -3,7 +3,7 @@ module RegistrationHelper
   def apo_list(*permission_keys)
     q = 'objectType_t:adminPolicy'
     unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_field:"#{key}"} }.join(" OR ") + ')'
+      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
     end
     result = Dor::SearchService.query(q, :rows => 99999, :field_list => ['id','tag_t','dc_title_t']).hits
     result.sort! do |a,b|
@@ -65,7 +65,7 @@ module RegistrationHelper
       label = label[0..110] + '...'
     end
     table_data = [['Object Label:',label]]
-    if project_name = doc['project_tag_field']
+    if project_name = doc['project_tag_t']
       table_data.push(['Project Name:',project_name.to_s])
     end
     table_data.push(['Date Printed:',Time.now.strftime('%c')])

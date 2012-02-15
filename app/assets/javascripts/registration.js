@@ -1,0 +1,11 @@
+//= require jquery
+//= require jquery-ui
+//= require jquery_ujs
+//= require argo
+//= require registration/grid.locale-en
+//= require registration/jquery.jqGrid.min
+//= require registration/jquery.defaultText
+//= require registration/jquery.textarea
+//= require registration/jquery.ajaxQ.min
+//= require registration/register
+//= require registration/grid

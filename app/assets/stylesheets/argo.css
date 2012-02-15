@@ -1,0 +1,10 @@
+/*
+ * Required by Blacklight:
+ *
+ * This is the default theme. You can modify many of the settings 
+ * by editing your local app/assets/stylesheets/blacklight_themes/standard.css
+ *= require 'blacklight_themes/standard'         
+ *= require jquery-ui/custom-theme/jquery-ui-1.8.13.custom
+ *= require_tree './argo'
+ */
+ 

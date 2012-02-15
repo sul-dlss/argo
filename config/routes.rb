@@ -1,4 +1,4 @@
-RubyDorServices::Application.routes.draw do
+Argo::Application.routes.draw do
 
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
@@ -30,8 +30,6 @@ RubyDorServices::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
-    get :reindex, :on => :member
-    get :reindex, :on => :collection
   end
   
   namespace :registration do

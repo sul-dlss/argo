@@ -23,4 +23,4 @@ module Argo
 end
 
 # Initialize the rails application
-RubyDorServices::Application.initialize!
+Argo::Application.initialize!

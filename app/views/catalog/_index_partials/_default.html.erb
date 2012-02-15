@@ -2,7 +2,7 @@
 <div class="index-thumb-container">
   <%= render_index_thumbnail document %>
 </div>
-<% Blacklight.config[:field_groups][:identification].each do |field_names| %>
+<% blacklight_config[:field_groups][:identification].each do |field_names| %>
   <div class="narrow column">
     <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => field_names } %>
   </div>

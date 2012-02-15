@@ -1,7 +1,12 @@
-<% 
-  content = params[:dsid] == 'full_dc' ? @obj.generate_dublin_core.to_xml : @obj.content(params[:dsid])
+<%
+  content = if params[:dsid] == 'full_dc'
+    @obj.generate_dublin_core.prettify
+  elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
+    @obj.datastreams[params[:dsid]].ng_xml.prettify
+  else
+    @obj.datastreams[params[:dsid]].content
+  end
   raise ActionController::RoutingError.new('Not Found') if content.nil?
-  encoder = CodeRay.encoder(:div, :css => :class)
-  output = encoder.encode(content, :xml)
+  output = CodeRay::Duo[:xml, :div].highlight content
 %>
 <%= output.html_safe %>

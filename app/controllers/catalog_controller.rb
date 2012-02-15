@@ -7,16 +7,96 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   helper HierarchyHelper
   
+  configure_blacklight do |config|
+    config.default_solr_params = {
+      :q => "*:*",
+      :rows => 10,
+      :facet => true,
+      :'facet.mincount' => 1,
+      :'f.wf_wps_facet.facet.limit' => -1,
+      :'f.wf_wsp_facet.facet.limit' => -1,
+      :'f.wf_swp_facet.facet.limit' => -1
+    }
+    
+    config.index.show_link = 'link_text_t'
+    config.index.record_display_type = 'content_type_facet'
+    
+    config.show.html_title = 'obj_label_t'
+    config.show.heading = 'obj_label_t'
+    config.show.display_type = 'objectType_t'
+    config.show.sections = {
+      :default => ['identification','datastreams','history'],
+      :item    => ['identification','datastreams','history','contents','child_objects']
+    }
+    config.show.section_links = {
+      'identification' => :render_full_dc_link,
+      'contents' => :render_dor_workspace_link
+    }
+    
+    config.add_index_field 'id', :label => 'DRUID:'
+    config.add_index_field 'dc_creator_t', :label => 'Creator:'
+    config.add_index_field 'project_tag_t', :label => 'Project:'
+    
+    config.add_show_field 'content_type_facet', :label => 'Content Type:'
+    config.add_show_field 'dc_identifier_t', :label => 'IDs:'
+    config.add_show_field 'obj_createdDate_dt', :label => 'Created:'
+    config.add_show_field 'obj_label_t', :label => 'Label:'
+    config.add_show_field 'is_governed_by_s', :label => 'Admin. Policy:'
+    config.add_show_field 'is_member_of_collection_s', :label => 'Collection:'
+    config.add_show_field 'item_status_t', :label => 'Status:'
+    config.add_show_field 'objectType_t', :label => 'Object Type:'
+    config.add_show_field 'id', :label => 'DRUID:'
+    config.add_show_field 'project_tag_t', :label => 'Project:'
+    config.add_show_field 'source_id_t', :label => 'Source:'
+    config.add_show_field 'tag_t', :label => 'Tags:'
+    
+    config.add_facet_field 'tag_facet', :label => 'Tag'
+    config.add_facet_field 'objectType_t', :label => 'Object Type'
+    config.add_facet_field 'content_type_facet', :label => 'Content Type'
+    config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
+    config.add_facet_field 'is_member_of_collection_s', :label => 'Owning Collection'
+    config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
+    config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)'
+    config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)'
+    config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)'
+    
+    config.add_search_field 'text', :label => 'All Fields'
+    
+    config.add_sort_field 'score desc', :label => 'Relevance'
+    
+    config.spell_max = 5
+    
+    config.facet_display = {
+      :partials => {
+        :wf_wps_facet        => "facet_hierarchy",
+        :wf_wsp_facet        => "facet_hierarchy",
+        :wf_swp_facet        => "facet_hierarchy",
+        :tag_facet           => "facet_hierarchy"
+      },
+      :hierarchy => {
+        'wf' => ['wps','wsp','swp'],
+        'tag' => [nil]
+      }
+    }
+    
+    config.field_groups = {
+      :identification => [
+        ['id','objectType_t','content_type_facet','item_status_t'],
+        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
+      ]
+    }
+  end
+  
   def solr_doc_params(id=nil)
     id ||= params[:id]
     {
-      :q => %{PID:"#{id}"}
+      :q => %{id:"#{id}"}
     }
   end
 
   def datastream_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor::Base.load params[:id], @document['objectType_t'].to_s
+    @obj = Dor.find params[:id]
     ds = @obj.datastreams[params[:dsid]]
     data = @obj.content params[:dsid], params[:raw]
     unless data.nil?
@@ -28,7 +108,7 @@ class CatalogController < ApplicationController
   
   def show_aspect
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor::Base.load params[:id], @document['objectType_t'].to_s
+    @obj = Dor.find params[:id]
     render :layout => request.xhr? ? false : true
   end
   
@@ -40,36 +120,19 @@ class CatalogController < ApplicationController
   
   def workflow_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor::Base.load params[:id], @document['objectType_t'].to_s
-    @workflow = @obj.datastreams[params[:wf_name]]
-    format = params[:format]
-    if Constants::FORMATS.include?(format)
-      mimetype = Rack::Mime.mime_type(".#{format}")
-      graph = workflow_graph(params[:wf_name], params[:dir])
-      send_data graph.output(format.to_sym => String), :type => mimetype, :disposition => 'inline'
-    else
-      render
+    @obj = Dor.find params[:id]
+    @workflow_id = params[:wf_name]
+    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows[@workflow_id]
+#    format = params[:format]
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @workflow.ng_xml.to_xml }
+      format.any(:png,:svg,:jpeg) {
+        graph = @workflow.graph
+        raise ActionController::RoutingError.new('Not Found') if graph.nil?
+        image_data = graph.output(request.format.to_sym => String)
+        send_data image_data, :type => request.format.to_s, :disposition => 'inline'
+      }
     end
   end
-  
-  def workflow_graph(wf_name, dir)
-    if wf_name == 'workflow'
-      graph = GraphViz.digraph(@obj.pid)
-      sg = graph.add_graph('rank') { |g| g[:rank => 'same'] }
-      document_workflows = @document['wf_wps_facet'].collect { |val| val.split(/:/).first }.uniq
-      document_workflows.each do |wf_name|
-        wf = @obj.workflow(wf_name)
-        unless wf.nil?
-          g = wf.graph(graph)
-          sg.add_node(g.root.id) unless g.nil?
-        end
-      end
-    else
-      graph = @obj.datastreams[wf_name].graph
-    end
-    raise ActionController::RoutingError.new('Not Found') if graph.nil?
-    graph['rankdir'] = dir || 'TB'
-    graph
-  end
-
 end 

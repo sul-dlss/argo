@@ -42,14 +42,11 @@ class ApplicationController < ActionController::Base
   def user_session
     session
   end
-  
-  def default_html_head
-    stylesheet_links << ['yui', 'custom-theme/jquery-ui-1.8.13.custom', 'blacklight/blacklight', {:media=>'all'}]
-    stylesheet_links << ['application', 'hierarchy', 'argonauta', 'coderay']
-    javascript_includes << ['jquery-1.6.2.min', 'jquery-ui.min', 'blacklight/blacklight' ]
-    javascript_includes << ['application', 'hierarchy', 'lightbox']
-  end
 
+  def default_html_head
+    stylesheet_links << ['argo']
+  end
+  
   protected
   def munge_parameters
     case request.content_type

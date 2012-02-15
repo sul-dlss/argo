@@ -1,0 +1,1 @@
+ActiveFedora.fedora_config_path = File.join(Rails.root,'config/fedora.yml')

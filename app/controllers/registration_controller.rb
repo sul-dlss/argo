@@ -1,4 +1,9 @@
 class RegistrationController < ApplicationController
+
+  def default_html_head
+    stylesheet_links << ['registration']
+    javascript_includes << ['registration']
+  end
   
   def form
     redirect_to register_items_url

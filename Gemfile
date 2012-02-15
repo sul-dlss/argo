@@ -1,8 +1,10 @@
 source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
+gem 'rails', '3.2.0'
+gem "blacklight", '~>3.2.0'
+
 gem 'rake'
-gem 'rack-flash'
 gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
@@ -12,18 +14,20 @@ gem 'ruby-graphviz'
 if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
   instance_eval File.read(fn)
 else
-  gem 'dor-services', ">= 2.5.2"
+  gem 'dor-services', ">= 3.0.0"
 end
-gem "mysql2", "~> 0.2.7"
+gem "solrizer-fedora"
+gem "sqlite3", :require => 'sqlite3'
+gem "mysql2", "~> 0.3.0"
 gem "progressbar"
-gem "sqlite3-ruby", "~> 1.2.5"
 gem "haml"
-gem "sass"
-gem "hassle", :git => "git://github.com/Papipo/hassle.git"
 gem "coderay"
 
-gem 'rails', '3.2.0'
-gem "blacklight"
+gem 'sass-rails',   '~> 3.2.3'
+gem 'coffee-rails', '~> 3.2.1'
+gem 'uglifier', '>= 1.0.3'
+gem 'jquery-rails'
 
-gem 'pry-rails', :group => :development
-
+group :development do
+#  gem 'pry-rails', :group => :development
+end
