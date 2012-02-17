@@ -4,7 +4,9 @@ require 'graphviz'
 
 class CatalogController < ApplicationController  
 
+  include BlacklightSolrExtensions
   include Blacklight::Catalog
+  helper ArgoHelper
   helper HierarchyHelper
   
   configure_blacklight do |config|
@@ -18,7 +20,7 @@ class CatalogController < ApplicationController
       :'f.wf_swp_facet.facet.limit' => -1
     }
     
-    config.index.show_link = 'link_text_t'
+    config.index.show_link = 'id'
     config.index.record_display_type = 'content_type_facet'
     
     config.show.html_title = 'obj_label_t'
@@ -50,15 +52,17 @@ class CatalogController < ApplicationController
     config.add_show_field 'source_id_t', :label => 'Source:'
     config.add_show_field 'tag_t', :label => 'Tags:'
     
-    config.add_facet_field 'tag_facet', :label => 'Tag'
+    config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'facet_hierarchy'
     config.add_facet_field 'objectType_t', :label => 'Object Type'
     config.add_facet_field 'content_type_facet', :label => 'Content Type'
     config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
     config.add_facet_field 'is_member_of_collection_s', :label => 'Owning Collection'
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
-    config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)'
-    config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)'
-    config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)'
+    config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'facet_hierarchy'
+    config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'facet_hierarchy'
+    config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'facet_hierarchy'
+    
+    config.default_solr_params[:'facet.field'] = config.facet_fields.keys
     
     config.add_search_field 'text', :label => 'All Fields'
     
@@ -67,12 +71,6 @@ class CatalogController < ApplicationController
     config.spell_max = 5
     
     config.facet_display = {
-      :partials => {
-        :wf_wps_facet        => "facet_hierarchy",
-        :wf_wsp_facet        => "facet_hierarchy",
-        :wf_swp_facet        => "facet_hierarchy",
-        :tag_facet           => "facet_hierarchy"
-      },
       :hierarchy => {
         'wf' => ['wps','wsp','swp'],
         'tag' => [nil]

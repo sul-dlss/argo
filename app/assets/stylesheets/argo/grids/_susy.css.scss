@@ -4,7 +4,7 @@
 $total-cols: 24 !default;
 
 /* But the widths are changeable to px, em. */
-//$col-width: 2.5em !default;
+$col-width: 10em !default;
 $gutter-width: .5em !default;
 $side-gutter-width: 2em !default;
 
@@ -48,13 +48,13 @@ $side-gutter-width: 2em !default;
   #main 
   {
     @include prefix(1,24);
-    @include columns(18,24);
+    @include columns(20,24);
     @include omega(24);
   }
 
   #sidebar 
   {
-    @include columns(5,24);
+    @include columns(3,24);
     @include clearfix;
     
     p 

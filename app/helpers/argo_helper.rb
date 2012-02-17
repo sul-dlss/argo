@@ -1,6 +1,9 @@
 # Overrides for Blacklight helpers
  
 module ArgoHelper
+  include BlacklightHelper
+  include ValueHelper
+  
   def ensure_current_document_version
     if @document.get('index_version_t').to_s < Dor::SearchService.index_version
       Dor::SearchService.reindex(@document.get('id'))
@@ -8,52 +11,6 @@ module ArgoHelper
     end
   end
 
-  # TODO: Remove this after all documents are reindexed with id instead of PID
-  def render_document_index_label doc, opts
-    opts[:label] ||= render_citation(doc)
-    super(doc, opts)
-  end
-  
-  def add_params_to_current_search(new_params)
-    p = session[:search] ? session[:search].dup : {}
-    p[:f] = (p[:f] || {}).dup # the command above is not deep in rails3, !@#$!@#$
-
-    new_params.each_pair do |field,value|
-      p[:f][field] = (p[:f][field] || []).dup
-      p[:f][field].push(value)
-    end
-    p
-  end
-
-  def add_params_to_current_search_and_redirect(params_to_add)
-    new_params = add_params_to_current_search(params_to_add)
-
-    # Delete page, if needed. 
-    new_params.delete(:page)
-
-    # Delete any request params from facet-specific action, needed
-    # to redir to index action properly. 
-    Blacklight::Solr::FacetPaginator.request_keys.values.each do |paginator_key| 
-      new_params.delete(paginator_key)
-    end
-    new_params.delete(:id)
-
-    # Force action to be index. 
-    new_params[:action] = "index"
-    new_params    
-  end
-  
-  def get_search_results *args
-    (solr_response, document_list) = super(*args)
-    document_list.each do |doc|
-      unless doc.has_key?(blacklight_config[:index][:show_link])
-        doc[blacklight_config[:index][:show_link]] = doc['id']
-        silently { Dor::Item.touch doc['id'].to_s }
-      end
-    end
-    return [solr_response, document_list]
-  end
-  
   def render_index_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
@@ -112,9 +69,10 @@ module ArgoHelper
   
   def render_facet_value(facet_solr_field, item, options ={})
     display_value = item.value
-    if item.value =~ /^druid:.+$/
-      if ref = Reference.find(item.value)
-        display_value = ref['link_text_display'].to_s
+    if item.value =~ /^info:fedora\/(druid:.+)$/
+      druid = $1
+      if ref = Reference.find(druid)
+        display_value = ref['title_facet'].to_s || druid
       end
     end
     (link_to_unless(options[:suppress_link], display_value, add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe

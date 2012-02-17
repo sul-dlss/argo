@@ -1,17 +1,18 @@
 module HierarchyHelper
 
 def is_hierarchical?(field_name)
+  Rails.logger.info 'is_hierarchical?'
   (prefix,order,suffix) = field_name.split(/_/)
-  list = blacklight_config[:facet][:hierarchy][prefix] and list.include?(order)
+  list = blacklight_config.facet_display[:hierarchy][prefix] and list.include?(order)
 end
     
 def facet_order(prefix)
   param_name = "#{prefix}_facet_order".to_sym
-  params[param_name] || blacklight_config[:facet][:hierarchy][prefix].first
+  params[param_name] || blacklight_config.facet_display[:hierarchy][prefix].first
 end
 
 def facet_after(prefix, order)
-  orders = blacklight_config[:facet][:hierarchy][prefix]
+  orders = blacklight_config.facet_display[:hierarchy][prefix]
   orders[orders.index(order)+1] || orders.first
 end
 
@@ -62,10 +63,10 @@ def render_facet_rotate(field_name)
 end
 
 def render_hierarchy(field)
-  prefix = field.name.split(/_/).first
-  tree = facet_tree(prefix)[field.name]
+  prefix = field.field.split(/_/).first
+  tree = facet_tree(prefix)[field.field]
   tree.keys.sort.collect do |key|
-    render :partial => 'facet_hierarchy_item', :locals => { :field_name => field.name, :data => tree[key], :key => key }
+    render :partial => 'facet_hierarchy_item', :locals => { :field_name => field.field, :data => tree[key], :key => key }
   end
 end
 
@@ -85,7 +86,7 @@ def facet_tree(prefix)
   @facet_tree ||= {}
   if @facet_tree[prefix].nil?
     @facet_tree[prefix] = {}
-    blacklight_config[:facet][:hierarchy][prefix].each { |key|
+    blacklight_config.facet_display[:hierarchy][prefix].each { |key|
       facet_field = [prefix,key,'facet'].compact.join('_')
       @facet_tree[prefix][facet_field] ||= {}
       data = @response.facet_by_field_name(facet_field)

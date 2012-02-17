@@ -14,7 +14,7 @@ gem 'ruby-graphviz'
 if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
   instance_eval File.read(fn)
 else
-  gem 'dor-services', ">= 3.0.0"
+  gem 'dor-services', "~> 3.0.0"
 end
 gem "solrizer-fedora"
 gem "sqlite3", :require => 'sqlite3'

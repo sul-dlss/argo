@@ -14,56 +14,45 @@ module ValueHelper
     end
   end
 
-  def dereference_id_field doc, relation
-    if ref = Reference.find(doc["#{relation}_id_field"].to_s)
-      ref['link_text_display'].to_s
-    else
-      nil
+  # Renderers  
+  def value_for_related_druid predicate, args
+    begin
+      target_id = args[:document].get("#{predicate}_s")
+      target_name = args[:document].get("#{predicate}_display")
+      link_to target_name, catalog_path(target_id.split(/\//).last)
+    rescue Exception => e
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
     end
   end
   
-  def calculate_isGovernedBy_field_value doc
-    dereference_id_field(doc, "isGovernedBy")
-  end
-  
-  def calculate_isMemberOfCollection_field_value doc
-    dereference_id_field(doc, "isMemberOfCollection")
+  def value_for_is_governed_by_s args
+    value_for_related_druid('is_governed_by', args)
   end
 
-  # Renderers  
-  def value_for_related_druid predicate, args
-    target_id = args[:document].get("#{predicate}_id_field")
-    target_name = args[:document].get("#{predicate}_field")
-    link_to target_name, add_params_to_current_search_and_redirect("#{predicate}_id_facet" => target_id)
+  def value_for_is_member_of_collection_s args
+    value_for_related_druid('is_member_of_collection', args)
   end
   
-  def value_for_isGovernedBy_field args
-    value_for_related_druid('isGovernedBy', args)
-  end
-
-  def value_for_isMemberOfCollection_field args
-    value_for_related_druid('isMemberOfCollection', args)
-  end
-  
-  def value_for_project_tag_field args
+  def value_for_project_tag_t args
     val = args[:document].get(args[:field])
     link_to val, add_facet_params_and_redirect("project_tag_facet", val)
   end
   
-  def value_for_fgs_createdDate_date args
+  def value_for_obj_created_date_dt args
     val = Time.parse(args[:document].get(args[:field]))
     val.localtime.strftime '%Y.%m.%d %H:%M%p'
   end
   
-  def value_for_dc_identifier_field args
+  def value_for_dc_identifier_t args
     val = args[:document][args[:field]]
     Array(val).reject { |v| v == args[:document].get('id') }.sort.uniq.join(', ')
   end
   
-  def value_for_tag_field args
+  def value_for_tag_t args
     val = args[:document][args[:field]]
     tags = Array(val).uniq.collect do |v| 
-      link_to v, add_params_to_current_search_and_redirect("tag_facet" => v) 
+      link_to v, add_facet_params_and_redirect("tag_facet", v) 
     end
     tags.join('<br/>').html_safe
   end

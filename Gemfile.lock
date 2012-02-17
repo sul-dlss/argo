@@ -8,13 +8,14 @@ GIT
 PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
   specs:
-    dor-services (3.0.0pre)
-      active-fedora
+    dor-services (3.0.0pre2)
+      active-fedora (~> 3.3.0)
       confstruct
       json
       lyber-utils
       nokogiri (>= 1.4.3.1)
       om (~> 1.5.0)
+      progressbar
       rest-client
       ruby-cache
       ruby-graphviz
@@ -22,6 +23,25 @@ PATH
       systemu
       uuidtools
       validatable
+
+PATH
+  remote: /Users/mbklein/Workspace/hydra/active_fedora
+  specs:
+    active-fedora (3.3.1)
+      activeresource (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      equivalent-xml
+      mediashelf-loggable
+      mime-types (>= 1.16)
+      multipart-post (= 1.1.2)
+      nokogiri
+      om (>= 1.5.1)
+      rdf
+      rdf-rdfxml
+      rubydora (~> 0.5.2)
+      solr-ruby (>= 0.0.6)
+      solrizer (~> 1.2.0)
+      xml-simple (>= 1.0.12)
 
 GEM
   remote: http://rubygems.org/
@@ -41,21 +61,6 @@ GEM
       rack-cache (~> 1.1)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.2)
-    active-fedora (3.3.1)
-      activeresource (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      equivalent-xml
-      mediashelf-loggable
-      mime-types (>= 1.16)
-      multipart-post (= 1.1.2)
-      nokogiri
-      om (>= 1.5.1)
-      rdf
-      rdf-rdfxml
-      rubydora (~> 0.5.2)
-      solr-ruby (>= 0.0.6)
-      solrizer (~> 1.2.0)
-      xml-simple (>= 1.0.12)
     activemodel (3.2.0)
       activesupport (= 3.2.0)
       builder (~> 3.0.0)
@@ -217,7 +222,7 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    savon (0.9.7)
+    savon (0.9.8)
       akami (~> 1.0)
       builder (>= 2.1.2)
       gyoku (>= 0.4.0)
@@ -273,6 +278,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active-fedora!
   barby
   blacklight (~> 3.2.0)
   coderay
