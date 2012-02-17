@@ -21,7 +21,7 @@ table { border-collapse: collapse; border-spacing: 0; }
 
 body {
   width: 100%;
-  background: #fff url('../images/webcrop_bg.png') repeat-x top left;
+  background: #fff url('/assets/webcrop_bg.png') repeat-x top left;
   font: normal normal normal 0.9em/1.6em "lucida grande",tahoma,verdana,arial,sans-serif;
 }
 
@@ -194,7 +194,7 @@ a:link, a:active, a:visited {
 }
 
 #crop-rotate-background {
-  background: transparent url('../images/rotate-grid.png') repeat top left;
+  background: transparent url('/assets/rotate-grid.png') repeat top left;
   height: 700px;
   width: 700px;
 }
@@ -226,20 +226,20 @@ a:link, a:active, a:visited {
 }
 
 #btn-rotate-90-ccw {
-  background: #eee url('../images/icon-rotate-ccw.png') 5px 2px no-repeat;
+  background: #eee url('/assets/icon-rotate-ccw.png') 5px 2px no-repeat;
 }
 
 #btn-rotate-90-cw {
-  background: #eee url('../images/icon-rotate-cw.png') 5px 2px no-repeat;
+  background: #eee url('/assets/icon-rotate-cw.png') 5px 2px no-repeat;
 }
 
 
 #btn-rotate-pt1-ccw {
-  background: #eee url('../images/icon-rotate-ccw.png') 5px 2px no-repeat;
+  background: #eee url('/assets/icon-rotate-ccw.png') 5px 2px no-repeat;
 }
 
 #btn-rotate-pt1-cw {
-  background: #eee url('../images/icon-rotate-cw.png') 5px 2px no-repeat;
+  background: #eee url('/assets/icon-rotate-cw.png') 5px 2px no-repeat;
 }
 
 

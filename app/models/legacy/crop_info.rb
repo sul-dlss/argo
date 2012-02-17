@@ -1,4 +1,5 @@
 class Legacy::CropInfo < Legacy::Base
+  
   set_table_name 'crop'
   belongs_to :file, :foreign_key => 'file_id', :primary_key => 'id'
   

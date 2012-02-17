@@ -65,14 +65,14 @@ var WebCrop = function(imgData, autoSaveHandler, imgLoc) {
       
       $('<img>', {
         'id': 'wc-has-crop-coords-' + index,
-        'src': imgLoc+'images/icon-crop-coords.png',
+        'src': '/assets/icon-crop-coords.png',
         'class': 'has-crop-coords',
         'style': 'visibility: ' + (hasCropCoords(index) ? 'visible' : 'hidden') + ';'
       }).appendTo(slide);
 
       $('<img>', {
         'id': 'wc-has-rotation-angle-' + index,
-        'src': imgLoc+'images/icon-rotation-angle.png',
+        'src': '/assets/icon-rotation-angle.png',
         'class': 'has-rotation-angle',
         'style': 'visibility: ' + (hasRotationAngle(index) ? 'visible' : 'hidden') + ';'
       }).appendTo(slide);
@@ -614,10 +614,10 @@ var WebCrop = function(imgData, autoSaveHandler, imgLoc) {
     $('#lock-crop-coords').click(function() {
       if (config.lockCropCoords) {
         config.lockCropCoords = false;
-        $('#lock-crop-coords').attr('src', imgLoc+'images/icon-lock-disabled.png');
+        $('#lock-crop-coords').attr('src', '/assets/icon-lock-disabled.png');
       } else {
         config.lockCropCoords = true;
-        $('#lock-crop-coords').attr('src', imgLoc+'images/icon-lock-enabled.png');
+        $('#lock-crop-coords').attr('src', '/assets/icon-lock-enabled.png');
       }
     });    
 
@@ -625,10 +625,10 @@ var WebCrop = function(imgData, autoSaveHandler, imgLoc) {
     $('#lock-rotation-angle').click(function() {
       if (config.lockRotationAngle) {
         config.lockRotationAngle = false;
-        $('#lock-rotation-angle').attr('src', imgLoc+'images/icon-lock-disabled.png');
+        $('#lock-rotation-angle').attr('src', '/assets/icon-lock-disabled.png');
       } else {
         config.lockRotationAngle = true;
-        $('#lock-rotation-angle').attr('src', imgLoc+'images/icon-lock-enabled.png');
+        $('#lock-rotation-angle').attr('src', '/assets/icon-lock-enabled.png');
       }
     });    
   };

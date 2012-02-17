@@ -1,10 +1,7 @@
 <% @title = "WebCrop Tool" %>
 <% content_for :head do %>
-    <%= stylesheet_link_tag 'webcrop', 'imgareaselect-animated.css', 'jslider' %>
-    <%= stylesheet_link_tag 'custom-theme/jquery-ui-1.8.13.custom' %>
-    <%= javascript_include_tag 'jquery-1.6.2.min', 'jquery-ui.min', 'application' %>
-    <%= javascript_include_tag 'raphael-min', 'jquery.imgareaselect.pack', 'jquery.dependClass', 'jquery.slider-min',
-                               'jquery.shiftclick', 'webcrop', 'json2', 'jquery.dateFormat' %>
+    <%= stylesheet_link_tag 'webcrop' %>
+    <%= javascript_include_tag 'webcrop' %>
     <script type="text/javascript">
       var imgDataJSON = <%=raw @image_data.to_json %>;
       var wc;
@@ -57,7 +54,7 @@
       <div id="crop-rotate-locks"> 
         <dl> 
           <dt>Lock/Unlock crop coordinates:</dt> 
-          <dd><img id="lock-crop-coords" src="/images/icon-lock-disabled.png" title="Lock/unlock crop coordinates" alt="Lock/unlock crop coordinates"></dd>              
+          <dd><img id="lock-crop-coords" src="/assets/icon-lock-disabled.png" title="Lock/unlock crop coordinates" alt="Lock/unlock crop coordinates"></dd>              
         </dl> 
       </div> 
     </div> 
@@ -71,7 +68,7 @@
       <div id="crop-rotate-locks"> 
         <dl> 
           <dt>Lock/Unlock rotation angle:</dt> 
-          <dd><img id="lock-rotation-angle" src="/images/icon-lock-disabled.png" title="Lock/unlock rotation angle" alt="Lock/unlock rotation angle"></dd>              
+          <dd><img id="lock-rotation-angle" src="/assets/icon-lock-disabled.png" title="Lock/unlock rotation angle" alt="Lock/unlock rotation angle"></dd>              
         </dl> 
       </div> 
     </div> 

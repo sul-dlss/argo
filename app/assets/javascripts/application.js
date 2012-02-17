@@ -20,3 +20,4 @@
 // Required by Argo
 //= require argo
 //= require lightbox
+//= require hierarchy

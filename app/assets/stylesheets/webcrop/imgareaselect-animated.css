@@ -3,19 +3,19 @@
  */
 
 .imgareaselect-border1 {
-	background: url('../images/border-anim-v.gif') repeat-y left top;
+	background: url('/assets/border-anim-v.gif') repeat-y left top;
 }
 
 .imgareaselect-border2 {
-    background: url('../images/border-anim-h.gif') repeat-x left top;
+    background: url('/assets/border-anim-h.gif') repeat-x left top;
 }
 
 .imgareaselect-border3 {
-    background: url('../images/border-anim-v.gif') repeat-y right top;
+    background: url('/assets/border-anim-v.gif') repeat-y right top;
 }
 
 .imgareaselect-border4 {
-    background: url('../images/border-anim-h.gif') repeat-x left bottom;
+    background: url('/assets/border-anim-h.gif') repeat-x left bottom;
 }
 
 .imgareaselect-border1, .imgareaselect-border2,
