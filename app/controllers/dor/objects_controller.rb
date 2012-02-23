@@ -43,9 +43,7 @@ class Dor::ObjectsController < ApplicationController
         end
         
         if params[:workflow_id]
-          admin_ds = dor_obj.admin_policy_object.datastreams['administrativeMetadata'].ng_xml
-          workflow_xml = admin_ds.at(%{/administrativeMetadata/registration/workflow[@id="#{params[:workflow_id]}"]}).to_xml
-          Dor::WorkflowService.create_workflow('dor',pid,params[:workflow_id],workflow_xml)
+          dor_obj.initiate_apo_workflow(params[:workflow_id])
         end
       end
       

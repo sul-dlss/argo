@@ -29,5 +29,6 @@ gem 'uglifier', '>= 1.0.3'
 gem 'jquery-rails'
 
 group :development do
+  gem 'ruby-prof'
 #  gem 'pry-rails', :group => :development
 end
