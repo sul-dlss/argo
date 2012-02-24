@@ -16,7 +16,6 @@ else
   gem 'dor-services', "~> 3.0.2"
 end
 gem "solrizer-fedora"
-gem "sqlite3", :require => 'sqlite3'
 gem "mysql2", "~> 0.3.0"
 gem "progressbar"
 gem "haml"
@@ -29,6 +28,7 @@ gem 'jquery-rails'
 
 group :development do
   gem 'capistrano'
+  gem 'lyberteam-devel', :path => '/Users/mbklein/workspace/gems/lyberteam-devel'
   gem 'net-ssh-kerberos'
   gem 'ruby-prof'
 end

@@ -43,6 +43,16 @@ PATH
       solrizer (~> 1.2.0)
       xml-simple (>= 1.0.12)
 
+PATH
+  remote: /Users/mbklein/workspace/gems/lyberteam-devel
+  specs:
+    lyberteam-devel (0.5.0)
+      capistrano
+      highline
+      net-ssh-kerberos
+      pony
+      rake (>= 0.8.7)
+
 GEM
   remote: http://rubygems.org/
   remote: http://sulair-rails-dev.stanford.edu/
@@ -182,6 +192,8 @@ GEM
       Ascii85 (~> 1.0.0)
       ruby-rc4
     polyglot (0.3.3)
+    pony (1.4)
+      mail (> 2.0)
     prawn (0.12.0)
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.2)
@@ -304,6 +316,7 @@ DEPENDENCIES
   dor-services!
   haml
   jquery-rails
+  lyberteam-devel!
   mysql2 (~> 0.3.0)
   net-ssh-kerberos
   prawn (>= 0.12.0)

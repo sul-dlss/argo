@@ -1,29 +1,34 @@
-require 'bundler/capistrano'
-require 'net/ssh'
+$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
+require "rvm/capistrano"                               # Load RVM's capistrano plugin.
 require 'net/ssh/kerberos'
+require 'bundler/setup'
+require 'bundler/capistrano'
+require 'dlss/capistrano'
 
-default_run_options[:pty] = true # Must be set for the password prompt from git to work
+before "deploy:setup", "dlss:create_gemset", "dlss:set_shared_children"
 
-task :development do
-  role :web, "lyberapps-dev.stanford.edu"
-  role :app, "lyberapps-dev.stanford.edu"
-  role :db,  "lyberapps-dev.stanford.edu", :primary => true
-  set :branch, "develop"
-end
+set :bundle_flags, ""
+
+set :deployment_host, "lyberapps-dev.stanford.edu"
+set :branch, "develop"
+set :bundle_without, [:production]
+set :rvm_ruby_string, "1.8.7@argo"
 
 task :testing do
-  role :web, "lyberapps-test.stanford.edu"
-  role :app, "lyberapps-test.stanford.edu"
-  role :db,  "lyberapps-test.stanford.edu", :primary => true
+  set :deployment_host, "lyberapps-test.stanford.edu"
   set :branch, "master"
+  set :bundle_without, [:development]
 end
 
 task :production do
-  role :web, "lyberapps-prod.stanford.edu"
-  role :app, "lyberapps-prod.stanford.edu"
-  role :db,  "lyberapps-prod.stanford.edu", :primary => true
+  set :deployment_host, "lyberapps-prod.stanford.edu"
   set :branch, "master"
+  set :bundle_without, [:development, :test]
 end
+
+role :web, deployment_host
+role :app, deployment_host
+role :db,  deployment_host, :primary => true
 
 set :user, "lyberadmin" 
 set :runner, "lyberadmin"
@@ -46,6 +51,6 @@ namespace :deploy do
   task :start do ; end
   task :stop do ; end
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+    run "touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 end
