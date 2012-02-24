@@ -27,8 +27,11 @@ gem 'uglifier', '>= 1.0.3'
 gem 'jquery-rails'
 
 group :development do
+  gem 'ruby-prof'
+end
+
+group :local do
   gem 'capistrano'
   gem 'lyberteam-devel', :path => '/Users/mbklein/workspace/gems/lyberteam-devel'
   gem 'net-ssh-kerberos'
-  gem 'ruby-prof'
 end
