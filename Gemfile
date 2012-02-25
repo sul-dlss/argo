@@ -30,8 +30,8 @@ group :development do
   gem 'ruby-prof'
 end
 
-group :local do
+group :deployment do
   gem 'capistrano'
-  gem 'lyberteam-devel', :path => '/Users/mbklein/workspace/gems/lyberteam-devel'
+  gem 'lyberteam-devel', '~> 0.5.1'
   gem 'net-ssh-kerberos'
 end

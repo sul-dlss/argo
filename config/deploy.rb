@@ -11,19 +11,19 @@ set :bundle_flags, ""
 
 set :deployment_host, "lyberapps-dev.stanford.edu"
 set :branch, "develop"
-set :bundle_without, [:local,:production]
+set :bundle_without, [:deployment,:production]
 set :rvm_ruby_string, "1.8.7@argo"
 
 task :testing do
   set :deployment_host, "lyberapps-test.stanford.edu"
   set :branch, "master"
-  set :bundle_without, [:local,:development]
+  set :bundle_without, [:deployment,:development]
 end
 
 task :production do
   set :deployment_host, "lyberapps-prod.stanford.edu"
   set :branch, "master"
-  set :bundle_without, [:local,:development,:test]
+  set :bundle_without, [:deployment,:development,:test]
 end
 
 role :web, deployment_host
