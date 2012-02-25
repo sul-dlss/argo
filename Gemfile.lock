@@ -8,7 +8,7 @@ GIT
 PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
   specs:
-    dor-services (3.0.2)
+    dor-services (3.0.3)
       active-fedora (~> 3.3.0)
       confstruct
       json
