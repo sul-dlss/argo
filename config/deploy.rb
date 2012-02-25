@@ -5,7 +5,7 @@ require 'bundler/setup'
 require 'bundler/capistrano'
 require 'dlss/capistrano'
 
-before "deploy:setup", "dlss:create_gemset", "dlss:set_shared_children"
+before "deploy:setup", "dlss:set_shared_children"
 
 set :bundle_flags, ""
 
