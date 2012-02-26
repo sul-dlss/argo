@@ -5,20 +5,23 @@ require 'bundler/setup'
 require 'bundler/capistrano'
 require 'dlss/capistrano'
 
-set :bundle_flags, ""
+set :bundle_flags, "--quiet"
 
+set :rails_env, "development"
 set :deployment_host, "lyberapps-dev.stanford.edu"
 set :branch, "develop"
 set :bundle_without, [:deployment,:production]
 set :rvm_ruby_string, "1.8.7@argo"
 
 task :testing do
+  set :rails_env, "test"
   set :deployment_host, "lyberapps-test.stanford.edu"
   set :branch, "master"
   set :bundle_without, [:deployment,:development]
 end
 
 task :production do
+  set :rails_env, "production"
   set :deployment_host, "lyberapps-prod.stanford.edu"
   set :branch, "master"
   set :bundle_without, [:deployment,:development,:test]

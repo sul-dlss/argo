@@ -10,10 +10,9 @@ namespace :argo do
       'WebAuthLdapAttribute mail',
     ]
 
-    resp = Dor::SearchService.gsearch(:q=>'object_type_field:adminPolicy', :rows=>'0',
-      :facet=>'on', :'facet.field'=>'apo_register_permissions_facet', :'facet.prefix'=>'workgroup:',
-      :'facet.mincount'=>'1', :'facet.limit'=>'-1')
-    facets = resp['facet_counts']['facet_fields']['apo_register_permissions_facet']
+    resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0, 
+      :facets => { :fields => ['apo_register_permissions_facet'], :prefix => 'workgroup:', :mincount => 1, :limit => -1 })
+    facets = resp.field_facets('apo_register_permissions_facet').collect { |f| f.name }
     priv_groups = facets.select { |v| v =~ /^workgroup:/ }
     directives += priv_groups.collect { |v| 
       ["Require privgroup #{v.split(/:/,2).last}", "WebAuthLdapPrivgroup #{v.split(/:/,2).last}"]
@@ -40,12 +39,12 @@ namespace :argo do
       q = args[:query] || '*:*'
       puts q
       start = 0
-      resp = Dor::SearchService.gsearch(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :fl => 'id')
-      while resp['response']['docs'].length > 0
-        pids += resp['response']['docs'].collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
+      resp = Dor::SearchService.query(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
+      while resp.hits.length > 0
+        pids += resp.hits.collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
         start += 1000
         $stdout.print "."
-        resp = Dor::SearchService.gsearch(:q=>q, :rows => 1000, :start => start, :fl => 'id')
+        resp = Dor::SearchService.query(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
       end
       $stdout.puts
     end
@@ -54,24 +53,31 @@ namespace :argo do
     $stdout.puts msg
     index_log.info msg
 
+    solr = ActiveFedora::SolrService.instance.conn
     pbar = ProgressBar.new("Reindexing...", pids.length)
     errors = 0
     pids.each do |pid|
       begin
         index_log.debug "Indexing #{pid}"
-        Dor::SearchService.reindex(pid)
+        obj = Dor.find pid
+        obj = obj.adapt_to(Dor::Item) if obj.class == ActiveFedora::Base
+        if obj.is_a?(Dor::Processable) and obj.workflows.new?
+          obj.workflows.save
+          obj = obj.class.load_instance obj.pid
+        end
+        solr.update obj.to_solr
+        errors = 0
       rescue Interrupt
         raise
       rescue Exception => e
         errors += 1
         index_log.warn("Error (#{errors}) indexing #{pid}")
         index_log.error("#{e.class}: #{e.message}")
-        if errors == 3
-          index_log.fatal("Too many errors. Exiting.")
-          raise e 
-        end
+#        if errors == 3
+#          index_log.fatal("Too many errors. Exiting.")
+#          raise e 
+#        end
       end
-      errors = 0
       pbar.inc(1)
     end
   end
