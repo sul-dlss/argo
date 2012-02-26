@@ -5,8 +5,6 @@ require 'bundler/setup'
 require 'bundler/capistrano'
 require 'dlss/capistrano'
 
-before "deploy:setup", "dlss:set_shared_children"
-
 set :bundle_flags, ""
 
 set :deployment_host, "lyberapps-dev.stanford.edu"
@@ -25,6 +23,8 @@ task :production do
   set :branch, "master"
   set :bundle_without, [:deployment,:development,:test]
 end
+
+set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml)
 
 role :web, deployment_host
 role :app, deployment_host
