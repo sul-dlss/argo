@@ -10,14 +10,12 @@ gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'
 gem 'ruby-graphviz'
-#gem "mod-cons", ">=0.2.0"
 if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
   instance_eval File.read(fn)
 else
-  gem 'dor-services', "~> 3.0.2"
+  gem 'dor-services', "~> 3.0.3"
 end
 gem "solrizer-fedora"
-gem "sqlite3", :require => 'sqlite3'
 gem "mysql2", "~> 0.3.0"
 gem "progressbar"
 gem "haml"
@@ -27,7 +25,14 @@ gem 'sass-rails',   '~> 3.2.3'
 gem 'coffee-rails', '~> 3.2.1'
 gem 'uglifier', '>= 1.0.3'
 gem 'jquery-rails'
+gem 'therubyracer'
 
 group :development do
   gem 'ruby-prof'
+end
+
+group :deployment do
+  gem 'capistrano'
+  gem 'lyberteam-devel', '~> 0.5.1'
+  gem 'net-ssh-kerberos'
 end

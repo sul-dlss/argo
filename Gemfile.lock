@@ -8,7 +8,7 @@ GIT
 PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
   specs:
-    dor-services (3.0.0)
+    dor-services (3.0.3)
       active-fedora (~> 3.3.0)
       confstruct
       json
@@ -75,10 +75,10 @@ GEM
     activesupport (3.2.0)
       i18n (~> 0.6)
       multi_json (~> 1.0)
-    addressable (2.2.6)
+    addressable (2.2.7)
     akami (1.0.0)
       gyoku (>= 0.4.0)
-    arel (3.0.0)
+    arel (3.0.2)
     bagit (0.2.0)
       validatable (~> 1.6)
     barby (0.5.0)
@@ -93,6 +93,12 @@ GEM
       sass-rails (~> 3.1)
       unicode
     builder (3.0.0)
+    capistrano (2.11.2)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
     childprocess (0.3.1)
       ffi (~> 1.0.6)
     chunky_png (1.2.5)
@@ -122,8 +128,9 @@ GEM
     gyoku (0.4.4)
       builder (>= 2.1.2)
     haml (3.1.4)
+    highline (1.6.11)
     hike (1.2.1)
-    httpi (0.9.5)
+    httpi (0.9.6)
       rack
     i18n (0.6.0)
     jettywrapper (1.2.1)
@@ -132,7 +139,7 @@ GEM
       i18n
       logger
       mediashelf-loggable
-    journey (1.0.1)
+    journey (1.0.3)
     jquery-rails (2.0.0)
       railties (>= 3.2.0.beta, < 5.0)
       thor (~> 0.14)
@@ -141,12 +148,19 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
       railties (>= 3.0.0)
+    libv8 (3.3.10.4)
     logger (1.2.8)
     lyber-utils (0.1.2)
       bagit (>= 0.1.0)
       nokogiri (>= 1.4.3.1)
       systemu (>= 1.2.0)
       validatable
+    lyberteam-devel (0.5.2)
+      capistrano
+      highline
+      net-ssh-kerberos
+      pony
+      rake (>= 0.8.7)
     mail (2.4.1)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -154,18 +168,29 @@ GEM
     marc (0.4.3)
     mediashelf-loggable (0.4.9)
     mime-types (1.17.2)
-    multi_json (1.0.4)
+    multi_json (1.1.0)
     multipart-post (1.1.2)
     mysql2 (0.3.11)
+    net-scp (1.0.4)
+      net-ssh (>= 1.99.1)
+    net-sftp (2.0.5)
+      net-ssh (>= 2.0.9)
+    net-ssh (2.3.0)
+    net-ssh-gateway (1.1.0)
+      net-ssh (>= 1.99.1)
+    net-ssh-kerberos (0.2.7)
+      net-ssh (>= 2.0)
     nokogiri (1.5.0)
-    nori (1.0.2)
-    om (1.5.2)
+    nori (1.1.0)
+    om (1.5.3)
       mediashelf-loggable
       nokogiri (>= 1.4.2)
     pdf-reader (1.0.0)
       Ascii85 (~> 1.0.0)
       ruby-rc4
     polyglot (0.3.3)
+    pony (1.4)
+      mail (> 2.0)
     prawn (0.12.0)
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.2)
@@ -223,14 +248,14 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    savon (0.9.8)
+    savon (0.9.9)
       akami (~> 1.0)
       builder (>= 2.1.2)
       gyoku (>= 0.4.0)
       httpi (~> 0.9)
       nokogiri (>= 1.4.0)
-      nori (~> 1.0)
-      wasabi (~> 2.0)
+      nori (~> 1.1)
+      wasabi (~> 2.1)
     solr-ruby (0.0.8)
     solrizer (1.2.0)
       daemons
@@ -251,9 +276,10 @@ GEM
       hike (~> 1.2)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.5)
     stomp (1.2.0)
     systemu (2.4.2)
+    therubyracer (0.9.10)
+      libv8 (~> 3.3.10)
     thin (1.3.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -271,7 +297,7 @@ GEM
     unicode (0.4.1)
     uuidtools (2.1.2)
     validatable (1.6.7)
-    wasabi (2.0.0)
+    wasabi (2.1.0)
       nokogiri (>= 1.4.0)
     xml-simple (1.1.1)
 
@@ -282,12 +308,15 @@ DEPENDENCIES
   active-fedora!
   barby
   blacklight (~> 3.2.0)
+  capistrano
   coderay
   coffee-rails (~> 3.2.1)
   dor-services!
   haml
   jquery-rails
+  lyberteam-devel (~> 0.5.1)
   mysql2 (~> 0.3.0)
+  net-ssh-kerberos
   prawn (>= 0.12.0)
   progressbar
   rack-webauth!
@@ -297,6 +326,6 @@ DEPENDENCIES
   ruby-prof
   sass-rails (~> 3.2.3)
   solrizer-fedora
-  sqlite3
+  therubyracer
   thin
   uglifier (>= 1.0.3)
