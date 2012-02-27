@@ -54,6 +54,7 @@ namespace :argo do
     index_log.info msg
 
     solr = ActiveFedora::SolrService.instance.conn
+    solr.autocommit = false
     pbar = ProgressBar.new("Reindexing...", pids.length)
     errors = 0
     pids.each do |pid|
@@ -80,6 +81,7 @@ namespace :argo do
       end
       pbar.inc(1)
     end
+    solr.commit
   end
   
 end
