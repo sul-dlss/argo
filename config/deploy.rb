@@ -5,33 +5,14 @@ require 'bundler/setup'
 require 'bundler/capistrano'
 require 'dlss/capistrano'
 
+set :stages, %W(dev testing prod)
+set :default_stage, "development"
 set :bundle_flags, "--quiet"
-
-set :rails_env, "development"
-set :deployment_host, "lyberapps-dev.stanford.edu"
-set :branch, "develop"
-set :bundle_without, [:deployment,:production]
 set :rvm_ruby_string, "1.8.7@argo"
 
-task :testing do
-  set :rails_env, "test"
-  set :deployment_host, "lyberapps-test.stanford.edu"
-  set :branch, "master"
-  set :bundle_without, [:deployment,:development]
-end
-
-task :production do
-  set :rails_env, "production"
-  set :deployment_host, "lyberapps-prod.stanford.edu"
-  set :branch, "master"
-  set :bundle_without, [:deployment,:development,:test]
-end
+require 'capistrano/ext/multistage'
 
 set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml)
-
-role :web, deployment_host
-role :app, deployment_host
-role :db,  deployment_host, :primary => true
 
 set :user, "lyberadmin" 
 set :runner, "lyberadmin"
@@ -54,6 +35,7 @@ namespace :deploy do
   task :start do ; end
   task :stop do ; end
   task :restart, :roles => :app, :except => { :no_release => true } do
+    run "/usr/local/rvm/bin/rvm rvmrc trust #{File.expand_path(current_path)}"
     run "touch #{File.join(current_path,'tmp','restart.txt')}"
   end
 end
