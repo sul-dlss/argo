@@ -13,7 +13,7 @@ gem 'ruby-graphviz'
 if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
   instance_eval File.read(fn)
 else
-  gem 'dor-services', "~> 3.0.3"
+  gem 'dor-services', "~> 3.0.5"
 end
 gem "solrizer-fedora"
 gem "rsolr-client-cert"
