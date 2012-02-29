@@ -8,7 +8,7 @@ GIT
 PATH
   remote: /Users/mbklein/Workspace/gems/dor-services
   specs:
-    dor-services (3.0.4)
+    dor-services (3.0.5)
       active-fedora (~> 3.3.0)
       confstruct
       json
@@ -240,7 +240,7 @@ GEM
     ruby-graphviz (1.0.5)
     ruby-prof (0.10.8)
     ruby-rc4 (0.1.5)
-    rubydora (0.5.2)
+    rubydora (0.5.3)
       activemodel
       activesupport
       fastercsv
