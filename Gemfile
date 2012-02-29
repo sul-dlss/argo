@@ -16,6 +16,7 @@ else
   gem 'dor-services', "~> 3.0.3"
 end
 gem "solrizer-fedora"
+gem "rsolr-client-cert"
 gem "mysql2", "~> 0.3.0"
 gem "progressbar"
 gem "haml"
@@ -33,6 +34,7 @@ end
 
 group :deployment do
   gem 'capistrano'
+  gem 'capistrano-ext'
   gem 'lyberteam-devel', '~> 0.5.1'
   gem 'net-ssh-kerberos'
 end
