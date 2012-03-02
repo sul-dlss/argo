@@ -22,5 +22,6 @@ module Argo
   end
 end
 
+require File.join(Rails.root, 'config', 'environments', "dor_#{Rails.env}")
 # Initialize the rails application
 Argo::Application.initialize!
