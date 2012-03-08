@@ -94,7 +94,7 @@ class CatalogController < ApplicationController
 
   def datastream_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id]
+    @obj = Dor.find params[:id], :lightweight => true
     ds = @obj.datastreams[params[:dsid]]
     data = @obj.content params[:dsid], params[:raw]
     unless data.nil?
@@ -106,7 +106,7 @@ class CatalogController < ApplicationController
   
   def show_aspect
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id]
+    @obj = Dor.find params[:id], :lightweight => true
     render :layout => request.xhr? ? false : true
   end
   
@@ -118,10 +118,10 @@ class CatalogController < ApplicationController
   
   def workflow_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id]
+    @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
     @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows[@workflow_id]
-#    format = params[:format]
+
     respond_to do |format|
       format.html
       format.xml  { render :xml => @workflow.ng_xml.to_xml }
