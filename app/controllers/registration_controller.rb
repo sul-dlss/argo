@@ -19,7 +19,7 @@ class RegistrationController < ApplicationController
   end
 
   def form_list
-    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).hits
+    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"})
     format = docs.collect { |doc| doc['administrativeMetadata_metadata_format_t'] }.flatten.first.to_s
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     result = forms[format.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
@@ -29,7 +29,7 @@ class RegistrationController < ApplicationController
   end
   
   def workflow_list
-    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).hits
+    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"})
     result = docs.collect { |doc| doc['registration_workflow_id_t'] }.compact
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result.flatten.sort }

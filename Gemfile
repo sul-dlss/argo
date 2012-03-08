@@ -1,6 +1,20 @@
 source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
+# Uncomment the following line to use the head revision of the DLSS active_fedora fork.
+# WARNING: Only use when there are pending pull requests that haven't been merged upstream yet.
+# Comment it back out when all pull requests are merged.
+if File.exists?(fn=File.join(ENV['HOME'],".static-gems/dor-services")) &! ENV['CLEAN_BUNDLE']
+  gem 'dor-services', :path => fn
+else
+  gem 'dor-services', "~> 3.1.0"
+end
+if File.exists?(fn=File.join(ENV['HOME'],".static-gems/active_fedora")) &! ENV['CLEAN_BUNDLE']
+  gem 'active-fedora', :path => fn
+else
+  gem 'active-fedora', "~> 4.0.0.rc9"
+end
+
 gem 'rails', '3.2.0'
 gem "blacklight", '~>3.2.0'
 
@@ -10,11 +24,6 @@ gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'
 gem 'ruby-graphviz'
-if File.exists?(fn=File.expand_path('../.dor-services',__FILE__))
-  instance_eval File.read(fn)
-else
-  gem 'dor-services', "~> 3.0.5"
-end
 gem "solrizer-fedora"
 gem "rsolr-client-cert"
 gem "mysql2", "~> 0.3.0"
@@ -29,6 +38,8 @@ gem 'jquery-rails'
 gem 'therubyracer'
 
 group :development do
+  gem 'pry'
+  gem 'pry-remote'
   gem 'ruby-prof'
 end
 

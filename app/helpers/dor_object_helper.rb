@@ -38,11 +38,10 @@ module DorObjectHelper
   end
   
   def render_events doc, obj
-    events = []
-    if obj.datastreams.has_key?('events') and not obj.datastreams['events'].new?
-      doc = Nokogiri::XML(obj.datastreams['events'].content)
-      events = doc.xpath('//event').collect do |node|
-        { :when => render_datetime(node['when']), :who => node['who'], :what => node.text }
+    events = structure_from_solr(doc,'event')
+    unless events.empty?
+      events = events.event.collect do |event|
+        { :when => render_datetime(event.when), :who => event.who, :what => event.message }
       end
     end
     render :partial => 'catalog/_show_partials/events', :locals => { :document => doc, :object => obj, :events => events }
@@ -66,11 +65,10 @@ module DorObjectHelper
   end
   
   def render_workflows doc, obj
-    workflows = obj.workflows.workflows.inject({}) do |hash,wf|
-      status = wf.processes.empty? ? 'empty' : (wf.processes.all? { |process| process.status == 'completed' } ? 'completed' : 'active')
-      errors = wf.processes.select { |process| process.status == 'error' }.count
-      hash[wf.workflowId.first] = { :status => status, :errors => errors }
-      hash
+    workflows = {}
+    Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :string, :displayable)]).each do |line|
+      (wf,status,errors) = line.split(/\|/)
+      workflows[wf] = { :status => status, :errors => errors.to_i }
     end
     render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
   end

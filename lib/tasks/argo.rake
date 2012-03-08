@@ -39,9 +39,9 @@ namespace :argo do
       q = args[:query] || '*:*'
       puts q
       start = 0
-      resp = Dor::SearchService.query(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
-      while resp.hits.length > 0
-        pids += resp.hits.collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
+      resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
+      while resp.length > 0
+        pids += resp.collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
         start += 1000
         $stdout.print "."
         resp = Dor::SearchService.query(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
