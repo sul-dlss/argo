@@ -37,7 +37,7 @@ class RegistrationController < ApplicationController
   end
 
   def autocomplete
-    response = Dor::SearchService.query('*:*', :rows => 0, :facets => { :fields => [params[:field]], :prefix => params[:term].titlecase, :mincount => 1, :limit => 15 })
+    response = Dor::SearchService.query('*:*', :rows => 0, :facets => { :fields => [params[:field]] }, :'facet.prefix' => params[:term].titlecase, :'facet.mincount' => 1, :'facet.limit' => 15 )
     result = response.field_facets(params[:field]).collect { |f| f.name }.sort
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }

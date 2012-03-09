@@ -11,12 +11,15 @@ namespace :argo do
     ]
 
     resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0, 
-      :facets => { :fields => ['apo_register_permissions_facet'], :prefix => 'workgroup:', :mincount => 1, :limit => -1 })
-    facets = resp.field_facets('apo_register_permissions_facet').collect { |f| f.name }
-    priv_groups = facets.select { |v| v =~ /^workgroup:/ }
-    directives += priv_groups.collect { |v| 
-      ["Require privgroup #{v.split(/:/,2).last}", "WebAuthLdapPrivgroup #{v.split(/:/,2).last}"]
-    }.flatten
+      :facets => { :fields => ['apo_register_permissions_facet'] }, :'facet.prefix' => 'workgroup:', :'facet.mincount' => 1, :'facet.limit' => -1 )
+    facet = resp.facets.find { |f| f.name == 'apo_register_permissions_facet' }
+    unless facet.nil?
+      facets = facet.items.collect &:value
+      priv_groups = facets.select { |v| v =~ /^workgroup:/ }
+      directives += priv_groups.collect { |v| 
+        ["Require privgroup #{v.split(/:/,2).last}", "WebAuthLdapPrivgroup #{v.split(/:/,2).last}"]
+      }.flatten
+    end
     File.open(File.join(Rails.root, 'public/.htaccess'),'w') do |htaccess|
       htaccess.puts directives.sort.join("\n")
     end
@@ -39,9 +42,9 @@ namespace :argo do
       q = args[:query] || '*:*'
       puts q
       start = 0
-      resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
+      resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
       while resp.length > 0
-        pids += resp.collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
+        pids += resp.docs.collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
         start += 1000
         $stdout.print "."
         resp = Dor::SearchService.query(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
