@@ -56,8 +56,7 @@ namespace :argo do
     $stdout.puts msg
     index_log.info msg
 
-    solr = ActiveFedora::SolrService.instance.conn
-    solr.autocommit = false
+    solr = ActiveFedora.solr.conn
     pbar = ProgressBar.new("Reindexing...", pids.length)
     errors = 0
     pids.each do |pid|
@@ -69,7 +68,7 @@ namespace :argo do
           obj.workflows.save
           obj = obj.class.load_instance obj.pid
         end
-        solr.update obj.to_solr
+        solr.add obj.to_solr, :commitWithin => 10000
         errors = 0
       rescue Interrupt
         raise
