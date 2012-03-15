@@ -68,7 +68,7 @@ namespace :argo do
           obj.workflows.save
           obj = obj.class.load_instance obj.pid
         end
-        solr.add obj.to_solr, :commitWithin => 10000
+        solr.add obj.to_solr, :add_attributes => {:commitWithin => 10}
         errors = 0
       rescue Interrupt
         raise
