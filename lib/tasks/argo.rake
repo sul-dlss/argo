@@ -43,11 +43,11 @@ namespace :argo do
       puts q
       start = 0
       resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
-      while resp.length > 0
+      while resp.docs.length > 0
         pids += resp.docs.collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
         start += 1000
         $stdout.print "."
-        resp = Dor::SearchService.query(:q => q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
+        resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
       end
       $stdout.puts
     end
