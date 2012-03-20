@@ -4,7 +4,7 @@
   elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
     @obj.datastreams[params[:dsid]].ng_xml.prettify
   else
-    @obj.datastreams[params[:dsid]].content
+    Nokogiri::XML(@obj.datastreams[params[:dsid]].content)
   end
   raise ActionController::RoutingError.new('Not Found') if content.nil?
   output = CodeRay::Duo[:xml, :div].highlight content

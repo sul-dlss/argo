@@ -8,10 +8,10 @@ module DorObjectHelper
     date = Array(doc['mods_dateissued_t'] || doc['mods_datecreated_t'] || doc['dc_date_t']).first
     
     result = ''
-    result += "#{h creator} " unless creator.nil?
-    result += "<i>#{h title}</i>"
+    result += "#{h creator} " if creator.present?
+    result += "<em>#{h title}</em>"
     origin_info = [publisher, place, date].compact.join(', ')
-    result += ": #{h origin_info}" unless origin_info.empty?
+    result += ": #{h origin_info}" if origin_info.present?
     result.html_safe
   end
   
