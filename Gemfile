@@ -30,7 +30,8 @@ gem "mysql2", "~> 0.3.0"
 gem "progressbar"
 gem "haml"
 gem "coderay"
-gem "memcache-client"
+gem "dalli"
+gem "kgio"
 
 gem 'sass-rails',   '~> 3.2.3'
 gem 'coffee-rails', '~> 3.2.1'
