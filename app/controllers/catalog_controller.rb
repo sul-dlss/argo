@@ -40,9 +40,9 @@ class CatalogController < ApplicationController
     config.add_index_field 'project_tag_t', :label => 'Project:'
     
     config.add_show_field 'content_type_facet', :label => 'Content Type:'
-    config.add_show_field 'dc_identifier_t', :label => 'IDs:'
-    config.add_show_field 'obj_createdDate_dt', :label => 'Created:'
-    config.add_show_field 'obj_label_t', :label => 'Label:'
+    config.add_show_field 'identifier_t', :label => 'IDs:'
+    config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'
+    config.add_show_field 'objProfile_objLabel_dt', :label => 'Label:'
     config.add_show_field 'is_governed_by_s', :label => 'Admin. Policy:'
     config.add_show_field 'is_member_of_collection_s', :label => 'Collection:'
     config.add_show_field 'item_status_t', :label => 'Status:'

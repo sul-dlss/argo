@@ -2,7 +2,7 @@ module DorObjectHelper
   # Metadata helpers
   def render_citation doc
     creator = Array(doc['mods_creator_t'] || doc['mods_name_t'] || doc['dc_creator_t']).first
-    title = Array(doc['mods_titleInfo_t'] || doc['dc_title_t'] || doc['obj_label_t']).first
+    title = Array(doc['mods_title_t'] || doc['dc_title_t'] || doc['obj_label_t']).first
     place = Array(doc['mods_originInfo_place_placeTerm_t']).first
     publisher = Array(doc['mods_originInfo_publisher_t'] || doc['dc_publisher_t']).first
     date = Array(doc['mods_dateissued_t'] || doc['mods_datecreated_t'] || doc['dc_date_t']).first

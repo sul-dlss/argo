@@ -8,7 +8,7 @@ GIT
 PATH
   remote: /Users/mbklein/.static-gems/active_fedora
   specs:
-    active-fedora (4.0.0.rc9)
+    active-fedora (4.0.0.rc15)
       activeresource (>= 3.0.0)
       activesupport (>= 3.0.0)
       equivalent-xml
@@ -18,16 +18,16 @@ PATH
       nokogiri
       om (>= 1.5.3)
       rdf
-      rdf-rdfxml
+      rdf-rdfxml (= 0.3.5)
       rsolr
-      rubydora (~> 0.5.4)
+      rubydora (~> 0.5.7)
       solrizer (~> 1.2.0)
       xml-simple (>= 1.0.12)
 
 PATH
   remote: /Users/mbklein/.static-gems/dor-services
   specs:
-    dor-services (3.3.0)
+    dor-services (3.3.3)
       active-fedora (>= 3.3.2)
       confstruct (>= 0.2.2)
       json
@@ -170,6 +170,7 @@ GEM
       treetop (~> 1.4.8)
     marc (0.4.4)
     mediashelf-loggable (0.4.9)
+    memcache-client (1.8.5)
     method_source (0.7.1)
     mime-types (1.17.2)
     multi_json (1.1.0)
@@ -229,7 +230,7 @@ GEM
       rdoc (~> 3.4)
       thor (~> 0.14.6)
     rake (0.9.2.2)
-    rdf (0.3.5)
+    rdf (0.3.5.1)
       addressable (>= 2.2.6)
     rdf-rdfxml (0.3.5)
       nokogiri (>= 1.4.4)
@@ -249,7 +250,7 @@ GEM
     ruby-graphviz (1.0.5)
     ruby-prof (0.10.8)
     ruby-rc4 (0.1.5)
-    rubydora (0.5.4)
+    rubydora (0.5.7)
       activemodel
       activesupport
       fastercsv
@@ -331,6 +332,7 @@ DEPENDENCIES
   haml
   jquery-rails
   lyberteam-devel (~> 0.5.1)
+  memcache-client
   mysql2 (~> 0.3.0)
   net-ssh-kerberos
   prawn (>= 0.12.0)

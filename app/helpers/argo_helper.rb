@@ -86,13 +86,7 @@ module ArgoHelper
   end
   
   def render_facet_value(facet_solr_field, item, options ={})
-    display_value = item.value
-    if item.value =~ /^info:fedora\/(druid:.+)$/
-      druid = $1
-      if ref = Reference.find(druid)
-        display_value = ref['title_facet'].to_s || druid
-      end
-    end
+    display_value = item.value =~ /druid:/ ? label_for_druid(item.value) : item.value
     (link_to_unless(options[:suppress_link], display_value, add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
   end
 
