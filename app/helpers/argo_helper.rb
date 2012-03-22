@@ -11,6 +11,24 @@ module ArgoHelper
     end
   end
 
+  def structure_from_solr(solr_doc, prefix, suffix='display')
+    prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
+    result = Confstruct::HashWithStructAccess.new
+    prefixed_fields.each_pair do |path_str,value|
+      h = result
+      path = path_str.sub(/_[^_]+$/,'').reverse.split(/_(?=\d+)/).collect { |k| k.reverse }.reverse.collect { |k| k.split(/_(?=\d+)/) }
+      path.each do |step, index|
+        if index.nil?
+          h[step.to_sym] = value
+        else
+          h[step.to_sym] ||= []
+          h = h[step.to_sym][index.to_i] ||= Confstruct::HashWithStructAccess.new
+        end
+      end
+    end
+    result
+  end
+  
   def render_index_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
@@ -68,18 +86,12 @@ module ArgoHelper
   end
   
   def render_facet_value(facet_solr_field, item, options ={})
-    display_value = item.value
-    if item.value =~ /^info:fedora\/(druid:.+)$/
-      druid = $1
-      if ref = Reference.find(druid)
-        display_value = ref['title_facet'].to_s || druid
-      end
-    end
+    display_value = item.value =~ /druid:/ ? label_for_druid(item.value) : item.value
     (link_to_unless(options[:suppress_link], display_value, add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
   end
 
   def render_document_sections(doc, action_name)
-    dor_object = Dor.find doc['id'].to_s
+    dor_object = Dor.find doc['id'].to_s, :lightweight => true
     format = document_partial_name(doc)
     sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
     result = ''

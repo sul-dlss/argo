@@ -1,17 +1,32 @@
 module DorObjectHelper
   # Metadata helpers
+  def retrieve_terms doc
+    terms = {
+      :creator   => ['public_dc_creator_t', 'mods_creator_t', 'mods_name_t', 'dc_creator_t'],
+      :title     => ['public_dc_title_t', 'mods_title_t', 'dc_title_t', 'obj_label_t'],
+      :place     => ['mods_originInfo_place_placeTerm_t'],
+      :publisher => ['public_dc_publisher_t', 'mods_originInfo_publisher_t', 'dc_publisher_t'],
+      :date      => ['public_dc_date_t', 'mods_dateissued_t', 'mods_datecreated_t', 'dc_date_t']
+    }
+    result = {}
+    terms.each_pair do |term,keys|
+      keys.each do |key|
+        if doc[key].present?
+          result[term] = doc[key].first
+          break
+        end
+      end
+    end
+    result
+  end
+  
   def render_citation doc
-    creator = Array(doc['mods_creator_t'] || doc['mods_name_t'] || doc['dc_creator_t']).first
-    title = Array(doc['mods_titleInfo_t'] || doc['dc_title_t'] || doc['obj_label_t']).first
-    place = Array(doc['mods_originInfo_place_placeTerm_t']).first
-    publisher = Array(doc['mods_originInfo_publisher_t'] || doc['dc_publisher_t']).first
-    date = Array(doc['mods_dateissued_t'] || doc['mods_datecreated_t'] || doc['dc_date_t']).first
-    
+    terms = retrieve_terms(doc)
     result = ''
-    result += "#{h creator} " unless creator.nil?
-    result += "<i>#{h title}</i>"
-    origin_info = [publisher, place, date].compact.join(', ')
-    result += ": #{h origin_info}" unless origin_info.empty?
+    result += "#{h terms[:creator]} " if terms[:creator].present?
+    result += "<em>#{h terms[:title]}</em>"
+    origin_info = terms.values_at(:publisher, :place, :date).compact.join(', ')
+    result += ": #{h origin_info}" if origin_info.present?
     result.html_safe
   end
   
@@ -38,11 +53,10 @@ module DorObjectHelper
   end
   
   def render_events doc, obj
-    events = []
-    if obj.datastreams.has_key?('events') and not obj.datastreams['events'].new?
-      doc = Nokogiri::XML(obj.datastreams['events'].content)
-      events = doc.xpath('//event').collect do |node|
-        { :when => render_datetime(node['when']), :who => node['who'], :what => node.text }
+    events = structure_from_solr(doc,'event')
+    unless events.empty?
+      events = events.event.collect do |event|
+        { :when => render_datetime(event.when), :who => event.who, :what => event.message }
       end
     end
     render :partial => 'catalog/_show_partials/events', :locals => { :document => doc, :object => obj, :events => events }
@@ -66,11 +80,10 @@ module DorObjectHelper
   end
   
   def render_workflows doc, obj
-    workflows = obj.workflows.workflows.inject({}) do |hash,wf|
-      status = wf.processes.empty? ? 'empty' : (wf.processes.all? { |process| process.status == 'completed' } ? 'completed' : 'active')
-      errors = wf.processes.select { |process| process.status == 'error' }.count
-      hash[wf.workflowId.first] = { :status => status, :errors => errors }
-      hash
+    workflows = {}
+    Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :string, :displayable)]).each do |line|
+      (wf,status,errors) = line.split(/\|/)
+      workflows[wf] = { :status => status, :errors => errors.to_i }
     end
     render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
   end
@@ -105,6 +118,14 @@ module DorObjectHelper
   
   def render_ds_label doc, specs
     specs[:label]
+  end
+
+  def render_ds_profile_header ds
+    dscd = ds.createDate
+    if dscd.is_a?(Time)
+      dscd = dscd.xmlschema
+    end
+    %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
   end
   
 end

@@ -1,6 +1,6 @@
 <% 
   ensure_current_document_version if Argo::Config[:reindex_on_the_fly]
-  @footer = "Argo v#{Argo.version} / DocIndex v#{@document.get('dor_services_version_t')}"
+  @footer = "Argo v#{Argo.version} / DOR Services v#{@document.get(ActiveFedora::SolrService.solr_name('dor_services_version',:string,:facetable))}"
 %>
 
 <% sidebar_items << capture do %>

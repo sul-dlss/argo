@@ -40,9 +40,9 @@ class CatalogController < ApplicationController
     config.add_index_field 'project_tag_t', :label => 'Project:'
     
     config.add_show_field 'content_type_facet', :label => 'Content Type:'
-    config.add_show_field 'dc_identifier_t', :label => 'IDs:'
-    config.add_show_field 'obj_createdDate_dt', :label => 'Created:'
-    config.add_show_field 'obj_label_t', :label => 'Label:'
+    config.add_show_field 'identifier_t', :label => 'IDs:'
+    config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'
+    config.add_show_field 'objProfile_objLabel_dt', :label => 'Label:'
     config.add_show_field 'is_governed_by_s', :label => 'Admin. Policy:'
     config.add_show_field 'is_member_of_collection_s', :label => 'Collection:'
     config.add_show_field 'item_status_t', :label => 'Status:'
@@ -94,7 +94,7 @@ class CatalogController < ApplicationController
 
   def datastream_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id]
+    @obj = Dor.find params[:id], :lightweight => true
     ds = @obj.datastreams[params[:dsid]]
     data = @obj.content params[:dsid], params[:raw]
     unless data.nil?
@@ -106,7 +106,7 @@ class CatalogController < ApplicationController
   
   def show_aspect
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id]
+    @obj = Dor.find params[:id], :lightweight => true
     render :layout => request.xhr? ? false : true
   end
   
@@ -118,10 +118,10 @@ class CatalogController < ApplicationController
   
   def workflow_view
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id]
+    @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
     @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows[@workflow_id]
-#    format = params[:format]
+
     respond_to do |format|
       format.html
       format.xml  { render :xml => @workflow.ng_xml.to_xml }

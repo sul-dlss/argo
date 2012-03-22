@@ -5,7 +5,7 @@ module RegistrationHelper
     unless permission_keys.empty?
       q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
     end
-    result = Dor::SearchService.query(q, :rows => 99999, :field_list => ['id','tag_t','dc_title_t']).hits
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => ['id','tag_t','dc_title_t']).docs
     result.sort! do |a,b|
       Array(a['tag_t']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
@@ -39,7 +39,7 @@ module RegistrationHelper
     
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
-    doc = Reference.find(druid)
+    doc = Dor::SearchService.query(%{id:"#{druid}"}, :rows => 1).docs.first
     if doc.nil?
       pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       return
@@ -69,10 +69,16 @@ module RegistrationHelper
       table_data.push(['Project Name:',project_name.to_s])
     end
     table_data.push(['Date Printed:',Time.now.strftime('%c')])
+    if doc['source_id_t'].present?
+      table_data.push(["Source ID:",Array(doc['source_id_t']).first])
+    end
     table_data += ids
-    puts "#{druid}: #{table_data.inspect}"
+    tags = Array(doc['tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,nbsp) }.compact
+    if tags.length > 0
+      table_data.push(["Tags:",tags.join("\n")])
+    end
     pdf.table(table_data, :column_widths => [100,224],
-      :cell_style => { :borders => [], :padding => 2.pt })
+      :cell_style => { :borders => [], :padding => 0.pt })
 
     pdf.y -= 0.5.in
 

@@ -13,8 +13,13 @@ table
 #bd, #bd #sidebar
   overflow: visible !important
   
+  
 #facets
   padding: 1em 0 0 0 !important
+  top: 0
+  left: 1.5em
+  position: relative
+  width: 170px
   
 #workflow_grid
   margin-top: 1.5em
@@ -114,12 +119,13 @@ h3.section-head
   color: #2A306C
   background-color: #D4E0E0
   &.collapsible-section
-    padding-left: 18px
     background-position: left center
     background-repeat: no-repeat
     background-image: url('hierarchy/expanded_lg.png') 
     &.collapsed
       background-image: url('hierarchy/collapsed_lg.png') 
+    .section-head-content	
+      padding-left: 18px
 
 .section-head-link
   float: right
@@ -150,11 +156,11 @@ ul.resource-tree
     ul
       margin: 0
       
-pre.prettyprint
-  border: none !important
-  white-space: pre-wrap
-  font-family: consolas,andale mono,monospace
-  font-size: 125%
+.CodeRay
+  pre
+    border: none !important
+    white-space: pre-wrap
+    font-family: consolas,andale mono,monospace
 
 .lightBox
   dl.defList 
