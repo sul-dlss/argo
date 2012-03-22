@@ -1,16 +1,31 @@
 module DorObjectHelper
   # Metadata helpers
+  def retrieve_terms doc
+    terms = {
+      :creator   => ['public_dc_creator_t', 'mods_creator_t', 'mods_name_t', 'dc_creator_t'],
+      :title     => ['public_dc_title_t', 'mods_title_t', 'dc_title_t', 'obj_label_t'],
+      :place     => ['mods_originInfo_place_placeTerm_t'],
+      :publisher => ['public_dc_publisher_t', 'mods_originInfo_publisher_t', 'dc_publisher_t'],
+      :date      => ['public_dc_date_t', 'mods_dateissued_t', 'mods_datecreated_t', 'dc_date_t']
+    }
+    result = {}
+    terms.each_pair do |term,keys|
+      keys.each do |key|
+        if doc[key].present?
+          result[term] = doc[key].first
+          break
+        end
+      end
+    end
+    result
+  end
+  
   def render_citation doc
-    creator = Array(doc['mods_creator_t'] || doc['mods_name_t'] || doc['dc_creator_t']).first
-    title = Array(doc['mods_title_t'] || doc['dc_title_t'] || doc['obj_label_t']).first
-    place = Array(doc['mods_originInfo_place_placeTerm_t']).first
-    publisher = Array(doc['mods_originInfo_publisher_t'] || doc['dc_publisher_t']).first
-    date = Array(doc['mods_dateissued_t'] || doc['mods_datecreated_t'] || doc['dc_date_t']).first
-    
+    terms = retrieve_terms(doc)
     result = ''
-    result += "#{h creator} " if creator.present?
-    result += "<em>#{h title}</em>"
-    origin_info = [publisher, place, date].compact.join(', ')
+    result += "#{h terms[:creator]} " if terms[:creator].present?
+    result += "<em>#{h terms[:title]}</em>"
+    origin_info = terms.values_at(:publisher, :place, :date).compact.join(', ')
     result += ": #{h origin_info}" if origin_info.present?
     result.html_safe
   end
@@ -103,6 +118,14 @@ module DorObjectHelper
   
   def render_ds_label doc, specs
     specs[:label]
+  end
+
+  def render_ds_profile_header ds
+    dscd = ds.createDate
+    if dscd.is_a?(Time)
+      dscd = dscd.xmlschema
+    end
+    %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
   end
   
 end
