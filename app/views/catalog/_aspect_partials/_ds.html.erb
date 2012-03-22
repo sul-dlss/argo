@@ -9,4 +9,7 @@
   raise ActionController::RoutingError.new('Not Found') if content.nil?
   output = CodeRay::Duo[:xml, :div].highlight content
 %>
+<% unless params[:dsid] == 'full_dc' %>
+  <div class="CodeRay" style="color: gray"><pre><%= render_ds_profile_header @obj.datastreams[params[:dsid]] %></pre></div>
+<% end %>
 <%= output.html_safe %>
