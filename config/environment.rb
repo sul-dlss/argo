@@ -4,7 +4,7 @@ require File.expand_path('../application', __FILE__)
 module Argo
   class << self
     def version
-      '1.5.4'
+      '2.0.2'
     end
 
     def configure *args, &block
