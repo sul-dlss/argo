@@ -14,6 +14,7 @@ require 'capistrano/ext/multistage'
 
 after "deploy:symlink", "argo:trust_rvmrc"
 after "deploy:symlink", "argo:initialize_htaccess"
+after "deploy:symlink", "argo:restart_indexer"
 
 set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml)
 
@@ -41,6 +42,11 @@ namespace :argo do
   
   task :initialize_htaccess do
     run "cd #{latest_release} && bundle exec rake RAILS_ENV=#{rails_env} argo:htaccess"
+  end
+  
+  task :restart_indexer do
+    dor_config_file = File.join(current_path,"config","environments","dor_#{rails_env}.rb")
+    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec dor-indexerd restart --dor-config #{dor_config_file} -o #{activemq_host}"
   end
 end
 
