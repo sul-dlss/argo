@@ -37,7 +37,7 @@ namespace :argo do
     index_log.info "Discovering PIDs..."
     pids = []
     if args[:query] == ':ALL:'
-      pids = Dor::SearchService.risearch("select $object from <#ri> where $object <info:fedora/fedora-system:def/model#label> $label", :limit => '1000000', :timeout => -1)
+      pids = Dor::SearchService.risearch("select $object from <#ri> where $object <info:fedora/fedora-system:def/model#label> $label", :limit => '5000000', :timeout => -1)
     else
       q = args[:query] || '*:*'
       puts q
