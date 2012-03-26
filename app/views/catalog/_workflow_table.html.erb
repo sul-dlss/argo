@@ -1,29 +1,41 @@
-<p>
-  <font size="+1"><b>Workflow: <%= wf_name %></b></font>
-</p>
+<h2>Workflow: <%= render_workflow_name(wf_name) %></h2>
 <table border="1" cellspacing="0" cellpadding="3">
   <tbody>
     <tr bgcolor="#990000">
-    <!--	<th colspan="2"><font color="white" face="Arial">Process</font></th> -->
-    	<th><font color="white" face="Arial">Current queue</font></th>
-    	<th><font color="white" face="Arial">Errors</font></th>
-    	<th><font color="white" face="Arial">Completed</font></th>
+      <th class="process" colspan="2">Process</th>
+    	<th class="description">Description</th>
+    	<th class="count waiting">Waiting</th>
+    	<th class="count intermediate">Intermediate</th>
+    	<th class="count ready">Ready</th>
+    	<th class="count errors">Errors</th>
+    	<th class="count completed">Completed</th>
     </tr>
     <% 
       proc_names = wf_data.keys.delete_if { |k,v| ! k.is_a?(String) }
       wf = Dor::WorkflowObject.find_by_name(wf_name)
       if wf.nil?
-        proc_names.sort!
+        proc_names = ActiveSupport::OrderedHash[*(proc_names.sort.collect { |n| [n,nil] }.flatten)]
       else
-        proc_names = wf.definition.processes.collect { |p| p.name }
+        proc_names = ActiveSupport::OrderedHash[*(wf.definition.processes.collect { |p| [p.name,p.label] }.flatten)]
       end
     %>
-    <% proc_names.each do |wf_process| %>
+    <% proc_names.each_with_index do |process_info,index| %>
+      <% wf_process,wf_desc = process_info %>
       <tr>
-        <td><%= render_workflow_item_count(wf_data,wf_name,wf_process,'waiting') %></td>
-        <td><%= render_workflow_item_count(wf_data,wf_name,wf_process,'error') %></td>
-        <td><%= render_workflow_item_count(wf_data,wf_name,wf_process,'completed') %></td>
+        <td class="index"><%= index+1 %></td>
+        <td class="process"><%= render_workflow_process_name(wf_name,wf_process) %></td>
+        <td class="description"><%= wf_desc %></td>
+        <td class="count waiting"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'waiting') %></td>
+        <td class="count intermediate"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'intermediate') %></td>
+        <td class="count ready"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'ready') %></td>
+        <td class="count errors"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'error') %></td>
+        <td class="count completed"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'completed') %></td>
       </tr>
     <% end %>
+    <tr>
+      <td class="totals">&nbsp;</td>
+      <td class="totals" colspan="6">Completed/archived workflows</td>
+      <td class="totals"><%= render_workflow_archive_count('dor',wf_name) %></td>
+    </tr>
   </tbody>
 </table>

@@ -11,6 +11,20 @@ module WorkflowHelper
     end
     result.join("\n").html_safe
   end
+
+  def render_workflow_name(name)
+    new_params = add_facet_params("wf_wps_facet", name)
+    new_params[:wf_grid] = 'false'
+    new_params[:action] = 'index'
+    link_to(name, new_params)
+  end
+  
+  def render_workflow_process_name(name,process)
+    new_params = add_facet_params("wf_wps_facet", [name,process].compact.join(':'))
+    new_params[:wf_grid] = 'false'
+    new_params[:action] = 'index'
+    link_to(process, new_params)
+  end
   
   def render_workflow_item_count(wf_hash,name,process,status)
     new_params = add_facet_params("wf_wps_facet", [name,process,status].compact.join(':'))
@@ -21,7 +35,16 @@ module WorkflowHelper
     if wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_]
       item_count = item.hits
     end
-    link_to(process, new_params) + " (" + link_to(item_count, Dor::Config.workflow.url+"workflow_queue?repository=dor&workflow=#{name}&#{status}=#{process}", :target => '_blank') + ")"
+    if item_count == 0
+      item_count = content_tag :span, item_count, :class => "zero"
+    end
+    link_to(item_count, new_params)
+  end
+  
+  def render_workflow_archive_count(repo,name)
+    client = Dor::WorkflowService.workflow_resource
+    xml = client["workflow_archive?repository=#{repo}&workflow=#{name}&count-only=true"].get
+    count = Nokogiri::XML(xml).at_xpath('/objects/@count').value.to_i
   end
   
   def render_workflow_grid_toggle(field_name)
