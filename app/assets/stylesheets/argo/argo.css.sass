@@ -144,15 +144,12 @@ h3.section-head
 ul.resource-tree
   margin: 0
   li
-    padding-left: 16px
+    padding-left: 8px
     list-style-type: none
-    background-repeat: no-repeat
-    background-position: left top
-    background-image: url('bullets/bullet_go.png')
-    &.file
-      background-image: url('bullets/bullet_disk.png')
-    &.resource
-      background-image: url('bullets/bullet_star.png')
+    span.label
+      color: gray
+      &:after
+        content: ':'
     ul
       margin: 0
       
