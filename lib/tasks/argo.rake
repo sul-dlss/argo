@@ -33,24 +33,38 @@ namespace :argo do
     index_log.level = ENV['LOG_LEVEL'] ? Logger::SEV_LABEL.index(ENV['LOG_LEVEL']) : Logger::INFO
     $stdout.sync = true
     start_time = Time.now
-    $stdout.print "Discovering PIDs..."
+    $stdout.puts "Discovering PIDs..."
     index_log.info "Discovering PIDs..."
-    pids = []
-    if args[:query] == ':ALL:'
-      pids = Dor::SearchService.risearch("select $object from <#ri> where $object <info:fedora/fedora-system:def/model#label> $label", :limit => '1000000', :timeout => -1)
-    else
-      q = args[:query] || '*:*'
+    dor_pids = []
+    solr_pids = []
+    if args[:query] != ':ALL:'
+      q = (args[:query].nil? or args[:query]) == ':MISSING:' ? '*:*' : args[:query]
       puts q
       start = 0
       resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
       while resp.docs.length > 0
-        pids += resp.docs.collect { |doc| doc['id'] }.flatten.select { |pid| pid =~ /^druid:/ }
+        solr_pids += resp.docs.collect { |doc| doc['id'] }
         start += 1000
         $stdout.print "."
-        resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :field_list => ['id'])
+        resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
       end
       $stdout.puts
+      msg = "Found #{solr_pids.length} PIDs in solr."
+      $stdout.puts msg
+      index_log.info msg
     end
+    if args[:query] =~ /:(ALL|MISSING):/
+      dor_pids = Dor::SearchService.risearch("select $object from <#ri> where $object <info:fedora/fedora-system:def/model#label> $label", :limit => '5000000', :timeout => -1)
+      msg = "Found #{dor_pids.length} PIDs in DOR."
+      $stdout.puts msg
+      index_log.info msg
+    end
+    if dor_pids.present?
+      pids = dor_pids - solr_pids
+    else
+      pids = solr_pids
+    end
+    pids.delete_if { |pid| pid !~ /druid:/ }
     time = Time.now - start_time
     msg = "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
     $stdout.puts msg
@@ -62,13 +76,15 @@ namespace :argo do
     pids.each do |pid|
       begin
         index_log.debug "Indexing #{pid}"
-        obj = Dor.find pid
+        obj = Dor.load_instance pid
         obj = obj.adapt_to(Dor::Item) if obj.class == ActiveFedora::Base
         if obj.is_a?(Dor::Processable) and obj.workflows.new?
+          c = obj.class
           obj.workflows.save
-          obj = obj.class.load_instance obj.pid
+          obj = Dor.load_instance(pid).adapt_to c
         end
-        solr.add obj.to_solr, :add_attributes => {:commitWithin => 10}
+        solr_doc = obj.to_solr
+        solr.add solr_doc, :add_attributes => {:commitWithin => 10}
         errors = 0
       rescue Interrupt
         raise
