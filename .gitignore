@@ -12,3 +12,5 @@ config/solr.yml
 public/.htaccess
 .dor-services
 .sass-cache
+public/assets
+config/database.yml
