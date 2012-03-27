@@ -5,13 +5,12 @@ module RegistrationHelper
     unless permission_keys.empty?
       q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
     end
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => ['id','tag_t','dc_title_t']).docs
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
     result.sort! do |a,b|
       Array(a['tag_t']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
-    result
-    result.collect! do |doc|
-      [doc['dc_title_t'].to_s,doc['id'].to_s]
+    result.collect do |doc|
+      [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
   end
 

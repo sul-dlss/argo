@@ -397,5 +397,6 @@ var gridContext = function() {
 
 $(document).ready(function() {
   gridContext.initialize();
+  $('#apo_id').change();
   $('#properties_dialog').dialog('open');
 });
