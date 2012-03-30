@@ -65,8 +65,7 @@ function DorRegistration(initOpts) {
         params['pid'] = "druid:" + data.metadata_id;
       }
 
-      $t.setStatus(data, 'queued');
-      var xhr = $.ajax({
+      var ajaxParams = {
         type: 'POST',
         url: pathTo('/dor/objects'),
         data: params,
@@ -75,7 +74,9 @@ function DorRegistration(initOpts) {
         },
         ajaxQ: 'register',
         dataType: 'json'
-      })
+      }
+      $t.setStatus(data, 'queued');
+      var xhr = $.ajax(ajaxParams);
       xhr.success(function(response,status,xhr) { 
         if (response) {
           data.druid = response['pid'].split(':')[1];
