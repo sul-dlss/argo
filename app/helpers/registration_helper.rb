@@ -38,7 +38,7 @@ module RegistrationHelper
     
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
-    doc = Dor::SearchService.query(%{id:"#{druid}"}, :rows => 1).docs.first
+    doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
     if doc.nil?
       pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       return
@@ -72,7 +72,7 @@ module RegistrationHelper
       table_data.push(["Source ID:",Array(doc['source_id_t']).first])
     end
     table_data += ids
-    tags = Array(doc['tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,nbsp) }.compact
+    tags = Array(doc['tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
     if tags.length > 0
       table_data.push(["Tags:",tags.join("\n")])
     end
