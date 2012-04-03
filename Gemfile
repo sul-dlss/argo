@@ -7,12 +7,12 @@ source "http://sulair-rails-dev.stanford.edu"
 if File.exists?(fn=File.join(ENV['HOME'],".static-gems/dor-services")) &! ENV['CLEAN_BUNDLE']
   gem 'dor-services', :path => fn
 else
-  gem 'dor-services', "~> 3.1.0"
+  gem 'dor-services', ">= 3.3.6"
 end
 if File.exists?(fn=File.join(ENV['HOME'],".static-gems/active_fedora")) &! ENV['CLEAN_BUNDLE']
   gem 'active-fedora', :path => fn
 else
-  gem 'active-fedora', "~> 4.0.0.rc9"
+  gem 'active-fedora', "4.0.0.rc20"
 end
 
 gem 'rails', '3.2.0'
@@ -39,6 +39,11 @@ gem 'uglifier', '>= 1.0.3'
 gem 'jquery-rails'
 gem 'therubyracer'
 
+group :test, :development do
+  gem 'rspec-rails'
+  gem "rack-test", :require => "rack/test"
+end
+
 group :development do
   gem 'pry'
   gem 'pry-remote'
@@ -48,6 +53,6 @@ end
 group :deployment do
   gem 'capistrano'
   gem 'capistrano-ext'
-  gem 'lyberteam-devel', '~> 0.5.1'
+  gem 'lyberteam-devel', '>=0.6.0'
   gem 'net-ssh-kerberos'
 end
