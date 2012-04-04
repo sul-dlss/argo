@@ -7,7 +7,7 @@ source "http://sulair-rails-dev.stanford.edu"
 if File.exists?(fn=File.join(ENV['HOME'],".static-gems/dor-services")) &! ENV['CLEAN_BUNDLE']
   gem 'dor-services', :path => fn
 else
-  gem 'dor-services', ">= 3.3.6"
+  gem 'dor-services', ">= 3.4.0"
 end
 if File.exists?(fn=File.join(ENV['HOME'],".static-gems/active_fedora")) &! ENV['CLEAN_BUNDLE']
   gem 'active-fedora', :path => fn
@@ -25,6 +25,7 @@ gem 'prawn', ">=0.12.0"
 gem 'barby'
 gem 'ruby-graphviz'
 gem "solrizer-fedora"
+gem "rsolr", :git => "git://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
 gem "rsolr-client-cert"
 gem "mysql2", "~> 0.3.0"
 gem "progressbar"
