@@ -82,7 +82,12 @@ namespace :argo do
       index_log.info msg
     end
     if args[:query] =~ /:(ALL|MISSING):/
-      dor_pids = Dor::SearchService.risearch("select $object from <#ri> where $object <info:fedora/fedora-system:def/model#label> $label", :limit => '5000000', :timeout => -1)
+      dor_pids = []
+      Dor::SearchService.iterate_over_pids(:in_groups_of => 1000, :mode => :group) do |chunk|
+        dor_pids += chunk
+        $stderr.print "."
+      end
+      $stdout.puts
       msg = "Found #{dor_pids.length} PIDs in DOR."
       $stdout.puts msg
       index_log.info msg
