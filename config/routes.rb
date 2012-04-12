@@ -19,6 +19,7 @@ Argo::Application.routes.draw do
   match 'view/:id/workflows/:wf_name', :to => "catalog#workflow_view", :as => "workflow_view_catalog"
   match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  match '/about', :to => "about#index", :as => "about"
   
   root :to => "catalog#index"
 
@@ -56,7 +57,7 @@ Argo::Application.routes.draw do
   namespace :legacy do
     resources :objects
   end
-  
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
