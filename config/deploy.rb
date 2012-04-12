@@ -1,4 +1,3 @@
-$:.unshift(File.expand_path('./lib', ENV['rvm_path'])) # Add RVM's lib directory to the load path.
 require "rvm/capistrano"                               # Load RVM's capistrano plugin.
 require 'net/ssh/kerberos'
 require 'bundler/setup'
@@ -9,6 +8,7 @@ set :stages, %W(dev testing prod)
 set :default_stage, "development"
 set :bundle_flags, "--quiet"
 set :rvm_ruby_string, "1.8.7@argo"
+set :rvm_type, :system
 
 require 'capistrano/ext/multistage'
 
@@ -26,7 +26,6 @@ set :destination, "/var/opt/home/lyberadmin"
 set :application, "argo"
 
 set :scm, :git
-set :repository,  "ssh://cardinal.stanford.edu/afs/ir/dev/dlss/git/lyberteam/argo.git"
 set :deploy_via, :copy # I got 99 problems, but AFS ain't one
 set :copy_cache, true
 set :copy_exclude, [".git"]
