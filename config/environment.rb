@@ -2,7 +2,7 @@
 require File.expand_path('../application', __FILE__)
 
 module Argo
-  ARGO_VERSION = '2.0.8'
+  ARGO_VERSION = '2.0.9'
   
   class << self
     def version
