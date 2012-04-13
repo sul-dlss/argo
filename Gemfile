@@ -41,6 +41,7 @@ end
 group :deployment do
   gem 'capistrano'
   gem 'capistrano-ext'
+  gem 'rvm-capistrano'
   gem 'lyberteam-devel', '>=0.6.0'
   gem 'net-ssh-kerberos'
 end

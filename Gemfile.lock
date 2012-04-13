@@ -271,6 +271,8 @@ GEM
       nokogiri
       rest-client
       savon
+    rvm-capistrano (1.0.2)
+      capistrano (>= 2.0.0)
     sass (3.1.15)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
@@ -361,6 +363,7 @@ DEPENDENCIES
   rspec-rails
   ruby-graphviz
   ruby-prof
+  rvm-capistrano
   sass-rails (~> 3.2.3)
   solrizer-fedora
   therubyracer
