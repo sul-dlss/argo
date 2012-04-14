@@ -1,21 +1,22 @@
-namespace :argo do
+desc "Get application version"
+task :app_version do
+  puts File.read(File.expand_path('../../../VERSION',__FILE__)).strip
+end  
 
+namespace :argo do
   desc "Bump Argo's version number before release"
-  task :bump_version, [:level] => [:environment] do |t, args|
+  task :bump_version, [:level] do |t, args|
     levels = ['major','minor','patch','rc']
-    environment_file = File.read(File.join(Rails.root,'config/environment.rb'))
-    (declaration,version) = environment_file.scan(/^(\s*ARGO_VERSION = )['"](.+)['"]/).flatten
+    version_file = File.expand_path('../../../VERSION',__FILE__)
+    version = File.read(version_file)
     version = version.split(/\./)
     index = levels.index(args[:level] || (version.length == 4 ? 'rc' : 'patch'))
     if version.length == 4 and index < 3
       version.pop
     end
     if index == 3
-      puts version.inspect
       rc = version.length == 4 ? version.pop : 'rc0'
-      puts rc
       rc.sub!(/^rc(\d+)$/) { |m| "rc#{$1.to_i+1}" }
-      puts rc
       version << rc
       puts version.inspect
     else
@@ -23,8 +24,7 @@ namespace :argo do
       (index+1).upto(2) { |i| version[i] = '0' }
     end
     version = version.join('.')
-    environment_file.sub!(/^(\s*ARGO_VERSION = )['"](.+)['"]/,"#{declaration}'#{version}'")
-    File.open(File.join(Rails.root,'config/environment.rb'),'w') { |f| f.write(environment_file) }
+    File.open(version_file,'w') { |f| f.write(version) }
     $stderr.puts "Version bumped to #{version}"
   end
   
@@ -134,5 +134,4 @@ namespace :argo do
     end
     solr.commit
   end
-  
 end
