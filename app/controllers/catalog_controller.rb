@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
-require 'graphviz'
 
 class CatalogController < ApplicationController  
 
@@ -110,12 +109,6 @@ class CatalogController < ApplicationController
     @response, @document = get_solr_response_for_doc_id
     @obj = Dor.find params[:id], :lightweight => true
     render :layout => request.xhr? ? false : true
-  end
-  
-  def workflow_grid
-    delete_or_assign_search_session_params
-    (@response, @document_list) = get_search_results
-    render :partial => 'catalog/workflow_grid'
   end
   
   def workflow_view

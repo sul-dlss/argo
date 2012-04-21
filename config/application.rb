@@ -63,5 +63,26 @@ module Argo
        config.assets.paths.unshift Rails.root.join("app", "assets", "stylesheets", "jquery-ui", "custom-theme").to_s
     end
   end
+  
+  ARGO_VERSION = File.read(File.join(Rails.root,'VERSION'))
+  
+  class << self
+    def version
+      ARGO_VERSION
+    end
+
+    def configure *args, &block
+      Argo::Config.configure *args, &block
+    end
+  end
+  
+  Config = Confstruct::Configuration.new do
+    reindex_on_the_fly false
+    urls do
+      mdtoolkit nil
+      purl nil
+      stacks nil
+    end
+  end  
 end
 

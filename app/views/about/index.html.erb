@@ -11,7 +11,7 @@ $(document).ready(function() {
 <h1>Dependency Versions</h1>
 <div id="dependencies">
   <ul>
-    <li><b>Argo</b> (<%= Argo::ARGO_VERSION %>)</li>
+    <li><b>Argo</b> (<%= Argo.version %>)</li>
     <% Bundler.load.specs.sort_by { |s| s.name }.each do |spec| %>
       <li><b><%= spec.name %></b> (<%= spec.version %><%= spec.git_version %>)</li>
     <% end %>

@@ -1,7 +1,6 @@
 module HierarchyHelper
 
 def is_hierarchical?(field_name)
-  Rails.logger.info 'is_hierarchical?'
   (prefix,order,suffix) = field_name.split(/_/)
   list = blacklight_config.facet_display[:hierarchy][prefix] and list.include?(order)
 end
@@ -62,16 +61,44 @@ def render_facet_rotate(field_name)
   end
 end
 
+# Putting bare HTML strings in a helper sucks. But in this case, with a 
+# lot of recursive tree-walking going on, it's a lot faster than either 
+# render(:partial) or content_tag
+def render_facet_hierarchy_item(field_name, data, key)
+  item = data[:_]
+  subset = data.reject { |k,v| ! k.is_a?(String) }
+  
+  li_class = subset.empty? ? 'h-leaf' : 'h-node'
+  li = ul = ''
+  
+  if item.nil?
+    li = key
+  elsif facet_in_params?(field_name, item.qvalue)
+    li = render_selected_qfacet_value(field_name, item)
+  else
+    li = render_qfacet_value(field_name, item)
+  end
+  
+  unless subset.empty?
+    subul = subset.keys.sort.collect do |subkey| 
+      render_facet_hierarchy_item(field_name, subset[subkey], subkey) 
+    end.join('')
+    ul = "<ul>#{subul}</ul>".html_safe
+  end
+  
+  %{<li class="#{li_class}">#{li.html_safe}#{ul.html_safe}</li>}.html_safe
+end
+
 def render_hierarchy(field)
   prefix = field.field.split(/_/).first
   tree = facet_tree(prefix)[field.field]
   tree.keys.sort.collect do |key|
-    render :partial => 'facet_hierarchy_item', :locals => { :field_name => field.field, :data => tree[key], :key => key }
+    render_facet_hierarchy_item(field.field, tree[key], key)
   end
 end
 
 def render_qfacet_value(facet_solr_field, item, options ={})    
-  (link_to_unless(options[:suppress_link], item.value, add_facet_params_and_redirect(facet_solr_field, item.qvalue), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+  (link_to_unless(options[:suppress_link], item.value, add_facet_params(facet_solr_field, item.qvalue), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
 end
 
 # Standard display of a SELECTED facet value, no link, special span

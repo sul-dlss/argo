@@ -1,9 +1,8 @@
-<% unless has_search_parameters? or show_workflow_grid? %>
+<% unless has_search_parameters? %>
 	<%# if there are no input/search related params, display the "home" partial -%>
 	<%= render 'home' %>
 <% else %>
-
-  <% @page_title = application_name + (show_workflow_grid? ? " Queue Status" : " Search Results") %>
+  <% @page_title = "#{application_name} Search Results" %>
   <% extra_head_content << render_opensearch_response_metadata.html_safe %>
 	<%= render :partial => 'search_form' %>
   <% if has_search_parameters? %>
@@ -15,27 +14,12 @@
 	  <%= render :partial=>'facets' %>
 	<% end %>
 
-  <% if show_workflow_grid? %>
-    <% extra_head_content << capture do %>
-    <script type="text/javascript">
-      var updateTimer;
-      function updateGrid() {
-        $.get('/view/workflow_grid'+$(document).attr('location').search)
-        .success(function(data) { $('#workflow_grid').replaceWith(data) })
-      }
-      $(document).ready(function() { updateTimer = setInterval(updateGrid, 10000) });
-    </script>
-    <% end %>
-  	<%= render :partial => 'workflow_grid' %>
-  <% else %>
-    <div class="pageEntriesInfo">
-      <%= render_pagination_info @response, :entry_name=>'item' %>
-      <%=link_to "start over", catalog_index_path, :id=>"startOverLink" %>
-    </div>
-  	<%= render 'sort_and_per_page' %>
-    <%= render 'results_pagination' %>
-  	<%= render :partial => 'document_list' %>
-    <%= render 'results_pagination' %>
-  <% end %>
-
+  <div class="pageEntriesInfo">
+    <%= render_pagination_info @response, :entry_name=>'item' %>
+    <%=link_to "start over", catalog_index_path, :id=>"startOverLink" %>
+  </div>
+	<%= render 'sort_and_per_page' %>
+  <%= render 'results_pagination' %>
+	<%= render :partial => 'document_list' %>
+  <%= render 'results_pagination' %>
 <% end %>
