@@ -27,6 +27,10 @@ Argo::Application.routes.draw do
   match 'logout',         :to => 'auth',       :as => 'destroy_user_session'
   match 'profile',        :to => 'auth',       :as => 'edit_user_registration'
   
+  namespace :report do
+    get '/workflow_grid'
+  end
+  
   resources :items do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop

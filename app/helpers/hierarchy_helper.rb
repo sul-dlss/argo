@@ -1,7 +1,6 @@
 module HierarchyHelper
 
 def is_hierarchical?(field_name)
-  Rails.logger.info 'is_hierarchical?'
   (prefix,order,suffix) = field_name.split(/_/)
   list = blacklight_config.facet_display[:hierarchy][prefix] and list.include?(order)
 end
@@ -71,7 +70,7 @@ def render_hierarchy(field)
 end
 
 def render_qfacet_value(facet_solr_field, item, options ={})    
-  (link_to_unless(options[:suppress_link], item.value, add_facet_params_and_redirect(facet_solr_field, item.qvalue), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+  (link_to_unless(options[:suppress_link], item.value, add_facet_params(facet_solr_field, item.qvalue), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
 end
 
 # Standard display of a SELECTED facet value, no link, special span
