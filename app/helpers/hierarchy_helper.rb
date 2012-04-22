@@ -104,8 +104,11 @@ end
 # Standard display of a SELECTED facet value, no link, special span
 # with class, and 'remove' button.
 def render_selected_qfacet_value(facet_solr_field, item)
-  content_tag(:span, render_facet_value(facet_solr_field, item, :suppress_link => true), :class => "selected label") + " " +
-    link_to("[X]", remove_facet_params(facet_solr_field, item.qvalue, params), :class=>"remove")
+  c = content_tag(:span, :class => "selected label") do
+    render_facet_value(facet_solr_field, item, :suppress_link => true)
+  end
+
+  link_to(c, remove_facet_params(facet_solr_field, item.qvalue, params), :class=>"remove")
 end
 
 HierarchicalFacetItem = Struct.new :qvalue, :value, :hits

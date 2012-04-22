@@ -9,3 +9,11 @@ ul.facet-hierarchy
     list-style-image: url("hierarchy/collapsed.png") !important
   li.h-node.twiddle-open
     list-style-image: url("hierarchy/expanded.png") !important
+
+a.remove
+  border-bottom: none
+  &:after
+    margin-left: .5em
+    border-bottom: 1px dotted
+    content: '[X]'
+    color: red
