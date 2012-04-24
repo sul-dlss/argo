@@ -35,7 +35,6 @@ end
 
 group :development do
   gem 'pry'
-  gem 'pry-remote'
   gem 'ruby-prof'
 end
 
