@@ -57,7 +57,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objectType_t', :label => 'Object Type'
     config.add_facet_field 'content_type_facet', :label => 'Content Type'
     config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
-    config.add_facet_field 'is_member_of_collection_s', :label => 'Owning Collection'
+    config.add_facet_field 'is_member_of_collection_s', :label => 'Collection'
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'facet_hierarchy'
