@@ -17,7 +17,9 @@
 // Required by Blacklight
 //= require blacklight/blacklight
 //
+// Required by Blacklight Hierarchical Facet Plugin
+//= require blacklight/hierarchy/hierarchy
+//
 // Required by Argo
 //= require argo
 //= require lightbox
-//= require hierarchy

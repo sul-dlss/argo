@@ -6,7 +6,6 @@ class CatalogController < ApplicationController
   include BlacklightSolrExtensions
   include Blacklight::Catalog
   helper ArgoHelper
-  helper HierarchyHelper
   
   configure_blacklight do |config|
     config.default_solr_params = {
@@ -53,15 +52,15 @@ class CatalogController < ApplicationController
     config.add_show_field 'source_id_t', :label => 'Source:'
     config.add_show_field 'tag_t', :label => 'Tags:'
     
-    config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'facet_hierarchy'
+    config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_facet', :label => 'Object Type'
     config.add_facet_field 'content_type_facet', :label => 'Content Type'
     config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
     config.add_facet_field 'is_member_of_collection_s', :label => 'Collection'
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
-    config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'facet_hierarchy'
-    config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'facet_hierarchy'
-    config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'facet_hierarchy'
+    config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     
     config.default_solr_params[:'facet.field'] = config.facet_fields.keys
     
