@@ -54,7 +54,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'tag_t', :label => 'Tags:'
     
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'facet_hierarchy'
-    config.add_facet_field 'objectType_t', :label => 'Object Type'
+    config.add_facet_field 'objectType_facet', :label => 'Object Type'
     config.add_facet_field 'content_type_facet', :label => 'Content Type'
     config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
     config.add_facet_field 'is_member_of_collection_s', :label => 'Collection'
