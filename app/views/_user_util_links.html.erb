@@ -6,12 +6,15 @@
     <%= link_to 'Your&nbsp;Bookmarks'.html_safe, bookmarks_path %>
     |
     <%= link_to "Saved&nbsp;Searches".html_safe, saved_searches_path %>
+    <br/>
 <% else %>
   <%= link_to 'Login', new_user_session_path %>
+  |
 <% end %>
-|
 <%= link_to "Item&nbsp;Registration".html_safe, register_items_path %>
 | 
 <%= link_to "Selected&nbsp;Items".html_safe, folder_index_path %> (<span id="folder_number"><%= "#{session[:folder_document_ids] ? session[:folder_document_ids].length : 0}" %></span>)
 |
 <%= link_to "Search&nbsp;History".html_safe, search_history_path %>
+|
+<%= link_to "Feedback", 'mailto:argo-feedback@stanford.edu' %>

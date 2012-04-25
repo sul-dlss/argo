@@ -2,17 +2,19 @@ module DorObjectHelper
   # Metadata helpers
   def retrieve_terms doc
     terms = {
-      :creator   => ['public_dc_creator_t', 'mods_creator_t', 'mods_name_t', 'dc_creator_t'],
-      :title     => ['public_dc_title_t', 'mods_title_t', 'dc_title_t', 'obj_label_t'],
-      :place     => ['mods_originInfo_place_placeTerm_t'],
-      :publisher => ['public_dc_publisher_t', 'mods_originInfo_publisher_t', 'dc_publisher_t'],
-      :date      => ['public_dc_date_t', 'mods_dateissued_t', 'mods_datecreated_t', 'dc_date_t']
+      :creator   => { :selector => ['public_dc_creator_t', 'mods_creator_t', 'mods_name_t', 'dc_creator_t'] },
+      :title     => { :selector => ['public_dc_title_t', 'mods_title_t', 'dc_title_t', 'obj_label_t'], :combiner => lambda { |s| s.join(' -- ') } },
+      :place     => { :selector => ['mods_originInfo_place_placeTerm_t'] },
+      :publisher => { :selector => ['public_dc_publisher_t', 'mods_originInfo_publisher_t', 'dc_publisher_t'] },
+      :date      => { :selector => ['public_dc_date_t', 'mods_dateissued_t', 'mods_datecreated_t', 'dc_date_t'] }
     }
     result = {}
-    terms.each_pair do |term,keys|
-      keys.each do |key|
+    terms.each_pair do |term,finder|
+      finder[:selector].each do |key|
         if doc[key].present?
-          result[term] = doc[key].first
+          val = doc[key]
+          com = finder[:combiner]
+          result[term] = com ? com.call(val) : val.first
           break
         end
       end

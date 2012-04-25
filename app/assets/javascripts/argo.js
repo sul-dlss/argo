@@ -17,4 +17,5 @@ $(document).ready(function() {
   $('.start-open').addClass('twiddle-open');
   $('.start-open').next('ul').show();
   $('.collapsible-section').click(function() { $(this).next('div').slideToggle(); $(this).toggleClass('collapsed') })
+  $('#facets a.remove').map(function() { $(this).html('') })
 });
