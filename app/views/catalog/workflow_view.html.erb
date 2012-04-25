@@ -12,21 +12,25 @@
   <tr><th></th><th>process</th><th>status</th><th>datetime</th><th>elapsed seconds</th><th>attempts</th><th>lifecycle</th></tr>
   </thead>
   <tbody>
-    <% @workflow.processes.each_with_index do |process,index| %>
-      <tr>
-        <td><%=index+1%>.</td>
-        <td><%=process.name%></td>
-        <td><%=process.status%></td>
-        <td><%=render_datetime(process.datetime)%></td>
-        <td><%=process.elapsed ? '%.3f' % process.elapsed : ''%></td>
-        <td><%=process.attempts%></td>
-        <td><%=process.lifecycle%></td>
-      </tr>
-      <% if process.status == 'error' %>
+    <% if @workflow.nil? %>
+      <tr><td colspan="7">No processes defined for this workflow.</td></tr>
+    <% else %>
+      <% @workflow.processes.each_with_index do |process,index| %>
         <tr>
-          <td>&nbsp;</td>
-          <td colspan="6" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
+          <td><%=index+1%>.</td>
+          <td><%=process.name%></td>
+          <td><%=process.status%></td>
+          <td><%=render_datetime(process.datetime)%></td>
+          <td><%=process.elapsed ? '%.3f' % process.elapsed : ''%></td>
+          <td><%=process.attempts%></td>
+          <td><%=process.lifecycle%></td>
         </tr>
+        <% if process.status == 'error' %>
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan="6" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
+          </tr>
+        <% end %>
       <% end %>
     <% end %>
   </tbody>
