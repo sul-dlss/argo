@@ -4,7 +4,7 @@ source "http://sulair-rails-dev.stanford.edu"
 gem 'dor-services', ">= 3.4.1"
 gem 'rails', '3.2.0'
 gem "blacklight", '~>3.2.0'
-gem 'blacklight-hierarchy'
+gem 'blacklight-hierarchy', :git => "git://github.com/sul-dlss/blacklight-hierarchy.git"
 
 gem 'rake'
 gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
