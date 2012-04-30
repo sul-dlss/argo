@@ -35,9 +35,8 @@ module WorkflowHelper
   end
   
   def render_workflow_archive_count(repo,name)
-    client = Dor::WorkflowService.workflow_resource
-    xml = client["workflow_archive?repository=#{repo}&workflow=#{name}&count-only=true"].get
-    count = Nokogiri::XML(xml).at_xpath('/objects/@count').value.to_i
+    wf_doc = Dor::SearchService.query("objectType_facet:workflow workflow_name_s:#{name}").docs.first
+    wf_doc.nil? ? '-' : wf_doc["#{name}_archived_display"].first.to_i
   end
   
   def render_workflow_grid_toggle(field_name)

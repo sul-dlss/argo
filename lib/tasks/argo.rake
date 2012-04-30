@@ -54,6 +54,13 @@ namespace :argo do
     File.unlink('public/auth/.htaccess') if File.exists?('public/auth/.htaccess')
   end
   
+  desc "Update completed/archived workflow counts"
+  task :update_archive_counts => :environment do |t|
+    Dor.find_all('objectType_facet:workflow').each do |wf|
+      wf.update_index
+    end
+  end
+  
   desc "Reindex all DOR objects"
   task :reindex_all, [:query] => [:environment] do |t, args|
     index_log = Logger.new(File.join(Rails.root,'log','reindex.log'))

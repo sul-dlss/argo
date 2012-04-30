@@ -36,12 +36,11 @@
         <td class="count completed"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'completed') %></td>
       </tr>
     <% end %>
-<!--
     <tr>
       <td class="totals">&nbsp;</td>
-      <td class="totals" colspan="6">Completed/archived workflows</td>
-      <td class="totals"><%#= render_workflow_archive_count('dor',wf_name) %></td>
+      <td class="totals" colspan="5">&nbsp;</td>
+      <td class="totals" colspan="3">Completed/archived workflows</td>
+      <td class="totals"><%= render_workflow_archive_count('dor',wf_name) %></td>
     </tr>
--->
   </tbody>
 </table>
