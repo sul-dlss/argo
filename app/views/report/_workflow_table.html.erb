@@ -5,9 +5,11 @@
       <th class="process" colspan="2">Process</th>
     	<th class="description">Description</th>
     	<th class="count waiting">Waiting</th>
+    	<th class="count hold">Hold</th>
     	<th class="count intermediate">Intermediate</th>
     	<th class="count ready">Ready</th>
-    	<th class="count errors">Errors</th>
+    	<th class="count errors">Error</th>
+    	<th class="count skipped">Skipped</th>
     	<th class="count completed">Completed</th>
     </tr>
     <% 
@@ -26,16 +28,20 @@
         <td class="process"><%= render_workflow_process_name(wf_name,wf_process) %></td>
         <td class="description"><%= wf_desc %></td>
         <td class="count waiting"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'waiting') %></td>
+        <td class="count hold"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'hold') %></td>
         <td class="count intermediate"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'intermediate') %></td>
         <td class="count ready"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'ready') %></td>
         <td class="count errors"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'error') %></td>
+        <td class="count skipped"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'skipped') %></td>
         <td class="count completed"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'completed') %></td>
       </tr>
     <% end %>
+<!--
     <tr>
       <td class="totals">&nbsp;</td>
       <td class="totals" colspan="6">Completed/archived workflows</td>
-      <td class="totals"><%= render_workflow_archive_count('dor',wf_name) %></td>
+      <td class="totals"><%#= render_workflow_archive_count('dor',wf_name) %></td>
     </tr>
+-->
   </tbody>
 </table>
