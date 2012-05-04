@@ -69,7 +69,7 @@ module ArgoHelper
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))
-        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'document-thumb'
+        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}?w=240&h=240", :class => 'document-thumb'
       end
     end
   end
@@ -80,7 +80,7 @@ module ArgoHelper
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))
-        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_square", :class => 'index-thumb'
+        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}?w=80&h=80", :class => 'index-thumb'
       end
     end
   end
