@@ -109,22 +109,5 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id], :lightweight => true
     render :layout => request.xhr? ? false : true
   end
-  
-  def workflow_view
-    @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id], :lightweight => true
-    @workflow_id = params[:wf_name]
-    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows[@workflow_id]
 
-    respond_to do |format|
-      format.html
-      format.xml  { render :xml => @workflow.ng_xml.to_xml }
-      format.any(:png,:svg,:jpeg) {
-        graph = @workflow.graph
-        raise ActionController::RoutingError.new('Not Found') if graph.nil?
-        image_data = graph.output(request.format.to_sym => String)
-        send_data image_data, :type => request.format.to_s, :disposition => 'inline'
-      }
-    end
-  end
 end 

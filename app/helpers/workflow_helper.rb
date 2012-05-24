@@ -21,6 +21,23 @@ module WorkflowHelper
     link_to(process, new_params)
   end
   
+  def render_workflow_process_reset(pid, process)
+    allowable_changes = {
+      'waiting' => 'completed',
+      'error'   => 'waiting'
+    }
+    new_status = allowable_changes[process.status]
+    if new_status.present?
+      form_tag workflow_update_item_url(pid, process.workflow), :class => 'dialogLink' do
+        hidden_field_tag('process', process.name) +
+        hidden_field_tag('status', new_status) +
+        button_tag(new_status, :type => 'submit')
+      end
+    else
+      ''
+    end
+  end
+  
   def render_workflow_item_count(wf_hash,name,process,status)
     new_params = add_facet_params("wf_wps_facet", [name,process,status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     rotate_facet_params('wf','wps',facet_order('wf'),new_params)

@@ -16,7 +16,6 @@ Argo::Application.routes.draw do
   match 'view/:id/ds/:dsid', :to => "catalog#show_aspect", :template => 'ds', :as => 'ds_aspect_view_catalog'
   match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :as => "datastream_view_catalog"
   match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
-  match 'view/:id/workflows/:wf_name', :to => "catalog#workflow_view", :as => "workflow_view_catalog"
   match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/about', :to => "about#index", :as => "about"
@@ -35,6 +34,8 @@ Argo::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
+    get  '/workflows/:wf_name', :on => :member, :action => :workflow_view,   :as => 'workflow_view'
+    post '/workflows/:wf_name', :on => :member, :action => :workflow_update, :as => 'workflow_update'
   end
   
   namespace :registration do
