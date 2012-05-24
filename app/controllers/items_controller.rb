@@ -31,5 +31,37 @@ class ItemsController < ApplicationController
     end
     render :register, :layout => 'application'
   end
+  
+  def workflow_view
+    @obj = Dor.find params[:id], :lightweight => true
+    @workflow_id = params[:wf_name]
+    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows[@workflow_id]
 
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @workflow.ng_xml.to_xml }
+      format.any(:png,:svg,:jpeg) {
+        graph = @workflow.graph
+        raise ActionController::RoutingError.new('Not Found') if graph.nil?
+        image_data = graph.output(request.format.to_sym => String)
+        send_data image_data, :type => request.format.to_s, :disposition => 'inline'
+      }
+    end
+  end
+  
+  def workflow_update
+    args = params.values_at(:id, :wf_name, :process, :status)
+    if args.all? &:present?
+      Dor::WorkflowService.update_workflow_status 'dor', *args
+      @item = Dor.find params[:id]
+      @item.update_index
+      respond_to do |format|
+        format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name]), :notice => 'Workflow was successfully updated' }
+      end
+    else
+      respond_to do |format| 
+        format.any { render format.to_sym => 'Bad Request', :status => :bad_request }
+      end
+    end
+  end
 end

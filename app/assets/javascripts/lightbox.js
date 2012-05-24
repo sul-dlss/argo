@@ -16,4 +16,18 @@ $(document).ready(function() {
     $("body").css("cursor", "progress");
     return false; // do not execute default href visit
   });
+  
+  $("form.dialogLink").live('submit',function(ev) {
+    var form = ev.currentTarget;
+    $('button',lightBox).attr('disabled','disabled')
+    $.ajax({
+      url: form.action,
+      type: form.method,
+      data: $(form).serialize()
+    }).success(function(data) {
+      $(lightBox).html(data)
+    });
+
+    return false;
+  });
 })
