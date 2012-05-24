@@ -1,0 +1,48 @@
+<% if params[:raw] %>
+  <%= CodeRay::Duo[:xml, :div].highlight(@workflow.ng_xml.prettify).html_safe %>
+<% else %>
+<div class="lightbox-head">
+  <span class="section-head-link">
+    <%= link_to 'View XML', workflow_view_item_path(@obj.pid, @workflow_id, :raw => 'true'), :class => 'dialogLink', :title => @workflow_id %>
+  </span>
+  <%= @obj.pid %>
+</div>
+<table class="detail">
+  <thead>
+    <tr>
+      <th></th>
+      <th>process</th>
+      <th>status</th>
+      <th>reset</th>
+      <th>datetime</th>
+      <th>elapsed seconds</th>
+      <th>attempts</th>
+      <th>lifecycle</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @workflow.nil? %>
+      <tr><td colspan="7">No processes defined for this workflow.</td></tr>
+    <% else %>
+      <% @workflow.processes.each_with_index do |process,index| %>
+        <tr>
+          <td><%=index+1%>.</td>
+          <td><%=process.name%></td>
+          <td><%=process.status%></td>
+          <td><%=render_workflow_process_reset(@obj.pid, process)%></td>
+          <td><%=render_datetime(process.datetime)%></td>
+          <td><%=process.elapsed ? '%.3f' % process.elapsed : ''%></td>
+          <td><%=process.attempts%></td>
+          <td><%=process.lifecycle%></td>
+        </tr>
+        <% if process.status == 'error' %>
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan="6" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<% end %>
