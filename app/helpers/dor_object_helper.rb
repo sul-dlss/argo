@@ -67,6 +67,8 @@ module DorObjectHelper
   def render_milestones doc, obj
     milestones = ActiveSupport::OrderedHash[
       'registered',  { :display => 'Registered',  :time => 'pending' },
+      'submitted',   { :display => 'Submitted',   :time => 'pending' },
+      'described',   { :display => 'Described',   :time => 'pending' },
       'inprocess',   { :display => 'In Process',  :time => 'pending' },
       'released',    { :display => 'Released',    :time => 'pending' },
       'published',   { :display => 'Published',   :time => 'pending' },
@@ -74,8 +76,10 @@ module DorObjectHelper
       'accessioned', { :display => 'Accessioned', :time => 'pending' }
     ]
     
-    Array(doc['lifecycle_facet']).each do |m| 
+    lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
+    Array(doc[lifecycle_field]).each do |m| 
       (name,time) = m.split(/:/,2)
+      milestones[name] ||= { :display => name.titleize, :time => 'pending' }
       milestones[name][:time] = render_datetime(time)
     end
     render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
