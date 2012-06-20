@@ -1,3 +1,6 @@
+<% extra_head_content << capture do %>
+  <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
+<% end %>
 <% unless has_search_parameters? %>
 	<%# if there are no input/search related params, display the "home" partial -%>
 	<%= render 'home' %>
