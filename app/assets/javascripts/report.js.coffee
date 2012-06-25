@@ -31,11 +31,13 @@ $(document).ready ->
   $('#report_grid').jqGrid 'navButtonAdd', '#preport_grid',
     caption: "Columns"
     title: "Choose Columns"
+    buttonicon: 'ui-icon-script'
     onClickButton: -> $('#report_grid').jqGrid('columnChooser')
 
   $('#report_grid').jqGrid 'navButtonAdd', '#preport_grid',
     caption: "Download"
     title: "Download as CSV"
+    buttonicon: 'ui-icon-disk'
     onClickButton: -> 
       visible = $.grep $('#report_grid').jqGrid('getGridParam','colModel'), (col,idx) -> (col.name != 'rn' && !col.hidden)
       field_list = $.map(visible, (col,idx) -> col.name).join(',')

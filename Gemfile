@@ -29,6 +29,7 @@ gem 'jquery-rails'
 gem 'therubyracer'
 
 group :test, :development do
+  gem 'unicorn'
   gem 'rspec-rails'
   gem "rack-test", :require => "rack/test"
 end
