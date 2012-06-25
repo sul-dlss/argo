@@ -51,7 +51,7 @@ $(document).ready ->
 
   resized = ->
     
-    $('#report_grid').jqGrid('setGridHeight', $(window).innerHeight() - ($('#appliedParams').offset().top + $('#appliedParams').outerHeight()) - 90)
+    $('#report_grid').jqGrid('setGridHeight', $(window).innerHeight() - ($('#appliedParams').offset().top + $('#appliedParams').outerHeight()) - 102)
     $('#report_grid').jqGrid('setGridWidth',  $('#appliedParams').outerWidth())
 
   resize_timeout = null
