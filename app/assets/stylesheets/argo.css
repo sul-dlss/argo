@@ -8,4 +8,5 @@
  *= require jquery-ui/custom-theme/jquery-ui-1.8.13.custom
  *= require_tree './argo'
  */
+.ui-jqgrid td { border: none }
  
