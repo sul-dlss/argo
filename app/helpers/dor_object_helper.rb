@@ -25,10 +25,10 @@ module DorObjectHelper
   def render_citation doc
     terms = retrieve_terms(doc)
     result = ''
-    result += "#{h terms[:creator]} " if terms[:creator].present?
-    result += "<em>#{h terms[:title]}</em>"
+    result += "#{terms[:creator].html_safe} " if terms[:creator].present?
+    result += "<em>#{terms[:title].html_safe}</em>"
     origin_info = terms.values_at(:publisher, :place, :date).compact.join(', ')
-    result += ": #{h origin_info}" if origin_info.present?
+    result += ": #{origin_info.html_safe}" if origin_info.present?
     result.html_safe
   end
   

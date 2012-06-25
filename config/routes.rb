@@ -10,7 +10,6 @@ Argo::Application.routes.draw do
   match 'view/send_email_record', :to => 'catalog#send_email_record', :as => "send_email_record_catalog"
   match "view/facet/:id", :to => 'catalog#facet', :as => 'catalog_facet'
   match 'view/unapi', :to => "catalog#unapi", :as => 'unapi'
-  match 'view/workflow_grid', :to => "catalog#workflow_grid", :as => "workflow_grid_catalog"
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
   match 'view/:id/dc', :to => "catalog#show_aspect", :template => 'dc', :as => "dc_aspect_view_catalog"
   match 'view/:id/ds/:dsid', :to => "catalog#show_aspect", :template => 'ds', :as => 'ds_aspect_view_catalog'
@@ -19,7 +18,11 @@ Argo::Application.routes.draw do
   match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/about', :to => "about#index", :as => "about"
-  
+  match '/report', :to => "report#index", :as => "report"
+  match '/report/data', :to => "report#data", :as => "report_data"
+  match '/report/download', :to => "report#download", :as => "report_download"
+  match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
+
   root :to => "catalog#index"
 
   match 'login',          :to => 'auth',       :as => 'new_user_session'
