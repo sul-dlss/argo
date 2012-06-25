@@ -20,6 +20,7 @@ Argo::Application.routes.draw do
   match '/about', :to => "about#index", :as => "about"
   match '/report', :to => "report#index", :as => "report"
   match '/report/data', :to => "report#data", :as => "report_data"
+  match '/report/download', :to => "report#download", :as => "report_download"
   match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
 
   root :to => "catalog#index"

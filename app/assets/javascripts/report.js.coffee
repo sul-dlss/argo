@@ -11,7 +11,7 @@ $(document).ready ->
     rownumbers: true
     datatype: 'json'
     pager: 'preport_grid'
-    colNames: report_model.field_names
+#    colNames: report_model.field_names
     colModel: report_model.column_model
     sortable: true
     jsonReader:
@@ -32,6 +32,14 @@ $(document).ready ->
     caption: "Columns"
     title: "Choose Columns"
     onClickButton: -> $('#report_grid').jqGrid('columnChooser')
+
+  $('#report_grid').jqGrid 'navButtonAdd', '#preport_grid',
+    caption: "Download"
+    title: "Download as CSV"
+    onClickButton: -> 
+      visible = $.grep $('#report_grid').jqGrid('getGridParam','colModel'), (col,idx) -> (col.name != 'rn' && !col.hidden)
+      field_list = $.map(visible, (col,idx) -> col.name).join(',')
+      $("body").append("<iframe src='" + report_model.download_url + "&fields=" + field_list + "' style='display: none;' ></iframe>");
 
   resized = ->
     pos = $('#report_grid').offset()
