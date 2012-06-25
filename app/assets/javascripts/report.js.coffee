@@ -5,13 +5,13 @@
 $(document).ready ->
   colModel = report_model.column_model
   colModel[1]['formatter'] = (val, opts, row) -> "<a href='#{val}' target='_blank'>#{val}</a>"
-  
+
+  initialized = false
   $('#report_grid').jqGrid
     url: report_model.data_url
     rownumbers: true
     datatype: 'json'
     pager: 'preport_grid'
-#    colNames: report_model.field_names
     colModel: report_model.column_model
     sortable: true
     jsonReader:
@@ -20,6 +20,12 @@ $(document).ready ->
     scroll: 1
     prmNames:
       npage: 'npage'
+    viewrecords: true
+    recordtext: '{2} records'
+    gridComplete: -> 
+      unless initialized
+        $(window).trigger('resize')
+        initialized = true
       
   $('#report_grid').jqGrid 'navGrid', '#preport_grid',
     add:false
@@ -44,16 +50,14 @@ $(document).ready ->
       $("body").append("<iframe src='" + report_model.download_url + "&fields=" + field_list + "' style='display: none;' ></iframe>");
 
   resized = ->
-    pos = $('#report_grid').offset()
-    $('#report_grid').jqGrid('setGridHeight', $(window).height() - pos.top  - 60)
-    $('#report_grid').jqGrid('setGridWidth',  $(window).width()  - pos.left - 24)
+    
+    $('#report_grid').jqGrid('setGridHeight', $(window).innerHeight() - ($('#appliedParams').offset().top + $('#appliedParams').outerHeight()) - 90)
+    $('#report_grid').jqGrid('setGridWidth',  $('#appliedParams').outerWidth())
 
   resize_timeout = null
   $(window).bind 'resize', =>
     if resize_timeout
       clearTimeout(resize_timeout)
     resize_timeout = setTimeout(resized, 200)
-    
-  $(window).trigger('resize')
-  $('#report_grid').trigger('reloadGrid')
-  
+
+  resized()
