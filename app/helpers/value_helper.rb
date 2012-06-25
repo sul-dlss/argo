@@ -16,7 +16,7 @@ module ValueHelper
   
   # Renderers
   def label_for_druid druid
-    druid = druid.split(/\//).last # strip "info:fedora/"
+    druid = druid.to_s.split(/\//).last # strip "info:fedora/"
     Rails.cache.fetch("label_for_#{druid}", :expires_in => 1.hour) do 
       Dor.find(druid, :lightweight => true).label rescue druid
     end

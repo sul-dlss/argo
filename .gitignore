@@ -14,3 +14,4 @@ public/.htaccess
 .sass-cache
 public/assets
 config/database.yml
+app/assets/javascripts/jqgrid/
