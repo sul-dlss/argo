@@ -17,10 +17,6 @@
     <%= render :partial=>'facets' %>
 	<% end %>
 
-  <div class="pageEntriesInfo">
-    <%= render_pagination_info @response, :entry_name=>'item' %>
-  </div>
-	<%= render 'sort_and_per_page' %>
   <%= render 'results_pagination' %>
 	<%= render :partial => 'document_list' %>
   <%= render 'results_pagination' %>

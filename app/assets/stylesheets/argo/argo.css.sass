@@ -13,7 +13,6 @@ table
 #bd, #bd #sidebar
   overflow: visible !important
   
-  
 #facets
   padding: 1em 0 0 0 !important
   top: 0
@@ -25,10 +24,13 @@ table
     &:after
       color: red
       content: '[X]'
-  
+
 #doc4
   width: 100%
-      
+  
+#report_container
+  margin-top: 1.5em
+
 .CodeRay
   pre
     border: none !important
@@ -46,3 +48,41 @@ table
 
 form.dialogLink button
   width: 100%
+
+#sortAndPerPage
+  float: right
+  background-color: inherit
+  border: none
+  padding: 0
+  
+#appliedParams
+  margin-bottom: 0
+  .appliedFilter
+    padding: 2px 2px 2px 1em
+    border-radius: 3px 3px 3px 3px
+    -webkit-border-radius: 3px 3px 3px 3px
+    .filterValue
+      padding-right: 22px
+    .btnRemove
+      width: 16px
+  
+.pagination
+  border-width: 0px 1px 1px
+  .prev_page
+    position: relative
+    left: auto
+  .next_page
+    position: relative
+    right: auto
+
+#documents+.pagination
+  border-top-width: 1px
+  
+.pageEntriesInfo
+  display: none
+  
+#previousNextDocument
+  padding: 0.8em
+  border-top: 0
+  .next
+    float: none
