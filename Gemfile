@@ -3,7 +3,7 @@ source "http://sulair-rails-dev.stanford.edu"
 
 gem 'dor-services', ">= 3.5.1"
 gem 'rails', '3.2.0'
-gem "blacklight", '~>3.2.0'
+gem "blacklight", '~>3.5'
 gem 'blacklight-hierarchy', :git => "git://github.com/sul-dlss/blacklight-hierarchy.git"
 
 gem 'rake'
@@ -22,12 +22,6 @@ gem "coderay"
 gem "dalli"
 gem "kgio"
 
-gem 'sass-rails',   '~> 3.2.3'
-gem 'coffee-rails', '~> 3.2.1'
-gem 'uglifier', '>= 1.0.3'
-gem 'jquery-rails'
-gem 'therubyracer'
-
 group :test, :development do
   gem 'unicorn'
   gem 'rspec-rails'
@@ -45,4 +39,14 @@ group :deployment do
   gem 'rvm-capistrano'
   gem 'lyberteam-devel', '>=0.7.0'
   gem 'net-ssh-kerberos'
+end
+
+group :assets do
+  gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier', '>= 1.0.3'
+  gem 'jquery-rails'
+  gem 'therubyracer'
+  gem 'sass-rails', '~> 3.2.0'
+  gem 'compass-rails', '~> 1.0.0'
+  gem 'compass-susy-plugin', '~> 0.9.0'
 end
