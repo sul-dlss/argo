@@ -3,3 +3,13 @@
 
 en:
   hello: "Hello world"
+
+  blacklight:
+    search:
+      pagination_info:
+        pages:
+          one: '%{start_num} - %{end_num} of %{total_num}'
+          other: '%{start_num} - %{end_num} of %{total_num}'
+      entry_pagination_info:
+        one: '%{current} of %{total}'
+        other: '%{current} of %{total}'

@@ -50,8 +50,7 @@ $(document).ready ->
       $("body").append("<iframe src='" + report_model.download_url + "&fields=" + field_list + "' style='display: none;' ></iframe>");
 
   resized = ->
-    
-    $('#report_grid').jqGrid('setGridHeight', $(window).innerHeight() - ($('#appliedParams').offset().top + $('#appliedParams').outerHeight()) - 102)
+    $('#report_grid').jqGrid('setGridHeight', $(window).innerHeight() - ($('#report_container').offset().top + 90))
     $('#report_grid').jqGrid('setGridWidth',  $('#appliedParams').outerWidth())
 
   resize_timeout = null

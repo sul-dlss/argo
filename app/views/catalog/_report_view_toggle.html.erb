@@ -1,0 +1,8 @@
+<div class="reportToggle">
+  <% case params[:controller] %>
+  <% when 'catalog' %>
+    <%= link_to 'Report View', report_url(params), :class => 'ui-state-default ui-corner-all', :style => 'padding: .4em .5em;' %>
+  <% when 'report' %>
+    <%= link_to 'Results View', catalog_index_url(params), :class => 'ui-state-default ui-corner-all', :style => 'padding: .4em .5em;' %>
+  <% end %>
+</div>
