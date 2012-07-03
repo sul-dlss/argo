@@ -46,7 +46,8 @@ namespace :argo do
   
   task :restart_indexer do
     dor_config_file = File.join(current_path,"config","environments","dor_#{rails_env}.rb")
-    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec dor-indexerd restart --dor-config #{dor_config_file} -o #{activemq_host}"
+    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec dor-indexerd stop  --dor-config #{dor_config_file}"
+    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec dor-indexerd start --dor-config #{dor_config_file}"
   end
 end
 

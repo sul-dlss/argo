@@ -45,6 +45,22 @@ module ArgoHelper
     end
   end
   
+  def link_to_previous_document(previous_document)
+    if previous_document
+      link_to raw(t('views.pagination.previous')), previous_document, :class => "previous", :'data-counter' => session[:search][:counter].to_i - 1
+    else
+      content_tag :span, raw(t('views.pagination.previous')), :class => 'disabled'
+    end
+  end
+
+  def link_to_next_document(next_document)
+    if next_document
+      link_to raw(t('views.pagination.next')), next_document, :class => "next", :'data-counter' => session[:search][:counter].to_i + 1
+    else
+      content_tag :span, raw(t('views.pagination.next')), :class => 'disabled'
+    end
+  end
+
   def render_document_heading
     ''
   end

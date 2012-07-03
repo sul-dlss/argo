@@ -1,9 +1,12 @@
 <div id="previousNextDocument">
-  <% if @previous_document || @next_document %>
-		<%= link_to_previous_document(@previous_document) %> | 
-  <% end %>
-  <%= item_page_entry_info %>
-  <% if @previous_document || @next_document %>
-		| <%= link_to_next_document(@next_document) %>	
-  <% end %>
+  <div style="float: right">
+    <%= link_back_to_catalog %>
+  </div>
+  <div>
+    <% if @previous_document || @next_document %>
+  		<%= link_to_previous_document(@previous_document) %> | 
+      <%= item_page_entry_info %>
+  		| <%= link_to_next_document(@next_document) %>	
+    <% end %>
+  </div>
 </div>
