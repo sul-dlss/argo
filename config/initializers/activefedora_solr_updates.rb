@@ -1,1 +1,1 @@
-::ENABLE_SOLR_UPDATES = false
+# ::ENABLE_SOLR_UPDATES = false

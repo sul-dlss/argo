@@ -126,6 +126,18 @@ class Report
         :proc => lambda { |doc| doc['workflow_status_display'].inject(0) { |sum,disp| sum += disp.split(/\|/).last.to_i } },
         :solr_fields => ['workflow_status_display'],
         :sort => true, :default => false, :width => 100 
+      },
+      {
+        :field => 'file_count', :label => "Files",
+        :proc => lambda { |doc| Array(doc['content_file_display']).length },
+        :solr_fields => ['content_file_display'],
+        :sort => false, :default => true, :width => 50
+      },
+      {
+        :field => 'shelved_file_count', :label => "Shelved Files",
+        :proc => lambda { |doc| Array(doc['shelved_content_file_display']).length },
+        :solr_fields => ['shelved_content_file_display'],
+        :sort => false, :default => true, :width => 50
       }
     ]
     config.default_solr_params = {

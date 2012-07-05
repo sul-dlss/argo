@@ -18,7 +18,7 @@
                 <li class="file">
                   <span class="label">File</span>
                   <%= file['id'] %> 
-                  (<%= file['format'] %>, <%= file['mimetype'] %>, <%= file['size'].to_i.bytestring('%.1f%s') %>,
+                  (<%= file['mimetype'] %>, <%= file['size'].to_i.bytestring('%.1f%s') %>,
                   <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
                 </li>
               <% end %>
