@@ -2,7 +2,7 @@ set :rails_env, "test"
 set :activemq_host, "dor-test.stanford.edu"
 set :deployment_host, "lyberapps-test.stanford.edu"
 set :repository,  "."
-set :branch, "master"
+set :branch, "develop"
 set :bundle_without, [:deployment,:development]
 
 role :web, deployment_host
