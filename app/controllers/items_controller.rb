@@ -54,7 +54,11 @@ class ItemsController < ApplicationController
     if args.all? &:present?
       Dor::WorkflowService.update_workflow_status 'dor', *args
       @item = Dor.find params[:id]
-      @item.update_index
+      begin
+        @item.update_index
+      rescue Exception => e
+        Rails.logger.warn "ItemsController#workflow_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
+      end
       respond_to do |format|
         format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name]), :notice => 'Workflow was successfully updated' }
       end
