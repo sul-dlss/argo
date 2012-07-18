@@ -17,7 +17,7 @@ Argo::Application.routes.draw do
   match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
   match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
-  match '/about', :to => "about#index", :as => "about"
+  mount AboutPage::Engine => '/about(.:format)'
   match '/report', :to => "report#index", :as => "report"
   match '/report/data', :to => "report#data", :as => "report_data"
   match '/report/download', :to => "report#download", :as => "report_download"

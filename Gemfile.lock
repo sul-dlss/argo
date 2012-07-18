@@ -26,6 +26,8 @@ GEM
   remote: http://sulair-rails-dev.stanford.edu/
   specs:
     Ascii85 (1.0.1)
+    about_page (0.0.4)
+      rails (~> 3.2)
     actionmailer (3.2.0)
       actionpack (= 3.2.0)
       mail (~> 2.4.0)
@@ -156,6 +158,7 @@ GEM
     httpi (1.1.1)
       rack
     i18n (0.6.0)
+    is_it_working-cbeer (1.0.15)
     journey (1.0.4)
     jquery-rails (2.0.2)
       railties (>= 3.2.0, < 5.0)
@@ -358,6 +361,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  about_page
   barby
   blacklight (~> 3.5)
   blacklight-hierarchy!
@@ -370,6 +374,7 @@ DEPENDENCIES
   dalli
   dor-services (>= 3.5.1)
   haml
+  is_it_working-cbeer
   jquery-rails
   kgio
   lyberteam-devel (>= 0.7.0)
