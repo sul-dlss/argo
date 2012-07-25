@@ -27,7 +27,8 @@ module RegistrationHelper
   def valid_rights_options
     [
       ['World','world'],
-      ['Stanford','stanford']
+      ['Stanford','stanford'],
+      ['Dark (Preserve Only)','none']
     ]
   end
   
