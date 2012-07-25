@@ -4,8 +4,14 @@
 en:
   hello: "Hello world"
 
+  argo:
+    search:
+      report_view: 'Report View'
+      result_view: 'Results View'
+    
   blacklight:
     search:
+      start_over: 'Start Over'
       pagination_info:
         pages:
           one: '%{start_num} - %{end_num} of %{total_num}'
