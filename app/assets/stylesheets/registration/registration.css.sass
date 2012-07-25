@@ -53,6 +53,9 @@ body
 .full-height
   height: 100%
 
+.invalid
+  color: red
+  
 #dynamic
   position: relative
   
@@ -61,19 +64,27 @@ body
   display: none
   resize: none
   
-#properties_dialog 
-  table
+#properties
+  font-size: 125%
+  background-color: #FDF3F1
+  padding: 1em 0.5em
+  .break
+    clear: left
+  div.property-item
+    width: 29em
+    float: left
     font: inherit
-  td.label
-    width: 100px
-  td.control
-    width: auto
-  label
-    font-weight: bold
-    display: inline-block
-    width: 100%
-  input, select
-    width: 100%
-
+    white-space: nowrap
+    input,select
+      width: 18em
+      margin-right: 0.5em
+    label
+      font-weight: bold
+      color: gray
+      display: inline-block
+      text-align: right
+      width: 10em
+      padding-right: 1em
+  
 .button-group
   margin-right: 4px

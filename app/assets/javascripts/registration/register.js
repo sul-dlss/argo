@@ -2,14 +2,26 @@ $.ajaxQ('register', { maxRequests: 10 });
 
 function DorRegistration(initOpts) {
   var $t = {
-    projectName: '',
-    apoId: null,
-    workflowId: null,
-    mdFormId: null,
-    metadataSource: null,
-    tagList: "",
+    defaultValues: {
+      objectType: 'item',
+      projectName: '',
+      apoId: 'druid:hv992ry2431',
+      workflowId: null,
+      mdFormId: null,
+      metadataSource: 'label',
+      tagList: "",
+    },
+    
     registrationQueue: [],
     maxConcurrentRequests: 5,
+
+    setDefault : function(param) {
+      if (param == null) {
+        for (param in $t.defaultValues) { $t.setDefault(param) }
+      } else {
+        $t[param] = $t.defaultValues[param]
+      }
+    },
     
     getTrackingSheet : function(druids) {
       var project = $t.projectName;
@@ -23,11 +35,6 @@ function DorRegistration(initOpts) {
       var apo = $t.apoId;
       var sourcePrefix = $t.metadataSource;
       progressFunction = progressFunction || function() {}
-
-      if ($.isEmptyObject(apo) || $.isEmptyObject(sourcePrefix)) {
-        $t.displayRequirements();
-        return(false);
-      }
 
       // Grab list of tags from textarea, split, and reject blanks
       var tags = $.grep($t.tagList.split('\n'), function(tag) { return tag.trim() == '' ? false : true })
@@ -43,12 +50,12 @@ function DorRegistration(initOpts) {
       data.id = rowid
 
       var params = { 
-        'object_type' : 'item',
+        'object_type' : $t.objectType,
         'admin_policy' : apo,
         'workflow_id' : $t.workflowId,
-        'seed_datastream' : ['descMetadata'],
+        'seed_datastream' : ($t.metadataSource == 'label') ? null : ['descMetadata'],
         'label' : data.label || ':auto',
-        'tag' : tags 
+        'tag' : tags
       }
 
       if (data.source_id) {
@@ -64,6 +71,8 @@ function DorRegistration(initOpts) {
       } else if (sourcePrefix == 'mdtoolkit') {
         params['pid'] = "druid:" + data.metadata_id;
       }
+      
+      for (x in params) { if (params[x] == null) { delete params[x] } }
 
       var ajaxParams = {
         type: 'POST',
@@ -97,22 +106,48 @@ function DorRegistration(initOpts) {
       });
     },
 
+    validate : function() {
+      var apo = $t.apoId;
+      var sourcePrefix = $t.metadataSource;
+      switch($t.objectType) {
+        case 'item':
+          if ($.isEmptyObject(apo) || $.isEmptyObject(sourcePrefix)) {
+            $t.displayRequirements('Please specify both an Admin. Policy and a Metadata Source before continuing.');
+            return(false);
+          }
+          break;
+        case 'collection':
+        case 'set':
+          if ($.isEmptyObject(apo)) {
+            $t.displayRequirements('Please specify an Admin. Policy before continuing.');
+            return(false);
+          }
+          return(false);
+          break;
+      }
+      
+      if (sourcePrefix != 'label') {
+        var mdIds = $('#data').jqGrid('getCol','metadata_id')
+        if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
+          $t.displayRequirements('Metadata source "' + sourcePrefix + '" requires metadata IDs for all items.');
+          return(false);
+        }
+      }
+      return(true)
+    },
+
     registerAll : function() {
       var apo = $t.apoId;
       var sourcePrefix = $t.metadataSource;
-
-      if ($.isEmptyObject(apo) || $.isEmptyObject(sourcePrefix)) {
-        $t.displayRequirements();
-        return(false);
-      }
-
-      var ids = $t.getDataIds();
-      $t.progress(true);
-      for (var i = 0; i < ids.length; i++) {
-        var rowid = ids[i];
-        $t.register(rowid, function(xhr) {
-          $t.progress();
-        });
+      if (this.validate()) {
+        var ids = $t.getDataIds();
+        $t.progress(true);
+        for (var i = 0; i < ids.length; i++) {
+          var rowid = ids[i];
+          $t.register(rowid, function(xhr) {
+            $t.progress();
+          });
+        }
       }
     }
   };

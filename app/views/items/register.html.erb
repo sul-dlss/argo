@@ -7,52 +7,32 @@
   </script>
 <% end %>
 
-<div id='dialogs'>
-  <div id='properties_dialog'>
-    <table style='width: 100%'>
-      <tr>
-        <td class='label'>
-          <label for='project'>Project Name</label>
-        </td>
-        <td class='control'>
-          <%= text_field_tag :project, :id => :project %>
-        </td>
-      </tr>
-      <tr>
-        <td class='label'>
-          <label for='apo_id'>Object Type</label>
-        </td>
-        <td class='control'>
-          <%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :id => :apo_id %>
-        </td>
-      </tr>
-      <tr>
-        <td class='label'>
-          <label for='workflow_id'>Workflow</label>
-        </td>
-        <td class='control'>
-          <%= select_tag :workflow_id, '', :id => :workflow_id %>
-        </td>
-      </tr>
-      <tr>
-        <td class='label'>
-          <label for='id_source'>Metadata Source</label>
-        </td>
-        <td class='control'>
-          <%= select_tag :id_source, options_for_select(metadata_sources), :id => :id_source %>
-        </td>
-      </tr>
-      <tr>
-        <td class='label'>
-          <label for='mdform_id'>Editor Form</label>
-        </td>
-        <td class='control'>
-          <%= select_tag :mdform_id, '', :id => :mdform_id %>
-        </td>
-      </tr>
+<div id='properties' class="ui-widget" style="display: none">
+        <div class="property-item"><label for="object_type">Type of Object</label><%= select_tag :object_type, options_for_select(valid_object_types), :'data-rcparam' => 'objectType' %></div>
+        <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :'data-rcparam' => 'apoId' %></div>
+        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(valid_rights_options), :class => 'tag-field', :'data-tagname' => 'Process : Rights' %></div>
+        <div class="property-item"><label for="id_source">Metadata Source</label><%= select_tag :id_source, options_for_select(metadata_sources), :'data-rcparam' => 'metadataSource' %></div>
+        <div class="property-item spacer"></div>
+        <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
+        <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), :class => 'tag-field', :'data-tagname' => 'Process : Content Type' %></div>
+        <div class="property-item"><label for='mdform_id'>Editor Form</label><%= select_tag :mdform_id, '', :class => 'tag-field', :'data-tagname' => 'MDForm' %></div>
+        <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, :class => 'tag-field', :'data-tagname' => 'Project', :'data-rcparam' => 'projectName' %></div>
+        <div class="property-item wide"><label for='tag_1'>Tags</label>
+          <span id="tags" style="width: auto">
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_0', :class => 'free tag-field' %> 
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %> 
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_2', :class => 'free tag-field' %>
+            <%= hidden_field_tag :registered_by, webauth.login, :class => 'tag-field ', :'data-tagname' => 'Registered By' %>
+          </span>
+        </div>
+        <div class="break"></div>
     </table>
+</div>
+
+<div id='dialogs'>
+  <div id='invalid_dialog'>
     <p>
-      <label for='tag_list'>Tags</label> <%= text_area_tag :tag_list, '', :class => 'full-width', :id => :tag_list, :rows => 7 %>
+      The form contains errors. Please correct them before submitting.
     </p>
   </div>
   <div id='specify'>

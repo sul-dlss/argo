@@ -14,6 +14,37 @@ module RegistrationHelper
     end
   end
 
+  def valid_object_types
+    [
+      ['Item','item'],
+      ['Set','set'],
+      ['Collection','collection'],
+      ['Admin. Policy','adminPolicy'],
+      ['Workflow Definition','workflow']
+    ]
+  end
+  
+  def valid_rights_options
+    [
+      ['World','world'],
+      ['Stanford','stanford']
+    ]
+  end
+  
+  def valid_content_types
+    [
+      'Book (flipbook, ltr)',
+      'Book (flipbook, rtl)',
+      'Book (image-only)',
+      'Image',
+      'File',
+      'Manuscript (flipbook, ltr)',
+      'Manuscript (flipbook, rtl)',
+      'Manuscript (image-only)',
+      'Map'
+    ]
+  end
+  
   def metadata_sources
     [
       ['None','label'],
