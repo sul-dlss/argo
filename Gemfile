@@ -1,7 +1,7 @@
 source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
-gem 'dor-services', ">= 3.5.1"
+gem 'dor-services', ">= 3.9.0"
 gem 'rails', '3.2.0'
 gem "blacklight", '~>3.5'
 gem 'blacklight-hierarchy', :git => "git://github.com/sul-dlss/blacklight-hierarchy.git"
