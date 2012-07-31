@@ -7,8 +7,7 @@ module WorkflowHelper
     workflow_data = facet_tree('wf')['wf_wps_facet']
     result = workflow_data.keys.sort.collect do |wf_name|
       render :partial => 'workflow_table', :locals => { :wf_name => wf_name, :wf_data => workflow_data[wf_name] }
-    end
-    result.join("\n").html_safe
+    end.join("\n").html_safe
   end
 
   def render_workflow_name(name)
