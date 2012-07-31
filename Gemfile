@@ -7,6 +7,8 @@ gem "blacklight", '~>3.5'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 
 gem 'rake'
+gem 'about_page'
+gem 'is_it_working-cbeer'
 gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
