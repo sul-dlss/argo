@@ -11,5 +11,7 @@ describe 'report/workflow_grid' do
     assign(:response, RSolr::Ext::Response::Base.new(@solr_response, nil, {}))
 
     render
+
+    rendered.should have_selector('table td.count.waiting', :content => '500')
   end
 end

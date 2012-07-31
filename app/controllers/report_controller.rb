@@ -50,10 +50,15 @@ class ReportController < CatalogController
   def workflow_grid
     delete_or_assign_search_session_params
     (@response, @document_list) = get_search_results
+
     if request.xhr?
       render :partial => 'workflow_grid'
-    else
-      render
+      return
+    end 
+
+    respond_to do |format|
+      format.json
+      format.html
     end
   end
   
