@@ -9,15 +9,15 @@ gem 'blacklight-hierarchy', "~> 0.0.3"
 gem 'rake'
 gem 'about_page'
 gem 'is_it_working-cbeer'
-gem 'rack-webauth', :git => "git://github.com/sul-dlss/rack-webauth.git"
+gem 'rack-webauth', :git => "https://github.com/sul-dlss/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'
 gem 'ruby-graphviz'
 gem "solrizer-fedora"
-gem "rsolr", :git => "git://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
-gem "rsolr-client-cert"
-gem 'confstruct'
+gem "rsolr", :git => "https://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
+gem "rsolr-client-cert", :git => 'https://github.com/cbeer/rsolr-client-cert.git'
+gem 'confstruct', :git => 'https://github.com/cbeer/confstruct.git'
 gem "mysql2", "~> 0.3.0"
 gem "progressbar"
 gem "haml"
