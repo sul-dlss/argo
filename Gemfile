@@ -2,7 +2,7 @@ source :rubygems
 source "http://sulair-rails-dev.stanford.edu"
 
 gem 'dor-services', ">= 3.9.0"
-gem 'rails', '3.2.0'
+gem 'rails', '3.2.6'
 gem "blacklight", '~>3.5'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 
