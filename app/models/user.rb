@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
  end
  
  def to_s
-   webauth.attributes['DISPLAYNAME']
+   webauth.attributes['DISPLAYNAME'] || webauth.login
  end
  
 end
