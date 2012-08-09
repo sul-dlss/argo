@@ -105,16 +105,10 @@ class Report
         :solr_fields => ['lifecycle_facet'],
         :sort => false, :default => true, :width => 100 
       },
-      {
-        :field => 'registered_dt', :label => "Reg. Date", 
-        :sort => true, :default => false, :width => 100 
-      },
-      { 
-        :field => 'submitted_dt', :label => "Submit Date", 
-        :sort => true, :default => true, :width => 100 
-      },
       { 
         :field => 'published_dt', :label => "Pub. Date", 
+        #modified to format the date
+        :proc => lambda { |doc| Date.strptime(doc['published_dt'],'%Y-%m-%d %H:%M:%S'},
         :sort => true, :default => true, :width => 100 
       },
       { 
@@ -126,7 +120,7 @@ class Report
         :sort => true, :default => true, :width => 100 
       },
       { 
-        :field => 'accessioned_dt', :label => "Acc. Date", 
+        :field => 'accessioned_dt', :label => "Accession. Date", 
         :sort => true, :default => false, :width => 100
       },
       { 
