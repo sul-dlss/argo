@@ -70,7 +70,7 @@ class ApplicationController < ActionController::Base
   end
   
   def authorize!
-    unless webauth.logged_in?
+    unless current_user
       redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}" 
       return false
     end
