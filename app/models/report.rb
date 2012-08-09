@@ -107,8 +107,8 @@ class Report
       },
       { 
         :field => 'published_dt', :label => "Pub. Date", 
-        #modified to format the date
-        :proc => lambda { |doc| Date.strptime(doc['published_dt'],'%Y-%m-%d %H:%M:%S'},
+          #modified to format the date
+        :proc => lambda { |doc| Date.strptime(doc['published_dt'],'%Y-%m-%d %H:%M:%S')},
         :sort => true, :default => true, :width => 100 
       },
       { 
