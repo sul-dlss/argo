@@ -32,8 +32,10 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
-    if webauth.logged_in?
+    if webauth and webauth.logged_in?
       User.find_or_create_by_webauth(webauth)
+    elsif request.env['REMOTE_USER']
+      User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
     else
       nil
     end

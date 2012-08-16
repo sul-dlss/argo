@@ -6,7 +6,7 @@
   <body data-application-root="<%= ENV['RACK_BASE_URI'] %>">
     <div id='container'>
       <div id='header'>
-        <span class='text right'><%= webauth.attributes['DISPLAYNAME'] || webauth.login %></span> 
+        <span class='text right'><%= current_user.to_s %></span> 
         <%= link_to(image_tag('sulair_logo.png').html_safe, root_path) %>
         <span class='text'>Digital Library Systems and Services</span>
       </div>

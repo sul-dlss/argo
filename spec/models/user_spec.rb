@@ -11,11 +11,35 @@ describe User do
     end
   end
 
-  describe "#to_s" do
-    it "should be the name from Webauth" do
-      mock_webauth = double('webauth', :attributes => { 'DISPLAYNAME' => 'Møds Ässet'})
-      subject.should_receive(:webauth).and_return mock_webauth
-      subject.to_s.should == 'Møds Ässet'
+  context "with webauth" do
+    subject { User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Møds Ässet'})) }
+
+    describe "#login" do
+      it "should get the sunetid from Webauth" do
+        subject.login.should == 'mods'
+      end
+    end
+
+    describe "#to_s" do
+      it "should be the name from Webauth" do
+        subject.to_s.should == 'Møds Ässet'
+      end
+    end
+  end
+
+  context "with REMOTE_USER" do
+    subject { User.find_or_create_by_remoteuser('mods') }
+
+    describe "#login" do
+      it "should get the sunetid from Webauth" do
+        subject.login.should == 'mods'
+      end
+    end
+
+    describe "#to_s" do
+      it "should be the name from Webauth" do
+        subject.to_s.should == 'mods'
+      end
     end
   end
 end

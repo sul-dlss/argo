@@ -8,6 +8,10 @@ describe ApplicationController do
       subject.current_user.should be_a_kind_of(User)
     end
 
+    it "should be a user if REMOTE_USER is provided" do
+      request.env['REMOTE_USER'] = 'mods'
+      subject.current_user.should be_a_kind_of(User)
+    end
     it "should be nil if there is no user" do
       subject.stub(:webauth).and_return(mock(:webauth_user, :logged_in? => false))
       subject.current_user.should be_nil

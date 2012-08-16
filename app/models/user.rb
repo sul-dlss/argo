@@ -10,8 +10,25 @@ class User < ActiveRecord::Base
    result
  end
  
- def to_s
-   webauth.attributes['DISPLAYNAME'] || webauth.login
+ def self.find_or_create_by_remoteuser username
+   result = self.find_or_create_by_sunetid(username)
+   result
  end
- 
+
+ def to_s
+   if webauth
+     webauth.attributes['DISPLAYNAME'] || webauth.login
+   else
+     sunetid
+   end
+ end
+
+ def login
+   if webauth
+     webauth.login
+   else
+     sunetid
+   end
+ end
+
 end
