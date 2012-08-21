@@ -6,6 +6,8 @@ set :branch, "develop"
 set :bundle_without, [:deployment,:production]
 set :rvm_ruby_string, "1.9.3"
 set :destination, "/home/lyberadmin"
+set :application, "argo"
+set :deploy_to, "#{destination}/#{application}"
 
 role :web, deployment_host
 role :app, deployment_host

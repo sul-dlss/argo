@@ -4,6 +4,9 @@ set :deployment_host, "lyberapps-prod.stanford.edu"
 set :repository,  "ssh://corn.stanford.edu/afs/ir/dev/dlss/git/lyberteam/argo.git"
 set :branch, "master"
 set :bundle_without, [:deployment,:development,:test]
+set :destination, "/var/opt/home/lyberadmin"
+set :application, "argo"
+set :deploy_to, "#{destination}/#{application}"
 
 role :web, deployment_host
 role :app, deployment_host
