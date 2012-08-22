@@ -36,14 +36,16 @@ module DorObjectHelper
     if datetime.nil?
       ''
     else
-      #d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
-      #d.strftime('%Y-%m-%d %I:%M%p')
+
       #this needs to use the timezone set in config.time_zone
-      
-      zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
-      d=DateTime.parse(datetime).in_time_zone(zone)
-      I18n.l(d)
-    
+      begin
+        zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
+        d = datetime.is_a?(Time) ? datetime : DateTime.parse(datetime).in_time_zone(zone)
+        I18n.l(d)
+      rescue
+        d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
+        d.strftime('%Y-%m-%d %I:%M%p')
+      end
     
     end
   end
