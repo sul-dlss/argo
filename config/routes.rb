@@ -46,6 +46,7 @@ Argo::Application.routes.draw do
     get "/tracksheet"
     get "/form_list"
     get "/workflow_list"
+    get "/rights_list"
     get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
   end
 
@@ -59,9 +60,7 @@ Argo::Application.routes.draw do
     get '/configuration'
     get '/label'
     get '/query_by_id'
-    match 'reindex/:pid', :action => :reindex
-    match 'delete_from_index/:pid', :action => :delete_from_index
-    resources :objects 
+    resources :objects
   end
   
   namespace :legacy do

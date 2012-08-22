@@ -10,5 +10,11 @@
   <% end %>
   <div style="clear:left">
     <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => ['objProfile_objCreateDate_dt','objProfile_objLabel_dt','identifier_t','tag_t'] } %>
-  </div>
+  	<dl class="defList">
+		<dt>Status</dt>
+		<dd>	
+		<%= render_status document%>
+		</dd>
+	</dl>
+	</div>
 </div>

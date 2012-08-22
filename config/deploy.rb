@@ -23,6 +23,8 @@ set :user, "lyberadmin"
 set :runner, "lyberadmin"
 set :ssh_options, {:auth_methods => %w(gssapi-with-mic publickey hostbased), :forward_agent => true}
 
+set :destination, "/var/opt/home/lyberadmin"
+set :application, "argo"
 
 set :scm, :git
 set :deploy_via, :copy # I got 99 problems, but AFS ain't one
@@ -31,7 +33,7 @@ set :copy_exclude, [".git"]
 set :use_sudo, false
 set :keep_releases, 10
 
-
+set :deploy_to, "#{destination}/#{application}"
 
 namespace :argo do
   task :trust_rvmrc do

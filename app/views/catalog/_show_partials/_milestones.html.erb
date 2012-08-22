@@ -4,7 +4,7 @@
   </thead>
   <tbody>
   <% milestones.each_pair do |k,m| %>
-    <tr><td><%= m[:display] %></td><td><%= m[:time] %></td></tr>
+    <tr><td><%= m[:display] %></td><td><%= if (m[:time]=='pending') then m[:time] else l m[:time] end%></td></tr>
   <% end %>
   </tbody>
 </table>

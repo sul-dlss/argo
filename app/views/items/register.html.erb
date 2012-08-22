@@ -10,7 +10,7 @@
 <div id='properties' class="ui-widget" style="display: none">
         <div class="property-item"><label for="object_type">Type of Object</label><%= select_tag :object_type, options_for_select(valid_object_types), :'data-rcparam' => 'objectType' %></div>
         <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :'data-rcparam' => 'apoId' %></div>
-        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(valid_rights_options), :class => 'tag-field', :'data-tagname' => 'Process : Rights' %></div>
+        <div class="property-item"><label for="rights"><img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>Rights</label><%= select_tag :rights, options_for_select(valid_rights_options), :'data-tagname' => 'Process : Rights' %></div>
         <div class="property-item"><label for="id_source">Metadata Source</label><%= select_tag :id_source, options_for_select(metadata_sources), :'data-rcparam' => 'metadataSource' %></div>
         <div class="property-item spacer"></div>
         <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
@@ -39,6 +39,14 @@
     <p>
       Please specify both an Admin. Policy and a Metadata Source before continuing.
     </p>
+  </div>
+  <div id='help_dialog'>
+	<p>
+		<b>World</b>: PURL page and published content files available to all<br>
+		<b>Stanford</b>: PURL page is world visible; content files are available to the Stanford community only<br>
+		<b>None</b>: PURL page is world visible; no content files are available<br>
+		<b>Dark</b>: No PURL page, no content available online
+	</p>
   </div>
   <div id='progress_dialog'>
     <div id='progress'></div>

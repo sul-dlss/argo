@@ -55,7 +55,9 @@ function DorRegistration(initOpts) {
         'workflow_id' : $t.workflowId,
         'seed_datastream' : ($t.metadataSource == 'label') ? null : ['descMetadata'],
         'label' : data.label || ':auto',
-        'tag' : tags
+        'tag' : tags,
+		'rights' : $('#rights').val()
+		
       }
 
       if (data.source_id) {
@@ -125,7 +127,7 @@ function DorRegistration(initOpts) {
           return(false);
           break;
       }
-      
+      //if the metadata source is set, check for metadata ids
       if (sourcePrefix != 'label') {
         var mdIds = $('#data').jqGrid('getCol','metadata_id')
         if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
@@ -133,6 +135,14 @@ function DorRegistration(initOpts) {
           return(false);
         }
       }
+
+	  //check for missing source ids
+		var source_ids = $('#data').jqGrid('getCol','source_id_id')
+        if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
+          $t.displayRequirements('Source ids must be set for all items.');
+          return(false);
+        }
+
       return(true)
     },
 

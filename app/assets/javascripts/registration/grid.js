@@ -222,8 +222,7 @@ var gridContext = function() {
         }
       }
       this.statusImages.preloadImages();
-
-      $.defaultText({ css: 'default-text' });
+	  $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
         $t.resizeGrid();
       });
@@ -233,7 +232,7 @@ var gridContext = function() {
     initializeGrid: function() {
       var sourceIdFormatter = function(val,opts,rowObject) { 
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
-        if (val.match(/^\s*$/) || val.match(/^.+:.+$/)) {
+        if (val.length>0 && (val.match(/^\s*$/) || val.match(/^.+:.+$/))) {
           cell.removeClass('invalid')
         } else {
           cell.addClass('invalid')
@@ -449,11 +448,39 @@ var gridContext = function() {
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) { 
             if (response) {
+			
               var optionsHtml = response.map(function(v) { return '<option value="'+v+'">'+v+'</option>' }).join('');
               $('#workflow_id').html(optionsHtml);
             }
           }
         })
+
+	        $.ajax({
+	          type: 'GET',
+	          url: pathTo('/registration/rights_list'),
+	          dataType: 'json',
+	          data: { apo_id: $('#apo_id').val() },
+	          success: function(response,status,xhr) { 
+	            if (response) {
+	              	var optionsHtml='';
+					for (var entry in response)
+						{
+							if(response.hasOwnProperty(entry))
+							{
+								if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
+								{
+									optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
+								}
+								else
+								{
+									optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
+								}
+							}
+						}
+	              	$('#rights').html(optionsHtml);
+	            }
+	          }
+	        })
         
         $.ajax({
           type: 'GET',
@@ -476,6 +503,14 @@ var gridContext = function() {
         modal: true,
         height: 140,
         title: 'Error',
+        resizable: false
+      });
+	$('#help_dialog').dialog({
+        autoOpen: false,
+        buttons: { "Ok": function() { $(this).dialog("close"); } },
+        modal: true,
+        height: 260,
+        title: 'Help',
         resizable: false
       });
       

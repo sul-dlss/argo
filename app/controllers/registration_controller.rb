@@ -36,6 +36,56 @@ class RegistrationController < ApplicationController
     end
   end
 
+  def rights_list
+    apo_object = Dor.find(params[:apo_id], :lightweight => true)
+    #get the xml from the defaultObjectRights datastream
+    adm_xml = apo_object.defaultObjectRights.ng_xml 
+    found=false
+    result=Hash.new
+    #looks for <group>stanford</group>
+    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
+      result['default']='Stanford (APO default)'
+      result['world']='World'
+      result['dark']='Dark'
+      result['none']='None'
+      found=true
+    end
+    #looks for a world tag
+    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
+      result['stanford']='Stanford'
+      result['default']='World (APO default)'
+      result['dark']='Dark'
+      result['none']='None'
+      found=true
+    end
+    
+    adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').each do |read|
+      result['stanford']='Stanford'
+      result['world']='World'
+      result['none']='None'
+      result['dark']='Dark (APO default)'
+    end
+    #if it wasnt stanford or world default rights, there is either no object rights metadata or it doesnt include default rights
+    if not found
+      if adm_xml.to_s.length>0
+        result['stanford']='Stanford'
+        result['world']='World'
+        result['default']='Dark (APO default)'
+      else
+        result['stanford']='Stanford'
+        result['world']='World'
+        result['dark']='Dark'
+        result['none']='None'
+        result['empty']='none (set in Assembly)'
+      end
+    end
+  
+    respond_to do |format|
+      format.any(:json, :xml) { render request.format.to_sym => result }
+    end
+  end
+  
+
   def autocomplete
     response = Dor::SearchService.query('*:*', :rows => 0, :facets => { :fields => [params[:field]] }, :'facet.prefix' => params[:term].titlecase, :'facet.mincount' => 1, :'facet.limit' => 15 )
     result = response.facets.find { |f| f.name == params[:field] }.items.collect { |f| f.value }.sort

@@ -32,25 +32,19 @@ module DorObjectHelper
     result.html_safe
   end
   
-  def render_item_status doc
-    current_milestone = Array(doc['lifecycle_t']).last
-    if current_milestone.nil?
-      nil
-    else
-      status = current_milestone.split(/:/,2).first
-      if embargo_status = doc['embargo_status_t']
-        status += " (#{embargo_status.first})"
-      end
-      status
-    end
-  end
-  
   def render_datetime(datetime)
     if datetime.nil?
       ''
     else
-      d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
-      d.strftime('%Y-%m-%d %I:%M%p')
+      #d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
+      #d.strftime('%Y-%m-%d %I:%M%p')
+      #this needs to use the timezone set in config.time_zone
+      
+      zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
+      d=DateTime.parse(datetime).in_time_zone(zone)
+      I18n.l(d)
+    
+    
     end
   end
   
@@ -65,24 +59,85 @@ module DorObjectHelper
   end
   
   def render_milestones doc, obj
-    milestones = ActiveSupport::OrderedHash[
-      'registered',  { :display => 'Registered',  :time => 'pending' },
-      'submitted',   { :display => 'Submitted',   :time => 'pending' },
-      'described',   { :display => 'Described',   :time => 'pending' },
-      'inprocess',   { :display => 'In Process',  :time => 'pending' },
-      'released',    { :display => 'Released',    :time => 'pending' },
-      'published',   { :display => 'Published',   :time => 'pending' },
-      'archived',    { :display => 'Archived',    :time => 'pending' },
-      'accessioned', { :display => 'Accessioned', :time => 'pending' }
-    ]
-    
+    milestones = SolrDocument::get_milestones(doc)
+    render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
+  end
+  
+  def render_status (doc)
+    status = 0
+    version = 'v1'
+    status_hash={
+      0 => version + ' No data',
+      1 => version + ' Registered',
+      2 => version + ' In process',
+      3 => version + ' In process (described)',
+      4 => version + ' In process (described, published)',
+      5 => version + ' In process (described, published, deposited)',
+      6 => version + ' Accessioned',
+      7 => version + ' Accessioned (indexed)',
+      8 => version + ' Accessioned (indexed, ingested)'
+      }           
+    status_time=nil
     lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
     Array(doc[lifecycle_field]).each do |m| 
       (name,time) = m.split(/:/,2)
-      milestones[name] ||= { :display => name.titleize, :time => 'pending' }
-      milestones[name][:time] = render_datetime(time)
+      case name
+      when 'registered'
+        if status<1
+          status=1
+          status_time=time
+        end        
+      when 'submitted'
+        if status<2
+          status=2
+          status_time=time
+        end
+      when 'described'
+        if status<3
+          status=3
+          status_time=time
+        end
+      when 'published'
+        if status<4
+          status=4
+          status_time=time
+        end
+      when 'deposited'
+        if status<5
+          status=5
+          status_time=time
+        end
+      when 'accessioned'
+        if status<6
+          status=6
+          status_time=time
+        end
+      when 'indexed'
+        if status<7
+          status=7
+          status_time=time
+        end
+      when 'shelved'
+        if status<8
+          status=8
+          status_time=time
+        end
     end
-    render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
+  end
+  embargo=''
+  if(doc.has_key?('embargoMetadata_t'))
+    embargo_data=doc['embargoMetadata_t']
+    text=embargo_data.split.first
+    date=embargo_data.split.last
+    
+    if text == 'released'
+      #do nothing at the moment, we arent displaying these
+    else
+      embargo= ' (embargoed until '+render_datetime(date.to_s)+')' #the .to_s being necissary indiates ruby magically made date a datetime
+    end
+  end
+    result=status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
+    result=result.html_safe
   end
   
   def render_workflows doc, obj
