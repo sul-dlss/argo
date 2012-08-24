@@ -60,7 +60,9 @@ Argo::Application.routes.draw do
     get '/configuration'
     get '/label'
     get '/query_by_id'
-    resources :objects
+    match 'reindex/:pid', :action => :reindex
+    match 'delete_from_index/:pid', :action => :delete_from_index
+    resources :objects 
   end
   
   namespace :legacy do
