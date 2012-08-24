@@ -67,7 +67,7 @@ module DorObjectHelper
   
   def render_status (doc)
     status = 0
-    version = 'v1'
+    version = ''
     status_hash={
       0 => version + ' No data',
       1 => version + ' Registered',

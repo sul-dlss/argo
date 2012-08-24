@@ -8,7 +8,7 @@ function DorRegistration(initOpts) {
       apoId: 'druid:hv992ry2431',
       workflowId: null,
       mdFormId: null,
-      metadataSource: 'label',
+      metadataSource: 'none',
       tagList: "",
     },
     
@@ -53,7 +53,8 @@ function DorRegistration(initOpts) {
         'object_type' : $t.objectType,
         'admin_policy' : apo,
         'workflow_id' : $t.workflowId,
-        'seed_datastream' : ($t.metadataSource == 'label') ? null : ['descMetadata'],
+        'seed_datastream' : ($t.metadataSource == 'none' || $t.metadataSource == 'label' ) ? null : ['descMetadata'],
+		'metadata_source' : ($t.metadataSource != 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
         'tag' : tags,
 		'rights' : $('#rights').val()
@@ -64,7 +65,7 @@ function DorRegistration(initOpts) {
         params['source_id'] = data.source_id;
       }
 
-      if (sourcePrefix != 'label') {
+      if (sourcePrefix != 'none') {
         params['other_id'] = sourcePrefix + ':' + data.metadata_id;
       }
 
@@ -128,7 +129,7 @@ function DorRegistration(initOpts) {
           break;
       }
       //if the metadata source is set, check for metadata ids
-      if (sourcePrefix != 'label') {
+      if (sourcePrefix != 'none' && sourcePrefix!= 'label') {
         var mdIds = $('#data').jqGrid('getCol','metadata_id')
         if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
           $t.displayRequirements('Metadata source "' + sourcePrefix + '" requires metadata IDs for all items.');

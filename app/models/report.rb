@@ -101,7 +101,7 @@ class Report
       },
       { 
         :field => 'status', :label => "Status", 
-        :proc => lambda { |doc| doc['lifecycle_facet'].last },
+        :proc => lambda {|doc| render_status(doc) },
         :solr_fields => ['lifecycle_facet'],
         :sort => false, :default => true, :width => 100 
       },

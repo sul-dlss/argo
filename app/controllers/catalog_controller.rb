@@ -19,7 +19,7 @@ class CatalogController < ApplicationController
       :'f.wf_wsp_facet.facet.limit' => -1,
       :'f.wf_swp_facet.facet.limit' => -1,
       :'f.tag_facet.facet.limit' => -1,
-      :'f.is_governed_by_s.facet.limit' => -1,
+      #:'f.is_governed_by_s.facet.limit' => -1,
       :'f.is_member_of_collection_s.facet.limit' => -1,
       :'f.tag_facet.facet.sort' => 'index'
     }
