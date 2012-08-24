@@ -313,12 +313,22 @@ var gridContext = function() {
       $('#icons').append('<span class="button-group"></span>');
 
       this.addToolbarButton('transfer-e-w','register','Register').click(function() {
+			var cells = $('#data').jqGrid('getGridParam','savedRow');
+		      if (cells.length > 0) {
+				$('#editing_dialog').dialog('open')
+				return;
+		      }
+		else{
         if ($t.allValid()) {
           $t.toggleEditing(false);
           $t.rc.registerAll();
-        } else {
+        }
+		else{
           $('#invalid_dialog').dialog('open')
         }
+		}
+
+	
       }).addClass('enabled-grid-locked');
       
       this.addToolbarButton('note','pdf','Tracking Sheets').click(function() {
@@ -514,6 +524,15 @@ var gridContext = function() {
         resizable: false
       });
       
+	$('#editing_dialog').dialog({
+        autoOpen: false,
+        buttons: { "Ok": function() { $(this).dialog("close"); } },
+        modal: true,
+        height: 260,
+        title: 'Error',
+        resizable: false
+      });
+
       $('#invalid_dialog').dialog({
         autoOpen: false,
         buttons: { "Ok": function() { $(this).dialog("close"); } },
