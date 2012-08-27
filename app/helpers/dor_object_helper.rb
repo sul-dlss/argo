@@ -69,7 +69,7 @@ module DorObjectHelper
     status = 0
     version = ''
     status_hash={
-      0 => version + ' No data',
+      0 => version + ' ',
       1 => version + ' Registered',
       2 => version + ' In process',
       3 => version + ' In process (described)',
