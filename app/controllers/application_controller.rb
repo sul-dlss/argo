@@ -32,8 +32,10 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
-    if webauth.logged_in?
+    if webauth and webauth.logged_in?
       User.find_or_create_by_webauth(webauth)
+    elsif request.env['REMOTE_USER']
+      User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
     else
       nil
     end
@@ -70,7 +72,7 @@ class ApplicationController < ActionController::Base
   end
   
   def authorize!
-    unless webauth.logged_in?
+    unless current_user
       redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}" 
       return false
     end

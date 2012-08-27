@@ -3,9 +3,21 @@
 
 en:
   hello: "Hello world"
-
+  date:
+      formats:
+          default: ! %Y-%m-%d %I:%M%p
+  time:
+      am: am
+      formats:
+        default: ! %Y-%m-%d %I:%M%p
+  argo:
+    search:
+      report_view: 'Report View'
+      result_view: 'Results View'
+    
   blacklight:
     search:
+      start_over: 'Start Over'
       pagination_info:
         pages:
           one: '%{start_num} - %{end_num} of %{total_num}'

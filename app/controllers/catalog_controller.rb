@@ -17,7 +17,11 @@ class CatalogController < ApplicationController
       :'facet.mincount' => 1,
       :'f.wf_wps_facet.facet.limit' => -1,
       :'f.wf_wsp_facet.facet.limit' => -1,
-      :'f.wf_swp_facet.facet.limit' => -1
+      :'f.wf_swp_facet.facet.limit' => -1,
+      :'f.tag_facet.facet.limit' => -1,
+      #:'f.is_governed_by_s.facet.limit' => -1,
+      :'f.is_member_of_collection_s.facet.limit' => -1,
+      :'f.tag_facet.facet.sort' => 'index'
     }
     
     config.index.show_link = 'id'
@@ -40,6 +44,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'project_tag_t', :label => 'Project:'
     
     config.add_show_field 'content_type_facet', :label => 'Content Type:'
+    config.add_show_field 'embargoMetadata_t', :label => 'Embargo:'
     config.add_show_field 'identifier_t', :label => 'IDs:'
     config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'
     config.add_show_field 'objProfile_objLabel_dt', :label => 'Label:'
@@ -67,7 +72,9 @@ class CatalogController < ApplicationController
     config.add_search_field 'text', :label => 'All Fields'
     
     config.add_sort_field 'score desc', :label => 'Relevance'
-    
+    #These 2 lines make the sort dropdowns appear, but the queries cause an ArrayOutOfBoundsException in solr
+    config.add_sort_field 'creator_sort desc', :label => 'Creator'
+    config.add_sort_field 'title_sort desc', :label => 'Title'
     config.spell_max = 5
     
     config.facet_display = {

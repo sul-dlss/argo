@@ -101,24 +101,29 @@ class Report
       },
       { 
         :field => 'status', :label => "Status", 
-        :proc => lambda { |doc| doc['lifecycle_facet'].last },
+        :proc => lambda {|doc| render_status(doc) },
         :solr_fields => ['lifecycle_facet'],
         :sort => false, :default => true, :width => 100 
       },
       { 
         :field => 'published_dt', :label => "Pub. Date", 
+          #modified to format the date
+        :proc => lambda { |doc| render_datetime(['published_dt'])},
         :sort => true, :default => true, :width => 100 
       },
       { 
-        :field => 'shelved_dt', :label => "Shelve Date", 
+        :field => 'shelved_dt', :label => "Shelve Date",
+        :proc => lambda { |doc| render_datetime(doc['shelved_dt'])}, 
         :sort => true, :default => false, :width => 100 
       },
       { 
         :field => 'preserved_dt', :label => "Pres. Date", 
+        :proc => lambda { |doc| render_datetime(['preserved_dt'])},
         :sort => true, :default => true, :width => 100 
       },
       { 
         :field => 'accessioned_dt', :label => "Accession. Date", 
+        :proc => lambda { |doc| render_datetime(doc['accessioned_dt'])},
         :sort => true, :default => false, :width => 100
       },
       { 
@@ -187,6 +192,30 @@ class Report
     docs_to_records(@document_list)
   end
   
+  
+  def csv2
+    headings=''
+    rows=''
+    @fields.each do |f|
+      headings+=f[:label]+","
+    end
+
+    while @document_list.length >0
+      records=docs_to_records(@document_list)
+      records.each do |record|
+        rows+="\r\n"
+        row = @fields.collect { |f| record[f[:field]] }
+        row.each do |field|
+          rows+=field.to_s+','
+        end
+      end
+      @params[:page] += 1
+      (@response, @document_list) = get_search_results
+      
+    end
+    return headings+rows
+  end
+    
   def each
     headers = @fields.collect { |f| f[:label] }
     yield FasterCSV::Row.new(headers,headers).to_csv

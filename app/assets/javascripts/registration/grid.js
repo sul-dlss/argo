@@ -49,7 +49,8 @@ var gridContext = function() {
           if (currentStep >= 99.999) { $('#progress_dialog').dialog('close'); }
         }
       },
-      displayRequirements : function() {
+      displayRequirements : function(text) {
+        $('#specify p').html(text);
         $('#specify').dialog('open');
       }
     });
@@ -68,6 +69,20 @@ var gridContext = function() {
           return value.replace(/(^[^a-zA-Z0-9]+|[^a-zA-Z0-9]+$)/g,"");
       } else {
         return ''
+      }
+    },
+    
+    resizeGrid: function() {
+      $('.spacer').html($('#id_source').position().top == $('#rights').position().top ? '&nbsp;' : '')
+      var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
+      $('#tabs').height(tabDivHeight);
+      var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
+      $('#id_list').height(tabDivHeight - tabHeadHeight);
+      $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100 + $('#properties').outerHeight()));
+      // Make up for width calculation error in jqgrid header code.
+      $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
+      if ($('#id_list').css('display') != 'none') {
+        $t.resizeIdList();
       }
     },
     
@@ -124,6 +139,7 @@ var gridContext = function() {
         newRow[columns[i].name] = value;
       }
       $('#data').jqGrid('addRowData',newId, newRow, 'last');
+      $('#data').jqGrid('setRowData',newId, newRow);
       $('#data').data('nextId',newId+1);
     },
 
@@ -141,6 +157,7 @@ var gridContext = function() {
       $('#data').data('nextId',0);
       var textData = $('#id_list').val().replace(/^\t*\n$/,'');
       $t.addIdentifiers(textData.split('\n'));
+      $t.formatDruids();
     },
     
     gridToText: function() {
@@ -172,6 +189,27 @@ var gridContext = function() {
       return button;
     },
 
+    allValid: function() {
+      var result = $('#properties .invalid').length == 0 && $('#data .invalid').length == 0
+      return result
+    },
+    
+    formatDruids: function(index) {
+      var rowCount = $('#data').jqGrid('getGridParam','reccount');
+      var checkRow = function(i) {
+        var rowData = $('#data').jqGrid('getRowData',i);
+        rowData.druid = rowData.druid.trim().replace(/^.+:/,'')
+        $('#data').jqGrid('setRowData',i,rowData);
+      }
+      if (typeof index == 'undefined') {
+        for (var i = 0; i < rowCount; i++) {
+          checkRow(i)
+        }
+      } else {
+        checkRow(index)
+      }
+    },
+    
     initializeContext: function() {
       $t.statusImages = { 
         queued: pathTo('/assets/icons/queued.png'), 
@@ -184,24 +222,35 @@ var gridContext = function() {
         }
       }
       this.statusImages.preloadImages();
-
-      $.defaultText({ css: 'default-text' });
+	  $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
-        var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
-        $('#tabs').height(tabDivHeight);
-        var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
-        $('#id_list').height(tabDivHeight - tabHeadHeight);
-        $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100));
-        // Make up for width calculation error in jqgrid header code.
-        $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
-        if ($('#id_list').css('display') != 'none') {
-          $t.resizeIdList();
-        }
+        $t.resizeGrid();
       });
       return(this);
     },
 
     initializeGrid: function() {
+      var sourceIdFormatter = function(val,opts,rowObject) { 
+        var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
+        if (val.length>0 && (val.match(/^\s*$/) || val.match(/^.+:.+$/))) {
+          cell.removeClass('invalid')
+        } else {
+          cell.addClass('invalid')
+        }
+        return val
+      }
+      
+      var druidFormatter = function(val,opts,rowObject) {
+        var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
+        var newVal = val.replace(/^.+:/,'')
+        if (newVal.match(/^([a-z]{2}[0-9]{3}[a-z]{2}[0-9]{4})?$/)) {
+          cell.removeClass('invalid')
+        } else {
+          cell.addClass('invalid')
+        }
+        return newVal
+      }
+      
       $('#data').jqGrid({
         data: [],
         datatype: "local",
@@ -211,8 +260,8 @@ var gridContext = function() {
         colModel: [
           {label:' ',name:'status',index:'status',width:18,sortable:false,formatter: statusFormatter },
           {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true},
-          {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true},
-          {label:'DRUID',name:'druid',index:'druid',width:150,editable:true},
+          {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true,formatter:sourceIdFormatter},
+          {label:'DRUID',name:'druid',index:'druid',width:150,editable:true,formatter:druidFormatter},
           {label:'Label',name:'label',index:'label', width:($('#content').width() - 468),editable:true },
           {label:'Error',name:'error',index:'error',hidden:true}
         ],
@@ -228,6 +277,7 @@ var gridContext = function() {
       });
       $(window).trigger('resize')
       $('#t_data').html('<div id="icons"/>')
+      $('#properties').show().insertBefore($('#dynamic .ui-userdata'))
 
       return(this);
     },
@@ -262,13 +312,23 @@ var gridContext = function() {
 
       $('#icons').append('<span class="button-group"></span>');
 
-      this.addToolbarButton('tag','edit-properties','Properties').click(function() {
-        $('#properties_dialog').dialog('open');
-      });
-
       this.addToolbarButton('transfer-e-w','register','Register').click(function() {
-        $t.toggleEditing(false);
-        $t.rc.registerAll();
+			var cells = $('#data').jqGrid('getGridParam','savedRow');
+		      if (cells.length > 0) {
+				$('#editing_dialog').dialog('open')
+				return;
+		      }
+		else{
+        if ($t.allValid()) {
+          $t.toggleEditing(false);
+          $t.rc.registerAll();
+        }
+		else{
+          $('#invalid_dialog').dialog('open')
+        }
+		}
+
+	
       }).addClass('enabled-grid-locked');
       
       this.addToolbarButton('note','pdf','Tracking Sheets').click(function() {
@@ -288,35 +348,105 @@ var gridContext = function() {
       return(this);
     },
     
-    initializeDialogs: function() {
-      $('#properties_dialog').dialog({
-        autoOpen: false,
-        open: function() {
-          $('#project').val($t.rc.projectName);
-          $('#apo_id').val($t.rc.apoId);
-          $('#workflow_id').val($t.rc.workflowId);
-          $('#mdform_id').val($t.rc.mdFormId);
-          $('#id_source').val($t.rc.metadataSource);
-          $('#tag_list').val($t.rc.tagList);
-        },
-        buttons: { 
-          "Ok": function() { 
-            $t.rc.projectName = $('#project').val();
-            $t.rc.apoId = $('#apo_id').val();
-            $t.rc.workflowId = $('#workflow_id').val();
-            $t.rc.mdFormId = $('#mdform_id').val();
-            $t.rc.metadataSource = $('#id_source').val();
-            $t.rc.tagList = $('#tag_list').val();
-            $(this).dialog("close");
-          },
-          "Cancel": function() { $(this).dialog("close"); }
-        },
-        title: 'Registration Properties'
+    setTags: function() {
+      var tags = $('#properties .tag-field').map(function(index,elem) { 
+        var field = $(elem);
+        var value = field.val();
+        if (field.attr('disabled') || value == null || value.trim() == '') {
+          return null
+        } else {
+          var prefix = field.data('tagname')
+          if (prefix) {
+            return prefix + ' : ' + value
+          } else {
+            return value
+          }
+        }
+      })
+      tags = $.map(tags, function(e) { return e })
+      $t.rc.tagList = tags.join("\n").trim();
+    },
+    
+    initializeCallbacks: function() {
+      $('#properties input,#properties select').change(function(evt) {
+        var sender = $(evt.target)
+        var prop = sender.data('rcparam')
+        if (prop) {
+          $t.rc[prop] = sender.val();
+        }
+        return true
       });
 
+      $('#properties input.free.tag-field').change(function(evt) {
+        var sender = $(evt.target)
+        var value = sender.val().trim().split(/\s*:\s*/)
+        sender.val(value.join(' : '))
+        if ((value.length == 1 && value[0] != '') || (value.length > 1 && $.grep(value, function(x) { return(x == '') }).length > 0)) {
+          sender.addClass('invalid')
+        } else {
+          sender.removeClass('invalid')
+        }
+        $t.setTags();
+        return(true);
+      });
+      
+      $('#properties input.ui-autocomplete-input').blur(function(evt) { 
+        $t.setTags();
+        $(evt.target).change();
+      })
+      
+      $('#properties select.tag-field').change($t.setTags)
+
+      var disable = function(elem,bool) {
+        var target = $(elem)
+        if (target.attr('disabled') != bool) {
+          target.attr('disabled',bool)
+          if (bool) {
+            var param = target.data('rcparam');
+            if (param) { $t.rc.setDefault(param); }
+          } else {
+            target.change()
+          }
+        }
+        return(true)
+      }
+      
+      $('#object_type').change(function(evt) {
+        var sender = evt.target
+        var valid_controls = {
+          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2"],
+          'set'        : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2"],
+          'collection' : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2"],
+          'adminPolicy': ["object_type", "registered_by"],
+          'workflow'   : ["object_type", "registered_by"]
+        }
+        var current_type = $('#object_type').val();
+        var enable = valid_controls[current_type];
+        $('#properties input,#properties select').each( function(index,elem) {
+          if (elem.id != sender.id) {
+            disable(elem, enable.indexOf(elem.id) == -1)
+          }
+        })
+        $t.setTags();
+        $('#id_source').change();
+        return true
+      })
+      
+      $('#id_source').change(function(evt) {
+        control = $(evt.target)
+        var mdtk = !control.attr('disabled')
+        mdtk = mdtk && (control.val() == 'mdtoolkit')
+        disable($('#mdform_id'), !mdtk)
+        return true
+      });
+      
+      return(this);
+    },
+    
+    initializeDialogs: function() {      
       $('#project').autocomplete({
         source: pathTo('/registration/suggest_project'),
-        minLength: 0
+        minLength: 0,
       });
       
       // Update Workflow and Form lists when APO changes
@@ -328,11 +458,39 @@ var gridContext = function() {
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) { 
             if (response) {
+			
               var optionsHtml = response.map(function(v) { return '<option value="'+v+'">'+v+'</option>' }).join('');
               $('#workflow_id').html(optionsHtml);
             }
           }
         })
+
+	        $.ajax({
+	          type: 'GET',
+	          url: pathTo('/registration/rights_list'),
+	          dataType: 'json',
+	          data: { apo_id: $('#apo_id').val() },
+	          success: function(response,status,xhr) { 
+	            if (response) {
+	              	var optionsHtml='';
+					for (var entry in response)
+						{
+							if(response.hasOwnProperty(entry))
+							{
+								if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
+								{
+									optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
+								}
+								else
+								{
+									optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
+								}
+							}
+						}
+	              	$('#rights').html(optionsHtml);
+	            }
+	          }
+	        })
         
         $.ajax({
           type: 'GET',
@@ -357,6 +515,32 @@ var gridContext = function() {
         title: 'Error',
         resizable: false
       });
+	$('#help_dialog').dialog({
+        autoOpen: false,
+        buttons: { "Ok": function() { $(this).dialog("close"); } },
+        modal: true,
+        height: 260,
+        title: 'Help',
+        resizable: false
+      });
+      
+	$('#editing_dialog').dialog({
+        autoOpen: false,
+        buttons: { "Ok": function() { $(this).dialog("close"); } },
+        modal: true,
+        height: 260,
+        title: 'Error',
+        resizable: false
+      });
+
+      $('#invalid_dialog').dialog({
+        autoOpen: false,
+        buttons: { "Ok": function() { $(this).dialog("close"); } },
+        modal: true,
+        height: 140,
+        title: 'Error',
+        resizable: false
+      });
       
       $('#reset_dialog').dialog({
         autoOpen: false,
@@ -364,7 +548,6 @@ var gridContext = function() {
           "Ok": function() { 
             $t.reset(); 
             $(this).dialog("close"); 
-            $('#properties_dialog').dialog('open');
           },
           "Cancel": function() { $(this).dialog("close"); }
         },
@@ -389,7 +572,7 @@ var gridContext = function() {
 
     initialize: function() {
       this.initializeContext().initializeDialogs().
-        initializeGrid().initializeToolbar();
+        initializeGrid().initializeToolbar().initializeCallbacks();
     }
   };
   return($t);
@@ -397,6 +580,5 @@ var gridContext = function() {
 
 $(document).ready(function() {
   gridContext.initialize();
-  $('#apo_id').change();
-  $('#properties_dialog').dialog('open');
+  $('#properties input,#properties select').change();
 });

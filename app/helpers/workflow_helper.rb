@@ -7,8 +7,7 @@ module WorkflowHelper
     workflow_data = facet_tree('wf')['wf_wps_facet']
     result = workflow_data.keys.sort.collect do |wf_name|
       render :partial => 'workflow_table', :locals => { :wf_name => wf_name, :wf_data => workflow_data[wf_name] }
-    end
-    result.join("\n").html_safe
+    end.join("\n").html_safe
   end
 
   def render_workflow_name(name)
@@ -70,6 +69,18 @@ module WorkflowHelper
       end
       link_to(img.html_safe, p, :class => 'no-underline')
     end
+  end
+
+  def proc_names_for_wf(wf_name, wf_data)
+      proc_names = wf_data.keys.delete_if { |k,v| ! k.is_a?(String) }
+      wf = Dor::WorkflowObject.find_by_name(wf_name)
+      if wf.nil?
+        proc_names = ActiveSupport::OrderedHash[*(proc_names.sort.collect { |n| [n,nil] }.flatten)]
+      else
+        proc_names = ActiveSupport::OrderedHash[*(wf.definition.processes.collect { |p| [p.name,p.label] }.flatten)]
+      end
+
+      proc_names
   end
   
 end

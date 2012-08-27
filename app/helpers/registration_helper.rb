@@ -13,12 +13,111 @@ module RegistrationHelper
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
   end
+  
+  def apo_default_rights_list(*permission_keys)
+    q = 'objectType_t:adminPolicy'
+    unless permission_keys.empty?
+      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
+    end
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result.sort! do |a,b|
+      Array(a['tag_t']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+    end
+    #for each apo, fetch the apo object so the rightsMetadata stream can be read, and the default permissions based on the chosen apo can be labeled as (apo default)
+    default_rights=Array.new
+    result.each do |apo|
+      apo_object = Dor.find(apo['id'], :lightweight => true)
+      adm_xml = apo_object.defaultObjectRights.ng_xml 
+      added=false
+      
+      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
+        #if read.value='Stanford'
+          apo['rights'] = 'Stanford'+read.name
+          added=true
+          break
+        #end
+      end
+      
+      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
+          apo['rights'] = 'world'
+          added=true
+          break
+        
+      end
+      
+      if apo['rights'].nil?
+      apo['rights'] = 'dark'
+      end
+    end
+    result.collect do |doc|
+      [Array( doc['rights']).first  ,doc['id'].to_s]
+    end
+  end
 
+  def apo_default_rights(apo_id)
+    apo_object = Dor.find(apo_id, :lightweight => true)
+    adm_xml = apo_object.defaultObjectRights.ng_xml 
+    added=false
+    
+    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
+      toret=Array.new
+      toret['stanford']='Stanford (default)'
+      toret['world']='world'
+      toret['none']='dark'
+      return toret
+    end
+    
+    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
+        oret=Array.new
+        toret['stanford']='Stanford'
+        toret['world']='world (default)'
+        toret['none']='dark'
+        return toret
+    end
+    oret=Array.new
+    toret['stanford']='Stanford'
+    toret['world']='world'
+    toret['none']='dark (default)'
+  end
+  
+  def valid_object_types
+    [
+      ['Item','item'],
+      ['Set','set'],
+      ['Collection','collection'],
+      ['Admin. Policy','adminPolicy'],
+      ['Workflow Definition','workflow']
+    ]
+  end
+  
+  def valid_rights_options
+    [
+      ['World','world'],
+      ['Stanford','stanford'],
+      ['Dark (Preserve Only)','none']
+    ]
+  end
+  
+  def valid_content_types
+    [
+      'Book (flipbook, ltr)',
+      'Book (flipbook, rtl)',
+      'Book (image-only)',
+      'Image',
+      'File',
+      'Manuscript (flipbook, ltr)',
+      'Manuscript (flipbook, rtl)',
+      'Manuscript (image-only)',
+      'Map'
+    ]
+  end
+  
   def metadata_sources
     [
-      ['None','label'],
+      ['None','none'], #changed from label
       ['Symphony','symphony'], 
-      ['Metadata Toolkit','mdtoolkit']
+      ['Metadata Toolkit','mdtoolkit'],
+      ['Label','label']
     ]
   end
 

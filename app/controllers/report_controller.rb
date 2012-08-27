@@ -44,17 +44,21 @@ class ReportController < CatalogController
     self.response.headers["Content-Type"] = "application/octet-stream" 
     self.response.headers["Content-Disposition"] = "attachment; filename=report.csv"
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
-    self.response_body = Report.new(params,fields)
+    self.response_body = Report.new(params,fields).csv2
   end
   
   def workflow_grid
     delete_or_assign_search_session_params
     (@response, @document_list) = get_search_results
+
     if request.xhr?
       render :partial => 'workflow_grid'
-    else
-      render
+      return
+    end 
+
+    respond_to do |format|
+      format.json
+      format.html
     end
   end
-  
 end
