@@ -54,6 +54,8 @@ module DorObjectHelper
     events = structure_from_solr(doc,'event')
     unless events.empty?
       events = events.event.collect do |event|
+        event.who = event.who.first if event.who.is_a? Array
+        event.message = event.message.first if event.message.is_a? Array
         { :when => render_datetime(event.when), :who => event.who, :what => event.message }
       end
     end
