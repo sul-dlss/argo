@@ -108,7 +108,7 @@ class Report
       { 
         :field => 'published_dt', :label => "Pub. Date", 
           #modified to format the date
-        :proc => lambda { |doc| render_datetime(['published_dt'])},
+        :proc => lambda { |doc| render_datetime(doc['published_dt'])},
         :sort => true, :default => true, :width => 100 
       },
       { 
@@ -118,7 +118,7 @@ class Report
       },
       { 
         :field => 'preserved_dt', :label => "Pres. Date", 
-        :proc => lambda { |doc| render_datetime(['preserved_dt'])},
+        :proc => lambda { |doc| render_datetime(doc['preserved_dt'])},
         :sort => true, :default => true, :width => 100 
       },
       { 

@@ -33,7 +33,7 @@ module DorObjectHelper
   end
   
   def render_datetime(datetime)
-    if datetime.nil?
+    if datetime.nil? || datetime==''
       ''
     else
 
