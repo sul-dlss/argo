@@ -256,6 +256,7 @@ var gridContext = function() {
         datatype: "local",
         caption: "Register DOR Items",
         cellEdit: true,
+		autoencode: true,
         cellsubmit: 'clientArray',
         colModel: [
           {label:' ',name:'status',index:'status',width:18,sortable:false,formatter: statusFormatter },
