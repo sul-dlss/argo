@@ -75,7 +75,7 @@ class Report
         :sort => true, :default => false, :width => 100 
       },
       { 
-        :field => 'registered_by_facet', :label => "Registered By", 
+        :field => 'registered_by_tag_facet', :label => "Registered By", 
         :sort => true, :default => false, :width => 100 
       },
       { 
