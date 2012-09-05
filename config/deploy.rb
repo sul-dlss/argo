@@ -15,7 +15,6 @@ require 'capistrano/ext/multistage'
 after "deploy:create_symlink", "argo:trust_rvmrc"
 after "deploy:create_symlink", "argo:initialize_htaccess"
 after "deploy:create_symlink", "argo:restart_indexer"
-after "deploy:restart", "dlss:log_release"
 
 set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml)
 
