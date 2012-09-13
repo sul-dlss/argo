@@ -52,7 +52,7 @@ function DorRegistration(initOpts) {
       var params = { 
         'object_type' : $t.objectType,
         'admin_policy' : apo,
-        'workflow_id' : $t.workflowId,
+        'workflow_id' : $('#workflow_id').val(),
         'seed_datastream' : ($t.metadataSource == 'none' || $t.metadataSource == 'label' ) ? null : ['descMetadata'],
 		'metadata_source' : ($t.metadataSource != 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
