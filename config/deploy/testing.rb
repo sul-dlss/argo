@@ -1,10 +1,11 @@
-set :rails_env, "test"
+set :rails_env, "production"
 set :activemq_host, "dor-test.stanford.edu"
-set :deployment_host, "lyberapps-test.stanford.edu"
+set :deployment_host, "argo-test.stanford.edu"
 set :repository,  "."
 set :branch, "develop"
+set :deploy_via, 'copy'
 set :bundle_without, [:deployment,:development]
-set :destination, "/var/opt/home/lyberadmin"
+set :destination, "/home/lyberadmin"
 set :application, "argo"
 set :deploy_to, "#{destination}/#{application}"
 

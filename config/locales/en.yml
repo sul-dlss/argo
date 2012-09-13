@@ -5,11 +5,11 @@ en:
   hello: "Hello world"
   date:
       formats:
-          default: ! %Y-%m-%d %I:%M%p
+          default: "%Y-%m-%d %I:%M%p"
   time:
       am: am
       formats:
-        default: ! %Y-%m-%d %I:%M%p
+        default: "%Y-%m-%d %I:%M%p"
   argo:
     search:
       report_view: 'Report View'

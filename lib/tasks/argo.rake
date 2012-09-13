@@ -31,6 +31,10 @@ namespace :argo do
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
     directives = [
+      'Deny from all',
+      'Order allow,deny',
+      'Allow from 171.64.11.39',
+      'Satisfy any',
       'AuthType WebAuth',
       'Require privgroup dlss:argo-access',
       'WebAuthLdapAttribute suAffiliation',
