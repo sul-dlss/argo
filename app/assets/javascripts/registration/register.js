@@ -138,9 +138,15 @@ function DorRegistration(initOpts) {
       }
 
 	  //check for missing source ids
-		var source_ids = $('#data').jqGrid('getCol','source_id_id')
+		var source_ids = $('#data').jqGrid('getCol','source_id')
         if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
           $t.displayRequirements('Source ids must be set for all items.');
+          return(false);
+        }
+        //check for missing labels
+		var source_ids = $('#data').jqGrid('getCol','label')
+        if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
+          $t.displayRequirements('Labels must be set for all items.');
           return(false);
         }
 

@@ -233,9 +233,18 @@ var gridContext = function() {
       var sourceIdFormatter = function(val,opts,rowObject) { 
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
         if (val.length>0 && (val.match(/^\s*$/) || val.match(/^.+:.+$/))) {
-          cell.removeClass('invalid')
+          cell.removeClass('invalidDisplay')
         } else {
-          cell.addClass('invalid')
+          cell.addClass('invalidDisplay')
+        }
+        return val
+      }
+      var metadataIdFormatter = function(val,opts,rowObject) { 
+        var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
+        if (val.length>0 && val.indexOf(':')>=0) {
+          cell.addClass('invalidDisplay')
+        } else {
+          cell.removeClass('invalidDisplay')
         }
         return val
       }
@@ -244,12 +253,21 @@ var gridContext = function() {
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
         var newVal = val.replace(/^.+:/,'')
         if (newVal.match(/^([a-z]{2}[0-9]{3}[a-z]{2}[0-9]{4})?$/)) {
-          cell.removeClass('invalid')
+          cell.removeClass('invalidDisplay')
         } else {
-          cell.addClass('invalid')
+          cell.addClass('invalidDisplay')
         }
         return newVal
       }
+      var labelFormatter = function(val,opts,rowObject) {
+        var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
+        if(val.trim().length>0){
+        cell.removeClass('invalidDisplay')
+        } else {
+          cell.addClass('invalidDisplay')
+          }
+         return val;
+          }
       
       $('#data').jqGrid({
         data: [],
@@ -260,10 +278,10 @@ var gridContext = function() {
         cellsubmit: 'clientArray',
         colModel: [
           {label:' ',name:'status',index:'status',width:18,sortable:false,formatter: statusFormatter },
-          {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true},
+          {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true,formatter:metadataIdFormatter},
           {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true,formatter:sourceIdFormatter},
           {label:'DRUID',name:'druid',index:'druid',width:150,editable:true,formatter:druidFormatter},
-          {label:'Label',name:'label',index:'label', width:($('#content').width() - 468),editable:true },
+          {label:'Label',name:'label',index:'label', width:($('#content').width() - 468),editable:true,formatter:labelFormatter },
           {label:'Error',name:'error',index:'error',hidden:true}
         ],
         hidegrid: false,
