@@ -23,6 +23,13 @@ class User < ActiveRecord::Base
    end
  end
 
+	def groups
+		      perm_keys = ["sunetid:#{self.login}"]
+		        if webauth and webauth.privgroup.present?
+			          perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
+			      end
+						return perm_keys
+	end
  def login
    if webauth
      webauth.login

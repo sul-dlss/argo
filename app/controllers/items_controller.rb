@@ -119,7 +119,7 @@ class ItemsController < ApplicationController
     		raise 'datastream didnt write'
     	end
     	respond_to do |format|
-        format.any { redirect_to ds_aspect_view_catalog_path(params[:id], params[:dsid]), :notice => 'Datastream was successfully updated' }
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
       end
     end
   end

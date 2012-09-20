@@ -101,7 +101,7 @@ GEM
       blacklight (~> 3.2)
       rails (~> 3.2.0)
     builder (3.0.3)
-    capistrano (2.12.0)
+    capistrano (2.13.4)
       highline
       net-scp (>= 1.0.0)
       net-sftp (>= 2.0.0)
@@ -172,13 +172,17 @@ GEM
     fastercsv (1.5.5)
     ffi (1.1.0)
     fssm (0.2.9)
+    grit (2.5.0)
+      diff-lcs (~> 1.1)
+      mime-types (~> 1.15)
+      posix-spawn (~> 0.3.6)
     gyoku (0.4.6)
       builder (>= 2.1.2)
     haml (3.1.6)
     happymapper (0.4.0)
       libxml-ruby (~> 2.0)
     hashery (2.0.1)
-    highline (1.6.13)
+    highline (1.6.15)
     hike (1.2.1)
     hooks (0.2.1)
     httpi (1.1.1)
@@ -204,17 +208,17 @@ GEM
       nokogiri (>= 1.4.3.1)
       systemu (>= 1.2.0)
       validatable
-    lyberteam-capistrano-devel (0.9.0)
+    lyberteam-capistrano-devel (1.0.5)
+      actionmailer
       capistrano (>= 2.11.0)
-      lyberteam-gems-devel
+      grit
       net-ssh-kerberos
       rake (>= 0.8.7)
       rest-client
-      rvm-capistrano
-    lyberteam-devel (0.8.0)
-      lyberteam-capistrano-devel
-      lyberteam-gems-devel
-    lyberteam-gems-devel (0.8.0)
+    lyberteam-devel (1.0.0)
+      lyberteam-capistrano-devel (~> 1.0, >= 1.0.1)
+      lyberteam-gems-devel (~> 1.0, >= 1.0.1)
+    lyberteam-gems-devel (1.0.1)
       rake (>= 0.8.7)
       rest-client
     mail (2.4.4)
@@ -252,6 +256,7 @@ GEM
       Ascii85 (~> 1.0.0)
       ruby-rc4
     polyglot (0.3.3)
+    posix-spawn (0.3.6)
     prawn (0.12.0)
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.2)
@@ -325,7 +330,7 @@ GEM
       rest-client
       savon
     rubyzip (0.9.9)
-    rvm-capistrano (1.2.5)
+    rvm-capistrano (1.2.7)
       capistrano (>= 2.0.0)
     sass (3.1.20)
     sass-rails (3.2.5)
