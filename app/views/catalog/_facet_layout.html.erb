@@ -1,4 +1,4 @@
-<% unless hide_facet?(facet_field.field) %>
+<% unless hide_facet?(facet_field.field) || facet_field.field=~ /_dt/ %>
 <div class="facet_limit blacklight-<%= facet_field.field.parameterize %>">
   <span style="float: right; display: block"><%= render_facet_rotate(facet_field.field) %></span>
   <span style="float: right; display: block"><%= render_workflow_grid_toggle(facet_field.field) %></span>
