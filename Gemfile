@@ -3,7 +3,7 @@ source "http://sulair-rails-dev.stanford.edu"
 
 gem 'dor-services', ">= 3.9.0"
 gem 'rails', '3.2.6'
-gem "blacklight", '~>3.5'
+gem "blacklight", '~>3.5', :git => 'https://github.com/projectblacklight/blacklight.git'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 
 gem 'rake'

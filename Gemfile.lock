@@ -14,7 +14,7 @@ GIT
 
 GIT
   remote: https://github.com/projectblacklight/blacklight.git
-  revision: 8d8e47befcc2dbf0c462da01764a33c67b28bea6
+  revision: 03cdfafe8f083f9c1fd346778f14c5739f183517
   specs:
     blacklight (3.5.0)
       compass-rails (~> 1.0.0)
@@ -397,7 +397,7 @@ PLATFORMS
 DEPENDENCIES
   about_page
   barby
-  blacklight!
+  blacklight (~> 3.5)!
   blacklight-hierarchy (~> 0.0.3)
   capistrano
   capistrano-ext
