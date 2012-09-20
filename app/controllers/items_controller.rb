@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_filter :authorize!
-  
+  helper DorObjectHelper  
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
@@ -32,6 +32,20 @@ class ItemsController < ApplicationController
     render :register, :layout => 'application'
   end
   
+  def is_admin?
+  if @perm_keys==nil
+    @perm_keys = ["sunetid:#{current_user.login}"] 
+      if webauth and webauth.privgroup.present?
+        @perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
+      end
+  end
+  	@perm_keys.each do |key|
+  		if key == 'workgroup:dlss:lyberteam'
+  		return true
+  		end
+  	end
+  	return false
+  end
   def workflow_view
     @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
@@ -48,7 +62,23 @@ class ItemsController < ApplicationController
       }
     end
   end
-  
+   def embargo_update
+      if not is_admin?
+      	render :status=> :forbidden, :text =>'forbidden'
+      else
+			  @item = Dor.find params[:id]
+      	new_date=DateTime.parse(params[:embargo_date])
+		  	@item.update_embargo(new_date)
+      	begin
+        	@item.update_index
+      	rescue Exception => e
+        	Rails.logger.warn "ItemsController#embargo_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
+    		end
+      	respond_to do |format|
+        format.any { redirect_to catalog_path(@item.pid), :notice => 'Embargo was successfully updated' }
+      end
+	end
+  end
   def workflow_update
     args = params.values_at(:id, :wf_name, :process, :status)
     if args.all? &:present?
@@ -65,6 +95,31 @@ class ItemsController < ApplicationController
     else
       respond_to do |format| 
         format.any { render format.to_sym => 'Bad Request', :status => :bad_request }
+      end
+    end
+  end
+  def datastream_update
+  	if not is_admin?
+    	render :status=> :forbidden, :text =>'forbidden'
+ 			return   
+    else
+    	req_params=['id','dsid','content']
+    	item = Dor.find params[:id]
+    	ds=item.datastreams[params[:dsid]]
+    	#check that the content is valid xml
+    	begin
+    		content=Nokogiri::XML(params[:content]){ |config| config.strict }
+    	rescue
+    		raise 'XML was not well formed!'
+    	end
+    	ds.content=content.to_s
+    	puts ds.content
+    	ds.save
+    	if ds.dirty?
+    		raise 'datastream didnt write'
+    	end
+    	respond_to do |format|
+        format.any { redirect_to ds_aspect_view_catalog_path(params[:id], params[:dsid]), :notice => 'Datastream was successfully updated' }
       end
     end
   end

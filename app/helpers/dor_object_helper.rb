@@ -31,7 +31,22 @@ module DorObjectHelper
     result += ": #{origin_info.html_safe}" if origin_info.present?
     result.html_safe
   end
-  
+	  def render_embargo_date_reset(pid, current_user)
+				#	 new_date=Datetime.parse(new_date)
+				#		if(new_date.past?)
+			#				raise 'The new date must be in the future!'
+			#			end
+						if is_permitted(current_user, :modify, pid)	
+						  form_tag embargo_update_item_url(pid), :class => 'dialogLink' do
+						  button_tag("Change Embargo", :type => 'submit')
+						 end
+					 else
+						 ''
+	       end
+			end
+	def is_permitted(current_user, operation, pid)
+		return true
+	end
   def render_datetime(datetime)
     if datetime.nil? || datetime==''
       ''
@@ -137,7 +152,10 @@ module DorObjectHelper
     if text == 'released'
       #do nothing at the moment, we arent displaying these
     else
-      embargo= ' (embargoed until '+render_datetime(date.to_s)+')' #the .to_s being necissary indiates ruby magically made date a datetime
+      embargo= ' (embargoed until '+render_datetime(date.to_s)+')' 
+      #add a date picker and button to change the embargo date for those who should be able to.
+      embargo+=render :partial => 'items/embargo_form'
+      
     end
   end
     result=status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
@@ -152,7 +170,13 @@ module DorObjectHelper
     end
     render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
   end
-  
+  #this should be in a config file
+  def is_admin? groups
+  if groups.include? "workgroup:dlss:dor-admin"
+  	return true
+  end
+  false
+  end
   # Datastream helpers
   CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
   def parse_specs spec_string

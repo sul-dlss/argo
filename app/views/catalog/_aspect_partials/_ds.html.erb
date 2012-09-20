@@ -1,4 +1,24 @@
-<%
+<%if(params[:edit])
+
+ if current_user and is_admin? current_user.groups %>
+	<%= form_tag url_for(:controller => :items, :action => :datastream_update), :method => :POST do%>
+		<input type="hidden" name="id" value="<%=@obj.pid %>" />
+		<input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
+		<textarea style="width:100%" name="content" id="content"><%=@obj.datastreams[params[:dsid]].ng_xml.to_s %></textarea><br>
+		<%= submit_tag 'update datastream', :class=>'submit', :id=>'update' %>
+	<% end %>
+	
+	</div>
+	<%
+	end
+else
+%>
+	<%=
+	if current_user and is_admin? current_user.groups
+	 	link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :class => 'dialogLink', :title => params[:dsid]  
+	end
+	%>
+  <%
   content = if params[:dsid] == 'full_dc'
     @obj.generate_dublin_core.prettify
   elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
@@ -13,3 +33,4 @@
   <div class="CodeRay" style="color: gray"><pre><%= render_ds_profile_header @obj.datastreams[params[:dsid]] %></pre></div>
 <% end %>
 <%= output.html_safe %>
+<%end%>

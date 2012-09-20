@@ -22,7 +22,7 @@ Argo::Application.routes.draw do
   match '/report/data', :to => "report#data", :as => "report_data"
   match '/report/download', :to => "report#download", :as => "report_download"
   match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
-
+  
   root :to => "catalog#index"
 
   match 'login',          :to => 'auth',       :as => 'new_user_session'
@@ -39,6 +39,8 @@ Argo::Application.routes.draw do
     get :register, :on => :collection
     get  '/workflows/:wf_name', :on => :member, :action => :workflow_view,   :as => 'workflow_view'
     post '/workflows/:wf_name', :on => :member, :action => :workflow_update, :as => 'workflow_update'
+    post '/embargo', :on => :member, :action => :embargo_update, :as => 'embargo_update'
+    post '/datastream', :on => :member, :action => :datastream_update, :as => 'datastream_update'
   end
   
   namespace :registration do
