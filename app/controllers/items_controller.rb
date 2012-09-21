@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_filter :authorize!
-  helper DorObjectHelper  
+  
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
@@ -32,20 +32,10 @@ class ItemsController < ApplicationController
     render :register, :layout => 'application'
   end
   
-  def is_admin?
-  if @perm_keys==nil
-    @perm_keys = ["sunetid:#{current_user.login}"] 
-      if webauth and webauth.privgroup.present?
-        @perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
-      end
-  end
-  	@perm_keys.each do |key|
-  		if key == 'workgroup:dlss:lyberteam'
-  		return true
-  		end
-  	end
-  	return false
-  end
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   def workflow_view
     @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
@@ -62,47 +52,17 @@ class ItemsController < ApplicationController
       }
     end
   end
-   def embargo_update
-      if not is_admin?
-      	render :status=> :forbidden, :text =>'forbidden'
-      else
-			  @item = Dor.find params[:id]
-      	new_date=DateTime.parse(params[:embargo_date])
-		  	@item.update_embargo(new_date)
-      	begin
-        	@item.update_index
-      	rescue Exception => e
-        	Rails.logger.warn "ItemsController#embargo_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
-    		end
-      	respond_to do |format|
-        format.any { redirect_to catalog_path(@item.pid), :notice => 'Embargo was successfully updated' }
-      end
-	end
-  end
-  def workflow_update
-    args = params.values_at(:id, :wf_name, :process, :status)
-    if args.all? &:present?
-      Dor::WorkflowService.update_workflow_status 'dor', *args
-      @item = Dor.find params[:id]
-      begin
-        @item.update_index
-      rescue Exception => e
-        Rails.logger.warn "ItemsController#workflow_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
-      end
-      respond_to do |format|
-        format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name]), :notice => 'Workflow was successfully updated' }
-      end
-    else
-      respond_to do |format| 
-        format.any { render format.to_sym => 'Bad Request', :status => :bad_request }
-      end
-    end
-  end
   def datastream_update
-  	if not is_admin?
+  	found=false
+  	ADMIN_GROUPS.each do |group|
+			if current_user.groups.include? group
+				found=true   
+			end
+    end
+    if not found
     	render :status=> :forbidden, :text =>'forbidden'
- 			return   
-    else
+ 			return
+ 		else
     	req_params=['id','dsid','content']
     	item = Dor.find params[:id]
     	ds=item.datastreams[params[:dsid]]
