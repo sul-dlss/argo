@@ -16,8 +16,8 @@ gem 'barby'
 gem 'ruby-graphviz'
 gem "solrizer-fedora"
 gem "rsolr", :git => "https://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
-gem "rsolr-client-cert", :git => 'https://github.com/cbeer/rsolr-client-cert.git'
-gem 'confstruct', :git => 'https://github.com/cbeer/confstruct.git'
+gem "rsolr-client-cert", "~> 0.5.2"
+gem 'confstruct', "~> 0.2.4"
 gem "mysql2", "~> 0.3.0"
 gem "progressbar"
 gem "haml"
