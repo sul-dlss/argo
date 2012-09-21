@@ -172,7 +172,7 @@ module DorObjectHelper
   end
   #this should be in a config file
   def is_admin? groups
-  ADMIN_GROUPS.each do || group
+  ADMIN_GROUPS.each do |group|
   if groups.include? group
   	return true
   end
