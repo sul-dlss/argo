@@ -1,18 +1,4 @@
 GIT
-  remote: https://github.com/cbeer/confstruct.git
-  revision: 699f30564a044b62fb97f5bd6b15c7b34804115f
-  specs:
-    confstruct (0.2.3)
-
-GIT
-  remote: https://github.com/cbeer/rsolr-client-cert.git
-  revision: 6fb639d04f462dceeaff1f1fc37dc5ecf75e5345
-  specs:
-    rsolr-client-cert (0.5.1)
-      rest-client
-      rsolr
-
-GIT
   remote: https://github.com/sul-dlss/rack-webauth.git
   revision: 0f3bb0bf4a00ae99bf5d75c92b228c2d9874d208
   specs:
@@ -130,6 +116,7 @@ GEM
       compass (>= 0.12.2, < 0.14)
     compass-susy-plugin (0.9)
       compass (>= 0.11.1)
+    confstruct (0.2.4)
     daemons (1.1.9)
     dalli (2.1.0)
     deprecation (0.0.5)
@@ -289,6 +276,9 @@ GEM
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rsolr-client-cert (0.5.2)
+      rest-client
+      rsolr
     rsolr-ext (1.0.3)
       rsolr (>= 1.0.2)
     rspec (2.11.0)
@@ -400,7 +390,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   compass-rails (~> 1.0.0)
   compass-susy-plugin (~> 0.9.0)
-  confstruct!
+  confstruct (~> 0.2.4)
   dalli
   dor-services (>= 3.9.0)
   haml
@@ -418,7 +408,7 @@ DEPENDENCIES
   rails (= 3.2.6)
   rake
   rsolr!
-  rsolr-client-cert!
+  rsolr-client-cert (~> 0.5.2)
   rspec-rails
   ruby-graphviz
   ruby-prof
