@@ -31,11 +31,7 @@ class ItemsController < ApplicationController
     end
     render :register, :layout => 'application'
   end
-  
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
   def workflow_view
     @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
