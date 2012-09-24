@@ -127,7 +127,7 @@ GEM
     deprecation (0.0.5)
       activesupport
     diff-lcs (1.1.3)
-    dor-services (3.13.3)
+    dor-services (3.13.4)
       active-fedora (>= 4.0.0)
       active-fedora (>= 4.0.0.rc20)
       confstruct (>= 0.2.2)
@@ -216,7 +216,7 @@ GEM
     mediashelf-loggable (0.4.9)
     method_source (0.8)
     mime-types (1.19)
-    moab-versioning (0.8.7)
+    moab-versioning (0.8.8)
       confstruct
       happymapper
       hashery (>= 2.0.0)
