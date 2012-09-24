@@ -48,14 +48,25 @@ class ItemsController < ApplicationController
       }
     end
   end
-  def datastream_update
-  	found=false
-  	ADMIN_GROUPS.each do |group|
-			if current_user.groups.include? group
-				found=true   
+	def embargo_update
+		if not current_user.is_admin?
+		 render :status=> :forbidden, :text =>'forbidden'
+		else
+			@item = Dor.find params[:id]
+			new_date=DateTime.parse(params[:embargo_date])
+			@item.update_embargo(new_date)
+			begin
+				@item.update_index
+			rescue Exception => e
+				Rails.logger.warn "ItemsController#embargo_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
 			end
-    end
-    if not found
+			respond_to do |format|
+			format.any { redirect_to catalog_path(@item.pid), :notice => 'Embargo was successfully updated' }
+		end
+	end
+end
+  def datastream_update
+    if not current_user.is_admin?
     	render :status=> :forbidden, :text =>'forbidden'
  			return
  		else

@@ -30,6 +30,14 @@ class User < ActiveRecord::Base
 			      end
 						return perm_keys
 	end
+	def is_admin?
+  	ADMIN_GROUPS.each do |group|
+			if self.groups.include? group
+				return true 
+			end
+    end
+    return false
+  end
  def login
    if webauth
      webauth.login

@@ -7,7 +7,7 @@
 	$( "#embargo_date" ).hide();
 		$('#embargo_update').dialog({
         autoOpen: false,
-        buttons: { "Close": function() { $(this).dialog("close"); } },
+        buttons: { "Cancel": function() { $(this).dialog("close"); } },
         modal: true,
         height: 150,
         width:  400,
@@ -28,7 +28,7 @@
 <%= form_tag url_for(:controller => :items, :action => :embargo_update), :method => :POST do%>
 	
 	New date: <input name="embargo_date" id="embargo_date" type="text">
-	<%= submit_tag 'update embargo', :class=>'submit', :id=>'submit_embargo' %>
+	<button id="submit_embargo" type="submit">Update Embargo</button> 
 <% end %>
 
 </div><%end%>
