@@ -20,7 +20,7 @@ class ReportController < CatalogController
   
   def data
     params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
-    rows_per_page = params.delete(:rows).to_i
+    rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i,1].max
 
     delete_or_assign_search_session_params

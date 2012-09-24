@@ -7,7 +7,7 @@ require 'dlss/capistrano'
 set :stages, %W(dev testing prod)
 set :default_stage, "development"
 set :bundle_flags, "--quiet"
-set :rvm_ruby_string, "1.8.7@argo"
+set :rvm_ruby_string, "1.9.3"
 set :rvm_type, :system
 
 require 'capistrano/ext/multistage'
@@ -15,7 +15,6 @@ require 'capistrano/ext/multistage'
 after "deploy:create_symlink", "argo:trust_rvmrc"
 after "deploy:create_symlink", "argo:initialize_htaccess"
 after "deploy:create_symlink", "argo:restart_indexer"
-after "deploy:restart", "dlss:log_release"
 
 set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml)
 

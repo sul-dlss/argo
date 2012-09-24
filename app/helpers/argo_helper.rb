@@ -35,7 +35,39 @@ module ArgoHelper
     end
     result
   end
+  def create_rsolr_facet_field_response_for_query_facet_field facet_name, facet_field
+    salient_facet_queries = facet_field.query.map { |k, x| x[:fq] }
+    items = []
+    @response.facet_queries.select { |k,v| salient_facet_queries.include?(k) }.reject { |value, hits| hits == 0 }.map do |value,hits|
+      key = facet_field.query.select { |key, val| val[:fq] == value }.first.first
+      items << OpenStruct.new(:value => key, :hits => hits, :label => facet_field.query[key][:label])
+    end
+ 
+    RSolr::Ext::Response::Facets::FacetField.new facet_name, items
+  end
   
+	# copies the current params (or whatever is passed in as the 3rd arg)
+	   # removes the field value from params[:f]
+	   # removes the field if there are no more values in params[:f][field]
+	   # removes additional params (page, id, etc..)
+	   def remove_facet_params(field, value, source_params=params)
+	     p = source_params.dup
+	    # need to dup the facet values too,
+	    # if the values aren't dup'd, then the values
+	    # from the session will get remove in the show view...
+	    p[:f] = (p[:f] || {}).dup
+	     p[:f][field] = (p[:f][field] || []).dup
+	     p.delete :page
+	     p.delete :id
+	     p.delete :counter
+	    p.delete :commit
+			begin
+	     p[:f][field] = p[:f][field] - [value]
+	   rescue 
+		 end
+		 p[:f].delete(field) if p[:f][field].size == 0
+	     p
+	   end
   def render_index_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
@@ -107,10 +139,10 @@ module ArgoHelper
       end
     end
   end
-  
+  #override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
   def render_facet_value(facet_solr_field, item, options ={})
     display_value = item.value =~ /druid:/ ? label_for_druid(item.value) : item.value
-    (link_to_unless(options[:suppress_link], display_value, add_facet_params(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+    (link_to_unless(options[:suppress_link], ((item.label if item.respond_to?(:label)) || display_value), add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
   end
 
   def render_document_sections(doc, action_name)
@@ -126,6 +158,12 @@ module ArgoHelper
   
   def first_image(a)
     Array(a).find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
+  end
+  
+  def render_date_pickers(field_name)
+    if field_name =~ /_date/
+      render(:partial => 'catalog/_show_partials/date_choice', :locals => {:field_name => field_name})
+    end
   end
   
   def document_has? document, field_name

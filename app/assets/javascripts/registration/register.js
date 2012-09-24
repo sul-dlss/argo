@@ -52,7 +52,7 @@ function DorRegistration(initOpts) {
       var params = { 
         'object_type' : $t.objectType,
         'admin_policy' : apo,
-        'workflow_id' : $t.workflowId,
+        'workflow_id' : $('#workflow_id').val(),
         'seed_datastream' : ($t.metadataSource == 'none' || $t.metadataSource == 'label' ) ? null : ['descMetadata'],
 		'metadata_source' : ($t.metadataSource != 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
@@ -138,9 +138,15 @@ function DorRegistration(initOpts) {
       }
 
 	  //check for missing source ids
-		var source_ids = $('#data').jqGrid('getCol','source_id_id')
+		var source_ids = $('#data').jqGrid('getCol','source_id')
         if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
           $t.displayRequirements('Source ids must be set for all items.');
+          return(false);
+        }
+        //check for missing labels
+		var source_ids = $('#data').jqGrid('getCol','label')
+        if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
+          $t.displayRequirements('Labels must be set for all items.');
           return(false);
         }
 

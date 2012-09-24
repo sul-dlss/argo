@@ -5,8 +5,14 @@ class CatalogController < ApplicationController
 
   include BlacklightSolrExtensions
   include Blacklight::Catalog
+  #include BlacklightFacetExtras::Query::ControllerExtension
   helper ArgoHelper
   
+before_filter :reformat_dates
+
+
+
+
   configure_blacklight do |config|
     config.default_solr_params = {
       :'q.alt' => "*:*",
@@ -19,7 +25,6 @@ class CatalogController < ApplicationController
       :'f.wf_wsp_facet.facet.limit' => -1,
       :'f.wf_swp_facet.facet.limit' => -1,
       :'f.tag_facet.facet.limit' => -1,
-      #:'f.is_governed_by_s.facet.limit' => -1,
       :'f.is_member_of_collection_s.facet.limit' => -1,
       :'f.tag_facet.facet.sort' => 'index'
     }
@@ -66,8 +71,29 @@ class CatalogController < ApplicationController
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'indexed_at_dt', :label => 'Last Argo Update'
+    config.add_facet_field 'registered_dt',:label =>'Registered'
+    config.add_facet_field 'submitted_dt',:label =>'Submitted'
+    config.add_facet_field 'published_dt',:label =>'Published'
     
-    config.default_solr_params[:'facet.field'] = config.facet_fields.keys
+    
+     config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
+        :days_7 => { :label => 'within 7 days', :fq => "submitted_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "submitted_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+      }
+      config.add_facet_field 'registered_date', :label => 'Registered', :query => {
+        :days_7 => { :label => 'within 7 days', :fq => "registered_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "registered_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+      }
+      config.add_facet_field 'published_date', :label => 'Published', :query => {
+        :days_7 => { :label => 'within 7 days', :fq => "published_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "published_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+      }
+      config.add_facet_field 'indexed_at_date', :label => 'Last Argo Update', :query => {
+        :days_7 => { :label => 'within 7 days', :fq => "indexed_at_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "indexed_at_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+      }
+      config.add_facet_fields_to_solr_request!
     
     config.add_search_field 'text', :label => 'All Fields'
     
@@ -103,9 +129,9 @@ class CatalogController < ApplicationController
     @response, @document = get_solr_response_for_doc_id
     @obj = Dor.find params[:id], :lightweight => true
     ds = @obj.datastreams[params[:dsid]]
-    data = @obj.content params[:dsid], params[:raw]
+    data = @obj.datastreams[params[:dsid]].content 
     unless data.nil?
-      send_data data, :type => ds.attributes['mimeType'], :disposition => 'inline'
+      send_data data, :type => 'xml', :disposition => 'inline'
     else
       raise ActionController::RoutingError.new('Not Found')
     end
@@ -113,8 +139,20 @@ class CatalogController < ApplicationController
   
   def show_aspect
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id], :lightweight => true
+    @obj = Dor.find params[:id]
     render :layout => request.xhr? ? false : true
   end
-
-end 
+  private
+  def reformat_dates
+    params.each do |key, val|
+    begin 
+		 if(key=~  /_datepicker/ and val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
+        val= DateTime.parse(val).beginning_of_day.utc.xmlschema
+				field=key.split( '_after_datepicker').first.split('_before_datepicker').first
+				params[:f][field]='['+val.to_s+'Z TO *]'
+      end
+     rescue
+		 end
+  end
+end
+end

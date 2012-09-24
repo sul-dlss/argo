@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
     end
     render :register, :layout => 'application'
   end
-  
+
   def workflow_view
     @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
@@ -48,23 +48,45 @@ class ItemsController < ApplicationController
       }
     end
   end
-  
-  def workflow_update
-    args = params.values_at(:id, :wf_name, :process, :status)
-    if args.all? &:present?
-      Dor::WorkflowService.update_workflow_status 'dor', *args
-      @item = Dor.find params[:id]
-      begin
-        @item.update_index
-      rescue Exception => e
-        Rails.logger.warn "ItemsController#workflow_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
-      end
-      respond_to do |format|
-        format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name]), :notice => 'Workflow was successfully updated' }
-      end
-    else
-      respond_to do |format| 
-        format.any { render format.to_sym => 'Bad Request', :status => :bad_request }
+	def embargo_update
+		if not current_user.is_admin?
+		 render :status=> :forbidden, :text =>'forbidden'
+		else
+			@item = Dor.find params[:id]
+			new_date=DateTime.parse(params[:embargo_date])
+			@item.update_embargo(new_date)
+			begin
+				@item.update_index
+			rescue Exception => e
+				Rails.logger.warn "ItemsController#embargo_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
+			end
+			respond_to do |format|
+			format.any { redirect_to catalog_path(@item.pid), :notice => 'Embargo was successfully updated' }
+		end
+	end
+end
+  def datastream_update
+    if not current_user.is_admin?
+    	render :status=> :forbidden, :text =>'forbidden'
+ 			return
+ 		else
+    	req_params=['id','dsid','content']
+    	item = Dor.find params[:id]
+    	ds=item.datastreams[params[:dsid]]
+    	#check that the content is valid xml
+    	begin
+    		content=Nokogiri::XML(params[:content]){ |config| config.strict }
+    	rescue
+    		raise 'XML was not well formed!'
+    	end
+    	ds.content=content.to_s
+    	puts ds.content
+    	ds.save
+    	if ds.dirty?
+    		raise 'datastream didnt write'
+    	end
+    	respond_to do |format|
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
       end
     end
   end

@@ -3,7 +3,7 @@ source "http://sulair-rails-dev.stanford.edu"
 
 gem 'dor-services', ">= 3.9.0"
 gem 'rails', '3.2.6'
-gem "blacklight", '~>3.5'
+gem "blacklight", '~>3.5', :git => 'https://github.com/projectblacklight/blacklight.git'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 
 gem 'rake'
@@ -16,8 +16,8 @@ gem 'barby'
 gem 'ruby-graphviz'
 gem "solrizer-fedora"
 gem "rsolr", :git => "https://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
-gem "rsolr-client-cert", :git => 'https://github.com/cbeer/rsolr-client-cert.git'
-gem 'confstruct', :git => 'https://github.com/cbeer/confstruct.git'
+gem "rsolr-client-cert", "~> 0.5.2"
+gem 'confstruct', "~> 0.2.4"
 gem "mysql2", "~> 0.3.0"
 gem "progressbar"
 gem "haml"
