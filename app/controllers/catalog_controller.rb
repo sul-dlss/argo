@@ -77,13 +77,14 @@ before_filter :reformat_dates
     config.add_facet_field 'published_dt',:label =>'Published'
     
     
-     config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
-        :days_7 => { :label => 'within 7 days', :fq => "submitted_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
-        :days_30 => { :label => 'within 30 days', :fq => "submitted_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
-      }
+     
       config.add_facet_field 'registered_date', :label => 'Registered', :query => {
         :days_7 => { :label => 'within 7 days', :fq => "registered_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
         :days_30 => { :label => 'within 30 days', :fq => "registered_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+      }
+      config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
+        :days_7 => { :label => 'within 7 days', :fq => "submitted_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "submitted_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
       }
       config.add_facet_field 'published_date', :label => 'Published', :query => {
         :days_7 => { :label => 'within 7 days', :fq => "published_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
