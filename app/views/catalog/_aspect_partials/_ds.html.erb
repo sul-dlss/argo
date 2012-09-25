@@ -1,6 +1,6 @@
 <%if(params[:edit])
 
- if current_user and is_admin? current_user.groups%>
+ if current_user and current_user.is_admin %>
 	<%= form_tag url_for(:controller => :items, :action => :datastream_update), :method => :POST do%>
 		<input type="hidden" name="id" value="<%=@obj.pid %>" />
 		<input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
@@ -14,7 +14,7 @@
 else
 %>
 	<%=
-	if current_user and is_admin? current_user.groups  and params[:dsid] != 'RELS-EXT' and params[:dsid] != 'workflows'
+	if current_user and current_user.is_admin and params[:dsid] != 'RELS-EXT' and params[:dsid] != 'workflows'
 	 	link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :class => 'dialogLink', :title => params[:dsid]  
 	end
 	%>
