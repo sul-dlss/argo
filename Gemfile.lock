@@ -1,9 +1,9 @@
 GIT
-  remote: /Users/jdeering/Documents/code/dor-services/.git
-  revision: 5ff60eb636dceee83d334005d3e052db82ae1cc5
-  branch: local
+  remote: git@github.com:sul-dlss/dor-services.git
+  revision: e72b557b13f6f13885b6481a5a303e4bf856837e
+  branch: develop
   specs:
-    dor-services (3.11.6)
+    dor-services (3.14.0)
       active-fedora (>= 4.0.0)
       active-fedora (>= 4.0.0.rc20)
       confstruct (>= 0.2.2)
