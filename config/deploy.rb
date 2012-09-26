@@ -43,8 +43,8 @@ namespace :argo do
   
   task :restart_indexer do
     dor_config_file = File.join(current_path,"config","environments","dor_#{rails_env}.rb")
-    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec dor-indexerd stop  --dor-config #{dor_config_file}"
-    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec dor-indexerd start --dor-config #{dor_config_file}"
+    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec bin/dor-indexerd stop --dor-config #{dor_config_file} --log_dir #{latest_release}../../shared/log"
+    run "cd #{latest_release} && RAILS_ENV=#{rails_env} bundle exec bin/dor-indexerd start --dor-config #{dor_config_file} --log_dir #{latest_release}../../shared/log"
   end
 end
 

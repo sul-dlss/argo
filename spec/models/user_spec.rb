@@ -42,12 +42,9 @@ describe User do
       end
     end
   end
-  describe "is_admin?" do
+  describe "is_admin" do
   	
   end
   describe "groups" do
-  	group_text='workgroup:dlss:dor-admin'
-  	subject.webauth.stub(:privgroup).and_return('workgroup:dlss:dor-admin')
-  	subject.is_admin?.should ==true
   end
 end

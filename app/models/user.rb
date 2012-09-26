@@ -24,13 +24,13 @@ class User < ActiveRecord::Base
  end
 
 	def groups
-		      perm_keys = ["sunetid:#{self.login}"]
-		        if webauth and webauth.privgroup.present?
-			          perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
-			      end
-						return perm_keys
+		perm_keys = ["sunetid:#{self.login}"]
+		if webauth and webauth.privgroup.present?
+				perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
+		end
+		return perm_keys
 	end
-	def is_admin?
+  def is_admin
   	ADMIN_GROUPS.each do |group|
 			if self.groups.include? group
 				return true 

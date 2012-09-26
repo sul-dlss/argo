@@ -170,15 +170,7 @@ module DorObjectHelper
     end
     render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
   end
-  #this should be in a config file
-  def is_admin? groups
-  ADMIN_GROUPS.each do |group|
-  if groups.include? group
-  	return true
-  end
-  end
-  false
-  end
+ 
   # Datastream helpers
   CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
   def parse_specs spec_string

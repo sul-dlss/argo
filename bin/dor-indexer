@@ -1,0 +1,108 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'optparse'
+require 'stomp'
+require 'timeout'
+require 'dor-services'
+
+options = { :log_level => Logger::WARN }
+
+optparse = OptionParser.new do|opts|
+  opts.banner = "Usage: #{File.basename(__FILE__)} [options]"
+
+  options[:dor_config] = nil
+  opts.on( '--dor-config PATH', 'Load the dor-services configuration file at this path' ) do |path|
+    puts "Configuring dor-services..."
+    options[:dor_config] = path
+    require options[:dor_config]
+  end
+
+  options[:destination] = '/topic/fedora.apim.update'
+  opts.on('-d','--destination TOPIC', 'Topic to listen to') do |destination|
+    options[:destination] = destination
+  end
+
+  options[:client_id] = "fedora_stomper"
+  opts.on('-c', '--client-id ID', 'Stomp client ID') do |client_id|
+    Dor::Config.stomp.client_id = client_id
+  end
+  
+  opts.on('-v', 'Verbose') do
+    options[:log_level] -= 1 if options[:log_level] > 0
+  end
+  
+  opts.on('-h', '--help', 'Display this screen') do
+    puts opts
+    exit
+  end
+end
+
+optparse.parse!
+
+begin; require 'rubygems'; rescue; end
+
+unless options[:dor_config]
+  $stderr.puts "The --dor-config PATH option is mandatory. Please provide the path to a valid dor-services configuration file."
+  exit 1
+end
+
+puts "loading listener"
+logger=Logger.new(File.expand_path("../../../../shared/log/indexer.log",__FILE__))
+begin
+  @clientid = options[:client_id]
+  @destination = options[:destination]
+
+  
+  @conn = Dor::Config.stomp.connection
+  logger.warn " Getting output from #{@destination}\n"
+  
+  @conn.subscribe(@destination, {"activemq.subscriptionName" => @clientid, :ack =>"client" })
+  while true
+    
+      begin
+      	Timeout::timeout(300) do
+        	@msg = @conn.receive
+        end
+        if @msg.nil?
+        logger.warn 'nil message\n'
+        else
+        pid = @msg.headers["pid"]
+        method = @msg.headers["methodName"]
+
+        if ["addDatastream", "addRelationship","ingest","modifyDatastreamByValue","modifyDatastreamByReference","modifyObject","purgeDatastream","purgeRelationship","reindex"].include? method
+          begin
+            obj = Dor.load_instance pid
+            Dor::SearchService.solr.add(obj.to_solr, :add_attributes => {:commitWithin => 10}) unless obj.nil?
+          rescue
+          end
+        elsif method == "purgeObject"
+          Dor::SearchService.solr.delete_by_id(pid)
+        else
+          logger.warn " Unknown Method: #{method} for PID #{pid}"
+        end
+        logger.warn  " updated solr index for #{pid}\n"
+        @conn.ack @msg.headers["message-id"]
+        end
+      rescue Timeout::Error
+				begin
+					logger.warn " Sending heartbeat\n"
+					@conn.begin('heartbeat')
+					@conn.commit('heartbeat')
+				rescue Exception => e
+					body = "Unable to send heartbeat to broker\n"
+					body << "\n\nExeption:\n" << he.inspect << "\n" << he.backtrace.join("\n")
+					logger.warn(" Unable to send heartbeat")
+					logger.warn(body)
+				end
+			
+	      
+      rescue Exception => e
+        logger.warn " failed to update solr index for #{pid}: #<#{e.class.name}: #{e.message}>"
+      end
+  end
+  @conn.join
+rescue Exception => e
+p e
+end
+
