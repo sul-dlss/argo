@@ -47,7 +47,7 @@ else
 end
 
 
-if log_dir.empty?
+if log_dir.nil?
 	File.join(Dir.pwd,'log')
 end
 
