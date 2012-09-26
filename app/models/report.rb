@@ -192,6 +192,7 @@ class Report
     docs_to_records(@document_list)
   end
   
+
   
   def csv2
     headings=''
@@ -214,6 +215,27 @@ class Report
       
     end
     return headings+rows
+  end
+  def csv
+  csv_string=''
+  csv_string+= @fields.to_csv
+  
+  while @document_list.length >0
+      records=docs_to_records(@document_list)
+      records.each do |record|
+      ar=record.values
+      #wrap every field in double quotes
+      ar.each do |val|
+	      val='"'+val.to_s+'"'
+      end
+      	csv_string += record.values.to_csv
+      end
+      @params[:page] += 1
+      (@response, @document_list) = get_search_results
+      break
+    end
+  
+  return csv_string
   end
     
   def each

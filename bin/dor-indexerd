@@ -1,0 +1,73 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'daemons'
+require 'stomp'
+
+banner=<<-EOC
+Usage: #{File.basename(__FILE__)} command --dor-config PATH [options]
+        PATH must point to a valid dor-services configuration file
+Commands:
+        start         start an instance of the application
+        stop          stop all instances of the application
+        restart       stop all instances and restart them afterwards
+        status        show status (PID) of application instances
+Options:
+        --dor-config PATH          Load the dor-services configuration file at this path
+        -d, --destination TOPIC    Topic to listen to (default: /topic/fedora.apim.update)
+        -c, --client-id            Stomp client ID (default: fedora_stomper)
+        -h, --help                 Display this screen
+EOC
+
+
+# check for a valid command
+unless ['start','stop','restart','status'].include? ARGV[0]
+  puts banner
+  exit 7
+end
+
+if ARGV.include?('-h') || ARGV.include?('--help')
+  puts banner
+  exit 0
+end
+
+# Make sure --dor-config was set for the start and restart commands
+if ARGV[0] == 'start' || ARGV[0] == 'restart'
+  unless ARGV[1] == '--dor-config'
+    puts "ERROR: You must --dor-config to specify the path to a valid dor-services gem configuration file"
+    exit 8
+  end
+end
+#4th arg should be --log_dir and 5th is the path.
+log_dir=nil
+if ARGV[3]=='--log_dir'
+log_dir=ARGV[4]
+else
+	puts "Log dir not specified"
+end
+
+
+if log_dir.nil?
+	File.join(Dir.pwd,'log')
+end
+
+
+options = {
+  :multiple=>ARGV.any? { |arg| arg =~ %r{^/queue/}},
+  :dir_mode=>:normal,
+  :dir=>'/tmp',
+  :log_dir=> log_dir,
+  :log_output=>true,
+  :backtrace=>true
+}
+argv_array = []
+argv_array << ARGV[0]
+argv_array << '--'
+ARGV[1..-1].each {|ele| argv_array << ele }
+options[:ARGV] = argv_array
+
+version = '>=0'
+#app = Gem.bin_path('dor-services','dor-indexer',version)
+app = File.expand_path('../dor-indexer',__FILE__)
+Daemons.run(app,options)
+

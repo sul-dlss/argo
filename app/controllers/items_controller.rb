@@ -49,7 +49,7 @@ class ItemsController < ApplicationController
     end
   end
 	def embargo_update
-		if not current_user.is_admin?
+		if not current_user.is_admin
 		 render :status=> :forbidden, :text =>'forbidden'
 		else
 			@item = Dor.find params[:id]
@@ -66,7 +66,7 @@ class ItemsController < ApplicationController
 	end
 end
   def datastream_update
-    if not current_user.is_admin?
+    if not current_user.is_admin
     	render :status=> :forbidden, :text =>'forbidden'
  			return
  		else
