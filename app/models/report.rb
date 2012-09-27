@@ -218,6 +218,10 @@ class Report
   end
   def csv
   csv_string=''
+  fields=[]
+  @fields.each do |f|
+  	fields << f[:label]
+  end
   csv_string+= @fields.to_csv
   
   while @document_list.length >0
