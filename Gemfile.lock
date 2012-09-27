@@ -1,4 +1,32 @@
 GIT
+  remote: git@github.com:sul-dlss/dor-services.git
+  revision: e72b557b13f6f13885b6481a5a303e4bf856837e
+  branch: develop
+  specs:
+    dor-services (3.14.0)
+      active-fedora (>= 4.0.0)
+      active-fedora (>= 4.0.0.rc20)
+      confstruct (>= 0.2.2)
+      druid-tools (>= 0.2.1)
+      equivalent-xml (>= 0.2.2)
+      json
+      lyber-utils
+      moab-versioning (>= 0.8.7)
+      net-sftp
+      net-ssh
+      nokogiri (~> 1.5.0)
+      om (>= 1.5.0)
+      progressbar
+      rest-client
+      rsolr-client-cert (>= 0.5.1)
+      rsolr-ext
+      ruby-cache
+      ruby-graphviz
+      systemu
+      uuidtools
+      validatable
+
+GIT
   remote: https://github.com/projectblacklight/blacklight.git
   revision: 03cdfafe8f083f9c1fd346778f14c5739f183517
   specs:

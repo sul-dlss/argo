@@ -157,7 +157,8 @@ module ArgoHelper
   end
   
   def first_image(a)
-    Array(a).find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
+    Array(a).find{|f| File.extname(f)=~ /jp2/}
+    #Array(a).find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
   end
   
   def render_date_pickers(field_name)
