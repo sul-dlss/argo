@@ -207,7 +207,7 @@ class Report
         rows+="\r\n"
         row = @fields.collect { |f| record[f[:field]] }
         row.each do |field|
-          rows+=field.to_s+','
+          rows+='"'+field.to_s+'"'+','
         end
       end
       @params[:page] += 1
