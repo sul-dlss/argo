@@ -143,11 +143,14 @@ function DorRegistration(initOpts) {
           $t.displayRequirements('Source ids must be set for all items.');
           return(false);
         }
-        //check for missing labels
-		var source_ids = $('#data').jqGrid('getCol','label')
-        if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
-          $t.displayRequirements('Labels must be set for all items.');
-          return(false);
+        //check for missing labels if not using a metadata source
+        if(sourcePrefix == 'none' || sourcePrefix== 'label')
+        {
+				var source_ids = $('#data').jqGrid('getCol','label')
+						if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
+							$t.displayRequirements('Labels must be set for all items.');
+							return(false);
+						}
         }
 
       return(true)

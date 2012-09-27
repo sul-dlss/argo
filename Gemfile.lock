@@ -31,7 +31,7 @@ GIT
 
 GEM
   remote: http://rubygems.org/
-  remote: http://sulair-rails-dev.stanford.edu/
+  remote: http://sul-gems.stanford.edu/
   specs:
     Ascii85 (1.0.1)
     about_page (0.0.4)
@@ -127,7 +127,7 @@ GEM
     deprecation (0.0.5)
       activesupport
     diff-lcs (1.1.3)
-    dor-services (3.13.4)
+    dor-services (3.14.1)
       active-fedora (>= 4.0.0)
       active-fedora (>= 4.0.0.rc20)
       confstruct (>= 0.2.2)
@@ -403,7 +403,7 @@ DEPENDENCIES
   compass-susy-plugin (~> 0.9.0)
   confstruct (~> 0.2.4)
   dalli
-  dor-services (>= 3.9.0)
+  dor-services (>= 3.14.1)
   haml
   is_it_working-cbeer
   jquery-rails
