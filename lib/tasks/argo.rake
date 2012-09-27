@@ -34,6 +34,7 @@ namespace :argo do
       'Deny from all',
       'Order allow,deny',
       'Allow from 171.64.11.39',
+      'Allow from 171.67.35.140',
       'Satisfy any',
       'AuthType WebAuth',
       'Require privgroup dlss:argo-access',
