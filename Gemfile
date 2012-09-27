@@ -2,9 +2,9 @@ source :rubygems
 source "http://sul-gems.stanford.edu"
 
 
-gem 'dor-services', ">= 3.14.1"
+gem 'dor-services', ">= 3.14.2"
 gem 'rails', '3.2.6'
-gem "blacklight", '~>3.5', :git => 'https://github.com/projectblacklight/blacklight.git'
+gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 
 gem 'rake'
