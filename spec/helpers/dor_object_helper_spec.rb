@@ -22,7 +22,7 @@ describe DorObjectHelper do
       embargo_data=Array.new
       embargo_data << 'embargoed until 2012-11-27 3:41pm'
       doc={ 'lifecycle_display' => lifecycle_data,'embargoMetadata_t' =>embargo_data }
-			user=User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Møds Ässet'}))
+			user=User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Mods Asset'}))
 			User.any_instance.stub(:is_admin).and_return(false)
 			helper.stub(:current_user).and_return(user)
 			helper.render_status(doc).should == ' Registered 2011-10-24 03:41pm (embargoed until 2012-11-27 07:41am)'
@@ -33,7 +33,7 @@ describe DorObjectHelper do
       embargo_data=Array.new
       embargo_data << 'embargoed until 2012-11-27 3:41pm'
       doc={ 'lifecycle_display' => lifecycle_data,'embargoMetadata_t' =>embargo_data }
-			user=User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Møds Ässet'}))
+			user=User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Mods Asset'}))
 			User.any_instance.stub(:is_admin).and_return(true)
 			helper.stub(:current_user).and_return(user)
 			helper.render_status(doc).should match "datepicker"
