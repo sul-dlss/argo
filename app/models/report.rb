@@ -218,7 +218,11 @@ class Report
   end
   def csv
   csv_string=''
-  csv_string+= @fields.to_csv
+  fields=[]
+  @fields.each do |f|
+  	fields << f[:label]
+  end
+  csv_string+= fields.to_csv
   
   while @document_list.length >0
       records=docs_to_records(@document_list)
@@ -232,7 +236,7 @@ class Report
       end
       @params[:page] += 1
       (@response, @document_list) = get_search_results
-      break
+      
     end
   
   return csv_string
