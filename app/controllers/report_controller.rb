@@ -44,7 +44,7 @@ class ReportController < CatalogController
     self.response.headers["Content-Type"] = "application/octet-stream" 
     self.response.headers["Content-Disposition"] = "attachment; filename=report.csv"
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
-    self.response_body = Report.new(params,fields).csv
+    self.response_body = Report.new(params,fields).csv2
   end
   
   def workflow_grid
