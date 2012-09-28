@@ -1,5 +1,7 @@
 Argo::Application.routes.draw do
 
+  get "status/log"
+
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
   match 'view/opensearch', :to => 'catalog#opensearch', :as => "opensearch_catalog"
@@ -57,8 +59,7 @@ Argo::Application.routes.draw do
     get '/logout'
     get '/profile'
   end
-  
-  namespace :dor do
+	namespace :dor do
     get '/configuration'
     get '/label'
     get '/query_by_id'
