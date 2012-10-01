@@ -40,6 +40,10 @@ class ApplicationController < ActionController::Base
       nil
     end
   end
+
+  def current_or_guest_user
+    current_user
+  end
   
   def user_session
     session
