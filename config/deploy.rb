@@ -16,7 +16,7 @@ after "deploy:create_symlink", "argo:trust_rvmrc"
 after "deploy:create_symlink", "argo:initialize_htaccess"
 after "deploy:create_symlink", "argo:restart_indexer"
 
-set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml)
+set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml config/default_htaccess_directives)
 
 set :user, "lyberadmin" 
 set :runner, "lyberadmin"
