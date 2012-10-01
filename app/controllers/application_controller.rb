@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :authorize!
   before_filter :fedora_setup
+
+  helper_method :current_or_guest_user
   
   include Rack::Webauth::Helpers
 
