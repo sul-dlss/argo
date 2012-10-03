@@ -48,6 +48,25 @@ class ItemsController < ApplicationController
       }
     end
   end
+  def workflow_update
+    args = params.values_at(:id, :wf_name, :process, :status)
+    if args.all? &:present?
+      Dor::WorkflowService.update_workflow_status 'dor', *args
+      @item = Dor.find params[:id]
+      begin
+        @item.update_index
+      rescue Exception => e
+        Rails.logger.warn "ItemsController#workflow_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
+      end
+      respond_to do |format|
+        format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name]), :notice => 'Workflow was successfully updated' }
+      end
+    else
+      respond_to do |format|
+        format.any { render format.to_sym => 'Bad Request', :status => :bad_request }
+      end
+    end
+  end
 	def embargo_update
 		if not current_user.is_admin
 		 render :status=> :forbidden, :text =>'forbidden'
