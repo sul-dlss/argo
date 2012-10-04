@@ -31,17 +31,15 @@ namespace :argo do
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
     directives = [
-      'Deny from all',
-      'Order allow,deny',
-      'Allow from 171.64.11.39',
-      'Allow from 171.67.35.140',
-      'Satisfy any',
+
       'AuthType WebAuth',
       'Require privgroup dlss:argo-access',
       'WebAuthLdapAttribute suAffiliation',
       'WebAuthLdapAttribute displayName',
       'WebAuthLdapAttribute mail',
     ]
+
+    directives += File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) rescue nil
 
     resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0, 
       :facets => { :fields => ['apo_register_permissions_facet'] }, :'facet.prefix' => 'workgroup:', :'facet.mincount' => 1, :'facet.limit' => -1 )

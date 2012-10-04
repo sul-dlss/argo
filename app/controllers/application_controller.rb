@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   before_filter :authorize!
   before_filter :fedora_setup
+
+  helper_method :current_or_guest_user
   
   include Rack::Webauth::Helpers
 
@@ -39,6 +41,10 @@ class ApplicationController < ActionController::Base
     else
       nil
     end
+  end
+
+  def current_or_guest_user
+    current_user
   end
   
   def user_session
