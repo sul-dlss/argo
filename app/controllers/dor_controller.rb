@@ -48,6 +48,7 @@ class DorController < ApplicationController
 
   def delete_from_index
     Dor::SearchService.solr.delete_by_id(params[:pid])
+    Dor::SearchService.solr.commit
     render :text => params[:pid]
   end
 end
