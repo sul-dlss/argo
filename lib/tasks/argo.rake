@@ -63,6 +63,52 @@ namespace :argo do
       wf.update_index
     end
   end
+
+  desc ""
+  task :process_indexing_exception_queue => :environment do |t|
+    $stdout.sync = true
+    @destination = 'edu.stanford.argo.ReindexQueueExceptions'
+    @clientid = 'argo'
+    Dor::Config.stomp.client_id = @clientid
+    @conn = Dor::Config.stomp.connection
+
+    @conn.subscribe(@destination, "activemq.subscriptionName" => @clientid, :ack =>"client")
+    $stdout.puts
+    @i = 0
+    while true
+    begin
+      Timeout::timeout(15) do
+        @msg = @conn.receive
+      end
+
+      next if @msg.nil?
+
+      pid = @msg.body
+
+      ex = IndexingException.find_or_initialize_by_pid(pid)
+
+      begin
+        ex.solr_document = Dor::Item.find(pid).to_solr 
+        Dor::SearchService.solr.add(ex.solr_document, :add_attributes => {:commitWithin => 10000})
+        $stdout.print "."
+      rescue => e
+        @i += 1
+        ex.exception = e
+        ex.save
+        $stdout.print "x"
+      end
+
+      @conn.ack @msg.headers["message-id"]
+    rescue Timeout::Error
+      # all done!
+      $stdout.puts
+      $stdout.puts "Logged #{@i} indexing exceptions"
+      exit
+    end
+  end
+
+    @conn.join
+  end
   
   desc "Reindex all DOR objects"
   task :reindex_all, [:query] => [:environment] do |t, args|
