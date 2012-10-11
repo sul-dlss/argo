@@ -25,6 +25,7 @@ gem "haml"
 gem "coderay"
 gem "dalli"
 gem "kgio"
+gem 'kaminari'
 
 group :test, :development do
   gem 'unicorn'

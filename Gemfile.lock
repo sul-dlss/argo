@@ -402,6 +402,7 @@ DEPENDENCIES
   haml
   is_it_working-cbeer
   jquery-rails
+  kaminari
   kgio
   lyberteam-devel (>= 0.7.0)
   mysql2 (~> 0.3.0)

@@ -63,8 +63,9 @@ Argo::Application.routes.draw do
     get '/configuration'
     get '/label'
     get '/query_by_id'
-    match 'reindex/:pid', :action => :reindex
+    match 'reindex/:pid', :action => :reindex, :as => 'reindex'
     match 'delete_from_index/:pid', :action => :delete_from_index
+    get '/index_exceptions'
     resources :objects 
   end
   

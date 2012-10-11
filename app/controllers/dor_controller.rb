@@ -51,4 +51,8 @@ class DorController < ApplicationController
     Dor::SearchService.solr.commit
     render :text => params[:pid]
   end
+
+  def index_exceptions
+    @exceptions = IndexingException.order(:created_at).reverse_order.page(params[:page]).per(50)
+  end
 end
