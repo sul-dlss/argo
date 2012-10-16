@@ -73,7 +73,7 @@ begin
         if ["addDatastream", "addRelationship","ingest","modifyDatastreamByValue","modifyDatastreamByReference","modifyObject","purgeDatastream","purgeRelationship","reindex"].include? method
           begin
             obj = Dor.load_instance pid
-            Dor::SearchService.solr.add(obj.to_solr, :add_attributes => {:commitWithin => 10}) unless obj.nil?
+            Dor::SearchService.solr.add(obj.to_solr, :add_attributes => {:commitWithin => 10000}) unless obj.nil?
           rescue
           end
         elsif method == "purgeObject"
