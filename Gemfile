@@ -26,7 +26,7 @@ gem "coderay"
 gem "dalli"
 gem "kgio"
 gem 'kaminari'
-
+gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 group :test, :development do
   gem 'unicorn'
   gem 'rspec-rails'
