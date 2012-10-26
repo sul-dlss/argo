@@ -43,6 +43,15 @@ Argo::Application.routes.draw do
     post '/workflows/:wf_name', :on => :member, :action => :workflow_update, :as => 'workflow_update'
     post '/embargo', :on => :member, :action => :embargo_update, :as => 'embargo_update'
     post '/datastream', :on => :member, :action => :datastream_update, :as => 'datastream_update'
+    get '/file', :on => :member, :action => :get_file, :as => 'get_file'
+    get '/file_list', :on => :member, :action => :file, :as => 'file'
+    post '/file', :on => :member, :action => :replace_file, :as => 'replace_file'
+    get '/resource', :action=>:resource, :as =>'resource'
+    post '/version/open', :action=>:open_version, :as => 'open_version'
+    post '/version/close', :action=>:close_version, :as => 'close_version'
+    delete '/file', :action => :delete_file, :as => 'delete_file'
+    post '/add_file', :action => :add_file, :as => 'add_file'
+    post '/file/attributes', :action => :update_attributes, :as => 'update_attributes'
   end
   
   namespace :registration do

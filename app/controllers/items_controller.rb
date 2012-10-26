@@ -1,6 +1,8 @@
 class ItemsController < ApplicationController
   before_filter :authorize!
-  
+  require 'net/ssh'
+  require 'net/sftp'
+
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
@@ -11,7 +13,7 @@ class ItemsController < ApplicationController
     end
     render :crop, :layout => 'webcrop'
   end
-  
+
   def save_crop
     @druid = params[:id].sub(/^druid:/,'')
     @image_data = JSON.parse(request.body.read)
@@ -23,7 +25,7 @@ class ItemsController < ApplicationController
     }
     render :json => @image_data.to_json
   end
-  
+
   def register
     @perm_keys = ["sunetid:#{current_user.login}"] 
     if webauth and webauth.privgroup.present?
@@ -67,46 +69,118 @@ class ItemsController < ApplicationController
       end
     end
   end
-	def embargo_update
-		if not current_user.is_admin
-		 render :status=> :forbidden, :text =>'forbidden'
-		else
-			@item = Dor.find params[:id]
-			new_date=DateTime.parse(params[:embargo_date])
-			@item.update_embargo(new_date)
-			begin
-				@item.update_index
-			rescue Exception => e
-				Rails.logger.warn "ItemsController#embargo_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
-			end
-			respond_to do |format|
-			format.any { redirect_to catalog_path(@item.pid), :notice => 'Embargo was successfully updated' }
-		end
-	end
-end
+  def embargo_update
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+    else
+      @item = Dor.find params[:id]
+      new_date=DateTime.parse(params[:embargo_date])
+      @item.update_embargo(new_date)
+      begin
+        @item.update_index
+      rescue Exception => e
+        Rails.logger.warn "ItemsController#embargo_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
+      end
+      respond_to do |format|
+        format.any { redirect_to catalog_path(@item.pid), :notice => 'Embargo was successfully updated' }
+      end
+    end
+  end
   def datastream_update
     if not current_user.is_admin
-    	render :status=> :forbidden, :text =>'forbidden'
- 			return
- 		else
-    	req_params=['id','dsid','content']
-    	item = Dor.find params[:id]
-    	ds=item.datastreams[params[:dsid]]
-    	#check that the content is valid xml
-    	begin
-    		content=Nokogiri::XML(params[:content]){ |config| config.strict }
-    	rescue
-    		raise 'XML was not well formed!'
-    	end
-    	ds.content=content.to_s
-    	puts ds.content
-    	ds.save
-    	if ds.dirty?
-    		raise 'datastream didnt write'
-    	end
-    	respond_to do |format|
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
+      req_params=['id','dsid','content']
+      item = Dor.find params[:id]
+      ds=item.datastreams[params[:dsid]]
+      #check that the content is valid xml
+      begin
+        content=Nokogiri::XML(params[:content]){ |config| config.strict }
+      rescue
+        raise 'XML was not well formed!'
+      end
+      ds.content=content.to_s
+      puts ds.content
+      ds.save
+      if ds.dirty?
+        raise 'datastream didnt write'
+      end
+      respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
       end
+    end
+  end
+  def get_file
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else  
+      item=Dor::Item.find(params[:id])
+      data=item.get_file(params[:file])
+      self.response.headers["Content-Type"] = "application/octet-stream" 
+      self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
+      self.response.headers['Last-Modified'] = Time.now.ctime.to_s
+      self.response_body = data
+    end	  
+  end
+  def update_attributes
+    item=Dor::Item.find(params[:item_id])
+    if params[:publish]='yes'
+      params[:publish]='true'
+    else
+      params[:publish]='false'
+    end
+    if params[:shelve]='yes'
+      params[:shelve]='true'
+    else
+      params[:shelve]='false'
+    end
+    if params[:preserve]='yes'
+      params[:preserve]='true'
+    else
+      params[:preserve]='false'
+    end
+    item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
+    respond_to do |format|
+        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
+    end
+  end
+  def replace_file
+    item=Dor::Item.find(params[:id])
+    item.replace_file params[:uploaded_file],params[:file_name]
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:file_name]+' was replaced!' }
+    end
+  end
+  #add a file to a resource, not to be confused with add a resource to an object
+  def add_file
+    item=Dor::Item.find(params[:item_id])
+    item.add_file params[:uploaded_file],params[:resource],params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
+    end
+  end
+  def open_version
+    puts params.inspect
+    item=Dor::Item.find(params[:item_id])
+    item.open_new_version
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
+    end
+  end
+  def close_version
+    item=Dor::Item.find(params[:item_id])
+    item.close_version
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
+    end
+  end
+  def delete_file
+    item=Dor::Item.find(params[:item_id])
+    item.remove_file(params[:file_name])
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:file_name] + ' has been deleted!' }  
     end
   end
 end

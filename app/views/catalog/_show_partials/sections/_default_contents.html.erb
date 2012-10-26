@@ -1,15 +1,23 @@
 <% if object.datastreams.keys.include?('contentMetadata') and not object.datastreams['contentMetadata'].new? %>
 <% content_ds = object.datastreams['contentMetadata'] %>
+<% workspace_files=object.list_files%>
 <div style="clear:left">
   <ul class="resource-tree">
     <li>
       <span class="label">Type</span>
       <%= content_ds.ng_xml.root['type']%>
       <ul>
-        <% content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource,index| %>
+        <%
+		is_admin = current_user.is_admin
+		version_open = can_close_version? object.pid
+ 		content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource,index| %>
           <li class="resource">
-            <span class="label">Resource (<%=index+1%>)</span>
-            <%= resource['id'] %>
+            <span class="label">Resource (<%=index+1%>) <%= resource['id'] %> 
+	
+</span>				<%if is_admin and version_open
+					edit_resource_link='/items/'+params[:id]+'/resource/?edit=true&resource='+resource['id']%>
+							<a class="smallDialogLink" href=<%= edit_resource_link%>>edit<a/>
+			            <%end%>
             <% if resource.at('label') %>
               (<%= resource.at('label').text %>)
             <% end %>
@@ -17,7 +25,14 @@
               <% resource.xpath('file').each do |file| %>
                 <li class="file">
                   <span class="label">File</span>
-                  <%= file['id'] %> 
+				<%if is_admin and workspace_files.include?(file['id']) %>
+				<% 
+				link='/items/'+params[:id]+'/file_list/?file='+file['id']
+				%>
+				<a class="smallDialogLink" href=<%= link%>><%=file['id']%><a/>
+                  <%else%>
+				<%=file['id']%>
+				<%end%>
                   (<%= file['mimetype'] %>, <%= file['size'].to_i.bytestring('%.1f%s') %>,
                   <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
                 </li>
