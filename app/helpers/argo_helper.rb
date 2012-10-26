@@ -1,16 +1,16 @@
 # Overrides for Blacklight helpers
- 
+
 module ArgoHelper
   include BlacklightHelper
   include ValueHelper
-  
+
   def build_solr_request_from_response
     qs = @response['responseHeader']['params'].reject { |k,v| k == 'wt' }.collect do |k,v|
       v.is_a?(Array) ? v.collect { |v1| [k,URI.encode(v1.to_s)].join('=') } : [k,URI.encode(v.to_s)].join('=')
     end.flatten.join('&')
     Dor::SearchService.solr.uri.merge("select?#{qs}").to_s.html_safe
   end
-  
+
   def ensure_current_document_version
     if @document.get('index_version_t').to_s < Dor::SearchService.index_version
       Dor::SearchService.reindex(@document.get('id'))
@@ -42,32 +42,32 @@ module ArgoHelper
       key = facet_field.query.select { |key, val| val[:fq] == value }.first.first
       items << OpenStruct.new(:value => key, :hits => hits, :label => facet_field.query[key][:label])
     end
- 
+
     RSolr::Ext::Response::Facets::FacetField.new facet_name, items
   end
-  
-	# copies the current params (or whatever is passed in as the 3rd arg)
-	   # removes the field value from params[:f]
-	   # removes the field if there are no more values in params[:f][field]
-	   # removes additional params (page, id, etc..)
-	   def remove_facet_params(field, value, source_params=params)
-	     p = source_params.dup
-	    # need to dup the facet values too,
-	    # if the values aren't dup'd, then the values
-	    # from the session will get remove in the show view...
-	    p[:f] = (p[:f] || {}).dup
-	     p[:f][field] = (p[:f][field] || []).dup
-	     p.delete :page
-	     p.delete :id
-	     p.delete :counter
-	    p.delete :commit
-			begin
-	     p[:f][field] = p[:f][field] - [value]
-	   rescue 
-		 end
-		 p[:f].delete(field) if p[:f][field].size == 0
-	     p
-	   end
+
+  # copies the current params (or whatever is passed in as the 3rd arg)
+  # removes the field value from params[:f]
+  # removes the field if there are no more values in params[:f][field]
+  # removes additional params (page, id, etc..)
+  def remove_facet_params(field, value, source_params=params)
+    p = source_params.dup
+    # need to dup the facet values too,
+    # if the values aren't dup'd, then the values
+    # from the session will get remove in the show view...
+    p[:f] = (p[:f] || {}).dup
+    p[:f][field] = (p[:f][field] || []).dup
+    p.delete :page
+    p.delete :id
+    p.delete :counter
+    p.delete :commit
+    begin
+      p[:f][field] = p[:f][field] - [value]
+    rescue 
+    end
+    p[:f].delete(field) if p[:f][field].size == 0
+    p
+  end
   def render_index_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
@@ -76,7 +76,7 @@ module ArgoHelper
       super(args)
     end
   end
-  
+
   def link_to_previous_document(previous_document)
     if previous_document
       link_to raw(t('views.pagination.previous')), previous_document, :class => "previous", :'data-counter' => session[:search][:counter].to_i - 1
@@ -96,11 +96,11 @@ module ArgoHelper
   def render_document_heading
     ''
   end
-  
+
   def render_show_doc_actions *args
     ''
   end
-  
+
   def render_document_show_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
@@ -109,7 +109,7 @@ module ArgoHelper
       super(args)
     end
   end
-  
+
   def render_extended_document_class(document = @document)
     result = render_document_class(document).to_s
     if first_image(document['shelved_content_file_t'])
@@ -117,7 +117,7 @@ module ArgoHelper
     end
     result
   end
-  
+
   def render_document_show_thumbnail doc
     if doc['shelved_content_file_t']
       fname = first_image(doc['shelved_content_file_t'])
@@ -128,7 +128,7 @@ module ArgoHelper
       end
     end
   end
-  
+
   def render_index_thumbnail doc
     if doc['shelved_content_file_t']
       fname = first_image(doc['shelved_content_file_t'])
@@ -155,18 +155,18 @@ module ArgoHelper
     end
     return result.html_safe
   end
-  
+
   def first_image(a)
     Array(a).find{|f| File.extname(f)=~ /jp2/}
     #Array(a).find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
   end
-  
+
   def render_date_pickers(field_name)
     if field_name =~ /_date/
       render(:partial => 'catalog/_show_partials/date_choice', :locals => {:field_name => field_name})
     end
   end
-  
+
   def document_has? document, field_name
     if document.has? field_name
       return true
@@ -182,27 +182,27 @@ module ArgoHelper
       return false
     end
   end
-  
+
   def render_purl_link document, link_text='PURL', opts={:target => '_blank'}
     val = document.get('id').split(/:/).last
     link_to link_text, File.join(Argo::Config.urls.purl, val), opts
   end
-  
+
   def render_dor_link document, link_text='Fedora UI', opts={:target => '_blank'}
     val = document.get('id')
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}"), opts
   end
-  
+
   def render_foxml_link document, link_text='FoXML', opts={:target => '_blank'}
     val = document.get('id')
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}/objectXML"), opts
   end
-  
+
   def render_searchworks_link document, link_text='Searchworks', opts={:target => '_blank'}
     val = document.get('catkey_id_t')
     link_to link_text, "http://searchworks.stanford.edu/view/#{val}", opts
   end
-  
+
   def render_mdtoolkit_link document, link_text='MD Toolkit', opts={:target => '_blank'}
     val = document.get('mdtoolkit_id_t')
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
@@ -212,19 +212,19 @@ module ArgoHelper
       link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
     end
   end
-  
+
   def render_section_header_link section, document
     section_header_method = blacklight_config[:show][:section_links][section]
     unless section_header_method.nil?
       self.send(section_header_method, document)
     end
   end
-  
+
   def render_full_dc_link document, link_text="View full Dublin Core"
     link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)'
   end
-  
+
   def render_dor_workspace_link document, link_text="View DOR workspace"
   end
-  
+
 end

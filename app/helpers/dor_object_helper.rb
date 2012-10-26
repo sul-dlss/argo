@@ -21,7 +21,7 @@ module DorObjectHelper
     end
     result
   end
-  
+
   def render_citation doc
     terms = retrieve_terms(doc)
     result = ''
@@ -31,22 +31,22 @@ module DorObjectHelper
     result += ": #{origin_info.html_safe}" if origin_info.present?
     result.html_safe
   end
-	  def render_embargo_date_reset(pid, current_user)
-				#	 new_date=Datetime.parse(new_date)
-				#		if(new_date.past?)
-			#				raise 'The new date must be in the future!'
-			#			end
-						if is_permitted(current_user, :modify, pid)	
-						  form_tag embargo_update_item_url(pid), :class => 'dialogLink' do
-						  button_tag("Change Embargo", :type => 'submit')
-						 end
-					 else
-						 ''
-	       end
-			end
-	def is_permitted(current_user, operation, pid)
-		return true
-	end
+  def render_embargo_date_reset(pid, current_user)
+    #	 new_date=Datetime.parse(new_date)
+    #		if(new_date.past?)
+    #				raise 'The new date must be in the future!'
+    #			end
+    if is_permitted(current_user, :modify, pid)	
+      form_tag embargo_update_item_url(pid), :class => 'dialogLink' do
+        button_tag("Change Embargo", :type => 'submit')
+      end
+    else
+      ''
+    end
+  end
+  def is_permitted(current_user, operation, pid)
+    return true
+  end
   def render_datetime(datetime)
     if datetime.nil? || datetime==''
       ''
@@ -61,10 +61,10 @@ module DorObjectHelper
         d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
         d.strftime('%Y-%m-%d %I:%M%p')
       end
-    
+
     end
   end
-  
+
   def render_events doc, obj
     events = structure_from_solr(doc,'event')
     unless events.empty?
@@ -76,13 +76,13 @@ module DorObjectHelper
     end
     render :partial => 'catalog/_show_partials/events', :locals => { :document => doc, :object => obj, :events => events }
   end
-  
+
   def render_milestones doc, obj
     milestones = SolrDocument::get_milestones(doc)
     render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
   end
-  
-  def render_status (doc)
+
+  def render_status (doc,object)
     status = 0
     version = ''
     status_hash={
@@ -95,7 +95,7 @@ module DorObjectHelper
       6 => version + ' Accessioned',
       7 => version + ' Accessioned (indexed)',
       8 => version + ' Accessioned (indexed, ingested)'
-      }           
+    }           
     status_time=nil
     lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
     Array(doc[lifecycle_field]).each do |m| 
@@ -141,74 +141,101 @@ module DorObjectHelper
           status=8
           status_time=time
         end
+      end
     end
-  end
-  embargo=''
-  if(doc.has_key?('embargoMetadata_t'))
-    embargo_data=doc['embargoMetadata_t']
-    text=embargo_data.split.first
-    date=embargo_data.split.last
-    
-    if text == 'released'
-      #do nothing at the moment, we arent displaying these
-    else
-      embargo= ' (embargoed until '+render_datetime(date.to_s)+')' 
-      #add a date picker and button to change the embargo date for those who should be able to.
-      embargo+=render :partial => 'items/embargo_form'
-      
+    embargo=''
+    if(doc.has_key?('embargoMetadata_t'))
+      embargo_data=doc['embargoMetadata_t']
+      text=embargo_data.split.first
+      date=embargo_data.split.last
+
+      if text == 'released'
+        #do nothing at the moment, we arent displaying these
+      else
+        embargo= ' (embargoed until '+render_datetime(date.to_s)+')' 
+        #add a date picker and button to change the embargo date for those who should be able to.
+        embargo+=render :partial => 'items/embargo_form'
+
+      end
     end
-  end
     result=status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
+    if(can_close_version?(object.pid))
+      result+=button_to 'Close Version','/items/'+object.pid+'/version/close/'
+    else
+      if can_open_version?(object.pid)
+        result+=button_to 'Open for modification','/items/'+object.pid+'/version/open/'
+      end
+    end
     result=result.html_safe
   end
-  
-  def render_workflows doc, obj
-    workflows = {}
-    Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :string, :displayable)]).each do |line|
-      (wf,status,errors) = line.split(/\|/)
-      workflows[wf] = { :status => status, :errors => errors.to_i }
+
+  def can_open_version? pid
+    if not (Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))
+      return false
     end
-    render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
+    if(Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted'))
+      return false
+    end
+    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
+      return false
+    end 
+    true
   end
- 
-  # Datastream helpers
-  CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
-  def parse_specs spec_string
-    Hash[[:dsid,:control_group,:mime_type,:version,:size,:label].zip(spec_string.split(/\|/))]
-  end
-  
-  def render_ds_control_group doc, specs
-    cg = specs[:control_group] || 'X'
-    "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
-  end
-  
-  def render_ds_id doc, specs
-    link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :class => 'dialogLink', :title => specs[:dsid]
-  end
-  
-  def render_ds_mime_type doc, specs
-    specs[:mime_type]
-  end
-  
-  def render_ds_version doc, specs
-    "v#{specs[:version]}"
-  end
-  
-  def render_ds_size doc, specs
-    val = specs[:size].to_i.bytestring('%.1f%s').downcase
-    val.sub(/\.?0+([a-z]?b)$/,'\1')
-  end
-  
-  def render_ds_label doc, specs
-    specs[:label]
+  def can_close_version? pid
+    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') and not Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
+      true
+    else
+      false
+    end
   end
 
-  def render_ds_profile_header ds
-    dscd = ds.createDate
-    if dscd.is_a?(Time)
-      dscd = dscd.xmlschema
+    def render_workflows doc, obj
+      workflows = {}
+      Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :string, :displayable)]).each do |line|
+        (wf,status,errors) = line.split(/\|/)
+        workflows[wf] = { :status => status, :errors => errors.to_i }
+      end
+      render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
     end
-    %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
+
+    # Datastream helpers
+    CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
+    def parse_specs spec_string
+      Hash[[:dsid,:control_group,:mime_type,:version,:size,:label].zip(spec_string.split(/\|/))]
+    end
+
+    def render_ds_control_group doc, specs
+      cg = specs[:control_group] || 'X'
+      "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
+    end
+
+    def render_ds_id doc, specs
+      link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :class => 'dialogLink', :title => specs[:dsid]
+    end
+
+    def render_ds_mime_type doc, specs
+      specs[:mime_type]
+    end
+
+    def render_ds_version doc, specs
+      "v#{specs[:version]}"
+    end
+
+    def render_ds_size doc, specs
+      val = specs[:size].to_i.bytestring('%.1f%s').downcase
+      val.sub(/\.?0+([a-z]?b)$/,'\1')
+    end
+
+    def render_ds_label doc, specs
+      specs[:label]
+    end
+
+    def render_ds_profile_header ds
+      dscd = ds.createDate
+      if dscd.is_a?(Time)
+        dscd = dscd.xmlschema
+      end
+      %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
+    end
+
   end
-  
-end

@@ -13,7 +13,7 @@ module RegistrationHelper
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
   end
-  
+
   def apo_default_rights_list(*permission_keys)
     q = 'objectType_t:adminPolicy'
     unless permission_keys.empty?
@@ -29,24 +29,24 @@ module RegistrationHelper
       apo_object = Dor.find(apo['id'], :lightweight => true)
       adm_xml = apo_object.defaultObjectRights.ng_xml 
       added=false
-      
+
       adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
         #if read.value='Stanford'
-          apo['rights'] = 'Stanford'+read.name
-          added=true
-          break
+        apo['rights'] = 'Stanford'+read.name
+        added=true
+        break
         #end
       end
-      
+
       adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
-          apo['rights'] = 'world'
-          added=true
-          break
-        
+        apo['rights'] = 'world'
+        added=true
+        break
+
       end
-      
+
       if apo['rights'].nil?
-      apo['rights'] = 'dark'
+        apo['rights'] = 'dark'
       end
     end
     result.collect do |doc|
@@ -58,7 +58,7 @@ module RegistrationHelper
     apo_object = Dor.find(apo_id, :lightweight => true)
     adm_xml = apo_object.defaultObjectRights.ng_xml 
     added=false
-    
+
     adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
       toret=Array.new
       toret['stanford']='Stanford (default)'
@@ -66,20 +66,20 @@ module RegistrationHelper
       toret['none']='dark'
       return toret
     end
-    
+
     adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
-        oret=Array.new
-        toret['stanford']='Stanford'
-        toret['world']='world (default)'
-        toret['none']='dark'
-        return toret
+      oret=Array.new
+      toret['stanford']='Stanford'
+      toret['world']='world (default)'
+      toret['none']='dark'
+      return toret
     end
     oret=Array.new
     toret['stanford']='Stanford'
     toret['world']='world'
     toret['none']='dark (default)'
   end
-  
+
   def valid_object_types
     [
       ['Item','item'],
@@ -89,7 +89,7 @@ module RegistrationHelper
       ['Workflow Definition','workflow']
     ]
   end
-  
+
   def valid_rights_options
     [
       ['World','world'],
@@ -97,7 +97,7 @@ module RegistrationHelper
       ['Dark (Preserve Only)','none']
     ]
   end
-  
+
   def valid_content_types
     [
       'Book (flipbook, ltr)',
@@ -111,7 +111,7 @@ module RegistrationHelper
       'Map'
     ]
   end
-  
+
   def metadata_sources
     [
       ['None','none'], #changed from label
@@ -130,11 +130,11 @@ module RegistrationHelper
     end
     return pdf
   end
-  
+
   def generate_tracking_sheet(druid, pdf)
     bc_width  = 2.25.in
     bc_height = 0.75.in
-    
+
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
     doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
@@ -142,16 +142,16 @@ module RegistrationHelper
       pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       return
     end
-    
+
     ids = Array(doc['mods_identifier_t']).collect do |id| 
       result = id.split(/:/,2)
       result[0] = "#{result[0].titleize}:"
       result
     end.reject { |id| id[0] =~ /DRUID/i }
-    
+
     barcode = Barby::Code128B.new(druid)
     barcode.annotate_pdf(pdf, :width => bc_width, :height => bc_height, 
-      :x => ((pdf.bounds.width / 2) - (bc_width / 2)), :y => (pdf.bounds.height - bc_height))
+    :x => ((pdf.bounds.width / 2) - (bc_width / 2)), :y => (pdf.bounds.height - bc_height))
 
     pdf.y -= (bc_height + 0.25.in)
     pdf.text druid, :size => 15, :style => :bold, :align => :center
@@ -176,7 +176,7 @@ module RegistrationHelper
       table_data.push(["Tags:",tags.join("\n")])
     end
     pdf.table(table_data, :column_widths => [100,224],
-      :cell_style => { :borders => [], :padding => 0.pt })
+    :cell_style => { :borders => [], :padding => 0.pt })
 
     pdf.y -= 0.5.in
 
