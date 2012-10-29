@@ -1,0 +1,19 @@
+<%object=Dor::Item.find(params[:id])%>
+<% content_ds = object.datastreams['contentMetadata'] %>
+<% workspace_files=object.list_files%>
+<%
+
+	if workspace_files.include?(params[:file])
+		link='/items/'+params[:id]+'/file/?file='+params[:file]
+		%>
+		Workspace: <a href=<%= link%>><%=params[:file]%><a/>
+		<%
+	end
+	content_ds.ng_xml.search('//file[@id=\''+params[:file]+'\']').each do |file|
+		if false and file['shelve']=='true'
+			%>
+			<br>Stacks: <a href=<%= stacks_url_full_size(object,params[:file])%>><%=params[:file]%></a>
+			<%
+		end
+	end
+%>
