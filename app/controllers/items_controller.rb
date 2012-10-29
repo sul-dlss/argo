@@ -183,4 +183,8 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:file_name] + ' has been deleted!' }  
     end
   end
+  def resource
+    @object=Dor::Item.find(params[:item_id])
+    @content_ds = @object.datastreams['contentMetadata']
+  end
 end

@@ -82,7 +82,7 @@ module DorObjectHelper
     render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
   end
 
-  def render_status (doc,object)
+  def render_status (doc,object=nil)
     status = 0
     version = ''
     status_hash={
@@ -159,10 +159,10 @@ module DorObjectHelper
       end
     end
     result=status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
-    if(can_close_version?(object.pid))
+    if(object and can_close_version?(object.pid))
       result+=button_to 'Close Version','/items/'+object.pid+'/version/close/'
     else
-      if can_open_version?(object.pid)
+      if object and can_open_version?(object.pid)
         result+=button_to 'Open for modification','/items/'+object.pid+'/version/open/'
       end
     end
