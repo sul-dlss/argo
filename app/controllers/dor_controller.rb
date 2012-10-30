@@ -3,6 +3,13 @@ class DorController < ApplicationController
   before_filter :authorize!
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
+  def index_logger
+      @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 10240000)
+      @@index_logger.formatter = proc do |severity, datetime, progname, msg|
+        "#{datetime}: #{msg}\n"
+      end
+      @@index_logger
+    end
   
   def configuration
     result = Dor::Config.to_hash.merge({
@@ -39,10 +46,12 @@ class DorController < ApplicationController
   end
 
   def reindex
+    puts 'reindexing'
     obj = Dor.load_instance params[:pid]
     solr_doc = obj.to_solr
+    index_logger.info "updated index for #{params[:pid]}"
     Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-
+    index_logger.info "updated index for #{params[:pid]}"
     render :text => solr_doc
   end
 
