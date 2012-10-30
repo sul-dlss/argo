@@ -48,7 +48,11 @@ unless options[:dor_config]
 end
 
 puts "loading listener"
-logger=Logger.new(File.expand_path("../../../../shared/log/indexer.log",__FILE__))
+
+logger=Logger.new(File.expand_path("../../../../shared/log/indexer.log",__FILE__), 10, 10240000)
+logger.formatter = proc do |severity, datetime, progname, msg|
+  "#{datetime}: #{msg}\n"
+end
 begin
   @clientid = options[:client_id]
   @destination = options[:destination]
