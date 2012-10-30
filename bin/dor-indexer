@@ -73,17 +73,7 @@ begin
         method = @msg.headers["methodName"]
 
         if ["addDatastream", "addRelationship","ingest","modifyDatastreamByValue","modifyDatastreamByReference","modifyObject","purgeDatastream","purgeRelationship","reindex"].include? method 
-          if (not last==pid or not last_time > 5.seconds.ago) 
-          begin
-            obj = Dor.load_instance pid
-            Dor::SearchService.solr.add(obj.to_solr, :add_attributes => {:commitWithin => 10000}) unless obj.nil?
-            last=pid
-            last_time=Time.now
-            logger.warn  " updated solr index for #{pid}\n"
-          rescue
-          end
-        else
-          logger.warn "Skipping recently indexed PID #{pid}"
+          
         end
         elsif method == "purgeObject"
           Dor::SearchService.solr.delete_by_id(pid)
