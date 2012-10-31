@@ -73,16 +73,11 @@ class ItemsController < ApplicationController
     if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
     else
-      @item = Dor.find params[:id]
+      @item = Dor::Item.find params[:id]
       new_date=DateTime.parse(params[:embargo_date])
       @item.update_embargo(new_date)
-      begin
-        @item.update_index
-      rescue Exception => e
-        Rails.logger.warn "ItemsController#embargo_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
-      end
       respond_to do |format|
-        format.any { redirect_to catalog_path(@item.pid), :notice => 'Embargo was successfully updated' }
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
       end
     end
   end
@@ -92,7 +87,7 @@ class ItemsController < ApplicationController
       return
     else
       req_params=['id','dsid','content']
-      item = Dor.find params[:id]
+      item = Dor::Item.find params[:id]
       ds=item.datastreams[params[:dsid]]
       #check that the content is valid xml
       begin
@@ -101,7 +96,6 @@ class ItemsController < ApplicationController
         raise 'XML was not well formed!'
       end
       ds.content=content.to_s
-      puts ds.content
       ds.save
       if ds.dirty?
         raise 'datastream didnt write'
@@ -125,18 +119,22 @@ class ItemsController < ApplicationController
     end	  
   end
   def update_attributes
+      if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
     item=Dor::Item.find(params[:item_id])
-    if params[:publish]='yes'
+    if params[:publish]=='yes'
       params[:publish]='true'
     else
       params[:publish]='false'
     end
-    if params[:shelve]='yes'
+    if params[:shelve]=='yes'
       params[:shelve]='true'
     else
       params[:shelve]='false'
     end
-    if params[:preserve]='yes'
+    if params[:preserve]=='yes'
       params[:preserve]='true'
     else
       params[:preserve]='false'
@@ -146,45 +144,75 @@ class ItemsController < ApplicationController
         format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
     end
   end
+  end
   def replace_file
-    item=Dor::Item.find(params[:id])
+    if not current_user.is_admin
+    render :status=> :forbidden, :text =>'forbidden'
+    return
+  else
+    item=Dor::Item.find(params[:item_id])
     item.replace_file params[:uploaded_file],params[:file_name]
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:file_name]+' was replaced!' }
+      format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:file_name]+' was replaced!' }
     end
+  end
   end
   #add a file to a resource, not to be confused with add a resource to an object
   def add_file
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
     item=Dor::Item.find(params[:item_id])
     item.add_file params[:uploaded_file],params[:resource],params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
     end
   end
+  end
   def open_version
-    puts params.inspect
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
     item=Dor::Item.find(params[:item_id])
     item.open_new_version
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
     end
   end
+  end
   def close_version
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
     item=Dor::Item.find(params[:item_id])
     item.close_version
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
     end
   end
+  end
   def delete_file
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
     item=Dor::Item.find(params[:item_id])
     item.remove_file(params[:file_name])
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:file_name] + ' has been deleted!' }  
     end
   end
+  end
   def resource
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
     @object=Dor::Item.find(params[:item_id])
     @content_ds = @object.datastreams['contentMetadata']
+  end
   end
 end

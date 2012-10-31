@@ -46,7 +46,6 @@ class DorController < ApplicationController
   end
 
   def reindex
-    puts 'reindexing'
     obj = Dor.load_instance params[:pid]
     solr_doc = obj.to_solr
     index_logger.info "updated index for #{params[:pid]}"

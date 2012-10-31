@@ -67,7 +67,7 @@ class RegistrationController < ApplicationController
     end
     #if it wasnt stanford or world default rights, there is either no object rights metadata or it doesnt include default rights
     if not found
-      if adm_xml.to_s.length>0
+      if adm_xml.xpath('//rightsMetadata').length > 0
         result['stanford']='Stanford'
         result['world']='World'
         result['default']='Dark (APO default)'

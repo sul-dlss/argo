@@ -54,32 +54,6 @@ module RegistrationHelper
     end
   end
 
-  def apo_default_rights(apo_id)
-    apo_object = Dor.find(apo_id, :lightweight => true)
-    adm_xml = apo_object.defaultObjectRights.ng_xml 
-    added=false
-
-    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
-      toret=Array.new
-      toret['stanford']='Stanford (default)'
-      toret['world']='world'
-      toret['none']='dark'
-      return toret
-    end
-
-    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
-      oret=Array.new
-      toret['stanford']='Stanford'
-      toret['world']='world (default)'
-      toret['none']='dark'
-      return toret
-    end
-    oret=Array.new
-    toret['stanford']='Stanford'
-    toret['world']='world'
-    toret['none']='dark (default)'
-  end
-
   def valid_object_types
     [
       ['Item','item'],

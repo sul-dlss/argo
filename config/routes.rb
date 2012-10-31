@@ -1,6 +1,7 @@
 Argo::Application.routes.draw do
 
   get "status/log"
+  get "status/indexer"
 
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
@@ -59,7 +60,7 @@ Argo::Application.routes.draw do
     get "/tracksheet"
     get "/form_list"
     get "/workflow_list"
-    get "/rights_list"
+    get "/rights_list", :action => :rights_list, :as => 'rights_list'
     get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
   end
 
