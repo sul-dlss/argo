@@ -138,7 +138,7 @@ class ItemsController < ApplicationController
     item=Dor::Item.find(params[:id])
     item.replace_file params[:uploaded_file],params[:file_name]
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:file_name]+' was replaced!' }
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:file_name]+' was replaced!' }
     end
   end
   end
