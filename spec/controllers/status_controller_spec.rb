@@ -31,12 +31,6 @@ describe StatusController do
 			get 'log',:test_obj=>'druid:bs846vw6460'
     end
   end
-  describe 'GET indexer' do
-    it 'should get the indexer status' do
-      
-      get 'indexer'
-      response.body.should 
-    end
-  end
+  
 
 end
