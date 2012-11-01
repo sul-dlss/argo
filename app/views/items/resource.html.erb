@@ -23,19 +23,19 @@ Resource: <%=params[:resource]%>
 						<input type="hidden" name="file_name" value="<%=file['id']%>">
 				<%
 				checked=''
-				if(file['publish'] and file['publish']=='true')
+				if(file['publish'] and file['publish']=='yes')
 					checked='checked'
 				end
 				%>
 				<input type="checkbox" name="publish" <%=checked%>>publish
 				<%checked=''
-				if(file['shelve'] and file['shelve']=='true')
+				if(file['shelve'] and file['shelve']=='yes')
 					checked='checked'
 				end
 				%>
 				<input type="checkbox" name="shelve" <%=checked%>>shelve
 				<%checked=''
-				if(file['preserve'] and file['preserve']=='true')
+				if(file['preserve'] and file['preserve']=='yes')
 					checked='checked'
 				end
 				%>

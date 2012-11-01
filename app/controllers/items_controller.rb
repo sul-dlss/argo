@@ -124,21 +124,6 @@ class ItemsController < ApplicationController
       return
     else
     item=Dor::Item.find(params[:item_id])
-    if params[:publish]=='yes'
-      params[:publish]='true'
-    else
-      params[:publish]='false'
-    end
-    if params[:shelve]=='yes'
-      params[:shelve]='true'
-    else
-      params[:shelve]='false'
-    end
-    if params[:preserve]=='yes'
-      params[:preserve]='true'
-    else
-      params[:preserve]='false'
-    end
     item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
     respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
@@ -150,7 +135,7 @@ class ItemsController < ApplicationController
     render :status=> :forbidden, :text =>'forbidden'
     return
   else
-    item=Dor::Item.find(params[:item_id])
+    item=Dor::Item.find(params[:id])
     item.replace_file params[:uploaded_file],params[:file_name]
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:file_name]+' was replaced!' }
