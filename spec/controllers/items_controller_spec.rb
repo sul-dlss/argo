@@ -100,33 +100,43 @@ describe "replace_file" do
       ran=true
     end
     file.stub(:original_filename).and_return('filename')
-    post 'replace_file', :uploaded_file => file, :item_id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
+    post 'replace_file', :uploaded_file => file, :id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
     ran.should == true
   end
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
-    post 'replace_file', :uploaded_file => nil, :item_id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
+    post 'replace_file', :uploaded_file => nil, :id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
     response.code.should == "403"
   end
 end
 describe "update_parameters" do
-  it 'should update the shelve, publish and preserve to true' do
+  it 'should update the shelve, publish and preserve to yes (used to be true)' do
     contentMD=mock(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
-    contentMD.stub(:update_attributes) do |file,shelve,preserve,publish|
-      shelve.should == "true"
-      preserve.should == "true"
-      publish.should == "true"
+    contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
+      shelve.should == "yes"
+      preserve.should == "yes"
+      publish.should == "yes"
     end
-    post 'update_attributes', :shelve => 'yes', :publish => 'yes', :preserve => 'yes', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
   end
-  it 'should update the shelve, publish and preserve to false' do
+  it 'should work ok if not all of the values are set' do
     contentMD=mock(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
-    contentMD.stub(:update_attributes) do |file,shelve,preserve,publish|
-      shelve.should == "false"
-      preserve.should == "false"
-      publish.should == "false"
+    contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
+      shelve.should == "no"
+      preserve.should == "yes"
+      publish.should == "yes"
+    end
+    post 'update_attributes',  :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+  end
+  it 'should update the shelve, publish and preserve to no (used to be false)' do
+    contentMD=mock(Dor::ContentMetadataDS)
+    @item.stub(:contentMetadata).and_return(contentMD)
+    contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
+      shelve.should == "no"
+      preserve.should == "no"
+      publish.should == "no"
     end
     contentMD.should_receive(:update_attributes)
     post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :item_id => 'oo201oo0001', :file_name => 'something.txt'

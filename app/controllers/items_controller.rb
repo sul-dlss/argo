@@ -123,6 +123,24 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
+      
+    if(params[:publish].nil? || params[:publish]!='on')
+      params[:publish]='no'
+    else
+      params[:publish]='yes'
+    end
+    if(params[:shelve].nil? || params[:shelve]!='on')
+      params[:shelve]='no'
+    else
+      params[:shelve]='yes'
+    end
+    if(params[:preserve].nil? || params[:preserve]!='on')
+      params[:preserve]='no'
+    else
+      params[:preserve]='yes'
+    end
+    
+    
     item=Dor::Item.find(params[:item_id])
     item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
     respond_to do |format|
