@@ -41,7 +41,7 @@ class StatusController < ApplicationController
       if line.match 'updated'
         #parse the time to see if it was within the last params[:interval] minutes
         timestamp=line.split('[').last.split('\.').first
-        this_run=DateTime.parse(timestamp).change(:offset => "-0700")	
+        this_run=DateTime.parse(timestamp).change(:offset => "-0800")	
         if(this_run > cutoff_time)
           return true
         else

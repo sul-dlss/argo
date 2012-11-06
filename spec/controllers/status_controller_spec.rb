@@ -11,7 +11,7 @@ describe StatusController do
 
     it "fails if the last log time was more than 15 minutes ago " do
 			#the time has to be incorrectly offset to gmt like it is in the logs, hence the additional -420 minutes
-			File.stub(:new){StringIO.new("W, ["+437.minutes.ago.strftime('%Y-%m-%d %H:%M:%S ')+". #27663]  WARN -- :  updated solr index for druid:gb234tt5124")}
+			File.stub(:new){StringIO.new("W, ["+497.minutes.ago.strftime('%Y-%m-%d %H:%M:%S ')+". #27663]  WARN -- :  updated solr index for druid:gb234tt5124")}
 			get 'log'
       response.code.should == '500' 
     end
@@ -27,7 +27,7 @@ describe StatusController do
     	@item.stub(:identityMetadata).and_return(mock_md)
     	Dor::Item.stub(:find).and_return(@item)
 			#the time has to be incorrectly offset to gmt like it is in the logs, hence the additional -420 minutes
-			File.stub(:new){StringIO.new("W, ["+437.minutes.ago.strftime('%Y-%m-%d %H:%M:%S ')+". #27663]  WARN -- :  updated solr index for druid:gb234tt5124")}
+			File.stub(:new){StringIO.new("W, ["+497.minutes.ago.strftime('%Y-%m-%d %H:%M:%S ')+". #27663]  WARN -- :  updated solr index for druid:gb234tt5124")}
 			get 'log',:test_obj=>'druid:bs846vw6460'
     end
   end
