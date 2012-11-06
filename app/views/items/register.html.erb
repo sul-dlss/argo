@@ -6,7 +6,6 @@
     var dor_path = "<%= fedora_base %>";
   </script>
 <% end %>
-<%= indexer_stats%>
 <div id='properties' class="ui-widget" style="display: none">
         <div class="property-item"><label for="object_type">Type of Object</label><%= select_tag :object_type, options_for_select(valid_object_types), :'data-rcparam' => 'objectType' %></div>
         <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :'data-rcparam' => 'apoId' %></div>
