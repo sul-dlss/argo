@@ -24,6 +24,12 @@ class StatusController < ApplicationController
     end
     render :status=>500, :text=>'Nothing indexed in last '+ params[:minutes]+' minutes'
   end			
+  def indexer
+    url='http://sulstats-raw.stanford.edu/render/?format=json&from=-1minute&until=now&target=stats.gauges.dor-prod.indexing-queue-length.max'
+    data=JSON.parse(open(url).read)
+    count=data.first['datapoints'].first.first.to_i
+    render :status => 200, :text => count
+  end
   protected 
   def check_logs 
     log_file=	File.new(LOG_FILE,'r')

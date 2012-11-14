@@ -23,168 +23,199 @@ describe ItemsController do
     response.code.should == "302"
     runs.should ==1
   end
-end
-describe "open_version" do
-  it 'should call dor-services to open a new version' do
-    ran=false
-    @item.stub(:open_new_version)do 
-    ran=true
   end
-  get 'open_version', :item_id => 'oo201oo0001'
-  ran.should == true
-end 
-it 'should 403 if you arent an admin' do
-  @current_user.stub(:is_admin).and_return(false)
-  get 'open_version', :item_id => 'oo201oo0001'
-  response.code.should == "403"
-end
-end
-describe "close_version" do
-  it 'should call dor-services to close the version' do
-    ran=false
-    @item.stub(:close_version)do 
-    ran=true
-  end
-  @item.stub(:current_version).and_return('2')
-  get 'close_version', :item_id => 'oo201oo0001'
-  ran.should == true
-end
-it 'should 403 if you arent an admin' do
-  @current_user.stub(:is_admin).and_return(false)
-  get 'close_version', :item_id => 'oo201oo0001'
-  response.code.should == "403"
-end
-end
-describe "add_file" do
-  it 'should recieve an uploaded file and add it to the requested resource' do
-    pending 'Mock isnt working correctly'
-    file=mock(ActionDispatch::Http::UploadedFile)
-    ran=false
-    @item.stub(:add_file) do
-      ran=true
+  describe "open_version" do
+    it 'should call dor-services to open a new version' do
+      ran=false
+      @item.stub(:open_new_version)do 
+        ran=true
+      end
+      get 'open_version', :item_id => 'oo201oo0001'
+      ran.should == true
+    end 
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      get 'open_version', :item_id => 'oo201oo0001'
+      response.code.should == "403"
     end
-    file.stub(:original_filename).and_return('filename')
-    post 'add_file', :uploaded_file => file, :item_id => 'oo201oo0001', :resource => 'resourceID'
-    ran.should == true
+  end
+  describe "close_version" do
+    it 'should call dor-services to close the version' do
+      ran=false
+      @item.stub(:close_version)do 
+        ran=true
+      end
+      @item.stub(:current_version).and_return('2')
+      get 'close_version', :item_id => 'oo201oo0001'
+      ran.should == true
+    end
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      get 'close_version', :item_id => 'oo201oo0001'
+      response.code.should == "403"
+    end
+  end
+  describe "add_file" do
+    it 'should recieve an uploaded file and add it to the requested resource' do
+      pending 'Mock isnt working correctly'
+      file=mock(ActionDispatch::Http::UploadedFile)
+      ran=false
+      @item.stub(:add_file) do
+        ran=true
+      end
+      file.stub(:original_filename).and_return('filename')
+      post 'add_file', :uploaded_file => file, :item_id => 'oo201oo0001', :resource => 'resourceID'
+      ran.should == true
 
-  end   
-  it 'should 403 if you arent an admin' do
-    @current_user.stub(:is_admin).and_return(false)
-    post 'add_file', :uploaded_file => nil, :item_id => 'oo201oo0001', :resource => 'resourceID'
-    response.code.should == "403"
-  end     
-end
-describe "delete_file" do
-  it 'should call dor services to remove the file' do
-    ran=false
-    @item.stub(:remove_file)do 
-    ran=true
+    end   
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      post 'add_file', :uploaded_file => nil, :item_id => 'oo201oo0001', :resource => 'resourceID'
+      response.code.should == "403"
+    end     
   end
-  get 'delete_file', :item_id => 'oo201oo0001', :file_name => 'old_file'
-  ran.should == true
-end
-it 'should 403 if you arent an admin' do
-  @current_user.stub(:is_admin).and_return(false)
-  get 'delete_file', :item_id => 'oo201oo0001', :file_name => 'old_file'
-  response.code.should == "403"
-
-end
-
-end
-describe "replace_file" do
-  it 'should recieve an uploaded file and call dor-services' do
-    #pending 'Mock isnt working correctly'
-    file=mock(ActionDispatch::Http::UploadedFile)
-    ran=false
-    @item.stub(:replace_file) do
-      ran=true
+  describe "delete_file" do
+    it 'should call dor services to remove the file' do
+      ran=false
+      @item.stub(:remove_file)do 
+        ran=true
+      end
+      get 'delete_file', :item_id => 'oo201oo0001', :file_name => 'old_file'
+      ran.should == true
     end
-    file.stub(:original_filename).and_return('filename')
-    post 'replace_file', :uploaded_file => file, :id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
-    ran.should == true
-  end
-  it 'should 403 if you arent an admin' do
-    @current_user.stub(:is_admin).and_return(false)
-    post 'replace_file', :uploaded_file => nil, :id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
-    response.code.should == "403"
-  end
-end
-describe "update_parameters" do
-  it 'should update the shelve, publish and preserve to yes (used to be true)' do
-    contentMD=mock(Dor::ContentMetadataDS)
-    @item.stub(:contentMetadata).and_return(contentMD)
-    contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
-      shelve.should == "yes"
-      preserve.should == "yes"
-      publish.should == "yes"
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      get 'delete_file', :item_id => 'oo201oo0001', :file_name => 'old_file'
+      response.code.should == "403"
     end
-    post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
   end
-  it 'should work ok if not all of the values are set' do
-    contentMD=mock(Dor::ContentMetadataDS)
-    @item.stub(:contentMetadata).and_return(contentMD)
-    contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
-      shelve.should == "no"
-      preserve.should == "yes"
-      publish.should == "yes"
+  describe "replace_file" do
+    it 'should recieve an uploaded file and call dor-services' do
+      #pending 'Mock isnt working correctly'
+      file=mock(ActionDispatch::Http::UploadedFile)
+      ran=false
+      @item.stub(:replace_file) do
+        ran=true
+      end
+      file.stub(:original_filename).and_return('filename')
+      post 'replace_file', :uploaded_file => file, :id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
+      ran.should == true
     end
-    post 'update_attributes',  :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
-  end
-  it 'should update the shelve, publish and preserve to no (used to be false)' do
-    contentMD=mock(Dor::ContentMetadataDS)
-    @item.stub(:contentMetadata).and_return(contentMD)
-    contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
-      shelve.should == "no"
-      preserve.should == "no"
-      publish.should == "no"
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      post 'replace_file', :uploaded_file => nil, :id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
+      response.code.should == "403"
     end
-    contentMD.should_receive(:update_attributes)
-    post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :item_id => 'oo201oo0001', :file_name => 'something.txt'
   end
-  it 'should 403 if you arent an admin' do
-    @current_user.stub(:is_admin).and_return(false)
-    post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :item_id => 'oo201oo0001', :file_name => 'something.txt'
-    response.code.should == "403"
+  describe "update_parameters" do
+    it 'should update the shelve, publish and preserve to yes (used to be true)' do
+      contentMD=mock(Dor::ContentMetadataDS)
+      @item.stub(:contentMetadata).and_return(contentMD)
+      contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
+        shelve.should == "yes"
+        preserve.should == "yes"
+        publish.should == "yes"
+      end
+      post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    end
+    it 'should work ok if not all of the values are set' do
+      contentMD=mock(Dor::ContentMetadataDS)
+      @item.stub(:contentMetadata).and_return(contentMD)
+      contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
+        shelve.should == "no"
+        preserve.should == "yes"
+        publish.should == "yes"
+      end
+      post 'update_attributes',  :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    end
+    it 'should update the shelve, publish and preserve to no (used to be false)' do
+      contentMD=mock(Dor::ContentMetadataDS)
+      @item.stub(:contentMetadata).and_return(contentMD)
+      contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
+        shelve.should == "no"
+        preserve.should == "no"
+        publish.should == "no"
+      end
+      contentMD.should_receive(:update_attributes)
+      post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    end
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+      response.code.should == "403"
+    end
   end
-end
-describe 'get_file' do
-  it 'should have dor-services fetch a file from the workspace' do
-    @item.stub(:get_file).and_return('abc')
-    @item.should_receive(:get_file)
-    get 'get_file', :file => 'somefile.txt', :id => 'oo201oo0001'
+  describe 'get_file' do
+    it 'should have dor-services fetch a file from the workspace' do
+      @item.stub(:get_file).and_return('abc')
+      @item.should_receive(:get_file)
+      get 'get_file', :file => 'somefile.txt', :id => 'oo201oo0001'
+    end
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      get 'get_file', :file => 'somefile.txt', :id => 'oo201oo0001'
+      response.code.should == "403"
+    end
   end
-  it 'should 403 if you arent an admin' do
-    @current_user.stub(:is_admin).and_return(false)
-    get 'get_file', :file => 'somefile.txt', :id => 'oo201oo0001'
-    response.code.should == "403"
+  describe 'datastream_update' do
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<contentMetadata/>'
+      response.code.should == "403"
+    end
+    it 'should error on malformed xml' do
+      lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<this>isnt well formed.'}.should raise_error
+    end
+    it 'should call save with good xml' do
+      mock_ds=mock(Dor::ContentMetadataDS)
+      mock_ds.stub(:content=)
+      mock_ds.stub(:save)
+      mock_ds.should_receive(:save)
+      @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
+      mock_ds.stub(:dirty?).and_return(false)
+      post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<contentMetadata><text>hello world</text></contentMetadata>'
+    end
   end
-end
-describe 'datastream_update' do
-  it 'should 403 if you arent an admin' do
-    @current_user.stub(:is_admin).and_return(false)
-    post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<contentMetadata/>'
-    response.code.should == "403"
+  describe 'update_sequence' do
+    it 'should 403 if you arent an admin' do
+      @current_user.stub(:is_admin).and_return(false)
+      post 'update_resource', :resource => '0001', :position => '3', :item_id => 'oo201oo0001'
+      response.code.should == "403"
+    end
+    it 'should call dor-services to reorder the resources' do
+      mock_ds=mock(Dor::ContentMetadataDS)
+      @item.stub(:move_resource)
+      @item.should_receive(:move_resource)
+      mock_ds.stub(:save)
+      @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
+      mock_ds.stub(:dirty?).and_return(false)
+      post 'update_resource', :resource => '0001', :position => '3', :item_id => 'oo201oo0001'
+    end
+    it 'should call dor-services to change the label' do
+      mock_ds=mock(Dor::ContentMetadataDS)
+      @item.stub(:update_resource_label)
+      @item.should_receive(:update_resource_label)
+      mock_ds.stub(:save)
+      @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
+      mock_ds.stub(:dirty?).and_return(false)
+      post 'update_resource', :resource => '0001', :label => 'label!', :item_id => 'oo201oo0001'
+    end
+    it 'should call dor-services to update the resource type' do
+      mock_ds=mock(Dor::ContentMetadataDS)
+      @item.stub(:update_resource_type)
+      @item.should_receive(:update_resource_type)
+      mock_ds.stub(:save)
+      @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
+      mock_ds.stub(:dirty?).and_return(false)
+      post 'update_resource', :resource => '0001', :type => 'book', :item_id => 'oo201oo0001'
+    end
   end
-  it 'should error on malformed xml' do
-    lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<this>isnt well formed.'}.should raise_error
+  describe 'resource' do
+    it 'should set the object and datastream, then call the view' do
+      Dor::Item.should_receive(:find)
+      mock_ds=mock(Dor::ContentMetadataDS)
+      @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
+      get 'resource', :item_id => 'oo201oo0001', :resource => '0001'
+    end
   end
-  it 'should call save with good xml' do
-    mock_ds=mock(Dor::ContentMetadataDS)
-    mock_ds.stub(:content=)
-    mock_ds.stub(:save)
-    mock_ds.should_receive(:save)
-    @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
-    mock_ds.stub(:dirty?).and_return(false)
-    post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<contentMetadata><text>hello world</text></contentMetadata>'
-  end
-end
-describe 'resource' do
-  it 'should set the object and datastream, then call the view' do
-    Dor::Item.should_receive(:find)
-    mock_ds=mock(Dor::ContentMetadataDS)
-    @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
-    get 'resource', :item_id => 'oo201oo0001', :resource => '0001'
-
-  end
-end
 end

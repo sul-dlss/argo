@@ -216,46 +216,7 @@ class Report
     end
     return headings+rows
   end
-  def csv
-  csv_string=''
-  fields=[]
-  @fields.each do |f|
-  	fields << f[:label]
-  end
-  csv_string+= fields.to_csv
-  
-  while @document_list.length >0
-      records=docs_to_records(@document_list)
-      records.each do |record|
-      ar=record.values
-      #wrap every field in double quotes
-      ar.each do |val|
-	      val='"'+val.to_s+'"'
-      end
-      	csv_string += record.values.to_csv
-      end
-      @params[:page] += 1
-      (@response, @document_list) = get_search_results
-      
-    end
-  
-  return csv_string
-  end
-    
-  def each
-    headers = @fields.collect { |f| f[:label] }
-    yield FasterCSV::Row.new(headers,headers).to_csv
-    while @document_list.length > 0
-      records = docs_to_records(@document_list)
-      records.each do |record|
-        row = @fields.collect { |f| record[f[:field]] }
-        yield FasterCSV::Row.new(headers,row).to_csv
-      end
-      @params[:page] += 1
-      (@response, @document_list) = get_search_results
-    end
-  end
-  
+
   protected
   def docs_to_records(docs, fields=blacklight_config.report_fields)
     result = []

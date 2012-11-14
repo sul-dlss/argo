@@ -1,10 +1,32 @@
-<table class="detail">
+<table class="detail"style="wdith:100%">
   <thead>
-  <tr><th>what</th><th>when</th></tr>
+  <tr><th>version</th><th>what</th><th>when</th></tr>
   </thead>
   <tbody>
-  <% milestones.each_pair do |k,m| %>
-    <tr><td><%= m[:display] %></td><td><%= if (m[:time]=='pending') then m[:time] else l m[:time] end%></td></tr>
-  <% end %>
+  <% 
+  first=false
+  current_version=nil
+  milestones.each_pair do |version, steps|
+  first=true
+  steps.each_pair do |k,m| %>
+    <%
+    if first
+    	%><tr style="display:none" class="last_step<%= version%>"><td><img src="/assets/expand.png" onclick='$(".version<%= version%>").toggle();$(".last_step<%= version%>").toggle();' alt="collapse"/><%= version%></td>
+    	<td><%= steps['accessioned'][:display]%></td><td><%= l steps['accessioned'][:time]%></td></tr>
+    <%end%>
+    <tr class="version<%= version%>">
+    <%if first
+    	first=false
+    	%><td onclick='$(".version<%= version%>") .toggle();$(".last_step<%= version%>").toggle();'><img src="/assets/expand.png" alt="collapse"/>
+    	<%=version%>
+    	<%else%>
+    	<td>
+    <%end%>
+    </td>
+    <td><%= m[:display] %></td>
+    <td><%= if (m[:time]=='pending') then m[:time] else l m[:time] end%></td>
+    </tr>
+  <%end%>
+  <%end %>
   </tbody>
 </table>

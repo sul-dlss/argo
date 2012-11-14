@@ -46,28 +46,7 @@ module ArgoHelper
     RSolr::Ext::Response::Facets::FacetField.new facet_name, items
   end
 
-  # copies the current params (or whatever is passed in as the 3rd arg)
-  # removes the field value from params[:f]
-  # removes the field if there are no more values in params[:f][field]
-  # removes additional params (page, id, etc..)
-  def remove_facet_params(field, value, source_params=params)
-    p = source_params.dup
-    # need to dup the facet values too,
-    # if the values aren't dup'd, then the values
-    # from the session will get remove in the show view...
-    p[:f] = (p[:f] || {}).dup
-    p[:f][field] = (p[:f][field] || []).dup
-    p.delete :page
-    p.delete :id
-    p.delete :counter
-    p.delete :commit
-    begin
-      p[:f][field] = p[:f][field] - [value]
-    rescue 
-    end
-    p[:f].delete(field) if p[:f][field].size == 0
-    p
-  end
+ 
   def render_index_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)

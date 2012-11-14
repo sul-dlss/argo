@@ -12,31 +12,43 @@ describe SolrDocument do
       lifecycle_data=Array.new
       lifecycle_data << 'registered:2012-02-25T01:40:57Z'
       doc={ 'lifecycle_display' => lifecycle_data }
-      milestones=get_milestones(doc)
+      
+      versions=get_milestones(doc)
+      versions.each do |version,milestones|
       milestones.each do |key,value|
-        value[:version].should == 1
+        version.should == 1
         if value[:display]=='Registered'
           I18n.l(value[:time]).should=='2012-02-24 05:40pm'
         else
           value[:time].should=='pending'
         end
       end
+      end
     end
     it 'should recognize versions and bundle versions together' do
       lifecycle_data=Array.new
-      lifecycle_data << '1:registered:2012-02-25T01:40:57Z'
-      lifecycle_data << '2:opened:2012-02-25T01:39:57Z'
+      lifecycle_data << 'registered:2012-02-25T01:40:57Z;1'
+      lifecycle_data << 'opened:2012-02-25T01:39:57Z;2'
       doc={ 'lifecycle_display' => lifecycle_data }
-      milestones=get_milestones(doc)
-      milestones.each do |key,value|
+      versions=get_milestones(doc)
+      versions['1'].length.should == 8
+      versions['1']['registered'].nil?.should == false
+      versions['2'].length.should == 8
+      versions['2']['registered'].nil?.should == true
+      versions['2']['opened'].nil?.should == false
+      versions.each do |version,milestones|
+      milestones.each do|key,value|
+      
         case value[:display]
         when 'Registered'
           I18n.l(value[:time]).should=='2012-02-24 05:40pm' #the hour/minute here is wrong...dont know why
-          value[:version].should == 1 #registration is always only v1
+          version.should == '1' #registration is always only v1
         when 'Opened'
           I18n.l(value[:time]).should=='2012-02-24 05:39pm' #the hour/minute here is wrong...dont know why
+          version.should == '2'
         else
           value[:time].should=='pending'
+        end
         end
       end
     end  

@@ -119,46 +119,46 @@ class ItemsController < ApplicationController
     end	  
   end
   def update_attributes
-      if not current_user.is_admin
+    if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      
-    if(params[:publish].nil? || params[:publish]!='on')
-      params[:publish]='no'
-    else
-      params[:publish]='yes'
-    end
-    if(params[:shelve].nil? || params[:shelve]!='on')
-      params[:shelve]='no'
-    else
-      params[:shelve]='yes'
-    end
-    if(params[:preserve].nil? || params[:preserve]!='on')
-      params[:preserve]='no'
-    else
-      params[:preserve]='yes'
-    end
-    
-    
-    item=Dor::Item.find(params[:item_id])
-    item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
-    respond_to do |format|
+
+      if(params[:publish].nil? || params[:publish]!='on')
+        params[:publish]='no'
+      else
+        params[:publish]='yes'
+      end
+      if(params[:shelve].nil? || params[:shelve]!='on')
+        params[:shelve]='no'
+      else
+        params[:shelve]='yes'
+      end
+      if(params[:preserve].nil? || params[:preserve]!='on')
+        params[:preserve]='no'
+      else
+        params[:preserve]='yes'
+      end
+
+
+      item=Dor::Item.find(params[:item_id])
+      item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
+      respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
+      end
     end
-  end
   end
   def replace_file
     if not current_user.is_admin
-    render :status=> :forbidden, :text =>'forbidden'
-    return
-  else
-    item=Dor::Item.find(params[:id])
-    item.replace_file params[:uploaded_file],params[:file_name]
-    respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:file_name]+' was replaced!' }
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
+      item=Dor::Item.find(params[:id])
+      item.replace_file params[:uploaded_file],params[:file_name]
+      respond_to do |format|
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:file_name]+' was replaced!' }
+      end
     end
-  end
   end
   #add a file to a resource, not to be confused with add a resource to an object
   def add_file
@@ -166,56 +166,76 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-    item=Dor::Item.find(params[:item_id])
-    item.add_file params[:uploaded_file],params[:resource],params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
-    respond_to do |format|
-      format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
+      item=Dor::Item.find(params[:item_id])
+      item.add_file params[:uploaded_file],params[:resource],params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
+      respond_to do |format|
+        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
+      end
     end
-  end
   end
   def open_version
     if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-    item=Dor::Item.find(params[:item_id])
-    item.open_new_version
-    respond_to do |format|
-      format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
+      item=Dor::Item.find(params[:item_id])
+      item.open_new_version
+      respond_to do |format|
+        format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
+      end
     end
-  end
   end
   def close_version
     if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-    item=Dor::Item.find(params[:item_id])
-    item.close_version
-    respond_to do |format|
-      format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
+      item=Dor::Item.find(params[:item_id])
+      item.close_version
+      respond_to do |format|
+        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
+      end
     end
-  end
   end
   def delete_file
     if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-    item=Dor::Item.find(params[:item_id])
-    item.remove_file(params[:file_name])
-    respond_to do |format|
-      format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:file_name] + ' has been deleted!' }  
+      item=Dor::Item.find(params[:item_id])
+      item.remove_file(params[:file_name])
+      respond_to do |format|
+        format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:file_name] + ' has been deleted!' }  
+      end
     end
-  end
   end
   def resource
     if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-    @object=Dor::Item.find(params[:item_id])
-    @content_ds = @object.datastreams['contentMetadata']
+      @object=Dor::Item.find(params[:item_id])
+      @content_ds = @object.datastreams['contentMetadata']
+    end
   end
+  def update_resource
+    if not current_user.is_admin
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    else
+      item=Dor::Item.find(params[:item_id])
+      if params[:position]
+        item.move_resource(params[:resource], params[:position])
+      end
+      if params[:label]
+        item.update_resource_label(params[:resource], params[:label])
+      end
+      if params[:type]
+        item.update_resource_type(params[:resource], params[:type])
+      end
+      respond_to do |format|
+        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'updated resource ' + params[:resource] + '!' }  
+      end
+    end
   end
 end

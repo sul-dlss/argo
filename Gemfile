@@ -2,7 +2,7 @@ source :rubygems
 source "http://sul-gems.stanford.edu"
 
 
-gem 'dor-services', ">= 3.14.5"
+gem 'dor-services', ">= 3.14.5",:git => "/Users/jdeering/Documents/code/dor-services/.git", :branch => "xslt"
 gem 'rails', '3.2.6'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
@@ -32,6 +32,7 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'capybara'
   gem "rack-test", :require => "rack/test"
+	gem 'simplecov', :require => false
 end
 
 group :development do

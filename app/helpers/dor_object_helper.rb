@@ -86,108 +86,137 @@ module DorObjectHelper
     status = 0
     version = ''
     status_hash={
-      0 => version + ' ',
-      1 => version + ' Registered',
-      2 => version + ' In process',
-      3 => version + ' In process (described)',
-      4 => version + ' In process (described, published)',
-      5 => version + ' In process (described, published, deposited)',
-      6 => version + ' Accessioned',
-      7 => version + ' Accessioned (indexed)',
-      8 => version + ' Accessioned (indexed, ingested)'
+      0 => '',
+      1 => 'Registered',
+      2 => 'In process',
+      3 => 'In process (described)',
+      4 => 'In process (described, published)',
+      5 => 'In process (described, published, deposited)',
+      6 => 'Accessioned',
+      7 => 'Accessioned (indexed)',
+      8 => 'Accessioned (indexed, ingested)',
+      9 => 'Opened'
     }           
     status_time=nil
     lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
+    current=false
+    versions=[]
+    Array(doc[lifecycle_field]).each do |m|
+      if not m.include?(';')
+        current=true
+      else
+        if not versions.include? m.split(/;/).last
+          versions << m.split(/;/).last
+        end
+      end
+    end
+    versions.sort
+    oldest_version=versions.last
     Array(doc[lifecycle_field]).each do |m| 
       (name,time) = m.split(/:/,2)
-      case name
-      when 'registered'
-        if status<1
-          status=1
-          status_time=time
-        end        
-      when 'submitted'
-        if status<2
-          status=2
-          status_time=time
-        end
-      when 'described'
-        if status<3
-          status=3
-          status_time=time
-        end
-      when 'published'
-        if status<4
-          status=4
-          status_time=time
-        end
-      when 'deposited'
-        if status<5
-          status=5
-          status_time=time
-        end
-      when 'accessioned'
-        if status<6
-          status=6
-          status_time=time
-        end
-      when 'indexed'
-        if status<7
-          status=7
-          status_time=time
-        end
-      when 'shelved'
-        if status<8
-          status=8
-          status_time=time
+      if time.include?(';')
+        (time,version)=time.split(/;/,2)
+      end
+      if current or (not current and version==oldest_version)
+        case name
+        when 'registered'
+          if status<1
+            status=1
+            status_time=time
+          end        
+        when 'submitted'
+          if status<2
+            status=2
+            status_time=time
+          end
+        when 'described'
+          if status<3
+            status=3
+            status_time=time
+          end
+        when 'published'
+          if status<4
+            status=4
+            status_time=time
+          end
+        when 'deposited'
+          if status<5
+            status=5
+            status_time=time
+          end
+        when 'accessioned'
+          if status<6
+            status=6
+            status_time=time
+          end
+        when 'indexed'
+          if status<7
+            status=7
+            status_time=time
+          end
+        when 'shelved'
+          if status<8
+            status=8
+            status_time=time
+          end
+        when 'opened'
+          if status<9
+            status=9
+            status_time=time
+          end
         end
       end
-    end
-    embargo=''
-    if(doc.has_key?('embargoMetadata_t'))
-      embargo_data=doc['embargoMetadata_t']
-      text=embargo_data.split.first
-      date=embargo_data.split.last
+      end
+      embargo=''
+      if(doc.has_key?('embargoMetadata_t'))
+        embargo_data=doc['embargoMetadata_t']
+        text=embargo_data.split.first
+        date=embargo_data.split.last
 
-      if text == 'released'
-        #do nothing at the moment, we arent displaying these
+        if text == 'released'
+          #do nothing at the moment, we arent displaying these
+        else
+          embargo= ' (embargoed until '+render_datetime(date.to_s)+')' 
+          #add a date picker and button to change the embargo date for those who should be able to.
+          embargo+=render :partial => 'items/embargo_form'
+
+        end
+      end
+      result=''
+      if current
+        result='v1 '+status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
       else
-        embargo= ' (embargoed until '+render_datetime(date.to_s)+')' 
-        #add a date picker and button to change the embargo date for those who should be able to.
-        embargo+=render :partial => 'items/embargo_form'
-
+        result='v'+oldest_version+' '+status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
       end
-    end
-    result=status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
-    if(object and can_close_version?(object.pid))
-      result+=button_to 'Close Version','/items/'+object.pid+'/version/close/'
-    else
-      if object and can_open_version?(object.pid)
-        result+=button_to 'Open for modification','/items/'+object.pid+'/version/open/'
+      if(object and can_close_version?(object.pid))
+        result+=button_to 'Close Version','/items/'+object.pid+'/version/close/'
+      else
+        if object and can_open_version?(object.pid)
+          result+=button_to 'Open for modification','/items/'+object.pid+'/version/open/'
+        end
       end
+      result=result.html_safe
     end
-    result=result.html_safe
-  end
 
-  def can_open_version? pid
-    if not (Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))
-      return false
-    end
-    if(Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted'))
-      return false
-    end
-    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
-      return false
-    end 
-    true
-  end
-  def can_close_version? pid
-    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') and not Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
+    def can_open_version? pid
+      if not (Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))
+        return false
+      end
+      if(Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted'))
+        return false
+      end
+      if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
+        return false
+      end 
       true
-    else
-      false
     end
-  end
+    def can_close_version? pid
+      if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') and not Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
+        true
+      else
+        false
+      end
+    end
 
     def render_workflows doc, obj
       workflows = {}
