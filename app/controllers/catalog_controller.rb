@@ -65,41 +65,42 @@ before_filter :reformat_dates
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_facet', :label => 'Object Type'
     config.add_facet_field 'content_type_facet', :label => 'Content Type'
-    config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
-    config.add_facet_field 'is_member_of_collection_s', :label => 'Collection'
+    #config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
+    #config.add_facet_field 'is_member_of_collection_s', :label => 'Collection'
+    config.add_facet_field 'collection_title_facet', :label => 'Collection Title'
+    config.add_facet_field 'apo_title_facet', :label => 'APO Title'
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'indexed_at_dt', :label => 'Last Argo Update'
-    config.add_facet_field 'registered_dt',:label =>'Registered'
-    config.add_facet_field 'submitted_dt',:label =>'Submitted'
-    config.add_facet_field 'published_dt',:label =>'Published'
+    #config.add_facet_field 'registered_day_facet',:label =>'Registered'
+    #config.add_facet_field 'submitted_dt',:label =>'Submitted'
+    #config.add_facet_field 'published_dt',:label =>'Published'
     
     
      
       config.add_facet_field 'registered_date', :label => 'Registered', :query => {
-        :days_7 => { :label => 'within 7 days', :fq => "registered_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
-        :days_30 => { :label => 'within 30 days', :fq => "registered_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+        :days_7 => { :label => 'within 7 days', :fq => "registered_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "registered_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
       }
       config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
-        :days_7 => { :label => 'within 7 days', :fq => "submitted_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
-        :days_30 => { :label => 'within 30 days', :fq => "submitted_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+        :days_7 => { :label => 'within 7 days', :fq => "submitted_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "submitted_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
       }
       config.add_facet_field 'published_date', :label => 'Published', :query => {
-        :days_7 => { :label => 'within 7 days', :fq => "published_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
-        :days_30 => { :label => 'within 30 days', :fq => "published_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+        :days_7 => { :label => 'within 7 days', :fq => "published_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "published_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
       }
       config.add_facet_field 'indexed_at_date', :label => 'Last Argo Update', :query => {
-        :days_7 => { :label => 'within 7 days', :fq => "indexed_at_dt:[#{7.days.ago.utc.xmlschema } TO *]" },
-        :days_30 => { :label => 'within 30 days', :fq => "indexed_at_dt:[#{30.days.ago.utc.xmlschema } TO *]"}
+        :days_7 => { :label => 'within 7 days', :fq => "indexed_day_t:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+        :days_30 => { :label => 'within 30 days', :fq => "indexed_day_t:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
       }
       config.add_facet_fields_to_solr_request!
     
     config.add_search_field 'text', :label => 'All Fields'
     
     config.add_sort_field 'score desc', :label => 'Relevance'
-    #These 2 lines make the sort dropdowns appear, but the queries cause an ArrayOutOfBoundsException in solr
     config.add_sort_field 'creator_sort desc', :label => 'Creator'
     config.add_sort_field 'title_sort desc', :label => 'Title'
     config.spell_max = 5

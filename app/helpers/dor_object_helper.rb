@@ -112,6 +112,9 @@ module DorObjectHelper
     end
     versions.sort
     oldest_version=versions.last
+    if(oldest_version.nil?)
+    oldest_version='1'
+    end
     Array(doc[lifecycle_field]).each do |m| 
       (name,time) = m.split(/:/,2)
       if time.include?(';')
