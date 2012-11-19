@@ -130,21 +130,25 @@ class Report
         :field => 'published_dt', :label => "Pub. Date", 
           #modified to format the date
         :proc => lambda { |doc| doc['published_day_facet']},
+        :solr_fields => ['published_day_facet'],
         :sort => true, :default => true, :width => 100 
       },
       { 
         :field => 'shelved_dt', :label => "Shelve Date",
-        :proc => lambda { |doc| doc['shelved_day_facet']}, 
+        :proc => lambda { |doc| doc['shelved_day_facet']},
+        :solr_fields => ['shelved_day_facet'], 
         :sort => true, :default => false, :width => 100 
       },
       { 
         :field => 'preserved_dt', :label => "Pres. Date", 
         :proc => lambda { |doc| doc['preserved_day_facet']},
+        :solr_fields => ['preserved_day_facet'],
         :sort => true, :default => true, :width => 100 
       },
       { 
         :field => 'accessioned_dt', :label => "Accession. Date", 
         :proc => lambda { |doc| doc['accessioned_day_facet']},
+        :solr_fields => ['accessioned_day_facet'],
         :sort => true, :default => false, :width => 100
       },
       { 
