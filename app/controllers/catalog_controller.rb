@@ -115,7 +115,7 @@ before_filter :reformat_dates
     
     config.field_groups = {
       :identification => [
-        ['id','objectType_t','content_type_facet','item_status_t'],
+        ['id','objectType_t','content_type_facet','status_display'],
         ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
       ]
     }
