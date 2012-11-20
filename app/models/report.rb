@@ -110,7 +110,7 @@ class Report
           #modified to format the date
         :proc => lambda { |doc| render_datetime(doc['published_dt'])},
         :solr_fields => ['published_dt'],
-        :sort => true, :default => true, :width => 100 
+        :sort => true, :default => false, :width => 100 
       },
       { 
         :field => 'shelved_datetime', :label => "Shelve Datetime",
@@ -122,7 +122,7 @@ class Report
         :field => 'preserved_datetime', :label => "Pres. Datetime", 
         :proc => lambda { |doc| render_datetime(doc['preserved_dt'])},
         :solr_fields => ['preserved_dt'],
-        :sort => true, :default => true, :width => 100 
+        :sort => true, :default => false, :width => 100 
       },
       { 
         :field => 'accessioned_datetime', :label => "Accession. Datetime", 
@@ -147,7 +147,7 @@ class Report
         :field => 'preserved_dt', :label => "Pres. Date", 
         :proc => lambda { |doc| doc['preserved_day_facet']},
         :solr_fields => ['preserved_day_facet'],
-        :sort => true, :default => true, :width => 100 
+        :sort => true, :default => false, :width => 100 
       },
       { 
         :field => 'accessioned_dt', :label => "Accession. Date", 

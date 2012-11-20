@@ -17,6 +17,12 @@ module ArgoHelper
       @response, @document = get_solr_response_for_doc_id
     end
   end
+  
+  def index_queue_depth
+    url=Dor::Config.status.indexer_url
+    data=JSON.parse(open(url).read)
+    count=data.first['datapoints'].first.first.to_i
+  end
 
   def structure_from_solr(solr_doc, prefix, suffix='display')
     prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]

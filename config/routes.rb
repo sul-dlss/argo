@@ -42,6 +42,7 @@ Argo::Application.routes.draw do
     get :register, :on => :collection
     get  '/workflows/:wf_name', :on => :member, :action => :workflow_view,   :as => 'workflow_view'
     post '/workflows/:wf_name', :on => :member, :action => :workflow_update, :as => 'workflow_update'
+    get '/workflow/history', :on => :member, :action => :workflow_history_view, :as => 'workflow_history_view'
     post '/embargo', :on => :member, :action => :embargo_update, :as => 'embargo_update'
     post '/datastream', :on => :member, :action => :datastream_update, :as => 'datastream_update'
     get '/file', :on => :member, :action => :get_file, :as => 'get_file'

@@ -1,3 +1,9 @@
+<% if index_queue_depth>1000
+		%> <span style="color:red; font-weight:bold">indexer queue: <%= index_queue_depth%></span><%
+	else 
+	%> <span>indexer queue: <%= index_queue_depth%></span>
+	<%end%>
+|
 <%= link_to "Home", root_path %>
 |
 <% if current_user %>

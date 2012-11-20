@@ -27,6 +27,7 @@ before_filter :reformat_dates
       :'f.tag_facet.facet.limit' => -1,
       :'f.is_member_of_collection_s.facet.limit' => -1,
       :'f.tag_facet.facet.sort' => 'index'
+      
     }
     
     config.index.show_link = 'id'
@@ -61,23 +62,18 @@ before_filter :reformat_dates
     config.add_show_field 'project_tag_t', :label => 'Project:'
     config.add_show_field 'source_id_t', :label => 'Source:'
     config.add_show_field 'tag_t', :label => 'Tags:'
+    config.add_show_field 'status_display', :label => 'Status'
     
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_facet', :label => 'Object Type'
     config.add_facet_field 'content_type_facet', :label => 'Content Type'
-    #config.add_facet_field 'is_governed_by_s', :label => 'Admin. Policy'
-    #config.add_facet_field 'is_member_of_collection_s', :label => 'Collection'
-    config.add_facet_field 'collection_title_facet', :label => 'Collection Title'
-    config.add_facet_field 'apo_title_facet', :label => 'APO Title'
+    config.add_facet_field 'collection_title_facet', :label => 'Collection', :sort => 'index'
+    config.add_facet_field 'apo_title_facet', :label => 'Admin. Policy', :sort => 'index'
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'indexed_at_dt', :label => 'Last Argo Update'
-    #config.add_facet_field 'registered_day_facet',:label =>'Registered'
-    #config.add_facet_field 'submitted_dt',:label =>'Submitted'
-    #config.add_facet_field 'published_dt',:label =>'Published'
-    
+    config.add_facet_field 'current_version_facet', :label => 'Version'
     
      
       config.add_facet_field 'registered_date', :label => 'Registered', :query => {
@@ -95,6 +91,11 @@ before_filter :reformat_dates
       config.add_facet_field 'indexed_at_date', :label => 'Last Argo Update', :query => {
         :days_7 => { :label => 'within 7 days', :fq => "indexed_day_t:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
         :days_30 => { :label => 'within 30 days', :fq => "indexed_day_t:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      }
+      config.add_facet_field 'version_opened', :label => 'Open Version', :query => {
+        :all => { :label => 'All', :fq => "version_opened_facet:[* TO #{1.second.ago.utc.xmlschema.split('T').first }]" },
+        :days_7 => { :label => 'more than 7 days', :fq => "version_opened_facet:[* TO #{7.days.ago.utc.xmlschema }]" },
+        :days_30 => { :label => 'more than 30 days', :fq => "version_opened_facet:[* TO #{30.days.ago.utc.xmlschema }]"}
       }
       config.add_facet_fields_to_solr_request!
     

@@ -50,6 +50,9 @@ class ItemsController < ApplicationController
       }
     end
   end
+  def workflow_history_view
+    @history_xml=Dor::WorkflowService.get_workflow_xml 'dor', params[:id], nil
+  end
   def workflow_update
     args = params.values_at(:id, :wf_name, :process, :status)
     if args.all? &:present?
@@ -180,6 +183,7 @@ class ItemsController < ApplicationController
     else
       item=Dor::Item.find(params[:item_id])
       item.open_new_version
+      item.datastreams['events'].add_event("open", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " opened")
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
       end
@@ -192,6 +196,7 @@ class ItemsController < ApplicationController
     else
       item=Dor::Item.find(params[:item_id])
       item.close_version
+      item.datastreams['events'].add_event("close", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " closed")
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
       end

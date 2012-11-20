@@ -30,6 +30,15 @@ describe ItemsController do
       @item.stub(:open_new_version)do 
         ran=true
       end
+      version_metadata=mock(Dor::VersionMetadataDS)
+      version_metadata.stub(:current_version_id).and_return(2)
+      @item.stub(:versionMetadata).and_return(version_metadata)
+      event_ds=mock(Dor::EventsDS)
+      event_ds.stub(:add_event)
+      ds={}
+      ds['events'] = event_ds
+      @item.stub(:current_version).and_return('2')
+      @item.stub(:datastreams).and_return(ds)
       get 'open_version', :item_id => 'oo201oo0001'
       ran.should == true
     end 
@@ -45,7 +54,15 @@ describe ItemsController do
       @item.stub(:close_version)do 
         ran=true
       end
+      version_metadata=mock(Dor::VersionMetadataDS)
+      version_metadata.stub(:current_version_id).and_return(2)
+      @item.stub(:versionMetadata).and_return(version_metadata)
+      event_ds=mock(Dor::EventsDS)
+      event_ds.stub(:add_event)
+      ds={}
+      ds['events'] = event_ds
       @item.stub(:current_version).and_return('2')
+      @item.stub(:datastreams).and_return(ds)
       get 'close_version', :item_id => 'oo201oo0001'
       ran.should == true
     end
