@@ -66,7 +66,16 @@ lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lif
     else
       (name,time) = m.split(/:/,2)
       version=1
-      versions[version]=milestones
+      versions[version]=versions[version]= ActiveSupport::OrderedHash[
+        'registered',   { :display => 'Registered',  :time => 'pending'},
+        'submitted',    { :display => 'Submitted',   :time => 'pending'},
+        'described',    { :display => 'Described',   :time => 'pending'},
+        'published',    { :display => 'Published',   :time => 'pending'},
+        'deposited',    { :display => 'Deposited',    :time => 'pending'},
+        'accessioned',  { :display => 'Accessioned', :time => 'pending'},
+        'indexed',      { :display => 'Indexed', :time => 'pending'},
+        'ingested',     { :display => 'Ingested', :time => 'pending'}
+      ]
       versions[version][name] ||= { :display => name.titleize, :time => 'pending' }
       versions[version][name][:time] = DateTime.parse(time).in_time_zone(zone)
     end
