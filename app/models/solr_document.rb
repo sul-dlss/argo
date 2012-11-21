@@ -33,16 +33,7 @@ class SolrDocument
 end
 public
 def get_milestones(doc)
-  milestones = ActiveSupport::OrderedHash[
-  'registered',   { :display => 'Registered',  :time => 'pending'},
-  'submitted',    { :display => 'Submitted',   :time => 'pending'},
-  'described',    { :display => 'Described',   :time => 'pending'},
-  'published',    { :display => 'Published',   :time => 'pending'},
-  'deposited',    { :display => 'Deposited',    :time => 'pending'},
-  'accessioned',  { :display => 'Accessioned', :time => 'pending'},
-  'indexed',      { :display => 'Indexed', :time => 'pending'},
-  'ingested',     { :display => 'Ingested', :time => 'pending'}
-]
+
 versions={}
 #this needs to use the timezone set in config.time_zone
 zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
@@ -52,12 +43,24 @@ lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lif
       (name,time) = m.split(/:/,2)
       (time,version) = time.split(/;/,2)
       if versions[version].nil?
-				versions[version]=milestones.dup
+				versions[version]= ActiveSupport::OrderedHash[
+          'registered',   { :display => 'Registered',  :time => 'pending'},
+          'opened',       { :display => 'Opened',  :time => 'pending'},
+          'submitted',    { :display => 'Submitted',   :time => 'pending'},
+          'described',    { :display => 'Described',   :time => 'pending'},
+          'published',    { :display => 'Published',   :time => 'pending'},
+          'deposited',    { :display => 'Deposited',    :time => 'pending'},
+          'accessioned',  { :display => 'Accessioned', :time => 'pending'},
+          'indexed',      { :display => 'Indexed', :time => 'pending'},
+          'ingested',     { :display => 'Ingested', :time => 'pending'}
+        ]
 				if version !='1' 
 					versions[version].delete('registered')
+				else
+				  versions[version].delete('opened')
 				end
       end
-      versions[version][name] ||= { :display => name.titleize, :time => 'pending' }
+      versions[version][name] = { :display => name.titleize, :time => 'pending' }
       versions[version][name][:time] = DateTime.parse(time).in_time_zone(zone)
       
     else
