@@ -104,8 +104,8 @@ module ArgoHelper
   end
 
   def render_document_show_thumbnail doc
-    if doc['shelved_content_file_t']
-      fname = first_image(doc['shelved_content_file_t'])
+    if doc['first_shelved_image_display']
+      fname = doc['first_shelved_image_display'].first
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))
@@ -115,8 +115,8 @@ module ArgoHelper
   end
 
   def render_index_thumbnail doc
-    if doc['shelved_content_file_t']
-      fname = first_image(doc['shelved_content_file_t'])
+    if doc['first_shelved_image_display']
+      fname = doc['first_shelved_image_display'].first
       if fname
         druid = doc['id'].to_s.split(/:/).last
         fname = File.basename(fname,File.extname(fname))

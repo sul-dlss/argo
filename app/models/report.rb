@@ -119,6 +119,12 @@ class Report
         :sort => true, :default => false, :width => 100 
       },
       { 
+        :field => 'registered_datetime', :label => "Reg. Datetime", 
+        :proc => lambda { |doc| render_datetime(doc['registered_dt'])},
+        :solr_fields => ['preserved_dt'],
+        :sort => true, :default => false, :width => 100 
+      },
+      { 
         :field => 'preserved_datetime', :label => "Pres. Datetime", 
         :proc => lambda { |doc| render_datetime(doc['preserved_dt'])},
         :solr_fields => ['preserved_dt'],
@@ -130,6 +136,13 @@ class Report
         :solr_fields => ['accessioned_dt'],
         :sort => true, :default => false, :width => 100
       },
+      {
+        :field => 'registered_dt', :label => "Reg. Date", 
+          #modified to format the date
+        :proc => lambda { |doc| doc['registered_day_facet']},
+        :solr_fields => ['registered_day_facet'],
+        :sort => true, :default => true, :width => 100 
+      },  
       { 
         :field => 'published_dt', :label => "Pub. Date", 
           #modified to format the date
@@ -185,7 +198,7 @@ class Report
       :'q.alt' => "*:*",
       :defType => 'dismax',
       :qf => %{text^3 accessioned_day_facet preserved_day_facet shelved_day_facet shelved_day_facet published_day_facet citationCreator_t citationTitle_t content_file_count_display coordinates_t creator_t dc_creator_t dc_identifier_t dc_title_t dor_id_t event_t events_event_t events_t extent_t identifier_t identityMetadata_citationCreator_t identityMetadata_citationTitle_t identityMetadata_objectCreator_t identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_t mods_originInfo_place_placeTerm_t mods_originInfo_publisher_t obj_label_t obj_state_t originInfo_place_placeTerm_t originInfo_publisher_t otherId_t public_dc_contributor_t public_dc_coverage_t public_dc_creator_t public_dc_date_t public_dc_description_t public_dc_format_t public_dc_identifier_t public_dc_language_t public_dc_publisher_t public_dc_relation_t public_dc_rights_t public_dc_subject_t public_dc_title_t public_dc_type_t resource_count_display scale_t shelved_content_file_count_display sourceId_t tag_t title_t topic_t},
-      :rows => 10,
+      :rows => 50,
       :facet => true,
       :'facet.mincount' => 1,
       :'f.wf_wps_facet.facet.limit' => -1,
@@ -243,12 +256,11 @@ class Report
         rows+="\r\n"
         row = @fields.collect { |f| record[f[:field]] }
         row.each do |field|
-          rows+='"'+field.to_s+'"'+','
+          rows << '"'+field.to_s+'"'+','
         end
       end
       @params[:page] += 1
-      (@response, @document_list) = get_search_results
-      
+      (@response, @document_list) = get_search_results      
     end
     return headings+rows
   end
