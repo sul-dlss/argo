@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
     if not @role_cache
       @role_cache={}
     end
-    
+
     if @role_cache[pid]
       return @role_cache[pid]
     end
@@ -39,13 +39,13 @@ class User < ActiveRecord::Base
     if(resp['apo_role_group_manager_t'] and (resp['apo_role_group_manager_t'] & groups).length > 0)
       toret << 'dor-apo-manager'
     end
-    
+
     known_roles.each do |role|
       if(resp['apo_role_group_'+role+'_t'] and (resp['apo_role_group_' + role + '_t'] & groups).length >0)
         toret << role
       end
     end
-    
+
     #now look to see if there are roles for this person by sunet id. groups actually contains the sunetid, so it is just looking at different solr fields
     #this is a legacy role that has to be translated
     if(resp['apo_role_person_manager_t'] and (resp['apo_role_person_manager_t'] & groups).length > 0)
@@ -68,18 +68,16 @@ class User < ActiveRecord::Base
     groups.each do |group|
       if first
         query+=' '+group.gsub(':','\:')
-      first=false
+        first=false
       else
         query+=' OR '+group.gsub(':','\:')
       end
     end
-    resp = Dor::SearchService.query('apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')', {:rows => 100,:fl => 'id'})['response']['docs']
+    resp = Dor::SearchService.query('apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')', {:rows => 100, :fl => 'id'})['response']['docs']
     pids=[]
     count=1
     resp.each do |doc|
-      puts count
-      count += 1
-        pids << doc['id']
+      pids << doc['id']
     end
     pids  
   end
