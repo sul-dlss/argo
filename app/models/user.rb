@@ -73,10 +73,13 @@ class User < ActiveRecord::Base
         query+=' OR '+group.gsub(':','\:')
       end
     end
-    resp = Dor::SearchService.query('apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')')['response']['docs']
+    resp = Dor::SearchService.query('apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')', {:rows => 100,:fl => 'id'})['response']['docs']
     pids=[]
+    count=1
     resp.each do |doc|
-      pids << doc['id']
+      puts count
+      count += 1
+        pids << doc['id']
     end
     pids  
   end
