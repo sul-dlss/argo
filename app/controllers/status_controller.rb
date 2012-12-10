@@ -24,10 +24,22 @@ class StatusController < ApplicationController
     end
     render :status=>500, :text=>'Nothing indexed in last '+ params[:minutes]+' minutes'
   end			
-  def indexer
-    count=Status.count
-    render :status => 200, :text => count
+  
+  def memcached
+    Rails.cache.fetch("cache_test", :expires_in => 1.minute) do 
+      'hello world'
+    end
+    if Rails.cache.fetch("cache_test", :expires_in => 1.minute).nil?
+      render :status=>500, :text=>'Cache lookup failed'
+      return
+    end
+    if  Rails.cache.fetch("cache_test", :expires_in => 1.minute) == 'hello world'
+      render :status=>200, :text=>'Success'
+      return
+    end
+    render :status=>500, :text=>'Incorrect value!'
   end
+  
   protected 
   def check_logs 
     log_file=	File.new(LOG_FILE,'r')

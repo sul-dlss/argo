@@ -47,4 +47,51 @@ describe User do
   end
   describe "groups" do
   end
+  describe 'roles' do
+    before(:each) do
+    @answer={}
+    @answer['response']={}
+    @answer['response']['docs']=[]
+    @doc={}
+    @doc['apo_role_group_dor-administrator_t']=['dlss:groupA', 'dlss:groupB']
+    @doc['apo_role_group_dor-apo-manager_t']=['dlss:groupC', 'dlss:groupD']
+    @doc['apo_role_group_dor-viewer_t']=['dlss:groupE', 'dlss:groupF']
+    @doc['apo_role_person_dor-viewer_t']=['sunetid:tcramer']
+    @doc['apo_role_group_manager_t']=['dlss:groupR']
+    @answer['response']['docs'] << @doc
+    Dor::SearchService.stub(:query).and_return(@answer)
+    end
+    it 'should build a set of roles' do
+      User.any_instance.stub(:groups).and_return(['dlss:groupF', 'dlss:groupA'])
+      mock_webauth = double('webauth', :login => 'asdf')
+      user = User.find_or_create_by_webauth(mock_webauth)
+      res=user.roles('pid')
+      res.should == ['dor-administrator','dor-viewer']
+    end
+    it 'should translate the old "manager" role into dor-apo-manager' do
+      User.any_instance.stub(:groups).and_return(['dlss:groupR'])
+      mock_webauth = double('webauth', :login => 'asdf')
+      user = User.find_or_create_by_webauth(mock_webauth)
+      res=user.roles('pid')
+      res.should == ['dor-apo-manager']
+    end
+    it 'should work correctly if the individual is named in the apo, but isnt in any groups that matter' do
+      User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
+      mock_webauth = double('webauth', :login => 'asdf')
+      user = User.find_or_create_by_webauth(mock_webauth)
+      res=user.roles('pid')
+      res.should == ['dor-viewer']
+    end
+    it 'should hang onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
+      User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
+      mock_webauth = double('webauth', :login => 'asdf')
+      user = User.find_or_create_by_webauth(mock_webauth)
+      Dor::SearchService.should_receive(:query).once
+      res=user.roles('pid')
+      res=user.roles('pid')
+    end
+  end
+  describe 'permitted_apos' do
+    
+  end
 end

@@ -14,7 +14,7 @@
 else
 %>
 	<%=
-	if current_user and current_user.is_admin and params[:dsid] != 'RELS-EXT' and params[:dsid] != 'workflows'
+	if current_user and current_user.is_admin and @obj.datastreams[params[:dsid]].respond_to? :ng_xml and params[:dsid] != 'RELS-EXT' and params[:dsid] != 'workflows'
 	 	link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :class => 'dialogLink', :title => params[:dsid]  
 	end
 	%>
@@ -22,9 +22,9 @@ else
   content = if params[:dsid] == 'full_dc'
     @obj.generate_dublin_core.prettify
   elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
-    @obj.datastreams[params[:dsid]].ng_xml.prettify
+    Nokogiri::XML(@obj.datastreams[params[:dsid]].ng_xml.to_s, &:noblanks).to_s
   else
-    Nokogiri::XML(@obj.datastreams[params[:dsid]].content)
+    Nokogiri::XML(@obj.datastreams[params[:dsid]].ng_xml.to_s, &:noblanks).to_s
   end
   raise ActionController::RoutingError.new('Not Found') if content.nil?
   output = CodeRay::Duo[:xml, :div].highlight content

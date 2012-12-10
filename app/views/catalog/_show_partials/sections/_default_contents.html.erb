@@ -8,12 +8,12 @@
 				<%= content_ds.ng_xml.root['type']%>
 				<ul>
 					<%
-					is_admin = current_user.is_admin
+					can_manage = object.can_manage_content? current_user.roles(object.admin_policy_object.first.pid)
 					version_open = can_close_version? object.pid
 					content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource,index| %>
 					<li class="resource">
 						<span class="label">Resource (<%=index+1%>)</span> <%= resource['type']%> 
-						<%if is_admin and version_open
+						<%if can_manage and version_open
 							edit_resource_link='/items/'+params[:id]+'/resource/?edit=true&resource='+resource['id']%>
 							<a class="smallDialogLink" href=<%= edit_resource_link%>>(edit)<a/>
 						<%end%>
@@ -31,7 +31,7 @@
 								<li class="resource">
 									<span class="label">Resource (<%=inner_index%>)</span> 
 									<%= child['type']%> 
-									<%if is_admin and version_open
+									<%if can_manage and version_open
 										edit_resource_link='/items/'+params[:id]+'/resource/?edit=true&resource='+child['id']%>
 										<a class="smallDialogLink" href=<%= edit_resource_link%>>(edit)<a/>
 											<%end%><ul>
@@ -41,7 +41,7 @@
 											<% child.xpath('file').each do |file| %>
 											<li class="file">
 												<span class="label">File</span>
-												<%if is_admin and workspace_files.include?(file['id']) %>
+												<%if can_manage and workspace_files.include?(file['id']) %>
 												<% 
 												link='/items/'+params[:id]+'/file_list/?file='+file['id']
 												%>
@@ -62,7 +62,7 @@
 										<% resource.xpath('file').each do |file| %>
 										<li class="file">
 											<span class="label">File</span>
-											<%if is_admin and workspace_files.include?(file['id']) %>
+											<%if can_manage and workspace_files.include?(file['id']) %>
 											<% 
 											link='/items/'+params[:id]+'/file_list/?file='+file['id']
 											%>

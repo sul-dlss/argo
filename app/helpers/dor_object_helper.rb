@@ -21,6 +21,9 @@ module DorObjectHelper
     end
     result
   end
+  
+
+  
   def render_qfacet_value(facet_solr_field, item, options ={})
      params=add_facet_params(facet_solr_field, item.qvalue)
      link_to(item.value,root_url)
