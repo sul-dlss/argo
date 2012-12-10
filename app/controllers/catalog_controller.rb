@@ -1,6 +1,5 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
-require 'ruby-prof'
 class CatalogController < ApplicationController  
 
   include BlacklightSolrExtensions
