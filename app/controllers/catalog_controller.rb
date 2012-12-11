@@ -8,9 +8,9 @@ class CatalogController < ApplicationController
   #include BlacklightFacetExtras::Query::ControllerExtension
   helper ArgoHelper
 
-  before_filter :reformat_dates
-  
+  before_filter :reformat_dates, :session_groups
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
+
   configure_blacklight do |config|
     config.default_solr_params = {
       :'q.alt' => "*:*",
@@ -116,6 +116,7 @@ class CatalogController < ApplicationController
         ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
       ]
     }
+    
   end
 
   def solr_doc_params(id=nil)
@@ -142,7 +143,16 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id]
     render :layout => request.xhr? ? false : true
   end
+    
+
   private
+  def session_groups
+    puts session.inspect
+    @user=current_user
+    if session[:groups]
+      @user.set_groups session[:groups]
+    end
+  end
   def reformat_dates
     params.each do |key, val|
       begin 

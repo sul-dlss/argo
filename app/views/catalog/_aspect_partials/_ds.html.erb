@@ -24,10 +24,10 @@ else
   elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
     Nokogiri::XML(@obj.datastreams[params[:dsid]].ng_xml.to_s, &:noblanks).to_s
   else
-    Nokogiri::XML(@obj.datastreams[params[:dsid]].ng_xml.to_s, &:noblanks).to_s
+    Nokogiri::XML(@obj.datastreams[params[:dsid]].content, &:noblanks).to_s
   end
   raise ActionController::RoutingError.new('Not Found') if content.nil?
-  output = CodeRay::Duo[:xml, :div].highlight content
+  output = [:xml, :div].highlight content
 %>
 <% unless params[:dsid] == 'full_dc' %>
   <div class="CodeRay" style="color: gray"><pre><%= render_ds_profile_header @obj.datastreams[params[:dsid]] %></pre></div>

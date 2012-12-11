@@ -73,6 +73,8 @@ Argo::Application.routes.draw do
     get '/logout'
     get '/profile'
     get '/groups'
+    post '/set_groups', :action => :set_groups, :as => 'set_groups'
+    get '/remove_groups'
   end
 
 	namespace :dor do

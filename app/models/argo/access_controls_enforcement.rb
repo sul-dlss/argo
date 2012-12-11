@@ -3,10 +3,16 @@ module Argo
     extend ActiveSupport::Concern
 
     def add_access_controls_to_solr_params(solr_parameters, user)
-      apply_gated_discovery(solr_parameters, current_user)
+      #usr=current_user
+      #usr.set_groups(["dlss:dpg-staff"])
+      apply_gated_discovery(solr_parameters, @user)
     end
 
     def apply_gated_discovery(solr_parameters, user)
+      #admin users shouldnt be restricted in any way
+      if user.is_admin
+        return solr_parameters
+      end
       solr_parameters[:fq] ||= []
       pids=user.permitted_apos 
       if pids.length == 0
@@ -16,6 +22,7 @@ module Argo
         pids=pids.join(" OR ").gsub('druid', 'info:fedora/druid').gsub(':','\:')
       end
       solr_parameters[:fq] << "is_governed_by_s:("+pids+")"
+      puts solr_parameters[:fq].inspect
       logger.debug("Solr parameters: #{ solr_parameters.inspect }")
       solr_parameters
     end

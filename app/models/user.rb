@@ -81,7 +81,15 @@ class User < ActiveRecord::Base
     end
     pids  
   end
+  @groups
+  def set_groups grps
+    @groups=grps
+    puts @groups.inspect 
+  end
   def groups
+    if @groups
+      return @groups
+    end
     perm_keys = ["sunetid:#{self.login}"]
     if webauth and webauth.privgroup.present?
       perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
@@ -89,8 +97,11 @@ class User < ActiveRecord::Base
     return perm_keys
   end
   def is_admin
+    puts caller
     ADMIN_GROUPS.each do |group|
+      puts self.groups.inspect
       if self.groups.include? group
+        puts "saying yes to isadmin"
         return true 
       end
     end
