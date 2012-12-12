@@ -43,19 +43,18 @@ describe User do
     end
   end
   describe "is_admin" do
-  	it 'should work' do
+  	it 'should be true if the group is an admin group' do
       subject.stub(:groups).and_return(['workgroup:dlss:dor-admin'])
       subject.is_admin.should == true
     end
   end
   describe 'is_viewer' do
-    it 'should work' do
-      subject.stub(:groups).and_return(['workgroup:dlss:dor-admin'])
-      subject.is_viewer.should == false
+    it 'should be true if the group is a viewer grou' do
+      subject.stub(:groups).and_return(['workgroup:dlss:dor-viewer'])
+      subject.is_viewer.should == true
     end
   end
-  describe "groups" do
-  end
+
   describe 'roles' do
     before(:each) do
     @answer={}
@@ -100,7 +99,9 @@ describe User do
       res=user.roles('pid')
     end
   end
+  #TODO
   describe 'permitted_apos' do
-    
+  end
+  describe "groups" do
   end
 end

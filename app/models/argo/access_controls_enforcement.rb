@@ -9,8 +9,8 @@ module Argo
     end
 
     def apply_gated_discovery(solr_parameters, user)
-      #admin users shouldnt be restricted in any way
-      if user.is_admin
+      #repository wide admin and viewer users shouldnt be restricted in any way
+      if user.is_admin or user.is_viewer
         return solr_parameters
       end
       solr_parameters[:fq] ||= []
