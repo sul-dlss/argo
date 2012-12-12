@@ -125,7 +125,15 @@ class CatalogController < ApplicationController
       :q => %{id:"#{id}"}
     }
   end
-
+  
+  def show
+    @obj = Dor.find params[:id]
+    if not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid))
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    end
+    super()
+  end
   def datastream_view
     @response, @document = get_solr_response_for_doc_id
     @obj = Dor.find params[:id], :lightweight => true
@@ -139,9 +147,12 @@ class CatalogController < ApplicationController
   end
 
   def show_aspect
+    if @obj.nil?
+      @obj = Dor.find params[:id]
+    end
     @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id]
     render :layout => request.xhr? ? false : true
+    
   end
     
 

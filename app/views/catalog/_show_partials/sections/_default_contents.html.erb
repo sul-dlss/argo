@@ -9,6 +9,7 @@
 				<ul>
 					<%
 					can_manage = object.can_manage_content? current_user.roles(object.admin_policy_object.first.pid)
+					can_view = object.can_view_content? current_user.roles(object.admin_policy_object.first.pid)
 					version_open = can_close_version? object.pid
 					content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource,index| %>
 					<li class="resource">
@@ -62,7 +63,7 @@
 										<% resource.xpath('file').each do |file| %>
 										<li class="file">
 											<span class="label">File</span>
-											<%if can_manage and workspace_files.include?(file['id']) %>
+											<%if can_view and workspace_files.include?(file['id']) %>
 											<% 
 											link='/items/'+params[:id]+'/file_list/?file='+file['id']
 											%>
