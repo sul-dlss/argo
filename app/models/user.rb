@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
       sunetid
     end
   end
+  
   @role_cache={}
   def roles pid
     if not @role_cache
@@ -81,10 +82,12 @@ class User < ActiveRecord::Base
     end
     pids  
   end
+  
+  
   @groups
+  #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions
   def set_groups grps
     @groups=grps
-    puts @groups.inspect 
   end
   def groups
     if @groups
@@ -96,12 +99,21 @@ class User < ActiveRecord::Base
     end
     return perm_keys
   end
+  
+  #is the user a repository wide administrator
   def is_admin
-    puts caller
     ADMIN_GROUPS.each do |group|
-      puts self.groups.inspect
       if self.groups.include? group
-        puts "saying yes to isadmin"
+        return true 
+      end
+    end
+    return false
+  end
+  
+  #is the user a repository wide viewer
+  def is_viewer
+    VIEWER_GROUPS.each do |group|
+      if self.groups.include? group
         return true 
       end
     end

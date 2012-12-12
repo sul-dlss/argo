@@ -27,7 +27,7 @@ else
     Nokogiri::XML(@obj.datastreams[params[:dsid]].content, &:noblanks).to_s
   end
   raise ActionController::RoutingError.new('Not Found') if content.nil?
-  output = [:xml, :div].highlight content
+  output = CodeRay::Duo[:xml, :div].highlight content
 %>
 <% unless params[:dsid] == 'full_dc' %>
   <div class="CodeRay" style="color: gray"><pre><%= render_ds_profile_header @obj.datastreams[params[:dsid]] %></pre></div>

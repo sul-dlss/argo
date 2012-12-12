@@ -12,6 +12,7 @@ describe 'Argo::AccessControlsEnforcement' do
     it 'should add a fq that requires the apo' do
       user=mock(User)
       user.stub(:permitted_apos).and_return(['druid:cb081vd1895'])
+      user.stub(:is_admin).and_return(false)
       solr_params={}
       @obj.apply_gated_discovery(solr_params,user)
       solr_params.should == {:fq=>["is_governed_by_s:(info\\:fedora/druid\\:cb081vd1895)"]}
@@ -19,6 +20,7 @@ describe 'Argo::AccessControlsEnforcement' do
     it 'should add to an existing fq' do
       user=mock(User)
       user.stub(:permitted_apos).and_return(['druid:cb081vd1895'])
+      user.stub(:is_admin).and_return(false)
       solr_params={:fq=>["is_governed_by_s:(info\\:fedora/druid\\:ab123cd4567)"]}
       @obj.apply_gated_discovery(solr_params,user)
       solr_params.should == {:fq=>["is_governed_by_s:(info\\:fedora/druid\\:ab123cd4567)", "is_governed_by_s:(info\\:fedora/druid\\:cb081vd1895)"]}
@@ -26,6 +28,7 @@ describe 'Argo::AccessControlsEnforcement' do
     it 'should build a valid query if there arent any apos' do
       user=mock(User)
       user.stub(:permitted_apos).and_return([])
+      user.stub(:is_admin).and_return(false)
       solr_params={}
       @obj.apply_gated_discovery(solr_params,user)
       solr_params.should == {:fq=>["is_governed_by_s:(dummy_value)"]}

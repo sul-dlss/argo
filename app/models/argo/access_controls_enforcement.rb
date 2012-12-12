@@ -22,7 +22,6 @@ module Argo
         pids=pids.join(" OR ").gsub('druid', 'info:fedora/druid').gsub(':','\:')
       end
       solr_parameters[:fq] << "is_governed_by_s:("+pids+")"
-      puts solr_parameters[:fq].inspect
       logger.debug("Solr parameters: #{ solr_parameters.inspect }")
       solr_parameters
     end

@@ -147,7 +147,6 @@ class CatalogController < ApplicationController
 
   private
   def session_groups
-    puts session.inspect
     @user=current_user
     if session[:groups]
       @user.set_groups session[:groups]
