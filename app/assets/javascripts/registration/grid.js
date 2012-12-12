@@ -433,9 +433,9 @@ var gridContext = function() {
       $('#object_type').change(function(evt) {
         var sender = evt.target
         var valid_controls = {
-          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2"],
-          'set'        : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2"],
-          'collection' : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2"],
+          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
+          'set'        : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
+          'collection' : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
           'adminPolicy': ["object_type", "registered_by"],
           'workflow'   : ["object_type", "registered_by"]
         }
