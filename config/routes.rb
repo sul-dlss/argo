@@ -1,7 +1,5 @@
 Argo::Application.routes.draw do
 
-  get "status/log"
-  get "status/indexer"
 
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
@@ -56,6 +54,11 @@ Argo::Application.routes.draw do
     post '/file/attributes', :action => :update_attributes, :as => 'update_attributes'
   end
   
+  namespace :status do
+    get "log"
+    get "memcached"
+  end
+  
   namespace :registration do
     get "/", :action => :form
     get "/tracksheet"
@@ -69,7 +72,11 @@ Argo::Application.routes.draw do
     get '/login'
     get '/logout'
     get '/profile'
+    get '/groups'
+    post '/set_groups', :action => :set_groups, :as => 'set_groups'
+    get '/remove_groups'
   end
+
 	namespace :dor do
     get '/configuration'
     get '/label'

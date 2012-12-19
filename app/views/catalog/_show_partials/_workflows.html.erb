@@ -9,7 +9,7 @@
         status = workflows[wf]
     -%>
       <tr>
-        <td><%= link_to wf, workflow_view_item_path(document.get('id'), wf), :class => 'dialogLink', :title => wf %></td>
+        <td><%= link_to wf, workflow_view_item_path(document.get('id'), wf, :repo => status[:repo]), :class => 'dialogLink', :title => wf %></td>
         <td>
           <%= status[:status] %>
           <% if status[:errors] > 0 -%>

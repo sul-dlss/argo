@@ -41,9 +41,11 @@ class ReportController < CatalogController
 
   def download
     fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
+    params[:per_page]=10
     self.response.headers["Content-Type"] = "application/octet-stream" 
     self.response.headers["Content-Disposition"] = "attachment; filename=report.csv"
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
+    puts params.inspect
     self.response_body = Report.new(params,fields).csv2
   end
   

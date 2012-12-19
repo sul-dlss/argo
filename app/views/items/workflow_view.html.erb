@@ -4,8 +4,8 @@
 <div class="lightbox-head">
   <span class="section-head-link">
     View: 
-    <%= link_to 'Diagram', workflow_view_item_path(@obj.pid, @workflow_id, :format => 'svg'), :class => 'dialogLink', :title => @workflow_id %> |
-    <%= link_to 'XML', workflow_view_item_path(@obj.pid, @workflow_id, :raw => 'true'), :class => 'dialogLink', :title => @workflow_id %>
+    <%= link_to 'Diagram', workflow_view_item_path(@obj.pid, @workflow_id, :format => 'svg', :repo => @repo), :class => 'dialogLink', :title => @workflow_id %> |
+    <%= link_to 'XML', workflow_view_item_path(@obj.pid, @workflow_id, :raw => 'true', :repo => @repo), :class => 'dialogLink', :title => @workflow_id %>
   </span>
   <%= @obj.pid %>
 </div>
@@ -26,6 +26,8 @@
     <% if @workflow.nil? %>
       <tr><td colspan="7">No processes defined for this workflow.</td></tr>
     <% else %>
+	<%
+	%>
       <% @workflow.processes.each_with_index do |process,index| %>
         <tr>
           <td><%=index+1%>.</td>
