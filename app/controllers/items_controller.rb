@@ -37,7 +37,8 @@ class ItemsController < ApplicationController
   def workflow_view
     @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
-    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows[@workflow_id]
+    @repo=params[:repo] #pass this to workflow queries
+    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows.get_workflow(@workflow_id,@repo)
 
     respond_to do |format|
       format.html
@@ -79,6 +80,7 @@ class ItemsController < ApplicationController
       @item = Dor::Item.find params[:id]
       new_date=DateTime.parse(params[:embargo_date])
       @item.update_embargo(new_date)
+      @item.datastreams['events'].add_event("Embargo", current_user.to_s , "Embargo date modified")
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
       end
@@ -90,8 +92,8 @@ class ItemsController < ApplicationController
       return
     else
       req_params=['id','dsid','content']
-      item = Dor::Item.find params[:id]
-      ds=item.datastreams[params[:dsid]]
+      @item = Dor::Item.find params[:id]
+      ds=@item.datastreams[params[:dsid]]
       #check that the content is valid xml
       begin
         content=Nokogiri::XML(params[:content]){ |config| config.strict }
@@ -113,8 +115,8 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     else  
-      item=Dor::Item.find(params[:id])
-      data=item.get_file(params[:file])
+      @item=Dor::Item.find(params[:id])
+      data=@item.get_file(params[:file])
       self.response.headers["Content-Type"] = "application/octet-stream" 
       self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
       self.response.headers['Last-Modified'] = Time.now.ctime.to_s
@@ -184,6 +186,7 @@ class ItemsController < ApplicationController
       item=Dor::Item.find(params[:item_id])
       item.open_new_version
       item.datastreams['events'].add_event("open", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " opened")
+      item.save
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
       end
@@ -197,6 +200,7 @@ class ItemsController < ApplicationController
       item=Dor::Item.find(params[:item_id])
       item.close_version
       item.datastreams['events'].add_event("close", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " closed")
+      item.save
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
       end
