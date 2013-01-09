@@ -1,0 +1,12 @@
+<form action=<%=url_for :controller => :items,:action => :open_version, :id => @object.pid%> method="POST">
+	<label for="severity">Type</label>
+	<select id="severity" name="severity">
+		<option value="major">Major</option>
+		<option value="minor">Minor</option>
+	</select>
+	<br>
+	<label for="description">version description</label><br>
+	<textarea id="description" name="description" ></textarea>
+	<br>
+	<button>Open</button>
+</form>
