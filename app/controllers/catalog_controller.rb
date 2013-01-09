@@ -139,7 +139,7 @@ class CatalogController < ApplicationController
       return
     end
     #if there is no apo and things got to this point, they are a repo viewer or admin
-    if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid))
+    if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid)) and not @user.is_admin and not @user.is_viewer
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
