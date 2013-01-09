@@ -20,14 +20,21 @@
     <%
     if first
     	%><tr style="display:none" class="last_step<%= version%>"><td><span style="cursor: pointer;" onclick='$(".version<%= version%>").toggle();$(".last_step<%= version%>").toggle();'">+</span><%= version%></td>
+	
+		
     	<td><%= steps['accessioned'][:display]%></td><td><%=  if (steps['accessioned'][:time]=='pending') then steps['accessioned'][:time] else l steps['accessioned'][:time] end%></td></tr>
+		
     <%end%>
     <tr class="version<%= version%>">
     <%if first
     	first=false
-    	%><td onclick='$(".version<%= version%>") .toggle();$(".last_step<%= version%>").toggle();'><span style="cursor: pointer;">-</span>
+    	%><td colspan=3 onclick='$(".version<%= version%>") .toggle();$(".last_step<%= version%>").toggle();'><span style="cursor: pointer;">-</span>
     	<%=version%>
-    	<%else%>
+		<%if version_hash[version]%>
+			(<%=version_hash[version][:tag]%>) <%=version_hash[version][:desc]%>
+		<%end%>
+    	<tr><td>
+		<%else%>
     	<td>
     <%end%>
     </td>

@@ -4,17 +4,17 @@ class SolrDocument
   include Blacklight::Solr::Document
 
   # self.unique_key = 'id'
-  
+
   # The following shows how to setup this blacklight document to display marc documents
   extension_parameters[:marc_source_field] = :marc_display
   extension_parameters[:marc_format_type] = :marcxml
   use_extension( Blacklight::Solr::Document::Marc) do |document|
     document.key?( :marc_display  )
   end
-  
+
   # Email uses the semantic field mappings below to generate the body of an email.
   SolrDocument.use_extension( Blacklight::Solr::Document::Email )
-  
+
   # SMS uses the semantic field mappings below to generate the body of an SMS email.
   SolrDocument.use_extension( Blacklight::Solr::Document::Sms )
 
@@ -25,25 +25,38 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension( Blacklight::Solr::Document::DublinCore)    
   field_semantics.merge!(    
-                         :title => "title_display",
-                         :author => "author_display",
-                         :language => "language_facet",
-                         :format => "format"
-                         )
+  :title => "title_display",
+  :author => "author_display",
+  :language => "language_facet",
+  :format => "format"
+  )
 end
 public
+def get_versions(doc)
+  versions={}
+  recs=doc['versions_display']
+  if recs
+    recs.each do |rec|
+      (version, tag, desc)=rec.split(';')
+      versions[version]={}
+      versions[version][:tag]=tag
+      versions[version][:desc]=desc
+    end
+  end
+  versions
+end
 def get_milestones(doc)
 
-versions={}
-#this needs to use the timezone set in config.time_zone
-zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
-lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
+  versions={}
+  #this needs to use the timezone set in config.time_zone
+  zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
+  lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
   Array(doc[lifecycle_field]).each do |m| 
     if m.split(/;/).length == 2 #if it has a version number
       (name,time) = m.split(/:/,2)
       (time,version) = time.split(/;/,2)
       if versions[version].nil?
-				versions[version]= ActiveSupport::OrderedHash[
+        versions[version]= ActiveSupport::OrderedHash[
           'registered',   { :display => 'Registered',  :time => 'pending'},
           'opened',       { :display => 'Opened',  :time => 'pending'},
           'submitted',    { :display => 'Submitted',   :time => 'pending'},
@@ -54,15 +67,15 @@ lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lif
           'indexed',      { :display => 'Indexed', :time => 'pending'},
           'ingested',     { :display => 'Ingested', :time => 'pending'}
         ]
-				if version !='1' 
-					versions[version].delete('registered')
-				else
-				  versions[version].delete('opened')
-				end
+        if version !='1' 
+          versions[version].delete('registered')
+        else
+          versions[version].delete('opened')
+        end
       end
       versions[version][name] = { :display => name.titleize, :time => 'pending' }
       versions[version][name][:time] = DateTime.parse(time).in_time_zone(zone)
-      
+
     else
       (name,time) = m.split(/:/,2)
       version=1

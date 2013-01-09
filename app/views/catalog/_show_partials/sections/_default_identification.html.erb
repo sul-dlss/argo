@@ -3,7 +3,7 @@
 </div>
 <div>
   <h4><%= render_citation document %></h4>
-  <% blacklight_config[:field_groups][:identification].each do |field_names| %>
+  <% blacklight_config[:field_groups][:full_identification].each do |field_names| %>
     <div class="narrow column">
       <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => field_names } %>
     </div>
@@ -16,5 +16,6 @@
 		<%= render_status document,object%>
 		</dd>
 	</dl>
+	
 	</div>
 </div>

@@ -47,11 +47,21 @@ Argo::Application.routes.draw do
     get '/file_list', :on => :member, :action => :file, :as => 'file'
     post '/file', :on => :member, :action => :replace_file, :as => 'replace_file'
     get '/resource', :action=>:resource, :as =>'resource'
-    post '/version/open', :action=>:open_version, :as => 'open_version'
-    post '/version/close', :action=>:close_version, :as => 'close_version'
+
     delete '/file', :action => :delete_file, :as => 'delete_file'
     post '/add_file', :action => :add_file, :as => 'add_file'
     post '/file/attributes', :action => :update_attributes, :as => 'update_attributes'
+    get 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
+    post 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
+    get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
+    post 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
+    get '/version/open', :action=>:open_version, :as => 'open_version'
+  end
+  
+  namespace :items do
+    post '/version/close', :action=>:close_version, :as => 'close_version'
+    post '/version/open', :action=>:open_version, :as => 'open_version'
+
   end
   
   namespace :status do
@@ -81,6 +91,8 @@ Argo::Application.routes.draw do
     get '/configuration'
     get '/label'
     get '/query_by_id'
+    match 'republish/:pid', :action => :republish
+    match 'archive/:pid', :action => :archive_workflows
     match 'reindex/:pid', :action => :reindex, :as => 'reindex'
     match 'delete_from_index/:pid', :action => :delete_from_index
     get '/index_exceptions'

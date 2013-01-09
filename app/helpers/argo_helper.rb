@@ -140,6 +140,51 @@ module ArgoHelper
     end
     return result.html_safe
   end
+  
+  def render_buttons(doc)
+    result='<ul>'
+    pid=doc['id']
+    if current_user.is_admin 
+  		result+='<li><a class="dialogLink button" href="' + url_for(:controller => :dor,:action => :reindex, :pid => pid)+'">Reindex</a></li>'
+  		if has_been_published? pid
+  			result+='<li><a class="dialogLink button" href=' + url_for(:controller => :dor,:action => :republish, :pid => pid) + '>Republish</a></li>'
+  		end
+  		accessionComplete = true
+  		obj=Dor::Item.find(pid)
+      wf=obj.workflows.get_workflow('accessionWF','dor')
+       wf.processes.each do |proc|
+        if proc.status != 'completed'
+          accessionComplete = false
+        end
+       end
+       if wf.processes.length==0
+         accessionComplete=false
+       end
+  		if accessionComplete
+  		  result+='<li><a class="dialogLink button" href="' + url_for(:controller => :dor,:action => :archive_workflows, :pid => pid)+'">Archive accessionWF</a></li>'
+		  end
+  	end
+  	if(pid and can_close_version?(pid))
+      result+='<li><a class="dialogLink button" href=' + '/items/'+pid+'/close_version_ui' + '>Close Version</a></li>'
+    else
+      if pid and can_open_version?(pid)
+        result+='<li><a class="dialogLink button" href=' + '/items/'+pid+'/open_version_ui' + '>Open for modification</a></li>'
+      end
+    end
+    if(doc.has_key?('embargoMetadata_t'))
+      embargo_data=doc['embargoMetadata_t']
+      text=embargo_data.split.first
+      date=embargo_data.split.last
+
+      if text == 'released'
+        #do nothing at the moment, we arent displaying these
+      else
+        #add a date picker and button to change the embargo date for those who should be able to.
+        result+=render :partial => 'items/embargo_form'
+      end
+    end
+    result.html_safe
+  end
 
   def first_image(a)
     Array(a).find{|f| File.extname(f)=~ /jp2/}

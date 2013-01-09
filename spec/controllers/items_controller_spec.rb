@@ -38,15 +38,16 @@ describe "open_version" do
   end
   version_metadata=mock(Dor::VersionMetadataDS)
   version_metadata.stub(:current_version_id).and_return(2)
+  version_metadata.should_receive(:update_current_version)
   @item.stub(:versionMetadata).and_return(version_metadata)
   @item.stub(:current_version).and_return('2')
   @item.stub(:save)
-  get 'open_version', :item_id => 'oo201oo0001'
+  get 'open_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
   ran.should == true
 end 
 it 'should 403 if you arent an admin' do
   @current_user.stub(:is_admin).and_return(false)
-  get 'open_version', :item_id => 'oo201oo0001'
+  get 'open_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
   response.code.should == "403"
 end
 end
@@ -59,9 +60,10 @@ describe "close_version" do
   version_metadata=mock(Dor::VersionMetadataDS)
   version_metadata.stub(:current_version_id).and_return(2)
   @item.stub(:versionMetadata).and_return(version_metadata)
+  version_metadata.should_receive(:update_current_version)
   @item.stub(:current_version).and_return('2')
   @item.stub(:save)
-  get 'close_version', :item_id => 'oo201oo0001'
+  get 'close_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
   ran.should == true
 end
 it 'should 403 if you arent an admin' do

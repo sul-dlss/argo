@@ -86,9 +86,9 @@ class CatalogController < ApplicationController
       :days_7 => { :label => 'within 7 days', :fq => "published_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
       :days_30 => { :label => 'within 30 days', :fq => "published_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
-    config.add_facet_field 'indexed_at_date', :label => 'Last Argo Update', :query => {
-      :days_7 => { :label => 'within 7 days', :fq => "indexed_day_t:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
-      :days_30 => { :label => 'within 30 days', :fq => "indexed_day_t:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+    config.add_facet_field 'object_modified_day', :label => 'Object Last Modified', :query => {
+      :days_7 => { :label => 'within 7 days', :fq => "last_modified_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+      :days_30 => { :label => 'within 30 days', :fq => "last_modified_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'version_opened', :label => 'Open Version', :query => {
       :all => { :label => 'All', :fq => "version_opened_facet:[* TO #{1.second.ago.utc.xmlschema.split('T').first }]" },
@@ -98,9 +98,10 @@ class CatalogController < ApplicationController
     config.add_facet_fields_to_solr_request!
 
     config.add_search_field 'text', :label => 'All Fields'
-
+    config.add_sort_field 'id asc', :label => 'Druid'
     config.add_sort_field 'score desc', :label => 'Relevance'
     config.add_sort_field 'creator_title_sort asc', :label => 'Creator and Title'
+    
     config.spell_max = 5
 
     config.facet_display = {
@@ -113,6 +114,10 @@ class CatalogController < ApplicationController
     config.field_groups = {
       :identification => [
         ['id','objectType_t','content_type_facet','status_display'],
+        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
+      ],
+      :full_identification => [
+        ['id','objectType_t','content_type_facet'],
         ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
       ]
     }
@@ -128,7 +133,13 @@ class CatalogController < ApplicationController
   
   def show
     @obj = Dor.find params[:id]
-    if not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid))
+    apo=@obj.admin_policy_object.first
+    if not apo and not @user.is_admin and not @user.is_viewer
+      render :status=> :forbidden, :text =>'No APO, no access'
+      return
+    end
+    #if there is no apo and things got to this point, they are a repo viewer or admin
+    if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid))
       render :status=> :forbidden, :text =>'forbidden'
       return
     end

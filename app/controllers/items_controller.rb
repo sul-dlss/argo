@@ -25,7 +25,16 @@ class ItemsController < ApplicationController
     }
     render :json => @image_data.to_json
   end
-
+  
+  def close_version_ui
+    @object = Dor.find params[:id], :lightweight => true
+    @description = @object.datastreams['versionMetadata'].current_description
+    @tag = @object.datastreams['versionMetadata'].current_tag
+  end
+  def open_version_ui
+    @object = Dor.find params[:id], :lightweight => true
+  end
+  
   def register
     @perm_keys = ["sunetid:#{current_user.login}"] 
     if webauth and webauth.privgroup.present?
@@ -144,8 +153,6 @@ class ItemsController < ApplicationController
       else
         params[:preserve]='yes'
       end
-
-
       item=Dor::Item.find(params[:item_id])
       item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
       respond_to do |format|
@@ -183,12 +190,17 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:item_id])
+      item=Dor::Item.find(params[:id])
       item.open_new_version
       item.datastreams['events'].add_event("open", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " opened")
       item.save
+      severity=params[:severity]
+      desc=params[:description]
+      ds=item.versionMetadata
+      ds.update_current_version({:description => desc,:significance => severity.to_sym})
+      item.save
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
+        format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }  
       end
     end
   end
@@ -197,12 +209,17 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:item_id])
+      item=Dor::Item.find(params[:id])
+      severity=params[:severity]
+      desc=params[:description]
+      ds=item.versionMetadata
+      ds.update_current_version({:description => desc,:significance => severity.to_sym})
+      item.save
       item.close_version
       item.datastreams['events'].add_event("close", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " closed")
       item.save
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+item.current_version+' of '+params[:id]+' has been closed!' }  
       end
     end
   end

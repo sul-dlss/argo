@@ -83,7 +83,6 @@ class User < ActiveRecord::Base
     pids  
   end
   
-  
   @groups
   #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions
   def set_groups grps
@@ -113,6 +112,15 @@ class User < ActiveRecord::Base
   #is the user a repository wide viewer
   def is_viewer
     VIEWER_GROUPS.each do |group|
+      if self.groups.include? group
+        return true 
+      end
+    end
+    return false
+  end
+  #is the user a repo wide manager
+  def is_manager
+    MANAGER_GROUPS.each do |group|
       if self.groups.include? group
         return true 
       end
