@@ -33,7 +33,8 @@
 		<%if version_hash[version]%>
 			(<%=version_hash[version][:tag]%>) <%=version_hash[version][:desc]%>
 		<%end%>
-    	<tr><td>
+    	<tr class="version<%= version%>">
+	    <td>
 		<%else%>
     	<td>
     <%end%>
