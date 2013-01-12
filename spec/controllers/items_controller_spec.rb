@@ -23,6 +23,7 @@ describe ItemsController do
     @item.stub(:can_manage_item?).and_return(false)
     @item.stub(:can_manage_content?).and_return(false)
     @item.stub(:can_view_content?).and_return(false)
+    Dor::SearchService.solr.stub(:add)
   end
   describe "embargo_update" do
     it "should 403 if you arent an admin" do
