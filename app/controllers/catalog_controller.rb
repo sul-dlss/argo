@@ -101,7 +101,7 @@ class CatalogController < ApplicationController
     config.add_sort_field 'id asc', :label => 'Druid'
     config.add_sort_field 'score desc', :label => 'Relevance'
     config.add_sort_field 'creator_title_sort asc', :label => 'Creator and Title'
-    
+
     config.spell_max = 5
 
     config.facet_display = {
@@ -115,75 +115,77 @@ class CatalogController < ApplicationController
       :identification => [
         ['id','objectType_t','content_type_facet','status_display'],
         ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
-      ],
-      :full_identification => [
-        ['id','objectType_t','content_type_facet'],
-        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
-      ]
-    }
-    
-  end
+        ],
+        :full_identification => [
+          ['id','objectType_t','content_type_facet'],
+          ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
+        ]
+      }
 
-  def solr_doc_params(id=nil)
-    id ||= params[:id]
-    {
-      :q => %{id:"#{id}"}
-    }
-  end
-  
-  def show
-    @obj = Dor.find params[:id]
-    apo=@obj.admin_policy_object.first
-    if not apo and not @user.is_admin and not @user.is_viewer
-      render :status=> :forbidden, :text =>'No APO, no access'
-      return
     end
-    #if there is no apo and things got to this point, they are a repo viewer or admin
-    if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid)) and not @user.is_admin and not @user.is_viewer
-      render :status=> :forbidden, :text =>'forbidden'
-      return
-    end
-    super()
-  end
-  def datastream_view
-    @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id], :lightweight => true
-    ds = @obj.datastreams[params[:dsid]]
-    data = @obj.datastreams[params[:dsid]].content 
-    unless data.nil?
-      send_data data, :type => 'xml', :disposition => 'inline'
-    else
-      raise ActionController::RoutingError.new('Not Found')
-    end
-  end
 
-  def show_aspect
-    if @obj.nil?
+    def solr_doc_params(id=nil)
+      id ||= params[:id]
+      {
+        :q => %{id:"#{id}"}
+      }
+    end
+
+    def show
       @obj = Dor.find params[:id]
-    end
-    @response, @document = get_solr_response_for_doc_id
-    render :layout => request.xhr? ? false : true
-    
-  end
-    
-
-  private
-  def session_groups
-    @user=current_user
-    if session[:groups]
-      @user.set_groups session[:groups]
-    end
-  end
-  def reformat_dates
-    params.each do |key, val|
-      begin 
-        if(key=~  /_datepicker/ and val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
-          val= DateTime.parse(val).beginning_of_day.utc.xmlschema
-          field=key.split( '_after_datepicker').first.split('_before_datepicker').first
-          params[:f][field]='['+val.to_s+'Z TO *]'
+        apo=nil
+        begin
+        apo=@obj.admin_policy_object.first
+        rescue
         end
-      rescue
+        if not apo and not @user.is_admin and not @user.is_viewer
+          render :status=> :forbidden, :text =>'No APO, no access'
+          return
+        end
+        #if there is no apo and things got to this point, they are a repo viewer or admin
+        if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid)) and not @user.is_admin and not @user.is_viewer
+          render :status=> :forbidden, :text =>'forbidden'
+          return
+        end
+        super()
+      end
+      def datastream_view
+        @response, @document = get_solr_response_for_doc_id
+        @obj = Dor.find params[:id], :lightweight => true
+        ds = @obj.datastreams[params[:dsid]]
+        data = @obj.datastreams[params[:dsid]].content 
+        unless data.nil?
+          send_data data, :type => 'xml', :disposition => 'inline'
+        else
+          raise ActionController::RoutingError.new('Not Found')
+        end
+      end
+
+      def show_aspect
+        if @obj.nil?
+          @obj = Dor.find params[:id]
+        end
+        @response, @document = get_solr_response_for_doc_id
+        render :layout => request.xhr? ? false : true
+      end
+
+      private
+      def session_groups
+        @user=current_user
+        if session[:groups]
+          @user.set_groups session[:groups]
+        end
+      end
+      def reformat_dates
+        params.each do |key, val|
+          begin 
+            if(key=~  /_datepicker/ and val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
+              val= DateTime.parse(val).beginning_of_day.utc.xmlschema
+              field=key.split( '_after_datepicker').first.split('_before_datepicker').first
+              params[:f][field]='['+val.to_s+'Z TO *]'
+            end
+          rescue
+          end
+        end
       end
     end
-  end
-end

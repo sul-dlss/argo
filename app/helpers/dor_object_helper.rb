@@ -28,7 +28,6 @@ module DorObjectHelper
      params=add_facet_params(facet_solr_field, item.qvalue)
      link_to(item.value,root_url)
      # (link_to_unless(options[:suppress_link], item.value, params, :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
-   
    end
   def render_citation doc
     terms = retrieve_terms(doc)

@@ -1,0 +1,4 @@
+<%=form_tag url_for(:controller => :items, :action => :source_id, :id => @object.pid) do%>
+	<input class="longInputBox" size="100" maxlength="255" style="width:auto" name="new_id" id="new_id" type="text" value="<%=@object.identityMetadata.sourceId%>"/>
+	<button>Update</button>
+<%end%>

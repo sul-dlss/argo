@@ -56,12 +56,17 @@ Argo::Application.routes.draw do
     get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
     post 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
     get '/version/open', :action=>:open_version, :as => 'open_version'
+    get '/source_id_ui', :on => :member, :action => :source_id_ui, :as => 'source_id_ui'
+    get '/tags_ui', :on => :member, :action => :tags_ui, :as => 'tags_ui'
+    get '/tags', :on => :member, :action => :tags, :as => 'tags'
+    post '/tags', :on => :member, :action => :tags, :as => 'tags'
+
   end
   
   namespace :items do
     post '/version/close', :action=>:close_version, :as => 'close_version'
     post '/version/open', :action=>:open_version, :as => 'open_version'
-
+    post '/source_id', :action => :source_id, :as => 'source_id'
   end
   
   namespace :status do

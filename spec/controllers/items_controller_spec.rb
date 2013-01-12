@@ -1,16 +1,28 @@
 require 'spec_helper'
 describe ItemsController do
   before :each do
+    #TODO use fixtures here, this is too much stubbing
     @item = mock(Dor::Item)
+    @item.stub(:to_solr)
     @current_user=mock(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
     @current_user.stub(:is_admin).and_return(true)
+    @current_user.stub(:roles).and_return([])
+    @current_user.stub(:is_manager).and_return(false)
     ItemsController.any_instance.stub(:current_user).and_return(@current_user)
     Dor::Item.stub(:find).and_return(@item)
     @event_ds=mock(Dor::EventsDS)
     @event_ds.stub(:add_event)
     @ds={}
+    idmd=mock()
+    idmd.stub(:dirty=)
+    @item.stub(:save)
+    @ds['identityMetadata']=idmd
+    @item.stub(:identityMetadata).and_return(idmd)
     @ds['events'] = @event_ds
     @item.stub(:datastreams).and_return(@ds)
+    @item.stub(:can_manage_item?).and_return(false)
+    @item.stub(:can_manage_content?).and_return(false)
+    @item.stub(:can_view_content?).and_return(false)
   end
   describe "embargo_update" do
     it "should 403 if you arent an admin" do
@@ -72,6 +84,31 @@ it 'should 403 if you arent an admin' do
   response.code.should == "403"
 end
 end
+describe "source_id" do
+  it 'should update the source id' do
+    @item.should_receive(:set_source_id).with('new source id')
+    post 'source_id', :id => 'oo201oo0001', :new_id => 'new source id'
+  end
+end
+describe "tags" do
+  before :each do
+    @item.stub(:tags).and_return(['some:thing'])
+  end
+  it 'should update tags' do
+    @item.should_receive(:update_tag).with('some:thing', 'some:thingelse')
+    post 'tags', :id => 'oo201oo0001', :update=>'true', :tag1 => 'some:thingelse'
+  end
+  it 'should delete tag' do
+    @item.should_receive(:remove_tag).with('some:thing').and_return(true)
+    post 'tags', :id => 'oo201oo0001', :tag => '1', :del => 'true'
+  end
+  it 'should add a tag' do
+    @item.should_receive(:add_tag).with('new:thing')
+    post 'tags', :id => 'oo201oo0001', :new_tag1 => 'new:thing', :add => 'true'
+  end
+end
+
+
 describe "add_file" do
   it 'should recieve an uploaded file and add it to the requested resource' do
     pending 'Mock isnt working correctly'
