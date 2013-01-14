@@ -7,10 +7,10 @@ module Argo
     end
 
     def apply_gated_discovery(solr_parameters, user)
-    #repository wide admin and viewer users shouldnt be restricted in any way
-    # if user.is_admin or user.is_viewer
-     #   return solr_parameters
-     #end
+      #repository wide admin and viewer users shouldnt be restricted in any way
+      if user.is_admin or user.is_viewer
+        return solr_parameters
+      end
       solr_parameters[:fq] ||= []
       pids=user.permitted_apos 
       #do this as a negative query, exclude items they dont have permission rather than including items they have permission to view
@@ -22,9 +22,9 @@ module Argo
         end
         disallowed_apos=all_apos-pids
         if disallowed_apos.length==0
-        pids='dummy'
+          pids='dummy'
         else
-        pids=disallowed_apos.join(" ").gsub('druid', 'info:fedora/druid').gsub(':','\:')
+          pids=disallowed_apos.join(" ").gsub('druid', 'info:fedora/druid').gsub(':','\:')
         end
         solr_parameters[:fq] << "is_governed_by_s:['' TO *] AND -is_governed_by_s:("+pids+")"
       else
@@ -41,9 +41,9 @@ module Argo
     end
   end
   def find(*args)
-      response = Blacklight.solr.find(args[0],args[1] ,:method => :post)
-      force_to_utf8(response)
-    rescue Errno::ECONNREFUSED => e
-      raise Blacklight::Exceptions::ECONNREFUSED.new("Unable to connect to Solr instance using #{Blacklight.solr.inspect}")
-    end
+    response = Blacklight.solr.find(args[0],args[1] ,:method => :post)
+    force_to_utf8(response)
+  rescue Errno::ECONNREFUSED => e
+    raise Blacklight::Exceptions::ECONNREFUSED.new("Unable to connect to Solr instance using #{Blacklight.solr.inspect}")
+  end
 end
