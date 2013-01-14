@@ -8,9 +8,9 @@ module Argo
 
     def apply_gated_discovery(solr_parameters, user)
     #repository wide admin and viewer users shouldnt be restricted in any way
-     if user.is_admin or user.is_viewer
-        return solr_parameters
-     end
+    # if user.is_admin or user.is_viewer
+     #   return solr_parameters
+     #end
       solr_parameters[:fq] ||= []
       pids=user.permitted_apos 
       #do this as a negative query, exclude items they dont have permission rather than including items they have permission to view
@@ -40,4 +40,10 @@ module Argo
       solr_parameters
     end
   end
+  def find(*args)
+      response = Blacklight.solr.find(args[0],args[1] ,:method => :post)
+      force_to_utf8(response)
+    rescue Errno::ECONNREFUSED => e
+      raise Blacklight::Exceptions::ECONNREFUSED.new("Unable to connect to Solr instance using #{Blacklight.solr.inspect}")
+    end
 end
