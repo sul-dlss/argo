@@ -8,14 +8,13 @@
 				<%= content_ds.ng_xml.root['type']%>
 				<ul>
 					<%
+					apo_pid=nil
 					if object.admin_policy_object.first
 						apo_pid=object.admin_policy_object.first.pid
-					else
-						apo_id=nil
 					end
 					
-					can_manage = apo_id and object.can_manage_content? current_user.roles(apo_pid)
-					can_view = apo_id and object.can_view_content? current_user.roles(apo_pid)
+					can_manage = current_user.is_admin or current_user.is_manager or (apo_pid and object.can_manage_content? current_user.roles(apo_pid))
+					can_view = (apo_pid and object.can_view_content? current_user.roles(apo_pid))
 					version_open = can_close_version? object.pid
 					content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource,index| %>
 					<li class="resource">
