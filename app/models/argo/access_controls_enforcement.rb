@@ -40,10 +40,4 @@ module Argo
       solr_parameters
     end
   end
-  def find(*args)
-    response = Blacklight.solr.find(args[0],args[1] ,:method => :post)
-    force_to_utf8(response)
-  rescue Errno::ECONNREFUSED => e
-    raise Blacklight::Exceptions::ECONNREFUSED.new("Unable to connect to Solr instance using #{Blacklight.solr.inspect}")
-  end
 end

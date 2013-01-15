@@ -105,6 +105,10 @@ class User < ActiveRecord::Base
   
   #is the user a repository wide administrator
   def is_admin
+    #if this is an admin wanting to view the world as if they werent, accomidate them.
+    if @groups
+      return false
+    end
     ADMIN_GROUPS.each do |group|
       if self.groups.include? group
         return true 
@@ -115,6 +119,10 @@ class User < ActiveRecord::Base
   
   #is the user a repository wide viewer
   def is_viewer
+    #if this is an admin wanting to view the world as if they werent, accomidate them.
+    if @groups
+      return false
+    end
     VIEWER_GROUPS.each do |group|
       if self.groups.include? group
         return true 
@@ -124,6 +132,10 @@ class User < ActiveRecord::Base
   end
   #is the user a repo wide manager
   def is_manager
+    #if this is an admin wanting to view the world as if they werent, accomidate them.
+    if @groups
+      return false
+    end
     MANAGER_GROUPS.each do |group|
       if self.groups.include? group
         return true 
