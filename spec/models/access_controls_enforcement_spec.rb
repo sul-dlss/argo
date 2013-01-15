@@ -16,7 +16,7 @@ describe 'Argo::AccessControlsEnforcement' do
       @user.stub(:is_viewer).and_return(false)
       solr_params={}
       @obj.apply_gated_discovery(solr_params,@user)
-      solr_params.should == {:fq=>["is_governed_by_s:(info\\:fedora/druid\\:cb081vd1895)"]}
+      solr_params.should == {:fq => ["is_governed_by_s:(\"info:fedora/druid:cb081vd1895\")"]}
     end
     it 'should add to an existing fq' do
       @user.stub(:permitted_apos).and_return(['druid:cb081vd1895'])
@@ -24,7 +24,7 @@ describe 'Argo::AccessControlsEnforcement' do
       @user.stub(:is_viewer).and_return(false)
       solr_params={:fq=>["is_governed_by_s:(info\\:fedora/druid\\:ab123cd4567)"]}
       @obj.apply_gated_discovery(solr_params,@user)
-      solr_params.should == {:fq=>["is_governed_by_s:(info\\:fedora/druid\\:ab123cd4567)", "is_governed_by_s:(info\\:fedora/druid\\:cb081vd1895)"]}
+      solr_params.should == {:fq=>["is_governed_by_s:(info\\:fedora/druid\\:ab123cd4567)", "is_governed_by_s:(\"info:fedora/druid:cb081vd1895\")"]}
     end
     it 'should build a valid query if there arent any apos' do
       @user.stub(:permitted_apos).and_return([])
@@ -50,21 +50,5 @@ describe 'Argo::AccessControlsEnforcement' do
       @obj.apply_gated_discovery(solr_params,@user)
       solr_params.should == {}
     end
-    it 'should use a negative query if there are a large number of permitted_apos to simplify the query' do
-      @user.stub(:permitted_apos).and_return(['druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895','druid:cb081vd1895'])
-      @user.stub(:is_admin).and_return(false)
-      @user.stub(:is_viewer).and_return(false)
-      solr_params={}
-      @answer={}
-      @answer['response']={}
-      @answer['response']['docs']=[]
-      @doc={}
-      @doc['id']='druid:something'
-      @answer['response']['docs'] << @doc
-      Dor::SearchService.stub(:query).and_return @answer
-      @obj.apply_gated_discovery(solr_params,@user)
-      solr_params.should == {:fq=>["is_governed_by_s:['' TO *] AND -is_governed_by_s:(info\\:fedora/druid\\:something)"]}
-    end
-    
   end
 end
