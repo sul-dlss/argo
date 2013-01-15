@@ -25,8 +25,14 @@ module ValueHelper
   def value_for_related_druid predicate, args
     begin
       target_id = args[:document].get("#{predicate}_s")
-      target_name = label_for_druid(target_id)
-      link_to target_name, catalog_path(target_id.split(/\//).last)
+      target_name = ''
+      links=''
+      target_id.split(',').each do |targ|
+        target_name = label_for_druid(targ)
+        links += link_to target_name, catalog_path(targ.split(/\//).last)
+        links +='<br>'
+      end
+      links.html_safe
     rescue Exception => e
       Rails.logger.error e.message
       Rails.logger.error e.backtrace.join("\n")
