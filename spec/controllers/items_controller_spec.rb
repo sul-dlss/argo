@@ -43,6 +43,12 @@ describe ItemsController do
     runs.should ==1
   end
 end
+describe "register" do
+  it "should load the registration form" do
+    get :register
+    response.should render_template('register')
+  end
+end
 describe "open_version" do
   it 'should call dor-services to open a new version' do
     ran=false
@@ -81,7 +87,7 @@ describe "close_version" do
 end
 it 'should 403 if you arent an admin' do
   @current_user.stub(:is_admin).and_return(false)
-  get 'close_version', :item_id => 'oo201oo0001'
+  get 'close_version', :id => 'oo201oo0001'
   response.code.should == "403"
 end
 end
@@ -119,13 +125,13 @@ describe "add_file" do
       ran=true
     end
     file.stub(:original_filename).and_return('filename')
-    post 'add_file', :uploaded_file => file, :item_id => 'oo201oo0001', :resource => 'resourceID'
+    post 'add_file', :uploaded_file => file, :id => 'oo201oo0001', :resource => 'resourceID'
     ran.should == true
 
   end   
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
-    post 'add_file', :uploaded_file => nil, :item_id => 'oo201oo0001', :resource => 'resourceID'
+    post 'add_file', :uploaded_file => nil, :id => 'oo201oo0001', :resource => 'resourceID'
     response.code.should == "403"
   end     
 end
@@ -135,12 +141,12 @@ describe "delete_file" do
     @item.stub(:remove_file)do 
     ran=true
   end
-  get 'delete_file', :item_id => 'oo201oo0001', :file_name => 'old_file'
+  get 'delete_file', :id => 'oo201oo0001', :file_name => 'old_file'
   ran.should == true
 end
 it 'should 403 if you arent an admin' do
   @current_user.stub(:is_admin).and_return(false)
-  get 'delete_file', :item_id => 'oo201oo0001', :file_name => 'old_file'
+  get 'delete_file', :id => 'oo201oo0001', :file_name => 'old_file'
   response.code.should == "403"
 end
 end
@@ -171,7 +177,7 @@ describe "update_parameters" do
       preserve.should == "yes"
       publish.should == "yes"
     end
-    post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :id => 'oo201oo0001', :file_name => 'something.txt'
   end
   it 'should work ok if not all of the values are set' do
     contentMD=mock(Dor::ContentMetadataDS)
@@ -181,7 +187,7 @@ describe "update_parameters" do
       preserve.should == "yes"
       publish.should == "yes"
     end
-    post 'update_attributes',  :publish => 'on', :preserve => 'on', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    post 'update_attributes',  :publish => 'on', :preserve => 'on', :id => 'oo201oo0001', :file_name => 'something.txt'
   end
   it 'should update the shelve, publish and preserve to no (used to be false)' do
     contentMD=mock(Dor::ContentMetadataDS)
@@ -192,11 +198,11 @@ describe "update_parameters" do
       publish.should == "no"
     end
     contentMD.should_receive(:update_attributes)
-    post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => 'oo201oo0001', :file_name => 'something.txt'
   end
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
-    post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :item_id => 'oo201oo0001', :file_name => 'something.txt'
+    post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => 'oo201oo0001', :file_name => 'something.txt'
     response.code.should == "403"
   end
 end
@@ -234,7 +240,7 @@ end
 describe 'update_sequence' do
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
-    post 'update_resource', :resource => '0001', :position => '3', :item_id => 'oo201oo0001'
+    post 'update_resource', :resource => '0001', :position => '3', :id => 'oo201oo0001'
     response.code.should == "403"
   end
   it 'should call dor-services to reorder the resources' do
@@ -244,7 +250,7 @@ describe 'update_sequence' do
     mock_ds.stub(:save)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
     mock_ds.stub(:dirty?).and_return(false)
-    post 'update_resource', :resource => '0001', :position => '3', :item_id => 'oo201oo0001'
+    post 'update_resource', :resource => '0001', :position => '3', :id => 'oo201oo0001'
   end
   it 'should call dor-services to change the label' do
     mock_ds=mock(Dor::ContentMetadataDS)
@@ -253,7 +259,7 @@ describe 'update_sequence' do
     mock_ds.stub(:save)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
     mock_ds.stub(:dirty?).and_return(false)
-    post 'update_resource', :resource => '0001', :label => 'label!', :item_id => 'oo201oo0001'
+    post 'update_resource', :resource => '0001', :label => 'label!', :id => 'oo201oo0001'
   end
   it 'should call dor-services to update the resource type' do
     mock_ds=mock(Dor::ContentMetadataDS)
@@ -262,7 +268,7 @@ describe 'update_sequence' do
     mock_ds.stub(:save)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
     mock_ds.stub(:dirty?).and_return(false)
-    post 'update_resource', :resource => '0001', :type => 'book', :item_id => 'oo201oo0001'
+    post 'update_resource', :resource => '0001', :type => 'book', :id => 'oo201oo0001'
   end
 end
 describe 'resource' do
@@ -270,7 +276,7 @@ describe 'resource' do
     Dor::Item.should_receive(:find)
     mock_ds=mock(Dor::ContentMetadataDS)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
-    get 'resource', :item_id => 'oo201oo0001', :resource => '0001'
+    get 'resource', :id => 'oo201oo0001', :resource => '0001'
   end
 end
 end

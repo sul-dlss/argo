@@ -3,6 +3,17 @@ class ItemsController < ApplicationController
   require 'net/ssh'
   require 'net/sftp'
 
+  before_filter :create_obj, :except => [:register]
+  
+  def create_obj
+    if params[:id]
+      @object = Dor::Item.find params[:id], :lightweight => true
+    else
+      raise 'missing druid'+params.inspect
+    end
+    
+  end
+  
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
@@ -13,7 +24,7 @@ class ItemsController < ApplicationController
     end
     render :crop, :layout => 'webcrop'
   end
-
+  
   def save_crop
     @druid = params[:id].sub(/^druid:/,'')
     @image_data = JSON.parse(request.body.read)
@@ -27,18 +38,24 @@ class ItemsController < ApplicationController
   end
 
   def close_version_ui
-    @object = Dor.find params[:id], :lightweight => true
     @description = @object.datastreams['versionMetadata'].current_description
     @tag = @object.datastreams['versionMetadata'].current_tag
   end
-  def open_version_ui
-    @object = Dor.find params[:id], :lightweight => true
+  def add_collection
+    @object.add_collection(params[:collection])
+    @object.save
+    reindex(@object)
+      respond_to do |format|
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
+      end
   end
-  def source_id_ui
-    @object = Dor.find params[:id], :lightweight => true
-  end
-  def tags_ui
-    @object = Dor.find params[:id], :lightweight => true
+  def remove_collection
+    @object.remove_collection(params[:collection])
+    @object.save
+    reindex(@object)
+       respond_to do |format|
+         format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully removed' }
+       end
   end
 
   def register
@@ -50,7 +67,7 @@ class ItemsController < ApplicationController
   end
 
   def workflow_view
-    @obj = Dor.find params[:id], :lightweight => true
+    @obj=@object
     @workflow_id = params[:wf_name]
     @repo=params[:repo] #pass this to workflow queries
     @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows.get_workflow(@workflow_id,@repo)
@@ -162,7 +179,7 @@ class ItemsController < ApplicationController
       end
       item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
       end
     end
   end
@@ -187,146 +204,139 @@ class ItemsController < ApplicationController
     else
       item.add_file params[:uploaded_file],params[:resource],params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
       end
     end
   end
   def open_version
-    item=Dor::Item.find(params[:id])
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    if not @object.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item.open_new_version
-      item.datastreams['events'].add_event("open", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " opened")
-      item.save
+      @object.open_new_version
+      @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
+      @object.save
       severity=params[:severity]
       desc=params[:description]
-      ds=item.versionMetadata
+      ds=@object.versionMetadata
       ds.update_current_version({:description => desc,:significance => severity.to_sym})
-      item.save
-      doc=item.to_solr
-      Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+      @object.save
+      reindex(@object)
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }  
       end
     end
   end
   def close_version
-    item=Dor::Item.find(params[:id])
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    if not @object.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
       severity=params[:severity]
       desc=params[:description]
-      ds=item.versionMetadata
+      ds=@object.versionMetadata
       ds.update_current_version({:description => desc,:significance => severity.to_sym})
-      item.save
-      item.close_version
-      item.datastreams['events'].add_event("close", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " closed")
-      item.save
-      doc=item.to_solr
-      Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+      @object.save
+      @object.close_version
+      @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")
+      @object.save
+      reindex(@object)
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+item.current_version+' of '+params[:id]+' has been closed!' }  
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }  
       end
     end
   end
   def source_id
-    item=Dor::Item.find(params[:id])
     #can this go in a filter to avoid repeating myself?
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    if not @object.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
-    item.set_source_id(params[:new_id])
-    item.identityMetadata.dirty=true
-    item.save
-    doc=item.to_solr
-    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+    @object.set_source_id(params[:new_id])
+    @object.identityMetadata.dirty=true
+    @object.save
+    reindex(@object)
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for '+params[:id]+' has been updated!' }  
     end
   end
   def tags
-    item=Dor::Item.find(params[:id])
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    if not @object.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
-    current_tags=item.tags
+    current_tags=@object.tags
     if params[:add]
       if params[:new_tag1] and params[:new_tag1].length > 0
-        item.add_tag(params[:new_tag1])
+        @object.add_tag(params[:new_tag1])
       end
       if params[:new_tag2] and params[:new_tag2].length > 0 
-        item.add_tag(params[:new_tag2])
+        @object.add_tag(params[:new_tag2])
       end
       if params[:new_tag3]  and params[:new_tag3].length > 0
-        item.add_tag(params[:new_tag3])
+        @object.add_tag(params[:new_tag3])
       end
     end
     if params[:del]
-      if not item.remove_tag(current_tags[params[:tag].to_i - 1])
+      if not @object.remove_tag(current_tags[params[:tag].to_i - 1])
         raise 'failed to delete'
       end
     end
     if params[:update]
       count = 1
       current_tags.each do |tag|
-        item.update_tag(tag,params[('tag'+count.to_s).to_sym])
+        @object.update_tag(tag,params[('tag'+count.to_s).to_sym])
         count+=1
       end
     end
-    item.identityMetadata.dirty=true
-    item.save
-    doc=item.to_solr
-    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000}) 
+    @object.identityMetadata.dirty=true
+    @object.save
+    reindex(@object)
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }  
     end
   end
   def delete_file
-    item=Dor::Item.find(params[:id])
-    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
+    if not current_user.is_admin and not @object.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item.remove_file(params[:file_name])
+      @object.remove_file(params[:file_name])
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:file_name] + ' has been deleted!' }  
+        format.any { redirect_to catalog_path(params[:id]), :notice => params[:file_name] + ' has been deleted!' }  
       end
     end
   end
   def resource
-    item=Dor::Item.find(params[:id])
     if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      @item=Dor::Item.find(params[:item_id])
-      @content_ds = @item.datastreams['contentMetadata']
+      @content_ds = @object.datastreams['contentMetadata']
     end
   end
   def update_resource
-    item=Dor::Item.find(params[:item_id])
-    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
+    if not current_user.is_admin and not @object.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
       if params[:position]
-        item.move_resource(params[:resource], params[:position])
+        @object.move_resource(params[:resource], params[:position])
       end
       if params[:label]
-        item.update_resource_label(params[:resource], params[:label])
+        @object.update_resource_label(params[:resource], params[:label])
       end
       if params[:type]
-        item.update_resource_type(params[:resource], params[:type])
+        @object.update_resource_type(params[:resource], params[:type])
       end
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'updated resource ' + params[:resource] + '!' }  
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'updated resource ' + params[:resource] + '!' }  
       end
     end
+  end
+  private 
+  def reindex item
+    doc=item.to_solr
+    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
   end
 end

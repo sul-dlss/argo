@@ -13,24 +13,6 @@ module RegistrationHelper
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
   end
-  
-  def collection_list
-    q = 'objectType_t:collection '
-    qrys=[]
-    current_user.permitted_apos.each do |pid|
-      qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
-    end
-    q+=qrys.join " OR "
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
-    result.sort! do |a,b|
-      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
-    end
-    res=['None']
-    res + result.collect do |doc|
-      [Array(doc['dc_title_t']).first,doc['id'].to_s]
-    end
-    res=['None']
-  end
 
   def apo_default_rights_list(*permission_keys)
     q = 'objectType_t:adminPolicy'

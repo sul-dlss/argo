@@ -21,10 +21,10 @@ Resource: <%=params[:resource]%>
 			<div class="fileUpdate">
 				<img style="height:16px;" onclick="document.getElementById('upload_<%=file['id']%>').style.display='block';" src="/assets/update.png" alt="update"></img>
 				<%delete_image_tag=image_tag ('unavailable.png')%>
-				<%=link_to(delete_image_tag, '/items/'+params[:item_id]+'/file/?file_name='+file['id'], :confirm => 'Are you sure you want to delete ' + file['id'] + '?', :method => :delete) %>
+				<%=link_to(delete_image_tag, '/items/'+params[:id]+'/file/?file_name='+file['id'], :confirm => 'Are you sure you want to delete ' + file['id'] + '?', :method => :delete) %>
 				File:<%=file['id']%>
 				<span style="float:right">
-				<form action="<%='/items/' + params[:item_id]+'/file/attributes'%>" method="POST">
+				<form action="<%='/items/' + params[:id]+'/file/attributes'%>" method="POST">
 				<input type="hidden" name="file_name" value="<%=file['id']%>">
 				<%
 				checked=''

@@ -46,11 +46,10 @@ Argo::Application.routes.draw do
     get '/file', :on => :member, :action => :get_file, :as => 'get_file'
     get '/file_list', :on => :member, :action => :file, :as => 'file'
     post '/file', :on => :member, :action => :replace_file, :as => 'replace_file'
-    get '/resource', :action=>:resource, :as =>'resource'
-
-    delete '/file', :action => :delete_file, :as => 'delete_file'
-    post '/add_file', :action => :add_file, :as => 'add_file'
-    post '/file/attributes', :action => :update_attributes, :as => 'update_attributes'
+    get '/resource', :on => :member, :action=>:resource, :as =>'resource'
+    delete '/file', :on => :member, :action => :delete_file, :as => 'delete_file'
+    post '/add_file', :on => :member, :action => :add_file, :as => 'add_file'
+    post '/file/attributes', :on => :member, :action => :update_attributes, :as => 'update_attributes'
     get 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
     post 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
     get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
@@ -60,6 +59,9 @@ Argo::Application.routes.draw do
     get '/tags_ui', :on => :member, :action => :tags_ui, :as => 'tags_ui'
     get '/tags', :on => :member, :action => :tags, :as => 'tags'
     post '/tags', :on => :member, :action => :tags, :as => 'tags'
+    get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
+    get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
+    post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
 
   end
   

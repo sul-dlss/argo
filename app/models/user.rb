@@ -86,6 +86,22 @@ class User < ActiveRecord::Base
     end
     pids  
   end
+  def permitted_collections
+    q = 'objectType_t:collection '
+    qrys=[]
+    permitted_apos.each do |pid|
+      qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
+    end
+    q+=qrys.join " OR "
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result.sort! do |a,b|
+      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+    end
+    res=['None','']
+    result.collect do |doc|
+      [Array(doc['dc_title_t']).first,doc['id'].to_s]
+    end
+  end
   
   @groups
   #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions

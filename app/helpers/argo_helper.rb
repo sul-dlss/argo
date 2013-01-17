@@ -145,10 +145,12 @@ module ArgoHelper
     result='<ul>'
     pid=doc['id']
     object=Dor::Item.find(pid)
+    
+    buttons=[]
     if current_user.is_admin 
-      result+='<li><a class="smallDialogLink button" href="' + url_for(:controller => :dor,:action => :reindex, :pid => pid)+'">Reindex</a></li>'
+      buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
       if has_been_published? pid
-        result+='<li><a class="smallDialogLink button" href=' + url_for(:controller => :dor,:action => :republish, :pid => pid) + '>Republish</a></li>'
+        buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
       accessionComplete = true
       obj=Dor::Item.find(pid)
@@ -162,19 +164,20 @@ module ArgoHelper
         accessionComplete=false
       end
       if accessionComplete
-        result+='<li><a class="smallDialogLink button" href="' + url_for(:controller => :dor,:action => :archive_workflows, :pid => pid) + '">Archive accessionWF</a></li>'
+        buttons << {:url =>  url_for(:controller => :dor,:action => :archive_workflows, :pid => pid), :label => 'Archive accessionWF'}
       end
     end
     if(pid and can_close_version?(pid))
-      result+='<li><a class="smallDialogLink button" href=' + '/items/'+pid+'/close_version_ui' + '>Close Version</a></li>'
+      buttons << {:url => '/items/'+pid+'/close_version_ui', :label => 'Close Version'}
     else
       if pid and can_open_version?(pid)
-        result+='<li><a class="smallDialogLink button" href=' + '/items/'+pid+'/open_version_ui' + '>Open for modification</a></li>'
+        buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
     if object.can_manage_item?(current_user.groups) or current_user.is_admin or current_user.is_manager 
-      result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/source_id_ui' + '>Change source id</a></li>'
-      result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/tags_ui' + '>Edit tags</a></li>'
+      buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
+      buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
+      buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
     end
     if(doc.has_key?('embargoMetadata_t'))
       embargo_data=doc['embargoMetadata_t']
@@ -188,8 +191,8 @@ module ArgoHelper
         result+=render :partial => 'items/embargo_form'
       end
     end
-
-    result.html_safe
+    render(:partial => 'items/button_link_list', :locals => {:buttons => buttons})
+    #result.html_safe
   end
 
   def first_image(a)

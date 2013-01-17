@@ -1,0 +1,19 @@
+<div><label>Remove existing collections</label><br>
+<%
+	@object.collection.each do |col|
+		%>
+		<%=col.label%>
+		<%del_image=image_tag ('unavailable.png')%>
+		<%=link_to del_image, url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid)%><br>
+		<%
+	end
+%>
+</div>
+<br>
+<div>
+<label>Add a collection</label>
+<%=form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid) do%>
+	<%= select_tag :collection, options_for_select(current_user.permitted_collections)%>
+	<button>Add Collection</button>
+<%end%>
+</div>
