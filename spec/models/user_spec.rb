@@ -61,9 +61,9 @@ describe User do
     @answer['response']={}
     @answer['response']['docs']=[]
     @doc={}
-    @doc['apo_role_group_dor-administrator_t']=['dlss:groupA', 'dlss:groupB']
-    @doc['apo_role_group_dor-apo-manager_t']=['dlss:groupC', 'dlss:groupD']
-    @doc['apo_role_group_dor-viewer_t']=['dlss:groupE', 'dlss:groupF']
+    @doc['apo_role_dor-administrator_t']=['dlss:groupA', 'dlss:groupB']
+    @doc['apo_role_dor-apo-manager_t']=['dlss:groupC', 'dlss:groupD']
+    @doc['apo_role_dor-viewer_t']=['dlss:groupE', 'dlss:groupF']
     @doc['apo_role_person_dor-viewer_t']=['sunetid:tcramer']
     @doc['apo_role_group_manager_t']=['dlss:groupR']
     @answer['response']['docs'] << @doc

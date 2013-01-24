@@ -23,6 +23,9 @@ describe ItemsController do
     @item.stub(:can_manage_item?).and_return(false)
     @item.stub(:can_manage_content?).and_return(false)
     @item.stub(:can_view_content?).and_return(false)
+    apo=mock
+    apo.stub(:pid).and_return('druid:ab12cde7890')
+    @item.stub(:admin_policy_object).and_return([apo])
     Dor::SearchService.solr.stub(:add)
   end
   describe "embargo_update" do

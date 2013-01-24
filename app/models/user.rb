@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
     end
 
     known_roles.each do |role|
-      if(resp['apo_role_group_'+role+'_t'] and (resp['apo_role_group_' + role + '_t'] & groups).length >0)
+      if(resp['apo_role_'+role+'_t'] and (resp['apo_role_' + role + '_t'] & groups).length >0)
         toret << role
       end
     end
@@ -93,7 +93,7 @@ class User < ActiveRecord::Base
     @groups=grps
   end
   def groups
-    if @groups
+     if @groups
       return @groups
     end
     perm_keys = ["sunetid:#{self.login}"]

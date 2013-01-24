@@ -145,6 +145,12 @@ module ArgoHelper
     result='<ul>'
     pid=doc['id']
     object=Dor::Item.find(pid)
+    apo_pid=doc['is_governed_by_s']
+    if apo_pid
+      apo_pid=apo_pid.first.split(/\//).last
+    else
+      apo_pid='none'
+    end
     if current_user.is_admin 
       result+='<li><a class="smallDialogLink button" href="' + url_for(:controller => :dor,:action => :reindex, :pid => pid)+'">Reindex</a></li>'
       if has_been_published? pid
@@ -172,7 +178,7 @@ module ArgoHelper
         result+='<li><a class="smallDialogLink button" href=' + '/items/'+pid+'/open_version_ui' + '>Open for modification</a></li>'
       end
     end
-    if object.can_manage_item?(current_user.groups) or current_user.is_admin or current_user.is_manager 
+    if object.can_manage_item?(current_user.roles apo_pid) or current_user.is_admin or current_user.is_manager 
       result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/source_id_ui' + '>Change source id</a></li>'
       result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/tags_ui' + '>Edit tags</a></li>'
     end

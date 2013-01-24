@@ -193,7 +193,12 @@ class ItemsController < ApplicationController
   end
   def open_version
     item=Dor::Item.find(params[:id])
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
@@ -214,7 +219,12 @@ class ItemsController < ApplicationController
   end
   def close_version
     item=Dor::Item.find(params[:id])
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
@@ -236,7 +246,12 @@ class ItemsController < ApplicationController
   def source_id
     item=Dor::Item.find(params[:id])
     #can this go in a filter to avoid repeating myself?
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
@@ -251,7 +266,12 @@ class ItemsController < ApplicationController
   end
   def tags
     item=Dor::Item.find(params[:id])
-    if not item.can_manage_item?(current_user.roles params[:id]) and not current_user.is_admin and not current_user.is_manager
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
