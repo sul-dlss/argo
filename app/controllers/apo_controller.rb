@@ -13,7 +13,7 @@ class ApoController < ApplicationController
       reg_params[:label] = params[:title]
       reg_params[:object_type] = 'adminPolicy'
       reg_params[:admin_policy] = 'druid:hv992ry2431'
-      reg_params[:source_id] = 'apo:'+params[:title]
+      #reg_params[:source_id] = 'apo:'+params[:title]
       response = Dor::RegistrationService.create_from_request(reg_params)
       pid = response[:pid]
       item=Dor.find(pid)
