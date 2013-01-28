@@ -3,7 +3,8 @@
 	<%count = 1%>
 	<%@object.tags.each do |tag|%>
 	<input class="tag" size="100" maxlength="255" style="width:auto" name="tag<%=count%>" id="tag<%=count%>" type="text" value="<%=tag%>"/>
-	<%=link_to 'delete', url_for(:controller => :items, :action => :tags, :id => @object.pid, :del => 'true', :tag => count)%>
+	<%del_image=image_tag ('unavailable.png')%>
+	<%=link_to del_image, url_for(:controller => :items, :action => :tags, :id => @object.pid, :del => 'true', :tag => count)%>
 	<br>
 	<%count+=1%>
 	<%end%>

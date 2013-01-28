@@ -433,7 +433,7 @@ var gridContext = function() {
       $('#object_type').change(function(evt) {
         var sender = evt.target
         var valid_controls = {
-          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3", "tag_4"],
+          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3", "tag_4", "collection"],
           'set'        : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
           'collection' : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
           'adminPolicy': ["object_type", "registered_by"],
@@ -485,6 +485,33 @@ var gridContext = function() {
         })
 
 	        $.ajax({
+	          type: 'GET',
+	          url: pathTo('/registration/collection_list'),
+	          dataType: 'json',
+	          data: { apo_id: $('#apo_id').val() },
+	          success: function(response,status,xhr) { 
+	            if (response) {
+	              	var optionsHtml='';
+					for (var entry in response)
+						{
+							if(response.hasOwnProperty(entry))
+							{
+								if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
+								{
+									optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
+								}
+								else
+								{
+									optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
+								}
+							}
+						}
+	              	$('#collection').html(optionsHtml);
+	            }
+	          }
+	        })
+	
+			$.ajax({
 	          type: 'GET',
 	          url: pathTo('/registration/rights_list'),
 	          dataType: 'json',

@@ -32,7 +32,6 @@ class User < ActiveRecord::Base
     if @role_cache[pid]
       return @role_cache[pid]
     end
-    known_roles=['dor-administrator', 'dor-viewer', 'dor-apo-creator', 'dor-apo-manager', 'dor-apo-depositor', 'dor-apo-reviewer', 'dor-apo-metadata', 'dor-apo-viewer']
     resp = Dor::SearchService.query('id:"'+ pid+ '"')['response']['docs'].first
     toret=[]
     #search for group based roles
@@ -62,9 +61,12 @@ class User < ActiveRecord::Base
     toret
   end
   #array of apos the user is allowed to view
+  def known_roles
+    ['dor-administrator', 'dor-viewer', 'dor-apo-creator', 'dor-apo-manager', 'dor-apo-depositor', 'dor-apo-reviewer', 'dor-apo-metadata', 'dor-apo-viewer']
+  end
+
   def permitted_apos 
     query=""
-    known_roles=['dor-administrator', 'dor-viewer', 'dor-apo-creator', 'dor-apo-manager', 'dor-apo-depositor', 'dor-apo-reviewer', 'dor-apo-metadata', 'dor-apo-viewer']
     first=true
     groups.each do |group|
       if first
@@ -76,7 +78,7 @@ class User < ActiveRecord::Base
     end
     q='apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')'
     known_roles.each do |role|
-      q+=' OR apo_role_group_'+role+'_t:('+query+')' 
+      q+=' OR apo_role_'+role+'_t:('+query+')' 
     end
     resp = Dor::SearchService.query(q, {:rows => 100, :fl => 'id'})['response']['docs']
     pids=[]
@@ -85,6 +87,23 @@ class User < ActiveRecord::Base
       pids << doc['id']
     end
     pids  
+  end
+  def permitted_collections
+    q = 'objectType_t:collection '
+    qrys=[]
+    permitted_apos.each do |pid|
+      qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
+    end
+    q+=qrys.join " OR "
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result.sort! do |a,b|
+      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+    end
+    result.collect do |doc|
+      [Array(doc['dc_title_t']).first,doc['id'].to_s]
+    end
+    arr=[['None','']]+result
+    
   end
   
   @groups
