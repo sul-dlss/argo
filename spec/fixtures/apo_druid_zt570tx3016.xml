@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:zt570tx3016"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Ampex"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-07-05T17:12:18.757Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2013-01-09T20:31:55.690Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2011-07-05T17:12:18.757Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyObject</audit:action>
+<audit:componentID></audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-09-21T23:04:14.253Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-01-09T19:22:42.825Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-01-09T19:23:00.220Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-01-09T20:31:55.690Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="DC.0" LABEL="Dublin Core Record for this object" CREATED="2011-07-05T20:50:11.624Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="375">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Ampex</dc:title>
+  <dc:identifier>druid:zt570tx3016</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-07-25T20:32:10.617Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="529">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#">
+  <rdf:Description rdf:about="info:fedora/druid:zt570tx3016">
+    <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431"></hydra:isGovernedBy>
+    <hydra:referencesAgreement rdf:resource="info:fedora/druid:dd327qr3670"></hydra:referencesAgreement>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="administrativeMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="administrativeMetadata.0" LABEL="Administrative Metadata" CREATED="2011-07-05T20:59:01.385Z" MIMETYPE="text/xml" SIZE="2114">
+<foxml:xmlContent>
+<administrativeMetadata objectId="druid:zt570tx3016">
+  <descMetadata>
+    <format>MODS</format>
+  </descMetadata>
+    <relationships xmlns:fedora-rel="info:fedora/fedora-system:def/relations-external#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+     <fedora-rel:isMemberOf rdf:resource="info:fedora/druid:fz306fj8334"></fedora-rel:isMemberOf>
+     <fedora-rel:isMemberOfCollection rdf:resource="info:fedora/druid:fz306fj8334"></fedora-rel:isMemberOfCollection>
+  </relationships>
+  <registration>
+	<agreementId>druid:xf765cv5573</agreementId>
+    <workflow id="digitizationWF">
+      <process lifecycle="registered" name="initiate" status="completed"></process>
+      <process name="digitize" status="waiting"></process>
+      <process name="start-accession" status="waiting"></process>
+    </workflow>
+  </registration>
+	<assembly>
+		<workflow id="assemblyWF">
+	      <process lifecycle="inprocess" name="start-assembly" status="completed"></process>
+	      <process name="jp2-create" status="waiting"></process>
+	      <process name="checksum-compute" status="waiting"></process>
+	      <process name="exif-collect" status="waiting"></process>
+	      <process name="accessioning-initiate" status="waiting"></process>
+	  </workflow>
+	</assembly>
+  <accessioning>
+    <workflow id="accessionWF">
+      <process lifecycle="inprocess" name="start-accession" status="completed"></process>
+      <process name="content-metadata" status="waiting"></process>
+      <process name="descriptive-metadata" status="waiting"></process>
+      <process name="rights-metadata" status="waiting"></process>
+      <process name="technical-metadata" status="waiting"></process>
+      <process name="provenance-metadata" status="waiting"></process>
+      <process name="remediate-object" status="waiting"></process>
+      <process name="shelve" status="waiting"></process>
+      <process lifecycle="released" name="publish" status="waiting"></process>
+      <process name="sdr-ingest-transfer" status="waiting"></process>
+      <process lifecycle="accessioned" name="cleanup" status="waiting"></process>
+    </workflow>
+  </accessioning>
+</administrativeMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="defaultObjectRights" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="defaultObjectRights.0" LABEL="Default Object Rights" CREATED="2011-07-05T20:46:24.337Z" MIMETYPE="text/xml" SIZE="731">
+<foxml:xmlContent>
+<rightsMetadata>
+  <copyright>
+    <human type="copyright">Additional copyright info</human>
+  </copyright>
+  <access type="discover">
+    <machine>
+      <world></world>
+    </machine>
+  </access>
+  <access type="read">
+    <machine>
+      <world></world>
+    </machine>
+  </access>
+  <use>
+    <human type="useAndReproduction">Rights are owned by Stanford University Libraries. All Rights Reserved. This work is protected by copyright law. No part of the materials may be derived, copied, photocopied, reproduced, translated or reduced to any electronic medium or machine readable form, in whole or in part, without specific permission from the copyright holder. To access this content or to request reproduction permission, please send a written request to speccollref@stanford.edu.</human>
+  </use>
+ <use>
+    <machine type="creativeCommons">by-nc-sa</machine>
+    <human type="creativeCommons">CC Attribution-NonCommercial-ShareAlike 3.0</human>
+  </use>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-07-05T20:50:24.156Z" MIMETYPE="text/xml" SIZE="368">
+<foxml:xmlContent>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+  <mods:titleInfo>
+    <mods:title>Ampex</mods:title>
+  </mods:titleInfo>
+  <mods:identifier type="druid">zt570tx3016</mods:identifier>
+</mods:mods>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-07-05T20:49:25.801Z" MIMETYPE="text/xml" SIZE="289">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:zt570tx3016</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Ampex</objectLabel>
+  <objectCreator>DOR</objectCreator>
+  <otherId name="uuid">0ec59fb0-0430-11e2-a21f-0800200c9a66</otherId>
+  <tag>Project : DOR</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+<foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-26T23:48:36.737Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-prod.stanford.edu/workflow/dor/objects/druid:zt570tx3016/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="roleMetadata.3" LABEL="Role Metadata" CREATED="2013-01-09T20:31:55.690Z" MIMETYPE="text/xml" SIZE="553">
+<foxml:xmlContent>
+<roleMetadata objectId="druid:zt570tx3016">
+  <role type="dor-apo-manager">
+    <group>
+      <identifier type="workgroup">dlss:developers</identifier>
+    </group>
+    <group>
+      <identifier type="workgroup">dlss:pmag-staff</identifier>
+    </group>
+    <group>
+      <identifier type="workgroup">dlss:smpl-staff</identifier>
+    </group>
+    <group>
+      <identifier type="workgroup">dlss:dpg-staff</identifier>
+    </group>
+    <group>
+      <identifier type="workgroup">dlss:argo-access-spec</identifier>
+    </group>
+	<person>
+      <identifier type="sunetid">lmcrae</identifier>
+      <name>McRae, Lynn</name>
+    </person>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

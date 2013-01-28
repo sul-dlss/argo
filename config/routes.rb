@@ -34,6 +34,21 @@ Argo::Application.routes.draw do
     get '/workflow_grid'
   end
   
+  resources :apo do
+    get 'apo_ui', :on => :member, :action => :apo_ui, :as => 'apo_ui'
+    post 'delete_role', :on => :member
+    post 'add_collection', :on => :member
+    post 'delete_collection', :on => :member
+    post 'update_title', :on => :member
+    post 'update_creative_commons', :on => :member
+    post 'update_use', :on => :member
+    post 'update_copyright', :on => :member
+    post 'update_default_object_rights', :on => :member
+    post 'add_roleplayer', :on => :member
+    post 'update_desc_metadata', :on => :member
+    get :register, :on => :collection
+    post :register, :on => :collection
+  end
   resources :items do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
@@ -62,7 +77,6 @@ Argo::Application.routes.draw do
     get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
     get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
     post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
-
   end
   
   namespace :items do
@@ -80,6 +94,7 @@ Argo::Application.routes.draw do
     get "/", :action => :form
     get "/tracksheet"
     get "/form_list"
+    get "/collection_list"
     get "/workflow_list"
     get "/rights_list", :action => :rights_list, :as => 'rights_list'
     get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'

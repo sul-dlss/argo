@@ -140,21 +140,9 @@ module ArgoHelper
     end
     return result.html_safe
   end
-
-  def render_buttons(doc, object)
-    result='<ul>'
-    pid=doc['id']
-    object=Dor::Item.find(pid)
-    
-    buttons=[]
-    if current_user.is_admin 
-      buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-      if has_been_published? pid
-        buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
-      end
-      accessionComplete = true
-      obj=Dor::Item.find(pid)
-      wf=obj.workflows.get_workflow('accessionWF','dor')
+  def archive_button
+     accessionComplete = true
+      wf=object.workflows.get_workflow('accessionWF','dor')
       wf.processes.each do |proc|
         if proc.status != 'completed'
           accessionComplete = false
@@ -166,6 +154,16 @@ module ArgoHelper
       if accessionComplete
         buttons << {:url =>  url_for(:controller => :dor,:action => :archive_workflows, :pid => pid), :label => 'Archive accessionWF'}
       end
+  end
+  def render_buttons(doc)
+    pid=doc['id']
+    object = Dor.find(pid)
+    buttons=[]
+    if current_user.is_admin 
+      buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
+      if has_been_published? pid
+        buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
+      end
     end
     if(pid and can_close_version?(pid))
       buttons << {:url => '/items/'+pid+'/close_version_ui', :label => 'Close Version'}
@@ -174,7 +172,10 @@ module ArgoHelper
         buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
-    if object.can_manage_item?(current_user.groups) or current_user.is_admin or current_user.is_manager 
+    if object.methods.include? 'roleMetadata'
+      buttons << {:url => url_for(:controller => :apo, :action => :apo_ui, :id => pid), :label => 'Edit APO', :new_page => true}
+    end
+    if object.can_manage_item?(current_user.roles(object.admin_policy_object.first.pid)) or current_user.is_admin or current_user.is_manager 
       buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
       buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
@@ -188,11 +189,10 @@ module ArgoHelper
         #do nothing at the moment, we arent displaying these
       else
         #add a date picker and button to change the embargo date for those who should be able to.
-        result+=render :partial => 'items/embargo_form'
+        buttons << {:label => 'Update embargo', :url => 'items/embargo_form'}
       end
     end
-    render(:partial => 'items/button_link_list', :locals => {:buttons => buttons})
-    #result.html_safe
+   buttons
   end
 
   def first_image(a)

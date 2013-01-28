@@ -35,7 +35,19 @@ class RegistrationController < ApplicationController
       format.any(:json, :xml) { render request.format.to_sym => result.flatten.sort }
     end
   end
-
+  def collection_list
+    res={}
+    apo_object = Dor.find(params[:apo_id], :lightweight => true)
+    adm_xml = apo_object.administrativeMetadata.ng_xml 
+    adm_xml.search('//registration/collection').each do |col|
+      obj=Dor.find(col['id'])
+      res[col['id']]= obj.label
+    end
+    respond_to do |format|
+      format.any(:json, :xml) { render request.format.to_sym => res }
+    end
+  end
+  
   def rights_list
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     #get the xml from the defaultObjectRights datastream

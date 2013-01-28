@@ -4,16 +4,10 @@ class ItemsController < ApplicationController
   require 'net/sftp'
 
   before_filter :create_obj, :except => [:register]
-  
-  def create_obj
-    if params[:id]
-      @object = Dor::Item.find params[:id], :lightweight => true
-    else
-      raise 'missing druid'+params.inspect
-    end
-    
-  end
-  
+  before_filter :forbid, :only => [:add_collection, :remove_collection]
+  after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update]
+
+
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
@@ -24,7 +18,7 @@ class ItemsController < ApplicationController
     end
     render :crop, :layout => 'webcrop'
   end
-  
+
   def save_crop
     @druid = params[:id].sub(/^druid:/,'')
     @image_data = JSON.parse(request.body.read)
@@ -43,19 +37,15 @@ class ItemsController < ApplicationController
   end
   def add_collection
     @object.add_collection(params[:collection])
-    @object.save
-    reindex(@object)
-      respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
-      end
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
+    end
   end
   def remove_collection
     @object.remove_collection(params[:collection])
-    @object.save
-    reindex(@object)
-       respond_to do |format|
-         format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully removed' }
-       end
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully removed' }
+    end
   end
 
   def register
@@ -87,12 +77,13 @@ class ItemsController < ApplicationController
     @history_xml=Dor::WorkflowService.get_workflow_xml 'dor', params[:id], nil
   end
   def workflow_update
+    @item=@object
     args = params.values_at(:id, :wf_name, :process, :status)
     if args.all? &:present?
       Dor::WorkflowService.update_workflow_status 'dor', *args
       @item = Dor.find params[:id]
       begin
-        @item.update_index
+        reindex(@item)
       rescue Exception => e
         Rails.logger.warn "ItemsController#workflow_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
       end
@@ -109,10 +100,9 @@ class ItemsController < ApplicationController
     if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
     else
-      @item = Dor::Item.find params[:id]
       new_date=DateTime.parse(params[:embargo_date])
-      @item.update_embargo(new_date)
-      @item.datastreams['events'].add_event("Embargo", current_user.to_s , "Embargo date modified")
+      @object.update_embargo(new_date)
+      @object.datastreams['events'].add_event("Embargo", current_user.to_s , "Embargo date modified")
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
       end
@@ -124,8 +114,7 @@ class ItemsController < ApplicationController
       return
     else
       req_params=['id','dsid','content']
-      @item = Dor::Item.find params[:id]
-      ds=@item.datastreams[params[:dsid]]
+      ds=@object.datastreams[params[:dsid]]
       #check that the content is valid xml
       begin
         content=Nokogiri::XML(params[:content]){ |config| config.strict }
@@ -133,10 +122,6 @@ class ItemsController < ApplicationController
         raise 'XML was not well formed!'
       end
       ds.content=content.to_s
-      ds.save
-      if ds.dirty?
-        raise 'datastream didnt write'
-      end
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
       end
@@ -220,8 +205,6 @@ class ItemsController < ApplicationController
       desc=params[:description]
       ds=@object.versionMetadata
       ds.update_current_version({:description => desc,:significance => severity.to_sym})
-      @object.save
-      reindex(@object)
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }  
       end
@@ -239,8 +222,6 @@ class ItemsController < ApplicationController
       @object.save
       @object.close_version
       @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")
-      @object.save
-      reindex(@object)
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }  
       end
@@ -254,8 +235,6 @@ class ItemsController < ApplicationController
     end
     @object.set_source_id(params[:new_id])
     @object.identityMetadata.dirty=true
-    @object.save
-    reindex(@object)
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for '+params[:id]+' has been updated!' }  
     end
@@ -290,8 +269,6 @@ class ItemsController < ApplicationController
       end
     end
     @object.identityMetadata.dirty=true
-    @object.save
-    reindex(@object)
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }  
     end
@@ -338,5 +315,30 @@ class ItemsController < ApplicationController
   def reindex item
     doc=item.to_solr
     Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+  end
+  def create_obj
+    if params[:id]
+      @object = Dor::Item.find params[:id], :lightweight => true
+      @apo=@object.admin_policy_object
+      if @apo.length>0
+        @apo=@apo.first.pid
+      else
+        @apo=''
+      end
+    else
+      raise 'missing druid'
+    end
+  end
+  def save_and_reindex
+    @object.save
+    reindex @object
+  end
+
+  #check that the user can carry out this item modification
+  def forbid
+    if not current_user.is_admin and not @object.can_manage_content?(current_user.roles @apo)
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    end
   end
 end

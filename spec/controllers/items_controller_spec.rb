@@ -23,6 +23,9 @@ describe ItemsController do
     @item.stub(:can_manage_item?).and_return(false)
     @item.stub(:can_manage_content?).and_return(false)
     @item.stub(:can_view_content?).and_return(false)
+    @apo=mock()
+    @apo.stub(:pid).and_return('druid:apo')
+    @item.stub(:admin_policy_object).and_return([@apo])
     Dor::SearchService.solr.stub(:add)
   end
   describe "embargo_update" do
@@ -60,7 +63,8 @@ describe "open_version" do
   version_metadata.should_receive(:update_current_version)
   @item.stub(:versionMetadata).and_return(version_metadata)
   @item.stub(:current_version).and_return('2')
-  @item.stub(:save)
+  @item.should_receive(:save)
+  Dor::SearchService.solr.should_receive(:add)
   get 'open_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
   ran.should == true
 end 
@@ -81,7 +85,8 @@ describe "close_version" do
   @item.stub(:versionMetadata).and_return(version_metadata)
   version_metadata.should_receive(:update_current_version)
   @item.stub(:current_version).and_return('2')
-  @item.stub(:save)
+  @item.should_receive(:save)
+  Dor::SearchService.solr.should_receive(:add)
   get 'close_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
   ran.should == true
 end
@@ -94,12 +99,14 @@ end
 describe "source_id" do
   it 'should update the source id' do
     @item.should_receive(:set_source_id).with('new source id')
+    Dor::SearchService.solr.should_receive(:add)
     post 'source_id', :id => 'oo201oo0001', :new_id => 'new source id'
   end
 end
 describe "tags" do
   before :each do
     @item.stub(:tags).and_return(['some:thing'])
+    Dor::SearchService.solr.should_receive(:add)
   end
   it 'should update tags' do
     @item.should_receive(:update_tag).with('some:thing', 'some:thingelse')
@@ -152,7 +159,6 @@ end
 end
 describe "replace_file" do
   it 'should recieve an uploaded file and call dor-services' do
-    #pending 'Mock isnt working correctly'
     file=mock(ActionDispatch::Http::UploadedFile)
     ran=false
     @item.stub(:replace_file) do
@@ -230,8 +236,7 @@ describe 'datastream_update' do
   it 'should call save with good xml' do
     mock_ds=mock(Dor::ContentMetadataDS)
     mock_ds.stub(:content=)
-    mock_ds.stub(:save)
-    mock_ds.should_receive(:save)
+    @item.should_receive(:save)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
     mock_ds.stub(:dirty?).and_return(false)
     post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<contentMetadata><text>hello world</text></contentMetadata>'
@@ -277,6 +282,28 @@ describe 'resource' do
     mock_ds=mock(Dor::ContentMetadataDS)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
     get 'resource', :id => 'oo201oo0001', :resource => '0001'
+  end
+end
+describe 'add_collection' do
+  it 'should add a collection' do
+    @item.should_receive(:add_collection).with('druid:1234')
+    post 'add_collection', :id => 'oo201oo0001', :collection => 'druid:1234'
+  end
+  it 'should 403 if they arent permitted' do
+    @current_user.stub(:is_admin).and_return(false)
+    post 'add_collection', :id => 'oo201oo0001', :collection => 'druid:1234'
+    response.code.should == "403"
+  end
+end
+describe 'remove_collection' do
+  it 'should remove a collection' do
+    @item.should_receive(:remove_collection).with('druid:1234')
+    post 'remove_collection', :id => 'oo201oo0001', :collection => 'druid:1234'
+  end
+  it 'should 403 if they arent permitted' do
+    @current_user.stub(:is_admin).and_return(false)
+    post 'remove_collection', :id => 'oo201oo0001', :collection => 'druid:1234'
+    response.code.should == "403"
   end
 end
 end
