@@ -1,5 +1,5 @@
 GIT
-  remote: /Users/jdeering/Documents/code/dor-services/.git
+  remote: https://github.com/sul-dlss/dor-services.git 
   revision: a66a723d7d484a6e347f383138201e5635bb4211
   branch: collection
   specs:
