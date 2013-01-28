@@ -99,11 +99,12 @@ class User < ActiveRecord::Base
     result.sort! do |a,b|
       a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
-    result.collect do |doc|
+    res=[['None', '']]
+    res+=result.collect do |doc|
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
-    arr=[['None','']]+result
-    
+    puts res.inspect
+    res
   end
   
   @groups
@@ -112,7 +113,7 @@ class User < ActiveRecord::Base
     @groups=grps
   end
   def groups
-     if @groups
+    if @groups
       return @groups
     end
     perm_keys = ["sunetid:#{self.login}"]

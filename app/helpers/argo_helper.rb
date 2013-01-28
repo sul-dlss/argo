@@ -172,7 +172,7 @@ module ArgoHelper
         buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
-    if object.methods.include? 'roleMetadata'
+    if object.methods.include? 'roleMetadata' or object.methods.include? :roleMetadata
       buttons << {:url => url_for(:controller => :apo, :action => :apo_ui, :id => pid), :label => 'Edit APO', :new_page => true}
     end
     if object.can_manage_item?(current_user.roles(object.admin_policy_object.first.pid)) or current_user.is_admin or current_user.is_manager 
