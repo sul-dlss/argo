@@ -1,5 +1,11 @@
 GIT
-  remote: /Users/jdeering/Documents/code/dor-services/.git
+  remote: https://github.com/meh/ruby-thread.git
+  revision: 1f1a6d68d8158af7c0a0509552dadfb4305d7716
+  specs:
+    thread (0.0.1)
+
+GIT
+  remote: https://github.com/sul-dlss/dor-services.git
   revision: 68d6f6ad0c060ab8aff54df7a765bb42fecf418a
   branch: collection
   specs:
@@ -25,12 +31,6 @@ GIT
       systemu
       uuidtools
       validatable
-
-GIT
-  remote: https://github.com/meh/ruby-thread.git
-  revision: 1f1a6d68d8158af7c0a0509552dadfb4305d7716
-  specs:
-    thread (0.0.1)
 
 GIT
   remote: https://github.com/sul-dlss/rack-webauth.git
