@@ -3,9 +3,9 @@ class ItemsController < ApplicationController
   require 'net/ssh'
   require 'net/sftp'
 
-  before_filter :create_obj, :except => [:register]
-  before_filter :forbid, :only => [:add_collection, :remove_collection]
-  after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update]
+  before_filter :create_obj, :except => [:register,:open_bulk]
+  before_filter :forbid, :only => [:add_collection, :remove_collection, :purge_object, :update_rights, :set_content_type]
+  after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :update_rights, :set_content_type]
 
 
   def crop
@@ -198,15 +198,24 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      @object.open_new_version
-      @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
-      @object.save
-      severity=params[:severity]
-      desc=params[:description]
-      ds=@object.versionMetadata
-      ds.update_current_version({:description => desc,:significance => severity.to_sym})
-      respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }  
+      begin
+        @object.open_new_version
+        @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
+        @object.save
+        severity=params[:severity]
+        desc=params[:description]
+        ds=@object.versionMetadata
+        ds.update_current_version({:description => desc,:significance => severity.to_sym})
+        respond_to do |format|
+          format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }  
+        end
+      rescue Exception => e
+        if e.to_s == 'Object net yet accessioned'
+        render :status=> 500, :text =>'Object net yet accessioned'
+        return
+        else
+        raise e
+        end
       end
     end
   end
@@ -292,6 +301,16 @@ class ItemsController < ApplicationController
       @content_ds = @object.datastreams['contentMetadata']
     end
   end
+  def purge_object
+    if Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
+      render :status=> :forbidden, :text =>'Cannot purge an object after it is submitted.'
+      return
+    end
+    @object.delete
+    respond_to do |format|
+      format.any { redirect_to '/', :notice => params[:id] + ' has been purged!' }  
+    end
+  end
   def update_resource
     if not current_user.is_admin and not @object.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
@@ -309,6 +328,30 @@ class ItemsController < ApplicationController
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'updated resource ' + params[:resource] + '!' }  
       end
+    end
+  end
+  def update_rights
+    if not ['Stanford','World', 'None', 'Dark'].include? params[:rights]
+      render :status=> :forbidden, :text =>'Invalid new rights setting.'
+      return
+    end
+    @object.set_rights(params[:rights])
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }  
+    end
+  end
+  def set_content_type
+    if not ['book', 'file', 'image'].include? params[:content_type]
+      render :status=> :forbidden, :text =>'Invalid new content type.'
+      return
+    end
+    if not @object.datastreams.include? 'contentMetadata'
+      render :status=> :forbidden, :text =>'Object doesnt have a content metadata datastream to update.'
+      return
+    end
+    @object.contentMetadata.set_content_type(params[:content_type], params[:resource_type])
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
     end
   end
   private 

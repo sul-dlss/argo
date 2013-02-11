@@ -6,7 +6,6 @@
     	<th class="description">Description</th>
     	<th class="count waiting">Waiting</th>
     	<th class="count hold">Hold</th>
-    	<th class="count intermediate">Intermediate</th>
     	<th class="count ready">Ready</th>
     	<th class="count errors">Error</th>
     	<th class="count skipped">Skipped</th>
@@ -18,7 +17,7 @@
 <%= render :partial => 'workflow_table_process', :collection => proc_names_for_wf(wf_name, wf_data).to_a, :as => :process_info, :locals => { :wf_data => wf_data, :wf_name => wf_name } -%>
     <tr>
       <td class="totals">&nbsp;</td>
-      <td class="totals" colspan="5">&nbsp;</td>
+      <td class="totals" colspan="4">&nbsp;</td>
       <td class="totals" colspan="3">Completed/archived workflows</td>
       <td class="totals"><%= render_workflow_archive_count('dor',wf_name) %></td>
     </tr>

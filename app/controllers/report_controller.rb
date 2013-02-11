@@ -17,9 +17,18 @@ class ReportController < CatalogController
   def rsolr_request_error(exception)
     raise exception
   end
-  
+  def bulk
+    (@response, @document_list) = get_search_results
+    
+  end
   def data
-    params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
+    #if (not params[:sidx]) or params[:sidx] == 'druid'
+    #  params[:sidx] = 'id'
+    #end
+    if not params[:sord]
+      params[:sord] = 'asc'
+    end
+    #params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i,1].max
 
@@ -38,7 +47,19 @@ class ReportController < CatalogController
       format.xml  { render :xml  => @report.report_data }
     end
   end
-
+  def pids
+    params[:per_page]=100000
+    
+    fields=['druid']
+    ids=Report.new(params,fields).pids
+    respond_to do |format|
+      format.json { 
+        render :json => {
+          :druids => ids
+        }
+      }
+    end
+  end
   def download
     fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
     params[:per_page]=10

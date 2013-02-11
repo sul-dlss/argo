@@ -33,6 +33,9 @@ class User < ActiveRecord::Base
       return @role_cache[pid]
     end
     resp = Dor::SearchService.query('id:"'+ pid+ '"')['response']['docs'].first
+    if not resp
+      resp={}
+    end
     toret=[]
     #search for group based roles
     #this is a legacy role that has to be translated
@@ -103,7 +106,6 @@ class User < ActiveRecord::Base
     res+=result.collect do |doc|
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
-    puts res.inspect
     res
   end
   

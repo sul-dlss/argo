@@ -11,6 +11,36 @@ function pathTo(path) {
   return(root + path);
 }
 
+function fetch_druids(fun)
+{
+	
+	log=document.getElementById('log');
+	log.style.display="block";
+	
+	if(document.getElementById('pids').value.length>5)
+	{
+		txt=document.getElementById('pids').value
+		druids=txt.split("\n")
+		log.innerHTML="Using "+ druids.length +" user supplied druids.\n"
+		fun(druids);
+	}
+	else{
+	
+	log.innerHTML="Fetching all "+report_model['total_rows']+" druids.\n"
+
+	$.getJSON(report_model['data_url'], function(data){
+		report_model['druids']=[]
+		$.each(data.druids, function(i,s){
+			report_model['druids'].push(s);
+			});
+			log.innerHTML=log.innerHTML+"Received "+report_model['druids'].length+" pids, starting work\n"
+			fun(report_model['druids']);
+		}).error(function(jqXhr, textStatus, error) {
+			alert("ERROR: " + textStatus + ", " + error);
+		});
+	}
+	}
+
 $(document).ready(function() {
   $('#page').wrapInner('<div id="argonauta"/>');
   $('#logo h1').remove();

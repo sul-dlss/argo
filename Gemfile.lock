@@ -1,12 +1,6 @@
 GIT
-  remote: https://github.com/meh/ruby-thread.git
-  revision: 1f1a6d68d8158af7c0a0509552dadfb4305d7716
-  specs:
-    thread (0.0.1)
-
-GIT
-  remote: https://github.com/sul-dlss/dor-services.git
-  revision: a66a723d7d484a6e347f383138201e5635bb4211
+  remote: /Users/jdeering/Documents/code/dor-services/.git
+  revision: 68d6f6ad0c060ab8aff54df7a765bb42fecf418a
   branch: collection
   specs:
     dor-services (3.20.0)
@@ -31,6 +25,12 @@ GIT
       systemu
       uuidtools
       validatable
+
+GIT
+  remote: https://github.com/meh/ruby-thread.git
+  revision: 1f1a6d68d8158af7c0a0509552dadfb4305d7716
+  specs:
+    thread (0.0.1)
 
 GIT
   remote: https://github.com/sul-dlss/rack-webauth.git
@@ -157,7 +157,7 @@ GEM
     deprecation (0.0.5)
       activesupport
     diff-lcs (1.1.3)
-    dor-workflow-service (1.2.2)
+    dor-workflow-service (1.2.3)
       activesupport
       confstruct
       nokogiri

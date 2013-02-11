@@ -14,12 +14,13 @@ module ApoHelper
     [
       ['World','World'],
       ['Stanford','Stanford'],
-      ['Dark (Preserve Only)','Dark']
+      ['Dark (Preserve Only)','Dark'],
+      ['None']
     ]
   end
   def options_for_desc_md
     [
-      ['TEI'],['MODS']
+      ['MODS'],['TEI']
       ]
   end
   def workflow_options

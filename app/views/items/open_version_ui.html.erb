@@ -1,3 +1,20 @@
+<% extra_head_content << capture do %>
+  <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
+  <script type="text/javascript">
+    report_model = {
+      total_rows: <%= @response['response']['numFound'] %>,
+      data_url: '<%=url_for(:controller => :report, :action => :pids, :format => 'json') %>'
+    }
+	function open_version(druids){
+		log=document.getElementById('log').innerHTML
+	  $.each(druids, function(i,element){
+		url=<%=url_for :controller => :items,:action => :open_version%>+'?id='+element
+		log = log + url+"\n";
+	})
+	}
+  </script>
+<% end %>
+<button onclick="fetch_druids(open_version);">Fetch Druids</button>
 <form action=<%=url_for :controller => :items,:action => :open_version, :id => @object.pid%> method="POST">
 	<label for="severity">Type</label>
 	<select id="severity" name="severity">
@@ -11,3 +28,4 @@
 	<br>
 	<button>Open</button>
 </form>
+<textarea id="log" name="log"></textaread>

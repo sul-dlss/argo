@@ -1,0 +1,182 @@
+	<% extra_head_content << capture do %>
+	<link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
+	<script type="text/javascript">
+	report_model = {
+		total_rows: <%= @response['response']['numFound'] %>,
+		data_url: <%= report_pids_url(params.merge(:format => 'json')).to_json.html_safe %>,
+		
+	}
+	function open_version(druids){
+		log=document.getElementById('log');
+		var params={
+				'severity': $('#severity').val(),
+				'description': $('#description').val(),
+		}
+		$.each(druids, function(i,element){
+			//send a request to open this object and log the success or failure
+			url='<%=url_for :controller => :items,:action => :open_version, :id => 'druid:xxxxxxxxx'%>'
+			url=url.replace('xxxxxxxxx',element);
+			var xhr=$.ajax({url: url, type: 'POST', data: params});
+				xhr.success(function(response,status,xhr) { 
+					log.innerHTML = log.innerHTML+element+' Opened'+"\n";	
+				})
+				xhr.error(function(xhr,status,err) {
+					msg='';
+					if(xhr.responseText.length<150)
+					{
+						msg=xhr.responseText;
+					}
+					if (xhr.status < 500) {
+						log.innerHTML = log.innerHTML+element+':'+status+' '+err+" : "+msg+"\n";	
+					} else {
+						log.innerHTML = log.innerHTML+element+':'+status+' '+err+" : "+msg+"\n";	
+					}
+				})
+		})
+}
+function set_content_type(druids){
+	log=document.getElementById('log');
+	var params={
+			'content_type': $('#content_type').val(),
+			'resource_type': $('#resource_type').val(),
+	}
+	$.each(druids, function(i,element){
+		//send a request to open this object and log the success or failure
+		url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'POST', data: params});
+			xhr.success(function(response,status,xhr) { 
+				log.innerHTML = log.innerHTML+element+' Updated'+"\n";	
+			})
+			xhr.error(function(xhr,status,err) {
+				msg='';
+				if(xhr.responseText.length<150)
+				{
+					msg=xhr.responseText;
+				}
+				if (xhr.status < 500) {
+					log.innerHTML = log.innerHTML+element+':'+status+' '+err+" : "+msg+"\n";	
+				} else {
+					log.innerHTML = log.innerHTML+element+':'+status+' '+err+" : "+msg+"\n";	
+				}
+			})
+	})
+}
+
+
+
+
+function purge(druids){
+	log=document.getElementById('log');
+	$.each(druids, function(i,element){
+		i=i+1;
+		//send a request to open this object and log the success or failure
+		url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+			xhr.success(function(response,status,xhr) { 
+				log.innerHTML = log.innerHTML+i+' ' +element+' Purged'+"\n";	
+			})
+			xhr.error(function(xhr,status,err) {
+				
+				msg='';
+				if(xhr.responseText.length<150)
+				{
+					msg=xhr.responseText;
+				}
+				if (xhr.status < 500) {
+					log.innerHTML = log.innerHTML+i+' ' + element+':'+status+' '+err+" : "+msg+"\n";	
+				} else {
+					log.innerHTML = log.innerHTML+i+' ' +element+':'+status+' '+err+" : "+msg+"\n";	
+				}
+			})
+	})
+}
+function reindex(druids){
+	log=document.getElementById('log');
+	$.each(druids, function(i,element){
+		i=i+1;
+		//send a request to open this object and log the success or failure
+		url='<%=url_for :controller => :dor,:action => :reindex, :pid => 'druid:xxxxxxxxx'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+			xhr.success(function(response,status,xhr) { 
+				log.innerHTML = log.innerHTML+i+' ' +element+' Reindexed'+"\n";	
+			})
+			xhr.error(function(xhr,status,err) {
+				
+				msg='';
+				if(xhr.responseText.length<150)
+				{
+					msg=xhr.responseText;
+				}
+				if (xhr.status < 500) {
+					log.innerHTML = log.innerHTML+i+' ' + element+':'+status+' '+err+" : "+msg+"\n";	
+				} else {
+					log.innerHTML = log.innerHTML+i+' ' +element+':'+status+' '+err+" : "+msg+"\n";	
+				}
+			})
+	})
+}
+
+
+</script>
+<style>
+.bulk_operation{border:1px;border-style:solid;padding:25px;margin-top:25px;}
+</style>
+<% end %>
+
+<% @page_title = "#{application_name} Search Results" %>
+  <% extra_head_content << render_opensearch_response_metadata.html_safe %>
+	<%= render :partial => 'search_form' %>
+  <% if has_search_parameters? %>
+    <%= render :partial => 'did_you_mean' %>
+    <%= render 'constraints', :localized_params=>params %>
+    <%= render 'report_view_toggle', :localized_params=>params %>
+
+  <% end %>
+  
+	<% sidebar_items << capture do %>
+    <%= render :partial=>'facets' %>
+	<% end %>
+	<h1>Bulk update operations</h1>
+	<div class="bulk_operation">
+
+	<h1>By default, the operations are carried out on all items in your search result. Paste a list of druids here to operate on them instead.</h1>
+	<br><textarea id="pids" name="pids"></textarea><br>
+	</div>
+<div class="bulk_operation">
+	<h1>Open a new version of the items so they can be modified</h1>
+	<label for="severity">Type</label>
+	<select id="severity" name="severity">
+		<option value="major">Major</option>
+		<option value="minor">Minor</option>
+		<option value="admin">Admin</option>
+	</select>
+	<br>
+	<label for="description">version description</label><br>
+	<textarea id="description" name="description" ></textarea>
+	<br>
+	<button onclick="fetch_druids(open_version);">Open objects for modification</button><br>
+
+	</div>
+<br>
+
+<div class="bulk_operation">
+	<h1>Set content and resource types</h1>
+<label>Content type</label>
+<%=select_tag :content_type, options_for_select(['image', 'book', 'file']) %><br>
+<label>Resource type</label>
+<%=select_tag :resource_type, options_for_select(['image', 'page', 'file']) %><br>
+<p>Note that the resource type is applied to all resources.</p>
+<button onclick="fetch_druids(set_content_type)">Set content types</button>
+</div>
+<div class="bulk_operation">
+<h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
+<button onclick="fetch_druids(purge);">Purge objects from fedora</button><br>
+</div>
+<div class="bulk_operation">
+	<h1>Reindex items</h1>
+<button onclick="fetch_druids(reindex);">Update solr index for objects</button>
+</div>
+<br><textarea style="display:none;width:50%" id="log" name="log"></textarea></div>

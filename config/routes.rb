@@ -22,6 +22,8 @@ Argo::Application.routes.draw do
   match '/report', :to => "report#index", :as => "report"
   match '/report/data', :to => "report#data", :as => "report_data"
   match '/report/download', :to => "report#download", :as => "report_download"
+  match '/report/bulk', :to => "report#bulk", :as => "report_bulk"
+  match 'report/pids', :to => "report#pids", :as => 'report_pids'
   match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
   
   root :to => "catalog#index"
@@ -36,9 +38,9 @@ Argo::Application.routes.draw do
   
   resources :apo do
     get 'apo_ui', :on => :member, :action => :apo_ui, :as => 'apo_ui'
-    post 'delete_role', :on => :member
+    get 'delete_role', :on => :member
     post 'add_collection', :on => :member
-    post 'delete_collection', :on => :member
+    get 'delete_collection', :on => :member
     post 'update_title', :on => :member
     post 'update_creative_commons', :on => :member
     post 'update_use', :on => :member
@@ -48,6 +50,8 @@ Argo::Application.routes.draw do
     post 'update_desc_metadata', :on => :member
     get :register, :on => :collection
     post :register, :on => :collection
+    post :update, :on => :member
+
   end
   resources :items do
     get :crop, :on => :member
@@ -77,6 +81,9 @@ Argo::Application.routes.draw do
     get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
     get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
     post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
+    get '/purge', :on => :member, :action => :purge_object
+    post '/set_content_type', :on => :member, :action => :set_content_type
+    get '/content_type', :on => :member, :action => :content_type
   end
   
   namespace :items do

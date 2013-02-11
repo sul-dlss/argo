@@ -158,11 +158,19 @@ module ArgoHelper
   def render_buttons(doc)
     pid=doc['id']
     object = Dor.find(pid)
+    apo_pid = ''
+    begin 
+      apo_id=doc['is_governed_by_s'].first.gsub('info:fedora/','')
+    rescue
+    end
     buttons=[]
     if current_user.is_admin 
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
+      end
+      if not has_been_submitted? pid
+        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page => true}
       end
     end
     if(pid and can_close_version?(pid))
@@ -173,12 +181,15 @@ module ArgoHelper
       end
     end
     if object.methods.include? 'roleMetadata' or object.methods.include? :roleMetadata
-      buttons << {:url => url_for(:controller => :apo, :action => :apo_ui, :id => pid), :label => 'Edit APO', :new_page => true}
+      buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
     end
-    if object.can_manage_item?(current_user.roles(object.admin_policy_object.first.pid)) or current_user.is_admin or current_user.is_manager 
+    if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
       buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
       buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+      if object.datastreams.include? 'contentMetadata'
+        buttons << {:url => url_for(:controller => :items, :action => :content_type, :id => pid), :label => 'Set content type'}
+      end
     end
     if(doc.has_key?('embargoMetadata_t'))
       embargo_data=doc['embargoMetadata_t']
@@ -197,7 +208,6 @@ module ArgoHelper
 
   def first_image(a)
     Array(a).find{|f| File.extname(f)=~ /jp2/}
-    #Array(a).find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
   end
 
   def render_date_pickers(field_name)

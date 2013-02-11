@@ -1,5 +1,6 @@
 <div class="reportToggle">
   <%= link_to t('blacklight.search.start_over'), url_for(:controller => 'catalog', :action=>'index'), :class => 'ui-state-default ui-corner-all' %>
+<%=link_to 'Bulk Update View', report_bulk_url(params), :class => 'ui-state-default ui-corner-all'%>
   <% case params[:controller] %>
   <% when 'catalog' %>
     <%= link_to t('argo.search.report_view'), report_url(params), :class => 'ui-state-default ui-corner-all' %>

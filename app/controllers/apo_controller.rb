@@ -1,93 +1,151 @@
 class ApoController < ApplicationController
 
   before_filter :create_obj, :except => [:register]
-  #after_filter :redirect, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata]
-  after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata]
-  
-  
+  after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role]
+
+
   def register
     if params[:title]
       #register a new apo
-      
       reg_params={}
       reg_params[:label] = params[:title]
       reg_params[:object_type] = 'adminPolicy'
       reg_params[:admin_policy] = 'druid:hv992ry2431'
-      #reg_params[:source_id] = 'apo:'+params[:title]
       response = Dor::RegistrationService.create_from_request(reg_params)
       pid = response[:pid]
       item=Dor.find(pid)
-      #item.set_copyright_statement(params[:copyright])
-      item.set_use_statement(params[:use])
-      item.set_mods_title(params[:title])
-      item.set_desc_metadata_format(params[:desc_md])
+      item.copyright_statement=params[:copyright]
+      item.use_statement=params[:use]
+      item.mods_title=params[:title]
+      item.desc_metadata_format=params[:desc_md]
+      item.agreement=params[:agreement].to_s
       if params[:collection] and params[:collection].length > 0
-        item.set_default_collection params[:collection]
+        item.add_default_collection params[:collection]
       end
-      #item.set_default_workflow(params[:workflow])
-      roleplayers=params[:roleplayer].split ','
-      role=params[:role]
-      roleplayers.each do |entity|
-        item.add_roleplayer role, entity
+      item.default_workflow=params[:workflow]
+      item.creative_commons_license = params[:cc_license]
+      item.default_rights = params[:default_object_rights]
+      managers=params[:managers].split ' '
+      viewers=params[:viewers].split ' '
+      managers.each do |manager|
+        if manager.include? 'sunetid'
+          item.add_roleplayer 'dor-apo-manager', manager, 'person'
+        else
+          item.add_roleplayer 'dor-apo-manager', manager 
+        end
       end
+      viewers.each do |viewer|
+         if viewer.include? 'sunetid'
+           item.add_roleplayer 'dor-apo-viewer', viewer, 'person'
+         else
+           item.add_roleplayer 'dor-apo-viewer', viewer 
+         end
+       end
       item.save
-      
       item.update_index
-      
       respond_to do |format|
         format.any { redirect_to catalog_path(pid), :notice => 'APO created.' }
       end
       return
     end
+    if params[:id]
+      create_obj
+      @managers=[]
+      @viewers=[]
+      if @object.roles['dor-apo-manager']
+      
+      @object.roles['dor-apo-manager'].each do |entity|
+            @managers << entity.gsub('workgroup:', '').gsub('person:', '')
+      end
+    end
+      if @object.roles['dor-apo-viewer']
+      @object.roles['dor-apo-viewer'].each do |entity|
+        @viewers << entity.gsub('workgroup:', '').gsub('person:', '')
+      end
+    end
+    end
   end
-  
+
+  def update 
+    @object.copyright_statement = params[:copyright]
+    @object.use_statement = params[:use]
+    @object.mods_title = params[:title]
+    @object.desc_metadata_format = params[:desc_md]
+    @object.agreement = params[:agreement].to_s
+    if params[:collection] and params[:collection].length > 0
+      @object.add_default_collection params[:collection]
+    end
+    @object.default_workflow=params[:workflow]
+    @object.creative_commons_license = params[:cc_license]
+    @object.default_rights = params[:default_object_rights]
+    @object.purge_roles
+    managers=params[:managers].split ' '
+    viewers=params[:viewers].split ' '
+    managers.each do |manager|
+      if manager.include? 'sunetid'
+        @object.add_roleplayer 'dor-apo-manager', manager, 'person'
+      else
+        @object.add_roleplayer 'dor-apo-manager', manager 
+      end
+    end
+    viewers.each do |viewer|
+       if viewer.include? 'sunetid'
+         @object.add_roleplayer 'dor-apo-viewer', viewer, 'person'
+       else
+         @object.add_roleplayer 'dor-apo-viewer', viewer 
+       end
+     end
+    save_and_index
+    redirect
+  end
+
   def add_roleplayer
     @object.add_roleplayer(params[:role], params[:roleplayer])
     redirect
   end
 
-  def delete_roleplayer
-    @object.delete_roleplayer(params[:role], params[:roleplayer])
+  def delete_role
+    @object.delete_role(params[:role], params[:roleplayer])
     redirect
   end
 
   def delete_collection
-    @object.delete_collection(params[:collection])
+    @object.remove_default_collection(params[:collection])
     redirect
   end
-  
+
   def add_collection
-    @object.add_collection(params[:collection])
+    @object.add_default_collection(params[:collection])
     redirect
   end
 
   def update_title
-    @object.update_title(params[:title])
+    @object.mods_title = params[:title]
     redirect
   end
 
   def update_creative_commons
-    @object.update_creative_commons(params[:creative_commons], creative_commons_options)
+    @object.creative_commons = params[:creative_commons]
     redirect
   end
-  
+
   def update_use
-    @object.update_use(params[:use])
+    @object.use_statement = params[:use]
     redirect
   end
-  
+
   def update_copyright
-    @object.update_copyright(params[:copyright])
+    @object.copyright_statement = params[:copyright]
     redirect
   end
-  
+
   def update_default_object_rights
-    @object.update_default_object_rights(params[:rights])
+    @object.default_rights = params[:rights]
     redirect
   end
-  
+
   def update_desc_metadata
-    @object.update_desc_metadata_format(params[:desc_metadata_format])
+    @object.desc_metadata_format = params[:desc_metadata_format]
     redirect
   end
 
@@ -119,8 +177,9 @@ class ApoController < ApplicationController
 
   def save_and_index
     @object.save
+    @object.update_index
   end
-  
+
   def redirect
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'APO updated.' }
