@@ -51,7 +51,7 @@ class DorController < ApplicationController
       index_logger.info "updated index for #{params[:pid]}"
       Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
       index_logger.info "updated index for #{params[:pid]}"
-      render :text => solr_doc
+      render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
     end
 
     def delete_from_index

@@ -3,9 +3,9 @@ class ItemsController < ApplicationController
   require 'net/ssh'
   require 'net/sftp'
 
-  before_filter :create_obj, :except => [:register,:open_bulk]
+  before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
   before_filter :forbid, :only => [:add_collection, :remove_collection, :purge_object, :update_rights, :set_content_type]
-  after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :update_rights, :set_content_type]
+  after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type]
 
 
   def crop
@@ -30,7 +30,32 @@ class ItemsController < ApplicationController
     }
     render :json => @image_data.to_json
   end
-
+  #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version. 
+  def prepare
+    if not Dor::WorkflowService.get_lifecycle('dor', @object.pid, 'submitted')
+      #this item hasnt been submitted yet, it can be modified
+    else
+      #this item must go though versioning, is it already open?
+      if @object.new_version_open?
+        
+      else
+      #can it be opened?
+      begin
+      @object.open_new_version
+      @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
+      @object.save
+      severity=params[:severity]
+      desc=params[:description]
+      ds=@object.versionMetadata
+      ds.update_current_version({:description => desc,:significance => severity.to_sym})
+      rescue Dor::Exception => e
+        render :status=> :precondition_failed, :text => e
+        return;
+      end
+      end
+    end
+    render :status => :ok, :text => 'All good'
+  end
   def close_version_ui
     @description = @object.datastreams['versionMetadata'].current_description
     @tag = @object.datastreams['versionMetadata'].current_tag
@@ -302,11 +327,18 @@ class ItemsController < ApplicationController
     end
   end
   def purge_object
-    if Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
+    begin
+      @object = Dor::Item.find params[:id], :lightweight => true
+    rescue
+      Dor::SearchService.solr.delete_by_id(params[:id])
+      Dor::SearchService.solr.commit
+    end
+    if Dor::WorkflowService.get_lifecycle('dor', @object.pid, 'submitted')
       render :status=> :forbidden, :text =>'Cannot purge an object after it is submitted.'
       return
     end
     @object.delete
+  
     respond_to do |format|
       format.any { redirect_to '/', :notice => params[:id] + ' has been purged!' }  
     end
@@ -330,12 +362,12 @@ class ItemsController < ApplicationController
       end
     end
   end
-  def update_rights
-    if not ['Stanford','World', 'None', 'Dark'].include? params[:rights]
+  def set_rights
+    if not ['stanford','world', 'none', 'dark'].include? params[:rights]
       render :status=> :forbidden, :text =>'Invalid new rights setting.'
       return
     end
-    @object.set_rights(params[:rights])
+    @object.set_read_rights(params[:rights])
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }  
     end

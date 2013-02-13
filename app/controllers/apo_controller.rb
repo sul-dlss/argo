@@ -19,6 +19,7 @@ class ApoController < ApplicationController
       item.mods_title=params[:title]
       item.desc_metadata_format=params[:desc_md]
       item.agreement=params[:agreement].to_s
+      item.add_tag('Registered By : ' + current_user.to_s)
       if params[:collection] and params[:collection].length > 0
         item.add_default_collection params[:collection]
       end

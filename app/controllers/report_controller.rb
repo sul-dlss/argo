@@ -19,7 +19,6 @@ class ReportController < CatalogController
   end
   def bulk
     (@response, @document_list) = get_search_results
-    
   end
   def data
     #if (not params[:sidx]) or params[:sidx] == 'druid'
@@ -47,11 +46,14 @@ class ReportController < CatalogController
       format.xml  { render :xml  => @report.report_data }
     end
   end
+  def content_types
+    
+  end
+
   def pids
     params[:per_page]=100000
-    
     fields=['druid']
-    ids=Report.new(params,fields).pids
+    ids=Report.new(params,fields).pids params
     respond_to do |format|
       format.json { 
         render :json => {

@@ -84,6 +84,9 @@ Argo::Application.routes.draw do
     get '/purge', :on => :member, :action => :purge_object
     post '/set_content_type', :on => :member, :action => :set_content_type
     get '/content_type', :on => :member, :action => :content_type
+    get '/rights', :on => :member, :action => :rights
+    post '/prepare', :on => :member, :action => :prepare
+    post '/set_rights', :on => :member, :action => :set_rights
   end
   
   namespace :items do

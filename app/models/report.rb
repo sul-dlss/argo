@@ -236,10 +236,14 @@ class Report
   def params
     @params
   end
-  def pids
+  def pids params
     toret=[]
     report_data.each do|rec|
-    toret << rec['druid']
+    if params[:source_id]
+      toret << rec['druid'].to_s+' '+rec['source_id_t'].to_s
+    else
+      toret << rec['druid']
+    end
     end
     toret
   end
