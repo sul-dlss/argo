@@ -229,6 +229,7 @@ class Report
     end
     @params = params
     @params[:page] ||= 1
+    
     (@response, @document_list) = get_search_results
     @num_found = @response['response']['numFound'].to_i
   end
@@ -238,6 +239,7 @@ class Report
   end
   def pids params
     toret=[]
+    while @document_list.length >0
     report_data.each do|rec|
     if params[:source_id]
       toret << rec['druid'].to_s+' '+rec['source_id_t'].to_s
@@ -245,6 +247,9 @@ class Report
       toret << rec['druid']
     end
     end
+    @params[:page] += 1
+    (@response, @document_list) = get_search_results
+  end
     toret
   end
   def report_data

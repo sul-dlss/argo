@@ -27,6 +27,11 @@ $(document).ready(function() {
       lightBox.dialog('option','position',['100px','100px']).dialog('option','width',$(window).width()-200).dialog('option','height',$(window).height()-200);
       $(lightBox).html(xhr.responseText)
       $("body").css("cursor", "auto");
+	$("#lightBox").position({
+	   my: "center",
+	   at: "center",
+	   of: window
+	});
       lightBox.dialog('open');
     });
     $("body").css("cursor", "progress");

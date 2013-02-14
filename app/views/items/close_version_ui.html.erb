@@ -9,5 +9,5 @@
 	<label for="description">version description</label><br>
 	<textarea id="description" name="description" ><%=@description%></textarea>
 	<br>
-	<button>Close</button>
+	<button>Close</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
 </form>

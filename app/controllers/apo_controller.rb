@@ -5,7 +5,17 @@ class ApoController < ApplicationController
 
 
   def register
+    
     if params[:title]
+      cc= {
+        'by' => 'Attribution 3.0 Unported',
+        'by_sa' => 'Attribution Share Alike 3.0 Unported',
+        'by-nd' => 'Attribution No Derivatives 3.0 Unported',
+        'by-nc' => 'Attribution Non-Commercial 3.0 Unported', 
+        'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
+        'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported', 
+      }
+      
       #register a new apo
       reg_params={}
       reg_params[:label] = params[:title]
@@ -23,8 +33,9 @@ class ApoController < ApplicationController
       if params[:collection] and params[:collection].length > 0
         item.add_default_collection params[:collection]
       end
-      item.default_workflow=params[:workflow]
+      item.default_workflow=params[:workflow] unless(not params[:workflow] or params[:workflow].length<5)
       item.creative_commons_license = params[:cc_license]
+      item.creative_commons_license_human=cc[params[:cc_license]]
       item.default_rights = params[:default_object_rights]
       managers=params[:managers].split ' '
       viewers=params[:viewers].split ' '

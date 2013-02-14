@@ -2,6 +2,10 @@
 	<%if button[:new_page]%>
 	<li><a class="button" href="<%=button[:url]%>" ><%=button[:label]%></a></li>
 	<%else%>
-	<li><a class="smallDialogLink button" href="<%=button[:url]%>" ><%=button[:label]%></a></li>
+	<%if button[:confirm]%>
+		<li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
+	<%else%>
+		<li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
+	<%end%>
 	<%end%>
 <%end%>

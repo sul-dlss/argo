@@ -7,31 +7,12 @@ report_model = {
 }
 function catalog_url(element)
 {
-	url='<%=link_to 'druid:xxxxxxxxx', url_for(:controller => :catalog,:action => :show, :id => 'druid:xxxxxxxxx'), :target => '_blank'%>'
+	url='<%=link_to 'druid:xxxxxxxxx', url_for(:controller => :catalog,:action => :show, :id => 'druid:xxxxxxxxx', :bulk => 'true'), :target => '_blank'%>'
 	url=url.replace(/xxxxxxxxx/g,element);
 	return url;
 	
 }
 function open_version(druids){
-	log=document.getElementById('log');
-	var params={
-		'severity': $('#severity').val(),
-		'description': $('#description').val(),
-	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element_url);
-		//send a request to open this object and log the success or failure
-		url='<%=url_for :controller => :items,:action => :prepare, :id => 'druid:xxxxxxxxx'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		xhr.success(function(response,status,xhr) { 
-			log.innerHTML = log.innerHTML+job_count.pop()+" "+element+' is ready'+"<br>\n";	
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function close_version(druids){
-	log=document.getElementById('log');
 	var params={
 		'severity': $('#severity').val(),
 		'description': $('#description').val(),
@@ -39,44 +20,60 @@ function close_version(druids){
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
 		//send a request to open this object and log the success or failure
-		url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx'%>'
-		url=url.replace('xxxxxxxxx',element_url);
+		url='<%=url_for :controller => :items,:action => :prepare, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
 		xhr.success(function(response,status,xhr) { 
-			log.innerHTML = log.innerHTML+job_count.pop()+" "+element+' Opened'+"<br>\n";	
+			success_handler(element_url, 'Prepared', show_buttons);
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop(),show_buttons)})
+	})
+}
+function close_version(druids){
+	var params={
+		'severity': $('#severity').val(),
+		'description': $('#description').val(),
+	}
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		//send a request to open this object and log the success or failure
+		url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'POST', data: params});
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url, 'Closed');
 		})
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
 function set_content_type(druids){
-	log=document.getElementById('log');
 	var params={
-		'content_type': $('#content_type').val(),
-		'resource_type': $('#resource_type').val(),
+		'new_content_type': $('#new_content_type').val(),
+		'new_resource_type': $('#new_resource_type').val(),
+		'old_content_type': $('#old_content_type').val(),
+		'old_resource_type': $('#old_resource_type').val()
 	}
 	$.each(druids, function(i,element){
-		i=i+1;
      	var	element_url=catalog_url(element);
 		//send a request to open this object and log the success or failure
-		url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx'%>'
-		url=url.replace('xxxxxxxxx',element_url);
+		url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
 		xhr.success(function(response,status,xhr) { 
-			log.innerHTML = log.innerHTML+job_count.pop()+" "+element_url+' Updated'+"<br>\n";	
+			success_handler(element_url, 'Updated');
 		})
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element,job_count.pop())})
 	})
 }
 function purge(druids){
-	log=document.getElementById('log');
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
 		//send a request to open this object and log the success or failure
-		url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx'%>'
+		url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'GET'});
 		xhr.success(function(response,status,xhr) { 
-			log.innerHTML = log.innerHTML+job_count.pop()+' ' +element_url+' Purged'+"<br>\n";	
+			success_handler(element_url, 'Purged');
 		})
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
@@ -116,7 +113,6 @@ function fetch_druids(fun)
 	}
 }
 function reindex(druids){
-	log=document.getElementById('log');
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
 		//send a request to open this object and log the success or failure
@@ -124,38 +120,63 @@ function reindex(druids){
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'GET'});
 		xhr.success(function(response,status,xhr) { 
-			log.innerHTML = log.innerHTML+job_count.pop()+' ' +element_url+' Reindexed'+"\n<br>";	
+			success_handler(element_url, 'Reindexed.');
+			
 		})
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
 function set_rights(druids){
-	log=document.getElementById('log');
 	var params={
-		'rights': $('#rights').val(),
+		'rights': $('#rights_select').val(),
 	}
 	$.each(druids, function(i,element){
-		element_url=catalog_url(element);
-		//send a request to open this object and log the success or failure
-		url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx'%>'
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
 		xhr.success(function(response,status,xhr) { 
-			log.innerHTML = log.innerHTML+job_count.pop()+" "+element_url+' Updated'+"<br>\n";	
+			success_handler(element_url,'Updated');
 		})
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
-function error_handler(xhr,status,err,element,index){
+//print a success message with whatever description fits the action being performed.
+function success_handler(element_url,desc,after)
+{
+	if (job_count.length == 1 && after != null)
+	{
+		after();
+	}
+	log=document.getElementById('log');
+	log.innerHTML = job_count.pop()+" "+element_url+' '+desc+"<br>\n"+log.innerHTML;
+	if (job_count.length == 0)
+	{
+		log.innerHTML = "Done!\n<br>"+log.innerHTML
+	}
+}
+function error_handler(xhr,status,err,element,index, after){
+	if (job_count.length == 1 && after != null)
+	{
+		after();
+	}
 	msg='';
 	if(xhr.responseText.length<150)
 	{
 		msg=xhr.responseText;
 	}
 	if (xhr.status < 500) {
-		log.innerHTML = log.innerHTML+index+" "+element+':'+status+' '+err+" : "+msg+"<br>\n";	
+		log.innerHTML = index+" "+element+':'+status+' '+err+" : "+msg+"<br>\n"+log.innerHTML;	
+		if (job_count.length == 0)
+		{
+			log.innerHTML = "Done!<br>\n"+log.innerHTML
+		}
 	} else {
-		log.innerHTML = log.innerHTML+index+" "+element+':'+status+' '+err+" : "+msg+"<br>\n";	
+		log.innerHTML = index+" "+element+':'+status+' '+err+" : "+msg+"<br>\n"+log.innerHTML;	
+		if (job_count.length == 0)
+		{
+			log.innerHTML = "Done!<br>\n"+log.innerHTML
+		}
 	}
 }
 function source_id(){
@@ -167,36 +188,40 @@ function source_id(){
 	last=druids.pop();
 	if(last != ''){druids.push(last);}
 	d=[]
+	for(i=druids.length;i>0;i--)
+	{
+		job_count.push(i);
+	}
 	for(i=0;i< druids.length; i++)
 	{
 		parts=druids[i].split(" ",2);
 		d.push({'druid': parts[0], 'source': parts[1]});
 	}
 	log.innerHTML="Using "+ druids.length +" user supplied druids and source ids.<br>\n"
-
 	log=document.getElementById('log');
 	$.each(d, function(i,element){
-		element_url=catalog_url(element['druid']);
-		i=i+1;
+		var element_url=catalog_url(element['druid']);
 		//send a request to open this object and log the success or failure
 		params={
 			'new_id': element['source']
 		}
-		url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx'%>'
+		url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 		url=url.replace('xxxxxxxxx',element['druid']);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
 		xhr.success(function(response,status,xhr) { 
-			log.innerHTML = log.innerHTML+i+' ' +element_url+' source id updated.'+"<br>\n";	
+			success_handler(element_url, 'Updated	');
 		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,i)})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
 function get_druids()
 {
 	log=document.getElementById('pids');
 	$('#pid_list').show(400);
+	log.innerHTML=log.innerHTML+'Fetching druids...'+"\n"
 	$.getJSON(report_model['data_url'], function(data){
-		report_model['druids']=[]
+		report_model['druids']=[];
+		log.innerHTML='';
 		$.each(data.druids, function(i,s){
 			report_model['druids'].push(s);
 			log.innerHTML=log.innerHTML+'druid:'+s+"\n"
@@ -218,6 +243,10 @@ function get_source_ids()
 		alert("ERROR: " + textStatus + ", " + error);
 	});
 }
+function show_buttons()
+{
+	$('#updates').show(400);
+}
 </script>
 <style>
 .bulk_operation{border:1px;border-style:solid;padding:25px;margin-top:25px;display:none}
@@ -231,13 +260,10 @@ function get_source_ids()
 <%= render :partial => 'did_you_mean' %>
 <%= render 'constraints', :localized_params=>params %>
 <%= render 'report_view_toggle', :localized_params=>params %>
-
 <% end %>
-
 <% sidebar_items << capture do %>
 <%= render :partial=>'facets' %>
 <% end %>
-<p><%=%></p>
 <h1>Bulk update operations</h1>
 <button onclick="get_druids();">Get druids from search</button>
 <button onclick="$('#pid_list').show(400)">Paste a druid list</button>
@@ -245,27 +271,29 @@ function get_source_ids()
 	<h1>Druids</h1>
 	<p>Bulk actions will be performed on this list of druids. Modify the list of paste a list of druids here to operate on them instead.</p>
 	<br><textarea id="pids" name="pids"></textarea><br>
-	<button onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
+	<button onclick="$('#open').show(400);">Prepare objects</button>
+	<button onclick="$('#close').show(400)">Close versions</button>
 	<button onclick="$('#reindex').show(400)">Reindex</button>
 	<button onclick="$('#purge').show(400)">Purge</button>
-	<button onclick="$('#open').show(400)">Open version</button>
-	<button onclick="$('#close').show(400)">Close version</button>
-	<button onclick="$('#content_type').show(400)">Content type</button>
-	<button onclick="$('#rights').show(400)">Object rights</button>
+	<div style="display:none" id="updates" name="updates">
+		<button onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
+		<button onclick="$('#content_type').show(400)">Content type</button>
+		<button onclick="$('#rights').show(400)">Object rights</button>
+	</div>
 </div>
 <div class="bulk_operation" id="open" name="open">
-	<h1>Open a new version of the items so they can be modified</h1>
-	<label for="severity">Type</label>
+	<h1>Open new versions if needed</h1>
+	<label for="severity">Change type</label>
 	<select id="severity" name="severity">
 		<option value="major">Major</option>
 		<option value="minor">Minor</option>
 		<option value="admin">Admin</option>
 	</select>
 	<br>
-	<label for="description">version description</label><br>
+	<label for="description">Change description</label><br>
 	<textarea id="description" name="description" ></textarea>
 	<br>
-	<button onclick="fetch_druids(open_version);">Open objects for modification</button><br>
+	<button onclick="fetch_druids(open_version);$('#open').hide(400);">Prepare objects for modification</button><br>
 </div>
 <br>
 
@@ -302,13 +330,13 @@ function get_source_ids()
 	<h1>Set content and resource types</h1>
 	<p>This searches for items with the old content type and changes them to the new content type, along with changing any resources of the old type to the new type.</p>
 	<label>Old content type</label>
-	<%=select_tag :content_type, options_for_select(current_content_types) %><br>
+	<%=select_tag :old_content_type, options_for_select(current_content_types) %><br>
 	<label>Old resource type</label>
-	<%=select_tag :resource_type, options_for_select(resource_types) %><br>
+	<%=select_tag :old_resource_type, options_for_select(resource_types) %><br>
 	<label>New content type</label>
-	<%=select_tag :content_type, options_for_select(content_types) %><br>
+	<%=select_tag :new_content_type, options_for_select(content_types) %><br>
 	<label>New resource type</label>
-	<%=select_tag :resource_type, options_for_select(resource_types) %><br>
+	<%=select_tag :new_resource_type, options_for_select(resource_types) %><br>
 	<button onclick="fetch_druids(set_content_type)">Set content types</button>
 </div>
 <div class="bulk_operation" id="purge" name="purge">
@@ -327,7 +355,7 @@ function get_source_ids()
 </div>
 <div class="bulk_operation" id="rights" name="rights">
 	<h1>Set object rights</h1>
-	<%=select_tag :rights, options_for_select(['world','stanford', 'none', 'dark'])%>
+	<%=select_tag :rights_select, options_for_select(['world','stanford', 'none', 'dark'])%>
 	<button id="rights_button" name="rights_button" onclick="fetch_druids(set_rights);">Set rights</button>
 </div>
 <br><div style="display:none;width:50%" id="log" name="log"></div></div>

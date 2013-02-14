@@ -51,7 +51,8 @@ class ReportController < CatalogController
   end
 
   def pids
-    params[:per_page]=100000
+    #params[:per_page]=100
+    #params[:rows]=100
     fields=['druid']
     ids=Report.new(params,fields).pids params
     respond_to do |format|

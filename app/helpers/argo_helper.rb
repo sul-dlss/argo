@@ -170,7 +170,7 @@ module ArgoHelper
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
       if not has_been_submitted? pid
-        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page => true}
+        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
       end
     end
     if(pid and can_close_version?(pid))
