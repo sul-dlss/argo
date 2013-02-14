@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
   require 'net/ssh'
   require 'net/sftp'
 
-  before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
+  before_filter :create_obj, :except => [:register,:open_bulk, :purge_object,:prepare]
   before_filter :forbid, :only => [:add_collection, :remove_collection, :purge_object, :update_rights, :set_content_type]
   after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type]
 
@@ -32,15 +32,17 @@ class ItemsController < ApplicationController
   end
   #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version. 
   def prepare
-    if not Dor::WorkflowService.get_lifecycle('dor', @object.pid, 'submitted')
+    if not Dor::WorkflowService.get_lifecycle('dor', params[:id], 'submitted')
       #this item hasnt been submitted yet, it can be modified
     else
       #this item must go though versioning, is it already open?
+      @object=dor.find(params[:id])
       if @object.new_version_open?
         
       else
       #can it be opened?
       begin
+        
       @object.open_new_version
       @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
       @object.save
@@ -267,7 +269,9 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
-    @object.set_source_id(params[:new_id])
+    new_id=params[:new_id]
+    new_id=new_id.gsub(' ','').gsub(':',' : ')
+    @object.set_source_id(new_id)
     @object.identityMetadata.dirty=true
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for '+params[:id]+' has been updated!' }  
@@ -373,7 +377,7 @@ class ItemsController < ApplicationController
     end
   end
   def set_content_type
-    if not ['book', 'file', 'image'].include? params[:content_type]
+    if not ['book', 'file', 'image','map','manuscript'].include? params[:new_content_type]
       render :status=> :forbidden, :text =>'Invalid new content type.'
       return
     end
@@ -381,7 +385,7 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'Object doesnt have a content metadata datastream to update.'
       return
     end
-    @object.contentMetadata.set_content_type(params[:content_type], params[:resource_type])
+    @object.contentMetadata.set_content_type(params[:old_content_type], params[:old_resource_type], params[:new_content_type], params[:new_resource_type])
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
     end
@@ -406,7 +410,7 @@ class ItemsController < ApplicationController
   end
   def save_and_reindex
     @object.save
-    reindex @object
+    reindex @object unless(params[:bulk])
   end
 
   #check that the user can carry out this item modification
