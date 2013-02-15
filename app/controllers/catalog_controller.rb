@@ -35,7 +35,7 @@ class CatalogController < ApplicationController
     config.show.heading = 'obj_label_t'
     config.show.display_type = 'objectType_t'
     config.show.sections = {
-      :default => ['identification','datastreams','history', 'contents'],
+      :default => ['identification','datastreams','history'],
       :item    => ['identification','datastreams','history','contents','child_objects']
     }
     config.show.section_links = {

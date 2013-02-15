@@ -3,6 +3,6 @@ module ReportHelper
     ['image', 'book', 'file', 'manuscript', 'map']
   end
   def resource_types
-    ['image', 'book', 'file']
+    ['image', 'page', 'file']
   end
 end
