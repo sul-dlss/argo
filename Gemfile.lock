@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 68d6f6ad0c060ab8aff54df7a765bb42fecf418a
+  revision: b621cee4050fe9ee3360567f922ecd04c5988118 
   branch: collection
   specs:
     dor-services (3.20.0)
