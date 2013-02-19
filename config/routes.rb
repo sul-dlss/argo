@@ -87,6 +87,7 @@ Argo::Application.routes.draw do
     get '/rights', :on => :member, :action => :rights
     post '/prepare', :on => :member, :action => :prepare
     post '/set_rights', :on => :member, :action => :set_rights
+    get '/preserved_file', :on => :member, :action => :get_preserved_file
   end
   
   namespace :items do

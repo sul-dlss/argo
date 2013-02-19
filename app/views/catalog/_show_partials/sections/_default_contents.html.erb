@@ -47,7 +47,7 @@
 											<% child.xpath('file').each do |file| %>
 											<li class="file">
 												<span class="label">File</span>
-												<%if can_manage and workspace_files.include?(file['id']) %>
+												<%if can_manage %>
 												<% 
 												link='/items/'+params[:id]+'/file_list/?file='+file['id']
 												%>
@@ -68,7 +68,7 @@
 										<% resource.xpath('file').each do |file| %>
 										<li class="file">
 											<span class="label">File</span>
-											<%if can_view and workspace_files.include?(file['id']) %>
+											<%if can_view %>
 											<% 
 											link='/items/'+params[:id]+'/file_list/?file='+file['id']
 											%>

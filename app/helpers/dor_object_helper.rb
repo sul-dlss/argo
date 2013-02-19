@@ -204,6 +204,10 @@ module DorObjectHelper
     def has_been_submitted? pid
       Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
     end
+    def has_been_accessioned? pid
+      Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
+    end  
+    
 
     def can_open_version? pid
       if not (Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))

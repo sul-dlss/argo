@@ -172,20 +172,24 @@ class ItemsController < ApplicationController
 
       preservation_user = 'fedoraAdmin'
       preservation_password = 'fedoraAdmin'
-      add=preservation_server+params[:file]+"?version=1"
+      file=params[:file]
+      file=URI.encode(params[:file])
+      add=preservation_server+file+"?version=1"
       uri = URI(add)
       req = Net::HTTP::Get.new(uri.request_uri)
       req.basic_auth 'fedoraAdmin','fedoraAdmin'
       res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') {|http|
         http.request(req)
       }
-  if res.code == 403
-  raise 'forbidden'
-  end
-      self.response.headers["Content-Type"] = "application/octet-stream"
-      self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
-      self.response.headers['Last-Modified'] = Time.now.ctime.to_s
-      self.response_body = res.body
+      case res
+      when Net::HTTPSuccess then
+        self.response.headers["Content-Type"] = "application/octet-stream"
+        self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
+        self.response.headers['Last-Modified'] = Time.now.ctime.to_s
+        self.response_body = res.body
+      else
+        raise response.value
+      end
     end
     def save_crop
       @druid = params[:id].sub(/^druid:/,'')
