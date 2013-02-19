@@ -165,14 +165,18 @@ function error_handler(xhr,status,err,element,index, after){
 	{
 		msg=xhr.responseText;
 	}
+	else
+	{
+		msg=err;
+	}
 	if (xhr.status < 500) {
-		log.innerHTML = index+" "+element+':'+status+' '+err+" : "+msg+"<br>\n"+log.innerHTML;	
+		log.innerHTML = index+" "+element+':'+status+' '+" : "+msg+"<br>\n"+log.innerHTML;	
 		if (job_count.length == 0)
 		{
 			log.innerHTML = "Done!<br>\n"+log.innerHTML
 		}
 	} else {
-		log.innerHTML = index+" "+element+':'+status+' '+err+" : "+msg+"<br>\n"+log.innerHTML;	
+		log.innerHTML = index+" "+element+':'+status+' '+" : "+msg+"<br>\n"+log.innerHTML;	
 		if (job_count.length == 0)
 		{
 			log.innerHTML = "Done!<br>\n"+log.innerHTML
@@ -265,19 +269,19 @@ function show_buttons()
 <%= render :partial=>'facets' %>
 <% end %>
 <h1>Bulk update operations</h1>
-<button onclick="get_druids();">Get druids from search</button>
+<button id="get_druids" name="get_druids" onclick="get_druids();">Get druids from search</button>
 <button onclick="$('#pid_list').show(400)">Paste a druid list</button>
 <div id="pid_list" name="pid_list" style="display:none;" class="bulk_operation">
 	<h1>Druids</h1>
 	<p>Bulk actions will be performed on this list of druids. Modify the list of paste a list of druids here to operate on them instead.</p>
 	<br><textarea id="pids" name="pids"></textarea><br>
-	<button onclick="$('#open').show(400);">Prepare objects</button>
+	<button id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</button>
 	<button onclick="$('#close').show(400)">Close versions</button>
-	<button onclick="$('#reindex').show(400)">Reindex</button>
+	<button id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
 	<button onclick="$('#purge').show(400)">Purge</button>
 	<div style="display:none" id="updates" name="updates">
 		<label>Object Updates</label><br>
-		<button onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
+		<button id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
 		<button onclick="$('#content_type').show(400)">Content type</button>
 		<button onclick="$('#rights').show(400)">Object rights</button>
 	</div>
@@ -294,7 +298,7 @@ function show_buttons()
 	<label for="description">Change description</label><br>
 	<textarea id="description" name="description" ></textarea>
 	<br>
-	<button onclick="fetch_druids(open_version);$('#open').hide(400);">Prepare objects for modification</button><br>
+	<button id="prepare_button" name="prepare_button" onclick="fetch_druids(open_version);$('#open').hide(400);">Prepare objects for modification</button><br>
 </div>
 <br>
 
@@ -346,7 +350,7 @@ function show_buttons()
 </div>
 <div class="bulk_operation" id="reindex" name="reindex">
 	<h1>Reindex items</h1>
-	<button id="reindex" name="reindex" onclick="fetch_druids(reindex);">Update solr index for objects</button>
+	<button id="reindex_button" name="reindex_button" onclick="fetch_druids(reindex);">Update solr index for objects</button>
 </div>
 <div class="bulk_operation" id="source_id">
 	<h1>Change source id</h1>

@@ -98,9 +98,9 @@ end
 end
 describe "source_id" do
   it 'should update the source id' do
-    @item.should_receive(:set_source_id).with('new source id')
+    @item.should_receive(:set_source_id).with('new : source_id')
     Dor::SearchService.solr.should_receive(:add)
-    post 'source_id', :id => 'oo201oo0001', :new_id => 'new source id'
+    post 'source_id', :id => 'oo201oo0001', :new_id => 'new:source_id'
   end
 end
 describe "tags" do

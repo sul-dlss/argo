@@ -3,7 +3,7 @@ class ItemsController < ApplicationController
   require 'net/ssh'
   require 'net/sftp'
 
-  before_filter :create_obj, :except => [:register,:open_bulk, :purge_object,:prepare]
+  before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
   before_filter :forbid, :only => [:add_collection, :remove_collection, :purge_object, :update_rights, :set_content_type]
   after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type]
 
@@ -32,28 +32,27 @@ class ItemsController < ApplicationController
   end
   #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version. 
   def prepare
-    if not Dor::WorkflowService.get_lifecycle('dor', params[:id], 'submitted')
+    if not Dor::WorkflowService.get_lifecycle('dor', params[:id], 'submitted' )
       #this item hasnt been submitted yet, it can be modified
     else
       #this item must go though versioning, is it already open?
-      @object=dor.find(params[:id])
       if @object.new_version_open?
-        
+
       else
-      #can it be opened?
-      begin
-        
-      @object.open_new_version
-      @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
-      @object.save
-      severity=params[:severity]
-      desc=params[:description]
-      ds=@object.versionMetadata
-      ds.update_current_version({:description => desc,:significance => severity.to_sym})
-      rescue Dor::Exception => e
-        render :status=> :precondition_failed, :text => e
-        return;
-      end
+        #can it be opened?
+        begin
+
+          @object.open_new_version
+          @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
+          @object.save
+          severity=params[:severity]
+          desc=params[:description]
+          ds=@object.versionMetadata
+          ds.update_current_version({:description => desc,:significance => severity.to_sym})
+        rescue Dor::Exception => e
+          render :status=> :precondition_failed, :text => e
+          return;
+        end
       end
     end
     render :status => :ok, :text => 'All good'
@@ -167,6 +166,39 @@ class ItemsController < ApplicationController
       self.response_body = data
     end	  
   end
+  def get_preserved_file
+      'https://sdr-services-test.stanford.edu/sdr/objects/druid:oo000vt0001/content/HEBARD%20DISSERTATION%208-26%201226.pdf?version=2'
+      preservation_server='https://sdr-services-test.stanford.edu/sdr/objects/'+@object.pid+"/content/"
+
+      preservation_user = 'fedoraAdmin'
+      preservation_password = 'fedoraAdmin'
+      add=preservation_server+params[:file]+"?version=1"
+      uri = URI(add)
+      req = Net::HTTP::Get.new(uri.request_uri)
+      req.basic_auth 'fedoraAdmin','fedoraAdmin'
+      res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') {|http|
+        http.request(req)
+      }
+  if res.code == 403
+  raise 'forbidden'
+  end
+      self.response.headers["Content-Type"] = "application/octet-stream"
+      self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
+      self.response.headers['Last-Modified'] = Time.now.ctime.to_s
+      self.response_body = res.body
+    end
+    def save_crop
+      @druid = params[:id].sub(/^druid:/,'')
+      @image_data = JSON.parse(request.body.read)
+      @image_data.each { |file_data|
+        file_data.symbolize_keys!
+        file_data[:cropCoords].symbolize_keys! if file_data.has_key?(:cropCoords)
+        file = Legacy::File.find(file_data[:id])
+        file.webcrop = file_data
+      }
+      render :json => @image_data.to_json
+    end
+
   def update_attributes
     item=Dor::Item.find(params[:id])
     if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
@@ -238,10 +270,10 @@ class ItemsController < ApplicationController
         end
       rescue Exception => e
         if e.to_s == 'Object net yet accessioned'
-        render :status=> 500, :text =>'Object net yet accessioned'
-        return
+          render :status=> 500, :text =>'Object net yet accessioned'
+          return
         else
-        raise e
+          raise e
         end
       end
     end
@@ -342,7 +374,7 @@ class ItemsController < ApplicationController
       return
     end
     @object.delete
-  
+
     respond_to do |format|
       format.any { redirect_to '/', :notice => params[:id] + ' has been purged!' }  
     end
@@ -397,12 +429,17 @@ class ItemsController < ApplicationController
   end
   def create_obj
     if params[:id]
-      @object = Dor::Item.find params[:id], :lightweight => true
-      @apo=@object.admin_policy_object
-      if @apo.length>0
-        @apo=@apo.first.pid
-      else
-        @apo=''
+      begin
+        @object = Dor::Item.find params[:id], :lightweight => true
+        @apo=@object.admin_policy_object
+        if @apo.length>0
+          @apo=@apo.first.pid
+        else
+          @apo=''
+        end
+      rescue ActiveFedora::ObjectNotFoundError => e
+        render :status=> 500, :text =>'Object doesnt exist in Fedora.'
+        return
       end
     else
       raise 'missing druid'

@@ -38,7 +38,7 @@ describe ArgoHelper do
     it 'should create a hash with the needed button info for an admin' do
        helper.render_buttons(@doc).should == [{:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
-         {:label=>"Purge", :new_page=>true, :url=>"/items/something/purge"},
+         {:label=>"Purge", :confirm => "This object will be permanently purged from DOR. This action cannot be undone. Are you sure?", :url=>"/items/something/purge"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
          {:label=>"Edit collections", :url=>"/items/something/collection_ui"},
@@ -57,7 +57,7 @@ describe ArgoHelper do
       @doc['embargoMetadata_t'] = ['2012-10-19T00:00:00Z']
       helper.render_buttons(@doc).should == [{:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
-         {:label=>"Purge", :new_page=>true, :url=>"/items/something/purge"},
+         {:label=>"Purge", :confirm => "This object will be permanently purged from DOR. This action cannot be undone. Are you sure?", :url=>"/items/something/purge"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
          {:label=>"Edit collections", :url=>"/items/something/collection_ui"},
