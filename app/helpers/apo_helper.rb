@@ -23,6 +23,9 @@ module ApoHelper
       ['MODS'],['TEI']
       ]
   end
+  def metadata_sources
+  [['Symphony'],['DOR'],['MDToolkit']]
+  end
   def workflow_options
      q = 'objectType_t:workflow '
       qrys=[]

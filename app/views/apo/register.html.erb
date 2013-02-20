@@ -1,6 +1,6 @@
 <% @title = "Register APO" %>
 <div style="width:1052px;background-color:0000cc;color:white;font-size:3em;">
-	<span style="margin-left:50px;">Register APO</span>
+	<span style="margin-left:50px;"><%=@object ? 'Edit APO' : 'Register APO'%></span>
 	</div>
 <div style="width:950px; background:white; margin-top:0px;margin-bottom:50px;padding-left:50px;padding-right:50px;border:1px;border-style:solid"%>
 	
@@ -26,21 +26,25 @@ end
 <br><div class="register-div">
 	<label>Descriptive Metadata format</label><br>
 		<%=select_tag :desc_md, options_for_select(options_for_desc_md, @object ? @object.desc_metadata_format : 'MODS')%>
+		<%=select_tag :metadata_source, options_for_select(metadata_sources,@object ? @object.metadata_source : 'DOR')%>
 </div>
 
 <br><div class="register-div">
 	<label>Roles</label><br>
 	<p>These roles govern access to all objects registered under this APO.<br>
-	        Provide one or more workgroups as <span style="font-style:italic">stem</span>:<span style="font-style:italic">groupname</span> (e.g., "dlss:dpg-staff") or sunetids as sunetid:<span style="font-style:italic">value</span> (e.g., "sunetid:jsmith").<br>
-	        The default groups shown should be included unless they are to be explicitly excluded.<br>
-	        Values may be separate by commas, spaces or new lines.</p>
+		<ul><li>
+	        Provide one or more workgroups as <span style="font-style:italic">stem</span>:<span style="font-style:italic">groupname</span> (e.g., "dlss:dpg-staff") or sunetids as sunetid:<span style="font-style:italic">value</span> (e.g., "sunetid:jsmith").</li>
+	        <li>The default groups shown should be included unless they are to be explicitly excluded.</li>
+	        <li>Values may be separate by commas, spaces or new lines.</li>
+		<li>Common workgroups:  dlss:dpg-staff  dlss:dpg-hourlies  dlss:forensics-staff  dlss:smpl-staff  sulair:map-staff  sulair:map-hourlies</li>
+	</ul>
 	<div class="register-label-div">Manager</div><input id="managers" name="managers" type="text" style="width:90%" value="<%= @object ? @managers.join(' ') : 'dlss:developers dlss:pmag-staff'%>"/><br>
 	<p class="help" style="margin-left:60px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
 	<div class="register-label-div">Viewer</div><input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @object ? @viewers : ''%>"/>
 	<p class="help" style="margin-left:60px;font-size:.8em">View only access to the objects</p>
 </div>
 <div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
-<label>Object defaults</label>
+<label style="font-size:1.2em">Object defaults</label>
 <p>The following defaults will apply to all newly registered objects.</p>
 </div>
 <div class="register-div">
@@ -75,5 +79,5 @@ end
 
 <button id="register" name="register"><%=@object ? 'Update APO' : 'Register APO' %></button>
 <%end%>
-<%=button_to 'Cancel', '/'%>
+<%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/' %>
 </div>

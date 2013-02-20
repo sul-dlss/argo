@@ -3,18 +3,19 @@ class ApoController < ApplicationController
   before_filter :create_obj, :except => [:register]
   after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role]
 
-
+  
   def register
-    
+    param_cleanup params
+    @cc= {
+      'by' => 'Attribution 3.0 Unported',
+      'by_sa' => 'Attribution Share Alike 3.0 Unported',
+      'by-nd' => 'Attribution No Derivatives 3.0 Unported',
+      'by-nc' => 'Attribution Non-Commercial 3.0 Unported', 
+      'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported', 
+    }
     if params[:title]
-      cc= {
-        'by' => 'Attribution 3.0 Unported',
-        'by_sa' => 'Attribution Share Alike 3.0 Unported',
-        'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-        'by-nc' => 'Attribution Non-Commercial 3.0 Unported', 
-        'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-        'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported', 
-      }
+      
       
       #register a new apo
       reg_params={}
@@ -28,14 +29,15 @@ class ApoController < ApplicationController
       item.use_statement=params[:use]
       item.mods_title=params[:title]
       item.desc_metadata_format=params[:desc_md]
+      item.metadata_source=params[:metadata_source]
       item.agreement=params[:agreement].to_s
-      item.add_tag('Registered By : ' + current_user.to_s)
+      item.add_tag('Registered By : ' + current_user.login)
       if params[:collection] and params[:collection].length > 0
         item.add_default_collection params[:collection]
       end
       item.default_workflow=params[:workflow] unless(not params[:workflow] or params[:workflow].length<5)
       item.creative_commons_license = params[:cc_license]
-      item.creative_commons_license_human=cc[params[:cc_license]]
+      item.creative_commons_license_human=@cc[params[:cc_license]]
       item.default_rights = params[:default_object_rights]
       managers=params[:managers].split ' '
       viewers=params[:viewers].split ' '
@@ -77,18 +79,33 @@ class ApoController < ApplicationController
     end
     end
   end
-
+  def param_cleanup params
+    params[:title].strip! unless not params[:title]
+    params[:managers]=params[:managers].gsub('\n',' ').gsub(',',' ') unless not params[:managers]
+    params[:viewers]=params[:viewers].gsub('\n',' ').gsub(',',' ') unless not params[:viewers]
+  end
   def update 
+    @cc= {
+      'by' => 'Attribution 3.0 Unported',
+      'by_sa' => 'Attribution Share Alike 3.0 Unported',
+      'by-nd' => 'Attribution No Derivatives 3.0 Unported',
+      'by-nc' => 'Attribution Non-Commercial 3.0 Unported', 
+      'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported', 
+    }
     @object.copyright_statement = params[:copyright]
     @object.use_statement = params[:use]
     @object.mods_title = params[:title]
     @object.desc_metadata_format = params[:desc_md]
+    @object.metadata_source=params[:metadata_source]
     @object.agreement = params[:agreement].to_s
     if params[:collection] and params[:collection].length > 0
       @object.add_default_collection params[:collection]
     end
     @object.default_workflow=params[:workflow]
     @object.creative_commons_license = params[:cc_license]
+    @object.creative_commons_license_human=@cc[params[:cc_license]]
+    
     @object.default_rights = params[:default_object_rights]
     @object.purge_roles
     managers=params[:managers].split ' '

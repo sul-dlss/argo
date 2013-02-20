@@ -242,7 +242,7 @@ class Report
     while @document_list.length >0
     report_data.each do|rec|
     if params[:source_id]
-      toret << rec['druid'].to_s+' '+rec['source_id_t'].to_s
+      toret << rec['druid'].to_s+"\t"+rec['source_id_t'].to_s
     else
       toret << rec['druid']
     end

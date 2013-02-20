@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
   require 'net/sftp'
 
   before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
-  before_filter :forbid, :only => [:add_collection, :remove_collection, :purge_object, :update_rights, :set_content_type]
+  before_filter :forbid, :only => [:add_collection, :remove_collection, :purge_object, :update_rights, :set_content_type, :preserved_file]
   after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type]
 
 
@@ -167,20 +167,7 @@ class ItemsController < ApplicationController
     end	  
   end
   def get_preserved_file
-      'https://sdr-services-test.stanford.edu/sdr/objects/druid:oo000vt0001/content/HEBARD%20DISSERTATION%208-26%201226.pdf?version=2'
-      preservation_server='https://sdr-services-test.stanford.edu/sdr/objects/'+@object.pid+"/content/"
-
-      preservation_user = 'fedoraAdmin'
-      preservation_password = 'fedoraAdmin'
-      file=params[:file]
-      file=URI.encode(params[:file])
-      add=preservation_server+file+"?version=1"
-      uri = URI(add)
-      req = Net::HTTP::Get.new(uri.request_uri)
-      req.basic_auth 'fedoraAdmin','fedoraAdmin'
-      res = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') {|http|
-        http.request(req)
-      }
+      res=@object.get_preserved_file params[:file], params[:version]
       case res
       when Net::HTTPSuccess then
         self.response.headers["Content-Type"] = "application/octet-stream"
@@ -188,7 +175,7 @@ class ItemsController < ApplicationController
         self.response.headers['Last-Modified'] = Time.now.ctime.to_s
         self.response_body = res.body
       else
-        raise response.value
+        raise res.value
       end
     end
     def save_crop
@@ -305,8 +292,7 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
-    new_id=params[:new_id]
-    new_id=new_id.gsub(' ','').gsub(':',' : ')
+    new_id=params[:new_id].strip
     @object.set_source_id(new_id)
     @object.identityMetadata.dirty=true
     respond_to do |format|
