@@ -23,7 +23,7 @@ module ApoHelper
       ['MODS'],['TEI']
       ]
   end
-  def metadata_sources
+  def apo_metadata_sources
   [['Symphony'],['DOR'],['MDToolkit']]
   end
   def workflow_options

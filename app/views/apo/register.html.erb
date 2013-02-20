@@ -26,7 +26,7 @@ end
 <br><div class="register-div">
 	<label>Descriptive Metadata format</label><br>
 		<%=select_tag :desc_md, options_for_select(options_for_desc_md, @object ? @object.desc_metadata_format : 'MODS')%>
-		<%=select_tag :metadata_source, options_for_select(metadata_sources,@object ? @object.metadata_source : 'DOR')%>
+		<%=select_tag :metadata_source, options_for_select(apo_metadata_sources,@object ? @object.metadata_source : 'DOR')%>
 </div>
 
 <br><div class="register-div">
