@@ -320,7 +320,7 @@ GEM
       rspec-mocks (~> 2.12.0)
     ruby-cache (0.3.0)
     ruby-graphviz (1.0.8)
-    ruby-prof (0.12.0)
+    ruby-prof (0.12.2)
     ruby-rc4 (0.1.5)
     rubydora (0.5.13)
       activemodel
