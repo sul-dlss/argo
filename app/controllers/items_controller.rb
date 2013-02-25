@@ -32,9 +32,21 @@ class ItemsController < ApplicationController
     }
     render :json => @image_data.to_json
   end
+  def on_hold
+    begin
+    if (Dor::WorkflowService.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (Dor::WorkflowService.workflows.include?('accessionWF') not Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
+      true
+    else
+      false
+    end
+  rescue
+    return false
+  end
+  end
   #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version. 
   def prepare
-    if @object.allows_modification?
+    
+    if not  Dor::WorkflowService.get_lifecycle('dor', @object.pid, 'submitted' ) or on_hold
       #this item hasnt been submitted yet, it can be modified
     else
       #this item must go though versioning, is it already open?

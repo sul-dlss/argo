@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 46aca71c7c2efa0c02f33f36d151af05b1bc53c8 
+  revision: 44ac68307e758dc29c446008cab271811cb3936f 
   specs:
     dor-services (3.24.0)
       active-fedora (~> 4.5)
