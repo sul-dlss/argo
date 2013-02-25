@@ -17,7 +17,7 @@ module ArgoHelper
       @response, @document = get_solr_response_for_doc_id
     end
   end
-  
+
   def index_queue_depth
     url=Dor::Config.status.indexer_url
     data=JSON.parse(open(url).read)
@@ -52,7 +52,7 @@ module ArgoHelper
     RSolr::Ext::Response::Facets::FacetField.new facet_name, items
   end
 
- 
+
   def render_index_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
@@ -139,6 +139,63 @@ module ArgoHelper
       result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc,:object=>dor_object,:format=>format,:section=>section_name,:collapsible=>(index > 0)})
     end
     return result.html_safe
+  end
+
+  def render_buttons(doc, object)
+    result='<ul>'
+    pid=doc['id']
+    object=Dor::Item.find(pid)
+    apo_pid=doc['is_governed_by_s']
+    if apo_pid
+      apo_pid=apo_pid.first.split(/\//).last
+    else
+      apo_pid='none'
+    end
+    if current_user.is_admin 
+      result+='<li><a class="smallDialogLink button" href="' + url_for(:controller => :dor,:action => :reindex, :pid => pid)+'">Reindex</a></li>'
+      if has_been_published? pid
+        result+='<li><a class="smallDialogLink button" href=' + url_for(:controller => :dor,:action => :republish, :pid => pid) + '>Republish</a></li>'
+      end
+      accessionComplete = true
+      obj=Dor::Item.find(pid)
+      wf=obj.workflows.get_workflow('accessionWF','dor')
+      wf.processes.each do |proc|
+        if proc.status != 'completed'
+          accessionComplete = false
+        end
+      end
+      if wf.processes.length==0
+        accessionComplete=false
+      end
+      if accessionComplete
+        result+='<li><a class="smallDialogLink button" href="' + url_for(:controller => :dor,:action => :archive_workflows, :pid => pid) + '">Archive accessionWF</a></li>'
+      end
+    end
+    if(pid and can_close_version?(pid))
+      result+='<li><a class="smallDialogLink button" href=' + '/items/'+pid+'/close_version_ui' + '>Close Version</a></li>'
+    else
+      if pid and can_open_version?(pid)
+        result+='<li><a class="smallDialogLink button" href=' + '/items/'+pid+'/open_version_ui' + '>Open for modification</a></li>'
+      end
+    end
+    if object.can_manage_item?(current_user.roles apo_pid) or current_user.is_admin or current_user.is_manager 
+      result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/source_id_ui' + '>Change source id</a></li>'
+      result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/tags_ui' + '>Edit tags</a></li>'
+    end
+    if(doc.has_key?('embargoMetadata_t'))
+      embargo_data=doc['embargoMetadata_t']
+      text=embargo_data.split.first
+      date=embargo_data.split.last
+
+      if text == 'released'
+        #do nothing at the moment, we arent displaying these
+      else
+        #add a date picker and button to change the embargo date for those who should be able to.
+        result+=render :partial => 'items/embargo_form'
+      end
+    end
+
+    result.html_safe
   end
 
   def first_image(a)

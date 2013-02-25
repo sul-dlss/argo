@@ -12,4 +12,14 @@ class AuthController < ApplicationController
     redirect_to root_path
   end
   
+  def set_groups
+    groups=params[:groups].split(',')
+    session[:groups]=groups
+    redirect_to root_path
+  end
+  def remove_groups
+    session[:groups]=nil
+    redirect_to root_path
+  end
+  
 end

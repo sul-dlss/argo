@@ -10,6 +10,7 @@ function DorRegistration(initOpts) {
       mdFormId: null,
       metadataSource: 'none',
       tagList: "",
+	  collection: 'None'
     },
     
     registrationQueue: [],
@@ -33,6 +34,7 @@ function DorRegistration(initOpts) {
         
     register : function(rowid, progressFunction) {
       var apo = $t.apoId;
+	  var collection = $t.collection;
       var sourcePrefix = $t.metadataSource;
       progressFunction = progressFunction || function() {}
 
@@ -57,7 +59,8 @@ function DorRegistration(initOpts) {
 		'metadata_source' : ($t.metadataSource != 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
         'tag' : tags,
-		'rights' : $('#rights').val()
+		'rights' : $('#rights').val(),
+		'collection' : collection
 		
       }
 
@@ -111,6 +114,7 @@ function DorRegistration(initOpts) {
 
     validate : function() {
       var apo = $t.apoId;
+	  var collection = $t.collection;
       var sourcePrefix = $t.metadataSource;
       switch($t.objectType) {
         case 'item':
@@ -158,6 +162,7 @@ function DorRegistration(initOpts) {
 
     registerAll : function() {
       var apo = $t.apoId;
+	  var collection = $t.collection;
       var sourcePrefix = $t.metadataSource;
       if (this.validate()) {
         var ids = $t.getDataIds();

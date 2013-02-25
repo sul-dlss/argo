@@ -26,6 +26,21 @@ class ItemsController < ApplicationController
     render :json => @image_data.to_json
   end
 
+  def close_version_ui
+    @object = Dor.find params[:id], :lightweight => true
+    @description = @object.datastreams['versionMetadata'].current_description
+    @tag = @object.datastreams['versionMetadata'].current_tag
+  end
+  def open_version_ui
+    @object = Dor.find params[:id], :lightweight => true
+  end
+  def source_id_ui
+    @object = Dor.find params[:id], :lightweight => true
+  end
+  def tags_ui
+    @object = Dor.find params[:id], :lightweight => true
+  end
+
   def register
     @perm_keys = ["sunetid:#{current_user.login}"] 
     if webauth and webauth.privgroup.present?
@@ -37,7 +52,8 @@ class ItemsController < ApplicationController
   def workflow_view
     @obj = Dor.find params[:id], :lightweight => true
     @workflow_id = params[:wf_name]
-    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows[@workflow_id]
+    @repo=params[:repo] #pass this to workflow queries
+    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows.get_workflow(@workflow_id,@repo)
 
     respond_to do |format|
       format.html
@@ -79,6 +95,7 @@ class ItemsController < ApplicationController
       @item = Dor::Item.find params[:id]
       new_date=DateTime.parse(params[:embargo_date])
       @item.update_embargo(new_date)
+      @item.datastreams['events'].add_event("Embargo", current_user.to_s , "Embargo date modified")
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
       end
@@ -90,8 +107,8 @@ class ItemsController < ApplicationController
       return
     else
       req_params=['id','dsid','content']
-      item = Dor::Item.find params[:id]
-      ds=item.datastreams[params[:dsid]]
+      @item = Dor::Item.find params[:id]
+      ds=@item.datastreams[params[:dsid]]
       #check that the content is valid xml
       begin
         content=Nokogiri::XML(params[:content]){ |config| config.strict }
@@ -109,11 +126,11 @@ class ItemsController < ApplicationController
     end
   end
   def get_file
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    if not current_user.is_admin and not item.can_view_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else  
-      item=Dor::Item.find(params[:id])
       data=item.get_file(params[:file])
       self.response.headers["Content-Type"] = "application/octet-stream" 
       self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
@@ -122,7 +139,8 @@ class ItemsController < ApplicationController
     end	  
   end
   def update_attributes
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
@@ -142,9 +160,6 @@ class ItemsController < ApplicationController
       else
         params[:preserve]='yes'
       end
-
-
-      item=Dor::Item.find(params[:item_id])
       item.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
@@ -152,11 +167,11 @@ class ItemsController < ApplicationController
     end
   end
   def replace_file
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:id])
       item.replace_file params[:uploaded_file],params[:file_name]
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:file_name]+' was replaced!' }
@@ -165,11 +180,11 @@ class ItemsController < ApplicationController
   end
   #add a file to a resource, not to be confused with add a resource to an object
   def add_file
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:item_id])
       item.add_file params[:uploaded_file],params[:resource],params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
@@ -177,37 +192,127 @@ class ItemsController < ApplicationController
     end
   end
   def open_version
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:item_id])
       item.open_new_version
       item.datastreams['events'].add_event("open", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " opened")
+      item.save
+      severity=params[:severity]
+      desc=params[:description]
+      ds=item.versionMetadata
+      ds.update_current_version({:description => desc,:significance => severity.to_sym})
+      item.save
+      doc=item.to_solr
+      Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:item_id]+' is open for modification!' }  
+        format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }  
       end
     end
   end
   def close_version
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:item_id])
+      severity=params[:severity]
+      desc=params[:description]
+      ds=item.versionMetadata
+      ds.update_current_version({:description => desc,:significance => severity.to_sym})
+      item.save
       item.close_version
       item.datastreams['events'].add_event("close", current_user.to_s , "Version "+ item.versionMetadata.current_version_id.to_s + " closed")
+      item.save
+      doc=item.to_solr
+      Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
       respond_to do |format|
-        format.any { redirect_to catalog_path(params[:item_id]), :notice => 'Version '+item.current_version+' of '+params[:item_id]+' has been closed!' }  
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+item.current_version+' of '+params[:id]+' has been closed!' }  
       end
     end
   end
+  def source_id
+    item=Dor::Item.find(params[:id])
+    #can this go in a filter to avoid repeating myself?
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    end
+    item.set_source_id(params[:new_id])
+    item.identityMetadata.dirty=true
+    item.save
+    doc=item.to_solr
+    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for '+params[:id]+' has been updated!' }  
+    end
+  end
+  def tags
+    item=Dor::Item.find(params[:id])
+    apo_pid=''
+    begin 
+    apo_pid=item.admin_policy_object.first.pid
+    rescue
+    end
+    if not item.can_manage_item?(current_user.roles apo_pid) and not current_user.is_admin and not current_user.is_manager
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    end
+    current_tags=item.tags
+    if params[:add]
+      if params[:new_tag1] and params[:new_tag1].length > 0
+        item.add_tag(params[:new_tag1])
+      end
+      if params[:new_tag2] and params[:new_tag2].length > 0 
+        item.add_tag(params[:new_tag2])
+      end
+      if params[:new_tag3]  and params[:new_tag3].length > 0
+        item.add_tag(params[:new_tag3])
+      end
+    end
+    if params[:del]
+      if not item.remove_tag(current_tags[params[:tag].to_i - 1])
+        raise 'failed to delete'
+      end
+    end
+    if params[:update]
+      count = 1
+      current_tags.each do |tag|
+        item.update_tag(tag,params[('tag'+count.to_s).to_sym])
+        count+=1
+      end
+    end
+    item.identityMetadata.dirty=true
+    item.save
+    doc=item.to_solr
+    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000}) 
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }  
+    end
+  end
   def delete_file
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:item_id])
       item.remove_file(params[:file_name])
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:item_id]), :notice => params[:file_name] + ' has been deleted!' }  
@@ -215,20 +320,21 @@ class ItemsController < ApplicationController
     end
   end
   def resource
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:id])
+    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      @object=Dor::Item.find(params[:item_id])
-      @content_ds = @object.datastreams['contentMetadata']
+      @item=Dor::Item.find(params[:item_id])
+      @content_ds = @item.datastreams['contentMetadata']
     end
   end
   def update_resource
-    if not current_user.is_admin
+    item=Dor::Item.find(params[:item_id])
+    if not current_user.is_admin and not item.can_manage_content?(current_user.roles params[:id])
       render :status=> :forbidden, :text =>'forbidden'
       return
     else
-      item=Dor::Item.find(params[:item_id])
       if params[:position]
         item.move_resource(params[:resource], params[:position])
       end

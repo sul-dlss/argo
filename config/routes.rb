@@ -1,7 +1,5 @@
 Argo::Application.routes.draw do
 
-  get "status/log"
-  get "status/indexer"
 
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
@@ -49,11 +47,31 @@ Argo::Application.routes.draw do
     get '/file_list', :on => :member, :action => :file, :as => 'file'
     post '/file', :on => :member, :action => :replace_file, :as => 'replace_file'
     get '/resource', :action=>:resource, :as =>'resource'
-    post '/version/open', :action=>:open_version, :as => 'open_version'
-    post '/version/close', :action=>:close_version, :as => 'close_version'
+
     delete '/file', :action => :delete_file, :as => 'delete_file'
     post '/add_file', :action => :add_file, :as => 'add_file'
     post '/file/attributes', :action => :update_attributes, :as => 'update_attributes'
+    get 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
+    post 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
+    get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
+    post 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
+    get '/version/open', :action=>:open_version, :as => 'open_version'
+    get '/source_id_ui', :on => :member, :action => :source_id_ui, :as => 'source_id_ui'
+    get '/tags_ui', :on => :member, :action => :tags_ui, :as => 'tags_ui'
+    get '/tags', :on => :member, :action => :tags, :as => 'tags'
+    post '/tags', :on => :member, :action => :tags, :as => 'tags'
+
+  end
+  
+  namespace :items do
+    post '/version/close', :action=>:close_version, :as => 'close_version'
+    post '/version/open', :action=>:open_version, :as => 'open_version'
+    post '/source_id', :action => :source_id, :as => 'source_id'
+  end
+  
+  namespace :status do
+    get "log"
+    get "memcached"
   end
   
   namespace :registration do
@@ -69,11 +87,17 @@ Argo::Application.routes.draw do
     get '/login'
     get '/logout'
     get '/profile'
+    get '/groups'
+    post '/set_groups', :action => :set_groups, :as => 'set_groups'
+    get '/remove_groups'
   end
+
 	namespace :dor do
     get '/configuration'
     get '/label'
     get '/query_by_id'
+    match 'republish/:pid', :action => :republish
+    match 'archive/:pid', :action => :archive_workflows
     match 'reindex/:pid', :action => :reindex, :as => 'reindex'
     match 'delete_from_index/:pid', :action => :delete_from_index
     get '/index_exceptions'

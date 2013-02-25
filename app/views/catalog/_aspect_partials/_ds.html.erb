@@ -1,10 +1,10 @@
 <%if(params[:edit])
 
- if current_user and current_user.is_admin %>
+ if @user and (@user.is_admin or (@obj.can_manage_content?(@user.roles(@obj.admin_policy_object.first.pid)) and @obj.can_manage_metadata?(@user.roles(@obj.admin_policy_object.first.pid)))) %>
 	<%= form_tag url_for(:controller => :items, :action => :datastream_update), :method => :POST do%>
 		<input type="hidden" name="id" value="<%=@obj.pid %>" />
 		<input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
-		<textarea style="width:100%;height:80%" name="content" id="content"><%=@obj.datastreams[params[:dsid]].ng_xml.to_s %></textarea><br>
+		<textarea style="width:100%;height:80%" name="content" id="content"><%=@obj.datastreams[params[:dsid]].content.to_s %></textarea><br>
 		<button type="submit" id="update">Update Datastream</button>
 	<% end %>
 	
@@ -12,9 +12,10 @@
 	<%
 	end
 else
+	#if the user is a repo admin or is permitted to manage both content and rights, display raw xml editing
 %>
 	<%=
-	if current_user and current_user.is_admin and params[:dsid] != 'RELS-EXT' and params[:dsid] != 'workflows'
+	if @user and (@user.is_admin) and (@obj.datastreams[params[:dsid]].respond_to? :ng_xml or params[:dsid] == 'RELS-EXT') and params[:dsid] != 'workflows'
 	 	link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :class => 'dialogLink', :title => params[:dsid]  
 	end
 	%>
@@ -22,9 +23,9 @@ else
   content = if params[:dsid] == 'full_dc'
     @obj.generate_dublin_core.prettify
   elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
-    @obj.datastreams[params[:dsid]].ng_xml.prettify
+    Nokogiri::XML(@obj.datastreams[params[:dsid]].ng_xml.to_s, &:noblanks).to_s
   else
-    Nokogiri::XML(@obj.datastreams[params[:dsid]].content)
+    Nokogiri::XML(@obj.datastreams[params[:dsid]].content, &:noblanks).to_s
   end
   raise ActionController::RoutingError.new('Not Found') if content.nil?
   output = CodeRay::Duo[:xml, :div].highlight content

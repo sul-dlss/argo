@@ -53,4 +53,15 @@ describe SolrDocument do
       end
     end  
   end
+  describe 'get_versions' do
+    it 'should build a version hash' do
+      data=[]
+      data << '1;1.0.0;Initial version'
+      data << '2;1.1.0;Minor change'
+      doc={'versions_display' => data}
+      versions=get_versions(doc)
+      versions['1'][:tag].should == '1.0.0'
+    end
+  end
+  
 end

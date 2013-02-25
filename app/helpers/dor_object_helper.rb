@@ -21,11 +21,13 @@ module DorObjectHelper
     end
     result
   end
+  
+
+  
   def render_qfacet_value(facet_solr_field, item, options ={})
      params=add_facet_params(facet_solr_field, item.qvalue)
      link_to(item.value,root_url)
      # (link_to_unless(options[:suppress_link], item.value, params, :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
-   
    end
   def render_citation doc
     terms = retrieve_terms(doc)
@@ -84,19 +86,21 @@ module DorObjectHelper
 
   def render_milestones doc, obj
     milestones = SolrDocument::get_milestones(doc)
-    render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones }
+    version_hash=SolrDocument::get_versions(doc)
+    render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 
   def render_status (doc,object=nil)
-    status = 0
+    status = -1
     version = ''
     status_hash={
-      0 => '',
+      -1 => '',
+      0 => 'Opened',
       1 => 'Registered',
-      2 => 'In process',
-      3 => 'In process (described)',
-      4 => 'In process (described, published)',
-      5 => 'In process (described, published, deposited)',
+      2 => 'In accessioning',
+      3 => 'In accessioning (described)',
+      4 => 'In accessioning (described, published)',
+      5 => 'In accessioning (described, published, deposited)',
       6 => 'Accessioned',
       7 => 'Accessioned (indexed)',
       8 => 'Accessioned (indexed, ingested)',
@@ -168,8 +172,8 @@ module DorObjectHelper
             status_time=time
           end
         when 'opened'
-          if status<9
-            status=9
+          if status<0
+            status=0
             status_time=time
           end
         end
@@ -180,14 +184,9 @@ module DorObjectHelper
         embargo_data=doc['embargoMetadata_t']
         text=embargo_data.split.first
         date=embargo_data.split.last
-
         if text == 'released'
-          #do nothing at the moment, we arent displaying these
         else
           embargo= ' (embargoed until '+render_datetime(date.to_s)+')' 
-          #add a date picker and button to change the embargo date for those who should be able to.
-          embargo+=render :partial => 'items/embargo_form'
-
         end
       end
       result=''
@@ -196,14 +195,11 @@ module DorObjectHelper
       else
         result='v'+oldest_version+' '+status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
       end
-      if(object and can_close_version?(object.pid))
-        result+=button_to 'Close Version','/items/'+object.pid+'/version/close/'
-      else
-        if object and can_open_version?(object.pid)
-          result+=button_to 'Open for modification','/items/'+object.pid+'/version/open/'
-        end
-      end
       result=result.html_safe
+    end
+
+    def has_been_published? pid
+      Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
     end
 
     def can_open_version? pid
@@ -236,8 +232,8 @@ module DorObjectHelper
     def render_workflows doc, obj
       workflows = {}
       Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :string, :displayable)]).each do |line|
-        (wf,status,errors) = line.split(/\|/)
-        workflows[wf] = { :status => status, :errors => errors.to_i }
+        (wf,status,errors,repo) = line.split(/\|/)
+        workflows[wf] = { :status => status, :errors => errors.to_i, :repo => repo }
       end
       render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
     end

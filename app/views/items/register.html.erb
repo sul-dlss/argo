@@ -9,6 +9,8 @@
 <div id='properties' class="ui-widget" style="display: none">
         <div class="property-item"><label for="object_type">Type of Object</label><%= select_tag :object_type, options_for_select(valid_object_types), :'data-rcparam' => 'objectType' %></div>
         <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :'data-rcparam' => 'apoId' %></div>
+        <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, options_for_select(collection_list) %></div>
+
         <div class="property-item"><label for="rights"><img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>Rights</label><%= select_tag :rights, options_for_select(valid_rights_options), :'data-tagname' => 'Process : Rights' %></div>
         <div class="property-item"><label for="id_source">Metadata Source</label><%= select_tag :id_source, options_for_select(metadata_sources), :'data-rcparam' => 'metadataSource' %></div>
         <div class="property-item spacer"></div>
@@ -21,6 +23,7 @@
             <%= text_field_tag :'tags[]', nil, :id => 'tags_0', :class => 'free tag-field' %> 
             <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %> 
             <%= text_field_tag :'tags[]', nil, :id => 'tags_2', :class => 'free tag-field' %>
+			<%= text_field_tag :'tags[]', nil, :id => 'tags_3', :class => 'free tag-field' %>
             <%= hidden_field_tag :registered_by, current_user.login, :class => 'tag-field ', :'data-tagname' => 'Registered By' %>
           </span>
         </div>

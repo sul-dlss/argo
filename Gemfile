@@ -3,7 +3,7 @@ source "http://sul-gems.stanford.edu"
 
 
 gem 'dor-services', ">= 3.14.5"
-gem 'rails', '3.2.6'
+gem 'rails', '3.2.11'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 gem 'net-sftp'

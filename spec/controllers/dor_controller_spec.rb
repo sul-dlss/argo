@@ -19,4 +19,15 @@ describe DorController do
       get :delete_from_index, :pid => 'asdf:1234'
     end
   end
+  
+  describe "republish" do
+    it 'should republish' do
+      log_in_as_mock_user(subject)
+      mock_item=mock()
+      mock_item.should_receive(:publish_metadata)
+      Dor::Item.stub(:find).and_return(mock_item)
+      get :republish, :pid => 'druid:123'
+    end
+  end
+  
 end
