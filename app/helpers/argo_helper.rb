@@ -181,7 +181,7 @@ module ArgoHelper
       end
     end
     #if this is an apo and the user has permission for the apo, let them edit it.
-    if (object.methods.include? 'roleMetadata' or object.methods.include? :roleMetadata) and (current_user.is_admin pr object.can_manage_item?(current_user.roles(apo_pid)))
+    if (object.methods.include? 'roleMetadata' or object.methods.include? :roleMetadata) and (current_user.is_admin or object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
