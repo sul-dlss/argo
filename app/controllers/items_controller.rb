@@ -34,7 +34,7 @@ class ItemsController < ApplicationController
   end
   #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version. 
   def prepare
-    if not Dor::WorkflowService.get_lifecycle('dor', params[:id], 'submitted' )
+    if @object.allows_modification?
       #this item hasnt been submitted yet, it can be modified
     else
       #this item must go though versioning, is it already open?
