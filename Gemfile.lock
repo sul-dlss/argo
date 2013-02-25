@@ -6,10 +6,9 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: e482a9c3505ce61b4e026960f60e80a9c04d8f7e 
-  branch: collection
+  revision: 46aca71c7c2efa0c02f33f36d151af05b1bc53c8 
   specs:
-    dor-services (3.23.0)
+    dor-services (3.24.0)
       active-fedora (~> 4.5)
       confstruct (>= 0.2.2)
       dor-workflow-service (>= 1.2.1)

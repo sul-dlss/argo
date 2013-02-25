@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
     known_roles.each do |role|
       q+=' OR apo_role_'+role+'_t:('+query+')' 
     end
-    resp = Dor::SearchService.query(q, {:rows => 100, :fl => 'id'})['response']['docs']
+    resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id'})['response']['docs']
     pids=[]
     count=1
     resp.each do |doc|
@@ -98,7 +98,7 @@ class User < ActiveRecord::Base
       qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
     end
     q+=qrys.join " OR "
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_t,dc_title_t').docs
     result.sort! do |a,b|
       a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end

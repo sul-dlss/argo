@@ -170,7 +170,7 @@ module ArgoHelper
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
       if not has_been_submitted? pid
-        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
+        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page=> true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
       end
     end
     if(pid and can_close_version?(pid))
@@ -180,7 +180,8 @@ module ArgoHelper
         buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
-    if object.methods.include? 'roleMetadata' or object.methods.include? :roleMetadata
+    #if this is an apo and the user has permission for the apo, let them edit it.
+    if (object.methods.include? 'roleMetadata' or object.methods.include? :roleMetadata) and (current_user.is_admin pr object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 

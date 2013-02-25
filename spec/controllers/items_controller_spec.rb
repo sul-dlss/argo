@@ -20,6 +20,7 @@ describe ItemsController do
     @item.stub(:identityMetadata).and_return(idmd)
     @ds['events'] = @event_ds
     @item.stub(:datastreams).and_return(@ds)
+    @item.stub(:allows_modification?).and_return(true)
     @item.stub(:can_manage_item?).and_return(false)
     @item.stub(:can_manage_content?).and_return(false)
     @item.stub(:can_view_content?).and_return(false)
@@ -98,7 +99,7 @@ end
 end
 describe "source_id" do
   it 'should update the source id' do
-    @item.should_receive(:set_source_id).with('new : source_id')
+    @item.should_receive(:set_source_id).with('new:source_id')
     Dor::SearchService.solr.should_receive(:add)
     post 'source_id', :id => 'oo201oo0001', :new_id => 'new:source_id'
   end
@@ -121,7 +122,12 @@ describe "tags" do
     post 'tags', :id => 'oo201oo0001', :new_tag1 => 'new:thing', :add => 'true'
   end
 end
-
+describe "set_rights" do
+  it 'should set an item to dark' do
+    @item.should_receive(:set_read_rights).with('dark')
+    get 'set_rights', :id => 'oo201oo0001', :rights => 'dark'
+  end
+end
 
 describe "add_file" do
   it 'should recieve an uploaded file and add it to the requested resource' do

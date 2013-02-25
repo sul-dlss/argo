@@ -59,7 +59,6 @@ module RegistrationHelper
       ['Item','item'],
       ['Set','set'],
       ['Collection','collection'],
-      ['Admin. Policy','adminPolicy'],
       ['Workflow Definition','workflow']
     ]
   end
