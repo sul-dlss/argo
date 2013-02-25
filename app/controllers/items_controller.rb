@@ -34,7 +34,7 @@ class ItemsController < ApplicationController
   end
   def on_hold
     begin
-    if (Dor::WorkflowService.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (Dor::WorkflowService.workflows.include?('accessionWF') not Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
+    if (Dor::WorkflowService.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (Dor::WorkflowService.workflows.include?('accessionWF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
       true
     else
       false
