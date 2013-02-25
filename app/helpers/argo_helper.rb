@@ -140,25 +140,9 @@ module ArgoHelper
     end
     return result.html_safe
   end
-
-  def render_buttons(doc, object)
-    result='<ul>'
-    pid=doc['id']
-    object=Dor::Item.find(pid)
-    apo_pid=doc['is_governed_by_s']
-    if apo_pid
-      apo_pid=apo_pid.first.split(/\//).last
-    else
-      apo_pid='none'
-    end
-    if current_user.is_admin 
-      result+='<li><a class="smallDialogLink button" href="' + url_for(:controller => :dor,:action => :reindex, :pid => pid)+'">Reindex</a></li>'
-      if has_been_published? pid
-        result+='<li><a class="smallDialogLink button" href=' + url_for(:controller => :dor,:action => :republish, :pid => pid) + '>Republish</a></li>'
-      end
-      accessionComplete = true
-      obj=Dor::Item.find(pid)
-      wf=obj.workflows.get_workflow('accessionWF','dor')
+  def archive_button
+     accessionComplete = true
+      wf=object.workflows.get_workflow('accessionWF','dor')
       wf.processes.each do |proc|
         if proc.status != 'completed'
           accessionComplete = false
@@ -168,19 +152,48 @@ module ArgoHelper
         accessionComplete=false
       end
       if accessionComplete
-        result+='<li><a class="smallDialogLink button" href="' + url_for(:controller => :dor,:action => :archive_workflows, :pid => pid) + '">Archive accessionWF</a></li>'
+        buttons << {:url =>  url_for(:controller => :dor,:action => :archive_workflows, :pid => pid), :label => 'Archive accessionWF'}
+      end
+  end
+  def render_buttons(doc)
+    pid=doc['id']
+    object = Dor.find(pid)
+    apo_pid = ''
+    begin 
+      apo_id=doc['is_governed_by_s'].first.gsub('info:fedora/','')
+    rescue
+    end
+    buttons=[]
+    if current_user.is_admin 
+      buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
+      if has_been_published? pid
+        buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
+      end
+      if not has_been_submitted? pid
+        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page=> true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
       end
     end
     if(pid and can_close_version?(pid))
-      result+='<li><a class="smallDialogLink button" href=' + '/items/'+pid+'/close_version_ui' + '>Close Version</a></li>'
+      buttons << {:url => '/items/'+pid+'/close_version_ui', :label => 'Close Version'}
     else
       if pid and can_open_version?(pid)
-        result+='<li><a class="smallDialogLink button" href=' + '/items/'+pid+'/open_version_ui' + '>Open for modification</a></li>'
+        buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
-    if object.can_manage_item?(current_user.roles apo_pid) or current_user.is_admin or current_user.is_manager 
-      result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/source_id_ui' + '>Change source id</a></li>'
-      result += '<li><a class="smallDialogLink button" href='+ '/items/'+pid+'/tags_ui' + '>Edit tags</a></li>'
+    #if this is an apo and the user has permission for the apo, let them edit it.
+    if (object.methods.include? 'roleMetadata' or object.methods.include? :roleMetadata) and (current_user.is_admin pr object.can_manage_item?(current_user.roles(apo_pid)))
+      buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
+    end
+    if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
+      buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
+      buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
+      buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+      if object.datastreams.include? 'contentMetadata'
+        buttons << {:url => url_for(:controller => :items, :action => :content_type, :id => pid), :label => 'Set content type'}
+      end
+      if object.datastreams.include? 'rightsMetadata'
+        buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
+      end
     end
     if(doc.has_key?('embargoMetadata_t'))
       embargo_data=doc['embargoMetadata_t']
@@ -191,16 +204,14 @@ module ArgoHelper
         #do nothing at the moment, we arent displaying these
       else
         #add a date picker and button to change the embargo date for those who should be able to.
-        result+=render :partial => 'items/embargo_form'
+        buttons << {:label => 'Update embargo', :url => 'items/embargo_form'}
       end
     end
-
-    result.html_safe
+   buttons
   end
 
   def first_image(a)
     Array(a).find{|f| File.extname(f)=~ /jp2/}
-    #Array(a).find { |f| Rack::Mime.mime_type(File.extname(f)) =~ /^image\// }
   end
 
   def render_date_pickers(field_name)

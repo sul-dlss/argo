@@ -34,7 +34,6 @@ function DorRegistration(initOpts) {
         
     register : function(rowid, progressFunction) {
       var apo = $t.apoId;
-	  var collection = $t.collection;
       var sourcePrefix = $t.metadataSource;
       progressFunction = progressFunction || function() {}
 
@@ -60,7 +59,7 @@ function DorRegistration(initOpts) {
         'label' : data.label || ':auto',
         'tag' : tags,
 		'rights' : $('#rights').val(),
-		'collection' : collection
+		'collection' : collection.value
 		
       }
 

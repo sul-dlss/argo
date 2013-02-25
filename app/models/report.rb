@@ -18,7 +18,7 @@ class Report
       { 
         :label => "Druid", :field => 'druid', 
         :proc => lambda { |doc| doc['id'].split(/:/).last }, 
-        :sort => true, :default => true, :width => 100 
+        :sort => true, :default => true, :width => 100
       },
       { 
         :field => 'purl', :label => "Purl", 
@@ -204,7 +204,7 @@ class Report
       :'f.wf_wps_facet.facet.limit' => -1,
       :'f.wf_wsp_facet.facet.limit' => -1,
       :'f.wf_swp_facet.facet.limit' => -1,
-      :fl => config.report_fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
+      :fl => config.report_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
     }
 
     config.column_model = config.report_fields.collect { |spec| 
@@ -229,6 +229,7 @@ class Report
     end
     @params = params
     @params[:page] ||= 1
+    
     (@response, @document_list) = get_search_results
     @num_found = @response['response']['numFound'].to_i
   end
@@ -236,12 +237,24 @@ class Report
   def params
     @params
   end
-  
+  def pids params
+    toret=[]
+    while @document_list.length >0
+    report_data.each do|rec|
+    if params[:source_id]
+      toret << rec['druid'].to_s+"\t"+rec['source_id_t'].to_s
+    else
+      toret << rec['druid']
+    end
+    end
+    @params[:page] += 1
+    (@response, @document_list) = get_search_results
+  end
+    toret
+  end
   def report_data
     docs_to_records(@document_list)
   end
-  
-
   
   def csv2
     headings=''

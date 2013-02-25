@@ -17,9 +17,17 @@ class ReportController < CatalogController
   def rsolr_request_error(exception)
     raise exception
   end
-  
+  def bulk
+    (@response, @document_list) = get_search_results
+  end
   def data
-    params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
+    #if (not params[:sidx]) or params[:sidx] == 'druid'
+    #  params[:sidx] = 'id'
+    #end
+    if not params[:sord]
+      params[:sord] = 'asc'
+    end
+    #params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i,1].max
 
@@ -38,14 +46,29 @@ class ReportController < CatalogController
       format.xml  { render :xml  => @report.report_data }
     end
   end
+  def content_types
+    
+  end
 
+  def pids
+    #params[:per_page]=100
+    #params[:rows]=100
+    fields=['druid']
+    ids=Report.new(params,fields).pids params
+    respond_to do |format|
+      format.json { 
+        render :json => {
+          :druids => ids
+        }
+      }
+    end
+  end
   def download
     fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
     params[:per_page]=10
     self.response.headers["Content-Type"] = "application/octet-stream" 
     self.response.headers["Content-Disposition"] = "attachment; filename=report.csv"
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
-    puts params.inspect
     self.response_body = Report.new(params,fields).csv2
   end
   

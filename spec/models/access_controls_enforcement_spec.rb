@@ -8,6 +8,7 @@ describe 'Argo::AccessControlsEnforcement' do
   before :each do
     @obj=TestClass.new
     @user=mock(@user)
+    @user.stub(:is_manager).and_return(false)
   end
   describe 'apply_gated_discovery' do
     it 'should add a fq that requires the apo' do

@@ -1,0 +1,7 @@
+<%=form_tag url_for(:controller => :items, :action => :set_content_type, :id => @object.pid) do%>
+	<label>Content type</label>
+	<%=select_tag :content_type, options_for_select(['image', 'book', 'file', 'map', 'manuscript']) %>
+	<label>Resource type for all resources</label>
+	<%=select_tag :resource_type, options_for_select(['image', 'page', 'file']) %>
+	<button>Update</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
+<%end%>

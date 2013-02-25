@@ -28,7 +28,7 @@
 <%= form_tag url_for(:controller => :items, :action => :embargo_update), :method => :POST do%>
 	
 	New date: <input name="embargo_date" id="embargo_date" type="text">
-	<button id="submit_embargo" type="submit">Update Embargo</button> 
+	<button id="submit_embargo" type="submit">Update Embargo</button> <button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
 <% end %>
 
 </div><%end%>

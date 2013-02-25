@@ -102,6 +102,8 @@ describe User do
   #TODO
   describe 'permitted_apos' do
   end
+  describe 'permitted_collections' do
+  end
   describe "groups" do
   end
 end

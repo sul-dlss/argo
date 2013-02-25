@@ -22,6 +22,8 @@ Argo::Application.routes.draw do
   match '/report', :to => "report#index", :as => "report"
   match '/report/data', :to => "report#data", :as => "report_data"
   match '/report/download', :to => "report#download", :as => "report_download"
+  match '/report/bulk', :to => "report#bulk", :as => "report_bulk"
+  match 'report/pids', :to => "report#pids", :as => 'report_pids'
   match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
   
   root :to => "catalog#index"
@@ -34,6 +36,23 @@ Argo::Application.routes.draw do
     get '/workflow_grid'
   end
   
+  resources :apo do
+    get 'apo_ui', :on => :member, :action => :apo_ui, :as => 'apo_ui'
+    get 'delete_role', :on => :member
+    post 'add_collection', :on => :member
+    get 'delete_collection', :on => :member
+    post 'update_title', :on => :member
+    post 'update_creative_commons', :on => :member
+    post 'update_use', :on => :member
+    post 'update_copyright', :on => :member
+    post 'update_default_object_rights', :on => :member
+    post 'add_roleplayer', :on => :member
+    post 'update_desc_metadata', :on => :member
+    get :register, :on => :collection
+    post :register, :on => :collection
+    post :update, :on => :member
+
+  end
   resources :items do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
@@ -46,11 +65,10 @@ Argo::Application.routes.draw do
     get '/file', :on => :member, :action => :get_file, :as => 'get_file'
     get '/file_list', :on => :member, :action => :file, :as => 'file'
     post '/file', :on => :member, :action => :replace_file, :as => 'replace_file'
-    get '/resource', :action=>:resource, :as =>'resource'
-
-    delete '/file', :action => :delete_file, :as => 'delete_file'
-    post '/add_file', :action => :add_file, :as => 'add_file'
-    post '/file/attributes', :action => :update_attributes, :as => 'update_attributes'
+    get '/resource', :on => :member, :action=>:resource, :as =>'resource'
+    delete '/file', :on => :member, :action => :delete_file, :as => 'delete_file'
+    post '/add_file', :on => :member, :action => :add_file, :as => 'add_file'
+    post '/file/attributes', :on => :member, :action => :update_attributes, :as => 'update_attributes'
     get 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
     post 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
     get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
@@ -60,7 +78,16 @@ Argo::Application.routes.draw do
     get '/tags_ui', :on => :member, :action => :tags_ui, :as => 'tags_ui'
     get '/tags', :on => :member, :action => :tags, :as => 'tags'
     post '/tags', :on => :member, :action => :tags, :as => 'tags'
-
+    get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
+    get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
+    post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
+    get '/purge', :on => :member, :action => :purge_object
+    post '/set_content_type', :on => :member, :action => :set_content_type
+    get '/content_type', :on => :member, :action => :content_type
+    get '/rights', :on => :member, :action => :rights
+    post '/prepare', :on => :member, :action => :prepare
+    post '/set_rights', :on => :member, :action => :set_rights
+    get '/preserved_file', :on => :member, :action => :get_preserved_file
   end
   
   namespace :items do
@@ -78,6 +105,7 @@ Argo::Application.routes.draw do
     get "/", :action => :form
     get "/tracksheet"
     get "/form_list"
+    get "/collection_list"
     get "/workflow_list"
     get "/rights_list", :action => :rights_list, :as => 'rights_list'
     get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'

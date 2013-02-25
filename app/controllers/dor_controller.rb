@@ -46,12 +46,17 @@ class DorController < ApplicationController
     end
 
     def reindex
+      begin
       obj = Dor.load_instance params[:pid]
       solr_doc = obj.to_solr
       index_logger.info "updated index for #{params[:pid]}"
       Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
       index_logger.info "updated index for #{params[:pid]}"
-      render :text => solr_doc
+      render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
+      rescue ActiveFedora::ObjectNotFoundError => e
+        render :status=> 500, :text =>'Object doesnt exist in Fedora.'
+        return
+      end
     end
 
     def delete_from_index

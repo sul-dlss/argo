@@ -1,9 +1,16 @@
-<% if index_queue_depth>1000
-		%> <span style="color:red; font-weight:bold">indexer backlog: <%= index_queue_depth%></span><%
-	else 
-	%> <span>indexer backlog: <%= index_queue_depth%></span>
-	<%end%>
-|<% if not session[:groups].nil? 
+<%= link_to "Home", root_path %>
+|
+<% if current_user %>
+  <%= link_to "Log&nbsp;Out".html_safe, destroy_user_session_path %> [<%= link_to current_user, edit_user_registration_path %>]
+  |
+<% else %>
+  <%= link_to 'Login', new_user_session_path %>
+  |
+<% end %>
+<%= link_to "Feedback", 'mailto:argo-feedback@stanford.edu' %>
+  |
+
+<% if not session[:groups].nil? 
 	%>Impersonating:<%
 		session[:groups].each do |group|
 		%>
@@ -18,15 +25,14 @@
 		end
 	end
 	%>
-<%= link_to "Home", root_path %>
+	<% if index_queue_depth>1000
+			%> <span style="color:red; font-weight:bold">indexer backlog: <%= index_queue_depth%></span><%
+		else 
+		%> <span>indexer backlog: <%= index_queue_depth%></span>
+		<%end%>
+
+<br>
+<%= link_to "Register&nbsp; Items".html_safe, register_items_path %>
 |
-<% if current_user %>
-  <%= link_to "Log&nbsp;Out".html_safe, destroy_user_session_path %> [<%= link_to current_user, edit_user_registration_path %>]
-  |
-<% else %>
-  <%= link_to 'Login', new_user_session_path %>
-  |
-<% end %>
-<%= link_to "Item&nbsp;Registration".html_safe, register_items_path %>
-|
-<%= link_to "Feedback", 'mailto:argo-feedback@stanford.edu' %>
+<%= link_to "Register&nbsp;APO".html_safe, url_for(:controller => :apo, :action => :register) %>
+

@@ -2,7 +2,7 @@ source :rubygems
 source "http://sul-gems.stanford.edu"
 
 
-gem 'dor-services', ">= 3.14.5"
+gem 'dor-services', ">= 3.14.5", :git => 'https://github.com/sul-dlss/dor-services.git'
 gem 'rails', '3.2.11'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
@@ -51,7 +51,7 @@ end
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
-  gem 'jquery-rails'
+  gem 'jquery-rails', '=2.1.4'
   gem 'therubyracer', "~> 0.10.0" #, '0.11.0beta5'
   gem 'sass-rails', '~> 3.2.0'
   gem 'compass-rails', '~> 1.0.0'

@@ -9,11 +9,19 @@
 		Workspace: <a href=<%= link%>><%=params[:file]%><a/>
 		<%
 	end
+	accessioned=has_been_accessioned? object.pid
 	content_ds.ng_xml.search('//file[@id=\''+params[:file]+'\']').each do |file|
-		if false and file['shelve']=='true'
+		if file['shelve'] == 'yes'
 			%>
 			<br>Stacks: <a href=<%= stacks_url_full_size(object,params[:file])%>><%=params[:file]%></a>
 			<%
 		end
+		if (accessioned) and file['preserve'] == 'yes'
+			%>
+			<br>Preservation: <%=%> <%=link_to params[:file], url_for(:controller => :items, :action => :get_preserved_file, :id => params[:id], :file => params[:file], :version => object.versionMetadata.current_version_id)%>
+			<%
+		end
 	end
-%>
+
+	%>
+	<br><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>

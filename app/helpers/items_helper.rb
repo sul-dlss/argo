@@ -16,7 +16,7 @@ module ItemsHelper
     return valid_types  
   end
   def stacks_url_full_size obj, file_name
-    druid=obj.pid.gsub('druid:','')
-    Argo::Config.urls.stacks+'/'+druid+'/'+file_name+'_full'
+    druid=obj.pid
+    Argo::Config.urls.stacks_file+'/'+druid+'/'+file_name
   end
 end
