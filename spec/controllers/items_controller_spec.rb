@@ -24,10 +24,19 @@ describe ItemsController do
     @item.stub(:can_manage_item?).and_return(false)
     @item.stub(:can_manage_content?).and_return(false)
     @item.stub(:can_view_content?).and_return(false)
+    @item.stub(:pid).and_return('object:pid')
+    @item.stub(:delete)
     @apo=mock()
     @apo.stub(:pid).and_return('druid:apo')
     @item.stub(:admin_policy_object).and_return([@apo])
     Dor::SearchService.solr.stub(:add)
+  end
+  describe 'purge' do
+    it 'should 403' do
+      @current_user.stub(:is_admin).and_return(false)
+      post 'purge_object', :id => 'oo201oo0001'
+      response.code.should == "403"
+    end
   end
   describe "embargo_update" do
     it "should 403 if you arent an admin" do

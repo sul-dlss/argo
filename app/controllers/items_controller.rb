@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
   require 'net/sftp'
 
   before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
-  before_filter :forbid_modify, :only => [:add_collection, :remove_collection, :purge_object, :update_rights, :set_content_type, :tags, :source_id,:delete_file, :close_version, :open_version, :resource, :add_file, :replace_file,:update_attributes, :update_resource ]
+  before_filter :forbid_modify, :only => [:add_collection, :remove_collection, :update_rights, :set_content_type, :tags, :source_id,:delete_file, :close_version, :open_version, :resource, :add_file, :replace_file,:update_attributes, :update_resource ]
   before_filter :forbid_view, :only => [:preserved_file, :get_file]
   before_filter :enforce_versioning, :only => [:add_collection, :remove_collection, :update_rights,:tags,:source_id,:set_source_id,:set_content_type,:set_rights]
   after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type]
@@ -315,7 +315,11 @@ class ItemsController < ApplicationController
   end
   def purge_object
     begin
-      @object = Dor::Item.find params[:id], :lightweight => true
+      create_obj
+      #return because rendering already happened
+      if not forbid_modify
+        return 
+      end
     rescue
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
@@ -397,27 +401,18 @@ class ItemsController < ApplicationController
 
   #check that the user can carry out this item modification
   def forbid_modify
-    if not @object
-      create_obj
-    end
     if not current_user.is_admin and not @object.can_manage_content?(current_user.roles @apo)
       render :status=> :forbidden, :text =>'forbidden'
-      return
+      return false
     end
   end
   def forbid_view
-    if not @object
-      create_obj
-    end
     if not current_user.is_admin and not @object.can_view_content?(current_user.roles @apo)
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
   end
   def enforce_versioning
-    if not @object
-      create_obj
-    end
     #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
       if not @object.allows_modification?
         render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
