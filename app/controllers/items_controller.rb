@@ -397,18 +397,27 @@ class ItemsController < ApplicationController
 
   #check that the user can carry out this item modification
   def forbid_modify
+    if not @object
+      create_obj
+    end
     if not current_user.is_admin and not @object.can_manage_content?(current_user.roles @apo)
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
   end
   def forbid_view
+    if not @object
+      create_obj
+    end
     if not current_user.is_admin and not @object.can_view_content?(current_user.roles @apo)
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
   end
   def enforce_versioning
+    if not @object
+      create_obj
+    end
     #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
       if not @object.allows_modification?
         render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
