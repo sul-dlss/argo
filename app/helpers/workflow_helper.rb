@@ -22,6 +22,7 @@ module WorkflowHelper
   
   def render_workflow_process_reset(pid, process)
     allowable_changes = {
+      'hold' => 'waiting',
       'waiting' => 'completed',
       'error'   => 'waiting'
     }

@@ -40,7 +40,6 @@ function close_version(druids){
 	cons=[];
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
-		//send a request to open this object and log the success or failure
 		url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
@@ -61,7 +60,6 @@ function set_content_type(druids){
 	cons=[];
 	$.each(druids, function(i,element){
      	var	element_url=catalog_url(element);
-		//send a request to open this object and log the success or failure
 		url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
@@ -76,7 +74,6 @@ function purge(druids){
 	cons=[];
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
-		//send a request to open this object and log the success or failure
 		url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'GET'});
@@ -125,13 +122,42 @@ function reindex(druids){
 	cons=[]
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
-		//send a request to open this object and log the success or failure
 		url='<%=url_for :controller => :dor,:action => :reindex, :pid => 'druid:xxxxxxxxx'%>'
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'GET'});
 		cons.push(xhr);
 		xhr.success(function(response,status,xhr) { 
 			success_handler(element_url, 'Reindexed.');
+			
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+function republish(druids){
+	cons=[]
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url, 'Republished.');
+			
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+function release_hold(druids){
+	cons=[]
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :workflow_update, :id => 'druid:xxxxxxxxx', :wf_name => 'accessionWF', :process => 'sdr-ingest-transfer', :status => 'waiting', :bulk => true%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'POST'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url, 'Hold released.');
 			
 		})
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
@@ -227,7 +253,6 @@ function source_id(){
 			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid source id '"+element['source']+"'</span><br>\n"+log.innerHTML;
 			return;
 		}
-		//send a request to open this object and log the success or failure
 		params={
 			'new_id': element['source']
 		}
@@ -312,7 +337,9 @@ function stop_all()
 	<button id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</button>
 	<button onclick="$('#close').show(400)">Close versions</button>
 	<button id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
+	<button id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
 	<button onclick="$('#purge').show(400)">Purge</button>
+	<%if current_user.is_admin%><button onclick="$('#release_hold').show(400)">Release for ingest</button><%end%>
 	<div style="display:none" id="updates" name="updates">
 		<label>Object Updates</label><br>
 		<button id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
@@ -382,9 +409,17 @@ function stop_all()
 	<h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
 	<button onclick="fetch_druids(purge);$('#purge').hide(400);">Purge objects from fedora</button><br>
 </div>
+<div class="bulk_operation" id="release_hold" name="release_hold">
+	<h1>Release to SDR-Ingest</h1>
+	<button id="release_hold" name="release_hold" onclick="fetch_druids(release_hold);$('#release_hold').hide(400);">Release object</button>
+</div>
 <div class="bulk_operation" id="reindex" name="reindex">
 	<h1>Reindex items</h1>
 	<button id="reindex_button" name="reindex_button" onclick="fetch_druids(reindex);$('#reindex').hide(400);">Update DOR/Argo index for object</button>
+</div>
+<div class="bulk_operation" id="republish" name="republish">
+	<h1>Republish items</h1>
+	<button id="republish_button" name="republish_button" onclick="fetch_druids(republish);$('#republish').hide(400);">Refresh metadata on PURL</button>
 </div>
 <div class="bulk_operation" id="source_id">
 	<h1>Change source id</h1>

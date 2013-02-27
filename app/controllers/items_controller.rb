@@ -118,19 +118,33 @@ class ItemsController < ApplicationController
   def workflow_update
     @item=@object
     args = params.values_at(:id, :wf_name, :process, :status)
+    check_args = params.values_at(:id, :wf_name, :process)
+    
     if args.all? &:present?
+      #this will raise and exception if the item doesnt have that workflow step
+      Dor::WorkflowService.get_workflow_status 'dor', *check_args
       Dor::WorkflowService.update_workflow_status 'dor', *args
       @item = Dor.find params[:id]
       begin
-        reindex(@item)
+        if not params[:bulk]
+          reindex(@item)
+        end
       rescue Exception => e
         Rails.logger.warn "ItemsController#workflow_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
       end
       respond_to do |format|
+        if params[:bulk]
+          render :status => 200, :text => 'Updated!'
+          return 
+        end
         format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name]), :notice => 'Workflow was successfully updated' }
       end
     else
       respond_to do |format|
+        if params[:bulk]
+          render :status => :bad_request, :text => 'Bad request!'
+          return
+        end
         format.any { render format.to_sym => 'Bad Request', :status => :bad_request }
       end
     end
@@ -271,7 +285,11 @@ class ItemsController < ApplicationController
     @object.set_source_id(new_id)
     @object.identityMetadata.dirty=true
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for '+params[:id]+' has been updated!' }  
+      if params[:bulk]
+        render :status => 200, :text =>'Updated source id.'
+      else
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for '+params[:id]+' has been updated!' }  
+      end
     end
   end
   def tags
@@ -405,6 +423,7 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return false
     end
+    true
   end
   def forbid_view
     if not current_user.is_admin and not @object.can_view_content?(current_user.roles @apo)
