@@ -8,6 +8,7 @@ gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 gem 'net-sftp'
 gem 'rake'
+gem 'jettywrapper'
 gem 'about_page'
 gem 'is_it_working-cbeer'
 gem 'rack-webauth', :git => "https://github.com/sul-dlss/rack-webauth.git"
