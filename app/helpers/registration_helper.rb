@@ -111,8 +111,16 @@ module RegistrationHelper
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
     doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
+    
     if doc.nil?
-      pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
+      begin
+         obj = Dor.load_instance 'druid:'+druid
+         solr_doc = obj.to_solr
+          Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
+          doc=solr_doc
+      rescue
+        pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
+      end
       return
     end
 
