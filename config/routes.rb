@@ -57,6 +57,7 @@ Argo::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
+    get '/create_minimal_mods', :on => :member, :action => :create_minimal_mods, :as => 'create_minimal_mods'
     get  '/workflows/:wf_name', :on => :member, :action => :workflow_view,   :as => 'workflow_view'
     post '/workflows/:wf_name', :on => :member, :action => :workflow_update, :as => 'workflow_update'
     get '/workflow/history', :on => :member, :action => :workflow_history_view, :as => 'workflow_history_view'
