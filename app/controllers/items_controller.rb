@@ -232,6 +232,28 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
     end
   end
+  def create_minimal_mods
+    if not (Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'descriptive-metadata')=='error' or Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'publish')=='error')
+      render :text => 'Object is not in error for descMD or publish!', :status => 500
+      return
+    end
+    if not @object.descMetadata.new?
+      render :text => 'This service cannot overwrite existing data!', :status => 500
+      return
+    end
+    @object.descMetadata.content=''
+    @object.set_desc_metadata_using_label
+    @object.save
+    if Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'descriptive-metadata')=='error'
+      Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'descriptive-metadata', 'waiting'
+    end
+    if Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'publish')=='error'
+      Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'publish', 'waiting'
+    end
+    respond_to do |format|
+      format.any { render :text => 'Set metadata ' }
+    end
+  end
   def replace_file
     @object.replace_file params[:uploaded_file],params[:file_name]
     respond_to do |format|

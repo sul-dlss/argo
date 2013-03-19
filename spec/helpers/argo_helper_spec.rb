@@ -33,7 +33,6 @@ describe ArgoHelper do
       @apo=mock()
       @apo.stub(:pid).and_return('apo:druid')
       @object.stub(:admin_policy_object).and_return([@apo])
-      Dor::WorkflowService.stub(:get_workflow_status).and_return('waiting')
       Dor.stub(:find).and_return(@object)
     end
     it 'should create a hash with the needed button info for an admin' do

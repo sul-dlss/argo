@@ -180,6 +180,21 @@ function set_rights(druids){
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
+function create_desc_md(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :create_minimal_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Updated');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+
 //print a success message with whatever description fits the action being performed.
 function success_handler(element_url,desc,after)
 {
@@ -339,7 +354,9 @@ function stop_all()
 	<button id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
 	<button id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
 	<button onclick="$('#purge').show(400)">Purge</button>
-	<%if current_user.is_admin%><button onclick="$('#release_hold').show(400)">Release for ingest</button><%end%>
+	
+	
+	<%if current_user.is_admin%><button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button><button onclick="$('#release_hold').show(400)">Release for ingest</button><%end%>
 	<div style="display:none" id="updates" name="updates">
 		<label>Object Updates</label><br>
 		<button id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
@@ -376,6 +393,12 @@ function stop_all()
 	<input type="text" id="description" name="description" >
 	<br>
 	<button onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</button><br>
+</div>
+
+<div class="bulk_operation" id="create_desc_md" name="create_desc_md">
+	<h1>Create minimal descriptive metadata from the title.</h1>
+	<p>This can only be performed on items which are stopped in the accessioning pipeline due to errors.</p>
+	<button onclick="fetch_druids(create_desc_md);$('#create_desc_md').hide(400);">Create Mods</button><br>
 </div>
 <br>
 

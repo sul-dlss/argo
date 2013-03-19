@@ -166,9 +166,6 @@ module ArgoHelper
     buttons=[]
     if current_user.is_admin 
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-      if (Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'descriptive-metadata')=='error' or Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'publish')=='error')
-        buttons << {:url => url_for(:controller => :items, :action => :create_minimal_mods, :id => pid), :label => 'Create minimal mods'}
-      end
       
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
