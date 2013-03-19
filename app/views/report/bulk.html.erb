@@ -194,6 +194,23 @@ function create_desc_md(druids){
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
+function add_collection(druids){
+	cons=[];
+	var params={
+		'collection': $('#collection_select').val(),
+	}
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :add_collection, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'POST', data: params});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Updated');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
 
 //print a success message with whatever description fits the action being performed.
 function success_handler(element_url,desc,after)
@@ -362,6 +379,7 @@ function stop_all()
 		<button id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
 		<button onclick="$('#content_type').show(400)">Content type</button>
 		<button onclick="$('#rights').show(400)">Object rights</button>
+		<button onclick="$('#add_collection').show(400)">Add collection</button>
 	</div>
 </div>
 <div class="bulk_operation" id="open" name="open">
@@ -399,6 +417,12 @@ function stop_all()
 	<h1>Create minimal descriptive metadata from the title.</h1>
 	<p>This can only be performed on items which are stopped in the accessioning pipeline due to errors.</p>
 	<button onclick="fetch_druids(create_desc_md);$('#create_desc_md').hide(400);">Create Mods</button><br>
+</div>
+<div class="bulk_operation" id="add_collection" name="add_collection">
+	<h1>Add these objects to a collection</h1>
+	<p>This does not remove them from existing collections</p>
+	<%=select_tag :collection_select, options_for_select(current_user.permitted_collections)%>
+	<button onclick="fetch_druids(add_collection);$('#add_collection').hide(400);">Add Collection</button><br>
 </div>
 <br>
 

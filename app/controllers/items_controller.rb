@@ -77,7 +77,12 @@ class ItemsController < ApplicationController
   def add_collection
     @object.add_collection(params[:collection])
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
+      if params[:bulk]
+        format.html {render :status => :ok, :text => 'Collection added!'}
+      else
+        format.html { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
+      end
+      
     end
   end
   def remove_collection
