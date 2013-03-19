@@ -249,10 +249,10 @@ class ItemsController < ApplicationController
     @object.descMetadata.content=''
     @object.set_desc_metadata_using_label
     @object.save
-    if Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'descriptive-metadata')=='error'
+    if Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'descriptive-metadata')=='error'
       Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'descriptive-metadata', 'waiting'
     end
-    if Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'publish')=='error'
+    if Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'publish')=='error'
       Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'publish', 'waiting'
     end
     respond_to do |format|
