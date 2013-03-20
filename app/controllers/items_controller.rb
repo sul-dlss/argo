@@ -2,6 +2,7 @@ class ItemsController < ApplicationController
   before_filter :authorize!
   require 'net/ssh'
   require 'net/sftp'
+  require 'equivalent-xml'
 
   before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
   before_filter :forbid_modify, :only => [:add_collection, :remove_collection, :update_rights, :set_content_type, :tags, :source_id,:delete_file, :close_version, :open_version, :resource, :add_file, :replace_file,:update_attributes, :update_resource ]
@@ -390,6 +391,56 @@ class ItemsController < ApplicationController
     end
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'updated resource ' + params[:resource] + '!' }  
+    end
+  end
+  def remove_duplicate_encoding
+    ds=params[:ds]
+    content=ds.content
+    old_content=content
+    content=CGI.unescape_html(content)
+    ng=Nokogiri::XML(content,nil,'UTF-8')
+    ds.ng_xml=ng
+    ds.content=ng.to_s
+    ds.save
+  end
+  def detect_duplicate_encoding
+    ds=@object.descMetadata
+    content=ds.content
+    /&amp;#[0-9]+;/
+    chars=['amp', 'lt', 'gt','quot']
+    regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
+    chars.each do |char|
+    content=content.gsub('&amp;'+char+';', '&'+char+';')
+    end
+    content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
+    content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
+    ng=Nokogiri::XML(content,nil,'UTF-8')
+    if EquivalentXml.equivalent?(ng,ds.ng_xml)
+      render :status => :ok, :text => 'No change'
+    else
+      render :status => 500, :text => 'Has duplicates'
+    end
+  end
+  def remove_duplicate_encoding
+    ds=@object.descMetadata
+    content=ds.content
+    /&amp;#[0-9]+;/
+    chars=['amp', 'lt', 'gt','quot']
+    regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
+    chars.each do |char|
+    content=content.gsub('&amp;'+char+';', '&'+char+';')
+    end
+    content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
+    content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
+    ng=Nokogiri::XML(content,nil,'UTF-8')
+    if EquivalentXml.equivalent?(ng,ds.ng_xml)
+      render :status => 500, :text => 'No duplicate encoding'
+      return
+    else
+      ds.ng_xml=ng
+      ds.content=ng.to_s
+      @object.save
+      render :status => :ok, :text => 'Has duplicates'
     end
   end
   def set_rights
