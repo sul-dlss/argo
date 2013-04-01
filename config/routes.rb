@@ -57,6 +57,8 @@ Argo::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
+    get '/mods', :on => :member, :action => :mods, :as => 'mods'
+    post '/mods', :on => :member, :action => :update_mods, :as => 'update_mods'
     get '/remove_duplicate_encoding', :on => :member, :action => :remove_duplicate_encoding, :as => 'remove_duplicate_encoding'
     get '/detect_duplicate_encoding', :on => :member, :action => :detect_duplicate_encoding, :as => 'detect_duplicate_encoding'
     get '/create_minimal_mods', :on => :member, :action => :create_minimal_mods, :as => 'create_minimal_mods'
