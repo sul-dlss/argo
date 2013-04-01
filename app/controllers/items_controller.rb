@@ -121,6 +121,20 @@ class ItemsController < ApplicationController
   def workflow_history_view
     @history_xml=Dor::WorkflowService.get_workflow_xml 'dor', params[:id], nil
   end
+  def mods
+    respond_to do |format|
+    format.xml  { render :xml => @object.descMetadata.ng_xml.to_s }
+    format.html
+    end
+  end
+  def update_mods
+    puts params.inspect
+    @object.descMetadata.content=params[:xmlstr]
+    @object.save
+    respond_to do |format|
+    format.xml  { render :xml => @object.descMetadata.ng_xml.to_s }
+    end
+  end
   def workflow_update
     @item=@object
     args = params.values_at(:id, :wf_name, :process, :status)
@@ -419,6 +433,13 @@ class ItemsController < ApplicationController
       render :status => :ok, :text => 'No change'
     else
       render :status => 500, :text => 'Has duplicates'
+    end
+  end
+  def change_mods_value
+    mods=Mods::Reader.new(@object.descMetadata.content)
+    params[:field]
+    if mods.methods.include? params[:field].to_sym
+      mods.send(params[:field].to_sym, params[:val])
     end
   end
   def remove_duplicate_encoding

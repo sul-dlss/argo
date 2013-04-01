@@ -195,6 +195,9 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
+      if object.datastreams.include? 'descMetadata'
+        buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
+      end
     end
     if(doc.has_key?('embargoMetadata_t'))
       embargo_data=doc['embargoMetadata_t']
