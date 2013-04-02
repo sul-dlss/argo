@@ -18,7 +18,7 @@
 		end
 		if (accessioned) and file['preserve'] == 'yes'
 			%>
-			<br>Preservation: <%=%> <%=link_to params[:file], url_for(:controller => :items, :action => :get_preserved_file, :id => params[:id], :file => params[:file], :version => object.versionMetadata.current_version_id)%>
+			<br>Preservation: <%=%> <%=link_to params[:file], url_for(:controller => :items, :action => :get_preserved_file, :id => params[:id], :file => params[:file], :version => last_accessioned_version(object))%>
 			<%
 		end
 	end

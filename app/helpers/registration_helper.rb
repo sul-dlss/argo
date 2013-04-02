@@ -87,10 +87,8 @@ module RegistrationHelper
 
   def metadata_sources
     [
-      ['None','none'], #changed from label
-      ['Symphony','symphony'], 
-      ['Metadata Toolkit','mdtoolkit'],
-      ['Label','label']
+      ['Auto','auto'],
+      ['None','none']
     ]
   end
 

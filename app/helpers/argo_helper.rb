@@ -19,9 +19,13 @@ module ArgoHelper
   end
 
   def index_queue_depth
+    if Dor::Config.status and Dor::Config.status.indexer_url
     url=Dor::Config.status.indexer_url
     data=JSON.parse(open(url).read)
     count=data.first['datapoints'].first.first.to_i
+  else
+    0
+  end
   end
 
   def structure_from_solr(solr_doc, prefix, suffix='display')
@@ -203,10 +207,7 @@ module ArgoHelper
       embargo_data=doc['embargoMetadata_t']
       text=embargo_data.split.first
       date=embargo_data.split.last
-
-      if text == 'released'
-        #do nothing at the moment, we arent displaying these
-      else
+      if text != 'released'
         #add a date picker and button to change the embargo date for those who should be able to.
         buttons << {:label => 'Update embargo', :url => 'items/embargo_form'}
       end

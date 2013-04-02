@@ -127,14 +127,36 @@ function DorRegistration(initOpts) {
           return(false);
           break;
       }
-      //if the metadata source is set, check for metadata ids
-      if (sourcePrefix != 'none' && sourcePrefix!= 'label') {
+      //if the metadata source is auto, figure out whether it should be label, symphony or mdtoolkit based on what is in the mdsource field
+      if (sourcePrefix != 'none') {
         var mdIds = $('#data').jqGrid('getCol','metadata_id')
-        if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
-          $t.displayRequirements('Metadata source "' + sourcePrefix + '" requires metadata IDs for all items.');
-          return(false);
-        }
-      }
+		if(mdIds[0].trim().length==0)
+		{
+			//no md source, set to label
+			$t.metadataSource = 'label';
+			return true;
+		}
+		else
+		{
+			alert(mdIds[0].trim())
+			//if it is an integer, it is a catkey or barcode
+			if(parseInt(mdIds[0].trim()) != NaN)
+			{
+				$t.metadataSource = 'symphony';
+			}
+			else
+			{
+				$t.metadataSource = 'mdtoolkit';
+			}
+		}
+		sourcePrefix = $t.metadataSource;
+		if (sourcePrefix != 'label'){}
+        	if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
+	          $t.displayRequirements('Metadata source "' + sourcePrefix + '" requires metadata IDs for all items.');
+	          return(false);
+	        }
+		}
+      
 
 	  //check for missing source ids
 		var source_ids = $('#data').jqGrid('getCol','source_id')

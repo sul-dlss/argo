@@ -206,6 +206,17 @@ module DorObjectHelper
     end
     def has_been_accessioned? pid
       Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
+    end
+    def last_accessioned_version object
+      #if the item hasnt been accessioned, thats bad
+      if not has_been_accessioned?(object.pid)
+        raise 'Cant get preservation core version for an object that hasnt been accessioned.'
+      end
+      if Dor::WorkflowService.get_lifecycle('dor', object.pid, 'accessioned')
+        object.versionMetadata.current_version_id.to_i - 1
+      else
+        object.versionMetadata.current_version_id
+      end
     end  
     
 

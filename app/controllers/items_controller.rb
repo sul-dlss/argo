@@ -35,18 +35,18 @@ class ItemsController < ApplicationController
   end
   def on_hold
     begin
-    if (Dor::WorkflowService.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (Dor::WorkflowService.workflows.include?('accessionWF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
-      true
-    else
-      false
+      if (Dor::WorkflowService.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (Dor::WorkflowService.workflows.include?('accessionWF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
+        true
+      else
+        false
+      end
+    rescue
+      return false
     end
-  rescue
-    return false
-  end
   end
   #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version. 
   def prepare
-    
+
     if not  Dor::WorkflowService.get_lifecycle('dor', @object.pid, 'submitted' ) or on_hold
       #this item hasnt been submitted yet, it can be modified
     else
@@ -83,7 +83,7 @@ class ItemsController < ApplicationController
       else
         format.html { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
       end
-      
+
     end
   end
   def remove_collection
@@ -123,22 +123,22 @@ class ItemsController < ApplicationController
   end
   def mods
     respond_to do |format|
-    format.xml  { render :xml => @object.descMetadata.content }
-    format.html
+      format.xml  { render :xml => @object.descMetadata.content }
+      format.html
     end
   end
   def update_mods
     @object.descMetadata.content=params[:xmlstr]
     @object.save
     respond_to do |format|
-    format.xml  { render :xml => @object.descMetadata.ng_xml.to_s }
+      format.xml  { render :xml => @object.descMetadata.ng_xml.to_s }
     end
   end
   def workflow_update
     @item=@object
     args = params.values_at(:id, :wf_name, :process, :status)
     check_args = params.values_at(:id, :wf_name, :process)
-    
+
     if args.all? &:present?
       #this will raise and exception if the item doesnt have that workflow step
       Dor::WorkflowService.get_workflow_status 'dor', *check_args
@@ -200,11 +200,11 @@ class ItemsController < ApplicationController
     end
   end
   def get_file
-      data=@object.get_file(params[:file])
-      self.response.headers["Content-Type"] = "application/octet-stream" 
-      self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
-      self.response.headers['Last-Modified'] = Time.now.ctime.to_s
-      self.response_body = data
+    data=@object.get_file(params[:file])
+    self.response.headers["Content-Type"] = "application/octet-stream" 
+    self.response.headers["Content-Disposition"] = "attachment; filename="+params[:file]
+    self.response.headers['Last-Modified'] = Time.now.ctime.to_s
+    self.response_body = data
   end
   def get_preserved_file
     res=@object.get_preserved_file params[:file], params[:version]
@@ -423,7 +423,7 @@ class ItemsController < ApplicationController
     chars=['amp', 'lt', 'gt','quot']
     regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
     chars.each do |char|
-    content=content.gsub('&amp;'+char+';', '&'+char+';')
+      content=content.gsub('&amp;'+char+';', '&'+char+';')
     end
     content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
     content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
@@ -448,7 +448,7 @@ class ItemsController < ApplicationController
     chars=['amp', 'lt', 'gt','quot']
     regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
     chars.each do |char|
-    content=content.gsub('&amp;'+char+';', '&'+char+';')
+      content=content.gsub('&amp;'+char+';', '&'+char+';')
     end
     content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
     content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
@@ -531,8 +531,8 @@ class ItemsController < ApplicationController
   end
   def enforce_versioning
     #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
-      if not @object.allows_modification?
-        render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
+    if not @object.allows_modification?
+      render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
       return
     end
   end
