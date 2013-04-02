@@ -10,7 +10,11 @@
 <script src="/assets/xml/vkbeautify.js"></script>
 <script src="/assets/mods.js"></script>
 <script src="/assets/jquery.xmleditor.js"></script>
+<style>
+ul {list-style-type:none !important}
+li {list-style-type:none !important}
 
+</style>
 
 <body>
 	<div class="wrapper">
@@ -23,7 +27,8 @@
 				schemaObject : modsSchema,
 				documentTitle : 'some title',
 				ajaxOptions: {
-									xmlRetrievalPath: "mods.xml"
+									xmlRetrievalPath: "mods.xml",
+									xmlUploadPath: "mods"
 								}
 			});
 			

@@ -321,4 +321,32 @@ describe 'remove_collection' do
     response.code.should == "403"
   end
 end
+describe 'mods' do
+  it 'should return the mods xml for a GET' do
+    @request.env["HTTP_ACCEPT"] = "application/xml"
+    xml='<somexml>stuff</somexml>'
+    descmd=mock()
+    descmd.should_receive(:content).and_return(xml)
+    @item.should_receive(:descMetadata).and_return(descmd)
+    get 'mods', :id => 'oo201oo0001'
+    response.body.should == xml
+  end
+  it 'should 403 if they arent permitted' do
+    @current_user.stub(:is_admin).and_return(false)
+    get 'mods', :id => 'oo201oo0001'
+    response.code.should == "403"
+  end
+  it 'should update the mods for a POST' do
+    xml='<somexml>stuff</somexml>'
+    descmd=mock()
+    descmd.should_receive(:content=).with(xml)
+    @item.should_receive(:descMetadata).and_return(descmd)
+    post 'update_mods', :id => 'oo201oo0001', :xmlstr => xml
+  end
+  it 'should 403 if they arent permitted' do
+    @current_user.stub(:is_admin).and_return(false)
+    get 'update_mods', :id => 'oo201oo0001'
+    response.code.should == "403"
+  end
+end
 end

@@ -400,15 +400,15 @@ function stop_all()
 	<button id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
 	<button onclick="$('#purge').show(400)">Purge</button>
 	<button onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</button>
-
-	<%if current_user.is_admin%><button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button><button onclick="$('#release_hold').show(400)">Release for ingest</button><button onclick="$('#remove_duplicate_encoding').show(400)">Remove duplicate xml encoding</button>
+	<button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button>
+	<%if current_user.is_admin%><button onclick="$('#release_hold').show(400)">Release for ingest</button><button onclick="$('#remove_duplicate_encoding').show(400)">Remove duplicate xml encoding</button>
 	<%end%>
 	<div style="display:none" id="updates" name="updates">
 		<label>Object Updates</label><br>
 		<button id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
 		<button onclick="$('#content_type').show(400)">Content type</button>
-		<button onclick="$('#rights').show(400)">Object rights</button>
-		<button onclick="$('#add_collection').show(400)">Add collection</button>
+		<button onclick="$('#rights').show(400)">Object rights</button
+		<button onclick="$('#add_collection').show(400)">Add collection</button
 	</div>
 </div>
 <div class="bulk_operation" id="open" name="open">
