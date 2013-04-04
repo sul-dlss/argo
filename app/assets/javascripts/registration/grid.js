@@ -451,13 +451,6 @@ var gridContext = function() {
         return true
       })
       
-      $('#id_source').change(function(evt) {
-        control = $(evt.target)
-        var mdtk = !control.attr('disabled')
-        mdtk = mdtk && (control.val() == 'mdtoolkit')
-        disable($('#mdform_id'), !mdtk)
-        return true
-      });
       
       return(this);
     },

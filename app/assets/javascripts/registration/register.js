@@ -130,16 +130,17 @@ function DorRegistration(initOpts) {
       //if the metadata source is auto, figure out whether it should be label, symphony or mdtoolkit based on what is in the mdsource field
       if (sourcePrefix != 'none') {
         var mdIds = $('#data').jqGrid('getCol','metadata_id')
+alert(mdIds[0]);
 		if(mdIds[0].trim().length==0)
 		{
 			//no md source, set to label
 			$t.metadataSource = 'label';
-			return true;
 		}
 		else
 		{
+			var intRegex = /^\d+$/;
 			//if it is an integer, it is a catkey or barcode
-			if(parseInt(mdIds[0].trim()) != NaN)
+			if(intRegex.test(mdIds[0].trim()))
 			{
 				$t.metadataSource = 'symphony';
 			}
@@ -151,9 +152,10 @@ function DorRegistration(initOpts) {
 		//check for mixed md sources, that isnt allowed
 		for(mdId in mdIds)
 		{
-			alert(mdIds[mdId]);
 			var trimmed=mdIds[mdId].trim();
-			if(parseInt(trimmed) != NaN &&  $t.metadataSource != 'symphony')
+			var intRegex = /^\d+$/;
+			//if it is an integer, it is a catkey or barcode
+			if(intRegex.test(trimmed) &&  $t.metadataSource != 'symphony')
 			{
 				$t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies symphony.');
 	            return false;	
