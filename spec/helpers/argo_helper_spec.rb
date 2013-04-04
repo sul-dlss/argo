@@ -18,12 +18,12 @@ describe ArgoHelper do
 	end
 	describe 'render_buttons' do
     before :each do
-      @doc={'id'=>'something'}
+      @doc={'id'=>'something', 'is_governed_by_s'=>['apo_druid']}
       @usr=mock()
       @usr.stub(:is_admin).and_return(true)
       @usr.stub(:groups).and_return([])
       @usr.stub(:is_manager).and_return(false)
-      @usr.stub(:roles).and_return([])
+      #@usr.stub(:roles).and_return([])
       helper.stub(:has_been_published?).and_return(true)
       helper.stub(:current_user).and_return(@usr)
       @object=mock()
@@ -31,6 +31,8 @@ describe ArgoHelper do
       @object.stub(:pid).and_return('druid:123')
       @object.stub(:datastreams).and_return({'contentMetadata'=>nil})
       @apo=mock()
+      @usr.should_receive(:roles).with('apo_druid').and_return([])
+      
       @apo.stub(:pid).and_return('apo:druid')
       @object.stub(:admin_policy_object).and_return([@apo])
       Dor.stub(:find).and_return(@object)

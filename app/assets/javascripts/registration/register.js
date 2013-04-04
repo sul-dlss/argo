@@ -138,7 +138,6 @@ function DorRegistration(initOpts) {
 		}
 		else
 		{
-			alert(mdIds[0].trim())
 			//if it is an integer, it is a catkey or barcode
 			if(parseInt(mdIds[0].trim()) != NaN)
 			{
@@ -149,10 +148,32 @@ function DorRegistration(initOpts) {
 				$t.metadataSource = 'mdtoolkit';
 			}
 		}
+		//check for mixed md sources, that isnt allowed
+		for(mdId in mdIds)
+		{
+			alert(mdIds[mdId]);
+			var trimmed=mdIds[mdId].trim();
+			if(parseInt(trimmed) != NaN &&  $t.metadataSource != 'symphony')
+			{
+				$t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies symphony.');
+	            return false;	
+			}
+			if(trimmed == '' && $t.metadataSource != 'label')
+			{
+				$t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies label.');
+	            return false;
+			}
+			if(trimmed.indexOf('druid')>0 && $t.metadataSource != 'mdtoolkit')
+			{
+				$t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies mdtoolkit.');
+	            return false;
+			}
+			
+		}
 		sourcePrefix = $t.metadataSource;
 		if (sourcePrefix != 'label'){}
         	if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
-	          $t.displayRequirements('Metadata source "' + sourcePrefix + '" requires metadata IDs for all items.');
+	          $t.displayRequirements('Metadata source was detected as"' + sourcePrefix + '", which	 requires metadata IDs for all items.');
 	          return(false);
 	        }
 		}

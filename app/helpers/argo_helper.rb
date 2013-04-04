@@ -164,7 +164,7 @@ module ArgoHelper
     object = Dor.find(pid)
     apo_pid = ''
     begin 
-      apo_id=doc['is_governed_by_s'].first.gsub('info:fedora/','')
+      apo_pid=doc['is_governed_by_s'].first.gsub('info:fedora/','')
     rescue
     end
     buttons=[]
