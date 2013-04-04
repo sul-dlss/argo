@@ -25,6 +25,7 @@ Argo::Application.routes.draw do
   match '/report/bulk', :to => "report#bulk", :as => "report_bulk"
   match 'report/pids', :to => "report#pids", :as => 'report_pids'
   match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
+  match 'report/reset', :to => "report#reset", :as => 'report_reset'
   
   root :to => "catalog#index"
 

@@ -6,7 +6,7 @@
         <td class="count waiting"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'waiting') %></td>
         <td class="count hold"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'hold') %></td>
         <td class="count ready"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'ready') %></td>
-        <td class="count errors"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'error') %></td>
+        <td class="count errors"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'error') %> <%=render_workflow_reset_link(wf_data,wf_name,wf_process,'error')%></td>
         <td class="count skipped"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'skipped') %></td>
         <td class="count completed"><%= render_workflow_item_count(wf_data,wf_name,wf_process,'completed') %></td>
       </tr>

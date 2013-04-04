@@ -71,7 +71,16 @@ class ReportController < CatalogController
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
     self.response_body = Report.new(params,fields).csv2
   end
-  
+
+  # an ajax call to reset workflow states for objects
+  def reset
+    return unless request.xhr?
+    @workflow=params[:reset_workflow]
+    @step=params[:reset_step]
+    @ids=Report.new(params,['druids']).pids params
+    @ids.each { |pid| Dor::WorkflowService.update_workflow_status 'dor',"druid:#{pid}",@workflow, @step, "waiting" }
+  end
+    
   def workflow_grid
     delete_or_assign_search_session_params
     (@response, @document_list) = get_search_results
