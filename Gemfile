@@ -2,7 +2,7 @@ source :rubygems
 source "http://sul-gems.stanford.edu"
 
 
-gem 'dor-services', ">= 3.14.5", :git => 'https://github.com/sul-dlss/dor-services.git'
+gem 'dor-services', ">= 3.24.3"
 gem 'rails', '3.2.11'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
