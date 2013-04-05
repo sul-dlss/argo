@@ -130,7 +130,6 @@ function DorRegistration(initOpts) {
       //if the metadata source is auto, figure out whether it should be label, symphony or mdtoolkit based on what is in the mdsource field
       if (sourcePrefix != 'none') {
         var mdIds = $('#data').jqGrid('getCol','metadata_id')
-alert(mdIds[0]);
 		if(mdIds[0].trim().length==0)
 		{
 			//no md source, set to label
