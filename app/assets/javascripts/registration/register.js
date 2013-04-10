@@ -172,13 +172,13 @@ function DorRegistration(initOpts) {
 			
 		}
 		sourcePrefix = $t.metadataSource;
-		if (sourcePrefix != 'label'){}
+		if (sourcePrefix != 'label'){
         	if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
 	          $t.displayRequirements('Metadata source was detected as"' + sourcePrefix + '", which	 requires metadata IDs for all items.');
 	          return(false);
 	        }
 		}
-      
+      }
 
 	  //check for missing source ids
 		var source_ids = $('#data').jqGrid('getCol','source_id')
