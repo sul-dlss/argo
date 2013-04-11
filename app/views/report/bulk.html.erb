@@ -239,7 +239,62 @@ function remove_duplicate_encoding(druids){
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
-
+function schema_validate(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :schema_validation, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Valid');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+function discoverable(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :discoverable, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Discovable.');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+function remediate_mods(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :remediate_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Fixed');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+function refresh_metadata(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Updated');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
 //print a success message with whatever description fits the action being performed.
 function success_handler(element_url,desc,after)
 {
@@ -260,7 +315,7 @@ function error_handler(xhr,status,err,element,index, after){
 		after();
 	}
 	msg='';
-	if( xhr.responseText && xhr.responseText.length<150)
+	if( xhr.responseText && xhr.responseText.length<500)
 	{
 		msg=xhr.responseText;
 	}
@@ -401,7 +456,12 @@ function stop_all()
 	<button onclick="$('#purge').show(400)">Purge</button>
 	<button onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</button>
 	<button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button>
-	<%if current_user.is_admin%><button onclick="$('#release_hold').show(400)">Release for ingest</button><button onclick="$('#remove_duplicate_encoding').show(400)">Remove duplicate xml encoding</button>
+	<%if current_user.is_admin%><br><button onclick="$('#release_hold').show(400)">Release for ingest</button>
+	<button onclick="$('#remove_duplicate_encoding').show(400)">Remove duplicate xml encoding</button>
+	<button onclick="$('#schema_validate').show(400)">Validate MODs</button>
+	<button onclick="$('#remediate_mods').show(400)">Remediate MODs</button>
+	<button onclick="$('#refresh_metadata').show(400)">Refresh MODs</button>
+	<button onclick="$('#discoverable').show(400)">Check discoverability</button>
 	<%end%>
 	<div style="display:none" id="updates" name="updates">
 		<label>Object Updates</label><br>
@@ -489,6 +549,22 @@ function stop_all()
 <div class="bulk_operation" id="remove_duplicate_encoding" name="remove_duplicate_encoding">
 	<h1>Check whether items have duplicate xml encoding</h1>
 	<button onclick="fetch_druids(remove_duplicate_encoding);$('#remove_duplicate_encoding').hide(400);">Remove duplicate encoding</button><br>
+</div>
+<div class="bulk_operation" id="remediate_mods" name="remediate_mods">
+	<h1>Run the Mclaughlin Maps remediation suite.</h1>
+	<button onclick="fetch_druids(remediate_mods);$('#remediate_mods').hide(400);">Remediate</button><br>
+</div>
+<div class="bulk_operation" id="discoverable" name="discoverable">
+	<h1>Check for the presence of the mods basic required fields for Searchworks.</h1>
+	<button onclick="fetch_druids(discoverable);$('#discoverable').hide(400);">Check discoverability</button><br>
+</div>
+<div class="bulk_operation" id="schema_validate" name="schema_validate">
+	<h1>Run mods schema validation.</h1>
+	<button onclick="fetch_druids(schema_validate);$('#schema_validate').hide(400);">Validate</button><br>
+</div>
+<div class="bulk_operation" id="refresh_metadata" name="refresh_metadata">
+	<h1>Refresh metadata from the external source.</h1>
+	<button onclick="fetch_druids(refresh_metadata);$('#refresh_metadata').hide(400);">Refresh metadata</button><br>
 </div>
 <div class="bulk_operation" id="detect_duplicate_encoding" name="detect_duplicate_encoding">
 	<h1>Check whether items have duplicate xml encoding</h1>
