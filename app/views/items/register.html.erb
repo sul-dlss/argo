@@ -16,7 +16,7 @@
         <div class="property-item spacer"></div>
         <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
         <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), :class => 'tag-field', :'data-tagname' => 'Process : Content Type' %></div>
-        <div class="property-item"><label for='mdform_id'>Editor Form</label><%= select_tag :mdform_id, '', :class => 'tag-field', :'data-tagname' => 'MDForm' %></div>
+        <div class="property-item"><label for='mdform_id'>MDtoolkit Form</label><%= select_tag :mdform_id, '', :class => 'tag-field', :'data-tagname' => 'MDForm' %></div>
         <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, :class => 'tag-field', :'data-tagname' => 'Project', :'data-rcparam' => 'projectName' %></div>
         <div class="property-item wide"><label for='tag_1'>Tags</label>
           <span id="tags" style="width: auto">
