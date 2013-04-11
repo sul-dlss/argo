@@ -2,6 +2,7 @@ source :rubygems
 source "http://sul-gems.stanford.edu"
 
 
+gem 'stanford-mods'
 gem 'dor-services', ">= 3.24.3"
 gem 'rails', '3.2.11'
 gem "blacklight", '~>3.7'
