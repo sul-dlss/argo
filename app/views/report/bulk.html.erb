@@ -439,9 +439,7 @@ function stop_all()
 <%= render 'constraints', :localized_params=>params %>
 <%= render 'report_view_toggle', :localized_params=>params %>
 <% end %>
-<% sidebar_items << capture do %>
-<%= render :partial=>'facets' %>
-<% end %>
+
 <h1>Bulk update operations</h1>
 <button id="get_druids" name="get_druids" onclick="get_druids();">Get druids from search</button>
 <button onclick="$('#pid_list').show(400)">Paste a druid list</button>
