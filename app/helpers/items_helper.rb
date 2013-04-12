@@ -145,19 +145,19 @@ module ItemsHelper
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       atts=node.attributes()
       states=false
-      if node['type'] and node['type'].include?('state') and is_numeric?(node['type'][-1, 1]) 
+      if node['type'] and node['type'].include?('state') and is_numeric?(node['type'].last(1)) 
         #find the number and use it
-        number=node['type'][-2, 2].strip
+        number=node['type'].last(2).strip
         if not is_numeric? number
-          number=node['type'][-1, 1]
+          number=node['type'].last(1)
         end       
         node['displayLabel']='State '+number
         node.remove_attribute('type')
       else
-        if node['displayLabel'] and (node['displayLabel'].include?('State') or node['displayLabel'].include?('state')) and is_numeric? node['displayLabel'][-1][1]
-          number=node['displayLabel'][-2, 2].strip
+        if node['displayLabel'] and node['displayLabel'].include?('tate') and is_numeric? node['displayLabel'].last(1)
+          number=node['displayLabel'].last(2).strip
           if not is_numeric? number
-            number=node['displayLabel'][-1, 1]
+            number=node['displayLabel'].last(1)
           end
           if not is_numeric? number
             node.remove_attribute('displayLabel')
@@ -166,6 +166,7 @@ module ItemsHelper
             node['displayLabel']='State '+number
             node.remove_attribute('type')
           end
+
         end
       end
     end
