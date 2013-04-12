@@ -340,6 +340,7 @@ module ItemsHelper
     messages
   end
   def mclaughlin_remediation xml
+    mclaughlin_cleanup_states xml
     mclaughlin_cleanup_statement xml
     mclaughlin_reorder_states xml
     mclaughlin_cleanup_notes xml
