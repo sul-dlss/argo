@@ -9,8 +9,8 @@ set :bundle_flags, "--quiet"
 
 require 'capistrano/ext/multistage'
 
-after "deploy:create_symlink", "argo:initialize_htaccess"
-after "deploy", "deploy:migrate"
+before "deploy:restart", "argo:initialize_htaccess"
+before "deploy:restart", "deploy:migrate"
 
 set :shared_children, %w(log config/certs config/environments config/database.yml config/solr.yml config/default_htaccess_directives)
 
