@@ -4,7 +4,7 @@ class DorController < ApplicationController
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
   def index_logger
-    @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
+    @@index_logger |= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
     @@index_logger.formatter = proc do |severity, datetime, progname, msg|
       "#{datetime}: #{msg}\n"
     end
@@ -63,10 +63,6 @@ class DorController < ApplicationController
       Dor::SearchService.solr.delete_by_id(params[:pid])
       Dor::SearchService.solr.commit
       render :text => params[:pid]
-    end
-
-    def index_exceptions
-      @exceptions = IndexingException.order(:created_at).reverse_order.page(params[:page]).per(50)
     end
 
     def republish
