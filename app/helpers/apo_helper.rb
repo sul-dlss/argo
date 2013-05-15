@@ -1,4 +1,8 @@
+# encoding: utf-8
 module ApoHelper
+  def utf_val
+    "hello world ©"
+  end
   def creative_commons_options
   [
     ['None',''],
@@ -34,7 +38,7 @@ module ApoHelper
         a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
       end
       result.collect do |doc|
-        [Array(doc['dc_title_t']).first,doc['id'].to_s]
+        [Array(doc['dc_title_t']).first,doc['dc_title_t'].first.to_s]
       end
   end
   def agreement_options

@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
   end
   def on_hold
     begin
-      if (Dor::WorkflowService.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (Dor::WorkflowService.workflows.include?('accessionWF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
+      if (@object.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (@object.workflows.include?('accessionWF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
         true
       else
         false
@@ -537,10 +537,10 @@ class ItemsController < ApplicationController
     def create_obj
       if params[:id]
         begin
-          @object = Dor::Item.find params[:id], :lightweight => true
+          @object = Dor::Item.find params[:id]
           @apo=@object.admin_policy_object
-          if @apo.length>0
-            @apo=@apo.first.pid
+          if @apo
+            @apo=@apo.pid
           else
             @apo=''
           end

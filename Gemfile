@@ -3,7 +3,7 @@ source "http://sul-gems.stanford.edu"
 
 
 gem 'stanford-mods'
-gem 'dor-services', ">= 3.24.3"
+gem 'dor-services', ">= 4.0.0"
 gem 'rails', '3.2.11'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
@@ -30,7 +30,8 @@ gem "kgio"
 gem 'kaminari'
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 group :test, :development do
-  gem 'unicorn'
+  gem 'selenium-webdriver'
+	gem 'unicorn'
   gem 'rspec-rails'
   gem 'capybara'
   gem "rack-test", :require => "rack/test"

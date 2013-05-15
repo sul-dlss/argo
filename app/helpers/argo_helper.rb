@@ -20,12 +20,12 @@ module ArgoHelper
 
   def index_queue_depth
     if Dor::Config.status and Dor::Config.status.indexer_url
-    url=Dor::Config.status.indexer_url
-    data=JSON.parse(open(url).read)
-    count=data.first['datapoints'].first.first.to_i
-  else
-    0
-  end
+      url=Dor::Config.status.indexer_url
+      data=JSON.parse(open(url).read)
+      count=data.first['datapoints'].first.first.to_i
+    else
+      0
+    end
   end
 
   def structure_from_solr(solr_doc, prefix, suffix='display')
@@ -145,39 +145,30 @@ module ArgoHelper
     return result.html_safe
   end
   def archive_button
-     accessionComplete = true
-      wf=object.workflows.get_workflow('accessionWF','dor')
-      wf.processes.each do |proc|
-        if proc.status != 'completed'
-          accessionComplete = false
-        end
+    accessionComplete = true
+    wf=object.workflows.get_workflow('accessionWF','dor')
+    wf.processes.each do |proc|
+      if proc.status != 'completed'
+        accessionComplete = false
       end
-      if wf.processes.length==0
-        accessionComplete=false
-      end
-      if accessionComplete
-        buttons << {:url =>  url_for(:controller => :dor,:action => :archive_workflows, :pid => pid), :label => 'Archive accessionWF'}
-      end
+    end
+    if wf.processes.length==0
+      accessionComplete=false
+    end
+    if accessionComplete
+      buttons << {:url =>  url_for(:controller => :dor,:action => :archive_workflows, :pid => pid), :label => 'Archive accessionWF'}
+    end
   end
   def render_buttons(doc)
     pid=doc['id']
     object = Dor.find(pid)
     apo_pid = ''
+    #wf_stuff.include? 'accessionWF:completed:publish'
     begin 
       apo_pid=doc['is_governed_by_s'].first.gsub('info:fedora/','')
     rescue
     end
     buttons=[]
-    if current_user.is_admin 
-      buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-      
-      if has_been_published? pid
-        buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
-      end
-      if not has_been_submitted? pid
-        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page=> true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
-      end
-    end
     if(pid and can_close_version?(pid))
       buttons << {:url => '/items/'+pid+'/close_version_ui', :label => 'Close Version'}
     else
@@ -186,10 +177,18 @@ module ArgoHelper
       end
     end
     #if this is an apo and the user has permission for the apo, let them edit it.
-    if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or object.can_manage_item?(current_user.roles(apo_pid)))
+    if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
+      buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
+
+      if has_been_published? pid
+        buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
+      end
+      if not has_been_submitted? pid
+        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page=> true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
+      end
       buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
       buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
@@ -199,7 +198,7 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
-      if object.datastreams.include? 'descMetadata'
+      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
@@ -212,7 +211,7 @@ module ArgoHelper
         buttons << {:label => 'Update embargo', :url => 'items/embargo_form'}
       end
     end
-   buttons
+    buttons
   end
 
   def first_image(a)

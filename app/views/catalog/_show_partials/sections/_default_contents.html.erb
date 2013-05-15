@@ -9,8 +9,8 @@
 				<ul>
 					<%
 					apo_pid=nil
-					if object.admin_policy_object.first
-						apo_pid=object.admin_policy_object.first.pid
+					if object.admin_policy_object
+						apo_pid=object.admin_policy_object.pid
 					end
 					
 					can_manage = current_user.is_admin or current_user.is_manager or (apo_pid and object.can_manage_content? current_user.roles(apo_pid))

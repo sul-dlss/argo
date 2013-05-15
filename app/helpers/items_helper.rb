@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'stanford-mods'
 module ItemsHelper
   def valid_resource_types type
@@ -21,6 +22,44 @@ module ItemsHelper
     Argo::Config.urls.stacks_file+'/'+druid+'/'+file_name
   end
 
+  #remove all namespaces and add back mods and xsi with the schema declaration 
+  def mclaughlin_prune_namespaces xml
+    xml.remove_namespaces!
+    xml.root.add_namespace nil, 'http://www.loc.gov/mods/v3'
+    xml.root.add_namespace 'xsi', "http://www.w3.org/2001/XMLSchema-instance"
+    xml.root['xsi:schemaLocation']="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"
+    xml.root['version']='3.3'    
+  end
+  def mclaughlin_reorder_notes xml
+    notes={ :general => [], :sor => [], :pub => [], :ref => [], :lang => [] }
+    xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
+      case node['displayLabel']
+      when nil
+        notes[:general] << node
+      when 'Language'
+        notes[:lang] << node
+      when 'Statement of Responsibility'
+        notes[:sor] << node
+      when 'Publication'
+        notes[:pub] << node
+      when 'References'
+        notes[:ref] << node
+      end
+    end
+    root=xml.root
+    reparent notes[:general], root
+    reparent notes[:lang], root
+    reparent notes[:pub], root
+    reparent notes[:sor], root
+    #state reording is a complicated pain, do it elsewhere
+    mclaughlin_reorder_states xml
+    reparent notes[:ref], root
+  end
+  def reparent nodes, root
+    nodes.each do |node| 
+      root << node
+    end
+  end
   def mclaughlin_reorder_states xml
     states=[]
     parent=nil
@@ -36,7 +75,7 @@ module ItemsHelper
       n['displayLabel'][7]='z' #pad 2 digit numbers so they sort to the bottom. There must be a better way.
     end }
     sorted.each do |node|
-      parent << node
+      xml.root << node
     end
     xml
   end
@@ -205,7 +244,37 @@ module ItemsHelper
       end
     end
   end
-
+  def mclaughlin_fix_cartographics xml
+    hash={}
+    hash['W0000000 W0000000 N900000 N900000'] = ['W0000000 W0000000 N0900000 N0900000','(W 0° --E 0°/N 90° --N 90°)']
+    hash['W0180000 E0510000 N370000 S350000'] = ['W0180000 E0510000 N0370000 S0350000','(W 18° --E 51°/N 37° --S 35°)']
+    hash['W0200000 E1600000 N900000 S900000'] = ['W1600000 E0200000 N0900000 S0900000','(W 160° --E 20°/N 90° --S 90°)']
+    hash['W0210000 E1590000 N900000 S900000'] = ['W0210000 E1590000 N0900000 S0900000','(W 21° --E 159°/N 90° --S 90°)']
+    hash['W0700000 E1100000 N630000 S530000'] = ['E1100000 W0700000 N0630000 S0530000','(E 110° --W 70°/N 63° --S 53°)']
+    hash['W0830000 W0690000 N470000 N310000'] = ['W1250000 W1100000 N0470000 N0310000','(W 125° --W 110°/N 47° --N 31°)']
+    hash['W0921500 W0771000 N183000 N071000'] = ['W0921500 W0771000 N0183000 N0071000','(W 92°15ʹ --W 77°10ʹ/N 18°30ʹ --N 7°10ʹ)']
+    hash['W1243000 W1141500 N420000 N323000'] = ['W1243000 W1141500 N0420000 N0323000','(W 124°30ʹ --W 114°15ʹ/N 42°00ʹ --N 32°30)']
+    hash['W1730000 W0100000 N840000 N071000'] = ['W1730000 W0100000 N0840000 N0071000','(W 173°00ʹ --W 10°00ʹ/N 84°00ʹ --N 7°10ʹ)']
+    hash['W1800000 E1800000 N850000 S850000'] = ['W1800000 E1800000 N0850000 S0850000','(W 180° --E 180°/N 85° --S 85°)']
+    hash['W1730000 W0100000 N840000 N080000'] = ['W1730000 W0100000 N0840000 N0080000','(W 173° --W 10°/N 84° --N 8°)']
+    hash['W0820000 W0350000 N130000 S550000'] = ['W0820000 W0350000 N0130000 S0550000','(W 82° --W 35°/N 13° --S 55°)']
+    hash['W0000000 W0000000 S900000 S900000'] = ['W0000000 W0000000 S0900000 S0900000','(W 0° --W 0°/S 90° --S 90°)']
+    hash['W1280000 W0650000 N510000 N250000'] = ['W1280000 W0650000 N0510000 N0250000','(W 128° --W 65°/N 51° --N 25°)']
+    coords = xml.search('//mods:subject/mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
+    coords.each do |coord|
+      if hash.has_key? coord.text
+        #the idea is to create a new subject/cartographics/coordinates and put the corrected encoded coords there, with the more readable ones in the original subject/cartographics
+        new_sub=Nokogiri::XML::Node.new('mods:subject',xml)
+        new_cart=Nokogiri::XML::Node.new('mods:cartographics',xml)
+        new_coord=Nokogiri::XML::Node.new('mods:coordinates',xml)
+        new_coord.content=hash[coord.text].first
+        new_cart.add_child new_coord
+        new_sub.add_child new_cart
+        coord.parent.parent.parent.add_child new_sub    
+        coord.content = hash[coord.text].last
+      end
+    end
+  end
   def schema_validate xml
     @xsd ||= Nokogiri::XML::Schema(File.read(File.expand_path(File.dirname(__FILE__) + "/xslt/mods-3-4.xsd")))
     errors=[]
@@ -275,6 +344,12 @@ module ItemsHelper
     }
     toret 
   end
+  def mclaughlin_remove_keydate xml
+    titles=xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3')
+    titles.each do |title|
+      title.remove
+    end
+  end
   #remove empty nodes and strip trailing whitespace from text
   def remove_empty_nodes xml
     root=xml.search('//mods:mods','mods'=>'http://www.loc.gov/mods/v3')
@@ -310,7 +385,7 @@ module ItemsHelper
     end
   end
 
-  def mods_discoverabable xml
+  def mods_discoverable xml
     messages=[]
     mods_rec = Stanford::Mods::Record.new
     mods_rec.from_nk_node(xml)
@@ -354,6 +429,7 @@ module ItemsHelper
     mclaughlin_cleanup_references xml
     mclaughlin_cleanup_publication xml
   end
+
   def is_numeric? s
     begin
       Float(s)

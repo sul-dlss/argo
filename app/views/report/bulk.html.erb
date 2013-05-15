@@ -87,6 +87,7 @@ function purge(druids){
 
 function fetch_druids(fun)
 {
+	$(".stop_button").show();
 	log=document.getElementById('log');
 	log.style.display="block";
 	if(document.getElementById('pids').value.length>5)
@@ -307,6 +308,7 @@ function success_handler(element_url,desc,after)
 	if (job_count.length == 0)
 	{
 		log.innerHTML = "Done!\n<br>"+log.innerHTML
+    	$(".stop_button").hide();
 	}
 }
 function error_handler(xhr,status,err,element,index, after){
@@ -327,6 +329,7 @@ function error_handler(xhr,status,err,element,index, after){
 		if (job_count.length == 0)
 		{
 			log.innerHTML = "Done!<br>\n"+log.innerHTML
+			$(".stop_button").hide();
 		}
 	
 }
@@ -413,6 +416,7 @@ function get_source_ids()
 function show_buttons()
 {
 	$('#updates').show(400);
+	$('.update_buttons').removeAttr("disabled");
 }
 function stop_all()
 {
@@ -461,12 +465,12 @@ function stop_all()
 	<button onclick="$('#refresh_metadata').show(400)">Refresh MODs</button>
 	<button onclick="$('#discoverable').show(400)">Check discoverability</button>
 	<%end%>
-	<div style="display:none" id="updates" name="updates">
-		<label>Object Updates</label><br>
-		<button id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
-		<button onclick="$('#content_type').show(400)">Content type</button>
-		<button onclick="$('#rights').show(400)">Object rights</button
-		<button onclick="$('#add_collection').show(400)">Add collection</button
+	<div style="" id="updates" name="updates">
+		<label>Object Updates, you must prepare objects to use these.</label><br>
+		<button class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
+		<button class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</button>
+		<button class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</button>
+		<button class="update_buttons"disabled onclick="$('#add_collection').show(400)">Add collection</button>
 	</div>
 </div>
 <div class="bulk_operation" id="open" name="open">
@@ -591,6 +595,6 @@ function stop_all()
 	<%=select_tag :rights_select, options_for_select(['world','stanford', 'none', 'dark'])%>
 	<button id="rights_button" name="rights_button" onclick="fetch_druids(set_rights);$('#rights').hide(400);">Set rights</button>
 </div>
-<button onclick="stop_all();">Stop</button>
+<button id="stop" class="stop_button" style="display:none" name="stop" onclick="stop_all();">Stop</button>
 
 <br><div style="display:none;width:50%" id="log" name="log"></div></div>

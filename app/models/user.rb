@@ -83,7 +83,7 @@ class User < ActiveRecord::Base
     known_roles.each do |role|
       q+=' OR apo_role_'+role+'_t:('+query+')' 
     end
-    resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id'})['response']['docs']
+    resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!tag_facet:"Project : Hydrus"'})['response']['docs']
     pids=[]
     count=1
     resp.each do |doc|
@@ -98,17 +98,26 @@ class User < ActiveRecord::Base
       qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
     end
     q+=qrys.join " OR "
-    result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_t,dc_title_t').docs
+    result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_t,dc_title_t'}).docs
+    
+    #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_t,dc_title_t').docs
     result.sort! do |a,b|
       a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
+    #puts 'qry '+result.first['dc_title_t'].encoding.inspect
     res=[['None', '']]
     res+=result.collect do |doc|
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
+    res.each do |ar|
+      ar[0] =chomp_title ar.first
+    end
     res
   end
-  
+  #this is a nasty way to deal with the bizzare ascii results coming from solr. Upgrading to blacklight 4.2 looks like it will remove the need for this
+  def chomp_title title
+    title.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
+  end
   @groups
   #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions
   def set_groups grps

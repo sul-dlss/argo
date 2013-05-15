@@ -1,6 +1,6 @@
 <%if(params[:edit])
 
- if @user and (@user.is_admin or (@obj.can_manage_content?(@user.roles(@obj.admin_policy_object.first.pid)) and @obj.can_manage_metadata?(@user.roles(@obj.admin_policy_object.first.pid)))) %>
+ if @user and (@user.is_admin or (@obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid)) and @obj.can_manage_metadata?(@user.roles(@obj.admin_policy_object.pid)))) %>
 	<%= form_tag url_for(:controller => :items, :action => :datastream_update), :method => :POST do%>
 		<input type="hidden" name="id" value="<%=@obj.pid %>" />
 		<input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
@@ -15,7 +15,7 @@ else
 	#if the user is a repo admin or is permitted to manage both content and rights, display raw xml editing
 %>
 	<%=
-	if @user and (@user.is_admin or @obj.can_manage_content?(@user.roles(@obj.admin_policy_object.first.pid))) and (@obj.datastreams[params[:dsid]].respond_to? :ng_xml or params[:dsid] == 'RELS-EXT') and params[:dsid] != 'workflows'
+	if @user and (@user.is_admin or @obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid))) and (@obj.datastreams[params[:dsid]].respond_to? :ng_xml or params[:dsid] == 'RELS-EXT') and params[:dsid] != 'workflows'
 	 	link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :class => 'dialogLink', :title => params[:dsid]  
 	end
 	%>

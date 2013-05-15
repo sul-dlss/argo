@@ -28,7 +28,7 @@ describe ItemsController do
     @item.stub(:delete)
     @apo=mock()
     @apo.stub(:pid).and_return('druid:apo')
-    @item.stub(:admin_policy_object).and_return([@apo])
+    @item.stub(:admin_policy_object).and_return(@apo)
     Dor::SearchService.solr.stub(:add)
   end
   describe 'purge' do
@@ -336,6 +336,8 @@ describe 'mods' do
     get 'mods', :id => 'oo201oo0001'
     response.code.should == "403"
   end
+end
+describe 'update_mods' do
   it 'should update the mods for a POST' do
     xml='<somexml>stuff</somexml>'
     descmd=mock()

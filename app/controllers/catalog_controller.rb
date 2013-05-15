@@ -137,7 +137,7 @@ class CatalogController < ApplicationController
       @obj = Dor.find params[:id]
         apo=nil
         begin
-        apo=@obj.admin_policy_object.first
+        apo=@obj.admin_policy_object
         rescue
         end
         if not apo and not @user.is_admin and not @user.is_viewer
@@ -145,7 +145,7 @@ class CatalogController < ApplicationController
           return
         end
         #if there is no apo and things got to this point, they are a repo viewer or admin
-        if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.first.pid)) and not @user.is_admin and not @user.is_viewer
+        if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.pid)) and not @user.is_admin and not @user.is_viewer
           render :status=> :forbidden, :text =>'forbidden'
           return
         end

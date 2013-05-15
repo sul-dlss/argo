@@ -4,7 +4,7 @@ class DorController < ApplicationController
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
   def index_logger
-    @@index_logger |= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
+    @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
     @@index_logger.formatter = proc do |severity, datetime, progname, msg|
       "#{datetime}: #{msg}\n"
     end

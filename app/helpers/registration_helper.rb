@@ -1,3 +1,4 @@
+# encoding: utf-8
 module RegistrationHelper
 
   def apo_list(*permission_keys)
@@ -13,7 +14,10 @@ module RegistrationHelper
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
   end
-
+  
+  def utf_val
+    "hello world ©"
+  end
   def apo_default_rights_list(*permission_keys)
     q = 'objectType_t:adminPolicy'
     unless permission_keys.empty?
