@@ -61,8 +61,6 @@ module RegistrationHelper
   def valid_object_types
     [
       ['Item','item'],
-      ['Set','set'],
-      ['Collection','collection'],
       ['Workflow Definition','workflow']
     ]
   end
