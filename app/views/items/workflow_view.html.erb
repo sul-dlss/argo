@@ -45,6 +45,13 @@
             <td colspan="6" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
           </tr>
         <% end %>
+        <% if process.note %>
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan="6" style="padding-left: 1em" class="notetext">Note: <%=process.note%></td>
+          </tr>
+        <% end %>
+		
       <% end %>
     <% end %>
   </tbody>

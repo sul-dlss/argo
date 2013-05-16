@@ -47,8 +47,9 @@ group :deployment do
   gem 'capistrano'
   gem 'capistrano-ext'
   gem 'rvm-capistrano'
-  gem 'lyberteam-devel', '>=0.7.0', :platform => :ruby_18
-  gem 'net-ssh-kerberos', :platform => :ruby_18
+  gem 'lyberteam-devel', '>=0.7.0'
+	#, :platform => :ruby_18
+  gem 'net-ssh-krb', :git => 'https://github.com/cbeer/net-ssh-kerberos.git'
 end
 
 group :assets do

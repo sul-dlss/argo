@@ -60,7 +60,8 @@ class CatalogController < ApplicationController
     config.add_show_field 'project_tag_t', :label => 'Project:'
     config.add_show_field 'source_id_t', :label => 'Source:'
     config.add_show_field 'tag_t', :label => 'Tags:'
-    config.add_show_field 'status_display', :label => 'Status'
+    config.add_show_field 'status_display', :label => 'Status:'
+    config.add_show_field 'wf_error_display', :label => "Error:"
 
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_facet', :label => 'Object Type'
@@ -115,7 +116,7 @@ class CatalogController < ApplicationController
 
     config.field_groups = {
       :identification => [
-        ['id','objectType_t','content_type_facet','status_display'],
+        ['id','objectType_t','content_type_facet','status_display','wf_error_display'],
         ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
         ],
         :full_identification => [
