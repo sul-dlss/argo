@@ -6,6 +6,9 @@ class Dor::ObjectsController < ApplicationController
 
   def create
     begin
+      if params[:collection] and params[:collection].length ==0
+        params.remove :collection
+      end
       response = Dor::RegistrationService.create_from_request(params)
       pid = response[:pid]
       

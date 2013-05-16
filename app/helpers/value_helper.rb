@@ -39,6 +39,10 @@ module ValueHelper
     end
   end
   
+  def value_for_wf_error_display args
+    wf,step,message = args[:document].get(args[:field]).split(':',3)
+    step+' : '+message
+  end
   def value_for_is_governed_by_s args
     value_for_related_druid('is_governed_by', args)
   end
