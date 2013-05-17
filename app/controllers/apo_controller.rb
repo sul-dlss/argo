@@ -25,15 +25,20 @@ class ApoController < ApplicationController
       pid = response[:pid]
       #register a collection if requested
       collection_pid=nil
-      if params[:collection_radio]=='create' and params[:collection_title] and params[:collection_title].length>0
+      if params[:collection_radio]=='create'
         reg_params={}
+        if params[:collection_title] and params[:collection_title].length>0
         reg_params[:label] = params[:collection_title]
+      else
+        reg_params[:label]= ':auto'
+      end
         reg_params[:object_type] = 'collection'
         reg_params[:admin_policy] = pid
         reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
-        reg_params[:otherId]=params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
+        reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
         reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
         reg_params[:workflow_id]='accessionWF'
+        puts reg_params.inspect
         response = Dor::RegistrationService.create_from_request(reg_params)
         collection_pid = response[:pid]
       end
