@@ -573,7 +573,7 @@ class ItemsController < ApplicationController
     end
     def enforce_versioning
       #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
-      if not @object.allows_modification?
+      if not @object.allows_modification? and not on_hold
         render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
         return
       end

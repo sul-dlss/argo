@@ -41,6 +41,10 @@ class ApoController < ApplicationController
         puts reg_params.inspect
         response = Dor::RegistrationService.create_from_request(reg_params)
         collection_pid = response[:pid]
+        if params[:collection_abstract] and params[:collection_abstract].length >0
+          set_abstract(collection_pid, params[:collection_abstract])
+        end
+        
       end
       item=Dor.find(pid)
       item.copyright_statement=params[:copyright]
@@ -136,10 +140,8 @@ class ApoController < ApplicationController
       reg_params[:workflow_id]='accessionWF'
       response = Dor::RegistrationService.create_from_request(reg_params)
       collection_pid = response[:pid]
-      if params[:abstract] and params[:abstract].length >0
-        collection_obj=Dor.find(collection_pid)
-        collection_obj.abstract=params[:abstract]
-        collection_obj.save
+      if params[:collection_abstract] and params[:collection_abstract].length >0
+        set_abstract(collection_pid, params[:collection_abstract])
       end
     end
     if params[:collection_select]='select' and params[:collection] and params[:collection].length > 0
@@ -267,5 +269,11 @@ class ApoController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
       return
     end
+  end
+  def set_abstract collection_pid, abstract
+      collection_obj=Dor.find(collection_pid)
+      collection_obj.descMetadata.abstract=abstract
+      collection_obj.descMetadata.content=collection_obj.descMetadata.ng_xml.to_s
+      collection_obj.descMetadata.save
   end
 end
