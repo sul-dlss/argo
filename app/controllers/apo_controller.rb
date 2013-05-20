@@ -123,8 +123,8 @@ class ApoController < ApplicationController
       'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
       'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported', 
     }
-    @object.copyright_statement = params[:copyright]
-    @object.use_statement = params[:use]
+    @object.copyright_statement = params[:copyright] if params[:copyright] and params[:copyright].length > 0
+    @object.use_statement = params[:use] if params[:use] and params[:use].length >0
     @object.mods_title = params[:title]
     @object.desc_metadata_format = params[:desc_md]
     @object.metadata_source=params[:metadata_source]
