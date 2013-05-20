@@ -129,21 +129,28 @@ class ApoController < ApplicationController
     @object.desc_metadata_format = params[:desc_md]
     @object.metadata_source=params[:metadata_source]
     @object.agreement = params[:agreement].to_s
-    if params[:collection_radio]=='create' and params[:collection_title] and params[:collection_title].length>0
+    if params[:collection_radio]=='create'
       reg_params={}
+      if params[:collection_title] and params[:collection_title].length>0
       reg_params[:label] = params[:collection_title]
+    else
+      reg_params[:label]= ':auto'
+    end
       reg_params[:object_type] = 'collection'
-      reg_params[:admin_policy] = @object.pid
+      reg_params[:admin_policy] = pid
       reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
-      reg_params[:otherId]=params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
+      reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
       reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
       reg_params[:workflow_id]='accessionWF'
+      puts reg_params.inspect
       response = Dor::RegistrationService.create_from_request(reg_params)
       collection_pid = response[:pid]
       if params[:collection_abstract] and params[:collection_abstract].length >0
         set_abstract(collection_pid, params[:collection_abstract])
       end
+      
     end
+    
     if params[:collection_select]='select' and params[:collection] and params[:collection].length > 0
       @object.add_default_collection params[:collection]
     else
