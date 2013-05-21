@@ -137,7 +137,7 @@ class ApoController < ApplicationController
       reg_params[:label]= ':auto'
     end
       reg_params[:object_type] = 'collection'
-      reg_params[:admin_policy] = pid
+      reg_params[:admin_policy] = @object.pid
       reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
       reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
       reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
@@ -179,7 +179,7 @@ class ApoController < ApplicationController
         @object.add_roleplayer 'dor-apo-viewer', viewer 
       end
     end
-    save_and_index
+    @object.saveg
     redirect
   end
 
