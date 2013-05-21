@@ -43,15 +43,6 @@ group :development do
   gem 'ruby-prof'
 end
 
-group :deployment do
-  gem 'capistrano'
-  gem 'capistrano-ext'
-  gem 'rvm-capistrano'
-  gem 'lyberteam-devel', '>=0.7.0'
-	#, :platform => :ruby_18
-  gem 'net-ssh-krb', :git => 'https://github.com/cbeer/net-ssh-kerberos.git'
-end
-
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
