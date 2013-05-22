@@ -153,7 +153,7 @@ function release_hold(druids){
 	cons=[]
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :workflow_update, :id => 'druid:xxxxxxxxx', :wf_name => 'accessionWF', :process => 'sdr-ingest-transfer', :status => 'waiting', :bulk => true%>'
+		url='<%=url_for :controller => :items,:action => :release_hold, :id => 'druid:xxxxxxxxx', :bulk => true%>'
 		url=url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'POST'});
 		cons.push(xhr);
