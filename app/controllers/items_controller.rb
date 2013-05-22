@@ -169,6 +169,26 @@ class ItemsController < ApplicationController
       end
     end
   end
+  def release_hold
+    
+    #this will raise and exception if the item doesnt have that workflow step
+    if not Dor::WorkflowService.get_workflow_status('dor', @object.pid, 'accessionWF','sdr-ingest-transfer') == 'hold'
+      render :status => :bad_request, :text => 'Item isnt on hold!'
+      return
+    end
+    if not Dor::WorkflowService.get_lifecycle('dor', @object.admin_policy_object.pid, 'accessioned')
+      render :status => :bad_request, :text => "Item's APO #{@object.admin_policy_object.pid} hasnt been ingested!"
+      return
+    end
+    Dor::WorkflowService.update_workflow_status 'dor', @object.pid, 'accessionWF','sdr-ingest-transfer','waiting'
+    respond_to do |format|
+      if params[:bulk]
+        render :status => 200, :text => 'Updated!'
+        return 
+      end
+      format.any { redirect_to catalog_path(@object.pid), :notice => 'Workflow was successfully updated' }
+    end
+  end
   def embargo_update
     if not current_user.is_admin
       render :status=> :forbidden, :text =>'forbidden'
@@ -451,131 +471,131 @@ class ItemsController < ApplicationController
       render :status => 500, :text => error_str[0...490] 
     end
   end
-    def refresh_metadata
-      @object.build_datastream('descMetadata',true)
-      @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
-      @object.descMetadata.save
-      render :status => :ok, :text => 'Refreshed.'
-    end
+  def refresh_metadata
+    @object.build_datastream('descMetadata',true)
+    @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
+    @object.descMetadata.save
+    render :status => :ok, :text => 'Refreshed.'
+  end
 
-    def detect_duplicate_encoding
-      ds=@object.descMetadata
-      content=ds.content
-      /&amp;#[0-9]+;/
-      chars=['amp', 'lt', 'gt','quot']
-      regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
-      chars.each do |char|
-        content=content.gsub('&amp;'+char+';', '&'+char+';')
-      end
-      content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
-      content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
-      ng=Nokogiri::XML(content,nil,'UTF-8')
-      if EquivalentXml.equivalent?(ng,ds.ng_xml)
-        render :status => :ok, :text => 'No change'
-      else
-        render :status => 500, :text => 'Has duplicates'
-      end
+  def detect_duplicate_encoding
+    ds=@object.descMetadata
+    content=ds.content
+    /&amp;#[0-9]+;/
+    chars=['amp', 'lt', 'gt','quot']
+    regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
+    chars.each do |char|
+      content=content.gsub('&amp;'+char+';', '&'+char+';')
     end
-    def change_mods_value
-      mods=Mods::Reader.new(@object.descMetadata.content)
-      params[:field]
-      if mods.methods.include? params[:field].to_sym
-        mods.send(params[:field].to_sym, params[:val])
-      end
-    end
-    def remove_duplicate_encoding
-      ds=@object.descMetadata
-      content=ds.content
-      /&amp;#[0-9]+;/
-      chars=['amp', 'lt', 'gt','quot']
-      regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
-      chars.each do |char|
-        content=content.gsub('&amp;'+char+';', '&'+char+';')
-      end
-      content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
-      content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
-      ng=Nokogiri::XML(content,nil,'UTF-8')
-      if EquivalentXml.equivalent?(ng,ds.ng_xml)
-        render :status => 500, :text => 'No duplicate encoding'
-        return
-      else
-        ds.ng_xml=ng
-        ds.content=ng.to_s
-        @object.save
-        render :status => :ok, :text => 'Has duplicates'
-      end
-    end
-    def set_rights
-      if not ['stanford','world', 'none', 'dark'].include? params[:rights]
-        render :status=> :forbidden, :text =>'Invalid new rights setting.'
-        return
-      end
-      @object.set_read_rights(params[:rights])
-      respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }  
-      end
-    end
-    def set_content_type
-      if not ['book', 'file', 'image','map','manuscript'].include? params[:new_content_type]
-        render :status=> :forbidden, :text =>'Invalid new content type.'
-        return
-      end
-      if not @object.datastreams.include? 'contentMetadata'
-        render :status=> :forbidden, :text =>'Object doesnt have a content metadata datastream to update.'
-        return
-      end
-      @object.contentMetadata.set_content_type(params[:old_content_type], params[:old_resource_type], params[:new_content_type], params[:new_resource_type])
-      respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
-      end
-    end
-    private 
-    def reindex item
-      doc=item.to_solr
-      Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
-    end
-    def create_obj
-      if params[:id]
-        begin
-          @object = Dor::Item.find params[:id]
-          @apo=@object.admin_policy_object
-          if @apo
-            @apo=@apo.pid
-          else
-            @apo=''
-          end
-        rescue ActiveFedora::ObjectNotFoundError => e
-          render :status=> 500, :text =>'Object doesnt exist in Fedora.'
-          return
-        end
-      else
-        raise 'missing druid'
-      end
-    end
-    def save_and_reindex
-      @object.save
-      reindex @object unless(params[:bulk])
-    end
-
-    #check that the user can carry out this item modification
-    def forbid_modify
-      if not current_user.is_admin and not @object.can_manage_content?(current_user.roles @apo)
-        render :status=> :forbidden, :text =>'forbidden'
-        return false
-      end
-      true
-    end
-    def forbid_view
-      if not current_user.is_admin and not @object.can_view_content?(current_user.roles @apo)
-        render :status=> :forbidden, :text =>'forbidden'
-        return
-      end
-    end
-    def enforce_versioning
-      #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
-      if not @object.allows_modification? and not on_hold
-        render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
-        return
-      end
+    content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
+    content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
+    ng=Nokogiri::XML(content,nil,'UTF-8')
+    if EquivalentXml.equivalent?(ng,ds.ng_xml)
+      render :status => :ok, :text => 'No change'
+    else
+      render :status => 500, :text => 'Has duplicates'
     end
   end
+  def change_mods_value
+    mods=Mods::Reader.new(@object.descMetadata.content)
+    params[:field]
+    if mods.methods.include? params[:field].to_sym
+      mods.send(params[:field].to_sym, params[:val])
+    end
+  end
+  def remove_duplicate_encoding
+    ds=@object.descMetadata
+    content=ds.content
+    /&amp;#[0-9]+;/
+    chars=['amp', 'lt', 'gt','quot']
+    regexes=["#[0-9]+","#x[0-9A-Fa-f]+"]
+    chars.each do |char|
+      content=content.gsub('&amp;'+char+';', '&'+char+';')
+    end
+    content=content.gsub /&amp;(\#[0-9]+;)/, '&\1' 
+    content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1' 
+    ng=Nokogiri::XML(content,nil,'UTF-8')
+    if EquivalentXml.equivalent?(ng,ds.ng_xml)
+      render :status => 500, :text => 'No duplicate encoding'
+      return
+    else
+      ds.ng_xml=ng
+      ds.content=ng.to_s
+      @object.save
+      render :status => :ok, :text => 'Has duplicates'
+    end
+  end
+  def set_rights
+    if not ['stanford','world', 'none', 'dark'].include? params[:rights]
+      render :status=> :forbidden, :text =>'Invalid new rights setting.'
+      return
+    end
+    @object.set_read_rights(params[:rights])
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }  
+    end
+  end
+  def set_content_type
+    if not ['book', 'file', 'image','map','manuscript'].include? params[:new_content_type]
+      render :status=> :forbidden, :text =>'Invalid new content type.'
+      return
+    end
+    if not @object.datastreams.include? 'contentMetadata'
+      render :status=> :forbidden, :text =>'Object doesnt have a content metadata datastream to update.'
+      return
+    end
+    @object.contentMetadata.set_content_type(params[:old_content_type], params[:old_resource_type], params[:new_content_type], params[:new_resource_type])
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
+    end
+  end
+  private 
+  def reindex item
+    doc=item.to_solr
+    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+  end
+  def create_obj
+    if params[:id]
+      begin
+        @object = Dor::Item.find params[:id]
+        @apo=@object.admin_policy_object
+        if @apo
+          @apo=@apo.pid
+        else
+          @apo=''
+        end
+      rescue ActiveFedora::ObjectNotFoundError => e
+        render :status=> 500, :text =>'Object doesnt exist in Fedora.'
+        return
+      end
+    else
+      raise 'missing druid'
+    end
+  end
+  def save_and_reindex
+    @object.save
+    reindex @object unless(params[:bulk])
+  end
+
+  #check that the user can carry out this item modification
+  def forbid_modify
+    if not current_user.is_admin and not @object.can_manage_content?(current_user.roles @apo)
+      render :status=> :forbidden, :text =>'forbidden'
+      return false
+    end
+    true
+  end
+  def forbid_view
+    if not current_user.is_admin and not @object.can_view_content?(current_user.roles @apo)
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    end
+  end
+  def enforce_versioning
+    #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
+    if not @object.allows_modification? and not on_hold
+      render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
+      return
+    end
+  end
+end

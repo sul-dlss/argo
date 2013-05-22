@@ -52,7 +52,8 @@ Argo::Application.routes.draw do
     get :register, :on => :collection
     post :register, :on => :collection
     post :update, :on => :member
-
+		get :register_collection, :on => :member
+		post :register_collection, :on => :member
   end
   resources :items do
     get :crop, :on => :member

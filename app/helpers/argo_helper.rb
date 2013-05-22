@@ -144,21 +144,7 @@ module ArgoHelper
     end
     return result.html_safe
   end
-  def archive_button
-    accessionComplete = true
-    wf=object.workflows.get_workflow('accessionWF','dor')
-    wf.processes.each do |proc|
-      if proc.status != 'completed'
-        accessionComplete = false
-      end
-    end
-    if wf.processes.length==0
-      accessionComplete=false
-    end
-    if accessionComplete
-      buttons << {:url =>  url_for(:controller => :dor,:action => :archive_workflows, :pid => pid), :label => 'Archive accessionWF'}
-    end
-  end
+
   def render_buttons(doc)
     pid=doc['id']
     object = Dor.find(pid)
@@ -179,6 +165,8 @@ module ArgoHelper
     #if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
+      buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
+      
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
