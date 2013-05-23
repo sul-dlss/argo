@@ -1,6 +1,6 @@
 <% if object.datastreams.keys.include?('contentMetadata') and not object.datastreams['contentMetadata'].new? %>
 	<% content_ds = object.datastreams['contentMetadata'] %>
-	<% workspace_files=object.list_files%>
+	<%admin_policy_object=@admin_policy_object%>
 	<div style="clear:left">
 		<ul class="resource-tree">
 			<li>
@@ -9,8 +9,8 @@
 				<ul>
 					<%
 					apo_pid=nil
-					if object.admin_policy_object
-						apo_pid=object.admin_policy_object.pid
+					if admin_policy_object
+						apo_pid=admin_policy_object.pid
 					end
 					
 					can_manage = current_user.is_admin or current_user.is_manager or (apo_pid and object.can_manage_content? current_user.roles(apo_pid))

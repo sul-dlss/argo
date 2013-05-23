@@ -11,5 +11,5 @@
     <li><%= render_dor_link document %></li>
     <li><%= render_foxml_link document %></li>
   </ul>
-	<%= render(:partial => 'items/button_link_list', :locals => {:buttons => (render_buttons document)})%>
+	<%= render(:partial => 'items/button_link_list', :locals => {:buttons => (render_buttons document, @obj)})%>
 </div>

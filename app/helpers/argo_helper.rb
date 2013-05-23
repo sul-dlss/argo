@@ -27,6 +27,7 @@ module ArgoHelper
       0
     end
   end
+  
 
   def structure_from_solr(solr_doc, prefix, suffix='display')
     prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
@@ -135,19 +136,21 @@ module ArgoHelper
   end
 
   def render_document_sections(doc, action_name)
-    dor_object = Dor.find doc['id'].to_s, :lightweight => true
+    dor_object = @obj #Dor.find doc['id'].to_s, :lightweight => true
     format = document_partial_name(doc)
     sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
     result = ''
     sections.each_with_index do |section_name,index|
-      result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc,:object=>dor_object,:format=>format,:section=>section_name,:collapsible=>(index > 0)})
+      result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc,:object=>dor_object, :admin_policy_object => @apo, :format=>format,:section=>section_name,:collapsible=>(index > 0)})
     end
     return result.html_safe
   end
 
-  def render_buttons(doc)
-    pid=doc['id']
-    object = Dor.find(pid)
+  def render_buttons(doc, object=nil)
+    if not object
+      pid=doc['id']
+      object = Dor.find(pid)
+    end
     apo_pid = ''
     #wf_stuff.include? 'accessionWF:completed:publish'
     begin 
