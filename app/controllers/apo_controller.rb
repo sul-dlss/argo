@@ -191,6 +191,7 @@ class ApoController < ApplicationController
     else
       reg_params[:label]= ':auto'
     end
+    reg_params[:rights]=params[:collection_rights]
     reg_params[:object_type] = 'collection'
     reg_params[:admin_policy] = params[:id]
     reg_params[:metadata_source]='label' 
