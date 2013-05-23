@@ -31,7 +31,7 @@ url_params={:controller => :apo, :action => :register_collection}
 	<div id="create-collection-catkey" class=" collection_div" style="display:none">
 		<div class="register-label-div">Collection Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value=""/>
 		<div class="register-label-div">Collection Rights</div>
-			<%=select_tag :collection_rights, options_for_select(default_rights_options, 'World' )%><br>
+			<%=select_tag :collection_rights_catkey, options_for_select(default_rights_options, 'World' )%><br>
 	</div>
 </div>
 <button id="register" name="register"><%='Register Collection' %></button>
