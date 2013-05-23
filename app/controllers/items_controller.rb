@@ -136,28 +136,23 @@ class ItemsController < ApplicationController
     end
   end
   def workflow_update
+    
     @item=@object
     args = params.values_at(:id, :wf_name, :process, :status)
     check_args = params.values_at(:id, :wf_name, :process)
 
     if args.all? &:present?
       #this will raise and exception if the item doesnt have that workflow step
-      Dor::WorkflowService.get_workflow_status 'dor', *check_args
-      Dor::WorkflowService.update_workflow_status 'dor', *args
+      Dor::WorkflowService.get_workflow_status params[:repo], *check_args
+      Dor::WorkflowService.update_workflow_status params[:repo], *args
       @item = Dor.find params[:id]
-      begin
-        if not params[:bulk]
-          reindex(@item)
-        end
-      rescue Exception => e
-        Rails.logger.warn "ItemsController#workflow_update failed to update solr index for #{@item.pid}: #<#{e.class.name}: #{e.message}>"
-      end
+     
       respond_to do |format|
         if params[:bulk]
           render :status => 200, :text => 'Updated!'
           return 
         end
-        format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name]), :notice => 'Workflow was successfully updated' }
+        format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name],:repo => params[:repo]), :notice => 'Workflow was successfully updated' }
       end
     else
       respond_to do |format|

@@ -31,6 +31,19 @@ describe ItemsController do
     @item.stub(:admin_policy_object).and_return(@apo)
     Dor::SearchService.solr.stub(:add)
   end
+  describe 'release_hold' do
+    it 'should release an item that is on hold if its apo has been ingested' do
+      pid='oo201oo0001'
+      Dor::WorkflowService.should_receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('hold')
+      Dor::WorkflowService.should_receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
+      Dor::WorkflowService.should_receive(:update_workflow_status)
+      post :release_hold, :id => pid
+    end
+    it 'should refuse to release an item that isnt on hold' do
+    end
+    it 'should refuse to release an item whose apo hasnt been ingested' do
+    end
+  end 
   describe 'purge' do
     it 'should 403' do
       @current_user.stub(:is_admin).and_return(false)

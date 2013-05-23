@@ -32,6 +32,7 @@ class ApoController < ApplicationController
         else
           reg_params[:label]= ':auto'
         end
+        reg_params[:rights]=params[:collection_rights]
         reg_params[:object_type] = 'collection'
         reg_params[:admin_policy] = pid
         reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
@@ -135,6 +136,7 @@ class ApoController < ApplicationController
       else
         reg_params[:label]= ':auto'
       end
+      reg_params[:rights]=params[:collection_rights]
       reg_params[:object_type] = 'collection'
       reg_params[:admin_policy] = @object.pid
       reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0

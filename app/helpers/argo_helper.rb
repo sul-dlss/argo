@@ -147,8 +147,8 @@ module ArgoHelper
   end
 
   def render_buttons(doc, object=nil)
+    pid=doc['id']
     if not object
-      pid=doc['id']
       object = Dor.find(pid)
     end
     apo_pid = ''
