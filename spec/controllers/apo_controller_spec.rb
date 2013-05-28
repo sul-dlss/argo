@@ -41,15 +41,17 @@ describe ApoController do
       params[:admin_policy].should == 'druid:forapo'
       params[:other_id].should == 'symphony:'+catkey
       params[:metadata_source].should == 'symphony'
+      params[:rights].should == "dark"
       {:pid => 'druid:newcollection'}
     end
-    post "register_collection", "label"=>":auto", "collection_catkey"=>catkey, "rights"=>"dark", 'id'=>'druid:forapo'
+    post "register_collection", "label"=>":auto", "collection_catkey"=>catkey, "collection_rights_catkey"=>"dark", 'id'=>'druid:forapo'
   end
   it 'should create a collection from title/abstract by registering the collection, then adding the abstract' do
     title='collection title'
     abstract='this is the abstract'
     Dor::RegistrationService.should_receive(:create_from_request) do |params|
       params[:label].should == title
+      params[:rights].should == 'dark'
       params[:object_type].should == 'collection'
       params[:admin_policy].should == 'druid:forapo'
       params[:metadata_source].should == 'label'
@@ -59,7 +61,7 @@ describe ApoController do
     Dor.should_receive(:find).with('druid:newcollection').and_return(@item)
     @item.descMetadata.should_receive(:abstract=).with(abstract)
     @item.descMetadata.should_receive(:content=)
-    post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "rights"=>"dark", 'id'=>'druid:forapo'
+    post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "collection_rights"=>"dark", 'id'=>'druid:forapo'
   end
   it 'should add the collection to the apo default collection list' do
     title='collection title'
@@ -69,10 +71,11 @@ describe ApoController do
       params[:object_type].should == 'collection'
       params[:admin_policy].should == 'druid:forapo'
       params[:metadata_source].should == 'label'
+      params[:rights].should == 'dark'
       {:pid => 'druid:newcollection'}
     end
     controller.should_receive(:set_abstract)
-    post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "rights"=>"dark", 'id'=>'druid:forapo'
+    post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "collection_rights"=>"dark", 'id'=>'druid:forapo'
     
   end
 end
