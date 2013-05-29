@@ -38,7 +38,7 @@ class RegistrationController < ApplicationController
       end
     end
     def collection_list
-      res={}
+      res={''=>'None'}
       apo_object = Dor.find(params[:apo_id], :lightweight => true)
       adm_xml = apo_object.administrativeMetadata.ng_xml 
       adm_xml.search('//registration/collection').each do |col|
