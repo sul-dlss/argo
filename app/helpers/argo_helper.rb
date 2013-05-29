@@ -169,11 +169,9 @@ module ArgoHelper
     if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
-      
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
@@ -199,7 +197,7 @@ module ArgoHelper
       date=embargo_data.split.last
       if text != 'released'
         #add a date picker and button to change the embargo date for those who should be able to.
-        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)}
+        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if current_user.is_admin
       end
     end
     buttons
