@@ -1,5 +1,5 @@
 <div style="width:1052px;background-color:0000cc;color:white;font-size:3em;">
-	<span style="margin-left:50px;"><%='Create Collection'%></span>
+	<span style="margin-left:50px;"><%='Create a Collection'%></span>
 	</div>
 <div style="width:950px; background:white; margin-top:0px;margin-bottom:50px;padding-left:50px;padding-right:50px;border:1px;border-style:solid">
 
@@ -8,14 +8,7 @@ url_params={:controller => :apo, :action => :register_collection}
 %>
 <%= form_tag url_for(url_params), :id => 'collection_form' do%>
 <div class="register-div" style="min-height:600px">
-	<%
-	if @object and @object.default_collections
-		%><label>Default Collections</label><br><%
-		@object.default_collections.each do |col|
-			%><%=link_to col, catalog_path(:id =>col)%> <%=link_to('X',delete_collection_apo_path(:collection => col, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br><%
-		end
-	end
-	%>
+	<br><label>Create a collection that can be assigned to items governed by this APO -- [<%= @object.label%>]<br></label>
 	<br>
 	<input checked type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
 	<label>Create a Collection</label>
@@ -24,13 +17,34 @@ url_params={:controller => :apo, :action => :register_collection}
 	<br>
 	<div id="create-collection" class="collection_div">
 		<div class="register-label-div">Collection Title</div><input type="text" id="collection_title" name="collection_title" style="width:90%" value=""/>
-		<div class="register-label-div">Collection Abstract</div><textarea id="collection_abstract" name="collection_abstract" style="width:90%" ></textarea>
-		<div class="register-label-div">Collection Rights</div>
+		<div class="register-label-div">Collection Abstract</div><textarea id="collection_abstract" name="collection_abstract" style="width:90%" ></textarea><br>
+		<div style="width:80%; margin-left:10%"><label>Collection visibility rules: Collections in general will have visible PURLs (typically of
+		           little interest) and be published in Searchworks along with collection members. <br>Choices:</label>
+				   <div>
+		           <br>• World -- The default for most collections; other choices will be rare
+		           <br>• Stanford -- PURL page is world visible; content files are available to the Stanford community
+		              only.  Only meaningful if the Collection object bears content that is meant to be
+		              published, e.g., photos pertinent to the collection as a whole.
+		           <br>• None -- PURL page is world visible; no content files are available
+		           <br>• Dark (preserve only) -- No PURL page,  no content available online</div>
+			   </div><br>
+		<div class="register-label-div">Collection Object Visibility</div>
 			<%=select_tag :collection_rights, options_for_select(default_rights_options, 'World' )%><br>
 	</div>
 	<div id="create-collection-catkey" class=" collection_div" style="display:none">
-		<div class="register-label-div">Collection Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value=""/>
-		<div class="register-label-div">Collection Rights</div>
+		<div class="register-label-div">Collection Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value=""/><br>
+		<div style="width:80%; margin-left:10%"><label>Collection visibility rules: Collections in general will have visible PURLs (typically of
+		           little interest) and be published in Searchworks along with collection members. <br>Choices:</label>
+				   <div>
+		           <br>• World -- The default for most collections; other choices will be rare
+		           <br>• Stanford -- PURL page is world visible; content files are available to the Stanford community
+		              only.  Only meaningful if the Collection object bears content that is meant to be
+		              published, e.g., photos pertinent to the collection as a whole.
+		           <br>• None -- PURL page is world visible; no content files are available
+		           <br>• Dark (preserve only) -- No PURL page,  no content available online</div>
+			   </div><br>
+		
+		<div class="register-label-div">Collection Object Visibility</div>
 			<%=select_tag :collection_rights_catkey, options_for_select(default_rights_options, 'World' )%><br>
 	</div>
 </div>

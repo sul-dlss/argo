@@ -40,8 +40,6 @@ class ApoController < ApplicationController
         if reg_params[:rights]
           reg_params[:rights]=reg_params[:rights].downcase
         end
-        
-        
         reg_params[:object_type] = 'collection'
         reg_params[:admin_policy] = pid
         reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
@@ -53,7 +51,6 @@ class ApoController < ApplicationController
         if params[:collection_abstract] and params[:collection_abstract].length >0
           set_abstract(collection_pid, params[:collection_abstract])
         end
-        
       end
       item=Dor.find(pid)
       item.copyright_statement=params[:copyright]

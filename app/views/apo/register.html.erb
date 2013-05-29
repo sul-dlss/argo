@@ -47,12 +47,12 @@ end
 	<%
 	if @object and @object.default_collections
 		%><label>Default Collections</label><br><%
-		@object.default_collections.each do |col|
-			%><%=link_to col, catalog_path(:id =>col)%> <%=link_to('X',delete_collection_apo_path(:collection => col, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br><%
+		@collections.each do |col|
+			%><%=link_to col.label, catalog_path(:id =>col.pid)%> <%=link_to('(remove)',delete_collection_apo_path(:collection => col.pid, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br><%
 		end
 	end
 	%>
-
+	<br>
 	<input checked type="radio" name="collection_radio" value="none" onclick="$('.collection_div').hide();"/>
 	<label>Don't add a Collection</label> 			
 	<input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
