@@ -167,6 +167,8 @@ module ArgoHelper
     end
     #if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
+      
+      puts object.datastreams.inspect
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
     end
@@ -180,7 +182,9 @@ module ArgoHelper
       end
       buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
-      buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+      if not (object.datastreams.include? 'administrativeMetadata') #apos cant be members of collections
+        buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+      end
       if object.datastreams.include? 'contentMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :content_type, :id => pid), :label => 'Set content type'}
       end

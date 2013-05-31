@@ -302,12 +302,12 @@ class ApoController < ApplicationController
   end
   def save_and_reindex
     @object.save
-    reindex @object
+    #reindex @object
   end
 
   def save_and_index
     @object.save
-    @object.update_index
+    #@object.update_index
   end
 
   def redirect

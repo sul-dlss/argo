@@ -554,14 +554,7 @@ var gridContext = function() {
         title: 'Error',
         resizable: false
       });
-	$('#help_dialog').dialog({
-        autoOpen: false,
-        buttons: { "Ok": function() { $(this).dialog("close"); } },
-        modal: true,
-        height: 260,
-        title: 'Help',
-        resizable: false
-      });
+	
       
 	$('#editing_dialog').dialog({
         autoOpen: false,

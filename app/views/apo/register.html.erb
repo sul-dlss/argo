@@ -66,15 +66,17 @@ end
 	<div id="select-collection" class="collection_div" style="display:none">
 		<%= select_tag :collection, options_for_select(current_user.permitted_collections)%><br>
 	</div>
-
+	<div style="display:none"><%=render :partial => '/items/rights_help'%></div>
 	<div id="create-collection" class="collection_div" style="display:none">
 		<div class="register-label-div">Collection Title</div><input type="text" id="collection_title" name="collection_title" style="width:90%" value=""/>
 		<div class="register-label-div">Collection Abstract</div><textarea id="collection_abstract" name="collection_abstract" style="width:90%" ></textarea>
+		<img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>
 		<div class="register-label-div">Collection Rights</div>
 			<%=select_tag :collection_rights, options_for_select(default_rights_options, 'World' )%><br>
 	</div>
 	<div id="create-collection-catkey" class=" collection_div" style="display:none">
 		<div class="register-label-div">Collection Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value=""/>
+		<img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>
 		<div class="register-label-div">Collection Rights</div>
 			<%=select_tag :collection_rights_catkey, options_for_select(default_rights_options, 'World' )%><br>
 	</div>
