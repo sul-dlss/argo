@@ -540,6 +540,26 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
     end
   end
+  def prioritize
+    updated=false
+    @object.workflows.workflows.each do |wf|
+      workflow=wf.workflowId.first
+      wf.processes.each do |proc|
+        if not proc.completed? and not proc.version  
+          Dor::WorkflowService.update_workflow_status('dor', @object.id, workflow , proc.name, 'waiting', {:priority => 50} )
+          puts "updateding #{proc.name}"
+          updated=true
+        end
+      end
+    end 
+    if updated
+    render :status=> 200, :text =>'Priority set.'
+  else
+    render :status=> 200, :text =>'No processes eligable for priority.'
+    
+  end
+    
+  end
   private 
   def reindex item
     doc=item.to_solr

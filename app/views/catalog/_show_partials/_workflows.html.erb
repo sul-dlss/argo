@@ -11,7 +11,11 @@
       <tr>
         <td><%= link_to wf, workflow_view_item_path(document.get('id'), wf, :repo => status[:repo]), :class => 'dialogLink', :title => wf %></td>
         <td>
-          <%= status[:status] %>
+          <% if object.workflows.get_workflow(wf).expedited? %>
+		  <%="expedited"%>
+		  <%else%>
+		  <%=status[:status] %>
+		  <% end %>
           <% if status[:errors] > 0 -%>
           <span class="errortext">(<%= inflect('error', status[:errors]) %>)</span>
           <% end %>

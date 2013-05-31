@@ -59,7 +59,8 @@ Argo::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
-    get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
+    get '/prioritize', :on => :member, :action => :prioritize, :as => 'prioritize'
+		get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
     get '/refresh_metadata', :on => :member, :action => :refresh_metadata, :as => 'refresh_metadata'
     get '/schema_validate', :on => :member, :action => :schema_validation, :as => 'schema_validation'
     get '/remediate_mods', :on => :member, :action => :remediate_mods, :as => 'remediate_mods'
