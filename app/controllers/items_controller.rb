@@ -555,7 +555,7 @@ class ItemsController < ApplicationController
     if updated
     render :status=> 200, :text =>'Priority set.'
   else
-    render :status=> 200, :text =>'No processes eligable for priority.'
+    render :status=> 500, :text =>'No processes eligable for priority.'
     
   end
     

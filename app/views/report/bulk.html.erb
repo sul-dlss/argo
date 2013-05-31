@@ -282,6 +282,22 @@ function remediate_mods(druids){
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
+function expedite(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :prioritize, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Expedited');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+
+
 function refresh_metadata(druids){
 	cons=[];
 	$.each(druids, function(i,element){
@@ -456,6 +472,7 @@ function stop_all()
 	<button id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
 	<button id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
 	<button onclick="$('#purge').show(400)">Purge</button>
+	<button onclick="$('#expedite').show(400)">Expedite</button>
 	<button onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</button>
 	<button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button>
 	<%if current_user.is_admin%><br><button onclick="$('#release_hold').show(400)">Release for ingest</button>
@@ -546,6 +563,11 @@ function stop_all()
 <div class="bulk_operation" id="purge" name="purge">
 	<h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
 	<button onclick="fetch_druids(purge);$('#purge').hide(400);">Purge objects from fedora</button><br>
+</div>
+
+<div class="bulk_operation" id="expedite" name="expedite">
+	<h1>Make this item high priority in the workflow queue.</h1>
+	<button onclick="fetch_druids(expedite);$('#expedite').hide(400);">Expedite</button><br>
 </div>
 
 <div class="bulk_operation" id="remove_duplicate_encoding" name="remove_duplicate_encoding">
