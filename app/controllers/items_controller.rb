@@ -546,7 +546,7 @@ class ItemsController < ApplicationController
       workflow=wf.workflowId.first
       wf.processes.each do |proc|
         if not proc.completed? and not proc.version  
-          Dor::WorkflowService.update_workflow_status('dor', @object.id, workflow , proc.name, 'waiting', {:priority => 50} )
+          Dor::WorkflowService.update_workflow_status('dor', @object.id, workflow , proc.name, proc.status, {:priority => 50} )
           puts "updateding #{proc.name}"
           updated=true
         end
