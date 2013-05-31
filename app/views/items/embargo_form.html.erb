@@ -2,28 +2,11 @@
 
 <script>
 	$(function() {
-		$( "#embargo_date" ).datepicker();
+		$( "#embargo_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
 	});
-	$( "#embargo_date" ).hide();
-		$('#embargo_update').dialog({
-        autoOpen: false,
-        buttons: { "Cancel": function() { $(this).dialog("close"); } },
-        modal: true,
-        height: 150,
-        width:  400,
-        open: function (event, ui)
-        {
-            $('#embargo_date').show();
-        },
-				close: function (event, ui)
-        {
-            $('#embargo_date').hide();
-        },
-        title: 'Embargo Update',
-        resizable: false
-      });
+	
+
 </script>
-<a href="#" onclick="$('#embargo_update').dialog('open');false;">(update embargo)</a>
 <div id='embargo_update'>
 <%= form_tag url_for(:controller => :items, :action => :embargo_update), :method => :POST do%>
 	

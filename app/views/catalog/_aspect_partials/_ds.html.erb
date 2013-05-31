@@ -1,6 +1,6 @@
 <%if(params[:edit])
 
- if @user and (@user.is_admin or (@obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid)) and @obj.can_manage_metadata?(@user.roles(@obj.admin_policy_object.pid)))) %>
+ if @user and (@user.is_admin or (@obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid)) and @obj.can_manage_desc_metadata?(@user.roles(@obj.admin_policy_object.pid)))) %>
 	<%= form_tag url_for(:controller => :items, :action => :datastream_update), :method => :POST do%>
 		<input type="hidden" name="id" value="<%=@obj.pid %>" />
 		<input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>

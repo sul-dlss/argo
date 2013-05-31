@@ -18,7 +18,18 @@ module ValueHelper
   def label_for_druid druid
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
     Rails.cache.fetch("label_for_#{druid}", :expires_in => 1.hour) do 
-      Dor.find(druid, :lightweight => true).label rescue druid
+      if  @apo and druid ==  @apo.pid
+        item=@apo
+      end
+      if @obj and druid == @obj.pid
+        item=@obj
+      end
+      begin
+      item=Dor.find(druid) if not item
+      item.label 
+    rescue 
+      druid 
+    end
     end
   end
   
@@ -44,11 +55,38 @@ module ValueHelper
     step+' : '+message
   end
   def value_for_is_governed_by_s args
-    value_for_related_druid('is_governed_by', args)
+    begin
+      target_id = args[:document].get("is_governed_by_s")
+      target_name = ''
+      links=''
+      target_id.split(',').each do |targ|
+        target_name = args[:document].get("apo_title_t")
+        links += link_to target_name, catalog_path(targ.split(/\//).last)
+        links +='<br>'
+      end
+      links.html_safe
+    rescue Exception => e
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
+    end
+    #value_for_related_druid('is_governed_by', args)
   end
 
   def value_for_is_member_of_collection_s args
-    value_for_related_druid('is_member_of_collection', args)
+    begin
+      target_id = args[:document].get("is_member_of_collection_s")
+      target_name = ''
+      links=''
+      target_id.split(',').each do |targ|
+        target_name = args[:document].get("collection_title_t")
+        links += link_to target_name, catalog_path(targ.split(/\//).last)
+        links +='<br>'
+      end
+      links.html_safe
+    rescue Exception => e
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
+    end
   end
   
   def value_for_project_tag_t args

@@ -120,7 +120,7 @@ GEM
       activesupport
     diff-lcs (1.2.4)
     docopt (0.5.0)
-    dor-services (4.0.2)
+    dor-services (4.0.4)
       active-fedora (~> 5.6, >= 5.6.3)
       confstruct (>= 0.2.2)
       dor-workflow-service (>= 1.2.1)

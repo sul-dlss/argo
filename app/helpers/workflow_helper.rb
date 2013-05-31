@@ -31,6 +31,7 @@ module WorkflowHelper
       form_tag workflow_update_item_url(pid, process.workflow), :class => 'dialogLink' do
         hidden_field_tag('process', process.name) +
         hidden_field_tag('status', new_status) +
+        hidden_field_tag('repo', @repo)+
         button_tag('set to ' + new_status, :type => 'submit')
       end
     else

@@ -39,44 +39,53 @@ end
 		<li>Common workgroups:  dlss:dpg-staff  dlss:dpg-hourlies  dlss:forensics-staff  dlss:smpl-staff  sulair:map-staff  sulair:map-hourlies</li>
 	</ul>
 	<div class="register-label-div">Manager</div><input id="managers" name="managers" type="text" style="width:90%" value="<%= @object ? @managers.join(' ') : 'dlss:developers dlss:pmag-staff'%>"/><br>
-	<p class="help" style="margin-left:60px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
+	<p class="help" style="margin-left:90px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
 	<div class="register-label-div">Viewer</div><input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @object and @viewers.length>0 ? @viewers : ''%>"/>
-	<p class="help" style="margin-left:60px;font-size:.8em">View only access to the objects</p>
-</div>
-<div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
-<label style="font-size:1.2em">Object defaults</label>
-<p>The following defaults will apply to all newly registered objects.</p>
+	<p class="help" style="margin-left:90px;font-size:.8em">View only access to the objects</p>
 </div>
 <div class="register-div">
 	<%
 	if @object and @object.default_collections
 		%><label>Default Collections</label><br><%
-		@object.default_collections.each do |col|
-			%><%=link_to col, catalog_path(:id =>col)%> <%=link_to('X',delete_collection_apo_path(:collection => col, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br><%
+		@collections.each do |col|
+			%><%=link_to col.label, catalog_path(:id =>col.pid)%> <%=link_to('(remove)',delete_collection_apo_path(:collection => col.pid, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br><%
 		end
 	end
 	%>
-
+	<br>
 	<input checked type="radio" name="collection_radio" value="none" onclick="$('.collection_div').hide();"/>
 	<label>Don't add a Collection</label> 			
 	<input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
-	<label>Choose a Default Collection</label> 			
+	<label>Choose a Default Collection</label> 	
+	<%if !@object%>		
 	<input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
 	<label>Create a Collection</label>
 	<input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection-catkey').show();"/>
 	<label>Create a Collection from Symphony</label><br>
+	<%end%>
 	<div id="select-collection" class="collection_div" style="display:none">
 		<%= select_tag :collection, options_for_select(current_user.permitted_collections)%><br>
 	</div>
-
+	<div style="display:none"><%=render :partial => '/items/rights_help'%></div>
 	<div id="create-collection" class="collection_div" style="display:none">
-		<div class="register-label-div">Title</div><input type="text" id="collection_title" name="collection_title" style="width:90%" value=""/>
-		<div class="register-label-div">Abstract</div><textarea id="collection_abstract" name="collection_abstract" style="width:90%" ></textarea>
+		<div class="register-label-div">Collection Title</div><input type="text" id="collection_title" name="collection_title" style="width:90%" value=""/>
+		<div class="register-label-div">Collection Abstract</div><textarea id="collection_abstract" name="collection_abstract" style="width:90%" ></textarea>
+		<img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>
+		<div class="register-label-div">Collection Rights</div>
+			<%=select_tag :collection_rights, options_for_select(default_rights_options, 'World' )%><br>
 	</div>
 	<div id="create-collection-catkey" class=" collection_div" style="display:none">
-		<div class="register-label-div">Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value=""/>
+		<div class="register-label-div">Collection Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value=""/>
+		<img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>
+		<div class="register-label-div">Collection Rights</div>
+			<%=select_tag :collection_rights_catkey, options_for_select(default_rights_options, 'World' )%><br>
 	</div>
 </div>
+<div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
+<label style="font-size:1.2em">Object defaults</label>
+<p>The following defaults will apply to all newly registered objects.</p>
+</div>
+
 
 <br><div class="register-div">
 	<label>Default Object Rights</label><br>

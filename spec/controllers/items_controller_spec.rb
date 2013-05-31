@@ -30,7 +30,39 @@ describe ItemsController do
     @apo.stub(:pid).and_return('druid:apo')
     @item.stub(:admin_policy_object).and_return(@apo)
     Dor::SearchService.solr.stub(:add)
+    @pid='oo201oo0001'
+
   end
+  describe 'datastream_update' do
+    it 'should allow a non admin to update the datastream' do
+      @item.stub(:can_manage_content?).and_return(true)
+      @item.stub(:can_manage_desc_metadata?).and_return(true)
+      xml="<some> xml</some>"
+      @item.datastreams['identityMetadata'].stub(:content=)
+      post :datastream_update, :id => @pid, :dsid => 'identityMetadata', :content => xml
+      response.code.should == "302"
+    end
+  end
+  
+  describe 'release_hold' do
+    it 'should release an item that is on hold if its apo has been ingested' do
+      Dor::WorkflowService.should_receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('hold')
+      Dor::WorkflowService.should_receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
+      Dor::WorkflowService.should_receive(:update_workflow_status)
+      post :release_hold, :id => @pid
+    end
+    it 'should refuse to release an item that isnt on hold' do
+      Dor::WorkflowService.should_receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('waiting')
+      Dor::WorkflowService.should_not_receive(:update_workflow_status)
+      post :release_hold, :id => @pid
+    end
+    it 'should refuse to release an item whose apo hasnt been ingested' do
+      Dor::WorkflowService.should_receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('hold')
+      Dor::WorkflowService.should_receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
+      Dor::WorkflowService.should_not_receive(:update_workflow_status)
+      post :release_hold, :id => @pid
+    end
+  end 
   describe 'purge' do
     it 'should 403' do
       @current_user.stub(:is_admin).and_return(false)

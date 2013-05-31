@@ -47,17 +47,19 @@ class DorController < ApplicationController
 
     def reindex
       begin
-      obj = Dor.load_instance params[:pid]
-      solr_doc = obj.to_solr
-      index_logger.info "updated index for #{params[:pid]}"
-      Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-      index_logger.info "updated index for #{params[:pid]}"
-      render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
+        obj = Dor.load_instance params[:pid]
+        solr_doc = obj.to_solr
+        index_logger.info "updated index for #{params[:pid]}"
+        Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
+        index_logger.info "updated index for #{params[:pid]}"
+        render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
       rescue ActiveFedora::ObjectNotFoundError => e
         render :status=> 500, :text =>'Object doesnt exist in Fedora.'
         return
       end
+      archive_workflows(obj)
     end
+    
 
     def delete_from_index
       Dor::SearchService.solr.delete_by_id(params[:pid])
@@ -70,15 +72,25 @@ class DorController < ApplicationController
       obj.publish_metadata
       render :text => 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
     end
-
-    def archive_workflows
-      obj=Dor::Item.find(params[:pid])
-      wf=obj.workflows.get_workflow('accessionWF','dor')
-      wf.processes.each do |proc|
-        if proc.status != 'completed'
-          raise 'Unable to archive accessionWF, ' + proc.name + 'is not in completed status, it is in ' + proc.status
+    private 
+    def archive_workflows obj
+      obj.workflows.workflows.each do |wf|
+        #wf=obj.workflows.get_workflow('accessionWF','dor')
+        archive=true #are all processes complete
+        active=false #are there any processes without version numbers, meaning they arent archived
+        wf.processes.each do |proc|
+          if not proc.version and not proc.completed?
+            archive=false
+          end
+          if not proc.version
+            active=true
+          end
         end
+        if archive and active
+          Dor::WorkflowService.configure  Argo::Config.urls.workflow, :dor_services_url => Argo::Config.urls.dor_services
+          logger.info "Archiving #{wf.workflowId.first} for #{obj.pid}"
+          Dor::WorkflowService.archive_workflow 'dor', obj.pid, wf.workflowId.first
+        end      
       end
-      Dor::WorkflowService.archive_workflow 'dor', pid, wf.name
     end
   end

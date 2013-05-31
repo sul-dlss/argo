@@ -27,6 +27,7 @@ module ArgoHelper
       0
     end
   end
+  
 
   def structure_from_solr(solr_doc, prefix, suffix='display')
     prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
@@ -135,33 +136,21 @@ module ArgoHelper
   end
 
   def render_document_sections(doc, action_name)
-    dor_object = Dor.find doc['id'].to_s, :lightweight => true
+    dor_object = @obj #Dor.find doc['id'].to_s, :lightweight => true
     format = document_partial_name(doc)
     sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
     result = ''
     sections.each_with_index do |section_name,index|
-      result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc,:object=>dor_object,:format=>format,:section=>section_name,:collapsible=>(index > 0)})
+      result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc,:object=>dor_object, :admin_policy_object => @apo, :format=>format,:section=>section_name,:collapsible=>(index > 0)})
     end
     return result.html_safe
   end
-  def archive_button
-    accessionComplete = true
-    wf=object.workflows.get_workflow('accessionWF','dor')
-    wf.processes.each do |proc|
-      if proc.status != 'completed'
-        accessionComplete = false
-      end
-    end
-    if wf.processes.length==0
-      accessionComplete=false
-    end
-    if accessionComplete
-      buttons << {:url =>  url_for(:controller => :dor,:action => :archive_workflows, :pid => pid), :label => 'Archive accessionWF'}
-    end
-  end
-  def render_buttons(doc)
+
+  def render_buttons(doc, object=nil)
     pid=doc['id']
-    object = Dor.find(pid)
+    if not object
+      object = Dor.find(pid)
+    end
     apo_pid = ''
     #wf_stuff.include? 'accessionWF:completed:publish'
     begin 
@@ -178,11 +167,13 @@ module ArgoHelper
     end
     #if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
+      
+      puts object.datastreams.inspect
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
+      buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
@@ -191,7 +182,9 @@ module ArgoHelper
       end
       buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
-      buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+      if not (object.datastreams.include? 'administrativeMetadata') #apos cant be members of collections
+        buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+      end
       if object.datastreams.include? 'contentMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :content_type, :id => pid), :label => 'Set content type'}
       end
@@ -202,13 +195,13 @@ module ArgoHelper
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
-    if(doc.has_key?('embargoMetadata_t'))
-      embargo_data=doc['embargoMetadata_t']
+    if(doc.has_key?('embargoMetadata_t') || doc.has_key?('embargoMetadata_status_t'))
+      embargo_data=doc['embargoMetadata_t'] ? doc['embargoMetadata_t'] : doc['embargoMetadata_status_t']
       text=embargo_data.split.first
       date=embargo_data.split.last
       if text != 'released'
         #add a date picker and button to change the embargo date for those who should be able to.
-        buttons << {:label => 'Update embargo', :url => 'items/embargo_form'}
+        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if current_user.is_admin
       end
     end
     buttons

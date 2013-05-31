@@ -1,7 +1,7 @@
 class ApoController < ApplicationController
 
   before_filter :create_obj, :except => [:register]
-  after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role]
+  after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
 
 
   def register
@@ -28,23 +28,29 @@ class ApoController < ApplicationController
       if params[:collection_radio]=='create'
         reg_params={}
         if params[:collection_title] and params[:collection_title].length>0
-        reg_params[:label] = params[:collection_title]
-      else
-        reg_params[:label]= ':auto'
-      end
+          reg_params[:label] = params[:collection_title]
+        else
+          reg_params[:label]= ':auto'
+        end
+        if reg_params[:label]==':auto'
+          reg_params[:rights]=params[:collection_rights_catkey]
+        else
+          reg_params[:rights]=params[:collection_rights]
+        end
+        if reg_params[:rights]
+          reg_params[:rights]=reg_params[:rights].downcase
+        end
         reg_params[:object_type] = 'collection'
         reg_params[:admin_policy] = pid
         reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
         reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
         reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
         reg_params[:workflow_id]='accessionWF'
-        puts reg_params.inspect
         response = Dor::RegistrationService.create_from_request(reg_params)
         collection_pid = response[:pid]
         if params[:collection_abstract] and params[:collection_abstract].length >0
           set_abstract(collection_pid, params[:collection_abstract])
         end
-        
       end
       item=Dor.find(pid)
       item.copyright_statement=params[:copyright]
@@ -132,17 +138,24 @@ class ApoController < ApplicationController
     if params[:collection_radio]=='create'
       reg_params={}
       if params[:collection_title] and params[:collection_title].length>0
-      reg_params[:label] = params[:collection_title]
-    else
-      reg_params[:label]= ':auto'
-    end
+        reg_params[:label] = params[:collection_title]
+      else
+        reg_params[:label]= ':auto'
+      end
+      if reg_params[:label]==':auto'
+        reg_params[:rights]=params[:collection_rights_catkey]
+      else
+        reg_params[:rights]=params[:collection_rights]
+      end
+      if reg_params[:rights]
+        reg_params[:rights]=reg_params[:rights].downcase
+      end
       reg_params[:object_type] = 'collection'
       reg_params[:admin_policy] = @object.pid
       reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
       reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
       reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
       reg_params[:workflow_id]='accessionWF'
-      puts reg_params.inspect
       response = Dor::RegistrationService.create_from_request(reg_params)
       collection_pid = response[:pid]
       if params[:collection_abstract] and params[:collection_abstract].length >0
@@ -179,10 +192,43 @@ class ApoController < ApplicationController
         @object.add_roleplayer 'dor-apo-viewer', viewer 
       end
     end
-    @object.saveg
+    @object.save
     redirect
   end
-
+  def register_collection
+    if params[:collection_title] or params[:collection_catkey]
+      
+    reg_params={}
+    if params[:collection_title] and params[:collection_title].length>0
+      reg_params[:label] = params[:collection_title]
+    else
+      reg_params[:label]= ':auto'
+    end
+    if reg_params[:label]==':auto'
+      reg_params[:rights]=params[:collection_rights_catkey]
+    else
+      reg_params[:rights]=params[:collection_rights]
+    end
+    if reg_params[:rights]
+      reg_params[:rights]=reg_params[:rights].downcase
+    end
+    reg_params[:object_type] = 'collection'
+    reg_params[:admin_policy] = params[:id]
+    reg_params[:metadata_source]='label' 
+    reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
+    reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
+    reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
+    reg_params[:workflow_id]='accessionWF'
+    response = Dor::RegistrationService.create_from_request(reg_params)
+    collection_pid = response[:pid]
+    if params[:collection_abstract] and params[:collection_abstract].length >0
+      set_abstract(collection_pid, params[:collection_abstract])
+    end
+    @object.add_default_collection collection_pid
+    redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}" 
+    end
+  end
+    
   def add_roleplayer
     @object.add_roleplayer(params[:role], params[:roleplayer])
     redirect
@@ -256,12 +302,12 @@ class ApoController < ApplicationController
   end
   def save_and_reindex
     @object.save
-    reindex @object
+    #reindex @object
   end
 
   def save_and_index
     @object.save
-    @object.update_index
+    #@object.update_index
   end
 
   def redirect
@@ -278,9 +324,9 @@ class ApoController < ApplicationController
     end
   end
   def set_abstract collection_pid, abstract
-      collection_obj=Dor.find(collection_pid)
-      collection_obj.descMetadata.abstract=abstract
-      collection_obj.descMetadata.content=collection_obj.descMetadata.ng_xml.to_s
-      collection_obj.descMetadata.save
+    collection_obj=Dor.find(collection_pid)
+    collection_obj.descMetadata.abstract=abstract
+    collection_obj.descMetadata.content=collection_obj.descMetadata.ng_xml.to_s
+    collection_obj.descMetadata.save
   end
 end

@@ -9,6 +9,7 @@ class CatalogController < ApplicationController
   helper ArgoHelper
 
   before_filter :reformat_dates, :session_groups
+  
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
 
   configure_blacklight do |config|
@@ -46,7 +47,6 @@ class CatalogController < ApplicationController
     config.add_index_field 'id', :label => 'DRUID:'
     config.add_index_field 'dc_creator_t', :label => 'Creator:'
     config.add_index_field 'project_tag_t', :label => 'Project:'
-
     config.add_show_field 'content_type_facet', :label => 'Content Type:'
     config.add_show_field 'embargoMetadata_t', :label => 'Embargo:'
     config.add_show_field 'identifier_t', :label => 'IDs:'
@@ -62,6 +62,8 @@ class CatalogController < ApplicationController
     config.add_show_field 'tag_t', :label => 'Tags:'
     config.add_show_field 'status_display', :label => 'Status:'
     config.add_show_field 'wf_error_display', :label => "Error:"
+    config.add_show_field 'collection_title_display', :label => "Error:"
+
 
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_facet', :label => 'Object Type'
@@ -136,17 +138,18 @@ class CatalogController < ApplicationController
 
     def show
       @obj = Dor.find params[:id]
+      
         apo=nil
         begin
-        apo=@obj.admin_policy_object
+        @apo=@obj.admin_policy_object
         rescue
         end
-        if not apo and not @user.is_admin and not @user.is_viewer
+        if not @apo and not @user.is_admin and not @user.is_viewer
           render :status=> :forbidden, :text =>'No APO, no access'
           return
         end
         #if there is no apo and things got to this point, they are a repo viewer or admin
-        if apo and not @obj.can_view_metadata?(@user.roles(@obj.admin_policy_object.pid)) and not @user.is_admin and not @user.is_viewer
+        if @apo and not @obj.can_view_metadata?(@user.roles(@apo.pid)) and not @user.is_admin and not @user.is_viewer
           render :status=> :forbidden, :text =>'forbidden'
           return
         end

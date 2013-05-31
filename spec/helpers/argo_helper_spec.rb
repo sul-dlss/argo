@@ -65,7 +65,7 @@ describe ArgoHelper do
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
          {:label=>"Edit collections", :url=>"/items/something/collection_ui"},
          {:label=>"Set content type", :url=>"/items/something/content_type"},
-         {:label=>"Update embargo", :url=>"items/embargo_form"}]
+         {:label=>"Update embargo", :url=>"/items/something/embargo_form"}]
     end
     it 'should inlcude the edit MODS button if there is a desc metadata ds in fedora' do
       descMD=mock(Dor::DescMetadataDS)

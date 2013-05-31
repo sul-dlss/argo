@@ -52,7 +52,8 @@ Argo::Application.routes.draw do
     get :register, :on => :collection
     post :register, :on => :collection
     post :update, :on => :member
-
+		get :register_collection, :on => :member
+		post :register_collection, :on => :member
   end
   resources :items do
     get :crop, :on => :member
@@ -71,6 +72,7 @@ Argo::Application.routes.draw do
     post '/workflows/:wf_name', :on => :member, :action => :workflow_update, :as => 'workflow_update'
     get '/workflow/history', :on => :member, :action => :workflow_history_view, :as => 'workflow_history_view'
     post '/embargo', :on => :member, :action => :embargo_update, :as => 'embargo_update'
+    get '/embargo_form', :on => :member, :action => :embargo_form, :as => 'embargo_form'
     post '/datastream', :on => :member, :action => :datastream_update, :as => 'datastream_update'
     get '/file', :on => :member, :action => :get_file, :as => 'get_file'
     get '/file_list', :on => :member, :action => :file, :as => 'file'
@@ -98,7 +100,8 @@ Argo::Application.routes.draw do
     post '/prepare', :on => :member, :action => :prepare
     post '/set_rights', :on => :member, :action => :set_rights
     get '/preserved_file', :on => :member, :action => :get_preserved_file
-  end
+    post :release_hold, :on => :member
+end
   
   namespace :items do
     post '/version/close', :action=>:close_version, :as => 'close_version'
