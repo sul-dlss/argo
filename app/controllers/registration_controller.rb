@@ -33,6 +33,12 @@ class RegistrationController < ApplicationController
     def workflow_list
       docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).docs
       result = docs.collect { |doc| doc['registration_workflow_id_t'] }.compact
+      apo_object = Dor.find(params[:apo_id], :lightweight => true)
+      adm_xml = apo_object.administrativeMetadata.ng_xml 
+      adm_xml.search('//registration/workflow').each do |wf|
+        result << wf['id']
+      end
+      
       respond_to do |format|
         format.any(:json, :xml) { render request.format.to_sym => result.flatten.sort }
       end

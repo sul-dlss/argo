@@ -26,6 +26,9 @@ Argo::Application.routes.draw do
   match 'report/pids', :to => "report#pids", :as => 'report_pids'
   match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
   match 'report/reset', :to => "report#reset", :as => 'report_reset'
+  match 'discovery', :to => 'discovery#index', :as => 'discovery'
+  match '/discovery/data', :to => "discovery#data", :as => "discovery_data"
+  match 'discovery/download', :to => 'discovery#download', :as => 'discovery_download'
   
   root :to => "catalog#index"
 
