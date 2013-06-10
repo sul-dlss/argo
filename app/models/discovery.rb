@@ -11,7 +11,6 @@ class Discovery
       { 
         :label => "Druid", :field => 'druid', 
         :proc => lambda { |doc| 
-          puts doc['id']
           doc['id'].split(/:/).last }, 
         :sort => true, :default => true, :width => 100
       },
@@ -23,6 +22,11 @@ class Discovery
         :label => "Display Title",
         :field => "sw_title_display_facet",
         :sort => true, :default => true, :width => 200
+      },
+      {
+        :label => "Format",
+        :field => "sw_format_facet",
+        :default => true, :width => 200 
       },
       {
         :label => "245a Search Title",
@@ -156,7 +160,7 @@ class Discovery
       },
 
       {
-        :label => "Pub Date Facet",
+        :label => "Pub Year Facet",
         :field => "sw_pub_date_facet",
         :default => true, :width => 200 
       },
