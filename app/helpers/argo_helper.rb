@@ -166,7 +166,7 @@ module ArgoHelper
       end
     end
     
-    buttons << {:url => url_for(:controller => :items, :action => :prioritize, :id => pid), :label => 'Expedite'}
+    buttons << {:url => url_for(:controller => :items, :action => :prioritize, :id => pid), :label => 'Expedite Workflow'}
     
     
     #if this is an apo and the user has permission for the apo, let them edit it.

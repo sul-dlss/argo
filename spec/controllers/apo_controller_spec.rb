@@ -27,6 +27,15 @@ describe ApoController do
       Dor.should_receive(:find).with('druid:collectionpid').and_return(@item)
       post 'register',  "title"=>"New APO Title",  "agreement"=>"druid:xf765cv5573",  "desc_md"=>"MODS",  "metadata_source"=>"DOR",  "managers"=>"dlss:developers",  "viewers"=>"dlss:dor-viewer", "collection_radio"=>"","collection_title"=>'col title', "collection_abstract"=>"",  "default_object_rights"=>"World",  "use"=>"",  "copyright"=>"",  "cc_license"=>"",  "workflow"=>"digitizationWF",  "register"=>""
     end
+    it 'should set apo workflows to priority 70' do
+      Dor::RegistrationService.should_receive(:create_from_request) do |params|
+        params[:workflow_priority].should == '70'
+        {:pid => 'druid:collectionpid'}
+      end
+      @item.should_receive(:add_roleplayer).exactly(2).times
+      Dor.should_receive(:find).with('druid:collectionpid').and_return(@item)
+      post 'register',  "title"=>"New APO Title",  "agreement"=>"druid:xf765cv5573",  "desc_md"=>"MODS",  "metadata_source"=>"DOR",  "managers"=>"dlss:developers",  "viewers"=>"dlss:dor-viewer", "collection_radio"=>"","collection_title"=>'col title', "collection_abstract"=>"",  "default_object_rights"=>"World",  "use"=>"",  "copyright"=>"",  "cc_license"=>"",  "workflow"=>"digitizationWF",  "register"=>""
+    end
   end
   describe 'register_collection' do
     before :each do
@@ -77,6 +86,14 @@ describe ApoController do
     controller.should_receive(:set_abstract)
     post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "collection_rights"=>"dark", 'id'=>'druid:forapo'
     
+  end
+  it 'should set the workflow priority to 65' do
+    catkey='1234567'
+    Dor::RegistrationService.should_receive(:create_from_request) do |params|
+      params[:workflow_priority].should == '65'
+      {:pid => 'druid:newcollection'}
+    end
+    post "register_collection", "label"=>":auto", "collection_catkey"=>catkey, "collection_rights_catkey"=>"dark", 'id'=>'druid:forapo'
   end
 end
 

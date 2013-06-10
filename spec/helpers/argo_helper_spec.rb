@@ -40,7 +40,8 @@ describe ArgoHelper do
       Dor.stub(:find).and_return(@object)
     end
     it 'should create a hash with the needed button info for an admin' do
-       helper.render_buttons(@doc).should == [{:label=>"Reindex", :url=>"/dor/reindex/something"},
+       helper.render_buttons(@doc).should == [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
+         {:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
@@ -50,7 +51,8 @@ describe ArgoHelper do
     it 'should generate a the same button set for a non admin' do
       @usr.stub(:is_admin).and_return(false)
       @object.stub(:can_manage_item?).and_return(true)
-      helper.render_buttons(@doc).should == [{:label=>"Reindex", :url=>"/dor/reindex/something"},
+      helper.render_buttons(@doc).should == [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
+        {:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
@@ -59,7 +61,8 @@ describe ArgoHelper do
        end
     it 'should include the embargo update button if the user is an admin and the object is embargoed' do
       @doc['embargoMetadata_t'] = ['2012-10-19T00:00:00Z']
-      helper.render_buttons(@doc).should == [{:label=>"Reindex", :url=>"/dor/reindex/something"},
+      helper.render_buttons(@doc).should == [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
+        {:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
@@ -71,7 +74,8 @@ describe ArgoHelper do
       descMD=mock(Dor::DescMetadataDS)
       descMD.stub(:new?).and_return(false)
       @object.stub(:datastreams).and_return({'contentMetadata'=>nil, 'descMetadata' => descMD})
-      helper.render_buttons(@doc).should == [{:label=>"Reindex", :url=>"/dor/reindex/something"},
+      helper.render_buttons(@doc).should == [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
+        {:label=>"Reindex", :url=>"/dor/reindex/something"},
         {:label=>"Republish", :url=>"/dor/republish/something"},
         {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
         {:label=>"Edit tags", :url=>"/items/something/tags_ui"},

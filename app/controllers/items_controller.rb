@@ -547,15 +547,14 @@ class ItemsController < ApplicationController
       wf.processes.each do |proc|
         if not proc.completed? and not proc.version  
           Dor::WorkflowService.update_workflow_status('dor', @object.id, workflow , proc.name, proc.status, {:priority => 50} )
-          puts "updateding #{proc.name}"
           updated=true
         end
       end
     end 
     if updated
-    render :status=> 200, :text =>'Priority set.'
+    render :status=> 200, :text =>'Expedited.'
   else
-    render :status=> 500, :text =>'No processes eligable for priority.'
+    render :status=> 500, :text =>'No processes eligable for expedite.'
     
   end
     
