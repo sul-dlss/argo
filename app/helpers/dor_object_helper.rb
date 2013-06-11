@@ -73,8 +73,9 @@ module DorObjectHelper
   end
 
   def render_events doc, obj
-    events = structure_from_solr(doc,'event')
+    events = structure_from_solr(doc,'event'
     unless events.empty?
+      events.compact!
       events = events.event.collect do |event|
         event.who = event.who.first if event.who.is_a? Array
         event.message = event.message.first if event.message.is_a? Array
