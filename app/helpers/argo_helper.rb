@@ -165,10 +165,12 @@ module ArgoHelper
         buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
+    
+    buttons << {:url => url_for(:controller => :items, :action => :prioritize, :id => pid), :label => 'Expedite Workflow'}
+    
+    
     #if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
-      
-      puts object.datastreams.inspect
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
     end

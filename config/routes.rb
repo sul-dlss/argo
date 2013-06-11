@@ -26,6 +26,9 @@ Argo::Application.routes.draw do
   match 'report/pids', :to => "report#pids", :as => 'report_pids'
   match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
   match 'report/reset', :to => "report#reset", :as => 'report_reset'
+  match 'discovery', :to => 'discovery#index', :as => 'discovery'
+  match '/discovery/data', :to => "discovery#data", :as => "discovery_data"
+  match 'discovery/download', :to => 'discovery#download', :as => 'discovery_download'
   
   root :to => "catalog#index"
 
@@ -59,7 +62,8 @@ Argo::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
-    get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
+    get '/prioritize', :on => :member, :action => :prioritize, :as => 'prioritize'
+		get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
     get '/refresh_metadata', :on => :member, :action => :refresh_metadata, :as => 'refresh_metadata'
     get '/schema_validate', :on => :member, :action => :schema_validation, :as => 'schema_validation'
     get '/remediate_mods', :on => :member, :action => :remediate_mods, :as => 'remediate_mods'

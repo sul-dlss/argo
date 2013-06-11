@@ -16,7 +16,7 @@ class ApoController < ApplicationController
     }
     if params[:title]
       #register a new apo
-      reg_params={}
+      reg_params={:workflow_priority => '70'}
       reg_params[:label] = params[:title]
       reg_params[:object_type] = 'adminPolicy'
       reg_params[:admin_policy] = 'druid:hv992ry2431'
@@ -26,7 +26,7 @@ class ApoController < ApplicationController
       #register a collection if requested
       collection_pid=nil
       if params[:collection_radio]=='create'
-        reg_params={}
+        reg_params={:workflow_priority => '65'}
         if params[:collection_title] and params[:collection_title].length>0
           reg_params[:label] = params[:collection_title]
         else
@@ -136,7 +136,7 @@ class ApoController < ApplicationController
     @object.metadata_source=params[:metadata_source]
     @object.agreement = params[:agreement].to_s
     if params[:collection_radio]=='create'
-      reg_params={}
+      reg_params={:workflow_priority => '65'}
       if params[:collection_title] and params[:collection_title].length>0
         reg_params[:label] = params[:collection_title]
       else
@@ -198,7 +198,7 @@ class ApoController < ApplicationController
   def register_collection
     if params[:collection_title] or params[:collection_catkey]
       
-    reg_params={}
+    reg_params={:workflow_priority => '65'}
     if params[:collection_title] and params[:collection_title].length>0
       reg_params[:label] = params[:collection_title]
     else
@@ -302,12 +302,10 @@ class ApoController < ApplicationController
   end
   def save_and_reindex
     @object.save
-    #reindex @object
   end
 
   def save_and_index
     @object.save
-    #@object.update_index
   end
 
   def redirect
