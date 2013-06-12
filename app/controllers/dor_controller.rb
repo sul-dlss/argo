@@ -79,7 +79,7 @@ class DorController < ApplicationController
         archive=true #are all processes complete
         active=false #are there any processes without version numbers, meaning they arent archived
         wf.processes.each do |proc|
-          if not proc.version and not proc.completed?
+          if not proc.version and not proc.completed? and not proc.status == 'skipped'
             archive=false
           end
           if not proc.version

@@ -395,7 +395,6 @@ DEPENDENCIES
   kgio
   mysql2 (~> 0.3.0)
   net-sftp
-  nokogiri (= 1.5.9)
   prawn (>= 0.12.0)
   progressbar
   pry
