@@ -62,6 +62,7 @@ Argo::Application.routes.draw do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
+    get 'purl_preview', :on => :member, :action => :purl_preview, :as => 'purl_preview'
     get '/prioritize', :on => :member, :action => :prioritize, :as => 'prioritize'
 		get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
     get '/refresh_metadata', :on => :member, :action => :refresh_metadata, :as => 'refresh_metadata'

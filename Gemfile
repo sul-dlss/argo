@@ -3,6 +3,7 @@ source "http://sul-gems.stanford.edu"
 
 
 gem 'stanford-mods'
+gem 'mods_display'
 gem 'dor-services', ">= 4.0.0"
 gem 'rails', '3.2.11'
 gem "blacklight", '~>3.7'

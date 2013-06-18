@@ -40,7 +40,7 @@ class CatalogController < ApplicationController
       :item    => ['identification','datastreams','history','contents','child_objects']
     }
     config.show.section_links = {
-      'identification' => :render_full_dc_link,
+      'identification' => :render_full_view_links,
       'contents' => :render_dor_workspace_link
     }
 

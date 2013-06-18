@@ -211,6 +211,8 @@ GEM
       iso-639
       nokogiri
       nom-xml
+    mods_display (0.0.1.beta6)
+      stanford-mods
     multi_json (1.7.6)
     mysql2 (0.3.11)
     net-sftp (2.1.2)
@@ -393,6 +395,7 @@ DEPENDENCIES
   jquery-rails (= 2.1.4)
   kaminari
   kgio
+  mods_display
   mysql2 (~> 0.3.0)
   net-sftp
   prawn (>= 0.12.0)

@@ -4,6 +4,7 @@ class ItemsController < ApplicationController
   require 'net/sftp'
   require 'equivalent-xml'
   include ItemsHelper
+  include ModsDisplay::ControllerExtension
 
   before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
   before_filter :forbid_modify, :only => [:add_collection, :remove_collection, :update_rights, :set_content_type, :tags, :source_id,:delete_file, :close_version, :open_version, :resource, :add_file, :replace_file,:update_attributes, :update_resource, :update_mods, :mods, :datastream_update ]
@@ -11,7 +12,9 @@ class ItemsController < ApplicationController
   before_filter :enforce_versioning, :only => [:add_collection, :remove_collection, :update_rights,:tags,:source_id,:set_source_id,:set_content_type,:set_rights]
   after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type]
 
-
+  def purl_preview
+    @mods_display=ModsDisplayObject.new(@object.add_collection_reference)
+  end
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }

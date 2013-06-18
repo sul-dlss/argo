@@ -1,0 +1,24 @@
+<% extra_head_content << capture do %><style>dl {
+  dt {
+    float: left;
+    color: #555;
+    min-width: 9.5em;
+    padding: 0 5px 0 0;
+    text-align: left;
+    width: 11em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  dd {
+    padding: 0;
+    margin-left: 11.6em;
+  }
+}
+</style>
+<%end%>
+  <h3>
+	  <%=render_mods_display(@mods_display).title.first.html_safe%>
+  </h3>	
+  
+<%=render_mods_display(@mods_display).body.html_safe%>
