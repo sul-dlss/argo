@@ -276,7 +276,7 @@ module ArgoHelper
     link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)'
   end
   def render_mods_view_link document, link_text="View Mods"
-  	link_to link_text, purl_preview_item_url(document.get('id')),:class => 'dialogLink', :title => 'Mods View'
+  	link_to link_text, purl_preview_item_url(document.get('id')),:class => 'dialogLink', :title => 'MODS View'
   end
   def render_full_view_links document
     render_full_dc_link(document) + ' / '+render_mods_view_link(document)
