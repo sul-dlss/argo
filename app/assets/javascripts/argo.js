@@ -11,19 +11,7 @@ function pathTo(path) {
   return(root + path);
 }
 
-$(document).ready(function(){$('#help_dialog').dialog({
-    autoOpen: false,
-    buttons: { "Ok": function() { $(this).dialog("close"); } },
-    modal: true,
-    height: 260,
-	position: {
-	   my: "center",
-	   at: "center",
-	   of: window
-	},
-    title: 'Help',
-    resizable: false
-  });})
+
 
 $(document).ready(function() {
   $('#page').wrapInner('<div id="argonauta"/>');
