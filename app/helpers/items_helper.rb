@@ -418,6 +418,14 @@ module ItemsHelper
     end
     messages
   end
+  def mclaughlin_remove_related_item xml
+    titles = xml.search('//mods:relatedItem/mods:titleInfo/mods:title','mods'=>'http://www.loc.gov/mods/v3')
+    titles.each do |title|
+      if title.text == "mapping of California as an island"
+        title.parent.parent.remove
+      end
+    end    
+  end
   def mclaughlin_remediation xml
     mclaughlin_cleanup_states xml
     mclaughlin_cleanup_statement xml

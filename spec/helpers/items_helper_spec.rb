@@ -558,9 +558,7 @@ describe ItemsHelper do
     end
   end
   context 'mclaughlin_reorder_notes' do
-  
     it 'should reorder notes' do
-      
       doc = Nokogiri.XML(@notes_doc) do |config|
         config.default_xml.noblanks
       end
@@ -627,6 +625,16 @@ describe ItemsHelper do
         doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').first.text.should == @display_coords[count]
         count += 1
       end
+    end
+  end
+  context 'mclaughlin_remove_related_item' do
+    it 'should remove the related item' do
+      doc = Nokogiri.XML(@full_doc) do |config|
+        config.default_xml.noblanks
+      end
+      doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+      mclaughlin_remove_related_item doc
+      doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length.should == 0
     end
   end
 end
