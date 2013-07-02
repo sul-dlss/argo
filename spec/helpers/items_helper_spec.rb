@@ -288,6 +288,54 @@ describe ItemsHelper do
     <mods:typeOfResource collection="yes"/>
     </mods:mods/>
     '
+    @notes_doc = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+  <mods:typeOfResource>cartographic</mods:typeOfResource>
+  <mods:genre authority="marcgt">map</mods:genre>
+  <mods:genre>Digital Maps</mods:genre>
+  <mods:genre>Early Maps</mods:genre>
+  <mods:accessCondition displayLabel="Copyright Stanford University. Stanford, CA 94305. (650) 723-2300." type="useAndReproduction">Stanford University Libraries and Academic Information Resources - Terms of Use SULAIR Web sites are subject to Stanford Universitys standard Terms of Use (See http://www.stanford.edu/home/atoz/terms.html) These terms include a limited personal, non-exclusive, non-transferable license to access and use the sites, and to download - where permitted - material for personal, non-commercial, non-display use only. Please contact the University Librarian to request permission to use SULAIR Web sites and contents beyond the scope of the above license, including but not limited to republication to a group or republishing the Web site or parts of the Web site. SULAIR provides access to a variety of external databases and resources, which sites are governed by their own Terms of Use, as well as contractual access restrictions. The Terms of Use on these external sites always govern the data available there. Please consult with library staff if you have questions about data access and availability.</mods:accessCondition>
+  <mods:identifier displayLabel="Post publication map number" type="local">511</mods:identifier>
+  <mods:titleInfo>
+    <mods:title>GEOGRAPHY.</mods:title>
+  </mods:titleInfo>
+  <mods:originInfo>
+    <mods:publisher>J. Wilkes</mods:publisher>
+    <mods:place>
+      <mods:placeTerm>[London]</mods:placeTerm>
+    </mods:place>
+    <mods:dateCreated keyDate="yes">1807</mods:dateCreated>
+  </mods:originInfo>
+  <mods:physicalDescription>
+    <mods:extent>7.8 cm. in diameter on sheet 23.8 x 18.0 cm.</mods:extent>
+  </mods:physicalDescription>
+  <mods:name authority="naf" type="personal" xlink:href="http://id.loc.gov/authorities/names/nr91033752">
+    <mods:role>
+      <mods:roleTerm>creator</mods:roleTerm>
+    </mods:role>
+    <mods:namePart>Wilkes, John, of Milland House, Sussex</mods:namePart>
+  </mods:name>
+  <mods:name authority="naf" type="personal" xlink:href="http://id.loc.gov/authorities/names/no2010024699">
+    <mods:role>
+      <mods:roleTerm>engraver</mods:roleTerm>
+    </mods:role>
+    <mods:namePart>Pass, J.</mods:namePart>
+  </mods:name>
+  <mods:genre>Separate Map</mods:genre>
+  <mods:note>Page showing five hemispherical maps of the world. Hemispheres numbered &#x201C;2&#x201D; and &#x201C;4&#x201D; show California as an unlabeled island from a polar and oblique projection, respectively.</mods:note>
+  <mods:note>J. Pass sculp (lower right).</mods:note>
+  <mods:note>Published as the Act directs, Jany. 1st 1807, by J. Wilkes (lower middle).</mods:note>
+  <mods:note>Plate III. (upper right).</mods:note>
+  <mods:note type="publications">Issued in his: Encyclopaedia londinensis; or, universal dictionary of arts, sciences &amp; literature ... London, Adlard, 1810-1829.</mods:note>
+  <mods:note>Supplementary title below maps: Projections of the Sphere, and common Terrestrial Globe.</mods:note>
+  <mods:note type="references">UCLA.</mods:note>
+  <mods:note displayLabel="Statement of responsibility" type="statement_of_responsibility">[John Wilkes]</mods:note>
+  <mods:subject>
+    <mods:topic>California as an island--Maps</mods:topic>
+  </mods:subject>
+  <mods:subject>
+    <mods:topic>Northern Hemisphere--Maps</mods:topic>
+  </mods:subject>
+</mods:mods>'
     @collection_record=Nokogiri::XML(collection_record)
   end
   context 'mclaughlin_cleanup_notes' do
@@ -512,12 +560,22 @@ describe ItemsHelper do
   context 'mclaughlin_reorder_notes' do
   
     it 'should reorder notes' do
-      pending 
-      doc = Nokogiri.XML(@full_doc) do |config|
+      
+      doc = Nokogiri.XML(@notes_doc) do |config|
         config.default_xml.noblanks
       end
       mclaughlin_remediation doc
       mclaughlin_reorder_notes doc
+      notes=doc.search('//mods:note', 'mods'=>'http://www.loc.gov/mods/v3')
+      notes.length.should == 8  
+      notes.each_with_index do |note, index|
+        if index == 6
+          note['type'].should == 'references'
+        end
+        if index ==  7
+          note['type'].should == 'statement_of_responsibility'
+        end
+      end
     end
   end
   context 'mclaughlin_remove_keydate' do

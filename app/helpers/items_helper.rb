@@ -31,7 +31,7 @@ module ItemsHelper
     xml.root['version']='3.3'    
   end
   def mclaughlin_reorder_notes xml
-    notes={ :general => [], :sor => [], :pub => [], :ref => [], :lang => [] }
+    notes={ :general => [], :sor => [], :pub => [], :ref => [], :lang => [], :identifiers => [] }
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       case node['displayLabel']
       when nil
@@ -44,6 +44,8 @@ module ItemsHelper
         notes[:pub] << node
       when 'References'
         notes[:ref] << node
+      when 'Identifiers'
+        notes[:identifiers] << node
       end
     end
     root=xml.root
@@ -54,6 +56,7 @@ module ItemsHelper
     #state reording is a complicated pain, do it elsewhere
     mclaughlin_reorder_states xml
     reparent notes[:ref], root
+    reparent notes[:identifiers], root
   end
   def reparent nodes, root
     nodes.each do |node| 
@@ -418,10 +421,11 @@ module ItemsHelper
   def mclaughlin_remediation xml
     mclaughlin_cleanup_states xml
     mclaughlin_cleanup_statement xml
-    mclaughlin_reorder_states xml
+    mclaughlin_reorder_notes xml
     mclaughlin_cleanup_notes xml
     mclaughlin_remove_newlines xml
     mclaughlin_prune_identifiers xml
+    mclaughlin_fix_cartographics xml
     mclaughlin_reorder_cartographics xml
     mclaughlin_fix_subjects xml
     remove_empty_nodes xml
