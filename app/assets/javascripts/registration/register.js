@@ -9,7 +9,8 @@ function DorRegistration(initOpts) {
       workflowId: null,
       mdFormId: null,
       metadataSource: 'none',
-      tagList: ""
+      tagList: "",
+	  collection: 'None'
     },
     
     registrationQueue: [],
@@ -57,7 +58,8 @@ function DorRegistration(initOpts) {
 		'metadata_source' : ($t.metadataSource != 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
         'tag' : tags,
-		'rights' : $('#rights').val()		
+		'rights' : $('#rights').val(),
+		'collection' : collection.value
       }
 
       if (data.source_id) {
