@@ -83,6 +83,9 @@ class User < ActiveRecord::Base
     known_roles.each do |role|
       q+=' OR apo_role_'+role+'_t:('+query+')' 
     end
+    if is_admin
+      q='objectType_facet:adminPolicy'
+    end
     resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!tag_facet:"Project : Hydrus"'})['response']['docs']
     pids=[]
     count=1
@@ -136,6 +139,7 @@ class User < ActiveRecord::Base
   
   #is the user a repository wide administrator
   def is_admin
+    return true
     #if this is an admin wanting to view the world as if they werent, accomidate them.
     if @groups
       return false

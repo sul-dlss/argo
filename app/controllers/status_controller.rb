@@ -3,18 +3,18 @@ class StatusController < ApplicationController
   skip_before_filter :authorize!
 
   def log
-    if check_logs !=true
+    if check_recently_indexed !=true
       if not params[:test_obj].nil?
         test_item=Dor::Item.find(params[:test_obj])
         test_item.identityMetadata.dirty=true
         test_item.save
         sleep 5.0
-        txt= check_logs
+        txt= check_recently_indexed
         if txt==true	
           render :status=>200, :text=> 'All good!	<br>'
           return
         else
-          render :status=>500, :text=>'Nothing indexed in last '+ params[:minutes] +' minutes, last indexed was:<br> '+txt
+          render :status=>500, :text=>'Nothing indexed in last '+ params[:minutes] +' minutes, last indexed was:<br> '
           return
         end
       end
@@ -41,6 +41,14 @@ class StatusController < ApplicationController
   end
   
   protected 
+  def check_recently_indexed
+    docs = Dor::SearchService.query("indexed_at_dt:[NOW-15MINUTES  TO NOW]", {:rows => 1, :fl => 'indexed_at_dt'})['response']['docs']
+    if docs.length == 1
+      true
+    else
+      false
+    end
+  end
   def check_logs 
     log_file=	File.new(LOG_FILE,'r')
     txt=''
