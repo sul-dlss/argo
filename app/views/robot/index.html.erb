@@ -1,0 +1,26 @@
+<style>
+img.resize{
+    width:10px; /* you can use % */
+    height: auto;
+}
+</style>
+
+<%
+@robots.each do |robot|
+	
+	%>
+	<br>
+	
+	<% if robot.status %>
+	<img class="resize" src="/assets/Green_Light_Icon.svg"/>
+	<%else%>
+	<% if robot.status_long%>
+	<img class="resize" src="/assets/Yellow_Light_Icon.svg"/>
+	<% else %>
+	<img class="resize" src="/assets/Red_Light_Icon.svg"/>
+	<%end%>
+	<%end%>
+	<%=link_to(robot.wf + ':' + robot.process, robot_url(robot)) %>
+	<%
+end	
+%>

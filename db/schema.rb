@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121011191241) do
+ActiveRecord::Schema.define(:version => 20130710164606) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -32,6 +32,13 @@ ActiveRecord::Schema.define(:version => 20121011191241) do
   end
 
   add_index "indexing_exceptions", ["pid"], :name => "index_indexing_exceptions_on_pid"
+
+  create_table "robots", :force => true do |t|
+    t.string   "wf"
+    t.string   "process"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "searches", :force => true do |t|
     t.text     "query_params"
