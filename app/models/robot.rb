@@ -11,7 +11,7 @@ class Robot < ActiveRecord::Base
      end
   end
   def status_long
-    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-15HOURS  TO NOW]", {:rows => 20, :fl => 'id'})['response']['docs']
+    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-1HOUR  TO NOW]", {:rows => 20, :fl => 'id'})['response']['docs']
     if docs.length >0 
       true
     else
@@ -19,6 +19,6 @@ class Robot < ActiveRecord::Base
     end
   end
   def recent_work
-    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-15HOUR  TO NOW]", {:rows => 20, :fl => 'id,dc_title_t,apo_title_facet'})['response']['docs']
+    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-1HOUR  TO NOW]", {:rows => 20, :fl => 'id,dc_title_t,apo_title_facet'})['response']['docs']
   end
 end
