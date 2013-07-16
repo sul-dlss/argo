@@ -102,7 +102,7 @@ describe DorController do
       item.workflows.should_receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
       item.stub(:milestones).and_return []
       item.stub(:new_version_open?).and_return false
-      @solr_doc=item.to_solr
+      #@solr_doc=item.to_solr
     end
     
     it 'the indexer should generate gryphondor fields' do

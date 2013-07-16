@@ -32,7 +32,9 @@ describe ArgoHelper do
       @object.stub(:pid).and_return('druid:123')
       descMD=mock(Dor::DescMetadataDS)
       descMD.stub(:new?).and_return(true)
-      @object.stub(:datastreams).and_return({'contentMetadata'=>nil, 'descMetadata' => descMD})
+      idMD=mock(Dor::DescMetadataDS)
+      idMD.stub(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
+      @object.stub(:datastreams).and_return({'contentMetadata'=>nil, 'descMetadata' => descMD, 'identityMetadata' => idMD})
       @apo=mock()
       @usr.should_receive(:roles).with('apo_druid').and_return([])
       @apo.stub(:pid).and_return('apo:druid')
@@ -73,7 +75,9 @@ describe ArgoHelper do
     it 'should inlcude the edit MODS button if there is a desc metadata ds in fedora' do
       descMD=mock(Dor::DescMetadataDS)
       descMD.stub(:new?).and_return(false)
-      @object.stub(:datastreams).and_return({'contentMetadata'=>nil, 'descMetadata' => descMD})
+      idMD=mock(Dor::DescMetadataDS)
+      idMD.stub(:ng_xml).and_return(Nokogiri::XML('<identityMetadata></otherId><identityMetadata>'))
+      @object.stub(:datastreams).and_return({'contentMetadata'=>nil, 'descMetadata' => descMD, 'identityMetadata' => idMD})
       helper.render_buttons(@doc).should == [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
         {:label=>"Reindex", :url=>"/dor/reindex/something"},
         {:label=>"Republish", :url=>"/dor/republish/something"},
@@ -82,6 +86,20 @@ describe ArgoHelper do
         {:label=>"Edit collections", :url=>"/items/something/collection_ui"},
         {:label=>"Set content type", :url=>"/items/something/content_type"},
         {:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true}]
+    end
+    it 'should exclude the edit mods button if the item has a catkey in otherids, meaning it uses symphony as its metadata source' do
+      descMD=mock(Dor::DescMetadataDS)
+      descMD.stub(:new?).and_return(false)
+      idMD=mock(Dor::DescMetadataDS)
+      idMD.stub(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><otherId name="catkey">1234567</otherId><identityMetadata>'))
+      @object.stub(:datastreams).and_return({'contentMetadata'=>nil, 'descMetadata' => descMD, 'identityMetadata' => idMD})
+      helper.render_buttons(@doc).should == [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
+        {:label=>"Reindex", :url=>"/dor/reindex/something"},
+        {:label=>"Republish", :url=>"/dor/republish/something"},
+        {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
+        {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
+        {:label=>"Edit collections", :url=>"/items/something/collection_ui"},
+        {:label=>"Set content type", :url=>"/items/something/content_type"}]
     end
   end
 end

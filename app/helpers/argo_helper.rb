@@ -28,6 +28,28 @@ module ArgoHelper
     end
   end
   
+  def index_queue_velocity
+    begin
+      if Dor::Config.status and Dor::Config.status.indexer_url
+        url=Dor::Config.status.indexer_velocity_url
+        data=JSON.parse(open(url).read)
+        points=[]
+        data.first['datapoints'].each do |data|
+          points << data.first.to_i
+        end
+        if points.length>1
+          diff=points.last-points.first
+          speed=diff/(points.length-1)
+          return speed
+        end
+      else
+        0
+      end
+    rescue 
+      return 0
+    end
+  end
+  
 
   def structure_from_solr(solr_doc, prefix, suffix='display')
     prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
@@ -193,7 +215,7 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
-      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false
+      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false and object.datastreams['identityMetadata'].ng_xml.search('//otherId[@name=\'catkey\']').length == 0
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
@@ -276,7 +298,7 @@ module ArgoHelper
     link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)'
   end
   def render_mods_view_link document, link_text="View MODS"
-  	link_to link_text, purl_preview_item_url(document.get('id')),:class => 'dialogLink', :title => 'MODS View'
+    link_to link_text, purl_preview_item_url(document.get('id')),:class => 'dialogLink', :title => 'MODS View'
   end
   def render_full_view_links document
     render_full_dc_link(document) + ' / '+render_mods_view_link(document)
