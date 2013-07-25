@@ -22,7 +22,7 @@ module Dor
         processes.each do |process|
           if process.status.present?
             #add a record of the robot having operated on this item, so we can track robot activity
-            if process.status == 'completed' || process.status == 'error'
+            if process.date_time and process.status and (process.status == 'completed' || process.status == 'error')
               add_solr_value(solr_doc, "wf_#{wf_name}_#{process.name}", process.date_time+'Z', :date)
             end
             add_solr_value(solr_doc, 'wf_error', "#{wf_name}:#{process.name}:#{process.error_message}", :string, [:facetable,:displayable]) if process.error_message #index the error message without the druid so we hopefully get some overlap
