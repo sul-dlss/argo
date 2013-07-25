@@ -57,7 +57,6 @@ class DorController < ApplicationController
         render :status=> 500, :text =>'Object doesnt exist in Fedora.'
         return
       end
-      archive_workflows(obj)
     end
     
 
