@@ -596,21 +596,7 @@ describe ItemsHelper do
       @new_coords=["W0000000 W0000000 N0900000 N0900000","W0180000 E0510000 N0370000 S0350000","W1600000 E0200000 N0900000 S0900000","W0210000 E1590000 N0900000 S0900000","E1100000 W0700000 N0630000 S0530000","W1250000 W1100000 N0470000 N0310000","W0921500 W0771000 N0183000 N0071000","W1243000 W1141500 N0420000 N0323000","W1730000 W0100000 N0840000 N0071000","W1800000 E1800000 N0850000 S0850000","W1730000 W0100000 N0840000 N0080000","W0820000 W0350000 N0130000 S0550000","W0000000 W0000000 S0900000 S0900000","W1280000 W0650000 N0510000 N0250000"]
       @display_coords=["(W 0° --E 0°/N 90° --N 90°)","(W 18° --E 51°/N 37° --S 35°)","(W 160° --E 20°/N 90° --S 90°)","(W 21° --E 159°/N 90° --S 90°)","(E 110° --W 70°/N 63° --S 53°)","(W 125° --W 110°/N 47° --N 31°)","(W 92°15ʹ --W 77°10ʹ/N 18°30ʹ --N 7°10ʹ)","(W 124°30ʹ --W 114°15ʹ/N 42°00ʹ --N 32°30)","(W 173°00ʹ --W 10°00ʹ/N 84°00ʹ --N 7°10ʹ)","(W 180° --E 180°/N 85° --S 85°)","(W 173° --W 10°/N 84° --N 8°)","(W 82° --W 35°/N 13° --S 55°)","(W 0° --W 0°/S 90° --S 90°)","(W 128° --W 65°/N 51° --N 25°)"]
     end
-    it 'should modify the coordinates when needed' do
-      count = 0
-      @old_coords.each do |coord|
-        xml='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">'+"
-        <mods:subject>
-        <mods:cartographics>
-        <mods:coordinates>#{coord}</mods:coordinates>
-        </mods:cartographics>
-        </mods:subject></mods:mods>"
-        doc=Nokogiri::XML(xml)
-        mclaughlin_fix_cartographics doc
-        doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').last.text.should == @new_coords[count]
-        count += 1
-      end
-    end
+
     it 'should add a display counterpart to the encoded coordinates' do
       count = 0
       @old_coords.each do |coord|
@@ -623,8 +609,34 @@ describe ItemsHelper do
         doc=Nokogiri::XML(xml)
         mclaughlin_fix_cartographics doc
         doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').first.text.should == @display_coords[count]
+        #the encoded coordinates should be gone(they used to get copied to a new node)
+        doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
         count += 1
       end
+    end
+  end
+  context 'mclaughlin_combine_cartographics' do
+    it 'should combine scale, projection and coordinates into one cartographics' do
+      xml='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">'+"
+      <mods:subject>
+      <mods:cartographics>
+      <mods:coordinates>W0000000 W0000000 N900000 N900000</mods:coordinates>
+      </mods:cartographics>
+      <mods:cartographics>
+      <mods:scale>something</mods:scale>
+      </mods:cartographics>
+      <mods:cartographics>
+        <mods:projection>magic</mods:projection>
+      </mods:cartographics>
+      </mods:subject></mods:mods>"
+      doc=Nokogiri::XML(xml)
+      mclaughlin_combine_cartographics doc
+      remove_empty_nodes doc
+      puts doc.to_s
+      #should be merged into a single cartographics
+      doc.search("//mods:subject/mods:cartographics",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+      doc.search("//mods:subject/mods:cartographics/mods:scale",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+      doc.search("//mods:subject/mods:cartographics/mods:projection",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
     end
   end
   context 'mclaughlin_remove_related_item' do
@@ -635,6 +647,15 @@ describe ItemsHelper do
       doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length.should == 1
       mclaughlin_remove_related_item doc
       doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length.should == 0
+    end
+  end
+  context 'mclaughlin_replace_problematic_characters' do
+    it "should replace the bad character" do
+      pending
+      bad_string = "&#x2013; &#x2018; &#x2019; &#x2018; &#x2019 ;&#x201C; &#x201D; &#x2026; &#x2070; &#x30A; &#xBA; &#xB6;"
+      good_string = "-- &apos; &apos; &quot; &quot; ... &#xB0; &#xB0; &#xB0; "
+      xml=Nokogiri::XML("<something>#{bad_string}</something>")
+      mclaughlin_replace_problematic_characters(xml).to_s.should == good_string
     end
   end
 end

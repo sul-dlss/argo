@@ -221,7 +221,7 @@ module ItemsHelper
   def mclaughlin_fix_subjects xml
     xml.search('//mods:subject','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       #if there is more than 1 topic in this subject, split it out into another subject
-      topics = node.search('//mods:topic','mods'=>'http://www.loc.gov/mods/v3')
+      topics = node.xpath('.//mods:topic','mods'=>'http://www.loc.gov/mods/v3')
       if topics.length > 1
         parent=node.parent
         node.remove
@@ -247,6 +247,24 @@ module ItemsHelper
       end
     end
   end
+  #merge scale, projection and coordinates into a single cartographics node
+  def mclaughlin_combine_cartographics xml
+    #pick 1 cartographic and reparent the scale, projection and coordinates to be inside it. The empty node pruning will clean up the mess.
+    cartographic=xml.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').first
+    if cartographic 
+      scales=xml.search('//mods:cartographics/mods:scale','mods'=>'http://www.loc.gov/mods/v3')
+      projections=xml.search('//mods:cartographics/mods:projection','mods'=>'http://www.loc.gov/mods/v3')
+      coordinates=xml.search('//mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
+      raise 'too many coordinates' if coordinates.length > 1
+      raise 'too many projections' if projections.length > 1
+      raise 'too many scales' if scales.length > 1
+      puts 'reparenting'
+      cartographic << scales.first if scales.first
+      cartographic << projections.first if projections.first 
+      cartographic << coordinates.first if coordinates.first
+    end
+  end
+  
   def mclaughlin_fix_cartographics xml
     hash={}
     hash['W0000000 W0000000 N900000 N900000'] = ['W0000000 W0000000 N0900000 N0900000','(W 0° --E 0°/N 90° --N 90°)']
@@ -266,14 +284,6 @@ module ItemsHelper
     coords = xml.search('//mods:subject/mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
     coords.each do |coord|
       if hash.has_key? coord.text
-        #the idea is to create a new subject/cartographics/coordinates and put the corrected encoded coords there, with the more readable ones in the original subject/cartographics
-        new_sub=Nokogiri::XML::Node.new('mods:subject',xml)
-        new_cart=Nokogiri::XML::Node.new('mods:cartographics',xml)
-        new_coord=Nokogiri::XML::Node.new('mods:coordinates',xml)
-        new_coord.content=hash[coord.text].first
-        new_cart.add_child new_coord
-        new_sub.add_child new_cart
-        coord.parent.parent.parent.add_child new_sub    
         coord.content = hash[coord.text].last
       end
     end
@@ -426,6 +436,28 @@ module ItemsHelper
       end
     end    
   end
+  
+  def mclaughlin_replace_problematic_characters xml
+    characters={}
+    characters["&#x2013;"] = "--"
+    characters["&#x2018;"] = "&apos;"
+    characters["&#x2019;"] = "&apos;"
+    characters["&#x201C;"] = "&quot;"
+    characters["&#x201D;"] = "&quot;"
+    characters["&#x2026;"] = "..."
+    characters["&#x2070; "] = "&#xB0;"
+    characters["&#x30A;"] = "&#xB0;"
+    characters["&#xBA;"] = "&#xB0;"
+    characters["&#xB6;"] = " "
+    text=xml.to_s
+    characters.keys.each do |key|
+      puts key
+      text.gsub!(key,characters[key])
+    end
+    xml=Nokogiri.XML(text)
+    xml
+  end
+  
   def mclaughlin_remediation xml
     mclaughlin_cleanup_states xml
     mclaughlin_cleanup_statement xml
