@@ -24,7 +24,6 @@ class CatalogController < ApplicationController
       :'f.wf_wsp_facet.facet.limit' => -1,
       :'f.wf_swp_facet.facet.limit' => -1,
       :'f.tag_facet.facet.limit' => -1,
-      :'f.is_member_of_collection_s.facet.limit' => -1,
       :'f.tag_facet.facet.sort' => 'index'
 
     }
@@ -63,15 +62,15 @@ class CatalogController < ApplicationController
     config.add_show_field 'status_display', :label => 'Status:'
     config.add_show_field 'wf_error_display', :label => "Error:"
     config.add_show_field 'collection_title_display', :label => "Error:"
-
+    config.add_show_field 'metadata_source_t', :label => 'MD Source:'
 
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_facet', :label => 'Object Type'
     config.add_facet_field 'content_type_facet', :label => 'Content Type'
-    config.add_facet_field 'collection_title_facet', :label => 'Collection', :sort => 'index'
-    config.add_facet_field 'hydrus_collection_title_facet', :label => 'Hydrus Collection', :sort => 'index'
-    config.add_facet_field 'apo_title_facet', :label => 'Admin. Policy', :sort => 'index'
-    config.add_facet_field 'hydrus_apo_title_facet', :label => 'Hydrus Admin. Policy', :sort => 'index'
+    config.add_facet_field 'collection_title_facet', :label => 'Collection', :sort => 'index', :limit => 200
+    config.add_facet_field 'hydrus_collection_title_facet', :label => 'Hydrus Collection', :sort => 'index', :limit => 200
+    config.add_facet_field 'apo_title_facet', :label => 'Admin. Policy', :sort => 'index', :limit => 200
+    config.add_facet_field 'hydrus_apo_title_facet', :label => 'Hydrus Admin. Policy', :sort => 'index', :limit => 200
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
@@ -122,7 +121,7 @@ class CatalogController < ApplicationController
         ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
         ],
         :full_identification => [
-          ['id','objectType_t','content_type_facet'],
+          ['id','objectType_t','content_type_facet','metadata_source_t'],
           ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
         ]
       }
@@ -137,7 +136,7 @@ class CatalogController < ApplicationController
     end
 
     def show
-      @obj = Dor.find params[:id]
+      @obj = Dor.find params[:id], :lightweight => true
       
         apo=nil
         begin
