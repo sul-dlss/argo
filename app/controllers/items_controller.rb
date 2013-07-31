@@ -201,18 +201,18 @@ class ItemsController < ApplicationController
   end
   def datastream_update
     
-      req_params=['id','dsid','content']
-      ds=@object.datastreams[params[:dsid]]
-      #check that the content is valid xml
-      begin
-        content=Nokogiri::XML(params[:content]){ |config| config.strict }
-      rescue
-        raise 'XML was not well formed!'
-      end
-      ds.content=content.to_s
-      respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
-      end
+    req_params=['id','dsid','content']
+    ds=@object.datastreams[params[:dsid]]
+    #check that the content is valid xml
+    begin
+      content=Nokogiri::XML(params[:content]){ |config| config.strict }
+    rescue
+      raise 'XML was not well formed!'
+    end
+    ds.content=content.to_s
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
+    end
   end
   def get_file
     data=@object.get_file(params[:file])
@@ -529,6 +529,7 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }  
     end
   end
+  #set the content type in the content metadata
   def set_content_type
     if not ['book', 'file', 'image','map','manuscript'].include? params[:new_content_type]
       render :status=> :forbidden, :text =>'Invalid new content type.'
@@ -543,6 +544,13 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
     end
   end
+  #set the rightsMetadata to the APO's defaultObjectRights
+  def apply_apo_defaults
+    @object.reapplyAdminPolicyObjectDefaults
+    render :status=> 200, :text =>'Defaults applied.'
+  end
+  
+  #set the workflow priority for an object
   def prioritize
     updated=false
     @object.workflows.workflows.each do |wf|
@@ -555,13 +563,29 @@ class ItemsController < ApplicationController
       end
     end 
     if updated
-    render :status=> 200, :text =>'Expedited.'
-  else
-    render :status=> 500, :text =>'No processes eligable for expedite.'
-    
+      render :status=> 200, :text =>'Expedited.'
+    else
+      render :status=> 500, :text =>'No processes eligable for expedite.'
+    end
   end
-    
+  #add a workflow to an object if the workflow is not present in the active table
+  def add_workflow
+    wf = @object.workflows[params[:wf]]
+    if wf
+      #check for this workflow is present and active (not archived)
+      if wf and wf.active?
+        render :status => 500, :text => "#{params[:wf]} already exists!"
+        return
+      end
+      @object.initialize_workflow(params[:wf])
+      if params[:bulk]
+        render :text => "Added #{params[:wf]}"
+      else
+        redirect_to catalog_path(params[:id]), :notice => "Added #{params[:wf]}" 
+      end
+    end
   end
+  
   private 
   def reindex item
     doc=item.to_solr

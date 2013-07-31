@@ -37,7 +37,7 @@ Argo::Application.routes.draw do
   match 'profile',        :to => 'auth',       :as => 'edit_user_registration'
   
   namespace :report do
-    get '/workflow_grid'
+    get '/workflow_grid', :action => :workflow_grid
   end
   resources :robot do
 	end
@@ -107,6 +107,9 @@ Argo::Application.routes.draw do
     post '/set_rights', :on => :member, :action => :set_rights
     get '/preserved_file', :on => :member, :action => :get_preserved_file
     post :release_hold, :on => :member
+    get :add_workflow, :on => :member
+    post :add_workflow, :on => :member
+    get :apply_apo_defaults, :on => :member
 end
   
   namespace :items do
@@ -122,32 +125,32 @@ end
   
   namespace :registration do
     get "/", :action => :form
-    get "/tracksheet"
-    get "/form_list"
-    get "/collection_list"
-    get "/workflow_list"
+    get "tracksheet"
+    get "form_list"
+    get "collection_list"
+    get "workflow_list"
     get "/rights_list", :action => :rights_list, :as => 'rights_list'
     get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
   end
 
   namespace :auth do
-    get '/login'
-    get '/logout'
-    get '/profile'
-    get '/groups'
+    get 'login'
+    get 'logout'
+    get 'profile'
+    get 'groups'
     post '/set_groups', :action => :set_groups, :as => 'set_groups'
-    get '/remove_groups'
+    get 'remove_groups'
   end
 
 	namespace :dor do
-    get '/configuration'
-    get '/label'
-    get '/query_by_id'
+    get 'configuration'
+    get 'label'
+    get 'query_by_id'
     match 'republish/:pid', :action => :republish
     match 'archive/:pid', :action => :archive_workflows
     match 'reindex/:pid', :action => :reindex, :as => 'reindex'
     match 'delete_from_index/:pid', :action => :delete_from_index
-    get '/index_exceptions'
+    get 'index_exceptions'
     resources :objects 
   end
   
