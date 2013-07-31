@@ -570,20 +570,25 @@ class ItemsController < ApplicationController
   end
   #add a workflow to an object if the workflow is not present in the active table
   def add_workflow
-    wf = @object.workflows[params[:wf]]
-    if wf
-      #check for this workflow is present and active (not archived)
-      if wf and wf.active?
-        render :status => 500, :text => "#{params[:wf]} already exists!"
-        return
+    if params[:wf]
+      wf = @object.workflows[params[:wf]]
+
+        
+        #check for this workflow is present and active (not archived)
+        if wf and wf.active?
+          render :status => 500, :text => "#{params[:wf]} already exists!"
+          return
+        end
+        @object.initialize_workflow(params[:wf])
+        if params[:bulk]
+          puts 'redirect'
+          
+          render :text => "Added #{params[:wf]}"
+        else
+          redirect_to catalog_path(params[:id]), :notice => "Added #{params[:wf]}" 
+        end
       end
-      @object.initialize_workflow(params[:wf])
-      if params[:bulk]
-        render :text => "Added #{params[:wf]}"
-      else
-        redirect_to catalog_path(params[:id]), :notice => "Added #{params[:wf]}" 
-      end
-    end
+    
   end
   
   private 

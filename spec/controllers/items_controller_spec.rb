@@ -383,4 +383,22 @@ describe 'update_mods' do
     response.code.should == "403"
   end
 end
+describe "add_workflow" do
+  it 'should initialize the new workflow' do
+    @item.should_receive(:initialize_workflow)
+    wf=mock
+    wf.stub(:[]).and_return(nil)
+    @item.stub(:workflows).and_return wf
+    post 'add_workflow', :id => 'oo201oo0001', :wf => 'accessionWF'
+  end
+  it 'shouldnt initialize the workflow if one is already active' do
+    @item.should_not_receive(:initialize_workflow)
+    wf=mock
+    mock_wf=mock
+    mock_wf.stub(:active?).and_return(true)
+    wf.stub(:[]).and_return(mock_wf)
+    @item.stub(:workflows).and_return wf
+    post 'add_workflow', :id => 'oo201oo0001', :wf => 'accessionWF'
+  end
+end
 end
