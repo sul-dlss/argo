@@ -198,7 +198,19 @@ module DorObjectHelper
       end
       result=result.html_safe
     end
-
+    
+    def metadata_source object
+      source = "DOR"
+      if object.identityMetadata.otherId('mdtoolkit').length > 0
+        source = "Metadata Toolkit"
+      else
+        if object.identityMetadata.otherId('catkey').length > 0
+          source = "Symphony"
+        end
+      end
+      source
+    end
+    
     def has_been_published? pid
       Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
     end
