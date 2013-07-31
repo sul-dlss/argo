@@ -297,6 +297,38 @@ function expedite(druids){
 	})
 }
 
+function apply_apo_defaults(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Defaults applied.');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+
+function add_workflow(druids){
+	cons=[];
+	var params={
+		'wf': $('#wf').val(),
+	}
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url='<%=url_for :controller => :items,:action => :add_workflow, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+		url=url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'POST', data: params});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url,'Workflow Added');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
 
 function refresh_metadata(druids){
 	cons=[];
@@ -481,13 +513,15 @@ function stop_all()
 	<button onclick="$('#remediate_mods').show(400)">Remediate MODs</button>
 	<button onclick="$('#refresh_metadata').show(400)">Refresh MODs</button>
 	<button onclick="$('#discoverable').show(400)">Check discoverability</button>
+	<button onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</button>
+	<button onclick="$('#add_workflow ').show(400)">Add a Workflow</button>
 	<%end%>
 	<div style="" id="updates" name="updates">
 		<label>Object Updates, you must prepare objects to use these.</label><br>
 		<button class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
 		<button class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</button>
 		<button class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</button>
-		<button class="update_buttons"disabled onclick="$('#add_collection').show(400)">Add collection</button>
+		<button class="update_buttons" disabled onclick="$('#add_collection').show(400)">Add collection</button>
 	</div>
 </div>
 <div class="bulk_operation" id="open" name="open">
@@ -519,6 +553,12 @@ function stop_all()
 	<input type="text" id="description" name="description" >
 	<br>
 	<button onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</button><br>
+</div>
+
+<div class="bulk_operation" id="apply_apo_defaults" name="apply_apo_defaults">
+	<h1>Reset the rights metadata to match teh APO default.</h1>
+	<p>This will overwrite any changes in the rights metadata, including embargo.</p>
+	<button onclick="fetch_druids(apply_apo_defaults);$('#apply_apo_defaults').hide(400);">Apply defaults.</button><br>
 </div>
 
 <div class="bulk_operation" id="create_desc_md" name="create_desc_md">
@@ -568,6 +608,12 @@ function stop_all()
 <div class="bulk_operation" id="expedite" name="expedite">
 	<h1>Make this item high priority in the workflow queue.</h1>
 	<button onclick="fetch_druids(expedite);$('#expedite').hide(400);">Expedite</button><br>
+</div>
+
+<div class="bulk_operation" id="add_workflow" name="add_workflow">
+	<h1>Add a workflow to the items.</h1>
+	<%=select_tag :wf, options_for_select(workflow_options, 'digitizationWF')%>
+	<button onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add Workflow</button><br>
 </div>
 
 <div class="bulk_operation" id="remove_duplicate_encoding" name="remove_duplicate_encoding">
