@@ -247,6 +247,24 @@ module ItemsHelper
       end
     end
   end
+
+  #merge scale, projection and coordinates into a single cartographics node
+  def mclaughlin_combine_cartographics xml
+    #pick 1 cartographic and reparent the scale, projection and coordinates to be inside it. The empty node pruning will clean up the mess.
+    cartographic=xml.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').first
+    if cartographic 
+      scales=xml.search('//mods:cartographics/mods:scale','mods'=>'http://www.loc.gov/mods/v3')
+      projections=xml.search('//mods:cartographics/mods:projection','mods'=>'http://www.loc.gov/mods/v3')
+      coordinates=xml.search('//mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
+      raise 'too many coordinates' if coordinates.length > 1
+      raise 'too many projections' if projections.length > 1
+      raise 'too many scales' if scales.length > 1
+      cartographic << scales.first if scales.first
+      cartographic << projections.first if projections.first 
+      cartographic << coordinates.first if coordinates.first
+    end
+  end
+  
   def mclaughlin_fix_cartographics xml
     hash={}
     hash['W0000000 W0000000 N900000 N900000'] = ['W0000000 W0000000 N0900000 N0900000','(W 0° --E 0°/N 90° --N 90°)']
@@ -436,6 +454,7 @@ module ItemsHelper
     mclaughlin_fix_cartographics xml
     mclaughlin_reorder_cartographics xml
     mclaughlin_fix_subjects xml
+    mclaughlin_remove_related_item xml
     remove_empty_nodes xml
     mclaughlin_ignore_fields xml
     mclaughlin_cleanup_references xml
