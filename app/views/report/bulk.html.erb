@@ -1,3 +1,5 @@
+
+<%= javascript_include_tag 'bulk' %>
 <% extra_head_content << capture do %>
 <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
 <script type="text/javascript">
@@ -13,437 +15,26 @@ function catalog_url(element)
 	return url;
 	
 }
-function open_version(druids){
-	cons=[];
-	var params={
-		'severity': $('#severity').val(),
-		'description': $('#description').val(),
-	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		//send a request to open this object and log the success or failure
-		url='<%=url_for :controller => :items,:action => :prepare, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Prepared', show_buttons);
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop(),show_buttons)})
-	})
-}
-function close_version(druids){
-	var params={
-		'severity': $('#severity').val(),
-		'description': $('#description').val(),
-	}
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Closed');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function set_content_type(druids){
-	var params={
-		'new_content_type': $('#new_content_type').val(),
-		'new_resource_type': $('#new_resource_type').val(),
-		'old_content_type': $('#old_content_type').val(),
-		'old_resource_type': $('#old_resource_type').val()
-	}
-	cons=[];
-	$.each(druids, function(i,element){
-     	var	element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element,job_count.pop())})
-	})
-}
-function purge(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Purged');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-
-function fetch_druids(fun)
-{
-	$(".stop_button").show();
-	log=document.getElementById('log');
-	log.style.display="block";
-	if(document.getElementById('pids').value.length>5)
-	{
-		txt=document.getElementById('pids').value
-		txt=txt.replace(/druid:/g,'');
-		druids=txt.split("\n");
-		last=druids.pop();
-		if(last != ''){druids.push(last);}
-		log.innerHTML="Using "+ druids.length +" user supplied druids.\n<br>"
-		job_count=[]
-		for(i=druids.length;i>0;i--)
-		{
-			job_count.push(i);
-		}
-		fun(druids);
-	}
-	else{
-		log.innerHTML="Fetching all "+report_model['total_rows']+" druids.<br>\n"
-		$.getJSON(report_model['data_url'], function(data){
-			report_model['druids']=[]
-			$.each(data.druids, function(i,s){
-				report_model['druids'].push(s);
-			});
-			log.innerHTML=log.innerHTML+"Received "+report_model['druids'].length+" pids, starting work<br>\n"
-			fun(report_model['druids']);
-		}).error(function(jqXhr, textStatus, error) {
-			alert("ERROR: " + textStatus + ", " + error);
-		});
-	}
-}
-function reindex(druids){
-	cons=[]
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :dor,:action => :reindex, :pid => 'druid:xxxxxxxxx'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Reindexed.');
-			
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function republish(druids){
-	cons=[]
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Republished.');
-			
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function release_hold(druids){
-	cons=[]
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :release_hold, :id => 'druid:xxxxxxxxx', :bulk => true%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Hold released.');
-			
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function set_rights(druids){
-	cons=[];
-	var params={
-		'rights': $('#rights_select').val(),
-	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function create_desc_md(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :create_minimal_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function add_collection(druids){
-	cons=[];
-	var params={
-		'collection': $('#collection_select').val(),
-	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :add_collection, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function detect_duplicate_encoding(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :detect_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'No duplicates');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function remove_duplicate_encoding(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :remove_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Fixed');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function schema_validate(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :schema_validation, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Valid');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function discoverable(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :discoverable, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Discovable.');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function remediate_mods(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :remediate_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Fixed');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-function expedite(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :prioritize, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Expedited');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-
-
-function refresh_metadata(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
-}
-//print a success message with whatever description fits the action being performed.
-function success_handler(element_url,desc,after)
-{
-	if (job_count.length == 1 && after != null)
-	{
-		after();
-	}
-	log=document.getElementById('log');
-	log.innerHTML = job_count.pop()+" "+element_url+' '+desc+"<br>\n"+log.innerHTML;
-	if (job_count.length == 0)
-	{
-		log.innerHTML = "Done!\n<br>"+log.innerHTML
-    	$(".stop_button").hide();
-	}
-}
-function error_handler(xhr,status,err,element,index, after){
-	if (job_count.length == 1 && after != null)
-	{
-		after();
-	}
-	msg='';
-	if( xhr.responseText && xhr.responseText.length<500)
-	{
-		msg=xhr.responseText;
-	}
-	else
-	{
-		msg=err;
-	}
-		log.innerHTML = "<span class=\"error\"> "+index+" "+element+" : "+msg+"</span><br>\n"+log.innerHTML;	
-		if (job_count.length == 0)
-		{
-			log.innerHTML = "Done!<br>\n"+log.innerHTML
-			$(".stop_button").hide();
-		}
-	
-}
-function source_id(){
-	cons=[];
-	log=document.getElementById('log');
-	log.style.display="block";
-	txt=document.getElementById('source_ids').value
-	txt=txt.replace(/druid:/g,'');
-	druids=txt.split("\n")
-	last=druids.pop();
-	if(last != ''){druids.push(last);}
-	d=[]
-	for(i=druids.length;i>0;i--)
-	{
-		job_count.push(i);
-	}
-	for(i=0;i< druids.length; i++)
-	{
-		dr=druids[i];
-		dr=dr.replace(/ : /g,':');
-		parts=dr.split("\t",2);
-		d.push({'druid': parts[0], 'source': parts[1]});
-	}
-	log.innerHTML="Using "+ druids.length +" user supplied druids and source ids.<br>\n"
-	log=document.getElementById('log');
-	$.each(d, function(i,element){
-		//get rid of blank lines
-		if(element['druid'] == null || element['druid'].length < 2)
-		{
-			return;
-		}
-		var element_url=catalog_url(element['druid']);
-		//skip bad source ids
-		if(element['source']==null || element['source'].length<=1 || element['source'].indexOf(':')<1)
-		{
-			err_log=document.getElementById('log');
-
-			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid source id '"+element['source']+"'</span><br>\n"+log.innerHTML;
-			return;
-		}
-		params={
-			'new_id': element['source']
-		}
-		url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-		url=url.replace('xxxxxxxxx',element['druid']);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Updated	');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-})
-}
-function get_druids()
-{
-	log=document.getElementById('pids');
-	$('#pid_list').show(400);
-	log.innerHTML=log.innerHTML+'Fetching druids...'+"\n"
-	$.getJSON(report_model['data_url'], function(data){
-		report_model['druids']=[];
-		log.innerHTML='';
-		$.each(data.druids, function(i,s){
-			report_model['druids'].push(s);
-			log.innerHTML=log.innerHTML+'druid:'+s+"\n"
-		});
-	}).error(function(jqXhr, textStatus, error) {
-		alert("ERROR: " + textStatus + ", " + error);
-	});
-}
-function get_source_ids()
-{
-	log=document.getElementById('source_ids');
-	$.getJSON(report_model['data_url']+'&source_id=true', function(data){
-		report_model['druids']=[]
-		$.each(data.druids, function(i,s){
-			report_model['druids'].push(s);
-			log.innerHTML=log.innerHTML+'druid:'+s+"\n"
-		});
-	}).error(function(jqXhr, textStatus, error) {
-		alert("ERROR: " + textStatus + ", " + error);
-	});
-}
-function show_buttons()
-{
-	$('#updates').show(400);
-	$('.update_buttons').removeAttr("disabled");
-}
-function stop_all()
-{
-	log=document.getElementById('log');
-	
-	while(cons.length>0)
-	{
-		con=cons.pop();
-		con.abort();
-	}
-}
+open_version_url='<%=url_for :controller => :items,:action => :prepare, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+close_version_url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+set_content_type_url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+puge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+reindex_url='<%=url_for :controller => :dor,:action => :reindex, :pid => 'druid:xxxxxxxxx'%>'
+republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
+release_hold_url='<%=url_for :controller => :items,:action => :release_hold, :id => 'druid:xxxxxxxxx', :bulk => true%>'
+set_rights_url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+create_desc_md_url='<%=url_for :controller => :items,:action => :create_minimal_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+add_collection_url='<%=url_for :controller => :items,:action => :add_collection, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+detect_duplicate_encoding_url='<%=url_for :controller => :items,:action => :detect_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+remove_duplicate_encoding_url='<%=url_for :controller => :items,:action => :remove_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+schema_validate_url='<%=url_for :controller => :items,:action => :schema_validation, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+discoverable_url='<%=url_for :controller => :items,:action => :discoverable, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+remediate_mods_url='<%=url_for :controller => :items,:action => :remediate_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+expedite_url='<%=url_for :controller => :items,:action => :prioritize, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+add_workflow_url='<%=url_for :controller => :items,:action => :add_workflow, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 </script>
 <style>
 .bulk_operation{border:1px;border-style:solid;padding:25px;margin-top:25px;display:none}
@@ -481,13 +72,15 @@ function stop_all()
 	<button onclick="$('#remediate_mods').show(400)">Remediate MODs</button>
 	<button onclick="$('#refresh_metadata').show(400)">Refresh MODs</button>
 	<button onclick="$('#discoverable').show(400)">Check discoverability</button>
+	<button onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</button>
+	<button onclick="$('#add_workflow ').show(400)">Add a Workflow</button>
 	<%end%>
 	<div style="" id="updates" name="updates">
 		<label>Object Updates, you must prepare objects to use these.</label><br>
 		<button class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
 		<button class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</button>
 		<button class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</button>
-		<button class="update_buttons"disabled onclick="$('#add_collection').show(400)">Add collection</button>
+		<button class="update_buttons" disabled onclick="$('#add_collection').show(400)">Add collection</button>
 	</div>
 </div>
 <div class="bulk_operation" id="open" name="open">
@@ -519,6 +112,12 @@ function stop_all()
 	<input type="text" id="description" name="description" >
 	<br>
 	<button onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</button><br>
+</div>
+
+<div class="bulk_operation" id="apply_apo_defaults" name="apply_apo_defaults">
+	<h1>Reset the rights metadata to match teh APO default.</h1>
+	<p>This will overwrite any changes in the rights metadata, including embargo.</p>
+	<button onclick="fetch_druids(apply_apo_defaults);$('#apply_apo_defaults').hide(400);">Apply defaults.</button><br>
 </div>
 
 <div class="bulk_operation" id="create_desc_md" name="create_desc_md">
@@ -568,6 +167,12 @@ function stop_all()
 <div class="bulk_operation" id="expedite" name="expedite">
 	<h1>Make this item high priority in the workflow queue.</h1>
 	<button onclick="fetch_druids(expedite);$('#expedite').hide(400);">Expedite</button><br>
+</div>
+
+<div class="bulk_operation" id="add_workflow" name="add_workflow">
+	<h1>Add a workflow to the items.</h1>
+	<%=select_tag :wf, options_for_select(workflow_options, 'digitizationWF')%>
+	<button onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add Workflow</button><br>
 </div>
 
 <div class="bulk_operation" id="remove_duplicate_encoding" name="remove_duplicate_encoding">

@@ -49,10 +49,10 @@ class DorController < ApplicationController
       begin
         obj = Dor.load_instance params[:pid]
         solr_doc = obj.to_solr
-        index_logger.info "updated index for #{params[:pid]}"
         Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
         index_logger.info "updated index for #{params[:pid]}"
         render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
+        archive_workflows(obj)
       rescue ActiveFedora::ObjectNotFoundError => e
         render :status=> 500, :text =>'Object doesnt exist in Fedora.'
         return
@@ -74,7 +74,6 @@ class DorController < ApplicationController
     private 
     def archive_workflows obj
       obj.workflows.workflows.each do |wf|
-        #wf=obj.workflows.get_workflow('accessionWF','dor')
         archive=true #are all processes complete
         active=false #are there any processes without version numbers, meaning they arent archived
         wf.processes.each do |proc|
@@ -85,7 +84,7 @@ class DorController < ApplicationController
             active=true
           end
         end
-        if archive and active
+        if archive and active and wf.repository.first == 'dor'
           Dor::WorkflowService.configure  Argo::Config.urls.workflow, :dor_services_url => Argo::Config.urls.dor_services
           logger.info "Archiving #{wf.repository.first} #{wf.workflowId.first} for #{obj.pid}"
           Dor::WorkflowService.archive_workflow wf.repository.first, obj.pid, wf.workflowId.first

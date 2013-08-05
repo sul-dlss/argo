@@ -1,0 +1,4 @@
+<%= form_tag add_workflow_item_url do %>
+<%=select_tag :wf, options_for_select(workflow_options, 'digitizationWF')%>
+<button>Add Workflow</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
+<% end %>

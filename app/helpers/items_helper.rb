@@ -258,7 +258,6 @@ module ItemsHelper
       raise 'too many coordinates' if coordinates.length > 1
       raise 'too many projections' if projections.length > 1
       raise 'too many scales' if scales.length > 1
-      puts 'reparenting'
       cartographic << scales.first if scales.first
       cartographic << projections.first if projections.first 
       cartographic << coordinates.first if coordinates.first
@@ -468,6 +467,7 @@ module ItemsHelper
     mclaughlin_fix_cartographics xml
     mclaughlin_reorder_cartographics xml
     mclaughlin_fix_subjects xml
+    mclaughlin_remove_related_item xml
     remove_empty_nodes xml
     mclaughlin_ignore_fields xml
     mclaughlin_cleanup_references xml

@@ -198,6 +198,7 @@ module ArgoHelper
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
+      buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :pid => pid), :label => 'Add Workflow'}
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
@@ -215,7 +216,7 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
-      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false and object.datastreams['identityMetadata'].ng_xml.search('//otherId[@name=\'catkey\']').length == 0
+      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false and object.datastreams['identityMetadata'].otherId('catkey)').length == 0 and object.datastreams['identityMetadata'].otherId('mdtoolkit)').length == 0
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
@@ -256,7 +257,11 @@ module ArgoHelper
       return false
     end
   end
-
+  def render_dpg_link document
+    val = document.get('id').split(/:/).last
+    link_to "DPG Object Status", File.join(Argo::Config.urls.dpg, val)
+  end
+  
   def render_purl_link document, link_text='PURL', opts={:target => '_blank'}
     val = document.get('id').split(/:/).last
     link_to link_text, File.join(Argo::Config.urls.purl, val), opts

@@ -100,7 +100,9 @@ class User < ActiveRecord::Base
     permitted_apos.each do |pid|
       qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
     end
-    q+=qrys.join " OR "
+    if not is_admin
+      q+=qrys.join " OR "
+    end
     result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_t,dc_title_t'}).docs
     
     #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_t,dc_title_t').docs
