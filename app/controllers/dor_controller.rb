@@ -84,7 +84,7 @@ class DorController < ApplicationController
             active=true
           end
         end
-        if archive and active
+        if archive and active and wf.repository.first == 'dor'
           Dor::WorkflowService.configure  Argo::Config.urls.workflow, :dor_services_url => Argo::Config.urls.dor_services
           logger.info "Archiving #{wf.repository.first} #{wf.workflowId.first} for #{obj.pid}"
           Dor::WorkflowService.archive_workflow wf.repository.first, obj.pid, wf.workflowId.first

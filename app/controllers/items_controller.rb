@@ -330,6 +330,7 @@ class ItemsController < ApplicationController
     ds=@object.versionMetadata
     ds.update_current_version({:description => desc,:significance => severity.to_sym})
     @object.save
+    Dor::WorkflowService.configure  Argo::Config.urls.workflow, :dor_services_url => Argo::Config.urls.dor_services
     @object.close_version
     @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")
     respond_to do |format|
