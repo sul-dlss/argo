@@ -104,7 +104,7 @@ function reindex(druids){
 	cons=[]
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
-		reindex_url=url.replace('xxxxxxxxx',element);
+		url=reindex_url.replace('xxxxxxxxx',element);
 		var xhr=$.ajax({url: url, type: 'GET'});
 		cons.push(xhr);
 		xhr.success(function(response,status,xhr) { 
