@@ -18,7 +18,7 @@ describe SolrDocument do
       milestones.each do |key,value|
         version.should == 1
         if value[:display]=='Registered'
-          I18n.l(value[:time]).should=='2012-02-24 05:40pm'
+          I18n.l(value[:time]).should=='2012-02-24 05:40PM'
         else
           value[:time].should=='pending'
         end
@@ -41,10 +41,10 @@ describe SolrDocument do
       
         case value[:display]
         when 'Registered'
-          I18n.l(value[:time]).should=='2012-02-24 05:40pm' #the hour/minute here is wrong...dont know why
+          I18n.l(value[:time]).should=='2012-02-24 05:40PM' #the hour/minute here is wrong...dont know why
           version.should == '1' #registration is always only v1
         when 'Opened'
-          I18n.l(value[:time]).should=='2012-02-24 05:39pm' #the hour/minute here is wrong...dont know why
+          I18n.l(value[:time]).should=='2012-02-24 05:39PM' #the hour/minute here is wrong...dont know why
           version.should == '2'
         else
           value[:time].should=='pending'

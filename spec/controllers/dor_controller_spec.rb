@@ -99,20 +99,19 @@ describe DorController do
       <mods:title>AMERICA cum Supplementis Poly-Glot-tis</mods:title>
       </mods:titleInfo>
       </mods:mods>'))
-      #item.workflows.should_receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
+      item.workflows.should_receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
       item.stub(:milestones).and_return []
       item.stub(:new_version_open?).and_return false
       item.stub(:archive_workflows)
-      #@solr_doc=item.to_solr
+      @solr_doc=item.to_solr
     end
     
     it 'the indexer should generate gryphondor fields' do
-      pending
       @solr_doc[:sw_title_sort_facet].should == "AMERICA cum Supplementis PolyGlottis"
     end
     
     it 'all of the gdor fields should be present in the hash' do
-      pending
+      
       @solr_doc.has_key?(:sw_title_245a_search_facet_facet).should == true
       @solr_doc.has_key?(:sw_title_245_search_facet_facet).should == true
       @solr_doc.has_key?(:sw_title_variant_search_facet_facet).should == true
