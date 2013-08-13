@@ -37,12 +37,12 @@ group :test, :development do
   gem 'capybara'
   gem "rack-test", :require => "rack/test"
 	gem 'simplecov', :require => false
-  gem 'sqlite3'
 end
 
 group :development do
   gem 'pry'
   gem 'ruby-prof'
+  gem 'sqlite3'
 end
 
 group :assets do
