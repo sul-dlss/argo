@@ -35,6 +35,7 @@ apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_d
 add_workflow_url='<%=url_for :controller => :items,:action => :add_workflow, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_provenance, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 </script>
 <style>
 .bulk_operation{border:1px;border-style:solid;padding:25px;margin-top:25px;display:none}
@@ -73,7 +74,8 @@ source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'd
 	<button onclick="$('#refresh_metadata').show(400)">Refresh MODs</button>
 	<button onclick="$('#discoverable').show(400)">Check discoverability</button>
 	<button onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</button>
-	<button onclick="$('#add_workflow ').show(400)">Add a Workflow</button>
+	<button onclick="$('#add_workflow').show(400)">Add a Workflow</button>
+	<button onclick="$('#fix_provenance').show(400)">Add missing Provenance</button>
 	<%end%>
 	<div style="" id="updates" name="updates">
 		<label>Object Updates, you must prepare objects to use these.</label><br>
@@ -163,7 +165,10 @@ source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'd
 	<h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
 	<button onclick="fetch_druids(purge);$('#purge').hide(400);">Purge objects from fedora</button><br>
 </div>
-
+<div class="bulk_operation" id="fix_provenance" name="fix_provenance">
+	<h1>Add provenance metadata to items that have errored out in sdr-ingest-transfer due to missing provenance and reset the workflow step.</h1>
+	<button onclick="fetch_druids(fix_provenance);$('#fix_provenance').hide(400);">Add Provenance</button><br>
+</div>
 <div class="bulk_operation" id="expedite" name="expedite">
 	<h1>Make this item high priority in the workflow queue.</h1>
 	<button onclick="fetch_druids(expedite);$('#expedite').hide(400);">Expedite</button><br>

@@ -110,6 +110,7 @@ Argo::Application.routes.draw do
     get :add_workflow, :on => :member
     post :add_workflow, :on => :member
     get :apply_apo_defaults, :on => :member
+    get :fix_missing_provenance, :on => :member
 end
   
   namespace :items do

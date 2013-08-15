@@ -52,6 +52,21 @@ function set_content_type(druids){
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element,job_count.pop())})
 	})
 }
+
+
+function fix_provenance(druids){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url=fix_provenance_url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url, 'Provenance added.');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
 function purge(druids){
 	cons=[];
 	$.each(druids, function(i,element){

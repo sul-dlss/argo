@@ -545,6 +545,18 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
     end
   end
+
+  #if an item errored in sdr-ingest-transfer due to missing provenance metadata, create the datastream and reset the error
+  def fix_missing_provenance
+    if Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'sdr-ingest-transfer') =='error' and @object.provenanceMetadata.new?
+      @object.build_provenanceMetadata_datastream('accessionWF','DOR Common Accessioning completed')
+      Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'sdr-ingest-transfer', 'waiting'
+      render :text => 'ok.'
+    else
+      render :status => 500, :text => "Item not in error for sdr-ingest-transfer or provenance metadata already exists!"
+    end
+  end
+  
   #set the rightsMetadata to the APO's defaultObjectRights
   def apply_apo_defaults
     @object.reapplyAdminPolicyObjectDefaults
