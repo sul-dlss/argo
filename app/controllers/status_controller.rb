@@ -8,7 +8,7 @@ class StatusController < ApplicationController
         test_item=Dor::Item.find(params[:test_obj])
         test_item.identityMetadata.dirty=true
         test_item.save
-        sleep 5.0
+        sleep 7.0
         txt= check_recently_indexed
         if txt==true	
           render :status=>200, :text=> 'All good!	<br>'
