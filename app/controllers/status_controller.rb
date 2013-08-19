@@ -8,13 +8,12 @@ class StatusController < ApplicationController
         test_item=Dor::Item.find(params[:test_obj])
         test_item.identityMetadata.dirty=true
         test_item.save
-        sleep 7.0
-        txt= check_recently_indexed
-        if txt==true	
+        sleep 10.0
+        if check_recently_indexed 	
           render :status=>200, :text=> 'All good!	<br>'
           return
         else
-          render :status=>500, :text=>'Nothing indexed in last '+ params[:minutes] +' minutes, last indexed was:<br> '
+          render :status=>500, :text=>'Nothing indexed recently.'
           return
         end
       end
@@ -22,7 +21,7 @@ class StatusController < ApplicationController
       render :status=>200, :text=> 'All good!	<br>'
       return
     end
-    render :status=>500, :text=>'Nothing indexed in last '+ params[:minutes]+' minutes'
+    render :status=>500, :text=>'Nothing indexed recently.'
   end			
   
   def memcached
