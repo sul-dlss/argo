@@ -191,6 +191,12 @@ class Report
         :proc => lambda {|doc| doc['resource_count_display'] },
         :solr_fields => ['resource_count_display'],
         :sort => false, :default => true, :width => 50
+      },
+      {
+        :field => 'preserved_size', :label => "Preservation Size",
+        :proc => lambda { |doc| doc['preserved_size_display'] },
+        :solr_fields => ['preserved_size_display'],
+        :sort => false, :default => true, :width => 50
       }
       
     ]

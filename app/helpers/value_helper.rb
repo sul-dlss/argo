@@ -32,7 +32,10 @@ module ValueHelper
     end
     end
   end
+  def value_for_preserved_size_display args
+    args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
   
+  end
   def value_for_related_druid predicate, args
     begin
       target_id = args[:document].get("#{predicate}_s")

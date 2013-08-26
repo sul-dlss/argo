@@ -63,6 +63,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'wf_error_display', :label => "Error:"
     config.add_show_field 'collection_title_display', :label => "Error:"
     config.add_show_field 'metadata_source_t', :label => 'MD Source:'
+    config.add_show_field 'preserved_size_display', :label => "Preservation Size"
 
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_facet', :label => 'Object Type'
@@ -123,7 +124,7 @@ class CatalogController < ApplicationController
     config.field_groups = {
       :identification => [
         ['id','objectType_t','content_type_facet','status_display','wf_error_display'],
-        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
+        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t','preserved_size_display']
         ],
         :full_identification => [
           ['id','objectType_t','content_type_facet','metadata_source_t'],
