@@ -92,7 +92,7 @@ class CatalogController < ApplicationController
       :days_30 => { :label => 'within 30 days', :fq => "published_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'deposited_date', :label => 'Deposited', :query => {
-      :days_7 => { :label => 'today', :fq => "deposited_day_facet:[#{1.minute.ago.utc.xmlschema.split('T').first } TO *]" },
+      :days_1 => { :label => 'today', :fq => "deposited_day_facet:[#{1.minute.ago.utc.xmlschema.split('T').first } TO *]" },
       :days_7 => { :label => 'within 7 days', :fq => "deposited_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
       :days_30 => { :label => 'within 30 days', :fq => "deposited_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
