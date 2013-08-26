@@ -3,7 +3,14 @@
 	<%admin_policy_object=@admin_policy_object%>
 	<div style="clear:left">
 		<ul class="resource-tree">
+			
 			<li>
+				<%if document_has? document, 'preserved_size_display'
+				%>
+				<span class="label">Preservation Size</span>
+				<%=value_for_preserved_size_display :document => document, :field => 'preserved_size_display'%>
+				<br>
+				<%end%>
 				<span class="label">Type</span>
 				<%= content_ds.ng_xml.root['type']%>
 				<ul>
@@ -83,11 +90,6 @@
 									</ul>
 								</li>
 								<% end %>
-								<%if document_has? document, 'preserved_size_display'
-								%>
-								<span class="label">Preservation Size</span>
-								<%=value_for_preserved_size_display :document => document, :field => 'preserved_size_display'%>
-								<%end%>
 							</ul>
 						</li>
 						
