@@ -26,7 +26,8 @@ gem "progressbar"
 gem "haml"
 gem "coderay"
 gem "dalli"
-gem "kgio"
+gem "kgio"  
+gem 'jettywrapper'
 gem 'kaminari'
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 group :test, :development do
@@ -36,7 +37,6 @@ group :test, :development do
   gem 'capybara'
   gem "rack-test", :require => "rack/test"
 	gem 'simplecov', :require => false
-  gem 'jettywrapper'
 end
 
 group :development do
