@@ -8,7 +8,7 @@ task :ci do
   Rake::Task['db:migrate'].invoke
   jetty_params = Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
   error = Jettywrapper.wrap(jetty_params) do  
-      system 'rspec'
+    Rake::Task['spec'].invoke
     end
     raise "test failures: #{error}" if error
 end
