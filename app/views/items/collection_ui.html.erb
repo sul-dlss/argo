@@ -1,6 +1,6 @@
 <div><label>Remove existing collections</label><br>
 <%
-	@object.collection.each do |col|
+	@object.collections.each do |col|
 		%>
 		<%=col.label%>
 		<%del_image=image_tag ('unavailable.png')%>
