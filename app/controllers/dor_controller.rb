@@ -52,7 +52,7 @@ class DorController < ApplicationController
         Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
         index_logger.info "updated index for #{params[:pid]}"
         render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
-        archive_workflows(obj)
+        #archive_workflows(obj)
       rescue ActiveFedora::ObjectNotFoundError => e
         render :status=> 500, :text =>'Object doesnt exist in Fedora.'
         return

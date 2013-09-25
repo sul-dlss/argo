@@ -13,6 +13,7 @@ describe DorController do
     end
    
     it 'should trigger archiving a completed workflow' do
+      pending
       log_in_as_mock_user(subject)
       item = instantiate_fixture("druid_bb001zc5754", Dor::Item)
       Dor.should_receive(:load_instance).with('druid:bb001zc5754').and_return(item)
@@ -39,6 +40,7 @@ describe DorController do
     end
    
     it 'should trigger archiving if there is a skipped step and the rest are completed' do
+      pending
       log_in_as_mock_user(subject)
       item = instantiate_fixture("druid_bb001zc5754", Dor::Item)
       Dor.should_receive(:load_instance).with('druid:bb001zc5754').and_return(item)
@@ -64,6 +66,7 @@ describe DorController do
        
     end
     it 'shouldnt trigger archiving for an archived workflow' do
+      pending
       log_in_as_mock_user(subject)
       item = instantiate_fixture("druid_bb001zc5754", Dor::Item)
       Dor.should_receive(:load_instance).with('druid:bb001zc5754').and_return(item)
