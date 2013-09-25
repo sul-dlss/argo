@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
     #puts 'qry '+result.first['dc_title_t'].encoding.inspect
     res=[['None', '']]
     res+=result.collect do |doc|
-      [Array(doc['dc_title_t']).first,doc['id'].to_s]
+      [Array(doc['dc_title_t']).first+ ' (' + doc['id'].to_s + ')',doc['id'].to_s]
     end
     res.each do |ar|
       ar[0] =chomp_title ar.first
