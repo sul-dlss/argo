@@ -1,7 +1,8 @@
 source "https://rubygems.org"
 source "http://sul-gems.stanford.edu"
 
-
+gem 'squash_ruby'
+gem 'squash_rails'
 gem 'stanford-mods'
 gem 'mods_display'
 gem 'dor-services', ">= 4.0.0"
