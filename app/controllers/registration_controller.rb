@@ -48,8 +48,12 @@ class RegistrationController < ApplicationController
       apo_object = Dor.find(params[:apo_id], :lightweight => true)
       adm_xml = apo_object.administrativeMetadata.ng_xml 
       adm_xml.search('//registration/collection').each do |col|
-        solr_doc=Dor::SearchService.query_by_id(col['id'])
-        res[col['id']]= "#{solr_doc.first['dc_title_t']}(#{col['id']})"
+        solr_doc=Blacklight.solr.find({:q => "id:\"#{col['id']}\"", :rows => 1, :fl => 'id,tag_t,dc_title_t'}).docs
+        if solr_doc.first['dc_title_t'] and solr_doc.first['dc_title_t'].first
+          res[col['id']]= "#{solr_doc.first['dc_title_t'].first}(#{col['id']})"
+        else
+          res[col['id']]= "#{col['id']}"
+        end
       end
       respond_to do |format|
         format.any(:json, :xml) { render request.format.to_sym => res }
