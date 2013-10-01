@@ -95,7 +95,7 @@ class User < ActiveRecord::Base
     pids  
   end
   def permitted_collections
-    q = 'objectType_t:collection '
+    q = 'objectType_t:collection AND !tag_facet:"Project : Hydrus" '
     qrys=[]
     permitted_apos.each do |pid|
       qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
