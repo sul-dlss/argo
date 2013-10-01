@@ -71,6 +71,12 @@ class Report
         :sort => false, :default => false, :width => 100 
       },
       { 
+        :field => 'hydrus_collection', :label => "Hydrus Collection", 
+        :proc => lambda { |doc| doc['hydrus_collection_title_facet'] }, 
+        :solr_fields => ['hydrus_collection_title_facet'],
+        :sort => false, :default => false, :width => 100 
+      },
+      { 
         :field => 'project_tag_facet', :label => "Project", 
         :sort => true, :default => false, :width => 100 
       },
