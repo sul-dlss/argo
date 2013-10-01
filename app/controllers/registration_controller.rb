@@ -48,8 +48,8 @@ class RegistrationController < ApplicationController
       apo_object = Dor.find(params[:apo_id], :lightweight => true)
       adm_xml = apo_object.administrativeMetadata.ng_xml 
       adm_xml.search('//registration/collection').each do |col|
-        obj=Dor.find(col['id'])
-        res[col['id']]= obj.label
+        solr_doc=Dor::SearchService.query_by_id(col['id'])
+        res[col['id']]= "#{solr_doc.first['dc_title_t']}(#{col['id']})"
       end
       respond_to do |format|
         format.any(:json, :xml) { render request.format.to_sym => res }
