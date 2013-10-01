@@ -2,7 +2,7 @@
 module RegistrationHelper
 
   def apo_list(*permission_keys)
-    q = 'objectType_t:adminPolicy'
+    q = 'objectType_t:adminPolicy AND !tag_facet:"Project : Hydrus"'
     unless permission_keys.empty?
       q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
     end
