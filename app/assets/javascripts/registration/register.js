@@ -40,9 +40,6 @@ function DorRegistration(initOpts) {
       // Grab list of tags from textarea, split, and reject blanks
       var tags = $.grep($t.tagList.split('\n'), function(tag) { return tag.trim() == '' ? false : true })
       var project = $t.projectName;
-      if (project) {
-        tags.unshift('Project : '+project);
-      }
       if ($t.mdFormId) {
         tags.unshift('MDForm : '+$t.mdFormId);
       }
