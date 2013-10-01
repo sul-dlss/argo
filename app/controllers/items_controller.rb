@@ -9,7 +9,7 @@ class ItemsController < ApplicationController
   before_filter :forbid_modify, :only => [:add_collection, :remove_collection, :update_rights, :set_content_type, :tags, :source_id,:delete_file, :close_version, :open_version, :resource, :add_file, :replace_file,:update_attributes, :update_resource, :update_mods, :mods, :datastream_update ]
   before_filter :forbid_view, :only => [:preserved_file, :get_file]
   before_filter :enforce_versioning, :only => [:add_collection, :remove_collection, :update_rights,:tags,:source_id,:set_source_id,:set_content_type,:set_rights]
-  after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type]
+  after_filter :save_and_reindex, :only => [:add_collection, :remove_collection, :open_version, :close_version, :tags, :source_id, :datastream_update, :set_rights, :set_content_type, :apply_apo_defaults]
 
   #this empty config block is recommended by jkeck due to potential misconfiguration without it. That should be fixed in >= 0.1.4
   configure_mods_display do
