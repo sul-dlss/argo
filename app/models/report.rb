@@ -250,6 +250,9 @@ class Report
     @params
   end
   def pids params
+    @params[:page] = 1
+    params[:per_page] = 1000
+    (@response, @document_list) = get_search_results
     toret=[]
     while @document_list.length >0
     report_data.each do|rec|
