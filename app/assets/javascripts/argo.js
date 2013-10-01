@@ -21,6 +21,19 @@ $(document).ready(function() {
   $('.collapsible-section').click(function() { $(this).next('div').slideToggle(); $(this).toggleClass('collapsed') })
   $('#facets a.remove').map(function() { $(this).html('') })
 });
+$(document).ready(function(){$('#help_dialog').dialog({
+    autoOpen: false,
+    buttons: { "Ok": function() { $(this).dialog("close"); } },
+    modal: true,
+    height: 260,
+	position: {
+	   my: "center",
+	   at: "center",
+	   of: window
+	},
+    title: 'Help',
+    resizable: false
+  });})
 function assembleQuery(caller)
 {
 	var field_name=caller.id;
