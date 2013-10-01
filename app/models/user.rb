@@ -141,7 +141,6 @@ class User < ActiveRecord::Base
   
   #is the user a repository wide administrator
   def is_admin
-    return true
     #if this is an admin wanting to view the world as if they werent, accomidate them.
     if @groups
       return false
