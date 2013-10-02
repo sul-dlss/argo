@@ -96,6 +96,8 @@ Argo::Application.routes.draw do
     get '/tags_ui', :on => :member, :action => :tags_ui, :as => 'tags_ui'
     get '/tags', :on => :member, :action => :tags, :as => 'tags'
     post '/tags', :on => :member, :action => :tags, :as => 'tags'
+    get '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
+    post '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
     get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
     get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
     post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
