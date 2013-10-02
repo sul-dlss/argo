@@ -43,7 +43,7 @@ describe ItemsController do
       response.code.should == "302"
     end
   end
-  
+
   describe 'release_hold' do
     it 'should release an item that is on hold if its apo has been ingested' do
       Dor::WorkflowService.should_receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('hold')
@@ -162,6 +162,24 @@ describe "tags" do
     @item.should_receive(:add_tag).with('new:thing')
     post 'tags', :id => 'oo201oo0001', :new_tag1 => 'new:thing', :add => 'true'
   end
+end
+describe 'tags_bulk' do
+  before :each do
+    @item.stub(:tags).and_return(['some:thing'])
+    Dor::SearchService.solr.should_receive(:add)
+  end
+  it 'should remve an old tag an add a new one' do
+    @item.should_receive(:remove_tag).with('some:thing').and_return(true)
+    @item.should_receive(:add_tag).with('new:thing').and_return(true)
+    post 'tags_bulk', :id => 'oo201oo0001', :tags => 'new:thing'
+  end
+  it 'should add multiple tags' do
+    @item.should_receive(:add_tag).twice
+    @item.should_receive(:remove_tag).with('some:thing').and_return(true)
+    @item.should_receive(:save)
+    post 'tags_bulk', :id => 'oo201oo0001', :tags => 'Process : Content Type : Book (flipbook, ltr)	 Registered By : labware'
+  end
+  
 end
 describe "set_rights" do
   it 'should set an item to dark' do

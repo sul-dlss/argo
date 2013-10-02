@@ -354,6 +354,20 @@ function get_source_ids()
 		alert("ERROR: " + textStatus + ", " + error);
 	});
 }
+function get_tags()
+{
+	log=document.getElementById('tags');
+	$.getJSON(report_model['data_url']+'&tags=true', function(data){
+		report_model['druids']=[]
+		$.each(data.druids, function(i,s){
+			report_model['druids'].push(s);
+			log.innerHTML=log.innerHTML+'druid:'+s+"\n"
+		});
+	}).error(function(jqXhr, textStatus, error) {
+		alert("ERROR: " + textStatus + ", " + error);
+	});
+}
+
 function show_buttons()
 {
 	$('#updates').show(400);
@@ -449,6 +463,59 @@ function source_id(){
 			'new_id': element['source']
 		}
 		url=source_id_url.replace('xxxxxxxxx',element['druid']);
+		var xhr=$.ajax({url: url, type: 'POST', data: params});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url, 'Updated	');
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+})
+}
+function set_tags(){
+	cons=[];
+	job_count = [];
+	log=document.getElementById('log');
+	log.style.display="block";
+	txt=document.getElementById('tags').value
+	txt=txt.replace(/druid:/g,'');
+	druids=txt.split("\n")
+	last=druids.pop();
+	if(last != ''){druids.push(last);}
+	d=[]
+	for(i=druids.length;i>0;i--)
+	{
+		job_count.push(i);
+	}
+	for(i=0;i< druids.length; i++)
+	{
+		dr=druids[i];
+		dr=dr.replace(/ : /g,':');
+		parts=dr.split("\t");
+		druid=parts.shift();
+		tags=parts.join("\t");
+		d.push({'druid': druid, 'tags': tags});
+	}
+	log.innerHTML="Using "+ druids.length +" user supplied druids and source ids.<br>\n"
+	log=document.getElementById('log');
+	$.each(d, function(i,element){
+		//get rid of blank lines
+		if(element['druid'] == null || element['druid'].length < 2)
+		{
+			return;
+		}
+		var element_url=catalog_url(element['druid']);
+		//skip bad source ids
+		if(element['tags']==null || element['tags'].length<=1 || element['tags'].indexOf(':')<1)
+		{
+			err_log=document.getElementById('log');
+
+			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid tags '"+element['source']+"'</span><br>\n"+log.innerHTML;
+			return;
+		}
+		params={
+			'tags': element['tags']
+		}
+		url=tags_url.replace('xxxxxxxxx',element['druid']);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
 		xhr.success(function(response,status,xhr) { 

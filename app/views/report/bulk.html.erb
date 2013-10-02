@@ -35,6 +35,8 @@ apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_d
 add_workflow_url='<%=url_for :controller => :items,:action => :add_workflow, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+tags_url='<%=url_for :controller => :items,:action => :tags_bulk, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+
 fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_provenance, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 </script>
 <style>
@@ -76,10 +78,12 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 	<button onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</button>
 	<button onclick="$('#add_workflow').show(400)">Add a Workflow</button>
 	<button onclick="$('#fix_provenance').show(400)">Add missing Provenance</button>
+	
 	<%end%>
 	<div style="" id="updates" name="updates">
 		<label>Object Updates, you must prepare objects to use these.</label><br>
 		<button class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
+		<button class="update_buttons" disabled id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</button>
 		<button class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</button>
 		<button class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</button>
 		<button class="update_buttons" disabled onclick="$('#add_collection').show(400)">Add collection</button>
@@ -215,6 +219,12 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 <div class="bulk_operation" id="republish" name="republish">
 	<h1>Republish items</h1>
 	<button id="republish_button" name="republish_button" onclick="fetch_druids(republish);$('#republish').hide(400);">Refresh metadata on PURL</button>
+</div>
+<div class="bulk_operation" id="tag">
+	<h1>Change tags</h1>
+	<p>This needs a list of pids and tags with a tab between the pid and each tag. ex.<br>druid:bc088fn5010 Project:Something Process:Content Type:Book</p><p>The best way to do this is by copy/pasting this content into Excel.</p>
+	<textarea style="width:50%" id="tags" name="tags"></textarea><br>
+	<button id="set_tags" name="set_tags" onclick="set_tags();$('#tag').hide(400);">Update tags</button>
 </div>
 <div class="bulk_operation" id="source_id">
 	<h1>Change source id</h1>

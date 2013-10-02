@@ -85,7 +85,7 @@ class Report
         :sort => true, :default => false, :width => 100 
       },
       { 
-        :field => 'tag_facet', :label => "Tags", 
+        :field => 'identityMetadata_tag_t', :label => "Tags", 
         :sort => true, :default => false, :width => 100 
       },
       { 
@@ -255,11 +255,21 @@ class Report
     (@response, @document_list) = get_search_results
     toret=[]
     while @document_list.length >0
+      
     report_data.each do|rec|
+
     if params[:source_id]
       toret << rec['druid'].to_s+"\t"+rec['source_id_t'].to_s
     else
-      toret << rec['druid']
+      if params[:tags]
+        tags=''
+        rec['identityMetadata_tag_t'].split(';').each do |tag|
+          tags+="\t"+tag.to_s
+        end
+        toret << rec['druid']+tags
+      else
+        toret << rec['druid']
+      end
     end
     end
     @params[:page] += 1
