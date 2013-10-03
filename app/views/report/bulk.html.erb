@@ -18,7 +18,7 @@ function catalog_url(element)
 open_version_url='<%=url_for :controller => :items,:action => :prepare, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 close_version_url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 set_content_type_url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-puge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 reindex_url='<%=url_for :controller => :dor,:action => :reindex, :pid => 'druid:xxxxxxxxx'%>'
 republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
 release_hold_url='<%=url_for :controller => :items,:action => :release_hold, :id => 'druid:xxxxxxxxx', :bulk => true%>'
