@@ -93,7 +93,7 @@ module ValueHelper
   end
   
   def value_for_project_tag_t args
-    val = args[:document].get(args[:field])
+    val = args[:document].get(args[:field]).split(':').first
     link_to val, add_facet_params_and_redirect("project_tag_facet", val)
   end
   
