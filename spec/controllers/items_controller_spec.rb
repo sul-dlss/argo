@@ -166,6 +166,7 @@ end
 describe 'tags_bulk' do
   before :each do
     @item.stub(:tags).and_return(['some:thing'])
+    @item.datastreams['identityMetadata'].should_receive(:save)
     Dor::SearchService.solr.should_receive(:add)
   end
   it 'should remve an old tag an add a new one' do
