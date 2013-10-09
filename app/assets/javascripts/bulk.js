@@ -495,7 +495,7 @@ function set_tags(){
 		tags=parts.join("\t");
 		d.push({'druid': druid, 'tags': tags});
 	}
-	log.innerHTML="Using "+ druids.length +" user supplied druids and source ids.<br>\n"
+	log.innerHTML="Using "+ druids.length +" user supplied druids and tags.<br>\n"
 	log=document.getElementById('log');
 	$.each(d, function(i,element){
 		//get rid of blank lines
