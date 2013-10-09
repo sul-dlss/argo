@@ -334,10 +334,14 @@ class ItemsController < ApplicationController
     ds.update_current_version({:description => desc,:significance => severity.to_sym})
     @object.save
     Dor::WorkflowService.configure  Argo::Config.urls.workflow, :dor_services_url => Argo::Config.urls.dor_services
+    begin
     @object.close_version
     @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }  
+    end
+    rescue Dor::Exception => e
+      render :status => 500, :text => 'No version to close.'
     end
   end
   def source_id
