@@ -68,6 +68,7 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 	<button onclick="$('#purge').show(400)">Purge</button>
 	<button onclick="$('#expedite').show(400)">Expedite</button>
 	<button onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</button>
+	<button id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</button>
 	<button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button>
 	<%if current_user.is_admin%><br><button onclick="$('#release_hold').show(400)">Release for ingest</button>
 	<button onclick="$('#remove_duplicate_encoding').show(400)">Remove duplicate xml encoding</button>
@@ -83,7 +84,6 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 	<div style="" id="updates" name="updates">
 		<label>Object Updates, you must prepare objects to use these.</label><br>
 		<button class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
-		<button class="update_buttons" disabled id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</button>
 		<button class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</button>
 		<button class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</button>
 		<button class="update_buttons" disabled onclick="$('#add_collection').show(400)">Add collection</button>
