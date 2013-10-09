@@ -70,16 +70,16 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 	<button onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</button>
 	<button id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</button>
 	<button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button>
-	<%if current_user.is_admin%><br><button onclick="$('#release_hold').show(400)">Release for ingest</button>
+	<br><button onclick="$('#release_hold').show(400)">Release for ingest</button>
 	<button onclick="$('#remove_duplicate_encoding').show(400)">Remove duplicate xml encoding</button>
 	<button onclick="$('#schema_validate').show(400)">Validate MODs</button>
-	<button onclick="$('#remediate_mods').show(400)">Remediate MODs</button>
 	<button onclick="$('#refresh_metadata').show(400)">Refresh MODs</button>
 	<button onclick="$('#discoverable').show(400)">Check discoverability</button>
 	<button onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</button>
 	<button onclick="$('#add_workflow').show(400)">Add a Workflow</button>
+	<%if current_user.is_admin%>
 	<button onclick="$('#fix_provenance').show(400)">Add missing Provenance</button>
-	
+	<button onclick="$('#remediate_mods').show(400)">Remediate MODs</button>
 	<%end%>
 	<div style="" id="updates" name="updates">
 		<label>Object Updates, you must prepare objects to use these.</label><br>
