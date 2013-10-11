@@ -142,8 +142,8 @@ class CatalogController < ApplicationController
     end
 
     def show
-      @obj = Dor.find params[:id], :lightweight => true
-      
+      params[:id] = 'druid:' + params[:id] if not params[:id].include? 'druid'
+      @obj = Dor.find params[:id]
         apo=nil
         begin
         @apo=@obj.admin_policy_object
@@ -174,7 +174,9 @@ class CatalogController < ApplicationController
 
       def show_aspect
         if @obj.nil?
-          @obj = Dor.find params[:id]
+          @obj = Dor.find params[:id] if params[:id].include? 'druid'
+          @obj = Dor.find 'druid:' + params[:id] if not params[:id].include? 'druid'
+          
         end
         @response, @document = get_solr_response_for_doc_id
         render :layout => request.xhr? ? false : true

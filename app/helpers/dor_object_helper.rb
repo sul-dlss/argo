@@ -92,113 +92,12 @@ module DorObjectHelper
   end
 
   def render_status (doc,object=nil)
-    status = -1
-    version = ''
-    status_hash={
-      -1 => '',
-      0 => 'Opened',
-      1 => 'Registered',
-      2 => 'In accessioning',
-      3 => 'In accessioning (described)',
-      4 => 'In accessioning (described, published)',
-      5 => 'In accessioning (described, published, deposited)',
-      6 => 'Accessioned',
-      7 => 'Accessioned (indexed)',
-      8 => 'Accessioned (indexed, ingested)',
-      9 => 'Opened'
-    }           
-    status_time=nil
-    lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
-    current=false
-    versions=[]
-    Array(doc[lifecycle_field]).each do |m|
-      if not m.include?(';')
-        current=true
-      else
-        if not versions.include? m.split(/;/).last
-          versions << m.split(/;/).last
-        end
-      end
+    if object.nil?
+      doc['status_display']
+    else
+      obj.status(true).htmlsafe
     end
-    versions.sort
-    oldest_version=versions.last
-    if(oldest_version.nil?)
-    oldest_version='1'
-    end
-    Array(doc[lifecycle_field]).each do |m| 
-      (name,time) = m.split(/:/,2)
-      if time.include?(';')
-        (time,version)=time.split(/;/,2)
-      end
-      if current or (not current and version==oldest_version)
-        case name
-        when 'registered'
-          if status<1
-            status=1
-            status_time=time
-          end        
-        when 'submitted'
-          if status<2
-            status=2
-            status_time=time
-          end
-        when 'described'
-          if status<3
-            status=3
-            status_time=time
-          end
-        when 'published'
-          if status<4
-            status=4
-            status_time=time
-          end
-        when 'deposited'
-          if status<5
-            status=5
-            status_time=time
-          end
-        when 'accessioned'
-          if status<6
-            status=6
-            status_time=time
-          end
-        when 'indexed'
-          if status<7
-            status=7
-            status_time=time
-          end
-        when 'shelved'
-          if status<8
-            status=8
-            status_time=time
-          end
-        when 'opened'
-          if status<0
-            status=0
-            status_time=time
-          end
-        end
-      end
-      end
-      embargo=''
-      if(doc.has_key?('embargoMetadata_t'))
-        embargo_data=doc['embargoMetadata_t']
-        text=embargo_data.split.first
-        date=embargo_data.split.last
-        if text == 'released'
-        else
-          embargo= ' (embargoed until '+render_datetime(date.to_s)+')' 
-        end
-      end
-      result=''
-      if current
-        result='v1 '+status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
-      else
-        result='v'+oldest_version+' '+status_hash[status].to_s+' '+render_datetime(status_time).to_s+embargo
-      end
-      result=result.html_safe
-    end
-    
+  end
     def metadata_source object
       source = "DOR"
       if object.identityMetadata.otherId('mdtoolkit').length > 0

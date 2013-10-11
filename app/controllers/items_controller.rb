@@ -96,7 +96,11 @@ class ItemsController < ApplicationController
   def remove_collection
     @object.remove_collection(params[:collection])
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully removed' }
+      if params[:bulk]
+        format.html {render :status => :ok, :text => 'Collection removed!'}
+      else
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully removed' }
+      end
     end
   end
 
@@ -338,7 +342,11 @@ class ItemsController < ApplicationController
     @object.close_version
     @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }  
+      if params[:bulk]
+        format.html {render :status => :ok, :text => 'Version Closed.'}
+      else
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }  
+      end
     end
     rescue Dor::Exception => e
       render :status => 500, :text => 'No version to close.'
@@ -370,7 +378,11 @@ class ItemsController < ApplicationController
     @object.identityMetadata.dirty=true
     @object.identityMetadata.save
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }  
+      if params[:bulk]
+        format.html {render :status => :ok, :text => 'Tags updated.'}
+      else
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }  
+      end
     end
   end
   def tags
@@ -551,7 +563,11 @@ class ItemsController < ApplicationController
     end
     @object.set_read_rights(params[:rights])
     respond_to do |format|
+      if params[:bulk]
+        format.html {render :status => :ok, :text => 'Rights updated.'}
+      else
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }  
+      end
     end
   end
   #set the content type in the content metadata
@@ -566,7 +582,11 @@ class ItemsController < ApplicationController
     end
     @object.contentMetadata.set_content_type(params[:old_content_type], params[:old_resource_type], params[:new_content_type], params[:new_resource_type])
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
+      if params[:bulk]
+        format.html {render :status => :ok, :text => 'Content type updated.'}
+      else
+        format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }  
+      end
     end
   end
 
