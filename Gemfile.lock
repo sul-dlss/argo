@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/meh/ruby-thread.git
-  revision: a256a8ffb69495ab815fa32783b94c38c497bce2
+  revision: b408f77fcfb26a893cf1195efdc92e7e564bd9e3
   specs:
-    thread (0.1.0)
+    thread (0.1.1)
 
 GIT
   remote: https://github.com/sul-dlss/rack-webauth.git
@@ -24,7 +24,7 @@ GEM
   remote: http://sul-gems.stanford.edu/
   specs:
     Ascii85 (1.0.2)
-    about_page (0.2.1)
+    about_page (0.2.6)
       rails (~> 3.2)
     actionmailer (3.2.14)
       actionpack (= 3.2.14)
@@ -97,7 +97,7 @@ GEM
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
     chunky_png (1.2.8)
-    coderay (1.0.9)
+    coderay (1.1.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -120,9 +120,8 @@ GEM
       activesupport
     diff-lcs (1.2.4)
     docopt (0.5.0)
-    dor-services (4.3.2)
+    dor-services (4.2.0)
       active-fedora (~> 5.6, >= 5.6.3)
-      activesupport
       confstruct (>= 0.2.2)
       dor-workflow-service (~> 1.3)
       druid-tools (>= 0.2.3)
@@ -136,6 +135,7 @@ GEM
       om
       progressbar
       rest-client
+      rsolr-client-cert (>= 0.5.1)
       rsolr-ext
       ruby-cache
       ruby-graphviz
@@ -154,8 +154,7 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     eventmachine (1.0.3)
-    execjs (1.4.0)
-      multi_json (~> 1.0)
+    execjs (2.0.2)
     fastercsv (1.5.5)
     ffi (1.9.0)
     fssm (0.2.10)
@@ -169,7 +168,7 @@ GEM
     i18n (0.6.5)
     is_it_working-cbeer (1.0.16)
     iso-639 (0.1.0)
-    jettywrapper (1.4.1)
+    jettywrapper (1.4.2)
       activesupport (>= 3.0.0)
       childprocess
       i18n
@@ -183,7 +182,7 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    kgio (2.8.0)
+    kgio (2.8.1)
     libv8 (3.3.10.4)
     libxml-ruby (2.7.0)
     logger (1.2.8)
@@ -195,7 +194,7 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    marc (0.5.1)
+    marc (0.7.1)
     mediashelf-loggable (0.4.9)
     method_source (0.8.2)
     mime-types (1.25)
@@ -211,7 +210,7 @@ GEM
       iso-639
       nokogiri
       nom-xml
-    mods_display (0.1.3)
+    mods_display (0.1.4)
       stanford-mods
     multi_json (1.8.1)
     mysql2 (0.3.13)
@@ -241,10 +240,11 @@ GEM
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.2)
     progressbar (0.21.0)
-    pry (0.9.12.2)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.4)
+    pry (0.9.6)
+      coderay (>= 0.9.8)
+      method_source (>= 0.6.5)
+      ruby_parser (>= 2.0.5)
+      slop (~> 2.1.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -267,10 +267,10 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    raindrops (0.11.0)
+    raindrops (0.12.0)
     rake (10.1.0)
-    rdf (1.0.8)
-      addressable (>= 2.2)
+    rdf (1.0.9)
+      addressable (>= 2.3)
     rdf-rdfxml (0.3.9)
       rdf (>= 0.3.11)
       rdf-xsd (>= 0.3.8)
@@ -286,10 +286,10 @@ GEM
       rsolr
     rsolr-ext (1.0.3)
       rsolr (>= 1.0.2)
-    rspec-core (2.14.4)
-    rspec-expectations (2.14.0)
+    rspec-core (2.14.5)
+    rspec-expectations (2.14.3)
       diff-lcs (>= 1.1.3, < 2.0)
-    rspec-mocks (2.14.2)
+    rspec-mocks (2.14.3)
     rspec-rails (2.14.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
@@ -301,6 +301,8 @@ GEM
     ruby-graphviz (1.0.9)
     ruby-prof (0.13.0)
     ruby-rc4 (0.1.5)
+    ruby_parser (3.2.2)
+      sexp_processor (~> 4.1)
     rubydora (1.6.5)
       activemodel
       activesupport
@@ -312,21 +314,22 @@ GEM
       nokogiri
       rest-client
     rubyzip (0.9.9)
-    sass (3.2.10)
+    sass (3.2.12)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    selenium-webdriver (2.33.0)
+    selenium-webdriver (2.35.1)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
-      rubyzip
+      rubyzip (< 1.0.0)
       websocket (~> 1.0.4)
+    sexp_processor (4.3.0)
     simplecov (0.7.1)
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
     simplecov-html (0.7.1)
-    slop (3.4.6)
+    slop (2.1.0)
     solrizer (2.2.0)
       activesupport
       daemons
@@ -342,7 +345,7 @@ GEM
       multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
-    sqlite3 (1.3.7)
+    sqlite3 (1.3.8)
     squash_rails (1.2.0)
       squash_ruby
     squash_ruby (1.2.2)
@@ -359,12 +362,12 @@ GEM
       rack (>= 1.0.0)
     thor (0.18.1)
     tilt (1.4.1)
-    treetop (1.4.14)
+    treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
     ttfunk (1.0.3)
-    tzinfo (0.3.37)
-    uglifier (2.1.2)
+    tzinfo (0.3.38)
+    uglifier (2.2.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     unicode (0.4.4)
@@ -394,7 +397,7 @@ DEPENDENCIES
   compass-susy-plugin (~> 0.9.0)
   confstruct (~> 0.2.4)
   dalli
-  dor-services (>= 4.0.0)
+  dor-services (= 4.2.0)
   haml
   is_it_working-cbeer
   jettywrapper
