@@ -5,7 +5,7 @@ gem 'squash_ruby'
 gem 'squash_rails'
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', "= 4.2.0"
+gem 'dor-services', ">= 4.2.0"
 gem 'rails', '~> 3.2.11'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"

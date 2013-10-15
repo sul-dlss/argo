@@ -95,7 +95,7 @@ module DorObjectHelper
     if object.nil?
       doc['status_display']
     else
-      obj.status(true).htmlsafe
+      object.status.html_safe
     end
   end
     def metadata_source object
