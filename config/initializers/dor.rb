@@ -35,9 +35,8 @@ module Dor
         partial_tag_states=''
      
         parts.each_with_index do |part, index|
-          puts index.to_s + part
           partial_tag_states = part if index == 0
-          partial_tag_states += ":"+part if index != 0
+          partial_tag_states += " : " + part.trim if index != 0
           add_solr_value(solr_doc, 'tag', partial_tag_states, :string, [:searchable, :facetable])
         end
       
