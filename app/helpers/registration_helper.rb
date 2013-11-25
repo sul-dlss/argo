@@ -69,7 +69,8 @@ module RegistrationHelper
     [
       ['World','world'],
       ['Stanford','stanford'],
-      ['Dark (Preserve Only)','none']
+      ['Dark (Preserve Only)','dark'],
+      ['None', 'none']
     ]
   end
 
