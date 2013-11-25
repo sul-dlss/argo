@@ -36,12 +36,21 @@ add_workflow_url='<%=url_for :controller => :items,:action => :add_workflow, :id
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 tags_url='<%=url_for :controller => :items,:action => :tags_bulk, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-
 fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_provenance, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 </script>
+
 <style>
 .bulk_operation{border:1px;border-style:solid;padding:25px;margin-top:25px;display:none}
 .error{color:red}
+</style>
+<style>
+ul{
+	display:inline-block;
+	vertical-align:top;
+}
+ul li{
+	list-style-type: none;
+}
 </style>
 <% end %>
 
@@ -55,38 +64,59 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 <% end %>
 
 <h1>Bulk update operations</h1>
-<button id="get_druids" name="get_druids" onclick="get_druids();">Get druids from search</button>
-<button onclick="$('#pid_list').show(400)">Paste a druid list</button>
+<span class="bulk_button" id="get_druids" name="get_druids" onclick="get_druids();">Get druids from search</span>
+<span class="bulk_button" onclick="$('#pid_list').show(400)">Paste a druid list</span>
 <div id="pid_list" name="pid_list" style="display:none;" class="bulk_operation">
 	<h1>Druids</h1>
 	<p>Bulk actions will be performed on this list of druids. Modify the list or paste a list of druids here to operate on them instead.</p>
 	<br><textarea id="pids" name="pids"></textarea><br>
-	<button id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</button>
-	<button onclick="$('#close').show(400)">Close versions</button>
-	<button id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
-	<button id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
-	<button onclick="$('#purge').show(400)">Purge</button>
-	<button onclick="$('#expedite').show(400)">Expedite</button>
-	<button onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</button>
-	<button id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</button>
-	<button onclick="$('#create_desc_md').show(400)">Create MODs from label	</button>
-	<br><button onclick="$('#release_hold').show(400)">Release for ingest</button>
-	<button onclick="$('#remove_duplicate_encoding').show(400)">Remove duplicate xml encoding</button>
-	<button onclick="$('#schema_validate').show(400)">Validate MODs</button>
-	<button onclick="$('#refresh_metadata').show(400)">Refresh MODs</button>
-	<button onclick="$('#discoverable').show(400)">Check discoverability</button>
-	<button onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</button>
-	<button onclick="$('#add_workflow').show(400)">Add a Workflow</button>
+	<div id="buttons">
+	<ul class="button_list">
+		<label>Versioning</label>
+		<li><span class="bulk_button" id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</span>
+		<li><span class="bulk_button" onclick="$('#close').show(400)">Close versions</span>
+	</ul>
+	<ul class="button_list">
+		<label>Harmless stuff</label>
+		<li><span class="bulk_button" id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</span>
+		<li><span class="bulk_button" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</span>
+		<li><span class="bulk_button" onclick="$('#expedite').show(400)">Expedite</span>
+		<li><span class="bulk_button" id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</span>		
+	</ul> 
+	
+	<ul class="button_list">
+		<label>Metadata</label>
+		<li><span class="bulk_button" onclick="$('#create_desc_md').show(400)">Create MODs from label	</span>
+		<li><span class="bulk_button" onclick="$('#discoverable').show(400)">Check discoverability</span>
+		<li><span class="bulk_button" onclick="$('#schema_validate').show(400)">Validate MODs</span>
+		<li><span class="bulk_button" onclick="$('#refresh_metadata').show(400)">Refresh MODs</span>
+	  <li><span class="bulk_button" onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</span>
+	</ul>
+	
+	<ul class="button_list">
+		<label>Dangerous Stuff</label>
+		<li><span class="bulk_button" onclick="$('#purge').show(400)">Purge</span>
+		<li><span class="bulk_button" onclick="$('#release_hold').show(400)">Release for ingest</span>
+		<li><span class="bulk_button" onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</span>
+		<li><span class="bulk_button" onclick="$('#add_workflow').show(400)">Add a Workflow</span>
+	</ul>
+	
 	<%if current_user.is_admin%>
-	<button onclick="$('#fix_provenance').show(400)">Add missing Provenance</button>
-	<button onclick="$('#remediate_mods').show(400)">Remediate MODs</button>
+	
+		<ul class="button_list">
+			<label>Admin Only Actions</label>
+			<li><span class="bulk_button" onclick="$('#fix_provenance').show(400)">Add missing Provenance</span>
+			<li><span class="bulk_button" onclick="$('#remediate_mods').show(400)">Remediate MODs</span>
+		</ul>
 	<%end%>
-	<div style="" id="updates" name="updates">
-		<label>Object Updates, you must prepare objects to use these.</label><br>
-		<button class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</button>
-		<button class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</button>
-		<button class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</button>
-		<button class="update_buttons" disabled onclick="$('#add_collection').show(400)">Add collection</button>
+	
+		<ul class="button_list">
+			<label>Object Updates, you must prepare first!</label>
+			<li><span class="bulk_button" class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</span>
+			<li><span class="bulk_button" class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</span>
+			<li><span class="bulk_button" class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</span>
+			<li><span class="bulk_button" class="update_buttons" disabled onclick="$('#add_collection').show(400)">Add collection</span>
+		</ul>
 	</div>
 </div>
 <div class="bulk_operation" id="open" name="open">
@@ -101,7 +131,7 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 	<label for="description">Change description</label><br>
 	<input type="text" id="description" name="description" />
 	<br>
-	<button id="prepare_button" name="prepare_button" onclick="fetch_druids(open_version);$('#open').hide(400);">Prepare objects for modification</button><br>
+	<span class="bulk_button" id="prepare_button" name="prepare_button" onclick="fetch_druids(open_version);$('#open').hide(400);">Prepare objects for modification</span><br>
 </div>
 <br>
 
@@ -117,25 +147,25 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 	<label for="description">version description</label><br>
 	<input type="text" id="description" name="description" >
 	<br>
-	<button onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</button><br>
+	<span class="bulk_button" onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</span><br>
 </div>
 
 <div class="bulk_operation" id="apply_apo_defaults" name="apply_apo_defaults">
 	<h1>Reset the rights metadata to match teh APO default.</h1>
 	<p>This will overwrite any changes in the rights metadata, including embargo.</p>
-	<button onclick="fetch_druids(apply_apo_defaults);$('#apply_apo_defaults').hide(400);">Apply defaults.</button><br>
+	<span class="bulk_button" onclick="fetch_druids(apply_apo_defaults);$('#apply_apo_defaults').hide(400);">Apply defaults.</span><br>
 </div>
 
 <div class="bulk_operation" id="create_desc_md" name="create_desc_md">
 	<h1>Create minimal descriptive metadata from the title.</h1>
 	<p>This can only be performed on items which are stopped in the accessioning pipeline due to errors.</p>
-	<button onclick="fetch_druids(create_desc_md);$('#create_desc_md').hide(400);">Create Mods</button><br>
+	<span class="bulk_button" onclick="fetch_druids(create_desc_md);$('#create_desc_md').hide(400);">Create Mods</span><br>
 </div>
 <div class="bulk_operation" id="add_collection" name="add_collection">
 	<h1>Add these objects to a collection</h1>
 	<p>This does not remove them from existing collections</p>
 	<%=select_tag :collection_select, options_for_select(current_user.permitted_collections)%>
-	<button onclick="fetch_druids(add_collection);$('#add_collection').hide(400);">Add Collection</button><br>
+	<span class="bulk_button" onclick="fetch_druids(add_collection);$('#add_collection').hide(400);">Add Collection</span><br>
 </div>
 <br>
 
@@ -163,80 +193,80 @@ fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_pr
 	<%=select_tag :new_content_type, options_for_select(content_types) %><br>
 	<label>New resource type</label>
 	<%=select_tag :new_resource_type, options_for_select(resource_types) %><br>
-	<button onclick="fetch_druids(set_content_type);$('#content_type').hide(400);">Set content types</button>
+	<span class="bulk_button" onclick="fetch_druids(set_content_type);$('#content_type').hide(400);">Set content types</span>
 </div>
 <div class="bulk_operation" id="purge" name="purge">
 	<h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
-	<button onclick="fetch_druids(purge);$('#purge').hide(400);">Purge objects from fedora</button><br>
+	<span class="bulk_button" onclick="fetch_druids(purge);$('#purge').hide(400);">Purge objects from fedora</span><br>
 </div>
 <div class="bulk_operation" id="fix_provenance" name="fix_provenance">
 	<h1>Add provenance metadata to items that have errored out in sdr-ingest-transfer due to missing provenance and reset the workflow step.</h1>
-	<button onclick="fetch_druids(fix_provenance);$('#fix_provenance').hide(400);">Add Provenance</button><br>
+	<span class="bulk_button" onclick="fetch_druids(fix_provenance);$('#fix_provenance').hide(400);">Add Provenance</span><br>
 </div>
 <div class="bulk_operation" id="expedite" name="expedite">
 	<h1>Make this item high priority in the workflow queue.</h1>
-	<button onclick="fetch_druids(expedite);$('#expedite').hide(400);">Expedite</button><br>
+	<span class="bulk_button" onclick="fetch_druids(expedite);$('#expedite').hide(400);">Expedite</span><br>
 </div>
 
 <div class="bulk_operation" id="add_workflow" name="add_workflow">
 	<h1>Add a workflow to the items.</h1>
 	<%=select_tag :wf, options_for_select(workflow_options, 'digitizationWF')%>
-	<button onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add Workflow</button><br>
+	<span class="bulk_button" onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add Workflow</span><br>
 </div>
 
 <div class="bulk_operation" id="remove_duplicate_encoding" name="remove_duplicate_encoding">
 	<h1>Check whether items have duplicate xml encoding</h1>
-	<button onclick="fetch_druids(remove_duplicate_encoding);$('#remove_duplicate_encoding').hide(400);">Remove duplicate encoding</button><br>
+	<span class="bulk_button" onclick="fetch_druids(remove_duplicate_encoding);$('#remove_duplicate_encoding').hide(400);">Remove duplicate encoding</span><br>
 </div>
 <div class="bulk_operation" id="remediate_mods" name="remediate_mods">
 	<h1>Run the Mclaughlin Maps remediation suite.</h1>
-	<button onclick="fetch_druids(remediate_mods);$('#remediate_mods').hide(400);">Remediate</button><br>
+	<span class="bulk_button" onclick="fetch_druids(remediate_mods);$('#remediate_mods').hide(400);">Remediate</span><br>
 </div>
 <div class="bulk_operation" id="discoverable" name="discoverable">
 	<h1>Check for the presence of the mods basic required fields for Searchworks.</h1>
-	<button onclick="fetch_druids(discoverable);$('#discoverable').hide(400);">Check discoverability</button><br>
+	<span class="bulk_button" onclick="fetch_druids(discoverable);$('#discoverable').hide(400);">Check discoverability</span><br>
 </div>
 <div class="bulk_operation" id="schema_validate" name="schema_validate">
 	<h1>Run mods schema validation.</h1>
-	<button onclick="fetch_druids(schema_validate);$('#schema_validate').hide(400);">Validate</button><br>
+	<span class="bulk_button" onclick="fetch_druids(schema_validate);$('#schema_validate').hide(400);">Validate</span><br>
 </div>
 <div class="bulk_operation" id="refresh_metadata" name="refresh_metadata">
 	<h1>Refresh metadata from the external source.</h1>
-	<button onclick="fetch_druids(refresh_metadata);$('#refresh_metadata').hide(400);">Refresh metadata</button><br>
+	<span class="bulk_button" onclick="fetch_druids(refresh_metadata);$('#refresh_metadata').hide(400);">Refresh metadata</span><br>
 </div>
 <div class="bulk_operation" id="detect_duplicate_encoding" name="detect_duplicate_encoding">
 	<h1>Check whether items have duplicate xml encoding</h1>
-	<button onclick="fetch_druids(detect_duplicate_encoding);$('#detect_duplicate_encoding').hide(400);">Check for duplicate encoding</button><br>
+	<span class="bulk_button" onclick="fetch_druids(detect_duplicate_encoding);$('#detect_duplicate_encoding').hide(400);">Check for duplicate encoding</span><br>
 </div>
 <div class="bulk_operation" id="release_hold" name="release_hold">
 	<h1>Release to SDR-Ingest</h1>
-	<button id="release_hold" name="release_hold" onclick="fetch_druids(release_hold);$('#release_hold').hide(400);">Release object</button>
+	<span class="bulk_button" id="release_hold" name="release_hold" onclick="fetch_druids(release_hold);$('#release_hold').hide(400);">Release object</span>
 </div>
 <div class="bulk_operation" id="reindex" name="reindex">
 	<h1>Reindex items</h1>
-	<button id="reindex_button" name="reindex_button" onclick="fetch_druids(reindex);$('#reindex').hide(400);">Update DOR/Argo index for object</button>
+	<span class="bulk_button" id="reindex_button" name="reindex_button" onclick="fetch_druids(reindex);$('#reindex').hide(400);">Update DOR/Argo index for object</span>
 </div>
 <div class="bulk_operation" id="republish" name="republish">
 	<h1>Republish items</h1>
-	<button id="republish_button" name="republish_button" onclick="fetch_druids(republish);$('#republish').hide(400);">Refresh metadata on PURL</button>
+	<span class="bulk_button" id="republish_button" name="republish_button" onclick="fetch_druids(republish);$('#republish').hide(400);">Refresh metadata on PURL</span>
 </div>
 <div class="bulk_operation" id="tag">
 	<h1>Change tags</h1>
 	<p>This needs a list of pids and tags with a tab between the pid and each tag. ex.<br>druid:bc088fn5010 Project:Something Process:Content Type:Book</p><p>The best way to do this is by copy/pasting this content into Excel.</p>
 	<textarea style="width:50%" id="tags" name="tags"></textarea><br>
-	<button id="set_tags" name="set_tags" onclick="set_tags();$('#tag').hide(400);">Update tags</button>
+	<span class="bulk_button" id="set_tags" name="set_tags" onclick="set_tags();$('#tag').hide(400);">Update tags</span>
 </div>
 <div class="bulk_operation" id="source_id">
 	<h1>Change source id</h1>
 	<p>This needs a list of pids and source ids, with a space between the pid and the corresponding source id. ex.<br>druid:bc088fn5010 fuller:M1090_S15_B02_F12_0007</p>
 	<textarea style="width:50%" id="source_ids" name="source_ids"></textarea><br>
-	<button id="set_source_id" name="set_source_id" onclick="source_id();$('#source_id').hide(400);">Update source ids</button>
+	<span class="bulk_button" id="set_source_id" name="set_source_id" onclick="source_id();$('#source_id').hide(400);">Update source ids</span>
 </div>
 <div class="bulk_operation" id="rights" name="rights">
 	<h1>Set object rights</h1>
 	<%=select_tag :rights_select, options_for_select(['world','stanford', 'none', 'dark'])%>
-	<button id="rights_button" name="rights_button" onclick="fetch_druids(set_rights);$('#rights').hide(400);">Set rights</button>
+	<span class="bulk_button" id="rights_button" name="rights_button" onclick="fetch_druids(set_rights);$('#rights').hide(400);">Set rights</span>
 </div>
-<button id="stop" class="stop_button" style="display:none" name="stop" onclick="stop_all();">Stop</button>
+<span class="bulk_button" id="stop" class="stop_button" style="display:none" name="stop" onclick="stop_all();">Stop</span>
 
 <br><div style="display:none;width:50%" id="log" name="log"></div></div>
