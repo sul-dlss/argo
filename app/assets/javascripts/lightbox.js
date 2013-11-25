@@ -8,7 +8,7 @@ $(document).ready(function() {
     $.get(link.attr('href')).complete(function(xhr) {
       var title = link.attr('title') || link.text();
       lightBox.dialog('option','title',title);
-      lightBox.dialog('option','position',['100px','100px']).dialog('option','width',$(window).width()-200).dialog('option','height',$(window).height()-200);
+      lightBox.dialog('option','width','75%').dialog('option','height','650');
       $(lightBox).html(xhr.responseText)
       $("body").css("cursor", "auto");
       lightBox.dialog('open');
@@ -24,9 +24,10 @@ $(document).ready(function() {
     $.get(link.attr('href')).complete(function(xhr) {
       var title = link.attr('title') || link.text();
       lightBox.dialog('option','title',title);
-      lightBox.dialog('option','position',['100px','100px']).dialog('option','width',$(window).width()-200).dialog('option','height',$(window).height()-200);
+      lightBox.dialog('option','width','75%').dialog('option','height','650');
       $(lightBox).html(xhr.responseText)
       $("body").css("cursor", "auto");
+			
 	$("#lightBox").position({
 	   my: "center",
 	   at: "center",
