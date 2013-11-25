@@ -282,6 +282,7 @@ class Report
   end
   
   def csv2
+    @params[:page] = 1
     headings=''
     rows=''
     @fields.each do |f|

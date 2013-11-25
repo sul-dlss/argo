@@ -1,37 +1,45 @@
 
-function open_version(druids){
+function process_get(druids, action_url, success_string){
 	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url=action_url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'GET'});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url, success_string);
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+	})
+}
+
+function process_post(druids, action_url, params, success_string){
+	cons=[];
+	$.each(druids, function(i,element){
+		var element_url=catalog_url(element);
+		url=action_url.replace('xxxxxxxxx',element);
+		var xhr=$.ajax({url: url, type: 'POST', data: params});
+		cons.push(xhr);
+		xhr.success(function(response,status,xhr) { 
+			success_handler(element_url, success_string, show_buttons);
+		})
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop(),show_buttons)})
+	})
+	
+}
+function open_version(druids){
 	var params={
 		'severity': $('#severity').val(),
 		'description': $('#description').val(),
 	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=open_version_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Prepared', show_buttons);
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop(),show_buttons)})
-	})
+	process_post(druids, open_version_url, params, "Prepared");
 }
 function close_version(druids){
 	var params={
 		'severity': $('#severity').val(),
 		'description': $('#description').val(),
 	}
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=close_version_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Closed');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_post(druids, close_version_url, params, "Closed");
 }
 function set_content_type(druids){
 	var params={
@@ -40,45 +48,15 @@ function set_content_type(druids){
 		'old_content_type': $('#old_content_type').val(),
 		'old_resource_type': $('#old_resource_type').val()
 	}
-	cons=[];
-	$.each(druids, function(i,element){
-     	var	element_url=catalog_url(element);
-		url=set_content_type_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element,job_count.pop())})
-	})
+	process_post(druids,set_content_type_url, params, "Updated");
 }
 
 
 function fix_provenance(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=fix_provenance_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Provenance added.');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, provenance_url, "Provenance added.");
 }
 function purge(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=purge_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Purged');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, purge_url, "Purged");
 }
 
 function fetch_druids(fun)
@@ -116,144 +94,37 @@ function fetch_druids(fun)
 	}
 }
 function reindex(druids){
-	cons=[]
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=reindex_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Reindexed.');
-			
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, reindex_url, 'Reindexed.');
 }
 function republish(druids){
-	cons=[]
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=republish_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Republished.');
-			
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, republish_url, "Republished.");
 }
 function release_hold(druids){
-	cons=[]
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=release_hold_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Hold released.');
-			
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_post(druids,'',release_hold_url, "Hold released.")
 }
 function set_rights(druids){
-	cons=[];
 	var params={
 		'rights': $('#rights_select').val(),
 	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=set_rights_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_post(druids, params, rights_url, "Updated");
 }
-
 function create_desc_md(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=create_desc_md_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, create_desc_md_url ,"Updated");
 }
 function add_collection(druids){
-	cons=[];
-	var params={
-		'collection': $('#collection_select').val(),
-	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=add_collection_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_post(druid, params, add_collection_url, "Updated");
 }
 function detect_duplicate_encoding(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'No duplicates');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, detect_duplicate_encoding_url, 'No Duplicates.');
 }
 function remove_duplicate_encoding(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=remove_duplicate_encoding_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Fixed');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, remove_duplicate_encoding_url, "fixed");
 }
 function schema_validate(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=schema_validate_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Valid');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, schema_valudate_url, "Valid");
 }
 function discoverable(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=discoverable_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Discovable.');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, discoverable_url, "Dicoverable");
 }
 function remediate_mods(druids){
 	cons=[];
@@ -283,17 +154,7 @@ function expedite(druids){
 }
 
 function apply_apo_defaults(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=apo_apply_defaults_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Defaults applied.');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, apo_apply_defaults_url, 'Defaults_applied.')
 }
 function add_workflow(druids){
 	cons=[];
@@ -313,17 +174,7 @@ function add_workflow(druids){
 }
 
 function refresh_metadata(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=refresh_metadata_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Updated');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, refresh_metadata_url, "Updated.");
 }
 function get_druids()
 {
