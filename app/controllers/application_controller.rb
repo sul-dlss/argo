@@ -12,9 +12,9 @@ class ApplicationController < ActionController::Base
   include Rack::Webauth::Helpers
 
   attr_reader :help
-  require 'squash/rails'
-  include Squash::Ruby::ControllerMethods
-  enable_squash_client
+  require 'squash/rails' if Rails.env == :production
+  include Squash::Ruby::ControllerMethods if Rails.env == :production
+  enable_squash_client if Rails.env == :production
   
   def initialize(*args)
     super
