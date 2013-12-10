@@ -10,6 +10,19 @@ describe 'mods_view' do
     @current_user.stub(:is_manager).and_return(false)
     ItemsController.any_instance.stub(:current_user).and_return(@current_user)
   end
+  context "main page tests" do
+    it 'should have the expected heading for search facets' do
+      visit root_path
+      page.should have_content('Limit your search')
+    end
+    it 'should have the expected search facets' do
+      search_facets = ['Object Type', 'Content Type', 'Admin. Policy', 'Lifecycle', 'Workflows (WPS)', 'Version']
+      visit root_path
+      search_facets.each do |facet|
+        page.should have_content(facet)
+      end
+    end
+  end
   context 'mods view' do
     it' should render the mods view including a title' do
       visit '/items/druid:zt570tx3016/purl_preview'
