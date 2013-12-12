@@ -5,7 +5,10 @@ gem 'squash_ruby'
 gem 'squash_rails'
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', ">= 4.2.0"
+gem 'dor-services', ">= 4.4.9"
+gem 'dor-workflow-service', '=1.4.1'
+gem "druid-tools", "~> 0.3.0"
+gem "moab-versioning", "=1.3.1"
 gem 'rails', '~> 3.2.11'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
@@ -22,7 +25,7 @@ gem "solrizer-fedora"
 gem "rsolr", :git => "https://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
 gem "rsolr-client-cert", "~> 0.5.2"
 gem 'confstruct', "~> 0.2.4"
-gem "mysql2", "~> 0.3.0"
+gem "mysql2", "= 0.3.13"
 gem "progressbar"
 gem "haml"
 gem "coderay"

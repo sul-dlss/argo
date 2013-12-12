@@ -1,8 +1,8 @@
 GIT
   remote: https://github.com/meh/ruby-thread.git
-  revision: b408f77fcfb26a893cf1195efdc92e7e564bd9e3
+  revision: a0572745bd46b2d8d0da6cd62f4ef2b83b15b8db
   specs:
-    thread (0.1.1)
+    thread (0.1.3)
 
 GIT
   remote: https://github.com/sul-dlss/rack-webauth.git
@@ -26,12 +26,12 @@ GEM
     Ascii85 (1.0.2)
     about_page (0.2.6)
       rails (~> 3.2)
-    actionmailer (3.2.14)
-      actionpack (= 3.2.14)
+    actionmailer (3.2.16)
+      actionpack (= 3.2.16)
       mail (~> 2.5.4)
-    actionpack (3.2.14)
-      activemodel (= 3.2.14)
-      activesupport (= 3.2.14)
+    actionpack (3.2.16)
+      activemodel (= 3.2.16)
+      activesupport (= 3.2.16)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
       journey (~> 1.0.4)
@@ -52,23 +52,22 @@ GEM
       rsolr
       rubydora (~> 1.6)
       solrizer (~> 2.1)
-    activemodel (3.2.14)
-      activesupport (= 3.2.14)
+    activemodel (3.2.16)
+      activesupport (= 3.2.16)
       builder (~> 3.0.0)
-    activerecord (3.2.14)
-      activemodel (= 3.2.14)
-      activesupport (= 3.2.14)
+    activerecord (3.2.16)
+      activemodel (= 3.2.16)
+      activesupport (= 3.2.16)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.14)
-      activemodel (= 3.2.14)
-      activesupport (= 3.2.14)
-    activesupport (3.2.14)
+    activeresource (3.2.16)
+      activemodel (= 3.2.16)
+      activesupport (= 3.2.16)
+    activesupport (3.2.16)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
-    addressable (2.3.5)
     afm (0.2.0)
-    arel (3.0.2)
+    arel (3.0.3)
     bagit (0.3.2)
       docopt (~> 0.5.0)
       validatable (~> 1.6)
@@ -88,7 +87,7 @@ GEM
       blacklight (~> 3.2)
       rails (~> 3.2.0)
     builder (3.0.4)
-    capybara (2.1.0)
+    capybara (2.2.0)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -96,7 +95,7 @@ GEM
       xpath (~> 2.0)
     childprocess (0.3.9)
       ffi (~> 1.0, >= 1.0.11)
-    chunky_png (1.2.8)
+    chunky_png (1.2.9)
     coderay (1.1.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -118,18 +117,19 @@ GEM
     dalli (2.6.4)
     deprecation (0.0.5)
       activesupport
-    diff-lcs (1.2.4)
+    diff-lcs (1.2.5)
+    docile (1.1.1)
     docopt (0.5.0)
-    dor-services (4.3.2)
+    dor-services (4.4.9)
       active-fedora (~> 5.6, >= 5.6.3)
       activesupport
       confstruct (>= 0.2.2)
-      dor-workflow-service (~> 1.3)
-      druid-tools (>= 0.2.3)
+      dor-workflow-service (~> 1.4)
+      druid-tools (>= 0.3.0)
       equivalent-xml (>= 0.2.2)
       json
       lyber-utils
-      moab-versioning (>= 1.2.1)
+      moab-versioning (>= 1.3.1)
       net-sftp
       net-ssh
       nokogiri (>= 1.6.0)
@@ -144,31 +144,32 @@ GEM
       systemu
       uuidtools
       validatable
-    dor-workflow-service (1.3.2)
+    dor-workflow-service (1.4.1)
       activesupport
       confstruct
       nokogiri
       rest-client
-    druid-tools (0.2.3)
-    equivalent-xml (0.3.0)
+    druid-tools (0.3.0)
+    ensure_valid_encoding (0.5.3)
+    equivalent-xml (0.4.0)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.2)
     fastercsv (1.5.5)
-    ffi (1.9.0)
+    ffi (1.9.3)
     fssm (0.2.10)
-    haml (4.0.3)
+    haml (4.0.4)
       tilt
     happymapper (0.4.1)
       libxml-ruby (~> 2.0)
     hashery (2.1.1)
     hike (1.2.3)
-    hooks (0.3.1)
-    i18n (0.6.5)
+    hooks (0.3.3)
+    i18n (0.6.9)
     is_it_working-cbeer (1.0.16)
-    iso-639 (0.1.0)
-    jettywrapper (1.4.2)
+    iso-639 (0.2.4)
+    jettywrapper (1.5.0)
       activesupport (>= 3.0.0)
       childprocess
       i18n
@@ -178,8 +179,8 @@ GEM
     jquery-rails (2.1.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    json (1.8.0)
-    kaminari (0.14.1)
+    json (1.8.1)
+    kaminari (0.15.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.8.1)
@@ -194,12 +195,14 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    marc (0.7.1)
+    marc (0.8.1)
+      ensure_valid_encoding
+      unf
     mediashelf-loggable (0.4.9)
     method_source (0.8.2)
-    mime-types (1.25)
-    mini_portile (0.5.1)
-    moab-versioning (1.2.9)
+    mime-types (1.25.1)
+    mini_portile (0.5.2)
+    moab-versioning (1.3.1)
       confstruct
       happymapper
       hashery (>= 2.0.0)
@@ -210,7 +213,7 @@ GEM
       iso-639
       nokogiri
       nom-xml
-    mods_display (0.1.4)
+    mods_display (0.2.3)
       stanford-mods
     multi_json (1.8.2)
     mysql2 (0.3.13)
@@ -240,11 +243,10 @@ GEM
       pdf-reader (>= 0.9.0)
       ttfunk (~> 1.0.2)
     progressbar (0.21.0)
-    pry (0.9.6)
-      coderay (>= 0.9.8)
-      method_source (>= 0.6.5)
-      ruby_parser (>= 2.0.5)
-      slop (~> 2.1.0)
+    pry (0.9.12.4)
+      coderay (~> 1.0)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -252,31 +254,29 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rails (3.2.14)
-      actionmailer (= 3.2.14)
-      actionpack (= 3.2.14)
-      activerecord (= 3.2.14)
-      activeresource (= 3.2.14)
-      activesupport (= 3.2.14)
+    rails (3.2.16)
+      actionmailer (= 3.2.16)
+      actionpack (= 3.2.16)
+      activerecord (= 3.2.16)
+      activeresource (= 3.2.16)
+      activesupport (= 3.2.16)
       bundler (~> 1.0)
-      railties (= 3.2.14)
-    railties (3.2.14)
-      actionpack (= 3.2.14)
-      activesupport (= 3.2.14)
+      railties (= 3.2.16)
+    railties (3.2.16)
+      actionpack (= 3.2.16)
+      activesupport (= 3.2.16)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     raindrops (0.12.0)
     rake (10.1.0)
-    rdf (1.0.9)
-      addressable (>= 2.3)
+    rdf (1.1.0.1)
     rdf-rdfxml (0.3.9)
       rdf (>= 0.3.11)
       rdf-xsd (>= 0.3.8)
-    rdf-xsd (1.0.2.1)
-      nokogiri (>= 1.5.0)
-      rdf (>= 0.3.4)
+    rdf-xsd (1.1.0)
+      rdf (>= 1.1)
     rdoc (3.12.2)
       json (~> 1.4)
     rest-client (1.6.7)
@@ -286,10 +286,10 @@ GEM
       rsolr
     rsolr-ext (1.0.3)
       rsolr (>= 1.0.2)
-    rspec-core (2.14.5)
-    rspec-expectations (2.14.3)
+    rspec-core (2.14.7)
+    rspec-expectations (2.14.4)
       diff-lcs (>= 1.1.3, < 2.0)
-    rspec-mocks (2.14.3)
+    rspec-mocks (2.14.4)
     rspec-rails (2.14.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
@@ -301,8 +301,6 @@ GEM
     ruby-graphviz (1.0.9)
     ruby-prof (0.13.0)
     ruby-rc4 (0.1.5)
-    ruby_parser (3.2.2)
-      sexp_processor (~> 4.1)
     rubydora (1.6.5)
       activemodel
       activesupport
@@ -313,23 +311,23 @@ GEM
       mime-types
       nokogiri
       rest-client
-    rubyzip (0.9.9)
+    rubyzip (1.1.0)
     sass (3.2.12)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    selenium-webdriver (2.35.1)
+    selenium-webdriver (2.38.0)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
-      rubyzip (< 1.0.0)
+      rubyzip (~> 1.0)
       websocket (~> 1.0.4)
-    sexp_processor (4.3.0)
-    simplecov (0.7.1)
-      multi_json (~> 1.0)
-      simplecov-html (~> 0.7.1)
-    simplecov-html (0.7.1)
-    slop (2.1.0)
+    simplecov (0.8.2)
+      docile (~> 1.1.0)
+      multi_json
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
+    slop (3.4.7)
     solrizer (2.2.0)
       activesupport
       daemons
@@ -346,19 +344,19 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.8)
-    squash_rails (1.2.0)
+    squash_rails (1.3.0)
       squash_ruby
-    squash_ruby (1.2.2)
+    squash_ruby (1.2.3)
       json
-    stanford-mods (0.0.21)
+    stanford-mods (0.0.22)
       mods
-    stomp (1.3.1)
-    systemu (2.5.2)
+    stomp (1.3.2)
+    systemu (2.6.0)
     therubyracer (0.10.2)
       libv8 (~> 3.3.10)
-    thin (1.5.1)
+    thin (1.6.1)
       daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
+      eventmachine (>= 1.0.0)
       rack (>= 1.0.0)
     thor (0.18.1)
     tilt (1.4.1)
@@ -367,11 +365,14 @@ GEM
       polyglot (>= 0.3.1)
     ttfunk (1.0.3)
     tzinfo (0.3.38)
-    uglifier (2.2.1)
+    uglifier (2.3.2)
       execjs (>= 0.3.0)
-      multi_json (~> 1.0, >= 1.0.2)
+      json (>= 1.8.0)
+    unf (0.1.3)
+      unf_ext
+    unf_ext (0.0.6)
     unicode (0.4.4)
-    unicorn (4.6.3)
+    unicorn (4.7.0)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
@@ -397,15 +398,18 @@ DEPENDENCIES
   compass-susy-plugin (~> 0.9.0)
   confstruct (~> 0.2.4)
   dalli
-  dor-services (>= 4.2.0)
+  dor-services (>= 4.4.9)
+  dor-workflow-service (= 1.4.1)
+  druid-tools (~> 0.3.0)
   haml
   is_it_working-cbeer
   jettywrapper
   jquery-rails (= 2.1.4)
   kaminari
   kgio
+  moab-versioning (= 1.3.1)
   mods_display
-  mysql2 (~> 0.3.0)
+  mysql2 (= 0.3.13)
   net-sftp
   prawn (>= 0.12.0)
   progressbar
