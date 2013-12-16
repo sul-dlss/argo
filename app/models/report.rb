@@ -263,8 +263,10 @@ class Report
     else
       if params[:tags]
         tags=''
-        rec['identityMetadata_tag_t'].split(';').each do |tag|
-          tags+="\t"+tag.to_s
+        if  rec['identityMetadata_tag_t'] != nil
+          rec['identityMetadata_tag_t'].split(';').each do |tag|
+            tags+="\t"+tag.to_s
+          end
         end
         toret << rec['druid']+tags
       else
