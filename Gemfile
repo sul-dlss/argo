@@ -1,8 +1,7 @@
 source "https://rubygems.org"
 source "http://sul-gems.stanford.edu"
 
-gem 'squash_ruby'
-gem 'squash_rails'
+
 gem 'stanford-mods'
 gem 'mods_display'
 gem 'dor-services', ">= 4.4.9"
@@ -57,4 +56,9 @@ group :assets do
   gem 'sass-rails', '~> 3.2.0'
   gem 'compass-rails', '~> 1.0.0'
   gem 'compass-susy-plugin', '~> 0.9.0'
+end
+
+group :production do
+  gem 'squash_rails'
+  gem 'squash_ruby'
 end
