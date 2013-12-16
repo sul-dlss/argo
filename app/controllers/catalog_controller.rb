@@ -58,7 +58,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'id', :label => 'DRUID:'
     config.add_show_field 'project_tag_t', :label => 'Project:'
     config.add_show_field 'source_id_t', :label => 'Source:'
-    config.add_show_field 'tag_t', :label => 'Tags:'
+    config.add_show_field 'identityMetadata_tag_t', :label => 'Tags:'
     config.add_show_field 'status_display', :label => 'Status:'
     config.add_show_field 'wf_error_display', :label => "Error:"
     config.add_show_field 'collection_title_display', :label => "Error:"
