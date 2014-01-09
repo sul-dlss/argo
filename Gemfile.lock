@@ -156,6 +156,8 @@ GEM
     fastercsv (1.5.5)
     ffi (1.9.3)
     fssm (0.2.10)
+    gssapi (1.1.2)
+      ffi (>= 1.0.1)
     haml (4.0.4)
       tilt
     happymapper (0.4.1)
@@ -395,6 +397,7 @@ DEPENDENCIES
   dor-services (>= 4.4.9)
   dor-workflow-service (= 1.4.1)
   druid-tools (~> 0.3.0)
+  gssapi (~> 1.1.2)
   haml
   is_it_working-cbeer
   jettywrapper
