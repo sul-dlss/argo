@@ -33,7 +33,6 @@ gem "kgio"
 gem 'jettywrapper'
 gem 'kaminari'
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
-gem "gssapi", "~> 1.1.2"
 
 group :test, :development do
   gem 'selenium-webdriver'
