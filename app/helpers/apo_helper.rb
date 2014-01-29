@@ -5,7 +5,7 @@ module ApoHelper
   end
   def creative_commons_options
   [
-    ['None',''],
+    ['Citation Only',''],
     ['Attribution 3.0 Unported', 'by'],
     ['Attribution Share Alike 3.0 Unported','by_sa'],
     ['Attribution No Derivatives 3.0 Unported', 'by-nd'],
