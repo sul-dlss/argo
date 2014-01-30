@@ -21,7 +21,11 @@
 	<%= render :partial => 'document_list' %>
   <%= render 'results_pagination' %>
   
-  <%=URI.decode(@response.header.inspect) %>
+  <% unless Rails.env.production?%>
+  <div id='debug_query' style='display:none'>
+     <%=URI.decode(@response.header.inspect) %>
+   </div>
+  <%end%>
   
   
 <% end %>
