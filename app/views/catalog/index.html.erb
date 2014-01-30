@@ -20,4 +20,8 @@
   <%= render 'results_pagination' %>
 	<%= render :partial => 'document_list' %>
   <%= render 'results_pagination' %>
+  
+  <%=URI.decode(@response.header.inspect) %>
+  
+  
 <% end %>
