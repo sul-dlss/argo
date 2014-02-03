@@ -12,15 +12,15 @@
   <div style="clear:left">
     <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => ['objProfile_objCreateDate_dt','objProfile_objLabel_dt','identifier_t','identityMetadata_tag_t'] } %>	
 	
-    <%#unless object.class == Dor::WorkflowObject %>
+    <%unless object.class == Dor::WorkflowObject %>
      <dl class="defList">
 		  <dt>Status:</dt>
 		  <dd>
       <%-#object.class%>  	
-		  <%= render_status document,object rescue "Undefined."%>
+		  <%= render_status document,object %>
 		  </dd>
 	   </dl>
-     <%#end%>
+     <%end%>
     <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => ['wf_error_display'] } %>
 	
 	</div>
