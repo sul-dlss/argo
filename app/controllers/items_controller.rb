@@ -311,6 +311,7 @@ class ItemsController < ApplicationController
     end
   end
   def open_version
+    puts params[:description]
     begin
       @object.open_new_version
       @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")

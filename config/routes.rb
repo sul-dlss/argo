@@ -119,6 +119,7 @@ end
     post '/version/close', :action=>:close_version, :as => 'close_version'
     post '/version/open', :action=>:open_version, :as => 'open_version'
     post '/source_id', :action => :source_id, :as => 'source_id'
+    post '/add_collection', :action => :add_collection, :as => 'add_collection'
   end
   
   namespace :status do
