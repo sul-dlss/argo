@@ -112,7 +112,7 @@ function create_desc_md(druids){
 	process_get(druids, create_desc_md_url ,"Updated");
 }
 function add_collection(druids){
-	process_post(druid, params, add_collection_url, "Updated");
+	process_post(druids, params, add_collection_url, "Updated");
 }
 function detect_duplicate_encoding(druids){
 	process_get(druids, detect_duplicate_encoding_url, 'No Duplicates.');
