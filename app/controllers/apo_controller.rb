@@ -127,7 +127,7 @@ class ApoController < ApplicationController
       'by-nd' => 'Attribution No Derivatives 3.0 Unported',
       'by-nc' => 'Attribution Non-Commercial 3.0 Unported', 
       'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported', 
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported' 
     }
     @object.copyright_statement = params[:copyright] if params[:copyright] and params[:copyright].length > 0
     @object.use_statement = params[:use] if params[:use] and params[:use].length >0
