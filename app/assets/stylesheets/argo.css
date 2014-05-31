@@ -9,4 +9,6 @@
  *= require_tree './argo'
  */
 .ui-jqgrid td { border: none }
+
+.argo-obj-status-highlight { color: #00F }
  
