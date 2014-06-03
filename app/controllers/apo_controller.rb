@@ -103,7 +103,6 @@ class ApoController < ApplicationController
       @managers=[]
       @viewers=[]
       if @object.roles['dor-apo-manager']
-
         @object.roles['dor-apo-manager'].each do |entity|
           @managers << entity.gsub('workgroup:', '').gsub('person:', '')
         end
@@ -176,8 +175,8 @@ class ApoController < ApplicationController
     @object.creative_commons_license_human=@cc[params[:cc_license]]
     @object.default_rights = params[:default_object_rights]
     @object.purge_roles
-    managers=params[:managers].split ' '
-    viewers=params[:viewers].split ' '
+    managers=params[:managers].split(/[,\s]/).reject(){|str| str.empty?}
+    viewers=params[:viewers].split(/[,\s]/).reject(){|str| str.empty?}
     managers.each do |manager|
       if manager.include? 'sunetid'
         @object.add_roleplayer 'dor-apo-manager', manager, 'person'
