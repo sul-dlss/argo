@@ -4,8 +4,8 @@ source "http://sul-gems.stanford.edu"
 
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', ">= 4.4.9"
-gem 'dor-workflow-service', '=1.4.1'
+gem 'dor-services', ">= 4.6.8"
+gem 'dor-workflow-service', '~> 1.5'
 gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning", "=1.3.1"
 gem 'rails', '3.2.17'
@@ -33,6 +33,7 @@ gem "kgio"
 gem 'jettywrapper'
 gem 'kaminari'
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
+gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
 
 group :test, :development do
   gem 'selenium-webdriver'

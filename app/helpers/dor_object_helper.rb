@@ -28,7 +28,8 @@ module DorObjectHelper
      params=add_facet_params(facet_solr_field, item.qvalue)
      link_to(item.value,root_url)
      # (link_to_unless(options[:suppress_link], item.value, params, :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
-   end
+  end
+
   def render_citation doc
     terms = retrieve_terms(doc)
     result = ''
@@ -38,6 +39,7 @@ module DorObjectHelper
     result += ": #{origin_info.html_safe}" if origin_info.present?
     result.html_safe
   end
+
   def render_embargo_date_reset(pid, current_user)
     #	 new_date=Datetime.parse(new_date)
     #		if(new_date.past?)
@@ -51,9 +53,11 @@ module DorObjectHelper
       ''
     end
   end
+
   def is_permitted(current_user, operation, pid)
     return true
   end
+
   def render_datetime(datetime)
     if datetime.nil? || datetime==''
       ''
@@ -91,13 +95,26 @@ module DorObjectHelper
     render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 
-  def render_status (doc,object=nil)
+  def render_status (doc, object=nil)
     if object.nil?
-      doc['status_display']
+      return doc['status_display']
     else
-      object.status.html_safe
+      return object.status.html_safe
     end
   end
+
+  def render_status_style(doc, object=nil)
+    if !object.nil?
+      steps = object.class::STEPS
+      highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
+      if highlighted_statuses.include? object.status_info[:status_code]
+        return "argo-obj-status-highlight"
+      end
+    end
+
+    return ""
+  end
+
     def metadata_source object
       source = "DOR"
       if object.identityMetadata.otherId('mdtoolkit').length > 0
@@ -113,12 +130,15 @@ module DorObjectHelper
     def has_been_published? pid
       Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
     end
+
     def has_been_submitted? pid
       Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
     end
+
     def has_been_accessioned? pid
       Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
     end
+
     def last_accessioned_version object
       #if the item hasnt been accessioned, thats bad
       if not has_been_accessioned?(object.pid)
@@ -131,7 +151,6 @@ module DorObjectHelper
       end
     end  
     
-
     def can_open_version? pid
       if not (Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))
         return false
@@ -144,6 +163,7 @@ module DorObjectHelper
       end 
       true
     end
+
     def can_close_version? pid
       if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') and not Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
         true

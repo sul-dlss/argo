@@ -16,10 +16,12 @@
      <dl class="defList">
 		  <dt>Status:</dt>
 		  <dd>
-		  <%= render_status document,object %>
+	      <span class="<%= render_status_style(document, object) %>">
+          <%= render_status(document, object) %>
+        </span>
 		  </dd>
-	   </dl>
-     <%end%>
+     </dl>
+    <%end%>
     <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => ['wf_error_display'] } %>
 	
 	</div>

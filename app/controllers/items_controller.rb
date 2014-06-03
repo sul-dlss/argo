@@ -16,8 +16,10 @@ class ItemsController < ApplicationController
   end
   
   def purl_preview
-    @mods_display=ModsDisplayObject.new(@object.add_collection_reference)
+    @object.add_collection_reference @object.descMetadata.ng_xml
+    @mods_display = ModsDisplayObject.new(@object.descMetadata.ng_xml.to_s)
   end
+
   def crop
     @druid = params[:id].sub(/^druid:/,'')
     files = Legacy::Object.find_by_druid(@druid).files.find_all_by_file_role('00').sort { |a,b| a.id <=> b.id }
