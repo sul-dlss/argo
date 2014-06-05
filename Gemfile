@@ -8,7 +8,7 @@ gem 'dor-services', ">= 4.6.8"
 gem 'dor-workflow-service', '~> 1.5'
 gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning", "=1.3.1"
-gem 'rails', '3.2.17'
+gem 'rails', '3.2.18'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 gem 'net-sftp'
@@ -38,7 +38,7 @@ gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rai
 group :test, :development do
   gem 'selenium-webdriver'
 	gem 'unicorn'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2'
   gem 'capybara'
   gem "rack-test", :require => "rack/test"
 	gem 'simplecov', :require => false
@@ -54,7 +54,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
   gem 'jquery-rails', '=2.1.4'
-  gem 'therubyracer', "~> 0.10.0" #, '0.11.0beta5'
+  gem 'therubyracer', "~> 0.11"
   gem 'sass-rails', '~> 3.2.0'
   gem 'compass-rails', '~> 1.0.0'
   gem 'compass-susy-plugin', '~> 0.9.0'
