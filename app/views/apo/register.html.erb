@@ -38,9 +38,9 @@ end
 	        <li>Values may be separate by commas, spaces or new lines.</li>
 		<li>Common workgroups:  dlss:dpg-staff  dlss:dpg-hourlies  dlss:forensics-staff  dlss:smpl-staff  sulair:map-staff  sulair:map-hourlies</li>
 	</ul>
-	<div class="register-label-div">Manager</div><input id="managers" name="managers" type="text" style="width:90%" value="<%= @object ? @managers.join(' ') : ApoController::DEFAULT_MANAGER_WORKGROUPS.join(', ') %>"/><br>
+	<div class="register-label-div">Manager</div><input id="managers" name="managers" type="text" style="width:90%" value="<%= @object ? @managers.join(', ') : ApoController::DEFAULT_MANAGER_WORKGROUPS.join(', ') %>"/><br>
 	<p class="help" style="margin-left:90px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
-	<div class="register-label-div">Viewer</div><input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @object and @viewers.length>0 ? @viewers.join(' ') : ''%>"/>
+	<div class="register-label-div">Viewer</div><input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @object and @viewers.length>0 ? @viewers.join(', ') : ''%>"/>
 	<p class="help" style="margin-left:90px;font-size:.8em">View only access to the objects</p>
 </div>
 <div class="register-div">
