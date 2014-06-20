@@ -4,7 +4,7 @@ source "http://sul-gems.stanford.edu"
 
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', ">= 4.8.1"
+gem 'dor-services', ">= 4.8.2"
 gem 'dor-workflow-service', '~> 1.5'
 gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning", "=1.3.1"
@@ -48,6 +48,8 @@ group :development do
   gem 'pry'
   gem 'ruby-prof'
   gem 'sqlite3'
+  gem 'pry-debugger'
+  gem 'pry-rails'
 end
 
 group :assets do

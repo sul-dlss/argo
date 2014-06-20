@@ -115,6 +115,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    columnize (0.8.9)
     compass (0.12.6)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -126,11 +127,17 @@ GEM
     confstruct (0.2.7)
     daemons (1.1.9)
     dalli (2.7.2)
+    debugger (1.6.8)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.3.5)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.3.5)
     deprecation (0.1.0)
       activesupport
     diff-lcs (1.2.5)
     docile (1.1.3)
-    dor-services (4.8.1)
+    dor-services (4.8.2)
       active-fedora (~> 5.7.1)
       activesupport (~> 3.2, >= 3.2.18)
       confstruct (~> 0.2.2)
@@ -279,6 +286,11 @@ GEM
       coderay (~> 1.0)
       method_source (~> 0.8)
       slop (~> 3.4)
+    pry-debugger (0.2.2)
+      debugger (~> 1.3)
+      pry (~> 0.9.10)
+    pry-rails (0.3.2)
+      pry (>= 0.9.10)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -444,7 +456,7 @@ DEPENDENCIES
   compass-susy-plugin (~> 0.9.0)
   confstruct (~> 0.2.4)
   dalli
-  dor-services (>= 4.8.1)
+  dor-services (>= 4.8.2)
   dor-workflow-service (~> 1.5)
   druid-tools (~> 0.3.0)
   gssapi!
@@ -465,6 +477,8 @@ DEPENDENCIES
   prawn (>= 0.12.0)
   progressbar
   pry
+  pry-debugger
+  pry-rails
   rack-test
   rack-webauth!
   rails (= 3.2.18)
