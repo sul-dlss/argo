@@ -4,7 +4,7 @@ describe ApplicationController do
 
   describe "#current_user" do
     it "should be the webauth-ed user, if they exist" do
-      subject.stub(:webauth).and_return(mock(:webauth_user, :login => 'sunetid', :logged_in? => true))
+      subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
       subject.current_user.should be_a_kind_of(User)
     end
 
@@ -13,7 +13,7 @@ describe ApplicationController do
       subject.current_user.should be_a_kind_of(User)
     end
     it "should be nil if there is no user" do
-      subject.stub(:webauth).and_return(mock(:webauth_user, :logged_in? => false))
+      subject.stub(:webauth).and_return(double(:webauth_user, :logged_in? => false))
       subject.current_user.should be_nil
     end
   end
@@ -24,7 +24,7 @@ describe ApplicationController do
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
-      called.should be_true
+      called.should be true
     end
 
     it "should be called when DOR_SERVICES_DEBUG_MODE is set" do
@@ -32,7 +32,7 @@ describe ApplicationController do
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
-      called.should be_true
+      called.should be true
     end
 
     it "should otherwise do nothing" do
@@ -42,7 +42,7 @@ describe ApplicationController do
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
-      called.should be_false
+      called.should be false
     end
 
   end

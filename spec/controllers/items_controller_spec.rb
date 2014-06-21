@@ -2,18 +2,18 @@ require 'spec_helper'
 describe ItemsController do
   before :each do
     #TODO use fixtures here, this is too much stubbing
-    @item = mock(Dor::Item)
+    @item = double(Dor::Item)
     @item.stub(:to_solr)
-    @current_user=mock(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
+    @current_user=double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
     @current_user.stub(:is_admin).and_return(true)
     @current_user.stub(:roles).and_return([])
     @current_user.stub(:is_manager).and_return(false)
     ItemsController.any_instance.stub(:current_user).and_return(@current_user)
     Dor::Item.stub(:find).and_return(@item)
-    @event_ds=mock(Dor::EventsDS)
+    @event_ds=double(Dor::EventsDS)
     @event_ds.stub(:add_event)
     @ds={}
-    idmd=mock()
+    idmd=double()
     idmd.stub(:dirty=)
     @item.stub(:save)
     @ds['identityMetadata']=idmd
@@ -26,7 +26,7 @@ describe ItemsController do
     @item.stub(:can_view_content?).and_return(false)
     @item.stub(:pid).and_return('object:pid')
     @item.stub(:delete)
-    @apo=mock()
+    @apo=double()
     @apo.stub(:pid).and_return('druid:apo')
     @item.stub(:admin_policy_object).and_return(@apo)
     Dor::SearchService.solr.stub(:add)
@@ -100,7 +100,7 @@ describe "open_version" do
     @item.stub(:open_new_version)do 
     ran=true
   end
-  version_metadata=mock(Dor::VersionMetadataDS)
+  version_metadata=double(Dor::VersionMetadataDS)
   version_metadata.stub(:current_version_id).and_return(2)
   version_metadata.should_receive(:update_current_version)
   @item.stub(:versionMetadata).and_return(version_metadata)
@@ -122,7 +122,7 @@ describe "close_version" do
     @item.stub(:close_version)do 
     ran=true
   end
-  version_metadata=mock(Dor::VersionMetadataDS)
+  version_metadata=double(Dor::VersionMetadataDS)
   version_metadata.stub(:current_version_id).and_return(2)
   @item.stub(:versionMetadata).and_return(version_metadata)
   version_metadata.should_receive(:update_current_version)
@@ -192,7 +192,7 @@ end
 describe "add_file" do
   it 'should recieve an uploaded file and add it to the requested resource' do
     pending 'Mock isnt working correctly'
-    file=mock(ActionDispatch::Http::UploadedFile)
+    file=double(ActionDispatch::Http::UploadedFile)
     ran=false
     @item.stub(:add_file) do
       ran=true
@@ -225,7 +225,7 @@ end
 end
 describe "replace_file" do
   it 'should recieve an uploaded file and call dor-services' do
-    file=mock(ActionDispatch::Http::UploadedFile)
+    file=double(ActionDispatch::Http::UploadedFile)
     ran=false
     @item.stub(:replace_file) do
       ran=true
@@ -242,7 +242,7 @@ describe "replace_file" do
 end
 describe "update_parameters" do
   it 'should update the shelve, publish and preserve to yes (used to be true)' do
-    contentMD=mock(Dor::ContentMetadataDS)
+    contentMD=double(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
     contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
       shelve.should == "yes"
@@ -252,7 +252,7 @@ describe "update_parameters" do
     post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :id => 'oo201oo0001', :file_name => 'something.txt'
   end
   it 'should work ok if not all of the values are set' do
-    contentMD=mock(Dor::ContentMetadataDS)
+    contentMD=double(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
     contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
       shelve.should == "no"
@@ -262,7 +262,7 @@ describe "update_parameters" do
     post 'update_attributes',  :publish => 'on', :preserve => 'on', :id => 'oo201oo0001', :file_name => 'something.txt'
   end
   it 'should update the shelve, publish and preserve to no (used to be false)' do
-    contentMD=mock(Dor::ContentMetadataDS)
+    contentMD=double(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
     contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
       shelve.should == "no"
@@ -300,7 +300,7 @@ describe 'datastream_update' do
     lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => 'oo201oo0001', :content => '<this>isnt well formed.'}.should raise_error
   end
   it 'should call save with good xml' do
-    mock_ds=mock(Dor::ContentMetadataDS)
+    mock_ds=double(Dor::ContentMetadataDS)
     mock_ds.stub(:content=)
     @item.should_receive(:save)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
@@ -315,7 +315,7 @@ describe 'update_sequence' do
     response.code.should == "403"
   end
   it 'should call dor-services to reorder the resources' do
-    mock_ds=mock(Dor::ContentMetadataDS)
+    mock_ds=double(Dor::ContentMetadataDS)
     @item.stub(:move_resource)
     @item.should_receive(:move_resource)
     mock_ds.stub(:save)
@@ -324,7 +324,7 @@ describe 'update_sequence' do
     post 'update_resource', :resource => '0001', :position => '3', :id => 'oo201oo0001'
   end
   it 'should call dor-services to change the label' do
-    mock_ds=mock(Dor::ContentMetadataDS)
+    mock_ds=double(Dor::ContentMetadataDS)
     @item.stub(:update_resource_label)
     @item.should_receive(:update_resource_label)
     mock_ds.stub(:save)
@@ -333,7 +333,7 @@ describe 'update_sequence' do
     post 'update_resource', :resource => '0001', :label => 'label!', :id => 'oo201oo0001'
   end
   it 'should call dor-services to update the resource type' do
-    mock_ds=mock(Dor::ContentMetadataDS)
+    mock_ds=double(Dor::ContentMetadataDS)
     @item.stub(:update_resource_type)
     @item.should_receive(:update_resource_type)
     mock_ds.stub(:save)
@@ -345,7 +345,7 @@ end
 describe 'resource' do
   it 'should set the object and datastream, then call the view' do
     Dor::Item.should_receive(:find)
-    mock_ds=mock(Dor::ContentMetadataDS)
+    mock_ds=double(Dor::ContentMetadataDS)
     @item.stub(:datastreams).and_return({'contentMetadata' => mock_ds})
     get 'resource', :id => 'oo201oo0001', :resource => '0001'
   end
@@ -376,7 +376,7 @@ describe 'mods' do
   it 'should return the mods xml for a GET' do
     @request.env["HTTP_ACCEPT"] = "application/xml"
     xml='<somexml>stuff</somexml>'
-    descmd=mock()
+    descmd=double()
     descmd.should_receive(:content).and_return(xml)
     @item.should_receive(:descMetadata).and_return(descmd)
     get 'mods', :id => 'oo201oo0001'
@@ -391,7 +391,7 @@ end
 describe 'update_mods' do
   it 'should update the mods for a POST' do
     xml='<somexml>stuff</somexml>'
-    descmd=mock()
+    descmd=double()
     descmd.should_receive(:content=).with(xml)
     @item.should_receive(:descMetadata).and_return(descmd)
     post 'update_mods', :id => 'oo201oo0001', :xmlstr => xml
@@ -405,15 +405,15 @@ end
 describe "add_workflow" do
   it 'should initialize the new workflow' do
     @item.should_receive(:initialize_workflow)
-    wf=mock
+    wf=double()
     wf.stub(:[]).and_return(nil)
     @item.stub(:workflows).and_return wf
     post 'add_workflow', :id => 'oo201oo0001', :wf => 'accessionWF'
   end
   it 'shouldnt initialize the workflow if one is already active' do
     @item.should_not_receive(:initialize_workflow)
-    wf=mock
-    mock_wf=mock
+    wf=double()
+    mock_wf=double()
     mock_wf.stub(:active?).and_return(true)
     wf.stub(:[]).and_return(mock_wf)
     @item.stub(:workflows).and_return wf

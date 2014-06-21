@@ -1,8 +1,8 @@
 require 'spec_helper'
 describe RegistrationController do
   before :each do
-    @item = mock(Dor::Item)
-    @current_user=mock(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
+    @item = double(Dor::Item)
+    @current_user=double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
     @current_user.stub(:is_admin).and_return(true)
     RegistrationController.any_instance.stub(:current_user).and_return(@current_user)
     Dor::Item.stub(:find).and_return(@item)
@@ -33,11 +33,11 @@ describe RegistrationController do
       XML
 
       pid='abc123'
-      @item=mock(Dor::Item)
+      @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       Dor.stub(:find).and_return(@item)
       #using content metadata, but any datastream would do
-      object_rights=mock(Dor::ContentMetadataDS)
+      object_rights=double(Dor::ContentMetadataDS)
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
@@ -69,11 +69,11 @@ describe RegistrationController do
       XML
 
       pid='abc123'
-      @item=mock(Dor::Item)
+      @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       Dor.stub(:find).and_return(@item)
       #using content metadata, but any datastream would do
-      object_rights=mock(Dor::ContentMetadataDS)
+      object_rights=double(Dor::ContentMetadataDS)
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
@@ -105,11 +105,11 @@ describe RegistrationController do
       XML
 
       pid='abc123'
-      @item=mock(Dor::Item)
+      @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       Dor.stub(:find).and_return(@item)
       #using content metadata, but any datastream would do
-      object_rights=mock(Dor::ContentMetadataDS)
+      object_rights=double(Dor::ContentMetadataDS)
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
@@ -141,11 +141,11 @@ describe RegistrationController do
       XML
 
       pid='abc123'
-      @item=mock(Dor::Item)
+      @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       Dor.stub(:find).and_return(@item)
       #using content metadata, but any datastream would do
-      object_rights=mock(Dor::ContentMetadataDS)
+      object_rights=double(Dor::ContentMetadataDS)
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
@@ -155,11 +155,11 @@ describe RegistrationController do
     it 'should show no default if there is no xml' do
       content=''
       pid='abc123'
-      @item=mock(Dor::Item)
+      @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       Dor.stub(:find).and_return(@item)
       #using content metadata, but any datastream would do
-      object_rights=mock(Dor::ContentMetadataDS)
+      object_rights=double(Dor::ContentMetadataDS)
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml

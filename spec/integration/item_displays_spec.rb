@@ -4,7 +4,7 @@ describe 'mods_view' do
   before :each do
     @object = instantiate_fixture("druid_zt570tx3016", Dor::Item)
     Dor::Item.stub(:find).and_return(@object)
-    @current_user=mock(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
+    @current_user=double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
     @current_user.stub(:is_admin).and_return(true)
     @current_user.stub(:roles).and_return([])
     @current_user.stub(:is_manager).and_return(false)
@@ -82,7 +82,7 @@ describe 'mods_view' do
     end
     context 'source id ui' do
       it' should render the source id update ui' do
-        idmd=mock(Dor::IdentityMetadataDS)
+        idmd=double(Dor::IdentityMetadataDS)
         @object.stub(:identityMetadata).and_return(idmd)
         idmd.stub(:sourceId).and_return('something123')
         visit '/items/druid:zt570tx3016/source_id_ui'
@@ -91,7 +91,7 @@ describe 'mods_view' do
     end
     context 'tag ui' do
       it' should render the source id update ui' do
-        idmd=mock(Dor::IdentityMetadataDS)
+        idmd=double(Dor::IdentityMetadataDS)
         Dor::Item.stub(:identityMetadata).and_return(idmd)
         idmd.stub(:tags).and_return(['something:123'])
         visit '/items/druid:zt570tx3016/tags_ui'

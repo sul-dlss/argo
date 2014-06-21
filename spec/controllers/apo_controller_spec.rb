@@ -66,7 +66,7 @@ describe ApoController do
       params[:metadata_source].should == 'label'
       {:pid => 'druid:newcollection'}
     end
-    col=mock(Dor::Item)
+    col=double(Dor::Item)
     Dor.should_receive(:find).with('druid:newcollection').and_return(@item)
     @item.descMetadata.should_receive(:abstract=).with(abstract)
     @item.descMetadata.should_receive(:content=)

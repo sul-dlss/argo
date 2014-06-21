@@ -50,7 +50,7 @@ RSpec.configure do |config|
 end
 
 def log_in_as_mock_user(subject)
-  subject.stub(:webauth).and_return(mock(:webauth_user, :login => 'sunetid', :logged_in? => true))
+  subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
 end
 
 def item_from_foxml(foxml, item_class = Dor::Base)

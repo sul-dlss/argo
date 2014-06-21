@@ -7,7 +7,7 @@ end
 describe 'Argo::AccessControlsEnforcement' do
   before :each do
     @obj=TestClass.new
-    @user=mock(@user)
+    @user=double(@user)
     @user.stub(:is_manager).and_return(false)
     @user.stub(:is_admin).and_return(false)
     @user.stub(:is_viewer).and_return(false)
