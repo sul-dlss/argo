@@ -38,7 +38,7 @@ gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rai
 group :test, :development do
   gem 'selenium-webdriver'
 	gem 'unicorn'
-  gem 'rspec-rails', '~> 2'
+  gem 'rspec-rails', '~> 3'
   gem 'capybara'
   gem "rack-test", :require => "rack/test"
 	gem 'simplecov', :require => false
