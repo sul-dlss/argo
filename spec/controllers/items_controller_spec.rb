@@ -191,13 +191,12 @@ end
 
 describe "add_file" do
   it 'should recieve an uploaded file and add it to the requested resource' do
-    pending 'Mock isnt working correctly'
-    file=double(ActionDispatch::Http::UploadedFile)
+    #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
+    file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
     ran=false
     @item.stub(:add_file) do
       ran=true
     end
-    file.stub(:original_filename).and_return('filename')
     post 'add_file', :uploaded_file => file, :id => 'oo201oo0001', :resource => 'resourceID'
     ran.should == true
 
@@ -225,12 +224,12 @@ end
 end
 describe "replace_file" do
   it 'should recieve an uploaded file and call dor-services' do
-    file=double(ActionDispatch::Http::UploadedFile)
+    #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
+    file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
     ran=false
     @item.stub(:replace_file) do
       ran=true
     end
-    file.stub(:original_filename).and_return('filename')
     post 'replace_file', :uploaded_file => file, :id => 'oo201oo0001', :resource => 'resourceID', :file_name => 'somefile.txt'
     ran.should == true
   end
