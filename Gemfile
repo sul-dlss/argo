@@ -8,7 +8,7 @@ gem 'dor-services', ">= 4.8.2"
 gem 'dor-workflow-service', '~> 1.5'
 gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning", "=1.3.1"
-gem 'rails', '3.2.18'
+gem 'rails', '3.2.19'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
 gem 'net-sftp'
