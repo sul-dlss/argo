@@ -83,6 +83,15 @@ class ItemsController < ApplicationController
   def close_version_ui
     @description = @object.datastreams['versionMetadata'].current_description
     @tag = @object.datastreams['versionMetadata'].current_tag
+
+    # do some stuff to figure out which part of the version number changed when opening
+    # the item for versioning, so that the form can pre-select the correct severity level
+    @changed_severity = which_severity_changed(get_current_version_tag(@object), get_prior_version_tag(@object))
+    @severity_levels = [:major, :minor, :admin]
+    @severity_selected = {}
+    for severity in @severity_levels
+      @severity_selected[severity] = (@changed_severity == severity ? " selected" : "")
+    end
   end
   def add_collection
     @object.add_collection(params[:collection])
@@ -332,6 +341,35 @@ class ItemsController < ApplicationController
       else
         raise e
       end
+    end
+  end
+  def get_current_version_tag(item)
+    # create an instance of VersionTag for the current version of item
+    ds = item.datastreams['versionMetadata']
+    cur_version_id = ds.current_version_id
+    cur_tag = Dor::VersionTag.parse(ds.tag_for_version(cur_version_id))
+    return cur_tag
+  end
+  def get_prior_version_tag(item)
+    # create an instance of VersionTag for the second most recent version of item
+    ds = item.datastreams['versionMetadata']
+    prior_version_id = (Integer(ds.current_version_id)-1).to_s
+    prior_tag = Dor::VersionTag.parse(ds.tag_for_version(prior_version_id))
+    return prior_tag
+  end
+  def which_severity_changed(cur_version_tag, prior_version_tag)
+    # given two instances of VersionTag, find the most significant part of the field which changed
+    # between the two (return nil if either instance is nil or if they're the same)
+    if cur_version_tag == nil || prior_version_tag == nil
+      return nil
+    elsif cur_version_tag.major != prior_version_tag.major
+      return :major
+    elsif cur_version_tag.minor != prior_version_tag.minor
+      return :minor
+    elsif cur_version_tag.admin != prior_version_tag.admin
+      return :admin
+    else
+      return nil
     end
   end
   def close_version
