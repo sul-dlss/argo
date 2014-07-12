@@ -49,6 +49,7 @@ group :development do
   gem 'ruby-prof'
   gem 'sqlite3'
   gem 'pry-debugger'
+  gem 'pry-remote'
   gem 'pry-rails'
 end
 
