@@ -72,22 +72,12 @@ class ApoController < ApplicationController
       item.creative_commons_license = params[:cc_license]
       item.creative_commons_license_human=@cc[params[:cc_license]]
       item.default_rights = params[:default_object_rights]
-      managers=params[:managers].split ' '
-      viewers=params[:viewers].split ' '
-      managers.each do |manager|
-        if manager.include? 'sunetid'
-          item.add_roleplayer 'dor-apo-manager', manager, 'person'
-        else
-          item.add_roleplayer 'dor-apo-manager', manager 
-        end
-      end
-      viewers.each do |viewer|
-        if viewer.include? 'sunetid'
-          item.add_roleplayer 'dor-apo-viewer', viewer, 'person'
-        else
-          item.add_roleplayer 'dor-apo-viewer', viewer 
-        end
-      end
+      managers = split_roleplayer_input_field(params[:managers])
+      viewers = split_roleplayer_input_field(params[:viewers])
+      depositors = split_roleplayer_input_field(params[:depositors])
+      add_roleplayers_to_object(item, managers, 'dor-apo-manager')
+      add_roleplayers_to_object(item, viewers, 'dor-apo-viewer')
+      add_roleplayers_to_object(item, depositors, 'dor-apo-depositor')
       item.save
       item.update_index
       notice = 'APO created. '
@@ -103,23 +93,20 @@ class ApoController < ApplicationController
       create_obj
       @managers=[]
       @viewers=[]
-      if @object.roles['dor-apo-manager']
-        @object.roles['dor-apo-manager'].each do |entity|
-          @managers << entity.gsub('workgroup:', '').gsub('person:', '')
-        end
-      end
-      if @object.roles['dor-apo-viewer']
-        @object.roles['dor-apo-viewer'].each do |entity|
-          @viewers << entity.gsub('workgroup:', '').gsub('person:', '')
-        end
-      end
+      @depositors=[]
+      populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
+      populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
+      populate_role_form_field_var(@object.roles['dor-apo-depositor'], @depositors)
     end
   end
+
   def param_cleanup params
     params[:title].strip! unless not params[:title]
-    params[:managers]=params[:managers].gsub('\n',' ').gsub(',',' ') unless not params[:managers]
-    params[:viewers]=params[:viewers].gsub('\n',' ').gsub(',',' ') unless not params[:viewers]
+    [:managers, :viewers, :depositors].each do |role_param_sym|
+      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless not params[role_param_sym]
+    end
   end
+
   def update 
     @cc= {
       'by' => 'Attribution 3.0 Unported',
@@ -176,25 +163,16 @@ class ApoController < ApplicationController
     @object.creative_commons_license_human=@cc[params[:cc_license]]
     @object.default_rights = params[:default_object_rights]
     @object.purge_roles
-    managers=params[:managers].split(/[,\s]/).reject(){|str| str.empty?}
-    viewers=params[:viewers].split(/[,\s]/).reject(){|str| str.empty?}
-    managers.each do |manager|
-      if manager.include? 'sunetid'
-        @object.add_roleplayer 'dor-apo-manager', manager, 'person'
-      else
-        @object.add_roleplayer 'dor-apo-manager', manager 
-      end
-    end
-    viewers.each do |viewer|
-      if viewer.include? 'sunetid'
-        @object.add_roleplayer 'dor-apo-viewer', viewer, 'person'
-      else
-        @object.add_roleplayer 'dor-apo-viewer', viewer 
-      end
-    end
+    managers = split_roleplayer_input_field(params[:managers])
+    viewers = split_roleplayer_input_field(params[:viewers])
+    depositors = split_roleplayer_input_field(params[:depositors])
+    add_roleplayers_to_object(@object, managers, 'dor-apo-manager')
+    add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
+    add_roleplayers_to_object(@object, depositors, 'dor-apo-depositor')
     @object.save
     redirect
   end
+
   def register_collection
     if params[:collection_title] or params[:collection_catkey]
       
@@ -280,11 +258,14 @@ class ApoController < ApplicationController
   end
 
 
-  private 
+
+  private
+
   def reindex item
     doc=item.to_solr
     Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
   end
+
   def create_obj
     if params[:id]
       @object = Dor.find params[:id], :lightweight => true
@@ -300,6 +281,29 @@ class ApoController < ApplicationController
       raise 'missing druid'
     end
   end
+
+  def add_roleplayers_to_object(object, roleplayer_list, role)
+    roleplayer_list.each do |roleplayer|
+      if roleplayer.include? 'sunetid'
+        object.add_roleplayer role, roleplayer, 'person'
+      else
+        object.add_roleplayer role, roleplayer
+      end
+    end
+  end
+
+  def populate_role_form_field_var(role_list, form_field_var)
+    if role_list
+      role_list.each do |entity|
+        form_field_var << entity.gsub('workgroup:', '').gsub('person:', '')
+      end
+    end
+  end
+
+  def split_roleplayer_input_field(roleplayer_list_str)
+    return roleplayer_list_str.split(/[,\s]/).reject(){|str| str.empty?}
+  end
+
   def save_and_reindex
     @object.save
   end

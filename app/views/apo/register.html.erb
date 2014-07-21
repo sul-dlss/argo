@@ -42,6 +42,7 @@ end
 	<p class="help" style="margin-left:90px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
 	<div class="register-label-div">Viewer</div><input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @object and @viewers.length>0 ? @viewers.join(', ') : ''%>"/>
 	<p class="help" style="margin-left:90px;font-size:.8em">View only access to the objects</p>
+	<div class="register-label-div">Depositor</div><input type="text" id="depositors" name="depositors" style="width:90%" value="<%= @object and @depositors.length>0 ? @depositors.join(', ') : ''%>"/>
 </div>
 <div class="register-div">
 	<%
