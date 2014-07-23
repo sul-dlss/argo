@@ -74,10 +74,8 @@ class ApoController < ApplicationController
       item.default_rights = params[:default_object_rights]
       managers = split_roleplayer_input_field(params[:managers])
       viewers = split_roleplayer_input_field(params[:viewers])
-      depositors = split_roleplayer_input_field(params[:depositors])
       add_roleplayers_to_object(item, managers, 'dor-apo-manager')
       add_roleplayers_to_object(item, viewers, 'dor-apo-viewer')
-      add_roleplayers_to_object(item, depositors, 'dor-apo-depositor')
       item.save
       item.update_index
       notice = 'APO created. '
@@ -93,16 +91,14 @@ class ApoController < ApplicationController
       create_obj
       @managers=[]
       @viewers=[]
-      @depositors=[]
       populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
       populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
-      populate_role_form_field_var(@object.roles['dor-apo-depositor'], @depositors)
     end
   end
 
   def param_cleanup params
     params[:title].strip! unless not params[:title]
-    [:managers, :viewers, :depositors].each do |role_param_sym|
+    [:managers, :viewers].each do |role_param_sym|
       params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless not params[role_param_sym]
     end
   end
@@ -165,10 +161,8 @@ class ApoController < ApplicationController
     @object.purge_roles
     managers = split_roleplayer_input_field(params[:managers])
     viewers = split_roleplayer_input_field(params[:viewers])
-    depositors = split_roleplayer_input_field(params[:depositors])
     add_roleplayers_to_object(@object, managers, 'dor-apo-manager')
     add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
-    add_roleplayers_to_object(@object, depositors, 'dor-apo-depositor')
     @object.save
     redirect
   end
