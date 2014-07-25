@@ -86,11 +86,17 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (~> 1.3)
+    capistrano-bundler (1.1.2)
+      capistrano (~> 3.0)
+      sshkit (~> 1.2)
     capistrano-holepicker (0.0.1)
       capistrano (~> 3.0)
       holepicker
     capistrano-one_time_key (0.0.1)
       capistrano (~> 3.0)
+    capistrano-rails (1.1.1)
+      capistrano (~> 3.1)
+      capistrano-bundler (~> 1.1)
     capistrano-releaseboard (0.0.1)
       faraday
     capybara (2.3.0)
@@ -436,6 +442,7 @@ DEPENDENCIES
   blacklight (~> 3.7)
   blacklight-hierarchy (~> 0.0.3)
   capistrano (~> 3.0)
+  capistrano-rails
   capybara
   coderay
   coffee-rails (~> 3.2.1)

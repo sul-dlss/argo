@@ -68,5 +68,6 @@ end
 
 group :development,:deployment do
   gem 'capistrano', '~> 3.0'
+  gem 'capistrano-rails'
 	gem 'lyberteam-capistrano-devel', '>= 3.0'
 end
