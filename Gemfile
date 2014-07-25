@@ -13,7 +13,7 @@ gem 'net-sftp'
 gem 'rake'
 gem 'about_page'
 gem 'is_it_working-cbeer'
-gem 'rack-webauth', :git => "https://github.com/sul-dlss/rack-webauth.git"
+gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'

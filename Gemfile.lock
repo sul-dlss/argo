@@ -5,8 +5,8 @@ GIT
     thread (0.2.0)
 
 GIT
-  remote: https://github.com/sul-dlss/rack-webauth.git
-  revision: 655e83ddc28d569545c82c10c2cce60a59c359c9
+  remote: https://github.com/nilclass/rack-webauth.git
+  revision: 353eb1d893dc54fd02ae5097df6e1219391cf3ae
   specs:
     rack-webauth (0.1.3)
       rack
