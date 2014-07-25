@@ -44,13 +44,13 @@ describe User do
   end
   describe "is_admin" do
   	it 'should be true if the group is an admin group' do
-      subject.stub(:groups).and_return(['workgroup:dlss:dor-admin'])
+      subject.stub(:groups).and_return(['workgroup:sdr:administrator-role'])
       subject.is_admin.should == true
     end
   end
   describe 'is_viewer' do
     it 'should be true if the group is a viewer grou' do
-      subject.stub(:groups).and_return(['workgroup:dlss:dor-viewer'])
+      subject.stub(:groups).and_return(['workgroup:sdr:viewer-role'])
       subject.is_viewer.should == true
     end
   end
