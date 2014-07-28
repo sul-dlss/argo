@@ -62,9 +62,12 @@ describe User do
     @answer['response']['docs']=[]
     @doc={}
     @doc['apo_role_dor-administrator_t']=['dlss:groupA', 'dlss:groupB']
+    @doc['apo_role_sdr-administrator_t']=['dlss:groupA', 'dlss:groupB']
     @doc['apo_role_dor-apo-manager_t']=['dlss:groupC', 'dlss:groupD']
     @doc['apo_role_dor-viewer_t']=['dlss:groupE', 'dlss:groupF']
+    @doc['apo_role_sdr-viewer_t']=['dlss:groupE', 'dlss:groupF']
     @doc['apo_role_person_dor-viewer_t']=['sunetid:tcramer']
+    @doc['apo_role_person_sdr-viewer_t']=['sunetid:tcramer']
     @doc['apo_role_group_manager_t']=['dlss:groupR']
     @answer['response']['docs'] << @doc
     Dor::SearchService.stub(:query).and_return(@answer)
@@ -74,7 +77,7 @@ describe User do
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
-      res.should == ['dor-administrator','dor-viewer']
+      res.should == ['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer']
     end
     it 'should translate the old "manager" role into dor-apo-manager' do
       User.any_instance.stub(:groups).and_return(['dlss:groupR'])
@@ -88,7 +91,7 @@ describe User do
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
-      res.should == ['dor-viewer']
+      res.should == ['dor-viewer', 'sdr-viewer']
     end
     it 'should hang onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
       User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
