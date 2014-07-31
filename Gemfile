@@ -1,6 +1,4 @@
 source "https://rubygems.org"
-source "http://sul-gems.stanford.edu"
-
 
 gem 'stanford-mods'
 gem 'mods_display'
@@ -15,7 +13,7 @@ gem 'net-sftp'
 gem 'rake'
 gem 'about_page'
 gem 'is_it_working-cbeer'
-gem 'rack-webauth', :git => "https://github.com/sul-dlss/rack-webauth.git"
+gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
 gem 'thin' # or mongrel
 gem 'prawn', ">=0.12.0"
 gem 'barby'
@@ -69,12 +67,7 @@ group :production do
 end
 
 group :development,:deployment do
-  gem 'capistrano', '~>2'
-  gem 'capistrano-ext'
-  gem 'rvm-capistrano'
-  gem 'lyberteam-devel', '>=1.0.0'
-  gem 'lyberteam-gems-devel', '>=1.0.0'
-	gem 'lyberteam-capistrano-devel', '>= 1.1.0'
-  gem 'net-ssh-krb'
+  gem 'capistrano', '~> 3.0'
+  gem 'capistrano-rails'
+	gem 'lyberteam-capistrano-devel', '>= 3.0'
 end
-gem 'gssapi', :git => 'https://github.com/cbeer/gssapi.git'
