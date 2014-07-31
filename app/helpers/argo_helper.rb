@@ -163,7 +163,7 @@ module ArgoHelper
     sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
     result = ''
     sections.each_with_index do |section_name,index|
-      result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc,:object=>dor_object, :admin_policy_object => @apo, :format=>format,:section=>section_name,:collapsible=>(index > 0)})
+      result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc, :object=>dor_object, :format=>format, :section=>section_name, :collapsible=>(index > 0)})
     end
     return result.html_safe
   end
