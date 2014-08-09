@@ -8,7 +8,7 @@
 	%>
 	<br>
 	Enter a group or a comma separated list of groups to impersonate<br>
-	<%= form_tag('/auth/set_groups') do%>
+	<%= form_tag('/auth/remember_impersonated_groups') do%>
 	<%= text_field_tag(:groups) %>
 	  <%= submit_tag("Impersonate") %>
 	<%end%>

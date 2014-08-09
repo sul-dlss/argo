@@ -8,7 +8,7 @@ class CatalogController < ApplicationController
   #include BlacklightFacetExtras::Query::ControllerExtension
   helper ArgoHelper
 
-  before_filter :reformat_dates, :session_groups
+  before_filter :reformat_dates, :set_user_obj_instance_var
   
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
 
@@ -183,11 +183,8 @@ class CatalogController < ApplicationController
       end
 
       private
-      def session_groups
+      def set_user_obj_instance_var
         @user=current_user
-        if session[:groups]
-          @user.set_groups session[:groups]
-        end
       end
       def reformat_dates
         params.each do |key, val|

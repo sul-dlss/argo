@@ -142,8 +142,8 @@ end
     get 'logout'
     get 'profile'
     get 'groups'
-    post '/set_groups', :action => :set_groups, :as => 'set_groups'
-    get 'remove_groups'
+    post '/remember_impersonated_groups', :action => :remember_impersonated_groups, :as => 'remember_impersonated_groups'
+    get 'forget_impersonated_groups'
   end
 
 	namespace :dor do

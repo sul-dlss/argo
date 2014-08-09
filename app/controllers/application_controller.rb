@@ -37,13 +37,18 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
+    cur_user = nil
     if webauth and webauth.logged_in?
-      User.find_or_create_by_webauth(webauth)
+      cur_user = User.find_or_create_by_webauth(webauth)
     elsif request.env['REMOTE_USER']
-      User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
-    else
-      nil
+      cur_user = User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
     end
+
+    if cur_user && session[:groups]
+      cur_user.set_groups_to_impersonate session[:groups]
+    end
+
+    return cur_user
   end
 
   def current_or_guest_user

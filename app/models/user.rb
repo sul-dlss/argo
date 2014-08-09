@@ -63,6 +63,7 @@ class User < ActiveRecord::Base
     @role_cache[pid]=toret
     toret
   end
+
   #array of apos the user is allowed to view
   def known_roles
     ['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer', 'dor-apo-creator', 'dor-apo-manager', 'dor-apo-depositor', 'dor-apo-reviewer', 'dor-apo-metadata', 'dor-apo-viewer']
@@ -94,6 +95,7 @@ class User < ActiveRecord::Base
     end
     pids  
   end
+
   def permitted_collections
     q = 'objectType_t:collection AND !tag_facet:"Project : Hydrus" '
     qrys=[]
@@ -119,66 +121,53 @@ class User < ActiveRecord::Base
     end
     res
   end
+
   #this is a nasty way to deal with the bizzare ascii results coming from solr. Upgrading to blacklight 4.2 looks like it will remove the need for this
   def chomp_title title
     title.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
   end
-  @groups
+
+  @groups_to_impersonate
   #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions
-  def set_groups grps
-    @groups=grps
+  def set_groups_to_impersonate grps
+    @groups_to_impersonate = grps
   end
+
   def groups
-    if @groups
-      return @groups
-    end
+    return @groups_to_impersonate if @groups_to_impersonate
+
     perm_keys = ["sunetid:#{self.login}"]
     if webauth and webauth.privgroup.present?
       perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
     end
+
     return perm_keys
   end
   
-  #is the user a repository wide administrator
-  def is_admin
-    #if this is an admin wanting to view the world as if they werent, accomidate them.
-    if @groups
-      return false
-    end
-    ADMIN_GROUPS.each do |group|
+  def belongs_to_listed_group? group_list
+    group_list.each do |group|
       if self.groups.include? group
         return true 
       end
     end
     return false
+  end
+
+  #is the user a repository wide administrator
+  def is_admin
+    return belongs_to_listed_group? ADMIN_GROUPS
   end
   
   #is the user a repository wide viewer
   def is_viewer
-    #if this is an admin wanting to view the world as if they werent, accomidate them.
-    if @groups
-      return false
-    end
-    VIEWER_GROUPS.each do |group|
-      if self.groups.include? group
-        return true 
-      end
-    end
-    return false
+    return belongs_to_listed_group? VIEWER_GROUPS
   end
+
   #is the user a repo wide manager
   def is_manager
-    #if this is an admin wanting to view the world as if they werent, accomidate them.
-    if @groups
-      return false
-    end
-    MANAGER_GROUPS.each do |group|
-      if self.groups.include? group
-        return true 
-      end
-    end
-    return false
+    return belongs_to_listed_group? MANAGER_GROUPS
   end
+
   def login
     if webauth
       webauth.login
@@ -186,5 +175,4 @@ class User < ActiveRecord::Base
       sunetid
     end
   end
-
 end
