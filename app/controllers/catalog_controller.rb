@@ -125,77 +125,78 @@ class CatalogController < ApplicationController
       :identification => [
         ['id','objectType_t','content_type_facet','status_display','wf_error_display'],
         ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t','preserved_size_display']
-        ],
-        :full_identification => [
-          ['id','objectType_t','content_type_facet','metadata_source_t'],
-          ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
-        ]
-      }
+      ],
+      :full_identification => [
+        ['id','objectType_t','content_type_facet','metadata_source_t'],
+        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
+      ]
+    }
 
+  end
+
+  def solr_doc_params(id=nil)
+    id ||= params[:id]
+    {
+      :q => %{id:"#{id}"}
+    }
+  end
+
+  def show
+    params[:id] = 'druid:' + params[:id] if not params[:id].include? 'druid'
+    @obj = Dor.find params[:id]
+    apo = nil
+    begin
+      @apo = @obj.admin_policy_object
+    rescue
     end
-
-    def solr_doc_params(id=nil)
-      id ||= params[:id]
-      {
-        :q => %{id:"#{id}"}
-      }
+    if not @apo and not @user.is_admin and not @user.is_viewer
+      render :status=> :forbidden, :text =>'No APO, no access'
+      return
     end
+    #if there is no apo and things got to this point, they are a repo viewer or admin
+    if @apo and not @obj.can_view_metadata?(@user.roles(@apo.pid)) and not @user.is_admin and not @user.is_viewer
+      render :status=> :forbidden, :text =>'forbidden'
+      return
+    end
+    super()
+  end
 
-    def show
-      params[:id] = 'druid:' + params[:id] if not params[:id].include? 'druid'
-      @obj = Dor.find params[:id]
-        apo=nil
-        begin
-        @apo=@obj.admin_policy_object
-        rescue
-        end
-        if not @apo and not @user.is_admin and not @user.is_viewer
-          render :status=> :forbidden, :text =>'No APO, no access'
-          return
-        end
-        #if there is no apo and things got to this point, they are a repo viewer or admin
-        if @apo and not @obj.can_view_metadata?(@user.roles(@apo.pid)) and not @user.is_admin and not @user.is_viewer
-          render :status=> :forbidden, :text =>'forbidden'
-          return
-        end
-        super()
-      end
-      def datastream_view
-        @response, @document = get_solr_response_for_doc_id
-        @obj = Dor.find params[:id], :lightweight => true
-        ds = @obj.datastreams[params[:dsid]]
-        data = @obj.datastreams[params[:dsid]].content 
-        unless data.nil?
-          send_data data, :type => 'xml', :disposition => 'inline'
-        else
-          raise ActionController::RoutingError.new('Not Found')
-        end
-      end
+  def datastream_view
+    @response, @document = get_solr_response_for_doc_id
+    @obj = Dor.find params[:id], :lightweight => true
+    ds = @obj.datastreams[params[:dsid]]
+    data = @obj.datastreams[params[:dsid]].content 
+    unless data.nil?
+      send_data data, :type => 'xml', :disposition => 'inline'
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
+  end
 
-      def show_aspect
-        if @obj.nil?
-          @obj = Dor.find params[:id] if params[:id].include? 'druid'
-          @obj = Dor.find 'druid:' + params[:id] if not params[:id].include? 'druid'
-          
-        end
-        @response, @document = get_solr_response_for_doc_id
-        render :layout => request.xhr? ? false : true
-      end
+  def show_aspect
+    if @obj.nil?
+      @obj = Dor.find params[:id] if params[:id].include? 'druid'
+      @obj = Dor.find 'druid:' + params[:id] if not params[:id].include? 'druid'
+    end
+    @response, @document = get_solr_response_for_doc_id
+    render :layout => request.xhr? ? false : true
+  end
 
-      private
-      def set_user_obj_instance_var
-        @user=current_user
-      end
-      def reformat_dates
-        params.each do |key, val|
-          begin 
-            if(key=~  /_datepicker/ and val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
-              val= DateTime.parse(val).beginning_of_day.utc.xmlschema
-              field=key.split( '_after_datepicker').first.split('_before_datepicker').first
-              params[:f][field]='['+val.to_s+'Z TO *]'
-            end
-          rescue
-          end
+  private
+  def set_user_obj_instance_var
+    @user = current_user
+  end
+
+  def reformat_dates
+    params.each do |key, val|
+      begin
+        if (key=~  /_datepicker/ and val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
+          val = DateTime.parse(val).beginning_of_day.utc.xmlschema
+          field = key.split( '_after_datepicker').first.split('_before_datepicker').first
+          params[:f][field] = '['+val.to_s+'Z TO *]'
         end
+      rescue
       end
     end
+  end
+end
