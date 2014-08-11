@@ -16,6 +16,24 @@ describe ApplicationController do
       subject.stub(:webauth).and_return(double(:webauth_user, :logged_in? => false))
       subject.current_user.should be_nil
     end
+    it "should return the user's groups if impersonation info wasn't specified" do
+      webauth_privgroup_str = "dlss:testgroup1|dlss:testgroup2|dlss:testgroup3"
+      subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
+
+      # note the check for sunetid:sunetid.  user's sunetid should be prepended to the group list returned by webauth.
+      # note also that workgroup: should be prepended to each workgroup name.
+      expected_groups = ['sunetid:sunetid'] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
+      expect(subject.current_user.groups).to eq(expected_groups)
+    end
+    it "should override the user's groups if impersonation info was specified" do
+      webauth_privgroup_str = "dlss:testgroup1|dlss:testgroup2|dlss:testgroup3"
+      impersonated_groups = ["workgroup:dlss:impersonatedgroup1", "workgroup:dlss:impersonatedgroup2"]
+      session[:groups] = impersonated_groups
+
+      subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
+
+      expect(subject.current_user.groups).to eq(impersonated_groups)
+    end
   end
 
   describe "#development_only!" do
