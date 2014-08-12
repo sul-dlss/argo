@@ -118,6 +118,7 @@ describe User do
       user = User.find_or_create_by_webauth(mock_webauth)
       Dor::SearchService.should_receive(:query).once
       res=user.roles('pid')
+      res=user.roles('pid')
     end
   end
 
