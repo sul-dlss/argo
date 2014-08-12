@@ -144,6 +144,20 @@ describe User do
       
       expect(user.groups).to eq(impersonated_groups)
     end
+    it "should return false for is_admin/is_manager/is_viewer if such groups aren't specified for impersonation, even if the user is part of the admin/manager/viewer groups" do
+      webauth_privgroup_str = "sdr:administrator-role|sdr:manager-role|sdr:viewer-role"
+      sunetid = 'asdf'
+      mock_webauth = double('webauth', :login => sunetid, :logged_in? => true, :privgroup => webauth_privgroup_str)
+      user = User.find_or_create_by_webauth(mock_webauth)
+      expect(user.is_admin).to eq(true)
+      expect(user.is_manager).to eq(true)
+      expect(user.is_viewer).to eq(true)
+
+      user.set_groups_to_impersonate(['workgroup:sdr:not-an-administrator-role', 'workgroup:sdr:not-a-manager-role', 'workgroup:sdr:not-a-viewer-role'])
+      expect(user.is_admin).to eq(false)
+      expect(user.is_manager).to eq(false)
+      expect(user.is_viewer).to eq(false)
+    end
   end
 
   #TODO
