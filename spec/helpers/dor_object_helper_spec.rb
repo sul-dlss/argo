@@ -27,12 +27,8 @@ describe DorObjectHelper do
       steps = Dor::Processable::STEPS
       highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
 
-      mock_dor_obj_list = []
       highlighted_statuses.each do |status_code|
-        mock_dor_obj_list << double(Dor::Processable, :status_info => {:status_code => status_code})
-      end
-
-      mock_dor_obj_list.each do |mock_dor_obj|
+        mock_dor_obj = double(Dor::Processable, :status_info => {:status_code => status_code})
         expect(render_status_style(nil, mock_dor_obj)).to eq("argo-obj-status-highlight")
       end
     end
@@ -42,12 +38,8 @@ describe DorObjectHelper do
       # note that we omit steps['opened'] because it has the same status code as steps['registered'] and will result in an erroneous test failure
       non_highlighted_statuses = [steps['accessioned'], steps['indexed'], steps['shelved']]
 
-      mock_dor_obj_list = []
       non_highlighted_statuses.each do |status_code|
-        mock_dor_obj_list << double(Dor::Processable, :status_info => {:status_code => status_code})
-      end
-
-      mock_dor_obj_list.each do |mock_dor_obj|
+        mock_dor_obj = double(Dor::Processable, :status_info => {:status_code => status_code})
         expect(render_status_style(nil, mock_dor_obj)).to eq("")
       end
     end
