@@ -7,7 +7,9 @@
           <% unless solr_fname == 'status_display' %>
             <%= render_document_show_field_value :document => document, :field => solr_fname %>
           <% else %>
-            <span class="<%= render_status_style(document, dor_obj) %>"><%= render_status(document, dor_obj) %></span>
+            <span class="<%= render_status_style(document, dor_obj) %>">
+              <%= render_document_show_field_value :document => document, :field => solr_fname %>
+            </span>
           <% end %>  
         </dd>
       <% rescue NameError 
