@@ -4,7 +4,9 @@
 </div>
 <% blacklight_config[:field_groups][:identification].each do |field_names| %>
   <div class="narrow column">
-    <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => field_names } %>
+    <%= render :partial => "catalog/_show_partials/field_list", :locals => { :document => document, 
+                                                                            :field_names => field_names, 
+                                                                            :dor_obj => get_dor_obj_if_exists(document['id']) } %>
   </div>
 <% end %>
 <div class="clear"></div>
