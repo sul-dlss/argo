@@ -1,0 +1,3 @@
+== Certificates
+
+Dor-services uses certs for client authentication.  When you get them, put them in here.
