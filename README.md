@@ -3,21 +3,40 @@
 Argo is the administrative interface to the Stanford Digital Repository. It uses Blacklight and ActiveFedora to expose the repository contents, and DorServices to enable editing and updating. 
 
 ## Getting Started
-Argo current requires gems off Stanford's internal gem server.  If you are interested in running Argo as a Hydra head, it is suggested you contact DLSS at Standord Libraries for further information on Argo's dependencies.  
+Argo currently requires some unpublished gems from Stanford's internal gem server.  If you are interested in running Argo as a Hydra head, for further information on Argo's dependencies please contact DLSS at Standord Libraries (https://library.stanford.edu/department/digital-library-systems-and-services-dlss#) or open an issue on github.
 
-1. Check Out the Code
+### Check Out the Code
     
 ```bash
-    cd [ROOT LOCATION OF WHERE YOU WANT THE ARGO FOLDER TO GO]
-    git clone git clone https://github.com/sul-dlss/argo.git
-    cd argo
+cd [ROOT LOCATION WHERE YOU WANT ARGO FOLDER TO GO]
+git clone https://github.com/sul-dlss/argo.git
+cd argo
 ```
 
-1.  Install the dependencies:
+### Install dependencies
 
-```
-    bundle install
+```bash
+# install ruby (e.g., via rvm)
+# 
+bundle install
 ```
     
-1.  Configure the solr and database yml files.  Stanford users should review internal documentation.
+### Configure the solr and database yml files.  Stanford users should review internal documentation.
+
+### Install components and DB:
+
+```bash
+rake jetty:clean
+rake db:setup
+rake db:test:prepare
+rake db:migrate RAILS_ENV=test
+rake tmp:create
+```
+
+## Run the server
+
+```bash
+rake jetty:start
+rails server    # alternatively: rake server
+```
 
