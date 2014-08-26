@@ -1,4 +1,5 @@
-<% if object.datastreams.keys.include?('contentMetadata') and not object.datastreams['contentMetadata'].new? %>
+<% if object.datastreams.keys.include?('contentMetadata') && 
+	(not object.datastreams['contentMetadata'].new?) && object.datastreams['contentMetadata'].metadata? %>
 	<% content_ds = object.datastreams['contentMetadata'] %>
 	<% admin_policy_object = @apo %>
 	<div style="clear:left">
@@ -95,4 +96,12 @@
 						
 							    
 					</div>
-				<% end %>
+<% else %>
+	<div style="clear:left">
+		<ul class="resource-tree">
+			<li>
+				<span class="label">Preservation Size</span> 0 bytes
+			</li>
+		</ul>
+	</div>
+<% end %>
