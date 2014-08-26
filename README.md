@@ -7,13 +7,17 @@ Argo current requires gems off Stanford's internal gem server.  If you are inter
 
 1. Check Out the Code
     
+```bash
     cd [ROOT LOCATION OF WHERE YOU WANT THE ARGO FOLDER TO GO]
     git clone git clone https://github.com/sul-dlss/argo.git
     cd argo
+```
 
 1.  Install the dependencies:
 
+```
     bundle install
+```
     
-1.  Configure the solr and database yml files.  Stanford users should review internal documentation.       
+1.  Configure the solr and database yml files.  Stanford users should review internal documentation.
 
