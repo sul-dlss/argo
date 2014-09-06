@@ -28,7 +28,6 @@ bundle install
 ```bash
 rake jetty:clean
 rake db:setup
-rake db:test:prepare
 rake db:migrate RAILS_ENV=test
 rake tmp:create
 ```
