@@ -31,8 +31,8 @@ describe ItemsController do
     @item.stub(:admin_policy_object).and_return(@apo)
     Dor::SearchService.solr.stub(:add)
     @pid='oo201oo0001'
-
   end
+
   describe 'datastream_update' do
     it 'should allow a non admin to update the datastream' do
       @item.stub(:can_manage_content?).and_return(true)
@@ -98,45 +98,45 @@ describe "open_version" do
   it 'should call dor-services to open a new version' do
     ran=false
     @item.stub(:open_new_version)do 
-    ran=true
+      ran=true
+    end
+    version_metadata=double(Dor::VersionMetadataDS)
+    version_metadata.stub(:current_version_id).and_return(2)
+    version_metadata.should_receive(:update_current_version)
+    @item.stub(:versionMetadata).and_return(version_metadata)
+    @item.stub(:current_version).and_return('2')
+    @item.should_receive(:save)
+    Dor::SearchService.solr.should_receive(:add)
+    get 'open_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
+    ran.should == true
+  end 
+  it 'should 403 if you arent an admin' do
+    @current_user.stub(:is_admin).and_return(false)
+    get 'open_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
+    response.code.should == "403"
   end
-  version_metadata=double(Dor::VersionMetadataDS)
-  version_metadata.stub(:current_version_id).and_return(2)
-  version_metadata.should_receive(:update_current_version)
-  @item.stub(:versionMetadata).and_return(version_metadata)
-  @item.stub(:current_version).and_return('2')
-  @item.should_receive(:save)
-  Dor::SearchService.solr.should_receive(:add)
-  get 'open_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
-  ran.should == true
-end 
-it 'should 403 if you arent an admin' do
-  @current_user.stub(:is_admin).and_return(false)
-  get 'open_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
-  response.code.should == "403"
-end
 end
 describe "close_version" do
   it 'should call dor-services to close the version' do
     ran=false
     @item.stub(:close_version)do 
-    ran=true
+      ran=true
+    end
+    version_metadata=double(Dor::VersionMetadataDS)
+    version_metadata.stub(:current_version_id).and_return(2)
+    @item.stub(:versionMetadata).and_return(version_metadata)
+    version_metadata.should_receive(:update_current_version)
+    @item.stub(:current_version).and_return('2')
+    @item.should_receive(:save)
+    Dor::SearchService.solr.should_receive(:add)
+    get 'close_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
+    ran.should == true
   end
-  version_metadata=double(Dor::VersionMetadataDS)
-  version_metadata.stub(:current_version_id).and_return(2)
-  @item.stub(:versionMetadata).and_return(version_metadata)
-  version_metadata.should_receive(:update_current_version)
-  @item.stub(:current_version).and_return('2')
-  @item.should_receive(:save)
-  Dor::SearchService.solr.should_receive(:add)
-  get 'close_version', :id => 'oo201oo0001', :severity => 'major', :description => 'something'
-  ran.should == true
-end
-it 'should 403 if you arent an admin' do
-  @current_user.stub(:is_admin).and_return(false)
-  get 'close_version', :id => 'oo201oo0001'
-  response.code.should == "403"
-end
+  it 'should 403 if you arent an admin' do
+    @current_user.stub(:is_admin).and_return(false)
+    get 'close_version', :id => 'oo201oo0001'
+    response.code.should == "403"
+  end
 end
 describe "source_id" do
   it 'should update the source id' do
