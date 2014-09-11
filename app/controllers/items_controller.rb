@@ -485,13 +485,13 @@ class ItemsController < ApplicationController
     end
   end
   def discoverable
-    messages=mods_discoverabable @object.descMetadata.ng_xml
+    messages = mods_discoverable @object.descMetadata.ng_xml
     if messages.length == 0
       render :status => :ok, :text => 'Discoverable.'
     else
-      msgs=''
+      msgs = ''
       messages.each do |msg|
-        msgs+=msg
+        msgs += msg
       end
       render :status => 500, :text => msgs
     end
@@ -509,7 +509,7 @@ class ItemsController < ApplicationController
   def remediate_mods
     render :status => :ok, :text => 'method disabled'
     return
-    
+
     ds=@object.descMetadata
     content=ds.content
     mclaughlin_remediation ds.ng_xml
