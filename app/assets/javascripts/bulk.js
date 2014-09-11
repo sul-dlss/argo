@@ -102,10 +102,8 @@ function release_hold(druids){
 	process_post(druids,'',release_hold_url, "Hold released.")
 }
 function set_rights(druids){
-	var params={
-		'rights': $('#rights_select').val(),
-	}
-	process_post(druids, params, rights_url, "Updated");
+	var params = {rights: $('#rights_select').val()}
+	process_post(druids, set_rights_url, params, "Updated");
 }
 function create_desc_md(druids){
 	process_get(druids, create_desc_md_url ,"Updated");
@@ -321,8 +319,9 @@ function source_id(){
 			success_handler(element_url, 'Updated	');
 		})
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-})
+	})
 }
+
 function set_tags(){
 	cons=[];
 	job_count = [];
