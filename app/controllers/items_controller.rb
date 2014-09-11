@@ -4,6 +4,7 @@ class ItemsController < ApplicationController
   require 'net/sftp'
   require 'equivalent-xml'
   include ItemsHelper
+  include DorObjectHelper
   include ModsDisplay::ControllerExtension
   before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
   before_filter :forbid_modify, :only => [:add_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id,:delete_file, :close_version, :open_version, :resource, :add_file, :replace_file,:update_attributes, :update_resource, :update_mods, :mods, :datastream_update ]
@@ -42,6 +43,7 @@ class ItemsController < ApplicationController
     }
     render :json => @image_data.to_json
   end
+
   def on_hold
     begin
       if (@object.workflows.include?('accession2WF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF2', 'sdr-ingest-transfer')=='hold') or (@object.workflows.include?('accessionWF') and Dor::WorkflowService.get_workflow_status('dor', pid, 'accessionWF', 'sdr-ingest-transfer')=='hold')
@@ -53,33 +55,21 @@ class ItemsController < ApplicationController
       return false
     end
   end
+
   #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version. 
   def prepare
-
-    if not  Dor::WorkflowService.get_lifecycle('dor', @object.pid, 'submitted' ) or on_hold
-      #this item hasnt been submitted yet, it can be modified
-    else
-      #this item must go though versioning, is it already open?
-      if @object.new_version_open?
-
-      else
-        #can it be opened?
-        begin
-          @object.open_new_version
-          @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
-          @object.save
-          severity=params[:severity]
-          desc=params[:description]
-          ds=@object.versionMetadata
-          ds.update_current_version({:description => desc,:significance => severity.to_sym})
-        rescue Dor::Exception => e
-          render :status=> :precondition_failed, :text => e
-          return;
-        end
+    if can_open_version? @object.pid
+      begin
+        vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
+        @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+      rescue Dor::Exception => e
+        render :status=> :precondition_failed, :text => e
+        return;
       end
     end
     render :status => :ok, :text => 'All good'
   end
+
   def close_version_ui
     @description = @object.datastreams['versionMetadata'].current_description
     @tag = @object.datastreams['versionMetadata'].current_tag
@@ -324,13 +314,8 @@ class ItemsController < ApplicationController
   def open_version
     puts params[:description]
     begin
-      @object.open_new_version
-      @object.datastreams['events'].add_event("open", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " opened")
-      @object.save
-      severity=params[:severity]
-      desc=params[:description]
-      ds=@object.versionMetadata
-      ds.update_current_version({:description => desc,:significance => severity.to_sym})
+      vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
+      @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }  
       end
