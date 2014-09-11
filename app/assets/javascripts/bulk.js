@@ -127,6 +127,7 @@ function discoverable(druids){
 	process_get(druids, discoverable_url, "Dicoverable");
 }
 function remediate_mods(druids){
+	return; //disabled for now
 	cons=[];
 	$.each(druids, function(i,element){
 		var element_url=catalog_url(element);
