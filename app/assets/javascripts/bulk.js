@@ -59,40 +59,39 @@ function purge(druids){
 	process_get(druids, purge_url, "Purged");
 }
 
-function fetch_druids(fun)
-{
+function fetch_druids(fun) {
 	$(".stop_button").show();
-	log=document.getElementById('log');
-	log.style.display="block";
-	if(document.getElementById('pids').value.length>5)
-	{
-		txt=document.getElementById('pids').value
-		txt=txt.replace(/druid:/g,'');
-		druids=txt.split("\n");
-		last=druids.pop();
-		if(last != ''){druids.push(last);}
-		log.innerHTML="Using "+ druids.length +" user supplied druids.\n<br>"
-		job_count=[]
-		for(i=druids.length;i>0;i--)
-		{
+	log = document.getElementById('log');
+	log.style.display = "block";
+	var pids_txt = document.getElementById('pids').value.trim();
+	if(pids_txt.length > 5) {
+		//get rid of the 'druid:' prefixes, split the text on line breaks, trim each line, discard empties
+		pids_txt = pids_txt.replace(/druid:/g, '');
+		var str_trim_fn = function(str) {return str.trim();};
+		var str_is_not_empty_fn = function(str) {return str != null && str.length > 0;}
+		druids = pids_txt.split("\n").map(str_trim_fn).filter(str_is_not_empty_fn);
+
+		log.innerHTML = "Using " + druids.length + " user supplied druids.\n<br>";
+		job_count = [];
+		for(i=druids.length; i>0; i--) {
 			job_count.push(i);
 		}
 		fun(druids);
-	}
-	else{
-		log.innerHTML="Fetching all "+report_model['total_rows']+" druids.<br>\n"
-		$.getJSON(report_model['data_url'], function(data){
-			report_model['druids']=[]
-			$.each(data.druids, function(i,s){
+	} else {
+		log.innerHTML = "Fetching all " + report_model['total_rows'] + " druids.<br>\n"
+		$.getJSON(report_model['data_url'], function(data) {
+			report_model['druids'] = []
+			$.each(data.druids, function(i,s) {
 				report_model['druids'].push(s);
 			});
-			log.innerHTML=log.innerHTML+"Received "+report_model['druids'].length+" pids, starting work<br>\n"
+			log.innerHTML = log.innerHTML + "Received " + report_model['druids'].length + " pids, starting work<br>\n";
 			fun(report_model['druids']);
 		}).error(function(jqXhr, textStatus, error) {
 			alert("ERROR: " + textStatus + ", " + error);
 		});
 	}
 }
+
 function reindex(druids){
 	process_get(druids, reindex_url, 'Reindexed.');
 }
@@ -112,7 +111,8 @@ function create_desc_md(druids){
 	process_get(druids, create_desc_md_url ,"Updated");
 }
 function add_collection(druids){
-	process_post(druids, add_collection_url, "Updated");
+	var collection_id = document.getElementById('collection_select').value;
+	process_post(druids, add_collection_url, {collection: collection_id}, "Collection added");
 }
 function detect_duplicate_encoding(druids){
 	process_get(druids, detect_duplicate_encoding_url, 'No Duplicates.');
