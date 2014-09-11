@@ -507,6 +507,9 @@ class ItemsController < ApplicationController
     ds.save
   end
   def remediate_mods
+    render :status => :ok, :text => 'method disabled'
+    return
+    
     ds=@object.descMetadata
     content=ds.content
     mclaughlin_remediation ds.ng_xml
