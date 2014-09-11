@@ -53,7 +53,7 @@ function set_content_type(druids){
 
 
 function fix_provenance(druids){
-	process_get(druids, provenance_url, "Provenance added.");
+	process_get(druids, fix_provenance_url, "Provenance added.");
 }
 function purge(druids){
 	process_get(druids, purge_url, "Purged");
