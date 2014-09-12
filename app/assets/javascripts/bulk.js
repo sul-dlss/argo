@@ -280,7 +280,8 @@ function source_id(){
 	druids=txt.split("\n")
 	last=druids.pop();
 	if(last != ''){druids.push(last);}
-	d=[]
+	d = []
+	job_count = []
 	for(i=druids.length;i>0;i--)
 	{
 		job_count.push(i);

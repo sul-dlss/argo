@@ -384,7 +384,7 @@ class ItemsController < ApplicationController
     @object.identityMetadata.dirty=true
     respond_to do |format|
       if params[:bulk]
-        render :status => 200, :text =>'Updated source id.'
+        format.html { render :status => :ok, :text => 'Updated source id.' }
       else
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for '+params[:id]+' has been updated!' }  
       end
