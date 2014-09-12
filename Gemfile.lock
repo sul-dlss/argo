@@ -199,12 +199,11 @@ GEM
     i18n (0.6.11)
     is_it_working-cbeer (1.0.16)
     iso-639 (0.2.5)
-    jettywrapper (1.7.0)
+    jettywrapper (1.8.2)
       activesupport (>= 3.0.0)
       childprocess
       i18n
       logger
-      mediashelf-loggable
     journey (1.0.4)
     jquery-rails (2.1.4)
       railties (>= 3.0, < 5.0)
