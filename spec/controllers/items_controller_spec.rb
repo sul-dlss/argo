@@ -353,6 +353,22 @@ describe 'add_collection' do
     response.code.should == "403"
   end
 end
+describe 'set_collection' do
+  it 'should add a collection if there is none yet' do
+    collection_druid = 'druid:1234'
+    @item.stub(:collections).and_return([])
+    @item.should_receive(:add_collection).with(collection_druid)
+    post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
+    response.code.should == "200"
+  end
+  it 'should not add a collection if there is already one' do
+    collection_druid = 'druid:1234'
+    @item.stub(:collections).and_return(['collection'])
+    @item.should_not_receive(:add_collection)
+    post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
+    response.code.should == "500"
+  end
+end
 describe 'remove_collection' do
   it 'should remove a collection' do
     @item.should_receive(:remove_collection).with('druid:1234')

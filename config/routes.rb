@@ -101,6 +101,7 @@ Argo::Application.routes.draw do
     get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
     get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
     post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
+    post '/collection/set', :on => :member, :action => :set_collection, :as => 'set_collection'
     get '/purge', :on => :member, :action => :purge_object
     post '/set_content_type', :on => :member, :action => :set_content_type
     get '/content_type', :on => :member, :action => :content_type
@@ -120,6 +121,7 @@ end
     post '/version/open', :action=>:open_version, :as => 'open_version'
     post '/source_id', :action => :source_id, :as => 'source_id'
     post '/add_collection', :action => :add_collection, :as => 'add_collection'
+    post '/set_collection', :action => :set_collection, :as => 'set_collection'
   end
   
   namespace :status do
