@@ -17,19 +17,13 @@
 -->
 
 <!--  
- This is the Solr schema file. This file should be named "schema.xml" and
- should be in the conf directory under the solr home
- (i.e. ./solr/conf/schema.xml by default) 
- or located where the classloader for the Solr webapp can find it.
-
- This example schema is the recommended starting point for users.
- It should be kept correct and concise, usable out-of-the-box.
+ This is a Solr schema file.
 
  For more information, on how to customize this file, please see
  http://wiki.apache.org/solr/SchemaXml
 
- PERFORMANCE NOTE: this schema includes many optional features and should not
- be used for benchmarking.  To improve performance one could
+ PERFORMANCE NOTE: The default schema includes many optional features and should not
+ be used for benchmarking.  Performance guidelines:
   - set stored="false" for all fields possible (esp large fields) when you
     only need to search on the field but don't need to return the original
     value.
@@ -45,7 +39,7 @@
     that avoids logging every request
 -->
 
-<schema name="example" version="1.5">
+<schema name="Argo" version="1.5">
   <!-- attribute "name" is the name of this schema and is only used for display purposes.
        Applications should change this to reflect the nature of the search collection.
        version="x.y" is Solr's version number for the schema syntax and semantics.  It should
@@ -59,14 +53,6 @@
      -->
 
   <types>
-    <!-- field type definitions. The "name" attribute is
-       just a label to be used by field definitions.  The "class"
-       attribute and any other attributes determine the real
-       behavior of the fieldType.
-         Class names starting with "solr" refer to java classes in the
-       org.apache.solr.analysis package.
-    -->
-
     <!-- The StrField type is not analyzed, but indexed/stored verbatim. -->
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
 
@@ -94,9 +80,9 @@
     <!--
       Default numeric field types. For faster range queries, consider the tint/tfloat/tlong/tdouble types.
     -->
-    <fieldType name="int" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="float" class="solr.TrieFloatField" precisionStep="0" positionIncrementGap="0"/>
-    <fieldType name="long" class="solr.TrieLongField" precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="int"    class="solr.TrieIntField"    precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="float"  class="solr.TrieFloatField"  precisionStep="0" positionIncrementGap="0"/>
+    <fieldType name="long"   class="solr.TrieLongField"   precisionStep="0" positionIncrementGap="0"/>
     <fieldType name="double" class="solr.TrieDoubleField" precisionStep="0" positionIncrementGap="0"/>
 
     <!--
@@ -109,9 +95,9 @@
      indexed per value, slightly larger index size, and faster range queries.
      A precisionStep of 0 disables indexing at different precision levels.
     -->
-    <fieldType name="tint" class="solr.TrieIntField" precisionStep="8" positionIncrementGap="0"/>
-    <fieldType name="tfloat" class="solr.TrieFloatField" precisionStep="8" positionIncrementGap="0"/>
-    <fieldType name="tlong" class="solr.TrieLongField" precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tint"    class="solr.TrieIntField"    precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tfloat"  class="solr.TrieFloatField"  precisionStep="8" positionIncrementGap="0"/>
+    <fieldType name="tlong"   class="solr.TrieLongField"   precisionStep="8" positionIncrementGap="0"/>
     <fieldType name="tdouble" class="solr.TrieDoubleField" precisionStep="8" positionIncrementGap="0"/>
 
     <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
@@ -141,23 +127,6 @@
     <!-- A Trie based date field for faster date range queries and date faceting. -->
     <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
 
-
-    <!--
-      Note:
-      These should only be used for compatibility with existing indexes (created with older Solr versions)
-      or if "sortMissingFirst" or "sortMissingLast" functionality is needed. Use Trie based fields instead.
-
-      Plain numeric field types that store and index the text
-      value verbatim (and hence don't support range queries, since the
-      lexicographic ordering isn't equal to the numeric ordering)
-    -->
-    <fieldType name="pint" class="solr.IntField"/>
-    <fieldType name="plong" class="solr.LongField"/>
-    <fieldType name="pfloat" class="solr.FloatField"/>
-    <fieldType name="pdouble" class="solr.DoubleField"/>
-    <fieldType name="pdate" class="solr.DateField" sortMissingLast="true"/>
-
-
     <!--
       Note:
       These should only be used for compatibility with existing indexes (created with older Solr versions).
@@ -167,12 +136,11 @@
       a string value that isn't human-readable in its internal form,
       but with a lexicographic ordering the same as the numeric ordering,
       so that range queries work correctly.
-    -->
-    <fieldType name="sint" class="solr.SortableIntField" sortMissingLast="true" omitNorms="true"/>
-    <fieldType name="slong" class="solr.SortableLongField" sortMissingLast="true" omitNorms="true"/>
-    <fieldType name="sfloat" class="solr.SortableFloatField" sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="sint"    class="solr.SortableIntField"    sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="slong"   class="solr.SortableLongField"   sortMissingLast="true" omitNorms="true"/>
+    <fieldType name="sfloat"  class="solr.SortableFloatField"  sortMissingLast="true" omitNorms="true"/>
     <fieldType name="sdouble" class="solr.SortableDoubleField" sortMissingLast="true" omitNorms="true"/>
-
+    -->
 
     <!-- The "RandomSortField" is not used to store or search any
          data.  You can declare fields of this type it in your schema
@@ -187,159 +155,79 @@
      -->
     <fieldType name="random" class="solr.RandomSortField" indexed="true" />
 
-<fieldtype name="text_ws" class="solr.TextField" positionIncrementGap="100">
-<analyzer>
-<tokenizer class="solr.WhitespaceTokenizerFactory"/>
-</analyzer>
-</fieldtype>
+    <fieldtype name="text_ws" class="solr.TextField" positionIncrementGap="100">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+      </analyzer>
+    </fieldtype>
+
 <!--
 if we used synonyms, they would be used only for the queries, and they would appear after the unicodeNormalization and before the StopFilter
 -->
-<fieldtype name="text" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
-<analyzer>
-<tokenizer class="solr.WhitespaceTokenizerFactory"/>
-<filter class="solr.ICUFoldingFilterFactory"/>
-<!-- NFKC, case folding, diacritics removed -->
-<filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1" generateWordParts="1" catenateWords="1" splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1" catenateAll="0" preserveOriginal="0" stemEnglishPossessive="1"/>
-<!-- <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/> -->
-<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
-</analyzer>
-</fieldtype>
-<!-- Analyzed Text, no Stemming or Synonyms -->
-<fieldtype name="textNoStem" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
-<analyzer>
-<tokenizer class="solr.WhitespaceTokenizerFactory"/>
-<filter class="solr.ICUFoldingFilterFactory"/>
-<!-- NFKC, case folding, diacritics removed -->
-<filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1" generateWordParts="1" catenateWords="1" splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1" catenateAll="0" preserveOriginal="0" stemEnglishPossessive="0"/>
-<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
-</analyzer>
-</fieldtype>
-<!--
-single token analyzed text, for sorting. Punctuation is significant.
--->
-<fieldtype name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
-<analyzer>
-<tokenizer class="solr.KeywordTokenizerFactory"/>
-<filter class="solr.ICUFoldingFilterFactory"/>
-<filter class="solr.TrimFilterFactory"/>
-</analyzer>
-</fieldtype>
-
-    <fieldtype name="phonetic" stored="false" indexed="true" class="solr.TextField" >
-      <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.DoubleMetaphoneFilterFactory" inject="false"/>
-      </analyzer>
-    </fieldtype>
-
-    <fieldtype name="payloads" stored="false" indexed="true" class="solr.TextField" >
+    <fieldtype name="text" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory"/>
-        <!--
-        The DelimitedPayloadTokenFilter can put payloads on tokens... for example,
-        a token of "foo|1.4"  would be indexed as "foo" with a payload of 1.4f
-        Attributes of the DelimitedPayloadTokenFilterFactory : 
-         "delimiter" - a one character delimiter. Default is | (pipe)
-	 "encoder" - how to encode the following value into a playload
-	    float -> org.apache.lucene.analysis.payloads.FloatEncoder,
-	    integer -> o.a.l.a.p.IntegerEncoder
-	    identity -> o.a.l.a.p.IdentityEncoder
-            Fully Qualified class name implementing PayloadEncoder, Encoder must have a no arg constructor.
-         -->
-        <filter class="solr.DelimitedPayloadTokenFilterFactory" encoder="float"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <!-- NFKC, case folding, diacritics removed -->
+        <filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1" generateWordParts="1" catenateWords="1" splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1" catenateAll="0" preserveOriginal="0" stemEnglishPossessive="1"/>
+   <!-- <filter class="solr.EnglishPorterFilterFactory" protected="protwords.txt"/> -->
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
     </fieldtype>
 
-    <!-- lowercases the entire field value, keeping it as a single token.  -->
-    <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
+    <!-- Analyzed Text, no Stemming or Synonyms -->
+    <fieldtype name="textNoStem" class="solr.TextField" positionIncrementGap="100" autoGeneratePhraseQueries="true">
+      <analyzer>
+        <tokenizer class="solr.WhitespaceTokenizerFactory"/>
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <!-- NFKC, case folding, diacritics removed -->
+        <filter class="solr.WordDelimiterFilterFactory" splitOnCaseChange="1" generateWordParts="1" catenateWords="1" splitOnNumerics="0" generateNumberParts="1" catenateNumbers="1" catenateAll="0" preserveOriginal="0" stemEnglishPossessive="0"/>
+        <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+      </analyzer>
+    </fieldtype>
+
+    <!-- Single token analyzed text, for sorting. Punctuation is significant. -->
+    <fieldtype name="alphaSort" class="solr.TextField" sortMissingLast="true" omitNorms="true">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.ICUFoldingFilterFactory"/>
+        <filter class="solr.TrimFilterFactory"/>
       </analyzer>
-    </fieldType>
+    </fieldtype>
 
-    <fieldType name="text_path" class="solr.TextField" positionIncrementGap="100">
-      <analyzer>
-        <tokenizer class="solr.PathHierarchyTokenizerFactory"/>
-      </analyzer>
-    </fieldType>
-    
-
-    <!-- since fields of this type are by default not stored or indexed,
-         any data added to them will be ignored outright.  --> 
+    <!-- since fields of this type are by default not stored or indexed, any data added to them will be ignored outright.  -->
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
-
-    <!-- This point type indexes the coordinates as separate fields (subFields)
-      If subFieldType is defined, it references a type, and a dynamic field
-      definition is created matching *___<typename>.  Alternately, if 
-      subFieldSuffix is defined, that is used to create the subFields.
-      Example: if subFieldType="double", then the coordinates would be
-        indexed in fields myloc_0___double,myloc_1___double.
-      Example: if subFieldSuffix="_d" then the coordinates would be indexed
-        in fields myloc_0_d,myloc_1_d
-      The subFields are an implementation detail of the fieldType, and end
-      users normally should not need to know about them.
-     -->
-    <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
-
-    <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
-    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
-
-   <!--
-    A Geohash is a compact representation of a latitude longitude pair in a single field.
-    See http://wiki.apache.org/solr/SpatialSearch
-   -->
-    <fieldtype name="geohash" class="solr.GeoHashField"/>
-   <!-- Money/currency field type. See http://wiki.apache.org/solr/MoneyFieldType
-        Parameters:
-          defaultCurrency: Specifies the default currency if none specified. Defaults to "USD"
-          precisionStep:   Specifies the precisionStep for the TrieLong field used for the amount
-          providerClass:   Lets you plug in other exchange provider backend:
-                           solr.FileExchangeRateProvider is the default and takes one parameter:
-                             currencyConfig: name of an xml file holding exhange rates
-   -->
-<!--
-    <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD" currencyConfig="currency.xml" />
--->
-             
-   <!-- some examples for different languages (generally ordered by ISO code) -->
-   <!-- removed from Stanford puppet version -->
-
  </types>
 
-
-
  <fields>
-
-   <field name="id" type="string" indexed="true" stored="true" required="true" />
-   <field name="_version_" type="long" indexed="true" stored="true" multiValued="false"/>
-   <field name="text" type="text_ws" indexed="true" stored="false" multiValued="true"/>
-   <field name="text_search" type="text" indexed="true" stored="false" multiValued="true"/>
+   <field name="id"          type="string"  indexed="true" stored="true" required="true" />
+   <field name="_version_"   type="long"    indexed="true" stored="true"  multiValued="false"/>
+   <field name="text"        type="text_ws" indexed="true" stored="false" multiValued="true"/>
+   <field name="text_search" type="text"    indexed="true" stored="false" multiValued="true"/>
    <field name="text_unstem_search" type="textNoStem" indexed="true" stored="false" multiValued="true"/>
-   <field name="date" type="date" indexed="true" stored="true" multiValued="true"/>
-   <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
+   <field name="date"        type="date"    indexed="true" stored="true" multiValued="true"/>
+   <field name="timestamp"   type="date"    indexed="true" stored="true" default="NOW" multiValued="false"/>
 
    <!-- format is used for facet, display, and choosing which partial to use for the show view, so it must be stored and indexed -->
    <field name="format" type="string" indexed="true" stored="true"/>
    
-   <dynamicField name="*_i"  type="sint"    indexed="true"  stored="true"/>
+   <dynamicField name="*_i"  type="tint"    indexed="true"  stored="true"/>
    <dynamicField name="*_s"  type="string"  indexed="true"  stored="true" multiValued="true"/>
-   <dynamicField name="*_l"  type="slong"   indexed="true"  stored="true"/>
+   <dynamicField name="*_l"  type="tlong"   indexed="true"  stored="true"/>
    <dynamicField name="*_t"  type="text"    indexed="true"  stored="true" multiValued="true"/>
-   <dynamicField name="*_t_ws"  type="text_ws"    indexed="true"  stored="false" multiValued="true"/>
-   <dynamicField name="*_t_unstem_search"  type="textNoStem"    indexed="true"  stored="false" multiValued="true"/>
+   <dynamicField name="*_t_ws" type="text_ws" indexed="true" stored="false" multiValued="true"/>
+   <dynamicField name="*_t_unstem_search"  type="textNoStem" indexed="true"  stored="false" multiValued="true"/>
    <dynamicField name="*_b"  type="boolean" indexed="true"  stored="true"/>
-   <dynamicField name="*_f"  type="sfloat"  indexed="true"  stored="true"/>
-   <dynamicField name="*_d"  type="sdouble" indexed="true"  stored="true"/>
+   <dynamicField name="*_f"  type="tfloat"  indexed="true"  stored="true"/>
+   <dynamicField name="*_d"  type="tdouble" indexed="true"  stored="true"/>
    <dynamicField name="*_dt" type="date"    indexed="true"  stored="true" multiValued="true"/>
 
    <dynamicField name="random*" type="random" />
 
-   <dynamicField name="*_sort" type="alphaSort" indexed="true" stored="false" multiValued="false" />
-   <dynamicField name="*_dt_sort" type="tdate" indexed="true" stored="false" multiValued="false" />
-   <dynamicField name="*_facet" type="string" indexed="true" stored="true" multiValued="true" />
-   <dynamicField name="*_display" type="string" indexed="false" stored="true" multiValued="true" />
+   <dynamicField name="*_sort"    type="alphaSort" indexed="true"  stored="false" multiValued="false" />
+   <dynamicField name="*_dt_sort" type="tdate"     indexed="true"  stored="false" multiValued="false" />
+   <dynamicField name="*_facet"   type="string"    indexed="true"  stored="true"  multiValued="true" />
+   <dynamicField name="*_display" type="string"    indexed="false" stored="true"  multiValued="true" />
 
  </fields>
 
@@ -350,13 +238,10 @@ single token analyzed text, for sorting. Punctuation is significant.
  <copyField source="*_t"     dest="text" />
  <copyField source="*_t"     dest="text_search" />
  <copyField source="*_t"     dest="text_unstem_search" />
- <copyField source="title_t"     dest="title_t_ws" />
- <copyField source="title_t"     dest="title_t_unstem_search" />
- <copyField source="identityMetadata_t"     dest="identityMetadata_t_ws" />
- <copyField source="identityMetadata_t"     dest="identityMetadata_t_unstem_search" />
-
+ <copyField source="title_t" dest="title_t_ws" />
+ <copyField source="title_t" dest="title_t_unstem_search" />
+ <copyField source="identityMetadata_t" dest="identityMetadata_t_ws" />
+ <copyField source="identityMetadata_t" dest="identityMetadata_t_unstem_search" />
 
 </schema>
-
-
 
