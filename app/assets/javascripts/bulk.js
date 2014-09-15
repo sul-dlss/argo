@@ -59,17 +59,25 @@ function purge(druids){
 	process_get(druids, purge_url, "Purged");
 }
 
+function fetch_pids_txt() {
+	return document.getElementById('pids').value.trim();
+}
+
+function extract_pids_list(pids_txt) {
+	//get rid of the 'druid:' prefixes, declare helper funcs, split the text on line breaks, trim each line, discard empties
+	pids_txt = pids_txt.replace(/druid:/g, '');
+	var str_trim_fn = function(str) {return str.trim();};
+	var str_is_not_empty_fn = function(str) {return str != null && str.length > 0;};
+	return pids_txt.split("\n").map(str_trim_fn).filter(str_is_not_empty_fn);
+}
+
 function fetch_druids(fun) {
 	$(".stop_button").show();
 	log = document.getElementById('log');
 	log.style.display = "block";
-	var pids_txt = document.getElementById('pids').value.trim();
+	var pids_txt = fetch_pids_txt();
 	if(pids_txt.length > 5) {
-		//get rid of the 'druid:' prefixes, split the text on line breaks, trim each line, discard empties
-		pids_txt = pids_txt.replace(/druid:/g, '');
-		var str_trim_fn = function(str) {return str.trim();};
-		var str_is_not_empty_fn = function(str) {return str != null && str.length > 0;}
-		druids = pids_txt.split("\n").map(str_trim_fn).filter(str_is_not_empty_fn);
+		druids = extract_pids_list(pids_txt);
 
 		log.innerHTML = "Using " + druids.length + " user supplied druids.\n<br>";
 		job_count = [];
@@ -172,9 +180,11 @@ function add_workflow(druids){
 	})
 }
 
+
 function refresh_metadata(druids){
 	process_get(druids, refresh_metadata_url, "Updated.");
 }
+
 function get_druids()
 {
 	log=document.getElementById('pids');
@@ -191,19 +201,26 @@ function get_druids()
 		alert("ERROR: " + textStatus + ", " + error);
 	});
 }
+
 function get_source_ids()
 {
 	log=document.getElementById('source_ids');
 	$.getJSON(report_model['data_url']+'&source_id=true', function(data){
+		var pids_txt = fetch_pids_txt();
+		selected_druids = (pids_txt.length > 5) ? extract_pids_list(pids_txt) : null; //in case the user entered druids on which to filter
 		report_model['druids']=[]
-		$.each(data.druids, function(i,s){
-			report_model['druids'].push(s);
-			log.innerHTML=log.innerHTML+'druid:'+s+"\n"
+		$.each(data.druids, function(i, s) {
+			var cur_druid_only = s.trim().replace(/\s.*/g, ''); //trim and get just pre-whitespace chars for comparison to user entered druids
+			if (selected_druids == null || $.inArray(cur_druid_only, selected_druids) >= 0) {
+				report_model['druids'].push(s);
+				log.innerHTML=log.innerHTML+'druid:'+s+"\n";
+			}
 		});
 	}).error(function(jqXhr, textStatus, error) {
 		alert("ERROR: " + textStatus + ", " + error);
 	});
 }
+
 function get_tags()
 {
 	log=document.getElementById('tags');
@@ -217,6 +234,7 @@ function get_tags()
 		alert("ERROR: " + textStatus + ", " + error);
 	});
 }
+
 
 function show_buttons()
 {
