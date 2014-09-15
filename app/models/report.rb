@@ -249,36 +249,35 @@ class Report
   def params
     @params
   end
+
   def pids params
     @params[:page] = 1
     params[:per_page] = 100
     (@response, @document_list) = get_search_results
     toret=[]
-    while @document_list.length >0
-      
-    report_data.each do|rec|
-
-    if params[:source_id]
-      toret << rec['druid'].to_s+"\t"+rec['source_id_t'].to_s
-    else
-      if params[:tags]
-        tags=''
-        if  rec['identityMetadata_tag_t'] != nil
-          rec['identityMetadata_tag_t'].split(';').each do |tag|
-            tags+="\t"+tag.to_s
+    while @document_list.length > 0
+      report_data.each do |rec|
+        if params[:source_id]
+          toret << rec['druid'].to_s+"\t"+rec['source_id_t'].to_s
+        elsif params[:tags]
+          tags=''
+          if rec['identityMetadata_tag_t'] != nil
+            rec['identityMetadata_tag_t'].split(';').each do |tag|
+              tags+="\t"+tag.to_s
+            end
           end
+          toret << rec['druid']+tags
+        else
+          toret << rec['druid']
         end
-        toret << rec['druid']+tags
-      else
-        toret << rec['druid']
       end
+      @params[:page] += 1
+      (@response, @document_list) = get_search_results
     end
-    end
-    @params[:page] += 1
-    (@response, @document_list) = get_search_results
+
+    return toret
   end
-    toret
-  end
+
   def report_data
     docs_to_records(@document_list)
   end
