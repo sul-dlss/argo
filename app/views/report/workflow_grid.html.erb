@@ -20,4 +20,5 @@
   $(document).ready(function() { updateTimer = setInterval(updateGrid, 10000) });
 </script>
 <% end %>
+<div style="float:right"><a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a></div>
 <%= render :partial => 'workflow_grid' %>
