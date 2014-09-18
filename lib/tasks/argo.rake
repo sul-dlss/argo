@@ -1,4 +1,7 @@
 require 'jettywrapper'
+require 'json'
+require 'rest_client'
+
 desc "Get application version"
 task :app_version do
   puts File.read(File.expand_path('../../../VERSION',__FILE__)).strip
@@ -43,10 +46,109 @@ namespace :argo do
     $stderr.puts "Version bumped to #{version}"
   end
 
+  namespace :jetty do
+    WRAPPER_VERSION = "v7.1.0"
+
+    desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
+    task :clean, [:target] do |t, args|
+      args.with_defaults(:target=> WRAPPER_VERSION)
+      jetty_params = jettywrapper_load_config()
+      Jettywrapper.hydra_jetty_version = args[:target]
+      Rake::Task['jetty:clean'].invoke
+    end
+
+    desc "Overwrite Solr configs and JARs"
+    task :config => %w[argo:solr:config] do   # TODO: argo:fedora:config
+    end
+  end
+
+  namespace :solr do
+    ## HELPERS
+    def xml_cores(file)
+      res = Hash.new
+      solrxml = Nokogiri.XML(File.read(file))
+      solrxml.xpath('solr/cores/core').each do |core|
+        res[core.attr('name')] = core.attr('instanceDir')
+      end
+      return res
+    end
+
+    ## DEFAULTS
+    solr_conf_dir = 'solr_conf'
+    fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
+    live_solrxml_file = "jetty/solr/solr.xml"
+    testcores = %w(development-core test-core)
+    realcores = xml_cores(live_solrxml_file)
+
+    desc "List cores in solr.xml file, default: #{live_solrxml_file}"
+    task :cores, [:solrxml] do |task, args|
+      args.with_defaults(:solrxml => live_solrxml_file)
+      xml_cores(args[:solrxml]).each do |k,v|
+        puts "#{k} in #{v}"
+      end
+    end
+
+    desc "Clear all data from running core(s), default: #{realcores.keys}"
+    task :nuke, [:cores] do |task, args|
+      args.with_defaults(:cores => realcores.keys)
+      args[:cores].each do |core|
+        url = Blacklight.solr.options[:url] + "/" + core + '/update?commit=true'
+        puts "Nuking #{Blacklight.solr.options[:url]} #{core}"
+        RestClient.post url, '<delete><query>*:*</query></delete>', :content_type => 'text/xml; charset=utf-8'
+      end
+    end
+
+    desc "Load Solr data into running core(s), default: '#{fixtures_fileglob}' ==> #{realcores.keys} ## note quotes around glob"
+    task :load, [:glob, :cores] do |task, args|
+      args.with_defaults(:glob => fixtures_fileglob, :cores => realcores.keys)
+      docs = []
+      counts = Hash.new{ |h,k| 0 }
+      Dir.glob(args[:glob]).each do |file|
+        reply = JSON.parse(IO.read(file))
+        reply["response"]["docs"].each do |doc|
+          puts file + " " + doc["id"]
+          doc.delete('_version_')   # we can't post to an empty core while specifying that we are updating a given version!
+          docs << { "doc" => doc }
+          counts[file] = counts[file] + 1
+        end
+      end
+      puts counts
+      payload = "{\n" + docs.collect{|x| '"add": ' + JSON.pretty_generate(x)}.join(",\n") + "\n}"
+
+      IO.write("temp.json", payload)
+      args[:cores].each do |core|
+        url = Blacklight.solr.options[:url] + "/" + core + '/update?commit=true'
+        puts "Adding #{docs.count} docs from #{counts.count} file(s) to #{url}"
+        RestClient.post url, payload, :content_type => "application/json"
+      end
+    end
+
+    desc "Configure Solr root and core(s) from source dir, default: #{solr_conf_dir}"
+    task :config, [:dir] => [%w[ argo:solr:config_root argo:solr:config_cores ]] do |task, args|
+    end
+
+    desc "Configure Solr root from source dir, default: #{solr_conf_dir}"
+    task :config_root, [:dir] do |task, args|
+      args.with_defaults(:dir => solr_conf_dir)
+      cp("#{args[:dir]}/solr.xml", 'jetty/solr/', verbose: true)
+    end
+
+    desc "Copies configs to matching Solr core(s), default: #{solr_conf_dir} ==> #{testcores}"
+    task :config_cores, [:dir, :cores] do |task, args|
+      args.with_defaults(:dir => solr_conf_dir, :cores => testcores)
+      args[:cores].each do |core|
+        FileList["#{args[:dir]}/conf/*"].each do |f|
+          cp(f, "jetty/solr/#{core}/conf/", verbose: true)
+        end
+      end
+      cp("#{args[:dir]}/solr.xml", 'jetty/solr/', verbose: true)
+    end
+
+  end # :solr
+
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
     directives = [
-
       'AuthType WebAuth',
       'Require privgroup dlss:argo-access',
       'WebAuthLdapAttribute suAffiliation',
