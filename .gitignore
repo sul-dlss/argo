@@ -8,8 +8,10 @@ config/certs
 config/database.yml
 config/environments
 config/solr.yml
+coverage/
 db/*.sqlite3
 dpg_pool
+gem_graph.png
 jetty/
 log/*.log
 public/.htaccess
