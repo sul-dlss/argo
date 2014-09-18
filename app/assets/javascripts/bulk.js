@@ -135,50 +135,20 @@ function discoverable(druids){
 }
 function remediate_mods(druids){
 	return; //disabled for now
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=remediate_mods_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Fixed');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, remediate_mods_url, 'Fixed');
 }
+
 function expedite(druids){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=expedite_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Expedited');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	process_get(druids, expedite_url, 'Expedited');
 }
 
 function apply_apo_defaults(druids){
 	process_get(druids, apo_apply_defaults_url, 'Defaults_applied.')
 }
+
 function add_workflow(druids){
-	cons=[];
-	var params={
-		'wf': $('#wf').val(),
-	}
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=add_workflow_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url,'Workflow Added');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	var params={ 'wf': $('#wf').val() }
+	process_post(druids, add_workflow_url, params, 'Workflow Added');
 }
 
 
