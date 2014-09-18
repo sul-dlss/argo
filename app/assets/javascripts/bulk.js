@@ -1,32 +1,29 @@
-
-function process_get(druids, action_url, success_string){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=action_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'GET'});
+function process_request(druids, action_url, req_type, req_params, success_string, success_handler_callback, error_handler_callback) {
+	cons = [];
+	$.each(druids, function(i, element) {
+		var element_url = catalog_url(element);
+		var url = action_url.replace('xxxxxxxxx', element);
+		var req_obj = {url: url, type: req_type};
+		if(req_params != null) req_obj['data'] = req_params;
+		var xhr = $.ajax(req_obj);
 		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, success_string);
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+		xhr.success(function(response, status, xhr) { 
+			success_handler(element_url, success_string, success_handler_callback);
+		});
+		xhr.error(function(xhr, status, err) {
+			error_handler(xhr, status, err, element_url, job_count.pop(), error_handler_callback);
+		});
 	})
 }
 
-function process_post(druids, action_url, params, success_string){
-	cons=[];
-	$.each(druids, function(i,element){
-		var element_url=catalog_url(element);
-		url=action_url.replace('xxxxxxxxx',element);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, success_string, show_buttons);
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop(),show_buttons)})
-	})
-	
+function process_get(druids, action_url, success_string) {
+	process_request(druids, action_url, 'GET', null, success_string);
 }
+
+function process_post(druids, action_url, req_params, success_string) {
+	process_request(druids, action_url, 'POST', req_params, success_string, show_buttons, show_buttons);
+}
+
 function open_version(druids){
 	var params={
 		'severity': $('#severity').val(),
