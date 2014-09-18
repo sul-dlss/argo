@@ -2,16 +2,22 @@ require 'jettywrapper'
 desc "Get application version"
 task :app_version do
   puts File.read(File.expand_path('../../../VERSION',__FILE__)).strip
-end  
+end
+
+def jettywrapper_load_config
+    return Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
+end
+
 task :ci do
   ENV['RAILS_ENV'] = 'test'
   Rake::Task['db:migrate'].invoke
-  jetty_params = Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
-  error = Jettywrapper.wrap(jetty_params) do  
+  jetty_params = jettywrapper_load_config()
+  error = Jettywrapper.wrap(jetty_params) do
     Rake::Task['spec'].invoke
     end
     raise "test failures: #{error}" if error
 end
+
 namespace :argo do
   desc "Bump Argo's version number before release"
   task :bump_version, [:level] do |t, args|
@@ -50,13 +56,13 @@ namespace :argo do
 
     directives += File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) rescue nil
 
-    resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0, 
+    resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0,
     :facets => { :fields => ['apo_register_permissions_facet'] }, :'facet.prefix' => 'workgroup:', :'facet.mincount' => 1, :'facet.limit' => -1 )
     facet = resp.facets.find { |f| f.name == 'apo_register_permissions_facet' }
     unless facet.nil?
       facets = facet.items.collect &:value
       priv_groups = facets.select { |v| v =~ /^workgroup:/ }
-      directives += priv_groups.collect { |v| 
+      directives += priv_groups.collect { |v|
         ["Require privgroup #{v.split(/:/,2).last}", "WebAuthLdapPrivgroup #{v.split(/:/,2).last}"]
         }.flatten
       end
