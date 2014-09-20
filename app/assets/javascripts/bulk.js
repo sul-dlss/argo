@@ -68,6 +68,18 @@ function extract_pids_list(pids_txt) {
 	return pids_txt.split("\n").map(str_trim_fn).filter(str_is_not_empty_fn);
 }
 
+function get_druids_req(log, wait_msg, druid_each_callback, preprocessing_callback, postprocessing_callback) {
+	log.innerHTML = wait_msg;
+	$.getJSON(report_model['data_url'], function(data) {
+		report_model['druids'] = [];
+		if (preprocessing_callback != null) { preprocessing_callback(); }
+		$.each(data.druids, druid_each_callback);
+		if (postprocessing_callback != null) { postprocessing_callback(); }
+	}).error(function(jqXhr, textStatus, error) {
+		alert("ERROR: " + textStatus + ", " + error);
+	});
+}
+
 function fetch_druids(fun) {
 	$(".stop_button").show();
 	log = document.getElementById('log');
@@ -83,17 +95,15 @@ function fetch_druids(fun) {
 		}
 		fun(druids);
 	} else {
-		log.innerHTML = "Fetching all " + report_model['total_rows'] + " druids.<br>\n"
-		$.getJSON(report_model['data_url'], function(data) {
-			report_model['druids'] = []
-			$.each(data.druids, function(i,s) {
-				report_model['druids'].push(s);
-			});
+		job_count = [];
+		total_rows = report_model['total_rows'];
+		var wait_msg = "Fetching all " + total_rows + " druids.<br>\n";
+		var druid_each_callback = function(i, s) { report_model['druids'].push(s); job_count.push(total_rows-i); };
+		var postprocessing_callback = function() {
 			log.innerHTML = log.innerHTML + "Received " + report_model['druids'].length + " pids, starting work<br>\n";
 			fun(report_model['druids']);
-		}).error(function(jqXhr, textStatus, error) {
-			alert("ERROR: " + textStatus + ", " + error);
-		});
+		};
+		get_druids_req(log, wait_msg, druid_each_callback, null, postprocessing_callback);
 	}
 }
 
@@ -156,21 +166,14 @@ function refresh_metadata(druids){
 	process_get(druids, refresh_metadata_url, "Updated.");
 }
 
-function get_druids()
-{
-	log=document.getElementById('pids');
+function get_druids() {
+	var log = document.getElementById('pids');
 	$('#pid_list').show(400);
-	log.innerHTML=log.innerHTML+'Fetching druids...'+"\n"
-	$.getJSON(report_model['data_url'], function(data){
-		report_model['druids']=[];
-		log.innerHTML='';
-		$.each(data.druids, function(i,s){
-			report_model['druids'].push(s);
-			log.innerHTML=log.innerHTML+'druid:'+s+"\n"
-		});
-	}).error(function(jqXhr, textStatus, error) {
-		alert("ERROR: " + textStatus + ", " + error);
-	});
+
+	var wait_msg = log.innerHTML+"Fetching druids...\n";
+	var druid_each_callback = function(i, s) { report_model['druids'].push(s); log.innerHTML = log.innerHTML+"druid:"+s+"\n"; };
+	var preprocessing_callback = function() {log.innerHTML='';};
+	get_druids_req(log, wait_msg, druid_each_callback, preprocessing_callback);
 }
 
 function get_source_ids()
