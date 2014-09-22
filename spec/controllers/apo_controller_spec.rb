@@ -15,6 +15,8 @@ describe ApoController do
   describe 'create' do
     it 'should create an apo' do
     end
+    example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR", "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"","collection_title"=>'col title', "collection_abstract"=>"", "default_object_rights"=>"World", "use"=>"", "copyright"=>"", "cc_license"=>"", "workflow"=>"digitizationWF", "register"=>""}
+
     it 'should hit the registration service to register an apo and a collection' do
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
         params[:label].should == 'New APO Title'
@@ -25,7 +27,7 @@ describe ApoController do
       end
       @item.should_receive(:add_roleplayer).exactly(4).times
       Dor.should_receive(:find).with('druid:collectionpid').and_return(@item)
-      post 'register',  "title"=>"New APO Title",  "agreement"=>"druid:xf765cv5573",  "desc_md"=>"MODS",  "metadata_source"=>"DOR",  "managers"=>"dlss:developers dlss:dpg-staff",  "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"","collection_title"=>'col title', "collection_abstract"=>"",  "default_object_rights"=>"World",  "use"=>"",  "copyright"=>"",  "cc_license"=>"",  "workflow"=>"digitizationWF",  "register"=>""
+      post 'register', example
     end
     it 'should set apo workflows to priority 70' do
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
@@ -34,7 +36,7 @@ describe ApoController do
       end
       @item.should_receive(:add_roleplayer).exactly(4).times
       Dor.should_receive(:find).with('druid:collectionpid').and_return(@item)
-      post 'register',  "title"=>"New APO Title",  "agreement"=>"druid:xf765cv5573",  "desc_md"=>"MODS",  "metadata_source"=>"DOR",  "managers"=>"dlss:developers dlss:dpg-staff",  "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"","collection_title"=>'col title', "collection_abstract"=>"",  "default_object_rights"=>"World",  "use"=>"",  "copyright"=>"",  "cc_license"=>"",  "workflow"=>"digitizationWF",  "register"=>""
+      post 'register', example
     end
   end
   describe 'register_collection' do
@@ -85,7 +87,6 @@ describe ApoController do
     end
     controller.should_receive(:set_abstract)
     post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "collection_rights"=>"dark", 'id'=>'druid:forapo'
-    
   end
   it 'should set the workflow priority to 65' do
     catkey='1234567'
