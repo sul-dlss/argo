@@ -9,6 +9,7 @@ gem "moab-versioning", "=1.3.3"
 gem 'rails', '3.2.19'
 gem "blacklight", '~>3.7'
 gem 'blacklight-hierarchy', "~> 0.0.3"
+
 gem 'net-sftp'
 gem 'rake'
 gem 'about_page'
@@ -28,6 +29,7 @@ gem "haml"
 gem "coderay"
 gem "dalli"
 gem "kgio"  
+gem 'rest-client'
 gem 'jettywrapper'
 gem 'kaminari'
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
@@ -35,11 +37,11 @@ gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rai
 
 group :test, :development do
   gem 'selenium-webdriver'
-	gem 'unicorn'
+  gem 'unicorn'
   gem 'rspec-rails', '~> 3'
   gem 'capybara'
   gem "rack-test", :require => "rack/test"
-	gem 'simplecov', :require => false
+  gem 'simplecov', :require => false
 end
 
 group :development do
@@ -69,5 +71,5 @@ end
 group :deployment do
   gem 'capistrano', '~> 3.0'
   gem 'capistrano-rails'
-	gem 'lyberteam-capistrano-devel', '>= 3.0'
+  gem 'lyberteam-capistrano-devel', '>= 3.0'
 end
