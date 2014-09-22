@@ -13,16 +13,14 @@ require 'pry-debugger'
 # in spec/support/ and its subdirectories.
 
 def instantiate_fixture druid, klass = ActiveFedora::Base
-  @fixture_dir = fixture_dir = File.join(File.dirname(__FILE__),"fixtures")
+  @fixture_dir = File.join(File.dirname(__FILE__),"fixtures")
   mask = File.join(@fixture_dir,"*_#{druid.sub(/:/,'_')}.xml")
   fname = Dir[mask].first
   return nil if fname.nil?
   item_from_foxml(File.read(fname), klass)
 end
 
-def read_fixture fname
-  File.read(File.join(@fixture_dir,fname))
-end
+# Note: no such files, currently.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
@@ -73,8 +71,7 @@ def item_from_foxml(foxml, item_class = Dor::Base)
       ds = ActiveFedora::NokogiriDatastream.new(result,dsid)
       result.add_datastream(ds)
     end
-  
-    
+
     if ds.is_a?(ActiveFedora::NokogiriDatastream)
       result.datastreams[dsid] = ds.class.from_xml(Nokogiri::XML(content), ds)
     elsif ds.is_a?(ActiveFedora::RelsExtDatastream)
