@@ -68,9 +68,10 @@ function extract_pids_list(pids_txt) {
 	return pids_txt.split("\n").map(str_trim_fn).filter(str_is_not_empty_fn);
 }
 
-function get_druids_req(log, wait_msg, druid_each_callback, preprocessing_callback, postprocessing_callback) {
+function get_druids_req(log, wait_msg, druid_each_callback, preprocessing_callback, postprocessing_callback, req_url) {
 	log.innerHTML = wait_msg;
-	$.getJSON(report_model['data_url'], function(data) {
+	if (req_url == null) req_url = report_model['data_url'];
+	$.getJSON(req_url, function(data) {
 		report_model['druids'] = [];
 		if (preprocessing_callback != null) { preprocessing_callback(); }
 		$.each(data.druids, druid_each_callback);
@@ -176,37 +177,35 @@ function get_druids() {
 	get_druids_req(log, wait_msg, druid_each_callback, preprocessing_callback);
 }
 
-function get_source_ids()
-{
-	log=document.getElementById('source_ids');
-	$.getJSON(report_model['data_url']+'&source_id=true', function(data){
-		var pids_txt = fetch_pids_txt();
-		selected_druids = (pids_txt.length > 5) ? extract_pids_list(pids_txt) : null; //in case the user entered druids on which to filter
-		report_model['druids']=[]
-		$.each(data.druids, function(i, s) {
-			var cur_druid_only = s.trim().replace(/\s.*/g, ''); //trim and get just pre-whitespace chars for comparison to user entered druids
-			if (selected_druids == null || $.inArray(cur_druid_only, selected_druids) >= 0) {
-				report_model['druids'].push(s);
-				log.innerHTML=log.innerHTML+'druid:'+s+"\n";
-			}
-		});
-	}).error(function(jqXhr, textStatus, error) {
-		alert("ERROR: " + textStatus + ", " + error);
-	});
+// create a callback function that will request a list of druids based on the current search, but which
+// will also filter the list of druids on the list the user entered in the pids list text area, so that 
+// unwanted druids can get filtered out of search results.  useful for, e.g., get_source_ids and get_tags.
+function get_filtered_druid_each_callback(log) {
+	var pids_txt = fetch_pids_txt();
+	var selected_druids = (pids_txt.length > 5) ? extract_pids_list(pids_txt) : null; //in case the user entered druids on which to filter
+	var druid_each_callback = function(i, s) {
+		var cur_druid_only = s.trim().replace(/\s.*/g, ''); //trim and get just pre-whitespace chars for comparison to user entered druids
+		if (selected_druids == null || $.inArray(cur_druid_only, selected_druids) >= 0) {
+			report_model['druids'].push(s);
+			log.innerHTML = log.innerHTML + 'druid:' + s + "\n";
+		}
+	};
+
+	return druid_each_callback;
 }
 
-function get_tags()
-{
-	log=document.getElementById('tags');
-	$.getJSON(report_model['data_url']+'&tags=true', function(data){
-		report_model['druids']=[]
-		$.each(data.druids, function(i,s){
-			report_model['druids'].push(s);
-			log.innerHTML=log.innerHTML+'druid:'+s+"\n"
-		});
-	}).error(function(jqXhr, textStatus, error) {
-		alert("ERROR: " + textStatus + ", " + error);
-	});
+function get_source_ids() {
+	var log = document.getElementById('source_ids');
+	var druid_each_callback = get_filtered_druid_each_callback(log);
+	var req_url = report_model['data_url']+'&source_id=true';
+	get_druids_req(log, null, druid_each_callback, null, null, req_url);
+}
+
+function get_tags() {
+	var log = document.getElementById('tags');
+	var druid_each_callback = get_filtered_druid_each_callback(log);
+	var req_url = report_model['data_url']+'&tags=true';
+	get_druids_req(log, null, druid_each_callback, null, null, req_url);
 }
 
 
