@@ -632,7 +632,7 @@ describe ItemsHelper do
       doc=Nokogiri::XML(xml)
       mclaughlin_combine_cartographics doc
       remove_empty_nodes doc
-      puts doc.to_s
+    # puts doc.to_s
       #should be merged into a single cartographics
       doc.search("//mods:subject/mods:cartographics",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
       doc.search("//mods:subject/mods:cartographics/mods:scale",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
