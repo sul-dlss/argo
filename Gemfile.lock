@@ -85,16 +85,19 @@ GEM
       blacklight (~> 3.2)
       rails (~> 3.2.0)
     builder (3.0.4)
+    bundler-audit (0.3.1)
+      bundler (~> 1.2)
+      thor (~> 0.18)
     capistrano (3.2.1)
       i18n
       rake (>= 10.0.0)
       sshkit (~> 1.3)
+    capistrano-bundle_audit (0.0.2)
+      bundler-audit
+      capistrano (~> 3.0)
     capistrano-bundler (1.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    capistrano-holepicker (0.0.1)
-      capistrano (~> 3.0)
-      holepicker
     capistrano-one_time_key (0.0.1)
       capistrano (~> 3.0)
     capistrano-rails (1.1.1)
@@ -191,9 +194,6 @@ GEM
       libxml-ruby (~> 2.0)
     hashery (2.1.1)
     hike (1.2.3)
-    holepicker (0.3.3)
-      json (~> 1.8)
-      rainbow (~> 2.0)
     hooks (0.3.6)
       uber (~> 0.0.4)
     i18n (0.6.11)
@@ -221,11 +221,11 @@ GEM
       nokogiri (>= 1.4.3.1)
       systemu (>= 1.2.0)
       validatable
-    lyberteam-capistrano-devel (3.0.0)
+    lyberteam-capistrano-devel (3.1.0.pre1)
       capistrano (~> 3.0)
-      capistrano-holepicker
-      capistrano-one_time_key
-      capistrano-releaseboard
+      capistrano-bundle_audit (~> 0)
+      capistrano-one_time_key (~> 0)
+      capistrano-releaseboard (~> 0)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -310,7 +310,6 @@ GEM
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
-    rainbow (2.0.0)
     raindrops (0.13.0)
     rake (10.3.2)
     rdf (1.0.9)
@@ -417,7 +416,7 @@ GEM
       rack (>= 1.0.0)
     thor (0.19.1)
     tilt (1.4.1)
-    tins (1.3.0)
+    tins (1.3.3)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -469,7 +468,7 @@ DEPENDENCIES
   jquery-rails (= 2.1.4)
   kaminari
   kgio
-  lyberteam-capistrano-devel (>= 3.0)
+  lyberteam-capistrano-devel (= 3.1.0.pre1)
   moab-versioning (= 1.3.3)
   mods_display
   mysql2 (= 0.3.13)
