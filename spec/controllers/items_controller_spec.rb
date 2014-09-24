@@ -40,7 +40,7 @@ describe ItemsController do
       xml="<some> xml</some>"
       @item.datastreams['identityMetadata'].stub(:content=)
       post :datastream_update, :id => @pid, :dsid => 'identityMetadata', :content => xml
-      response.code.should == "302"
+      expect(response.code).to eq("302")
     end
   end
 
@@ -67,14 +67,14 @@ describe ItemsController do
     it 'should 403' do
       @current_user.stub(:is_admin).and_return(false)
       post 'purge_object', :id => @pid
-      response.code.should == "403"
+      expect(response.code).to eq("403")
     end
   end
   describe "embargo_update" do
     it "should 403 if you arent an admin" do
       @current_user.stub(:is_admin).and_return(false)
       post 'embargo_update', :id => @pid, :date => "12/19/2013"
-      response.code.should == "403"
+      expect(response.code).to eq("403")
     end
     it "should call Dor::Item.update_embargo" do
       runs=0
@@ -84,14 +84,14 @@ describe ItemsController do
     end
 
     post :embargo_update, :id => @pid,:embargo_date => "2012-10-19T00:00:00Z"
-    response.code.should == "302"
-    runs.should ==1
+    expect(response.code).to eq("302")
+    expect(runs).to eq(1)
   end
 end
 describe "register" do
   it "should load the registration form" do
     get :register
-    response.should render_template('register')
+    expect(response).to render_template('register')
   end
 end
 describe "open_version" do
@@ -106,7 +106,7 @@ describe "open_version" do
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
     get 'open_version', :id => @pid, :severity => 'major', :description => 'something'
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe "close_version" do
@@ -123,12 +123,12 @@ describe "close_version" do
     @item.should_receive(:save)
     Dor::SearchService.solr.should_receive(:add)
     get 'close_version', :id => @pid, :severity => 'major', :description => 'something'
-    ran.should == true
+    expect(ran).to eq(true)
   end
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
     get 'close_version', :id => @pid
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe "source_id" do
@@ -162,7 +162,7 @@ describe 'tags_bulk' do
     @item.datastreams['identityMetadata'].should_receive(:save)
     Dor::SearchService.solr.should_receive(:add)
   end
-  it 'should remve an old tag an add a new one' do
+  it 'should remove an old tag an add a new one' do
     @item.should_receive(:remove_tag).with('some:thing').and_return(true)
     @item.should_receive(:add_tag).with('new:thing').and_return(true)
     post 'tags_bulk', :id => @pid, :tags => 'new:thing'
@@ -191,13 +191,13 @@ describe "add_file" do
       ran=true
     end
     post 'add_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID'
-    ran.should == true
+    expect(ran).to eq(true)
 
   end   
-  it 'should 403 if you arent an admin' do
+  it 'should 403 if you are not an admin' do
     @current_user.stub(:is_admin).and_return(false)
     post 'add_file', :uploaded_file => nil, :id => @pid, :resource => 'resourceID'
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end     
 end
 describe "delete_file" do
@@ -207,12 +207,12 @@ describe "delete_file" do
     ran=true
   end
   get 'delete_file', :id => @pid, :file_name => 'old_file'
-  ran.should == true
+  expect(ran).to eq(true)
 end
 it 'should 403 if you arent an admin' do
   @current_user.stub(:is_admin).and_return(false)
   get 'delete_file', :id => @pid, :file_name => 'old_file'
-  response.code.should == "403"
+  expect(response.code).to eq("403")
 end
 end
 describe "replace_file" do
@@ -224,12 +224,12 @@ describe "replace_file" do
       ran=true
     end
     post 'replace_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'
-    ran.should == true
+    expect(ran).to eq(true)
   end
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
     post 'replace_file', :uploaded_file => nil, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe "update_parameters" do
@@ -237,9 +237,9 @@ describe "update_parameters" do
     contentMD=double(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
     contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
-      shelve.should == "yes"
-      preserve.should == "yes"
-      publish.should == "yes"
+      expect(shelve).to eq("yes")
+      expect(preserve).to eq("yes")
+      expect(publish).to eq("yes")
     end
     post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
   end
@@ -247,9 +247,9 @@ describe "update_parameters" do
     contentMD=double(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
     contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
-      shelve.should == "no"
-      preserve.should == "yes"
-      publish.should == "yes"
+      expect(shelve).to eq("no")
+      expect(preserve).to eq("yes")
+      expect(publish).to eq("yes")
     end
     post 'update_attributes',  :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
   end
@@ -257,9 +257,9 @@ describe "update_parameters" do
     contentMD=double(Dor::ContentMetadataDS)
     @item.stub(:contentMetadata).and_return(contentMD)
     contentMD.stub(:update_attributes) do |file, publish, shelve, preserve|
-      shelve.should == "no"
-      preserve.should == "no"
-      publish.should == "no"
+      expect(shelve).to eq("no")
+      expect(preserve).to eq("no")
+      expect(publish).to eq("no")
     end
     contentMD.should_receive(:update_attributes)
     post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
@@ -267,7 +267,7 @@ describe "update_parameters" do
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
     post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe 'get_file' do
@@ -279,17 +279,17 @@ describe 'get_file' do
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
     get 'get_file', :file => 'somefile.txt', :id => @pid
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe 'datastream_update' do
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
     post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<contentMetadata/>'
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
   it 'should error on malformed xml' do
-    lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}.should raise_error
+    expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error() # todo: add name of error
   end
   it 'should call save with good xml' do
     mock_ds=double(Dor::ContentMetadataDS)
@@ -304,7 +304,7 @@ describe 'update_sequence' do
   it 'should 403 if you arent an admin' do
     @current_user.stub(:is_admin).and_return(false)
     post 'update_resource', :resource => '0001', :position => '3', :id => @pid
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
   it 'should call dor-services to reorder the resources' do
     mock_ds=double(Dor::ContentMetadataDS)
@@ -350,7 +350,7 @@ describe 'add_collection' do
   it 'should 403 if they arent permitted' do
     @current_user.stub(:is_admin).and_return(false)
     post 'add_collection', :id => @pid, :collection => 'druid:1234'
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe 'set_collection' do
@@ -359,14 +359,14 @@ describe 'set_collection' do
     @item.stub(:collections).and_return([])
     @item.should_receive(:add_collection).with(collection_druid)
     post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
-    response.code.should == "200"
+    expect(response.code).to eq("200")
   end
   it 'should not add a collection if there is already one' do
     collection_druid = 'druid:1234'
     @item.stub(:collections).and_return(['collection'])
     @item.should_not_receive(:add_collection)
     post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
-    response.code.should == "500"
+    expect(response.code).to eq("500")
   end
 end
 describe 'remove_collection' do
@@ -377,7 +377,7 @@ describe 'remove_collection' do
   it 'should 403 if they arent permitted' do
     @current_user.stub(:is_admin).and_return(false)
     post 'remove_collection', :id => @pid, :collection => 'druid:1234'
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe 'mods' do
@@ -388,12 +388,12 @@ describe 'mods' do
     descmd.should_receive(:content).and_return(xml)
     @item.should_receive(:descMetadata).and_return(descmd)
     get 'mods', :id => @pid
-    response.body.should == xml
+    expect(response.body).to eq(xml)
   end
   it 'should 403 if they arent permitted' do
     @current_user.stub(:is_admin).and_return(false)
     get 'mods', :id => @pid
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe 'update_mods' do
@@ -407,7 +407,7 @@ describe 'update_mods' do
   it 'should 403 if they arent permitted' do
     @current_user.stub(:is_admin).and_return(false)
     get 'update_mods', :id => @pid
-    response.code.should == "403"
+    expect(response.code).to eq("403")
   end
 end
 describe "add_workflow" do
