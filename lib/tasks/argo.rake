@@ -1,6 +1,7 @@
 require 'jettywrapper'
 require 'json'
 require 'rest_client'
+require 'open-uri'
 
 desc "Get application version"
 task :app_version do
@@ -17,8 +18,8 @@ task :ci do
   jetty_params = jettywrapper_load_config()
   error = Jettywrapper.wrap(jetty_params) do
     Rake::Task['spec'].invoke
-    end
-    raise "test failures: #{error}" if error
+  end
+  raise "test failures: #{error}" if error
 end
 
 namespace :argo do
@@ -72,34 +73,56 @@ namespace :argo do
       end
       return res
     end
+    def json_cores(url)
+      return JSON.load(open(url))
+    end
 
     ## DEFAULTS
     solr_conf_dir = 'solr_conf'
     fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
     live_solrxml_file = "jetty/solr/solr.xml"
     testcores = %w(development-core test-core)
-    realcores = xml_cores(live_solrxml_file)
+    restcore_url = Blacklight.solr.options[:url] + "/admin/cores?action=STATUS&wt=json"
+    realcores = []
 
-    desc "List cores in solr.xml file, default: #{live_solrxml_file}"
-    task :cores, [:solrxml] do |task, args|
+    desc "List cores from REST target, default: #{restcore_url}"
+    task :cores, [:url] do |task, args|
+      args.with_defaults(:url => restcore_url)
+      url = args[:url]
+      puts "Requesting #{url}"
+      json = json_cores(url)
+      json["status"].each do |k,v|
+        puts "#{k} in #{v["name"]}"
+      end
+      realcores = json["status"]
+    end
+
+    desc "Read cores from solr.xml file, default: #{live_solrxml_file}"
+    task :xmlcores, [:solrxml] do |task, args|
       args.with_defaults(:solrxml => live_solrxml_file)
       xml_cores(args[:solrxml]).each do |k,v|
         puts "#{k} in #{v}"
       end
     end
 
-    desc "Clear all data from running core(s), default: #{realcores.keys}"
-    task :nuke, [:cores] do |task, args|
+    desc "Clear all data from running core(s), default: [list from :cores]"
+    task :nuke, [:cores] => :cores do |task, args|
       args.with_defaults(:cores => realcores.keys)
       args[:cores].each do |core|
         url = Blacklight.solr.options[:url] + "/" + core + '/update?commit=true'
-        puts "Nuking #{Blacklight.solr.options[:url]} #{core}"
-        RestClient.post url, '<delete><query>*:*</query></delete>', :content_type => 'text/xml; charset=utf-8'
+        puts "Completely delete all data in #{core} at:\n  #{url}\nAre you sure? [y/n]"
+        input = STDIN.gets.strip
+        if input == 'y'
+          RestClient.post url, '<delete><query>*:*</query></delete>', :content_type => 'text/xml; charset=utf-8'
+          puts "Nuked #{core}"
+        else
+          puts "Skipping #{core}"
+        end
       end
     end
 
-    desc "Load Solr data into running core(s), default: '#{fixtures_fileglob}' ==> #{realcores.keys} ## note quotes around glob"
-    task :load, [:glob, :cores] do |task, args|
+    desc "Load Solr data into running core(s), default: '#{fixtures_fileglob}' ==> [list from :cores] ## note quotes around glob"
+    task :load, [:glob, :cores] => :cores do |task, args|
       args.with_defaults(:glob => fixtures_fileglob, :cores => realcores.keys)
       docs = []
       counts = Hash.new{ |h,k| 0 }
@@ -133,7 +156,7 @@ namespace :argo do
       cp("#{args[:dir]}/solr.xml", 'jetty/solr/', verbose: true)
     end
 
-    desc "Copies configs to matching Solr core(s), default: #{solr_conf_dir} ==> #{testcores}"
+    desc "Copies configs to matching local Solr instanceDir(s), default: #{solr_conf_dir} ==> #{testcores}"
     task :config_cores, [:dir, :cores] do |task, args|
       args.with_defaults(:dir => solr_conf_dir, :cores => testcores)
       args[:cores].each do |core|
@@ -181,7 +204,7 @@ namespace :argo do
       end
     end
 
-    desc "Reindex all DOR objects"
+    desc "Reindex all (or a subset) of DOR objects in Solr"
     task :reindex_all, [:query] => [:environment] do |t, args|
       index_log = Logger.new(File.join(Rails.root,'log','reindex.log'))
       index_log.formatter = Logger::Formatter.new
