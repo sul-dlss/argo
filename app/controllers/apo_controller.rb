@@ -11,9 +11,9 @@ class ApoController < ApplicationController
       'by' => 'Attribution 3.0 Unported',
       'by_sa' => 'Attribution Share Alike 3.0 Unported',
       'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-      'by-nc' => 'Attribution Non-Commercial 3.0 Unported', 
+      'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
       'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported', 
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
     }
     if params[:title]
       #register a new apo
@@ -103,14 +103,14 @@ class ApoController < ApplicationController
     end
   end
 
-  def update 
+  def update
     @cc= {
       'by' => 'Attribution 3.0 Unported',
       'by_sa' => 'Attribution Share Alike 3.0 Unported',
       'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-      'by-nc' => 'Attribution Non-Commercial 3.0 Unported', 
+      'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
       'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported' 
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported'
     }
     @object.copyright_statement = params[:copyright] if params[:copyright] and params[:copyright].length > 0
     @object.use_statement = params[:use] if params[:use] and params[:use].length >0
@@ -144,9 +144,9 @@ class ApoController < ApplicationController
       if params[:collection_abstract] and params[:collection_abstract].length >0
         set_abstract(collection_pid, params[:collection_abstract])
       end
-      
+
     end
-    
+
     if params[:collection_select]='select' and params[:collection] and params[:collection].length > 0
       @object.add_default_collection params[:collection]
     else
@@ -169,38 +169,37 @@ class ApoController < ApplicationController
 
   def register_collection
     if params[:collection_title] or params[:collection_catkey]
-      
-    reg_params={:workflow_priority => '65'}
-    if params[:collection_title] and params[:collection_title].length>0
-      reg_params[:label] = params[:collection_title]
-    else
-      reg_params[:label]= ':auto'
-    end
-    if reg_params[:label]==':auto'
-      reg_params[:rights]=params[:collection_rights_catkey]
-    else
-      reg_params[:rights]=params[:collection_rights]
-    end
-    if reg_params[:rights]
-      reg_params[:rights]=reg_params[:rights].downcase
-    end
-    reg_params[:object_type] = 'collection'
-    reg_params[:admin_policy] = params[:id]
-    reg_params[:metadata_source]='label' 
-    reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
-    reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
-    reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
-    reg_params[:workflow_id]='accessionWF'
-    response = Dor::RegistrationService.create_from_request(reg_params)
-    collection_pid = response[:pid]
-    if params[:collection_abstract] and params[:collection_abstract].length >0
-      set_abstract(collection_pid, params[:collection_abstract])
-    end
-    @object.add_default_collection collection_pid
-    redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}" 
+      reg_params={:workflow_priority => '65'}
+      if params[:collection_title] and params[:collection_title].length>0
+        reg_params[:label] = params[:collection_title]
+      else
+        reg_params[:label]= ':auto'
+      end
+      if reg_params[:label]==':auto'
+        reg_params[:rights]=params[:collection_rights_catkey]
+      else
+        reg_params[:rights]=params[:collection_rights]
+      end
+      if reg_params[:rights]
+        reg_params[:rights]=reg_params[:rights].downcase
+      end
+      reg_params[:object_type] = 'collection'
+      reg_params[:admin_policy] = params[:id]
+      reg_params[:metadata_source]='label'
+      reg_params[:metadata_source]='symphony' if params[:collection_catkey] and params[:collection_catkey].length > 0
+      reg_params[:other_id]='symphony:' + params[:collection_catkey] if params[:collection_catkey] and params[:collection_catkey].length > 0
+      reg_params[:metadata_source]='label' unless params[:collection_catkey] and params[:collection_catkey].length > 0
+      reg_params[:workflow_id]='accessionWF'
+      response = Dor::RegistrationService.create_from_request(reg_params)
+      collection_pid = response[:pid]
+      if params[:collection_abstract] and params[:collection_abstract].length >0
+        set_abstract(collection_pid, params[:collection_abstract])
+      end
+      @object.add_default_collection collection_pid
+      redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
     end
   end
-    
+
   def add_roleplayer
     @object.add_roleplayer(params[:role], params[:roleplayer])
     redirect
