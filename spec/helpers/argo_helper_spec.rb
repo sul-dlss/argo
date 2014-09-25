@@ -42,8 +42,7 @@ describe ArgoHelper do
       Dor.stub(:find).and_return(@object)
     end
     it 'should create a hash with the needed button info for an admin' do
-      needed_buttons= [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
-         {:label=>"Reindex", :url=>"/dor/reindex/something"},
+      needed_buttons= [{:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
@@ -58,8 +57,7 @@ describe ArgoHelper do
       @usr.stub(:is_admin).and_return(false)
       @object.stub(:can_manage_item?).and_return(true)
       buttons = helper.render_buttons(@doc)
-      needed_buttons = [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
-        {:label=>"Reindex", :url=>"/dor/reindex/something"},
+      needed_buttons = [{:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
@@ -73,8 +71,7 @@ describe ArgoHelper do
     it 'should include the embargo update button if the user is an admin and the object is embargoed' do
       @doc['embargoMetadata_t'] = ['2012-10-19T00:00:00Z']
       buttons = helper.render_buttons(@doc)
-      needed_buttons = [{:url=>"/items/something/prioritize", :label=>"Expedite Workflow"},
-        {:label=>"Reindex", :url=>"/dor/reindex/something"},
+      needed_buttons = [{:label=>"Reindex", :url=>"/dor/reindex/something"},
          {:label=>"Republish", :url=>"/dor/republish/something"},
          {:label=>"Change source id", :url=>"/items/something/source_id_ui"},
          {:label=>"Edit tags", :url=>"/items/something/tags_ui"},
