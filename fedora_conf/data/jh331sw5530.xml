@@ -1,0 +1,1526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:jh331sw5530"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Google Scanned Book, barcode 36105013417212"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="dor"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-01-07T00:29:09.980Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-05-07T02:25:59.340Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2011-01-07T00:29:09.980Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleScannedBookWF</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T00:29:10.294Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T00:51:46.576Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T00:51:46.939Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T00:51:47.099Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleMETS</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T03:02:02.091Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T03:02:02.791Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>sourceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T03:02:03.142Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T05:17:46.218Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T05:18:06.488Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC10">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T05:18:06.754Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC11">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-09T23:25:28.484Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-01-06T21:18:06.754Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC12">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-09T23:25:28.601Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-01-06T21:18:06.488Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC13">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-09T23:25:28.749Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-01-06T21:17:46.218Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC14">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T02:59:22.299Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC15">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T02:59:24.657Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC16">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T02:59:24.922Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC17">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:08:53.326Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-09T18:59:24.922Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC18">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:08:53.552Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-09T18:59:24.657Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC19">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:08:53.737Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-09T18:59:22.299Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC20">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:20:25.814Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC21">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:20:26.210Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC22">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:20:26.363Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC23">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:31:49.688Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC24">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:31:49.836Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC25">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T17:31:50.001Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC26">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T19:29:45.829Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC27">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T19:29:48.124Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC28">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T19:29:48.299Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC29">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T23:02:30.465Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-10T11:29:48.299Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC30">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T23:02:30.623Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-10T11:29:48.124Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC31">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-10T23:02:30.778Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-10T11:29:45.829Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC32">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-11T01:13:18.875Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC33">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-11T01:13:21.486Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC34">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-11T01:13:21.874Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC35">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-11T23:58:52.451Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-10T17:13:21.874Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC36">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-11T23:58:52.775Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-10T17:13:21.486Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC37">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-11T23:58:52.932Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-10T17:13:18.875Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC38">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T01:30:34.925Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC39">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T01:30:37.836Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC40">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T01:30:38.012Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC41">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T07:04:40.412Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-11T17:30:38.012Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC42">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T07:04:40.615Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-11T17:30:37.836Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC43">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T07:04:40.793Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-11T17:30:34.925Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC44">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T08:11:36.180Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC45">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T08:11:39.269Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC46">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T08:11:39.663Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC47">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T18:28:48.141Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T00:11:39.663Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC48">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T18:28:48.278Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T00:11:39.269Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC49">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T18:28:48.433Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T00:11:36.180Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC50">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T19:28:19.799Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC51">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T19:28:22.169Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC52">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T19:28:22.319Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC53">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T22:32:06.309Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T11:28:22.319Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC54">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T22:32:06.466Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T11:28:22.169Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC55">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T22:32:06.602Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T11:28:19.799Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC56">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T23:33:20.724Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC57">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T23:33:22.983Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC58">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-12T23:33:23.366Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC59">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-13T20:41:22.262Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T15:33:23.366Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC60">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-13T20:41:22.408Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T15:33:22.983Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC61">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-13T20:41:22.539Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-12T15:33:20.724Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC62">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-13T21:47:49.540Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC63">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-13T21:47:51.846Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC64">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-13T21:47:51.998Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC65">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T19:23:12.675Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-13T13:47:51.998Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC66">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T19:23:12.817Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-13T13:47:51.846Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC67">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T19:23:12.986Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-13T13:47:49.540Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC68">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T20:22:20.978Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC69">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T20:22:23.425Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC70">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T20:22:23.580Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC71">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T22:18:57.378Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-14T12:22:23.580Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC72">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T22:18:57.524Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-14T12:22:23.425Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC73">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-14T22:18:57.655Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-14T12:22:20.978Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC74">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T00:00:10.965Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC75">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T00:00:13.537Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC76">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T00:00:13.712Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC77">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T17:42:29.072Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-14T16:00:13.712Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC78">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T17:42:29.213Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-14T16:00:13.537Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC79">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T17:42:29.359Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-14T16:00:10.965Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC80">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T19:14:53.645Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC81">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T19:15:00.192Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC82">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-15T19:15:00.461Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC83">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-16T22:31:20.365Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-15T11:15:00.461Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC84">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-16T22:31:20.781Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-15T11:15:00.192Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC85">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-16T22:31:20.990Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-15T11:14:53.645Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC86">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-16T23:32:23.260Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC87">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-16T23:32:25.941Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC88">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-16T23:32:26.095Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC89">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-17T17:01:12.026Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-16T15:32:26.095Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC90">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-17T17:01:12.209Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-16T15:32:25.941Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC91">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-17T17:01:12.369Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-16T15:32:23.260Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC92">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T19:33:07.984Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC93">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T19:33:11.718Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC94">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T19:33:11.921Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC95">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T21:36:14.042Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-22T11:33:11.921Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC96">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T21:36:14.218Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-22T11:33:11.718Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC97">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T21:36:14.345Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-22T11:33:07.984Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC98">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T23:57:55.516Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC99">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T23:58:06.635Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC100">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-22T23:58:06.818Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC101">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-23T23:55:04.548Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-22T15:58:06.818Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC102">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-23T23:55:04.747Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-22T15:58:06.635Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC103">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-23T23:55:04.895Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-22T15:57:55.516Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC104">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T00:47:48.483Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC105">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T00:47:52.307Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC106">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T00:47:52.472Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC107">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T06:34:06.152Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-23T16:47:52.472Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC108">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T06:34:06.400Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-23T16:47:52.307Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC109">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T06:34:06.562Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-23T16:47:48.483Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC110">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T20:38:23.128Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC111">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T20:38:23.474Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC112">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-24T20:38:23.602Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC113">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T01:09:47.262Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC114">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T01:09:52.839Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC115">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T01:09:53.081Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC116">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T07:35:29.947Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-24T17:09:53.081Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC117">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T07:35:30.214Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-24T17:09:52.839Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC118">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T07:35:30.455Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-24T17:09:47.262Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC119">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T10:53:40.281Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC120">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T10:53:46.511Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC121">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T10:53:46.893Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC122">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T18:21:59.645Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-25T02:53:46.893Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC123">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T18:21:59.826Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-25T02:53:46.511Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC124">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-25T18:21:59.973Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-25T02:53:40.281Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC125">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-26T00:25:43.109Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC126">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-26T00:25:47.671Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC127">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-26T00:25:47.861Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC128">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-27T17:36:45.919Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-25T16:25:47.861Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC129">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-27T17:36:46.143Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-25T16:25:47.671Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC130">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-27T17:36:46.277Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-25T16:25:43.109Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC131">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-28T00:27:40.306Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC132">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-28T00:27:44.217Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC133">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-02-28T00:27:44.412Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC134">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-01T19:02:41.158Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-27T16:27:44.412Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC135">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-01T19:02:41.407Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-27T16:27:44.217Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC136">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-01T19:02:41.776Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-02-27T16:27:40.306Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC137">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-01T22:11:07.621Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC138">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-01T22:11:15.009Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC139">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-01T22:11:15.245Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC140">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-03T18:30:40.539Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-03-01T14:11:15.245Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC141">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-03T18:30:40.739Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-03-01T14:11:15.009Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC142">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-03T18:30:41.092Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-03-01T14:11:07.621Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC143">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-08T21:56:26.985Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC144">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-08T21:56:27.159Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC145">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-08T21:56:27.475Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC146">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-09T00:06:14.119Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC147">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-09T00:06:18.408Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC148">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-09T00:06:18.581Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC149">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-12T01:44:18.490Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-03-08T16:06:18.581Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC150">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-12T01:44:18.738Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-03-08T16:06:18.408Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC151">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-12T01:44:18.917Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-03-08T16:06:14.119Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC152">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-16T20:32:23.487Z</audit:date>
+<audit:justification>Purged datastream (ID=provenanceMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC153">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-16T20:32:23.682Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC154">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-16T20:32:23.822Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 0 datastream version(s) () and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC155">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-16T23:36:04.706Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC156">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-03-16T23:36:04.871Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC157">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T01:54:23.633Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC158">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T01:54:23.633Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC159">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-29T01:35:06.324Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC160">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-30T08:48:26.470Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC161">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-28T01:39:40.701Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC162">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>googleScannedBookWF</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:56.323Z</audit:date>
+<audit:justification>Purged datastream (ID=googleScannedBookWF), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-01-06T16:29:10.294Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC163">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:56.913Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC164">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:56.913Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC165">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:57.495Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC166">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:57.495Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC167">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:57.964Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC168">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:57.964Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC169">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:58.510Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC170">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:58.510Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC171">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:59.082Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC172">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-07T02:25:59.340Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.4" LABEL="Dublin Core Record for this object" CREATED="2011-10-30T08:48:26.470Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1013">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Opisanīe Otechestvennoĭ voĭny 1812 goda</dc:title>
+  <dc:creator>Mikhaĭlovskiĭ-Danilevskiĭ, Aleksandr Ivanovich , 1789 or 90-1848</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:date>1840-1843</dc:date>
+  <dc:language>rus</dc:language>
+  <dc:identifier>catkey:2044464</dc:identifier>
+  <dc:identifier>shelfseq:DC 000235 .M55  1840  V.000002</dc:identifier>
+  <dc:identifier>barcode:36105013417212</dc:identifier>
+  <dc:identifier>callseq:6</dc:identifier>
+  <dc:identifier>uuid:368a5ba5-7cd5-4e8a-bd4b-382a40e2094b</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013417212</dc:identifier>
+  <dc:identifier>druid:jh331sw5530</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.3" LABEL="Dublin Core Record for this object" CREATED="2011-10-29T01:35:06.324Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1013">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Opisanīe Otechestvennoĭ voĭny 1812 goda</dc:title>
+  <dc:creator>Mikhaĭlovskiĭ-Danilevskiĭ, Aleksandr Ivanovich , 1789 or 90-1848</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:date>1840-1843</dc:date>
+  <dc:language>rus</dc:language>
+  <dc:identifier>catkey:2044464</dc:identifier>
+  <dc:identifier>shelfseq:DC 000235 .M55  1840  V.000002</dc:identifier>
+  <dc:identifier>barcode:36105013417212</dc:identifier>
+  <dc:identifier>callseq:6</dc:identifier>
+  <dc:identifier>uuid:368a5ba5-7cd5-4e8a-bd4b-382a40e2094b</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013417212</dc:identifier>
+  <dc:identifier>druid:jh331sw5530</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.2" LABEL="Dublin Core Record for this object" CREATED="2011-09-29T01:54:23.633Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1013">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Opisanīe Otechestvennoĭ voĭny 1812 goda</dc:title>
+  <dc:creator>Mikhaĭlovskiĭ-Danilevskiĭ, Aleksandr Ivanovich , 1789 or 90-1848</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:date>1840-1843</dc:date>
+  <dc:language>rus</dc:language>
+  <dc:identifier>catkey:2044464</dc:identifier>
+  <dc:identifier>shelfseq:DC 000235 .M55  1840  V.000002</dc:identifier>
+  <dc:identifier>barcode:36105013417212</dc:identifier>
+  <dc:identifier>callseq:6</dc:identifier>
+  <dc:identifier>uuid:368a5ba5-7cd5-4e8a-bd4b-382a40e2094b</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013417212</dc:identifier>
+  <dc:identifier>druid:jh331sw5530</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-01-07T00:29:10.037Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="421">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#">              <rdf:Description rdf:about="info:fedora/druid:jh331sw5530">                <fedora-model:hasModel rdf:resource="info:fedora/dor:googleScannedBook"></fedora-model:hasModel>              </rdf:Description>        </rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="contentMetadata.1" LABEL="Content Metadata" CREATED="2012-05-07T02:25:57.964Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:jh331sw5530+contentMetadata+contentMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="descMetadata.1" LABEL="Descriptive Metadata" CREATED="2012-05-07T02:25:56.913Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:jh331sw5530+descMetadata+descMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="events" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="events.0" LABEL="" CREATED="2012-05-07T02:25:59.082Z" MIMETYPE="text/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:jh331sw5530+events+events.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="googleMETS" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="googleMETS.0" LABEL="Google METS" CREATED="2011-01-07T03:02:02.091Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:jh331sw5530+googleMETS+googleMETS.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="identityMetadata.3" LABEL="Identity Metadata" CREATED="2012-05-07T02:25:58.510Z" MIMETYPE="application/xml" SIZE="1038">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:jh331sw5530</objectId>
+  <objectType>item</objectType>
+  <objectAdminClass>GoogleBooks</objectAdminClass>
+  <objectLabel>Google Scanned Book, barcode 36105013417212</objectLabel>
+  <objectCreator>DOR</objectCreator>
+  <citationTitle>Opisanīe Otechestvennoĭ voĭny 1812 goda</citationTitle>
+  <citationCreator>Mikhaĭlovskiĭ-Danilevskiĭ, Aleksandr Ivanovich , 1789
+        or 90-1848</citationCreator>
+  <sourceId source="google">STANFORD_36105013417212</sourceId>
+  <otherId name="catkey">2044464</otherId>
+  <otherId name="shelfseq">DC 000235 .M55 1840 V.000002</otherId>
+  <otherId name="barcode">36105013417212</otherId>
+  <otherId name="callseq">6</otherId>
+  <otherId name="uuid">368a5ba5-7cd5-4e8a-bd4b-382a40e2094b</otherId>
+  <agreementId>druid:zn292gq7284</agreementId>
+  <tag>Book : Multi-volume work</tag>
+  <tag>Google Book : GBS VIEW_FULL</tag>
+  <tag>Book : Non-US pre-1891</tag>
+  <tag>Google Book : Scan source STANFORD</tag>
+  <tag>Remediated By : 3.6.2</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="provenanceMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="provenanceMetadata.1" LABEL="Provenance Metadata" CREATED="2012-05-07T02:25:57.495Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:jh331sw5530+provenanceMetadata+provenanceMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="sourceMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="sourceMetadata.0" LABEL="Source Metadata" CREATED="2011-01-07T03:02:03.142Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:jh331sw5530+sourceMetadata+sourceMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
+<foxml:datastreamVersion ID="workflows.1" LABEL="Workflows" CREATED="2012-05-07T02:25:59.340Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:jh331sw5530/workflows"/>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflows.0" LABEL="workflows" CREATED="2012-01-28T01:39:40.701Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:jh331sw5530/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

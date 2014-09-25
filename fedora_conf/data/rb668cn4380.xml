@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:rb668cn4380"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Google Scanned Book, barcode 36105013540807"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="dor"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-01-07T01:24:00.177Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-01-28T02:53:44.008Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2011-01-07T01:24:00.177Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleScannedBookWF</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T01:24:00.610Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T02:04:48.358Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T02:04:48.649Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T02:04:48.769Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T02:52:24.109Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T02:52:24.109Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-29T01:41:34.160Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-30T08:58:42.280Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-28T02:53:44.008Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.4" LABEL="Dublin Core Record for this object" CREATED="2011-10-30T08:58:42.280Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1041">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Gossip of the century: personal and traditional memories, social, literary, artistic, etc</dc:title>
+  <dc:title>Social hours with celebrities</dc:title>
+  <dc:creator>Byrne, Wm. Pitt , 1819-1894</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>eng</dc:language>
+  <dc:identifier>catkey:765772</dc:identifier>
+  <dc:identifier>shelfseq:D  000360 .B88  1899  V.000002</dc:identifier>
+  <dc:identifier>barcode:36105013540807</dc:identifier>
+  <dc:identifier>callseq:6</dc:identifier>
+  <dc:identifier>uuid:ce5cdb27-bdbe-4b1e-ae64-c25a30df459c</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013540807</dc:identifier>
+  <dc:identifier>druid:rb668cn4380</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.3" LABEL="Dublin Core Record for this object" CREATED="2011-10-29T01:41:34.160Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1041">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Gossip of the century: personal and traditional memories, social, literary, artistic, etc</dc:title>
+  <dc:title>Social hours with celebrities</dc:title>
+  <dc:creator>Byrne, Wm. Pitt , 1819-1894</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>eng</dc:language>
+  <dc:identifier>catkey:765772</dc:identifier>
+  <dc:identifier>shelfseq:D  000360 .B88  1899  V.000002</dc:identifier>
+  <dc:identifier>barcode:36105013540807</dc:identifier>
+  <dc:identifier>callseq:6</dc:identifier>
+  <dc:identifier>uuid:ce5cdb27-bdbe-4b1e-ae64-c25a30df459c</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013540807</dc:identifier>
+  <dc:identifier>druid:rb668cn4380</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.2" LABEL="Dublin Core Record for this object" CREATED="2011-09-29T02:52:24.109Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1041">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Gossip of the century: personal and traditional memories, social, literary, artistic, etc</dc:title>
+  <dc:title>Social hours with celebrities</dc:title>
+  <dc:creator>Byrne, Wm. Pitt , 1819-1894</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>eng</dc:language>
+  <dc:identifier>catkey:765772</dc:identifier>
+  <dc:identifier>shelfseq:D  000360 .B88  1899  V.000002</dc:identifier>
+  <dc:identifier>barcode:36105013540807</dc:identifier>
+  <dc:identifier>callseq:6</dc:identifier>
+  <dc:identifier>uuid:ce5cdb27-bdbe-4b1e-ae64-c25a30df459c</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013540807</dc:identifier>
+  <dc:identifier>druid:rb668cn4380</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-01-07T01:24:00.200Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="421">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#">              <rdf:Description rdf:about="info:fedora/druid:rb668cn4380">                <fedora-model:hasModel rdf:resource="info:fedora/dor:googleScannedBook"></fedora-model:hasModel>              </rdf:Description>        </rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata (MODS)" CREATED="2011-01-07T02:04:48.358Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:rb668cn4380+descMetadata+descMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="googleScannedBookWF" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+<foxml:datastreamVersion ID="googleScannedBookWF.0" LABEL="Workflow" CREATED="2011-01-07T01:24:00.610Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:rb668cn4380/workflows/googleScannedBookWF"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="identityMetadata.1" LABEL="Identity Metadata" CREATED="2011-01-07T02:04:48.769Z" MIMETYPE="application/xml" SIZE="919">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:rb668cn4380</objectId>
+  <objectType>item</objectType>
+  <objectAdminClass>GoogleBooks</objectAdminClass>
+  <objectLabel>Google Scanned Book, barcode 36105013540807</objectLabel>
+  <objectCreator>DOR</objectCreator>
+  <citationTitle>Gossip of the century: personal and traditional memories, social, literary, artistic, etc</citationTitle>
+  <citationCreator>Byrne, Wm. Pitt , 1819-1894</citationCreator>
+  <sourceId source="google">STANFORD_36105013540807</sourceId>
+  <otherId name="catkey">765772</otherId>
+  <otherId name="shelfseq">D  000360 .B88  1899  V.000002</otherId>
+  <otherId name="barcode">36105013540807</otherId>
+  <otherId name="callseq">6</otherId>
+  <otherId name="uuid">ce5cdb27-bdbe-4b1e-ae64-c25a30df459c</otherId>
+  <agreementId>druid:zn292gq7284</agreementId>
+  <tag>Book : Multi-volume work</tag>
+  <tag>Google Book : GBS VIEW_FULL</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
+<foxml:datastreamVersion ID="workflows.0" LABEL="workflows" CREATED="2012-01-28T02:53:44.008Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:rb668cn4380/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

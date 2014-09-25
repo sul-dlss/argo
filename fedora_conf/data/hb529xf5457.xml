@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:hb529xf5457"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Google Scanned Book, barcode 36105013820555"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="dor"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-01-07T01:59:40.935Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-01-28T01:30:21.753Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2011-01-07T01:59:40.935Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleScannedBookWF</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T01:59:41.135Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T02:34:43.255Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T02:34:43.495Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-01-07T02:34:43.638Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T02:42:47.799Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T02:42:47.799Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-29T01:46:53.127Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-30T09:06:17.409Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-28T01:30:21.753Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.4" LABEL="Dublin Core Record for this object" CREATED="2011-10-30T09:06:17.409Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="991">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Český lid</dc:title>
+  <dc:format>text</dc:format>
+  <dc:date>1892-9999</dc:date>
+  <dc:language>cze</dc:language>
+  <dc:identifier>issn:0009-0794</dc:identifier>
+  <dc:identifier>lccn:51032293</dc:identifier>
+  <dc:identifier>catkey:356355</dc:identifier>
+  <dc:identifier>shelfseq:DB 000191 .C54  V.000012 001902/001903</dc:identifier>
+  <dc:identifier>barcode:36105013820555</dc:identifier>
+  <dc:identifier>callseq:123</dc:identifier>
+  <dc:identifier>uuid:688ef5d4-5ef3-4ea9-8e99-cadac9920b07</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013820555</dc:identifier>
+  <dc:identifier>druid:hb529xf5457</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.3" LABEL="Dublin Core Record for this object" CREATED="2011-10-29T01:46:53.127Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="991">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Český lid</dc:title>
+  <dc:format>text</dc:format>
+  <dc:date>1892-9999</dc:date>
+  <dc:language>cze</dc:language>
+  <dc:identifier>issn:0009-0794</dc:identifier>
+  <dc:identifier>lccn:51032293</dc:identifier>
+  <dc:identifier>catkey:356355</dc:identifier>
+  <dc:identifier>shelfseq:DB 000191 .C54  V.000012 001902/001903</dc:identifier>
+  <dc:identifier>barcode:36105013820555</dc:identifier>
+  <dc:identifier>callseq:123</dc:identifier>
+  <dc:identifier>uuid:688ef5d4-5ef3-4ea9-8e99-cadac9920b07</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013820555</dc:identifier>
+  <dc:identifier>druid:hb529xf5457</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.2" LABEL="Dublin Core Record for this object" CREATED="2011-09-29T02:42:47.799Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="991">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Český lid</dc:title>
+  <dc:format>text</dc:format>
+  <dc:date>1892-9999</dc:date>
+  <dc:language>cze</dc:language>
+  <dc:identifier>issn:0009-0794</dc:identifier>
+  <dc:identifier>lccn:51032293</dc:identifier>
+  <dc:identifier>catkey:356355</dc:identifier>
+  <dc:identifier>shelfseq:DB 000191 .C54  V.000012 001902/001903</dc:identifier>
+  <dc:identifier>barcode:36105013820555</dc:identifier>
+  <dc:identifier>callseq:123</dc:identifier>
+  <dc:identifier>uuid:688ef5d4-5ef3-4ea9-8e99-cadac9920b07</dc:identifier>
+  <dc:identifier>google:STANFORD_36105013820555</dc:identifier>
+  <dc:identifier>druid:hb529xf5457</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-01-07T01:59:40.955Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="421">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#">              <rdf:Description rdf:about="info:fedora/druid:hb529xf5457">                <fedora-model:hasModel rdf:resource="info:fedora/dor:googleScannedBook"></fedora-model:hasModel>              </rdf:Description>        </rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata (MODS)" CREATED="2011-01-07T02:34:43.255Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:hb529xf5457+descMetadata+descMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="googleScannedBookWF" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+<foxml:datastreamVersion ID="googleScannedBookWF.0" LABEL="Workflow" CREATED="2011-01-07T01:59:41.135Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:hb529xf5457/workflows/googleScannedBookWF"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="identityMetadata.1" LABEL="Identity Metadata" CREATED="2011-01-07T02:34:43.638Z" MIMETYPE="application/xml" SIZE="786">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hb529xf5457</objectId>
+  <objectType>item</objectType>
+  <objectAdminClass>GoogleBooks</objectAdminClass>
+  <objectLabel>Google Scanned Book, barcode 36105013820555</objectLabel>
+  <objectCreator>DOR</objectCreator>
+  <citationTitle>Český lid</citationTitle>
+  <sourceId source="google">STANFORD_36105013820555</sourceId>
+  <otherId name="catkey">356355</otherId>
+  <otherId name="shelfseq">DB 000191 .C54  V.000012 001902/001903</otherId>
+  <otherId name="barcode">36105013820555</otherId>
+  <otherId name="callseq">123</otherId>
+  <otherId name="uuid">688ef5d4-5ef3-4ea9-8e99-cadac9920b07</otherId>
+  <agreementId>druid:zn292gq7284</agreementId>
+  <tag>Book : Multi-volume work</tag>
+  <tag>Google Book : GBS VIEW_FULL</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
+<foxml:datastreamVersion ID="workflows.0" LABEL="workflows" CREATED="2012-01-28T01:30:21.753Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:hb529xf5457/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

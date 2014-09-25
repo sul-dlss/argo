@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:bw071ht4530"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Google Scanned Book, barcode 36105010254071"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="dor"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2010-11-10T08:15:13.520Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-05-06T22:57:23.291Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2010-11-10T08:15:13.520Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleScannedBookWF</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T08:15:13.821Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T09:12:19.615Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T09:12:19.880Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T09:12:20.010Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleMETS</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T10:21:47.992Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>sourceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T10:21:48.429Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T10:21:48.801Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T17:02:56.927Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T17:03:04.660Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC10">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T17:03:35.681Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC11">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T01:14:45.285Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC12">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T01:14:45.285Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC13">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-28T23:14:46.945Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC14">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-30T06:45:20.466Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC15">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-28T00:57:32.743Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC16">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>googleScannedBookWF</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:20.608Z</audit:date>
+<audit:justification>Purged datastream (ID=googleScannedBookWF), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2010-11-10T00:15:13.821Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC17">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:21.343Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC18">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:21.343Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC19">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:21.641Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC20">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:21.641Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC21">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:22.039Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC22">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:22.039Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC23">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:22.506Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC24">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:22.506Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC25">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:23.080Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC26">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T22:57:23.291Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.4" LABEL="Dublin Core Record for this object" CREATED="2011-10-30T06:45:20.466Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1032">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Mémoires sur la vie privée de Marie-Antoinette, reine de France et de Navarre: Mis en ordre et puliés par m. Barrière</dc:title>
+  <dc:creator>Campan, (Jeanne-Louise-Henriette) , 1752-1822</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>fre</dc:language>
+  <dc:identifier>catkey:2281676</dc:identifier>
+  <dc:identifier>shelfseq:944.049 .B552  V.000009</dc:identifier>
+  <dc:identifier>barcode:36105010254071</dc:identifier>
+  <dc:identifier>callseq:3</dc:identifier>
+  <dc:identifier>uuid:ae26c7de-7dd5-4278-92d1-64defbef9a31</dc:identifier>
+  <dc:identifier>google:STANFORD_36105010254071</dc:identifier>
+  <dc:identifier>druid:bw071ht4530</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.3" LABEL="Dublin Core Record for this object" CREATED="2011-10-28T23:14:46.945Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1032">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Mémoires sur la vie privée de Marie-Antoinette, reine de France et de Navarre: Mis en ordre et puliés par m. Barrière</dc:title>
+  <dc:creator>Campan, (Jeanne-Louise-Henriette) , 1752-1822</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>fre</dc:language>
+  <dc:identifier>catkey:2281676</dc:identifier>
+  <dc:identifier>shelfseq:944.049 .B552  V.000009</dc:identifier>
+  <dc:identifier>barcode:36105010254071</dc:identifier>
+  <dc:identifier>callseq:3</dc:identifier>
+  <dc:identifier>uuid:ae26c7de-7dd5-4278-92d1-64defbef9a31</dc:identifier>
+  <dc:identifier>google:STANFORD_36105010254071</dc:identifier>
+  <dc:identifier>druid:bw071ht4530</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.2" LABEL="Dublin Core Record for this object" CREATED="2011-09-29T01:14:45.285Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1032">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Mémoires sur la vie privée de Marie-Antoinette, reine de France et de Navarre: Mis en ordre et puliés par m. Barrière</dc:title>
+  <dc:creator>Campan, (Jeanne-Louise-Henriette) , 1752-1822</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>fre</dc:language>
+  <dc:identifier>catkey:2281676</dc:identifier>
+  <dc:identifier>shelfseq:944.049 .B552  V.000009</dc:identifier>
+  <dc:identifier>barcode:36105010254071</dc:identifier>
+  <dc:identifier>callseq:3</dc:identifier>
+  <dc:identifier>uuid:ae26c7de-7dd5-4278-92d1-64defbef9a31</dc:identifier>
+  <dc:identifier>google:STANFORD_36105010254071</dc:identifier>
+  <dc:identifier>druid:bw071ht4530</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2010-11-10T08:15:13.545Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="423">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#">              <rdf:Description rdf:about="info:fedora/druid:bw071ht4530">                <fedora-model:hasModel rdf:resource="info:fedora/dor:googleScannedBookWF"></fedora-model:hasModel>              </rdf:Description>        </rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="contentMetadata.1" LABEL="Content Metadata" CREATED="2012-05-06T22:57:22.039Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:bw071ht4530+contentMetadata+contentMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="descMetadata.1" LABEL="Descriptive Metadata" CREATED="2012-05-06T22:57:21.343Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:bw071ht4530+descMetadata+descMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="events" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="events.0" LABEL="" CREATED="2012-05-06T22:57:23.080Z" MIMETYPE="text/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:bw071ht4530+events+events.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="googleMETS" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="googleMETS.0" LABEL="Google METS" CREATED="2010-11-10T10:21:47.992Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:bw071ht4530+googleMETS+googleMETS.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="identityMetadata.3" LABEL="Identity Metadata" CREATED="2012-05-06T22:57:22.506Z" MIMETYPE="application/xml" SIZE="1054">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:bw071ht4530</objectId>
+  <objectType>item</objectType>
+  <objectLabel>Google Scanned Book, barcode 36105010254071</objectLabel>
+  <objectCreator>DOR</objectCreator>
+  <citationTitle>Mï¿½moires sur la vie privï¿½e de Marie-Antoinette, reine
+        de France et de Navarre: Mis en ordre et puliï¿½s par m. Barriï¿½re</citationTitle>
+  <citationCreator>Campan, (Jeanne-Louise-Henriette) , 1752-1822</citationCreator>
+  <sourceId source="google">STANFORD_36105010254071</sourceId>
+  <otherId name="catkey">2281676</otherId>
+  <otherId name="shelfseq">944.049 .B552 V.000009</otherId>
+  <otherId name="barcode">36105010254071</otherId>
+  <otherId name="callseq">3</otherId>
+  <otherId name="uuid">ae26c7de-7dd5-4278-92d1-64defbef9a31</otherId>
+  <agreementId>druid:zn292gq7284</agreementId>
+  <tag>Book : Multi-volume work</tag>
+  <tag>Google Book : GBS VIEW_FULL</tag>
+  <tag>Book : Non-US pre-1891</tag>
+  <tag>Google Book : Scan source STANFORD</tag>
+  <tag>Remediated By : 3.6.2</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="provenanceMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="provenanceMetadata.1" LABEL="Provenance Metadata" CREATED="2012-05-06T22:57:21.641Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:bw071ht4530+provenanceMetadata+provenanceMetadata.1"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="sourceMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="sourceMetadata.0" LABEL="Source Metadata" CREATED="2010-11-10T10:21:48.429Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:bw071ht4530+sourceMetadata+sourceMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="technicalMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="technicalMetadata.0" LABEL="Technical Metadata" CREATED="2010-11-10T17:02:56.927Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:bw071ht4530+technicalMetadata+technicalMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
+<foxml:datastreamVersion ID="workflows.1" LABEL="Workflows" CREATED="2012-05-06T22:57:23.291Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:bw071ht4530/workflows"/>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflows.0" LABEL="workflows" CREATED="2012-01-28T00:57:32.743Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:bw071ht4530/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

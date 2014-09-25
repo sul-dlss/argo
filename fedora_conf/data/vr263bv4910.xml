@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:vr263bv4910"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Google Scanned Book, barcode 36105020003492"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="dor"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2010-11-10T13:32:58.643Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2011-10-30T07:23:52.614Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2010-11-10T13:32:58.643Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleScannedBookWF</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T13:32:59.080Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T13:45:48.789Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T13:45:49.128Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-10T13:45:49.289Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>googleMETS</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-17T13:54:02.948Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>sourceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-17T13:54:03.390Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-11-17T13:54:03.691Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-12-11T02:35:27.890Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-12-11T02:35:29.322Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC10">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2010-12-11T02:35:29.597Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC11">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-29T00:00:33.983Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC12">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-29T00:00:33.983Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC13">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-30T07:23:52.614Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.3" LABEL="Dublin Core Record for this object" CREATED="2011-10-30T07:23:52.614Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1078">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Bracton&apos;s Note book: A collection of cases decided in the King&apos;s courts during the reign of Henry the Third</dc:title>
+  <dc:creator>Great Britain Courts.</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>lat</dc:language>
+  <dc:subject>LAW</dc:subject>
+  <dc:identifier>lccn:12030875</dc:identifier>
+  <dc:identifier>catkey:2328884</dc:identifier>
+  <dc:identifier>shelfseq:347 .B796M V.000002</dc:identifier>
+  <dc:identifier>barcode:36105020003492</dc:identifier>
+  <dc:identifier>callseq:2</dc:identifier>
+  <dc:identifier>uuid:fb3d76d1-d69c-4f6b-9254-e513e9efc51a</dc:identifier>
+  <dc:identifier>google:STANFORD_36105020003492</dc:identifier>
+  <dc:identifier>druid:vr263bv4910</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.2" LABEL="Dublin Core Record for this object" CREATED="2011-10-29T00:00:33.983Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="1078">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:srw_dc="info:srw/schema/1/dc-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://cosimo.stanford.edu/standards/oai_dc/v2/oai_dc.xsd">
+  <dc:title>Bracton&apos;s Note book: A collection of cases decided in the King&apos;s courts during the reign of Henry the Third</dc:title>
+  <dc:creator>Great Britain Courts.</dc:creator>
+  <dc:format>text</dc:format>
+  <dc:language>lat</dc:language>
+  <dc:subject>LAW</dc:subject>
+  <dc:identifier>lccn:12030875</dc:identifier>
+  <dc:identifier>catkey:2328884</dc:identifier>
+  <dc:identifier>shelfseq:347 .B796M V.000002</dc:identifier>
+  <dc:identifier>barcode:36105020003492</dc:identifier>
+  <dc:identifier>callseq:2</dc:identifier>
+  <dc:identifier>uuid:fb3d76d1-d69c-4f6b-9254-e513e9efc51a</dc:identifier>
+  <dc:identifier>google:STANFORD_36105020003492</dc:identifier>
+  <dc:identifier>druid:vr263bv4910</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2010-11-10T13:32:58.663Z" MIMETYPE="application/rdf+xml" FORMAT_URI="info:fedora/fedora-system:FedoraRELSExt-1.0" SIZE="423">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rel="info:fedora/fedora-system:def/relations-external#">              <rdf:Description rdf:about="info:fedora/druid:vr263bv4910">                <fedora-model:hasModel rdf:resource="info:fedora/dor:googleScannedBookWF"></fedora-model:hasModel>              </rdf:Description>        </rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="contentMetadata.0" LABEL="Content Metadata" CREATED="2010-12-11T02:35:29.322Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:vr263bv4910+contentMetadata+contentMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata (MODS)" CREATED="2010-11-10T13:45:48.789Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:vr263bv4910+descMetadata+descMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="googleMETS" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="googleMETS.0" LABEL="Google METS" CREATED="2010-11-17T13:54:02.948Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:vr263bv4910+googleMETS+googleMETS.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="googleScannedBookWF" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+<foxml:datastreamVersion ID="googleScannedBookWF.0" LABEL="Workflow" CREATED="2010-11-10T13:32:59.080Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:vr263bv4910/workflows/googleScannedBookWF"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="identityMetadata.2" LABEL="Identity Metadata" CREATED="2010-11-17T13:54:03.691Z" MIMETYPE="application/xml" SIZE="972">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:vr263bv4910</objectId>
+  <objectType>item</objectType>
+  <objectLabel>Google Scanned Book, barcode 36105020003492</objectLabel>
+  <objectCreator>DOR</objectCreator>
+  <citationTitle>Bracton&apos;s Note book: A collection of cases decided in
+        the King&apos;s courts during the reign of Henry the Third</citationTitle>
+  <citationCreator>Great Britain Courts.</citationCreator>
+  <sourceId source="google">STANFORD_36105020003492</sourceId>
+  <otherId name="catkey">2328884</otherId>
+  <otherId name="shelfseq">347 .B796M V.000002</otherId>
+  <otherId name="barcode">36105020003492</otherId>
+  <otherId name="callseq">2</otherId>
+  <otherId name="uuid">fb3d76d1-d69c-4f6b-9254-e513e9efc51a</otherId>
+  <agreementId>druid:zn292gq7284</agreementId>
+  <tag>Book : Multi-volume work</tag>
+  <tag>Google Book : GBS VIEW_FULL</tag>
+  <tag>Book : Non-US pre-1891</tag>
+  <tag>Google Book : Scan source STANFORD</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="provenanceMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="provenanceMetadata.0" LABEL="Provenance Metadata" CREATED="2010-12-11T02:35:29.597Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:vr263bv4910+provenanceMetadata+provenanceMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="sourceMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="sourceMetadata.0" LABEL="Source Metadata" CREATED="2010-11-17T13:54:03.390Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:vr263bv4910+sourceMetadata+sourceMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="technicalMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="technicalMetadata.0" LABEL="Technical Metadata" CREATED="2010-12-11T02:35:27.890Z" MIMETYPE="application/xml" SIZE="-1">
+<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:vr263bv4910+technicalMetadata+technicalMetadata.0"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>
