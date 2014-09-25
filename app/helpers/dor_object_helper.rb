@@ -21,9 +21,9 @@ module DorObjectHelper
     end
     result
   end
-  
 
-  
+
+
   def render_qfacet_value(facet_solr_field, item, options ={})
      params=add_facet_params(facet_solr_field, item.qvalue)
      link_to(item.value,root_url)
@@ -41,11 +41,11 @@ module DorObjectHelper
   end
 
   def render_embargo_date_reset(pid, current_user)
-    #	 new_date=Datetime.parse(new_date)
-    #		if(new_date.past?)
-    #				raise 'The new date must be in the future!'
-    #			end
-    if is_permitted(current_user, :modify, pid)	
+    # new_date=Datetime.parse(new_date)
+    # if(new_date.past?)
+    #   raise 'The new date must be in the future!'
+    # end
+    if is_permitted(current_user, :modify, pid)
       form_tag embargo_update_item_url(pid), :class => 'dialogLink' do
         button_tag("Change Embargo", :type => 'submit')
       end
@@ -134,7 +134,7 @@ module DorObjectHelper
       end
       source
     end
-    
+
     def has_been_published? pid
       Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
     end
@@ -157,8 +157,8 @@ module DorObjectHelper
       else
         object.versionMetadata.current_version_id
       end
-    end  
-    
+    end
+
     def can_open_version? pid
       if not (Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))
         return false
@@ -168,7 +168,7 @@ module DorObjectHelper
       end
       if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
         return false
-      end 
+      end
       true
     end
 
@@ -179,14 +179,14 @@ module DorObjectHelper
         false
       end
     end
-    
+
     def render_qfacet_value(facet_solr_field, item, options ={})
       params=add_facet_params(facet_solr_field, item.qvalue)
-      Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do 
+      Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
        (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
      end
     end
-    
+
     def render_workflows doc, obj
       workflows = {}
       Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :string, :displayable)]).each do |line|

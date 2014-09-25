@@ -2,7 +2,7 @@ module WorkflowHelper
   def show_workflow_grid?
     controller_name == 'report' and action_name == 'workflow_grid'
   end
-  
+
   def render_workflow_grid
     workflow_data = facet_tree('wf')['wf_wps_facet']
     result = workflow_data.keys.sort.collect do |wf_name|
@@ -14,12 +14,12 @@ module WorkflowHelper
     new_params = add_facet_params("wf_wps_facet", name).merge(:controller => 'catalog', :action => 'index')
     link_to(name, new_params)
   end
-  
+
   def render_workflow_process_name(name,process)
     new_params = add_facet_params("wf_wps_facet", [name,process].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     link_to(process, new_params)
   end
-  
+
   def render_workflow_process_reset(pid, process)
     allowable_changes = {
       'hold' => 'waiting',
@@ -40,12 +40,12 @@ module WorkflowHelper
   end
 
   def render_workflow_reset_link(wf_hash,name,process,status)
-    if (wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_]) 
+    if (wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_])
       new_params = add_facet_params("wf_wps_facet", [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow=>name,:reset_step=>process)
       raw " | " + link_to('reset', new_params,:remote=>true)
     end
   end
-  
+
   def render_workflow_item_count(wf_hash,name,process,status)
     new_params = add_facet_params("wf_wps_facet", [name,process,status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     rotate_facet_params('wf','wps',facet_order('wf'),new_params)
@@ -58,12 +58,12 @@ module WorkflowHelper
     end
     link_to(item_count, new_params)
   end
-  
+
   def render_workflow_archive_count(repo,name)
     wf_doc = Dor::SearchService.query("objectType_facet:workflow workflow_name_s:#{name}").docs.first
     wf_doc.nil? ? '-' : wf_doc["#{name}_archived_display"].first.to_i
   end
-  
+
   def render_workflow_grid_toggle(field_name)
     if field_name =~ /^wf_.+_facet/
       p = params.dup
@@ -91,5 +91,5 @@ module WorkflowHelper
 
       proc_names
   end
-  
+
 end

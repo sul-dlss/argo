@@ -8,7 +8,7 @@ module ApplicationHelper
   def fedora_base
     URI.parse(Dor::Config.fedora.safeurl.sub(/\/*$/,'/'))
   end
-  
+
   def object_location(pid)
     fedora_base.merge("objects/#{pid}").to_s
   end
@@ -20,11 +20,11 @@ module ApplicationHelper
   def robot_status_url
     return Argo::Config.urls.robot_status
   end
-  
+
   protected
-  
+
   def silently
     begin; yield; rescue; end
   end
-  
+
 end
