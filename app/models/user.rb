@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  # Connects this user object to Blacklights Bookmarks and Folders. 
+  # Connects this user object to Blacklights Bookmarks and Folders.
   include Blacklight::User
 
   attr_accessor :webauth
@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
       sunetid
     end
   end
-  
+
   @role_cache={}
   def roles pid
     if not @role_cache
@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
         toret << role
       end
     end
-    #store this for now, there may be several role related calls 
+    #store this for now, there may be several role related calls
     @role_cache[pid]=toret
     toret
   end
@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
     ['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer', 'dor-apo-creator', 'dor-apo-manager', 'dor-apo-depositor', 'dor-apo-reviewer', 'dor-apo-metadata', 'dor-apo-viewer']
   end
 
-  def permitted_apos 
+  def permitted_apos
     query=""
     first=true
     groups.each do |group|
@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
     end
     q='apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')'
     known_roles.each do |role|
-      q+=' OR apo_role_'+role+'_t:('+query+')' 
+      q+=' OR apo_role_'+role+'_t:('+query+')'
     end
     if is_admin
       q='objectType_facet:adminPolicy'
@@ -93,7 +93,7 @@ class User < ActiveRecord::Base
     resp.each do |doc|
       pids << doc['id']
     end
-    pids  
+    pids
   end
 
   def permitted_collections
@@ -106,7 +106,7 @@ class User < ActiveRecord::Base
       q+=qrys.join " OR "
     end
     result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_t,dc_title_t'}).docs
-    
+
     #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_t,dc_title_t').docs
     result.sort! do |a,b|
       a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
@@ -143,11 +143,11 @@ class User < ActiveRecord::Base
 
     return perm_keys
   end
-  
+
   def belongs_to_listed_group? group_list
     group_list.each do |group|
       if self.groups.include? group
-        return true 
+        return true
       end
     end
     return false
@@ -157,7 +157,7 @@ class User < ActiveRecord::Base
   def is_admin
     return belongs_to_listed_group? ADMIN_GROUPS
   end
-  
+
   #is the user a repository wide viewer
   def is_viewer
     return belongs_to_listed_group? VIEWER_GROUPS

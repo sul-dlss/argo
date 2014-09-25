@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class SolrDocument 
+class SolrDocument
 
   include Blacklight::Solr::Document
 
@@ -23,12 +23,12 @@ class SolrDocument
   # single valued. See Blacklight::Solr::Document::ExtendableClassMethods#field_semantics
   # and Blacklight::Solr::Document#to_semantic_values
   # Recommendation: Use field names from Dublin Core
-  use_extension( Blacklight::Solr::Document::DublinCore)    
-  field_semantics.merge!(    
-  :title => "title_display",
-  :author => "author_display",
-  :language => "language_facet",
-  :format => "format"
+  use_extension( Blacklight::Solr::Document::DublinCore)
+  field_semantics.merge!(
+    :title    => "title_display",
+    :author   => "author_display",
+    :language => "language_facet",
+    :format   => "format"
   )
 end
 public
@@ -51,7 +51,7 @@ def get_milestones(doc)
   #this needs to use the timezone set in config.time_zone
   zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
   lifecycle_field = doc.has_key?('lifecycle_display') ? 'lifecycle_display' : 'lifecycle_facet'
-  Array(doc[lifecycle_field]).each do |m| 
+  Array(doc[lifecycle_field]).each do |m|
     if m.split(/;/).length == 2 #if it has a version number
       (name,time) = m.split(/:/,2)
       (time,version) = time.split(/;/,2)
@@ -67,7 +67,7 @@ def get_milestones(doc)
           'indexed',      { :display => 'Indexed', :time => 'pending'},
           'ingested',     { :display => 'Ingested', :time => 'pending'}
         ]
-        if version !='1' 
+        if version !='1'
           versions[version].delete('registered')
         else
           versions[version].delete('opened')

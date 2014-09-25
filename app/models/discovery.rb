@@ -2,20 +2,20 @@ class Discovery
   include BlacklightSolrExtensions
   include Blacklight::Configurable
   include Blacklight::SolrHelper
-  
+
   attr_reader :response, :document_list, :num_found
-  
+
   configure_blacklight do |config|
 
     config.discovery_fields = [
-      { 
-        :label => "Druid", :field => 'druid', 
-        :proc => lambda { |doc| 
-          doc['id'].split(/:/).last }, 
+      {
+        :label => "Druid", :field => 'druid',
+        :proc => lambda { |doc|
+          doc['id'].split(/:/).last },
         :sort => true, :default => true, :width => 100
       },
-      { 
-        :label => "Druid", :field => 'id', 
+      {
+        :label => "Druid", :field => 'id',
         :sort => true, :default => false, :width => 100
       },
       {
@@ -26,148 +26,148 @@ class Discovery
       {
         :label => "Format",
         :field => "sw_format_facet",
-        :default => true, :width => 200 
+        :default => true, :width => 200
       },
       {
         :label => "245a Search Title",
         :field => "sw_title_245a_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "245 Search Title",
         :field => "sw_title_245_search_facet_facet",
-        :default => false, :false => 200 
+        :default => false, :false => 200
       },
       {
         :label => "Variant Search Title",
         :field => "sw_title_variant_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Sort Title",
         :field => "sw_title_sort_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "245a Display Title",
         :field => "sw_title_245a_display_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Full Display Title",
         :field => "sw_title_full_display_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "1xx Search Author",
         :field => "sw_author_1xx_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "7xx Search Author",
         :field => "sw_author_7xx_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Person Author Facet",
         :field => "sw_author_person_facet_facet",
-        :default => true, :width => 200 
+        :default => true, :width => 200
       },
       {
         :label => "Other Author Facet",
         :field => "sw_author_other_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Corporate Author Display",
         :field => "sw_author_corp_display_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Author Meeting Display",
         :field => "sw_author_meeting_display_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Person Author Display",
         :field => "sw_author_person_display_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Person Author Full Display",
         :field => "sw_author_person_full_display_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Topic Search",
         :field => "sw_topic_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Geographic Search",
         :field => "sw_geographic_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Other Subject",
         :field => "sw_subject_other_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Other Subject Subvy",
         :field => "sw_subject_other_subvy_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Subject All",
         :field => "sw_subject_all_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Topic Facet",
         :field => "sw_topic_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Geographic Facet",
         :field => "sw_geographic_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Era Facet",
         :field => "sw_era_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Language Facet",
         :field => "sw_language_facet",
-        :default => true, :width => 200 
+        :default => true, :width => 200
       },
       {
         :label => "Pub Place Search",
         :field => "sw_pub_search_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Pub Date Sort",
         :field => "sw_pub_date_sort_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
       {
         :label => "Pub Date Group Facet",
         :field => "sw_pub_date_group_facet_facet",
-        :default => false, :width => 200 
+        :default => false, :width => 200
       },
 
       {
         :label => "Pub Year Facet",
         :field => "sw_pub_date_facet",
-        :default => true, :width => 200 
+        :default => true, :width => 200
       },
       {
         :label => "Pub Date Display",
         :field => "sw_pub_date_display_facet",
-        :default => true, :width => 200 
+        :default => true, :width => 200
       }
     ]
     config.default_solr_params = {
@@ -182,12 +182,12 @@ class Discovery
       :'f.wf_swp_facet.facet.limit' => -1,
       :fl => config.discovery_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
     }
-    
-    config.add_sort_field 'id asc', :label => 'Druid'
-    
 
-    config.column_model = config.discovery_fields.collect { |spec| 
-      { 
+    config.add_sort_field 'id asc', :label => 'Druid'
+
+
+    config.column_model = config.discovery_fields.collect { |spec|
+      {
         'name' => spec[:field],
         'jsonmap' => spec[:field],
         'label' => spec[:label],
@@ -195,7 +195,7 @@ class Discovery
         'width' => spec[:width],
         'sortable' => spec[:sort],
         'hidden' => (not spec[:default])
-      } 
+      }
     }
   end
 
@@ -208,11 +208,11 @@ class Discovery
     end
     @params = params
     @params[:page] ||= 1
-    
+
     (@response, @document_list) = get_search_results
     @num_found = @response['response']['numFound'].to_i
   end
-  
+
   def params
     @params
   end
@@ -234,7 +234,7 @@ class Discovery
   def report_data
     docs_to_records(@document_list)
   end
-  
+
   def csv2
     headings=''
     rows=''
@@ -253,7 +253,7 @@ class Discovery
         end
       end
       @params[:page] += 1
-      (@response, @document_list) = get_search_results      
+      (@response, @document_list) = get_search_results
     end
     return headings+rows
   end
