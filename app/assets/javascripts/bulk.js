@@ -149,10 +149,6 @@ function remediate_mods(druids){
 	process_get(druids, remediate_mods_url, 'Fixed');
 }
 
-function expedite(druids){
-	process_get(druids, expedite_url, 'Expedited');
-}
-
 function apply_apo_defaults(druids){
 	process_get(druids, apo_apply_defaults_url, 'Defaults_applied.')
 }

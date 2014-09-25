@@ -20,7 +20,6 @@
       <th>elapsed seconds</th>
       <th>attempts</th>
       <th>lifecycle</th>
-	  <th>expedited</th>
     </tr>
   </thead>
   <tbody>
@@ -39,10 +38,6 @@
           <td><%=process.elapsed ? '%.3f' % process.elapsed : ''%></td>
           <td><%=process.attempts%></td>
           <td><%=process.lifecycle%></td>
-		  <td><%if process.priority.to_i > 0%>
-			  <%="yes"%>
-			  <%end%>
-		  </td>
         </tr>
         <% if process.status == 'error' %>
           <tr>

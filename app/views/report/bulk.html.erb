@@ -31,7 +31,6 @@ remove_duplicate_encoding_url='<%=url_for :controller => :items,:action => :remo
 schema_validate_url='<%=url_for :controller => :items,:action => :schema_validation, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 discoverable_url='<%=url_for :controller => :items,:action => :discoverable, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 remediate_mods_url='<%=url_for :controller => :items,:action => :remediate_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-expedite_url='<%=url_for :controller => :items,:action => :prioritize, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 add_workflow_url='<%=url_for :controller => :items,:action => :add_workflow, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
@@ -81,7 +80,6 @@ ul li{
 		<label>Harmless stuff</label>
 		<li><span class="bulk_button" id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</span>
 		<li><span class="bulk_button" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</span>
-		<li><span class="bulk_button" onclick="$('#expedite').show(400)">Expedite</span>
 		<li><span class="bulk_button" id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</span>		
 	</ul> 
 	
@@ -210,10 +208,6 @@ ul li{
 <div class="bulk_operation" id="fix_provenance" name="fix_provenance">
 	<h1>Add provenance metadata to items that have errored out in sdr-ingest-transfer due to missing provenance and reset the workflow step.</h1>
 	<span class="bulk_button" onclick="fetch_druids(fix_provenance);$('#fix_provenance').hide(400);">Add Provenance</span><br>
-</div>
-<div class="bulk_operation" id="expedite" name="expedite">
-	<h1>Make this item high priority in the workflow queue.</h1>
-	<span class="bulk_button" onclick="fetch_druids(expedite);$('#expedite').hide(400);">Expedite</span><br>
 </div>
 
 <div class="bulk_operation" id="add_workflow" name="add_workflow">

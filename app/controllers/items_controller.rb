@@ -661,24 +661,6 @@ class ItemsController < ApplicationController
     render :status=> 200, :text =>'Defaults applied.'
   end
   
-  #set the workflow priority for an object
-  def prioritize
-    updated=false
-    @object.workflows.workflows.each do |wf|
-      workflow=wf.workflowId.first
-      wf.processes.each do |proc|
-        if not proc.completed? and not proc.version and not proc.priority.to_i > 0
-          Dor::WorkflowService.update_workflow_status(wf.repository.first, @object.id, workflow , proc.name, proc.status, {:priority => 50} )
-          updated=true
-        end
-      end
-    end 
-    if updated
-      render :status=> 200, :text =>'Expedited.'
-    else
-      render :status=> 500, :text =>'No processes eligable for expedite.'
-    end
-  end
   #add a workflow to an object if the workflow is not present in the active table
   def add_workflow
     if params[:wf]
