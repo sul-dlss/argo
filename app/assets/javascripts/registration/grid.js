@@ -55,11 +55,11 @@ var gridContext = function() {
       }
     });
   };
-  
+
   var $t = {
     rc: createRegistrationContext(),
     statusImages: {},
-    
+
     processValue: function(cellname, value) {
       // Strip leading and trailing punctuation from everything but label
       if (value) {
@@ -71,7 +71,7 @@ var gridContext = function() {
         return ''
       }
     },
-    
+
     resizeGrid: function() {
       $('.spacer').html($('#id_source').position().top == $('#rights').position().top ? '&nbsp;' : '')
       var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
@@ -85,16 +85,16 @@ var gridContext = function() {
         $t.resizeIdList();
       }
     },
-    
+
     resizeIdList: function() {
       $('#id_list').animate({
-        'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3, 
+        'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3,
         'left': 3,
-        'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4, 
+        'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4,
         'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + $('#gbox_data .ui-jqgrid-bdiv').height() - 4
       }, 0);
     },
-    
+
     toggleText: function(textMode) {
       if (textMode) {
         $t.stopEditing(true);
@@ -107,7 +107,7 @@ var gridContext = function() {
       }
       $('#icons button').button('option', 'disabled', textMode);
     },
-    
+
     toggleEditing: function(edit) {
       this.stopEditing(true);
       $('#data').jqGrid('setColProp','source_id',{ editable: edit });
@@ -128,12 +128,12 @@ var gridContext = function() {
         $('#data').jqGrid(method,cells[0].id,cells[0].ic);
       }
     },
-    
+
     addRow: function(column_data) {
       var newId = $('#data').data('nextId') || 0;
       var newRow = { id: newId };
       var columns = $('#data').jqGrid('getGridParam','colModel');
-      
+
       for (var i = 2; i < columns.length; i++) {
         var value = $t.processValue(columns[i].name, column_data[i-2]);
         newRow[columns[i].name] = value;
@@ -159,7 +159,7 @@ var gridContext = function() {
       $t.addIdentifiers(textData.split('\n'));
       $t.formatDruids();
     },
-    
+
     gridToText: function() {
       var text = '';
       var gridData = $('#data').jqGrid('getRowData');
@@ -169,10 +169,9 @@ var gridContext = function() {
       }
       $('#id_list').val(text);
     },
-    
+
     reset: function() {
       $t.rc = createRegistrationContext();
-
       $('#data').jqGrid('clearGridData');
       $t.toggleEditing(true);
       $.defaultText();
@@ -193,7 +192,7 @@ var gridContext = function() {
       var result = $('#properties .invalid').length == 0 && $('#data .invalid').length == 0
       return result
     },
-    
+
     formatDruids: function(index) {
       var rowCount = $('#data').jqGrid('getGridParam','reccount');
       var checkRow = function(i) {
@@ -209,20 +208,20 @@ var gridContext = function() {
         checkRow(index)
       }
     },
-    
+
     initializeContext: function() {
-      $t.statusImages = { 
-        queued: pathTo('/assets/icons/queued.png'), 
-        pending: pathTo('/assets/icons/spinner.gif'), 
-        success: pathTo('/assets/icons/accept.png'), 
-        error: pathTo('/assets/icons/exclamation.png'),
-        abort: pathTo('/assets/icons/cancel.png'),
+      $t.statusImages = {
+        queued:  pathTo('/assets/icons/queued.png'),
+        pending: pathTo('/assets/icons/spinner.gif'),
+        success: pathTo('/assets/icons/accept.png'),
+        error:   pathTo('/assets/icons/exclamation.png'),
+        abort:   pathTo('/assets/icons/cancel.png'),
         preloadImages: function() {
           $([this.queued, this.pending, this.success, this.error, this.abort]).preload();
         }
       }
       this.statusImages.preloadImages();
-	  $.defaultText({ css: 'default-text' });
+      $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
         $t.resizeGrid();
       });
@@ -230,7 +229,7 @@ var gridContext = function() {
     },
 
     initializeGrid: function() {
-      var sourceIdFormatter = function(val,opts,rowObject) { 
+      var sourceIdFormatter = function(val,opts,rowObject) {
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
         if (val.length>0 && (val.match(/^\s*$/) || val.match(/^.+:.+$/))) {
           cell.removeClass('invalidDisplay')
@@ -239,7 +238,7 @@ var gridContext = function() {
         }
         return val
       }
-      var metadataIdFormatter = function(val,opts,rowObject) { 
+      var metadataIdFormatter = function(val,opts,rowObject) {
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
         if (val.length>0 && val.indexOf(':')>=0) {
           cell.addClass('invalidDisplay')
@@ -248,7 +247,7 @@ var gridContext = function() {
         }
         return val
       }
-      
+
       var druidFormatter = function(val,opts,rowObject) {
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
         var newVal = val.replace(/^.+:/,'')
@@ -262,19 +261,19 @@ var gridContext = function() {
       var labelFormatter = function(val,opts,rowObject) {
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
         if(val.trim().length>0){
-        cell.removeClass('invalidDisplay')
+          cell.removeClass('invalidDisplay')
         } else {
           cell.addClass('invalidDisplay')
-          }
-         return val;
-          }
-      
+        }
+        return val;
+      }
+
       $('#data').jqGrid({
         data: [],
         datatype: "local",
         caption: "Register DOR Items",
         cellEdit: true,
-		autoencode: true,
+        autoencode: true,
         cellsubmit: 'clientArray',
         colModel: [
           {label:' ',name:'status',index:'status',width:18,sortable:false,formatter: statusFormatter },
@@ -290,7 +289,7 @@ var gridContext = function() {
         scroll: true,
         toolbar: [true, "top"],
         viewrecords: true,
-        beforeSaveCell: function(rowid, cellname, value, row, col) { 
+        beforeSaveCell: function(rowid, cellname, value, row, col) {
           return $t.processValue(cellname, value);
         }
       });
@@ -303,7 +302,7 @@ var gridContext = function() {
 
     initializeToolbar: function() {
       $('#icons').append('<span class="button-group"></span>');
-      
+
       this.addToolbarButton('locked','lock','Lock').click(function() {
         $t.toggleEditing(false);
       });
@@ -332,43 +331,40 @@ var gridContext = function() {
       $('#icons').append('<span class="button-group"></span>');
 
       this.addToolbarButton('transfer-e-w','register','Register').click(function() {
-			var cells = $('#data').jqGrid('getGridParam','savedRow');
-		      if (cells.length > 0) {
-				$('#editing_dialog').dialog('open')
-				return;
-		      }
-		else{
-        if ($t.allValid()) {
-          $t.toggleEditing(false);
-          $t.rc.registerAll();
+        var cells = $('#data').jqGrid('getGridParam','savedRow');
+        if (cells.length > 0) {
+          $('#editing_dialog').dialog('open')
+          return;
         }
-		else{
-          $('#invalid_dialog').dialog('open')
+        else{
+          if ($t.allValid()) {
+            $t.toggleEditing(false);
+            $t.rc.registerAll();
+          } else {
+            $('#invalid_dialog').dialog('open')
+          }
         }
-		}
-
-	
       }).addClass('enabled-grid-locked');
-      
+
       this.addToolbarButton('note','pdf','Tracking Sheets').click(function() {
         $t.stopEditing(true);
         $t.rc.getTrackingSheet($('#data').getCol('druid'));
       }).addClass('enabled-grid-locked');
-      
+
       $('#icons').append('<span class="button-group" id="view-toggle"/>');
       $('#view-toggle').append('<input type="radio" id="grid-view" name="view" checked="checked"/><label for="grid-view">Grid</label></span>');
       $('#view-toggle').append('<input type="radio" id="text-view" name="view" /><label for="text-view">Text</label></span>');
       $('#view-toggle').buttonset();
-      
-      $('#view-toggle input').change(function(e) { 
+
+      $('#view-toggle input').change(function(e) {
         $t.toggleText(e.target.id == 'text-view');
       });
-      
+
       return(this);
     },
-    
+
     setTags: function() {
-      var tags = $('#properties .tag-field').map(function(index,elem) { 
+      var tags = $('#properties .tag-field').map(function(index,elem) {
         var field = $(elem);
         var value = field.val();
         if (field.attr('disabled') || value == null || value.trim() == '') {
@@ -385,7 +381,7 @@ var gridContext = function() {
       tags = $.map(tags, function(e) { return e })
       $t.rc.tagList = tags.join("\n").trim();
     },
-    
+
     initializeCallbacks: function() {
       $('#properties input,#properties select').change(function(evt) {
         var sender = $(evt.target)
@@ -408,12 +404,12 @@ var gridContext = function() {
         $t.setTags();
         return(true);
       });
-      
-      $('#properties input.ui-autocomplete-input').blur(function(evt) { 
+
+      $('#properties input.ui-autocomplete-input').blur(function(evt) {
         $t.setTags();
         $(evt.target).change();
       })
-      
+
       $('#properties select.tag-field').change($t.setTags)
 
       var disable = function(elem,bool) {
@@ -429,7 +425,7 @@ var gridContext = function() {
         }
         return(true)
       }
-      
+
       $('#object_type').change(function(evt) {
         var sender = evt.target
         var valid_controls = {
@@ -450,17 +446,16 @@ var gridContext = function() {
         $('#id_source').change();
         return true
       })
-      
-      
+
       return(this);
     },
-    
-    initializeDialogs: function() {      
+
+    initializeDialogs: function() {
       $('#project').autocomplete({
         source: pathTo('/registration/suggest_project'),
         minLength: 0,
       });
-      
+
       // Update Workflow and Form lists when APO changes
       $('#apo_id').change(function(e) {
         $.ajax({
@@ -468,75 +463,74 @@ var gridContext = function() {
           url: pathTo('/registration/workflow_list'),
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
-          success: function(response,status,xhr) { 
+          success: function(response,status,xhr) {
             if (response) {
-			
               var optionsHtml = response.map(function(v) { return '<option value="'+v+'">'+v+'</option>' }).join('');
               $('#workflow_id').html(optionsHtml);
             }
           }
         })
 
-	        $.ajax({
-	          type: 'GET',
-	          url: pathTo('/registration/collection_list'),
-	          dataType: 'json',
-	          data: { apo_id: $('#apo_id').val() },
-	          success: function(response,status,xhr) { 
-	            if (response) {
-	              	var optionsHtml='';
-					for (var entry in response)
-						{
-							if(response.hasOwnProperty(entry))
-							{
-								if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
-								{
-									optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
-								}
-								else
-								{
-									optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
-								}
-							}
-						}
-	              	$('#collection').html(optionsHtml);
-	            }
-	          }
-	        })
-	
-			$.ajax({
-	          type: 'GET',
-	          url: pathTo('/registration/rights_list'),
-	          dataType: 'json',
-	          data: { apo_id: $('#apo_id').val() },
-	          success: function(response,status,xhr) { 
-	            if (response) {
-	              	var optionsHtml='';
-					for (var entry in response)
-						{
-							if(response.hasOwnProperty(entry))
-							{
-								if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
-								{
-									optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
-								}
-								else
-								{
-									optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
-								}
-							}
-						}
-	              	$('#rights').html(optionsHtml);
-	            }
-	          }
-	        })
-        
+        $.ajax({
+          type: 'GET',
+          url: pathTo('/registration/collection_list'),
+          dataType: 'json',
+          data: { apo_id: $('#apo_id').val() },
+          success: function(response,status,xhr) {
+            if (response) {
+              var optionsHtml='';
+              for (var entry in response)
+              {
+                if(response.hasOwnProperty(entry))
+                {
+                  if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
+                  {
+                    optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
+                  }
+                  else
+                  {
+                    optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
+                  }
+                }
+              }
+              $('#collection').html(optionsHtml);
+            }
+          }
+        })
+
+        $.ajax({
+          type: 'GET',
+          url: pathTo('/registration/rights_list'),
+          dataType: 'json',
+          data: { apo_id: $('#apo_id').val() },
+          success: function(response,status,xhr) {
+            if (response) {
+              var optionsHtml='';
+              for (var entry in response)
+              {
+                if(response.hasOwnProperty(entry))
+                {
+                  if(response[entry].indexOf('default')!=-1 || response[entry].indexOf('Assembly')!=-1)
+                  {
+                    optionsHtml+='<option selected="selected" value="'+entry+'">'+response[entry]+'</option>';
+                  }
+                  else
+                  {
+                    optionsHtml+='<option value="'+entry+'">'+response[entry]+'</option>';
+                  }
+                }
+              }
+              $('#rights').html(optionsHtml);
+            }
+          }
+        })
+
         $.ajax({
           type: 'GET',
           url: pathTo('/registration/form_list'),
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
-          success: function(response,status,xhr) { 
+          success: function(response,status,xhr) {
             if (response) {
               var optionsHtml = '<option value="">None</option>'
               optionsHtml += response.map(function(v) { return '<option value="'+v[0]+'">'+v[1]+'</option>' }).join('');
@@ -545,7 +539,7 @@ var gridContext = function() {
           }
         })
       });
-      
+
       $('#specify').dialog({
         autoOpen: false,
         buttons: { "Ok": function() { $(this).dialog("close"); } },
@@ -554,9 +548,8 @@ var gridContext = function() {
         title: 'Error',
         resizable: false
       });
-	
-      
-	$('#editing_dialog').dialog({
+
+      $('#editing_dialog').dialog({
         autoOpen: false,
         buttons: { "Ok": function() { $(this).dialog("close"); } },
         modal: true,
@@ -573,13 +566,13 @@ var gridContext = function() {
         title: 'Error',
         resizable: false
       });
-      
+
       $('#reset_dialog').dialog({
         autoOpen: false,
-        buttons: { 
-          "Ok": function() { 
-            $t.reset(); 
-            $(this).dialog("close"); 
+        buttons: {
+          "Ok": function() {
+            $t.reset();
+            $(this).dialog("close");
           },
           "Cancel": function() { $(this).dialog("close"); }
         },
@@ -588,7 +581,7 @@ var gridContext = function() {
         title: 'Confirm',
         resizable: false
       });
-      
+
       $('#progress_dialog').dialog({
         autoOpen: false,
         height: 56,
@@ -596,9 +589,8 @@ var gridContext = function() {
         resizable: false
       });
       $('#progress').progressbar();
-
       $('#id_list').tabby();
-      
+
       return(this);
     },
 
