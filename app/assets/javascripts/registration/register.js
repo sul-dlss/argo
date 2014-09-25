@@ -10,9 +10,9 @@ function DorRegistration(initOpts) {
       mdFormId: null,
       metadataSource: 'none',
       tagList: "",
-	  collection: 'None'
+      collection: 'None'
     },
-    
+
     registrationQueue: [],
     maxConcurrentRequests: 5,
 
@@ -23,7 +23,7 @@ function DorRegistration(initOpts) {
         $t[param] = $t.defaultValues[param]
       }
     },
-    
+
     getTrackingSheet : function(druids) {
       var project = $t.projectName;
       var sequence = 1;
@@ -31,7 +31,7 @@ function DorRegistration(initOpts) {
       var url = pathTo("/registration/tracksheet?"+query);
       document.location.href = url;
     },
-        
+
     register : function(rowid, progressFunction) {
       var apo = $t.apoId;
       var sourcePrefix = $t.metadataSource;
@@ -47,16 +47,16 @@ function DorRegistration(initOpts) {
       var data = $t.getData(rowid);
       data.id = rowid
 
-      var params = { 
+      var params = {
         'object_type' : $t.objectType,
         'admin_policy' : apo,
         'workflow_id' : $('#workflow_id').val(),
         'seed_datastream' : ($t.metadataSource == 'none' || $t.metadataSource == 'label' ) ? null : ['descMetadata'],
-		'metadata_source' : ($t.metadataSource != 'label') ? null : $t.metadataSource,
+        'metadata_source' : ($t.metadataSource != 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
         'tag' : tags,
-		'rights' : $('#rights').val(),
-		'collection' : collection.value
+        'rights' : $('#rights').val(),
+        'collection' : collection.value
       }
 
       if (data.source_id) {
@@ -72,7 +72,7 @@ function DorRegistration(initOpts) {
       } else if (sourcePrefix == 'mdtoolkit') {
         params['pid'] = "druid:" + data.metadata_id;
       }
-      
+
       for (x in params) { if (params[x] == null) { delete params[x] } }
 
       var ajaxParams = {
@@ -87,7 +87,7 @@ function DorRegistration(initOpts) {
       }
       $t.setStatus(data, 'queued');
       var xhr = $.ajax(ajaxParams);
-      xhr.success(function(response,status,xhr) { 
+      xhr.success(function(response,status,xhr) {
         if (response) {
           data.druid = response['pid'].split(':')[1];
           data.label = response['label'];
@@ -129,71 +129,70 @@ function DorRegistration(initOpts) {
       //if the metadata source is auto, figure out whether it should be label, symphony or mdtoolkit based on what is in the mdsource field
       if (sourcePrefix != 'none') {
         var mdIds = $('#data').jqGrid('getCol','metadata_id')
-		if(mdIds[0].trim().length==0)
-		{
-			//no md source, set to label
-			$t.metadataSource = 'label';
-		}
-		else
-		{
-			var intRegex = /^\d+$/;
-			//if it is an integer, it is a catkey or barcode
-			if(intRegex.test(mdIds[0].trim()))
-			{
-				$t.metadataSource = 'symphony';
-			}
-			else
-			{
-				$t.metadataSource = 'mdtoolkit';
-			}
-		}
-		//check for mixed md sources, that isnt allowed
-		for(mdId in mdIds)
-		{
-			var trimmed=mdIds[mdId].trim();
-			var intRegex = /^\d+$/;
-			//if it is an integer, it is a catkey or barcode
-			if(intRegex.test(trimmed) &&  $t.metadataSource != 'symphony')
-			{
-				$t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies symphony.');
-	            return false;	
-			}
-			if(trimmed == '' && $t.metadataSource != 'label')
-			{
-				$t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies label.');
-	            return false;
-			}
-			if(trimmed.indexOf('druid')>0 && $t.metadataSource != 'mdtoolkit')
-			{
-				$t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies mdtoolkit.');
-	            return false;
-			}
-			
-		}
-		sourcePrefix = $t.metadataSource;
-		if (sourcePrefix != 'label'){
-        	if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
-	          $t.displayRequirements('Metadata source was detected as"' + sourcePrefix + '", which	 requires metadata IDs for all items.');
-	          return(false);
-	        }
-		}
+        if(mdIds[0].trim().length==0)
+        {
+            //no md source, set to label
+            $t.metadataSource = 'label';
+        }
+        else
+        {
+            var intRegex = /^\d+$/;
+            //if it is an integer, it is a catkey or barcode
+            if(intRegex.test(mdIds[0].trim()))
+            {
+                $t.metadataSource = 'symphony';
+            }
+            else
+            {
+                $t.metadataSource = 'mdtoolkit';
+            }
+        }
+        //check for mixed md sources, that isnt allowed
+        for(mdId in mdIds)
+        {
+            var trimmed=mdIds[mdId].trim();
+            var intRegex = /^\d+$/;
+            //if it is an integer, it is a catkey or barcode
+            if(intRegex.test(trimmed) &&  $t.metadataSource != 'symphony')
+            {
+                $t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies symphony.');
+                return false;
+            }
+            if(trimmed == '' && $t.metadataSource != 'label')
+            {
+                $t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies label.');
+                return false;
+            }
+            if(trimmed.indexOf('druid')>0 && $t.metadataSource != 'mdtoolkit')
+            {
+                $t.displayRequirements('You have mixed metadata sources, the first item indicates '+$t.metadataSource+' but "'+trimmed+'" implies mdtoolkit.');
+                return false;
+            }
+        }
+        sourcePrefix = $t.metadataSource;
+        if (sourcePrefix != 'label'){
+          if ($.grep(mdIds,function(id,index) { return id.trim() == '' }).length > 0) {
+            $t.displayRequirements('Metadata source was detected as"' + sourcePrefix + '", which requires metadata IDs for all items.');
+            return(false);
+          }
+        }
       }
 
-	  //check for missing source ids
-		var source_ids = $('#data').jqGrid('getCol','source_id')
+      //check for missing source ids
+      var source_ids = $('#data').jqGrid('getCol','source_id')
+      if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
+        $t.displayRequirements('Source ids must be set for all items.');
+        return(false);
+      }
+      //check for missing labels if not using a metadata source
+      if(sourcePrefix == 'none' || sourcePrefix== 'label')
+      {
+        var source_ids = $('#data').jqGrid('getCol','label')
         if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
-          $t.displayRequirements('Source ids must be set for all items.');
+          $t.displayRequirements('Labels must be set for all items.');
           return(false);
         }
-        //check for missing labels if not using a metadata source
-        if(sourcePrefix == 'none' || sourcePrefix== 'label')
-        {
-				var source_ids = $('#data').jqGrid('getCol','label')
-						if ($.grep(source_ids,function(id,index) { return id.trim() == '' }).length > 0) {
-							$t.displayRequirements('Labels must be set for all items.');
-							return(false);
-						}
-        }
+      }
 
       return(true)
     },
@@ -213,8 +212,7 @@ function DorRegistration(initOpts) {
       }
     }
   };
-  
-  $.extend($t, initOpts);
 
+  $.extend($t, initOpts);
   return($t);
 }
