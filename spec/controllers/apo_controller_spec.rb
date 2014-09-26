@@ -64,10 +64,10 @@ describe ApoController do
       abstract='this is the abstract'
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
         expect(params[:label]          ).to eq(title)
-        expect(params[:rights]         ).to eq('dark')
         expect(params[:object_type]    ).to eq('collection')
         expect(params[:admin_policy]   ).to eq('druid:forapo')
         expect(params[:metadata_source]).to eq('label')
+        expect(params[:rights]         ).to eq('dark')
         {:pid => 'druid:newcollection'}
       end
     # col=double(Dor::Item)
