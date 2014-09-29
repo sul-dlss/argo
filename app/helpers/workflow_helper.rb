@@ -59,11 +59,18 @@ module WorkflowHelper
     link_to(item_count, new_params)
   end
   
-  def render_workflow_archive_count(repo,name)
-    wf_doc = Dor::SearchService.query("objectType_facet:workflow workflow_name_s:#{name}").docs.first
-    wf_doc.nil? ? '-' : wf_doc["#{name}_archived_display"].first.to_i
+  def render_workflow_archive_count(repo, name)
+    query_results = Dor::SearchService.query("objectType_facet:workflow workflow_name_s:#{name}")
+    if query_results
+      wf_doc = query_results.docs.first
+      if wf_doc && wf_doc["#{name}_archived_display"]
+        return wf_doc["#{name}_archived_display"].first.to_i
+      end
+    end
+
+    return '-'
   end
-  
+
   def render_workflow_grid_toggle(field_name)
     if field_name =~ /^wf_.+_facet/
       p = params.dup
