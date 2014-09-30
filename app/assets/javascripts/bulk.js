@@ -258,103 +258,89 @@ function error_handler(xhr,status,err,element,index, after){
 	
 }
 
-function source_id(){
-	cons=[];
-	log=document.getElementById('log');
-	log.style.display="block";
-	txt=document.getElementById('source_ids').value
-	txt=txt.replace(/druid:/g,'');
-	druids=txt.split("\n")
-	last=druids.pop();
-	if(last != ''){druids.push(last);}
-	d = []
-	job_count = []
-	for(i=druids.length;i>0;i--)
-	{
+function source_id() {
+	cons = [];
+	log = document.getElementById('log');
+	log.style.display = "block";
+	txt = document.getElementById('source_ids').value;
+	txt = txt.replace(/druid:/g, '');
+	druids = txt.split("\n")
+	last = druids.pop();
+	if (last != '') {druids.push(last);}
+	d = [];
+	job_count = [];
+	for (i=druids.length; i>0; i--) {
 		job_count.push(i);
 	}
-	for(i=0;i< druids.length; i++)
-	{
-		dr=druids[i];
-		dr=dr.replace(/ : /g,':');
-		parts=dr.split("\t",2);
+	for (i=0; i<druids.length; i++) {
+		dr = druids[i];
+		dr = dr.replace(/ : /g,':');
+		parts = dr.split("\t", 2);
 		d.push({'druid': parts[0], 'source': parts[1]});
 	}
-	log.innerHTML="Using "+ druids.length +" user supplied druids and source ids.<br>\n"
-	log=document.getElementById('log');
-	$.each(d, function(i,element){
+	log.innerHTML = "Using " + druids.length + " user supplied druids and source ids.<br>\n";
+	log = document.getElementById('log');
+	$.each(d, function(i, element) {
 		//get rid of blank lines
-		if(element['druid'] == null || element['druid'].length < 2)
-		{
+		if(element['druid'] == null || element['druid'].length < 2) {
 			return;
 		}
-		var element_url=catalog_url(element['druid']);
+		var element_url = catalog_url(element['druid']);
 		//skip bad source ids
-		if(element['source']==null || element['source'].length<=1 || element['source'].indexOf(':')<1)
-		{
-			err_log=document.getElementById('log');
-
+		if(element['source']==null || element['source'].length<=1 || element['source'].indexOf(':')<1) {
+			err_log = document.getElementById('log');
 			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid source id '"+element['source']+"'</span><br>\n"+log.innerHTML;
 			return;
 		}
-		params={
-			'new_id': element['source']
-		}
-		url=source_id_url.replace('xxxxxxxxx',element['druid']);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
+		params = { 'new_id': element['source'] };
+		url = source_id_url.replace('xxxxxxxxx',element['druid']);
+		var xhr = $.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
 		xhr.success(function(response,status,xhr) { 
 			success_handler(element_url, 'Updated	');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
+		});
+		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())});
 	})
 }
 
-function set_tags(){
-	cons=[];
+function set_tags() {
+	cons = [];
 	job_count = [];
-	log=document.getElementById('log');
-	log.style.display="block";
-	txt=document.getElementById('tags').value
-	txt=txt.replace(/druid:/g,'');
-	druids=txt.split("\n")
-	last=druids.pop();
-	if(last != ''){druids.push(last);}
-	d=[]
-	for(i=druids.length;i>0;i--)
-	{
+	log = document.getElementById('log');
+	log.style.display = "block";
+	txt = document.getElementById('tags').value;
+	txt = txt.replace(/druid:/g,'');
+	druids = txt.split("\n");
+	last = druids.pop();
+	if (last != '') {druids.push(last);}
+	d=[];
+	for (i=druids.length; i>0; i--) {
 		job_count.push(i);
 	}
-	for(i=0;i< druids.length; i++)
-	{
-		dr=druids[i];
-		dr=dr.replace(/ : /g,':');
-		parts=dr.split("\t");
-		druid=parts.shift();
-		tags=parts.join("\t");
+	for(i=0; i<druids.length; i++) {
+		dr = druids[i];
+		dr = dr.replace(/ : /g,':');
+		parts = dr.split("\t");
+		druid = parts.shift();
+		tags = parts.join("\t");
 		d.push({'druid': druid, 'tags': tags});
 	}
-	log.innerHTML="Using "+ druids.length +" user supplied druids and tags.<br>\n"
-	log=document.getElementById('log');
-	$.each(d, function(i,element){
+	log.innerHTML = "Using " + druids.length +" user supplied druids and tags.<br>\n";
+	log = document.getElementById('log');
+	$.each(d, function(i, element) {
 		//get rid of blank lines
-		if(element['druid'] == null || element['druid'].length < 2)
-		{
+		if(element['druid'] == null || element['druid'].length < 2) {
 			return;
 		}
 		var element_url=catalog_url(element['druid']);
 		//skip bad source ids
-		if(element['tags']==null || element['tags'].length<=1 || element['tags'].indexOf(':')<1)
-		{
-			err_log=document.getElementById('log');
-
+		if(element['tags']==null || element['tags'].length<=1 || element['tags'].indexOf(':')<1) {
+			err_log = document.getElementById('log');
 			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid tags '"+element['source']+"'</span><br>\n"+log.innerHTML;
 			return;
 		}
-		params={
-			'tags': element['tags']
-		}
-		url=tags_url.replace('xxxxxxxxx',element['druid']);
+		params = { 'tags': element['tags'] };
+		url = tags_url.replace('xxxxxxxxx',element['druid']);
 		var xhr=$.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
 		xhr.success(function(response,status,xhr) { 
