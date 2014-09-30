@@ -27,7 +27,7 @@ module ArgoHelper
       0
     end
   end
-  
+
   def index_queue_velocity
     begin
       if Dor::Config.status and Dor::Config.status.indexer_url
@@ -45,11 +45,11 @@ module ArgoHelper
       else
         0
       end
-    rescue 
+    rescue
       return 0
     end
   end
-  
+
 
   def structure_from_solr(solr_doc, prefix, suffix='display')
     prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
@@ -175,7 +175,7 @@ module ArgoHelper
     end
     apo_pid = ''
     #wf_stuff.include? 'accessionWF:completed:publish'
-    begin 
+    begin
       apo_pid=doc['is_governed_by_s'].first.gsub('info:fedora/','')
     rescue
     end
@@ -187,14 +187,14 @@ module ArgoHelper
         buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
-    
-    
+
+
     #if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
     end
-    if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager 
+    if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
       buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :pid => pid), :label => 'Add Workflow'}
       if has_been_published? pid
@@ -248,7 +248,7 @@ module ArgoHelper
       if calculated_value.nil?
         return false
       else
-        document[field_name] = [calculated_value] 
+        document[field_name] = [calculated_value]
         return true
       end
     else
@@ -259,7 +259,7 @@ module ArgoHelper
     val = document.get('id').split(/:/).last
     link_to "DPG Object Status", File.join(Argo::Config.urls.dpg, val)
   end
-  
+
   def render_purl_link document, link_text='PURL', opts={:target => '_blank'}
     val = document.get('id').split(/:/).last
     link_to link_text, File.join(Argo::Config.urls.purl, val), opts

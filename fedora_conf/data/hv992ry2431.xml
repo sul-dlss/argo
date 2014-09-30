@@ -1,0 +1,1274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:hv992ry2431"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Internal Objects"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="DOR"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-04-18T18:18:53.666Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2014-09-02T21:24:11.298Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2011-04-18T18:18:53.666Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyObject</audit:action>
+<audit:componentID></audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T17:19:33.425Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T17:19:52.658Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T17:20:27.543Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>defaultObjectRights</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T17:21:02.310Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>defaultObjectRights</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T17:21:38.846Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>defaultObjectRights</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T17:22:17.179Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>defaultObjectRights</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T17:22:27.144Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T18:02:18.499Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-23T18:08:21.810Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC10">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-25T21:39:09.850Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC11">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-25T21:42:13.206Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC12">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-25T21:42:58.093Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC13">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-25T21:44:37.937Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC14">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-25T22:07:46.736Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC15">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-05-25T22:15:58.159Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC16">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-06-16T20:30:07.581Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC17">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-08-03T21:43:38.210Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC18">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-09-29T03:28:10.437Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC19">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-29T02:23:49.632Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC20">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-30T09:59:10.464Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC21">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-31T22:26:23.365Z</audit:date>
+<audit:justification>Fedora FUSE FS</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC22">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-11-07T02:10:48.083Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC23">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-28T01:35:58.251Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC24">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyObject</audit:action>
+<audit:componentID></audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-01T09:02:48.898Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC25">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-01T09:03:29.648Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC26">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyObject</audit:action>
+<audit:componentID></audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-01T09:03:50.630Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC27">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-04-09T22:41:24.309Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC28">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T19:21:42.642Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC29">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-06T19:23:16.499Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC30">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-07-03T21:22:11.811Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC31">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyObject</audit:action>
+<audit:componentID></audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-07-03T21:23:20.072Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC32">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-08-23T18:28:52.615Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC33">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>dlss-dev-jdeering.stanford.edu</audit:responsibility>
+<audit:date>2012-12-10T19:37:51.465Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC34">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2013-01-09T23:21:32.674Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC35">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2013-01-11T01:52:59.065Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC36">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2013-01-11T01:53:20.766Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC37">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2013-01-11T17:06:24.673Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC38">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2013-01-12T00:51:41.660Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC39">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>wmene</audit:responsibility>
+<audit:date>2013-02-13T17:59:15.985Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC40">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>workflows@sul-lyberservices-dev.stanford.edu</audit:responsibility>
+<audit:date>2013-02-13T18:01:29.520Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC41">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>workflows@sul-lyberservices-dev.stanford.edu</audit:responsibility>
+<audit:date>2013-02-13T18:01:29.520Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC42">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-test.stanford.edu</audit:responsibility>
+<audit:date>2014-08-20T22:28:51.843Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC43">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-test.stanford.edu</audit:responsibility>
+<audit:date>2014-08-20T22:28:52.051Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC44">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-test.stanford.edu</audit:responsibility>
+<audit:date>2014-08-20T22:28:52.215Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC45">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>versionMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-test.stanford.edu</audit:responsibility>
+<audit:date>2014-08-20T22:28:52.350Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC46">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2014-08-22T21:08:00.240Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC47">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2014-08-25T21:02:47.128Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC48">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2014-08-25T21:03:34.877Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC49">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>argo-test.stanford.edu</audit:responsibility>
+<audit:date>2014-09-02T21:24:11.298Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.11" LABEL="Dublin Core Record for this object" CREATED="2012-05-06T19:21:42.642Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="423">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Default Admin Policy</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.10" LABEL="Dublin Core Record for this object" CREATED="2011-10-30T09:59:10.464Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.9" LABEL="Dublin Core Record for this object" CREATED="2011-10-29T02:23:49.632Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.8" LABEL="Dublin Core Record for this object" CREATED="2011-09-29T03:28:10.437Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.7" LABEL="Dublin Core Record for this object" CREATED="2011-08-03T21:43:38.210Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.6" LABEL="Dublin Core Record for this object" CREATED="2011-05-25T21:44:37.937Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.5" LABEL="Dublin Core Record for this object" CREATED="2011-05-25T21:42:58.093Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.4" LABEL="Dublin Core Record for this object" CREATED="2011-05-25T21:42:13.206Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.3" LABEL="Dublin Core Record for this object" CREATED="2011-05-25T21:39:09.850Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.2" LABEL="Dublin Core Record for this object" CREATED="2011-05-23T17:19:52.658Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="418">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Personal Papers</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.1" LABEL="Dublin Core Record for this object" CREATED="2011-04-18T18:19:25.152Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="424">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Default Admin. Policy</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2011-04-18T18:18:53.666Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="391">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Default Admin. Policy</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.12" LABEL="Dublin Core Record for this object" CREATED="2013-01-11T01:53:20.766Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="419">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Internal Objects</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC.13" LABEL="Dublin Core Record for this object" CREATED="2014-08-25T21:03:34.877Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="428">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>[Internal System Objects]</dc:title>
+  <dc:identifier>druid:hv992ry2431</dc:identifier>
+  <dc:language>eng</dc:language>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="administrativeMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="administrativeMetadata.5" LABEL="Administrative Metadata" CREATED="2012-08-23T18:28:52.615Z" MIMETYPE="text/xml" SIZE="2083">
+<foxml:xmlContent>
+<administrativeMetadata>
+  <descMetadata>
+    <format>MODS</format>
+    <source>symphony</source>
+  </descMetadata>
+  <contact id="sunetid:mbklein" type="user">
+    <name>Michael B. Klein</name>
+    <organization>DLSS</organization>
+    <email>mbklein@stanford.edu</email>
+  </contact>
+  <rights>
+    <copyright useDefault="true"></copyright>
+    <use>
+      <defaultLicense override="yes" type="CreativeCommons" value="by-sa"></defaultLicense>
+    </use>
+    <use>
+      <access override="yes"></access>
+    </use>
+  </rights>
+  <relationships></relationships>
+  <registration>
+    <itemTag>AdminPolicy : Personal Papers</itemTag>
+    <workflow id="digitizationWF">
+      <process lifecycle="registered" name="initiate" status="completed"></process>
+      <process name="digitize" status="waiting"></process>
+      <process name="start-accession" status="waiting"></process>
+    </workflow>
+  </registration>
+  <deposit>
+    <depositStatus>closed</depositStatus>
+    <approval required="no"></approval>
+    <termsOfDeposit> By depositing stuff you agree... </termsOfDeposit>
+    <embargo default="6 months" maximum="2 years" minimum="0"></embargo>
+  </deposit>
+  <accessioning>
+    <workflow id="accessionWF">
+      <process lifecycle="submitted" name="start-accession" status="completed"></process>
+      <process name="content-metadata" status="waiting"></process>
+      <process lifecycle="described" name="descriptive-metadata" status="waiting"></process>
+      <process name="rights-metadata" status="waiting"></process>
+      <process name="technical-metadata" status="waiting"></process>
+      <process name="provenance-metadata" status="waiting"></process>
+      <process name="remediate-object" status="waiting"></process>
+      <process name="shelve" status="waiting"></process>
+      <process lifecycle="published" name="publish" status="waiting"></process>
+      <process name="sdr-ingest-transfer" status="waiting"></process>
+      <process lifecycle="accessioned" name="cleanup" status="waiting"></process>
+    </workflow>
+  </accessioning>
+</administrativeMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="administrativeMetadata.4" LABEL="Administrative Metadata" CREATED="2012-05-06T19:23:16.499Z" MIMETYPE="text/xml" SIZE="2083">
+<foxml:xmlContent>
+<administrativeMetadata>
+  <descMetadata>
+    <format>MODS</format>
+    <source>symphony</source>
+  </descMetadata>
+  <contact id="sunetid:mbklein" type="user">
+    <name>Michael B. Klein</name>
+    <organization>DLSS</organization>
+    <email>mbklein@stanford.edu</email>
+  </contact>
+  <rights>
+    <copyright useDefault="true"></copyright>
+    <use>
+      <defaultLicense override="yes" type="CreativeCommons" value="by-sa"></defaultLicense>
+    </use>
+    <use>
+      <access override="yes"></access>
+    </use>
+  </rights>
+  <relationships></relationships>
+  <registration>
+    <itemTag>AdminPolicy : Personal Papers</itemTag>
+    <workflow id="digitizationWF">
+      <process lifecycle="registered" name="initiate" status="completed"></process>
+      <process name="digitize" status="waiting"></process>
+      <process name="start-accession" status="waiting"></process>
+    </workflow>
+  </registration>
+  <deposit>
+    <depositStatus>closed</depositStatus>
+    <approval required="no"></approval>
+    <termsOfDeposit> By depositing stuff you agree... </termsOfDeposit>
+    <embargo default="6 months" maximum="2 years" minimum="0"></embargo>
+  </deposit>
+  <accessioning>
+    <workflow id="accessionWF">
+      <process lifecycle="submitted" name="start-accession" status="completed"></process>
+      <process name="content-metadata" status="waiting"></process>
+      <process lifecycle="described" name="descriptive-metadata" status="waiting"></process>
+      <process name="rights-metadata" status="waiting"></process>
+      <process name="technical-metadata" status="waiting"></process>
+      <process name="provenance-metadata" status="waiting"></process>
+      <process name="remediate-object" status="waiting"></process>
+      <process name="shelve" status="waiting"></process>
+      <process lifecycle="published" name="publish" status="waiting"></process>
+      <process name="sdr-ingest-transfer" status="waiting"></process>
+      <process lifecycle="accessioned" name="cleanup" status="waiting"></process>
+    </workflow>
+  </accessioning>
+</administrativeMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="administrativeMetadata.3" LABEL="Administrative Metadata" CREATED="2011-06-16T20:30:07.581Z" MIMETYPE="text/xml" SIZE="2326">
+<foxml:xmlContent>
+<administrativeMetadata>
+  <descMetadata>
+    <format>MODS</format>
+    <source>symphony</source>
+  </descMetadata>
+  <contact id="sunetid:mbklein" type="user">
+    <name>Michael B. Klein</name>
+    <organization>DLSS</organization>
+    <email>mbklein@stanford.edu</email>
+  </contact>
+  <rights>
+    <copyright useDefault="true"></copyright>
+    <use>
+      <defaultLicense override="yes" type="CreativeCommons" value="by-sa"></defaultLicense>
+    </use>
+    <use>
+      <access override="yes"></access>
+    </use>
+  </rights>
+  <relationships></relationships>
+  <registration>
+    <itemTag>AdminPolicy : Personal Papers</itemTag>
+    <workflow id="digitizationWF">
+      <process lifecycle="registered" name="initiate" status="completed"></process>
+      <process name="digitize" status="waiting"></process>
+      <process name="start-accession" status="waiting"></process>
+    </workflow>
+  </registration>
+  <deposit>
+    <depositStatus>closed</depositStatus>
+    <approval required="no"></approval>
+    <termsOfDeposit> By depositing stuff you agree... </termsOfDeposit>
+    <embargo default="6 months" maximum="2 years" minimum="0"></embargo>
+  </deposit>
+  <accessioning>
+    <workflow id="accessionWF">
+      <process lifecycle="inprocess" name="start-accession" status="completed"></process>
+      <process name="transfer-content" status="waiting"></process>
+      <process name="descriptive-metadata" status="waiting"></process>
+      <process name="technical-metadata" status="waiting"></process>
+      <process name="content-metadata" status="waiting"></process>
+      <process name="shelve" status="waiting"></process>
+      <process lifecycle="released" name="publish" status="waiting"></process>
+      <process name="provenance-metadata" status="waiting"></process>
+      <process name="sdr-ingest-transfer" status="waiting"></process>
+      <process name="sdr-ingest-deposit" status="waiting"></process>
+      <process lifecycle="archived" name="sdr-ingest-archive" status="waiting"></process>
+      <process lifecycle="accessioned" name="cleanup" status="waiting"></process>
+    </workflow>
+  </accessioning>
+  <preservation> ... storage, replication, audit requirements, e.g. </preservation>
+  <dissemination>
+    <releaseDelayLimit>20 years</releaseDelayLimit>
+  </dissemination>
+</administrativeMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="administrativeMetadata.2" LABEL="Administrative Metadata" CREATED="2011-05-25T22:15:58.159Z" MIMETYPE="text/xml" SIZE="2320">
+<foxml:xmlContent>
+<administrativeMetadata>
+  <descMetadata>
+    <format>MODS</format>
+    <source>symphony</source>
+  </descMetadata>
+  <contact id="sunetid:mbklein" type="user">
+    <name>Michael B. Klein</name>
+    <organization>DLSS</organization>
+    <email>mbklein@stanford.edu</email>
+  </contact>
+  <rights>
+    <copyright useDefault="true"></copyright>
+    <use>
+      <defaultLicense override="yes" type="CreativeCommons" value="by-sa"></defaultLicense>
+    </use>
+    <use>
+      <access override="yes"></access>
+    </use>
+  </rights>
+  <relationships></relationships>
+  <registration>
+    <itemTag>AdminPolicy : Personal Papers</itemTag>
+    <workflow id="digitizationWF">
+      <process id="initiate" lifecycle="registered" status="completed"></process>
+      <process id="digitize" status="waiting"></process>
+      <process id="start-accession" status="waiting"></process>
+    </workflow>
+  </registration>
+  <deposit>
+    <depositStatus>closed</depositStatus>
+    <approval required="no"></approval>
+    <termsOfDeposit> By depositing stuff you agree... </termsOfDeposit>
+    <embargo default="6 months" maximum="2 years" minimum="0"></embargo>
+  </deposit>
+  <accessioning>
+    <workflow id="accessionWF">
+      <process lifecycle="inprocess" name="start-accession" status="completed"></process>
+      <process name="transfer-content" status="waiting"></process>
+      <process name="descriptive-metadata" status="waiting"></process>
+      <process name="technical-metadata" status="waiting"></process>
+      <process name="content-metadata" status="waiting"></process>
+      <process name="shelve" status="waiting"></process>
+      <process lifecycle="released" name="publish" status="waiting"></process>
+      <process name="provenance-metadata" status="waiting"></process>
+      <process name="sdr-ingest-transfer" status="waiting"></process>
+      <process name="sdr-ingest-deposit" status="waiting"></process>
+      <process lifecycle="archived" name="sdr-ingest-archive" status="waiting"></process>
+      <process lifecycle="accessioned" name="cleanup" status="waiting"></process>
+    </workflow>
+  </accessioning>
+  <preservation> ... storage, replication, audit requirements, e.g. </preservation>
+  <dissemination>
+    <releaseDelayLimit>20 years</releaseDelayLimit>
+  </dissemination>
+</administrativeMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="administrativeMetadata.1" LABEL="Administrative Metadata" CREATED="2011-05-25T22:07:46.736Z" MIMETYPE="text/xml" SIZE="2320">
+<foxml:xmlContent>
+<administrativeMetadata>
+  <descMetadata>
+    <format>MODS</format>
+    <source>symphony</source>
+  </descMetadata>
+  <contact id="sunetid:mbklein" type="user">
+    <name>Michael B. Klein</name>
+    <organization>DLSS</organization>
+    <email>mbklein@stanford.edu</email>
+  </contact>
+  <rights>
+    <copyright useDefault="true"></copyright>
+    <use>
+      <defaultLicense override="yes" type="CreativeCommons" value="by-sa"></defaultLicense>
+    </use>
+    <use>
+      <access override="yes"></access>
+    </use>
+  </rights>
+  <relationships></relationships>
+  <registration>
+    <itemTag>AdminPolicy : Personal Papers</itemTag>
+    <workflow id="digitizationWF">
+      <process id="initiate" lifecycle="registered" status="completed"></process>
+      <process id="digitize" status="waiting"></process>
+      <process id="start-accession" status="waiting"></process>
+    </workflow>
+  </registration>
+  <deposit>
+    <depositStatus>closed</depositStatus>
+    <approval required="no"></approval>
+    <termsOfDeposit> By depositing stuff you agree... </termsOfDeposit>
+    <embargo default="6 months" maximum="2 years" minimum="0"></embargo>
+  </deposit>
+  <accessioning>
+    <workflow id="accessionWF">
+      <process lifecycle="inprocess" name="start-accession" status="completed"></process>
+      <process name="transfer-content" status="waiting"></process>
+      <process name="descriptive-metadata" status="waiting"></process>
+      <process name="technical-metadata" status="waiting"></process>
+      <process name="content-metadata" status="waiting"></process>
+      <process name="shelve" status="waiting"></process>
+      <process lifecycle="released" name="publish" status="waiting"></process>
+      <process name="provenance-metadata" status="waiting"></process>
+      <process name="sdr-ingest-transfer" status="waiting"></process>
+      <process name="sdr-ingest-deposit" status="waiting"></process>
+      <process lifecycle="archived" name="sdr-ingest-archive" status="waiting"></process>
+      <process lifecycle="accessioned" name="cleanup" status="waiting"></process>
+    </workflow>
+  </accessioning>
+  <preservation> ... storage, replication, audit requirements, e.g. </preservation>
+  <dissemination>
+    <releaseDelayLimit>20 years</releaseDelayLimit>
+  </dissemination>
+</administrativeMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="administrativeMetadata.0" LABEL="Administrative Metadata" CREATED="2011-05-23T18:02:18.499Z" MIMETYPE="text/xml" SIZE="2320">
+<foxml:xmlContent>
+<administrativeMetadata>
+  <descMetadata>
+    <format>MODS</format>
+    <source>symphony</source>
+  </descMetadata>
+  <contact id="sunetid:mbklein" type="user">
+    <name>Michael B. Klein</name>
+    <organization>DLSS</organization>
+    <email>mbklein@stanford.edu</email>
+  </contact>
+  <rights>
+    <copyright useDefault="true"></copyright>
+    <use>
+      <defaultLicense override="yes" type="CreativeCommons" value="by-sa"></defaultLicense>
+    </use>
+    <use>
+      <access override="yes"></access>
+    </use>
+  </rights>
+  <relationships></relationships>
+  <registration>
+    <itemTag>AdminPolicy : Personal Papers</itemTag>
+    <workflow id="digitizationWF">
+      <process id="initiate" lifecycle="registered" status="completed"></process>
+      <process id="digitize" status="waiting"></process>
+      <process id="start-accession" status="waiting"></process>
+    </workflow>
+  </registration>
+  <deposit>
+    <depositStatus>closed</depositStatus>
+    <approval required="no"></approval>
+    <termsOfDeposit> By depositing stuff you agree... </termsOfDeposit>
+    <embargo default="6 months" maximum="2 years" minimum="0"></embargo>
+  </deposit>
+  <accessioning>
+    <workflow id="accessionWF">
+      <process lifecycle="inprocess" name="start-accession" status="completed"></process>
+      <process name="transfer-content" status="waiting"></process>
+      <process name="descriptive-metadata" status="waiting"></process>
+      <process name="technical-metadata" status="waiting"></process>
+      <process name="content-metadata" status="waiting"></process>
+      <process name="shelve" status="waiting"></process>
+      <process lifecycle="released" name="publish" status="waiting"></process>
+      <process name="provenance-metadata" status="waiting"></process>
+      <process name="sdr-ingest-transfer" status="waiting"></process>
+      <process name="sdr-ingest-deposit" status="waiting"></process>
+      <process lifecycle="archived" name="sdr-ingest-archive" status="waiting"></process>
+      <process lifecycle="accessioned" name="cleanup" status="waiting"></process>
+    </workflow>
+  </accessioning>
+  <preservation> ... storage, replication, audit requirements, e.g. </preservation>
+  <dissemination>
+    <releaseDelayLimit>20 years</releaseDelayLimit>
+  </dissemination>
+</administrativeMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="defaultObjectRights" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="defaultObjectRights.4" LABEL="Default Object Rights" CREATED="2011-05-23T17:22:27.144Z" MIMETYPE="text/xml" SIZE="572">
+<foxml:xmlContent>
+<rightsMetadata>
+  <copyright>
+    <human type="copyright">This work is copyrighted by the creator.</human>
+  </copyright>
+  <access type="discover">
+    <world></world>
+  </access>
+  <access type="read">
+    <human>This document is available only to the Stanford faculty, staff and student
+            community</human>
+    <machine>
+      <group>stanford</group>
+    </machine>
+  </access>
+  <use>
+    <human type="creativecommons">Attribution Non-Commercial Share Alike license</human>
+    <machine type="creativecommons">by-nc-sa</machine>
+  </use>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="defaultObjectRights.3" LABEL="Default Object Rights" CREATED="2011-05-23T17:22:17.179Z" MIMETYPE="text/xml" SIZE="588">
+<foxml:xmlContent>
+<rightsMetadata>
+  <copyright>
+    <human type="copyright">This work is copyrighted by the individual rightsholder.</human>
+  </copyright>
+  <access type="discover">
+    <world></world>
+  </access>
+  <access type="read">
+    <human>This document is available only to the Stanford faculty, staff and student
+            community</human>
+    <machine>
+      <group>stanford</group>
+    </machine>
+  </access>
+  <use>
+    <human type="creativecommons">Attribution Non-Commercial Share Alike license</human>
+    <machine type="creativecommons">by-nc-sa</machine>
+  </use>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="defaultObjectRights.2" LABEL="Default Object Rights" CREATED="2011-05-23T17:21:38.846Z" MIMETYPE="text/xml" SIZE="566">
+<foxml:xmlContent>
+<rightsMetadata>
+  <copyright>
+    <human type="copyright">This work is in the Public Domain.</human>
+  </copyright>
+  <access type="discover">
+    <world></world>
+  </access>
+  <access type="read">
+    <human>This document is available only to the Stanford faculty, staff and student
+            community</human>
+    <machine>
+      <group>stanford</group>
+    </machine>
+  </access>
+  <use>
+    <human type="creativecommons">Attribution Non-Commercial Share Alike license</human>
+    <machine type="creativecommons">by-nc-sa</machine>
+  </use>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="defaultObjectRights.1" LABEL="Default Object Rights" CREATED="2011-05-23T17:21:02.310Z" MIMETYPE="text/xml" SIZE="548">
+<foxml:xmlContent>
+<rightsMetadata>
+  <copyright>
+    <human type="copyright">This work is in the Public Domain.</human>
+  </copyright>
+  <access type="discover">
+    <world></world>
+  </access>
+  <access type="read">
+    <human>This document is available only to the Stanford faculty, staff and student
+            community</human>
+    <machine>
+      <group>stanford</group>
+    </machine>
+  </access>
+  <use>
+    <human type="creativecommons">Attribution Share Alike license</human>
+    <machine type="creativecommons">by-sa</machine>
+  </use>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="defaultObjectRights.0" LABEL="Default Object Rights" CREATED="2011-04-18T18:51:06.680Z" MIMETYPE="text/xml" SIZE="490">
+<foxml:xmlContent>
+<rightsMetadata>
+  <copyright>
+    <human type="copyright">This work is in the Public Domain.</human>
+  </copyright>
+  <access type="discover">
+    <world></world>
+  </access>
+  <access type="read">
+    <human>This document is available to the entire world</human>
+    <machine>
+      <world></world>
+    </machine>
+  </access>
+  <use>
+    <human type="creativecommons">Attribution Share Alike license</human>
+    <machine type="creativecommons">by-sa</machine>
+  </use>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="identityMetadata.6" LABEL="Identity Metadata" CREATED="2012-07-03T21:22:11.811Z" MIMETYPE="text/xml" SIZE="361">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Internal Objects</objectLabel>
+  <objectDescription>Default Administrative Policy Object</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+  <agreementId>druid:tx617qp8040</agreementId>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.5" LABEL="Identity Metadata" CREATED="2012-04-09T22:41:24.309Z" MIMETYPE="text/xml" SIZE="365">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Default Admin Policy</objectLabel>
+  <objectDescription>Default Administrative Policy Object</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+  <agreementId>druid:tx617qp8040</agreementId>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.4" LABEL="Identity Metadata" CREATED="2012-03-01T09:03:29.648Z" MIMETYPE="text/xml" SIZE="318">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Default Admin Policy</objectLabel>
+  <objectDescription>Default Administrative Policy Object</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.3" LABEL="Identity Metadata" CREATED="2011-11-07T02:10:48.083Z" MIMETYPE="text/xml" SIZE="319">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Default Admin. Policy</objectLabel>
+  <objectDescription>Default Administrative Policy Object</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.2" LABEL="Identity Metadata" CREATED="2011-10-31T22:26:23.365Z" MIMETYPE="text/xml" SIZE="368">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Default Admin. Policy</objectLabel>
+  <objectDescription>Default Administrative Policy Object</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+  <tag>AdminPolicy : Default Admin. Policy</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.1" LABEL="Identity Metadata" CREATED="2011-05-23T17:20:27.543Z" MIMETYPE="text/xml" SIZE="347">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Personal Papers</objectLabel>
+  <objectDescription>Personal Papers and Records</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+  <tag>AdminPolicy : Personal Papers</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-04-18T18:45:37.109Z" MIMETYPE="text/xml" SIZE="354">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Default Admin. Policy</objectLabel>
+  <objectDescription>Default Administrative Policy Object</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+  <tag>AdminPolicy : default</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.7" LABEL="Identity Metadata" CREATED="2014-08-20T22:28:51.843Z" MIMETYPE="text/xml" SIZE="397">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:hv992ry2431</objectId>
+  <objectType>adminPolicy</objectType>
+  <objectLabel>Internal Objects</objectLabel>
+  <objectDescription>Default Administrative Policy Object</objectDescription>
+  <otherId name="uuid">661e629a-24c8-2ef3-227e-883eb4e2c6d4</otherId>
+  <agreementId>druid:tx617qp8040</agreementId>
+  <tag>Remediated By : 4.13.0</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="roleMetadata.0" LABEL="Role Metadata" CREATED="2011-05-23T18:08:21.810Z" MIMETYPE="text/xml" SIZE="568">
+<foxml:xmlContent>
+<roleMetadata>
+  <role type="manager">
+    <person>
+      <identifier type="sunetid">mbklein</identifier>
+      <name>Klein, Michael</name>
+    </person>
+    <person>
+      <identifier type="sunetid">lmcrae</identifier>
+      <name>McRae, Lynn</name>
+    </person>
+  </role>
+  <role type="depositor">
+    <person>
+      <identifier type="sunetid">labware</identifier>
+      <name>Labware, Hydra</name>
+    </person>
+    <group>
+      <identifier type="workgroup">dlss:labstaff</identifier>
+      <name>Scanning Lab Staff</name>
+    </group>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="roleMetadata.1" LABEL="Role Metadata" CREATED="2012-12-10T19:37:51.465Z" MIMETYPE="text/xml" SIZE="687">
+<foxml:xmlContent>
+<roleMetadata>
+  <role type="manager">
+    <person>
+      <identifier type="sunetid">mbklein</identifier>
+      <name>Klein, Michael</name>
+    </person>
+    <person>
+      <identifier type="sunetid">lmcrae</identifier>
+      <name>McRae, Lynn</name>
+    </person>
+    <person>
+      <identifier type="sunetid">jdeering</identifier>
+      <name>Deering, Jonathan</name>
+    </person>
+  </role>
+  <role type="depositor">
+    <person>
+      <identifier type="sunetid">labware</identifier>
+      <name>Labware, Hydra</name>
+    </person>
+    <group>
+      <identifier type="workgroup">dlss:labstaff</identifier>
+      <name>Scanning Lab Staff</name>
+    </group>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="roleMetadata.2" LABEL="Role Metadata" CREATED="2013-01-09T23:21:32.674Z" MIMETYPE="text/xml" SIZE="162">
+<foxml:xmlContent>
+<roleMetadata>
+  <role type="dor-apo-manager">
+    <group>
+      <identifier type="workgroup">dlss:dor-admin</identifier>
+    </group>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="roleMetadata.3" LABEL="Role Metadata" CREATED="2013-01-11T01:52:59.065Z" MIMETYPE="text/xml" SIZE="163">
+<foxml:xmlContent>
+<roleMetadata>
+  <role type="dor-apo-manager">
+    <group>
+      <identifier type="workgroup">dlss:developers</identifier>
+    </group>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="roleMetadata.4" LABEL="Role Metadata" CREATED="2013-01-11T17:06:24.673Z" MIMETYPE="text/xml" SIZE="155">
+<foxml:xmlContent>
+<roleMetadata>
+  <role type="manager">
+    <group>
+      <identifier type="workgroup">dlss:developers</identifier>
+    </group>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="roleMetadata.5" LABEL="Role Metadata" CREATED="2013-01-12T00:51:41.660Z" MIMETYPE="text/xml" SIZE="163">
+<foxml:xmlContent>
+<roleMetadata>
+  <role type="dor-apo-manager">
+    <group>
+      <identifier type="workgroup">dlss:developers</identifier>
+    </group>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="roleMetadata.6" LABEL="Role Metadata" CREATED="2014-09-02T21:24:11.298Z" MIMETYPE="text/xml" SIZE="163">
+<foxml:xmlContent>
+<roleMetadata>
+  <role type="dor-apo-manager">
+    <group>
+      <identifier type="workgroup">dlss:pmag-staff</identifier>
+    </group>
+  </role>
+</roleMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+<foxml:datastreamVersion ID="workflows.0" LABEL="workflows" CREATED="2012-01-28T01:35:58.251Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:hv992ry2431/workflows"/>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflows.1" LABEL="Workflow" CREATED="2013-02-13T18:01:29.520Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:hv992ry2431/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2014-08-20T22:28:52.051Z" MIMETYPE="application/rdf+xml" SIZE="315">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:hv992ry2431">
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Item"></fedora-model:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="RELS-EXT.1" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2014-08-22T21:08:00.240Z" MIMETYPE="application/rdf+xml" SIZE="328">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:hv992ry2431">
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_AdminPolicyObject"></fedora-model:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="events.0" LABEL="Events" CREATED="2014-08-20T22:28:52.215Z" MIMETYPE="text/xml" SIZE="394">
+<foxml:xmlContent>
+<events>
+  <event type="remediation" when="2014-08-20T15:28:51-07:00" who="Dor::Identifiable 3.6.1">Assert correct models</event>
+  <event type="remediation" when="2014-08-20T15:28:51-07:00" who="Dor::Identifiable 3.6.1">Record Remediation Version</event>
+  <event type="remediation" when="2014-08-20T15:28:51-07:00" who="Dor::Versionable 3.12.2">Add missing versionMetadata</event>
+</events>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="versionMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="versionMetadata.0" LABEL="Version Metadata" CREATED="2014-08-20T22:28:52.350Z" MIMETYPE="text/xml" SIZE="136">
+<foxml:xmlContent>
+<versionMetadata>
+  <version tag="1.0.0" versionId="1">
+    <description>Initial Version</description>
+  </version>
+</versionMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="descMetadata.1" LABEL="" CREATED="2014-08-25T21:02:47.128Z" MIMETYPE="text/xml" SIZE="388">
+<foxml:xmlContent>
+<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+  <mods:titleInfo>
+    <mods:title>[Internal System Objects]</mods:title>
+  </mods:titleInfo>
+  <mods:identifier type="druid">hv992ry2431</mods:identifier>
+</mods:mods>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

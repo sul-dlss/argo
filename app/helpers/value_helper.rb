@@ -13,11 +13,11 @@ module ValueHelper
       status
     end
   end
-  
+
   # Renderers
   def label_for_druid druid
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
-    Rails.cache.fetch("label_for_#{druid}", :expires_in => 1.hour) do 
+    Rails.cache.fetch("label_for_#{druid}", :expires_in => 1.hour) do
       if  @apo and druid ==  @apo.pid
         item=@apo
       end
@@ -26,15 +26,15 @@ module ValueHelper
       end
       begin
       item=Dor.find(druid) if not item
-      item.label 
-    rescue 
-      druid 
+      item.label
+    rescue
+      druid
     end
     end
   end
   def value_for_preserved_size_display args
     args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
-  
+
   end
   def value_for_related_druid predicate, args
     begin
@@ -52,7 +52,7 @@ module ValueHelper
       Rails.logger.error e.backtrace.join("\n")
     end
   end
-  
+
   def value_for_wf_error_display args
     wf,step,message = args[:document].get(args[:field]).split(':',3)
     step+' : '+message
@@ -91,26 +91,26 @@ module ValueHelper
       Rails.logger.error e.backtrace.join("\n")
     end
   end
-  
+
   def value_for_project_tag_t args
     val = args[:document].get(args[:field]).split(':').first
     link_to val, add_facet_params_and_redirect("project_tag_facet", val)
   end
-  
+
   def value_for_objProfile_objCreateDate_dt args
     val = Time.parse(args[:document][args[:field]].first)
     val.localtime.strftime '%Y.%m.%d %H:%M%p'
   end
-  
+
   def value_for_identifier_t args
     val = args[:document][args[:field]]
     Array(val).reject { |v| v == args[:document]['id'] }.sort.uniq.join(', ')
   end
-  
+
   def value_for_tag_t args
     val = args[:document][args[:field]]
-    tags = Array(val).uniq.collect do |v| 
-      link_to v, add_facet_params_and_redirect("tag_facet", v) 
+    tags = Array(val).uniq.collect do |v|
+      link_to v, add_facet_params_and_redirect("tag_facet", v)
     end
     tags.join('<br/>').html_safe
   end

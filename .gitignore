@@ -3,6 +3,7 @@
 .dor-services
 .powenv
 .sass-cache
+.*.swp
 app/assets/javascripts/jqgrid/
 config/certs
 config/database.yml

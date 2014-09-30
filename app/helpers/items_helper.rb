@@ -13,22 +13,22 @@ module ItemsHelper
       valid_types<<'permission'
     end
     if type=~ /Image/
-      valid_types<<'image'     
-    end 
-    return valid_types  
+      valid_types<<'image'
+    end
+    return valid_types
   end
   def stacks_url_full_size obj, file_name
     druid=obj.pid
     Argo::Config.urls.stacks_file+'/'+druid+'/'+file_name
   end
 
-  #remove all namespaces and add back mods and xsi with the schema declaration 
+  #remove all namespaces and add back mods and xsi with the schema declaration
   def mclaughlin_prune_namespaces xml
     xml.remove_namespaces!
     xml.root.add_namespace nil, 'http://www.loc.gov/mods/v3'
     xml.root.add_namespace 'xsi', "http://www.w3.org/2001/XMLSchema-instance"
     xml.root['xsi:schemaLocation']="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"
-    xml.root['version']='3.3'    
+    xml.root['version']='3.3'
   end
   def mclaughlin_reorder_notes xml
     notes={ :general => [], :sor => [], :pub => [], :ref => [], :lang => [], :identifiers => [] }
@@ -59,7 +59,7 @@ module ItemsHelper
     reparent notes[:identifiers], root
   end
   def reparent nodes, root
-    nodes.each do |node| 
+    nodes.each do |node|
       root << node
     end
   end
@@ -70,7 +70,7 @@ module ItemsHelper
       if node['displayLabel'] and node['displayLabel'].include? 'tate'
         states << node
         parent=node.parent
-      end 
+      end
     end
     sorted=states.sort_by{ |n| if n['displayLabel'].length ==7
       n['displayLabel']
@@ -107,7 +107,7 @@ module ItemsHelper
           when 'content'
             node.remove_attribute(att)
           when ' '
-            node.remove_attribute(att)            
+            node.remove_attribute(att)
           when ''
             node.remove_attribute(att)
           when 'state_note'
@@ -182,17 +182,17 @@ module ItemsHelper
         node['type']='reference'
       end
     end
-  end     
+  end
   def mclaughlin_cleanup_states xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       atts=node.attributes()
       states=false
-      if node['type'] and node['type'].include?('state') and is_numeric?(node['type'].last(1)) 
+      if node['type'] and node['type'].include?('state') and is_numeric?(node['type'].last(1))
         #find the number and use it
         number=node['type'].last(2).strip
         if not is_numeric? number
           number=node['type'].last(1)
-        end       
+        end
         node['displayLabel']='State '+number
         node.remove_attribute('type')
       else
@@ -251,7 +251,7 @@ module ItemsHelper
   def mclaughlin_combine_cartographics xml
     #pick 1 cartographic and reparent the scale, projection and coordinates to be inside it. The empty node pruning will clean up the mess.
     cartographic=xml.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').first
-    if cartographic 
+    if cartographic
       scales=xml.search('//mods:cartographics/mods:scale','mods'=>'http://www.loc.gov/mods/v3')
       projections=xml.search('//mods:cartographics/mods:projection','mods'=>'http://www.loc.gov/mods/v3')
       coordinates=xml.search('//mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
@@ -259,11 +259,11 @@ module ItemsHelper
       raise 'too many projections' if projections.length > 1
       raise 'too many scales' if scales.length > 1
       cartographic << scales.first if scales.first
-      cartographic << projections.first if projections.first 
+      cartographic << projections.first if projections.first
       cartographic << coordinates.first if coordinates.first
     end
   end
-  
+
   def mclaughlin_fix_cartographics xml
     hash={}
     hash['W0000000 W0000000 N900000 N900000'] = ['W0000000 W0000000 N0900000 N0900000','(W 0° --E 0°/N 90° --N 90°)']
@@ -345,7 +345,7 @@ module ItemsHelper
   end
   def all_children_are_blank?(node)
     toret=true
-    node.children.all?{|child| 
+    node.children.all?{|child|
       #this needs to be sure to return the correct value
       c=is_blank?(child)
       if c
@@ -354,7 +354,7 @@ module ItemsHelper
         toret=false
       end
     }
-    toret 
+    toret
   end
   def mclaughlin_remove_keydate xml
     titles=xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3')
@@ -371,14 +371,14 @@ module ItemsHelper
     while text!=xml.to_s
       text=xml.to_s
       if root.length>0
-        root.first.traverse {|node| 
+        root.first.traverse {|node|
           if all_children_are_blank?(node) and node.name != 'text' and node.name != 'typeOfResource'
             nodes_to_remove << node
           else
             if node.name=='text'
               node.content=node.content.strip
             end
-            node.attributes.keys.each do |att| 
+            node.attributes.keys.each do |att|
               if node[att]==' ' or node[att]== '' and att != 'text'
                 node.attributes[att].remove
               end
@@ -421,7 +421,7 @@ module ItemsHelper
     #should have a typeOfResource
     good_formats=['still image', 'mixed material', 'moving image', 'three dimensional object', 'cartographic', 'sound recording-musical', 'sound recording-nonmusical', 'software, multimedia']
     format=mods_rec.term_values(:typeOfResource)
-    if format and format.length>0 and good_formats.include? format.first 
+    if format and format.length>0 and good_formats.include? format.first
     else
       messages << 'Missing or invalid typeOfResource'
     end
@@ -433,9 +433,9 @@ module ItemsHelper
       if title.text == "mapping of California as an island"
         title.parent.parent.remove
       end
-    end    
+    end
   end
-  
+
   def mclaughlin_replace_problematic_characters xml
     characters={}
     characters["&#x2013;"] = "--"
@@ -456,7 +456,7 @@ module ItemsHelper
     xml=Nokogiri.XML(text)
     xml
   end
-  
+
   def mclaughlin_remediation xml
     mclaughlin_cleanup_states xml
     mclaughlin_cleanup_statement xml
