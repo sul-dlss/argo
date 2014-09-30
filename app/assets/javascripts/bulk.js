@@ -305,7 +305,6 @@ function source_id() {
 
 function set_tags() {
 	cons = [];
-	job_count = [];
 	log = document.getElementById('log');
 	log.style.display = "block";
 	txt = document.getElementById('tags').value;
@@ -313,7 +312,8 @@ function set_tags() {
 	druids = txt.split("\n");
 	last = druids.pop();
 	if (last != '') {druids.push(last);}
-	d=[];
+	d = [];
+	job_count = [];
 	for (i=druids.length; i>0; i--) {
 		job_count.push(i);
 	}
