@@ -345,7 +345,7 @@ function set_tags() {
 		cons.push(xhr);
 		xhr.success(function(response,status,xhr) { 
 			success_handler(element_url, 'Updated	');
-		})
+		});
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
 	})
 }
