@@ -300,7 +300,7 @@ function source_id() {
 			success_handler(element_url, 'Updated	');
 		});
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())});
-	})
+	});
 }
 
 function set_tags() {
@@ -347,5 +347,5 @@ function set_tags() {
 			success_handler(element_url, 'Updated	');
 		});
 		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+	});
 }
