@@ -19,6 +19,7 @@ gem 'prawn', ">=0.12.0"
 gem 'barby'
 gem 'ruby-graphviz'
 gem "solrizer-fedora"
+gem 'active-fedora'
 gem "rsolr", :git => "https://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
 gem "rsolr-client-cert", "~> 0.5.2"
 gem 'confstruct', "~> 0.2.4"
@@ -35,6 +36,7 @@ gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
 
 group :test, :development do
+  gem 'http_logger'
   gem 'selenium-webdriver'
   gem 'unicorn'
   gem 'rspec-rails', '~> 3'
