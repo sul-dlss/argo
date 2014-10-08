@@ -9,6 +9,7 @@ describe DorController do
       Dor.should_receive(:load_instance).with('asdf:1234').and_return(mock_obj)
       mock_obj.should_receive(:to_solr).and_return({:id => 'asdf:1234'})
       Dor::SearchService.solr.should_receive(:add).with(hash_including(:id => 'asdf:1234'), instance_of(Hash))
+      Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from the config file, leading to test failure
       get :reindex, :pid => 'asdf:1234'
     end
    
