@@ -201,6 +201,7 @@ GEM
     hike (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
+    http_logger (0.4.3)
     i18n (0.6.11)
     is_it_working-cbeer (1.0.16)
     iso-639 (0.2.5)
@@ -454,6 +455,7 @@ PLATFORMS
 
 DEPENDENCIES
   about_page
+  active-fedora
   addressable (= 2.3.5)
   barby
   blacklight (~> 3.7)
@@ -471,6 +473,7 @@ DEPENDENCIES
   dor-workflow-service (~> 1.5)
   druid-tools (~> 0.3.0)
   haml
+  http_logger
   is_it_working-cbeer
   jettywrapper
   jquery-rails (= 2.1.4)
