@@ -29,7 +29,6 @@ describe DorController do
 
       controller.stub(:index_logger).and_return(mock_logger)
       Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
-      controller.stub(:archive_workflows)
 
       Dor.should_receive(:load_instance).with(mock_druid).and_raise(ActiveFedora::ObjectNotFoundError)
       mock_logger.should_receive(:info).with("failed to update index for #{mock_druid}, object not found in Fedora")
@@ -45,7 +44,6 @@ describe DorController do
 
       controller.stub(:index_logger).and_return(mock_logger)
       Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
-      controller.stub(:archive_workflows)
 
       err_msg = "didn't see that one coming"
       Dor.should_receive(:load_instance).with(mock_druid).and_raise(err_msg)
