@@ -3,16 +3,57 @@ require 'spec_helper'
 describe DorController do
   describe "reindex" do
     it "should reindex an object" do
-      log_in_as_mock_user(subject)
+      mock_druid = 'asdf:1234'
+      mock_logger = double()
       mock_obj = double()
+
+      log_in_as_mock_user(subject)
+
+      controller.stub(:index_logger).and_return(mock_logger)
+      Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
       controller.stub(:archive_workflows)
-      Dor.should_receive(:load_instance).with('asdf:1234').and_return(mock_obj)
-      mock_obj.should_receive(:to_solr).and_return({:id => 'asdf:1234'})
-      Dor::SearchService.solr.should_receive(:add).with(hash_including(:id => 'asdf:1234'), instance_of(Hash))
-      Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from the config file, leading to test failure
-      get :reindex, :pid => 'asdf:1234'
+
+      Dor.should_receive(:load_instance).with(mock_druid).and_return(mock_obj)
+      mock_obj.should_receive(:to_solr).and_return({:id => mock_druid})
+      Dor::SearchService.solr.should_receive(:add).with(hash_including(:id => mock_druid), instance_of(Hash))
+      mock_logger.should_receive(:info).with("updated index for #{mock_druid}")
+
+      get :reindex, :pid => mock_druid
     end
    
+    it "should log the right thing if an object is not found" do
+      mock_druid = 'asdf:1234'
+      mock_logger = double()
+
+      log_in_as_mock_user(subject)
+
+      controller.stub(:index_logger).and_return(mock_logger)
+      Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
+      controller.stub(:archive_workflows)
+
+      Dor.should_receive(:load_instance).with(mock_druid).and_raise(ActiveFedora::ObjectNotFoundError)
+      mock_logger.should_receive(:info).with("failed to update index for #{mock_druid}, object not found in Fedora")
+
+      get :reindex, :pid => mock_druid
+    end
+
+    it "should log the right thing if there's an unexpected error" do
+      mock_druid = 'asdf:1234'
+      mock_logger = double()
+
+      log_in_as_mock_user(subject)
+
+      controller.stub(:index_logger).and_return(mock_logger)
+      Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
+      controller.stub(:archive_workflows)
+
+      err_msg = "didn't see that one coming"
+      Dor.should_receive(:load_instance).with(mock_druid).and_raise(err_msg)
+      mock_logger.should_receive(:error).with("failed to update index for #{mock_druid}, unexpected error, see main app log")
+
+      expect {get :reindex, :pid => mock_druid}.to raise_error(err_msg)
+    end
+
     it 'should trigger archiving a completed workflow' do
       pending
       log_in_as_mock_user(subject)

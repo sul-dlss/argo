@@ -55,8 +55,12 @@ class DorController < ApplicationController
         render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
         #archive_workflows(obj)
       rescue ActiveFedora::ObjectNotFoundError => e
+        index_logger.info "failed to update index for #{params[:pid]}, object not found in Fedora"
         render :status=> 500, :text =>'Object doesnt exist in Fedora.'
         return
+      rescue StandardError => se
+        index_logger.error "failed to update index for #{params[:pid]}, unexpected error, see main app log"
+        raise se
       end
     end
     
