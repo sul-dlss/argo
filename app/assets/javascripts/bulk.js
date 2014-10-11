@@ -289,8 +289,7 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 		
 		//skip bad rows
 		if(is_invalid_row_fn(element)) {
-			//TODO: obviously this shouldn't be hardcoded to 'source'
-			log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : "+invalid_row_err_msg+" '"+element['source']+"'</span><br>\n"+log.innerHTML;
+			log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : "+invalid_row_err_msg+" '"+element['upd_data']+"'</span><br>\n"+log.innerHTML;
 			return;
 		}
 		params = get_upd_req_params_from_row_fn(element);
@@ -307,11 +306,11 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 function source_id() {
 	var row_processing_fn = function(row_str) {
 		parts = row_str.split("\t", 2);
-		row_result = {'druid': parts[0], 'source': parts[1]};
+		row_result = {'druid': parts[0], 'upd_data': parts[1]};
 		return row_result;
 	};
-	var is_invalid_row_fn = function(row_obj) { return (row_obj['source']==null || row_obj['source'].length<=1 || row_obj['source'].indexOf(':')<1); };
-	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'new_id': row_obj['source'] }; };
+	var is_invalid_row_fn = function(row_obj) { return (row_obj['upd_data']==null || row_obj['upd_data'].length<=1 || row_obj['upd_data'].indexOf(':')<1); };
+	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'new_id': row_obj['upd_data'] }; };
 	upd_values_for_druids(source_id_url, 'source_ids', row_processing_fn, "user supplied druids and source ids.", is_invalid_row_fn, "invalid source id", get_upd_req_params_from_row_fn);
 }
 
@@ -320,10 +319,10 @@ function set_tags() {
 		parts = row_str.split("\t");
 		druid = parts.shift();
 		tags = parts.join("\t");
-		row_result = {'druid': druid, 'tags': tags};
+		row_result = {'druid': druid, 'upd_data': tags};
 		return row_result;
 	};
-	var is_invalid_row_fn = function(row_obj) { return (row_obj['tags']==null || row_obj['tags'].length<=1 || row_obj['tags'].indexOf(':')<1); };
-	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'tags': row_obj['tags'] }; };
+	var is_invalid_row_fn = function(row_obj) { return (row_obj['upd_data']==null || row_obj['upd_data'].length<=1 || row_obj['upd_data'].indexOf(':')<1); };
+	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'tags': row_obj['upd_data'] }; };
 	upd_values_for_druids(tags_url, 'tags', row_processing_fn, "user supplied druids and tags.", is_invalid_row_fn, "invalid tags", get_upd_req_params_from_row_fn);
 }
