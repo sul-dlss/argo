@@ -258,13 +258,13 @@ function error_handler(xhr,status,err,element,index, after){
 	
 }
 
-function source_id() {
+function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, custom_wait_msg, is_invalid_row_fn, invalid_row_err_msg, get_upd_req_params_from_row_fn) {
 	cons = [];
 	log = document.getElementById('log');
 	log.style.display = "block";
-	txt = document.getElementById('source_ids').value;
+	txt = document.getElementById(upd_textarea_id).value;
 	txt = txt.replace(/druid:/g, '');
-	druids = txt.split("\n")
+	druids = txt.split("\n");
 	last = druids.pop();
 	if (last != '') {druids.push(last);}
 	d = [];
@@ -275,77 +275,55 @@ function source_id() {
 	for (i=0; i<druids.length; i++) {
 		dr = druids[i];
 		dr = dr.replace(/ : /g,':');
-		parts = dr.split("\t", 2);
-		d.push({'druid': parts[0], 'source': parts[1]});
+		row_result = row_processing_fn(dr);
+		d.push(row_result);
 	}
-	log.innerHTML = "Using " + druids.length + " user supplied druids and source ids.<br>\n";
-	log = document.getElementById('log');
+	log.innerHTML = "Using " + druids.length + " " + custom_wait_msg + "<br>\n";
+
 	$.each(d, function(i, element) {
 		//get rid of blank lines
 		if(element['druid'] == null || element['druid'].length < 2) {
 			return;
 		}
 		var element_url = catalog_url(element['druid']);
-		//skip bad source ids
-		if(element['source']==null || element['source'].length<=1 || element['source'].indexOf(':')<1) {
-			err_log = document.getElementById('log');
-			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid source id '"+element['source']+"'</span><br>\n"+log.innerHTML;
+		
+		//skip bad rows
+		if(is_invalid_row_fn(element)) {
+			//TODO: obviously this shouldn't be hardcoded to 'source'
+			log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : "+invalid_row_err_msg+" '"+element['source']+"'</span><br>\n"+log.innerHTML;
 			return;
 		}
-		params = { 'new_id': element['source'] };
-		url = source_id_url.replace('xxxxxxxxx',element['druid']);
+		params = get_upd_req_params_from_row_fn(element);
+		url = upd_req_url.replace('xxxxxxxxx', element['druid']);
 		var xhr = $.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
+		xhr.success(function(response, status, xhr) { 
 			success_handler(element_url, 'Updated	');
 		});
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())});
+		xhr.error(function(xhr, status, err) { error_handler(xhr, status, err, element_url, job_count.pop()) });
 	});
 }
 
+function source_id() {
+	var row_processing_fn = function(row_str) {
+		parts = row_str.split("\t", 2);
+		row_result = {'druid': parts[0], 'source': parts[1]};
+		return row_result;
+	};
+	var is_invalid_row_fn = function(row_obj) { return (row_obj['source']==null || row_obj['source'].length<=1 || row_obj['source'].indexOf(':')<1); };
+	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'new_id': row_obj['source'] }; };
+	upd_values_for_druids(source_id_url, 'source_ids', row_processing_fn, "user supplied druids and source ids.", is_invalid_row_fn, "invalid source id", get_upd_req_params_from_row_fn);
+}
+
 function set_tags() {
-	cons = [];
-	log = document.getElementById('log');
-	log.style.display = "block";
-	txt = document.getElementById('tags').value;
-	txt = txt.replace(/druid:/g,'');
-	druids = txt.split("\n");
-	last = druids.pop();
-	if (last != '') {druids.push(last);}
-	d = [];
-	job_count = [];
-	for (i=druids.length; i>0; i--) {
-		job_count.push(i);
-	}
-	for(i=0; i<druids.length; i++) {
-		dr = druids[i];
-		dr = dr.replace(/ : /g,':');
-		parts = dr.split("\t");
+	var row_processing_fn = function(row_str) {
+		parts = row_str.split("\t");
 		druid = parts.shift();
 		tags = parts.join("\t");
-		d.push({'druid': druid, 'tags': tags});
-	}
-	log.innerHTML = "Using " + druids.length +" user supplied druids and tags.<br>\n";
-	log = document.getElementById('log');
-	$.each(d, function(i, element) {
-		//get rid of blank lines
-		if(element['druid'] == null || element['druid'].length < 2) {
-			return;
-		}
-		var element_url=catalog_url(element['druid']);
-		//skip bad source ids
-		if(element['tags']==null || element['tags'].length<=1 || element['tags'].indexOf(':')<1) {
-			err_log = document.getElementById('log');
-			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid tags '"+element['source']+"'</span><br>\n"+log.innerHTML;
-			return;
-		}
-		params = { 'tags': element['tags'] };
-		url = tags_url.replace('xxxxxxxxx',element['druid']);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Updated	');
-		});
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	});
+		row_result = {'druid': druid, 'tags': tags};
+		return row_result;
+	};
+	var is_invalid_row_fn = function(row_obj) { return (row_obj['tags']==null || row_obj['tags'].length<=1 || row_obj['tags'].indexOf(':')<1); };
+	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'tags': row_obj['tags'] }; };
+	upd_values_for_druids(tags_url, 'tags', row_processing_fn, "user supplied druids and tags.", is_invalid_row_fn, "invalid tags", get_upd_req_params_from_row_fn);
 }
