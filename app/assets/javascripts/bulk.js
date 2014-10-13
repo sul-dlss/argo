@@ -1,17 +1,17 @@
 function process_request(druids, action_url, req_type, req_params, success_string, success_handler_callback, error_handler_callback) {
 	cons = [];
-	$.each(druids, function(i, element) {
-		var element_url = catalog_url(element);
-		var url = action_url.replace('xxxxxxxxx', element);
+	$.each(druids, function(i, druid) {
+		var object_link = catalog_url(druid);
+		var url = action_url.replace('xxxxxxxxx', druid);
 		var req_obj = {url: url, type: req_type};
 		if(req_params != null) req_obj['data'] = req_params;
 		var xhr = $.ajax(req_obj);
 		cons.push(xhr);
 		xhr.success(function(response, status, xhr) { 
-			success_handler(element_url, success_string, success_handler_callback);
+			success_handler(object_link, success_string, success_handler_callback);
 		});
 		xhr.error(function(xhr, status, err) {
-			error_handler(xhr, status, err, element_url, job_count.pop(), error_handler_callback);
+			error_handler(xhr, status, err, object_link, job_count.pop(), error_handler_callback);
 		});
 	})
 }
@@ -87,7 +87,7 @@ function fetch_druids(fun) {
 	log.style.display = "block";
 	var pids_txt = fetch_pids_txt();
 	if(pids_txt.length > 5) {
-		druids = extract_pids_list(pids_txt);
+		var druids = extract_pids_list(pids_txt);
 
 		log.innerHTML = "Using " + druids.length + " user supplied druids.\n<br>";
 		job_count = [];
@@ -205,101 +205,97 @@ function get_tags() {
 }
 
 
-function show_buttons()
-{
+function show_buttons() {
 	$('#updates').show(400);
 	$('.update_buttons').removeAttr("disabled");
 }
-function stop_all()
-{
-	log=document.getElementById('log');
+
+function stop_all() {
+	log = document.getElementById('log');
 	
-	while(cons.length>0)
-	{
-		con=cons.pop();
+	while(cons.length > 0) {
+		con = cons.pop();
 		con.abort();
 	}
 }
+
 //print a success message with whatever description fits the action being performed.
-function success_handler(element_url,desc,after)
-{
-	if (job_count.length == 1 && after != null)
-	{
+function success_handler(object_link, desc, after) {
+	if (job_count.length == 1 && after != null) {
 		after();
 	}
-	log=document.getElementById('log');
-	log.innerHTML = job_count.pop()+" "+element_url+' '+desc+"<br>\n"+log.innerHTML;
-	if (job_count.length == 0)
-	{
-		log.innerHTML = "Done!\n<br>"+log.innerHTML
+
+	var log = document.getElementById('log');
+	log.innerHTML = job_count.pop()+" "+object_link+' '+desc+"<br>\n"+log.innerHTML;
+	if (job_count.length == 0) {
+		log.innerHTML = "Done!\n<br>"+log.innerHTML;
     	$(".stop_button").hide();
 	}
 }
-function error_handler(xhr,status,err,element,index, after){
-	if (job_count.length == 1 && after != null)
-	{
+
+function error_handler(xhr, status, err, object_link, index, after) {
+	if (job_count.length == 1 && after != null) {
 		after();
 	}
-	msg='';
-	if( xhr.responseText && xhr.responseText.length<500)
-	{
-		msg=xhr.responseText;
+
+	var msg = '';
+	if (xhr.responseText && xhr.responseText.length < 500) {
+		msg = xhr.responseText;
+	} else {
+		msg = err;
 	}
-	else
-	{
-		msg=err;
+
+	log.innerHTML = "<span class=\"error\"> " + index + " " + object_link + " : " + msg + "</span><br>\n" + log.innerHTML;	
+	if (job_count.length == 0) {
+		log.innerHTML = "Done!<br>\n" + log.innerHTML;
+		$(".stop_button").hide();
 	}
-		log.innerHTML = "<span class=\"error\"> "+index+" "+element+" : "+msg+"</span><br>\n"+log.innerHTML;	
-		if (job_count.length == 0)
-		{
-			log.innerHTML = "Done!<br>\n"+log.innerHTML
-			$(".stop_button").hide();
-		}
 	
 }
 
 function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, custom_wait_msg, is_invalid_row_fn, invalid_row_err_msg, get_upd_req_params_from_row_fn) {
 	cons = [];
-	log = document.getElementById('log');
+	var log = document.getElementById('log');
 	log.style.display = "block";
-	txt = document.getElementById(upd_textarea_id).value;
-	txt = txt.replace(/druid:/g, '');
-	druids = txt.split("\n");
-	last = druids.pop();
-	if (last != '') {druids.push(last);}
-	d = [];
+
+	var druid_upd_txt = document.getElementById(upd_textarea_id).value;
+	var druid_upd_lines = extract_pids_list(druid_upd_txt);
 	job_count = [];
-	for (i=druids.length; i>0; i--) {
+	for (i=druid_upd_lines.length; i>0; i--) {
 		job_count.push(i);
 	}
-	for (i=0; i<druids.length; i++) {
-		dr = druids[i];
+
+	var druid_upd_rows = [];
+	for (i=0; i<druid_upd_lines.length; i++) {
+		dr = druid_upd_lines[i];
 		dr = dr.replace(/ : /g,':');
 		row_result = row_processing_fn(dr);
-		d.push(row_result);
+		druid_upd_rows.push(row_result);
 	}
-	log.innerHTML = "Using " + druids.length + " " + custom_wait_msg + "<br>\n";
+	log.innerHTML = "Using " + druid_upd_lines.length + " " + custom_wait_msg + "<br>\n";
 
-	$.each(d, function(i, element) {
+	$.each(druid_upd_rows, function(i, upd_info) {
 		//get rid of blank lines
-		if(element['druid'] == null || element['druid'].length < 2) {
+		if(upd_info['druid'] == null || upd_info['druid'].length < 2) {
 			return;
 		}
-		var element_url = catalog_url(element['druid']);
+		var object_link = catalog_url(upd_info['druid']);
 		
 		//skip bad rows
-		if(is_invalid_row_fn(element)) {
-			log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : "+invalid_row_err_msg+" '"+element['upd_data']+"'</span><br>\n"+log.innerHTML;
+		if(is_invalid_row_fn(upd_info)) {
+			log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+object_link+" : "+invalid_row_err_msg+" '"+upd_info['upd_data']+"'</span><br>\n"+log.innerHTML;
 			return;
 		}
-		params = get_upd_req_params_from_row_fn(element);
-		url = upd_req_url.replace('xxxxxxxxx', element['druid']);
+		var params = get_upd_req_params_from_row_fn(upd_info);
+		var url = upd_req_url.replace('xxxxxxxxx', upd_info['druid']);
 		var xhr = $.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
 		xhr.success(function(response, status, xhr) { 
-			success_handler(element_url, 'Updated	');
+			success_handler(object_link, 'Updated	');
 		});
-		xhr.error(function(xhr, status, err) { error_handler(xhr, status, err, element_url, job_count.pop()) });
+		xhr.error(function(xhr, status, err) {
+			error_handler(xhr, status, err, object_link, job_count.pop());
+		});
 	});
 }
 
