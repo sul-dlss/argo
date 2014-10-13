@@ -154,7 +154,7 @@ function apply_apo_defaults(druids){
 }
 
 function add_workflow(druids){
-	var params={ 'wf': $('#wf').val() }
+	var params = { 'wf': $('#wf').val() }
 	process_post(druids, add_workflow_url, params, 'Workflow Added');
 }
 
