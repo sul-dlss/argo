@@ -390,15 +390,15 @@ class ItemsController < ApplicationController
     @object.save
     Dor::WorkflowService.configure  Argo::Config.urls.workflow, :dor_services_url => Argo::Config.urls.dor_services
     begin
-    @object.close_version
-    @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")
-    respond_to do |format|
-      if params[:bulk]
-        format.html {render :status => :ok, :text => 'Version Closed.'}
-      else
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }  
+      @object.close_version
+      @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")
+      respond_to do |format|
+        if params[:bulk]
+          format.html {render :status => :ok, :text => 'Version Closed.'}
+        else
+          format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }  
+        end
       end
-    end
     rescue Dor::Exception => e
       render :status => 500, :text => 'No version to close.'
     end
