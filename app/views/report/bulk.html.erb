@@ -137,15 +137,7 @@ ul li{
 
 <div class="bulk_operation" id="close" name="close">
 	<h1>Close a version of the items so the changes can be accessioned</h1>
-	<label for="severity">Type</label>
-	<select id="severity" name="severity">
-		<option value="major">Major</option>
-		<option value="minor">Minor</option>
-		<option value="admin">Admin</option>
-	</select>
-	<br>
-	<label for="description">version description</label><br>
-	<input type="text" id="description" name="description" >
+	The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
 	<br>
 	<span class="bulk_button" onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</span><br>
 </div>

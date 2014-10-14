@@ -383,12 +383,16 @@ class ItemsController < ApplicationController
     end
   end
   def close_version
-    severity=params[:severity]
-    desc=params[:description]
-    ds=@object.versionMetadata
-    ds.update_current_version({:description => desc,:significance => severity.to_sym})
-    @object.save
-    Dor::WorkflowService.configure  Argo::Config.urls.workflow, :dor_services_url => Argo::Config.urls.dor_services
+    # as long as this isn't a bulk operation, and we get non-nil severity and description 
+    # values, update those fields on the version metadata datastream
+    unless (params[:bulk] || !params[:severity] || !params[:description])
+      severity = params[:severity]
+      desc = params[:description]
+      ds = @object.versionMetadata
+      ds.update_current_version({:description => desc, :significance => severity.to_sym})
+      @object.save
+    end
+
     begin
       @object.close_version
       @object.datastreams['events'].add_event("close", current_user.to_s , "Version "+ @object.versionMetadata.current_version_id.to_s + " closed")

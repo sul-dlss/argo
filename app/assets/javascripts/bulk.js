@@ -32,11 +32,7 @@ function open_version(druids){
 	process_post(druids, open_version_url, params, "Prepared");
 }
 function close_version(druids){
-	var params={
-		'severity': $('#severity').val(),
-		'description': $('#description').val(),
-	}
-	process_post(druids, close_version_url, params, "Closed");
+	process_post(druids, close_version_url, null, "Closed");
 }
 function set_content_type(druids){
 	var params={
