@@ -3,6 +3,8 @@ class DorController < ApplicationController
   before_filter :authorize!
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
+
+  
   def index_logger
     @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
     @@index_logger.formatter = proc do |severity, datetime, progname, msg|
@@ -65,7 +67,7 @@ class DorController < ApplicationController
   end
 
   def republish
-    obj=Dor::Item.find(params[:pid])
+    obj = Dor::Item.find(params[:pid])
     obj.publish_metadata_remotely
     render :text => 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
   end
