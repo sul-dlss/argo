@@ -5,7 +5,7 @@ describe SolrDocument do
     it 'should build an empty listing if passed an empty doc' do
       milestones=get_milestones(Hash.new)
       milestones.each do |key,value|
-        value[:time].should=='pending'
+        expect(value[:time]).to eq 'pending'
       end
     end
     it 'should generate a correct lifecycle with the old format that lacks version info' do
@@ -15,14 +15,14 @@ describe SolrDocument do
       
       versions=get_milestones(doc)
       versions.each do |version,milestones|
-      milestones.each do |key,value|
-        version.should == 1
-        if value[:display]=='Registered'
-          I18n.l(value[:time]).should=='2012-02-24 05:40PM'
-        else
-          value[:time].should=='pending'
+        milestones.each do |key,value|
+          expect(version).to eq(1)
+          if value[:display]=='Registered'
+            expect(I18n.l(value[:time])).to eq('2012-02-24 05:40PM')
+          else
+            expect(value[:time]).to eq 'pending'
+          end
         end
-      end
       end
     end
     it 'should recognize versions and bundle versions together' do
@@ -31,24 +31,24 @@ describe SolrDocument do
       lifecycle_data << 'opened:2012-02-25T01:39:57Z;2'
       doc={ 'lifecycle_display' => lifecycle_data }
       versions=get_milestones(doc)
-      versions['1'].length.should == 8
-      versions['1']['registered'].nil?.should == false
-      versions['2'].length.should == 8
-      versions['2']['registered'].nil?.should == true
-      versions['2']['opened'].nil?.should == false
+      expect(versions['1'].length).to eq(8)
+      expect(versions['1']['registered'].nil?).to eq(false)
+      expect(versions['2'].length).to eq(8)
+      expect(versions['2']['registered'].nil?).to eq(true)
+      expect(versions['2']['opened'].nil?).to eq(false)
       versions.each do |version,milestones|
-      milestones.each do|key,value|
+        milestones.each do|key,value|
       
-        case value[:display]
-        when 'Registered'
-          I18n.l(value[:time]).should=='2012-02-24 05:40PM' #the hour/minute here is wrong...dont know why
-          version.should == '1' #registration is always only v1
-        when 'Opened'
-          I18n.l(value[:time]).should=='2012-02-24 05:39PM' #the hour/minute here is wrong...dont know why
-          version.should == '2'
-        else
-          value[:time].should=='pending'
-        end
+          case value[:display]
+            when 'Registered'
+              expect(I18n.l(value[:time])).to eq('2012-02-24 05:40PM') #the hour/minute here is wrong...dont know why
+              expect(version).to eq('1')                               #registration is always only v1
+            when 'Opened'
+              expect(I18n.l(value[:time])).to eq('2012-02-24 05:39PM') #the hour/minute here is wrong...dont know why
+              expect(version).to eq('2')
+            else
+              expect(value[:time]).to eq('pending')
+          end
         end
       end
     end  
@@ -60,7 +60,7 @@ describe SolrDocument do
       data << '2;1.1.0;Minor change'
       doc={'versions_display' => data}
       versions=get_versions(doc)
-      versions['1'][:tag].should == '1.0.0'
+      expect(versions['1'][:tag]).to eq('1.0.0')
     end
   end
   

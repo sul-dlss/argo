@@ -41,7 +41,7 @@ describe RegistrationController do
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
-      response.body.include?("Stanford (APO default)").should == true
+      expect(response.body.include?("Stanford (APO default)")).to eq(true)
 
     end
     it 'should show world as the default' do
@@ -77,7 +77,7 @@ describe RegistrationController do
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
-      response.body.include?("World (APO default)").should == true
+      expect(response.body.include?("World (APO default)")).to eq(true)
 
     end
     it 'should show Dark if discover is none' do
@@ -113,7 +113,7 @@ describe RegistrationController do
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
-      response.body.include?("Dark (APO default)").should == true
+      expect(response.body.include?("Dark (APO default)")).to eq(true)
 
     end
     it 'should show Dark as the default' do
@@ -149,7 +149,7 @@ describe RegistrationController do
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
-      response.body.include?("Dark (APO default)").should == true
+      expect(response.body.include?("Dark (APO default)")).to eq(true)
 
     end
     it 'should show no default if there is no xml' do
@@ -163,7 +163,7 @@ describe RegistrationController do
       object_rights.stub(:ng_xml).and_return xml
       @item.stub(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
-      response.body.include?("none (set in Assembly)").should == true
+      expect(response.body.include?("none (set in Assembly)")).to eq(true)
     end
   end
 end

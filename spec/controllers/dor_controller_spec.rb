@@ -150,42 +150,41 @@ describe DorController do
     end
     
     it 'the indexer should generate gryphondor fields' do
-      @solr_doc[:sw_title_sort_facet].should == "AMERICA cum Supplementis PolyGlottis"
+      expect(@solr_doc[:sw_title_sort_facet]).to eq("AMERICA cum Supplementis PolyGlottis")
     end
     
     it 'all of the gdor fields should be present in the hash' do
-      
-      @solr_doc.has_key?(:sw_title_245a_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_title_245_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_title_variant_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_title_sort_facet).should == true
-      @solr_doc.has_key?(:sw_title_245a_display_facet).should == true
-      @solr_doc.has_key?(:sw_title_display_facet).should == true
-      @solr_doc.has_key?(:sw_title_full_display_facet).should == true
-      @solr_doc.has_key?(:sw_author_1xx_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_author_7xx_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_author_person_facet_facet).should == true
-      @solr_doc.has_key?(:sw_author_other_facet_facet).should == true
-      @solr_doc.has_key?(:sw_author_corp_display_facet).should == true
-      @solr_doc.has_key?(:sw_author_meeting_display_facet).should == true
-      @solr_doc.has_key?(:sw_author_person_display_facet).should == true
-      @solr_doc.has_key?(:sw_author_person_full_display_facet).should == true
-      @solr_doc.has_key?(:sw_topic_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_geographic_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_subject_other_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_subject_other_subvy_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_subject_all_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_topic_facet_facet).should == true
-      @solr_doc.has_key?(:sw_geographic_facet_facet).should == true
-      @solr_doc.has_key?(:sw_era_facet_facet).should == true
-      @solr_doc.has_key?(:sw_language_facet).should == true
-      @solr_doc.has_key?(:sw_pub_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_pub_date_sort_facet).should == true
-      @solr_doc.has_key?(:sw_pub_date_group_facet_facet).should == true
-      @solr_doc.has_key?(:sw_pub_date_facet).should == true
-      @solr_doc.has_key?(:sw_pub_date_display_facet).should == true
-      @solr_doc.has_key?(:sw_all_search_facet_facet).should == true
-      @solr_doc.has_key?(:sw_format_facet).should == true
+      expect(@solr_doc.has_key?(:sw_title_245a_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_title_245_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_title_variant_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_title_sort_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_title_245a_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_title_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_title_full_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_1xx_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_7xx_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_person_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_other_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_corp_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_meeting_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_person_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_author_person_full_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_topic_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_geographic_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_subject_other_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_subject_other_subvy_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_subject_all_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_topic_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_geographic_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_era_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_language_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_pub_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_pub_date_sort_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_pub_date_group_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_pub_date_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_pub_date_display_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_all_search_facet_facet)).to be true
+      expect(@solr_doc.has_key?(:sw_format_facet)).to be true
     end
     it 'all of the solr fields argo depends on should be in a solr doc generated by to_solr' do
       skip

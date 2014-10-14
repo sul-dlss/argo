@@ -347,7 +347,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 14
+      expect(count).to eq(14)
     end
   end
   context 'mclaughlin_cleanup_statement' do
@@ -359,7 +359,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 4
+      expect(count).to eq(4)
     end
   end
   context 'mclaughlin_cleanup_publication' do
@@ -371,7 +371,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 3
+      expect(count).to eq(3)
     end
   end
   context 'mclaughlin_cleanup_references' do
@@ -383,7 +383,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 4
+      expect(count).to eq(4)
     end
   end
   context 'mclaughlin_cleanup_states' do
@@ -395,7 +395,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 5
+      expect(count).to eq(5)
     end
     it 'should normalize state2' do
       count = 0
@@ -405,7 +405,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 5
+      expect(count).to eq(5)
     end
     it 'should normalize state 3' do
       count = 0
@@ -415,7 +415,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 5
+      expect(count).to eq(5)
     end
     it 'should normalize state 10' do
       count = 0
@@ -425,7 +425,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 2
+      expect(count).to eq(2)
     end
     it 'should normalize state 11' do
       count = 0
@@ -435,7 +435,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 2
+      expect(count).to eq(2)
     end
     it 'should reorder states' do
       count = 0
@@ -455,7 +455,7 @@ describe ItemsHelper do
           count+=1
         end
       end
-      count.should == 0
+      expect(count).to eq(0)
     end
   end
   context 'mclaughlin_fix_subjects' do
@@ -465,7 +465,7 @@ describe ItemsHelper do
       @subject_doc.search('//mods:subject','mods'=>'http://www.loc.gov/mods/v3').each do |node|
         count+=1
       end
-      count.should == 4
+      expect(count).to eq(4)
     end
   end
   context 'mclaughlin_prune_identifiers' do
@@ -475,7 +475,7 @@ describe ItemsHelper do
       @identifier_doc.search('//mods:identifier','mods'=>'http://www.loc.gov/mods/v3').each do |node|
         count+=1
       end
-      count.should == 6
+      expect(count).to eq(6)
     end
   end
   context 'remove_empty_nodes' do
@@ -485,15 +485,15 @@ describe ItemsHelper do
       @emptynode_doc.search('//mods:nonSort','mods'=>'http://www.loc.gov/mods/v3').each do |node|
         count+=1
       end
-      count.should == 0
+      expect(count).to eq(0)
     end
     it 'should fix a mclaughlin record' do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
       remove_empty_nodes doc
-      doc.search('/mods:mods/mods:originInfo/mods:place','mods'=>'http://www.loc.gov/mods/v3').length.should == 0
-      doc.search('/mods:mods/mods:originInfo','mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+      expect(doc.search('/mods:mods/mods:originInfo/mods:place','mods'=>'http://www.loc.gov/mods/v3').length).to eq(0)
+      expect(doc.search('/mods:mods/mods:originInfo','mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
     end
   end
   context 'mclaughlin_reorder_cartographics' do
@@ -503,10 +503,10 @@ describe ItemsHelper do
       @carto_doc.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').each do |node|
         count+=1
         children=node.children
-        children[4].name.should == 'scale'
-        children[5].name.should == 'projection'
+        expect(children[4].name).to eq('scale')
+        expect(children[5].name).to eq('projection')
       end
-      count.should == 1
+      expect(count).to eq(1)
     end
   end
   \
@@ -515,20 +515,20 @@ describe ItemsHelper do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
-      schema_validate(doc).length.should == 6
+      expect(schema_validate(doc).length).to eq(6)
     end
   end
   context 'remove_empty_nodes' do
     it 'should preserve the empty typeofresource with collection=yes' do
       remove_empty_nodes(@collection_record)
-      @collection_record.search('//mods:typeOfResource','mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+      expect(@collection_record.search('//mods:typeOfResource','mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
     end
     it 'should strip leading and trailing whitespaces' do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
       remove_empty_nodes doc
-      doc.search('/mods:mods/mods:titleInfo/mods:title','mods'=>'http://www.loc.gov/mods/v3').first.text.should == "A New and Curious Map of the World"
+      expect(doc.search('/mods:mods/mods:titleInfo/mods:title','mods'=>'http://www.loc.gov/mods/v3').first.text).to eq("A New and Curious Map of the World")
     end
   end
   context 'mclaughlin_remove_newlines' do
@@ -537,7 +537,7 @@ describe ItemsHelper do
         config.default_xml.noblanks
       end
       mclaughlin_remove_newlines doc
-      doc.search('/mods:mods/mods:accessCondition','mods'=>'http://www.loc.gov/mods/v3').first.text.should == "Stanford University Libraries and Academic Information Resources - Terms ofUse SULAIR Web sites are subject to Stanford University's standard Terms ofUse (See http://www.stanford.edu/home/atoz/terms.html) These terms include alimited personal, non-exclusive, non-transferable license to access and usethe sites, and to download - where permitted - material for personal,non-commercial, non-display use only. Please contact the UniversityLibrarian to request permission to use SULAIR Web sites and contents beyondthe scope of the above license, including but not limited to republicationto a group or republishing the Web site or parts of the Web site. SULAIRprovides access to a variety of external databases and resources, whichsites are governed by their own Terms of Use, as well as contractual accessrestrictions. The Terms of Use on these external sites always govern thedata available there. Please consult with library staff if you havequestions about data access and availability."
+      expect(doc.search('/mods:mods/mods:accessCondition','mods'=>'http://www.loc.gov/mods/v3').first.text).to eq("Stanford University Libraries and Academic Information Resources - Terms ofUse SULAIR Web sites are subject to Stanford University's standard Terms ofUse (See http://www.stanford.edu/home/atoz/terms.html) These terms include alimited personal, non-exclusive, non-transferable license to access and usethe sites, and to download - where permitted - material for personal,non-commercial, non-display use only. Please contact the UniversityLibrarian to request permission to use SULAIR Web sites and contents beyondthe scope of the above license, including but not limited to republicationto a group or republishing the Web site or parts of the Web site. SULAIRprovides access to a variety of external databases and resources, whichsites are governed by their own Terms of Use, as well as contractual accessrestrictions. The Terms of Use on these external sites always govern thedata available there. Please consult with library staff if you havequestions about data access and availability.")
     end
   end
   context 'mclaughlin_discoverable' do
@@ -546,7 +546,7 @@ describe ItemsHelper do
         config.default_xml.noblanks
       end
       errors=mods_discoverable(doc)
-      errors.length.should == 0
+      expect(errors.length).to eq(0)
     end
   end
   context 'mclaughlin_prune_namespaces' do
@@ -565,13 +565,13 @@ describe ItemsHelper do
       mclaughlin_remediation doc
       mclaughlin_reorder_notes doc
       notes=doc.search('//mods:note', 'mods'=>'http://www.loc.gov/mods/v3')
-      notes.length.should == 8  
+      expect(notes.length).to eq(8  )
       notes.each_with_index do |note, index|
         if index == 6
-          note['type'].should == 'references'
+          expect(note['type']).to eq('references')
         end
         if index ==  7
-          note['type'].should == 'statement_of_responsibility'
+          expect(note['type']).to eq('statement_of_responsibility')
         end
       end
     end
@@ -587,7 +587,7 @@ describe ItemsHelper do
       '
       doc=Nokogiri::XML(xml)
       mclaughlin_remove_keydate doc
-      doc.search("//title",'mods'=>'http://www.loc.gov/mods/v3').length.should == 0
+      expect(doc.search("//title",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(0)
     end
   end
   context 'mclaughlin_fix_cartographics' do
@@ -608,9 +608,9 @@ describe ItemsHelper do
         </mods:subject></mods:mods>"
         doc=Nokogiri::XML(xml)
         mclaughlin_fix_cartographics doc
-        doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').first.text.should == @display_coords[count]
+        expect(doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').first.text).to eq(@display_coords[count])
         #the encoded coordinates should be gone(they used to get copied to a new node)
-        doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+        expect(doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
         count += 1
       end
     end
@@ -634,9 +634,9 @@ describe ItemsHelper do
       remove_empty_nodes doc
     # puts doc.to_s
       #should be merged into a single cartographics
-      doc.search("//mods:subject/mods:cartographics",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
-      doc.search("//mods:subject/mods:cartographics/mods:scale",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
-      doc.search("//mods:subject/mods:cartographics/mods:projection",'mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+      expect(doc.search("//mods:subject/mods:cartographics",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
+      expect(doc.search("//mods:subject/mods:cartographics/mods:scale",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
+      expect(doc.search("//mods:subject/mods:cartographics/mods:projection",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
     end
   end
   context 'mclaughlin_remove_related_item' do
@@ -644,9 +644,9 @@ describe ItemsHelper do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
-      doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length.should == 1
+      expect(doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
       mclaughlin_remove_related_item doc
-      doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length.should == 0
+      expect(doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length).to eq(0)
     end
   end
   context 'mclaughlin_replace_problematic_characters' do
@@ -655,7 +655,7 @@ describe ItemsHelper do
       bad_string = "&#x2013; &#x2018; &#x2019; &#x2018; &#x2019 ;&#x201C; &#x201D; &#x2026; &#x2070; &#x30A; &#xBA; &#xB6;"
       good_string = "-- &apos; &apos; &quot; &quot; ... &#xB0; &#xB0; &#xB0; "
       xml=Nokogiri::XML("<something>#{bad_string}</something>")
-      mclaughlin_replace_problematic_characters(xml).to_s.should == good_string
+      expect(mclaughlin_replace_problematic_characters(xml).to_s).to eq(good_string)
     end
   end
 end

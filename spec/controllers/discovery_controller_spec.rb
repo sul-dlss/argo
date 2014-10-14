@@ -7,7 +7,7 @@ describe DiscoveryController do
       User.any_instance.stub(:groups).and_return(['sdr:administrator-role'])
       get :data, :format => :json, :rows =>5
       json_body=JSON.parse(response.body)
-      json_body['rows'].first.has_key?('sw_author_other_facet_facet').should == true
+      expect(json_body['rows'].first.has_key?('sw_author_other_facet_facet')).to be true
     end
   end
 end

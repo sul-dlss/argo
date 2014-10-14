@@ -131,7 +131,71 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
 <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata (MODS)" CREATED="2010-11-10T11:25:59.718Z" MIMETYPE="application/xml" SIZE="-1">
-<foxml:contentLocation TYPE="INTERNAL_ID" REF="druid:qq305gm3805+descMetadata+descMetadata.0"/>
+<foxml:binaryContent> 
+              PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1vZHM6bW9kcyB4bWxuczptb2Rz
+              PSJodHRwOi8vd3d3LmxvYy5nb3YvbW9kcy92MyIKICAgICAgICAgICB4bWxuczp4c2k9Imh0dHA6Ly93
+              d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIgogICAgICAgICAgIHZlcnNpb249IjMuMyIK
+              ICAgICAgICAgICB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly93d3cubG9jLmdvdi9tb2RzL3YzIGh0
+              dHA6Ly9jb3NpbW8uc3RhbmZvcmQuZWR1L3N0YW5kYXJkcy9tb2RzL3YzL21vZHMtMy0zLnhzZCI+CiAg
+              IDxtb2RzOnRpdGxlSW5mbz4KICAgICAgPG1vZHM6dGl0bGU+U2FuIEZyYW5jaXNjbyBhbmQgdGhlcmVh
+              Ym91dDwvbW9kczp0aXRsZT4KICAgPC9tb2RzOnRpdGxlSW5mbz4KICAgPG1vZHM6bmFtZSB0eXBlPSJw
+              ZXJzb25hbCI+CiAgICAgIDxtb2RzOm5hbWVQYXJ0PktlZWxlciwgQ2hhcmxlcyBBdWd1c3R1czwvbW9k
+              czpuYW1lUGFydD4KICAgICAgPG1vZHM6bmFtZVBhcnQgdHlwZT0iZGF0ZSI+MTg3MS0xOTM3PC9tb2Rz
+              Om5hbWVQYXJ0PgogICAgICA8bW9kczpyb2xlPgogICAgICAgICA8bW9kczpyb2xlVGVybSBhdXRob3Jp
+              dHk9Im1hcmNyZWxhdG9yIiB0eXBlPSJ0ZXh0Ij5jcmVhdG9yPC9tb2RzOnJvbGVUZXJtPgogICAgICA8
+              L21vZHM6cm9sZT4KICAgPC9tb2RzOm5hbWU+CiAgIDxtb2RzOnR5cGVPZlJlc291cmNlPnRleHQ8L21v
+              ZHM6dHlwZU9mUmVzb3VyY2U+CiAgIDxtb2RzOm9yaWdpbkluZm8+CiAgICAgIDxtb2RzOnBsYWNlPgog
+              ICAgICAgICA8bW9kczpwbGFjZVRlcm0gdHlwZT0iY29kZSIgYXV0aG9yaXR5PSJtYXJjY291bnRyeSI+
+              Y2F1PC9tb2RzOnBsYWNlVGVybT4KICAgICAgPC9tb2RzOnBsYWNlPgogICAgICA8bW9kczpwbGFjZT4K
+              ICAgICAgICAgPG1vZHM6cGxhY2VUZXJtIHR5cGU9InRleHQiPlNhbiBGcmFuY2lzY288L21vZHM6cGxh
+              Y2VUZXJtPgogICAgICA8L21vZHM6cGxhY2U+CiAgICAgIDxtb2RzOnB1Ymxpc2hlcj5DYWxpZm9ybmlh
+              IFByb21vdGlvbiBDb21taXR0ZWU8L21vZHM6cHVibGlzaGVyPgogICAgICA8bW9kczpkYXRlSXNzdWVk
+              PjE5MDM8L21vZHM6ZGF0ZUlzc3VlZD4KICAgICAgPG1vZHM6ZGF0ZUlzc3VlZCBlbmNvZGluZz0ibWFy
+              YyIga2V5RGF0ZT0ieWVzIj4xOTAzPC9tb2RzOmRhdGVJc3N1ZWQ+CiAgICAgIDxtb2RzOmlzc3VhbmNl
+              Pm1vbm9ncmFwaGljPC9tb2RzOmlzc3VhbmNlPgogICA8L21vZHM6b3JpZ2luSW5mbz4KICAgPG1vZHM6
+              bGFuZ3VhZ2U+CiAgICAgIDxtb2RzOmxhbmd1YWdlVGVybSBhdXRob3JpdHk9ImlzbzYzOS0yYiIgdHlw
+              ZT0iY29kZSI+ZW5nPC9tb2RzOmxhbmd1YWdlVGVybT4KICAgPC9tb2RzOmxhbmd1YWdlPgogICA8bW9k
+              czpyZWxhdGVkSXRlbSB0eXBlPSJvcmlnaW5hbCI+CiAgICAgIDxtb2RzOnBoeXNpY2FsRGVzY3JpcHRp
+              b24+CiAgICAgICAgIDxtb2RzOmZvcm0gYXV0aG9yaXR5PSJtYXJjZm9ybSI+cHJpbnQ8L21vZHM6Zm9y
+              bT4KICAgICAgICAgPG1vZHM6ZXh0ZW50Pjk3IHAuIDogaWxsLiwgbWFwIDsgMjQgY20uPC9tb2RzOmV4
+              dGVudD4KICAgICAgPC9tb2RzOnBoeXNpY2FsRGVzY3JpcHRpb24+CiAgICAgIDxtb2RzOnJlY29yZElu
+              Zm8+CiAgICAgICAgIDxtb2RzOmRlc2NyaXB0aW9uU3RhbmRhcmQ+YWFjcjI8L21vZHM6ZGVzY3JpcHRp
+              b25TdGFuZGFyZD4KICAgICAgICAgPG1vZHM6cmVjb3JkQ29udGVudFNvdXJjZSBhdXRob3JpdHk9Im1h
+              cmNvcmciLz4KICAgICAgICAgPG1vZHM6cmVjb3JkQ3JlYXRpb25EYXRlIGVuY29kaW5nPSJtYXJjIj43
+              MjA5Mjc8L21vZHM6cmVjb3JkQ3JlYXRpb25EYXRlPgogICAgICAgICA8bW9kczpyZWNvcmRDaGFuZ2VE
+              YXRlIGVuY29kaW5nPSJpc284NjAxIj4xOTkyMTEyNTE1NDEwNy4wPC9tb2RzOnJlY29yZENoYW5nZURh
+              dGU+CiAgICAgICAgIDxtb2RzOnJlY29yZElkZW50aWZpZXIgc291cmNlPSJTVUwgY2F0YWxvZyBrZXki
+              PjI0MjM1NDk8L21vZHM6cmVjb3JkSWRlbnRpZmllcj4KICAgICAgICAgPG1vZHM6cmVjb3JkSWRlbnRp
+              ZmllciBzb3VyY2U9Im9jbGMiPjQxODgxNTwvbW9kczpyZWNvcmRJZGVudGlmaWVyPgogICAgICA8L21v
+              ZHM6cmVjb3JkSW5mbz4KICAgPC9tb2RzOnJlbGF0ZWRJdGVtPgogICA8bW9kczpwaHlzaWNhbERlc2Ny
+              aXB0aW9uPgogICAgICA8bW9kczpmb3JtIGF1dGhvcml0eT0ibWFyY2Zvcm0iPmVsZWN0cm9uaWM8L21v
+              ZHM6Zm9ybT4KICAgICAgPG1vZHM6cmVmb3JtYXR0aW5nUXVhbGl0eT5wcmVzZXJ2YXRpb248L21vZHM6
+              cmVmb3JtYXR0aW5nUXVhbGl0eT4KICAgICAgPG1vZHM6ZGlnaXRhbE9yaWdpbj5yZWZvcm1hdHRlZCBk
+              aWdpdGFsPC9tb2RzOmRpZ2l0YWxPcmlnaW4+CiAgIDwvbW9kczpwaHlzaWNhbERlc2NyaXB0aW9uPgog
+              ICA8bW9kczpub3RlIGRpc3BsYXlMYWJlbD0ic3RhdGVtZW50IG9mIHJlc3BvbnNpYmlsaXR5Ij5ieSBD
+              aGFybGVzIEtlZWxlci48L21vZHM6bm90ZT4KICAgPG1vZHM6c3ViamVjdD4KICAgICAgPG1vZHM6Z2Vv
+              Z3JhcGhpY0NvZGUgYXV0aG9yaXR5PSJtYXJjZ2FjIj5uLXVzLWNhPC9tb2RzOmdlb2dyYXBoaWNDb2Rl
+              PgogICA8L21vZHM6c3ViamVjdD4KICAgPG1vZHM6c3ViamVjdCBhdXRob3JpdHk9Imxjc2giPgogICAg
+              ICA8bW9kczpnZW9ncmFwaGljPlNhbiBGcmFuY2lzY28gKENhbGlmLik8L21vZHM6Z2VvZ3JhcGhpYz4K
+              ICAgICAgPG1vZHM6dG9waWM+RGVzY3JpcHRpb24gYW5kIHRyYXZlbDwvbW9kczp0b3BpYz4KICAgPC9t
+              b2RzOnN1YmplY3Q+CiAgIDxtb2RzOnN1YmplY3QgYXV0aG9yaXR5PSJsY3NoIj4KICAgICAgPG1vZHM6
+              Z2VvZ3JhcGhpYz5TYW4gRnJhbmNpc2NvIChDYWxpZi4pPC9tb2RzOmdlb2dyYXBoaWM+CiAgICAgIDxt
+              b2RzOnRvcGljPkhpc3Rvcnk8L21vZHM6dG9waWM+CiAgIDwvbW9kczpzdWJqZWN0PgogICA8bW9kczpj
+              bGFzc2lmaWNhdGlvbiBhdXRob3JpdHk9ImxjYyI+Rjg2OS5TMyBLMjAyPC9tb2RzOmNsYXNzaWZpY2F0
+              aW9uPgogICA8bW9kczppZGVudGlmaWVyIHR5cGU9ImxjY24iPjEyMDI3MzUwPC9tb2RzOmlkZW50aWZp
+              ZXI+CiAgIDxtb2RzOnJlY29yZEluZm8+CiAgICAgIDxtb2RzOnJlY29yZENvbnRlbnRTb3VyY2U+RE9S
+              X01BUkMyTU9EUzMtMy54c2wgUmV2aXNpb24gMS4xPC9tb2RzOnJlY29yZENvbnRlbnRTb3VyY2U+CiAg
+              ICAgIDxtb2RzOnJlY29yZENyZWF0aW9uRGF0ZSBlbmNvZGluZz0iaXNvODYwMSI+MjAxMC0xMS0xMFQw
+              MzoyNTo1OS42OTEtMDg6MDA8L21vZHM6cmVjb3JkQ3JlYXRpb25EYXRlPgogICAgICA8bW9kczpyZWNv
+              cmRJZGVudGlmaWVyIHNvdXJjZT0iRGF0YSBQcm92aWRlciBEaWdpdGFsIE9iamVjdCBJZGVudGlmaWVy
+              Ij4zNjEwNTAxMTc4NjA1NTwvbW9kczpyZWNvcmRJZGVudGlmaWVyPgogICA8L21vZHM6cmVjb3JkSW5m
+              bz4KICAgPG1vZHM6aWRlbnRpZmllciB0eXBlPSJsb2NhbCIgZGlzcGxheUxhYmVsPSJTVUwgUmVzb3Vy
+              Y2UgSUQiPmRydWlkOnFxMzA1Z20zODA1PC9tb2RzOmlkZW50aWZpZXI+CiAgIDxtb2RzOmxvY2F0aW9u
+              PgogICAgICA8bW9kczpwaHlzaWNhbExvY2F0aW9uPlN0YW5mb3JkIFVuaXZlcnNpdHkgTGlicmFyaWVz
+              PC9tb2RzOnBoeXNpY2FsTG9jYXRpb24+CiAgICAgIDxtb2RzOnVybD5odHRwOi8vcHVybC5zdGFuZm9y
+              ZC5lZHUvcXEzMDVnbTM4MDU8L21vZHM6dXJsPgogICA8L21vZHM6bG9jYXRpb24+CjwvbW9kczptb2Rz
+              Pg==
+</foxml:binaryContent> 
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="googleScannedBookWF" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">

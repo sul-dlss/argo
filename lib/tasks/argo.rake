@@ -147,7 +147,7 @@ namespace :argo do
     end
 
     desc "Configure Solr root and core(s) from source dir, default: #{solr_conf_dir}"
-    task :config, [:dir] => [%w[ argo:solr:config_root argo:solr:config_cores ]] do |task, args|
+    task :config, [:dir] => ['argo:solr:config_root', 'argo:solr:config_cores'] do |task, args|
     end
 
     desc "Configure Solr root from source dir, default: #{solr_conf_dir}"

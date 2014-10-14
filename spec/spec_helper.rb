@@ -79,9 +79,9 @@ def item_from_foxml(foxml, item_class = Dor::Base)
     else
       result.datastreams[dsid] = ds.class.from_xml(ds, stream)
     end
-  rescue
-    #rescue if 1 datastream failed 
-  end
+    rescue
+      #rescue if 1 datastream failed
+    end
   end
 
   # stub item and datastream repo access methods

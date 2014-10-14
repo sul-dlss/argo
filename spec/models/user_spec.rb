@@ -7,7 +7,7 @@ describe User do
     it "should work" do
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
-      user.webauth.should == mock_webauth
+      expect(user.webauth).to eq(mock_webauth)
     end
   end
 
@@ -16,12 +16,12 @@ describe User do
 
     describe "#login" do
       it "should get the sunetid from Webauth" do
-        subject.login.should == 'mods'
+        expect(subject.login).to eq('mods')
       end
     end
     describe "#to_s" do
       it "should be the name from Webauth" do
-        subject.to_s.should == 'Møds Ässet'
+        expect(subject.to_s).to eq('Møds Ässet')
       end
     end
   end
@@ -31,12 +31,12 @@ describe User do
 
     describe "#login" do
       it "should get the username for remoteuser" do
-        subject.login.should == 'mods'
+        expect(subject.login).to eq('mods')
       end
     end
     describe "#to_s" do
       it "should be the name from remoteuser" do
-        subject.to_s.should == 'mods'
+        expect(subject.to_s).to eq('mods')
       end
     end
   end
@@ -44,33 +44,33 @@ describe User do
   describe "is_admin" do
     it 'should be true if the group is an admin group' do
       subject.stub(:groups).and_return(['workgroup:sdr:administrator-role'])
-      subject.is_admin.should == true
+      expect(subject.is_admin).to eq(true)
     end
     it 'should be true if the group is a deprecated admin group' do
       subject.stub(:groups).and_return(['workgroup:dlss:dor-admin'])
-      subject.is_admin.should == true
+      expect(subject.is_admin).to eq(true)
     end
   end
 
   describe "is_manager" do
     it 'should be true if the group is a manager group' do
       subject.stub(:groups).and_return(['workgroup:sdr:manager-role'])
-      subject.is_manager.should == true
+      expect(subject.is_manager).to eq(true)
     end
     it 'should be true if the group is a deprecated manager group' do
       subject.stub(:groups).and_return(['workgroup:dlss:dor-manager'])
-      subject.is_manager.should == true
+      expect(subject.is_manager).to eq(true)
     end
   end
 
   describe 'is_viewer' do
     it 'should be true if the group is a viewer group' do
       subject.stub(:groups).and_return(['workgroup:sdr:viewer-role'])
-      subject.is_viewer.should == true
+      expect(subject.is_viewer).to eq(true)
     end
     it 'should be true if the group is a deprecated viewer group' do
       subject.stub(:groups).and_return(['workgroup:dlss:dor-viewer'])
-      subject.is_viewer.should == true
+      expect(subject.is_viewer).to eq(true)
     end
   end
 
@@ -96,21 +96,21 @@ describe User do
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
-      res.should == ['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer']
+      expect(res).to eq(['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer'])
     end
     it 'should translate the old "manager" role into dor-apo-manager' do
       User.any_instance.stub(:groups).and_return(['dlss:groupR'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
-      res.should == ['dor-apo-manager']
+      expect(res).to eq(['dor-apo-manager'])
     end
     it 'should work correctly if the individual is named in the apo, but isnt in any groups that matter' do
       User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
-      res.should == ['dor-viewer', 'sdr-viewer']
+      expect(res).to eq(['dor-viewer', 'sdr-viewer'])
     end
     it 'should hang onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
       User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
@@ -149,14 +149,14 @@ describe User do
       sunetid = 'asdf'
       mock_webauth = double('webauth', :login => sunetid, :logged_in? => true, :privgroup => webauth_privgroup_str)
       user = User.find_or_create_by_webauth(mock_webauth)
-      expect(user.is_admin).to eq(true)
+      expect(user.is_admin  ).to eq(true)
       expect(user.is_manager).to eq(true)
-      expect(user.is_viewer).to eq(true)
+      expect(user.is_viewer ).to eq(true)
 
       user.set_groups_to_impersonate(['workgroup:sdr:not-an-administrator-role', 'workgroup:sdr:not-a-manager-role', 'workgroup:sdr:not-a-viewer-role'])
-      expect(user.is_admin).to eq(false)
+      expect(user.is_admin  ).to eq(false)
       expect(user.is_manager).to eq(false)
-      expect(user.is_viewer).to eq(false)
+      expect(user.is_viewer ).to eq(false)
     end
   end
 

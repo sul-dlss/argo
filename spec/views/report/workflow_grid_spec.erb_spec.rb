@@ -9,9 +9,7 @@ describe 'report/workflow_grid' do
   it "should display all the workflow states" do
     @solr_response = { 'response' => { 'docs' => [] }, 'facet_counts' => { 'facet_fields' => { 'wf_wps_facet' => ['accessionWF:descriptive-metadata:waiting', 500], 'wf_wsp_facet' => [], 'wf_swp_facet' => []} } }
     assign(:response, RSolr::Ext::Response::Base.new(@solr_response, nil, {}))
-
     render
-
-    rendered.should have_selector('table td.count.waiting', :text => '500')
+    expect(rendered).to have_selector('table td.count.waiting', :text => '500')
   end
 end

@@ -5,16 +5,16 @@ describe ApplicationController do
   describe "#current_user" do
     it "should be the webauth-ed user, if they exist" do
       subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
-      subject.current_user.should be_a_kind_of(User)
+      expect(subject.current_user).to be_a_kind_of(User)
     end
 
     it "should be a user if REMOTE_USER is provided" do
       request.env['REMOTE_USER'] = 'mods'
-      subject.current_user.should be_a_kind_of(User)
+      expect(subject.current_user).to be_a_kind_of(User)
     end
     it "should be nil if there is no user" do
       subject.stub(:webauth).and_return(double(:webauth_user, :logged_in? => false))
-      subject.current_user.should be_nil
+      expect(subject.current_user).to be_nil
     end
     it "should return the user's groups if impersonation info wasn't specified" do
       webauth_privgroup_str = "dlss:testgroup1|dlss:testgroup2|dlss:testgroup3"
@@ -42,7 +42,7 @@ describe ApplicationController do
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
-      called.should be true
+      expect(called).to be true
     end
 
     it "should be called when DOR_SERVICES_DEBUG_MODE is set" do
@@ -50,7 +50,7 @@ describe ApplicationController do
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
-      called.should be true
+      expect(called).to be true
     end
 
     it "should otherwise do nothing" do
@@ -60,7 +60,7 @@ describe ApplicationController do
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
-      called.should be false
+      expect(called).to be false
     end
 
   end
