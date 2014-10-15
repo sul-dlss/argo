@@ -2,6 +2,7 @@ require 'jettywrapper'
 require 'json'
 require 'rest_client'
 require 'open-uri'
+require 'fileutils'
 
 desc "Get application version"
 task :app_version do
@@ -81,7 +82,7 @@ namespace :argo do
     solr_conf_dir = 'solr_conf'
     fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
     live_solrxml_file = "jetty/solr/solr.xml"
-    testcores = %w(development-core test-core)
+    testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
     restcore_url = Blacklight.solr.options[:url] + "/admin/cores?action=STATUS&wt=json"
     realcores = []
 
@@ -156,15 +157,24 @@ namespace :argo do
       cp("#{args[:dir]}/solr.xml", 'jetty/solr/', verbose: true)
     end
 
-    desc "Copies configs to matching local Solr instanceDir(s), default: #{solr_conf_dir} ==> #{testcores}"
+    desc "Copies configs to matching local Solr instanceDir(s), default: #{solr_conf_dir} ==> #{testcores.keys.sort}"
     task :config_cores, [:dir, :cores] do |task, args|
-      args.with_defaults(:dir => solr_conf_dir, :cores => testcores)
+      args.with_defaults(:dir => solr_conf_dir, :cores => testcores.keys.sort)
       args[:cores].each do |core|
+        instancedir = testcores[core] || core
+        puts "**** #{core} in #{instancedir}"
+        FileUtils.mkdir_p("jetty/solr/#{instancedir}/conf/", verbose: true)
         FileList["#{args[:dir]}/conf/*"].each do |f|
-          cp(f, "jetty/solr/#{core}/conf/", verbose: true)
+          cp(f, "jetty/solr/#{instancedir}/conf/", verbose: true)
         end
+        puts "sed -i -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml"   # tweak solrconfig
+        system("sed -i -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml")
+        propfile = "jetty/solr/#{instancedir}/core.properties"
+        open(propfile, 'w') { |f|
+          f.puts "name=#{core}"
+        }
+        puts "Added #{propfile}"
       end
-      cp("#{args[:dir]}/solr.xml", 'jetty/solr/', verbose: true)
     end
 
   end # :solr
@@ -277,7 +287,7 @@ namespace :argo do
           index_log.error("#{e.class}: #{e.message}")
           #        if errors == 3
           #          index_log.fatal("Too many errors. Exiting.")
-          #          raise e 
+          #          raise e
           #        end
         end
         pbar.inc(1)

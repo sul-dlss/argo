@@ -22,7 +22,7 @@
 -->
 <config>
 
-<lib dir="/usr/lib/solr/4.0.0/" /> 
+  <lib dir="./lib" /> 
   <!-- In all configuration below, a prefix of "solr." for class names
        is an alias that causes solr to search appropriate packages,
        including org.apache.solr.(search|update|request|core|analysis)
@@ -306,8 +306,8 @@
        </listener>
       -->
     <updateLog>
-          <str name="dir">${solr.core1.data.dir:/data/argo/data}</str>
-              </updateLog>
+      <str name="dir">${solr.data.dir:}</str>
+    </updateLog>
   </updateHandler>
   
   <!-- IndexReaderFactory
