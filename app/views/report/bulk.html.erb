@@ -137,15 +137,7 @@ ul li{
 
 <div class="bulk_operation" id="close" name="close">
 	<h1>Close a version of the items so the changes can be accessioned</h1>
-	<label for="severity">Type</label>
-	<select id="severity" name="severity">
-		<option value="major">Major</option>
-		<option value="minor">Minor</option>
-		<option value="admin">Admin</option>
-	</select>
-	<br>
-	<label for="description">version description</label><br>
-	<input type="text" id="description" name="description" >
+	The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
 	<br>
 	<span class="bulk_button" onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</span><br>
 </div>
@@ -254,13 +246,19 @@ ul li{
 </div>
 <div class="bulk_operation" id="tag">
 	<h1>Change tags</h1>
-	<p>This needs a list of pids and tags with a tab between the pid and each tag. ex.<br>druid:bc088fn5010 Project:Something Process:Content Type:Book</p><p>The best way to do this is by copy/pasting this content into Excel.</p>
+	<p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
+	druid:bc088fn5010	Project:Something	Process:Content	Type:Book
+	</p>
+	<p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
 	<textarea style="width:50%" id="tags" name="tags"></textarea><br>
 	<span class="bulk_button" id="set_tags" name="set_tags" onclick="set_tags();$('#tag').hide(400);">Update tags</span>
 </div>
 <div class="bulk_operation" id="source_id">
 	<h1>Change source id</h1>
-	<p>This needs a list of pids and source ids, with a space between the pid and the corresponding source id. ex.<br>druid:bc088fn5010 fuller:M1090_S15_B02_F12_0007</p>
+	<p>This needs a list of pids and source ids, with a tab between the pid and the corresponding source id. E.g.:<br>
+	druid:bc088fn5010	fuller:M1090_S15_B02_F12_0007
+	</p>
+	<p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
 	<textarea style="width:50%" id="source_ids" name="source_ids"></textarea><br>
 	<span class="bulk_button" id="set_source_id" name="set_source_id" onclick="source_id();$('#source_id').hide(400);">Update source ids</span>
 </div>

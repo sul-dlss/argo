@@ -1,17 +1,17 @@
 function process_request(druids, action_url, req_type, req_params, success_string, success_handler_callback, error_handler_callback) {
 	cons = [];
-	$.each(druids, function(i, element) {
-		var element_url = catalog_url(element);
-		var url = action_url.replace('xxxxxxxxx', element);
+	$.each(druids, function(i, druid) {
+		var object_link = catalog_url(druid);
+		var url = action_url.replace('xxxxxxxxx', druid);
 		var req_obj = {url: url, type: req_type};
 		if(req_params != null) req_obj['data'] = req_params;
 		var xhr = $.ajax(req_obj);
 		cons.push(xhr);
 		xhr.success(function(response, status, xhr) { 
-			success_handler(element_url, success_string, success_handler_callback);
+			success_handler(object_link, success_string, success_handler_callback);
 		});
 		xhr.error(function(xhr, status, err) {
-			error_handler(xhr, status, err, element_url, job_count.pop(), error_handler_callback);
+			error_handler(xhr, status, err, object_link, job_count.pop(), error_handler_callback);
 		});
 	})
 }
@@ -32,11 +32,7 @@ function open_version(druids){
 	process_post(druids, open_version_url, params, "Prepared");
 }
 function close_version(druids){
-	var params={
-		'severity': $('#severity').val(),
-		'description': $('#description').val(),
-	}
-	process_post(druids, close_version_url, params, "Closed");
+	process_post(druids, close_version_url, null, "Closed");
 }
 function set_content_type(druids){
 	var params={
@@ -87,7 +83,7 @@ function fetch_druids(fun) {
 	log.style.display = "block";
 	var pids_txt = fetch_pids_txt();
 	if(pids_txt.length > 5) {
-		druids = extract_pids_list(pids_txt);
+		var druids = extract_pids_list(pids_txt);
 
 		log.innerHTML = "Using " + druids.length + " user supplied druids.\n<br>";
 		job_count = [];
@@ -154,7 +150,7 @@ function apply_apo_defaults(druids){
 }
 
 function add_workflow(druids){
-	var params={ 'wf': $('#wf').val() }
+	var params = { 'wf': $('#wf').val() }
 	process_post(druids, add_workflow_url, params, 'Workflow Added');
 }
 
@@ -205,161 +201,120 @@ function get_tags() {
 }
 
 
-function show_buttons()
-{
+function show_buttons() {
 	$('#updates').show(400);
 	$('.update_buttons').removeAttr("disabled");
 }
-function stop_all()
-{
-	log=document.getElementById('log');
+
+function stop_all() {
+	log = document.getElementById('log');
 	
-	while(cons.length>0)
-	{
-		con=cons.pop();
+	while(cons.length > 0) {
+		con = cons.pop();
 		con.abort();
 	}
 }
+
 //print a success message with whatever description fits the action being performed.
-function success_handler(element_url,desc,after)
-{
-	if (job_count.length == 1 && after != null)
-	{
+function success_handler(object_link, desc, after) {
+	if (job_count.length == 1 && after != null) {
 		after();
 	}
-	log=document.getElementById('log');
-	log.innerHTML = job_count.pop()+" "+element_url+' '+desc+"<br>\n"+log.innerHTML;
-	if (job_count.length == 0)
-	{
-		log.innerHTML = "Done!\n<br>"+log.innerHTML
+
+	var log = document.getElementById('log');
+	log.innerHTML = job_count.pop()+" "+object_link+' '+desc+"<br>\n"+log.innerHTML;
+	if (job_count.length == 0) {
+		log.innerHTML = "Done!\n<br>"+log.innerHTML;
     	$(".stop_button").hide();
 	}
 }
-function error_handler(xhr,status,err,element,index, after){
-	if (job_count.length == 1 && after != null)
-	{
+
+function error_handler(xhr, status, err, object_link, index, after) {
+	if (job_count.length == 1 && after != null) {
 		after();
 	}
-	msg='';
-	if( xhr.responseText && xhr.responseText.length<500)
-	{
-		msg=xhr.responseText;
+
+	var msg = '';
+	if (xhr.responseText && xhr.responseText.length < 500) {
+		msg = xhr.responseText;
+	} else {
+		msg = err;
 	}
-	else
-	{
-		msg=err;
+
+	log.innerHTML = "<span class=\"error\"> " + index + " " + object_link + " : " + msg + "</span><br>\n" + log.innerHTML;	
+	if (job_count.length == 0) {
+		log.innerHTML = "Done!<br>\n" + log.innerHTML;
+		$(".stop_button").hide();
 	}
-		log.innerHTML = "<span class=\"error\"> "+index+" "+element+" : "+msg+"</span><br>\n"+log.innerHTML;	
-		if (job_count.length == 0)
-		{
-			log.innerHTML = "Done!<br>\n"+log.innerHTML
-			$(".stop_button").hide();
-		}
 	
 }
 
-function source_id(){
-	cons=[];
-	log=document.getElementById('log');
-	log.style.display="block";
-	txt=document.getElementById('source_ids').value
-	txt=txt.replace(/druid:/g,'');
-	druids=txt.split("\n")
-	last=druids.pop();
-	if(last != ''){druids.push(last);}
-	d = []
-	job_count = []
-	for(i=druids.length;i>0;i--)
-	{
+function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, custom_wait_msg, is_invalid_row_fn, invalid_row_err_msg, get_upd_req_params_from_row_fn) {
+	cons = [];
+	var log = document.getElementById('log');
+	log.style.display = "block";
+
+	var druid_upd_txt = document.getElementById(upd_textarea_id).value;
+	var druid_upd_lines = extract_pids_list(druid_upd_txt);
+	job_count = [];
+	for (i=druid_upd_lines.length; i>0; i--) {
 		job_count.push(i);
 	}
-	for(i=0;i< druids.length; i++)
-	{
-		dr=druids[i];
-		dr=dr.replace(/ : /g,':');
-		parts=dr.split("\t",2);
-		d.push({'druid': parts[0], 'source': parts[1]});
-	}
-	log.innerHTML="Using "+ druids.length +" user supplied druids and source ids.<br>\n"
-	log=document.getElementById('log');
-	$.each(d, function(i,element){
-		//get rid of blank lines
-		if(element['druid'] == null || element['druid'].length < 2)
-		{
-			return;
-		}
-		var element_url=catalog_url(element['druid']);
-		//skip bad source ids
-		if(element['source']==null || element['source'].length<=1 || element['source'].indexOf(':')<1)
-		{
-			err_log=document.getElementById('log');
 
-			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid source id '"+element['source']+"'</span><br>\n"+log.innerHTML;
+	var druid_upd_rows = [];
+	for (i=0; i<druid_upd_lines.length; i++) {
+		dr = druid_upd_lines[i];
+		dr = dr.replace(/ : /g,':');
+		row_result = row_processing_fn(dr);
+		druid_upd_rows.push(row_result);
+	}
+	log.innerHTML = "Using " + druid_upd_lines.length + " " + custom_wait_msg + "<br>\n";
+
+	$.each(druid_upd_rows, function(i, upd_info) {
+		//get rid of blank lines
+		if(upd_info['druid'] == null || upd_info['druid'].length < 2) {
 			return;
 		}
-		params={
-			'new_id': element['source']
+		var object_link = catalog_url(upd_info['druid']);
+		
+		//skip bad rows
+		if(is_invalid_row_fn(upd_info)) {
+			log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+object_link+" : "+invalid_row_err_msg+" '"+upd_info['upd_data']+"'</span><br>\n"+log.innerHTML;
+			return;
 		}
-		url=source_id_url.replace('xxxxxxxxx',element['druid']);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
+		var params = get_upd_req_params_from_row_fn(upd_info);
+		var url = upd_req_url.replace('xxxxxxxxx', upd_info['druid']);
+		var xhr = $.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Updated	');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-	})
+		xhr.success(function(response, status, xhr) { 
+			success_handler(object_link, 'Updated	');
+		});
+		xhr.error(function(xhr, status, err) {
+			error_handler(xhr, status, err, object_link, job_count.pop());
+		});
+	});
 }
 
-function set_tags(){
-	cons=[];
-	job_count = [];
-	log=document.getElementById('log');
-	log.style.display="block";
-	txt=document.getElementById('tags').value
-	txt=txt.replace(/druid:/g,'');
-	druids=txt.split("\n")
-	last=druids.pop();
-	if(last != ''){druids.push(last);}
-	d=[]
-	for(i=druids.length;i>0;i--)
-	{
-		job_count.push(i);
-	}
-	for(i=0;i< druids.length; i++)
-	{
-		dr=druids[i];
-		dr=dr.replace(/ : /g,':');
-		parts=dr.split("\t");
-		druid=parts.shift();
-		tags=parts.join("\t");
-		d.push({'druid': druid, 'tags': tags});
-	}
-	log.innerHTML="Using "+ druids.length +" user supplied druids and tags.<br>\n"
-	log=document.getElementById('log');
-	$.each(d, function(i,element){
-		//get rid of blank lines
-		if(element['druid'] == null || element['druid'].length < 2)
-		{
-			return;
-		}
-		var element_url=catalog_url(element['druid']);
-		//skip bad source ids
-		if(element['tags']==null || element['tags'].length<=1 || element['tags'].indexOf(':')<1)
-		{
-			err_log=document.getElementById('log');
+function source_id() {
+	var row_processing_fn = function(row_str) {
+		parts = row_str.split("\t", 2);
+		row_result = {'druid': parts[0], 'upd_data': parts[1]};
+		return row_result;
+	};
+	var is_invalid_row_fn = function(row_obj) { return (row_obj['upd_data']==null || row_obj['upd_data'].length<=1 || row_obj['upd_data'].indexOf(':')<1); };
+	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'new_id': row_obj['upd_data'] }; };
+	upd_values_for_druids(source_id_url, 'source_ids', row_processing_fn, "user supplied druids and source ids.", is_invalid_row_fn, "invalid source id", get_upd_req_params_from_row_fn);
+}
 
-			err_log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+element_url+" : invalid tags '"+element['source']+"'</span><br>\n"+log.innerHTML;
-			return;
-		}
-		params={
-			'tags': element['tags']
-		}
-		url=tags_url.replace('xxxxxxxxx',element['druid']);
-		var xhr=$.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.success(function(response,status,xhr) { 
-			success_handler(element_url, 'Updated	');
-		})
-		xhr.error(function(xhr,status,err){error_handler(xhr,status,err,element_url,job_count.pop())})
-})
+function set_tags() {
+	var row_processing_fn = function(row_str) {
+		parts = row_str.split("\t");
+		druid = parts.shift();
+		tags = parts.join("\t");
+		row_result = {'druid': druid, 'upd_data': tags};
+		return row_result;
+	};
+	var is_invalid_row_fn = function(row_obj) { return (row_obj['upd_data']==null || row_obj['upd_data'].length<=1 || row_obj['upd_data'].indexOf(':')<1); };
+	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'tags': row_obj['upd_data'] }; };
+	upd_values_for_druids(tags_url, 'tags', row_processing_fn, "user supplied druids and tags.", is_invalid_row_fn, "invalid tags", get_upd_req_params_from_row_fn);
 }

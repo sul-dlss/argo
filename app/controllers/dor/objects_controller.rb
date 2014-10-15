@@ -23,6 +23,7 @@ class Dor::ObjectsController < ApplicationController
     rescue Dor::DuplicateIdError => e
       render :text => e.message, :status => 409, :location => help.object_location(e.pid)
     rescue Exception => e
+      logger.info e.inspect.to_s
       raise
     end
   end
