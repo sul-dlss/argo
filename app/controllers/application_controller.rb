@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   # Adds a few additional behaviors into the application controller 
-   include Blacklight::Controller
+  include Blacklight::Controller
   # Please be sure to impelement current_user and user_session. Blacklight depends on 
   # these methods in order to perform user specific actions. 
 
@@ -12,9 +12,12 @@ class ApplicationController < ActionController::Base
   include Rack::Webauth::Helpers
 
   attr_reader :help
-  require 'squash/rails' if Rails.env == :production
-  include Squash::Ruby::ControllerMethods if Rails.env == :production
-  enable_squash_client if Rails.env == :production
+
+  if Rails.env.production?
+    require 'squash/rails'
+    include Squash::Ruby::ControllerMethods
+    enable_squash_client
+  end
   
   def initialize(*args)
     super

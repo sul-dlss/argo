@@ -65,8 +65,8 @@ group :assets do
 end
 
 group :production do
-  gem 'squash_rails'
-  gem 'squash_ruby'
+  gem 'squash_ruby',  :require => 'squash/ruby'
+  gem 'squash_rails', :require => 'squash/rails'
 end
 
 group :deployment do
