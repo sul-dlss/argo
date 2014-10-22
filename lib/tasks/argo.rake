@@ -140,7 +140,8 @@ namespace :argo do
       payload = "{\n" + docs.collect{|x| '"add": ' + JSON.pretty_generate(x)}.join(",\n") + "\n}"
 
       IO.write("temp.json", payload)
-      args[:cores].each do |core|
+      cores = args[:cores].is_a?(String) ? args[:cores].split(' ') : args[:cores] # make sure we got an array
+      cores.each do |core|
         url = Blacklight.solr.options[:url] + "/" + core + '/update?commit=true'
         puts "Adding #{docs.count} docs from #{counts.count} file(s) to #{url}"
         RestClient.post url, payload, :content_type => "application/json"
@@ -167,8 +168,9 @@ namespace :argo do
         FileList["#{args[:dir]}/conf/*"].each do |f|
           cp(f, "jetty/solr/#{instancedir}/conf/", verbose: true)
         end
-        puts "sed -i -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml"   # tweak solrconfig
-        system("sed -i -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml")
+        ## Mac OSX sed requires -i bak file
+        ## puts "sed -i.bak -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml"   # tweak solrconfig
+        ## system("sed -i.bak -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml")
         propfile = "jetty/solr/#{instancedir}/core.properties"
         open(propfile, 'w') { |f|
           f.puts "name=#{core}"
@@ -189,7 +191,7 @@ namespace :argo do
       'WebAuthLdapAttribute mail',
     ]
 
-    directives += File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) rescue nil
+    directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
 
     resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0,
     :facets => { :fields => ['apo_register_permissions_facet'] }, :'facet.prefix' => 'workgroup:', :'facet.mincount' => 1, :'facet.limit' => -1 )
