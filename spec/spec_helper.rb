@@ -12,10 +12,15 @@ require 'pry-debugger'
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 
+def druid_to_path druid, flavor='xml'
+  fixture_dir = File.join(File.dirname(__FILE__),"fixtures")
+  mask = File.join(fixture_dir,"*_#{druid.sub(/:/,'_')}.#{flavor}")
+  return Dir[mask].first
+end
+
 def instantiate_fixture druid, klass = ActiveFedora::Base
-  @fixture_dir = File.join(File.dirname(__FILE__),"fixtures")
-  mask = File.join(@fixture_dir,"*_#{druid.sub(/:/,'_')}.xml")
-  fname = Dir[mask].first
+  fname = druid_to_path(druid)
+  Rails.logger.debug "instantiate_fixture(#{druid}) ==> #{fname}"
   return nil if fname.nil?
   item_from_foxml(File.read(fname), klass)
 end
