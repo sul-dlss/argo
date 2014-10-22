@@ -5,16 +5,17 @@ class ApoController < ApplicationController
 
   DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
 
+  @@cc = {
+    'by' => 'Attribution 3.0 Unported',
+    'by_sa' => 'Attribution Share Alike 3.0 Unported',      # this has got to be wrong when everything else is hyphenated!
+    'by-nd' => 'Attribution No Derivatives 3.0 Unported',
+    'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
+    'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
+    'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
+  }
+
   def register
     param_cleanup params
-    @cc= {
-      'by' => 'Attribution 3.0 Unported',
-      'by_sa' => 'Attribution Share Alike 3.0 Unported',
-      'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-      'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
-      'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
-    }
     if params[:title]
       #register a new apo
       reg_params={:workflow_priority => '70'}
@@ -70,7 +71,7 @@ class ApoController < ApplicationController
       end
       item.default_workflow=params[:workflow] unless(not params[:workflow] or params[:workflow].length<5)
       item.creative_commons_license = params[:cc_license]
-      item.creative_commons_license_human=@cc[params[:cc_license]]
+      item.creative_commons_license_human=@@cc[params[:cc_license]]
       item.default_rights = params[:default_object_rights]
       managers = split_roleplayer_input_field(params[:managers])
       viewers = split_roleplayer_input_field(params[:viewers])
@@ -104,14 +105,6 @@ class ApoController < ApplicationController
   end
 
   def update
-    @cc= {
-      'by' => 'Attribution 3.0 Unported',
-      'by_sa' => 'Attribution Share Alike 3.0 Unported',
-      'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-      'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
-      'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported'
-    }
     @object.copyright_statement = params[:copyright] if params[:copyright] and params[:copyright].length > 0
     @object.use_statement = params[:use] if params[:use] and params[:use].length >0
     @object.mods_title = params[:title]
@@ -156,7 +149,7 @@ class ApoController < ApplicationController
     end
     @object.default_workflow=params[:workflow]
     @object.creative_commons_license = params[:cc_license]
-    @object.creative_commons_license_human=@cc[params[:cc_license]]
+    @object.creative_commons_license_human=@@cc[params[:cc_license]]
     @object.default_rights = params[:default_object_rights]
     @object.purge_roles
     managers = split_roleplayer_input_field(params[:managers])
@@ -226,7 +219,8 @@ class ApoController < ApplicationController
   end
 
   def update_creative_commons
-    @object.creative_commons = params[:creative_commons]
+    @object.creative_commons_license = params[:creative_commons]
+    @object.creative_commons_license_human = @@cc[params[:creative_commons]]
     redirect
   end
 
