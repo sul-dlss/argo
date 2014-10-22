@@ -28,10 +28,33 @@
   adminPath: RequestHandler path to manage cores.
     If 'null' (or absent), cores will not be manageable via REST
 
-  The cores element is outmoded.  Autodiscovery FTW!
+  The cores element is outmoded.  Autodiscovery is the new mode.
+  But production is stuck on enumerated config for now.
+  -->
   <cores adminPath="/admin/cores" defaultCoreName="development">
     <core name="development" instanceDir="development-core" />
     <core name="test" instanceDir="test-core" />
   </cores>
+  <!--
+       New style future stuff:
+  <solrcloud>
+    <str name="host">${host:}</str>
+    <int name="hostPort">${jetty.port:8984}</int>
+    <str name="hostContext">${hostContext:solr}</str>
+    <int name="zkClientTimeout">${zkClientTimeout:30000}</int>
+    <bool name="genericCoreNodeNames">${genericCoreNodeNames:false}</bool>
   -->
+    <!-- ZooKeeper Security -->
+  <!--
+    <str name="zkACLProvider">${zkACLProvider:}</str>
+    <str name="zkCredentialProvider">${zkCredentialProvider:}</str>
+  </solrcloud>
+
+  <shardHandlerFactory name="shardHandlerFactory"
+    class="HttpShardHandlerFactory">
+    <int name="socketTimeout">${socketTimeout:0}</int>
+    <int name="connTimeout">${connTimeout:0}</int>
+  </shardHandlerFactory>
+  -->
+
 </solr>
