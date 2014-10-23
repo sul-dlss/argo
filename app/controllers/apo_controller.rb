@@ -15,7 +15,6 @@ class ApoController < ApplicationController
   }
 
   def is_valid_role_list role_list
-    binding.pry
     return role_list.find { |role| /^[\w-]+:[\w-]+$/.match(role) == nil } == nil
   end
 
@@ -177,11 +176,6 @@ class ApoController < ApplicationController
     add_roleplayers_to_object(@object, managers, 'dor-apo-manager')
     add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
     @object.save
-    #TODO: actually, just do the nice UI for form validation in JS (and prevent submission if there are errors).  check for errors early on in the method and barf if there are any.
-    # flash[:error] = "test"
-    # redirect_to :controller => 'apo', :action => 'register'
-    # render :action => 'register'
-    # render :register
     redirect
   end
 
