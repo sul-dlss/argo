@@ -214,6 +214,9 @@ GEM
     jquery-rails (2.1.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
+    jquery-validation-rails (1.12.0)
+      railties (>= 3.2, < 5.0)
+      thor (~> 0.14)
     json (1.8.1)
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
@@ -477,6 +480,7 @@ DEPENDENCIES
   is_it_working-cbeer
   jettywrapper
   jquery-rails (= 2.1.4)
+  jquery-validation-rails
   kaminari
   kgio
   lyberteam-capistrano-devel (= 3.1.0.pre1)

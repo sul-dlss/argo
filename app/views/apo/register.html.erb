@@ -117,3 +117,13 @@ end
 <%end%>
 <%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/' %>
 </div>
+<script type="text/javascript">
+	$("#apo_form").validate({
+		rules: {
+			title: "required",
+			managers: {
+				remote: "is_valid_role_list"
+			}
+		}
+	})
+</script>

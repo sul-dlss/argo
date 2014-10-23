@@ -1,6 +1,6 @@
 class ApoController < ApplicationController
 
-  before_filter :create_obj, :except => [:register]
+  before_filter :create_obj, :except => [:register, :is_valid_role_list_endpoint]
   after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
 
   DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
@@ -13,6 +13,26 @@ class ApoController < ApplicationController
     'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
     'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
   }
+
+  def is_valid_role_list role_list
+    binding.pry
+    return role_list.find { |role| /^[\w-]+:[\w-]+$/.match(role) == nil } == nil
+  end
+
+  def is_valid_role_list_endpoint
+    role_list_str = params[:managers] || params[:viewers] || nil
+    if !role_list_str
+      ret_val = false
+    else
+      ret_val = is_valid_role_list(split_roleplayer_input_field(role_list_str))
+    end
+
+    respond_to do |format|
+      format.json {
+        render :json => ret_val
+      }
+    end
+  end
 
   def register
     param_cleanup params
@@ -157,6 +177,11 @@ class ApoController < ApplicationController
     add_roleplayers_to_object(@object, managers, 'dor-apo-manager')
     add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
     @object.save
+    #TODO: actually, just do the nice UI for form validation in JS (and prevent submission if there are errors).  check for errors early on in the method and barf if there are any.
+    # flash[:error] = "test"
+    # redirect_to :controller => 'apo', :action => 'register'
+    # render :action => 'register'
+    # render :register
     redirect
   end
 

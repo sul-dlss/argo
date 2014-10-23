@@ -29,6 +29,7 @@ Argo::Application.routes.draw do
   match 'discovery', :to => 'discovery#index', :as => 'discovery'
   match '/discovery/data', :to => "discovery#data", :as => "discovery_data"
   match 'discovery/download', :to => 'discovery#download', :as => 'discovery_download'
+  match '/apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :as => 'is_valid_role_list'
   
   root :to => "catalog#index"
 
@@ -114,7 +115,7 @@ Argo::Application.routes.draw do
     get :apply_apo_defaults, :on => :member
     get :fix_missing_provenance, :on => :member
 end
-  
+
   namespace :items do
     post '/version/close', :action=>:close_version, :as => 'close_version'
     post '/version/open', :action=>:open_version, :as => 'open_version'
