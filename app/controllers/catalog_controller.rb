@@ -25,14 +25,13 @@ class CatalogController < ApplicationController
       :'f.wf_swp_facet.facet.limit' => -1,
       :'f.tag_facet.facet.limit' => -1,
       :'f.tag_facet.facet.sort' => 'index'
-
     }
 
     config.index.show_link = 'id'
     config.index.record_display_type = 'content_type_facet'
 
-    config.show.html_title = 'obj_label_t'
-    config.show.heading = 'obj_label_t'
+    config.show.html_title   = 'obj_label_t'
+    config.show.heading      = 'obj_label_t'
     config.show.display_type = 'objectType_t'
     config.show.sections = {
       :default => ['identification','datastreams','history','contents'],
@@ -40,37 +39,37 @@ class CatalogController < ApplicationController
     }
     config.show.section_links = {
       'identification' => :render_full_view_links,
-      'contents' => :render_dor_workspace_link
+      'contents'       => :render_dor_workspace_link
     }
 
-    config.add_index_field 'id', :label => 'DRUID:'
-    config.add_index_field 'dc_creator_t', :label => 'Creator:'
+    config.add_index_field 'id',            :label => 'DRUID:'
+    config.add_index_field 'dc_creator_t',  :label => 'Creator:'
     config.add_index_field 'project_tag_t', :label => 'Project:'
-    config.add_show_field 'content_type_facet', :label => 'Content Type:'
-    config.add_show_field 'embargoMetadata_t', :label => 'Embargo:'
-    config.add_show_field 'identifier_t', :label => 'IDs:'
+    config.add_show_field 'content_type_facet',          :label => 'Content Type:'
+    config.add_show_field 'embargoMetadata_t',           :label => 'Embargo:'
+    config.add_show_field 'identifier_t',                :label => 'IDs:'
     config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'
-    config.add_show_field 'objProfile_objLabel_dt', :label => 'Label:'
-    config.add_show_field 'is_governed_by_s', :label => 'Admin. Policy:'
-    config.add_show_field 'is_member_of_collection_s', :label => 'Collection:'
-    config.add_show_field 'item_status_t', :label => 'Status:'
-    config.add_show_field 'objectType_t', :label => 'Object Type:'
-    config.add_show_field 'id', :label => 'DRUID:'
-    config.add_show_field 'project_tag_t', :label => 'Project:'
-    config.add_show_field 'source_id_t', :label => 'Source:'
-    config.add_show_field 'identityMetadata_tag_t', :label => 'Tags:'
-    config.add_show_field 'status_display', :label => 'Status:'
-    config.add_show_field 'wf_error_display', :label => "Error:"
-    config.add_show_field 'collection_title_display', :label => "Error:"
-    config.add_show_field 'metadata_source_t', :label => 'MD Source:'
-    config.add_show_field 'preserved_size_display', :label => "Preservation Size"
+    config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
+    config.add_show_field 'is_governed_by_s',            :label => 'Admin. Policy:'
+    config.add_show_field 'is_member_of_collection_s',   :label => 'Collection:'
+    config.add_show_field 'item_status_t',               :label => 'Status:'
+    config.add_show_field 'objectType_t',                :label => 'Object Type:'
+    config.add_show_field 'id',                          :label => 'DRUID:'
+    config.add_show_field 'project_tag_t',               :label => 'Project:'
+    config.add_show_field 'source_id_t',                 :label => 'Source:'
+    config.add_show_field 'identityMetadata_tag_t',      :label => 'Tags:'
+    config.add_show_field 'status_display',              :label => 'Status:'
+    config.add_show_field 'wf_error_display',            :label => "Error:"
+    config.add_show_field 'collection_title_display',    :label => "Error:"
+    config.add_show_field 'metadata_source_t',           :label => 'MD Source:'
+    config.add_show_field 'preserved_size_display',      :label => "Preservation Size"
 
     config.add_facet_field 'tag_facet', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'objectType_facet', :label => 'Object Type'
-    config.add_facet_field 'content_type_facet', :label => 'Content Type'
+    config.add_facet_field 'objectType_facet',       :label => 'Object Type'
+    config.add_facet_field 'content_type_facet',     :label => 'Content Type'
     config.add_facet_field 'collection_title_facet', :label => 'Collection', :sort => 'index', :limit => 200
     config.add_facet_field 'hydrus_collection_title_facet', :label => 'Hydrus Collection', :sort => 'index', :limit => 200
-    config.add_facet_field 'apo_title_facet', :label => 'Admin. Policy', :sort => 'index', :limit => 200
+    config.add_facet_field 'apo_title_facet',        :label => 'Admin. Policy',        :sort => 'index', :limit => 200
     config.add_facet_field 'hydrus_apo_title_facet', :label => 'Hydrus Admin. Policy', :sort => 'index', :limit => 200
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
@@ -78,31 +77,30 @@ class CatalogController < ApplicationController
     config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'current_version_facet', :label => 'Version'
 
-
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
-      :days_7 => { :label => 'within 7 days', :fq => "registered_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+      :days_7  => { :label => 'within 7 days',  :fq => "registered_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "registered_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
-      :days_7 => { :label => 'within 7 days', :fq => "submitted_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+      :days_7  => { :label => 'within 7 days',  :fq => "submitted_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "submitted_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'published_date', :label => 'Published', :query => {
-      :days_7 => { :label => 'within 7 days', :fq => "published_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+      :days_7  => { :label => 'within 7 days',  :fq => "published_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "published_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'deposited_date', :label => 'Deposited', :query => {
-      :days_1 => { :label => 'today', :fq => "deposited_day_facet:[#{1.minute.ago.utc.xmlschema.split('T').first } TO *]" },
-      :days_7 => { :label => 'within 7 days', :fq => "deposited_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+      :days_1  => { :label => 'today',          :fq => "deposited_day_facet:[#{ 1.minute.ago.utc.xmlschema.split('T').first } TO *]"},
+      :days_7  => { :label => 'within 7 days',  :fq => "deposited_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "deposited_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'object_modified_day', :label => 'Object Last Modified', :query => {
-      :days_7 => { :label => 'within 7 days', :fq => "last_modified_day_facet:[#{7.days.ago.utc.xmlschema.split('T').first } TO *]" },
+      :days_7  => { :label => 'within 7 days',  :fq => "last_modified_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "last_modified_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'version_opened', :label => 'Open Version', :query => {
-      :all => { :label => 'All', :fq => "version_opened_facet:[* TO #{1.second.ago.utc.xmlschema.split('T').first }]" },
-      :days_7 => { :label => 'more than 7 days', :fq => "version_opened_facet:[* TO #{7.days.ago.utc.xmlschema }]" },
+      :all     => { :label => 'All',               :fq => "version_opened_facet:[* TO #{1.second.ago.utc.xmlschema.split('T').first }]"},
+      :days_7  => { :label => 'more than 7 days',  :fq => "version_opened_facet:[* TO #{ 7.days.ago.utc.xmlschema }]"},
       :days_30 => { :label => 'more than 30 days', :fq => "version_opened_facet:[* TO #{30.days.ago.utc.xmlschema }]"}
     }
     config.add_facet_fields_to_solr_request!
