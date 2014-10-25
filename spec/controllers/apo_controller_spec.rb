@@ -138,7 +138,7 @@ describe ApoController do
   describe 'update_creative_commons' do
     it 'should call set_creative_commons' do
       Dor.should_receive(:find).and_return @item
-      @item.should_receive(:creative_commons=)
+      @item.should_receive(:creative_commons_license=)
       post 'update_creative_commons', :id => 'druid_zt570tx3016', :cc_license => 'cc_by'
     end
   end
