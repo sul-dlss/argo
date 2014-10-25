@@ -121,7 +121,11 @@ end
 	$("#apo_form").validate({
 		rules: {
 			title: "required",
+			// is_valid_role_list is a REST endpoint in ApoController (i.e. /apo/is_valid_role_list)
 			managers: {
+				remote: "is_valid_role_list"
+			},
+			viewers: {
 				remote: "is_valid_role_list"
 			}
 		}
