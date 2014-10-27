@@ -47,7 +47,10 @@ describe ApoController do
       @empty_item.should_receive(:add_default_collection).with('druid:newcollection')
     end
     it 'should create a collection via catkey' do
-      catkey='1234567'
+      catkey = '1234567'
+      new_collection_druid = 'druid:newcollection'
+      mock_new_collection = double(Dor::Collection)
+
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
         expect(params[:label]          ).to eq(':auto')
         expect(params[:object_type]    ).to eq('collection')
@@ -55,47 +58,77 @@ describe ApoController do
         expect(params[:other_id]       ).to eq('symphony:'+catkey)
         expect(params[:metadata_source]).to eq('symphony')
         expect(params[:rights]         ).to eq("dark")
-        {:pid => 'druid:newcollection'}
+        {:pid => new_collection_druid}
       end
+      Dor.should_receive(:find).with(new_collection_druid).and_return(mock_new_collection)
+      mock_new_collection.should_receive(:save)
+      mock_new_collection.should_receive(:update_index)
+
       post "register_collection", "label"=>":auto", "collection_catkey"=>catkey, "collection_rights_catkey"=>"dark", 'id'=>'druid:forapo'
     end
     it 'should create a collection from title/abstract by registering the collection, then adding the abstract' do
       title='collection title'
       abstract='this is the abstract'
+      new_collection_druid = 'druid:newcollection'
+      mock_new_collection = double(Dor::Collection)
+      mock_desc_md_ds = double(Dor::DescMetadataDS)
+
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
         expect(params[:label]          ).to eq(title)
         expect(params[:object_type]    ).to eq('collection')
         expect(params[:admin_policy]   ).to eq('druid:forapo')
         expect(params[:metadata_source]).to eq('label')
         expect(params[:rights]         ).to eq('dark')
-        {:pid => 'druid:newcollection'}
+        {:pid => new_collection_druid}
       end
-    # col=double(Dor::Item)
-      Dor.should_receive(:find).with('druid:newcollection').and_return(@item)
-      @item.descMetadata.should_receive(:abstract=).with(abstract)
-      @item.descMetadata.should_receive(:content=)
+      Dor.should_receive(:find).with(new_collection_druid).and_return(mock_new_collection)
+      mock_new_collection.should_receive(:descMetadata).and_return(mock_desc_md_ds)
+      mock_desc_md_ds.should_receive(:abstract=).with(abstract)
+      mock_new_collection.should_receive(:descMetadata).and_return(mock_desc_md_ds)
+      mock_desc_md_ds.should_receive(:ng_xml)
+      mock_new_collection.should_receive(:descMetadata).and_return(mock_desc_md_ds)
+      mock_desc_md_ds.should_receive(:content=)
+      mock_new_collection.should_receive(:descMetadata).and_return(mock_desc_md_ds)
+      mock_desc_md_ds.should_receive(:save)
+      mock_new_collection.should_receive(:save)
+      mock_new_collection.should_receive(:update_index)
+
       post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "collection_rights"=>"dark", 'id'=>'druid:forapo'
     end
     it 'should add the collection to the apo default collection list' do
       title='collection title'
+      new_collection_druid = 'druid:newcollection'
       abstract='this is the abstract'
+      mock_new_collection = double(Dor::Collection)
+
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
         expect(params[:label]          ).to eq(title)
         expect(params[:object_type]    ).to eq('collection')
         expect(params[:admin_policy]   ).to eq('druid:forapo')
         expect(params[:metadata_source]).to eq('label')
         expect(params[:rights]         ).to eq('dark')
-        {:pid => 'druid:newcollection'}
+        {:pid => new_collection_druid}
       end
+      Dor.should_receive(:find).with(new_collection_druid).and_return(mock_new_collection)
       controller.should_receive(:set_abstract)
+      mock_new_collection.should_receive(:save)
+      mock_new_collection.should_receive(:update_index)
+
       post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract , "collection_rights"=>"dark", 'id'=>'druid:forapo'
     end
     it 'should set the workflow priority to 65' do
       catkey='1234567'
+      new_collection_druid = 'druid:newcollection'
+      mock_new_collection = double(Dor::Collection)
+
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
         expect(params[:workflow_priority]).to eq('65')
-        {:pid => 'druid:newcollection'}
+        {:pid => new_collection_druid}
       end
+      Dor.should_receive(:find).with(new_collection_druid).and_return(mock_new_collection)
+      mock_new_collection.should_receive(:save)
+      mock_new_collection.should_receive(:update_index)
+
       post "register_collection", "label"=>":auto", "collection_catkey"=>catkey, "collection_rights_catkey"=>"dark", 'id'=>'druid:forapo'
     end
   end
