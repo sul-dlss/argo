@@ -8,6 +8,7 @@ describe ApoController do
       item.stub(:udpate_index) unless item.nil?
       item
     end
+  # Dor::WorkflowService.stub(:get_workflow_xml) { xml }
     @item = Dor::AdminPolicyObject.find("druid:zt570tx3016")
     @empty_item = Dor::AdminPolicyObject.find("pw570tx3016")
   # ItemsController.any_instance.stub(:current_user).and_return(@current_user)
@@ -171,10 +172,11 @@ describe ApoController do
     end
   end
   describe 'update_creative_commons' do
-    it 'should call set_creative_commons' do
+    it 'should set creative_commons' do
       Dor.should_receive(:find).and_return @item
       @item.should_receive(:creative_commons_license=)
-      post 'update_creative_commons', :id => 'druid_zt570tx3016', :cc_license => 'cc_by'
+      @item.should_receive(:creative_commons_license_human=)
+      post 'update_creative_commons', :id => 'druid_zt570tx3016', :cc_license => 'by-nc'
     end
   end
   describe 'update_use' do
