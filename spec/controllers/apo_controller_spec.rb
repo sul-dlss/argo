@@ -19,6 +19,8 @@ describe ApoController do
     end
     example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR", "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"", "collection_title"=>'col title', "collection_abstract"=>"", "default_object_rights"=>"World", "use"=>"", "copyright"=>"", "cc_license"=>"", "workflow"=>"digitizationWF", "register"=>""}
 
+    ## WARNING: The next two tests will TIMEOUT if not on Stanford network or VPN
+    ## This is clearly a failure to isolate the test aparatus.
     it 'should hit the registration service to register an apo and a collection' do
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
         expect(params[:label]          ).to eq('New APO Title')
