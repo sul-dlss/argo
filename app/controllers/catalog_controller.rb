@@ -9,7 +9,7 @@ class CatalogController < ApplicationController
   helper ArgoHelper
 
   before_filter :reformat_dates, :set_user_obj_instance_var
-  
+
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
 
   configure_blacklight do |config|
@@ -75,6 +75,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'has_model_s',  :label => 'Model', :helper_method => :model_facet_helper  # helper_method requires Blacklight 4.2
     config.add_facet_field 'current_version_facet', :label => 'Version'
 
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
@@ -103,7 +104,8 @@ class CatalogController < ApplicationController
       :days_7  => { :label => 'more than 7 days',  :fq => "version_opened_facet:[* TO #{ 7.days.ago.utc.xmlschema }]"},
       :days_30 => { :label => 'more than 30 days', :fq => "version_opened_facet:[* TO #{30.days.ago.utc.xmlschema }]"}
     }
-    config.add_facet_fields_to_solr_request!
+
+    config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
 
     config.add_search_field 'text', :label => 'All Fields'
     config.add_sort_field 'id asc', :label => 'Druid'
