@@ -18,7 +18,7 @@ describe 'mods_view' do
     end
     it 'should have the expected search facets' do
       pending 'debug indicates this visits the wrong place (http://www.example.com).  probably also not stubbing the user (since CatalogController is invoked here, not ItemsController).'
-      search_facets = ['Object Type', 'Content Type', 'Admin. Policy', 'Lifecycle', 'Workflows (WPS)', 'Version']
+      search_facets = ['Object Type', 'Content Type', 'Admin Policy', 'Lifecycle', 'Workflows (WPS)', 'Version']
       visit root_path
       search_facets.each do |facet|
         expect(page).to have_content(facet)

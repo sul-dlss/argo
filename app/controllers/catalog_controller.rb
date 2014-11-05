@@ -50,7 +50,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'identifier_t',                :label => 'IDs:'
     config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'
     config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
-    config.add_show_field 'is_governed_by_s',            :label => 'Admin. Policy:'
+    config.add_show_field 'is_governed_by_s',            :label => 'Admin Policy:'
     config.add_show_field 'is_member_of_collection_s',   :label => 'Collection:'
     config.add_show_field 'item_status_t',               :label => 'Status:'
     config.add_show_field 'objectType_t',                :label => 'Object Type:'

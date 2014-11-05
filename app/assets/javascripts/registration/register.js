@@ -113,14 +113,14 @@ function DorRegistration(initOpts) {
       switch($t.objectType) {
         case 'item':
           if ($.isEmptyObject(apo) || $.isEmptyObject(sourcePrefix)) {
-            $t.displayRequirements('Please specify both an Admin. Policy and a Metadata Source before continuing.');
+            $t.displayRequirements('Please specify both an Admin Policy and a Metadata Source before continuing.');
             return(false);
           }
           break;
         case 'collection':
         case 'set':
           if ($.isEmptyObject(apo)) {
-            $t.displayRequirements('Please specify an Admin. Policy before continuing.');
+            $t.displayRequirements('Please specify an Admin Policy before continuing.');
             return(false);
           }
           return(false);
