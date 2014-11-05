@@ -69,8 +69,8 @@ class CatalogController < ApplicationController
     config.add_facet_field 'content_type_facet',     :label => 'Content Type'
     config.add_facet_field 'collection_title_facet', :label => 'Collection', :sort => 'index', :limit => 500
     config.add_facet_field 'hydrus_collection_title_facet', :label => 'Hydrus Collection', :sort => 'index', :limit => 500
-    config.add_facet_field 'apo_title_facet',        :label => 'Admin. Policy',        :sort => 'index', :limit => 500
-    config.add_facet_field 'hydrus_apo_title_facet', :label => 'Hydrus Admin. Policy', :sort => 'index', :limit => 500
+    config.add_facet_field 'apo_title_facet',        :label => 'Admin Policy',        :sort => 'index', :limit => 500
+    config.add_facet_field 'hydrus_apo_title_facet', :label => 'Hydrus Admin Policy', :sort => 'index', :limit => 500
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
