@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', ">= 4.14.1"
+gem 'dor-services', ">= 4.14.4"
 gem 'dor-workflow-service', '~> 1.5'
 gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning", "=1.3.3"
