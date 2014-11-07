@@ -65,7 +65,12 @@ group :assets do
   gem 'compass-susy-plugin', '~> 0.9.0'
 end
 
-group :production, :test do
+group :test do
+  gem 'squash_ruby',  :require => 'squash/ruby'
+  gem 'squash_rails', :require => 'squash/rails'
+end
+
+group :production do
   gem 'squash_ruby',  :require => 'squash/ruby'
   gem 'squash_rails', :require => 'squash/rails'
 end
