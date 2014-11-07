@@ -34,6 +34,8 @@ gem 'jettywrapper'
 gem 'kaminari'
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
+gem 'squash_ruby',  :require => 'squash/ruby'
+gem 'squash_rails', :require => 'squash/rails'
 
 group :test, :development do
   gem 'http_logger'
@@ -63,16 +65,6 @@ group :assets do
   gem 'sass-rails', '~> 3.2.0'
   gem 'compass-rails', '~> 1.0.0'
   gem 'compass-susy-plugin', '~> 0.9.0'
-end
-
-group :test do
-  gem 'squash_ruby',  :require => 'squash/ruby'
-  gem 'squash_rails', :require => 'squash/rails'
-end
-
-group :production do
-  gem 'squash_ruby',  :require => 'squash/ruby'
-  gem 'squash_rails', :require => 'squash/rails'
 end
 
 group :deployment do
