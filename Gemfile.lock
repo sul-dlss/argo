@@ -146,7 +146,7 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     docopt (0.5.0)
-    dor-services (4.14.4)
+    dor-services (4.15.0)
       active-fedora (~> 5.7.1)
       activesupport (~> 3.2, >= 3.2.18)
       confstruct (~> 0.2.2)
@@ -434,7 +434,7 @@ GEM
       polyglot (>= 0.3.1)
     ttfunk (1.4.0)
     tzinfo (0.3.42)
-    uber (0.0.10)
+    uber (0.0.11)
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -472,7 +472,7 @@ DEPENDENCIES
   compass-susy-plugin (~> 0.9.0)
   confstruct (~> 0.2.4)
   dalli
-  dor-services (>= 4.14.4)
+  dor-services (>= 4.15.0)
   dor-workflow-service (~> 1.5)
   druid-tools (~> 0.3.0)
   haml
