@@ -62,46 +62,34 @@ class RegistrationController < ApplicationController
 
   def rights_list
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
-    #get the xml from the defaultObjectRights datastream
     adm_xml = apo_object.defaultObjectRights.ng_xml
-    found=false
-    result=Hash.new
-    #looks for <group>stanford</group>
-    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
-      result['default']='Stanford (APO default)'
-      result['world']='World'
-      result['dark']='Dark'
-      result['none']='None'
-      found=true
-    end
-    #looks for a world tag
-    adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
-      result['stanford']='Stanford'
-      result['default']='World (APO default)'
-      result['dark']='Dark'
-      result['none']='None'
-      found=true
-    end
+    found = false
+    result = Hash.new
 
-    adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').each do |read|
-      result['stanford']='Stanford'
-      result['world']='World'
-      result['none']='None'
-      result['dark']='Dark (APO default)'
-    end
+    if adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').length > 0
+    # looks for a none tag
+      result['world'] = 'World'
+      result['stanford'] = 'Stanford'
+      result['none'] = 'Citation Only'
+      result['dark'] = 'Dark (APO default)'
+    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').length > 0
+    # looks for a group tag
+      result['world'] = 'World'
+      result['default'] = 'Stanford (APO default)'
+      result['none'] = 'Citation Only'
+      result['dark'] = 'Dark'
+    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').length > 0
+    # looks for a world tag
+      result['default'] = 'World (APO default)'
+      result['stanford'] = 'Stanford'
+      result['none'] = 'Citation Only'
+      result['dark'] = 'Dark'
+    else
     #if it wasnt stanford or world default rights, there is either no object rights metadata or it doesnt include default rights
-    if not found
-      if adm_xml.xpath('//rightsMetadata').length > 0
-        result['stanford']='Stanford'
-        result['world']='World'
-        result['default']='Dark (APO default)'
-      else
-        result['stanford']='Stanford'
-        result['world']='World'
-        result['dark']='Dark'
-        result['none']='None'
-        result['empty']='none (set in Assembly)'
-      end
+      result['world'] = 'World'
+      result['stanford'] = 'Stanford'
+      result['none'] = 'Citation Only'
+      result['dark'] = 'Dark'
     end
 
     respond_to do |format|
