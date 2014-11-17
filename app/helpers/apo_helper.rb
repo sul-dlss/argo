@@ -16,10 +16,10 @@ module ApoHelper
   end
   def default_rights_options
     [
-      ['World', 'World'],
-      ['Stanford', 'Stanford'],
-      ['Dark (Preserve Only)', 'Dark'],
-      ['Citation Only']
+      ['World', 'world'],
+      ['Stanford', 'stanford'],
+      ['Dark (Preserve Only)', 'dark'],
+      ['Citation Only', 'none']
     ]
   end
   def options_for_desc_md
