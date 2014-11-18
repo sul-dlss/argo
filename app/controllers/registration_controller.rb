@@ -63,33 +63,39 @@ class RegistrationController < ApplicationController
   def rights_list
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.defaultObjectRights.ng_xml
-    found = false
-    result = Hash.new
 
-    if adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').length > 0
-    # looks for a none tag
-      result['world'] = 'World'
-      result['stanford'] = 'Stanford'
-      result['none'] = 'Citation Only'
-      result['dark'] = 'Dark (APO default)'
-    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').length > 0
-    # looks for a group tag
-      result['world'] = 'World'
-      result['default'] = 'Stanford (APO default)'
-      result['none'] = 'Citation Only'
-      result['dark'] = 'Dark'
-    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').length > 0
+    # the default if we either find no object rights metadata, or it doesn't include default rights
+    # result = { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'None', 'dark' => 'Dark'}
+    result = { :world => 'World', :stanford => 'Stanford', :none => 'Citation Only', :dark => 'Dark'}
+
+    if adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').length > 0
     # looks for a world tag
       result['default'] = 'World (APO default)'
       result['stanford'] = 'Stanford'
       result['none'] = 'Citation Only'
       result['dark'] = 'Dark'
-    else
-    #if it wasnt stanford or world default rights, there is either no object rights metadata or it doesnt include default rights
+    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').length > 0
+    #TODO: check for stanford specifically (group tag contains "stanford")
+    # looks for a group tag
       result['world'] = 'World'
-      result['stanford'] = 'Stanford'
+      result['default'] = 'Stanford (APO default)'
       result['none'] = 'Citation Only'
       result['dark'] = 'Dark'
+    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').length > 0
+    # none in read is either Citation Only (formerly "None") or Dark
+      if adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/world').length > 0
+      # world in discover and none in read translates to none
+        result['world'] = 'World'
+        result['stanford'] = 'Stanford'
+        result['default'] = 'Citation Only (APO default)'
+        result['dark'] = 'Dark'
+      elsif adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').length > 0
+      # none in discover and none in read translates to dark
+        result['world'] = 'World'
+        result['stanford'] = 'Stanford'
+        result['none'] = 'Citation Only'
+        result['default'] = 'Dark (APO default)'
+      end
     end
 
     respond_to do |format|
