@@ -72,8 +72,8 @@ class RegistrationController < ApplicationController
       # readable by world translates to World
       result['default'] = "#{result['world']} (APO default)"
       result.delete('world')
-    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').length > 0
-      #TODO: check for stanford specifically (group tag contains "stanford")
+    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group[text()=\'Stanford\' or text()=\'stanford\']').length > 0
+      #TODO: this is stupid, should handle "stanford" regardless of the string's case, but the xpath parser doesn't support the lower-case() fn
       # readable by stanford translates to Stanford
       result['default'] = "#{result['stanford']} (APO default)"
       result.delete('stanford')
