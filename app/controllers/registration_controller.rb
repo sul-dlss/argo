@@ -64,29 +64,36 @@ class RegistrationController < ApplicationController
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.defaultObjectRights.ng_xml
 
-    # the default if we either find no object rights metadata, or it doesn't include default rights
-    result = { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'Citation Only', 'dark' => 'Dark'}
-
-    # set the default, update the display text, get rid of the old entry from the has since we want the default entry in its place
+    # figure out what the default option (if any) should be
+    default_opt = nil
     if adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').length > 0
       # readable by world translates to World
-      result['default'] = "#{result['world']} (APO default)"
-      result.delete('world')
+      default_opt = 'world'
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group[text()=\'Stanford\' or text()=\'stanford\']').length > 0
       #TODO: this is stupid, should handle "stanford" regardless of the string's case, but the xpath parser doesn't support the lower-case() fn
       # readable by stanford translates to Stanford
-      result['default'] = "#{result['stanford']} (APO default)"
-      result.delete('stanford')
+      default_opt = 'stanford'
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').length > 0
       # readable by none is either Citation Only (formerly "None") or Dark
       if adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/world').length > 0
         # discoverable by world but readable by none translates to Citation Only/none
-        result['default'] = "#{result['none']} (APO default)"
-        result.delete('none')
+        default_opt = 'none'
       elsif adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').length > 0
         # discoverable by none and readable by none translates to Dark
-        result['default'] = "#{result['dark']} (APO default)"
-        result.delete('dark')
+        default_opt = 'dark'
+      end
+    end
+
+    # iterate through the default version of the rights list.  if we found a default option 
+    # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
+    # we didn't find a default option, we'll just return the default list of rights options with no
+    # specified selection.
+    result = Hash.new
+    { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'Citation Only', 'dark' => 'Dark'}.each do |key, val|
+      if default_opt == key
+        result['default'] = "#{val} (APO default)"
+      else
+        result[key] = val
       end
     end
 
