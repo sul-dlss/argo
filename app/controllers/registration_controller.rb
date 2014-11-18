@@ -65,36 +65,28 @@ class RegistrationController < ApplicationController
     adm_xml = apo_object.defaultObjectRights.ng_xml
 
     # the default if we either find no object rights metadata, or it doesn't include default rights
-    # result = { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'None', 'dark' => 'Dark'}
-    result = { :world => 'World', :stanford => 'Stanford', :none => 'Citation Only', :dark => 'Dark'}
+    result = { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'Citation Only', 'dark' => 'Dark'}
 
+    # set the default, update the display text, get rid of the old entry from the has since we want the default entry in its place
     if adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').length > 0
-    # looks for a world tag
-      result['default'] = 'World (APO default)'
-      result['stanford'] = 'Stanford'
-      result['none'] = 'Citation Only'
-      result['dark'] = 'Dark'
+      # readable by world translates to World
+      result['default'] = "#{result['world']} (APO default)"
+      result.delete('world')
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').length > 0
-    #TODO: check for stanford specifically (group tag contains "stanford")
-    # looks for a group tag
-      result['world'] = 'World'
-      result['default'] = 'Stanford (APO default)'
-      result['none'] = 'Citation Only'
-      result['dark'] = 'Dark'
+      #TODO: check for stanford specifically (group tag contains "stanford")
+      # readable by stanford translates to Stanford
+      result['default'] = "#{result['stanford']} (APO default)"
+      result.delete('stanford')
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').length > 0
-    # none in read is either Citation Only (formerly "None") or Dark
+      # readable by none is either Citation Only (formerly "None") or Dark
       if adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/world').length > 0
-      # world in discover and none in read translates to none
-        result['world'] = 'World'
-        result['stanford'] = 'Stanford'
-        result['default'] = 'Citation Only (APO default)'
-        result['dark'] = 'Dark'
+        # discoverable by world but readable by none translates to Citation Only/none
+        result['default'] = "#{result['none']} (APO default)"
+        result.delete('none')
       elsif adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').length > 0
-      # none in discover and none in read translates to dark
-        result['world'] = 'World'
-        result['stanford'] = 'Stanford'
-        result['none'] = 'Citation Only'
-        result['default'] = 'Dark (APO default)'
+        # discoverable by none and readable by none translates to Dark
+        result['default'] = "#{result['dark']} (APO default)"
+        result.delete('dark')
       end
     end
 
