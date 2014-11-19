@@ -175,11 +175,8 @@ class CatalogController < ApplicationController
 
   def show_aspect
     if @obj.nil?
-      if params[:id].include? 'druid'
-        @obj = Dor.find params[:id]
-      else
-        @obj = Dor.find 'druid:' + params[:id]
-      end
+      obj_pid = params[:id].include?('druid') ? params[:id] : 'druid:' + params[:id]
+      @obj = Dor.find obj_pid
     end
     @response, @document = get_solr_response_for_doc_id
     render :layout => request.xhr? ? false : true
