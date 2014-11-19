@@ -1,0 +1,6 @@
+<%
+  ds_xml_str = @obj.datastreams[params[:dsid]].ng_xml.to_s
+  ng_xml = Nokogiri::XML(ds_xml_str, &:noblanks)
+  ng_xml.encoding = 'UTF-8'
+%>
+<%= raw(ng_xml.to_xml) %>
