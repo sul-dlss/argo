@@ -16,6 +16,7 @@ end
 <br><div class="register-div">
 	<label>Title</label><br>
 	<input type="text" style="width:auto" size="40" id="title" name="title" value="<%=@object ? @object.mods_title : ''%>"></input>
+	<span id="title-err-msg-div" class="apo-register-error"></span>
 	
 </div>
 <br><div class="register-div">
@@ -40,8 +41,10 @@ end
 	</ul>
 	<div class="register-label-div">Manager</div><input id="managers" name="managers" type="text" style="width:90%" value="<%= @object ? @managers.join(', ') : ApoController::DEFAULT_MANAGER_WORKGROUPS.join(', ') %>"/><br>
 	<p class="help" style="margin-left:90px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
+	<p id="managers-err-msg-div" class="apo-register-error"></p>
 	<div class="register-label-div">Viewer</div><input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @object and @viewers.length>0 ? @viewers.join(', ') : ''%>"/>
 	<p class="help" style="margin-left:90px;font-size:.8em">View only access to the objects</p>
+	<p id="viewers-err-msg-div" class="apo-register-error"></p>
 </div>
 <div class="register-div">
 	<%
@@ -128,6 +131,22 @@ end
 			viewers: {
 				remote: "is_valid_role_list"
 			}
+		},
+		messages: {
+			managers: 'Error:  Enter manager workgroup names as "stem:value", e.g., dlss:project-x.  Enter individuals as "sunetid:value".<br><br>',
+			viewers: 'Error:  Enter viewer workgroup names as "stem:value", e.g., dlss:project-x.  Enter individuals as "sunetid:value".<br><br>',
+			title: ' &nbsp;&nbsp;Error:  A non-empty title is required.'
+		},
+		errorClass: 'apo-register-error',
+		errorPlacement: function(error, element) {
+			var errEltId = element.attr('id') + "-err-msg-div";
+			$("#"+errEltId).html(error.html());
+			return true;
+		},
+		success: function(label) {
+			//if we don't define this and return true, but we do define errorPlacement, the error messages never 
+			//disappear if the field goes valid.  not sure why that is.
+			return true;
 		}
 	})
 </script>
