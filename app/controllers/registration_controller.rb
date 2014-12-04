@@ -72,6 +72,7 @@ class RegistrationController < ApplicationController
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group[text()=\'Stanford\' or text()=\'stanford\']').length > 0
       #TODO: this is stupid, should handle "stanford" regardless of the string's case, but the xpath parser doesn't support the lower-case() fn
       # readable by stanford translates to Stanford
+      #TODO: found something indicating that xpath might support regex
       default_opt = 'stanford'
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').length > 0
       # readable by none is either Citation Only (formerly "None") or Dark
