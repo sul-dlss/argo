@@ -41,6 +41,9 @@ module ApoHelper
         [Array(doc['dc_title_t']).first,doc['dc_title_t'].first.to_s]
       end
   end
+  def default_workflow_option
+    return 'registrationWF'
+  end
   def agreement_options
     q = 'objectType_t:agreement '
       qrys=[]

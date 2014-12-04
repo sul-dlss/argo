@@ -204,7 +204,7 @@ ul li{
 
 <div class="bulk_operation" id="add_workflow" name="add_workflow">
 	<h1>Add a workflow to the items.</h1>
-	<%=select_tag :wf, options_for_select(workflow_options, 'digitizationWF')%>
+	<%=select_tag :wf, options_for_select(workflow_options, default_workflow_option)%>
 	<span class="bulk_button" onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add Workflow</span><br>
 </div>
 
