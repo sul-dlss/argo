@@ -112,7 +112,7 @@ end
 
 <br><div class="register-div">
 	<label>Default workflow</label><br>
-	<%=select_tag :workflow, options_for_select(workflow_options, default_workflow_option)%>
+	<%=select_tag :workflow, options_for_select(workflow_options, (@object ? @cur_default_workflow : default_workflow_option))%>
 </div>
 <div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
 
