@@ -49,12 +49,12 @@ class Report
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'is_governed_by_s', :label => 'Admin. Policy ID',
+        :field => 'is_governed_by_s', :label => 'Admin Policy ID',
         :proc => lambda { |doc| doc['is_governed_by_s'].first.split(/:/).last },
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'apo', :label => "Admin. Policy",
+        :field => 'apo', :label => "Admin Policy",
         :proc => lambda { |doc| doc['apo_title_facet'] },
         :solr_fields => ['apo_title_facet'],
         :sort => false, :default => true, :width => 100

@@ -50,7 +50,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'identifier_t',                :label => 'IDs:'
     config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'
     config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
-    config.add_show_field 'is_governed_by_s',            :label => 'Admin. Policy:'
+    config.add_show_field 'is_governed_by_s',            :label => 'Admin Policy:'
     config.add_show_field 'is_member_of_collection_s',   :label => 'Collection:'
     config.add_show_field 'item_status_t',               :label => 'Status:'
     config.add_show_field 'objectType_t',                :label => 'Object Type:'
@@ -69,15 +69,28 @@ class CatalogController < ApplicationController
     config.add_facet_field 'content_type_facet',     :label => 'Content Type'
     config.add_facet_field 'collection_title_facet', :label => 'Collection', :sort => 'index', :limit => 500
     config.add_facet_field 'hydrus_collection_title_facet', :label => 'Hydrus Collection', :sort => 'index', :limit => 500
-    config.add_facet_field 'apo_title_facet',        :label => 'Admin. Policy',        :sort => 'index', :limit => 500
-    config.add_facet_field 'hydrus_apo_title_facet', :label => 'Hydrus Admin. Policy', :sort => 'index', :limit => 500
+    config.add_facet_field 'apo_title_facet',        :label => 'Admin Policy',        :sort => 'index', :limit => 500
+    config.add_facet_field 'hydrus_apo_title_facet', :label => 'Hydrus Admin Policy', :sort => 'index', :limit => 500
     config.add_facet_field 'lifecycle_facet', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_facet', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_facet', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_swp_facet', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'has_model_s',  :label => 'Model', :helper_method => :model_facet_helper  # helper_method requires Blacklight 4.2
+
+    ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
+    ## For now, if you add an additional case, make sure the DOR case gets the negation.
+    config.add_facet_field 'source', :label => 'Source', :query => {
+      :other  => { :label => 'DOR',        :fq => '-has_model_s:"info:fedora/afmodel:Hydrus_Item" AND -has_model_s:"info:fedora/afmodel:Hydrus_Collection" AND -has_model_s:"info:fedora/afmodel:Hydrus_AdminPolicyObject" AND -has_model_s:"info:fedora/dor:googleScannedBook"' },
+      :google => { :label => 'Google',     :fq => 'has_model_s:"info:fedora/dor:googleScannedBook"' },
+    # :deepen => { :label => 'DPN',        :fq => 'has_model_s:info%3Afedora/whatever' },
+      :hyrdus => { :label => 'Hydrus/SDR', :fq => 'has_model_s:"info:fedora/afmodel:Hydrus_Item" OR has_model_s:"info:fedora/afmodel:Hydrus_Collection" OR has_model_s:"info:fedora/afmodel:Hydrus_AdminPolicyObject"' }
+    }
+
     config.add_facet_field 'current_version_facet', :label => 'Version'
 
+    config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
+      :no_has_model => { :label => 'has_model_s',  :fq => "-has_model_s:*"}
+    }
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
       :days_7  => { :label => 'within 7 days',  :fq => "registered_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "registered_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
