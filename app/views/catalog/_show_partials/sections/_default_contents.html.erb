@@ -28,7 +28,7 @@
 					<li class="resource">
 						<span class="label">Resource (<%=index+1%>)</span> <%= resource['type']%> 
 						<%if can_manage and version_open
-							edit_resource_link='/items/'+params[:id]+'/resource/?edit=true&resource='+resource['id']%>
+							edit_resource_link="/items/#{params[:id]}/resource/?edit=true&resource=#{resource['id']}"%>
 							<a class="smallDialogLink" href=<%= edit_resource_link%>>(edit)<a/>
 						<%end%>
 						<% if resource.at('label') %>
