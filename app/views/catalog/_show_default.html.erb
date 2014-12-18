@@ -5,8 +5,8 @@
 %>
 
 <% sidebar_items << capture do %>
-  <%= render :partial => '/catalog/_show_partials/external_links', :locals => { :document => @document, :object => @object } %>
-  <%= render :partial => '/catalog/_show_partials/embargo_sidebar', :locals => { :document => @document } %>
+  <%= render :partial => '/catalog/show_external_links', :locals => { :document => @document, :object => @object } %>
+  <%= render :partial => '/catalog/show_embargo_sidebar', :locals => { :document => @document } %>
 <% end %>
 
 <div id="document-sections">

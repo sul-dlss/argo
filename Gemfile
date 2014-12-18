@@ -7,8 +7,11 @@ gem 'dor-workflow-service', '~> 1.5'
 gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning", "=1.3.3"
 gem 'rails', '3.2.21'
-gem "blacklight", '~>3.7'
-gem 'blacklight-hierarchy', "~> 0.0.3"
+# gem 'rails', '~> 4'
+# gem "blacklight", '~> 3'
+gem "blacklight", '~> 4'
+# gem 'blacklight-hierarchy', "~> 0.0.3"
+# gem 'blacklight-hierarchy', "~> 0.1.0"
 gem 'net-sftp'
 gem 'rake'
 gem 'about_page'
@@ -36,6 +39,7 @@ gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
 gem 'squash_ruby',  :require => 'squash/ruby'
 gem 'squash_rails', :require => 'squash/rails'
+gem 'unicode'
 
 group :test, :development do
   gem 'http_logger'
@@ -63,8 +67,9 @@ group :assets do
   gem 'jquery-validation-rails'
   gem 'therubyracer', "~> 0.11"
   gem 'sass-rails', '~> 3.2.0'
-  gem 'compass-rails', '~> 1.0.0'
-  gem 'compass-susy-plugin', '~> 0.9.0'
+  # gem 'compass-rails', '~> 1.0.0'
+  # gem 'compass-susy-plugin', '~> 0.9.0'
+  gem 'bootstrap-sass'
 end
 
 group :deployment do

@@ -19,6 +19,8 @@ class ApplicationController < ActionController::Base
     enable_squash_client
   end
   
+  layout 'blacklight'
+
   def initialize(*args)
     super
     

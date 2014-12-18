@@ -5,12 +5,12 @@
   <h4><%= render_citation document %></h4>
   <% blacklight_config[:field_groups][:full_identification].each do |field_names| %>
     <div class="narrow column">
-      <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => field_names, :object => object } %>
+      <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => field_names, :object => object } %>
   	</dl>
 	</div>
   <% end %>
   <div style="clear:left">
-    <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => ['objProfile_objCreateDate_dt','objProfile_objLabel_dt','identifier_t','identityMetadata_tag_t'] } %>	
+    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['objProfile_objCreateDate_dt','objProfile_objLabel_dt','identifier_t','identityMetadata_tag_t'] } %>	
 	
     <%if defined?(object.status) %>
      <dl class="defList">
@@ -22,7 +22,7 @@
 		  </dd>
      </dl>
     <%end%>
-    <%= render :partial => "catalog/_show_partials/field_list", :locals => {:document => document, :field_names => ['wf_error_display'] } %>
+    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['wf_error_display'] } %>
 	
 	</div>
 </div>
