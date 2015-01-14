@@ -148,25 +148,29 @@ module RegistrationHelper
     pdf.y -= 0.5.in
 
     pdf.font('Courier', :size => 10)
+
     label = doc['obj_label_t'].first
     if label.length > 110
       label = label[0..110] + '...'
     end
+
     table_data = [['Object Label:',label]]
     if project_name = doc['project_tag_t']
       table_data.push(['Project Name:',project_name.to_s])
     end
+
     table_data.push(['Date Printed:',Time.now.strftime('%c')])
     if doc['source_id_t'].present?
       table_data.push(["Source ID:",Array(doc['source_id_t']).first])
     end
+
     table_data += ids
     tags = Array(doc['identityMetadata_tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
     if tags.length > 0
       table_data.push(["Tags:",tags.join("\n")])
     end
-    pdf.table(table_data, :column_widths => [100,224],
-    :cell_style => { :borders => [], :padding => 0.pt })
+
+    pdf.table(table_data, :column_widths => [100,224], :cell_style => { :borders => [], :padding => 0.pt })
 
     pdf.y -= 0.5.in
 
