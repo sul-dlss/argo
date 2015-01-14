@@ -207,4 +207,18 @@ describe RegistrationController do
       expect(response.body.include?("Dark (APO default)")).to eq(false)
     end
   end
+
+  describe 'tracksheet' do
+    it 'should generate a tracking sheet with the right default name' do
+      get 'tracksheet', :druid => 'xb482bw3979'
+      expect(response.headers["Content-Type"]).to eq("pdf; charset=utf-8")
+      expect(response.headers["content-disposition"]).to eq("attachment; filename=tracksheet-1.pdf")
+    end
+    it 'should generate a tracking sheet with the specified name (and sequence number)' do
+      test_name = 'test_name'
+      test_seq_no = 7
+      get 'tracksheet', :druid => 'xb482bw3979', :name => test_name, :sequence => test_seq_no
+      expect(response.headers["content-disposition"]).to eq("attachment; filename=#{test_name}-#{test_seq_no}.pdf")
+    end
+  end
 end
