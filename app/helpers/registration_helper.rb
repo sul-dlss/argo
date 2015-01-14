@@ -161,7 +161,7 @@ module RegistrationHelper
       table_data.push(["Source ID:",Array(doc['source_id_t']).first])
     end
     table_data += ids
-    tags = Array(doc['tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
+    tags = Array(doc['identityMetadata_tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
     if tags.length > 0
       table_data.push(["Tags:",tags.join("\n")])
     end
