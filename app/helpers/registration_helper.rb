@@ -99,10 +99,10 @@ module RegistrationHelper
     druids.each do |druid|
       doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
       if doc.nil?
-      obj = Dor.load_instance 'druid:'+druid
-      solr_doc = obj.to_solr
-      Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-     end
+        obj = Dor.load_instance 'druid:'+druid
+        solr_doc = obj.to_solr
+        Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
+      end
     end
     pdf = Prawn::Document.new(:page_size => [5.5.in, 8.5.in])
     pdf.font('Courier')
