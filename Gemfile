@@ -20,7 +20,8 @@ gem 'about_page'
 gem 'is_it_working-cbeer'
 gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
 gem 'thin' # or mongrel
-gem 'prawn', ">=0.12.0"
+gem 'prawn'
+gem 'prawn-table'
 gem 'barby'
 gem 'ruby-graphviz'
 gem "solrizer-fedora"
