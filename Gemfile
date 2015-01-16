@@ -2,10 +2,12 @@ source "https://rubygems.org"
 
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', ">= 4.15.2"
+# gem 'dor-services', ">= 4.15.2"
+gem 'dor-services', :git => "/Users/suntzu/rails_projects/dor-services/", :branch => "rails4"
 gem 'dor-workflow-service', '~> 1.5'
 gem "druid-tools", "~> 0.3.0"
-gem "moab-versioning", "=1.3.3"
+# gem "moab-versioning", "=1.3.3"
+gem "moab-versioning", "~> 1.4"
 gem 'rails', '3.2.21'
 # gem 'rails', '~> 4'
 # gem "blacklight", '~> 3'
