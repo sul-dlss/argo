@@ -1,6 +1,6 @@
 GIT
   remote: /Users/suntzu/rails_projects/dor-services/
-  revision: 7be15c4e4db5318c6e6121ab1dc73791fe9d58cd
+  revision: 6c1c6c162cc3a1a8666f893553f97adcb2f132c5
   branch: rails4
   specs:
     dor-services (5.0.0)
@@ -17,6 +17,7 @@ GIT
       net-ssh (~> 2.6.5)
       nokogiri (~> 1.6.0)
       om (~> 3.0)
+      osullivan
       progressbar (~> 0.21.0)
       rdf (~> 1.0.9.0)
       rest-client (~> 1.6.7)
@@ -268,6 +269,10 @@ GEM
       mediashelf-loggable
       nokogiri (>= 1.4.2)
       solrizer (~> 3.1.0)
+    osullivan (0.0.2)
+      activesupport (~> 3.2)
+      faraday (~> 0.9.0)
+      json
     pdf-core (0.4.0)
     polyglot (0.3.5)
     posix-spawn (0.3.9)
