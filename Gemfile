@@ -10,8 +10,10 @@ gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning", "~> 1.4"
 gem 'rails', '3.2.21'
 # gem 'rails', '~> 4'
+# gem 'rails'
 # gem "blacklight", '~> 3'
 gem "blacklight", '~> 4'
+# gem "blacklight"
 # gem 'blacklight-hierarchy', "~> 0.0.3"
 # gem 'blacklight-hierarchy', "~> 0.1.0"
 gem 'net-sftp'
@@ -64,12 +66,14 @@ group :development do
 end
 
 group :assets do
-  gem 'coffee-rails', '~> 3.2.1'
+  # gem 'coffee-rails', '~> 3.2.1'
+  gem 'coffee-rails'
   gem 'uglifier', '>= 1.0.3'
   gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
   gem 'jquery-validation-rails'
   gem 'therubyracer', "~> 0.11"
-  gem 'sass-rails', '~> 3.2.0'
+  # gem 'sass-rails', '~> 3.2.0'
+  gem 'sass-rails'
   # gem 'compass-rails', '~> 1.0.0'
   # gem 'compass-susy-plugin', '~> 0.9.0'
   gem 'bootstrap-sass'
