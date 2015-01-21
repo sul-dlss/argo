@@ -163,8 +163,8 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     docopt (0.5.0)
-    dor-workflow-service (1.7.2)
-      activesupport (~> 3.2)
+    dor-workflow-service (1.7.4)
+      activesupport (>= 3.2.1, < 4.2.2)
       confstruct (~> 0.2.7)
       nokogiri (~> 1.6.0)
       rest-client (~> 1.6.7)
@@ -268,8 +268,8 @@ GEM
       mediashelf-loggable
       nokogiri (>= 1.4.2)
       solrizer (~> 3.1.0)
-    osullivan (0.0.2)
-      activesupport (~> 3.2)
+    osullivan (0.0.3)
+      activesupport (>= 3.2.18)
       faraday (~> 0.9.0)
       json
     pdf-core (0.4.0)
