@@ -4,16 +4,15 @@ gem 'stanford-mods'
 gem 'mods_display'
 # gem 'dor-services', ">= 4.15.2"
 gem 'dor-services', :git => "/Users/suntzu/rails_projects/dor-services/", :branch => "rails4"
-gem 'dor-workflow-service', '~> 1.5'
+gem 'dor-workflow-service'
 gem "druid-tools", "~> 0.3.0"
-# gem "moab-versioning", "=1.3.3"
-gem "moab-versioning", "~> 1.4"
+gem "moab-versioning"
 gem 'rails', '3.2.21'
 # gem 'rails', '~> 4'
 # gem 'rails'
 # gem "blacklight", '~> 3'
-gem "blacklight", '~> 4'
-# gem "blacklight"
+# gem "blacklight", '~> 4'
+gem "blacklight"
 # gem 'blacklight-hierarchy', "~> 0.0.3"
 # gem 'blacklight-hierarchy', "~> 0.1.0"
 gem 'net-sftp'
@@ -69,7 +68,8 @@ group :assets do
   # gem 'coffee-rails', '~> 3.2.1'
   gem 'coffee-rails'
   gem 'uglifier', '>= 1.0.3'
-  gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
+  # gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
+  gem 'jquery-rails'
   gem 'jquery-validation-rails'
   gem 'therubyracer', "~> 0.11"
   # gem 'sass-rails', '~> 3.2.0'
