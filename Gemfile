@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem 'stanford-mods'
 gem 'mods_display'
 # gem 'dor-services', ">= 4.15.2"
-gem 'dor-services', :git => "/Users/suntzu/rails_projects/dor-services/", :branch => "rails4"
+gem 'dor-services', :git => "https://github.com/sul-dlss/dor-services.git", :branch => "rails4"
 gem 'dor-workflow-service'
 gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning"
@@ -15,6 +15,7 @@ gem 'rails', '3.2.21'
 gem "blacklight"
 # gem 'blacklight-hierarchy', "~> 0.0.3"
 # gem 'blacklight-hierarchy', "~> 0.1.0"
+gem 'osullivan', :git => "git://github.com/sul-dlss/osullivan.git", :branch => "development"  #TODO: this shouldn't remain in the final version since it's not a direct dependency of argo
 gem 'net-sftp'
 gem 'rake'
 gem 'about_page'
