@@ -5,17 +5,12 @@ gem 'mods_display'
 # gem 'dor-services', ">= 4.15.2"
 gem 'dor-services', :git => "https://github.com/sul-dlss/dor-services.git", :branch => "rails4"
 gem 'dor-workflow-service'
-gem "druid-tools", "~> 0.3.0"
+gem "druid-tools", "~> 0.3.0" #TODO: does argo use this directly?  can i get rid of this?
 gem "moab-versioning"
-gem 'rails', '3.2.21'
-# gem 'rails', '~> 4'
-# gem 'rails'
-# gem "blacklight", '~> 3'
-# gem "blacklight", '~> 4'
-gem "blacklight"
-# gem 'blacklight-hierarchy', "~> 0.0.3"
-# gem 'blacklight-hierarchy', "~> 0.1.0"
-gem 'osullivan', :git => "git://github.com/sul-dlss/osullivan.git", :branch => "development"  #TODO: this shouldn't remain in the final version since it's not a direct dependency of argo
+gem 'rails', '~> 4'
+gem "blacklight", '~> 5'
+gem 'blacklight-hierarchy'
+gem 'osullivan', '~> 0.0.3' #TODO: might want to remove this entirely since argo doesn't use it directly
 gem 'net-sftp'
 gem 'rake'
 gem 'about_page'
@@ -26,9 +21,11 @@ gem 'prawn'
 gem 'prawn-table'
 gem 'barby'
 gem 'ruby-graphviz'
-gem "solrizer-fedora"
+# gem "solrizer-fedora"
+gem "solrizer"
 gem 'active-fedora'
-gem "rsolr", :git => "https://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
+gem "rsolr"
+gem "nokogiri", "=1.6.5" #TODO: this should go, i just needed to get rid of nokogiri upgrade errors to do other stuff first
 gem "rsolr-client-cert", "~> 0.5.2"
 gem 'confstruct', "~> 0.2.4"
 gem "mysql2", "= 0.3.13"
