@@ -3,39 +3,39 @@ Argo::Application.routes.draw do
 
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
-  match 'view/opensearch', :to => 'catalog#opensearch', :as => "opensearch_catalog"
-  match 'view/citation', :to => 'catalog#citation', :as => "citation_catalog"
-  match 'view/email', :to => 'catalog#email', :as => "email_catalog"
-  match 'view/sms', :to => 'catalog#sms', :as => "sms_catalog"
-  match 'view/endnote', :to => 'catalog#endnote', :as => "endnote_catalog"
-  match 'view/send_email_record', :to => 'catalog#send_email_record', :as => "send_email_record_catalog"
-  match "view/facet/:id", :to => 'catalog#facet', :as => 'catalog_facet'
-  match 'view/unapi', :to => "catalog#unapi", :as => 'unapi'
+  match 'view/opensearch', :to => 'catalog#opensearch', :via => [:get, :post]
+  match 'view/citation', :to => 'catalog#citation', :via => [:get, :post]
+  match 'view/email', :to => 'catalog#email', :via => [:get, :post]
+  match 'view/sms', :to => 'catalog#sms', :via => [:get, :post]
+  match 'view/endnote', :to => 'catalog#endnote', :via => [:get, :post]
+  match 'view/send_email_record', :to => 'catalog#send_email_record', :via => [:get, :post]
+  match "view/facet/:id", :to => 'catalog#facet', :via => [:get, :post]
+  match 'view/unapi', :to => "catalog#unapi", :via => [:get, :post], :as => 'unapi'
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
-  match 'view/:id/dc', :to => "catalog#show_aspect", :template => 'dc', :as => "dc_aspect_view_catalog"
-  match 'view/:id/ds/:dsid', :to => "catalog#show_aspect", :template => 'ds', :as => 'ds_aspect_view_catalog'
-  match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :as => "datastream_view_catalog"
-  match 'view/:id/librarian_view', :to => "catalog#librarian_view", :as => "librarian_view_catalog"
-  match '/catalog', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
-  match '/catalog/*all', :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  match 'view/:id/dc', :to => "catalog#show_aspect", :via => [:get, :post], :template => 'dc', :as => "dc_aspect_view_catalog"
+  match 'view/:id/ds/:dsid', :to => "catalog#show_aspect", :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
+  match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :via => [:get, :post], :as => "datastream_view_catalog"
+  match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
+  match '/catalog', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  match '/catalog/*all', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   mount AboutPage::Engine => '/about(.:format)'
-  match '/report', :to => "report#index", :as => "report"
-  match '/report/data', :to => "report#data", :as => "report_data"
-  match '/report/download', :to => "report#download", :as => "report_download"
-  match '/report/bulk', :to => "report#bulk", :as => "report_bulk"
-  match 'report/pids', :to => "report#pids", :as => 'report_pids'
-  match '/report/workflow_grid', :to => "report#workflow_grid", :as => "report_workflow_grid"
-  match 'report/reset', :to => "report#reset", :as => 'report_reset'
-  match 'discovery', :to => 'discovery#index', :as => 'discovery'
-  match '/discovery/data', :to => "discovery#data", :as => "discovery_data"
-  match 'discovery/download', :to => 'discovery#download', :as => 'discovery_download'
-  match '/apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :as => 'is_valid_role_list'
+  match '/report', :to => "report#index", :via => [:get, :post], :as => "report"
+  match '/report/data', :to => "report#data", :via => [:get, :post], :as => "report_data"
+  match '/report/download', :to => "report#download", :via => [:get, :post], :as => "report_download"
+  match '/report/bulk', :to => "report#bulk", :via => [:get, :post], :as => "report_bulk"
+  match 'report/pids', :to => "report#pids", :via => [:get, :post], :as => 'report_pids'
+  match '/report/workflow_grid', :to => "report#workflow_grid", :via => [:get, :post], :as => "report_workflow_grid"
+  match 'report/reset', :to => "report#reset", :via => [:get, :post], :as => 'report_reset'
+  match 'discovery', :to => 'discovery#index', :via => [:get, :post], :as => 'discovery'
+  match '/discovery/data', :to => "discovery#data", :via => [:get, :post], :as => "discovery_data"
+  match 'discovery/download', :to => 'discovery#download', :via => [:get, :post], :as => 'discovery_download'
+  match '/apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :via => [:get, :post], :as => 'is_valid_role_list'
   
   root :to => "catalog#index"
 
-  match 'login',          :to => 'auth',       :as => 'new_user_session'
-  match 'logout',         :to => 'auth',       :as => 'destroy_user_session'
-  match 'profile',        :to => 'auth',       :as => 'edit_user_registration'
+  match 'login',          :to => 'auth',       :as => 'new_user_session', :via => [:get, :post]
+  match 'logout',         :to => 'auth',       :as => 'destroy_user_session', :via => [:get, :post]
+  match 'profile',        :to => 'auth',       :as => 'edit_user_registration', :via => [:get, :post]
   
   namespace :report do
     get '/workflow_grid', :action => :workflow_grid
@@ -87,17 +87,21 @@ Argo::Application.routes.draw do
     delete '/file', :on => :member, :action => :delete_file, :as => 'delete_file'
     post '/add_file', :on => :member, :action => :add_file, :as => 'add_file'
     post '/file/attributes', :on => :member, :action => :update_attributes, :as => 'update_attributes'
-    get 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
-    post 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
-    get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
-    post 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
+    # get 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
+    # post 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui'
+    match 'close_version_ui', :on => :member, :action => :close_version_ui, :as => 'close_version_ui', :via => [:get, :post]
+    # get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
+    # post 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
+    match 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui', :via => [:get, :post]
     get '/version/open', :action=>:open_version, :as => 'open_version'
     get '/source_id_ui', :on => :member, :action => :source_id_ui, :as => 'source_id_ui'
     get '/tags_ui', :on => :member, :action => :tags_ui, :as => 'tags_ui'
-    get '/tags', :on => :member, :action => :tags, :as => 'tags'
-    post '/tags', :on => :member, :action => :tags, :as => 'tags'
-    get '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
-    post '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
+    # get '/tags', :on => :member, :action => :tags, :as => 'tags'
+    # post '/tags', :on => :member, :action => :tags, :as => 'tags'
+    match '/tags', :on => :member, :action => :tags, :as => 'tags', :via => [:get, :post]
+    # get '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
+    # post '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
+    match '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk', :via => [:get, :post]
     get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
     get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
     post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
@@ -152,10 +156,10 @@ end
     get 'configuration'
     get 'label'
     get 'query_by_id'
-    match 'republish/:pid', :action => :republish
-    match 'archive/:pid', :action => :archive_workflows
-    match 'reindex/:pid', :action => :reindex, :as => 'reindex'
-    match 'delete_from_index/:pid', :action => :delete_from_index
+    match 'republish/:pid', :action => :republish, :via => [:get, :post]
+    match 'archive/:pid', :action => :archive_workflows, :via => [:get, :post]
+    match 'reindex/:pid', :action => :reindex, :as => 'reindex', :via => [:get, :post]
+    match 'delete_from_index/:pid', :action => :delete_from_index, :via => [:get, :post]
     get 'index_exceptions'
     resources :objects 
   end

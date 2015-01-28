@@ -13,10 +13,10 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: ae5baf694cda0a558d331dd4f04bd508bab3a248
+  revision: dccb44c5054b34961a3deb506dd6253aab426528
   branch: rails4
   specs:
-    dor-services (5.0.0)
+    dor-services (4.17.0)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       addressable (= 2.3.5)
@@ -33,7 +33,7 @@ GIT
       om (~> 3.0)
       osullivan (~> 0.0.3)
       progressbar (~> 0.21.0)
-      rdf (~> 1.0.9.0)
+      rdf (~> 1.1.7)
       rest-client (~> 1.6.7)
       rsolr-ext (~> 1.0.3)
       ruby-cache (~> 0.3.0)
@@ -97,7 +97,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.5)
     arel (6.0.0)
-    autoprefixer-rails (5.0.0.2)
+    autoprefixer-rails (5.0.0.3)
       execjs
       json
     bagit (0.3.2)
@@ -114,6 +114,10 @@ GEM
     blacklight-hierarchy (0.1.0)
       blacklight (~> 5, < 6)
       rails (~> 4.1)
+    blacklight-marc (5.5.0)
+      blacklight (~> 5.8)
+      marc (>= 0.4.3, < 1.1)
+      rails
     bootstrap-sass (3.3.3)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
@@ -163,7 +167,7 @@ GEM
       debugger-linecache (~> 1.2.0)
       debugger-ruby_core_source (~> 1.3.5)
     debugger-linecache (1.2.0)
-    debugger-ruby_core_source (1.3.7)
+    debugger-ruby_core_source (1.3.8)
     deprecation (0.1.0)
       activesupport
     diff-lcs (1.2.5)
@@ -175,6 +179,7 @@ GEM
       nokogiri (~> 1.6.0)
       rest-client (~> 1.6.7)
     druid-tools (0.3.1)
+    ensure_valid_encoding (0.5.3)
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
@@ -217,6 +222,7 @@ GEM
       activesupport (>= 3.0.0)
     kgio (2.9.3)
     libv8 (3.16.14.7)
+    link_header (0.0.8)
     logger (1.2.8)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
@@ -232,6 +238,10 @@ GEM
       capistrano-releaseboard (~> 0)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    marc (0.8.2)
+      ensure_valid_encoding
+      scrub_rb (>= 1.0.1, < 2)
+      unf
     mediashelf-loggable (0.4.10)
     method_source (0.8.2)
     mime-types (1.25.1)
@@ -243,9 +253,9 @@ GEM
       nokogiri
       nokogiri-happymapper
       systemu
-    mods (2.0.0)
+    mods (2.0.1)
       iso-639
-      nokogiri (< 1.6.6)
+      nokogiri
       nom-xml
     mods_display (0.3.3)
       i18n
@@ -325,17 +335,18 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (10.4.2)
-    rdf (1.0.9)
-      addressable (>= 2.3)
+    rdf (1.1.7)
+      link_header (~> 0.0, >= 0.0.8)
     rdf-rdfxml (1.0.1)
       rdf (>= 1.0)
       rdf-xsd (>= 1.0)
-    rdf-xsd (1.0.2.1)
-      nokogiri (>= 1.5.0)
-      rdf (>= 0.3.4)
+    rdf-xsd (1.1.2)
+      rdf (~> 1.1)
     rdoc (4.2.0)
       json (~> 1.4)
     ref (1.0.5)
+    responders (2.1.0)
+      railties (>= 4.2.0, < 5)
     rest-client (1.6.8)
       mime-types (~> 1.16)
       rdoc (>= 2.4.2)
@@ -383,6 +394,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (~> 1.1)
+    scrub_rb (1.0.1)
     selenium-webdriver (2.44.0)
       childprocess (~> 0.5)
       multi_json (~> 1.0)
@@ -419,7 +431,7 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh
       term-ansicolor
-    stanford-mods (1.0.3)
+    stanford-mods (1.1.2)
       mods
     stomp (1.3.4)
     systemu (2.6.4)
@@ -443,6 +455,9 @@ GEM
     uglifier (2.7.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.6)
     unicode (0.4.4.2)
     unicorn (4.8.3)
       kgio (~> 2.6)
@@ -465,6 +480,7 @@ DEPENDENCIES
   barby
   blacklight (~> 5)
   blacklight-hierarchy
+  blacklight-marc
   bootstrap-sass
   capistrano (= 3.2.1)
   capistrano-rails
@@ -502,6 +518,7 @@ DEPENDENCIES
   rack-webauth!
   rails (~> 4)
   rake
+  responders (~> 2.0)
   rest-client
   rsolr
   rsolr-client-cert (~> 0.5.2)

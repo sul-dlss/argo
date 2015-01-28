@@ -3,12 +3,14 @@ source "https://rubygems.org"
 gem 'stanford-mods'
 gem 'mods_display'
 # gem 'dor-services', ">= 4.15.2"
-gem 'dor-services', :git => "https://github.com/sul-dlss/dor-services.git", :branch => "rails4"
+gem 'dor-services', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'rails4'
 gem 'dor-workflow-service'
-gem "druid-tools", "~> 0.3.0" #TODO: does argo use this directly?  can i get rid of this?
-gem "moab-versioning"
+gem 'druid-tools', '~> 0.3.0' #TODO: does argo use this directly?  can i get rid of this?
+gem 'moab-versioning'
 gem 'rails', '~> 4'
-gem "blacklight", '~> 5'
+gem 'responders', '~> 2.0'
+gem 'blacklight', '~> 5'
+gem 'blacklight-marc'
 gem 'blacklight-hierarchy'
 gem 'osullivan', '~> 0.0.3' #TODO: might want to remove this entirely since argo doesn't use it directly
 gem 'net-sftp'
