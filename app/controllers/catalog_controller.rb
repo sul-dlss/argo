@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
 class CatalogController < ApplicationController  
+  include Blacklight::Marc::Catalog
 
   include BlacklightSolrExtensions
   include Blacklight::Catalog

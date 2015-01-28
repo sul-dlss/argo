@@ -1,6 +1,7 @@
 Argo::Application.routes.draw do
 
 
+  Blacklight::Marc.add_routes(self)
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
   match 'view/opensearch', :to => 'catalog#opensearch', :via => [:get, :post]
@@ -15,7 +16,8 @@ Argo::Application.routes.draw do
   match 'view/:id/dc', :to => "catalog#show_aspect", :via => [:get, :post], :template => 'dc', :as => "dc_aspect_view_catalog"
   match 'view/:id/ds/:dsid', :to => "catalog#show_aspect", :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
   match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :via => [:get, :post], :as => "datastream_view_catalog"
-  match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
+  #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
+  # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
   match '/catalog', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/catalog/*all', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   mount AboutPage::Engine => '/about(.:format)'
