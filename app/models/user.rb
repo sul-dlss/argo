@@ -5,13 +5,13 @@ class User < ActiveRecord::Base
   attr_accessor :webauth
 
   def self.find_or_create_by_webauth(webauth)
-    result = self.find_or_create_by_sunetid(webauth.login)
+    result = self.find_or_create_by(:sunetid => webauth.login)
     result.webauth = webauth
     result
   end
 
   def self.find_or_create_by_remoteuser username
-    result = self.find_or_create_by_sunetid(username)
+    result = self.find_or_create_by(:sunetid => username)
     result
   end
 
