@@ -9,51 +9,54 @@
 # from scratch. The latter is a flawed and unsustainable approach (the more migrations
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
-# It's strongly recommended to check this file into your version control system.
+# It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130710164606) do
+ActiveRecord::Schema.define(version: 20150128201043) do
 
-  create_table "bookmarks", :force => true do |t|
-    t.integer  "user_id",     :null => false
-    t.string   "document_id"
-    t.string   "title"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-    t.string   "user_type"
+  create_table "bookmarks", force: :cascade do |t|
+    t.integer  "user_id",                   null: false
+    t.string   "document_id",   limit: 255
+    t.string   "title",         limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "user_type",     limit: 255
+    t.string   "document_type"
   end
 
-  create_table "indexing_exceptions", :force => true do |t|
-    t.string   "pid"
+  add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
+
+  create_table "indexing_exceptions", force: :cascade do |t|
+    t.string   "pid",                  limit: 255
     t.text     "solr_document"
-    t.string   "dor_services_version"
+    t.string   "dor_services_version", limit: 255
     t.text     "exception"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
   end
 
-  add_index "indexing_exceptions", ["pid"], :name => "index_indexing_exceptions_on_pid"
+  add_index "indexing_exceptions", ["pid"], name: "index_indexing_exceptions_on_pid"
 
-  create_table "robots", :force => true do |t|
-    t.string   "wf"
-    t.string   "process"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+  create_table "robots", force: :cascade do |t|
+    t.string   "wf",         limit: 255
+    t.string   "process",    limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
-  create_table "searches", :force => true do |t|
+  create_table "searches", force: :cascade do |t|
     t.text     "query_params"
     t.integer  "user_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-    t.string   "user_type"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.string   "user_type",    limit: 255
   end
 
-  add_index "searches", ["user_id"], :name => "index_searches_on_user_id"
+  add_index "searches", ["user_id"], name: "index_searches_on_user_id"
 
-  create_table "users", :force => true do |t|
-    t.string   "sunetid"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+  create_table "users", force: :cascade do |t|
+    t.string   "sunetid",    limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
 end
