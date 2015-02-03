@@ -1,14 +1,14 @@
 <% 
   @page_title = "#{application_name} - #{Array(document_show_html_title).first.to_s.ellipsize(:max => 50)}"
   ensure_current_document_version if Argo::Config[:reindex_on_the_fly]
-  @footer = "Argo v#{Argo.version} / DOR Services v#{@document.get(ActiveFedora::SolrService.solr_name('dor_services_version',:string,:facetable))}"
+  @footer = "Argo v#{Argo.version} / DOR Services v#{@document.get(ActiveFedora::SolrService.solr_name('dor_services_version', :symbol))}"
 %>
-
-<% sidebar_items << capture do %>
-  <%= render :partial => '/catalog/show_external_links', :locals => { :document => @document, :object => @object } %>
-  <%= render :partial => '/catalog/show_embargo_sidebar', :locals => { :document => @document } %>
-<% end %>
 
 <div id="document-sections">
   <%= render_document_sections(@document,:show) %>
+</div>
+
+<div id="sidebar" class="col-md-3 col-sm-4">
+  <%= render :partial => '/catalog/show_external_links', :locals => { :document => @document, :object => @object } %>
+  <%= render :partial => '/catalog/show_embargo_sidebar', :locals => { :document => @document } %>
 </div>
