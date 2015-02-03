@@ -28,12 +28,11 @@ class CatalogController < ApplicationController
       :'f.tag_facet.facet.sort' => 'index'
     }
 
-    config.index.show_link = 'id'
-    config.index.record_display_type = 'content_type_facet'
+    config.index.title_field = 'id'
+    config.index.display_type_field = 'content_type_facet'
 
-    config.show.html_title   = 'obj_label_t'
-    config.show.heading      = 'obj_label_t'
-    config.show.display_type = 'objectType_t'
+    config.show.title_field  = 'obj_label_t'
+    config.show.display_type_field = 'objectType_t'
     config.show.sections = {
       :default => ['identification','datastreams','history','contents'],
       :item    => ['identification','datastreams','history','contents','child_objects']
