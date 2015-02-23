@@ -116,10 +116,10 @@ Argo::Application.routes.draw do
     post '/set_rights', :on => :member, :action => :set_rights
     get '/preserved_file', :on => :member, :action => :get_preserved_file
     post :release_hold, :on => :member
-    get :add_workflow, :on => :member
-    post :add_workflow, :on => :member
+    match :add_workflow, :on => :member, :action => :add_workflow, :as => 'add_workflow', :via => [:get, :post]
     get :apply_apo_defaults, :on => :member
     get :fix_missing_provenance, :on => :member
+    match :update_resource, :on => :member, :action => :update_resource, :as => 'update_resource', :via => [:get, :post]
 end
 
   namespace :items do
