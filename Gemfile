@@ -54,7 +54,7 @@ group :test, :development do
   gem "rack-test", :require => "rack/test"
   gem 'simplecov', :require => false
   gem 'pry'
-  gem 'pry-debugger'
+# gem 'pry-debugger'  # debugger can't handle ruby 2.x
   gem 'pry-remote'
   gem 'pry-rails'
 end
