@@ -71,5 +71,5 @@ end
 group :deployment do
   gem 'capistrano', '~> 3.0'
   gem 'capistrano-rails'
-  gem 'lyberteam-capistrano-devel', '=3.1.0.pre1'
+  gem 'lyberteam-capistrano-devel', '3.1.0'
 end
