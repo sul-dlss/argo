@@ -52,10 +52,10 @@ group :test, :development do
   gem 'capybara'
   gem "rack-test", :require => "rack/test"
   gem 'simplecov', :require => false
-  gem 'pry'
-  gem 'pry-debugger'
-  gem 'pry-remote'
-  gem 'pry-rails'
+  gem 'pry', :platform => :ruby_19
+  gem 'pry-debugger', :platform => :ruby_19  # debugger can't handle ruby 2.x
+  gem 'pry-remote', :platform => :ruby_19
+  gem 'pry-rails', :platform => :ruby_19
 end
 
 group :development do
