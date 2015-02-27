@@ -35,15 +35,15 @@ Argo::Application.routes.draw do
   
   root :to => "catalog#index"
 
-  match 'login',          :to => 'auth',       :as => 'new_user_session', :via => [:get, :post]
-  match 'logout',         :to => 'auth',       :as => 'destroy_user_session', :via => [:get, :post]
-  match 'profile',        :to => 'auth',       :as => 'edit_user_registration', :via => [:get, :post]
+  match 'login',   :controller => 'auth', :as => 'new_user_session',       :via => [:get, :post]
+  match 'logout',  :controller => 'auth', :as => 'destroy_user_session',   :via => [:get, :post]
+  match 'profile', :controller => 'auth', :as => 'edit_user_registration', :via => [:get, :post]
   
   namespace :report do
     get '/workflow_grid', :action => :workflow_grid
   end
   resources :robot do
-	end
+  end
   resources :apo do
     get 'apo_ui', :on => :member, :action => :apo_ui, :as => 'apo_ui'
     get 'delete_role', :on => :member
@@ -59,15 +59,15 @@ Argo::Application.routes.draw do
     get :register, :on => :collection
     post :register, :on => :collection
     post :update, :on => :member
-		get :register_collection, :on => :member
-		post :register_collection, :on => :member
+    get :register_collection, :on => :member
+    post :register_collection, :on => :member
   end
   resources :items do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
     get 'purl_preview', :on => :member, :action => :purl_preview, :as => 'purl_preview'
-		get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
+    get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
     get '/refresh_metadata', :on => :member, :action => :refresh_metadata, :as => 'refresh_metadata'
     get '/schema_validate', :on => :member, :action => :schema_validation, :as => 'schema_validation'
     get '/remediate_mods', :on => :member, :action => :remediate_mods, :as => 'remediate_mods'
@@ -154,7 +154,7 @@ end
     get 'forget_impersonated_groups'
   end
 
-	namespace :dor do
+  namespace :dor do
     get 'configuration'
     get 'label'
     get 'query_by_id'
