@@ -1,6 +1,6 @@
 
 <%= javascript_include_tag 'bulk' %>
-<% extra_head_content << capture do %>
+<% content_for :head do %>
 <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
 <script type="text/javascript">
 report_model = {
@@ -55,7 +55,7 @@ ul li{
 <% end %>
 
 <% @page_title = "#{application_name} Search Results" %>
-<% extra_head_content << render_opensearch_response_metadata.html_safe %>
+<% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
 <%= render :partial => 'search_form' %>
 <% if has_search_parameters? %>
 <%= render :partial => 'did_you_mean' %>

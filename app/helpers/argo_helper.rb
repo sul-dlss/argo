@@ -196,7 +196,7 @@ module ArgoHelper
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-      buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :pid => pid), :label => 'Add Workflow'}
+      buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :id => pid), :label => 'Add Workflow'}
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end

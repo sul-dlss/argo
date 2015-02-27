@@ -1,24 +1,24 @@
 <% @page_title = "#{application_name} Queue Status" %>
-<% extra_head_content << render_opensearch_response_metadata.html_safe %>
+<% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
 <%= render :partial => 'search_form' %>
 <% if has_search_parameters? %>
 	<%= render :partial => 'did_you_mean' %>
 	<%= render 'constraints', :localized_params=>params %>
 <% end %>
-  
-<% sidebar_items << capture do %>
-  <%= render :partial=>'facets' %>
-<% end %>
 
-<% extra_head_content << capture do %>
-<script type="text/javascript">
-  var updateTimer;
-  function updateGrid() {
-    $.get('workflow_grid'+$(document).attr('location').search)
-    .success(function(data) { $('#workflow_grid').replaceWith(data) })
-  }
-  $(document).ready(function() { updateTimer = setInterval(updateGrid, 10000) });
-</script>
+<% content_for :head do %>
+  <script type="text/javascript">
+    var updateTimer;
+    function updateGrid() {
+      $.get('workflow_grid'+$(document).attr('location').search)
+      .success(function(data) { $('#workflow_grid').replaceWith(data) })
+    }
+    $(document).ready(function() { updateTimer = setInterval(updateGrid, 10000) });
+  </script>
 <% end %>
 <div style="float:right"><a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a></div>
 <%= render :partial => 'workflow_grid' %>
+  
+<div id="sidebar" class="col-md-3 col-sm-4">
+  <%= render :partial=>'facets' %>
+</div>
