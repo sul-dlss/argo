@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', "~> 5"
+gem 'dor-services', '~> 5', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'develop'
 gem 'dor-workflow-service'
 gem 'druid-tools', '~> 0.3.0' #TODO: does argo use this directly?  can i get rid of this?
 gem 'moab-versioning'
