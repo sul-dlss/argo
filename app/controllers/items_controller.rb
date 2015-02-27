@@ -165,7 +165,7 @@ class ItemsController < ApplicationController
     end
   end
   def update_mods
-    @object.descMetadata.content=params[:xmlstr]
+    @object.descMetadata.content = params[:xmlstr]
     @object.save
     respond_to do |format|
       format.xml  { render :xml => @object.descMetadata.ng_xml.to_s }
