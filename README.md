@@ -9,15 +9,13 @@ Argo is the administrative interface to the Stanford Digital Repository. It uses
 Install Java 1.8 (or newer) JRE (and JDK also on Mac OSX).  It is required for the version of Solr in use.
 http://java.com/en/download/
 
-Install ruby 1.9.3 or later.
+Install ruby 1.9.3 or later (e.g., via rvm).
 
 ### Check Out the Code and Install Ruby Dependencies
     
 ```bash
 git clone https://github.com/sul-dlss/argo.git
 cd argo
-# install ruby (e.g., via rvm)
-# 
 bundle install
 ```
     
