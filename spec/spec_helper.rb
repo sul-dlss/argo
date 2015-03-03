@@ -1,7 +1,6 @@
 require 'simplecov'
 SimpleCov.start
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
@@ -50,7 +49,7 @@ def log_in_as_mock_user(subject)
 end
 
 # Highly similar to https://github.com/sul-dlss/dor-services/blob/master/spec/foxml_helper.rb
-def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::NokogiriDatastream)
+def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::OmDatastream)
   foxml = Nokogiri::XML(foxml) unless foxml.is_a?(Nokogiri::XML::Node)
   xml_streams = foxml.xpath('//foxml:datastream')
   properties = Hash[foxml.xpath('//foxml:objectProperties/foxml:property').collect { |node| 
