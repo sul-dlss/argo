@@ -14,7 +14,7 @@ module RegistrationHelper
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
     end
   end
-  
+
   def utf_val
     "hello world ©"
   end
@@ -31,7 +31,7 @@ module RegistrationHelper
     default_rights=Array.new
     result.each do |apo|
       apo_object = Dor.find(apo['id'], :lightweight => true)
-      adm_xml = apo_object.defaultObjectRights.ng_xml 
+      adm_xml = apo_object.defaultObjectRights.ng_xml
       added=false
 
       adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
@@ -46,7 +46,6 @@ module RegistrationHelper
         apo['rights'] = 'world'
         added=true
         break
-
       end
 
       if apo['rights'].nil?
@@ -120,27 +119,27 @@ module RegistrationHelper
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
     doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
-    
+
     if doc.nil?
       begin
          obj = Dor.load_instance 'druid:'+druid
          solr_doc = obj.to_solr
-          Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-          doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
+         Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
+         doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
       rescue
         pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       end
       return
     end
 
-    ids = Array(doc['mods_identifier_t']).collect do |id| 
+    ids = Array(doc['mods_identifier_t']).collect do |id|
       result = id.split(/:/,2)
       result[0] = "#{result[0].titleize}:"
       result
     end.reject { |id| id[0] =~ /DRUID/i }
 
     barcode = Barby::Code128B.new(druid)
-    barcode.annotate_pdf(pdf, :width => bc_width, :height => bc_height, 
+    barcode.annotate_pdf(pdf, :width => bc_width, :height => bc_height,
     :x => ((pdf.bounds.width / 2) - (bc_width / 2)), :y => (pdf.bounds.height - bc_height))
 
     pdf.y -= (bc_height + 0.25.in)
@@ -149,13 +148,14 @@ module RegistrationHelper
 
     pdf.font('Courier', :size => 10)
 
-    label = doc['obj_label_t'].first
+    labels = doc['obj_label_teim']
+    label  = (labels.nil? || labels.empty?) ? '' : labels.first
     if label.length > 110
       label = label[0..110] + '...'
     end
 
     table_data = [['Object Label:',label]]
-    if project_name = doc['project_tag_t']
+    if project_name = doc['project_tag_sim']
       table_data.push(['Project Name:',project_name.to_s])
     end
 
