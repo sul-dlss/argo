@@ -129,8 +129,8 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       :hierarchy => {
-        'wf' => ['wps','wsp','swp'],
-        'tag' => [nil]
+        'wf' => [['wps','wsp','swp'], ':'],
+        'tag' => [[nil], ':']
       }
     }
 
