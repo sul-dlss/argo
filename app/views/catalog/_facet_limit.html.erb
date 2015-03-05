@@ -13,7 +13,7 @@
     </li>
   <% end %>
 
-  <% if(paginator.has_next?)  %>
+  <% if(!paginator.last_page?)  %>
     <li class="more_facets_link"><%= link_to(t('blacklight.search.facets.more'), params.merge(:id => solr_field, :action=>"facet"), :class => "more_facets_link") %></li>
   <% end %>
 	<%= render_date_pickers(facet_field.field) %>
