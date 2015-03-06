@@ -14,23 +14,21 @@ describe ApoController do
   # ItemsController.any_instance.stub(:current_user).and_return(@current_user)
     log_in_as_mock_user(subject)
   end
-  
+
   describe 'create' do
     it 'should create an apo' do
     end
-    example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR", 
-              "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"", 
-              "collection_title"=>'col title', "collection_abstract"=>"", "default_object_rights"=>"World", "use"=>"", "copyright"=>"", 
+    example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR",
+              "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"",
+              "collection_title"=>'col title', "collection_abstract"=>"", "default_object_rights"=>"World", "use"=>"", "copyright"=>"",
               "cc_license"=>"", "workflow"=>"registrationWF", "register"=>""}
 
     ## WARNING: The next two tests will TIMEOUT if not on Stanford network or VPN
     ## This is clearly a failure to isolate the test aparatus.
     it 'should hit the registration service to register an apo and a collection' do
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
-        expect(params[:label]          ).to eq('New APO Title')
-        expect(params[:object_type]    ).to eq('adminPolicy')
-        expect(params[:admin_policy]   ).to eq('druid:hv992ry2431')
-        expect(params[:metadata_source]).to eq(nil) #descMD is created via the form
+        expect(params).to match a_hash_including(:label => 'New APO Title', :object_type => 'adminPolicy', :admin_policy => 'druid:hv992ry2431')
+        expect(params[:metadata_source]).to be_nil #descMD is created via the form
         {:pid => 'druid:collectionpid'}
       end
       @item.should_receive(:add_roleplayer).exactly(4).times
@@ -58,12 +56,14 @@ describe ApoController do
       mock_new_collection = double(Dor::Collection)
 
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
-        expect(params[:label]          ).to eq(':auto')
-        expect(params[:object_type]    ).to eq('collection')
-        expect(params[:admin_policy]   ).to eq('druid:forapo')
-        expect(params[:other_id]       ).to eq('symphony:'+catkey)
-        expect(params[:metadata_source]).to eq('symphony')
-        expect(params[:rights]         ).to eq("dark")
+        expect(params).to match a_hash_including(
+          :label           => ':auto',
+          :object_type     => 'collection',
+          :admin_policy    => 'druid:forapo',
+          :other_id        => 'symphony:'+catkey,
+          :metadata_source => 'symphony',
+          :rights          => 'dark'
+        )
         {:pid => new_collection_druid}
       end
       Dor.should_receive(:find).with(new_collection_druid).and_return(mock_new_collection)
@@ -80,11 +80,13 @@ describe ApoController do
       mock_desc_md_ds = double(Dor::DescMetadataDS)
 
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
-        expect(params[:label]          ).to eq(title)
-        expect(params[:object_type]    ).to eq('collection')
-        expect(params[:admin_policy]   ).to eq('druid:forapo')
-        expect(params[:metadata_source]).to eq('label')
-        expect(params[:rights]         ).to eq('dark')
+        expect(params).to match a_hash_including(
+          :label           => title,
+          :object_type     => 'collection',
+          :admin_policy    => 'druid:forapo',
+          :metadata_source => 'label',
+          :rights          => 'dark'
+        )
         {:pid => new_collection_druid}
       end
       Dor.should_receive(:find).with(new_collection_druid).and_return(mock_new_collection)
@@ -108,11 +110,13 @@ describe ApoController do
       mock_new_collection = double(Dor::Collection)
 
       Dor::RegistrationService.should_receive(:create_from_request) do |params|
-        expect(params[:label]          ).to eq(title)
-        expect(params[:object_type]    ).to eq('collection')
-        expect(params[:admin_policy]   ).to eq('druid:forapo')
-        expect(params[:metadata_source]).to eq('label')
-        expect(params[:rights]         ).to eq('dark')
+        expect(params).to match a_hash_including(
+          :label           => title,
+          :object_type     => 'collection',
+          :admin_policy    => 'druid:forapo',
+          :metadata_source => 'label',
+          :rights          => 'dark'
+        )
         {:pid => new_collection_druid}
       end
       Dor.should_receive(:find).with(new_collection_druid).and_return(mock_new_collection)
