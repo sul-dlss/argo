@@ -45,7 +45,7 @@ RSpec.configure do |config|
 end
 
 def log_in_as_mock_user(subject)
-  subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
+  allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
 end
 
 # Highly similar to https://github.com/sul-dlss/dor-services/blob/master/spec/foxml_helper.rb
