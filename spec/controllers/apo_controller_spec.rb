@@ -8,7 +8,7 @@ describe ApoController, :type => :controller do
       allow(item).to receive(:udpate_index) unless item.nil?
       item
     end
-  # Dor::WorkflowService.stub(:get_workflow_xml) { xml }
+  # allow(Dor::WorkflowService).to receive(:get_workflow_xml).and_return("")
     @item = Dor::AdminPolicyObject.find("druid:zt570tx3016")
     @empty_item = Dor::AdminPolicyObject.find("pw570tx3016")
   # ItemsController.any_instance.stub(:current_user).and_return(@current_user)
@@ -17,6 +17,7 @@ describe ApoController, :type => :controller do
 
   describe 'create' do
     it 'should create an apo' do
+      skip "Unimplemented"
     end
     example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR",
               "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"",
