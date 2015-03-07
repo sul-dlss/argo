@@ -91,13 +91,10 @@ describe ApoController, :type => :controller do
         {:pid => new_collection_druid}
       end
       expect(Dor).to receive(:find).with(new_collection_druid).and_return(mock_new_collection)
-      expect(mock_new_collection).to receive(:descMetadata).and_return(mock_desc_md_ds)
+      expect(mock_new_collection).to receive(:descMetadata).and_return(mock_desc_md_ds).exactly(4).times
       expect(mock_desc_md_ds).to receive(:abstract=).with(abstract)
-      expect(mock_new_collection).to receive(:descMetadata).and_return(mock_desc_md_ds)
       expect(mock_desc_md_ds).to receive(:ng_xml)
-      expect(mock_new_collection).to receive(:descMetadata).and_return(mock_desc_md_ds)
       expect(mock_desc_md_ds).to receive(:content=)
-      expect(mock_new_collection).to receive(:descMetadata).and_return(mock_desc_md_ds)
       expect(mock_desc_md_ds).to receive(:save)
       expect(mock_new_collection).to receive(:save)
       expect(mock_new_collection).to receive(:update_index)
