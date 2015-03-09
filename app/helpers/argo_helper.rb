@@ -163,7 +163,7 @@ module ArgoHelper
     sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
     result = ''
     sections.each_with_index do |section_name,index|
-      result += render(:partial=>"catalog/_#{action_name}_partials/section", :locals=>{:document=>doc, :object=>dor_object, :format=>format, :section=>section_name, :collapsible=>(index > 0)})
+      result += render(:partial=>"catalog/#{action_name}_section", :locals=>{:document=>doc, :object=>dor_object, :format=>format, :section=>section_name, :collapsible=>(index > 0)})
     end
     return result.html_safe
   end
@@ -196,7 +196,7 @@ module ArgoHelper
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-      buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :pid => pid), :label => 'Add Workflow'}
+      buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :id => pid), :label => 'Add Workflow'}
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
@@ -236,7 +236,7 @@ module ArgoHelper
 
   def render_date_pickers(field_name)
     if field_name =~ /_date/
-      render(:partial => 'catalog/_show_partials/date_choice', :locals => {:field_name => field_name})
+      render(:partial => 'catalog/show_date_choice', :locals => {:field_name => field_name})
     end
   end
 

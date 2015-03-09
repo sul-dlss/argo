@@ -12,12 +12,10 @@ describe 'mods_view' do
   end
   context "main page tests" do
     it 'should have the expected heading for search facets' do
-      pending 'debug indicates this visits the wrong place (http://www.example.com).  probably also not stubbing the user (since CatalogController is invoked here, not ItemsController).'
       visit root_path
       expect(page).to have_content('Limit your search')
     end
     it 'should have the expected search facets' do
-      pending 'debug indicates this visits the wrong place (http://www.example.com).  probably also not stubbing the user (since CatalogController is invoked here, not ItemsController).'
       search_facets = ['Object Type', 'Content Type', 'Admin Policy', 'Lifecycle', 'Workflows (WPS)', 'Version']
       visit root_path
       search_facets.each do |facet|

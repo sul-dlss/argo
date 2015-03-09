@@ -1,4 +1,4 @@
-<% extra_head_content << capture do %>
+<% content_for :head do %>
   <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
   <script type="text/javascript">
     report_model = {
@@ -14,19 +14,19 @@
 	<%= render 'home' %>
 <% else %>
   <% @page_title = "#{application_name} Search Results" %>
-  <% extra_head_content << render_opensearch_response_metadata.html_safe %>
+  <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
 	<%= render :partial => 'search_form' %>
   <% if has_search_parameters? %>
     <%= render :partial => 'did_you_mean' %>
     <%= render 'constraints', :localized_params=>params %>
   <% end %>
-  
-	<% sidebar_items << capture do %>
-    <%= render :partial=>'facets' %>
-	<% end %>
 
   <div id="report_container">
     <table id="report_grid"></table>
     <div id="preport_grid"></div>
+  </div>
+  
+  <div id="sidebar" class="col-md-3 col-sm-4">
+    <%= render :partial=>'facets' %>
   </div>
 <% end %>

@@ -1,9 +1,10 @@
 require 'spec_helper'
 
-describe 'report/workflow_grid' do
+describe 'report/workflow_grid', :type => :view do
   before do
-    view.stub(:extra_head_content).and_return([])
-    view.stub(:blacklight_config).and_return(ReportController.blacklight_config)
+    allow(view).to receive(:content_for).with(:head).and_return([])
+    allow(view).to receive(:blacklight_config).and_return(ReportController.blacklight_config)
+    allow(view).to receive(:has_search_parameters?).and_return(false)
     stub_template '_search_form' => '', '_did_you_mean' => '', '_constraints' => '', '_facets' => ''
   end
   it "should display all the workflow states" do

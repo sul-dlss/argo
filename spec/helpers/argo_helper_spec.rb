@@ -1,22 +1,24 @@
 require 'spec_helper'
 describe ArgoHelper do
-    describe 'render_document_show_thumbnail' do
-        it 'should include a thumbnail url' do
-            doc={'first_shelved_image_display'=>['testimage.jp2']}
-            link=helper.render_document_show_thumbnail(doc)
-            #alt is blank, points to thumb rather than fixed 240x240
-            expect(link).to match 'testimage_thumb" style="max-width:240px;max-height:240px;" />'
-        end
+  describe 'render_document_show_thumbnail' do
+    it 'should include a thumbnail url' do
+      doc={'first_shelved_image_display'=>['testimage.jp2']}
+      expect(helper.render_document_show_thumbnail(doc)  ).to  \
+        match(/src=".*testimage_thumb"/                  ).and \
+        match(/style="max-width:240px;max-height:240px;"/).and \
+        match(/alt=""/)
     end
-    describe 'render_index_thumbnail' do
-        it 'should include a thumbnail url' do
-            doc={'first_shelved_image_display'=>['testimage.jp2']}
-            link=helper.render_index_thumbnail(doc)
-            #alt is blank, points to thumb rather than fixed sie 80x80 or 240x240
-            expect(link).to match 'testimage_thumb" style="max-width:80px;max-height:80px;" />'
-        end
+  end
+  describe 'render_index_thumbnail' do
+    it 'should include a thumbnail url' do
+      doc={'first_shelved_image_display'=>['testimage.jp2']}
+      expect(helper.render_document_show_thumbnail(doc)  ).to  \
+        match(/src=".*testimage_thumb"/                  ).and \
+        match(/style="max-width:240px;max-height:240px;"/).and \
+        match(/alt=""/)
     end
-    describe 'render_buttons' do
+  end
+  describe 'render_buttons' do
     before :each do
       @object = instantiate_fixture("druid_zt570tx3016", Dor::Item)
       @doc={'id'=>'something', 'is_governed_by_s'=>['apo_druid']}
@@ -51,7 +53,7 @@ describe ArgoHelper do
         'Edit collections'  => '/items/something/collection_ui',
         'Set content type'  => '/items/something/content_type',
       }.each_pair do |k,v|
-        expect(buttons.include?({:label=>k,:url=>v})).to eq(true)
+        expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
       end
     end
     it 'should generate a the same button set for a non admin' do
@@ -66,7 +68,7 @@ describe ArgoHelper do
         'Edit collections'  => '/items/something/collection_ui',
         'Set content type'  => '/items/something/content_type',
       }.each_pair do |k,v|
-        expect(buttons.include?({:label=>k,:url=>v})).to eq(true)
+        expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
       end
     end
     it 'should include the embargo update button if the user is an admin and the object is embargoed' do
@@ -81,7 +83,7 @@ describe ArgoHelper do
         'Set content type'  => '/items/something/content_type',
         'Update embargo'    => '/items/something/embargo_form',
       }.each_pair do |k,v|
-        expect(buttons.include?({:label=>k,:url=>v})).to eq(true)
+        expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
       end
     end
     it 'should inlcude the edit MODS button if there is a desc metadata ds in fedora' do
@@ -90,7 +92,7 @@ describe ArgoHelper do
       @item.datastreams['descMetadata'].stub(:new?).and_return(false)
       Dor.stub(:find).and_return(@item)
       @item.identityMetadata.should_receive(:otherId).and_return([],[])
-      expect(helper.render_buttons(@doc).include?({:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true})).to eq(true)
+      expect(helper.render_buttons(@doc).include?({:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true})).to be_truthy
     end
     it 'should exclude the edit mods button if the item has a catkey in otherids, meaning it uses symphony as its metadata source' do
       @item = instantiate_fixture("druid_zt570tx3016", Dor::AdminPolicyObject)
@@ -105,7 +107,7 @@ describe ArgoHelper do
       @item.identityMetadata.should_receive(:otherId).and_return([],['a1234567'])
       @item.datastreams['descMetadata'].stub(:new?).and_return(false)
       Dor.stub(:find).and_return(@item)
-      expect(helper.render_buttons(@doc).include?({:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true})).to eq(false)
+      expect(helper.render_buttons(@doc).include?({:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true})).to be_falsey
     end
   end
 end

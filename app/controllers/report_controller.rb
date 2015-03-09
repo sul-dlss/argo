@@ -31,7 +31,6 @@ class ReportController < CatalogController
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i,1].max
 
-    delete_or_assign_search_session_params
     @report = Report.new(params)
     
     respond_to do |format|
@@ -82,7 +81,6 @@ class ReportController < CatalogController
   end
     
   def workflow_grid
-    delete_or_assign_search_session_params
     (@response, @document_list) = get_search_results
 
     if request.xhr?

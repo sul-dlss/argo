@@ -94,13 +94,13 @@ module DorObjectHelper
         { :when => render_datetime(event.when), :who => event.who, :what => event.message }
       end
     end
-    render :partial => 'catalog/_show_partials/events', :locals => { :document => doc, :object => obj, :events => events.compact }
+    render :partial => 'catalog/show_events', :locals => { :document => doc, :object => obj, :events => events.compact }
   end
 
   def render_milestones doc, obj
     milestones = SolrDocument::get_milestones(doc)
     version_hash=SolrDocument::get_versions(doc)
-    render :partial => 'catalog/_show_partials/milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
+    render :partial => 'catalog/show_milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 
   def render_status (doc, object=nil)
@@ -208,11 +208,11 @@ module DorObjectHelper
 
     def render_workflows doc, obj
       workflows = {}
-      Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :string, :displayable)]).each do |line|
+      Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :symbol)]).each do |line|
         (wf,status,errors,repo) = line.split(/\|/)
         workflows[wf] = { :status => status, :errors => errors.to_i, :repo => repo }
       end
-      render :partial => 'catalog/_show_partials/workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
+      render :partial => 'catalog/show_workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
     end
 
     # Datastream helpers

@@ -1,3 +1,9 @@
+###
+# * NOTE: this was all written when argo used blacklight 3.x.  now that argo's upgrading to blacklight 5.x, parts are falling out of date, though the whole
+#    thing's commented out anyway, so there's no immediate practical impact.  still, it should either be fixed or discarded instead of being left to rot.
+#    -JM, 2015-01-29 
+###
+
 ## -*- encoding : utf-8 -*-
 ## You can configure Blacklight from here. 
 ##   

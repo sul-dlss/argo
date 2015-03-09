@@ -1,9 +1,9 @@
 <% 
   content = begin
-    render :partial=>"catalog/_#{action_name}_partials/sections/#{format}_#{section}", :locals=>{:document=>document,:format=>format,:object=>object} 
+    render :partial=>"catalog/_#{action_name}_sections/#{format}_#{section}", :locals=>{:document=>document,:format=>format,:object=>object} 
   rescue ActionView::MissingTemplate
     begin
-      render :partial=>"catalog/_#{action_name}_partials/sections/default_#{section}", :locals=>{:document=>document,:format=>format,:object=>object} 
+      render :partial=>"catalog/_#{action_name}_sections/default_#{section}", :locals=>{:document=>document,:format=>format,:object=>object} 
     rescue ActionView::MissingTemplate
       nil
     end

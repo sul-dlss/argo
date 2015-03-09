@@ -27,7 +27,6 @@ class DiscoveryController < CatalogController
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i,1].max
 
-    delete_or_assign_search_session_params
     @report = Discovery.new(params)
     
     respond_to do |format|

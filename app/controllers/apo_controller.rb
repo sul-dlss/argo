@@ -98,9 +98,9 @@ class ApoController < ApplicationController
   def register_new_apo
     reg_params = {:workflow_priority => '70'}
     reg_params[:label] = params[:title]
-    reg_params[:object_type] = 'adminPolicy'
+    reg_params[:object_type ] = 'adminPolicy'
     reg_params[:admin_policy] = 'druid:hv992ry2431'
-    reg_params[:workflow_id] = 'accessionWF'
+    reg_params[:workflow_id ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     apo_pid = response[:pid]
     apo = Dor.find(apo_pid)
@@ -127,7 +127,7 @@ class ApoController < ApplicationController
     add_roleplayers_to_object(apo, viewers, 'dor-apo-viewer')
 
     apo.save
-    apo.update_index
+    update_index(apo)
     notice = 'APO created. '
     if collection_pid
       notice += "Collection #{collection_pid} created."
@@ -140,6 +140,12 @@ class ApoController < ApplicationController
     [:managers, :viewers].each do |role_param_sym|
       params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless not params[role_param_sym]
     end
+  end
+
+  # wrapper around call to update_index for various objects (APO, collection, item)
+  # provides easily-stubbed method for testing (instead of all object types)
+  def update_index(obj)
+    obj.update_index
   end
 
   def update
@@ -170,7 +176,7 @@ class ApoController < ApplicationController
     add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
 
     @object.save
-    @object.update_index
+    update_index(@object)
     redirect
   end
 
@@ -211,7 +217,7 @@ class ApoController < ApplicationController
       set_abstract(collection, params[:collection_abstract])
     end
     collection.save
-    collection.update_index
+    update_index(collection)
     return collection_pid
   end
 

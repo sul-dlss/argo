@@ -398,11 +398,16 @@ describe 'mods' do
 end
 describe 'update_mods' do
   it 'should update the mods for a POST' do
-    xml='<somexml>stuff</somexml>'
-    descmd=double()
+    xml = '<somexml>stuff</somexml>'
+    descmd = double()
+
+    @item.should_receive(:descMetadata).and_return(descmd)
     descmd.should_receive(:content=).with(xml)
     @item.should_receive(:descMetadata).and_return(descmd)
-    post 'update_mods', :id => @pid, :xmlstr => xml
+    descmd.should_receive(:ng_xml).and_return(xml)
+
+    post 'update_mods', :id => @pid, :xmlstr => xml, :format => 'xml'
+    expect(response.body).to eq(xml)
   end
   it 'should 403 if they arent permitted' do
     @current_user.stub(:is_admin).and_return(false)

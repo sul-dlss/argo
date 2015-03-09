@@ -12,13 +12,12 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
 //
 // Required by Blacklight
 //= require blacklight/blacklight
 //
 // Required by Blacklight Hierarchical Facet Plugin
-//= require blacklight/hierarchy/hierarchy
+//TODO = require blacklight/hierarchy/hierarchy
 //
 // Required by Argo
 //= require argo
