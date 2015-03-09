@@ -1,0 +1,9 @@
+Description:
+    Creates a basic Solr configuration file
+
+Example:
+    rails generate solryml
+    rails generate solryml your.production.server.com
+
+    This will create:
+        config/solr.yml
