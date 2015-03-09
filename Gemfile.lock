@@ -236,11 +236,11 @@ GEM
       nokogiri (>= 1.4.3.1)
       systemu (>= 1.2.0)
       validatable
-    lyberteam-capistrano-devel (3.1.0.pre1)
+    lyberteam-capistrano-devel (3.1.0)
       capistrano (~> 3.0)
-      capistrano-bundle_audit (~> 0)
-      capistrano-one_time_key (~> 0)
-      capistrano-releaseboard (~> 0)
+      capistrano-bundle_audit (>= 0.0.3)
+      capistrano-one_time_key
+      capistrano-releaseboard
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     marc (1.0.0)
@@ -508,7 +508,7 @@ DEPENDENCIES
   jquery-validation-rails
   kaminari
   kgio
-  lyberteam-capistrano-devel (= 3.1.0.pre1)
+  lyberteam-capistrano-devel (= 3.1.0)
   moab-versioning
   mods_display
   mysql2 (= 0.3.13)
