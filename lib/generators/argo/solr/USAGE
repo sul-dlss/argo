@@ -2,8 +2,8 @@ Description:
     Creates a basic Solr configuration file
 
 Example:
-    rails generate solryml
-    rails generate solryml your.production.server.com
+    rails generate argo:solr
+    rails generate argo:solr 'http://your.production.solr-server.com/solr'
 
     This will create:
         config/solr.yml
