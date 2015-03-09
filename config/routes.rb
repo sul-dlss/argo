@@ -42,8 +42,10 @@ Argo::Application.routes.draw do
   namespace :report do
     get '/workflow_grid', :action => :workflow_grid
   end
+
   resources :robot do
   end
+
   resources :apo do
     get 'apo_ui', :on => :member, :action => :apo_ui, :as => 'apo_ui'
     get 'delete_role', :on => :member
@@ -62,6 +64,7 @@ Argo::Application.routes.draw do
     get :register_collection, :on => :member
     post :register_collection, :on => :member
   end
+
   resources :items do
     get :crop, :on => :member
     put :crop, :on => :member, :action => :save_crop
