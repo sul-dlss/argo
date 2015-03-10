@@ -4,11 +4,20 @@ describe 'mods_view' do
   before :each do
     @object = instantiate_fixture("druid_zt570tx3016", Dor::Item)
     Dor::Item.stub(:find).and_return(@object)
-    @current_user=double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
+    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
     @current_user.stub(:is_admin).and_return(true)
     @current_user.stub(:roles).and_return([])
     @current_user.stub(:is_manager).and_return(false)
+
+    # here's something odd: it seems like you need to stub ApplicationController.current_user for the "main page tests" 
+    # section (since it doesn't invoke ItemsController, which was stubbed already).  fine.  when i run this test file by 
+    # itself ("rspec spec/integration/item_displays_spec.rb"), stubbing ApplicationController.current_user is sufficient 
+    # setup for all the tests (ItemsController subclasses ApplicationController).  however, when i run the entire test suite (by 
+    # just calling "rspec"), i have to stub both ItemsController.current_user and ApplicationController.current_user, or all 
+    # the tests that hit '/items/' fail.  either behavior feels defensible, but the inconsistency is puzzling.  anyway, i'm stubbing
+    # both.  JM, 2015-03-10
     ItemsController.any_instance.stub(:current_user).and_return(@current_user)
+    ApplicationController.any_instance.stub(:current_user).and_return(@current_user)
   end
   context "main page tests" do
     it 'should have the expected heading for search facets' do
