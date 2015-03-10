@@ -3,3 +3,10 @@ rvm:
   - 2.1.1
   - 2.0.0
   - 1.9.3
+jdk:
+  - oraclejdk8
+email: false
+before_script:
+  - rails generate argo:solr
+  - rails generate blacklight_hierarchy:install
+script: rake ci
