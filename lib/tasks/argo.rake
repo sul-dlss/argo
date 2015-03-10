@@ -13,9 +13,11 @@ def jettywrapper_load_config
     return Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
 end
 
+task :default => [:ci]
+
 task :ci do
   ENV['RAILS_ENV'] = 'test'
-  Rake::Task['db:migrate'].invoke
+  Rake::Task['argo:install'].invoke
   jetty_params = jettywrapper_load_config()
   error = Jettywrapper.wrap(jetty_params) do
     Rake::Task['spec'].invoke
@@ -24,6 +26,14 @@ task :ci do
 end
 
 namespace :argo do
+  desc "Install db, jetty (fedora/solr) and configs fresh"
+  task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate', 'tmp:create'] do
+    ['rails generate blacklight_hierarchy:install', 'rails generate argo:solr'].each{ |cmd|
+      puts cmd
+      system cmd
+    }
+  end
+
   desc "Bump Argo's version number before release"
   task :bump_version, [:level] do |t, args|
     levels = ['major','minor','patch','rc']

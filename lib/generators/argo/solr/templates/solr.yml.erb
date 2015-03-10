@@ -1,0 +1,6 @@
+local: &local
+  url: http://localhost:8983/solr
+production:
+  url: <%= prodhost %>
+development: *local
+test: *local
