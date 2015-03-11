@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DorController do
+describe DorController, :type => :controller do
   describe "reindex" do
     before :each do
       @mock_druid  = 'asdf:1234'
@@ -9,27 +9,27 @@ describe DorController do
 
       log_in_as_mock_user(subject)
 
-      controller.stub(:index_logger).and_return(@mock_logger)
-      Argo::Config.stub(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
+      allow(controller).to receive(:index_logger).and_return(@mock_logger)
+      allow(Argo::Config).to receive(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
     end
     it "should reindex an object" do
-      Dor.should_receive(:load_instance).with(@mock_druid).and_return(@mock_obj)
-      @mock_obj.should_receive(:to_solr).and_return({:id => @mock_druid})
-      Dor::SearchService.solr.should_receive(:add).with(hash_including(:id => @mock_druid), instance_of(Hash))
-      @mock_logger.should_receive(:info).with("updated index for #{@mock_druid}")
+      expect(Dor).to receive(:load_instance).with(@mock_druid).and_return(@mock_obj)
+      expect(@mock_obj).to receive(:to_solr).and_return({:id => @mock_druid})
+      expect(Dor::SearchService.solr).to receive(:add).with(hash_including(:id => @mock_druid), instance_of(Hash))
+      expect(@mock_logger).to receive(:info).with("updated index for #{@mock_druid}")
       get :reindex, :pid => @mock_druid
     end
 
     it "should log the right thing if an object is not found" do
-      Dor.should_receive(:load_instance).with(@mock_druid).and_raise(ActiveFedora::ObjectNotFoundError)
-      @mock_logger.should_receive(:info).with("failed to update index for #{@mock_druid}, object not found in Fedora")
+      expect(Dor).to receive(:load_instance).with(@mock_druid).and_raise(ActiveFedora::ObjectNotFoundError)
+      expect(@mock_logger).to receive(:info).with("failed to update index for #{@mock_druid}, object not found in Fedora")
       get :reindex, :pid => @mock_druid
     end
 
     it "should log the right thing if there's an unexpected error" do
       err_msg = "didn't see that one coming"
-      Dor.should_receive(:load_instance).with(@mock_druid).and_raise(err_msg)
-      @mock_logger.should_receive(:error).with("failed to update index for #{@mock_druid}, unexpected error, see main app log")
+      expect(Dor).to receive(:load_instance).with(@mock_druid).and_raise(err_msg)
+      expect(@mock_logger).to receive(:error).with("failed to update index for #{@mock_druid}, unexpected error, see main app log")
       expect {get :reindex, :pid => @mock_druid}.to raise_error(err_msg)
     end
   end
@@ -38,16 +38,16 @@ describe DorController do
     before :each do
       log_in_as_mock_user(subject)
       item = instantiate_fixture("druid_bb001zc5754", Dor::Item)
-      item.descMetadata.stub(:new?).and_return(false)
-      item.descMetadata.stub(:ng_xml).and_return(Nokogiri::XML('<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+      allow(item.descMetadata).to receive(:new?).and_return(false)
+      allow(item.descMetadata).to receive(:ng_xml).and_return(Nokogiri::XML('<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
       <mods:titleInfo>
       <mods:title>AMERICA cum Supplementis PolyGlottis</mods:title>
       </mods:titleInfo>
       </mods:mods>'))
-      item.workflows.should_receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
-      item.stub(:milestones).and_return []
-      item.stub(:new_version_open?).and_return false
-      item.stub(:archive_workflows)
+      expect(item.workflows).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
+      allow(item).to receive(:milestones).and_return []
+      allow(item).to receive(:new_version_open?).and_return false
+      allow(item).to receive(:archive_workflows)
       @solr_doc=item.to_solr
     end
 
@@ -79,7 +79,7 @@ describe DorController do
   describe "delete_from_index" do
     it "should remove an object from the index" do
       log_in_as_mock_user(subject)
-      Dor::SearchService.solr.should_receive(:delete_by_id).with('asdf:1234')
+      expect(Dor::SearchService.solr).to receive(:delete_by_id).with('asdf:1234')
       get :delete_from_index, :pid => 'asdf:1234'
     end
   end
@@ -88,8 +88,8 @@ describe DorController do
     it 'should republish' do
       log_in_as_mock_user(subject)
       mock_item=double()
-      mock_item.should_receive(:publish_metadata_remotely)
-      Dor::Item.stub(:find).and_return(mock_item)
+      expect(mock_item).to receive(:publish_metadata_remotely)
+      allow(Dor::Item).to receive(:find).and_return(mock_item)
       get :republish, :pid => 'druid:123'
     end
   end

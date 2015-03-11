@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe User do
+describe User, :type => :model do
   describe '.find_or_create_by_webauth' do
     it "should work" do
       mock_webauth = double('webauth', :login => 'asdf')
@@ -43,33 +43,33 @@ describe User do
 
   describe "is_admin" do
     it 'should be true if the group is an admin group' do
-      subject.stub(:groups).and_return(['workgroup:sdr:administrator-role'])
+      allow(subject).to receive(:groups).and_return(['workgroup:sdr:administrator-role'])
       expect(subject.is_admin).to eq(true)
     end
     it 'should be true if the group is a deprecated admin group' do
-      subject.stub(:groups).and_return(['workgroup:dlss:dor-admin'])
+      allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-admin'])
       expect(subject.is_admin).to eq(true)
     end
   end
 
   describe "is_manager" do
     it 'should be true if the group is a manager group' do
-      subject.stub(:groups).and_return(['workgroup:sdr:manager-role'])
+      allow(subject).to receive(:groups).and_return(['workgroup:sdr:manager-role'])
       expect(subject.is_manager).to eq(true)
     end
     it 'should be true if the group is a deprecated manager group' do
-      subject.stub(:groups).and_return(['workgroup:dlss:dor-manager'])
+      allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-manager'])
       expect(subject.is_manager).to eq(true)
     end
   end
 
   describe 'is_viewer' do
     it 'should be true if the group is a viewer group' do
-      subject.stub(:groups).and_return(['workgroup:sdr:viewer-role'])
+      allow(subject).to receive(:groups).and_return(['workgroup:sdr:viewer-role'])
       expect(subject.is_viewer).to eq(true)
     end
     it 'should be true if the group is a deprecated viewer group' do
-      subject.stub(:groups).and_return(['workgroup:dlss:dor-viewer'])
+      allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-viewer'])
       expect(subject.is_viewer).to eq(true)
     end
   end
@@ -89,34 +89,34 @@ describe User do
       @doc['apo_role_person_sdr-viewer_t']=['sunetid:tcramer']
       @doc['apo_role_group_manager_t']=['dlss:groupR']
       @answer['response']['docs'] << @doc
-      Dor::SearchService.stub(:query).and_return(@answer)
+      allow(Dor::SearchService).to receive(:query).and_return(@answer)
     end
     it 'should build a set of roles' do
-      User.any_instance.stub(:groups).and_return(['dlss:groupF', 'dlss:groupA'])
+      allow_any_instance_of(User).to receive(:groups).and_return(['dlss:groupF', 'dlss:groupA'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
       expect(res).to eq(['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer'])
     end
     it 'should translate the old "manager" role into dor-apo-manager' do
-      User.any_instance.stub(:groups).and_return(['dlss:groupR'])
+      allow_any_instance_of(User).to receive(:groups).and_return(['dlss:groupR'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
       expect(res).to eq(['dor-apo-manager'])
     end
     it 'should work correctly if the individual is named in the apo, but isnt in any groups that matter' do
-      User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
+      allow_any_instance_of(User).to receive(:groups).and_return(['sunetid:tcramer'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
       expect(res).to eq(['dor-viewer', 'sdr-viewer'])
     end
     it 'should hang onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
-      User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
+      allow_any_instance_of(User).to receive(:groups).and_return(['sunetid:tcramer'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
-      Dor::SearchService.should_receive(:query).once
+      expect(Dor::SearchService).to receive(:query).once
       res=user.roles('pid')
       res=user.roles('pid')
     end

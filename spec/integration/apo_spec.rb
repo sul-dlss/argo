@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe 'apo' do
+describe 'apo', :type => :request do
   before :each do
     pending
   end
@@ -20,14 +20,14 @@ describe 'apo' do
     druid=current_path.split('/').last
     visit url_for(:controller => :apo, :action => :register, :id => druid)
     #check the edit form to see that all of the filled in values match what was put in at registration time
-    find_field("title").value.should == "APO Title"
-    find_field("copyright").value.should == "Copyright statement"
-    find_field("use").value.should == "Use statement"
-    find_field("managers").value.should == "dlss:developers"
-    find_field("viewers").value.should == "sunetid:someone"
-    find_field("desc_md").value.should == 'TEI'
-    find_field("collection").value.should == ''
-    find_field("cc_license").value.should == "by_sa"
+    expect(find_field("title").value).to eq("APO Title")
+    expect(find_field("copyright").value).to eq("Copyright statement")
+    expect(find_field("use").value).to eq("Use statement")
+    expect(find_field("managers").value).to eq("dlss:developers")
+    expect(find_field("viewers").value).to eq("sunetid:someone")
+    expect(find_field("desc_md").value).to eq('TEI')
+    expect(find_field("collection").value).to eq('')
+    expect(find_field("cc_license").value).to eq("by_sa")
   end
   it 'should edit an apo' do
     log_in_as_mock_user(subject)
@@ -56,13 +56,13 @@ describe 'apo' do
     fill_in 'viewers', :with => 'sunetid:anyone'
     click_button "register"
     visit url_for(:controller => :apo, :action => :register, :id => druid)
-    find_field("title").value.should == "New APO Title"
-    find_field("copyright").value.should == "New copyright statement"
-    find_field("use").value.should == "New use statement"
-    find_field("managers").value.should == "dlss:dpg-staff"
+    expect(find_field("title").value).to eq("New APO Title")
+    expect(find_field("copyright").value).to eq("New copyright statement")
+    expect(find_field("use").value).to eq("New use statement")
+    expect(find_field("managers").value).to eq("dlss:dpg-staff")
     #find_field("viewers").value.should == "sunetid:anyone"
-    find_field("desc_md").value.should == 'MODS'
-    find_field("collection").value.should == ''
-    find_field("cc_license").value.should == "by-nd"
+    expect(find_field("desc_md").value).to eq('MODS')
+    expect(find_field("collection").value).to eq('')
+    expect(find_field("cc_license").value).to eq("by-nd")
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe AuthController do
+describe AuthController, :type => :controller do
 
   before :each do
     log_in_as_mock_user(subject)

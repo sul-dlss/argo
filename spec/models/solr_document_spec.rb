@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SolrDocument do
+describe SolrDocument, :type => :model do
   describe 'get_milestones' do
     it 'should build an empty listing if passed an empty doc' do
       milestones=get_milestones(Hash.new)

@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe RegistrationController do
+describe RegistrationController, :type => :controller do
   before :each do
     @item = double(Dor::Item)
     @current_user=double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
-    @current_user.stub(:is_admin).and_return(true)
-    RegistrationController.any_instance.stub(:current_user).and_return(@current_user)
-    Dor::Item.stub(:find).and_return(@item)
+    allow(@current_user).to receive(:is_admin).and_return(true)
+    allow_any_instance_of(RegistrationController).to receive(:current_user).and_return(@current_user)
+    allow(Dor::Item).to receive(:find).and_return(@item)
   end
 
   describe 'rights_list' do
@@ -37,11 +37,11 @@ describe RegistrationController do
       pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
-      Dor.stub(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(@item)
       #using content metadata, but any datastream would do
       object_rights=double(Dor::ContentMetadataDS)
-      object_rights.stub(:ng_xml).and_return xml
-      @item.stub(:defaultObjectRights).and_return object_rights
+      allow(object_rights).to receive(:ng_xml).and_return xml
+      allow(@item).to receive(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?("Stanford (APO default)")).to eq(true)
     end
@@ -73,11 +73,11 @@ describe RegistrationController do
       pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
-      Dor.stub(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(@item)
       #using content metadata, but any datastream would do
       object_rights=double(Dor::ContentMetadataDS)
-      object_rights.stub(:ng_xml).and_return xml
-      @item.stub(:defaultObjectRights).and_return object_rights
+      allow(object_rights).to receive(:ng_xml).and_return xml
+      allow(@item).to receive(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?("Stanford (APO default)")).to eq(false)
     end
@@ -109,11 +109,11 @@ describe RegistrationController do
       pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
-      Dor.stub(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(@item)
       #using content metadata, but any datastream would do
       object_rights=double(Dor::ContentMetadataDS)
-      object_rights.stub(:ng_xml).and_return xml
-      @item.stub(:defaultObjectRights).and_return object_rights
+      allow(object_rights).to receive(:ng_xml).and_return xml
+      allow(@item).to receive(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?("World (APO default)")).to eq(true)
     end
@@ -145,11 +145,11 @@ describe RegistrationController do
       pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
-      Dor.stub(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(@item)
       #using content metadata, but any datastream would do
       object_rights=double(Dor::ContentMetadataDS)
-      object_rights.stub(:ng_xml).and_return xml
-      @item.stub(:defaultObjectRights).and_return object_rights
+      allow(object_rights).to receive(:ng_xml).and_return xml
+      allow(@item).to receive(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?("Dark (APO default)")).to eq(true)
     end
@@ -181,11 +181,11 @@ describe RegistrationController do
       pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
-      Dor.stub(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(@item)
       #using content metadata, but any datastream would do
       object_rights=double(Dor::ContentMetadataDS)
-      object_rights.stub(:ng_xml).and_return xml
-      @item.stub(:defaultObjectRights).and_return object_rights
+      allow(object_rights).to receive(:ng_xml).and_return xml
+      allow(@item).to receive(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?("Citation Only (APO default)")).to eq(true)
     end
@@ -195,11 +195,11 @@ describe RegistrationController do
       pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
-      Dor.stub(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(@item)
       #using content metadata, but any datastream would do
       object_rights=double(Dor::ContentMetadataDS)
-      object_rights.stub(:ng_xml).and_return xml
-      @item.stub(:defaultObjectRights).and_return object_rights
+      allow(object_rights).to receive(:ng_xml).and_return xml
+      allow(@item).to receive(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?("World (APO default)")).to eq(false)
       expect(response.body.include?("Stanford (APO default)")).to eq(false)

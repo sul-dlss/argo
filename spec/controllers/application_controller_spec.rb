@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe ApplicationController do
+describe ApplicationController, :type => :controller do
 
   describe "#current_user" do
     it "should be the webauth-ed user, if they exist" do
-      subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
       expect(subject.current_user).to be_a_kind_of(User)
     end
 
@@ -13,12 +13,12 @@ describe ApplicationController do
       expect(subject.current_user).to be_a_kind_of(User)
     end
     it "should be nil if there is no user" do
-      subject.stub(:webauth).and_return(double(:webauth_user, :logged_in? => false))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :logged_in? => false))
       expect(subject.current_user).to be_nil
     end
     it "should return the user's groups if impersonation info wasn't specified" do
       webauth_privgroup_str = "dlss:testgroup1|dlss:testgroup2|dlss:testgroup3"
-      subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
 
       # note the check for sunetid:sunetid.  user's sunetid should be prepended to the group list returned by webauth.
       # note also that workgroup: should be prepended to each workgroup name.
@@ -30,7 +30,7 @@ describe ApplicationController do
       impersonated_groups = ["workgroup:dlss:impersonatedgroup1", "workgroup:dlss:impersonatedgroup2"]
       session[:groups] = impersonated_groups
 
-      subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
 
       expect(subject.current_user.groups).to eq(impersonated_groups)
     end
@@ -38,7 +38,7 @@ describe ApplicationController do
 
   describe "#development_only!" do
     it "should be called in development mode" do
-      Rails.env.stub(:development?).and_return(true)
+      allow(Rails.env).to receive(:development?).and_return(true)
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
@@ -46,7 +46,7 @@ describe ApplicationController do
     end
 
     it "should be called when DOR_SERVICES_DEBUG_MODE is set" do
-      ENV.should_receive(:[]).with('DOR_SERVICES_DEBUG_MODE').and_return('true')
+      expect(ENV).to receive(:[]).with('DOR_SERVICES_DEBUG_MODE').and_return('true')
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)
@@ -54,9 +54,9 @@ describe ApplicationController do
     end
 
     it "should otherwise do nothing" do
-      Rails.env.stub(:development?).and_return(false)
-      ENV.should_receive(:[]).with('DOR_SERVICES_DEBUG_MODE').and_return(nil)
-      subject.should_receive(:render)
+      allow(Rails.env).to receive(:development?).and_return(false)
+      expect(ENV).to receive(:[]).with('DOR_SERVICES_DEBUG_MODE').and_return(nil)
+      expect(subject).to receive(:render)
       called = false
       block = lambda { called = true }
       subject.send(:development_only!, &block)

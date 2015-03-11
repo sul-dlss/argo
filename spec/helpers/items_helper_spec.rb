@@ -1,6 +1,6 @@
 # encoding: utf-8
 require 'spec_helper'
-describe ItemsHelper do
+describe ItemsHelper, :type => :helper do
   before(:each) do
     @full_doc='  <mods:mods xmlns:xxi="http://orbeon.org/oxf/xml/xinclude" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:exforms="http://www.exforms.org/exf/1-0" xmlns:pipeline="java:org.orbeon.oxf.processor.pipeline.PipelineFunctionLibrary" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:dl="http://dl.lib.brown.edu/editor/mods/dl" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms">
     <mods:identifier type="local" displayLabel="SU DRUID">druid:sm817db3005</mods:identifier>

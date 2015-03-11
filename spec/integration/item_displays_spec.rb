@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe 'mods_view' do
+describe 'mods_view', :type => :request do
   before :each do
     @object = instantiate_fixture("druid_zt570tx3016", Dor::Item)
-    Dor::Item.stub(:find).and_return(@object)
+    allow(Dor::Item).to receive(:find).and_return(@object)
     @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
-    @current_user.stub(:is_admin).and_return(true)
-    @current_user.stub(:roles).and_return([])
-    @current_user.stub(:is_manager).and_return(false)
+    allow(@current_user).to receive(:is_admin).and_return(true)
+    allow(@current_user).to receive(:roles).and_return([])
+    allow(@current_user).to receive(:is_manager).and_return(false)
 
     # here's something odd: it seems like you need to stub ApplicationController.current_user for the "main page tests" 
     # section (since it doesn't invoke ItemsController, which was stubbed already).  fine.  when i run this test file by 
@@ -16,8 +16,8 @@ describe 'mods_view' do
     # just calling "rspec"), i have to stub both ItemsController.current_user and ApplicationController.current_user, or all 
     # the tests that hit '/items/' fail.  either behavior feels defensible, but the inconsistency is puzzling.  anyway, i'm stubbing
     # both.  JM, 2015-03-10
-    ItemsController.any_instance.stub(:current_user).and_return(@current_user)
-    ApplicationController.any_instance.stub(:current_user).and_return(@current_user)
+    allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@current_user)
   end
   context "main page tests" do
     it 'should have the expected heading for search facets' do
@@ -59,7 +59,7 @@ describe 'mods_view' do
     end
     context 'open version ui' do
       it 'should render the add collection ui' do
-        @current_user.stub(:permitted_collections).and_return(['druid:ab123cd4567'])
+        allow(@current_user).to receive(:permitted_collections).and_return(['druid:ab123cd4567'])
         visit '/items/druid:zt570tx3016/collection_ui'
         expect(page).to have_content('Add Collection')
       end
@@ -92,8 +92,8 @@ describe 'mods_view' do
     context 'source id ui' do
       it 'should render the source id update ui' do
         idmd=double(Dor::IdentityMetadataDS)
-        @object.stub(:identityMetadata).and_return(idmd)
-        idmd.stub(:sourceId).and_return('something123')
+        allow(@object).to receive(:identityMetadata).and_return(idmd)
+        allow(idmd).to receive(:sourceId).and_return('something123')
         visit '/items/druid:zt570tx3016/source_id_ui'
         expect(page).to have_content('Update')
       end
@@ -101,8 +101,8 @@ describe 'mods_view' do
     context 'tag ui' do
       it 'should render the tag ui' do
         idmd=double(Dor::IdentityMetadataDS)
-        Dor::Item.stub(:identityMetadata).and_return(idmd)
-        idmd.stub(:tags).and_return(['something:123'])
+        allow(Dor::Item).to receive(:identityMetadata).and_return(idmd)
+        allow(idmd).to receive(:tags).and_return(['something:123'])
         visit '/items/druid:zt570tx3016/tags_ui'
         expect(page).to have_content('Update tags')
       end

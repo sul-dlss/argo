@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe StatusController do
+describe StatusController, :type => :controller do
 
   describe "GET 'log'" do
    
