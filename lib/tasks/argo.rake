@@ -74,6 +74,16 @@ namespace :argo do
     end
   end
 
+  ## DEFAULTS
+  solr_conf_dir     = 'solr_conf'
+  fedora_conf_dir   = 'fedora_conf'
+  fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
+  fedora_fileglob   = "#{Rails.root}/#{fedora_conf_dir}/data/*.xml"
+  live_solrxml_file = "jetty/solr/solr.xml"
+  testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
+  restcore_url = Blacklight.solr.options[:url] + "/admin/cores?action=STATUS&wt=json"
+  realcores = []
+
   namespace :solr do
     ## HELPERS
     def xml_cores(file)
@@ -87,14 +97,6 @@ namespace :argo do
     def json_cores(url)
       return JSON.load(open(url))
     end
-
-    ## DEFAULTS
-    solr_conf_dir = 'solr_conf'
-    fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
-    live_solrxml_file = "jetty/solr/solr.xml"
-    testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
-    restcore_url = Blacklight.solr.options[:url] + "/admin/cores?action=STATUS&wt=json"
-    realcores = []
 
     desc "List cores from REST target, default: #{restcore_url}"
     task :cores, [:url] do |task, args|
@@ -174,6 +176,7 @@ namespace :argo do
       args[:cores].each do |core|
         instancedir = testcores[core] || core
         puts "**** #{core} in #{instancedir}"
+        puts "travis_fold:start:script.argo-solr-#{core}\r" if ENV['TRAVIS'] == 'true'
         FileUtils.mkdir_p("jetty/solr/#{instancedir}/conf/", verbose: true)
         FileList["#{args[:dir]}/conf/*"].each do |f|
           cp(f, "jetty/solr/#{instancedir}/conf/", verbose: true)
@@ -186,10 +189,27 @@ namespace :argo do
           f.puts "name=#{core}"
         }
         puts "Added #{propfile}"
+        puts "travis_fold:end:script.argo-solr-#{core}\r" if ENV['TRAVIS'] == 'true'
       end
     end
 
   end # :solr
+
+  namespace :repo do
+    desc "Load XML file(s) into repo (fedora and solr), default: '#{fedora_fileglob}' ## note quotes around glob"
+    task :load, [:glob] do |task, args|
+      puts "travis_fold:start:script.argo-repo-load\r" if ENV['TRAVIS'] == 'true'
+      args.with_defaults(:glob => fedora_fileglob)
+      docs = []
+      i=0
+      Dir.glob(args[:glob]).each do |file|
+        puts "** #{i=i+1} ** repo:load #{file}"
+        Rake::Task['repo:load'].invoke("foxml=#{file}")
+        Rake::Task['repo:load'].reenable
+      end
+      puts "travis_fold:start:script.argo-repo-load\r" if ENV['TRAVIS'] == 'true'
+    end
+  end
 
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
