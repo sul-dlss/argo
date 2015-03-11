@@ -7,6 +7,7 @@ jdk:
   - oraclejdk8
 email: false
 before_script:
+  - cp config/dor.rb.example config/environments/dor_test.rb
   - bundle exec rails generate argo:solr
   - bundle exec rails generate blacklight_hierarchy:install
 script: rake ci
