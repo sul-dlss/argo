@@ -7,7 +7,7 @@ jdk:
   - oraclejdk8
 email: false
 before_script:
-  - mkdir config/environments
+  - cp config/environments/test.rb.example config/environments/test.rb
   - cp config/dor.rb.example config/environments/dor_test.rb
   - cp config/database.yml.example config/database.yml
   - bundle exec rails generate argo:solr

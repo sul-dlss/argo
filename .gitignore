@@ -7,7 +7,7 @@
 app/assets/javascripts/jqgrid/
 config/certs
 config/database.yml
-config/environments
+config/environments/*.rb
 config/solr.yml
 coverage/
 db/*.sqlite3
