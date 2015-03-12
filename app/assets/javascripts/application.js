@@ -17,7 +17,7 @@
 //= require blacklight/blacklight
 //
 // Required by Blacklight Hierarchical Facet Plugin
-//TODO = require blacklight/hierarchy/hierarchy
+//= require blacklight/hierarchy/hierarchy
 //
 // Required by Argo
 //= require argo
