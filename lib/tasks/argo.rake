@@ -3,6 +3,7 @@ require 'json'
 require 'rest_client'
 require 'open-uri'
 require 'fileutils'
+require 'retries'
 
 desc "Get application version"
 task :app_version do
@@ -204,16 +205,19 @@ namespace :argo do
       docs   = []
       errors = []
       i = 0
+
       Dir.glob(args[:glob]).each do |file|
-        puts "** #{i=i+1} ** repo:load foxml=#{file}"
-        begin
-          ENV['foxml'] = file
-          Rake::Task['repo:load'].invoke
-        rescue StandardError => e
+        i=i+1
+        ENV['foxml'] = file
+        handler = Proc.new do |e, attempt_number, total_delay|
           puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
           errors << file
         end
-        Rake::Task['repo:load'].reenable
+        with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
+          puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
+          Rake::Task['repo:load'].invoke
+          Rake::Task['repo:load'].reenable
+        }
       end
       ENV['foxml'].delete if ENV['foxml']   # avoid ENV contamination
       puts "Done loading repo files"

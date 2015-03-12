@@ -17,6 +17,7 @@ gem 'progressbar'
 gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
 gem 'rake'
 gem 'rest-client'
+gem 'retries'
 gem 'ruby-graphviz'
 gem 'squash_rails', :require => 'squash/rails'
 gem 'squash_ruby',  :require => 'squash/ruby'
