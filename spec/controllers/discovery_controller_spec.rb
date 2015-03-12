@@ -7,7 +7,9 @@ describe DiscoveryController, :type => :controller do
       allow_any_instance_of(User).to receive(:groups).and_return(['sdr:administrator-role'])
       get :data, :format => :json, :rows =>5
       json_body=JSON.parse(response.body)
-      expect(json_body['rows'].first.has_key?('sw_author_other_facet_facet')).to be true
+      expect(json_body).to match a_hash_including('rows')
+      expect(json_body['rows']).not_to be_nil
+      expect(json_body['rows'].first).to match a_hash_including('sw_author_other_facet')
     end
   end
 end
