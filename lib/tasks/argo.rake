@@ -219,7 +219,7 @@ namespace :argo do
           Rake::Task['repo:load'].reenable
         }
       end
-      ENV['foxml'].delete if ENV['foxml']   # avoid ENV contamination
+      ENV.delete('foxml') if ENV['foxml']   # avoid ENV contamination
       puts "Done loading repo files"
       puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0
 #     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
