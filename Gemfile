@@ -1,48 +1,50 @@
 source "https://rubygems.org"
 
-gem 'stanford-mods'
-gem 'mods_display'
+gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
+gem 'barby'
+gem 'coderay'
+gem 'confstruct', "~> 0.2.4"
+gem 'dalli'
+gem 'haml'
+gem 'kaminari'
+gem 'kgio'  
+gem 'mysql2', '= 0.3.13'
+gem 'net-sftp'
+gem 'nokogiri', '=1.6.5' #TODO: this should go, i just needed to get rid of nokogiri upgrade errors to do other stuff first
+gem 'prawn', '~> 1'
+gem 'prawn-table'
+gem 'progressbar'
+gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
+gem 'rake'
+gem 'rest-client'
+gem 'ruby-graphviz'
+gem 'squash_rails', :require => 'squash/rails'
+gem 'squash_ruby',  :require => 'squash/ruby'
+gem 'thin' # or mongrel
+gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
+gem 'unicode'
+
+# Stanford/Hydra related gems
+gem 'about_page'
+gem 'active-fedora'
+gem 'blacklight', '~> 5'
+gem 'blacklight-hierarchy'
+gem 'blacklight-marc'
 gem 'dor-services', '~> 5', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'develop'
 gem 'dor-workflow-service'
 gem 'druid-tools', '~> 0.3.0' #TODO: does argo use this directly?  can i get rid of this?
+gem 'is_it_working-cbeer'
+gem 'jettywrapper'
 gem 'moab-versioning'
+gem 'mods_display'
+gem 'osullivan', '~> 0.0.3' #TODO: might want to remove this entirely since argo doesn't use it directly
 gem 'rails', '~> 4'
 gem 'responders', '~> 2.0'
-gem 'blacklight', '~> 5'
-gem 'blacklight-marc'
-gem 'blacklight-hierarchy'
-gem 'osullivan', '~> 0.0.3' #TODO: might want to remove this entirely since argo doesn't use it directly
-gem 'net-sftp'
-gem 'rake'
-gem 'about_page'
-gem 'is_it_working-cbeer'
-gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
-gem 'thin' # or mongrel
-gem 'prawn', '~> 1'
-gem 'prawn-table'
-gem 'barby'
-gem 'ruby-graphviz'
+gem 'rsolr'
+gem 'rsolr-client-cert', '~> 0.5.2'
+gem 'solrizer'
 # gem "solrizer-fedora"
-gem "solrizer"
-gem 'active-fedora'
-gem "rsolr"
-gem "nokogiri", "=1.6.5" #TODO: this should go, i just needed to get rid of nokogiri upgrade errors to do other stuff first
-gem "rsolr-client-cert", "~> 0.5.2"
-gem 'confstruct', "~> 0.2.4"
-gem "mysql2", "= 0.3.13"
-gem "progressbar"
-gem "haml"
-gem "coderay"
-gem "dalli"
-gem "kgio"  
-gem 'rest-client'
-gem 'jettywrapper'
-gem 'kaminari'
-gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
-gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
-gem 'squash_ruby',  :require => 'squash/ruby'
-gem 'squash_rails', :require => 'squash/rails'
-gem 'unicode'
+gem 'stanford-mods'
 
 group :test, :development do
   gem 'http_logger'
