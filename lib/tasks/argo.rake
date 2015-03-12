@@ -199,7 +199,7 @@ namespace :argo do
   namespace :repo do
     desc "Load XML file(s) into repo (fedora and solr), default: '#{fedora_fileglob}' ## note quotes around glob"
     task :load, [:glob] do |task, args|
-      puts "travis_fold:start:script.argo-repo-load\r" if ENV['TRAVIS'] == 'true'
+      puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
       args.with_defaults(:glob => fedora_fileglob)
       docs   = []
       errors = []
@@ -208,7 +208,7 @@ namespace :argo do
         puts "** #{i=i+1} ** repo:load foxml=#{file}"
         begin
           ENV['foxml'] = file
-          Rake::Task['repo:load'].invoke()
+          Rake::Task['repo:load'].invoke
         rescue StandardError => e
           puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
           errors << file
@@ -216,9 +216,10 @@ namespace :argo do
         Rake::Task['repo:load'].reenable
       end
       ENV['foxml'].delete if ENV['foxml']   # avoid ENV contamination
-#     puts "#{errors.size()} of #{i} files successfully"
+      puts "Done loading repo files"
+      puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0
 #     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
-      puts "travis_fold:start:script.argo-repo-load\r" if ENV['TRAVIS'] == 'true'
+      puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
     end
   end
 
