@@ -207,14 +207,17 @@ namespace :argo do
       Dir.glob(args[:glob]).each do |file|
         puts "** #{i=i+1} ** repo:load foxml=#{file}"
         begin
-          Rake::Task['repo:load'].invoke("foxml=#{file}")
+          ENV['foxml'] = file
+          Rake::Task['repo:load'].invoke()
         rescue StandardError => e
           puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
           errors << file
         end
         Rake::Task['repo:load'].reenable
       end
-      puts "Loaded #{i-errors.size()} of #{i} files successfully"
+      ENV['foxml'].delete if ENV['foxml']   # avoid ENV contamination
+#     puts "#{errors.size()} of #{i} files successfully"
+#     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
       puts "travis_fold:start:script.argo-repo-load\r" if ENV['TRAVIS'] == 'true'
     end
   end
