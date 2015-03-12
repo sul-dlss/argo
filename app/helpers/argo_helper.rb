@@ -154,7 +154,7 @@ module ArgoHelper
   #override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
   def render_facet_value(facet_solr_field, item, options ={})
     display_value = item.value =~ /druid:/ ? label_for_druid(item.value) : item.value
-    (link_to_unless(options[:suppress_link], ((item.label if item.respond_to?(:label)) || display_value), add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+    (link_to_unless(options[:suppress_link], ((item.label if item.respond_to?(:label)) || display_value), add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
   end
 
   def render_document_sections(doc, action_name)

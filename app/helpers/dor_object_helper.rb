@@ -25,9 +25,9 @@ module DorObjectHelper
 
 
   def render_qfacet_value(facet_solr_field, item, options ={})
-     params=add_facet_params(facet_solr_field, item.qvalue)
-     link_to(item.value,root_url)
-     # (link_to_unless(options[:suppress_link], item.value, params, :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+     params = add_facet_params(facet_solr_field, item.qvalue)
+     link_to(item.value, root_url)
+     # (link_to_unless(options[:suppress_link], item.value, params, :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
   end
 
   def render_citation doc
@@ -202,7 +202,7 @@ module DorObjectHelper
     def render_qfacet_value(facet_solr_field, item, options ={})
       params=add_facet_params(facet_solr_field, item.qvalue)
       Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
-       (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select label") + " " + render_facet_count(item.hits)).html_safe
+       (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
      end
     end
 
