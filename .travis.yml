@@ -7,6 +7,7 @@ jdk:
   - oraclejdk8
 email: false
 before_script:
+  - if [[ -r /etc/hosts ]]; then cat /etc/hosts ; fi
   - cp config/environments/test.rb.example config/environments/test.rb
   - cp config/dor.rb.example config/environments/dor_test.rb
   - cp config/database.yml.example config/database.yml
