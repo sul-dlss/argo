@@ -10,7 +10,7 @@ task :app_version do
 end
 
 def jettywrapper_load_config
-    return Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
+  return Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
 end
 
 task :default => [:ci]
@@ -20,6 +20,7 @@ task :ci do
   Rake::Task['argo:install'].invoke
   jetty_params = jettywrapper_load_config()
   error = Jettywrapper.wrap(jetty_params) do
+    Rake::Task['argo:repo:load'].invoke  # load 'em all!
     Rake::Task['spec'].invoke
   end
   raise "test failures: #{error}" if error
@@ -175,8 +176,8 @@ namespace :argo do
       args.with_defaults(:dir => solr_conf_dir, :cores => testcores.keys.sort)
       args[:cores].each do |core|
         instancedir = testcores[core] || core
+        puts "travis_fold:start:argo-config_cores-#{core}\r" if ENV['TRAVIS'] == 'true'
         puts "**** #{core} in #{instancedir}"
-        puts "travis_fold:start:script.argo-solr-#{core}\r" if ENV['TRAVIS'] == 'true'
         FileUtils.mkdir_p("jetty/solr/#{instancedir}/conf/", verbose: true)
         FileList["#{args[:dir]}/conf/*"].each do |f|
           cp(f, "jetty/solr/#{instancedir}/conf/", verbose: true)
@@ -189,7 +190,7 @@ namespace :argo do
           f.puts "name=#{core}"
         }
         puts "Added #{propfile}"
-        puts "travis_fold:end:script.argo-solr-#{core}\r" if ENV['TRAVIS'] == 'true'
+        puts "travis_fold:end:argo-config_cores-#{core}\r" if ENV['TRAVIS'] == 'true'
       end
     end
 
@@ -200,13 +201,20 @@ namespace :argo do
     task :load, [:glob] do |task, args|
       puts "travis_fold:start:script.argo-repo-load\r" if ENV['TRAVIS'] == 'true'
       args.with_defaults(:glob => fedora_fileglob)
-      docs = []
-      i=0
+      docs   = []
+      errors = []
+      i = 0
       Dir.glob(args[:glob]).each do |file|
-        puts "** #{i=i+1} ** repo:load #{file}"
-        Rake::Task['repo:load'].invoke("foxml=#{file}")
+        puts "** #{i=i+1} ** repo:load foxml=#{file}"
+        begin
+          Rake::Task['repo:load'].invoke("foxml=#{file}")
+        rescue StandardError => e
+          puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
+          errors << file
+        end
         Rake::Task['repo:load'].reenable
       end
+      puts "Loaded #{i-errors.size()} of #{i} files successfully"
       puts "travis_fold:start:script.argo-repo-load\r" if ENV['TRAVIS'] == 'true'
     end
   end
