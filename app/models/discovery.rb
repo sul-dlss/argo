@@ -30,17 +30,17 @@ class Discovery
       },
       {
         :label => "245a Search Title",
-        :field => "sw_title_245a_search_facet_facet",
+        :field => "sw_title_245a_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "245 Search Title",
-        :field => "sw_title_245_search_facet_facet",
+        :field => "sw_title_245_search_facet",
         :default => false, :false => 200
       },
       {
         :label => "Variant Search Title",
-        :field => "sw_title_variant_search_facet_facet",
+        :field => "sw_title_variant_search_facet",
         :default => false, :width => 200
       },
       {
@@ -60,22 +60,22 @@ class Discovery
       },
       {
         :label => "1xx Search Author",
-        :field => "sw_author_1xx_search_facet_facet",
+        :field => "sw_author_1xx_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "7xx Search Author",
-        :field => "sw_author_7xx_search_facet_facet",
+        :field => "sw_author_7xx_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "Person Author Facet",
-        :field => "sw_author_person_facet_facet",
+        :field => "sw_author_person_facet",
         :default => true, :width => 200
       },
       {
         :label => "Other Author Facet",
-        :field => "sw_author_other_facet_facet",
+        :field => "sw_author_other_facet",
         :default => false, :width => 200
       },
       {
@@ -100,42 +100,42 @@ class Discovery
       },
       {
         :label => "Topic Search",
-        :field => "sw_topic_search_facet_facet",
+        :field => "sw_topic_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "Geographic Search",
-        :field => "sw_geographic_search_facet_facet",
+        :field => "sw_geographic_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "Other Subject",
-        :field => "sw_subject_other_search_facet_facet",
+        :field => "sw_subject_other_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "Other Subject Subvy",
-        :field => "sw_subject_other_subvy_search_facet_facet",
+        :field => "sw_subject_other_subvy_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "Subject All",
-        :field => "sw_subject_all_search_facet_facet",
+        :field => "sw_subject_all_search_facet",
         :default => false, :width => 200
       },
       {
         :label => "Topic Facet",
-        :field => "sw_topic_facet_facet",
+        :field => "sw_topic_facet",
         :default => false, :width => 200
       },
       {
         :label => "Geographic Facet",
-        :field => "sw_geographic_facet_facet",
+        :field => "sw_geographic_facet",
         :default => false, :width => 200
       },
       {
         :label => "Era Facet",
-        :field => "sw_era_facet_facet",
+        :field => "sw_era_facet",
         :default => false, :width => 200
       },
       {
@@ -145,7 +145,7 @@ class Discovery
       },
       {
         :label => "Pub Place Search",
-        :field => "sw_pub_search_facet_facet",
+        :field => "sw_pub_search_facet",
         :default => false, :width => 200
       },
       {
@@ -155,7 +155,7 @@ class Discovery
       },
       {
         :label => "Pub Date Group Facet",
-        :field => "sw_pub_date_group_facet_facet",
+        :field => "sw_pub_date_group_facet",
         :default => false, :width => 200
       },
 
@@ -188,13 +188,13 @@ class Discovery
 
     config.column_model = config.discovery_fields.collect { |spec|
       {
-        'name' => spec[:field],
-        'jsonmap' => spec[:field],
-        'label' => spec[:label],
-        'index' => spec[:field],
-        'width' => spec[:width],
+        'name'     => spec[:field],
+        'jsonmap'  => spec[:field],
+        'label'    => spec[:label],
+        'index'    => spec[:field],
+        'width'    => spec[:width],
         'sortable' => spec[:sort],
-        'hidden' => (not spec[:default])
+        'hidden'   => (not spec[:default])
       }
     }
   end
