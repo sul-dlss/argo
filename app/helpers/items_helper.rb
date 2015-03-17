@@ -438,16 +438,16 @@ module ItemsHelper
 
   def mclaughlin_replace_problematic_characters xml
     characters={}
-    characters["&#x2013;"] = "--"
-    characters["&#x2018;"] = "&apos;"
-    characters["&#x2019;"] = "&apos;"
-    characters["&#x201C;"] = "&quot;"
-    characters["&#x201D;"] = "&quot;"
-    characters["&#x2026;"] = "..."
-    characters["&#x2070; "] = "&#xB0;"
-    characters["&#x30A;"] = "&#xB0;"
-    characters["&#xBA;"] = "&#xB0;"
-    characters["&#xB6;"] = " "
+    characters["&#x2013;"]  = "--"      # En Dash => --
+    characters["&#x2018;"]  = "&apos;"  # Left  Single Quotation Mark => '
+    characters["&#x2019;"]  = "&apos;"  # Right Single Quotation Mark => '
+    characters["&#x201C;"]  = "&quot;"  # Left  Double Quotation Mark => "
+    characters["&#x201D;"]  = "&quot;"  # Right Double Quotation Mark => "
+    characters["&#x2026;"]  = "..."     # Horizontal Ellipsis  => 3x Period
+    characters["&#x2070;"]  = "&#xB0;"  # Superscript Zero     => Degree Sign
+    characters["&#x30A;"]   = "&#xB0;"  # Combining Ring Above => Degree Sign
+    characters["&#xBA;"]    = "&#xB0;"  # Masculine Ordinal Indicator => Degree Sign
+    characters["&#xB6;"]    = " "       # Pilcrow Sign => space
     text=xml.to_s
     characters.keys.each do |key|
       # puts key
