@@ -14,49 +14,49 @@
 ActiveRecord::Schema.define(version: 20150128201043) do
 
   create_table "bookmarks", force: :cascade do |t|
-    t.integer  "user_id",                   null: false
+    t.integer  "user_id",       limit: 4,   null: false
     t.string   "document_id",   limit: 255
     t.string   "title",         limit: 255
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "user_type",     limit: 255
-    t.string   "document_type"
+    t.string   "document_type", limit: 255
   end
 
-  add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
+  add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id", using: :btree
 
   create_table "indexing_exceptions", force: :cascade do |t|
     t.string   "pid",                  limit: 255
-    t.text     "solr_document"
+    t.text     "solr_document",        limit: 65535
     t.string   "dor_services_version", limit: 255
-    t.text     "exception"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.text     "exception",            limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  add_index "indexing_exceptions", ["pid"], name: "index_indexing_exceptions_on_pid"
+  add_index "indexing_exceptions", ["pid"], name: "index_indexing_exceptions_on_pid", using: :btree
 
   create_table "robots", force: :cascade do |t|
     t.string   "wf",         limit: 255
     t.string   "process",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "searches", force: :cascade do |t|
-    t.text     "query_params"
-    t.integer  "user_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.text     "query_params", limit: 65535
+    t.integer  "user_id",      limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "user_type",    limit: 255
   end
 
-  add_index "searches", ["user_id"], name: "index_searches_on_user_id"
+  add_index "searches", ["user_id"], name: "index_searches_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "sunetid",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end
