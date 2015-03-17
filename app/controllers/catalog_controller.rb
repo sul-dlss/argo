@@ -51,15 +51,15 @@ class CatalogController < ApplicationController
     # config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'  # TODO: not sure objProfile fields exist
     # config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
     config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy:'
-    config.add_show_field 'is_member_of_collection_ssim',   :label => 'Collection:'
-    config.add_show_field 'status_ssm',               :label => 'Status:'
+    config.add_show_field 'is_member_of_collection_ssim', :label => 'Collection:'
+    config.add_show_field 'status_ssm',                  :label => 'Status:'
     config.add_show_field 'objectType_ssim',             :label => 'Object Type:'
     config.add_show_field 'id',                          :label => 'DRUID:'
     config.add_show_field 'project_tag_sim',             :label => 'Project:'
     config.add_show_field 'source_id_teim',              :label => 'Source:'
-    config.add_show_field 'identityMetadata_tag_t',      :label => 'Tags:'
-    config.add_show_field 'wf_error_ssm',            :label => "Error:"
-    config.add_show_field 'collection_title_display',    :label => "Error:"
+    config.add_show_field 'tag_teim',                    :label => 'Tags:'
+    config.add_show_field 'wf_error_ssm',                :label => "Error:"
+    config.add_show_field 'collection_title_teim',       :label => "Error:"
     config.add_show_field 'metadata_source_ssim',        :label => 'MD Source:'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
@@ -79,42 +79,42 @@ class CatalogController < ApplicationController
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
     config.add_facet_field 'source', :label => 'Source', :query => {
-      :other  => { :label => 'DOR',        :fq => '-has_model_s:"info:fedora/afmodel:Hydrus_Item" AND -has_model_s:"info:fedora/afmodel:Hydrus_Collection" AND -has_model_s:"info:fedora/afmodel:Hydrus_AdminPolicyObject" AND -has_model_s:"info:fedora/dor:googleScannedBook"' },
-      :google => { :label => 'Google',     :fq => 'has_model_s:"info:fedora/dor:googleScannedBook"' },
-    # :deepen => { :label => 'DPN',        :fq => 'has_model_s:info%3Afedora/whatever' },
-      :hyrdus => { :label => 'Hydrus/SDR', :fq => 'has_model_s:"info:fedora/afmodel:Hydrus_Item" OR has_model_s:"info:fedora/afmodel:Hydrus_Collection" OR has_model_s:"info:fedora/afmodel:Hydrus_AdminPolicyObject"' }
+      :other  => { :label => 'DOR',        :fq => '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject" AND -has_model_ssim:"info:fedora/dor:googleScannedBook"' },
+      :google => { :label => 'Google',     :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
+    # :deepen => { :label => 'DPN',        :fq => 'has_model_ssim:info%3Afedora/whatever' },
+      :hyrdus => { :label => 'Hydrus/SDR', :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item" OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"' }
     }
 
     config.add_facet_field 'current_version_sim', :label => 'Version'
 
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
-      :no_has_model => { :label => 'has_model_s',  :fq => "-has_model_s:*"}
+      :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
     }
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "registered_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "registered_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "registered_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "registered_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "submitted_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "submitted_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "submitted_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "submitted_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'published_date', :label => 'Published', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "published_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "published_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "published_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "published_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'deposited_date', :label => 'Deposited', :query => {
-      :days_1  => { :label => 'today',          :fq => "deposited_day_facet:[#{ 1.minute.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_7  => { :label => 'within 7 days',  :fq => "deposited_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "deposited_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_1  => { :label => 'today',          :fq => "deposited_day_tesim:[#{ 1.minute.ago.utc.xmlschema.split('T').first } TO *]"},
+      :days_7  => { :label => 'within 7 days',  :fq => "deposited_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "deposited_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'object_modified_day', :label => 'Object Last Modified', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "last_modified_day_facet:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "last_modified_day_facet:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "last_modified_day_sim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "last_modified_day_sim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
     }
     config.add_facet_field 'version_opened', :label => 'Open Version', :query => {
-      :all     => { :label => 'All',               :fq => "version_opened_facet:[* TO #{1.second.ago.utc.xmlschema.split('T').first }]"},
-      :days_7  => { :label => 'more than 7 days',  :fq => "version_opened_facet:[* TO #{ 7.days.ago.utc.xmlschema }]"},
-      :days_30 => { :label => 'more than 30 days', :fq => "version_opened_facet:[* TO #{30.days.ago.utc.xmlschema }]"}
+      :all     => { :label => 'All',               :fq => "version_opened_teim:[* TO #{1.second.ago.utc.xmlschema.split('T').first }]"},
+      :days_7  => { :label => 'more than 7 days',  :fq => "version_opened_teim:[* TO #{ 7.days.ago.utc.xmlschema }]"},
+      :days_30 => { :label => 'more than 30 days', :fq => "version_opened_teim:[* TO #{30.days.ago.utc.xmlschema }]"}
     }
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
@@ -122,7 +122,7 @@ class CatalogController < ApplicationController
     config.add_search_field 'text', :label => 'All Fields'
     config.add_sort_field 'id asc', :label => 'Druid'
     config.add_sort_field 'score desc', :label => 'Relevance'
-    config.add_sort_field 'creator_title_sort asc', :label => 'Creator and Title'
+    config.add_sort_field 'creator_title_si asc', :label => 'Creator and Title'
 
     config.spell_max = 5
 
@@ -135,12 +135,12 @@ class CatalogController < ApplicationController
 
     config.field_groups = {
       :identification => [
-        ['id','objectType_t','content_type_facet','status_display','wf_error_display'],
-        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t','preserved_size_display']
+        ['id','objectType_ssim','content_type_ssim','status_ssm','wf_error_ssm'],
+        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_sim','source_id_teim','preserved_size_ssm']
       ],
       :full_identification => [
-        ['id','objectType_t','content_type_facet','metadata_source_t'],
-        ['is_governed_by_s','is_member_of_collection_s','project_tag_t','source_id_t']
+        ['id','objectType_ssim','content_type_ssim','metadata_source_ssim'],
+        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_sim','source_id_teim']
       ]
     }
 
