@@ -450,7 +450,7 @@ module ItemsHelper
     characters["&#xB6;"] = " "
     text=xml.to_s
     characters.keys.each do |key|
-      puts key
+      # puts key
       text.gsub!(key,characters[key])
     end
     xml=Nokogiri.XML(text)

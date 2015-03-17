@@ -397,7 +397,7 @@ describe ItemsHelper, :type => :helper do
       end
       expect(count).to eq(5)
     end
-    it 'should normalize state2' do
+    it 'should normalize state 2' do
       count = 0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
@@ -509,7 +509,6 @@ describe ItemsHelper, :type => :helper do
       expect(count).to eq(1)
     end
   end
-  \
   context 'schema_validate' do
     it 'should validate a document' do
       doc = Nokogiri.XML(@full_doc) do |config|
