@@ -266,7 +266,7 @@ GEM
       stanford-mods
     multi_json (1.11.0)
     multipart-post (2.0.0)
-    mysql2 (0.3.13)
+    mysql2 (0.3.18)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -511,7 +511,7 @@ DEPENDENCIES
   lyberteam-capistrano-devel (= 3.1.0)
   moab-versioning
   mods_display
-  mysql2 (= 0.3.13)
+  mysql2
   net-sftp
   nokogiri (= 1.6.5)
   osullivan (~> 0.0.3)

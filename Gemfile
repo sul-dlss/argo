@@ -8,7 +8,7 @@ gem 'dalli'
 gem 'haml'
 gem 'kaminari'
 gem 'kgio'  
-gem 'mysql2', '= 0.3.13'
+gem 'mysql2'
 gem 'net-sftp'
 gem 'nokogiri', '=1.6.5' #TODO: this should go, i just needed to get rid of nokogiri upgrade errors to do other stuff first
 gem 'prawn', '~> 1'
