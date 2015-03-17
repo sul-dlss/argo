@@ -114,13 +114,13 @@ GEM
       docopt (~> 0.5.0)
       validatable (~> 1.6)
     barby (0.6.2)
-    blacklight (5.10.2)
+    blacklight (5.9.3)
       bootstrap-sass (~> 3.2)
       deprecation
       kaminari (~> 0.13)
       nokogiri (~> 1.6)
       rails (>= 3.2.6, < 5)
-      rsolr (~> 1.0.11)
+      rsolr (~> 1.0.6)
     blacklight-marc (5.5.0)
       blacklight (~> 5.8)
       marc (>= 0.4.3, < 1.1)
@@ -336,7 +336,7 @@ GEM
       sprockets-rails
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.5)
+    rails-dom-testing (1.0.6)
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6.0)
       rails-deprecated_sanitizer (>= 1.0.1)
@@ -492,7 +492,7 @@ DEPENDENCIES
   active-fedora
   addressable (= 2.3.5)
   barby
-  blacklight (~> 5)
+  blacklight (~> 5.9.0)
   blacklight-hierarchy!
   blacklight-marc
   bootstrap-sass
