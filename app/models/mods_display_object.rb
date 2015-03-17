@@ -13,7 +13,7 @@ class ModsDisplayObject
   end
   
   mods_xml_source do |obj|
-    puts obj.xml
+      # puts obj.xml
       obj.xml
   end
 end
