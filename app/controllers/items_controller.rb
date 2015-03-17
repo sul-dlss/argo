@@ -337,7 +337,7 @@ class ItemsController < ApplicationController
     end
   end
   def open_version
-    puts params[:description]
+    # puts params[:description]
     begin
       vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
       @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
