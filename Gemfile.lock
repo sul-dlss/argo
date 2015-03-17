@@ -13,8 +13,8 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/blacklight-hierarchy.git
-  revision: f9f80d31fe08308580a7586479cda7629b2612ac
-  branch: master
+  revision: 0d8b81c25428ef0f0cd656bb32a4f4f18fe7999c
+  branch: develop
   specs:
     blacklight-hierarchy (0.1.0)
       blacklight (~> 5, < 6)
