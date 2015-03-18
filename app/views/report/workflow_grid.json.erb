@@ -1,8 +1,6 @@
-<% 
+<%
   workflows = {}
-
-  workflow_data = facet_tree('wf')['wf_wps_facet']
-  
+  workflow_data = facet_tree('wf')['wf_wps_facet'] || {}
 
   workflow_data.keys.sort.collect do |wf_name|
     wf_data = workflow_data[wf_name]
@@ -11,16 +9,13 @@
     workflows[wf_name] = { :name => wf_name, :processes => {} }
 
     processes.each do |process_name, (wf_process, wf_desc)|
-
       p = {}
-    
       p[:processes] = [wf_name,wf_process].compact.join(":")
       p[:description] = wf_desc
 
       ['waiting', 'hold', 'intermediate', 'ready', 'errors', 'skipped', 'completed'].each do |status|
         p[status.to_sym] = wf_data[process_name][status][:_].hits rescue 0
       end
-
       workflows[wf_name][:processes][process_name] = p
     end
 
@@ -28,7 +23,6 @@
     completed_count = 0 if completed_count == '-'
 
     workflows[wf_name][:totals] =  { :completed =>  completed_count }
-
   end
 
 -%>
