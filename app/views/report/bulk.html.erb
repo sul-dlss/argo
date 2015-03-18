@@ -171,7 +171,7 @@ ul li{
 	<%
 	current_content_types=[]
 	count=1
-	@response['facet_counts']['facet_fields']['content_type_facet'].each do |k|
+	@response['facet_counts']['facet_fields']['content_type_ssim'].each do |k|
 	if count %2 == 1
 		current_content_types << k
 	end

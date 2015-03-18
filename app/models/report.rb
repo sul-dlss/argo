@@ -93,7 +93,7 @@ class Report
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'content_type_facet', :label => "Content Type",
+        :field => 'content_type_ssim', :label => "Content Type",
         :sort => true, :default => false, :width => 100
       },
 #      { :field => , :label => "Location", :sort => true, :default => false, :width => 100 },
