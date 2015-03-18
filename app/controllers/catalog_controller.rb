@@ -90,6 +90,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
       :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
     }
+    #TODO: it would be nice to do date math on date fields, but we index text, so we're doing a string range for now.
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
       :days_7  => { :label => 'within 7 days',  :fq => "registered_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "registered_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
