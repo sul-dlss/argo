@@ -28,7 +28,7 @@ gem 'unicode'
 # Stanford/Hydra related gems
 gem 'about_page'
 gem 'active-fedora'
-gem 'blacklight', '~> 5.9.0'
+gem 'blacklight', '~> 5.9.0' #TODO: unpin BL, stop pointing BLH to github
 gem 'blacklight-hierarchy', :git => 'https://github.com/sul-dlss/blacklight-hierarchy.git', :branch => 'develop'
 gem 'blacklight-marc'
 gem 'dor-services', '~> 5', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'develop'
