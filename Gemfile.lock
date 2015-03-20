@@ -133,7 +133,7 @@ GEM
     compass-susy-plugin (0.9)
       compass (>= 0.11.1)
     confstruct (0.2.7)
-    daemons (1.1.9)
+    daemons (1.2.2)
     dalli (2.7.2)
     debugger (1.6.8)
       columnize (>= 0.3.1)
@@ -141,28 +141,29 @@ GEM
       debugger-ruby_core_source (~> 1.3.5)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.3.7)
-    deprecation (0.1.0)
+    deprecation (0.2.2)
       activesupport
     diff-lcs (1.2.5)
     docile (1.1.5)
     docopt (0.5.0)
-    dor-services (4.15.2)
+    dor-services (4.18.3)
       active-fedora (~> 5.7.1)
       activesupport (~> 3.2, >= 3.2.18)
-      confstruct (~> 0.2.2)
+      confstruct (~> 0.2.7)
       dor-workflow-service (~> 1.7, >= 1.7.1)
       druid-tools (~> 0.3.1)
-      equivalent-xml (~> 0.2.2)
+      equivalent-xml (~> 0.5.1)
       json (~> 1.8.1)
       lyber-utils (~> 0.1.2)
-      moab-versioning (= 1.3.3)
+      moab-versioning (~> 1.4.4)
       net-sftp (~> 2.1.2)
-      net-ssh (~> 2.7.0)
+      net-ssh (~> 2.6.5)
       nokogiri (~> 1.6.0)
       om (~> 1.8.0)
+      osullivan
       progressbar (~> 0.21.0)
       rdf (~> 1.0.9.0)
-      rest-client (~> 1.6.7)
+      rest-client (~> 1.7)
       rsolr-ext (~> 1.0.3)
       ruby-cache (~> 0.3.0)
       ruby-graphviz (~> 1.0.9)
@@ -172,14 +173,14 @@ GEM
       systemu (~> 2.6.0)
       uuidtools (~> 2.1.4)
       validatable (~> 1.6.7)
-    dor-workflow-service (1.7.2)
-      activesupport (~> 3.2)
+    dor-workflow-service (1.7.5)
+      activesupport (>= 3.2.1, < 4.2.2)
       confstruct (~> 0.2.7)
       nokogiri (~> 1.6.0)
-      rest-client (~> 1.6.7)
+      rest-client (~> 1.7)
     druid-tools (0.3.1)
     ensure_valid_encoding (0.5.3)
-    equivalent-xml (0.2.9)
+    equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     eventmachine (1.0.3)
@@ -195,14 +196,11 @@ GEM
       posix-spawn (~> 0.3.6)
     haml (4.0.5)
       tilt
-    happymapper (0.4.1)
-      libxml-ruby (~> 2.0)
-    hashery (2.1.1)
     hike (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
     http_logger (0.4.3)
-    i18n (0.6.11)
+    i18n (0.7.0)
     is_it_working-cbeer (1.0.16)
     iso-639 (0.2.5)
     jettywrapper (1.8.2)
@@ -217,13 +215,12 @@ GEM
     jquery-validation-rails (1.12.0)
       railties (>= 3.2, < 5.0)
       thor (~> 0.14)
-    json (1.8.1)
+    json (1.8.2)
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.9.2)
     libv8 (3.16.14.7)
-    libxml-ruby (2.7.0)
     logger (1.2.8)
     lyber-utils (0.1.2)
       bagit (>= 0.1.0)
@@ -245,33 +242,35 @@ GEM
     mediashelf-loggable (0.4.10)
     method_source (0.8.2)
     mime-types (1.25.1)
-    mini_portile (0.6.1)
-    moab-versioning (1.3.3)
+    mini_portile (0.6.2)
+    moab-versioning (1.4.4)
       confstruct
-      happymapper
-      hashery (>= 2.0.0)
       json
       nokogiri
+      nokogiri-happymapper
       systemu
-    mods (0.0.23)
+    mods (2.0.2)
       iso-639
       nokogiri
-      nom-xml
+      nom-xml (~> 0.5.2)
     mods_display (0.3.3)
       i18n
       stanford-mods
-    multi_json (1.10.1)
+    multi_json (1.11.0)
     multipart-post (2.0.0)
-    mysql2 (0.3.13)
+    mysql2 (0.3.18)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (2.7.0)
-    nokogiri (1.6.5)
+    net-ssh (2.6.8)
+    netrc (0.10.3)
+    nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
-    nom-xml (0.5.1)
-      activesupport
+    nokogiri-happymapper (0.5.9)
+      nokogiri (~> 1.5)
+    nom-xml (0.5.2)
+      activesupport (>= 3.2.18)
       i18n
       nokogiri
     om (1.8.0)
@@ -280,6 +279,10 @@ GEM
       deprecation
       mediashelf-loggable
       nokogiri (>= 1.4.2)
+    osullivan (0.0.3)
+      activesupport (>= 3.2.18)
+      faraday (~> 0.9.0)
+      json
     pdf-core (0.4.0)
     polyglot (0.3.5)
     posix-spawn (0.3.9)
@@ -335,9 +338,9 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
-    rest-client (1.6.8)
-      mime-types (~> 1.16)
-      rdoc (>= 2.4.2)
+    rest-client (1.7.3)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
     rsolr-client-cert (0.5.2)
       rest-client
       rsolr
@@ -416,8 +419,8 @@ GEM
       term-ansicolor
     stanford-mods (0.0.27)
       mods
-    stomp (1.3.3)
-    systemu (2.6.4)
+    stomp (1.3.4)
+    systemu (2.6.5)
     term-ansicolor (1.3.0)
       tins (~> 1.0)
     therubyracer (0.12.1)
@@ -435,7 +438,7 @@ GEM
       polyglot (>= 0.3.1)
     ttfunk (1.4.0)
     tzinfo (0.3.42)
-    uber (0.0.11)
+    uber (0.0.13)
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -450,7 +453,7 @@ GEM
     uuidtools (2.1.5)
     validatable (1.6.7)
     websocket (1.2.1)
-    xml-simple (1.1.4)
+    xml-simple (1.1.5)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -473,7 +476,7 @@ DEPENDENCIES
   compass-susy-plugin (~> 0.9.0)
   confstruct (~> 0.2.4)
   dalli
-  dor-services (>= 4.15.2)
+  dor-services (~> 4.18)
   dor-workflow-service (~> 1.5)
   druid-tools (~> 0.3.0)
   haml
@@ -485,9 +488,9 @@ DEPENDENCIES
   kaminari
   kgio
   lyberteam-capistrano-devel (= 3.1.0.pre1)
-  moab-versioning (= 1.3.3)
+  moab-versioning
   mods_display
-  mysql2 (= 0.3.13)
+  mysql2
   net-sftp
   prawn
   prawn-table
