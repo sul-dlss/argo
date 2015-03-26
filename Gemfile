@@ -68,8 +68,7 @@ end
 group :assets do
   gem 'coffee-rails'
   gem 'uglifier', '>= 1.0.3'
-  # gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
-  gem 'jquery-rails'
+  gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
   gem 'jquery-validation-rails'
   gem 'therubyracer', "~> 0.11"
   gem 'sass-rails'

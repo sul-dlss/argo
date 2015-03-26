@@ -223,9 +223,8 @@ GEM
       i18n
       logger
       rubyzip
-    jquery-rails (4.0.3)
-      rails-dom-testing (~> 1.0)
-      railties (>= 4.2.0)
+    jquery-rails (2.1.4)
+      railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     jquery-validation-rails (1.13.1)
       railties (>= 3.2, < 5.0)
@@ -514,7 +513,7 @@ DEPENDENCIES
   http_logger
   is_it_working-cbeer
   jettywrapper
-  jquery-rails
+  jquery-rails (= 2.1.4)
   jquery-validation-rails
   kaminari
   kgio
