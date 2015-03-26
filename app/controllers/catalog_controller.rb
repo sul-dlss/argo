@@ -45,6 +45,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'id',              :label => 'DRUID:'
     config.add_index_field 'dc_creator_si',   :label => 'Creator:'
     config.add_index_field 'project_tag_sim', :label => 'Project:'
+
     config.add_show_field 'content_type_ssim',           :label => 'Content Type:'
     config.add_show_field 'embargoMetadata_tesim',       :label => 'Embargo:'  # TODO: not sure this is the right translation
     config.add_show_field 'identifier_tesim',            :label => 'IDs:'
@@ -74,7 +75,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'wf_wps_sim', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_sim', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_swp_sim', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'has_model_ssim',  :label => 'Model', :helper_method => :model_facet_helper  # helper_method requires Blacklight 4.2
+    config.add_facet_field 'has_model_ssim',  :label => 'Model'
 
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
