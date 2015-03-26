@@ -16,11 +16,6 @@ class Report
 
     config.report_fields = [
       {
-        :label => "Druid", :field => 'druid',
-        :proc => lambda { |doc| doc['id'].split(/:/).last },
-        :sort => true, :default => true, :width => 100
-      },
-      {
         :field => 'purl', :label => "Purl",
         :proc => lambda { |doc| File.join(Argo::Config.urls.purl, doc['id'].split(/:/).last) },
         :solr_fields => ['id'],
@@ -29,67 +24,65 @@ class Report
       {
         :field => 'title', :label => "Title",
         :proc => lambda { |doc| retrieve_terms(doc)[:title] },
-        :solr_fields => ['public_dc_title_t', 'mods_title_t', 'dc_title_t', 'obj_label_t'],
+        :solr_fields => ['public_dc_title_tesim', 'dc_title_si', 'obj_label_teim'],
         :sort => false, :default => false, :width => 100
       },
       {
         :field => 'citation', :label => "Citation",
         :proc => lambda { |doc| render_citation(doc) },
         :solr_fields => [
-          'public_dc_creator_t', 'mods_creator_t', 'mods_name_t', 'dc_creator_t',
-          'public_dc_title_t', 'mods_title_t', 'dc_title_t', 'obj_label_t',
-          'mods_originInfo_place_placeTerm_t',
-          'public_dc_publisher_t', 'mods_originInfo_publisher_t', 'dc_publisher_t',
-          'public_dc_date_t', 'mods_dateissued_t', 'mods_datecreated_t', 'dc_date_t'
+          'public_dc_creator_tesim', 'dc_creator_si', 'public_dc_title_tesim', 
+          'dc_title_si', 'obj_label_teim', 'originInfo_place_placeTerm_tesim',
+          'public_dc_publisher_tesim', 'originInfo_publisher_tesim', 'public_dc_date_tesim'
         ],
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'source_id_t', :label => "Source Id",
+        :field => 'source_id_teim', :label => "Source Id",
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'is_governed_by_s', :label => 'Admin Policy ID',
-        :proc => lambda { |doc| doc['is_governed_by_s'].first.split(/:/).last },
+        :field => 'is_governed_by_ssim', :label => 'Admin Policy ID',
+        :proc => lambda { |doc| doc['is_governed_by_ssim'].first.split(/:/).last },
         :sort => false, :default => false, :width => 100
       },
       {
         :field => 'apo', :label => "Admin Policy",
-        :proc => lambda { |doc| doc['apo_title_facet'] },
-        :solr_fields => ['apo_title_facet'],
+        :proc => lambda { |doc| doc['apo_title_ssm'] },
+        :solr_fields => ['apo_title_ssm'],
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'is_member_of_collection_s', :label => 'Collection ID',
-        :proc => lambda { |doc| doc['is_member_of_collection_s'].map{|col| col.split(/:/).last }},
+        :field => 'is_member_of_collection_ssim', :label => 'Collection ID',
+        :proc => lambda { |doc| doc['is_member_of_collection_ssim'].map{|col| col.split(/:/).last }},
         :sort => false, :default => false, :width => 100
       },
       {
         :field => 'collection', :label => "Collection",
-        :proc => lambda { |doc| doc['collection_title_facet'] },
-        :solr_fields => ['collection_title_facet'],
+        :proc => lambda { |doc| doc['collection_title_ssm'] },
+        :solr_fields => ['collection_title_ssm'],
         :sort => false, :default => false, :width => 100
       },
       {
         :field => 'hydrus_collection', :label => "Hydrus Collection",
-        :proc => lambda { |doc| doc['hydrus_collection_title_facet'] },
-        :solr_fields => ['hydrus_collection_title_facet'],
+        :proc => lambda { |doc| doc['hydrus_collection_title_teim'] },
+        :solr_fields => ['hydrus_collection_title_teim'],
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'project_tag_facet', :label => "Project",
+        :field => 'project_tag_sim', :label => "Project",
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'registered_by_tag_facet', :label => "Registered By",
+        :field => 'registered_by_tag_sim', :label => "Registered By",
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'identityMetadata_tag_t', :label => "Tags",
+        :field => 'tag_ssim', :label => "Tags",
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'objectType_facet', :label => "Object Type",
+        :field => 'objectType_ssim', :label => "Object Type",
         :sort => true, :default => false, :width => 100
       },
       {
@@ -98,28 +91,22 @@ class Report
       },
 #      { :field => , :label => "Location", :sort => true, :default => false, :width => 100 },
       {
-        :field => 'catkey_id_t', :label => "Catkey",
+        :field => 'catkey_id_teim', :label => "Catkey",
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'barcode_id_t', :label => "Barcode",
+        :field => 'barcode_id_teim', :label => "Barcode",
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'status_display', :label => "Status",
+        :field => 'status_ssm', :label => "Status",
         :sort => false, :default => true, :width => 100
       },
       {
         :field => 'published_datetime', :label => "Pub. Datetime",
           #modified to format the date
-        :proc => lambda { |doc| render_datetime(doc['published_dt'])},
-        :solr_fields => ['published_dt'],
-        :sort => true, :default => false, :width => 100
-      },
-      {
-        :field => 'shelved_datetime', :label => "Shelve Datetime",
-        :proc => lambda { |doc| render_datetime(doc['shelved_dt'])},
-        :solr_fields => ['shelved_dt'],
+        :proc => lambda { |doc| render_datetime(doc['published_tesim'])},
+        :solr_fields => ['published_tesim'],
         :sort => true, :default => false, :width => 100
       },
       {
@@ -150,32 +137,20 @@ class Report
       {
         :field => 'published_dt', :label => "Pub. Date",
           #modified to format the date
-        :proc => lambda { |doc| doc['published_day_facet']},
-        :solr_fields => ['published_day_facet'],
+        :proc => lambda { |doc| doc['published_day_tesim']},
+        :solr_fields => ['published_day_tesim'],
         :sort => true, :default => true, :width => 100
       },
       {
-        :field => 'shelved_dt', :label => "Shelve Date",
-        :proc => lambda { |doc| doc['shelved_day_facet']},
-        :solr_fields => ['shelved_day_facet'],
-        :sort => true, :default => false, :width => 100
-      },
-      {
-        :field => 'preserved_dt', :label => "Pres. Date",
-        :proc => lambda { |doc| doc['preserved_day_facet']},
-        :solr_fields => ['preserved_day_facet'],
-        :sort => true, :default => false, :width => 100
-      },
-      {
         :field => 'accessioned_dt', :label => "Accession. Date",
-        :proc => lambda { |doc| doc['accessioned_day_facet']},
-        :solr_fields => ['accessioned_day_facet'],
+        :proc => lambda { |doc| doc['accessioned_day_tesim']},
+        :solr_fields => ['accessioned_day_tesim'],
         :sort => true, :default => false, :width => 100
       },
       {
         :field => 'workflow_status_display', :label => "Errors",
-        :proc => lambda { |doc| doc['workflow_status_display'].first.split('|')[2] },
-        :solr_fields => ['workflow_status_display'],
+        :proc => lambda { |doc| doc['workflow_status_ssm'].first.split('|')[2] },
+        :solr_fields => ['workflow_status_ssm'],
         :sort => true, :default => false, :width => 100
       },
       {
@@ -207,7 +182,7 @@ class Report
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 accessioned_day_facet preserved_day_facet shelved_day_facet shelved_day_facet published_day_facet citationCreator_t citationTitle_t content_file_count_display coordinates_t creator_t dc_creator_t dc_identifier_t dc_title_t dor_id_t event_t events_event_t events_t extent_t identifier_t identityMetadata_citationCreator_t identityMetadata_citationTitle_t identityMetadata_objectCreator_t identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_t mods_originInfo_place_placeTerm_t mods_originInfo_publisher_t obj_label_t obj_state_t originInfo_place_placeTerm_t originInfo_publisher_t otherId_t public_dc_contributor_t public_dc_coverage_t public_dc_creator_t public_dc_date_t public_dc_description_t public_dc_format_t public_dc_identifier_t public_dc_language_t public_dc_publisher_t public_dc_relation_t public_dc_rights_t public_dc_subject_t public_dc_title_t public_dc_type_t resource_count_display scale_t shelved_content_file_count_display sourceId_t tag_t title_t topic_t is_member_of_collection_s is_governed_by_s},
+      :qf => %{text^3 accessioned_day_tesim preserved_day_facet shelved_day_facet published_day_tesim content_file_count_display coordinates_teim creator_tesim dc_creator_si dc_identifier_druid_si dc_title_si dor_id_teim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_teim obj_state_teim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim resource_count_display scale_teim shelved_content_file_count_display sourceId_t tag_teim title_tesim topic_tesim is_member_of_collection_ssim is_governed_by_ssim},
       :rows => 100,
       :facet => true,
       :'facet.mincount' => 1,
@@ -258,11 +233,11 @@ class Report
     while @document_list.length > 0
       report_data.each do |rec|
         if params[:source_id]
-          toret << rec['druid'].to_s+"\t"+rec['source_id_t'].to_s
+          toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
         elsif params[:tags]
           tags=''
-          if rec['identityMetadata_tag_t'] != nil
-            rec['identityMetadata_tag_t'].split(';').each do |tag|
+          if rec['tag_ssim'] != nil
+            rec['tag_ssim'].split(';').each do |tag|
               tags+="\t"+tag.to_s
             end
           end
