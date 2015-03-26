@@ -38,7 +38,6 @@ gem 'is_it_working-cbeer'
 gem 'jettywrapper'
 gem 'moab-versioning'
 gem 'mods_display'
-gem 'osullivan', '~> 0.0.3' #TODO: might want to remove this entirely since argo doesn't use it directly
 gem 'rails', '~> 4'
 gem 'responders', '~> 2.0'
 gem 'rsolr'
@@ -69,6 +68,7 @@ group :assets do
   gem 'coffee-rails'
   gem 'uglifier', '>= 1.0.3'
   gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
+  gem 'jquery-ui-rails'
   gem 'jquery-validation-rails'
   gem 'therubyracer', "~> 0.11"
   gem 'sass-rails'

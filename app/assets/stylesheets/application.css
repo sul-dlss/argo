@@ -12,4 +12,5 @@
  *= require blacklight
  *= require blacklight_hierarchy
  *= require argo
+ *= require jquery-ui
 */

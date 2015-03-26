@@ -24,5 +24,6 @@
 //= require lightbox
 //= require grid.locale-en
 //= require jquery.jqGrid.min
+//= require jquery-ui
 //= require jquery.validate
 //= require jquery.validate.additional-methods
