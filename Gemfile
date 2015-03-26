@@ -67,17 +67,13 @@ group :development do
 end
 
 group :assets do
-  # gem 'coffee-rails', '~> 3.2.1'
   gem 'coffee-rails'
   gem 'uglifier', '>= 1.0.3'
   # gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
   gem 'jquery-rails'
   gem 'jquery-validation-rails'
   gem 'therubyracer', "~> 0.11"
-  # gem 'sass-rails', '~> 3.2.0'
   gem 'sass-rails'
-  # gem 'compass-rails', '~> 1.0.0'
-  # gem 'compass-susy-plugin', '~> 0.9.0'
   gem 'bootstrap-sass'
 end
 
