@@ -442,7 +442,7 @@ GEM
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
     sqlite3 (1.3.10)
-    squash_rails (1.3.4)
+    squash_rails (1.3.3)
       squash_ruby
     squash_ruby (2.0.0)
       json
@@ -550,7 +550,7 @@ DEPENDENCIES
   simplecov
   solrizer
   sqlite3
-  squash_rails
+  squash_rails (= 1.3.3)
   squash_ruby
   stanford-mods
   therubyracer (~> 0.11)

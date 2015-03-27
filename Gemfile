@@ -19,7 +19,7 @@ gem 'rake'
 gem 'rest-client'
 gem 'retries'
 gem 'ruby-graphviz'
-gem 'squash_rails', :require => 'squash/rails'
+gem 'squash_rails', '=1.3.3', :require => 'squash/rails'
 gem 'squash_ruby',  :require => 'squash/ruby'
 gem 'thin' # or mongrel
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
