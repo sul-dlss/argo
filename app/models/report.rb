@@ -16,6 +16,11 @@ class Report
 
     config.report_fields = [
       {
+        :label => "Druid", :field => 'druid',
+        :proc => lambda { |doc| doc['id'].split(/:/).last },
+        :sort => true, :default => true, :width => 100
+      },
+      {
         :field => 'purl', :label => "Purl",
         :proc => lambda { |doc| File.join(Argo::Config.urls.purl, doc['id'].split(/:/).last) },
         :solr_fields => ['id'],
