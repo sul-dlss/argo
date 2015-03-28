@@ -8,18 +8,14 @@ class ReportController < CatalogController
   helper ArgoHelper
   copy_blacklight_config_from CatalogController
   
-  def default_html_head
-    super
-    stylesheet_links << ['ui.jqgrid']
-    javascript_includes << ['report']
-  end
-  
   def rsolr_request_error(exception)
     raise exception
   end
+
   def bulk
     (@response, @document_list) = get_search_results
   end
+
   def data
     #if (not params[:sidx]) or params[:sidx] == 'druid'
     #  params[:sidx] = 'id'
@@ -45,6 +41,7 @@ class ReportController < CatalogController
       format.xml  { render :xml  => @report.report_data }
     end
   end
+
   def content_types
     
   end
@@ -62,6 +59,7 @@ class ReportController < CatalogController
       }
     end
   end
+  
   def download
     fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
     params[:per_page]=10
