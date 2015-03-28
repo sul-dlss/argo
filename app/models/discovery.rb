@@ -20,23 +20,13 @@ class Discovery
       },
       {
         :label => "Display Title",
-        :field => "sw_title_display_facet",
+        :field => "title_ssm",
         :sort => true, :default => true, :width => 200
       },
       {
         :label => "Format",
-        :field => "sw_format_facet",
+        :field => "sw_format_tesim",
         :default => true, :width => 200
-      },
-      {
-        :label => "245a Search Title",
-        :field => "sw_title_245a_search_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "245 Search Title",
-        :field => "sw_title_245_search_facet",
-        :default => false, :false => 200
       },
       {
         :label => "Variant Search Title",
@@ -45,27 +35,12 @@ class Discovery
       },
       {
         :label => "Sort Title",
-        :field => "sw_title_sort_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "245a Display Title",
-        :field => "sw_title_245a_display_facet",
+        :field => "title_sort_si",
         :default => false, :width => 200
       },
       {
         :label => "Full Display Title",
-        :field => "sw_title_full_display_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "1xx Search Author",
-        :field => "sw_author_1xx_search_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "7xx Search Author",
-        :field => "sw_author_7xx_search_facet",
+        :field => "title_ssm",
         :default => false, :width => 200
       },
       {
@@ -100,7 +75,7 @@ class Discovery
       },
       {
         :label => "Topic Search",
-        :field => "sw_topic_search_facet",
+        :field => "topic_tesim",
         :default => false, :width => 200
       },
       {
@@ -120,12 +95,12 @@ class Discovery
       },
       {
         :label => "Subject All",
-        :field => "sw_subject_all_search_facet",
+        :field => "subject_topic_tesim",
         :default => false, :width => 200
       },
       {
         :label => "Topic Facet",
-        :field => "sw_topic_facet",
+        :field => "topic_tesim",
         :default => false, :width => 200
       },
       {
@@ -140,7 +115,7 @@ class Discovery
       },
       {
         :label => "Language Facet",
-        :field => "sw_language_facet",
+        :field => "sw_language_tesim",
         :default => true, :width => 200
       },
       {
@@ -173,7 +148,7 @@ class Discovery
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 accessioned_day_facet preserved_day_facet shelved_day_facet shelved_day_facet published_day_facet citationCreator_t citationTitle_t content_file_count_display coordinates_t creator_t dc_creator_t dc_identifier_t dc_title_t dor_id_t event_t events_event_t events_t extent_t identifier_t identityMetadata_citationCreator_t identityMetadata_citationTitle_t identityMetadata_objectCreator_t identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_t mods_originInfo_place_placeTerm_t mods_originInfo_publisher_t obj_label_t obj_state_t originInfo_place_placeTerm_t originInfo_publisher_t otherId_t public_dc_contributor_t public_dc_coverage_t public_dc_creator_t public_dc_date_t public_dc_description_t public_dc_format_t public_dc_identifier_t public_dc_language_t public_dc_publisher_t public_dc_relation_t public_dc_rights_t public_dc_subject_t public_dc_title_t public_dc_type_t resource_count_display scale_t shelved_content_file_count_display sourceId_t tag_t title_t topic_t},
+      :qf => %{text^3 accessioned_day_tesim published_day_sim content_file_count_teim coordinates_teim creator_tesim dc_creator_si dc_identifier_druid_si dc_title_si dor_id_teim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_sim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_teim obj_state_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim resource_count_display scale_teim shelved_content_file_count_display sourceId_t tag_teim title_tesim topic_tesim},
       :rows => 100,
       :facet => true,
       :'facet.mincount' => 1,
@@ -216,12 +191,13 @@ class Discovery
   def params
     @params
   end
+  
   def pids params
     toret=[]
     while @document_list.length >0
     report_data.each do|rec|
     if params[:source_id]
-      toret << rec['druid'].to_s+"\t"+rec['source_id_t'].to_s
+      toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
     else
       toret << rec['druid']
     end
