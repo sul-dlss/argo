@@ -1,4 +1,6 @@
 <% content_for :head do %>
+  <%= javascript_include_tag 'report' %>
+  <%= stylesheet_link_tag 'ui.jqgrid' %>
   <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
   <script type="text/javascript">
     report_model = {
