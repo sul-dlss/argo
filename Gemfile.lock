@@ -511,6 +511,7 @@ DEPENDENCIES
   dor-services (~> 5)!
   dor-workflow-service
   druid-tools (~> 0.3.0)
+  equivalent-xml (~> 0.5.1)
   haml
   http_logger
   is_it_working-cbeer

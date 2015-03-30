@@ -5,6 +5,7 @@ gem 'barby'
 gem 'coderay'
 gem 'confstruct', "~> 0.2.4"
 gem 'dalli'
+gem 'equivalent-xml', '~> 0.5.1'
 gem 'haml'
 gem 'kaminari'
 gem 'kgio'  
