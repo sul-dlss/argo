@@ -10,7 +10,7 @@ gem 'kaminari'
 gem 'kgio'  
 gem 'mysql2'
 gem 'net-sftp'
-gem 'nokogiri', '=1.6.5' #TODO: this should go, i just needed to get rid of nokogiri upgrade errors to do other stuff first
+gem 'nokogiri', '~> 1.6'
 gem 'prawn', '~> 1'
 gem 'prawn-table'
 gem 'progressbar'
