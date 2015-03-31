@@ -1,22 +1,22 @@
 <div><label>Update tags or delete a tag</label>
 <%=form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :update => 'true') do%>
-	<%count = 1%>
-	<%@object.tags.each do |tag|%>
-	<input class="tag" size="100" maxlength="255" style="width:auto" name="tag<%=count%>" id="tag<%=count%>" type="text" value="<%=tag%>"/>
-	<%del_image=image_tag ('unavailable.png')%>
-	<%=link_to del_image, url_for(:controller => :items, :action => :tags, :id => @object.pid, :del => 'true', :tag => count)%>
-	<br>
-	<%count+=1%>
-	<%end%>
-	<button>Update</button>
+  <%count = 1%>
+  <%@object.tags.each do |tag|%>
+  <input class="tag" size="100" maxlength="255" style="width:auto" name="tag<%=count%>" id="tag<%=count%>" type="text" value="<%=tag%>"/>
+  <%del_image=image_tag ('unavailable.png')%>
+  <%=link_to del_image, url_for(:controller => :items, :action => :tags, :id => @object.pid, :del => 'true', :tag => count)%>
+  <br/>
+  <%count+=1%>
+  <%end%>
+  <button>Update</button>
 <%end%>
 </div>
 <div>
-<label>Add a tag</label>
+  <label>Add a tag</label>
 <%=form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :add => 'true') do%>
-  	<input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag1" id="new_tag1" type="text" value=""/><br>
-	<input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag2" id="new_tag2" type="text" value=""/><br>
-	<input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag3" id="new_tag3" type="text" value=""/><br>
-	<button>Add</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
+  <input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag1" id="new_tag1" type="text" value=""/><br/>
+  <input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag2" id="new_tag2" type="text" value=""/><br/>
+  <input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag3" id="new_tag3" type="text" value=""/><br/>
+  <button>Add</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
 <%end%>
 </div>

@@ -1,14 +1,13 @@
 <div id="previousNextDocument">
   <div style="float: right">
-  	<%=link_to t('blacklight.search.start_over'), catalog_index_path%>
+    <%=link_to t('blacklight.search.start_over'), catalog_index_path%>
     <%= link_back_to_catalog %>
-
   </div>
   <div>
     <% if @previous_document || @next_document %>
-  		<%= link_to_previous_document(@previous_document) %> | 
-      <%= item_page_entry_info %>
-  		| <%= link_to_next_document(@next_document) %>	
+      <%= link_to_previous_document(@previous_document) %> |
+      <%= item_page_entry_info %> |
+      <%= link_to_next_document(@next_document) %>
     <% end %>
   </div>
 </div>

@@ -11,26 +11,24 @@
 <script src="/assets/mods.js"></script>
 <script src="/assets/jquery.xmleditor.js"></script>
 <style>
-ul {list-style-type:none !important}
-li {list-style-type:none !important}
-
+  ul {list-style-type:none !important}
+  li {list-style-type:none !important}
 </style>
 <body>
-	<div class="wrapper">
-	</div>
-	<div id="xml_editor">
-	</div>
-	<script>
-		$(function() {
-			$("#xml_editor").xmlEditor({
-				schemaObject : modsSchema,
-				documentTitle : 'some title',
-				ajaxOptions: {
-						    	xmlRetrievalPath: "mods.xml",
-								xmlUploadPath: "mods"
-								}
-			});
-			
-		});
-	</script>
+  <div class="wrapper">
+  </div>
+  <div id="xml_editor">
+  </div>
+  <script>
+    $(function() {
+      $("#xml_editor").xmlEditor({
+        schemaObject: modsSchema,
+        documentTitle: 'some title',
+        ajaxOptions: {
+          xmlRetrievalPath: "mods.xml",
+          xmlUploadPath: "mods"
+        }
+      });
+    });
+  </script>
 </body>

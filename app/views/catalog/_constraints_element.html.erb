@@ -1,5 +1,5 @@
 <%- # local params:
-    # label 
+    # label
     # value
     # options =>
     #   :remove => url for a remove constraint link
@@ -12,23 +12,23 @@
 
 <span class="appliedFilter constraint <%= options[:classes].join(" ") if options[:classes] %>">
       <%- unless label.blank? -%>
-        <span class="filterName"><%= options[:escape_label] ? h(label) : raw(label) %></span> 
+        <span class="filterName"><%= options[:escape_label] ? h(label) : raw(label) %></span>
       <%- end -%>
       <%- unless value.blank? -%>
         <span class="filterValue"><%= options[:escape_value] ? h(value) : raw(value) %></span>
       <%- end -%>
       <%- unless options[:remove].blank? -%>
-        <% accessible_remove_label =               
-                if label.blank?
-                  "Remove constraint #{options[:escape_value] ? h(value) : value}"
-                else
-                  "Remove constraint #{options[:escape_value] ? h(value) : value}: #{options[:escape_value] ? h(value) : value}"
-                end              
-        %>                
+        <% accessible_remove_label =
+             if label.blank?
+               "Remove constraint #{options[:escape_value] ? h(value) : value}"
+             else
+               "Remove constraint #{options[:escape_value] ? h(value) : value}: #{options[:escape_value] ? h(value) : value}"
+             end
+        %>
         <%= link_to(accessible_remove_label,
-					options[:remove],
-					:class=>'btnRemove imgReplace',
+          options[:remove],
+          :class=>'btnRemove imgReplace',
           :alt=>'remove'
-				) %>
+        ) %>
       <%- end -%>
 </span>

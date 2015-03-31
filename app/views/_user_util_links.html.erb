@@ -11,27 +11,27 @@
   |
 
 <% if not session[:groups].nil? 
-	%><span class="impersonating-highlight">Impersonating:<%
-		session[:groups].each do |group|
-		%>
-		<%= group%>
-		<%
-		end
-		%></span><a href="/auth/forget_impersonated_groups">x</a>|<%
-	else
-		if current_user.is_admin %>
-			<a href="/auth/groups.html">Impersonate</a> |
-			<%
-		end
-	end
-	%>
-	<% if index_queue_depth>1000
-			%> <span style="color:red; font-weight:bold">indexer backlog: <%= index_queue_depth%></span><%
-		else 
-		%> <span>indexer backlog: <%= index_queue_depth%></span>
-		<%end%>
+  %><span class="impersonating-highlight">Impersonating:<%
+    session[:groups].each do |group|
+    %>
+    <%= group%>
+    <%
+    end
+    %></span><a href="/auth/forget_impersonated_groups">x</a>|<%
+  else
+    if current_user.is_admin %>
+      <a href="/auth/groups.html">Impersonate</a> |
+      <%
+    end
+  end
+  %>
+<% if index_queue_depth>1000
+  %> <span style="color:red; font-weight:bold">indexer backlog: <%= index_queue_depth%></span><%
+  else 
+  %> <span>indexer backlog: <%= index_queue_depth%></span>
+<%end%>
 
-<br>
+<br/>
 <%= link_to "Register&nbsp; Items".html_safe, register_items_path %>
 <%if current_user.is_admin or current_user.is_manager %>
 |

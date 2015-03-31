@@ -1,12 +1,12 @@
 <%=form_tag url_for(:controller => :items, :action => :set_content_type, :id => @object.pid) do%>
-	<label>Content type</label>
-	<label>Old content type</label>
-	<%=select_tag :old_content_type, options_for_select(content_types) %><br>
-	<label>Old resource type</label>
-	<%=select_tag :old_resource_type, options_for_select(resource_types) %><br>
-	<label>New content type</label>
-	<%=select_tag :new_content_type, options_for_select(content_types) %><br>
-	<label>New resource type</label>
-	<%=select_tag :new_resource_type, options_for_select(resource_types) %><br>
-	<button>Update</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
+  <label>Content type</label>
+  <label>Old content type</label>
+  <%=select_tag :old_content_type, options_for_select(content_types) %><br/>
+  <label>Old resource type</label>
+  <%=select_tag :old_resource_type, options_for_select(resource_types) %><br/>
+  <label>New content type</label>
+  <%=select_tag :new_content_type, options_for_select(content_types) %><br/>
+  <label>New resource type</label>
+  <%=select_tag :new_resource_type, options_for_select(resource_types) %><br/>
+  <button>Update</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
 <%end%>

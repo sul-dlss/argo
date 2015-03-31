@@ -1,16 +1,16 @@
 <%if current_user.is_admin 
-	%>Current groups<br><%
- current_user.groups.each do |group| 
-	%>
-	<div><%= group%></div>
-	<%
-	end	
-	%>
-	<br>
-	Enter a group or a comma separated list of groups to impersonate<br>
-	<%= form_tag('/auth/remember_impersonated_groups') do%>
-	<%= text_field_tag(:groups) %>
-	  <%= submit_tag("Impersonate") %>
-	<%end%>
-	<%end%>
-	
+  %>Current groups<br/><%
+ current_user.groups.each do |group|
+  %>
+  <div><%= group%></div>
+  <%
+  end
+  %>
+  <br/>
+  Enter a group or a comma separated list of groups to impersonate<br/>
+  <%= form_tag('/auth/remember_impersonated_groups') do%>
+  <%= text_field_tag(:groups) %>
+    <%= submit_tag("Impersonate") %>
+  <%end%>
+<%end%>
+

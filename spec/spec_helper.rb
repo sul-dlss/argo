@@ -8,6 +8,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'equivalent-xml/rspec_matchers'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -52,8 +53,8 @@ end
 def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::OmDatastream)
   foxml = Nokogiri::XML(foxml) unless foxml.is_a?(Nokogiri::XML::Node)
   xml_streams = foxml.xpath('//foxml:datastream')
-  properties = Hash[foxml.xpath('//foxml:objectProperties/foxml:property').collect { |node| 
-    [node['NAME'].split(/#/).last, node['VALUE']] 
+  properties = Hash[foxml.xpath('//foxml:objectProperties/foxml:property').collect { |node|
+    [node['NAME'].split(/#/).last, node['VALUE']]
   }]
   result = item_class.new(:pid => foxml.root['PID'])
   result.label    = properties['label']

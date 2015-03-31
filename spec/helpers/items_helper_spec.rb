@@ -650,11 +650,10 @@ describe ItemsHelper, :type => :helper do
   end
   context 'mclaughlin_replace_problematic_characters' do
     it "should replace the bad character" do
-      pending
-      bad_string = "&#x2013; &#x2018; &#x2019; &#x2018; &#x2019 ;&#x201C; &#x201D; &#x2026; &#x2070; &#x30A; &#xBA; &#xB6;"
-      good_string = "-- &apos; &apos; &quot; &quot; ... &#xB0; &#xB0; &#xB0; "
-      xml=Nokogiri::XML("<something>#{bad_string}</something>")
-      expect(mclaughlin_replace_problematic_characters(xml).to_s).to eq(good_string)
+      bad_string  = "&#x2013; &#x2018; &#x2019; &#x201C; &#x201D; &#x2026; &#x2070; &#x30A; &#xBA; &#xB6; &quot;xyz"
+      good_string = "-- &apos; &apos; &quot; &quot; ... &#xB0; &#xB0; &#xB0; &quot;xyz"
+      bad_xml = Nokogiri::XML("<something> #{bad_string}</ something> ")
+      expect(mclaughlin_replace_problematic_characters(bad_xml).content).to be_equivalent_to Nokogiri::XML("<test>#{good_string} </test>").content
     end
   end
 end

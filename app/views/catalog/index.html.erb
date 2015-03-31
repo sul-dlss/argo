@@ -2,30 +2,28 @@
   <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
 <% end %>
 <% unless has_search_parameters? %>
-	<%# if there are no input/search related params, display the "home" partial -%>
-	<%= render 'home' %>
+  <%# if there are no input/search related params, display the "home" partial -%>
+  <%= render 'home' %>
 <% else %>
   <% @page_title = "#{application_name} Search Results" %>
   <% content_for(:head) { render_opensearch_response_metadata.html_safe } -%>
-	<%= render :partial => 'search_form' %>
+  <%= render :partial => 'search_form' %>
   <% if has_search_parameters? %>
     <%= render :partial => 'did_you_mean' %>
     <%= render 'constraints', :localized_params=>params %>
   <% end %>
-  
+
   <%= render 'results_pagination' %>
-	<%= render_document_index %>
+  <%= render_document_index %>
   <%= render 'results_pagination' %>
-  
+
   <% unless Rails.env.production?%>
   <div id='debug_query' style='display:none'>
      <%=URI.decode(@response.header.inspect) %>
-   </div>
+  </div>
   <%end%>
-  
-  
 <% end %>
-  
+
 <div id="sidebar" class="col-md-3 col-sm-4">
   <%= render :partial=>'facets' %>
 </div>

@@ -1,14 +1,14 @@
 <form action=<%=url_for :controller => :items,:action => :close_version, :id => @object.pid%> method="POST">
-	<label for="severity">Type</label>
-	<select id="severity" name="severity">
-		<%- # loop through the severity levels and pre-select the one that was chosen when opening the version -%>
-		<% for severity in @severity_levels %>
-			<option value="<%=severity.to_s-%>"<%=@severity_selected[severity]-%>><%=severity.to_s.capitalize-%></option>
-		<% end %>
-	</select>
-	<br>
-	<label for="description">version description</label><br>
-	<textarea id="description" name="description" ><%=@description%></textarea>
-	<br>
-	<button>Close</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
+  <label for="severity">Type</label>
+  <select id="severity" name="severity">
+    <%- # loop through the severity levels and pre-select the one that was chosen when opening the version -%>
+    <% for severity in @severity_levels %>
+      <option value="<%=severity.to_s-%>"<%=@severity_selected[severity]-%>><%=severity.to_s.capitalize-%></option>
+    <% end %>
+  </select>
+  <br/>
+  <label for="description">version description</label><br/>
+  <textarea id="description" name="description" ><%=@description%></textarea>
+  <br/>
+  <button>Close</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
 </form>

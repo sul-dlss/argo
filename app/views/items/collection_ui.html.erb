@@ -1,19 +1,19 @@
-<div><label>Remove existing collections</label><br>
+<div><label>Remove existing collections</label><br/>
 <%
-	@object.collections.each do |col|
-		%>
-		<%=col.label%>
-		<%del_image=image_tag ('unavailable.png')%>
-		<%=link_to del_image, url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid)%><br>
-		<%
-	end
+  @object.collections.each do |col|
+%>
+  <%=col.label%>
+  <%del_image=image_tag ('unavailable.png')%>
+  <%=link_to del_image, url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid)%><br/>
+<%
+  end
 %>
 </div>
-<br>
+<br/>
 <div>
 <label>Add a collection</label>
 <%=form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid) do%>
-	<%= select_tag :collection, options_for_select(current_user.permitted_collections)%>
-	<button>Add Collection</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
+  <%= select_tag :collection, options_for_select(current_user.permitted_collections)%>
+  <button>Add Collection</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
 <%end%>
 </div>

@@ -1,8 +1,8 @@
 
 <h3>Welcome to Argo!</h3>
 <%
-	user=current_user
- if user.permitted_apos.length>0 or user.is_admin or user.is_manager or user.is_viewer%>
+user=current_user
+if user.permitted_apos.length>0 or user.is_admin or user.is_manager or user.is_viewer%>
 <p>Enter one or more search terms or select a facet on the left to begin.</p>
 <%else%>
 <p>You dont appear to have permission to view any items in Argo. Please contact an administrator.</p>
