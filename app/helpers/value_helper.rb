@@ -19,23 +19,24 @@ module ValueHelper
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
     Rails.cache.fetch("label_for_#{druid}", :expires_in => 1.hour) do
       if  @apo and druid ==  @apo.pid
-        item=@apo
+        item = @apo
       end
       if @obj and druid == @obj.pid
-        item=@obj
+        item = @obj
       end
       begin
-      item=Dor.find(druid) if not item
-      item.label
-    rescue
-      druid
-    end
+        item = Dor.find(druid) if not item
+        item.label
+      rescue
+        druid
+      end
     end
   end
+
   def value_for_preserved_size_display args
     args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
-
   end
+
   def value_for_related_druid predicate, args
     begin
       target_id = args[:document].get("#{predicate}_s")
@@ -54,14 +55,15 @@ module ValueHelper
   end
 
   def value_for_wf_error_display args
-    wf,step,message = args[:document].get(args[:field]).split(':',3)
+    wf, step, message = args[:document].get(args[:field]).split(':',3)
     step+' : '+message
   end
+
   def value_for_is_governed_by_s args
     begin
       target_id = args[:document].get("is_governed_by_s")
       target_name = ''
-      links=''
+      links = ''
       target_id.split(',').each do |targ|
         target_name = args[:document].get("apo_title_t") ? args[:document].get("apo_title_t") : args[:document].get("hydrus_apo_title_t")
         links += link_to target_name, catalog_path(targ.split(/\//).last)
