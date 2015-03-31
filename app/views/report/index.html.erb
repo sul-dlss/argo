@@ -12,12 +12,12 @@
   </script>
 <% end %>
 <% unless has_search_parameters? %>
-	<%# if there are no input/search related params, display the "home" partial -%>
-	<%= render 'home' %>
+  <%# if there are no input/search related params, display the "home" partial -%>
+  <%= render 'home' %>
 <% else %>
   <% @page_title = "#{application_name} Search Results" %>
   <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
-	<%= render :partial => 'search_form' %>
+  <%= render :partial => 'search_form' %>
   <% if has_search_parameters? %>
     <%= render :partial => 'did_you_mean' %>
     <%= render 'constraints', :localized_params=>params %>
@@ -27,7 +27,7 @@
     <table id="report_grid"></table>
     <div id="preport_grid"></div>
   </div>
-  
+
   <div id="sidebar" class="col-md-3 col-sm-4">
     <%= render :partial=>'facets' %>
   </div>

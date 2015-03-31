@@ -1,11 +1,11 @@
 <%buttons.each do |button|%>
-	<%if button[:new_page]%>
-	<li><a class="button" href="<%=button[:url]%>" ><%=button[:label]%></a></li>
-	<%else%>
-	<%if button[:confirm]%>
-		<li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
-	<%else%>
-		<li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
-	<%end%>
-	<%end%>
+  <%if button[:new_page]%>
+    <li><a class="button" href="<%=button[:url]%>" ><%=button[:label]%></a></li>
+  <%else%>
+  <%if button[:confirm]%>
+    <li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
+  <%else%>
+    <li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
+  <%end%>
+  <%end%>
 <%end%>

@@ -20,10 +20,10 @@
         <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, :class => 'tag-field', :'data-tagname' => 'Project', :'data-rcparam' => 'projectName' %></div>
         <div class="property-item wide"><label for='tag_1'>Tags</label>
           <span id="tags" style="width: auto">
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_0', :class => 'free tag-field' %> 
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %> 
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_0', :class => 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %>
             <%= text_field_tag :'tags[]', nil, :id => 'tags_2', :class => 'free tag-field' %>
-			<%= text_field_tag :'tags[]', nil, :id => 'tags_3', :class => 'free tag-field' %>
+      <%= text_field_tag :'tags[]', nil, :id => 'tags_3', :class => 'free tag-field' %>
             <%= hidden_field_tag :registered_by, current_user.login, :class => 'tag-field ', :'data-tagname' => 'Registered By' %>
           </span>
         </div>
@@ -51,13 +51,13 @@
       Are you sure you want to clear the grid?
     </p>
   </div>
-	<div id='editing_dialog'>
+  <div id='editing_dialog'>
     <p>
       You are still editing a cell. Please use tab or enter to finish editing before trying to register items.
     </p>
   </div>
 </div>
-  
+
 </div>
 <div id='dynamic'>
   <table id='data'></table>
