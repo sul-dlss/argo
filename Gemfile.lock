@@ -516,7 +516,7 @@ DEPENDENCIES
   http_logger
   is_it_working-cbeer
   jettywrapper
-  jquery-rails (= 2.1.4)
+  jquery-rails
   jquery-ui-rails
   jquery-validation-rails
   kaminari
