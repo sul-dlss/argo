@@ -59,13 +59,13 @@ module ValueHelper
     step+' : '+message
   end
 
-  def value_for_is_governed_by_s args
+  def value_for_is_governed_by_ssim args
     begin
-      target_id = args[:document].get("is_governed_by_s")
+      target_id = args[:document].get("is_governed_by_ssim")
       target_name = ''
       links = ''
       target_id.split(',').each do |targ|
-        target_name = args[:document].get("apo_title_t") ? args[:document].get("apo_title_t") : args[:document].get("hydrus_apo_title_t")
+        target_name = args[:document].get("apo_title_ssm") ? args[:document].get("apo_title_ssm") : args[:document].get("hydrus_apo_title_t")
         links += link_to target_name, catalog_path(targ.split(/\//).last)
         links +='<br>'
       end
@@ -77,13 +77,13 @@ module ValueHelper
     #value_for_related_druid('is_governed_by', args)
   end
 
-  def value_for_is_member_of_collection_s args
+  def value_for_is_member_of_collection_ssim args
     begin
-      target_id = args[:document].get("is_member_of_collection_s")
+      target_id = args[:document].get("is_member_of_collection_ssim")
       target_name = ''
       links=''
       target_id.split(',').each do |targ|
-        target_name = args[:document].get("collection_title_t") ? args[:document].get("collection_title_t") : args[:document].get("hydrus_collection_title_t")
+        target_name = args[:document].get("collection_title_ssm") ? args[:document].get("collection_title_ssm") : args[:document].get("hydrus_collection_title_ssm")
         links += link_to target_name, catalog_path(targ.split(/\//).last)
         links +='<br>'
       end
