@@ -17,7 +17,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t coordinates_t creator_t dc_creator_t dc_identifier_t dc_title_t dor_id_t event_t events_event_t events_t extent_t identifier_t identityMetadata_citationCreator_t identityMetadata_citationTitle_t identityMetadata_objectCreator_t identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_t mods_originInfo_place_placeTerm_t mods_originInfo_publisher_t obj_label_t obj_state_t originInfo_place_placeTerm_t originInfo_publisher_t otherId_t public_dc_contributor_t public_dc_coverage_t public_dc_creator_t public_dc_date_t public_dc_description_t public_dc_format_t public_dc_identifier_t public_dc_language_t public_dc_publisher_t public_dc_relation_t public_dc_rights_t public_dc_subject_t public_dc_title_t public_dc_type_t scale_t shelved_content_file_t sourceId_t tag_t title_t topic_t},
+      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t coordinates_t creator_t dc_creator_t dc_identifier_t dc_title_t dor_id_t event_t events_event_t events_t extent_t identifier_t identityMetadata_citationCreator_t identityMetadata_citationTitle_t identityMetadata_objectCreator_t identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_t mods_originInfo_place_placeTerm_t mods_originInfo_publisher_t obj_label_t obj_state_t originInfo_place_placeTerm_t originInfo_publisher_t otherId_t public_dc_contributor_t public_dc_coverage_t public_dc_creator_t public_dc_date_t public_dc_description_t public_dc_format_t public_dc_identifier_t public_dc_language_t public_dc_publisher_t public_dc_relation_t public_dc_rights_t public_dc_subject_t public_dc_title_t public_dc_type_t scale_t shelved_content_file_t sourceId_t tag_ssim title_t topic_t},
       :rows => 10,
       :facet => true,
       :'facet.mincount' => 1,
@@ -58,7 +58,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'id',                          :label => 'DRUID:'
     config.add_show_field 'project_tag_sim',             :label => 'Project:'
     config.add_show_field 'source_id_teim',              :label => 'Source:'
-    config.add_show_field 'tag_teim',                    :label => 'Tags:'
+    config.add_show_field 'tag_ssim',                    :label => 'Tags:'
     config.add_show_field 'wf_error_ssm',                :label => "Error:"
     config.add_show_field 'collection_title_teim',       :label => "Error:"
     config.add_show_field 'metadata_source_ssim',        :label => 'MD Source:'
@@ -75,11 +75,11 @@ class CatalogController < ApplicationController
     config.add_facet_field 'wf_wps_sim', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_sim', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_swp_sim', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'has_model_ssim',  :label => 'Model'
+    config.add_facet_field 'has_model_ssim',  :label => 'Object Model'
 
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
-    config.add_facet_field 'source', :label => 'Source', :query => {
+    config.add_facet_field 'source', :label => 'Object Source', :query => {
       :other  => { :label => 'DOR',        :fq => '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject" AND -has_model_ssim:"info:fedora/dor:googleScannedBook"' },
       :google => { :label => 'Google',     :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
     # :deepen => { :label => 'DPN',        :fq => 'has_model_ssim:info%3Afedora/whatever' },
