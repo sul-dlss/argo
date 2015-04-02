@@ -227,6 +227,26 @@ namespace :argo do
     end
   end # :repo
 
+  # some helper methods
+  def apo_field_default
+    'apo_register_permissions_facet'
+  end
+  def get_workgroups_facet(apo_field=nil)
+    apo_field = apo_field_default() if apo_field.nil?
+    resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0,
+      :facets => { :fields => [apo_field] },
+      :'facet.prefix'   => 'workgroup:',
+      :'facet.mincount' => 1,
+      :'facet.limit'    => -1 )
+    facet = resp.facets.find { |f| f.name == apo_field }
+  end
+
+  desc "List APO workgroups from Solr (#{apo_field_default()})"
+  task :workgroups => :environment do
+    facet = get_workgroups_facet()
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.join(%q[\n])}"
+  end
+
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
     directives = ['AuthType WebAuth',
@@ -236,14 +256,7 @@ namespace :argo do
       'WebAuthLdapAttribute mail']
 
     directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
-
-    resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0,
-      :facets => { :fields => ['apo_register_permissions_facet'] },
-      :'facet.prefix'   => 'workgroup:',
-      :'facet.mincount' => 1,
-      :'facet.limit'    => -1 )
-
-    facet = resp.facets.find { |f| f.name == 'apo_register_permissions_facet' }
+    facet = get_workgroups_facet()
     unless facet.nil?
       facets = facet.items.collect &:value
       priv_groups = facets.select { |v| v =~ /^workgroup:/ }
