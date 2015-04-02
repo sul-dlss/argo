@@ -76,7 +76,7 @@ group :assets do
 end
 
 group :deployment do
-  gem 'capistrano', '=3.2.1'
+  gem 'capistrano', '=3.2.1' # pinned because inadvertent capistrano upgrades tend to cause deployment issues.
   gem 'capistrano-rails'
   gem 'lyberteam-capistrano-devel', '3.1.0'
 end
