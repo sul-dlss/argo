@@ -29,17 +29,16 @@ gem 'unicode'
 # Stanford/Hydra related gems
 gem 'about_page'
 gem 'active-fedora'
-gem 'blacklight', '~> 5.9.0' #TODO: unpin BL, stop pointing BLH to github
-gem 'blacklight-hierarchy', :git => 'https://github.com/sul-dlss/blacklight-hierarchy.git', :branch => 'develop'
+gem 'blacklight', '~> 5.9.0' #TODO: BL >= 5.10.x has new deprecation warnings vs <= 5.9.x, will investigate and unpin after current upgrade stuff has settled
+gem 'blacklight-hierarchy'
 gem 'blacklight-marc'
-gem 'dor-services', '~> 5', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'develop'
+gem 'dor-services', '~> 5.0', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'develop' # specifying because we expect a major vers upgrade to break things
 gem 'dor-workflow-service'
-gem 'druid-tools', '~> 0.3.0' #TODO: does argo use this directly?  can i get rid of this?
 gem 'is_it_working-cbeer'
 gem 'jettywrapper'
 gem 'moab-versioning'
 gem 'mods_display'
-gem 'rails', '~> 4'
+gem 'rails', '~> 4.0' # specifying because we expect a major vers upgrade to break things
 gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'rsolr-client-cert', '~> 0.5.2'
