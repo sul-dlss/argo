@@ -47,7 +47,6 @@ class CatalogController < ApplicationController
     config.add_index_field 'project_tag_sim', :label => 'Project:'
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type:'
-    config.add_show_field 'embargoMetadata_tesim',       :label => 'Embargo:'  # TODO: not sure this is the right translation
     config.add_show_field 'identifier_tesim',            :label => 'IDs:'
     # config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'  # TODO: not sure objProfile fields exist
     # config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
