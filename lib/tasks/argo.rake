@@ -249,9 +249,6 @@ namespace :argo do
 
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
-    require 'http_logger'
-    HttpLogger.logger = Logger.new($stdout) # defaults to Rails.logger if Rails is defined
-
     directives = ['AuthType WebAuth',
       'Require privgroup dlss:argo-access',
       'WebAuthLdapAttribute suAffiliation',
