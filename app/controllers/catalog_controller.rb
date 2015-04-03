@@ -59,7 +59,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'source_id_teim',              :label => 'Source:'
     config.add_show_field 'tag_ssim',                    :label => 'Tags:'
     config.add_show_field 'wf_error_ssm',                :label => "Error:"
-    config.add_show_field 'collection_title_teim',       :label => "Error:"
+    config.add_show_field 'collection_title_ssm',        :label => "Collection Title:"
     config.add_show_field 'metadata_source_ssim',        :label => 'MD Source:'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
@@ -84,11 +84,14 @@ class CatalogController < ApplicationController
       :hyrdus => { :label => 'Hydrus/SDR', :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item" OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"' }
     }
 
+    config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source'
+
     config.add_facet_field 'current_version_sim', :label => 'Version'
 
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
       :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
     }
+
     #TODO: it would be nice to do date math on date fields, but we index text, so we're doing a string range for now.
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
       :days_7  => { :label => 'within 7 days',  :fq => "registered_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
