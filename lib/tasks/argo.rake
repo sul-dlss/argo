@@ -244,11 +244,14 @@ namespace :argo do
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
     facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.join(%q[\n])}"
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect{|x| x.value}.join(%Q[\n])}"
   end
 
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
+    require 'http_logger'
+    HttpLogger.logger = Logger.new($stdout) # defaults to Rails.logger if Rails is defined
+
     directives = ['AuthType WebAuth',
       'Require privgroup dlss:argo-access',
       'WebAuthLdapAttribute suAffiliation',
