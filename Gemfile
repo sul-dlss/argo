@@ -2,9 +2,8 @@ source "https://rubygems.org"
 
 gem 'stanford-mods'
 gem 'mods_display'
-gem 'dor-services', "~> 4.18"
+gem 'dor-services', "~> 4.19"
 gem 'dor-workflow-service', '~> 1.5'
-gem "druid-tools", "~> 0.3.0"
 gem "moab-versioning"
 gem 'rails', '3.2.21'
 gem "blacklight", '~>3.7'
