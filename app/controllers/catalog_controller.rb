@@ -60,7 +60,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'tag_ssim',                    :label => 'Tags:'
     config.add_show_field 'wf_error_ssm',                :label => "Error:"
     config.add_show_field 'collection_title_ssm',        :label => "Collection Title:"
-    config.add_show_field 'metadata_source_ssim',        :label => 'MD Source:'
+    config.add_show_field 'metadata_source_ssi',         :label => 'MD Source:'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
     config.add_facet_field 'tag_ssim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
