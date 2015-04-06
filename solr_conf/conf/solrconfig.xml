@@ -16,67 +16,67 @@
 
   <dataDir>${solr.data.dir:}</dataDir>
 
+  <!-- Used by reports via queries that pass qt=search -->
   <requestHandler name="search" class="solr.SearchHandler" default="true">
     <!-- default values for query parameters can be specified, these
          will be overridden by parameters in the request
       -->
-     <lst name="defaults">
-       <str name="defType">edismax</str>
-       <str name="echoParams">explicit</str>
-       <str name="q.alt">*:*</str>
-       <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
-       <int name="qs">1</int>
-       <int name="ps">2</int>
-       <float name="tie">0.01</float>
-       <!-- this qf and pf are used by default, if not otherwise specified by
-            client. The default blacklight_config will use these for the
-            "keywords" search. See the author_qf/author_pf, title_qf, etc
-            below, which the default blacklight_config will specify for
-            those searches. You may also be interested in:
-            http://wiki.apache.org/solr/LocalParams
-       -->
-        <str name="qf">
-          id
-          all_text_timv
-          active_fedora_model_ssi
-          object_type_si
-        </str>
-        <str name="pf">
-          all_text_timv^10
-        </str>
+    <lst name="defaults">
+      <str name="defType">edismax</str>
+      <str name="echoParams">explicit</str>
+      <str name="q.alt">*:*</str>
+      <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
+      <int name="qs">1</int>
+      <int name="ps">2</int>
+      <float name="tie">0.01</float>
+      <!-- this qf and pf are used by default, if not otherwise specified by
+           client. The default blacklight_config will use these for the
+           "keywords" search. See the author_qf/author_pf, title_qf, etc
+           below, which the default blacklight_config will specify for
+           those searches. You may also be interested in:
+           http://wiki.apache.org/solr/LocalParams
+      -->
+       <str name="qf">
+         id
+         all_text_timv
+         active_fedora_model_ssi
+         object_type_si
+       </str>
+       <str name="pf">
+         all_text_timv^10
+       </str>
 
-       <str name="author_qf"></str>
-       <str name="author_pf"></str>
-       <str name="title_qf"></str>
-       <str name="title_pf"></str>
-       <str name="subject_qf"></str>
-       <str name="subject_pf"></str>
-       <str name="fl"> *, score</str>
+      <str name="author_qf"></str>
+      <str name="author_pf"></str>
+      <str name="title_qf"></str>
+      <str name="title_pf"></str>
+      <str name="subject_qf"></str>
+      <str name="subject_pf"></str>
+      <str name="fl"> *, score</str>
 
-       <str name="facet">true</str>
-       <str name="facet.mincount">1</str>
-       <str name="facet.limit">10</str>
-       <str name="facet.field">active_fedora_model_ssi</str>
-       <str name="facet.field">object_type_si</str>
+      <str name="facet">true</str>
+      <str name="facet.mincount">1</str>
+      <str name="facet.limit">10</str>
+      <str name="facet.field">active_fedora_model_ssi</str>
+      <str name="facet.field">object_type_si</str>
 
-       <str name="spellcheck">true</str>
-       <str name="spellcheck.dictionary">default</str>
-       <str name="spellcheck.onlyMorePopular">true</str>
-       <str name="spellcheck.extendedResults">true</str>
-       <str name="spellcheck.collate">false</str>
-       <str name="spellcheck.count">5</str>
-
-     </lst>
+      <str name="spellcheck">true</str>
+      <str name="spellcheck.dictionary">default</str>
+      <str name="spellcheck.onlyMorePopular">true</str>
+      <str name="spellcheck.extendedResults">true</str>
+      <str name="spellcheck.collate">false</str>
+      <str name="spellcheck.count">5</str>
+    </lst>
     <arr name="last-components">
       <str>spellcheck</str>
     </arr>
   </requestHandler>
 
-  <requestHandler name="argosearch" class="solr.SearchHandler" >
+  <requestHandler name="/argosearch" class="solr.SearchHandler"> <!-- experimental/useless -->
     <lst name="defaults">
-      <!-- Making defType lucene to exclude file assets -->
       <str name="defType">lucene</str>
       <str name="df">has_model_s</str>
+      <str name="q.alt">*:*</str>
       <str name="q.op">AND</str>
       <str name="facet">on</str>
       <str name="facet.mincount">1</str>
@@ -84,51 +84,9 @@
       <float name="tie">0.01</float>
       <str name="qf_dismax">id^0.8 id_t^0.8 title_t^0.3 mods_t^0.2</str>
       <str name="pf_dismax">id^0.9 id_t^0.9 title_t^0.5 mods_t^0.2</str>
-      <str name="fl">
-        id,title_t,date_t,year_facet,month_facet,has_model_s,has_collection_member_s,system_create_dt,
-        person_0_role_t,person_1_role_t,person_2_role_t,person_3_role_t,person_4_role_t,person_5_role_t,person_6_role_t,
-        person_7_role_t,person_8_role_t,person_9_role_t,
-        person_0_first_name_t,person_1_first_name_t,person_2_first_name_t,person_3_first_name_t,person_4_first_name_t,
-        person_5_first_name_t,person_6_first_name_t,person_7_first_name_t,person_8_first_name_t,person_9_first_name_t,
-        person_0_last_name_t,person_1_last_name_t,person_2_last_name_t,person_3_last_name_t,person_4_last_name_t,
-        person_5_last_name_t,person_6_last_name_t,person_7_last_name_t,person_8_last_name_t,person_9_last_name_t,
-        status_t,subject_t,depositor_t,
-        journal_title_info_t,journal_issue_publication_date_t,
-        journal_issue_pages_end_t,journal_issue_volume_t,journal_title_info_main_title_t,journal_issue_pages_start_t,
-        journal_issue_start_page_t, journal_issue_end_page_t, abstract_t,
-        person_0_institution_t,person_1_institution_t,person_2_institution_t,person_3_institution_t,person_4_institution_t,person_5_institution_t,person_institution_role_t,
-        person_7_institution_t,person_8_institution_t,person_9_institution_t,
-        mods_gps_t, mods_region_t, mods_site_t, mods_ecosystem_t,
-        mods_timespan_start_t, mods_timespan_end_t, description_t, mods_title_info_main_title_t, mods_0_title_info_0_main_title_t, embargo_release_date_dt, note_t,
-        object_type_facet, department_facet, peer_reviewed_facet
-      </str>
-      <str name="mm">
-        2&lt;-1 5&lt;-2 6&lt;90%
-      </str>
+      <str name="fl"> *, score</str>
+      <str name="mm">2&lt;-1 5&lt;-2 6&lt;90%</str>
       <int name="ps">100</int>
-    </lst>
-  </requestHandler>
-
-  <requestHandler name="permissions" class="solr.SearchHandler" >
-    <lst name="defaults">
-      <str name="facet">off</str>
-      <str name="echoParams">all</str>
-      <str name="rows">1</str>
-      <str name="q">{!raw f=id v=$id}</str> <!-- use id=666 instead of q=id:666 -->
-      <str name="fl">
-        id,
-        access_ssim,
-        discover_access_group_ssim,discover_access_person_ssim,
-        read_access_group_ssim,read_access_person_ssim,
-        edit_access_group_ssim,edit_access_person_ssim,
-        depositor_ti,
-        embargo_release_date_dtsi
-        inheritable_access_ssim,
-        inheritable_discover_access_group_ssim,inheritable_discover_access_person_ssim,
-        inheritable_read_access_group_ssim,inheritable_read_access_person_ssim,
-        inheritable_edit_access_group_ssim,inheritable_edit_access_person_ssim,
-        inheritable_embargo_release_date_dtsi
-      </str>
     </lst>
   </requestHandler>
 
@@ -140,7 +98,7 @@
   </requestHandler>
 
   <!-- for requests to get a single document; use id=666 instead of q=id:666 -->
-  <requestHandler name="document" class="solr.SearchHandler" >
+  <requestHandler name="/document" class="solr.SearchHandler" >
     <lst name="defaults">
       <str name="echoParams">all</str>
       <str name="fl">*</str>
@@ -148,7 +106,6 @@
       <str name="q">{!raw f=id v=$id}</str> <!-- use id=666 instead of q=id:666 -->
     </lst>
   </requestHandler>
-
 
   <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
     <str name="queryAnalyzerFieldType">textSpell</str>
