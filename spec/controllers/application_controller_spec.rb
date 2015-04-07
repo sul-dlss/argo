@@ -21,8 +21,9 @@ describe ApplicationController do
       subject.stub(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
 
       # note the check for sunetid:sunetid.  user's sunetid should be prepended to the group list returned by webauth.
-      # note also that workgroup: should be prepended to each workgroup name.
-      expected_groups = ['sunetid:sunetid'] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
+      # note also that workgroup: should be prepended to each workgroup name, and person: should be prepended to the user's 
+      # sunetid entry.
+      expected_groups = ['person:sunetid:sunetid'] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
       expect(subject.current_user.groups).to eq(expected_groups)
     end
     it "should override the user's groups if impersonation info was specified" do
