@@ -80,40 +80,40 @@ describe User do
       @answer['response']={}
       @answer['response']['docs']=[]
       @doc={}
-      @doc['apo_role_dor-administrator_t']=['dlss:groupA', 'dlss:groupB']
-      @doc['apo_role_sdr-administrator_t']=['dlss:groupA', 'dlss:groupB']
-      @doc['apo_role_dor-apo-manager_t']=['dlss:groupC', 'dlss:groupD']
-      @doc['apo_role_dor-viewer_t']=['dlss:groupE', 'dlss:groupF']
-      @doc['apo_role_sdr-viewer_t']=['dlss:groupE', 'dlss:groupF']
-      @doc['apo_role_person_dor-viewer_t']=['sunetid:tcramer']
-      @doc['apo_role_person_sdr-viewer_t']=['sunetid:tcramer']
-      @doc['apo_role_group_manager_t']=['dlss:groupR']
+      @doc['apo_role_dor-administrator_t']=['workgroup:dlss:groupA', 'workgroup:dlss:groupB']
+      @doc['apo_role_sdr-administrator_t']=['workgroup:dlss:groupA', 'workgroup:dlss:groupB']
+      @doc['apo_role_dor-apo-manager_t']=['workgroup:dlss:groupC', 'workgroup:dlss:groupD']
+      @doc['apo_role_dor-viewer_t']=['workgroup:dlss:groupE', 'workgroup:dlss:groupF']
+      @doc['apo_role_sdr-viewer_t']=['workgroup:dlss:groupE', 'workgroup:dlss:groupF']
+      @doc['apo_role_person_dor-viewer_t']=['person:sunetid:tcramer']
+      @doc['apo_role_person_sdr-viewer_t']=['person:sunetid:tcramer']
+      @doc['apo_role_group_manager_t']=['workgroup:dlss:groupR']
       @answer['response']['docs'] << @doc
       Dor::SearchService.stub(:query).and_return(@answer)
     end
     it 'should build a set of roles' do
-      User.any_instance.stub(:groups).and_return(['dlss:groupF', 'dlss:groupA'])
+      User.any_instance.stub(:groups).and_return(['workgroup:dlss:groupF', 'workgroup:dlss:groupA'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
       expect(res).to eq(['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer'])
     end
     it 'should translate the old "manager" role into dor-apo-manager' do
-      User.any_instance.stub(:groups).and_return(['dlss:groupR'])
+      User.any_instance.stub(:groups).and_return(['workgroup:dlss:groupR'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
       expect(res).to eq(['dor-apo-manager'])
     end
     it 'should work correctly if the individual is named in the apo, but isnt in any groups that matter' do
-      User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
+      User.any_instance.stub(:groups).and_return(['person:sunetid:tcramer'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
       expect(res).to eq(['dor-viewer', 'sdr-viewer'])
     end
     it 'should hang onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
-      User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
+      User.any_instance.stub(:groups).and_return(['testdoesnotcarewhatishere'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       Dor::SearchService.should_receive(:query).once
@@ -130,7 +130,7 @@ describe User do
 
       user = User.find_or_create_by_webauth(mock_webauth)
 
-      expected_groups = ["sunetid:#{sunetid}"] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
+      expected_groups = ["person:sunetid:#{sunetid}"] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
       expect(user.groups).to eq(expected_groups)
     end
     it "should return the groups specified for impersonation" do

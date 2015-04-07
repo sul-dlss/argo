@@ -146,12 +146,15 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     docopt (0.5.0)
-    dor-services (4.18.3)
+    domain_name (0.5.23)
+      unf (>= 0.0.5, < 1.0.0)
+    dor-services (4.19.1)
       active-fedora (~> 5.7.1)
       activesupport (~> 3.2, >= 3.2.18)
+      addressable (= 2.3.5)
       confstruct (~> 0.2.7)
       dor-workflow-service (~> 1.7, >= 1.7.1)
-      druid-tools (~> 0.3.1)
+      druid-tools (~> 0.4.0)
       equivalent-xml (~> 0.5.1)
       json (~> 1.8.1)
       lyber-utils (~> 0.1.2)
@@ -160,10 +163,11 @@ GEM
       net-ssh (~> 2.6.5)
       nokogiri (~> 1.6.0)
       om (~> 1.8.0)
-      osullivan
+      osullivan (~> 0.0.3)
       progressbar (~> 0.21.0)
       rdf (~> 1.0.9.0)
       rest-client (~> 1.7)
+      retries
       rsolr-ext (~> 1.0.3)
       ruby-cache (~> 0.3.0)
       ruby-graphviz (~> 1.0.9)
@@ -178,14 +182,14 @@ GEM
       confstruct (~> 0.2.7)
       nokogiri (~> 1.6.0)
       rest-client (~> 1.7)
-    druid-tools (0.3.1)
+    druid-tools (0.4.0)
     ensure_valid_encoding (0.5.3)
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.2.1)
-    faraday (0.9.0)
+    faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
     ffi (1.9.5)
@@ -199,6 +203,8 @@ GEM
     hike (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     http_logger (0.4.3)
     i18n (0.7.0)
     is_it_working-cbeer (1.0.16)
@@ -249,7 +255,7 @@ GEM
       nokogiri
       nokogiri-happymapper
       systemu
-    mods (2.0.2)
+    mods (2.0.3)
       iso-639
       nokogiri
       nom-xml (~> 0.5.2)
@@ -338,9 +344,11 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
-    rest-client (1.7.3)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    retries (0.0.5)
     rsolr-client-cert (0.5.2)
       rest-client
       rsolr
@@ -476,9 +484,8 @@ DEPENDENCIES
   compass-susy-plugin (~> 0.9.0)
   confstruct (~> 0.2.4)
   dalli
-  dor-services (~> 4.18)
+  dor-services (~> 4.19)
   dor-workflow-service (~> 1.5)
-  druid-tools (~> 0.3.0)
   haml
   http_logger
   is_it_working-cbeer
