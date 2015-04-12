@@ -85,8 +85,8 @@ describe User do
       @doc['apo_role_dor-apo-manager_t']=['workgroup:dlss:groupC', 'workgroup:dlss:groupD']
       @doc['apo_role_dor-viewer_t']=['workgroup:dlss:groupE', 'workgroup:dlss:groupF']
       @doc['apo_role_sdr-viewer_t']=['workgroup:dlss:groupE', 'workgroup:dlss:groupF']
-      @doc['apo_role_person_dor-viewer_t']=['person:sunetid:tcramer']
-      @doc['apo_role_person_sdr-viewer_t']=['person:sunetid:tcramer']
+      @doc['apo_role_person_dor-viewer_t']=['sunetid:tcramer']
+      @doc['apo_role_person_sdr-viewer_t']=['sunetid:tcramer']
       @doc['apo_role_group_manager_t']=['workgroup:dlss:groupR']
       @answer['response']['docs'] << @doc
       Dor::SearchService.stub(:query).and_return(@answer)
@@ -106,7 +106,7 @@ describe User do
       expect(res).to eq(['dor-apo-manager'])
     end
     it 'should work correctly if the individual is named in the apo, but isnt in any groups that matter' do
-      User.any_instance.stub(:groups).and_return(['person:sunetid:tcramer'])
+      User.any_instance.stub(:groups).and_return(['sunetid:tcramer'])
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       res=user.roles('pid')
@@ -130,7 +130,7 @@ describe User do
 
       user = User.find_or_create_by_webauth(mock_webauth)
 
-      expected_groups = ["person:sunetid:#{sunetid}"] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
+      expected_groups = ["sunetid:#{sunetid}"] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
       expect(user.groups).to eq(expected_groups)
     end
     it "should return the groups specified for impersonation" do
