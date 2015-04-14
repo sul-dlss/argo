@@ -13,10 +13,10 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 2bbbf4510d9834af6f9c5ecf15630ae0077d2f2b
+  revision: 08033bcab6cc305c5ac1e43598966646b7ec9e6e
   branch: develop
   specs:
-    dor-services (5.0.2)
+    dor-services (5.1.0)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       addressable (= 2.3.5)
@@ -255,7 +255,7 @@ GEM
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.6.2)
-    minitest (5.5.1)
+    minitest (5.6.0)
     moab-versioning (1.4.4)
       confstruct
       json
@@ -348,7 +348,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (10.4.2)
-    rdf (1.1.10)
+    rdf (1.1.11)
       link_header (~> 0.0, >= 0.0.8)
     rdf-rdfxml (1.0.1)
       rdf (>= 1.0)
