@@ -59,17 +59,27 @@ class CatalogController < ApplicationController
     config.add_show_field 'source_id_teim',              :label => 'Source:'
     config.add_show_field 'tag_ssim',                    :label => 'Tags:'
     config.add_show_field 'wf_error_ssm',                :label => "Error:"
-    config.add_show_field 'collection_title_ssm',        :label => "Collection Title:"
+    config.add_show_field 'collection_title_tesim',      :label => "Collection Title:"
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source:'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
     config.add_facet_field 'tag_ssim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
-    config.add_facet_field 'collection_title_ssim', :label => 'Collection', :sort => 'index', :limit => 500
-    config.add_facet_field 'hydrus_collection_title_ssim', :label => 'Hydrus Collection', :sort => 'index', :limit => 500
-    config.add_facet_field 'apo_title_ssm',         :label => 'Admin Policy',        :sort => 'index', :limit => 500
-    config.add_facet_field 'hydrus_apo_title_ssim', :label => 'Hydrus Admin Policy', :sort => 'index', :limit => 500
+    #TODO: access_rights_ssim once solr has it
+    #TODO: what we should actually use is collection_title_tesim.  then people can combine that facet with the "object source facet".
+    # or, we could have two compound facets, one for collections and one for hydrus collections, that did that combination for the user
+    # and presented it as a single facet.  i'd prefer leaving them as separate facets, for simplicity and extensibility (e.g., adding 
+    # an obj source only requires updating the "object source" compound query and not also adding a new compound facet for collection title and type).
+    # similar conundrum for APOs (apo_title_tesim once the field gets written properly).
+    config.add_facet_field 'collection_title_tesim', :label => 'Collection', :sort => 'index', :limit => 500
+    config.add_facet_field 'hydrus_collection_title_tesim', :label => 'Hydrus Collection', :sort => 'index', :limit => 500
+    config.add_facet_field 'apo_title_tesim',         :label => 'Admin Policy',        :sort => 'index', :limit => 500
+    config.add_facet_field 'hydrus_apo_title_tesim', :label => 'Hydrus Admin Policy', :sort => 'index', :limit => 500
+    #TODO: current_version_isi once solr has it
+    #TODO: processing_status_ssi once solr has it
+    #TODO: release_status_ssim once solr has it
+    #TODO: does release_status and processing_status supersede lifecycle?  do we ditch that?
     config.add_facet_field 'lifecycle_ssim', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_sim', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_sim', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
@@ -93,6 +103,7 @@ class CatalogController < ApplicationController
     }
 
     #TODO: it would be nice to do date math on date fields, but we index text, so we're doing a string range for now.
+    #TODO: registered_dt, opened_dt, accessioned_dt, ingest_dt, embargo_dt, modified_dt
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
       :days_7  => { :label => 'within 7 days',  :fq => "registered_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "registered_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
