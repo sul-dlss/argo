@@ -53,8 +53,8 @@ class Report
       },
       {
         :field => 'apo', :label => "Admin Policy",
-        :proc => lambda { |doc| doc['apo_title_ssm'] },
-        :solr_fields => ['apo_title_ssm'],
+        :proc => lambda { |doc| doc['apo_title_ssim'] },
+        :solr_fields => ['apo_title_ssim'],
         :sort => false, :default => true, :width => 100
       },
       {
@@ -64,14 +64,14 @@ class Report
       },
       {
         :field => 'collection', :label => "Collection",
-        :proc => lambda { |doc| doc['collection_title_ssm'] },
-        :solr_fields => ['collection_title_ssm'],
+        :proc => lambda { |doc| doc['collection_title_ssim'] },
+        :solr_fields => ['collection_title_ssim'],
         :sort => false, :default => false, :width => 100
       },
       {
         :field => 'hydrus_collection', :label => "Hydrus Collection",
-        :proc => lambda { |doc| doc['hydrus_collection_title_teim'] },
-        :solr_fields => ['hydrus_collection_title_teim'],
+        :proc => lambda { |doc| doc['hydrus_collection_title_ssim'] },
+        :solr_fields => ['hydrus_collection_title_ssim'],
         :sort => false, :default => false, :width => 100
       },
       {

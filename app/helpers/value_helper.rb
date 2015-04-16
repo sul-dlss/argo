@@ -65,7 +65,7 @@ module ValueHelper
       target_name = ''
       links = ''
       target_id.split(',').each do |targ|
-        target_name = args[:document].get("apo_title_ssm") ? args[:document].get("apo_title_ssm") : args[:document].get("hydrus_apo_title_t")
+        target_name = args[:document].get("apo_title_ssim") ? args[:document].get("apo_title_ssim") : args[:document].get("hydrus_apo_title_ssim")
         links += link_to target_name, catalog_path(targ.split(/\//).last)
         links +='<br>'
       end
@@ -83,7 +83,7 @@ module ValueHelper
       target_name = ''
       links=''
       target_id.split(',').each do |targ|
-        target_name = args[:document].get("collection_title_ssm") ? args[:document].get("collection_title_ssm") : args[:document].get("hydrus_collection_title_ssm")
+        target_name = args[:document].get("collection_title_ssim") ? args[:document].get("collection_title_ssim") : args[:document].get("hydrus_collection_title_ssim")
         links += link_to target_name, catalog_path(targ.split(/\//).last)
         links +='<br>'
       end
