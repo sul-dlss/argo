@@ -35,6 +35,6 @@ class Robot < ActiveRecord::Base
     @status
   end
   def recent_work
-    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-7HOURS-1HOUR  TO NOW]", {:rows => 20, :fl => 'id,dc_title_t,apo_title_facet'})['response']['docs']
+    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-7HOURS-1HOUR  TO NOW]", {:rows => 20, :fl => 'id,dc_title_t,apo_title_ssim'})['response']['docs']
   end
 end
