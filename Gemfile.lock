@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: b6da0c061284cb15f6e3f4fdc36486d28ab32b22
+  revision: c46aea04c14f735b23aef36e2f4dcd9e45d26bab
   branch: solrization_fixes
   specs:
     dor-services (5.1.0)
@@ -177,14 +177,14 @@ GEM
     diff-lcs (1.2.5)
     docile (1.1.5)
     docopt (0.5.0)
-    domain_name (0.5.23)
+    domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
     dor-workflow-service (1.7.5)
       activesupport (>= 3.2.1, < 4.2.2)
       confstruct (~> 0.2.7)
       nokogiri (~> 1.6.0)
       rest-client (~> 1.7)
-    druid-tools (0.4.0)
+    druid-tools (0.4.1)
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
@@ -471,7 +471,7 @@ GEM
       json (>= 1.8.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.6)
+    unf_ext (0.0.7.1)
     unicode (0.4.4.2)
     unicorn (4.8.3)
       kgio (~> 2.6)
