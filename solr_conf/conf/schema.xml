@@ -20,23 +20,7 @@
   <field name="object_profile_display" type="string" stored="true" indexed="true"/>
   <field name="has_model_s"            type="string" stored="true" indexed="true"/>
   <field name="is_governed_by_s"       type="string" stored="true" indexed="true"/>
-
-  These are hard coded in places in hydra-head, but we hope to fix that.
-
-  <field name="inheritable_discover_access_person_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="inheritable_read_access_person_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="inheritable_edit_access_person_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="inheritable_discover_access_group_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="inheritable_read_access_group_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="inheritable_edit_access_group_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="read_access_person_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="discover_access_person_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="edit_access_person_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="read_access_group_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="edit_access_group_t" type="string" stored="true" indexed="true" multiValued="true"/>
-  <field name="discover_access_group_t" type="string" stored="true" indexed="true" multiValued="true"/>
   -->
-
 
     <!-- NOTE:  not all possible Solr field types are represented in the dynamic fields -->
 
