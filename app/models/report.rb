@@ -69,12 +69,6 @@ class Report
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'hydrus_collection', :label => "Hydrus Collection",
-        :proc => lambda { |doc| doc['hydrus_collection_title_ssim'] },
-        :solr_fields => ['hydrus_collection_title_ssim'],
-        :sort => false, :default => false, :width => 100
-      },
-      {
         :field => 'project_tag_sim', :label => "Project",
         :sort => true, :default => false, :width => 100
       },
