@@ -94,9 +94,9 @@ module ValueHelper
     end
   end
 
-  def value_for_project_tag_t args
+  def value_for_project_tag_ssim args
     val = args[:document].get(args[:field]).split(':').first
-    link_to val, add_facet_params_and_redirect("project_tag_facet", val)
+    link_to val, add_facet_params_and_redirect("project_tag_ssim", val)
   end
 
   def value_for_objProfile_objCreateDate_dt args
@@ -109,10 +109,10 @@ module ValueHelper
     Array(val).reject { |v| v == args[:document]['id'] }.sort.uniq.join(', ')
   end
 
-  def value_for_tag_t args
+  def value_for_tag_ssim args
     val = args[:document][args[:field]]
     tags = Array(val).uniq.collect do |v|
-      link_to v, add_facet_params_and_redirect("tag_facet", v)
+      link_to v, add_facet_params_and_redirect("tag_ssim", v)
     end
     tags.join('<br/>').html_safe
   end

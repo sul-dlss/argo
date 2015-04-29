@@ -2,13 +2,13 @@
 module RegistrationHelper
 
   def apo_list(*permission_keys)
-    q = 'objectType_t:adminPolicy AND !tag_facet:"Project : Hydrus"'
+    q = 'objectType_ssim:adminPolicy AND !tag_ssim:"Project : Hydrus"'
     unless permission_keys.empty?
       q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
     end
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_t').docs
     result.sort! do |a,b|
-      Array(a['tag_t']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+      Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
     result.collect do |doc|
       [Array(doc['dc_title_t']).first,doc['id'].to_s]
@@ -19,13 +19,13 @@ module RegistrationHelper
     "hello world ©"
   end
   def apo_default_rights_list(*permission_keys)
-    q = 'objectType_t:adminPolicy'
+    q = 'objectType_ssim:adminPolicy'
     unless permission_keys.empty?
       q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
     end
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_t').docs
     result.sort! do |a,b|
-      Array(a['tag_t']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+      Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
     #for each apo, fetch the apo object so the rightsMetadata stream can be read, and the default permissions based on the chosen apo can be labeled as (apo default)
     default_rights=Array.new
@@ -155,7 +155,7 @@ module RegistrationHelper
     end
 
     table_data = [['Object Label:',label]]
-    if project_name = doc['project_tag_sim']
+    if project_name = doc['project_tag_ssim']
       table_data.push(['Project Name:',project_name.to_s])
     end
 

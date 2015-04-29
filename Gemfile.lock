@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 7f869994e2c800cee0899421e7b574fc8bdd34b0
+  revision: 978e70cc6f2fa255177b3d52c557a08ad3128753
   branch: solrization_fixes
   specs:
     dor-services (5.1.0)
@@ -258,7 +258,7 @@ GEM
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.6.2)
-    minitest (5.6.0)
+    minitest (5.6.1)
     moab-versioning (1.4.4)
       confstruct
       json

@@ -145,7 +145,7 @@ end
     get "collection_list"
     get "workflow_list"
     get "/rights_list", :action => :rights_list, :as => 'rights_list'
-    get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_facet'
+    get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_ssim'
   end
 
   namespace :auth do

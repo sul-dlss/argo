@@ -17,7 +17,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t coordinates_teim creator_tesim dc_creator_si dc_identifier_t dc_title_si dor_id_teim event_t events_event_t events_t extent_teim identifier_tesim identityMetadata_citationCreator_t identityMetadata_citationTitle_t objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_teim obj_state_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim shelved_content_file_t sourceId_t tag_ssim title_tesim topic_tesim},
+      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t coordinates_teim creator_tesim dc_creator_si dc_identifier_t dc_title_si dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim identityMetadata_citationCreator_t identityMetadata_citationTitle_t objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_teim obj_state_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim shelved_content_file_t sourceId_t tag_ssim title_tesim topic_tesim},
       :rows => 10,
       :facet => true,
       :'facet.mincount' => 1,
@@ -44,7 +44,7 @@ class CatalogController < ApplicationController
 
     config.add_index_field 'id',              :label => 'DRUID:'
     config.add_index_field 'dc_creator_si',   :label => 'Creator:'
-    config.add_index_field 'project_tag_sim', :label => 'Project:'
+    config.add_index_field 'project_tag_ssim', :label => 'Project:'
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type:'
     config.add_show_field 'identifier_tesim',            :label => 'IDs:'
@@ -55,15 +55,17 @@ class CatalogController < ApplicationController
     config.add_show_field 'status_ssm',                  :label => 'Status:'
     config.add_show_field 'objectType_ssim',             :label => 'Object Type:'
     config.add_show_field 'id',                          :label => 'DRUID:'
-    config.add_show_field 'project_tag_sim',             :label => 'Project:'
-    config.add_show_field 'source_id_teim',              :label => 'Source:'
+    config.add_show_field 'project_tag_ssim',             :label => 'Project:'
+    config.add_show_field 'source_id_ssim',              :label => 'Source:'
     config.add_show_field 'tag_ssim',                    :label => 'Tags:'
     config.add_show_field 'wf_error_ssm',                :label => "Error:"
     config.add_show_field 'collection_title_ssim',      :label => "Collection Title:"
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source:'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
-    config.add_facet_field 'tag_ssim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    # tag_sim indexes tag prefixes (see IdentityMetadataDS#to_solr), but tag_ssim indexes only the whole tag.
+    # we want to facet on _sim to get the hierarchy.
+    config.add_facet_field 'tag_sim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
     #TODO: access_rights_ssim once solr has it
@@ -143,11 +145,11 @@ class CatalogController < ApplicationController
     config.field_groups = {
       :identification => [
         ['id','objectType_ssim','content_type_ssim','status_ssm','wf_error_ssm'],
-        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_sim','source_id_teim','preserved_size_ssm']
+        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_ssim','source_id_ssim','preserved_size_ssm']
       ],
       :full_identification => [
         ['id','objectType_ssim','content_type_ssim','metadata_source_ssim'],
-        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_sim','source_id_teim']
+        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_ssim','source_id_ssim']
       ]
     }
 
