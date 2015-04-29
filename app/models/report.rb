@@ -90,7 +90,7 @@ class Report
       },
 #      { :field => , :label => "Location", :sort => true, :default => false, :width => 100 },
       {
-        :field => 'catkey_id_teim', :label => "Catkey",
+        :field => 'catkey_id_ssim', :label => "Catkey",
         :sort => true, :default => false, :width => 100
       },
       {

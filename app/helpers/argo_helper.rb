@@ -214,7 +214,7 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
-      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false and object.datastreams['identityMetadata'].otherId('catkey)').length == 0 and object.datastreams['identityMetadata'].otherId('mdtoolkit)').length == 0
+      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false and object.datastreams['identityMetadata'].otherId('catkey').length == 0 and object.datastreams['identityMetadata'].otherId('mdtoolkit').length == 0
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
@@ -276,7 +276,7 @@ module ArgoHelper
   end
 
   def render_searchworks_link document, link_text='Searchworks', opts={:target => '_blank'}
-    val = document.get('catkey_id_t')
+    val = document.get('catkey_id_ssim')
     link_to link_text, "http://searchworks.stanford.edu/view/#{val}", opts
   end
 
