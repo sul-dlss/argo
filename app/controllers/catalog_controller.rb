@@ -63,9 +63,10 @@ class CatalogController < ApplicationController
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source:'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
-    # tag_sim indexes tag prefixes (see IdentityMetadataDS#to_solr), but tag_ssim indexes only the whole tag.
-    # we want to facet on _sim to get the hierarchy.
-    config.add_facet_field 'tag_sim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact 
+    # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
+    # to get the hierarchy.
+    config.add_facet_field 'exploded_tag_ssim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
     #TODO: access_rights_ssim once solr has it
