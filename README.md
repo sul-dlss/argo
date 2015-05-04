@@ -41,7 +41,7 @@ rails server
 ## Load and index records
 
 ```bash
-for x in fedora_conf/data/*.xml; do echo Loading $x; rake repo:load foxml=$x ; done
+rake argo:repo:load
 ```
 
 ## Delete records
