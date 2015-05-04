@@ -26,6 +26,8 @@ module ArgoHelper
     else
       0
     end
+  rescue
+    0
   end
 
   def index_queue_velocity
