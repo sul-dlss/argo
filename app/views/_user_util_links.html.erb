@@ -1,39 +1,39 @@
-<%= link_to "Home", root_path %>
-|
-<% if current_user %>
-  <%= link_to "Log&nbsp;Out".html_safe, destroy_user_session_path %> [<%= link_to current_user, edit_user_registration_path %>]
-  |
-<% else %>
-  <%= link_to 'Login', new_user_session_path %>
-  |
-<% end %>
-<%= link_to "Feedback", 'mailto:argo-feedback@lists.stanford.edu' %>
-  |
-
-<% if not session[:groups].nil? 
-  %><span class="impersonating-highlight">Impersonating:<%
-    session[:groups].each do |group|
-    %>
-    <%= group%>
-    <%
-    end
-    %></span><a href="/auth/forget_impersonated_groups">x</a>|<%
-  else
-    if current_user.is_admin %>
-      <a href="/auth/groups.html">Impersonate</a> |
-      <%
-    end
-  end
-  %>
-<% if index_queue_depth>1000
-  %> <span style="color:red; font-weight:bold">indexer backlog: <%= index_queue_depth%></span><%
-  else 
-  %> <span>indexer backlog: <%= index_queue_depth%></span>
-<%end%>
-
-<br/>
-<%= link_to "Register&nbsp; Items".html_safe, register_items_path %>
-<%if current_user.is_admin or current_user.is_manager %>
-|
-<%= link_to "Register&nbsp;APO".html_safe, url_for(:controller => '/apo', :action => :register) %>
-<%end%>
+<div class='navbar-right'>
+  <ul class='nav navbar-nav'>
+    <li><%= link_to "Home", root_path %></li>
+    <li>
+      <% if current_user %>
+        <li><%= link_to "Log&nbsp;Out".html_safe, destroy_user_session_path %></li>
+        <li><%= link_to current_user, edit_user_registration_path %></li>
+      <% else %>
+        <%= link_to 'Login', new_user_session_path %>
+      <% end %>
+    </li>
+    <li><%= link_to "Feedback", 'mailto:argo-feedback@lists.stanford.edu' %></li>
+    <% if current_user.is_admin %>
+      <li>
+        <% if session[:groups].present? %>
+          <span class="impersonating-highlight">
+            Impersonating: <%= session[:groups].join(' ') %>
+          </span>
+          <a href="/auth/forget_impersonated_groups">x</a>
+        <% else %>
+          <a href="/auth/groups.html">Impersonate</a>
+        <% end %>
+      </li>
+    <% end %>
+    <li><%= link_to "Register&nbsp; Items".html_safe, register_items_path %></li>
+    <%if current_user.is_admin or current_user.is_manager %>
+      <li>
+        <%= link_to "Register&nbsp;APO".html_safe, register_apo_index_path %>
+      </li>
+    <% end %>
+    <li>
+      <% if index_queue_depth > 1000 %>
+        <p class='navbar-text'><span style="color:red; font-weight:bold">indexer backlog: <%= index_queue_depth%></span></p>
+      <% else %>
+        <p class='navbar-text'>indexer backlog: <%= index_queue_depth%></p>
+      <% end %>
+    </li>
+  </ul>
+</div>
