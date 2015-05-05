@@ -21,7 +21,6 @@
 //
 // Required by Argo
 //= require argo
-//= require lightbox
 //= require grid.locale-en
 //= require jquery.jqGrid.min
 //= require jquery-ui
