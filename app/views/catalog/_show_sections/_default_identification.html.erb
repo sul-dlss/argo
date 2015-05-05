@@ -6,8 +6,7 @@
   <% blacklight_config[:field_groups][:full_identification].each do |field_names| %>
     <div class="narrow column">
       <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => field_names, :object => object } %>
-    </dl>
-  </div>
+    </div>
   <% end %>
   <div style="clear:left">
     <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['objProfile_objCreateDate_dt','objProfile_objLabel_dt','identifier_t','identityMetadata_tag_t'] } %>

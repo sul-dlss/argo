@@ -3,7 +3,7 @@
   <%= render_index_thumbnail document %>
 </div>
 <% blacklight_config[:field_groups][:identification].each do |field_names| %>
-  <div class="narrow column">
+  <div class="col-md-6">
     <%= render :partial => "catalog/show_field_list", :locals => { :document => document, :field_names => field_names } %>
   </div>
 <% end %>
