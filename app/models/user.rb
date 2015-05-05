@@ -70,26 +70,26 @@ class User < ActiveRecord::Base
   end
 
   def permitted_apos
-    query=""
-    first=true
+    query = ""
+    first = true
     groups.each do |group|
       if first
-        query+=' '+group.gsub(':','\:')
-        first=false
+        query += ' ' + group.gsub(':','\:')
+        first = false
       else
-        query+=' OR '+group.gsub(':','\:')
+        query += ' OR ' + group.gsub(':','\:')
       end
     end
-    q='apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')'
+    q = 'apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')'
     known_roles.each do |role|
-      q+=' OR apo_role_'+role+'_t:('+query+')'
+      q += ' OR apo_role_'+role+'_t:('+query+')'
     end
     if is_admin
-      q='objectType_facet:adminPolicy'
+      q = 'objectType_ssim:adminPolicy'
     end
-    resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!tag_facet:"Project : Hydrus"'})['response']['docs']
-    pids=[]
-    count=1
+    resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!project_tag_ssim:"Hydrus"'})['response']['docs']
+    pids = []
+    count = 1
     resp.each do |doc|
       pids << doc['id']
     end
@@ -97,17 +97,17 @@ class User < ActiveRecord::Base
   end
 
   def permitted_collections
-    q = 'objectType_t:collection AND !tag_facet:"Project : Hydrus" '
+    q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
     qrys=[]
     permitted_apos.each do |pid|
-      qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
+      qrys << 'is_governed_by_ssim:"info:fedora/'+pid+'"'
     end
     if not is_admin
       q+=qrys.join " OR "
     end
-    result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_t,dc_title_t'}).docs
+    result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_t'}).docs
 
-    #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_t,dc_title_t').docs
+    #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_t').docs
     result.sort! do |a,b|
       a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
@@ -117,7 +117,7 @@ class User < ActiveRecord::Base
       [Array(doc['dc_title_t']).first+ ' (' + doc['id'].to_s + ')',doc['id'].to_s]
     end
     res.each do |ar|
-      ar[0] =chomp_title ar.first
+      ar[0] = chomp_title ar.first
     end
     res
   end
