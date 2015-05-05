@@ -1,4 +1,7 @@
-<%= form_tag add_workflow_item_url do %>
-<%=select_tag :wf, options_for_select(workflow_options, default_workflow_option)%>
-<button>Add Workflow</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
-<% end %>
+<div data-ajax-modal="container">
+  <h3 class="modal-title">Add workflow</h3>
+  <%= form_tag add_workflow_item_url do %>
+    <%= select_tag :wf, options_for_select(workflow_options, default_workflow_option)%>
+    <button class='btn btn-default'>Add</button>
+  <% end %>
+</div>

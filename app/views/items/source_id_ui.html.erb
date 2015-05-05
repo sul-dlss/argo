@@ -1,4 +1,9 @@
-<%=form_tag url_for(:controller => :items, :action => :source_id, :id => @object.pid) do%>
-  <input class="longInputBox" size="100" maxlength="255" style="width:auto" name="new_id" id="new_id" type="text" value="<%=@object.identityMetadata.sourceId.gsub(':',' : ')%>"/>
-  <button>Update</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
-<%end%>
+<div data-ajax-modal="container">
+  <h3 class="modal-title">Change source id</h3>
+  <%=form_tag url_for(:controller => :items, :action => :source_id, :id => @object.pid) do%>
+    <div class="form-group">
+      <input class="longInputBox form-control" maxlength="255" name="new_id" id="new_id" type="text" value="<%=@object.identityMetadata.sourceId.gsub(':',' : ')%>"/>
+    </div>
+    <button class="btn btn-default">Update</button>
+  <%end%>
+</div>

@@ -1,19 +1,16 @@
-<div><label>Remove existing collections</label><br/>
-<%
-  @object.collections.each do |col|
-%>
-  <%=col.label%>
-  <%del_image=image_tag ('unavailable.png')%>
-  <%=link_to del_image, url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid)%><br/>
-<%
-  end
-%>
-</div>
-<br/>
-<div>
-<label>Add a collection</label>
-<%=form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid) do%>
-  <%= select_tag :collection, options_for_select(current_user.permitted_collections)%>
-  <button>Add Collection</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
-<%end%>
+<div data-ajax-modal="container">
+  <div>
+    <h3 class="modal-title">Remove existing collections</h3>
+    <% @object.collections.each do |col| %>
+      <%= col.label %>
+      <%=link_to image_tag('unavailable.png'), url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid)%><br/>
+    <% end %>
+  </div>
+  <div>
+    <h3 class="modal-title">Add a collection</h3>
+    <%= form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid) do%>
+      <%= select_tag :collection, options_for_select(current_user.permitted_collections)%>
+      <button class='btn btn-default'>Add Collection</button>
+    <%end%>
+  </div>
 </div>
