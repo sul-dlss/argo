@@ -13,7 +13,7 @@
     <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['objProfile_objCreateDate_dt','objProfile_objLabel_dt','identifier_t','identityMetadata_tag_t'] } %>
 
     <%if defined?(object.status) %>
-     <dl class="defList">
+     <dl class="document-metadata dl-horizontal dl-invert">
       <dt>Status:</dt>
       <dd>
         <span class="<%= render_status_style(document, object) %>">

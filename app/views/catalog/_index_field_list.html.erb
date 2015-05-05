@@ -1,4 +1,4 @@
-<dl class="defList">
+<dl class="document-metadata dl-horizontal dl-invert">
 <% field_names.each do |solr_fname| -%>
   <% if document_has? document, solr_fname %>
   <dt class="blacklight-<%= solr_fname.parameterize %>"><%= render_index_field_label :field => solr_fname, :document => document %></dt>
