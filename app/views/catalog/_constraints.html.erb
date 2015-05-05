@@ -1,7 +1,7 @@
-<div id="appliedParams">
+<div id="appliedParams" class="clearfix constraints-container">
   <%= render('report_view_toggle') if params[:action] == 'index' %>
   <div>
-    <h3 class="label">You searched for:</h3>
-    <%= render_constraints(localized_params) %>  
+    <h3 class="label sr-only">You searched for:</h3>
+    <%= render_constraints(localized_params) %>
   </div>
 </div>
