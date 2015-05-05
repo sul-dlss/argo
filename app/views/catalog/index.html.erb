@@ -13,7 +13,6 @@
   <% else %>
     <% @page_title = "#{application_name} Search Results" %>
     <% content_for(:head) { render_opensearch_response_metadata.html_safe } -%>
-    <%= render :partial => 'search_form' %>
     <% if has_search_parameters? %>
       <%= render :partial => 'did_you_mean' %>
       <%= render 'constraints', :localized_params=>params %>
