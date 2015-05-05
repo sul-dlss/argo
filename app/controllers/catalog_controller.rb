@@ -44,22 +44,22 @@ class CatalogController < ApplicationController
 
     config.add_index_field 'id',              :label => 'DRUID'
     config.add_index_field 'dc_creator_si',   :label => 'Creator'
-    config.add_index_field 'project_tag_ssim', :label => 'Project'
+    config.add_index_field 'project_tag_ssim',:label => 'Project'
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type'
     config.add_show_field 'identifier_tesim',            :label => 'IDs'
     # config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'  # TODO: not sure objProfile fields exist
     # config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
     config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy'
-    config.add_show_field 'is_member_of_collection_ssim', :label => 'Collection'
+    config.add_show_field 'is_member_of_collection_ssim',:label => 'Collection'
     config.add_show_field 'status_ssm',                  :label => 'Status'
     config.add_show_field 'objectType_ssim',             :label => 'Object Type'
     config.add_show_field 'id',                          :label => 'DRUID'
-    config.add_show_field 'project_tag_ssim',             :label => 'Project'
+    config.add_show_field 'project_tag_ssim',            :label => 'Project'
     config.add_show_field 'source_id_ssim',              :label => 'Source'
     config.add_show_field 'tag_ssim',                    :label => 'Tags'
     config.add_show_field 'wf_error_ssm',                :label => "Error"
-    config.add_show_field 'collection_title_ssim',      :label => "Collection Title"
+    config.add_show_field 'collection_title_ssim',       :label => "Collection Title"
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
@@ -70,8 +70,8 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
     #TODO: access_rights_ssim once solr has it
-    config.add_facet_field 'collection_title_ssim', :label => 'Collection', :sort => 'index', :limit => 500
-    config.add_facet_field 'apo_title_ssim',         :label => 'Admin Policy',        :sort => 'index', :limit => 500
+    config.add_facet_field 'collection_title_ssim', :label => 'Collection',  :sort => 'index', :limit => 500
+    config.add_facet_field 'apo_title_ssim',        :label => 'Admin Policy',:sort => 'index', :limit => 500
     #TODO: current_version_isi once solr has it
     #TODO: processing_status_ssi once solr has it
     #TODO: release_status_ssim once solr has it
@@ -98,33 +98,37 @@ class CatalogController < ApplicationController
       :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
     }
 
-    #TODO: it would be nice to do date math on date fields, but we index text, so we're doing a string range for now.
-    #TODO: registered_dt, opened_dt, accessioned_dt, ingest_dt, embargo_dt, modified_dt
+    # Be careful using NOW: http://lucidworks.com/blog/date-math-now-and-filter-queries/
+    # tl;dr: specify coarsest granularity (/DAY or /HOUR) or lose caching
+    #
+    #TODO: update blacklight_range_limit to work w/ dates and use it.  Or something similarly powerful.
+    #      Per-query user-paramatized facet endpoints w/ auto-scaling granularity is the point.
+    #      See solr facet ranges (start/end/gap), NOT facet range queries (fq), as here.
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "registered_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "registered_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "registered_dttsim:[NOW/DAY-7DAYS TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "registered_dttsim:[NOW/DAY-30DAYS TO *]"}
     }
     config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "submitted_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "submitted_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "submitted_dttsim:[NOW/DAY-7DAYS TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "submitted_dttsim:[NOW/DAY-30DAYS TO *]"}
     }
     config.add_facet_field 'published_date', :label => 'Published', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "published_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "published_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "published_dttsim:[NOW/DAY-7DAYS TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "published_dttsim:[NOW/DAY-30DAYS TO *]"}
     }
     config.add_facet_field 'deposited_date', :label => 'Deposited', :query => {
-      :days_1  => { :label => 'today',          :fq => "deposited_day_tesim:[#{ 1.minute.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_7  => { :label => 'within 7 days',  :fq => "deposited_day_tesim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "deposited_day_tesim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_1  => { :label => 'today',          :fq => "deposited_dttsim:[NOW/DAY TO *]"},
+      :days_7  => { :label => 'within 7 days',  :fq => "deposited_dttsim:[NOW/DAY-7DAYS TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "deposited_dttsim:[NOW/DAY-30DAYS TO *]"}
     }
     config.add_facet_field 'object_modified_day', :label => 'Object Last Modified', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "last_modified_day_sim:[#{ 7.days.ago.utc.xmlschema.split('T').first } TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "last_modified_day_sim:[#{30.days.ago.utc.xmlschema.split('T').first } TO *]"}
+      :days_7  => { :label => 'within 7 days',  :fq => "modified_latest_dttsi:[NOW/DAY-7DAYS TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "modified_latest_dttsi:[NOW/DAY-30DAYS TO *]"}
     }
     config.add_facet_field 'version_opened', :label => 'Open Version', :query => {
-      :all     => { :label => 'All',               :fq => "version_opened_teim:[* TO #{1.second.ago.utc.xmlschema.split('T').first }]"},
-      :days_7  => { :label => 'more than 7 days',  :fq => "version_opened_teim:[* TO #{ 7.days.ago.utc.xmlschema }]"},
-      :days_30 => { :label => 'more than 30 days', :fq => "version_opened_teim:[* TO #{30.days.ago.utc.xmlschema }]"}
+      :all     => { :label => 'All',               :fq => "opened_latest_dttsi:*"},
+      :days_7  => { :label => 'more than 7 days',  :fq => "opened_latest_dttsi:[* TO NOW/DAY-7DAYS]"},
+      :days_30 => { :label => 'more than 30 days', :fq => "opened_latest_dttsi:[* TO NOW/DAY-30DAYS]"}
     }
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
@@ -212,7 +216,7 @@ class CatalogController < ApplicationController
   def reformat_dates
     params.each do |key, val|
       begin
-        if (key=~  /_datepicker/ and val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
+        if (key=~ /_datepicker/ and val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
           val = DateTime.parse(val).beginning_of_day.utc.xmlschema
           field = key.split( '_after_datepicker').first.split('_before_datepicker').first
           params[:f][field] = '['+val.to_s+'Z TO *]'
