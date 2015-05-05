@@ -9,7 +9,7 @@ describe ItemsController, :type => :controller do
     allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
-    allow(Dor::Item).to receive(:find).and_return(@item)
+    allow(Dor::Item).to receive(:find).with('druid:oo201oo0001').and_return(@item)
     @event_ds=double(Dor::EventsDS)
     allow(@event_ds).to receive(:add_event)
     @ds={}
@@ -21,16 +21,19 @@ describe ItemsController, :type => :controller do
     @ds['events'] = @event_ds
     allow(@item).to receive(:datastreams).and_return(@ds)
     allow(@item).to receive(:allows_modification?).and_return(true)
-    allow(@item).to receive(:can_manage_item?).and_return(false)
-    allow(@item).to receive(:can_manage_content?).and_return(false)
-    allow(@item).to receive(:can_view_content?).and_return(false)
+    allow(@item).to receive(:can_manage_item?    ).and_return(false)
+    allow(@item).to receive(:can_manage_content? ).and_return(false)
+    allow(@item).to receive(:can_view_content?   ).and_return(false)
     allow(@item).to receive(:pid).and_return('object:pid')
     allow(@item).to receive(:delete)
     @apo=double()
     allow(@apo).to receive(:pid).and_return('druid:apo')
     allow(@item).to receive(:admin_policy_object).and_return(@apo)
+    wf=double()
+    allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
+    allow(@item).to receive(:workflows).and_return wf
     allow(Dor::SearchService.solr).to receive(:add)
-    @pid='oo201oo0001'
+    @pid='druid:oo201oo0001'
   end
 
   describe 'datastream_update' do
