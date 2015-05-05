@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
-class CatalogController < ApplicationController  
+class CatalogController < ApplicationController
   include Blacklight::Marc::Catalog
 
   include BlacklightSolrExtensions
@@ -42,28 +42,28 @@ class CatalogController < ApplicationController
       'contents'       => :render_dor_workspace_link
     }
 
-    config.add_index_field 'id',              :label => 'DRUID:'
-    config.add_index_field 'dc_creator_si',   :label => 'Creator:'
-    config.add_index_field 'project_tag_ssim', :label => 'Project:'
+    config.add_index_field 'id',              :label => 'DRUID'
+    config.add_index_field 'dc_creator_si',   :label => 'Creator'
+    config.add_index_field 'project_tag_ssim', :label => 'Project'
 
-    config.add_show_field 'content_type_ssim',           :label => 'Content Type:'
-    config.add_show_field 'identifier_tesim',            :label => 'IDs:'
+    config.add_show_field 'content_type_ssim',           :label => 'Content Type'
+    config.add_show_field 'identifier_tesim',            :label => 'IDs'
     # config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'  # TODO: not sure objProfile fields exist
     # config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
-    config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy:'
-    config.add_show_field 'is_member_of_collection_ssim', :label => 'Collection:'
-    config.add_show_field 'status_ssm',                  :label => 'Status:'
-    config.add_show_field 'objectType_ssim',             :label => 'Object Type:'
-    config.add_show_field 'id',                          :label => 'DRUID:'
-    config.add_show_field 'project_tag_ssim',             :label => 'Project:'
-    config.add_show_field 'source_id_ssim',              :label => 'Source:'
-    config.add_show_field 'tag_ssim',                    :label => 'Tags:'
-    config.add_show_field 'wf_error_ssm',                :label => "Error:"
-    config.add_show_field 'collection_title_ssim',      :label => "Collection Title:"
-    config.add_show_field 'metadata_source_ssi',         :label => 'MD Source:'
+    config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy'
+    config.add_show_field 'is_member_of_collection_ssim', :label => 'Collection'
+    config.add_show_field 'status_ssm',                  :label => 'Status'
+    config.add_show_field 'objectType_ssim',             :label => 'Object Type'
+    config.add_show_field 'id',                          :label => 'DRUID'
+    config.add_show_field 'project_tag_ssim',             :label => 'Project'
+    config.add_show_field 'source_id_ssim',              :label => 'Source'
+    config.add_show_field 'tag_ssim',                    :label => 'Tags'
+    config.add_show_field 'wf_error_ssm',                :label => "Error"
+    config.add_show_field 'collection_title_ssim',      :label => "Collection Title"
+    config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
 
-    # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact 
+    # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
     config.add_facet_field 'exploded_tag_ssim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
@@ -187,7 +187,7 @@ class CatalogController < ApplicationController
     @response, @document = get_solr_response_for_doc_id
     @obj = Dor.find params[:id], :lightweight => true
     ds = @obj.datastreams[params[:dsid]]
-    data = @obj.datastreams[params[:dsid]].content 
+    data = @obj.datastreams[params[:dsid]].content
     unless data.nil?
       send_data data, :type => 'xml', :disposition => 'inline'
     else
