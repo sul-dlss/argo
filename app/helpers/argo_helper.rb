@@ -107,14 +107,6 @@ module ArgoHelper
     end
   end
 
-  def render_document_heading
-    ''
-  end
-
-  def render_show_doc_actions *args
-    ''
-  end
-
   def render_document_show_field_value args
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
