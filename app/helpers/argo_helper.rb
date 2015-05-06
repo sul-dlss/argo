@@ -21,9 +21,10 @@ module ArgoHelper
   def index_queue_depth
     begin
       if Dor::Config.status and Dor::Config.status.indexer_url
-        url=Dor::Config.status.indexer_url
-        data=JSON.parse(open(url).read)
-        count=data.first['datapoints'].first.first.to_i
+        url = Dor::Config.status.indexer_url
+        resp = RestClient::Request.execute(:method => :get, :url => url, :timeout => 3, :open_timeout => 3)
+        data = JSON.parse(resp)
+        count = data.first['datapoints'].first.first.to_i
       else
         return 0
       end

@@ -29,10 +29,11 @@
       </li>
     <% end %>
     <li>
-      <% if index_queue_depth > 1000 %>
-        <p class='navbar-text'><span style="color:red; font-weight:bold">indexer backlog: <%= index_queue_depth%></span></p>
+      <% iqd = index_queue_depth() %>
+      <% if iqd > 1000 %>
+        <p class='navbar-text'><span style="color:red; font-weight:bold">indexer backlog: <%= iqd %></span></p>
       <% else %>
-        <p class='navbar-text'>indexer backlog: <%= index_queue_depth%></p>
+        <p class='navbar-text'>indexer backlog: <%= iqd %></p>
       <% end %>
     </li>
   </ul>
