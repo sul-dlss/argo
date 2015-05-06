@@ -19,20 +19,23 @@ module ArgoHelper
   end
 
   def index_queue_depth
-    if Dor::Config.status and Dor::Config.status.indexer_url
-      url=Dor::Config.status.indexer_url
-      data=JSON.parse(open(url).read)
-      count=data.first['datapoints'].first.first.to_i
-    else
-      0
+    begin
+      if Dor::Config.status and Dor::Config.status.indexer_url
+        url = Dor::Config.status.indexer_url
+        resp = RestClient::Request.execute(:method => :get, :url => url, :timeout => 3, :open_timeout => 3)
+        data = JSON.parse(resp)
+        count = data.first['datapoints'].first.first.to_i
+      else
+        return 0
+      end
+    rescue
+      return 0
     end
-  rescue
-    0
   end
 
   def index_queue_velocity
     begin
-      if Dor::Config.status and Dor::Config.status.indexer_url
+      if Dor::Config.status and Dor::Config.status.indexer_velocity_url
         url=Dor::Config.status.indexer_velocity_url
         data=JSON.parse(open(url).read)
         points=[]
@@ -45,7 +48,7 @@ module ArgoHelper
           return speed
         end
       else
-        0
+        return 0
       end
     rescue
       return 0
