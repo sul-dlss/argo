@@ -7,3 +7,4 @@ Capistrano::OneTimeKey.generate_one_time_key!
 set :rails_env, 'production'
 set :branch, :develop
 
+set :deploy_to, '/opt/app/lyberadmin/argo'
