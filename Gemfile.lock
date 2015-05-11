@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: fc17ad1307afea13dfae6e607101b97a7599bfb6
+  revision: 6dc1c63ad7e5920b7174c310ff3d99fc9500981d
   branch: solrization_fixes
   specs:
     dor-services (5.1.0)
