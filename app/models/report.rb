@@ -104,8 +104,8 @@ class Report
       {
         :field => 'published_datetime', :label => "Pub. Datetime",
           #modified to format the date
-        :proc => lambda { |doc| render_datetime(doc['published_tesim'])},
-        :solr_fields => ['published_tesim'],
+        :proc => lambda { |doc| render_datetime(doc['published_dttsim'])},
+        :solr_fields => ['published_dttsim'],
         :sort => true, :default => false, :width => 100
       },
       {
@@ -136,8 +136,8 @@ class Report
       {
         :field => 'published_dt', :label => "Pub. Date",
           #modified to format the date
-        :proc => lambda { |doc| doc['published_day_tesim']},
-        :solr_fields => ['published_day_tesim'],
+        :proc => lambda { |doc| doc['published_dttsim']},
+        :solr_fields => ['published_dttsim'],
         :sort => true, :default => true, :width => 100
       },
       {
@@ -181,7 +181,7 @@ class Report
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 accessioned_day_tesim preserved_day_facet shelved_day_facet published_day_tesim content_file_count_display coordinates_teim creator_tesim dc_creator_si dc_identifier_druid_si dc_title_si dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_teim obj_state_teim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim resource_count_display scale_teim shelved_content_file_count_display sourceId_t tag_ssim title_tesim topic_tesim is_member_of_collection_ssim is_governed_by_ssim},
+      :qf => %{text^3 accessioned_day_tesim preserved_day_facet shelved_day_facet published_dttsim content_file_count_display coordinates_teim creator_tesim dc_creator_si dc_identifier_druid_si dc_title_si dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_teim obj_state_teim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim resource_count_display scale_teim shelved_content_file_count_display sourceId_t tag_ssim title_tesim topic_tesim is_member_of_collection_ssim is_governed_by_ssim},
       :rows => 100,
       :facet => true,
       :'facet.mincount' => 1,
