@@ -54,7 +54,7 @@ module ValueHelper
     end
   end
 
-  def value_for_wf_error_display args
+  def value_for_wf_error_ssim args
     wf, step, message = args[:document].get(args[:field]).split(':',3)
     step+' : '+message
   end
@@ -104,7 +104,7 @@ module ValueHelper
     val.localtime.strftime '%Y.%m.%d %H:%M%p'
   end
 
-  def value_for_identifier_t args
+  def value_for_identifier_tesim args
     val = args[:document][args[:field]]
     Array(val).reject { |v| v == args[:document]['id'] }.sort.uniq.join(', ')
   end

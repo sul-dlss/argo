@@ -21,11 +21,11 @@ class CatalogController < ApplicationController
       :rows => 10,
       :facet => true,
       :'facet.mincount' => 1,
-      :'f.wf_wps_sim.facet.limit' => -1,
-      :'f.wf_wsp_sim.facet.limit' => -1,
-      :'f.wf_swp_sim.facet.limit' => -1,
-      :'f.tag_facet.facet.limit' => -1,
-      :'f.tag_facet.facet.sort' => 'index'
+      :'f.wf_wps_ssim.facet.limit' => -1,
+      :'f.wf_wsp_ssim.facet.limit' => -1,
+      :'f.wf_swp_ssim.facet.limit' => -1,
+      :'f.tag_ssim.facet.limit' => -1,
+      :'f.tag_ssim.facet.sort' => 'index'
     }
 
     config.index.title_field = 'id'
@@ -58,7 +58,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'project_tag_ssim',            :label => 'Project'
     config.add_show_field 'source_id_ssim',              :label => 'Source'
     config.add_show_field 'tag_ssim',                    :label => 'Tags'
-    config.add_show_field 'wf_error_ssm',                :label => "Error"
+    config.add_show_field 'wf_error_ssim',                :label => "Error"
     config.add_show_field 'collection_title_ssim',       :label => "Collection Title"
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
@@ -77,9 +77,9 @@ class CatalogController < ApplicationController
     #TODO: release_status_ssim once solr has it
     #TODO: does release_status and processing_status supersede lifecycle?  do we ditch that?
     config.add_facet_field 'lifecycle_ssim', :label => 'Lifecycle'
-    config.add_facet_field 'wf_wps_sim', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_wsp_sim', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_swp_sim', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_wps_ssim', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_wsp_ssim', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_swp_ssim', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'has_model_ssim',  :label => 'Object Model'
 
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
@@ -147,7 +147,7 @@ class CatalogController < ApplicationController
 
     config.field_groups = {
       :identification => [
-        ['id','objectType_ssim','content_type_ssim','status_ssm','wf_error_ssm'],
+        ['id','objectType_ssim','content_type_ssim','status_ssm','wf_error_ssim'],
         ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_ssim','source_id_ssim','preserved_size_ssm']
       ],
       :full_identification => [

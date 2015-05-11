@@ -4,10 +4,10 @@ class Robot < ActiveRecord::Base
   # attr_accessible :wf, :process
 
   def status
-    ready_docs=Dor::SearchService.query("wf_wps_facet:\"#{wf}:#{process}:ready\"")['response']['docs']
+    ready_docs=Dor::SearchService.query("wf_wps_ssim:\"#{wf}:#{process}:ready\"")['response']['docs']
     if ready_docs.length > 0
 
-      docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-7HOURS-1HOUR TO NOW]", {:rows => 20, :fl => 'id'})['response']['docs']
+      docs = Dor::SearchService.query("wf_#{wf}_#{process}_dttsi:[NOW-7HOURS-1HOUR TO NOW]", {:rows => 20, :fl => 'id'})['response']['docs']
       if docs.length >0
         @status = 'activity'
       else
@@ -20,10 +20,10 @@ class Robot < ActiveRecord::Base
     @status
   end
   def status_long
-    ready_docs=Dor::SearchService.query("wf_wps_facet:\"#{wf}:#{process}:ready\"")['response']['docs']
+    ready_docs=Dor::SearchService.query("wf_wps_ssim:\"#{wf}:#{process}:ready\"")['response']['docs']
     if ready_docs.length > 0
 
-      docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-7HOURS-4HOURS TO NOW]", {:rows => 20, :fl => 'id'})['response']['docs']
+      docs = Dor::SearchService.query("wf_#{wf}_#{process}_dttsi:[NOW-7HOURS-4HOURS TO NOW]", {:rows => 20, :fl => 'id'})['response']['docs']
       if docs.length >0
         @status = 'activity'
       else
@@ -35,6 +35,6 @@ class Robot < ActiveRecord::Base
     @status
   end
   def recent_work
-    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dt:[NOW-7HOURS-1HOUR  TO NOW]", {:rows => 20, :fl => 'id,dc_title_t,apo_title_ssim'})['response']['docs']
+    docs = Dor::SearchService.query("wf_#{wf}_#{process}_dttsi:[NOW-7HOURS-1HOUR  TO NOW]", {:rows => 20, :fl => 'id,dc_title_t,apo_title_ssim'})['response']['docs']
   end
 end

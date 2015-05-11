@@ -4,7 +4,7 @@ module WorkflowHelper
   end
 
   def render_workflow_grid
-    workflow_data = facet_tree('wf')['wf_wps_sim']
+    workflow_data = facet_tree('wf')['wf_wps_ssim']
     return '' if workflow_data.nil?
     result = workflow_data.keys.sort.collect do |wf_name|
       render :partial => 'workflow_table', :locals => { :wf_name => wf_name, :wf_data => workflow_data[wf_name] }
@@ -12,12 +12,12 @@ module WorkflowHelper
   end
 
   def render_workflow_name(name)
-    new_params = add_facet_params("wf_wps_sim", name).merge(:controller => 'catalog', :action => 'index')
+    new_params = add_facet_params("wf_wps_ssim", name).merge(:controller => 'catalog', :action => 'index')
     link_to(name, new_params)
   end
 
   def render_workflow_process_name(name,process)
-    new_params = add_facet_params("wf_wps_sim", [name,process].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
+    new_params = add_facet_params("wf_wps_ssim", [name,process].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     link_to(process, new_params)
   end
 
@@ -40,15 +40,15 @@ module WorkflowHelper
     end
   end
 
-  def render_workflow_reset_link(wf_hash,name,process,status)
+  def render_workflow_reset_link(wf_hash, name, process, status)
     if (wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_])
-      new_params = add_facet_params("wf_wps_sim", [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow=>name,:reset_step=>process)
+      new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow=>name,:reset_step=>process)
       raw " | " + link_to('reset', new_params,:remote=>true)
     end
   end
 
-  def render_workflow_item_count(wf_hash,name,process,status)
-    new_params = add_facet_params("wf_wps_sim", [name,process,status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
+  def render_workflow_item_count(wf_hash, name, process, status)
+    new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     rotate_facet_params('wf','wps',facet_order('wf'),new_params)
     item_count = 0
     if wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_]
@@ -64,8 +64,8 @@ module WorkflowHelper
     query_results = Dor::SearchService.query("objectType_ssim:workflow title_tesim:#{name}")
     if query_results
       wf_doc = query_results.docs.first
-      if wf_doc && wf_doc["#{name}_archived_display"]
-        return wf_doc["#{name}_archived_display"].first.to_i
+      if wf_doc && wf_doc["#{name}_archived_isi"]
+        return wf_doc["#{name}_archived_isi"].first.to_i
       end
     end
     
@@ -73,7 +73,7 @@ module WorkflowHelper
   end
 
   def render_workflow_grid_toggle(field_name)
-    if field_name =~ /^wf_.+_facet/
+    if field_name =~ /^wf_.+_ssim/
       p = params.dup
       img = nil
       image_path = ''

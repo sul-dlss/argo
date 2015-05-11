@@ -152,9 +152,9 @@ class Discovery
       :rows => 100,
       :facet => true,
       :'facet.mincount' => 1,
-      :'f.wf_wps_facet.facet.limit' => -1,
-      :'f.wf_wsp_facet.facet.limit' => -1,
-      :'f.wf_swp_facet.facet.limit' => -1,
+      :'f.wf_wps_ssim.facet.limit' => -1,
+      :'f.wf_wsp_ssim.facet.limit' => -1,
+      :'f.wf_swp_ssim.facet.limit' => -1,
       :fl => config.discovery_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
     }
 

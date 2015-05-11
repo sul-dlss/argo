@@ -148,8 +148,8 @@ class Report
       },
       {
         :field => 'workflow_status_display', :label => "Errors",
-        :proc => lambda { |doc| doc['workflow_status_ssm'].first.split('|')[2] },
-        :solr_fields => ['workflow_status_ssm'],
+        :proc => lambda { |doc| doc['workflow_status_ssim'].first.split('|')[2] },
+        :solr_fields => ['workflow_status_ssim'],
         :sort => true, :default => false, :width => 100
       },
       {
@@ -185,9 +185,9 @@ class Report
       :rows => 100,
       :facet => true,
       :'facet.mincount' => 1,
-      :'f.wf_wps_facet.facet.limit' => -1,
-      :'f.wf_wsp_facet.facet.limit' => -1,
-      :'f.wf_swp_facet.facet.limit' => -1,
+      :'f.wf_wps_ssim.facet.limit' => -1,
+      :'f.wf_wsp_ssim.facet.limit' => -1,
+      :'f.wf_swp_ssim.facet.limit' => -1,
       :fl => config.report_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
     }
     config.add_sort_field 'id asc', :label => 'Druid'
