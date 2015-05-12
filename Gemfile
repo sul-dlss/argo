@@ -57,7 +57,6 @@ group :test, :development do
   gem 'pry-byebug',   :platform =>[:ruby_20, :ruby_21]
   gem 'pry-remote'
   gem 'pry-rails'
-  gem 'pry-nav'
 end
 
 group :development do
