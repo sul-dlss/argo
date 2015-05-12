@@ -12,6 +12,15 @@ GIT
       rack
 
 GIT
+  remote: https://github.com/sul-dlss/blacklight-hierarchy.git
+  revision: 4c21ee08439acb311efc41a321d1b92340c6ed60
+  branch: master
+  specs:
+    blacklight-hierarchy (0.1.1)
+      blacklight (~> 5, < 6)
+      rails (~> 4.1)
+
+GIT
   remote: https://github.com/sul-dlss/dor-services.git
   revision: 6dc1c63ad7e5920b7174c310ff3d99fc9500981d
   branch: solrization_fixes
@@ -100,7 +109,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.5)
     arel (6.0.0)
-    autoprefixer-rails (5.1.8)
+    autoprefixer-rails (5.1.11)
       execjs
       json
     bagit (0.3.2)
@@ -114,9 +123,6 @@ GEM
       nokogiri (~> 1.6)
       rails (>= 3.2.6, < 5)
       rsolr (~> 1.0.6)
-    blacklight-hierarchy (0.1.1)
-      blacklight (~> 5, < 6)
-      rails (~> 4.1)
     blacklight-marc (5.5.0)
       blacklight (~> 5.8)
       marc (>= 0.4.3, < 1.1)
@@ -192,12 +198,12 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     eventmachine (1.0.7)
-    execjs (2.4.0)
+    execjs (2.5.2)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
     ffi (1.9.8)
-    globalid (0.3.3)
+    globalid (0.3.5)
       activesupport (>= 4.1.0)
     grit (2.5.0)
       diff-lcs (~> 1.1)
@@ -205,7 +211,6 @@ GEM
       posix-spawn (~> 0.3.6)
     haml (4.0.6)
       tilt
-    hike (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
     http-cookie (1.0.2)
@@ -237,7 +242,7 @@ GEM
     libv8 (3.16.14.7)
     link_header (0.0.8)
     logger (1.2.8)
-    loofah (2.0.1)
+    loofah (2.0.2)
       nokogiri (>= 1.5.9)
     lyber-utils (0.1.2)
       bagit (>= 0.1.0)
@@ -317,12 +322,14 @@ GEM
     pry-debugger (0.2.3)
       debugger (~> 1.3)
       pry (>= 0.9.10, < 0.11.0)
+    pry-nav (0.2.4)
+      pry (>= 0.9.10, < 0.11.0)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     pry-remote (0.1.8)
       pry (~> 0.9)
       slop (~> 3.0)
-    rack (1.6.0)
+    rack (1.6.1)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.1)
@@ -430,12 +437,9 @@ GEM
       nokogiri
       stomp
       xml-simple
-    sprockets (2.12.3)
-      hike (~> 1.2)
-      multi_json (~> 1.0)
+    sprockets (3.1.0)
       rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
-    sprockets-rails (2.2.4)
+    sprockets-rails (2.3.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
@@ -496,7 +500,7 @@ DEPENDENCIES
   addressable (= 2.3.5)
   barby
   blacklight (~> 5.9.0)
-  blacklight-hierarchy
+  blacklight-hierarchy!
   blacklight-marc
   bootstrap-sass
   capistrano (= 3.2.1)
@@ -529,6 +533,7 @@ DEPENDENCIES
   progressbar
   pry-byebug
   pry-debugger
+  pry-nav
   pry-rails
   pry-remote
   rack-test
