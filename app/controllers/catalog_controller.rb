@@ -66,7 +66,7 @@ class CatalogController < ApplicationController
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
-    config.add_facet_field 'exploded_tag_ssim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'exploded_tag_ssim',     :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
     #TODO: access_rights_ssim once solr has it
@@ -140,8 +140,8 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       :hierarchy => {
-        'wf' => [['wps','wsp','swp'], ':'],
-        'tag' => [[nil], ':']
+        'wf' => [['wps_ssim','wsp_ssim','swp_ssim'], ':'],
+        'exploded_tag' => [['ssim'], ':']
       }
     }
 
