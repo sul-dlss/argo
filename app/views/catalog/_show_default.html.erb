@@ -1,9 +1,8 @@
 <%
   @page_title = "#{application_name} - #{Array(document_show_html_title).first.to_s.ellipsize(:max => 50)}"
   ensure_current_document_version if Argo::Config[:reindex_on_the_fly]
-  @footer = "Argo v#{Argo.version} / DOR Services v#{@document.get(ActiveFedora::SolrService.solr_name('dor_services_version', :symbol))}"
 %>
 
 <div id="document-sections">
-  <%= render_document_sections(@document,:show) %>
+  <%= render_document_sections(@document, :show) %>
 </div>
