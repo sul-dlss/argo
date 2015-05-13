@@ -30,7 +30,8 @@ gem 'unicode'
 gem 'about_page'
 gem 'active-fedora'
 gem 'blacklight', '~> 5.9.0' #TODO: BL >= 5.10.x has new deprecation warnings vs <= 5.9.x, will investigate and unpin after current upgrade stuff has settled
-gem 'blacklight-hierarchy', :git => 'https://github.com/sul-dlss/blacklight-hierarchy.git', :branch => 'master'
+# gem 'blacklight-hierarchy', :git => 'https://github.com/sul-dlss/blacklight-hierarchy.git', :branch => 'master'
+gem 'blacklight-hierarchy'
 gem 'blacklight-marc'
 gem 'dor-services', '~> 5.0', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'solrization_fixes' # specifying because we expect a major vers upgrade to break things
 gem 'dor-workflow-service'
@@ -57,6 +58,7 @@ group :test, :development do
   gem 'pry-byebug',   :platform =>[:ruby_20, :ruby_21]
   gem 'pry-remote'
   gem 'pry-rails'
+  # gem 'pry-nav'
 end
 
 group :development do
