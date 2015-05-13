@@ -43,6 +43,7 @@ gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'rsolr-client-cert', '~> 0.5.2'
 gem 'solrizer'
+gem 'sprockets', '~> 2.12'
 gem 'stanford-mods'
 
 group :test, :development do
