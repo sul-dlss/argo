@@ -43,7 +43,7 @@ gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'rsolr-client-cert', '~> 0.5.2'
 gem 'solrizer'
-gem 'sprockets', '~> 2.12'
+gem 'sprockets', '~> 2.12' # upgrading to 3.x introduces a deployment error, where cap tries to backup a non-existent manifest-*.js file
 gem 'stanford-mods'
 
 group :test, :development do
