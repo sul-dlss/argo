@@ -83,16 +83,16 @@ class ApoController < ApplicationController
   end
 
   def set_apo_metadata apo, md_info
-    apo.copyright_statement = md_info[:copyright] if md_info[:copyright] && md_info[:copyright].length > 0
-    apo.use_statement = md_info[:use] if md_info[:use] && md_info[:use].length > 0
-    apo.mods_title = md_info[:title]
-    apo.desc_metadata_format = md_info[:desc_md]
-    apo.metadata_source = md_info[:metadata_source]
-    apo.agreement = md_info[:agreement].to_s
-    apo.default_workflow = md_info[:workflow] unless (not md_info[:workflow] || md_info[:workflow].length < 5)
-    apo.creative_commons_license = md_info[:cc_license]
+    apo.copyright_statement  = md_info[:copyright] if md_info[:copyright] && md_info[:copyright].length > 0
+    apo.use_statement        = md_info[:use      ] if md_info[:use      ] && md_info[:use      ].length > 0
+    apo.mods_title           = md_info[:title    ]
+    apo.desc_metadata_format = md_info[:desc_md  ]
+    apo.metadata_source      = md_info[:metadata_source]
+    apo.agreement            = md_info[:agreement].to_s
+    apo.default_workflow     = md_info[:workflow ] unless (not md_info[:workflow] || md_info[:workflow].length < 5)
+    apo.creative_commons_license       =      md_info[:cc_license]
     apo.creative_commons_license_human = @@cc[md_info[:cc_license]]
-    apo.default_rights = md_info[:default_object_rights]
+    apo.default_rights                 = md_info[:default_object_rights]
   end
 
   def register_new_apo
@@ -122,7 +122,7 @@ class ApoController < ApplicationController
     apo.add_tag('Registered By : ' + current_user.login)
 
     managers = split_roleplayer_input_field(params[:managers])
-    viewers = split_roleplayer_input_field(params[:viewers])
+    viewers  = split_roleplayer_input_field(params[:viewers])
     add_roleplayers_to_object(apo, managers, 'dor-apo-manager')
     add_roleplayers_to_object(apo, viewers, 'dor-apo-viewer')
 
@@ -182,13 +182,13 @@ class ApoController < ApplicationController
 
   def register_collection
     if params[:collection_title] or params[:collection_catkey]
-      collection_pid = create_collection params[:id], 'label'
+      collection_pid = create_collection params[:id]
       @object.add_default_collection collection_pid
       redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
     end
   end
 
-  def create_collection apo_pid, metadata_source_init_value=nil
+  def create_collection apo_pid
     reg_params = {:workflow_priority => '65'}
     if params[:collection_title] && params[:collection_title].length > 0
       reg_params[:label] = params[:collection_title]
@@ -200,25 +200,21 @@ class ApoController < ApplicationController
     else
       reg_params[:rights] = params[:collection_rights]
     end
-    if reg_params[:rights]
-      reg_params[:rights] = reg_params[:rights].downcase
-    end
-    reg_params[:object_type] = 'collection'
-    reg_params[:admin_policy] = apo_pid
-    reg_params[:metadata_source] = metadata_source_init_value if metadata_source_init_value
-    reg_params[:metadata_source] = 'symphony' if params[:collection_catkey] && params[:collection_catkey].length > 0
-    reg_params[:other_id] = 'symphony:' + params[:collection_catkey] if params[:collection_catkey] && params[:collection_catkey].length > 0
-    reg_params[:metadata_source] = 'label' unless params[:collection_catkey] && params[:collection_catkey].length > 0
-    reg_params[:workflow_id] = 'accessionWF'
+    reg_params[:rights] = reg_params[:rights].downcase if reg_params[:rights]
+    col_catkey = params[:collection_catkey] || ''
+    reg_params[:object_type    ] = 'collection'
+    reg_params[:admin_policy   ] = apo_pid
+    reg_params[:metadata_source] = col_catkey.blank? ? 'label' : 'symphony'
+    reg_params[:other_id       ] = "symphony:#{col_catkey}" unless col_catkey.blank?
+    reg_params[:workflow_id    ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
-    collection_pid = response[:pid]
-    collection = Dor.find(collection_pid)
+    collection = Dor.find(response[:pid])
     if params[:collection_abstract] && params[:collection_abstract].length > 0
       set_abstract(collection, params[:collection_abstract])
     end
     collection.save
     update_index(collection)
-    return collection_pid
+    return response[:pid]
   end
 
   def add_roleplayer
