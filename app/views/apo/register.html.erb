@@ -117,7 +117,7 @@ end
 
 <button id="register" name="register"><%=@object ? 'Update APO' : 'Register APO' %></button>
 <%end%>
-<%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/' %>
+<%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/', :method => :get %>
 </div>
 <script type="text/javascript">
   $("#apo_form").validate({

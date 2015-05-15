@@ -35,7 +35,7 @@ url_params={:controller => :apo, :action => :register_collection}
 
 <button id="register" name="register"><%='Register Collection' %></button>
 <%end%>
-<%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/' %>
+<%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/', :method => :get %>
 </div>
 </div>
 

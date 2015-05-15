@@ -166,29 +166,31 @@ class CatalogController < ApplicationController
   end
 
   def show
-    params[:id] = 'druid:' + params[:id] if not params[:id].include? 'druid'
+    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
-    apo = nil
     begin
       @apo = @obj.admin_policy_object
     rescue
     end
-    if not @apo and not @user.is_admin and not @user.is_viewer
-      render :status=> :forbidden, :text =>'No APO, no access'
-      return
+
+    if @apo
+      unless @obj.can_view_metadata?(@user.roles(@apo.pid)) || @user.is_admin || @user.is_viewer
+        render :status=> :forbidden, :text =>'forbidden'
+        return
+      end
+    else
+      unless @user.is_admin || @user.is_viewer
+        render :status=> :forbidden, :text =>'No APO, no access'
+        return
+      end
     end
-    #if there is no apo and things got to this point, they are a repo viewer or admin
-    if @apo and not @obj.can_view_metadata?(@user.roles(@apo.pid)) and not @user.is_admin and not @user.is_viewer
-      render :status=> :forbidden, :text =>'forbidden'
-      return
-    end
+    # with or without an APO, if we get here, user is authorized to view
     super()
   end
 
   def datastream_view
     @response, @document = get_solr_response_for_doc_id
     @obj = Dor.find params[:id], :lightweight => true
-    ds = @obj.datastreams[params[:dsid]]
     data = @obj.datastreams[params[:dsid]].content
     unless data.nil?
       send_data data, :type => 'xml', :disposition => 'inline'
