@@ -11,8 +11,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_by_remoteuser username
-    result = self.find_or_create_by(:sunetid => username)
-    result
+    self.find_or_create_by(:sunetid => username)
   end
 
   def to_s
@@ -25,17 +24,10 @@ class User < ActiveRecord::Base
 
   @role_cache={}
   def roles pid
-    if not @role_cache
-      @role_cache={}
-    end
+    @role_cache ||= {}
+    return @role_cache[pid] if @role_cache[pid]
 
-    if @role_cache[pid]
-      return @role_cache[pid]
-    end
-    resp = Dor::SearchService.query('id:"'+ pid+ '"')['response']['docs'].first
-    if not resp
-      resp={}
-    end
+    resp = Dor::SearchService.query('id:"'+ pid+ '"')['response']['docs'].first || {}
     toret=[]
     #search for group based roles
     #this is a legacy role that has to be translated
@@ -146,9 +138,7 @@ class User < ActiveRecord::Base
 
   def belongs_to_listed_group? group_list
     group_list.each do |group|
-      if self.groups.include? group
-        return true
-      end
+      return true if self.groups.include? group
     end
     return false
   end
