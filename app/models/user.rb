@@ -30,25 +30,16 @@ class User < ActiveRecord::Base
     resp = Dor::SearchService.query('id:"'+ pid+ '"')['response']['docs'].first || {}
     toret=[]
     #search for group based roles
-    #this is a legacy role that has to be translated
-    if(resp['apo_role_group_manager_t'] and (resp['apo_role_group_manager_t'] & groups).length > 0)
-      toret << 'dor-apo-manager'
+    #(1) for User by sunet id
+    #(2) groups actually contains the sunetid, so it is just looking at different solr fields
+    #includes legacy roles that have to be translated
+    ["apo_role_group_manager_t","apo_role_person_manager_t"].each do |key|
+      toret << 'dor-apo-manager' if (resp[key] && (resp[key] & groups).length > 0)
     end
 
     known_roles.each do |role|
-      if(resp['apo_role_'+role+'_t'] and (resp['apo_role_' + role + '_t'] & groups).length >0)
-        toret << role
-      end
-    end
-    #now look to see if there are roles for this person by sunet id. groups actually contains the sunetid, so it is just looking at different solr fields
-    #this is a legacy role that has to be translated
-    if(resp['apo_role_person_manager_t'] and (resp['apo_role_person_manager_t'] & groups).length > 0)
-      toret << 'dor-apo-manager'
-    end
-
-    known_roles.each do |role|
-      if(resp['apo_role_person_'+role+'_t'] and (resp['apo_role_person_' + role + '_t'] & groups).length >0)
-        toret << role
+      ["apo_role_#{role}_t","apo_role_person_#{role}_t"].each do |key|
+        toret << role if (resp[key] && (resp[key] & groups).length > 0)
       end
     end
     #store this for now, there may be several role related calls
@@ -62,41 +53,19 @@ class User < ActiveRecord::Base
   end
 
   def permitted_apos
-    query = ""
-    first = true
-    groups.each do |group|
-      if first
-        query += ' ' + group.gsub(':','\:')
-        first = false
-      else
-        query += ' OR ' + group.gsub(':','\:')
-      end
-    end
+    query = groups.map{|g| g.gsub(':','\:')}.join(' OR ')
     q = 'apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')'
     known_roles.each do |role|
       q += ' OR apo_role_'+role+'_t:('+query+')'
     end
-    if is_admin
-      q = 'objectType_ssim:adminPolicy'
-    end
+    q = 'objectType_ssim:adminPolicy' if is_admin
     resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!project_tag_ssim:"Hydrus"'})['response']['docs']
-    pids = []
-    count = 1
-    resp.each do |doc|
-      pids << doc['id']
-    end
-    pids
+    resp.map{|doc| doc['id']}
   end
 
   def permitted_collections
     q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
-    qrys=[]
-    permitted_apos.each do |pid|
-      qrys << 'is_governed_by_ssim:"info:fedora/'+pid+'"'
-    end
-    if not is_admin
-      q+=qrys.join " OR "
-    end
+    q+= permitted_apos.map {|pid| 'is_governed_by_ssim:"info:fedora/'+pid+'"'}.join(" OR ") unless is_admin
     result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_t'}).docs
 
     #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_t').docs
@@ -108,15 +77,7 @@ class User < ActiveRecord::Base
     res+=result.collect do |doc|
       [Array(doc['dc_title_t']).first+ ' (' + doc['id'].to_s + ')',doc['id'].to_s]
     end
-    res.each do |ar|
-      ar[0] = chomp_title ar.first
-    end
     res
-  end
-
-  #this is a nasty way to deal with the bizzare ascii results coming from solr. Upgrading to blacklight 4.2 looks like it will remove the need for this
-  def chomp_title title
-    title.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
   end
 
   @groups_to_impersonate
@@ -157,6 +118,11 @@ class User < ActiveRecord::Base
   def is_manager
     return belongs_to_listed_group? MANAGER_GROUPS
   end
+
+  # The convention is for boolean is_XYZ methods to be interrogative (end in "?")
+  alias_method :is_admin?,   :is_admin
+  alias_method :is_viewer?,  :is_viewer
+  alias_method :is_manager?, :is_manager
 
   def login
     if webauth
