@@ -140,7 +140,9 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       :hierarchy => {
-        'wf' => [['wps_ssim','wsp_ssim','swp_ssim'], ':'],
+        'wf_wps' => [['ssim'], ':'],
+        'wf_wsp' => [['ssim'], ':'],
+        'wf_swp' => [['ssim'], ':'],
         'exploded_tag' => [['ssim'], ':']
       }
     }
