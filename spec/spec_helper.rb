@@ -17,9 +17,9 @@ require 'equivalent-xml/rspec_matchers'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 def druid_to_path druid, flavor='xml'
-  fixture_dir = File.join(File.dirname(__FILE__),"fixtures")
-  mask = File.join(fixture_dir,"*_#{druid.sub(/:/,'_')}.#{flavor}")
-  return Dir[mask].first
+  fixture_mask = File.join(File.dirname(__FILE__),"fixtures","*_#{druid.sub(/:/,'_')}.#{flavor}")
+  other_mask   = Rails.root.join("fedora_conf","data","#{druid.sub(/druid:/,'')}.#{flavor}")
+  return Dir[fixture_mask].first || Dir[other_mask].first
 end
 
 def instantiate_fixture druid, klass = ActiveFedora::Base
