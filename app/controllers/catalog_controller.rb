@@ -160,7 +160,7 @@ class CatalogController < ApplicationController
 
   end
 
-  def solr_doc_params(id=nil)
+  def default_solr_doc_params(id=nil)
     id ||= params[:id]
     {
       :q => %{id:"#{id}"}
@@ -176,7 +176,7 @@ class CatalogController < ApplicationController
     end
 
     if @apo
-      unless @obj.can_view_metadata?(@user.roles(@apo.pid)) || @user.is_admin || @user.is_viewer
+      unless @user.is_admin || @user.is_viewer || @obj.can_view_metadata?(@user.roles(@apo.pid))
         render :status=> :forbidden, :text =>'forbidden'
         return
       end
@@ -191,19 +191,18 @@ class CatalogController < ApplicationController
   end
 
   def datastream_view
-    @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id], :lightweight => true
+    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
+    @response, @document = get_solr_response_for_doc_id pid
+    @obj = Dor.find pid, :lightweight => true
     data = @obj.datastreams[params[:dsid]].content
-    unless data.nil?
-      send_data data, :type => 'xml', :disposition => 'inline'
-    else
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') if data.nil?
+    send_data data, :type => 'xml', :disposition => 'inline'
   end
 
   def show_aspect
-    @obj ||= Dor.find(params[:id].include?('druid') ? params[:id] : 'druid:' + params[:id])
-    @response, @document = get_solr_response_for_doc_id
+    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
+    @obj ||= Dor.find(pid)
+    @response, @document = get_solr_response_for_doc_id pid
     render :layout => request.xhr? ? false : true
   end
 

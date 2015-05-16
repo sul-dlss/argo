@@ -13,8 +13,9 @@ module ArgoHelper
 
   def ensure_current_document_version
     if @document.get('index_version_t').to_s < Dor::SearchService.index_version
-      Dor::SearchService.reindex(@document.get('id'))
-      @response, @document = get_solr_response_for_doc_id
+      id = @document.get('id')
+      Dor::SearchService.reindex(id)
+      @response, @document = get_solr_response_for_doc_id(id)
     end
   end
 
