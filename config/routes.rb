@@ -5,16 +5,16 @@ Argo::Application.routes.draw do
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
   match 'view/opensearch', :to => 'catalog#opensearch', :via => [:get, :post]
-  match 'view/citation', :to => 'catalog#citation', :via => [:get, :post]
-  match 'view/email', :to => 'catalog#email', :via => [:get, :post]
-  match 'view/sms', :to => 'catalog#sms', :via => [:get, :post]
-  match 'view/endnote', :to => 'catalog#endnote', :via => [:get, :post]
+  match 'view/citation',   :to => 'catalog#citation',   :via => [:get, :post]
+  match 'view/email',      :to => 'catalog#email',      :via => [:get, :post]
+  match 'view/sms',        :to => 'catalog#sms',        :via => [:get, :post]
+  match 'view/endnote',    :to => 'catalog#endnote',    :via => [:get, :post]
   match 'view/send_email_record', :to => 'catalog#send_email_record', :via => [:get, :post]
-  match "view/facet/:id", :to => 'catalog#facet', :via => [:get, :post]
-  match 'view/unapi', :to => "catalog#unapi", :via => [:get, :post], :as => 'unapi'
+  match "view/facet/:id",  :to => 'catalog#facet', :via => [:get, :post]
+  match 'view/unapi',      :to => "catalog#unapi", :via => [:get, :post], :as => 'unapi'
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
-  match 'view/:id/dc', :to => "catalog#show_aspect", :via => [:get, :post], :template => 'dc', :as => "dc_aspect_view_catalog"
-  match 'view/:id/ds/:dsid', :to => "catalog#show_aspect", :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
+  match 'view/:id/dc',                :to => "catalog#show_aspect",     :via => [:get, :post], :template => 'dc', :as => "dc_aspect_view_catalog"
+  match 'view/:id/ds/:dsid',          :to => "catalog#show_aspect",     :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
   match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :via => [:get, :post], :as => "datastream_view_catalog"
   #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
   # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
@@ -50,7 +50,7 @@ Argo::Application.routes.draw do
     get 'apo_ui', :on => :member, :action => :apo_ui, :as => 'apo_ui'
     get 'delete_role', :on => :member
     post 'add_collection', :on => :member
-    get 'delete_collection', :on => :member
+    get  'delete_collection', :on => :member
     post 'update_title', :on => :member
     post 'update_creative_commons', :on => :member
     post 'update_use', :on => :member
@@ -58,10 +58,10 @@ Argo::Application.routes.draw do
     post 'update_default_object_rights', :on => :member
     post 'add_roleplayer', :on => :member
     post 'update_desc_metadata', :on => :member
-    get :register, :on => :collection
+    get  :register, :on => :collection
     post :register, :on => :collection
     post :update, :on => :member
-    get :register_collection, :on => :member
+    get  :register_collection, :on => :member
     post :register_collection, :on => :member
   end
 
