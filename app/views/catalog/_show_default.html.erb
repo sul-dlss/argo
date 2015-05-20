@@ -7,4 +7,16 @@
   <%= render_document_sections(@document, :show) %>
 </div>
 
-<%= "object indexed by DOR Services v#{@document.get(Dor::INDEX_VERSION_FIELD)}" %>
+
+<div>
+  <%= "object indexed by DOR Services v#{@document.get(Dor::INDEX_VERSION_FIELD)}" %>
+  <%
+
+    solr_doc_url = "#{Dor::Config.solrizer.url}/select?q=id:\"#{@document.id}\"&wt=json&indent=true"
+  %>
+  <% if current_user.is_admin %>
+    <div>
+      <a href="<%=solr_doc_url-%>">view the object's Solr document</a>
+    </div>
+  <% end %>
+</div>

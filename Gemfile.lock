@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 6dc1c63ad7e5920b7174c310ff3d99fc9500981d
+  revision: 32069a0e9b9e19a48b93039ea681b8893bb5837f
   branch: solrization_fixes
   specs:
     dor-services (5.1.0)
@@ -351,7 +351,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (10.4.2)
-    rdf (1.1.12)
+    rdf (1.1.13)
       link_header (~> 0.0, >= 0.0.8)
     rdf-rdfxml (1.0.1)
       rdf (>= 1.0)

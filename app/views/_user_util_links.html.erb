@@ -1,6 +1,8 @@
 <div class='navbar-right'>
   <ul class='nav navbar-nav'>
+
     <li><%= link_to "Home", root_path %></li>
+
     <li>
       <% if current_user %>
         <li><%= link_to "Log&nbsp;Out".html_safe, destroy_user_session_path %></li>
@@ -9,32 +11,40 @@
         <%= link_to 'Login', new_user_session_path %>
       <% end %>
     </li>
-    <li><%= link_to "Feedback", 'mailto:argo-feedback@lists.stanford.edu' %></li>
-    <% if current_user.is_admin %>
+
+    <% if session[:groups].present? %>
       <li>
-        <% if session[:groups].present? %>
-          <span class="impersonating-highlight">
-            Impersonating: <%= session[:groups].join(' ') %>
-          </span>
-          <a href="/auth/forget_impersonated_groups">x</a>
-        <% else %>
-          <a href="/auth/groups.html">Impersonate</a>
-        <% end %>
+        <span class="impersonating-highlight">
+          Impersonating: <%= session[:groups].join(' ') %>
+        </span>
+        <a style="display: inline" href="/auth/forget_impersonated_groups">x</a>
+      </li>
+    <% elsif current_user.is_admin %>
+      <li>
+        <a href="/auth/groups.html">Impersonate</a>
       </li>
     <% end %>
-    <li><%= link_to "Register&nbsp; Items".html_safe, register_items_path %></li>
+
+    <li><%= link_to "Register&nbsp;Items".html_safe, register_items_path %></li>
+
     <%if current_user.is_admin or current_user.is_manager %>
       <li>
         <%= link_to "Register&nbsp;APO".html_safe, register_apo_index_path %>
       </li>
     <% end %>
+
+    <li><%= link_to "Feedback", 'mailto:argo-feedback@lists.stanford.edu' %></li>
+
     <li>
       <% iqd = index_queue_depth() %>
-      <% if iqd > 1000 %>
-        <p class='navbar-text'><span style="color:red; font-weight:bold">indexer backlog: <%= iqd %></span></p>
-      <% else %>
-        <p class='navbar-text'>indexer backlog: <%= iqd %></p>
-      <% end %>
+      <em>
+        <% if iqd > 1000 %>
+          <p class='navbar-text'><span style="color:red; font-weight:bold">indexer backlog: <%= iqd %></span></p>
+        <% else %>
+          <p class='navbar-text'>indexer backlog: <%= iqd %></p>
+        <% end %>
+      </em>
     </li>
+
   </ul>
 </div>
