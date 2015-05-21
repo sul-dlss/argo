@@ -65,7 +65,7 @@ module WorkflowHelper
     if query_results
       wf_doc = query_results.docs.first
       if wf_doc && wf_doc["#{name}_archived_isi"]
-        return wf_doc["#{name}_archived_isi"].first.to_i
+        return wf_doc["#{name}_archived_isi"]
       end
     end
     

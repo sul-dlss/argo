@@ -5,12 +5,12 @@ describe WorkflowHelper, :type => :helper do
     it 'should render the count if there is one' do
       wf_name = "testWF"
       query_params = "objectType_ssim:workflow title_tesim:#{wf_name}"
-      archived_disp_str = '42'
-      query_results = double('query_results', :docs => [{"#{wf_name}_archived_isi" => [archived_disp_str]}])
+      archived_disp_count = 42
+      query_results = double('query_results', :docs => [{"#{wf_name}_archived_isi" => archived_disp_count}])
 
       allow(Dor::SearchService).to receive(:query).with(query_params).and_return(query_results)
       result = render_workflow_archive_count(nil, wf_name)
-      expect(result).to eq(archived_disp_str.to_i)
+      expect(result).to eq(archived_disp_count)
     end
     it 'should return hyphen if it cannot get query results' do
       wf_name = "testWF"
