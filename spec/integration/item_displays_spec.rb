@@ -54,7 +54,7 @@ describe 'mods_view', :type => :request do
     context 'add workflow' do
       it 'should render the add workflow ui' do
         visit '/items/druid:zt570tx3016/add_workflow'
-        expect(page).to have_content('Add Workflow')
+        expect(page).to have_content('Add workflow')
       end
     end
     context 'open version ui' do
