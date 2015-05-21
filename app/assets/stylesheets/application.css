@@ -13,4 +13,5 @@
  *= require blacklight_hierarchy
  *= require argo
  *= require jquery-ui
+ *= require jqgrid-jquery-rails
 */

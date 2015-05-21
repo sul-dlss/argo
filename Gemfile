@@ -71,6 +71,7 @@ group :assets do
   gem 'jquery-rails'
   gem 'jquery-ui-rails'
   gem 'jquery-validation-rails'
+  gem 'jqgrid-jquery-rails'
   gem 'therubyracer', "~> 0.11"
   gem 'sass-rails'
   gem 'bootstrap-sass'
