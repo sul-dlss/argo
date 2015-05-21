@@ -11,24 +11,25 @@
     }
   </script>
 <% end %>
-<% unless has_search_parameters? %>
-  <%# if there are no input/search related params, display the "home" partial -%>
-  <%= render 'home' %>
-<% else %>
-  <% @page_title = "#{application_name} Search Results" %>
-  <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
-  <%= render :partial => 'search_form' %>
-  <% if has_search_parameters? %>
-    <%= render :partial => 'did_you_mean' %>
-    <%= render 'constraints', :localized_params=>params %>
+
+<div id="sidebar" class="col-md-3 col-sm-4">
+  <%= render 'search_sidebar' %>
+</div>
+<div id="content" class="col-md-9 col-sm-8">
+  <% unless has_search_parameters? %>
+    <%# if there are no input/search related params, display the "home" partial -%>
+    <%= render 'home' %>
+  <% else %>
+    <% @page_title = "#{application_name} Search Results" %>
+    <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
+    <% if has_search_parameters? %>
+      <%= render :partial => 'did_you_mean' %>
+      <%= render 'constraints', :localized_params=>params %>
+    <% end %>
+
+    <div id="report_container">
+      <table id="report_grid"></table>
+      <div id="preport_grid"></div>
+    </div>
   <% end %>
-
-  <div id="report_container">
-    <table id="report_grid"></table>
-    <div id="preport_grid"></div>
-  </div>
-
-  <div id="sidebar" class="col-md-3 col-sm-4">
-    <%= render :partial=>'facets' %>
-  </div>
-<% end %>
+</div>
