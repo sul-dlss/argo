@@ -307,4 +307,13 @@ module ArgoHelper
   def render_dor_workspace_link document, link_text="View DOR workspace"
   end
 
+  def render_datastream_link document
+    if(document_has?(@document, 'objectType_ssim'))
+      object_type = @document.get('objectType_ssim')
+      if(object_type == 'adminPolicy')
+        link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
+      end
+    end
+  end
+
 end

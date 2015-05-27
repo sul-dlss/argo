@@ -1,0 +1,40 @@
+<div data-ajax-modal="container">
+    <%= form_tag({action: :upload}, multipart: true) do %>
+        <div id="bulk-upload-form" class="container-fluid">
+	    <div class="row">
+		<div class="col-md-4">
+		    <%= file_field_tag :spreadsheet_file %>
+		    <input type="hidden" name="druid" value="<%=@object.id %>" />
+		</div>
+	    </div>
+    	    <div class="row spreadsheet-row">
+    		<div class="col-md-2"><strong>File type</strong></div>
+		<div class="col-md-6">
+		    <div class="radio spreadsheet-radio">
+			<label>
+			    <input type="radio" name="filetypes" id="filetypes_1", value="xml">
+			    XML
+			</label>
+		    </div>
+		    <div class="radio">
+			<label>
+			    <input type="radio" name="filetypes" id="filetypes_2",  value="spreadsheet">
+			    Spreadsheet
+			</label>
+		    </div>
+		    <div class="checkbox spreadsheet-checkbox">
+			<label>
+			    <input type="checkbox" name="xml_only" id="convert_only" value="xml_only" disabled>
+			    Convert to XML only; do not load
+			</label>
+		    </div>
+		</div>
+	    </div>
+    	    <div class="row spreadsheet-row">
+    		<div class="col-md-12">
+    		    <button type="submit" id="spreadsheet_submit" class="btn btn-primary">Submit</button>
+    		</div>
+    	    </div>
+    	</div>
+    <% end %>
+</div>

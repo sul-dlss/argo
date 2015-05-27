@@ -39,7 +39,8 @@ class CatalogController < ApplicationController
     }
     config.show.section_links = {
       'identification' => :render_full_view_links,
-      'contents'       => :render_dor_workspace_link
+      'contents'       => :render_dor_workspace_link,
+      'datastreams'    => :render_datastream_link
     }
 
     config.add_index_field 'id',              :label => 'DRUID'
@@ -169,6 +170,7 @@ class CatalogController < ApplicationController
     params[:id] = 'druid:' + params[:id] if not params[:id].include? 'druid'
     @obj = Dor.find params[:id]
     apo = nil
+
     begin
       @apo = @obj.admin_policy_object
     rescue
