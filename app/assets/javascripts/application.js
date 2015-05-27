@@ -22,8 +22,7 @@
 // Required by Argo
 //= require argo
 //= require spreadsheet
-//= require grid.locale-en
-//= require jquery.jqGrid.min
+//= require jqgrid-jquery-rails
 //= require jquery-ui
 //= require jquery.validate
 //= require jquery.validate.additional-methods

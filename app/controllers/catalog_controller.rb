@@ -67,7 +67,7 @@ class CatalogController < ApplicationController
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
-    config.add_facet_field 'exploded_tag_ssim', :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'exploded_tag_ssim',     :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
     #TODO: access_rights_ssim once solr has it
@@ -141,8 +141,10 @@ class CatalogController < ApplicationController
 
     config.facet_display = {
       :hierarchy => {
-        'wf' => [['wps','wsp','swp'], ':'],
-        'tag' => [[nil], ':']
+        'wf_wps' => [['ssim'], ':'],
+        'wf_wsp' => [['ssim'], ':'],
+        'wf_swp' => [['ssim'], ':'],
+        'exploded_tag' => [['ssim'], ':']
       }
     }
 
@@ -159,7 +161,7 @@ class CatalogController < ApplicationController
 
   end
 
-  def solr_doc_params(id=nil)
+  def default_solr_doc_params(id=nil)
     id ||= params[:id]
     {
       :q => %{id:"#{id}"}
@@ -167,44 +169,41 @@ class CatalogController < ApplicationController
   end
 
   def show
-    params[:id] = 'druid:' + params[:id] if not params[:id].include? 'druid'
+    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
-    apo = nil
-
     begin
       @apo = @obj.admin_policy_object
     rescue
     end
-    if not @apo and not @user.is_admin and not @user.is_viewer
-      render :status=> :forbidden, :text =>'No APO, no access'
-      return
+
+    if @apo
+      unless @user.is_admin || @user.is_viewer || @obj.can_view_metadata?(@user.roles(@apo.pid))
+        render :status=> :forbidden, :text =>'forbidden'
+        return
+      end
+    else
+      unless @user.is_admin || @user.is_viewer
+        render :status=> :forbidden, :text =>'No APO, no access'
+        return
+      end
     end
-    #if there is no apo and things got to this point, they are a repo viewer or admin
-    if @apo and not @obj.can_view_metadata?(@user.roles(@apo.pid)) and not @user.is_admin and not @user.is_viewer
-      render :status=> :forbidden, :text =>'forbidden'
-      return
-    end
+    # with or without an APO, if we get here, user is authorized to view
     super()
   end
 
   def datastream_view
-    @response, @document = get_solr_response_for_doc_id
-    @obj = Dor.find params[:id], :lightweight => true
-    ds = @obj.datastreams[params[:dsid]]
+    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
+    @response, @document = get_solr_response_for_doc_id pid
+    @obj = Dor.find pid, :lightweight => true
     data = @obj.datastreams[params[:dsid]].content
-    unless data.nil?
-      send_data data, :type => 'xml', :disposition => 'inline'
-    else
-      raise ActionController::RoutingError.new('Not Found')
-    end
+    raise ActionController::RoutingError.new('Not Found') if data.nil?
+    send_data data, :type => 'xml', :disposition => 'inline'
   end
 
   def show_aspect
-    if @obj.nil?
-      obj_pid = params[:id].include?('druid') ? params[:id] : 'druid:' + params[:id]
-      @obj = Dor.find obj_pid
-    end
-    @response, @document = get_solr_response_for_doc_id
+    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
+    @obj ||= Dor.find(pid)
+    @response, @document = get_solr_response_for_doc_id pid
     render :layout => request.xhr? ? false : true
   end
 

@@ -1,6 +1,5 @@
 <% @page_title = "#{application_name} Queue Status" %>
 <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
-<%= render :partial => 'search_form' %>
 <% if has_search_parameters? %>
   <%= render :partial => 'did_you_mean' %>
   <%= render 'constraints', :localized_params=>params %>
@@ -16,9 +15,12 @@
     $(document).ready(function() { updateTimer = setInterval(updateGrid, 10000) });
   </script>
 <% end %>
-<div style="float:right"><a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a></div>
-<%= render :partial => 'workflow_grid' %>
 
 <div id="sidebar" class="col-md-3 col-sm-4">
-  <%= render :partial=>'facets' %>
+  <%= render 'search_sidebar' %>
+</div>
+
+<div id="content" class="col-md-9 col-sm-8">
+  <div style="float:right"><a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a></div>
+  <%= render :partial => 'workflow_grid' %>
 </div>

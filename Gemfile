@@ -43,6 +43,7 @@ gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'rsolr-client-cert', '~> 0.5.2'
 gem 'solrizer'
+gem 'sprockets', '~> 2.12' # upgrading to 3.x introduces a deployment error, where cap tries to backup a non-existent manifest-*.js file
 gem 'stanford-mods'
 
 group :test, :development do
@@ -70,6 +71,7 @@ group :assets do
   gem 'jquery-rails'
   gem 'jquery-ui-rails'
   gem 'jquery-validation-rails'
+  gem 'jqgrid-jquery-rails'
   gem 'therubyracer', "~> 0.11"
   gem 'sass-rails'
   gem 'bootstrap-sass'

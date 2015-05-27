@@ -1,26 +1,21 @@
-<table class="detail"style="width:100%">
+<table class="detail" style="width:100%">
   <thead>
   <tr><th>version</th><th>what</th><th>when</th></tr>
   </thead>
   <tbody>
   <%
-  first=false
-  current_version=nil
-  versions=[]
-  milestones.each_pair do |version, steps|
-    versions << version
-  end
-  versions.sort!
-  latest_version=versions.last
-  versions.each do |v|
-  version=v
-  steps=milestones[v]
-  first=true
-  steps.each_pair do |k,m| %>
+  ## TODO: Pick a real date format for the date to_s calls.
+  ## Do it here and NOT in the model!!
+
+  milestones.keys.sort.each do |version|
+    steps=milestones[version]
+    first=true
+    steps.each_pair do |k,m| %>
 <%
-if first
+      if first
 %><tr style="display:none" class="last_step<%= version%>"><td><span style="cursor: pointer;" onclick='$(".version<%= version%>").toggle();$(".last_step<%= version%>").toggle();'">+</span><%= version%></td>
-        <td><%= steps['accessioned'][:display]%></td><td><%=  if (steps['accessioned'][:time]=='pending') then steps['accessioned'][:time] else l steps['accessioned'][:time] end%></td></tr>
+    <td><%= steps['accessioned'][:display] || k.titleize %></td>
+    <td><%= steps['accessioned'][:time].nil? ? 'pending' : steps['accessioned'][:time].in_time_zone.to_s() %></td></tr>
       <%end%>
   <tr class="version<%= version%>">
   <%if first
@@ -30,15 +25,14 @@ if first
     <%if version_hash[version]%>
       (<%=version_hash[version][:tag]%>) <%=version_hash[version][:desc]%>
     <%end%>
+      </td>
+    </tr>
     <tr class="version<%= version%>">
-    <td>
-  <%else%>
-    <td>
   <%end%>
-  </td>
-  <td><%= m[:display] %></td>
-  <td><%= if (m[:time]=='pending') then m[:time] else l m[:time] end%></td>
-  </tr>
+      <td></td>
+      <td><%= m[:display] || k.titleize %></td>
+      <td><%= m[:time].nil? ? 'pending' : m[:time].in_time_zone.to_s() %></td>
+    </tr>
   <%end%>
 <%end%>
   </tbody>

@@ -4,7 +4,7 @@ module WorkflowHelper
   end
 
   def render_workflow_grid
-    workflow_data = facet_tree('wf')['wf_wps_ssim']
+    workflow_data = facet_tree('wf_wps')['wf_wps_ssim']
     return '' if workflow_data.nil?
     result = workflow_data.keys.sort.collect do |wf_name|
       render :partial => 'workflow_table', :locals => { :wf_name => wf_name, :wf_data => workflow_data[wf_name] }
@@ -49,7 +49,7 @@ module WorkflowHelper
 
   def render_workflow_item_count(wf_hash, name, process, status)
     new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
-    rotate_facet_params('wf','wps',facet_order('wf'),new_params)
+    rotate_facet_params('wf_wps', 'wps', facet_order('wf_wps'), new_params)
     item_count = 0
     if wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_]
       item_count = item.hits
@@ -65,7 +65,7 @@ module WorkflowHelper
     if query_results
       wf_doc = query_results.docs.first
       if wf_doc && wf_doc["#{name}_archived_isi"]
-        return wf_doc["#{name}_archived_isi"].first.to_i
+        return wf_doc["#{name}_archived_isi"]
       end
     end
     
