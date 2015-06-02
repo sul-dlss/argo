@@ -72,12 +72,13 @@ module ItemsHelper
         parent=node.parent
       end
     end
-    sorted=states.sort_by{ |n| if n['displayLabel'].length ==7
-      n['displayLabel']
-    else
-      n['displayLabel'][7]='z' #pad 2 digit numbers so they sort to the bottom. There must be a better way.
-    end }
-    sorted.each do |node|
+    states.sort_by{ |n|
+      if n['displayLabel'].length ==7
+        n['displayLabel']
+      else
+        n['displayLabel'][7]='z' #pad 2 digit numbers so they sort to the bottom. There must be a better way.
+      end
+    }.each do |node|
       xml.root << node
     end
     xml

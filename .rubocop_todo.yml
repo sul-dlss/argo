@@ -60,10 +60,6 @@ Lint/UnusedMethodArgument:
 Lint/UselessAssignment:
   Enabled: false
 
-# Offense count: 1
-Lint/Void:
-  Enabled: false
-
 # Offense count: 102
 Metrics/AbcSize:
   Max: 136
@@ -182,11 +178,6 @@ Style/DeprecatedHashMethods:
 Style/Documentation:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ElseAlignment:
-  Enabled: false
-
 # Offense count: 73
 # Cop supports --auto-correct.
 # Configuration parameters: AllowAdjacentOneLineDefs.
@@ -257,11 +248,6 @@ Style/HashSyntax:
 # Cop supports --auto-correct.
 # Configuration parameters: MaxLineLength.
 Style/IfUnlessModifier:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/IndentArray:
   Enabled: false
 
 # Offense count: 6

@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
     res
   end
 
-  @groups_to_impersonate
+  @groups_to_impersonate = nil
   #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions
   def set_groups_to_impersonate grps
     @groups_to_impersonate = grps
