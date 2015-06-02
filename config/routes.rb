@@ -63,6 +63,12 @@ Argo::Application.routes.draw do
     post :update, :on => :member
     get  :register_collection, :on => :member
     post :register_collection, :on => :member
+
+    
+    get :bulk_upload_start, :on => :member
+    get :bulk_upload_form, :on => :member
+    get :spreadsheet_template, :on => :collection
+    post :upload, :on => :member
   end
 
   resources :items do

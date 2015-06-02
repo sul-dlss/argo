@@ -8,9 +8,9 @@ class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_filter :create_obj, :except => [:register,:open_bulk, :purge_object]
   before_filter :forbid_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id,:delete_file, :close_version, :open_version, :resource, :add_file, :replace_file,:update_attributes, :update_resource, :update_mods, :mods, :datastream_update ]
-  before_filter :forbid_view, :only => [:preserved_file, :get_file]
+  before_filter :forbid_view,   :only => [:preserved_file, :get_file]
   before_filter :enforce_versioning, :only => [:add_collection, :set_collection, :remove_collection, :update_rights,:tags,:source_id,:set_source_id, :set_content_type,:set_rights]
-  after_filter :save_and_reindex, :only => [:add_collection, :set_collection, :remove_collection, :open_version, :close_version, :tags, :tags_bulk, :source_id, :datastream_update, :set_rights, :set_content_type, :apply_apo_defaults]
+  after_filter  :save_and_reindex,   :only => [:add_collection, :set_collection, :remove_collection, :open_version, :close_version, :tags, :tags_bulk, :source_id, :datastream_update, :set_rights, :set_content_type, :apply_apo_defaults]
 
   def purl_preview
     @object.add_collection_reference @object.descMetadata.ng_xml
@@ -59,7 +59,7 @@ class ItemsController < ApplicationController
         @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
       rescue Dor::Exception => e
         render :status=> :precondition_failed, :text => e
-        return;
+        return
       end
     end
     render :status => :ok, :text => 'All good'
@@ -253,18 +253,6 @@ class ItemsController < ApplicationController
     else
       raise res.value
     end
-  end
-
-  def save_crop
-    @druid = params[:id].sub(/^druid:/,'')
-    @image_data = JSON.parse(request.body.read)
-    @image_data.each { |file_data|
-      file_data.symbolize_keys!
-      file_data[:cropCoords].symbolize_keys! if file_data.has_key?(:cropCoords)
-      file = Legacy::File.find(file_data[:id])
-      file.webcrop = file_data
-    }
-    render :json => @image_data.to_json
   end
 
   def update_attributes
@@ -464,17 +452,14 @@ class ItemsController < ApplicationController
     end
   end
   def update_resource
-    if params[:position]
-      @object.move_resource(params[:resource], params[:position])
-    end
-    if params[:label]
-      @object.update_resource_label(params[:resource], params[:label])
-    end
-    if params[:type]
-      @object.update_resource_type(params[:resource], params[:type])
-    end
+    @object.move_resource(        params[:resource], params[:position]) if params[:position]
+    @object.update_resource_label(params[:resource], params[:label   ]) if params[:label]
+    @object.update_resource_type( params[:resource], params[:type    ]) if params[:type]
+    acted = params[:position] || params[:label] || params[:type]
+    @object.save if acted
+    notice = (acted ? "updated" : "no action received for") + " resource #{params[:resource]}!"
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'updated resource ' + params[:resource] + '!' }
+      format.any { redirect_to catalog_path(params[:id]), :notice => notice }
     end
   end
   def discoverable
@@ -482,22 +467,8 @@ class ItemsController < ApplicationController
     if messages.length == 0
       render :status => :ok, :text => 'Discoverable.'
     else
-      msgs = ''
-      messages.each do |msg|
-        msgs += msg
-      end
-      render :status => 500, :text => msgs
+      render :status => 500, :text => messages.join(' ')
     end
-  end
-  def remove_duplicate_encoding
-    ds=params[:ds]
-    content=ds.content
-    old_content=content
-    content=CGI.unescape_html(content)
-    ng=Nokogiri::XML(content,nil,'UTF-8')
-    ds.ng_xml=ng
-    ds.content=ng.to_s
-    ds.save
   end
   def remediate_mods
     render :status => :ok, :text => 'method disabled'
@@ -509,10 +480,7 @@ class ItemsController < ApplicationController
     if errors.length == 0
       render :status => :ok, :text => 'Valid.'
     else
-      error_str=''
-      errors.each do |er|
-        error_str+=er+'<br>'
-      end
+      error_str=errors.join('<br>')
       render :status => 500, :text => error_str[0...490]
     end
   end

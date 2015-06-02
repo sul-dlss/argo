@@ -13,8 +13,8 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 32069a0e9b9e19a48b93039ea681b8893bb5837f
-  branch: solrization_fixes
+  revision: 70aaad2c94844952497ebbb8319586468918a4c2
+  branch: develop
   specs:
     dor-services (5.1.0)
       active-fedora (~> 6.0)
@@ -23,7 +23,7 @@ GIT
       confstruct (~> 0.2.7)
       dor-rights-auth (~> 1.0, >= 1.0.1)
       dor-workflow-service (~> 1.7, >= 1.7.1)
-      druid-tools (~> 0.4)
+      druid-tools (~> 0.4, >= 0.4.1)
       equivalent-xml (~> 0.5.1)
       json (~> 1.8.1)
       lyber-utils (~> 0.1.2)
@@ -45,7 +45,6 @@ GIT
       stanford-mods (~> 1.1)
       systemu (~> 2.6.0)
       uuidtools (~> 2.1.4)
-      validatable (~> 1.6.7)
 
 GEM
   remote: https://rubygems.org/
@@ -100,7 +99,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.5)
     arel (6.0.0)
-    autoprefixer-rails (5.1.11)
+    autoprefixer-rails (5.2.0)
       execjs
       json
     bagit (0.3.2)
@@ -408,7 +407,7 @@ GEM
       nokogiri
       rest-client
     rubyzip (1.1.7)
-    sass (3.4.13)
+    sass (3.4.14)
     sass-rails (5.0.3)
       railties (>= 4.0.0, < 5.0)
       sass (~> 3.1)
@@ -468,7 +467,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
-    tins (1.5.1)
+    tins (1.5.2)
     ttfunk (1.4.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)

@@ -21,6 +21,7 @@
 //
 // Required by Argo
 //= require argo
+//= require spreadsheet
 //= require jqgrid-jquery-rails
 //= require jquery-ui
 //= require jquery.validate
