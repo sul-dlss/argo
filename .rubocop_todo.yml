@@ -28,10 +28,6 @@ Lint/BlockAlignment:
 Lint/DeprecatedClassMethods:
   Enabled: false
 
-# Offense count: 1
-Lint/DuplicateMethods:
-  Enabled: false
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
@@ -104,11 +100,6 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 29
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Performance/Detect:
-  Enabled: false
-
 # Offense count: 3
 Style/AccessorMethodName:
   Enabled: false
@@ -128,12 +119,6 @@ Style/AlignHash:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/AndOr:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/BarePercentLiterals:
   Enabled: false
 
 # Offense count: 18
@@ -389,11 +374,6 @@ Style/PerlBackrefs:
 # Offense count: 12
 # Configuration parameters: NamePrefix, NamePrefixBlacklist.
 Style/PredicateName:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/Proc:
   Enabled: false
 
 # Offense count: 2
