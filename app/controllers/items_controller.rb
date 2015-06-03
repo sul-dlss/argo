@@ -33,7 +33,7 @@ class ItemsController < ApplicationController
     @image_data = JSON.parse(request.body.read)
     @image_data.each { |file_data|
       file_data.symbolize_keys!
-      file_data[:cropCoords].symbolize_keys! if file_data.has_key?(:cropCoords)
+      file_data[:cropCoords].symbolize_keys! if file_data.key?(:cropCoords)
       file = Legacy::File.find(file_data[:id])
       file.webcrop = file_data
     }

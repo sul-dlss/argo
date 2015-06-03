@@ -83,8 +83,8 @@ module DorObjectHelper
   end
 
   def render_milestones doc, obj
-    milestones = SolrDocument::get_milestones(doc)
-    version_hash=SolrDocument::get_versions(doc)
+    milestones = SolrDocument.get_milestones(doc)
+    version_hash=SolrDocument.get_versions(doc)
     render :partial => 'catalog/show_milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 
@@ -139,7 +139,7 @@ module DorObjectHelper
     # build an https URL for basic auth using the info we got above
     cur_vers_url = "https://#{sdr_user}:#{sdr_pass}@#{sdr_host}/sdr/objects/#{object.pid}/current_version"
 
-    response = RestClient.get(cur_vers_url) do |response, request, result|
+    res = RestClient.get(cur_vers_url) do |response, request, result|
       # make the REST call to SDR.  if the response code is 200, we can use
       # the returned XML (and parse the version number out later).  if the
       # response code is 404, that indicates the object hasn't made it to
@@ -157,7 +157,7 @@ module DorObjectHelper
     end
 
     # we expect a response along the lines of: <currentVersion>5</currentVersion>
-    response_doc = Nokogiri::XML(response)
+    response_doc = Nokogiri::XML(res)
     return response_doc.xpath("/currentVersion/text()")
   end
 

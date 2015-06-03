@@ -322,7 +322,7 @@ namespace :argo do
     end
     pids.delete_if { |pid| pid !~ /druid:/ }
     time = Time.now - start_time
-    msg = "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|t| t.to_s.rjust(2,'0')}.join(':')}"
+    msg = "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|tt| tt.to_s.rjust(2,'0')}.join(':')}"
     $stdout.puts msg
     index_log.info msg
 

@@ -20,11 +20,11 @@ class RegistrationController < ApplicationController
 
   def form_list
     docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).docs
-    format = docs.collect { |doc|
+    format_t = docs.collect { |doc|
       md_val=doc['administrativeMetadata_metadata_format_t'] ? doc['administrativeMetadata_metadata_format_t'] : doc['metadata_format_t']
       md_val }.flatten.first.to_s
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
-    result = forms[format.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
+    result = forms[format_t.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
     end

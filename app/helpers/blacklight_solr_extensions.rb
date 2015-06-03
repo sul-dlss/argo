@@ -40,7 +40,7 @@ module BlacklightSolrExtensions
   def get_search_results *args
     (solr_response, document_list) = super(*args)
     document_list.each do |doc|
-      unless doc.has_key?(blacklight_config[:index][:title_field])
+      unless doc.key?(blacklight_config[:index][:title_field])
         doc[blacklight_config[:index][:title_field]] = doc['id']
       end
     end

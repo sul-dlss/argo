@@ -293,7 +293,7 @@ class ApoController < ApplicationController
       response_xml = RestClient.post(Argo::Config.urls.normalizer, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
       send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
     else # spreadsheet
-      if(params.has_key?(:xml_only))
+      if(params.key?(:xml_only))
         response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
         send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
       else

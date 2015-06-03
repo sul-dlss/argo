@@ -226,7 +226,7 @@ module ItemsHelper
     hash['W1280000 W0650000 N510000 N250000'] = ['W1280000 W0650000 N0510000 N0250000','(W 128° --W 65°/N 51° --N 25°)']
     coords = xml.search('//mods:subject/mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
     coords.each do |coord|
-      coord.content = hash[coord.text].last if hash.has_key?(coord.text)
+      coord.content = hash[coord.text].last if hash.key?(coord.text)
     end
   end
   def schema_validate xml

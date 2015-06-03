@@ -32,10 +32,6 @@ Lint/HandleExceptions:
 Lint/RescueException:
   Enabled: false
 
-# Offense count: 5
-Lint/ShadowingOuterLocalVariable:
-  Enabled: false
-
 # Offense count: 43
 # Cop supports --auto-correct.
 Lint/UnusedBlockArgument:
@@ -130,11 +126,6 @@ Style/CaseIndentation:
 Style/ClassAndModuleChildren:
   Enabled: false
 
-# Offense count: 6
-# Cop supports --auto-correct.
-Style/ColonMethodCall:
-  Enabled: false
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: Keywords.
@@ -144,11 +135,6 @@ Style/CommentAnnotation:
 # Offense count: 14
 # Cop supports --auto-correct.
 Style/CommentIndentation:
-  Enabled: false
-
-# Offense count: 8
-# Cop supports --auto-correct.
-Style/DeprecatedHashMethods:
   Enabled: false
 
 # Offense count: 58

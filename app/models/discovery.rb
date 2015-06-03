@@ -235,7 +235,7 @@ class Discovery
     result = []
     docs.each_with_index do |doc,index|
       row = Hash[fields.collect do |spec|
-        val = spec.has_key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field]] rescue nil
+        val = spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field]] rescue nil
         val = val.join('; ') if val.is_a?(Array)
         [spec[:field],val]
       end]

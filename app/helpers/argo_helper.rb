@@ -32,8 +32,8 @@ module ArgoHelper
     url=Dor::Config.status.indexer_velocity_url
     data=JSON.parse(open(url).read)
     points=[]
-    data.first['datapoints'].each do |data|
-      points << data.first.to_i
+    data.first['datapoints'].each do |datum|
+      points << datum.first.to_i
     end
     if points.length>1
       diff=points.last-points.first
@@ -67,7 +67,7 @@ module ArgoHelper
     salient_facet_queries = facet_field.query.map { |k, x| x[:fq] }
     items = []
     @response.facet_queries.select { |k,v| salient_facet_queries.include?(k) }.reject { |value, hits| hits == 0 }.map do |value,hits|
-      key = facet_field.query.find{ |key, val| val[:fq] == value }.first
+      key = facet_field.query.find{ |k, val| val[:fq] == value }.first
       items << OpenStruct.new(:value => key, :hits => hits, :label => facet_field.query[key][:label])
     end
 
@@ -197,7 +197,7 @@ module ArgoHelper
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
-    if(doc.has_key?('embargoMetadata_t') || doc.has_key?('embargoMetadata_status_t'))
+    if(doc.key?('embargoMetadata_t') || doc.key?('embargoMetadata_status_t'))
       embargo_data=doc['embargoMetadata_t'] ? doc['embargoMetadata_t'] : doc['embargoMetadata_status_t']
       text=embargo_data.split.first
     # date=embargo_data.split.last
