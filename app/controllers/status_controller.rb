@@ -4,7 +4,7 @@ class StatusController < ApplicationController
 
   def log
     if check_recently_indexed !=true
-      if not params[:test_obj].nil?
+      if !params[:test_obj].nil?
         test_item=Dor::Item.find(params[:test_obj])
         test_item.identityMetadata.dirty=true
         test_item.save

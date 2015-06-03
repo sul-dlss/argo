@@ -25,7 +25,7 @@ module ValueHelper
         item = @obj
       end
       begin
-        item = Dor.find(druid) if not item
+        item = Dor.find(druid) if !item
         item.label
       rescue
         druid

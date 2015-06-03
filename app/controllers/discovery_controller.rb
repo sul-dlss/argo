@@ -17,7 +17,7 @@ class DiscoveryController < CatalogController
   end
 
   def data
-    if not params[:sord]
+    if !params[:sord]
       params[:sord] = 'asc'
     end
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10

@@ -197,7 +197,7 @@ class Report
         'index' => spec[:field],
         'width' => spec[:width],
         'sortable' => spec[:sort],
-        'hidden' => (not spec[:default])
+        'hidden' => (!spec[:default])
       }
     }
   end

@@ -95,8 +95,8 @@ class ApoController < ApplicationController
     apo.desc_metadata_format = md_info[:desc_md  ]
     apo.metadata_source      = md_info[:metadata_source]
     apo.agreement            = md_info[:agreement].to_s
-    apo.default_workflow     = md_info[:workflow ] unless (not md_info[:workflow] || md_info[:workflow].length < 5)
-    apo.creative_commons_license       =      md_info[:cc_license]
+    apo.default_workflow     = md_info[:workflow ] unless (!md_info[:workflow] || md_info[:workflow].length < 5)
+    apo.creative_commons_license       =     md_info[:cc_license]
     apo.creative_commons_license_human = @cc[md_info[:cc_license]]
     apo.default_rights                 = md_info[:default_object_rights]
   end
@@ -118,10 +118,8 @@ class ApoController < ApplicationController
     end
     if collection_pid
       apo.add_default_collection collection_pid
-    else
-      if params[:collection] && params[:collection].length > 0
-        apo.add_default_collection params[:collection]
-      end
+    elsif params[:collection] && params[:collection].length > 0
+      apo.add_default_collection params[:collection]
     end
 
     set_apo_metadata apo, params
@@ -142,9 +140,9 @@ class ApoController < ApplicationController
   end
 
   def param_cleanup params
-    params[:title].strip! unless not params[:title]
+    params[:title].strip! unless !params[:title]
     [:managers, :viewers].each do |role_param_sym|
-      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless not params[role_param_sym]
+      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless !params[role_param_sym]
     end
   end
 

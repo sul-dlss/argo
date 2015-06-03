@@ -20,7 +20,7 @@ class ReportController < CatalogController
     #if (not params[:sidx]) or params[:sidx] == 'druid'
     #  params[:sidx] = 'id'
     #end
-    if not params[:sord]
+    if !params[:sord]
       params[:sord] = 'asc'
     end
     #params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
