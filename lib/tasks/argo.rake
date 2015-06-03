@@ -107,7 +107,7 @@ namespace :argo do
       puts "Requesting #{url}"
       json = json_cores(url)
       json["status"].each do |k,v|
-        puts "#{k} in #{v["name"]}"
+        puts "#{k} in #{v['name']}"
       end
       realcores = json["status"]
     end
@@ -207,7 +207,7 @@ namespace :argo do
       i = 0
 
       Dir.glob(args[:glob]).each do |file|
-        i=i+1
+        i += 1
         ENV['foxml'] = file
         handler = proc do |e, attempt_number, total_delay|
           puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
@@ -266,7 +266,7 @@ namespace :argo do
       File.open(File.join(Rails.root, 'public/.htaccess'),'w') do |htaccess|
         htaccess.puts directives.sort.join("\n")
       end
-      File.unlink('public/auth/.htaccess') if File.exists?('public/auth/.htaccess')
+      File.unlink('public/auth/.htaccess') if File.exist?('public/auth/.htaccess')
     end
   end  # :htaccess
 

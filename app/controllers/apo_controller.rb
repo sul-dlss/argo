@@ -7,14 +7,18 @@ class ApoController < ApplicationController
 
   DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
 
-  @@cc = {
-    'by' => 'Attribution 3.0 Unported',
-    'by_sa' => 'Attribution Share Alike 3.0 Unported',      # this has got to be wrong when everything else is hyphenated!
-    'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-    'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
-    'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-    'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
-  }
+  attr_accessor :cc
+
+  def initialize
+    @cc = {
+      'by' => 'Attribution 3.0 Unported',
+      'by_sa' => 'Attribution Share Alike 3.0 Unported',      # this has got to be wrong when everything else is hyphenated!
+      'by-nd' => 'Attribution No Derivatives 3.0 Unported',
+      'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
+      'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
+    }
+  end
 
   def is_valid_role_name role_name
     return /^[\w-]+:[\w-]+$/.match(role_name) != nil
@@ -93,7 +97,7 @@ class ApoController < ApplicationController
     apo.agreement            = md_info[:agreement].to_s
     apo.default_workflow     = md_info[:workflow ] unless (not md_info[:workflow] || md_info[:workflow].length < 5)
     apo.creative_commons_license       =      md_info[:cc_license]
-    apo.creative_commons_license_human = @@cc[md_info[:cc_license]]
+    apo.creative_commons_license_human = @cc[md_info[:cc_license]]
     apo.default_rights                 = md_info[:default_object_rights]
   end
 
@@ -246,7 +250,7 @@ class ApoController < ApplicationController
 
   def update_creative_commons
     @object.creative_commons_license = params[:creative_commons]
-    @object.creative_commons_license_human = @@cc[params[:creative_commons]]
+    @object.creative_commons_license_human = @cc[params[:creative_commons]]
     redirect
   end
 

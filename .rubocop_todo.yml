@@ -18,11 +18,6 @@ Lint/AmbiguousRegexpLiteral:
 Lint/AssignmentInCondition:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Lint/DeprecatedClassMethods:
-  Enabled: false
-
 # Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: AlignWith, SupportedStyles, AutoCorrect.
@@ -133,15 +128,6 @@ Style/CaseIndentation:
 # Offense count: 5
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/ClassAndModuleChildren:
-  Enabled: false
-
-# Offense count: 2
-Style/ClassVars:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ClosingParenthesisIndentation:
   Enabled: false
 
 # Offense count: 6
@@ -384,11 +370,6 @@ Style/RegexpLiteral:
 Style/RescueModifier:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SelfAssignment:
-  Enabled: false
-
 # Offense count: 14
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -483,21 +464,10 @@ Style/SpaceInsideParens:
 Style/StringLiterals:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/StringLiteralsInInterpolation:
-  Enabled: false
-
 # Offense count: 9
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoredMethods.
 Style/SymbolProc:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/Tab:
   Enabled: false
 
 # Offense count: 14
@@ -515,12 +485,6 @@ Style/TrailingComma:
 # Offense count: 150
 # Cop supports --auto-correct.
 Style/TrailingWhitespace:
-  Enabled: false
-
-# Offense count: 3
-# Cop supports --auto-correct.
-# Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, IgnoreClassMethods, Whitelist.
-Style/TrivialAccessors:
   Enabled: false
 
 # Offense count: 5

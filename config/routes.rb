@@ -129,7 +129,7 @@ Argo::Application.routes.draw do
     get :apply_apo_defaults, :on => :member
     get :fix_missing_provenance, :on => :member
     match :update_resource, :on => :member, :action => :update_resource, :as => 'update_resource', :via => [:get, :post]
-end
+  end
 
   namespace :items do
     post '/version/close', :action=>:close_version, :as => 'close_version'

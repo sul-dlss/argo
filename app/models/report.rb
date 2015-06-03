@@ -8,7 +8,7 @@ class Report
     include ValueHelper
   end
 
-  attr_reader :response, :document_list, :num_found
+  attr_reader :response, :document_list, :num_found, :params
 
   @blacklight_config = blacklight_config.deep_copy if @blacklight_config.nil?
 
@@ -36,7 +36,7 @@ class Report
         :field => 'citation', :label => "Citation",
         :proc => lambda { |doc| render_citation(doc) },
         :solr_fields => [
-          'public_dc_creator_tesim', 'dc_creator_si', 'public_dc_title_tesim', 
+          'public_dc_creator_tesim', 'dc_creator_si', 'public_dc_title_tesim',
           'dc_title_si', 'obj_label_teim', 'originInfo_place_placeTerm_tesim',
           'public_dc_publisher_tesim', 'originInfo_publisher_tesim', 'public_dc_date_tesim'
         ],
@@ -218,10 +218,6 @@ class Report
 
     (@response, @document_list) = get_search_results
     @num_found = @response['response']['numFound'].to_i
-  end
-
-  def params
-    @params
   end
 
   def pids params

@@ -3,7 +3,7 @@ class Discovery
   include Blacklight::Configurable
   include Blacklight::SolrHelper
 
-  attr_reader :response, :document_list, :num_found
+  attr_reader :response, :document_list, :num_found, :params
 
   configure_blacklight do |config|
 
@@ -188,10 +188,6 @@ class Discovery
     @num_found = @response['response']['numFound'].to_i
   end
 
-  def params
-    @params
-  end
-  
   def pids params
     toret=[]
     while @document_list.length >0

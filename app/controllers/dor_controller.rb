@@ -6,12 +6,12 @@ class DorController < ApplicationController
 
   
   def index_logger
-    @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
-    @@index_logger.formatter = proc do |severity, datetime, progname, msg|
+    @index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
+    @index_logger.formatter = proc do |severity, datetime, progname, msg|
       date_format_str = Argo::Config.date_format_str
       "[#{request.uuid}] [#{datetime.strftime(date_format_str)}] #{msg}\n"
     end
-    @@index_logger
+    @index_logger
   end
 
   def configuration
