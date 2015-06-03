@@ -136,12 +136,12 @@ class Discovery
 
       {
         :label => "Pub Year Facet",
-        :field => "sw_pub_date_facet",
+        :field => "sw_pub_date_sort_ssi",
         :default => true, :width => 200
       },
       {
         :label => "Pub Date Display",
-        :field => "sw_pub_date_display_facet",
+        :field => "sw_pub_date_facet_ssi",
         :default => true, :width => 200
       }
     ]
