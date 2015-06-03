@@ -1,4 +1,4 @@
-BYTE_ORDERS = ['B','KB','MB','GB','TB','PB','EB']
+BYTE_ORDERS = %w(B KB MB GB TB PB EB)
 class Numeric
   def bytestring(fmt = "%.1f %s")
     order = 0

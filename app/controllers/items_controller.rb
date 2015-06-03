@@ -41,7 +41,7 @@ class ItemsController < ApplicationController
   end
 
   def on_hold
-    ['accession2WF', 'accessionWF'].each do |k|
+    %w(accession2WF accessionWF).each do |k|
         return true if (@object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold')
     end
     return false
@@ -219,7 +219,7 @@ class ItemsController < ApplicationController
     end
   end
   def datastream_update
-    req_params=['id','dsid','content']
+    req_params=%w(id dsid content)
     ds=@object.datastreams[params[:dsid]]
     #check that the content is valid xml
     begin
@@ -487,7 +487,7 @@ class ItemsController < ApplicationController
   end
 
   def scrubbed_content_ng_utf8(content)
-    ['amp','lt','gt','quot'].each do |char|
+    %w(amp lt gt quot).each do |char|
       content=content.gsub('&amp;'+char+';', '&'+char+';')
     end
     content=content.gsub /&amp;(\#[0-9]+;)/, '&\1'
@@ -522,7 +522,7 @@ class ItemsController < ApplicationController
     end
   end
   def set_rights
-    unless ['stanford','world', 'none', 'dark'].include? params[:rights]
+    unless %w(stanford world none dark).include? params[:rights]
       render :status=> :forbidden, :text =>'Invalid new rights setting.'
       return
     end
@@ -537,7 +537,7 @@ class ItemsController < ApplicationController
   end
   #set the content type in the content metadata
   def set_content_type
-    unless ['book', 'file', 'image','map','manuscript'].include? params[:new_content_type]
+    unless %w(book file image map manuscript).include? params[:new_content_type]
       render :status=> :forbidden, :text =>'Invalid new content type.'
       return
     end

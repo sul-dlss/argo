@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
     #(1) for User by sunet id
     #(2) groups actually contains the sunetid, so it is just looking at different solr fields
     #includes legacy roles that have to be translated
-    ["apo_role_group_manager_t","apo_role_person_manager_t"].each do |key|
+    %w(apo_role_group_manager_t apo_role_person_manager_t).each do |key|
       toret << 'dor-apo-manager' if (resp[key] && (resp[key] & groups).length > 0)
     end
 

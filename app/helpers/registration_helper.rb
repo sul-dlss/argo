@@ -59,17 +59,17 @@ module RegistrationHelper
 
   def valid_object_types
     [
-      ['Item','item'],
+      %w(Item item),
       ['Workflow Definition','workflow']
     ]
   end
 
   def valid_rights_options
     [
-      ['World','world'],
-      ['Stanford','stanford'],
+      %w(World world),
+      %w(Stanford stanford),
       ['Dark (Preserve Only)','dark'],
-      ['None', 'none']
+      %w(None none)
     ]
   end
 
@@ -89,8 +89,8 @@ module RegistrationHelper
 
   def metadata_sources
     [
-      ['Auto','auto'],
-      ['None','none']
+      %w(Auto auto),
+      %w(None none)
     ]
   end
 

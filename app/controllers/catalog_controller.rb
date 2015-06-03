@@ -34,8 +34,8 @@ class CatalogController < ApplicationController
     config.show.title_field  = 'obj_label_t'
     config.show.display_type_field = 'objectType_t'
     config.show.sections = {
-      :default => ['identification','datastreams','history','contents'],
-      :item    => ['identification','datastreams','history','contents','child_objects']
+      :default => %w(identification datastreams history contents),
+      :item    => %w(identification datastreams history contents child_objects)
     }
     config.show.section_links = {
       'identification' => :render_full_view_links,
@@ -150,12 +150,12 @@ class CatalogController < ApplicationController
 
     config.field_groups = {
       :identification => [
-        ['id','objectType_ssim','content_type_ssim','status_ssm','wf_error_ssim'],
-        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_ssim','source_id_ssim','preserved_size_ssm']
+        %w(id objectType_ssim content_type_ssim status_ssm wf_error_ssim),
+        %w(is_governed_by_ssim is_member_of_collection_ssim project_tag_ssim source_id_ssim preserved_size_ssm)
       ],
       :full_identification => [
-        ['id','objectType_ssim','content_type_ssim','metadata_source_ssim'],
-        ['is_governed_by_ssim','is_member_of_collection_ssim','project_tag_ssim','source_id_ssim']
+        %w(id objectType_ssim content_type_ssim metadata_source_ssim),
+        %w(is_governed_by_ssim is_member_of_collection_ssim project_tag_ssim source_id_ssim)
       ]
     }
 

@@ -38,7 +38,7 @@ namespace :argo do
 
   desc "Bump Argo's version number before release"
   task :bump_version, [:level] do |t, args|
-    levels = ['major','minor','patch','rc']
+    levels = %w(major minor patch rc)
     version_file = File.expand_path('../../../VERSION',__FILE__)
     version = File.read(version_file)
     version = version.split(/\./)

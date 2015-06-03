@@ -16,8 +16,8 @@ module ApoHelper
   end
   def default_rights_options
     [
-      ['World', 'world'],
-      ['Stanford', 'stanford'],
+      %w(World world),
+      %w(Stanford stanford),
       ['Dark (Preserve Only)', 'dark'],
       ['Citation Only', 'none']
     ]

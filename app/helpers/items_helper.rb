@@ -2,7 +2,7 @@
 require 'stanford-mods'
 module ItemsHelper
   def valid_resource_types type
-    valid_types=['object','file']
+    valid_types=%w(object file)
     if type =~/Book/
       valid_types<<'page'
       valid_types<<'spread'
@@ -185,7 +185,7 @@ module ItemsHelper
   def mclaughlin_reorder_cartographics xml
     xml.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       children=node.children
-      ['scale', 'projection', 'coordinates'].each do |child|
+      %w(scale projection coordinates).each do |child|
         children.each do |chi|
           node << chi if chi.name == child
         end

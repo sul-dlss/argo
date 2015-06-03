@@ -436,9 +436,3 @@ Style/VariableName:
 # Configuration parameters: MaxLineLength.
 Style/WhileUntilModifier:
   Enabled: false
-
-# Offense count: 33
-# Cop supports --auto-correct.
-# Configuration parameters: WordRegex.
-Style/WordArray:
-  MinSize: 9
