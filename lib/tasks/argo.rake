@@ -289,7 +289,7 @@ namespace :argo do
     dor_pids = []
     solr_pids = []
     if args[:query] != ':ALL:'
-      q = (args[:query].nil? or args[:query]) == ':MISSING:' ? '*:*' : args[:query]
+      q = (args[:query].nil? || args[:query] == ':MISSING:') ? '*:*' : args[:query]
       puts q
       start = 0
       resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
