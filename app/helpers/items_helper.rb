@@ -387,12 +387,9 @@ module ItemsHelper
   end
 
   def is_numeric? s
-    begin
-      Float(s)
-    rescue
-      false # not numeric
-    else
-      true # numeric
-    end
-  end
+    Float(s)
+  rescue
+    false # not numeric
+  else
+    true   end
 end

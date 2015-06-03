@@ -51,11 +51,9 @@ module DorObjectHelper
   end
 
   def get_dor_obj_if_exists(obj_id)
-    begin
-      return Dor.find(obj_id)
-    rescue ActiveFedora::ObjectNotFoundError => not_found_err
-      return nil
-    end
+    return Dor.find(obj_id)
+  rescue ActiveFedora::ObjectNotFoundError => not_found_err
+    return nil
   end
 
   def render_datetime(datetime)

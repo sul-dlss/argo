@@ -20,11 +20,4 @@ module ApplicationHelper
   def robot_status_url
     return Argo::Config.urls.robot_status
   end
-
-  protected
-
-  def silently
-    begin; yield; rescue; end
-  end
-
 end

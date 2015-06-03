@@ -38,20 +38,18 @@ module ValueHelper
   end
 
   def value_for_related_druid predicate, args
-    begin
-      target_id = args[:document].get("#{predicate}_s")
-      target_name = ''
-      links=''
-      target_id.split(',').each do |targ|
-        target_name = label_for_druid(targ)
-        links += link_to target_name, catalog_path(targ.split(/\//).last)
-        links +='<br>'
-      end
-      links.html_safe
-    rescue Exception => e
-      Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
+    target_id = args[:document].get("#{predicate}_s")
+    target_name = ''
+    links=''
+    target_id.split(',').each do |targ|
+      target_name = label_for_druid(targ)
+      links += link_to target_name, catalog_path(targ.split(/\//).last)
+      links +='<br>'
     end
+    links.html_safe
+  rescue Exception => e
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace.join("\n")
   end
 
   def value_for_wf_error_ssim args
@@ -60,38 +58,34 @@ module ValueHelper
   end
 
   def value_for_is_governed_by_ssim args
-    begin
-      target_id = args[:document].get("is_governed_by_ssim")
-      target_name = ''
-      links = ''
-      target_id.split(',').each do |targ|
-        target_name = args[:document].get("apo_title_ssim")
-        links += link_to target_name, catalog_path(targ.split(/\//).last)
-        links +='<br>'
-      end
-      links.html_safe
-    rescue Exception => e
-      Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
+    target_id = args[:document].get("is_governed_by_ssim")
+    target_name = ''
+    links = ''
+    target_id.split(',').each do |targ|
+      target_name = args[:document].get("apo_title_ssim")
+      links += link_to target_name, catalog_path(targ.split(/\//).last)
+      links +='<br>'
     end
+    links.html_safe
+  rescue Exception => e
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace.join("\n")
     #value_for_related_druid('is_governed_by', args)
   end
 
   def value_for_is_member_of_collection_ssim args
-    begin
-      target_id = args[:document].get("is_member_of_collection_ssim")
-      target_name = ''
-      links=''
-      target_id.split(',').each do |targ|
-        target_name = args[:document].get("collection_title_ssim")
-        links += link_to target_name, catalog_path(targ.split(/\//).last)
-        links +='<br>'
-      end
-      links.html_safe
-    rescue Exception => e
-      Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
+    target_id = args[:document].get("is_member_of_collection_ssim")
+    target_name = ''
+    links=''
+    target_id.split(',').each do |targ|
+      target_name = args[:document].get("collection_title_ssim")
+      links += link_to target_name, catalog_path(targ.split(/\//).last)
+      links +='<br>'
     end
+    links.html_safe
+  rescue Exception => e
+    Rails.logger.error e.message
+    Rails.logger.error e.backtrace.join("\n")
   end
 
   def value_for_project_tag_ssim args

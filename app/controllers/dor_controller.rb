@@ -49,20 +49,18 @@ class DorController < ApplicationController
   end
 
   def reindex
-    begin
-      obj = Dor.load_instance params[:pid]
-      solr_doc = obj.to_solr
-      Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-      index_logger.info "updated index for #{params[:pid]}"
-      render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
-    rescue ActiveFedora::ObjectNotFoundError => e
-      index_logger.info "failed to update index for #{params[:pid]}, object not found in Fedora"
-      render :status=> 500, :text =>'Object doesnt exist in Fedora.'
-      return
-    rescue StandardError => se
-      index_logger.error "failed to update index for #{params[:pid]}, unexpected error, see main app log"
-      raise se
-    end
+    obj = Dor.load_instance params[:pid]
+    solr_doc = obj.to_solr
+    Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
+    index_logger.info "updated index for #{params[:pid]}"
+    render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
+  rescue ActiveFedora::ObjectNotFoundError => e
+    index_logger.info "failed to update index for #{params[:pid]}, object not found in Fedora"
+    render :status=> 500, :text =>'Object doesnt exist in Fedora.'
+    return
+  rescue StandardError => se
+    index_logger.error "failed to update index for #{params[:pid]}, unexpected error, see main app log"
+    raise se
   end
 
   def delete_from_index

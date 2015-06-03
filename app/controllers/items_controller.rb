@@ -41,14 +41,12 @@ class ItemsController < ApplicationController
   end
 
   def on_hold
-    begin
-      ['accession2WF', 'accessionWF'].each do |k|
-          return true if (@object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold')
-      end
-      return false
-    rescue
-      return false
+    ['accession2WF', 'accessionWF'].each do |k|
+        return true if (@object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold')
     end
+    return false
+  rescue
+    return false
   end
 
   #open a new version if needed. 400 if the item is in a state that doesnt allow opening a version.
@@ -302,17 +300,15 @@ class ItemsController < ApplicationController
   end
   def open_version
     # puts params[:description]
-    begin
-      vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
-      @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
-      respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }
-      end
-    rescue Exception => e
-      raise e unless e.to_s == 'Object net yet accessioned'
-      render :status=> 500, :text =>'Object net yet accessioned'
-      return
+    vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
+    @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }
     end
+  rescue Exception => e
+    raise e unless e.to_s == 'Object net yet accessioned'
+    render :status=> 500, :text =>'Object net yet accessioned'
+    return
   end
   def get_current_version_tag(item)
     # create an instance of VersionTag for the current version of item
