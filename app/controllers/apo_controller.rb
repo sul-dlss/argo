@@ -21,7 +21,7 @@ class ApoController < ApplicationController
   end
 
   def is_valid_role_name role_name
-    return /^[\w-]+:[\w-]+$/.match(role_name) != nil
+    return !/^[\w-]+:[\w-]+$/.match(role_name).nil?
   end
 
   def is_valid_role_list role_list
