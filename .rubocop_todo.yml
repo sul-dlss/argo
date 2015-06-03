@@ -194,11 +194,6 @@ Style/EmptyLinesAroundModuleBody:
 Style/EmptyLiteral:
   Enabled: false
 
-# Offense count: 2
-# Configuration parameters: Exclude.
-Style/FileName:
-  Enabled: false
-
 # Offense count: 5
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles.
@@ -273,11 +268,6 @@ Style/MethodName:
 
 # Offense count: 1
 Style/MultilineBlockChain:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/MultilineBlockLayout:
   Enabled: false
 
 # Offense count: 3

@@ -331,7 +331,7 @@ class ItemsController < ApplicationController
   def which_severity_changed(cur_version_tag, prior_version_tag)
     # given two instances of VersionTag, find the most significant part of the field which changed
     # between the two (return nil if either instance is nil or if they're the same)
-    if cur_version_tag == nil || prior_version_tag == nil
+    if cur_version_tag.nil? || prior_version_tag.nil?
       return nil
     elsif cur_version_tag.major != prior_version_tag.major
       return :major

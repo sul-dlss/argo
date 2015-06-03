@@ -391,7 +391,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 1' and node['type'] == nil
+        if node['displayLabel'] == 'State 1' and node['type'].nil?
           count+=1
         end
       end

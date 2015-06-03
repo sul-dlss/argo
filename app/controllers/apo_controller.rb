@@ -26,7 +26,7 @@ class ApoController < ApplicationController
 
   def is_valid_role_list role_list
     # look for an invalid role name, return true if we don't find one
-    return role_list.find { |role_name| !is_valid_role_name(role_name) } == nil
+    return role_list.find { |role_name| !is_valid_role_name(role_name) }.nil?
   end
 
   def is_valid_role_list_endpoint
