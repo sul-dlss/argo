@@ -135,7 +135,7 @@ class CatalogController < ApplicationController
     config.add_search_field 'text', :label => 'All Fields'
     config.add_sort_field 'id asc', :label => 'Druid'
     config.add_sort_field 'score desc', :label => 'Relevance'
-    config.add_sort_field 'creator_title_si asc', :label => 'Creator and Title'
+    config.add_sort_field 'creator_title_ssi asc', :label => 'Creator and Title'
 
     config.spell_max = 5
 

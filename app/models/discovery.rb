@@ -20,7 +20,7 @@ class Discovery
       },
       {
         :label => "Display Title",
-        :field => "title_ssm",
+        :field => "title_ssim",
         :sort => true, :default => true, :width => 200
       },
       {
@@ -35,12 +35,12 @@ class Discovery
       },
       {
         :label => "Sort Title",
-        :field => "title_sort_si",
+        :field => "title_sort_ssi",
         :default => false, :width => 200
       },
       {
         :label => "Full Display Title",
-        :field => "title_ssm",
+        :field => "title_ssim",
         :default => false, :width => 200
       },
       {
@@ -125,12 +125,12 @@ class Discovery
       },
       {
         :label => "Pub Date Sort",
-        :field => "sw_pub_date_sort_facet",
+        :field => "sw_pub_date_sort_ssi",
         :default => false, :width => 200
       },
       {
         :label => "Pub Date Group Facet",
-        :field => "sw_pub_date_group_facet",
+        :field => "sw_pub_date_facet_ssi",
         :default => false, :width => 200
       },
 
