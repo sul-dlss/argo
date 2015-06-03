@@ -43,7 +43,6 @@ class ReportController < CatalogController
   end
 
   def content_types
-
   end
 
   def pids

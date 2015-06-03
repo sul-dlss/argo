@@ -23,28 +23,24 @@ module WorkflowHelper
 
   def render_workflow_process_reset(pid, process)
     allowable_changes = {
-      'hold' => 'waiting',
+      'hold'    => 'waiting',
       'waiting' => 'completed',
       'error'   => 'waiting'
     }
     new_status = allowable_changes[process.status]
-    if new_status.present?
-      form_tag workflow_update_item_url(pid, process.workflow), :class => 'dialogLink' do
-        hidden_field_tag('process', process.name) +
-        hidden_field_tag('status', new_status) +
-        hidden_field_tag('repo', @repo)+
-        button_tag('set to ' + new_status, :type => 'submit')
-      end
-    else
-      ''
+    return '' unless new_status.present?
+    form_tag workflow_update_item_url(pid, process.workflow), :class => 'dialogLink' do
+      hidden_field_tag('process', process.name) +
+      hidden_field_tag('status', new_status) +
+      hidden_field_tag('repo', @repo)+
+      button_tag('set to ' + new_status, :type => 'submit')
     end
   end
 
   def render_workflow_reset_link(wf_hash, name, process, status)
-    if (wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_])
-      new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow=>name,:reset_step=>process)
-      raw " | " + link_to('reset', new_params,:remote=>true)
-    end
+    return unless (wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_])
+    new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow=>name,:reset_step=>process)
+    raw " | " + link_to('reset', new_params,:remote=>true)
   end
 
   def render_workflow_item_count(wf_hash, name, process, status)
@@ -73,31 +69,28 @@ module WorkflowHelper
   end
 
   def render_workflow_grid_toggle(field_name)
-    if field_name =~ /^wf_.+_ssim/
-      p = params.dup
-      img = nil
-      image_path = ''
-      if show_workflow_grid?
-        img = image_tag('icons/detail_view.png', :title => "Item summary view")
-        p.merge!(:controller => :catalog, :action => 'index')
-      else
-        img = image_tag('icons/grid_view.png', :title => "Workflow grid view")
-        p.merge!(:controller => :report, :action => 'workflow_grid')
-      end
-      link_to(img.html_safe, p, :class => 'no-underline')
+    return unless field_name =~ /^wf_.+_ssim/
+    p = params.dup
+    img = nil
+    if show_workflow_grid?
+      img = image_tag('icons/detail_view.png', :title => "Item summary view")
+      p.merge!(:controller => :catalog, :action => 'index')
+    else
+      img = image_tag('icons/grid_view.png', :title => "Workflow grid view")
+      p.merge!(:controller => :report, :action => 'workflow_grid')
     end
+    link_to(img.html_safe, p, :class => 'no-underline')
   end
 
   def proc_names_for_wf(wf_name, wf_data)
-      proc_names = wf_data.keys.delete_if { |k,v| ! k.is_a?(String) }
-      wf = Dor::WorkflowObject.find_by_name(wf_name)
-      if wf.nil?
-        proc_names = ActiveSupport::OrderedHash[*(proc_names.sort.collect { |n| [n,nil] }.flatten)]
-      else
-        proc_names = ActiveSupport::OrderedHash[*(wf.definition.processes.collect { |p| [p.name,p.label] }.flatten)]
-      end
-
-      proc_names
+    proc_names = wf_data.keys.delete_if { |k,v| ! k.is_a?(String) }
+    wf = Dor::WorkflowObject.find_by_name(wf_name)
+    if wf.nil?
+      proc_names = ActiveSupport::OrderedHash[*(proc_names.sort.collect { |n| [n,nil] }.flatten)]
+    else
+      proc_names = ActiveSupport::OrderedHash[*(wf.definition.processes.collect { |p| [p.name,p.label] }.flatten)]
+    end
+    proc_names
   end
 
 end

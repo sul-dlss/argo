@@ -187,11 +187,10 @@ class ApoController < ApplicationController
   end
 
   def register_collection
-    if params[:collection_title] or params[:collection_catkey]
-      collection_pid = create_collection params[:id]
-      @object.add_default_collection collection_pid
-      redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
-    end
+    return unless params[:collection_title] || params[:collection_catkey]
+    collection_pid = create_collection params[:id]
+    @object.add_default_collection collection_pid
+    redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
   end
 
   def create_collection apo_pid
@@ -339,10 +338,9 @@ class ApoController < ApplicationController
   end
 
   def populate_role_form_field_var(role_list, form_field_var)
-    if role_list
-      role_list.each do |entity|
-        form_field_var << entity.gsub('workgroup:', '').gsub('person:', '')
-      end
+    return unless role_list
+    role_list.each do |entity|
+      form_field_var << entity.gsub('workgroup:', '').gsub('person:', '')
     end
   end
 
@@ -366,10 +364,9 @@ class ApoController < ApplicationController
 
   #check that the user can carry out this object modification
   def forbid
-    if not current_user.is_admin and not @object.can_manage_content?(current_user.roles params[:id])
-      render :status=> :forbidden, :text =>'forbidden'
-      return
-    end
+    return if current_user.is_admin || @object.can_manage_content?(current_user.roles params[:id])
+    render :status=> :forbidden, :text =>'forbidden'
+    return
   end
 
   def set_abstract collection_obj, abstract

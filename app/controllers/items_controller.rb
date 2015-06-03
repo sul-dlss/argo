@@ -161,7 +161,6 @@ class ItemsController < ApplicationController
     end
   end
   def workflow_update
-    @item=@object
     args = params.values_at(:id, :wf_name, :process, :status)
     check_args = params.values_at(:id, :wf_name, :process)
 
@@ -507,9 +506,8 @@ class ItemsController < ApplicationController
   end
   def change_mods_value
     mods=Mods::Reader.new(@object.descMetadata.content)
-    if mods.methods.include? params[:field].to_sym
-      mods.send(params[:field].to_sym, params[:val])
-    end
+    return unless mods.methods.include? params[:field].to_sym
+    mods.send(params[:field].to_sym, params[:val])
   end
   def remove_duplicate_encoding
     ds=@object.descMetadata
@@ -576,19 +574,18 @@ class ItemsController < ApplicationController
 
   #add a workflow to an object if the workflow is not present in the active table
   def add_workflow
-    if params[:wf]
-      wf = @object.workflows[params[:wf]]
-      #check for this workflow is present and active (not archived)
-      if wf && wf.active?
-        render :status => 500, :text => "#{params[:wf]} already exists!"
-        return
-      end
-      @object.initialize_workflow(params[:wf])
-      if params[:bulk]
-        render :text => "Added #{params[:wf]}"
-      else
-        redirect_to catalog_path(params[:id]), :notice => "Added #{params[:wf]}"
-      end
+    return unless params[:wf]
+    wf = @object.workflows[params[:wf]]
+    #check for this workflow is present and active (not archived)
+    if wf && wf.active?
+      render :status => 500, :text => "#{params[:wf]} already exists!"
+      return
+    end
+    @object.initialize_workflow(params[:wf])
+    if params[:bulk]
+      render :text => "Added #{params[:wf]}"
+    else
+      redirect_to catalog_path(params[:id]), :notice => "Added #{params[:wf]}"
     end
   end
 
@@ -597,6 +594,8 @@ class ItemsController < ApplicationController
     doc=item.to_solr
     Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
   end
+
+  # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
     begin
@@ -615,23 +614,19 @@ class ItemsController < ApplicationController
 
   #check that the user can carry out this item modification
   def forbid_modify
-    unless current_user.is_admin || @object.can_manage_content?(current_user.roles @apo)
-      render :status=> :forbidden, :text =>'forbidden'
-      return false
-    end
-    true
+    return true if current_user.is_admin || @object.can_manage_content?(current_user.roles @apo)
+    render :status=> :forbidden, :text =>'forbidden'
+    return false
   end
   def forbid_view
-    unless current_user.is_admin || @object.can_view_content?(current_user.roles @apo)
-      render :status=> :forbidden, :text =>'forbidden'
-      return
-    end
+    return true if current_user.is_admin || @object.can_view_content?(current_user.roles @apo)
+    render :status=> :forbidden, :text =>'forbidden'
+    return false
   end
   def enforce_versioning
     #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
-    unless @object.allows_modification? || on_hold
-      render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
-      return
-    end
+    return true if @object.allows_modification? || on_hold
+    render :status=> :forbidden, :text =>'Object cannot be modified in its current state.'
+    return false
   end
 end

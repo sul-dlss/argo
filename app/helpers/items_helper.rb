@@ -196,17 +196,16 @@ module ItemsHelper
   def mclaughlin_combine_cartographics xml
     #pick 1 cartographic and reparent the scale, projection and coordinates to be inside it. The empty node pruning will clean up the mess.
     cartographic=xml.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').first
-    if cartographic
-      scales=xml.search('//mods:cartographics/mods:scale','mods'=>'http://www.loc.gov/mods/v3')
-      projections=xml.search('//mods:cartographics/mods:projection','mods'=>'http://www.loc.gov/mods/v3')
-      coordinates=xml.search('//mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
-      raise 'too many coordinates' if coordinates.length > 1
-      raise 'too many projections' if projections.length > 1
-      raise 'too many scales' if scales.length > 1
-      cartographic << scales.first if scales.first
-      cartographic << projections.first if projections.first
-      cartographic << coordinates.first if coordinates.first
-    end
+    return unless cartographic
+    scales=xml.search('//mods:cartographics/mods:scale','mods'=>'http://www.loc.gov/mods/v3')
+    projections=xml.search('//mods:cartographics/mods:projection','mods'=>'http://www.loc.gov/mods/v3')
+    coordinates=xml.search('//mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
+    raise 'too many coordinates' if coordinates.length > 1
+    raise 'too many projections' if projections.length > 1
+    raise 'too many scales' if scales.length > 1
+    cartographic << scales.first if scales.first
+    cartographic << projections.first if projections.first
+    cartographic << coordinates.first if coordinates.first
   end
 
   def mclaughlin_fix_cartographics xml
@@ -391,5 +390,6 @@ module ItemsHelper
   rescue
     false # not numeric
   else
-    true   end
+    true
+  end
 end

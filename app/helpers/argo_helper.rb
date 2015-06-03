@@ -12,42 +12,34 @@ module ArgoHelper
   end
 
   def ensure_current_document_version
-    if @document.get('index_version_t').to_s < Dor::SearchService.index_version
-      id = @document.get('id')
-      Dor::SearchService.reindex(id)
-      @response, @document = get_solr_response_for_doc_id(id)
-    end
+    return unless @document.get('index_version_t').to_s < Dor::SearchService.index_version
+    id = @document.get('id')
+    Dor::SearchService.reindex(id)
+    @response, @document = get_solr_response_for_doc_id(id)
   end
 
   def index_queue_depth
-    if Dor::Config.status and Dor::Config.status.indexer_url
-      url = Dor::Config.status.indexer_url
-      resp = RestClient::Request.execute(:method => :get, :url => url, :timeout => 3, :open_timeout => 3)
-      data = JSON.parse(resp)
-      count = data.first['datapoints'].first.first.to_i
-    else
-      return 0
-    end
+    return 0 unless Dor::Config.status && Dor::Config.status.indexer_url
+    url = Dor::Config.status.indexer_url
+    resp = RestClient::Request.execute(:method => :get, :url => url, :timeout => 3, :open_timeout => 3)
+    JSON.parse(resp).first['datapoints'].first.first.to_i
   rescue
     return 0
   end
 
   def index_queue_velocity
-    if Dor::Config.status and Dor::Config.status.indexer_velocity_url
-      url=Dor::Config.status.indexer_velocity_url
-      data=JSON.parse(open(url).read)
-      points=[]
-      data.first['datapoints'].each do |data|
-        points << data.first.to_i
-      end
-      if points.length>1
-        diff=points.last-points.first
-        speed=diff/(points.length-1)
-        return speed
-      end
-    else
-      return 0
+    return 0 unless Dor::Config.status && Dor::Config.status.indexer_velocity_url
+    url=Dor::Config.status.indexer_velocity_url
+    data=JSON.parse(open(url).read)
+    points=[]
+    data.first['datapoints'].each do |data|
+      points << data.first.to_i
     end
+    if points.length>1
+      diff=points.last-points.first
+      return diff/(points.length-1)
+    end
+    return 0
   rescue
     return 0
   end
@@ -70,6 +62,7 @@ module ArgoHelper
     end
     result
   end
+
   def create_rsolr_facet_field_response_for_query_facet_field facet_name, facet_field
     salient_facet_queries = facet_field.query.map { |k, x| x[:fq] }
     items = []
@@ -80,7 +73,6 @@ module ArgoHelper
 
     RSolr::Ext::Response::Facets::FacetField.new facet_name, items
   end
-
 
   def render_index_field_value args
     handler = "value_for_#{args[:field]}".to_sym
@@ -125,25 +117,21 @@ module ArgoHelper
   end
 
   def render_document_show_thumbnail doc
-    if doc['first_shelved_image_display']
-      fname = doc['first_shelved_image_display'].first
-      if fname
-        druid = doc['id'].to_s.split(/:/).last
-        fname = File.basename(fname,File.extname(fname))
-        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'document-thumb', :alt => '', :style=>'max-width:240px;max-height:240px;'
-      end
-    end
+    return unless doc['first_shelved_image_display']
+    fname = doc['first_shelved_image_display'].first
+    return unless fname
+    druid = doc['id'].to_s.split(/:/).last
+    fname = File.basename(fname,File.extname(fname))
+    image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'document-thumb', :alt => '', :style=>'max-width:240px;max-height:240px;'
   end
 
   def render_index_thumbnail doc
-    if doc['first_shelved_image_display']
-      fname = doc['first_shelved_image_display'].first
-      if fname
-        druid = doc['id'].to_s.split(/:/).last
-        fname = File.basename(fname,File.extname(fname))
-        image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'index-thumb', :alt => '', :style=>'max-width:80px;max-height:80px;'
-      end
-    end
+    return unless doc['first_shelved_image_display']
+    fname = doc['first_shelved_image_display'].first
+    return unless fname
+    druid = doc['id'].to_s.split(/:/).last
+    fname = File.basename(fname,File.extname(fname))
+    image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'index-thumb', :alt => '', :style=>'max-width:80px;max-height:80px;'
   end
   #override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
   def render_facet_value(facet_solr_field, item, options ={})
@@ -163,10 +151,8 @@ module ArgoHelper
   end
 
   def render_buttons(doc, object=nil)
-    pid=doc['id']
-    if not object
-      object = Dor.find(pid)
-    end
+    pid = doc['id']
+    object ||= Dor.find(pid)
     apo_pid = ''
     #wf_stuff.include? 'accessionWF:completed:publish'
     begin
@@ -174,14 +160,13 @@ module ArgoHelper
     rescue
     end
     buttons=[]
-    if(pid and can_close_version?(pid))
-      buttons << {:url => '/items/'+pid+'/close_version_ui', :label => 'Close Version'}
-    else
-      if pid and can_open_version?(pid)
+    if pid
+      if can_close_version?(pid)
+        buttons << {:url => '/items/'+pid+'/close_version_ui', :label => 'Close Version'}
+      elsif can_open_version?(pid)
         buttons << {:url => '/items/'+pid+'/open_version_ui', :label => 'Open for modification'}
       end
     end
-
 
     #if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
@@ -215,9 +200,9 @@ module ArgoHelper
     if(doc.has_key?('embargoMetadata_t') || doc.has_key?('embargoMetadata_status_t'))
       embargo_data=doc['embargoMetadata_t'] ? doc['embargoMetadata_t'] : doc['embargoMetadata_status_t']
       text=embargo_data.split.first
-      date=embargo_data.split.last
+    # date=embargo_data.split.last
       if text != 'released'
-        #add a date picker and button to change the embargo date for those who should be able to.
+        # TODO: add a date picker and button to change the embargo date for those who should be able to.
         buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if current_user.is_admin
       end
     end
@@ -229,26 +214,19 @@ module ArgoHelper
   end
 
   def render_date_pickers(field_name)
-    if field_name =~ /_date/
-      render(:partial => 'catalog/show_date_choice', :locals => {:field_name => field_name})
-    end
+    return unless field_name =~ /_date/
+    render(:partial => 'catalog/show_date_choice', :locals => {:field_name => field_name})
   end
 
   def document_has? document, field_name
-    if document.has? field_name
-      return true
-    elsif self.respond_to?(:"calculate_#{field_name}_value")
-      calculated_value = self.send(:"calculate_#{field_name}_value", document)
-      if calculated_value.nil?
-        return false
-      else
-        document[field_name] = [calculated_value]
-        return true
-      end
-    else
-      return false
-    end
+    return true if document.has? field_name
+    return false unless self.respond_to?(:"calculate_#{field_name}_value")
+    calculated_value = self.send(:"calculate_#{field_name}_value", document)
+    return false if calculated_value.nil?
+    document[field_name] = [calculated_value]
+    return true
   end
+
   def render_dpg_link document
     val = document.get('id').split(/:/).last
     link_to "DPG Object Status", File.join(Argo::Config.urls.dpg, val)
@@ -279,16 +257,14 @@ module ArgoHelper
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     form = document.get('mdform_tag_t')
     collection = forms.keys.find { |k| forms[k].keys.include?(form) }
-    if form and collection
-      link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
-    end
+    return unless form && collection
+    link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
   end
 
   def render_section_header_link section, document
     section_header_method = blacklight_config[:show][:section_links][section]
-    unless section_header_method.nil?
-      self.send(section_header_method, document)
-    end
+    return if section_header_method.nil?
+    self.send(section_header_method, document)
   end
 
   def render_full_dc_link document, link_text="View full Dublin Core"
@@ -300,17 +276,12 @@ module ArgoHelper
   def render_full_view_links document
     render_full_dc_link(document) + ' / '+render_mods_view_link(document)
   end
-
   def render_dor_workspace_link document, link_text="View DOR workspace"
   end
 
   def render_datastream_link document
-    if(document_has?(@document, 'objectType_ssim'))
-      object_type = @document.get('objectType_ssim')
-      if(object_type == 'adminPolicy')
-        link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
-      end
-    end
+    return unless document_has?(@document, 'objectType_ssim') && @document.get('objectType_ssim') == 'adminPolicy'
+    link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
   end
 
 end

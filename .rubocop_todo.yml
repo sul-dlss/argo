@@ -205,11 +205,6 @@ Style/FirstParameterIndentation:
 Style/FormatString:
   Enabled: false
 
-# Offense count: 17
-# Configuration parameters: MinBodyLength.
-Style/GuardClause:
-  Enabled: false
-
 # Offense count: 1572
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, UseHashRocketsWithSymbolValues.
