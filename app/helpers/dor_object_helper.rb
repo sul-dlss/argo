@@ -90,7 +90,7 @@ module DorObjectHelper
     render :partial => 'catalog/show_milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 
-  def render_status (doc, object=nil)
+  def render_status(doc, object=nil)
     if object.nil?
       return doc['status_display']
     else
@@ -182,7 +182,7 @@ module DorObjectHelper
     params=add_facet_params(facet_solr_field, item.qvalue)
     Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
      (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
-   end
+    end
   end
 
   def render_workflows doc, obj

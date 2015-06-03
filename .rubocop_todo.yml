@@ -20,11 +20,6 @@ Lint/AssignmentInCondition:
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Lint/BlockAlignment:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
 Lint/DeprecatedClassMethods:
   Enabled: false
 
@@ -419,11 +414,6 @@ Style/SpaceAfterComma:
 # Offense count: 11
 # Cop supports --auto-correct.
 Style/SpaceAfterControlKeyword:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SpaceAfterMethodName:
   Enabled: false
 
 # Offense count: 1
