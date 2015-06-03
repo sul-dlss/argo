@@ -210,15 +210,15 @@ class ItemsController < ApplicationController
     end
   end
   def embargo_update
-    unless current_user.is_admin
-      render :status=> :forbidden, :text =>'forbidden'
-    else
+    if current_user.is_admin
       new_date=DateTime.parse(params[:embargo_date])
       @object.update_embargo(new_date)
       @object.datastreams['events'].add_event("Embargo", current_user.to_s , "Embargo date modified")
       respond_to do |format|
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
       end
+    else
+      render :status=> :forbidden, :text =>'forbidden'
     end
   end
   def datastream_update

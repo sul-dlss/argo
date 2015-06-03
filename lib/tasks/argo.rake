@@ -209,7 +209,7 @@ namespace :argo do
       Dir.glob(args[:glob]).each do |file|
         i=i+1
         ENV['foxml'] = file
-        handler = Proc.new do |e, attempt_number, total_delay|
+        handler = proc do |e, attempt_number, total_delay|
           puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
           errors << file
         end
@@ -244,7 +244,7 @@ namespace :argo do
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
     facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect{|x| x.value}.join(%Q[\n])}"
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect{|x| x.value}.join(%[\n])}"
   end
 
   desc "Update the .htaccess file from indexed APOs"

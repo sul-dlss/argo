@@ -78,7 +78,7 @@ module ArgoHelper
     salient_facet_queries = facet_field.query.map { |k, x| x[:fq] }
     items = []
     @response.facet_queries.select { |k,v| salient_facet_queries.include?(k) }.reject { |value, hits| hits == 0 }.map do |value,hits|
-      key = facet_field.query.select { |key, val| val[:fq] == value }.first.first
+      key = facet_field.query.find{ |key, val| val[:fq] == value }.first
       items << OpenStruct.new(:value => key, :hits => hits, :label => facet_field.query[key][:label])
     end
 

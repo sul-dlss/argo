@@ -25,34 +25,32 @@ module ApoHelper
   def options_for_desc_md
     [
       ['MODS'],['TEI']
-      ]
+    ]
   end
   def apo_metadata_sources
-  [['Symphony'],['DOR'],['MDToolkit']]
+    [['Symphony'],['DOR'],['MDToolkit']]
   end
   def workflow_options
-     q = 'objectType_t:workflow '
-      qrys=[]
-      result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
-      result.sort! do |a,b|
-        a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
-      end
-      result.collect do |doc|
-        [Array(doc['dc_title_t']).first,doc['dc_title_t'].first.to_s]
-      end
+    q = 'objectType_t:workflow '
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result.sort! do |a,b|
+      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+    end
+    result.collect do |doc|
+      [Array(doc['dc_title_t']).first,doc['dc_title_t'].first.to_s]
+    end
   end
   def default_workflow_option
     return 'registrationWF'
   end
   def agreement_options
     q = 'objectType_t:agreement '
-      qrys=[]
-      result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
-      result.sort! do |a,b|
-        a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
-      end
-      result.collect do |doc|
-        [Array(doc['dc_title_t']).first,doc['id'].to_s]
-      end
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    result.sort! do |a,b|
+      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+    end
+    result.collect do |doc|
+      [Array(doc['dc_title_t']).first, doc['id'].to_s]
+    end
   end
 end

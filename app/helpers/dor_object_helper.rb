@@ -22,14 +22,6 @@ module DorObjectHelper
     result
   end
 
-
-
-  def render_qfacet_value(facet_solr_field, item, options ={})
-     params = add_facet_params(facet_solr_field, item.qvalue)
-     link_to(item.value, root_url)
-     # (link_to_unless(options[:suppress_link], item.value, params, :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
-  end
-
   def render_citation doc
     terms = retrieve_terms(doc)
     result = ''
@@ -67,20 +59,15 @@ module DorObjectHelper
   end
 
   def render_datetime(datetime)
-    if datetime.nil? || datetime==''
-      ''
-    else
-
-      #this needs to use the timezone set in config.time_zone
-      begin
-        zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
-        d = datetime.is_a?(Time) ? datetime : DateTime.parse(datetime).in_time_zone(zone)
-        I18n.l(d)
-      rescue
-        d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
-        d.strftime('%Y-%m-%d %I:%M%p')
-      end
-
+    return '' if datetime.nil? || datetime==''
+    #this needs to use the timezone set in config.time_zone
+    begin
+      zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
+      d = datetime.is_a?(Time) ? datetime : DateTime.parse(datetime).in_time_zone(zone)
+      I18n.l(d)
+    rescue
+      d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
+      d.strftime('%Y-%m-%d %I:%M%p')
     end
   end
 
@@ -123,136 +110,128 @@ module DorObjectHelper
     return ""
   end
 
-    def metadata_source object
-      source = "DOR"
-      if object.identityMetadata.otherId('mdtoolkit').length > 0
-        source = "Metadata Toolkit"
-      else
-        if object.identityMetadata.otherId('catkey').length > 0
-          source = "Symphony"
-        end
-      end
-      source
+  def metadata_source object
+    source = "DOR"
+    if object.identityMetadata.otherId('mdtoolkit').length > 0
+      source = "Metadata Toolkit"
+    elsif object.identityMetadata.otherId('catkey').length > 0
+      source = "Symphony"
     end
-
-    def has_been_published? pid
-      Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
-    end
-
-    def has_been_submitted? pid
-      Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
-    end
-
-    def has_been_accessioned? pid
-      Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
-    end
-
-    def last_accessioned_version object
-      # we just want the hostname, remove the scheme, we'll build it back into the URL in a bit...
-      sdr_host = Dor::Config.content.sdr_server.gsub("https://", "")
-      sdr_user = Dor::Config.content.sdr_user
-      sdr_pass = Dor::Config.content.sdr_pass
-
-      # build an https URL for basic auth using the info we got above
-      cur_vers_url = "https://#{sdr_user}:#{sdr_pass}@#{sdr_host}/sdr/objects/#{object.pid}/current_version"
-
-      response = RestClient.get(cur_vers_url) do |response, request, result|
-        # make the REST call to SDR.  if the response code is 200, we can use
-        # the returned XML (and parse the version number out later).  if the 
-        # response code is 404, that indicates the object hasn't made it to 
-        # preservation core, so raise the same error this method used to about
-        # the object not being accessioned yet.  otherwise, raise a generic
-        # unknown error.
-        case response.code
-        when 200
-          response
-        when 404
-          raise 'Cant get preservation core version for an object that hasnt been accessioned.'
-        else
-          raise 'Unexpected exception: #{response}'
-        end
-      end
-
-      # we expect a response along the lines of: <currentVersion>5</currentVersion>
-      response_doc = Nokogiri::XML(response)
-      return response_doc.xpath("/currentVersion/text()")
-    end
-
-    def can_open_version? pid
-      if not (Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned'))
-        return false
-      end
-      if(Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted'))
-        return false
-      end
-      if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
-        return false
-      end
-      true
-    end
-
-    def can_close_version? pid
-      if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') and not Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
-        true
-      else
-        false
-      end
-    end
-
-    def render_qfacet_value(facet_solr_field, item, options ={})
-      params=add_facet_params(facet_solr_field, item.qvalue)
-      Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
-       (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
-     end
-    end
-
-    def render_workflows doc, obj
-      workflows = {}
-      Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :symbol)]).each do |line|
-        (wf,status,errors,repo) = line.split(/\|/)
-        workflows[wf] = { :status => status, :errors => errors.to_i, :repo => repo }
-      end
-      render :partial => 'catalog/show_workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
-    end
-
-    # Datastream helpers
-    CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
-    def parse_specs spec_string
-      Hash[[:dsid,:control_group,:mime_type,:version,:size,:label].zip(spec_string.split(/\|/))]
-    end
-
-    def render_ds_control_group doc, specs
-      cg = specs[:control_group] || 'X'
-      "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
-    end
-
-    def render_ds_id doc, specs
-      link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :class => 'dialogLink', :title => specs[:dsid]
-    end
-
-    def render_ds_mime_type doc, specs
-      specs[:mime_type]
-    end
-
-    def render_ds_version doc, specs
-      "v#{specs[:version]}"
-    end
-
-    def render_ds_size doc, specs
-      val = specs[:size].to_i.bytestring('%.1f%s').downcase
-      val.sub(/\.?0+([a-z]?b)$/,'\1')
-    end
-
-    def render_ds_label doc, specs
-      specs[:label]
-    end
-
-    def render_ds_profile_header ds
-      dscd = ds.createDate
-      if dscd.is_a?(Time)
-        dscd = dscd.xmlschema
-      end
-      %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
-    end
-
+    source
   end
+
+  def has_been_published? pid
+    Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
+  end
+
+  def has_been_submitted? pid
+    Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
+  end
+
+  def has_been_accessioned? pid
+    Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
+  end
+
+  def last_accessioned_version object
+    # we just want the hostname, remove the scheme, we'll build it back into the URL in a bit...
+    sdr_host = Dor::Config.content.sdr_server.gsub("https://", "")
+    sdr_user = Dor::Config.content.sdr_user
+    sdr_pass = Dor::Config.content.sdr_pass
+
+    # build an https URL for basic auth using the info we got above
+    cur_vers_url = "https://#{sdr_user}:#{sdr_pass}@#{sdr_host}/sdr/objects/#{object.pid}/current_version"
+
+    response = RestClient.get(cur_vers_url) do |response, request, result|
+      # make the REST call to SDR.  if the response code is 200, we can use
+      # the returned XML (and parse the version number out later).  if the
+      # response code is 404, that indicates the object hasn't made it to
+      # preservation core, so raise the same error this method used to about
+      # the object not being accessioned yet.  otherwise, raise a generic
+      # unknown error.
+      case response.code
+      when 200
+        response
+      when 404
+        raise 'Cant get preservation core version for an object that hasnt been accessioned.'
+      else
+        raise 'Unexpected exception: #{response}'
+      end
+    end
+
+    # we expect a response along the lines of: <currentVersion>5</currentVersion>
+    response_doc = Nokogiri::XML(response)
+    return response_doc.xpath("/currentVersion/text()")
+  end
+
+  def can_open_version? pid
+    return false unless Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
+    return false if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
+    return false if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
+    true
+  end
+
+  def can_close_version? pid
+    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') and ! Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
+      true
+    else
+      false
+    end
+  end
+
+  def render_qfacet_value(facet_solr_field, item, options ={})
+    params=add_facet_params(facet_solr_field, item.qvalue)
+    Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
+     (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
+   end
+  end
+
+  def render_workflows doc, obj
+    workflows = {}
+    Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :symbol)]).each do |line|
+      (wf,status,errors,repo) = line.split(/\|/)
+      workflows[wf] = { :status => status, :errors => errors.to_i, :repo => repo }
+    end
+    render :partial => 'catalog/show_workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
+  end
+
+  # Datastream helpers
+  CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
+  def parse_specs spec_string
+    Hash[[:dsid,:control_group,:mime_type,:version,:size,:label].zip(spec_string.split(/\|/))]
+  end
+
+  def render_ds_control_group doc, specs
+    cg = specs[:control_group] || 'X'
+    "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
+  end
+
+  def render_ds_id doc, specs
+    link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :class => 'dialogLink', :title => specs[:dsid]
+  end
+
+  def render_ds_mime_type doc, specs
+    specs[:mime_type]
+  end
+
+  def render_ds_version doc, specs
+    "v#{specs[:version]}"
+  end
+
+  def render_ds_size doc, specs
+    val = specs[:size].to_i.bytestring('%.1f%s').downcase
+    val.sub(/\.?0+([a-z]?b)$/,'\1')
+  end
+
+  def render_ds_label doc, specs
+    specs[:label]
+  end
+
+  def render_ds_profile_header ds
+    dscd = ds.createDate
+    if dscd.is_a?(Time)
+      dscd = dscd.xmlschema
+    end
+    %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
+  end
+
+end
