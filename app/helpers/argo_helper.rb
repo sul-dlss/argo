@@ -169,11 +169,11 @@ module ArgoHelper
     end
 
     #if this is an apo and the user has permission for the apo, let them edit it.
-    if (object.datastreams.include? 'roleMetadata') and (current_user.is_admin or current_user.is_manager or object.can_manage_item?(current_user.roles(apo_pid)))
+    if (object.datastreams.include? 'roleMetadata') && (current_user.is_admin || current_user.is_manager || object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
     end
-    if object.can_manage_item?(current_user.roles(apo_pid)) or current_user.is_admin or current_user.is_manager
+    if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin || current_user.is_manager
       buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
       buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :id => pid), :label => 'Add workflow'}
       if has_been_published? pid
@@ -193,7 +193,7 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
-      if object.datastreams.include? 'descMetadata' and object.datastreams['descMetadata'].new? == false and object.datastreams['identityMetadata'].otherId('catkey').length == 0 and object.datastreams['identityMetadata'].otherId('mdtoolkit').length == 0
+      if object.datastreams.include?('descMetadata') && object.datastreams['descMetadata'].new? == false && object.datastreams['identityMetadata'].otherId('catkey').length == 0 && object.datastreams['identityMetadata'].otherId('mdtoolkit').length == 0
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end

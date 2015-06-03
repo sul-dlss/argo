@@ -43,7 +43,7 @@ namespace :argo do
     version = File.read(version_file)
     version = version.split(/\./)
     index = levels.index(args[:level] || (version.length == 4 ? 'rc' : 'patch'))
-    if version.length == 4 and index < 3
+    if version.length == 4 && index < 3
       version.pop
     end
     if index == 3
@@ -334,7 +334,7 @@ namespace :argo do
         index_log.debug "Indexing #{pid}"
         obj = Dor.load_instance pid
         obj = obj.adapt_to(Dor::Item) if obj.class == ActiveFedora::Base
-        if obj.is_a?(Dor::Processable) and obj.workflows.new?
+        if obj.is_a?(Dor::Processable) && obj.workflows.new?
           c = obj.class
           obj.workflows.save
           obj = Dor.load_instance(pid).adapt_to c

@@ -1,6 +1,6 @@
 module WorkflowHelper
   def show_workflow_grid?
-    controller_name == 'report' and action_name == 'workflow_grid'
+    controller_name == 'report' && action_name == 'workflow_grid'
   end
 
   def render_workflow_grid

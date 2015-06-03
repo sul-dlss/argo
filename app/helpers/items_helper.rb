@@ -300,7 +300,7 @@ module ItemsHelper
         else
           node.content=node.content.strip if node.name == 'text'
           node.attributes.keys.each do |att|
-            if node[att]==' ' or node[att]== '' and att != 'text'
+            if node[att]==' ' || node[att]== '' && att != 'text'
               node.attributes[att].remove
             end
           end

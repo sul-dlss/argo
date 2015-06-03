@@ -210,7 +210,7 @@ class Report
     if fields.nil?
       @fields = self.class.blacklight_config.report_fields
     else
-      @fields = self.class.blacklight_config.report_fields.select { |f| fields.nil? or fields.include?(f[:field]) }
+      @fields = self.class.blacklight_config.report_fields.select { |f| fields.nil? || fields.include?(f[:field]) }
       @fields.sort! { |a,b| fields.index(a[:field]) <=> fields.index(b[:field]) }
     end
     @params = params

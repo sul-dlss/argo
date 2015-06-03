@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
     return @groups_to_impersonate if @groups_to_impersonate
 
     perm_keys = ["sunetid:#{self.login}"]
-    if webauth and webauth.privgroup.present?
+    if webauth && webauth.privgroup.present?
       perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
     end
 

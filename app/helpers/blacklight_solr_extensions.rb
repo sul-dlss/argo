@@ -52,13 +52,13 @@ module BlacklightSolrExtensions
   def facet_value_to_fq_string(facet_field, value)
     facet_config = blacklight_config.facet_fields[facet_field]
     case
-      when (facet_config and facet_config.query)
+      when (facet_config && facet_config.query)
         facet_config.query[value][:fq]
-      when (value.is_a?(TrueClass) or value.is_a?(FalseClass) or value == 'true' or value == 'false')
+      when (value.is_a?(TrueClass) || value.is_a?(FalseClass) || value == 'true' || value == 'false')
         "#{facet_field}:#{value}"
-      when (value.is_a?(Integer) or (value.to_i.to_s == value if value.respond_to? :to_i))
+      when (value.is_a?(Integer) || (value.to_i.to_s == value if value.respond_to? :to_i))
         "#{facet_field}:#{value}"
-      when (value.is_a?(Float) or (value.to_f.to_s == value if value.respond_to? :to_f))
+      when (value.is_a?(Float) || (value.to_f.to_s == value if value.respond_to? :to_f))
         "#{facet_field}:#{value}"
       when value.is_a?(Range)
         "#{facet_field}:[#{value.first} TO #{value.last}]"

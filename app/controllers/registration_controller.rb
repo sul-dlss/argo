@@ -21,8 +21,8 @@ class RegistrationController < ApplicationController
   def form_list
     docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).docs
     format_t = docs.collect { |doc|
-      md_val=doc['administrativeMetadata_metadata_format_t'] ? doc['administrativeMetadata_metadata_format_t'] : doc['metadata_format_t']
-      md_val }.flatten.first.to_s
+      doc['administrativeMetadata_metadata_format_t'] ? doc['administrativeMetadata_metadata_format_t'] : doc['metadata_format_t']
+    }.flatten.first.to_s
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     result = forms[format_t.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
     respond_to do |format|
@@ -49,7 +49,7 @@ class RegistrationController < ApplicationController
     adm_xml = apo_object.administrativeMetadata.ng_xml
     adm_xml.search('//registration/collection').each do |col|
       solr_doc=Blacklight.solr.find({:q => "id:\"#{col['id']}\"", :rows => 1, :fl => 'id,tag_t,dc_title_t'}).docs
-      if solr_doc.first['dc_title_t'] and solr_doc.first['dc_title_t'].first
+      if solr_doc.first['dc_title_t'] && solr_doc.first['dc_title_t'].first
         res[col['id']]= "#{solr_doc.first['dc_title_t'].first}(#{col['id']})"
       else
         res[col['id']]= "#{col['id']}"

@@ -202,7 +202,7 @@ module RegistrationHelper
   def extract_identifiers(xml)
     xml.search('/mods:mods/mods:identifier | /msDesc/msIdentifier/*', { 'mods' => 'http://www.loc.gov/mods/v3' }).collect do |elem|
       unless (elem.text.empty?)
-        ["#{(elem['displayLabel'] or elem.name).titleize}:", elem.text]
+        ["#{(elem['displayLabel'] || elem.name).titleize}:", elem.text]
       end
     end.compact
   end

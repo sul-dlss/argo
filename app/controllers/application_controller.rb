@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
 
   def current_user
     cur_user = nil
-    if webauth and webauth.logged_in?
+    if webauth && webauth.logged_in?
       cur_user = User.find_or_create_by_webauth(webauth)
     elsif request.env['REMOTE_USER']
       cur_user = User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
   end
 
   def development_only!
-    if Rails.env.development? or ENV['DOR_SERVICES_DEBUG_MODE']
+    if Rails.env.development? || ENV['DOR_SERVICES_DEBUG_MODE']
       yield
     else
       render :text => 'Not Found', :status => :not_found

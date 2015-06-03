@@ -169,7 +169,7 @@ module DorObjectHelper
   end
 
   def can_close_version? pid
-    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') and ! Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
+    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && ! Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
       true
     else
       false

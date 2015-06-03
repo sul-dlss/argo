@@ -355,7 +355,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_statement @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'Statement of responsibility' and node['type'] == 'statement_of_responsibility'
+        if node['displayLabel'] == 'Statement of responsibility' && node['type'] == 'statement_of_responsibility'
           count+=1
         end
       end
@@ -367,7 +367,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_publication @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'Publications' and node['type'] == 'publications'
+        if node['displayLabel'] == 'Publications' && node['type'] == 'publications'
           count+=1
         end
       end
@@ -379,7 +379,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_references @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'References' and node['type'] == 'reference'
+        if node['displayLabel'] == 'References' && node['type'] == 'reference'
           count+=1
         end
       end
@@ -391,7 +391,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 1' and node['type'].nil?
+        if node['displayLabel'] == 'State 1' && node['type'].nil?
           count+=1
         end
       end

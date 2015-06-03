@@ -10,8 +10,7 @@ class Discovery
     config.discovery_fields = [
       {
         :label => "Druid", :field => 'druid',
-        :proc => lambda { |doc|
-          doc['id'].split(/:/).last },
+        :proc => lambda { |doc| doc['id'].split(/:/).last },
         :sort => true, :default => true, :width => 100
       },
       {
@@ -160,7 +159,6 @@ class Discovery
 
     config.add_sort_field 'id asc', :label => 'Druid'
 
-
     config.column_model = config.discovery_fields.collect { |spec|
       {
         'name'     => spec[:field],
@@ -178,7 +176,7 @@ class Discovery
     if fields.nil?
       @fields = self.class.blacklight_config.discovery_fields
     else
-      @fields = self.class.blacklight_config.discovery_fields.select { |f| fields.nil? or fields.include?(f[:field]) }
+      @fields = self.class.blacklight_config.discovery_fields.select { |f| fields.nil? || fields.include?(f[:field]) }
       @fields.sort! { |a,b| fields.index(a[:field]) <=> fields.index(b[:field]) }
     end
     @params = params
@@ -191,16 +189,16 @@ class Discovery
   def pids params
     toret=[]
     while @document_list.length >0
-    report_data.each do|rec|
-    if params[:source_id]
-      toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
-    else
-      toret << rec['druid']
+      report_data.each do|rec|
+        if params[:source_id]
+          toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
+        else
+          toret << rec['druid']
+        end
+      end
+      @params[:page] += 1
+      (@response, @document_list) = get_search_results
     end
-    end
-    @params[:page] += 1
-    (@response, @document_list) = get_search_results
-  end
     toret
   end
   def report_data

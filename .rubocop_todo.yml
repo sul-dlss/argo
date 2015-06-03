@@ -93,21 +93,10 @@ Style/AlignArray:
 Style/AlignHash:
   Enabled: false
 
-# Offense count: 69
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/AndOr:
-  Enabled: false
-
 # Offense count: 18
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, ProceduralMethods, FunctionalMethods, IgnoredMethods.
 Style/BlockDelimiters:
-  Enabled: false
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/BlockEndNewline:
   Enabled: false
 
 # Offense count: 33
