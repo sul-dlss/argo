@@ -20,11 +20,6 @@ Lint/AssignmentInCondition:
 
 # Offense count: 2
 # Cop supports --auto-correct.
-Lint/BlockAlignment:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
 Lint/DeprecatedClassMethods:
   Enabled: false
 
@@ -63,10 +58,6 @@ Lint/UselessAssignment:
 # Offense count: 102
 Metrics/AbcSize:
   Max: 136
-
-# Offense count: 2
-Metrics/BlockNesting:
-  Max: 4
 
 # Offense count: 5
 # Configuration parameters: CountComments.
@@ -423,11 +414,6 @@ Style/SpaceAfterComma:
 # Offense count: 11
 # Cop supports --auto-correct.
 Style/SpaceAfterControlKeyword:
-  Enabled: false
-
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/SpaceAfterMethodName:
   Enabled: false
 
 # Offense count: 1

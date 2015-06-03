@@ -67,7 +67,7 @@ module ItemsHelper
     states=[]
     parent=nil
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      if node['displayLabel'] and node['displayLabel'].include? 'tate'
+      if node['displayLabel'] && node['displayLabel'].include?('tate')
         states << node
         parent=node.parent
       end
@@ -92,26 +92,12 @@ module ItemsHelper
         case att
         when 'displayLabel'
           case txt
-          when ''
-            node.remove_attribute(att)
-          when 'general note'
-            node.remove_attribute(att)
-          when 'general_state_note'
-            node.remove_attribute(att)
-          when 'state_note'
-            node.remove_attribute(att)
-          when 'state note'
+          when '', 'general note', 'general_state_note', 'state_note', 'state note'
             node.remove_attribute(att)
           end
         when 'type'
           case txt
-          when 'content'
-            node.remove_attribute(att)
-          when ' '
-            node.remove_attribute(att)
-          when ''
-            node.remove_attribute(att)
-          when 'state_note'
+          when 'content', ' ', '', 'state_note'
             node.remove_attribute(att)
           end
         end
@@ -121,23 +107,7 @@ module ItemsHelper
   def mclaughlin_cleanup_statement xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       atts=node.attributes()
-      statement=false
-      if node['displayLabel']=='' and node['type']=='statement_of_responsibility'
-        statement=true
-      end
-      if node['displayLabel']=='state_node_1' and node['type']=='statement_of_responsibility'
-        statement=true
-      end
-      if node['displayLabel']=='state_note' and node['type']=='statement_of_responsibility'
-        statement=true
-      end
-      if node['displayLabel']=='statement of responsibility'
-        statement=true
-      end
-      if node['type']=='statement_of_responsibility'
-        statement=true
-      end
-      if statement
+      if node['type']=='statement_of_responsibility' || node['displayLabel']=='statement of responsibility'
         node['displayLabel']='Statement of responsibility'
         node['type']='statement_of_responsibility'
       end
@@ -146,17 +116,7 @@ module ItemsHelper
   def mclaughlin_cleanup_publication xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       atts=node.attributes()
-      pub=false
-      if node['displayLabel']=='' and node['type']=='publications'
-        pub=true
-      end
-      if node['displayLabel']=='general note' and node['type']=='publications'
-        pub=true
-      end
-      if node['displayLabel']=='state_note' and node['type']=='publications'
-        pub=true
-      end
-      if pub
+      if node['type']=='publications' && ['', 'general note', 'state_note'].include?(node['displayLabel'])
         node['displayLabel']='Publications'
         node['type']='publications'
       end
@@ -166,17 +126,12 @@ module ItemsHelper
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       atts=node.attributes()
       ref=false
-      if node['displayLabel']=='' and node['type']=='references'
-        ref=true
-      end
-      if node['displayLabel']=='general note' and node['type']=='references'
-        ref=true
-      end
-      if node['displayLabel']=='general note' and node['type']=='reference'
-        ref=true
-      end
-      if node['displayLabel']=='citation/reference' and node['type']==nil
-        ref=true
+      if node['type'].nil?
+        ref=true if node['displayLabel']=='citation/reference'
+      elsif node['displayLabel']==''
+        ref=true if node['type']=='references'
+      elsif node['displayLabel']=='general note'
+        ref=true if node['type']=='references' || node['type']=='reference'
       end
       if ref
         node['displayLabel']='References'
@@ -188,29 +143,21 @@ module ItemsHelper
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       atts=node.attributes()
       states=false
-      if node['type'] and node['type'].include?('state') and is_numeric?(node['type'].last(1))
+      if node['type'] && node['type'].include?('state') && is_numeric?(node['type'].last(1))
         #find the number and use it
         number=node['type'].last(2).strip
-        if not is_numeric? number
-          number=node['type'].last(1)
-        end
+        number=node['type'].last(1) unless is_numeric?(number)
         node['displayLabel']='State '+number
         node.remove_attribute('type')
-      else
-        if node['displayLabel'] and node['displayLabel'].include?('tate') and is_numeric? node['displayLabel'].last(1)
-          number=node['displayLabel'].last(2).strip
-          if not is_numeric? number
-            number=node['displayLabel'].last(1)
-          end
-          if not is_numeric? number
-            node.remove_attribute('displayLabel')
-            node.remove_attribute('type')
-          else
-            node['displayLabel']='State '+number
-            node.remove_attribute('type')
-          end
-
+      elsif node['displayLabel'] && node['displayLabel'].include?('tate') && is_numeric?(node['displayLabel'].last(1))
+        number=node['displayLabel'].last(2).strip
+        number=node['displayLabel'].last(1) unless is_numeric?(number)
+        if is_numeric?(number)
+          node['displayLabel']='State '+number
+        else
+          node.remove_attribute('displayLabel')
         end
+        node.remove_attribute('type')
       end
     end
   end
@@ -223,14 +170,13 @@ module ItemsHelper
     xml.search('//mods:subject','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       #if there is more than 1 topic in this subject, split it out into another subject
       topics = node.xpath('.//mods:topic','mods'=>'http://www.loc.gov/mods/v3')
-      if topics.length > 1
-        parent=node.parent
-        node.remove
-        topics.each do |topic|
-          new_sub=Nokogiri::XML::Node.new('mods:subject',xml)
-          parent.add_child(new_sub)
-          topic.parent = new_sub
-        end
+      next unless topics.length > 1
+      parent=node.parent
+      node.remove
+      topics.each do |topic|
+        new_sub=Nokogiri::XML::Node.new('mods:subject',xml)
+        parent.add_child(new_sub)
+        topic.parent = new_sub
       end
     end
   end
@@ -240,10 +186,8 @@ module ItemsHelper
     xml.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       children=node.children
       ['scale', 'projection', 'coordinates'].each do |child|
-        children.each do|chi|
-          if chi.name == child
-            node << chi
-          end
+        children.each do |chi|
+          node << chi if chi.name == child
         end
       end
     end
@@ -283,18 +227,15 @@ module ItemsHelper
     hash['W1280000 W0650000 N510000 N250000'] = ['W1280000 W0650000 N0510000 N0250000','(W 128° --W 65°/N 51° --N 25°)']
     coords = xml.search('//mods:subject/mods:cartographics/mods:coordinates','mods'=>'http://www.loc.gov/mods/v3')
     coords.each do |coord|
-      if hash.has_key? coord.text
-        coord.content = hash[coord.text].last
-      end
+      coord.content = hash[coord.text].last if hash.has_key?(coord.text)
     end
   end
   def schema_validate xml
     @xsd ||= Nokogiri::XML::Schema(File.read(File.expand_path(File.dirname(__FILE__) + "/xslt/mods-3-4.xsd")))
     errors=[]
-    if @xsd.valid? xml
-    else
+    unless @xsd.valid?(xml)
       @xsd.validate(xml).each do |er|
-        errors <<  er.message
+        errors << er.message
       end
     end
     errors
@@ -302,54 +243,37 @@ module ItemsHelper
 
   def mclaughlin_prune_identifiers xml
     xml.search('//mods:identifier','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      text=node['displayLabel']
-      case text
-      when 'Original McLaughlin book number (1995 edition) with latest state information'
-        #node.remove
-      when 'Original McLaughlin book number (1995 edition)'
-        #node.remove
-      when 'Updated McLaughlin Book Number'
-        #node.remove
-      when 'Updated McLaughlin Book Number with latest state information'
-        #node.remove
-      when 'Post publication map number'
-        #node.remove
-      when 'Post publication map number with latest state information'
-        #node.remove
-      when 'FileMaker Pro Record Number'
-        node.remove
-      when 'FileMaker Pro record number with latest state information'
-        node.remove
-      when 'Stanford University Archives Id'
-        node.remove
-      when 'New Stanford map number'
-        node.remove
-      when 'New Stanford map number with latest state information'
-        node.remove
-      when 'SU DRUID'
-        node.remove
-      when 'entry_number'
-        node.remove
-      when 'call_number'
-        node.remove
-      when 'book_number'
-        node.remove
-      when 'record_number'
-        node.remove
-      when 'filename'
+      case node['displayLabel']
+      when 'Original McLaughlin book number (1995 edition) with latest state information',\
+           'Original McLaughlin book number (1995 edition)',\
+           'Updated McLaughlin Book Number',\
+           'Updated McLaughlin Book Number with latest state information',\
+           'Post publication map number',\
+           'Post publication map number with latest state information'
+        # node.remove  ## do nothing
+      when 'FileMaker Pro Record Number',\
+           'FileMaker Pro record number with latest state information',\
+           'Stanford University Archives Id',\
+           'New Stanford map number',\
+           'New Stanford map number with latest state information',\
+           'SU DRUID',\
+           'entry_number',\
+           'call_number',\
+           'book_number',\
+           'record_number',\
+           'filename'
         node.remove
       end
     end
   end
   def is_blank?(node)
-    all_children_are_blank?(node) and (node.text? and node.content.strip == '')
+    all_children_are_blank?(node) && node.text? && node.content.strip == ''
   end
   def all_children_are_blank?(node)
     toret=true
     node.children.all?{|child|
       #this needs to be sure to return the correct value
-      c=is_blank?(child)
-      if c
+      if is_blank?(child)
         child.remove
       else
         toret=false
@@ -358,8 +282,7 @@ module ItemsHelper
     toret
   end
   def mclaughlin_remove_keydate xml
-    titles=xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3')
-    titles.each do |title|
+    xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3').each do |title|
       title.remove
     end
   end
@@ -371,27 +294,25 @@ module ItemsHelper
     #this is necissary because the node remeoval really needs to happen from the bottom up, and traverse is top down. There should be a better way.
     while text!=xml.to_s
       text=xml.to_s
-      if root.length>0
-        root.first.traverse {|node|
-          if all_children_are_blank?(node) and node.name != 'text' and node.name != 'typeOfResource'
-            nodes_to_remove << node
-          else
-            if node.name=='text'
-              node.content=node.content.strip
-            end
-            node.attributes.keys.each do |att|
-              if node[att]==' ' or node[att]== '' and att != 'text'
-                node.attributes[att].remove
-              end
+      next unless root.length>0
+      root.first.traverse {|node|
+        if all_children_are_blank?(node) && node.name != 'text' && node.name != 'typeOfResource'
+          nodes_to_remove << node
+        else
+          node.content=node.content.strip if node.name == 'text'
+          node.attributes.keys.each do |att|
+            if node[att]==' ' or node[att]== '' and att != 'text'
+              node.attributes[att].remove
             end
           end
-        }
-        nodes_to_remove.each do |node|
-          node.remove
         end
+      }
+      nodes_to_remove.each do |node|
+        node.remove
       end
     end
   end
+
   def mclaughlin_remove_newlines xml
     xml.search('//mods:accessCondition','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       node.content=node.text.gsub(/\n\s*/,'')
@@ -404,28 +325,19 @@ module ItemsHelper
     mods_rec.from_nk_node(xml)
     #should have a title
     title=mods_rec.sw_full_title
-    if title and title.length>0
-    else
-      messages<< 'Missing title.'
-    end
+    messages << 'Missing title.' unless title && title.length>0
     #should have a dateIssued
     vals = mods_rec.term_values([:origin_info,:dateIssued])
     if vals
-      vals = vals.concat mods_rec.term_values([:origin_info,:dateCreated]) unless not mods_rec.term_values([:origin_info,:dateCreated])
+      vals = vals.concat mods_rec.term_values([:origin_info,:dateCreated]) if mods_rec.term_values([:origin_info,:dateCreated])
     else
       vals = mods_rec.term_values([:origin_info,:dateCreated])
     end
-    if vals and vals.length>0
-    else
-      messages << "Missing dateIssued or dateCreated."
-    end
+    messages << "Missing dateIssued or dateCreated." unless vals && vals.length>0
     #should have a typeOfResource
     good_formats=['still image', 'mixed material', 'moving image', 'three dimensional object', 'cartographic', 'sound recording-musical', 'sound recording-nonmusical', 'software, multimedia']
     format=mods_rec.term_values(:typeOfResource)
-    if format and format.length>0 and good_formats.include? format.first
-    else
-      messages << 'Missing or invalid typeOfResource'
-    end
+    messages << 'Missing or invalid typeOfResource' unless format && format.length>0 && good_formats.include?(format.first)
     messages
   end
   def mclaughlin_remove_related_item xml
@@ -454,8 +366,7 @@ module ItemsHelper
       # puts key
       text.gsub!(key,characters[key])
     end
-    xml=Nokogiri.XML(text)
-    xml
+    Nokogiri.XML(text)
   end
 
   def mclaughlin_remediation xml
