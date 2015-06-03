@@ -13,8 +13,8 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 70aaad2c94844952497ebbb8319586468918a4c2
-  branch: develop
+  revision: cef312e0e2946d16d7057adfb68c7ceebca46214
+  branch: solrization_fixes2
   specs:
     dor-services (5.1.0)
       active-fedora (~> 6.0)
