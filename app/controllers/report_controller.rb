@@ -7,7 +7,7 @@ class ReportController < CatalogController
   include Blacklight::Catalog
   helper ArgoHelper
   copy_blacklight_config_from CatalogController
-  
+
   def rsolr_request_error(exception)
     raise exception
   end
@@ -28,9 +28,9 @@ class ReportController < CatalogController
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i,1].max
 
     @report = Report.new(params)
-    
+
     respond_to do |format|
-      format.json { 
+      format.json {
         render :json => {
           :page => params[:page].to_i,
           :records => @report.num_found,
@@ -43,7 +43,7 @@ class ReportController < CatalogController
   end
 
   def content_types
-    
+
   end
 
   def pids
@@ -52,18 +52,18 @@ class ReportController < CatalogController
     fields=['druid']
     ids=Report.new(params,fields).pids params
     respond_to do |format|
-      format.json { 
+      format.json {
         render :json => {
           :druids => ids
         }
       }
     end
   end
-  
+
   def download
     fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
     params[:per_page]=10
-    self.response.headers["Content-Type"] = "application/octet-stream" 
+    self.response.headers["Content-Type"] = "application/octet-stream"
     self.response.headers["Content-Disposition"] = "attachment; filename=report.csv"
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
     self.response_body = Report.new(params,fields).csv2
@@ -77,14 +77,14 @@ class ReportController < CatalogController
     @ids=Report.new(params,['druids']).pids params
     @ids.each { |pid| Dor::WorkflowService.update_workflow_status 'dor',"druid:#{pid}",@workflow, @step, "waiting" }
   end
-    
+
   def workflow_grid
     (@response, @document_list) = get_search_results
 
     if request.xhr?
       render :partial => 'workflow_grid'
       return
-    end 
+    end
 
     respond_to do |format|
       format.json

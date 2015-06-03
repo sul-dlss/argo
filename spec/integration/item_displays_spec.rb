@@ -9,11 +9,11 @@ describe 'mods_view', :type => :request do
     allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)
 
-    # here's something odd: it seems like you need to stub ApplicationController.current_user for the "main page tests" 
-    # section (since it doesn't invoke ItemsController, which was stubbed already).  fine.  when i run this test file by 
-    # itself ("rspec spec/integration/item_displays_spec.rb"), stubbing ApplicationController.current_user is sufficient 
-    # setup for all the tests (ItemsController subclasses ApplicationController).  however, when i run the entire test suite (by 
-    # just calling "rspec"), i have to stub both ItemsController.current_user and ApplicationController.current_user, or all 
+    # here's something odd: it seems like you need to stub ApplicationController.current_user for the "main page tests"
+    # section (since it doesn't invoke ItemsController, which was stubbed already).  fine.  when i run this test file by
+    # itself ("rspec spec/integration/item_displays_spec.rb"), stubbing ApplicationController.current_user is sufficient
+    # setup for all the tests (ItemsController subclasses ApplicationController).  however, when i run the entire test suite (by
+    # just calling "rspec"), i have to stub both ItemsController.current_user and ApplicationController.current_user, or all
     # the tests that hit '/items/' fail.  either behavior feels defensible, but the inconsistency is puzzling.  anyway, i'm stubbing
     # both.  JM, 2015-03-10
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)

@@ -85,7 +85,7 @@ class RegistrationController < ApplicationController
       end
     end
 
-    # iterate through the default version of the rights list.  if we found a default option 
+    # iterate through the default version of the rights list.  if we found a default option
     # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
     # we didn't find a default option, we'll just return the default list of rights options with no
     # specified selection.

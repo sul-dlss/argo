@@ -43,5 +43,5 @@ describe ReportController, :type => :controller do
         expect(page).to have_button(btn_txt)
       end
     end
-  end  
+  end
 end

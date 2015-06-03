@@ -1,6 +1,6 @@
 class Dor::ObjectsController < ApplicationController
   before_filter :munge_parameters
-  
+
   def index
   end
 
@@ -11,7 +11,7 @@ class Dor::ObjectsController < ApplicationController
       end
       response = Dor::RegistrationService.create_from_request(params)
       pid = response[:pid]
-      
+
       respond_to do |format|
         format.json { render :json => response, :location => help.object_location(pid) }
         format.xml  { render :xml  => response, :location => help.object_location(pid) }

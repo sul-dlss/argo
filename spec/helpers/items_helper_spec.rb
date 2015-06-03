@@ -105,7 +105,7 @@ describe ItemsHelper, :type => :helper do
     </mods:physicalDescription>
     <mods:note displayLabel="statement of responsibility">Glen McLaughlin with Nancy H. Mayo.</mods:note>
     <mods:note>Includes bibliographical references (p. xv-xvi) and indexes.</mods:note>
-    <mods:note displayLabel="state_node_6" type="state 4">hello</mods:note> 	 
+    <mods:note displayLabel="state_node_6" type="state 4">hello</mods:note>
     <mods:note displayLabel="" type="state 5">goodbye</mods:note>
     <mods:subject>
     <mods:geographicCode authority="marcgac">n-us-ca</mods:geographicCode>
@@ -141,65 +141,65 @@ describe ItemsHelper, :type => :helper do
     </mods:relatedItem>
     </mods:mods>'
     xml='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
-    <mods:note displayLabel="" type=""/> 	
-    <mods:note displayLabel="general note" type=""/> 	 
-    <mods:note displayLabel="general note" type="state_note"/>	
-    <mods:note displayLabel="general note"/> 
-    <mods:note displayLabel="general_state_note"/> 	
-    <mods:note displayLabel="state_note"/>	
+    <mods:note displayLabel="" type=""/>
+    <mods:note displayLabel="general note" type=""/>
+    <mods:note displayLabel="general note" type="state_note"/>
+    <mods:note displayLabel="general note"/>
+    <mods:note displayLabel="general_state_note"/>
+    <mods:note displayLabel="state_note"/>
     <mods:note displayLabel="state note" type="state_note"/>
     <mods:note displayLabel="state_note" type=""/>
-    <mods:note/> 	
-    <mods:note displayLabel="" type="content"/> 	
-    <mods:note displayLabel="general note" type="content"/> 	 
-    <mods:note displayLabel="general_state_note" type="content"/> 
-    <mods:note displayLabel="state_note" type="content"/> 	
+    <mods:note/>
+    <mods:note displayLabel="" type="content"/>
+    <mods:note displayLabel="general note" type="content"/>
+    <mods:note displayLabel="general_state_note" type="content"/>
+    <mods:note displayLabel="state_note" type="content"/>
     <mods:note type="content"/>
-    <mods:note displayLabel="" type="statement_of_responsibility"/> 	
+    <mods:note displayLabel="" type="statement_of_responsibility"/>
     <mods:note displayLabel="state_node_1" type="statement_of_responsibility"  />
-    <mods:note displayLabel="state_note" type="statement_of_responsibility"/> 		 
-    <mods:note type="statement_of_responsibility"/> 	
+    <mods:note displayLabel="state_note" type="statement_of_responsibility"/>
+    <mods:note type="statement_of_responsibility"/>
     <mods:note displayLabel="" type="publications"/>
-    <mods:note displayLabel="general note" type="publications"/> 	 
-    <mods:note displayLabel="state_note" type="publications"/>      
-    <mods:note displayLabel="" type="references"/>  
-    <mods:note displayLabel="general note" type="reference"/> 	
-    <mods:note displayLabel="general note" type="references"/> 		
-    <mods:note displayLabel="citation/reference"/> 
-    <mods:note displayLabel="" type="state 1"/> 	
-    <mods:note displayLabel="general note" type="state 1"/> 	
-    <mods:note displayLabel="state_node_1" type="state 1"/> 	
-    <mods:note displayLabel="state_node_1"/> 	
-    <mods:note displayLabel="" type="state 2"/> 	
-    <mods:note displayLabel="general note" type="state 2"/> 	 
-    <mods:note displayLabel="State 2" type="state_note"/> 	
-    <mods:note displayLabel="state_node_2"/> 	
-    <mods:note displayLabel="state_node_4" type="state 2"/> 
-    <mods:note displayLabel="" type="state 3"/> 	
-    <mods:note displayLabel="general note" type="state 3"/> 	 
-    <mods:note displayLabel="state_node_3"/> 
-    <mods:note displayLabel="state_node_4" type="state 3"/> 	 
-    <mods:note displayLabel="state_node_5" type="state 3"/> 	
-    <mods:note displayLabel="state_node_4" type="state_note"/> 	 
-    <mods:note displayLabel="state_node_4"/> 	
-    <mods:note displayLabel="state_node_6" type="state 4"/> 	 
-    <mods:note displayLabel="" type="state 5"/> 	
-    <mods:note displayLabel="state_node_5"/> 	
-    <mods:note displayLabel="state_node_7" type="state 5"/> 		 
-    <mods:note displayLabel="State 6" type="state_note"/> 	
-    <mods:note displayLabel="state_node_6"/> 	
-    <mods:note displayLabel="state_node_8" type="state 6"/> 	
-    <mods:note displayLabel="" type="state 7"/> 	
-    <mods:note displayLabel="state_node_7"/> 	
-    <mods:note displayLabel="state_node_9" type="state 7"/> 	 
-    <mods:note displayLabel="state_node_8"/> 	
-    <mods:note displayLabel="state_node_10" type="state 8"/> 	 
-    <mods:note displayLabel="state_node_9"/> 	
-    <mods:note displayLabel="state_node_11" type="state 9"/> 		 
-    <mods:note displayLabel="state_node_10"/> 	
-    <mods:note displayLabel="state_node_2" type="state 10"/> 		 
-    <mods:note displayLabel="state_node_11"/> 	
-    <mods:note displayLabel="state_node_5" type="state 11"/> 	 	 
+    <mods:note displayLabel="general note" type="publications"/>
+    <mods:note displayLabel="state_note" type="publications"/>
+    <mods:note displayLabel="" type="references"/>
+    <mods:note displayLabel="general note" type="reference"/>
+    <mods:note displayLabel="general note" type="references"/>
+    <mods:note displayLabel="citation/reference"/>
+    <mods:note displayLabel="" type="state 1"/>
+    <mods:note displayLabel="general note" type="state 1"/>
+    <mods:note displayLabel="state_node_1" type="state 1"/>
+    <mods:note displayLabel="state_node_1"/>
+    <mods:note displayLabel="" type="state 2"/>
+    <mods:note displayLabel="general note" type="state 2"/>
+    <mods:note displayLabel="State 2" type="state_note"/>
+    <mods:note displayLabel="state_node_2"/>
+    <mods:note displayLabel="state_node_4" type="state 2"/>
+    <mods:note displayLabel="" type="state 3"/>
+    <mods:note displayLabel="general note" type="state 3"/>
+    <mods:note displayLabel="state_node_3"/>
+    <mods:note displayLabel="state_node_4" type="state 3"/>
+    <mods:note displayLabel="state_node_5" type="state 3"/>
+    <mods:note displayLabel="state_node_4" type="state_note"/>
+    <mods:note displayLabel="state_node_4"/>
+    <mods:note displayLabel="state_node_6" type="state 4"/>
+    <mods:note displayLabel="" type="state 5"/>
+    <mods:note displayLabel="state_node_5"/>
+    <mods:note displayLabel="state_node_7" type="state 5"/>
+    <mods:note displayLabel="State 6" type="state_note"/>
+    <mods:note displayLabel="state_node_6"/>
+    <mods:note displayLabel="state_node_8" type="state 6"/>
+    <mods:note displayLabel="" type="state 7"/>
+    <mods:note displayLabel="state_node_7"/>
+    <mods:note displayLabel="state_node_9" type="state 7"/>
+    <mods:note displayLabel="state_node_8"/>
+    <mods:note displayLabel="state_node_10" type="state 8"/>
+    <mods:note displayLabel="state_node_9"/>
+    <mods:note displayLabel="state_node_11" type="state 9"/>
+    <mods:note displayLabel="state_node_10"/>
+    <mods:note displayLabel="state_node_2" type="state 10"/>
+    <mods:note displayLabel="state_node_11"/>
+    <mods:note displayLabel="state_node_5" type="state 11"/>
     <mods:note displayLabel="location_code" type="content"/>
     <mods:note displayLabel="location_code"/>
     </mods:mods>'
@@ -343,7 +343,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_notes @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node.attribute_nodes().length==0 
+        if node.attribute_nodes().length==0
           count+=1
         end
       end

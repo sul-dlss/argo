@@ -68,7 +68,7 @@ module WorkflowHelper
         return wf_doc["#{name}_archived_isi"]
       end
     end
-    
+
     return '-'
   end
 

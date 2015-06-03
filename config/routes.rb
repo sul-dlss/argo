@@ -32,13 +32,13 @@ Argo::Application.routes.draw do
   match '/discovery/data', :to => "discovery#data", :via => [:get, :post], :as => "discovery_data"
   match 'discovery/download', :to => 'discovery#download', :via => [:get, :post], :as => 'discovery_download'
   match '/apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :via => [:get, :post], :as => 'is_valid_role_list'
-  
+
   root :to => "catalog#index"
 
   match 'login',   :controller => 'auth', :as => 'new_user_session',       :via => [:get, :post]
   match 'logout',  :controller => 'auth', :as => 'destroy_user_session',   :via => [:get, :post]
   match 'profile', :controller => 'auth', :as => 'edit_user_registration', :via => [:get, :post]
-  
+
   namespace :report do
     get '/workflow_grid', :action => :workflow_grid
   end
@@ -64,7 +64,7 @@ Argo::Application.routes.draw do
     get  :register_collection, :on => :member
     post :register_collection, :on => :member
 
-    
+
     get :bulk_upload_start, :on => :member
     get :bulk_upload_form, :on => :member
     get :spreadsheet_template, :on => :collection
@@ -113,7 +113,7 @@ Argo::Application.routes.draw do
     # get '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
     # post '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk'
     match '/tags_bulk', :on => :member, :action => :tags_bulk, :as => 'tags_bulk', :via => [:get, :post]
-    get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui' 
+    get '/collection_ui', :on => :member, :action => :collection_ui, :as => 'collection_ui'
     get '/collection/delete', :on => :member, :action => :remove_collection, :as => 'remove_collection'
     post '/collection/add', :on => :member, :action => :add_collection, :as => 'add_collection'
     post '/collection/set', :on => :member, :action => :set_collection, :as => 'set_collection'
@@ -138,12 +138,12 @@ Argo::Application.routes.draw do
     post '/add_collection', :action => :add_collection, :as => 'add_collection'
     post '/set_collection', :action => :set_collection, :as => 'set_collection'
   end
-  
+
   namespace :status do
     get "log"
     get "memcached"
   end
-  
+
   namespace :registration do
     get "/", :action => :form
     get "tracksheet"
@@ -172,9 +172,9 @@ Argo::Application.routes.draw do
     match 'reindex/:pid', :action => :reindex, :as => 'reindex', :via => [:get, :post]
     match 'delete_from_index/:pid', :action => :delete_from_index, :via => [:get, :post]
     get 'index_exceptions'
-    resources :objects 
+    resources :objects
   end
-  
+
   namespace :legacy do
     resources :objects
   end

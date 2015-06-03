@@ -1,14 +1,14 @@
 class ApplicationController < ActionController::Base
-  # Adds a few additional behaviors into the application controller 
+  # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
-  # Please be sure to impelement current_user and user_session. Blacklight depends on 
-  # these methods in order to perform user specific actions. 
+  # Please be sure to impelement current_user and user_session. Blacklight depends on
+  # these methods in order to perform user specific actions.
 
   before_filter :authorize!
   before_filter :fedora_setup
 
   helper_method :current_or_guest_user
-  
+
   include Rack::Webauth::Helpers
 
   attr_reader :help
@@ -18,12 +18,12 @@ class ApplicationController < ActionController::Base
     include Squash::Ruby::ControllerMethods
     enable_squash_client
   end
-  
+
   layout 'blacklight'
 
   def initialize(*args)
     super
-    
+
     klass_chain = self.class.name.sub(/Controller$/,'Helper').split(/::/)
     klass = nil
     begin
@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
     }.new
     self
   end
-  
+
   def current_user
     cur_user = nil
     if webauth and webauth.logged_in?
@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
   def current_or_guest_user
     current_user
   end
-  
+
   def user_session
     session
   end
@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
   def default_html_head
     stylesheet_links << ['argo']
   end
-  
+
   protected
   def munge_parameters
     case request.content_type
@@ -89,10 +89,10 @@ class ApplicationController < ActionController::Base
       render :text => 'Not Found', :status => :not_found
     end
   end
-  
+
   def authorize!
     unless current_user
-      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}" 
+      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}"
       return false
     end
     return true

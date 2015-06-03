@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe WorkflowHelper, :type => :helper do 
+describe WorkflowHelper, :type => :helper do
   describe 'render_workflow_archive_count' do
     it 'should render the count if there is one' do
       wf_name = "testWF"

@@ -9,7 +9,7 @@ class StatusController < ApplicationController
         test_item.identityMetadata.dirty=true
         test_item.save
         sleep 10.0
-        if check_recently_indexed 	
+        if check_recently_indexed
           render :status=>200, :text=> 'All good!	<br>'
           return
         else
@@ -22,10 +22,10 @@ class StatusController < ApplicationController
       return
     end
     render :status=>500, :text=>'Nothing indexed recently.'
-  end			
-  
+  end
+
   def memcached
-    Rails.cache.fetch("cache_test", :expires_in => 1.minute) do 
+    Rails.cache.fetch("cache_test", :expires_in => 1.minute) do
       'hello world'
     end
     if Rails.cache.fetch("cache_test", :expires_in => 1.minute).nil?
@@ -38,8 +38,8 @@ class StatusController < ApplicationController
     end
     render :status=>500, :text=>'Incorrect value!'
   end
-  
-  protected 
+
+  protected
   def check_recently_indexed
     docs = Dor::SearchService.query("indexed_at_dt:[NOW-15MINUTES  TO NOW]", {:rows => 1, :fl => 'indexed_at_dt'})['response']['docs']
     if docs.length == 1
@@ -48,7 +48,7 @@ class StatusController < ApplicationController
       false
     end
   end
-  def check_logs 
+  def check_logs
     log_file=	File.new(LOG_FILE,'r')
     txt=''
     zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
@@ -64,15 +64,15 @@ class StatusController < ApplicationController
       if line.match 'updated'
         #parse the time to see if it was within the last params[:interval] minutes
         timestamp=line.split('[').last.split('\.').first
-        this_run=DateTime.parse(timestamp).change(:offset => zone.formatted_offset)	
+        this_run=DateTime.parse(timestamp).change(:offset => zone.formatted_offset)
         if(this_run > cutoff_time)
           return true
         else
           txt=line
         end
       end
-    end	
+    end
     return txt
   end
-  
+
 end

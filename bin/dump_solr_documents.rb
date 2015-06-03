@@ -6,8 +6,8 @@ require 'dor-services'
 puts '<?xml version="1.0" encoding="UTF-8"?><add>'
 
 ARGF.each_line do |druid|
-  begin 
-    #break unless `grep #{druid.strip} docs.xml`.empty? 
+  begin
+    #break unless `grep #{druid.strip} docs.xml`.empty?
     dor_item = Dor::Item.find(druid.strip)
     add_xml = Nokogiri::XML Dor::SearchService.solr.xml.add dor_item.to_solr
     puts add_xml.xpath('//doc').to_s
