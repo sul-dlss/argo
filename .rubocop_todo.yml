@@ -377,10 +377,10 @@ Style/SpaceInsideParens:
 Style/StringLiterals:
   Enabled: false
 
-# Offense count: 11
+# Offense count: 9
 # Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/TrailingBlankLines:
+# Configuration parameters: IgnoredMethods.
+Style/SymbolProc:
   Enabled: false
 
 # Offense count: 4

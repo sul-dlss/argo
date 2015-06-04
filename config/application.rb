@@ -85,4 +85,3 @@ module Argo
     end
   end
 end
-
