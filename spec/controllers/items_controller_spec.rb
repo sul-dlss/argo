@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe ItemsController, :type => :controller do
   before :each do
-    #TODO use fixtures here, this is too much stubbing
+    # TODO: use fixtures here, this is too much stubbing
     @item = double(Dor::Item)
     allow(@item).to receive(:to_solr)
     @current_user=double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
@@ -289,7 +289,7 @@ describe ItemsController, :type => :controller do
       expect(response.code).to eq("403")
     end
     it 'should error on malformed xml' do
-      expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error() # todo: add name of error
+      expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error() # TODO: add name of error
     end
     it 'should call save with good xml' do
       mock_ds=double(Dor::ContentMetadataDS)
