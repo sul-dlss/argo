@@ -50,7 +50,7 @@ module ArgoHelper
     result = Confstruct::HashWithStructAccess.new
     prefixed_fields.each_pair do |path_str,value|
       h = result
-      path = path_str.sub(/_[^_]+$/,'').reverse.split(/_(?=\d+)/).collect { |k| k.reverse }.reverse.collect { |k| k.split(/_(?=\d+)/) }
+      path = path_str.sub(/_[^_]+$/,'').reverse.split(/_(?=\d+)/).collect(&:reverse).reverse.collect { |k| k.split(/_(?=\d+)/) }
       path.each do |step, index|
         if index.nil?
           h[step.to_sym] = value

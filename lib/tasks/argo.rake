@@ -243,7 +243,7 @@ namespace :argo do
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
     facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect{|x| x.value}.join(%[\n])}"
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect(&:value).join(%[\n])}"
   end
 
   desc "Update the .htaccess file from indexed APOs"
@@ -271,9 +271,7 @@ namespace :argo do
 
   desc "Update completed/archived workflow counts"
   task :update_archive_counts => :environment do |t|
-    Dor.find_all('objectType_facet:workflow').each do |wf|
-      wf.update_index
-    end
+    Dor.find_all('objectType_facet:workflow').each(&:update_index)
   end
 
   desc "Reindex all (or a subset) of DOR objects in Solr"

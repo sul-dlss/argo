@@ -157,9 +157,7 @@ module ItemsHelper
     end
   end
   def mclaughlin_ignore_fields xml
-    xml.search('//mods:note[@displayLabel=\'location_code\']','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      node.remove
-    end
+    xml.search('//mods:note[@displayLabel=\'location_code\']','mods'=>'http://www.loc.gov/mods/v3').each(&:remove)
   end
   def mclaughlin_fix_subjects xml
     xml.search('//mods:subject','mods'=>'http://www.loc.gov/mods/v3').each do |node|
@@ -276,9 +274,7 @@ module ItemsHelper
     toret
   end
   def mclaughlin_remove_keydate xml
-    xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3').each do |title|
-      title.remove
-    end
+    xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3').each(&:remove)
   end
   #remove empty nodes and strip trailing whitespace from text
   def remove_empty_nodes xml
@@ -301,9 +297,7 @@ module ItemsHelper
           end
         end
       }
-      nodes_to_remove.each do |node|
-        node.remove
-      end
+      nodes_to_remove.each(&:remove)
     end
   end
 
