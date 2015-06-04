@@ -281,7 +281,7 @@ module ArgoHelper
 
   def render_datastream_link document
     return unless document_has?(@document, 'objectType_ssim') && @document.get('objectType_ssim') == 'adminPolicy'
-    link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
+    link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :id => "bulk-button", :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
   end
 
 end

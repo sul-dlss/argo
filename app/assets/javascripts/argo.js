@@ -14,11 +14,17 @@ function pathTo(path) {
 
 
 $(document).ready(function() {
-  $('#page').wrapInner('<div id="argonauta"/>');
-  $('#logo h1').remove();
-  $('.start-open').addClass('twiddle-open');
-  $('.start-open').next('ul').show();
-  $('.collapsible-section').click(function() { $(this).next('div').slideToggle(); $(this).toggleClass('collapsed') })
+    $('#page').wrapInner('<div id="argonauta"/>');
+    $('#logo h1').remove();
+    $('.start-open').addClass('twiddle-open');
+    $('.start-open').next('ul').show();
+    $('.collapsible-section').click(function(e) {
+	// Do not want a click on the bulk load button to cause collapse
+	if(!(e.target.id === 'bulk-button')) {
+	    $(this).next('div').slideToggle();
+	    $(this).toggleClass('collapsed'); }
+    });
+    
   $('#facets a.remove').map(function() { $(this).html('') })
 });
 
