@@ -343,7 +343,7 @@ namespace :argo do
         errors = 0
       rescue Interrupt
         raise
-      rescue Exception => e
+      rescue StandardError => e
         errors += 1
         index_log.warn("Error (#{errors}) indexing #{pid}")
         index_log.error("#{e.class}: #{e.message}")

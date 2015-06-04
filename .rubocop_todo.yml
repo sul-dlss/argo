@@ -22,10 +22,6 @@ Lint/AssignmentInCondition:
 Lint/HandleExceptions:
   Enabled: false
 
-# Offense count: 6
-Lint/RescueException:
-  Enabled: false
-
 # Offense count: 43
 # Cop supports --auto-correct.
 Lint/UnusedBlockArgument:

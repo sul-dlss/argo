@@ -47,7 +47,7 @@ module ValueHelper
       links +='<br>'
     end
     links.html_safe
-  rescue Exception => e
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
   end
@@ -67,7 +67,7 @@ module ValueHelper
       links +='<br>'
     end
     links.html_safe
-  rescue Exception => e
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
     #value_for_related_druid('is_governed_by', args)
@@ -83,7 +83,7 @@ module ValueHelper
       links +='<br>'
     end
     links.html_safe
-  rescue Exception => e
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
   end

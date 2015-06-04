@@ -303,7 +303,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => params[:id]+' is open for modification!' }
     end
-  rescue Exception => e
+  rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
     render :status=> 500, :text =>'Object net yet accessioned'
     return
