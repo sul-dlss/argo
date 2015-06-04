@@ -34,7 +34,6 @@ describe RegistrationController, :type => :controller do
       </rightsMetadata>
       XML
 
-      pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
@@ -70,7 +69,6 @@ describe RegistrationController, :type => :controller do
       </rightsMetadata>
       XML
 
-      pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
@@ -106,7 +104,6 @@ describe RegistrationController, :type => :controller do
       </rightsMetadata>
       XML
 
-      pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
@@ -142,7 +139,6 @@ describe RegistrationController, :type => :controller do
       </rightsMetadata>
       XML
 
-      pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
@@ -178,7 +174,6 @@ describe RegistrationController, :type => :controller do
       </rightsMetadata>
       XML
 
-      pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
@@ -192,7 +187,6 @@ describe RegistrationController, :type => :controller do
 
     it 'should show no default if there is no xml' do
       content=''
-      pid='abc123'
       @item=double(Dor::Item)
       xml=Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)

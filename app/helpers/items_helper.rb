@@ -106,7 +106,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_statement xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
       if node['type']=='statement_of_responsibility' || node['displayLabel']=='statement of responsibility'
         node['displayLabel']='Statement of responsibility'
         node['type']='statement_of_responsibility'
@@ -115,7 +114,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_publication xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
       if node['type']=='publications' && ['', 'general note', 'state_note'].include?(node['displayLabel'])
         node['displayLabel']='Publications'
         node['type']='publications'
@@ -124,7 +122,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_references xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
       ref=false
       if node['type'].nil?
         ref=true if node['displayLabel']=='citation/reference'
@@ -141,8 +138,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_states xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
-      states=false
       if node['type'] && node['type'].include?('state') && is_numeric?(node['type'].last(1))
         #find the number and use it
         number=node['type'].last(2).strip

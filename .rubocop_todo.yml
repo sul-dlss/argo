@@ -36,10 +36,6 @@ Lint/UnusedBlockArgument:
 Lint/UnusedMethodArgument:
   Enabled: false
 
-# Offense count: 30
-Lint/UselessAssignment:
-  Enabled: false
-
 # Offense count: 99
 Metrics/AbcSize:
   Max: 136

@@ -219,7 +219,6 @@ class ItemsController < ApplicationController
     end
   end
   def datastream_update
-    req_params=%w(id dsid content)
     ds=@object.datastreams[params[:dsid]]
     #check that the content is valid xml
     begin
@@ -359,7 +358,7 @@ class ItemsController < ApplicationController
           format.any { redirect_to catalog_path(params[:id]), :notice => 'Version '+@object.current_version+' of '+params[:id]+' has been closed!' }
         end
       end
-    rescue Dor::Exception => e
+    rescue Dor::Exception # => e
       render :status => 500, :text => 'No version to close.'
     end
   end
@@ -469,14 +468,11 @@ class ItemsController < ApplicationController
     render :status => :ok, :text => 'method disabled'
   end
   def schema_validation
-    ds=@object.descMetadata
-    content=ds.content
-    errors= schema_validate ds.ng_xml
+    errors = schema_validate @object.descMetadata.ng_xml
     if errors.length == 0
       render :status => :ok, :text => 'Valid.'
     else
-      error_str=errors.join('<br>')
-      render :status => 500, :text => error_str[0...490]
+      render :status => 500, :text => errors.join('<br>')[0...490]
     end
   end
   def refresh_metadata
@@ -602,7 +598,7 @@ class ItemsController < ApplicationController
       @object = Dor::Item.find params[:id]
       @apo=@object.admin_policy_object
       @apo=( @apo ? @apo.pid : '' )
-    rescue ActiveFedora::ObjectNotFoundError => e
+    rescue ActiveFedora::ObjectNotFoundError # => e
       render :status=> 500, :text =>'Object doesnt exist in Fedora.'
       return
     end

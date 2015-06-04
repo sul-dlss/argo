@@ -421,9 +421,7 @@ describe ItemsHelper, :type => :helper do
       count = 0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 10'
-          count+=1
-        end
+        count+=1 if node['displayLabel'] == 'State 10'
       end
       expect(count).to eq(2)
     end
@@ -431,19 +429,15 @@ describe ItemsHelper, :type => :helper do
       count = 0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 11'
-          count+=1
-        end
+        count+=1 if node['displayLabel'] == 'State 11'
       end
       expect(count).to eq(2)
     end
     it 'should reorder states' do
-      count = 0
       mclaughlin_cleanup_states @doc
       mclaughlin_reorder_states @doc
-      @doc = Nokogiri.XML(@doc.to_s) do |config|
-        config.default_xml.noblanks
-      end
+      expect{ Nokogiri.XML(@doc.to_s) {|conf| conf.default_xml.noblanks} }.not_to raise_error()
+      # TODO: actually check the output.  get a real expectation
     end
   end
   context 'mclaughlin_ignore_fields' do
@@ -451,9 +445,7 @@ describe ItemsHelper, :type => :helper do
       count = 0
       mclaughlin_ignore_fields @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'location_code'
-          count+=1
-        end
+        count+=1 if node['displayLabel'] == 'location_code'
       end
       expect(count).to eq(0)
     end

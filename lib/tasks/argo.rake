@@ -66,7 +66,7 @@ namespace :argo do
     desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
     task :clean, [:target] do |t, args|
       args.with_defaults(:target=> WRAPPER_VERSION)
-      jetty_params = jettywrapper_load_config()
+      jettywrapper_load_config()
       Jettywrapper.hydra_jetty_version = args[:target]
       Rake::Task['jetty:clean'].invoke
     end
@@ -202,7 +202,6 @@ namespace :argo do
     task :load, [:glob] do |task, args|
       puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
       args.with_defaults(:glob => fedora_fileglob)
-      docs   = []
       errors = []
       i = 0
 
@@ -238,7 +237,7 @@ namespace :argo do
       :'facet.prefix'   => 'workgroup:',
       :'facet.mincount' => 1,
       :'facet.limit'    => -1 )
-    facet = resp.facets.find { |f| f.name == apo_field }
+    resp.facets.find { |f| f.name == apo_field }
   end
 
   desc "List APO workgroups from Solr (#{apo_field_default()})"

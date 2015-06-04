@@ -6,7 +6,7 @@ module WorkflowHelper
   def render_workflow_grid
     workflow_data = facet_tree('wf_wps')['wf_wps_ssim']
     return '' if workflow_data.nil?
-    result = workflow_data.keys.sort.collect do |wf_name|
+    workflow_data.keys.sort.collect do |wf_name|
       render :partial => 'workflow_table', :locals => { :wf_name => wf_name, :wf_data => workflow_data[wf_name] }
     end.join("\n").html_safe
   end
@@ -38,7 +38,7 @@ module WorkflowHelper
   end
 
   def render_workflow_reset_link(wf_hash, name, process, status)
-    return unless (wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_])
+    return unless (wf_hash[process] && wf_hash[process][status] && wf_hash[process][status][:_])
     new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow=>name,:reset_step=>process)
     raw " | " + link_to('reset', new_params,:remote=>true)
   end

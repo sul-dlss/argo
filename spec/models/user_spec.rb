@@ -130,8 +130,8 @@ describe User, :type => :model do
       mock_webauth = double('webauth', :login => 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       expect(Dor::SearchService).to receive(:query).once
-      res=user.roles('pid')
-      res=user.roles('pid')
+      user.roles('pid')
+      user.roles('pid')
     end
   end
 
@@ -139,7 +139,6 @@ describe User, :type => :model do
     it "should return the groups specified by webauth" do
       webauth_privgroup_str = "dlss:testgroup1|dlss:testgroup2|dlss:testgroup3"
       mock_webauth = double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => webauth_privgroup_str)
-
       user = User.find_or_create_by_webauth(mock_webauth)
       expected_groups = ["sunetid:asdf"] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
       expect(user.groups).to eq(expected_groups)
