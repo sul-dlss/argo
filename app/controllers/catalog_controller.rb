@@ -74,7 +74,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'collection_title_ssim', :label => 'Collection',  :sort => 'index', :limit => 500
     config.add_facet_field 'apo_title_ssim',        :label => 'Admin Policy',:sort => 'index', :limit => 500
     config.add_facet_field 'current_version_isi',   :label => 'Version'
-    #TODO: processing_status_ssi once solr has it
+    config.add_facet_field 'processing_status_text_ssi', :label => 'Processing Status'
     #TODO: release_status_ssim once solr has it
     #TODO: does release_status and processing_status supersede lifecycle?  do we ditch that?
     config.add_facet_field 'lifecycle_ssim', :label => 'Lifecycle'
