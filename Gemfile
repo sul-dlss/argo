@@ -82,4 +82,3 @@ group :deployment do
   gem 'capistrano-rails'
   gem 'lyberteam-capistrano-devel', '3.1.0'
 end
-

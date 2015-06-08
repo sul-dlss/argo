@@ -106,7 +106,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_statement xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
       if node['type']=='statement_of_responsibility' || node['displayLabel']=='statement of responsibility'
         node['displayLabel']='Statement of responsibility'
         node['type']='statement_of_responsibility'
@@ -115,7 +114,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_publication xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
       if node['type']=='publications' && ['', 'general note', 'state_note'].include?(node['displayLabel'])
         node['displayLabel']='Publications'
         node['type']='publications'
@@ -124,7 +122,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_references xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
       ref=false
       if node['type'].nil?
         ref=true if node['displayLabel']=='citation/reference'
@@ -141,8 +138,6 @@ module ItemsHelper
   end
   def mclaughlin_cleanup_states xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      atts=node.attributes()
-      states=false
       if node['type'] && node['type'].include?('state') && is_numeric?(node['type'].last(1))
         #find the number and use it
         number=node['type'].last(2).strip
@@ -162,9 +157,7 @@ module ItemsHelper
     end
   end
   def mclaughlin_ignore_fields xml
-    xml.search('//mods:note[@displayLabel=\'location_code\']','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-      node.remove
-    end
+    xml.search('//mods:note[@displayLabel=\'location_code\']','mods'=>'http://www.loc.gov/mods/v3').each(&:remove)
   end
   def mclaughlin_fix_subjects xml
     xml.search('//mods:subject','mods'=>'http://www.loc.gov/mods/v3').each do |node|
@@ -281,9 +274,7 @@ module ItemsHelper
     toret
   end
   def mclaughlin_remove_keydate xml
-    xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3').each do |title|
-      title.remove
-    end
+    xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3').each(&:remove)
   end
   #remove empty nodes and strip trailing whitespace from text
   def remove_empty_nodes xml
@@ -306,9 +297,7 @@ module ItemsHelper
           end
         end
       }
-      nodes_to_remove.each do |node|
-        node.remove
-      end
+      nodes_to_remove.each(&:remove)
     end
   end
 

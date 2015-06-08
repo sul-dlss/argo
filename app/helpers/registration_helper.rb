@@ -28,13 +28,12 @@ module RegistrationHelper
       Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
     end
     #for each apo, fetch the apo object so the rightsMetadata stream can be read, and the default permissions based on the chosen apo can be labeled as (apo default)
-    default_rights=Array.new
     result.each do |apo|
       apo_object = Dor.find(apo['id'], :lightweight => true)
       adm_xml = apo_object.defaultObjectRights.ng_xml
       added=false
 
-      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each  do |read|
+      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each do |read|
         #if read.value='Stanford'
         apo['rights'] = 'Stanford'+read.name
         added=true
@@ -47,13 +46,10 @@ module RegistrationHelper
         added=true
         break
       end
-
-      if apo['rights'].nil?
-        apo['rights'] = 'dark'
-      end
+      apo['rights'] = 'dark' if apo['rights'].nil?
     end
     result.collect do |doc|
-      [Array( doc['rights']).first  ,doc['id'].to_s]
+      [Array( doc['rights']).first, doc['id'].to_s]
     end
   end
 

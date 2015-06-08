@@ -47,13 +47,13 @@ module ValueHelper
       links +='<br>'
     end
     links.html_safe
-  rescue Exception => e
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
   end
 
   def value_for_wf_error_ssim args
-    wf, step, message = args[:document].get(args[:field]).split(':',3)
+    _wf, step, message = args[:document].get(args[:field]).split(':',3)
     step+' : '+message
   end
 
@@ -67,7 +67,7 @@ module ValueHelper
       links +='<br>'
     end
     links.html_safe
-  rescue Exception => e
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
     #value_for_related_druid('is_governed_by', args)
@@ -83,7 +83,7 @@ module ValueHelper
       links +='<br>'
     end
     links.html_safe
-  rescue Exception => e
+  rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
   end

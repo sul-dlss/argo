@@ -11,8 +11,5 @@ class ModsDisplayObject
     @xml
   end
 
-  mods_xml_source do |obj|
-    # puts obj.xml
-    obj.xml
-  end
+  mods_xml_source(&:xml)
 end

@@ -66,7 +66,7 @@ namespace :argo do
     desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
     task :clean, [:target] do |t, args|
       args.with_defaults(:target=> WRAPPER_VERSION)
-      jetty_params = jettywrapper_load_config()
+      jettywrapper_load_config()
       Jettywrapper.hydra_jetty_version = args[:target]
       Rake::Task['jetty:clean'].invoke
     end
@@ -202,7 +202,6 @@ namespace :argo do
     task :load, [:glob] do |task, args|
       puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
       args.with_defaults(:glob => fedora_fileglob)
-      docs   = []
       errors = []
       i = 0
 
@@ -238,13 +237,13 @@ namespace :argo do
       :'facet.prefix'   => 'workgroup:',
       :'facet.mincount' => 1,
       :'facet.limit'    => -1 )
-    facet = resp.facets.find { |f| f.name == apo_field }
+    resp.facets.find { |f| f.name == apo_field }
   end
 
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
     facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect{|x| x.value}.join(%[\n])}"
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect(&:value).join(%[\n])}"
   end
 
   desc "Update the .htaccess file from indexed APOs"
@@ -272,9 +271,7 @@ namespace :argo do
 
   desc "Update completed/archived workflow counts"
   task :update_archive_counts => :environment do |t|
-    Dor.find_all('objectType_facet:workflow').each do |wf|
-      wf.update_index
-    end
+    Dor.find_all('objectType_facet:workflow').each(&:update_index)
   end
 
   desc "Reindex all (or a subset) of DOR objects in Solr"
@@ -344,7 +341,7 @@ namespace :argo do
         errors = 0
       rescue Interrupt
         raise
-      rescue Exception => e
+      rescue StandardError => e
         errors += 1
         index_log.warn("Error (#{errors}) indexing #{pid}")
         index_log.error("#{e.class}: #{e.message}")

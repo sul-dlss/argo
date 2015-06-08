@@ -50,7 +50,7 @@ module ArgoHelper
     result = Confstruct::HashWithStructAccess.new
     prefixed_fields.each_pair do |path_str,value|
       h = result
-      path = path_str.sub(/_[^_]+$/,'').reverse.split(/_(?=\d+)/).collect { |k| k.reverse }.reverse.collect { |k| k.split(/_(?=\d+)/) }
+      path = path_str.sub(/_[^_]+$/,'').reverse.split(/_(?=\d+)/).collect(&:reverse).reverse.collect { |k| k.split(/_(?=\d+)/) }
       path.each do |step, index|
         if index.nil?
           h[step.to_sym] = value
@@ -281,7 +281,7 @@ module ArgoHelper
 
   def render_datastream_link document
     return unless document_has?(@document, 'objectType_ssim') && @document.get('objectType_ssim') == 'adminPolicy'
-    link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
+    link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :id => "bulk-button", :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
   end
 
 end

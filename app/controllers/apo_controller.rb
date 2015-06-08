@@ -343,7 +343,7 @@ class ApoController < ApplicationController
   end
 
   def split_roleplayer_input_field(roleplayer_list_str)
-    return roleplayer_list_str.split(/[,\s]/).reject(){|str| str.empty?}
+    return roleplayer_list_str.split(/[,\s]/).reject(&:empty?)
   end
 
   def save_and_reindex

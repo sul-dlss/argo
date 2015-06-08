@@ -18,4 +18,3 @@ ARGF.each_line do |druid|
 end
 
 puts "</add>"
-

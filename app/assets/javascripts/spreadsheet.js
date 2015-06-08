@@ -13,10 +13,12 @@ Blacklight.onLoad(function(){
 	$("#filetypes_2").prop("disabled", true);
 	$("#convert_only").prop("disabled", true);
 	$("#spreadsheet_submit").prop("disabled", true);
+	$("#note_text").prop("disabled", true);
 
 	$("#spreadsheet_file").change(function (){
 	    $("#filetypes_1").prop("disabled", false);
 	    $("#filetypes_2").prop("disabled", false);
+	    $("#note_text").prop("disabled", false);
 	    $("#convert_only").prop("disabled", true);
 	});
 	
