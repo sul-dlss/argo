@@ -204,7 +204,7 @@ module DorObjectHelper
   end
 
   def render_ds_id doc, specs
-    link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :class => 'dialogLink', :title => specs[:dsid]
+    link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :title => specs[:dsid], :data => { ajax_modal: 'trigger' }
   end
 
   def render_ds_mime_type doc, specs

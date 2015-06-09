@@ -1,1 +1,3 @@
-<%= CodeRay::Duo[:xml, :div].highlight(Nokogiri::XML(@history_xml).prettify).html_safe %>
+<div data-ajax-modal="container">
+  <%= CodeRay::Duo[:xml, :div].highlight(Nokogiri::XML(@history_xml).prettify).html_safe %>
+</div>
