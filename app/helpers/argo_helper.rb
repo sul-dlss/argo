@@ -268,20 +268,23 @@ module ArgoHelper
   end
 
   def render_full_dc_link document, link_text="View full Dublin Core"
-    link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :class => 'dialogLink', :title => 'Dublin Core (derived from MODS)'
+    link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' }
   end
+
   def render_mods_view_link document, link_text="View MODS"
-    link_to link_text, purl_preview_item_url(document.get('id')),:class => 'dialogLink', :title => 'MODS View'
+    link_to link_text, purl_preview_item_url(document.get('id')), :title => 'MODS View', :data => { ajax_modal: 'trigger' }
   end
+
   def render_full_view_links document
     render_full_dc_link(document) + ' / '+render_mods_view_link(document)
   end
+  
   def render_dor_workspace_link document, link_text="View DOR workspace"
   end
 
   def render_datastream_link document
     return unless document_has?(@document, 'objectType_ssim') && @document.get('objectType_ssim') == 'adminPolicy'
-    link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :id => "bulk-button", :class => "smallDialogLink button btn btn-primary", data: { ajax_modal: 'trigger' }
+    link_to 'MODS bulk loads', bulk_upload_start_apo_path(@document.get('id')), :id => "bulk-button", :class => "button btn btn-primary", :data => { ajax_modal: 'trigger' }
   end
 
 end
