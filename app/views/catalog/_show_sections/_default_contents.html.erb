@@ -67,22 +67,23 @@
                     </li>
                   <% end %>
                 <% end %>
+                
+                <% resource.xpath('file').each do |file| %>
+                  <li class="file">
+                    <span class="label">File</span>
+                    <%if can_view 
+                      file_link = '/items/'+params[:id]+'/file_list/?file='+URI.escape(file['id']) %>
+                      <%= link_to file['id'], file_link, :data => {ajax_modal: 'trigger'} %>
+                    <%else%>
+                      <%=file['id']%>
+                    <%end%>
+                    (<%= file['mimetype'] %>, <%= file['size'].to_i.bytestring('%.1f%s') %>,
+                     <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
+                  </li>
+                <% end %>
+                
               </ul>
             </li>
-                
-            <% resource.xpath('file').each do |file| %>
-              <li class="file">
-                <span class="label">File</span>
-                <%if can_view 
-                  file_link = '/items/'+params[:id]+'/file_list/?file='+URI.escape(file['id']) %>
-                  <%= link_to file['id'], file_link, :data => {ajax_modal: 'trigger'} %>
-                <%else%>
-                  <%=file['id']%>
-                <%end%>
-                (<%= file['mimetype'] %>, <%= file['size'].to_i.bytestring('%.1f%s') %>,
-                 <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
-              </li>
-            <% end %>
           <% end %>
         </ul>
       </li>
