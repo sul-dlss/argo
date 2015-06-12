@@ -4,7 +4,7 @@ module RegistrationHelper
   def apo_list(*permission_keys)
     q = 'objectType_ssim:adminPolicy AND !tag_ssim:"Project : Hydrus"'
     unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
+      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_ssim:"#{key}"} }.join(" OR ") + ')'
     end
     result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_t').docs
     result.sort! do |a,b|
@@ -21,7 +21,7 @@ module RegistrationHelper
   def apo_default_rights_list(*permission_keys)
     q = 'objectType_ssim:adminPolicy'
     unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_t:"#{key}"} }.join(" OR ") + ')'
+      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_ssim:"#{key}"} }.join(" OR ") + ')'
     end
     result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_t').docs
     result.sort! do |a,b|

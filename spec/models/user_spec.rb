@@ -93,14 +93,14 @@ describe User, :type => :model do
     before(:each) do
       @answer={}
       @doc={}
-      @doc['apo_role_dor-administrator_t']=['dlss:groupA', 'dlss:groupB']
-      @doc['apo_role_sdr-administrator_t']=['dlss:groupA', 'dlss:groupB']
-      @doc['apo_role_dor-apo-manager_t']=['dlss:groupC', 'dlss:groupD']
-      @doc['apo_role_dor-viewer_t']=['dlss:groupE', 'dlss:groupF']
-      @doc['apo_role_sdr-viewer_t']=['dlss:groupE', 'dlss:groupF']
-      @doc['apo_role_person_dor-viewer_t']=['sunetid:tcramer']
-      @doc['apo_role_person_sdr-viewer_t']=['sunetid:tcramer']
-      @doc['apo_role_group_manager_t']=['dlss:groupR']
+      @doc['apo_role_dor-administrator_ssim']=['dlss:groupA', 'dlss:groupB']
+      @doc['apo_role_sdr-administrator_ssim']=['dlss:groupA', 'dlss:groupB']
+      @doc['apo_role_dor-apo-manager_ssim']=['dlss:groupC', 'dlss:groupD']
+      @doc['apo_role_dor-viewer_ssim']=['dlss:groupE', 'dlss:groupF']
+      @doc['apo_role_sdr-viewer_ssim']=['dlss:groupE', 'dlss:groupF']
+      @doc['apo_role_person_dor-viewer_ssim']=['sunetid:tcramer']
+      @doc['apo_role_person_sdr-viewer_ssim']=['sunetid:tcramer']
+      @doc['apo_role_group_manager_ssim']=['dlss:groupR']
       @answer['response'] = {'docs' => [@doc]}
       allow(Dor::SearchService).to receive(:query).and_return(@answer)
     end

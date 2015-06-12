@@ -33,12 +33,12 @@ class User < ActiveRecord::Base
     #(1) for User by sunet id
     #(2) groups actually contains the sunetid, so it is just looking at different solr fields
     #includes legacy roles that have to be translated
-    %w(apo_role_group_manager_t apo_role_person_manager_t).each do |key|
+    %w(apo_role_group_manager_ssim apo_role_person_manager_ssim).each do |key|
       toret << 'dor-apo-manager' if (resp[key] && (resp[key] & groups).length > 0)
     end
 
     known_roles.each do |role|
-      ["apo_role_#{role}_t","apo_role_person_#{role}_t"].each do |key|
+      ["apo_role_#{role}_ssim", "apo_role_person_#{role}_ssim"].each do |key|
         toret << role if (resp[key] && (resp[key] & groups).length > 0)
       end
     end
@@ -54,9 +54,9 @@ class User < ActiveRecord::Base
 
   def permitted_apos
     query = groups.map{|g| g.gsub(':','\:')}.join(' OR ')
-    q = 'apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')'
+    q = 'apo_role_group_manager_ssim:('+ query + ') OR apo_role_person_manager_ssim:(' + query + ')'
     known_roles.each do |role|
-      q += ' OR apo_role_'+role+'_t:('+query+')'
+      q += ' OR apo_role_'+role+'_ssim:('+query+')'
     end
     q = 'objectType_ssim:adminPolicy' if is_admin
     resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!project_tag_ssim:"Hydrus"'})['response']['docs']
