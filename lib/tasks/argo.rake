@@ -228,11 +228,11 @@ namespace :argo do
 
   # some helper methods
   def apo_field_default
-    'apo_register_permissions_facet'
+    'apo_register_permissions_ssim'
   end
   def get_workgroups_facet(apo_field=nil)
     apo_field = apo_field_default() if apo_field.nil?
-    resp = Dor::SearchService.query('objectType_facet:adminPolicy', :rows => 0,
+    resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
       :facets => { :fields => [apo_field] },
       :'facet.prefix'   => 'workgroup:',
       :'facet.mincount' => 1,
@@ -271,7 +271,7 @@ namespace :argo do
 
   desc "Update completed/archived workflow counts"
   task :update_archive_counts => :environment do |t|
-    Dor.find_all('objectType_facet:workflow').each(&:update_index)
+    Dor.find_all('objectType_ssim:workflow').each(&:update_index)
   end
 
   desc "Reindex all (or a subset) of DOR objects in Solr"
