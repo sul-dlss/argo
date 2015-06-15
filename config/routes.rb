@@ -16,6 +16,13 @@ Argo::Application.routes.draw do
   match 'view/:id/dc',                :to => "catalog#show_aspect",     :via => [:get, :post], :template => 'dc', :as => "dc_aspect_view_catalog"
   match 'view/:id/ds/:dsid',          :to => "catalog#show_aspect",     :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
   match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :via => [:get, :post], :as => "datastream_view_catalog"
+
+  match 'catalog/:id/bulk_upload_start', :to => 'catalog#bulk_upload_start', :as => 'bulk_upload_start', :via => [:get]
+  match 'catalog/:id/bulk_upload_form', :to => 'catalog#bulk_upload_form', :as => 'bulk_upload_form', :via => [:get]
+  match 'catalog/:id/upload', :to => 'catalog#upload', :as => 'upload', :via => [:post]
+  match 'catalog/:id/bulk_index', :to => 'catalog#bulk_index', :as => 'bulk_index', :via => [:get]
+  
+  
   #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
   # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
   match '/catalog', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
@@ -63,12 +70,7 @@ Argo::Application.routes.draw do
     post :update, :on => :member
     get  :register_collection, :on => :member
     post :register_collection, :on => :member
-
-
-    get :bulk_upload_start, :on => :member
-    get :bulk_upload_form, :on => :member
     get :spreadsheet_template, :on => :collection
-    post :upload, :on => :member
   end
 
   resources :items do
