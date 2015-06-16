@@ -257,6 +257,10 @@ class CatalogController < ApplicationController
     if(params[:note])
       log_file.puts("note #{params[:note]}")
     end
+
+    spreadsheet_copy_filename = File.join(output_directory, params[:spreadsheet_file].original_filename)
+    FileUtils.cp(params[:spreadsheet_file].tempfile, spreadsheet_copy_filename)
+    log_file.puts("input_file #{params[:spreadsheet_file].original_filename}")
     log_file.close
 
     redirect_to bulk_index_path(@object.id)
