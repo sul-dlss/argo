@@ -207,6 +207,90 @@ class CatalogController < ApplicationController
     render :layout => request.xhr? ? false : true
   end
 
+
+  def bulk_upload_start
+    @object = Dor.find params[:id]
+  end
+
+  def bulk_upload_form
+    @object = Dor.find params[:id]
+  end
+
+  def upload
+    @object = Dor.find params[:id]
+    
+    uploaded_file = params[:spreadsheet_file].tempfile
+    response_xml = nil
+
+    if(params[:filetypes] == "xml")
+      response_xml = RestClient.post(Argo::Config.urls.normalizer, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
+      #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
+    else # spreadsheet
+      if(params.key?(:xml_only))
+        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
+        #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
+      else
+        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
+        #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
+      end
+    end
+
+    current_time = Time.now
+    directory_name = current_time.strftime("%Y_%m_%d_%H_%M_%S_%L")
+    output_directory = File.join(Argo::Config.bulk_directory, params[:druid], directory_name)
+    log_filename = File.join(output_directory, 'log.txt')
+    log_file = nil
+
+    if(!File.directory?(output_directory))
+      FileUtils::mkdir_p(output_directory)
+    end
+
+    log_file = File.new(log_filename, 'w')
+    log_timestamp = current_time.strftime("%Y-%m-%d %H:%M%P")
+    log_file.puts("job_start #{log_timestamp}")
+    log_file.puts("current_user #{current_user.login}")
+    record_count = response_xml.scan('<xmlDoc id').size
+    File.open(File.join(output_directory, 'metadata.xml'), "w") { |f| f.write(response_xml) }
+    log_file.puts("xml_written #{log_timestamp}")
+    log_file.puts("records #{record_count}")
+
+    if(params[:note])
+      log_file.puts("note #{params[:note]}")
+    end
+
+    spreadsheet_copy_filename = File.join(output_directory, params[:spreadsheet_file].original_filename)
+    FileUtils.cp(params[:spreadsheet_file].tempfile, spreadsheet_copy_filename)
+    log_file.puts("input_file #{params[:spreadsheet_file].original_filename}")
+    log_file.close
+
+    redirect_to bulk_index_path(@object.id)
+  end
+
+
+  def bulk_index
+    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
+    @obj = Dor.find params[:id]
+    begin
+      @apo = @obj.admin_policy_object
+    rescue
+    end
+
+    if @apo
+      unless @user.is_admin || @user.is_viewer || @obj.can_view_metadata?(@user.roles(@apo.pid))
+        render :status=> :forbidden, :text =>'forbidden'
+        return
+      end
+    else
+      unless @user.is_admin || @user.is_viewer
+        render :status=> :forbidden, :text =>'No APO, no access'
+        return
+      end
+    end
+
+    @response, @document = get_solr_response_for_doc_id params[:id]
+  end
+  
+
   private
   def set_user_obj_instance_var
     @user = current_user

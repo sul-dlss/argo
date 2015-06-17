@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'rest-client'
 
 class ApoController < ApplicationController
@@ -271,34 +272,10 @@ class ApoController < ApplicationController
     redirect
   end
 
-  def bulk_upload_start
-    @object = Dor.find params[:id]
-  end
-
-  def bulk_upload_form
-    @object = Dor.find params[:id]
-  end
 
   def spreadsheet_template
     binary_string = RestClient.get(Argo::Config.urls.spreadsheet)
     send_data(binary_string, :filename => "spreadsheet_template.xlsx", :type =>  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-  end
-
-  def upload
-    uploaded_file = params[:spreadsheet_file].tempfile
-
-    if(params[:filetypes] == "xml")
-      response_xml = RestClient.post(Argo::Config.urls.normalizer, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
-      send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
-    else # spreadsheet
-      if(params.key?(:xml_only))
-        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
-        send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
-      else
-        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
-        send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
-      end
-    end
   end
 
 
