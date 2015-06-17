@@ -2,10 +2,10 @@ module DorObjectHelper
   # Metadata helpers
   def retrieve_terms doc
     terms = {
-      :creator   => { :selector => %w(public_dc_creator_t mods_creator_t mods_name_t dc_creator_t) },
-      :title     => { :selector => %w(public_dc_title_t mods_title_t dc_title_t obj_label_t), :combiner => lambda { |s| s.join(' -- ') } },
+      :creator   => { :selector => %w(public_dc_creator_tesim mods_creator_t mods_name_t dc_creator_tesim) },
+      :title     => { :selector => %w(public_dc_title_tesim mods_title_t dc_title_tesim obj_label_t), :combiner => lambda { |s| s.join(' -- ') } },
       :place     => { :selector => ['mods_originInfo_place_placeTerm_t'] },
-      :publisher => { :selector => %w(public_dc_publisher_t mods_originInfo_publisher_t dc_publisher_t) },
+      :publisher => { :selector => %w(public_dc_publisher_tesim mods_originInfo_publisher_t dc_publisher_t) },
       :date      => { :selector => %w(public_dc_date_t mods_dateissued_t mods_datecreated_t dc_date_t) }
     }
     result = {}
