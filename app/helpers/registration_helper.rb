@@ -144,7 +144,7 @@ module RegistrationHelper
 
     pdf.font('Courier', :size => 10)
 
-    labels = doc['obj_label_teim']
+    labels = doc['obj_label_ssim']
     label  = (labels.nil? || labels.empty?) ? '' : labels.first
     if label.length > 110
       label = label[0..110] + '...'
