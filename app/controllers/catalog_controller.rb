@@ -208,10 +208,6 @@ class CatalogController < ApplicationController
   end
 
 
-  def bulk_upload_start
-    @obj = Dor.find params[:id]
-  end
-
   def bulk_upload_form
     @object = Dor.find params[:id]
   end
