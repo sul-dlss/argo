@@ -31,26 +31,26 @@ module ApoHelper
     [['Symphony'],['DOR'],['MDToolkit']]
   end
   def workflow_options
-    q = 'objectType_t:workflow '
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    q = 'objectType_ssim:workflow '
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
     result.sort! do |a,b|
-      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+      a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end
     result.collect do |doc|
-      [Array(doc['dc_title_t']).first,doc['dc_title_t'].first.to_s]
+      [Array(doc['dc_title_tesim']).first,doc['dc_title_tesim'].first.to_s]
     end
   end
   def default_workflow_option
     return 'registrationWF'
   end
   def agreement_options
-    q = 'objectType_t:agreement '
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_t,dc_title_t').docs
+    q = 'objectType_ssim:agreement '
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
     result.sort! do |a,b|
-      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+      a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end
     result.collect do |doc|
-      [Array(doc['dc_title_t']).first, doc['id'].to_s]
+      [Array(doc['dc_title_tesim']).first, doc['id'].to_s]
     end
   end
 end

@@ -48,9 +48,9 @@ class RegistrationController < ApplicationController
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.administrativeMetadata.ng_xml
     adm_xml.search('//registration/collection').each do |col|
-      solr_doc=Blacklight.solr.find({:q => "id:\"#{col['id']}\"", :rows => 1, :fl => 'id,tag_t,dc_title_t'}).docs
-      if solr_doc.first['dc_title_t'] && solr_doc.first['dc_title_t'].first
-        res[col['id']]= "#{solr_doc.first['dc_title_t'].first}(#{col['id']})"
+      solr_doc=Blacklight.solr.find({:q => "id:\"#{col['id']}\"", :rows => 1, :fl => 'id,tag_ssim,dc_title_tesim'}).docs
+      if solr_doc.first['dc_title_tesim'] && solr_doc.first['dc_title_tesim'].first
+        res[col['id']]= "#{solr_doc.first['dc_title_tesim'].first}(#{col['id']})"
       else
         res[col['id']]= "#{col['id']}"
       end
