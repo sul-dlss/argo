@@ -33,7 +33,7 @@ gem 'blacklight', '~> 5.9.0' #TODO: BL >= 5.10.x has new deprecation warnings vs
 gem 'blacklight-hierarchy'
 gem 'blacklight-marc'
 gem 'dor-services', '~> 5.0', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'solrization_fixes2'
-gem 'dor-workflow-service'
+gem 'dor-workflow-service', :git => 'https://github.com/sul-dlss/dor-workflow-service.git', :branch => 'upd_dependency_reqs'
 gem 'is_it_working-cbeer'
 gem 'jettywrapper'
 gem 'moab-versioning'
