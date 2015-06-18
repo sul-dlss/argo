@@ -8,6 +8,9 @@ Blacklight.onLoad(function(){
     // "loaded.blacklight.ajax-modal" is fired just before this Blacklight lightbox is shown.
     $("#ajax-modal").on("loaded.blacklight.ajax-modal", function(e){
 
+	// Only lightboxes require the 'close' button (upper right corner)
+	$("#spreadsheet-start-header").prepend("<div class=\"row\"><div class=\".col-md-11 header-column\"><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button></div></div>");
+
 	// None of the form controls should be functional until a file has been selected
 	$("#filetypes_1").prop("disabled", true);
 	$("#filetypes_2").prop("disabled", true);

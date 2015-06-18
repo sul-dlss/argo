@@ -209,7 +209,7 @@ class CatalogController < ApplicationController
 
 
   def bulk_upload_start
-    @object = Dor.find params[:id]
+    @obj = Dor.find params[:id]
   end
 
   def bulk_upload_form
@@ -288,6 +288,12 @@ class CatalogController < ApplicationController
     end
 
     @response, @document = get_solr_response_for_doc_id params[:id]
+    @bulk_jobs = load_bulk_jobs(params[:id])
+  end
+
+
+  def bulk_status_help
+    
   end
   
 
@@ -307,5 +313,39 @@ class CatalogController < ApplicationController
       rescue
       end
     end
+  end
+
+  def bulk_job_metadata(dir)
+    job_info = Hash.new
+    log_filename = File.join(dir, "log.txt")
+    if(File.directory?(dir) && File.readable?(dir))
+      if(File.exist?(log_filename) && File.readable?(log_filename))
+        File.open(log_filename, 'r') { |log_file|
+          log_file.each_line do |line|
+            matched_strings = line.match(/^([^\s]+)\s+(.*)/)
+            if(matched_strings && matched_strings.length == 3)
+              job_info[matched_strings[1]] = matched_strings[2]
+            end
+          end
+          job_info['dir'] = dir
+        }
+      end
+    end
+    return job_info
+  end
+
+  def load_bulk_jobs(druid)
+    directory_list = Array.new
+    bulk_info = Array.new()
+    bulk_load_dir = File.join(Argo::Config.bulk_directory, druid)
+
+    if(File.directory?(bulk_load_dir))
+      directory_list = Dir.glob("#{bulk_load_dir}/*")
+    end
+
+    directory_list.each do |d|
+      bulk_info.push(bulk_job_metadata(d))
+    end
+    return bulk_info
   end
 end

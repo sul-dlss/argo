@@ -1,0 +1,17 @@
+<div id="spreadsheet-start-header" class="row spreadsheet-header">
+    <div class="col-md-8 header-column"><strong>Datastream spreadsheet bulk upload for APO <%= @obj.id %></strong></div>
+    <div class="col-md-3 header-column spreadsheet-column"><%= link_to 'Download blank spreadsheet', spreadsheet_template_apo_index_path %></div>
+</div>
+<%
+     dc = Nokogiri::XML(@obj.datastreams['DC'].content, &:noblanks)
+     title_node = dc.xpath('/oai_dc:dc/dc:title').first
+     %>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-11">"<%= title_node.content %>"</div>
+</div>
+<div class="row spreadsheet-row">
+    <div class="col-md-12">
+	<%= link_to("Submit new file ...", bulk_upload_form_path(@obj.id), :class => "button btn btn-primary", data: { ajax_modal: 'trigger' }) %>
+    </div>
+</div>
