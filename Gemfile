@@ -25,6 +25,9 @@ gem 'squash_ruby',  :require => 'squash/ruby'
 gem 'thin' # or mongrel
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 gem 'unicode'
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+gem 'daemons'
 
 # Stanford/Hydra related gems
 gem 'about_page'
