@@ -21,7 +21,7 @@ describe ArgoHelper, :type => :helper do
   describe 'render_buttons' do
     before :each do
       @object = instantiate_fixture("druid_zt570tx3016", Dor::Item)
-      @doc={'id'=>'something', 'is_governed_by_s'=>['apo_druid']}
+      @doc={'id'=>'something', 'is_governed_by_ssim'=>['apo_druid']}
       @usr=double()
       allow(@usr).to receive(:is_admin).and_return(true)
       allow(@usr).to receive(:groups).and_return([])

@@ -26,7 +26,7 @@ module Argo
         pids=new_pids
         pids=pids.join(' OR ')
       end
-      solr_parameters[:fq] << "is_governed_by_s:("+pids+")"
+      solr_parameters[:fq] << "is_governed_by_ssim:("+pids+")"
       logger.debug("Solr parameters: #{ solr_parameters.inspect }")
       solr_parameters
     end

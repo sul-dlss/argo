@@ -156,7 +156,7 @@ module ArgoHelper
     apo_pid = ''
     #wf_stuff.include? 'accessionWF:completed:publish'
     begin
-      apo_pid=doc['is_governed_by_s'].first.gsub('info:fedora/','')
+      apo_pid=doc['is_governed_by_ssim'].first.gsub('info:fedora/','')
     rescue
     end
     buttons=[]
