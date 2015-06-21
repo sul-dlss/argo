@@ -38,7 +38,7 @@ module ValueHelper
   end
 
   def value_for_related_druid predicate, args
-    target_id = args[:document].get("#{predicate}_s")
+    target_id = args[:document].get("#{predicate}_ssim")
     target_name = ''
     links=''
     target_id.split(',').each do |targ|
