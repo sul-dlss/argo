@@ -289,7 +289,7 @@ describe ItemsController, :type => :controller do
       expect(response.code).to eq("403")
     end
     it 'should error on malformed xml' do
-      expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error() # TODO: add name of error
+      expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error(RuntimeError, 'XML was not well formed!')
     end
     it 'should call save with good xml' do
       mock_ds=double(Dor::ContentMetadataDS)
