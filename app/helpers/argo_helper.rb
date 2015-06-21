@@ -197,10 +197,10 @@ module ArgoHelper
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
-    if(doc.key?('embargoMetadata_t') || doc.key?('embargoMetadata_status_t'))
-      embargo_data=doc['embargoMetadata_t'] ? doc['embargoMetadata_t'] : doc['embargoMetadata_status_t']
-      text=embargo_data.split.first
-    # date=embargo_data.split.last
+    if(doc.key?('embargo_status_ssim'))
+      embargo_data = doc['embargo_status_ssim']
+      text = embargo_data.split.first
+      # date=embargo_data.split.last
       if text != 'released'
         # TODO: add a date picker and button to change the embargo date for those who should be able to.
         buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if current_user.is_admin

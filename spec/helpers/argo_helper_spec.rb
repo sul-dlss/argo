@@ -72,7 +72,7 @@ describe ArgoHelper, :type => :helper do
       end
     end
     it 'should include the embargo update button if the user is an admin and the object is embargoed' do
-      @doc['embargoMetadata_t'] = ['2012-10-19T00:00:00Z']
+      @doc['embargo_status_ssim'] = ['2012-10-19T00:00:00Z']
       buttons = helper.render_buttons(@doc)
       {
         'Reindex'           => '/dor/reindex/something',
