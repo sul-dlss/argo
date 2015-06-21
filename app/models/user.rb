@@ -66,16 +66,16 @@ class User < ActiveRecord::Base
   def permitted_collections
     q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
     q+= permitted_apos.map {|pid| 'is_governed_by_ssim:"info:fedora/'+pid+'"'}.join(" OR ") unless is_admin
-    result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_t'}).docs
+    result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim'}).docs
 
-    #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_t').docs
+    #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim').docs
     result.sort! do |a,b|
-      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
+      a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end
-    #puts 'qry '+result.first['dc_title_t'].encoding.inspect
+    #puts 'qry '+result.first['dc_title_tesim'].encoding.inspect
     res=[['None', '']]
     res+=result.collect do |doc|
-      [Array(doc['dc_title_t']).first+ ' (' + doc['id'].to_s + ')',doc['id'].to_s]
+      [Array(doc['dc_title_tesim']).first+ ' (' + doc['id'].to_s + ')',doc['id'].to_s]
     end
     res
   end
