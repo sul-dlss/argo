@@ -31,7 +31,7 @@ class CatalogController < ApplicationController
     config.index.title_field = 'id'
     config.index.display_type_field = 'content_type_ssim'
 
-    config.show.title_field  = 'obj_label_ssim'
+    config.show.title_field = 'obj_label_ssim'
     config.show.display_type_field = 'objectType_ssim'
     config.show.sections = {
       :default => %w(identification datastreams history contents),
@@ -59,7 +59,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'project_tag_ssim',            :label => 'Project'
     config.add_show_field 'source_id_ssim',              :label => 'Source'
     config.add_show_field 'tag_ssim',                    :label => 'Tags'
-    config.add_show_field 'wf_error_ssim',                :label => "Error"
+    config.add_show_field 'wf_error_ssim',               :label => "Error"
     config.add_show_field 'collection_title_ssim',       :label => "Collection Title"
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
     config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
@@ -214,7 +214,7 @@ class CatalogController < ApplicationController
 
   def upload
     @object = Dor.find params[:id]
-    
+
     uploaded_file = params[:spreadsheet_file].tempfile
     response_xml = nil
 
@@ -235,9 +235,8 @@ class CatalogController < ApplicationController
     directory_name = current_time.strftime("%Y_%m_%d_%H_%M_%S_%L")
     output_directory = File.join(Argo::Config.bulk_directory, params[:druid], directory_name)
     log_filename = File.join(output_directory, 'log.txt')
-    log_file = nil
 
-    if(!File.directory?(output_directory))
+    unless File.directory?(output_directory)
       FileUtils::mkdir_p(output_directory)
     end
 
@@ -289,9 +288,8 @@ class CatalogController < ApplicationController
 
 
   def bulk_status_help
-    
   end
-  
+
 
   private
   def set_user_obj_instance_var
