@@ -3,29 +3,26 @@ module ValueHelper
   # Calculated fields
   def calculate_item_status_t_value doc
     current_milestone = Array(doc['lifecycle_field']).last
-    if current_milestone.nil?
-      nil
-    else
-      status = current_milestone.split(/:/,2).first
-      if embargo_status = doc.get('embargo_status_field')
-        status += " (#{embargo_status})"
-      end
-      status
+    return nil if current_milestone.nil?
+    status = current_milestone.split(/:/,2).first
+    if embargo_status = doc.get('embargo_status_field')
+      status += " (#{embargo_status})"
     end
+    status
   end
 
   # Renderers
   def label_for_druid druid
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
     Rails.cache.fetch("label_for_#{druid}", :expires_in => 1.hour) do
-      if  @apo && druid ==  @apo.pid
+      if @apo && druid == @apo.pid
         item = @apo
       end
       if @obj && druid == @obj.pid
         item = @obj
       end
       begin
-        item = Dor.find(druid) if !item
+        item ||= Dor.find(druid)
         item.label
       rescue
         druid
@@ -40,11 +37,11 @@ module ValueHelper
   def value_for_related_druid predicate, args
     target_id = args[:document].get("#{predicate}_ssim")
     target_name = ''
-    links=''
+    links = ''
     target_id.split(',').each do |targ|
       target_name = label_for_druid(targ)
       links += link_to target_name, catalog_path(targ.split(/\//).last)
-      links +='<br>'
+      links += '<br/>'
     end
     links.html_safe
   rescue StandardError => e
@@ -64,7 +61,7 @@ module ValueHelper
     target_id.split(',').each do |targ|
       target_name = args[:document].get("apo_title_ssim")
       links += link_to target_name, catalog_path(targ.split(/\//).last)
-      links +='<br>'
+      links += '<br/>'
     end
     links.html_safe
   rescue StandardError => e
@@ -76,11 +73,11 @@ module ValueHelper
   def value_for_is_member_of_collection_ssim args
     target_id = args[:document].get("is_member_of_collection_ssim")
     target_name = ''
-    links=''
+    links = ''
     target_id.split(',').each do |targ|
       target_name = args[:document].get("collection_title_ssim")
       links += link_to target_name, catalog_path(targ.split(/\//).last)
-      links +='<br>'
+      links += '<br/>'
     end
     links.html_safe
   rescue StandardError => e
