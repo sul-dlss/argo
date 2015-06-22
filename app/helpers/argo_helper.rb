@@ -179,12 +179,12 @@ module ArgoHelper
       if has_been_published? pid
         buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
       end
-      if !has_been_submitted? pid
+      unless has_been_submitted? pid
         buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page=> true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
       end
       buttons << {:url => '/items/'+pid+'/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/'+pid+'/tags_ui', :label => 'Edit tags'}
-      if !(object.datastreams.include? 'administrativeMetadata') #apos cant be members of collections
+      unless object.datastreams.include? 'administrativeMetadata' #apos cant be members of collections
         buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
       end
       if object.datastreams.include? 'contentMetadata'
@@ -278,7 +278,7 @@ module ArgoHelper
   def render_full_view_links document
     render_full_dc_link(document) + ' / '+render_mods_view_link(document)
   end
-  
+
   def render_dor_workspace_link document, link_text="View DOR workspace"
   end
 

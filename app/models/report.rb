@@ -227,7 +227,7 @@ class Report
           toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
         elsif params[:tags]
           tags=''
-          if !rec['tag_ssim'].nil?
+          unless rec['tag_ssim'].nil?
             rec['tag_ssim'].split(';').each do |tag|
               tags+="\t"+tag.to_s
             end

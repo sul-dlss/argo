@@ -220,11 +220,6 @@ Style/MultilineBlockChain:
 Style/MultilineOperationIndentation:
   Enabled: false
 
-# Offense count: 11
-# Cop supports --auto-correct.
-Style/NegatedIf:
-  Enabled: false
-
 # Offense count: 3
 # Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
 Style/Next:

@@ -97,7 +97,7 @@ module DorObjectHelper
   end
 
   def render_status_style(doc, object=nil)
-    if !object.nil?
+    unless object.nil?
       steps = Dor::Processable::STEPS
       highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
       if highlighted_statuses.include? object.status_info[:status_code]

@@ -51,13 +51,11 @@ class ApoController < ApplicationController
     err_list = []
 
     # error if title is empty
-    if input_params[:title].strip.length == 0
-      err_list.push(:title)
-    end
+    err_list.push(:title) if input_params[:title].strip.length == 0
 
     # error if managers or viewers role list is invalid
     [:managers, :viewers].each do |roleplayer_list|
-      if !is_valid_role_list(split_roleplayer_input_field(input_params[roleplayer_list]))
+      unless is_valid_role_list(split_roleplayer_input_field(input_params[roleplayer_list]))
         err_list.push(roleplayer_list)
       end
     end
@@ -141,9 +139,9 @@ class ApoController < ApplicationController
   end
 
   def param_cleanup params
-    params[:title].strip! unless !params[:title]
+    params[:title].strip! if params[:title]
     [:managers, :viewers].each do |role_param_sym|
-      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless !params[role_param_sym]
+      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') if params[role_param_sym]
     end
   end
 

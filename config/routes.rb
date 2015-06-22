@@ -21,7 +21,7 @@ Argo::Application.routes.draw do
   match 'catalog/:id/upload',             :to => 'catalog#upload',            :as => 'upload',             :via => [:post]
   match 'catalog/:id/bulk_index',         :to => 'catalog#bulk_index',        :as => 'bulk_index',         :via => [:get]
   match 'catalog/:id/bulk_status_help',   :to => 'catalog#bulk_status_help',  :as => 'bulk_status_help',   :via => [:get]
-  
+
   #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
   # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
   match '/catalog', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
