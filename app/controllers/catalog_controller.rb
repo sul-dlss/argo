@@ -237,7 +237,7 @@ class CatalogController < ApplicationController
     log_filename = File.join(output_directory, 'log.txt')
 
     unless File.directory?(output_directory)
-      FileUtils::mkdir_p(output_directory)
+      FileUtils.mkdir_p(output_directory)
     end
 
     log_file = File.new(log_filename, 'w')
