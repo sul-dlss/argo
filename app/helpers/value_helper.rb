@@ -110,6 +110,6 @@ module ValueHelper
 
   # not actually called yet, requires Blacklight 4.2.0
   def facet_model_helper value
-    value.gsub /^info:fedora\/(afmodel:)?/, ''
+    value.gsub(/^info:fedora\/(afmodel:)?/, '')
   end
 end

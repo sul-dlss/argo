@@ -486,8 +486,8 @@ class ItemsController < ApplicationController
     %w(amp lt gt quot).each do |char|
       content=content.gsub('&amp;'+char+';', '&'+char+';')
     end
-    content=content.gsub /&amp;(\#[0-9]+;)/, '&\1'
-    content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1'
+    content=content.gsub(/&amp;(\#[0-9]+;)/, '&\1')
+    content=content.gsub(/&amp;(\#x[0-9A-Fa-f];)/, '&\1')
     Nokogiri::XML(content,nil,'UTF-8')
   end
 
