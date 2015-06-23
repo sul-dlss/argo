@@ -50,29 +50,4 @@ class StatusController < ApplicationController
     docs.length == 1
   end
 
-  def check_logs
-    log_file = File.new(LOG_FILE,'r')
-    txt=''
-    zone = ActiveSupport::TimeZone.new("Pacific Time (US & Canada)")
-    params[:minutes] ||= '15'
-    cutoff_time = params[:minutes].to_i.minutes.ago
-    cutoff_time=DateTime.parse(cutoff_time.to_s).in_time_zone(zone)
-
-    while(line=log_file.gets)
-
-      #check whether this is a successful index
-      if line.match 'updated'
-        #parse the time to see if it was within the last params[:interval] minutes
-        timestamp=line.split('[').last.split('\.').first
-        this_run=DateTime.parse(timestamp).change(:offset => zone.formatted_offset)
-        if(this_run > cutoff_time)
-          return true
-        else
-          txt=line
-        end
-      end
-    end
-    return txt
-  end
-
 end
