@@ -197,7 +197,7 @@ module ArgoHelper
         buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
       end
     end
-    if(doc.key?('embargo_status_ssim'))
+    if (doc.key?('embargo_status_ssim'))
       embargo_data = doc['embargo_status_ssim']
       text = embargo_data.split.first
       # date=embargo_data.split.last

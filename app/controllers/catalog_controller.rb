@@ -218,11 +218,11 @@ class CatalogController < ApplicationController
     uploaded_file = params[:spreadsheet_file].tempfile
     response_xml = nil
 
-    if(params[:filetypes] == "xml")
+    if (params[:filetypes] == "xml")
       response_xml = RestClient.post(Argo::Config.urls.normalizer, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
       #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
     else # spreadsheet
-      if(params.key?(:xml_only))
+      if (params.key?(:xml_only))
         response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
         #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
       else
@@ -249,7 +249,7 @@ class CatalogController < ApplicationController
     log_file.puts("xml_written #{log_timestamp}")
     log_file.puts("records #{record_count}")
 
-    if(params[:note])
+    if (params[:note])
       log_file.puts("note #{params[:note]}")
     end
 
@@ -312,12 +312,12 @@ class CatalogController < ApplicationController
   def bulk_job_metadata(dir)
     job_info = Hash.new
     log_filename = File.join(dir, "log.txt")
-    if(File.directory?(dir) && File.readable?(dir))
-      if(File.exist?(log_filename) && File.readable?(log_filename))
+    if (File.directory?(dir) && File.readable?(dir))
+      if (File.exist?(log_filename) && File.readable?(log_filename))
         File.open(log_filename, 'r') { |log_file|
           log_file.each_line do |line|
             matched_strings = line.match(/^([^\s]+)\s+(.*)/)
-            if(matched_strings && matched_strings.length == 3)
+            if (matched_strings && matched_strings.length == 3)
               job_info[matched_strings[1]] = matched_strings[2]
             end
           end
@@ -333,7 +333,7 @@ class CatalogController < ApplicationController
     bulk_info = Array.new()
     bulk_load_dir = File.join(Argo::Config.bulk_directory, druid)
 
-    if(File.directory?(bulk_load_dir))
+    if (File.directory?(bulk_load_dir))
       directory_list = Dir.glob("#{bulk_load_dir}/*")
     end
 

@@ -216,16 +216,6 @@ Style/MultilineBlockChain:
 Style/MultilineOperationIndentation:
   Enabled: false
 
-# Offense count: 3
-# Configuration parameters: EnforcedStyle, MinBodyLength, SupportedStyles.
-Style/Next:
-  Enabled: false
-
-# Offense count: 9
-# Cop supports --auto-correct.
-Style/NumericLiterals:
-  MinDigits: 15
-
 # Offense count: 10
 # Cop supports --auto-correct.
 # Configuration parameters: AllowSafeAssignment.
@@ -294,11 +284,6 @@ Style/SingleSpaceBeforeFirstArg:
 # Offense count: 294
 # Cop supports --auto-correct.
 Style/SpaceAfterComma:
-  Enabled: false
-
-# Offense count: 7
-# Cop supports --auto-correct.
-Style/SpaceAfterControlKeyword:
   Enabled: false
 
 # Offense count: 2

@@ -399,7 +399,7 @@ class ItemsController < ApplicationController
     current_tags=@object.tags
     if params[:add]
       [:new_tag1,:new_tag2,:new_tag3].each do |k|
-        next unless(params[k] && params[k].length > 0)
+        next unless (params[k] && params[k].length > 0)
         @object.add_tag(params[k])
       end
     end
@@ -605,7 +605,7 @@ class ItemsController < ApplicationController
   end
   def save_and_reindex
     @object.save
-    reindex @object unless(params[:bulk])
+    reindex @object unless (params[:bulk])
   end
 
   #check that the user can carry out this item modification
