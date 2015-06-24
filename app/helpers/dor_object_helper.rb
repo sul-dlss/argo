@@ -169,7 +169,7 @@ module DorObjectHelper
   def render_qfacet_value(facet_solr_field, item, options ={})
     params=add_facet_params(facet_solr_field, item.qvalue)
     Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
-     (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
+      (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
     end
   end
 

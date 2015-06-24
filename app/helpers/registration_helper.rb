@@ -119,10 +119,10 @@ module RegistrationHelper
 
     if doc.nil?
       begin
-         obj = Dor.load_instance 'druid:'+druid
-         solr_doc = obj.to_solr
-         Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-         doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
+        obj = Dor.load_instance 'druid:'+druid
+        solr_doc = obj.to_solr
+        Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
+        doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
       rescue
         pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       end
@@ -146,7 +146,7 @@ module RegistrationHelper
     pdf.font('Courier', :size => 10)
 
     labels = doc['obj_label_ssim']
-    label  = (labels.nil? || labels.empty?) ? '' : labels.first
+    label = (labels.nil? || labels.empty?) ? '' : labels.first
     label = label[0..110] + '...' if label.length > 110
 
     table_data = [['Object Label:',label]]
@@ -155,9 +155,7 @@ module RegistrationHelper
     end
 
     table_data.push(['Date Printed:',Time.now.strftime('%c')])
-    if doc['source_id_t'].present?
-      table_data.push(["Source ID:",Array(doc['source_id_t']).first])
-    end
+    table_data.push(["Source ID:",Array(doc['source_id_t']).first]) if doc['source_id_t'].present?
 
     table_data += ids
     tags = Array(doc['identityMetadata_tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact

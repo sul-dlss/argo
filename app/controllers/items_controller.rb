@@ -42,7 +42,7 @@ class ItemsController < ApplicationController
 
   def on_hold
     %w(accession2WF accessionWF).each do |k|
-        return true if (@object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold')
+      return true if (@object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold')
     end
     return false
   rescue
