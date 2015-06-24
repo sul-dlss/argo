@@ -163,7 +163,7 @@ module DorObjectHelper
   end
 
   def can_close_version? pid
-    Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && ! Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
+    Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && !Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
   end
 
   def render_qfacet_value(facet_solr_field, item, options ={})
