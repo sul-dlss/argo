@@ -161,7 +161,7 @@ class CatalogController < ApplicationController
 
   end
 
-  def default_solr_doc_params(id=nil)
+  def default_solr_doc_params(id = nil)
     id ||= params[:id]
     {
       :q => %{id:"#{id}"}

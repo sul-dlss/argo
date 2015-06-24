@@ -230,7 +230,7 @@ namespace :argo do
     'apo_register_permissions_ssim'
   end
 
-  def get_workgroups_facet(apo_field=nil)
+  def get_workgroups_facet(apo_field = nil)
     apo_field = apo_field_default() if apo_field.nil?
     resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
       :facets => { :fields => [apo_field] },

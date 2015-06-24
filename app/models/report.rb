@@ -201,7 +201,7 @@ class Report
     }
   end
 
-  def initialize(params = {}, fields=nil)
+  def initialize(params = {}, fields = nil)
     if fields.nil?
       @fields = self.class.blacklight_config.report_fields
     else
@@ -272,7 +272,7 @@ class Report
 
   protected
 
-  def docs_to_records(docs, fields=blacklight_config.report_fields)
+  def docs_to_records(docs, fields = blacklight_config.report_fields)
     result = []
     docs.each_with_index do |doc,index|
       row = Hash[fields.collect do |spec|

@@ -88,11 +88,11 @@ module DorObjectHelper
     render :partial => 'catalog/show_milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 
-  def render_status(doc, object=nil)
+  def render_status(doc, object = nil)
     object.nil? ? doc['status_display'] : object.status.html_safe
   end
 
-  def render_status_style(doc, object=nil)
+  def render_status_style(doc, object = nil)
     unless object.nil?
       steps = Dor::Processable::STEPS
       highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
@@ -166,7 +166,7 @@ module DorObjectHelper
     Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && !Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
   end
 
-  def render_qfacet_value(facet_solr_field, item, options ={})
+  def render_qfacet_value(facet_solr_field, item, options = {})
     params=add_facet_params(facet_solr_field, item.qvalue)
     Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
       (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe

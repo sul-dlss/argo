@@ -16,7 +16,7 @@ require 'equivalent-xml/rspec_matchers'
 # Note: no such files, currently.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-def druid_to_path druid, flavor='xml'
+def druid_to_path druid, flavor = 'xml'
   fixture_mask = File.join(File.dirname(__FILE__),"fixtures","*_#{druid.sub(/:/,'_')}.#{flavor}")
   other_mask   = Rails.root.join("fedora_conf","data","#{druid.sub(/druid:/,'')}.#{flavor}")
   return Dir[fixture_mask].first || Dir[other_mask].first

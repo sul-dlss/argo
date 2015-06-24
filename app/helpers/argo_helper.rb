@@ -44,7 +44,7 @@ module ArgoHelper
     return 0
   end
 
-  def structure_from_solr(solr_doc, prefix, suffix='display')
+  def structure_from_solr(solr_doc, prefix, suffix = 'display')
     prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
     result = Confstruct::HashWithStructAccess.new
     prefixed_fields.each_pair do |path_str,value|
@@ -133,7 +133,7 @@ module ArgoHelper
     image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'index-thumb', :alt => '', :style=>'max-width:80px;max-height:80px;'
   end
   #override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
-  def render_facet_value(facet_solr_field, item, options ={})
+  def render_facet_value(facet_solr_field, item, options = {})
     display_value = item.value =~ /druid:/ ? label_for_druid(item.value) : item.value
     (link_to_unless(options[:suppress_link], ((item.label if item.respond_to?(:label)) || display_value), add_facet_params_and_redirect(facet_solr_field, item.value), :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
   end
@@ -149,7 +149,7 @@ module ArgoHelper
     return result.html_safe
   end
 
-  def render_buttons(doc, object=nil)
+  def render_buttons(doc, object = nil)
     pid = doc['id']
     object ||= Dor.find(pid)
     apo_pid = ''
@@ -231,27 +231,27 @@ module ArgoHelper
     link_to "DPG Object Status", File.join(Argo::Config.urls.dpg, val)
   end
 
-  def render_purl_link document, link_text='PURL', opts={:target => '_blank'}
+  def render_purl_link document, link_text = 'PURL', opts = {:target => '_blank'}
     val = document.get('id').split(/:/).last
     link_to link_text, File.join(Argo::Config.urls.purl, val), opts
   end
 
-  def render_dor_link document, link_text='Fedora UI', opts={:target => '_blank'}
+  def render_dor_link document, link_text = 'Fedora UI', opts = {:target => '_blank'}
     val = document.get('id')
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}"), opts
   end
 
-  def render_foxml_link document, link_text='FoXML', opts={:target => '_blank'}
+  def render_foxml_link document, link_text = 'FoXML', opts = {:target => '_blank'}
     val = document.get('id')
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}/objectXML"), opts
   end
 
-  def render_searchworks_link document, link_text='Searchworks', opts={:target => '_blank'}
+  def render_searchworks_link document, link_text = 'Searchworks', opts = {:target => '_blank'}
     val = document.get('catkey_id_ssim')
     link_to link_text, "http://searchworks.stanford.edu/view/#{val}", opts
   end
 
-  def render_mdtoolkit_link document, link_text='MD Toolkit', opts={:target => '_blank'}
+  def render_mdtoolkit_link document, link_text = 'MD Toolkit', opts = {:target => '_blank'}
     val = document.get('mdtoolkit_id_t')
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     form = document.get('mdform_tag_t')
@@ -266,11 +266,11 @@ module ArgoHelper
     self.send(section_header_method, document)
   end
 
-  def render_full_dc_link document, link_text="View full Dublin Core"
+  def render_full_dc_link document, link_text = "View full Dublin Core"
     link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' }
   end
 
-  def render_mods_view_link document, link_text="View MODS"
+  def render_mods_view_link document, link_text = "View MODS"
     link_to link_text, purl_preview_item_url(document.get('id')), :title => 'MODS View', :data => { ajax_modal: 'trigger' }
   end
 
@@ -278,7 +278,7 @@ module ArgoHelper
     render_full_dc_link(document) + ' / '+render_mods_view_link(document)
   end
 
-  def render_dor_workspace_link document, link_text="View DOR workspace"
+  def render_dor_workspace_link document, link_text = "View DOR workspace"
   end
 
   def render_datastream_link document

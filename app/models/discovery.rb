@@ -172,7 +172,7 @@ class Discovery
     }
   end
 
-  def initialize(params = {}, fields=nil)
+  def initialize(params = {}, fields = nil)
     if fields.nil?
       @fields = self.class.blacklight_config.discovery_fields
     else
@@ -231,7 +231,7 @@ class Discovery
 
   protected
 
-  def docs_to_records(docs, fields=blacklight_config.discovery_fields)
+  def docs_to_records(docs, fields = blacklight_config.discovery_fields)
     result = []
     docs.each_with_index do |doc,index|
       row = Hash[fields.collect do |spec|
