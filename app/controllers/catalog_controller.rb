@@ -214,44 +214,14 @@ class CatalogController < ApplicationController
   def upload
     @object = Dor.find params[:id]
 
-    uploaded_file = params[:spreadsheet_file].tempfile
-    response_xml = nil
-
-    if (params[:filetypes] == "xml")
-      response_xml = RestClient.post(Argo::Config.urls.normalizer, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
-      #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
-    else # spreadsheet
-      if (params.key?(:xml_only))
-        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
-        #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
-      else
-        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_file, 'rb'), :filename => params[:spreadsheet_file].original_filename)
-        #send_data(response_xml, :filename => "#{params[:id]}.xml", :type => "application/xml")
-      end
-    end
-
-    current_time = Time.now
-    directory_name = current_time.strftime("%Y_%m_%d_%H_%M_%S_%L")
-    output_directory = File.join(Argo::Config.bulk_directory, params[:druid], directory_name)
+    directory_name = Time.now.strftime("%Y_%m_%d_%H_%M_%S_%L")
+    output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
     log_filename = File.join(output_directory, 'log.txt')
 
-    FileUtils.mkdir_p(output_directory) unless File.directory?(output_directory)
-
-    log_file = File.new(log_filename, 'w')
-    log_timestamp = current_time.strftime("%Y-%m-%d %H:%M%P")
-    log_file.puts("job_start #{log_timestamp}")
-    log_file.puts("current_user #{current_user.login}")
-    record_count = response_xml.scan('<xmlDoc id').size
-    File.open(File.join(output_directory, 'metadata.xml'), "w") { |f| f.write(response_xml) }
-    log_file.puts("xml_written #{log_timestamp}")
-    log_file.puts("records #{record_count}")
-
-    log_file.puts("note #{params[:note]}") if (params[:note])
-
-    spreadsheet_copy_filename = File.join(output_directory, params[:spreadsheet_file].original_filename)
-    FileUtils.cp(params[:spreadsheet_file].tempfile, spreadsheet_copy_filename)
-    log_file.puts("input_file #{params[:spreadsheet_file].original_filename}")
-    log_file.close
+    # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it
+    temp_filename = Rails.root.join('tmp', params[:spreadsheet_file].original_filename)
+    FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
+    ModsulatorJob.perform_later(temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only].to_s, params[:note].to_s)
 
     redirect_to bulk_index_path(@object.id)
   end
@@ -324,7 +294,7 @@ class CatalogController < ApplicationController
   def load_bulk_jobs(druid)
     directory_list = Array.new
     bulk_info = Array.new()
-    bulk_load_dir = File.join(Argo::Config.bulk_directory, druid)
+    bulk_load_dir = File.join(Argo::Config.bulk_metadata_directory, druid)
 
     if (File.directory?(bulk_load_dir))
       directory_list = Dir.glob("#{bulk_load_dir}/*")
