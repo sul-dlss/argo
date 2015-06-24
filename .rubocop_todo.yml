@@ -242,12 +242,6 @@ Style/RescueModifier:
 Style/SignalException:
   Enabled: false
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
-Style/SingleLineMethods:
-  Enabled: false
-
 # Offense count: 21
 # Cop supports --auto-correct.
 Style/SingleSpaceBeforeFirstArg:

@@ -82,6 +82,7 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
   end
 
   # stub item and datastream repo access methods
+  # rubocop:disable Style/SingleLineMethods
   result.datastreams.each_pair do |dsid,ds|
     if ds.is_a?(other_class) && !ds.is_a?(Dor::WorkflowDs)
       ds.instance_eval do
