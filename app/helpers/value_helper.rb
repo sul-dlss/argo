@@ -15,12 +15,8 @@ module ValueHelper
   def label_for_druid druid
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
     Rails.cache.fetch("label_for_#{druid}", :expires_in => 1.hour) do
-      if @apo && druid == @apo.pid
-        item = @apo
-      end
-      if @obj && druid == @obj.pid
-        item = @obj
-      end
+      item = @apo if @apo && druid == @apo.pid
+      item = @obj if @obj && druid == @obj.pid
       begin
         item ||= Dor.find(druid)
         item.label

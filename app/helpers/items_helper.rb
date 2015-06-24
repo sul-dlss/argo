@@ -12,9 +12,7 @@ module ItemsHelper
       valid_types<<'supplement'
       valid_types<<'permission'
     end
-    if type=~ /Image/
-      valid_types<<'image'
-    end
+    valid_types<<'image' if type=~ /Image/
     return valid_types
   end
   def stacks_url_full_size obj, file_name

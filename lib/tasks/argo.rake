@@ -43,9 +43,7 @@ namespace :argo do
     version = File.read(version_file)
     version = version.split(/\./)
     index = levels.index(args[:level] || (version.length == 4 ? 'rc' : 'patch'))
-    if version.length == 4 && index < 3
-      version.pop
-    end
+    version.pop if version.length == 4 && index < 3
     if index == 3
       rc = version.length == 4 ? version.pop : 'rc0'
       rc.sub!(/^rc(\d+)$/) { |m| "rc#{$1.to_i+1}" }

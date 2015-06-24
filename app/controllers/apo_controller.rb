@@ -132,9 +132,7 @@ class ApoController < ApplicationController
     apo.save
     update_index(apo)
     notice = 'APO created. '
-    if collection_pid
-      notice += "Collection #{collection_pid} created."
-    end
+    notice += "Collection #{collection_pid} created." if collection_pid
     return {:notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid}
   end
 
@@ -165,9 +163,7 @@ class ApoController < ApplicationController
     if params[:collection] && params[:collection].length > 0
       @object.add_default_collection params[:collection]
     else
-      if collection_pid
-        @object.add_default_collection collection_pid
-      end
+      @object.add_default_collection collection_pid if collection_pid
     end
 
     set_apo_metadata @object, params

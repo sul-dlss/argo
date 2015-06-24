@@ -343,9 +343,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_notes @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node.attribute_nodes().length==0
-          count+=1
-        end
+        count+=1 if node.attribute_nodes().length==0
       end
       expect(count).to eq(14)
     end
@@ -391,9 +389,7 @@ describe ItemsHelper, :type => :helper do
       count=0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 1' && node['type'].nil?
-          count+=1
-        end
+        count+=1 if node['displayLabel'] == 'State 1' && node['type'].nil?
       end
       expect(count).to eq(5)
     end
@@ -401,9 +397,7 @@ describe ItemsHelper, :type => :helper do
       count = 0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 2'
-          count+=1
-        end
+        count+=1 if node['displayLabel'] == 'State 2'
       end
       expect(count).to eq(5)
     end
@@ -411,9 +405,7 @@ describe ItemsHelper, :type => :helper do
       count = 0
       mclaughlin_cleanup_states @doc
       @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 3'
-          count+=1
-        end
+        count+=1 if node['displayLabel'] == 'State 3'
       end
       expect(count).to eq(5)
     end
@@ -558,12 +550,8 @@ describe ItemsHelper, :type => :helper do
       notes=doc.search('//mods:note', 'mods'=>'http://www.loc.gov/mods/v3')
       expect(notes.length).to eq(8  )
       notes.each_with_index do |note, index|
-        if index == 6
-          expect(note['type']).to eq('references')
-        end
-        if index ==  7
-          expect(note['type']).to eq('statement_of_responsibility')
-        end
+        expect(note['type']).to eq('references') if index == 6
+        expect(note['type']).to eq('statement_of_responsibility') if index ==  7
       end
     end
   end

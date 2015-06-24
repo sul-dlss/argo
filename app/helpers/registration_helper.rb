@@ -146,9 +146,7 @@ module RegistrationHelper
 
     labels = doc['obj_label_ssim']
     label  = (labels.nil? || labels.empty?) ? '' : labels.first
-    if label.length > 110
-      label = label[0..110] + '...'
-    end
+    label = label[0..110] + '...' if label.length > 110
 
     table_data = [['Object Label:',label]]
     if project_name = doc['project_tag_ssim']
@@ -162,9 +160,7 @@ module RegistrationHelper
 
     table_data += ids
     tags = Array(doc['identityMetadata_tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
-    if tags.length > 0
-      table_data.push(["Tags:",tags.join("\n")])
-    end
+    table_data.push(["Tags:",tags.join("\n")]) if tags.length > 0
 
     pdf.table(table_data, :column_widths => [100,224], :cell_style => { :borders => [], :padding => 0.pt })
 

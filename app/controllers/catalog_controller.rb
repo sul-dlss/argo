@@ -236,9 +236,7 @@ class CatalogController < ApplicationController
     output_directory = File.join(Argo::Config.bulk_directory, params[:druid], directory_name)
     log_filename = File.join(output_directory, 'log.txt')
 
-    unless File.directory?(output_directory)
-      FileUtils.mkdir_p(output_directory)
-    end
+    FileUtils.mkdir_p(output_directory) unless File.directory?(output_directory)
 
     log_file = File.new(log_filename, 'w')
     log_timestamp = current_time.strftime("%Y-%m-%d %H:%M%P")
@@ -249,9 +247,7 @@ class CatalogController < ApplicationController
     log_file.puts("xml_written #{log_timestamp}")
     log_file.puts("records #{record_count}")
 
-    if (params[:note])
-      log_file.puts("note #{params[:note]}")
-    end
+    log_file.puts("note #{params[:note]}") if (params[:note])
 
     spreadsheet_copy_filename = File.join(output_directory, params[:spreadsheet_file].original_filename)
     FileUtils.cp(params[:spreadsheet_file].tempfile, spreadsheet_copy_filename)

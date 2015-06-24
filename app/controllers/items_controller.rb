@@ -78,9 +78,7 @@ class ItemsController < ApplicationController
 
   def set_collection
     can_set_collection = (@object.collections.size == 0)
-    if can_set_collection
-      @object.add_collection(params[:collection])
-    end
+    @object.add_collection(params[:collection]) if can_set_collection
     respond_to do |format|
       if params[:bulk]
         if can_set_collection
