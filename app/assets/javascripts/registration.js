@@ -1,6 +1,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
+//= require jqgrid-jquery-rails
 //= require argo
 //= require jquery.defaultText
 //= require jquery.textarea
