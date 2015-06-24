@@ -345,6 +345,7 @@ describe ItemsController, :type => :controller do
     end
     it 'should 403 if they arent permitted' do
       allow(@current_user).to receive(:is_admin).and_return(false)
+      expect(@item).not_to receive(:remove_collection)
       post 'remove_collection', :id => @pid, :collection => 'druid:1234'
       expect(response.code).to eq("403")
     end
