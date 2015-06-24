@@ -266,12 +266,10 @@ class ApoController < ApplicationController
     redirect
   end
 
-
   def spreadsheet_template
     binary_string = RestClient.get(Argo::Config.urls.spreadsheet)
     send_data(binary_string, :filename => "spreadsheet_template.xlsx", :type =>  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
   end
-
 
   private
 

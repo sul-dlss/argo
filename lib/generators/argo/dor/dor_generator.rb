@@ -26,6 +26,7 @@ class DorGenerator < Rails::Generators::Base
   end
 
   private
+
   def workflow_url
     uri = URI.parse(workflow_server)
     uri = URI.parse('https://' + workflow_server) if uri.scheme.nil?

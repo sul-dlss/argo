@@ -44,7 +44,6 @@ module ArgoHelper
     return 0
   end
 
-
   def structure_from_solr(solr_doc, prefix, suffix='display')
     prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
     result = Confstruct::HashWithStructAccess.new

@@ -201,6 +201,7 @@ class Discovery
     end
     toret
   end
+
   def report_data
     docs_to_records(@document_list)
   end
@@ -229,6 +230,7 @@ class Discovery
   end
 
   protected
+
   def docs_to_records(docs, fields=blacklight_config.discovery_fields)
     result = []
     docs.each_with_index do |doc,index|

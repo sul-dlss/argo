@@ -94,6 +94,7 @@ namespace :argo do
       end
       return res
     end
+
     def json_cores(url)
       return JSON.load(open(url))
     end
@@ -228,6 +229,7 @@ namespace :argo do
   def apo_field_default
     'apo_register_permissions_ssim'
   end
+
   def get_workgroups_facet(apo_field=nil)
     apo_field = apo_field_default() if apo_field.nil?
     resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,

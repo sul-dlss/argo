@@ -188,7 +188,6 @@ class Report
     }
     config.add_sort_field 'id asc', :label => 'Druid'
 
-
     config.column_model = config.report_fields.collect { |spec|
       {
         'name' => spec[:field],
@@ -272,6 +271,7 @@ class Report
   end
 
   protected
+
   def docs_to_records(docs, fields=blacklight_config.report_fields)
     result = []
     docs.each_with_index do |doc,index|

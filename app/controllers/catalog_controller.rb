@@ -207,7 +207,6 @@ class CatalogController < ApplicationController
     render :layout => request.xhr? ? false : true
   end
 
-
   def bulk_upload_form
     @object = Dor.find params[:id]
   end
@@ -257,7 +256,6 @@ class CatalogController < ApplicationController
     redirect_to bulk_index_path(@object.id)
   end
 
-
   def bulk_index
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
@@ -282,12 +280,11 @@ class CatalogController < ApplicationController
     @bulk_jobs = load_bulk_jobs(params[:id])
   end
 
-
   def bulk_status_help
   end
 
-
   private
+
   def set_user_obj_instance_var
     @user = current_user
   end

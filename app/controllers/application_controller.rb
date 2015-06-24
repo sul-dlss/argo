@@ -67,6 +67,7 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
   def munge_parameters
     case request.content_type
     when 'application/xml','text/xml'

@@ -20,6 +20,7 @@ class SolrGenerator < Rails::Generators::Base
   end
 
   private
+
   def prodhost
     uri = URI.parse(prod_solr)
     uri = URI.parse('http://' + prod_solr) if uri.scheme.nil?

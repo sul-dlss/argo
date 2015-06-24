@@ -8,3 +8,6 @@ Metrics/LineLength:
 Style/FileName:
   Exclude:
     - 'config/deploy/*.rb'
+
+Style/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true

@@ -15,6 +15,7 @@ module ItemsHelper
     valid_types<<'image' if type=~ /Image/
     return valid_types
   end
+
   def stacks_url_full_size obj, file_name
     druid=obj.pid
     return "#{Argo::Config.urls.stacks_file}/#{druid}/#{URI.encode(file_name)}"
@@ -28,6 +29,7 @@ module ItemsHelper
     xml.root['xsi:schemaLocation']="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"
     xml.root['version']='3.3'
   end
+
   def mclaughlin_reorder_notes xml
     notes={ :general => [], :sor => [], :pub => [], :ref => [], :lang => [], :identifiers => [] }
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
@@ -56,11 +58,13 @@ module ItemsHelper
     reparent notes[:ref], root
     reparent notes[:identifiers], root
   end
+
   def reparent nodes, root
     nodes.each do |node|
       root << node
     end
   end
+
   def mclaughlin_reorder_states xml
     states=[]
     parent=nil
@@ -102,6 +106,7 @@ module ItemsHelper
       end
     end
   end
+
   def mclaughlin_cleanup_statement xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       if node['type']=='statement_of_responsibility' || node['displayLabel']=='statement of responsibility'
@@ -110,6 +115,7 @@ module ItemsHelper
       end
     end
   end
+
   def mclaughlin_cleanup_publication xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       if node['type']=='publications' && ['', 'general note', 'state_note'].include?(node['displayLabel'])
@@ -118,6 +124,7 @@ module ItemsHelper
       end
     end
   end
+
   def mclaughlin_cleanup_references xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       ref=false
@@ -134,6 +141,7 @@ module ItemsHelper
       end
     end
   end
+
   def mclaughlin_cleanup_states xml
     xml.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       if node['type'] && node['type'].include?('state') && is_numeric?(node['type'].last(1))
@@ -154,9 +162,11 @@ module ItemsHelper
       end
     end
   end
+
   def mclaughlin_ignore_fields xml
     xml.search('//mods:note[@displayLabel=\'location_code\']','mods'=>'http://www.loc.gov/mods/v3').each(&:remove)
   end
+
   def mclaughlin_fix_subjects xml
     xml.search('//mods:subject','mods'=>'http://www.loc.gov/mods/v3').each do |node|
       #if there is more than 1 topic in this subject, split it out into another subject
@@ -220,6 +230,7 @@ module ItemsHelper
       coord.content = hash[coord.text].last if hash.key?(coord.text)
     end
   end
+
   def schema_validate xml
     @xsd ||= Nokogiri::XML::Schema(File.read(File.expand_path(File.dirname(__FILE__) + "/xslt/mods-3-4.xsd")))
     errors=[]
@@ -256,9 +267,11 @@ module ItemsHelper
       end
     end
   end
+
   def is_blank?(node)
     all_children_are_blank?(node) && node.text? && node.content.strip == ''
   end
+
   def all_children_are_blank?(node)
     toret=true
     node.children.all?{|child|
@@ -271,6 +284,7 @@ module ItemsHelper
     }
     toret
   end
+
   def mclaughlin_remove_keydate xml
     xml.search('//mods:mods/titleInfo/title[@keyDate=\'no\']','mods'=>'http://www.loc.gov/mods/v3').each(&:remove)
   end
@@ -326,6 +340,7 @@ module ItemsHelper
     messages << 'Missing or invalid typeOfResource' unless format && format.length>0 && good_formats.include?(format.first)
     messages
   end
+
   def mclaughlin_remove_related_item xml
     titles = xml.search('//mods:relatedItem/mods:titleInfo/mods:title','mods'=>'http://www.loc.gov/mods/v3')
     titles.each do |title|

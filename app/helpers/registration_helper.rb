@@ -18,6 +18,7 @@ module RegistrationHelper
   def utf_val
     "hello world ©"
   end
+
   def apo_default_rights_list(*permission_keys)
     q = 'objectType_ssim:adminPolicy'
     unless permission_keys.empty?

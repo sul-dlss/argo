@@ -1,6 +1,5 @@
 Argo::Application.routes.draw do
 
-
   Blacklight::Marc.add_routes(self)
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
