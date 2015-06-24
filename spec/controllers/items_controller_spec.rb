@@ -80,14 +80,9 @@ describe ItemsController, :type => :controller do
       expect(response.code).to eq("403")
     end
     it "should call Dor::Item.update_embargo" do
-      runs=0
-      allow(@item).to receive(:update_embargo) do |a|
-        runs=1
-        true
-      end
+      expect(@item).to receive(:update_embargo)
       post :embargo_update, :id => @pid,:embargo_date => "2012-10-19T00:00:00Z"
       expect(response.code).to eq("302")
-      expect(runs).to eq(1)
     end
   end
   describe "register" do
@@ -113,10 +108,7 @@ describe ItemsController, :type => :controller do
   end
   describe "close_version" do
     it 'should call dor-services to close the version' do
-      ran=false
-      allow(@item).to receive(:close_version)do
-        ran=true
-      end
+      expect(@item).to receive(:close_version)
       version_metadata=double(Dor::VersionMetadataDS)
       allow(version_metadata).to receive(:current_version_id).and_return(2)
       allow(@item).to receive(:versionMetadata).and_return(version_metadata)
@@ -125,7 +117,6 @@ describe ItemsController, :type => :controller do
       expect(@item).to receive(:save)
       expect(Dor::SearchService.solr).to receive(:add)
       get 'close_version', :id => @pid, :severity => 'major', :description => 'something'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -187,12 +178,8 @@ describe ItemsController, :type => :controller do
     it 'should recieve an uploaded file and add it to the requested resource' do
       #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
-      ran=false
-      allow(@item).to receive(:add_file) do
-        ran=true
-      end
+      expect(@item).to receive(:add_file)
       post 'add_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you are not an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -202,12 +189,8 @@ describe ItemsController, :type => :controller do
   end
   describe "delete_file" do
     it 'should call dor services to remove the file' do
-      ran=false
-      allow(@item).to receive(:remove_file)do
-        ran=true
-      end
+      expect(@item).to receive(:remove_file)
       get 'delete_file', :id => @pid, :file_name => 'old_file'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -219,12 +202,8 @@ describe ItemsController, :type => :controller do
     it 'should recieve an uploaded file and call dor-services' do
       #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
-      ran=false
-      allow(@item).to receive(:replace_file) do
-        ran=true
-      end
+      expect(@item).to receive(:replace_file)
       post 'replace_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -233,10 +212,12 @@ describe ItemsController, :type => :controller do
     end
   end
   describe "update_parameters" do
+    before :each do
+      @content_md = double(Dor::ContentMetadataDS)
+      allow(@item).to receive(:contentMetadata).and_return(@content_md)
+    end
     it 'should update the shelve, publish and preserve to yes (used to be true)' do
-      contentMD=double(Dor::ContentMetadataDS)
-      allow(@item).to receive(:contentMetadata).and_return(contentMD)
-      allow(contentMD).to receive(:update_attributes) do |file, publish, shelve, preserve|
+      allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
         expect(shelve  ).to eq("yes")
         expect(preserve).to eq("yes")
         expect(publish ).to eq("yes")
@@ -244,24 +225,20 @@ describe ItemsController, :type => :controller do
       post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
     end
     it 'should work ok if not all of the values are set' do
-      contentMD=double(Dor::ContentMetadataDS)
-      allow(@item).to receive(:contentMetadata).and_return(contentMD)
-      allow(contentMD).to receive(:update_attributes) do |file, publish, shelve, preserve|
+      allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
         expect(shelve  ).to eq("no")
         expect(preserve).to eq("yes")
         expect(publish ).to eq("yes")
       end
-      post 'update_attributes',  :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
+      post 'update_attributes', :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
     end
     it 'should update the shelve, publish and preserve to no (used to be false)' do
-      contentMD=double(Dor::ContentMetadataDS)
-      allow(@item).to receive(:contentMetadata).and_return(contentMD)
-      allow(contentMD).to receive(:update_attributes) do |file, publish, shelve, preserve|
+      allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
         expect(shelve  ).to eq("no")
         expect(preserve).to eq("no")
         expect(publish ).to eq("no")
       end
-      expect(contentMD).to receive(:update_attributes)
+      expect(@content_md).to receive(:update_attributes)
       post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
     end
     it 'should 403 if you arent an admin' do
@@ -345,18 +322,19 @@ describe ItemsController, :type => :controller do
     end
   end
   describe 'set_collection' do
+    before :each do
+      @collection_druid = 'druid:1234'
+    end
     it 'should add a collection if there is none yet' do
-      collection_druid = 'druid:1234'
       allow(@item).to receive(:collections).and_return([])
-      expect(@item).to receive(:add_collection).with(collection_druid)
-      post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
+      expect(@item).to receive(:add_collection).with(@collection_druid)
+      post 'set_collection', :id => @pid, :collection => @collection_druid, :bulk => true
       expect(response.code).to eq("200")
     end
     it 'should not add a collection if there is already one' do
-      collection_druid = 'druid:1234'
       allow(@item).to receive(:collections).and_return(['collection'])
       expect(@item).not_to receive(:add_collection)
-      post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
+      post 'set_collection', :id => @pid, :collection => @collection_druid, :bulk => true
       expect(response.code).to eq("500")
     end
   end
