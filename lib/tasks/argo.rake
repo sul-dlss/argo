@@ -247,10 +247,10 @@ namespace :argo do
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
     directives = ['AuthType WebAuth',
-      'Require privgroup dlss:argo-access',
-      'WebAuthLdapAttribute suAffiliation',
-      'WebAuthLdapAttribute displayName',
-      'WebAuthLdapAttribute mail']
+                  'Require privgroup dlss:argo-access',
+                  'WebAuthLdapAttribute suAffiliation',
+                  'WebAuthLdapAttribute displayName',
+                  'WebAuthLdapAttribute mail']
 
     directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
     facet = get_workgroups_facet()
