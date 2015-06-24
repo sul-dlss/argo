@@ -1,6 +1,6 @@
 <%
   workflows = {}
-  workflow_data = facet_tree('wf')['wf_wps_facet'] || {}
+  workflow_data = facet_tree('wf')['wf_wps_ssim'] || {}
 
   workflow_data.keys.sort.collect do |wf_name|
     wf_data = workflow_data[wf_name]
