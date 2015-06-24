@@ -51,7 +51,7 @@ describe ArgoHelper, :type => :helper do
         'Change source id'  => '/items/something/source_id_ui',
         'Edit tags'         => '/items/something/tags_ui',
         'Edit collections'  => '/items/something/collection_ui',
-        'Set content type'  => '/items/something/content_type',
+        'Set content type'  => '/items/something/content_type'
       }.each_pair do |k,v|
         expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
       end
@@ -66,7 +66,7 @@ describe ArgoHelper, :type => :helper do
         'Change source id'  => '/items/something/source_id_ui',
         'Edit tags'         => '/items/something/tags_ui',
         'Edit collections'  => '/items/something/collection_ui',
-        'Set content type'  => '/items/something/content_type',
+        'Set content type'  => '/items/something/content_type'
       }.each_pair do |k,v|
         expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
       end
@@ -81,7 +81,7 @@ describe ArgoHelper, :type => :helper do
         'Edit tags'         => '/items/something/tags_ui',
         'Edit collections'  => '/items/something/collection_ui',
         'Set content type'  => '/items/something/content_type',
-        'Update embargo'    => '/items/something/embargo_form',
+        'Update embargo'    => '/items/something/embargo_form'
       }.each_pair do |k,v|
         expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
       end

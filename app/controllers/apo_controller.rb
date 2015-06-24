@@ -17,7 +17,7 @@ class ApoController < ApplicationController
       'by-nd' => 'Attribution No Derivatives 3.0 Unported',
       'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
       'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported'
     }
   end
 

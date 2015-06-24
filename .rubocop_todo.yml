@@ -341,19 +341,7 @@ Style/SpaceInsideParens:
 Style/StringLiterals:
   Enabled: false
 
-# Offense count: 4
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-Style/TrailingComma:
-  Enabled: false
-
 # Offense count: 5
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/VariableName:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: MaxLineLength.
-Style/WhileUntilModifier:
   Enabled: false
