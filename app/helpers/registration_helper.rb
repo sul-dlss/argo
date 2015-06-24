@@ -19,41 +19,6 @@ module RegistrationHelper
     "hello world ©"
   end
 
-  def apo_default_rights_list(*permission_keys)
-    q = 'objectType_ssim:adminPolicy'
-    unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_ssim:"#{key}"} }.join(" OR ") + ')'
-    end
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
-    result.sort! do |a,b|
-      Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
-    end
-    #for each apo, fetch the apo object so the rightsMetadata stream can be read, and the default permissions based on the chosen apo can be labeled as (apo default)
-    result.each do |apo|
-      apo_object = Dor.find(apo['id'], :lightweight => true)
-      adm_xml = apo_object.defaultObjectRights.ng_xml
-      added=false
-
-      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each do |read|
-        #if read.value='Stanford'
-        apo['rights'] = 'Stanford'+read.name
-        added=true
-        break
-        #end
-      end
-
-      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
-        apo['rights'] = 'world'
-        added=true
-        break
-      end
-      apo['rights'] = 'dark' if apo['rights'].nil?
-    end
-    result.collect do |doc|
-      [Array( doc['rights']).first, doc['id'].to_s]
-    end
-  end
-
   def valid_object_types
     [
       %w(Item item),
