@@ -17,12 +17,10 @@ class ReportController < CatalogController
   end
 
   def data
-    #if (not params[:sidx]) or params[:sidx] == 'druid'
+    #if !params[:sidx] || params[:sidx] == 'druid'
     #  params[:sidx] = 'id'
     #end
-    if !params[:sord]
-      params[:sord] = 'asc'
-    end
+    params[:sord] ||= 'asc'
     #params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i,1].max
@@ -32,10 +30,10 @@ class ReportController < CatalogController
     respond_to do |format|
       format.json {
         render :json => {
-          :page => params[:page].to_i,
+          :page    => params[:page].to_i,
           :records => @report.num_found,
-          :total => (@report.num_found / rows_per_page.to_f).ceil,
-          :rows => @report.report_data
+          :total   => (@report.num_found / rows_per_page.to_f).ceil,
+          :rows    => @report.report_data
         }
       }
       format.xml  { render :xml  => @report.report_data }
@@ -48,8 +46,7 @@ class ReportController < CatalogController
   def pids
     #params[:per_page]=100
     #params[:rows]=100
-    fields=['druid']
-    ids=Report.new(params,fields).pids params
+    ids=Report.new(params,['druid']).pids params
     respond_to do |format|
       format.json {
         render :json => {
@@ -75,6 +72,7 @@ class ReportController < CatalogController
     @step=params[:reset_step]
     @ids=Report.new(params,['druids']).pids params
     @ids.each { |pid| Dor::WorkflowService.update_workflow_status 'dor',"druid:#{pid}",@workflow, @step, "waiting" }
+    ### XXX: Where's the authorization?
   end
 
   def workflow_grid

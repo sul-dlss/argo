@@ -17,7 +17,7 @@ class ApoController < ApplicationController
       'by-nd' => 'Attribution No Derivatives 3.0 Unported',
       'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
       'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
+      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported'
     }
   end
 
@@ -51,13 +51,11 @@ class ApoController < ApplicationController
     err_list = []
 
     # error if title is empty
-    if input_params[:title].strip.length == 0
-      err_list.push(:title)
-    end
+    err_list.push(:title) if input_params[:title].strip.length == 0
 
     # error if managers or viewers role list is invalid
     [:managers, :viewers].each do |roleplayer_list|
-      if !is_valid_role_list(split_roleplayer_input_field(input_params[roleplayer_list]))
+      unless is_valid_role_list(split_roleplayer_input_field(input_params[roleplayer_list]))
         err_list.push(roleplayer_list)
       end
     end
@@ -134,16 +132,14 @@ class ApoController < ApplicationController
     apo.save
     update_index(apo)
     notice = 'APO created. '
-    if collection_pid
-      notice += "Collection #{collection_pid} created."
-    end
+    notice += "Collection #{collection_pid} created." if collection_pid
     return {:notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid}
   end
 
   def param_cleanup params
-    params[:title].strip! unless !params[:title]
+    params[:title].strip! if params[:title]
     [:managers, :viewers].each do |role_param_sym|
-      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless !params[role_param_sym]
+      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') if params[role_param_sym]
     end
   end
 
@@ -167,9 +163,7 @@ class ApoController < ApplicationController
     if params[:collection] && params[:collection].length > 0
       @object.add_default_collection params[:collection]
     else
-      if collection_pid
-        @object.add_default_collection collection_pid
-      end
+      @object.add_default_collection collection_pid if collection_pid
     end
 
     set_apo_metadata @object, params
@@ -272,12 +266,10 @@ class ApoController < ApplicationController
     redirect
   end
 
-
   def spreadsheet_template
     binary_string = RestClient.get(Argo::Config.urls.spreadsheet)
     send_data(binary_string, :filename => "spreadsheet_template.xlsx", :type =>  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
   end
-
 
   private
 

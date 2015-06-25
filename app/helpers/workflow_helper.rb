@@ -83,7 +83,7 @@ module WorkflowHelper
   end
 
   def proc_names_for_wf(wf_name, wf_data)
-    proc_names = wf_data.keys.delete_if { |k,v| ! k.is_a?(String) }
+    proc_names = wf_data.keys.delete_if { |k,v| !k.is_a?(String) }
     wf = Dor::WorkflowObject.find_by_name(wf_name)
     if wf.nil?
       proc_names = ActiveSupport::OrderedHash[*(proc_names.sort.collect { |n| [n,nil] }.flatten)]

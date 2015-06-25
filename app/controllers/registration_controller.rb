@@ -41,6 +41,7 @@ class RegistrationController < ApplicationController
       format.any(:json, :xml) { render request.format.to_sym => result.flatten.sort }
     end
   end
+
   def collection_list
     res={''=>'None'}
     apo_object = Dor.find(params[:apo_id], :lightweight => true)

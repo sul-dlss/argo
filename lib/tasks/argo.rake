@@ -43,9 +43,7 @@ namespace :argo do
     version = File.read(version_file)
     version = version.split(/\./)
     index = levels.index(args[:level] || (version.length == 4 ? 'rc' : 'patch'))
-    if version.length == 4 && index < 3
-      version.pop
-    end
+    version.pop if version.length == 4 && index < 3
     if index == 3
       rc = version.length == 4 ? version.pop : 'rc0'
       rc.sub!(/^rc(\d+)$/) { |m| "rc#{$1.to_i+1}" }
@@ -96,6 +94,7 @@ namespace :argo do
       end
       return res
     end
+
     def json_cores(url)
       return JSON.load(open(url))
     end
@@ -230,7 +229,8 @@ namespace :argo do
   def apo_field_default
     'apo_register_permissions_ssim'
   end
-  def get_workgroups_facet(apo_field=nil)
+
+  def get_workgroups_facet(apo_field = nil)
     apo_field = apo_field_default() if apo_field.nil?
     resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
       :facets => { :fields => [apo_field] },
@@ -249,10 +249,10 @@ namespace :argo do
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
     directives = ['AuthType WebAuth',
-      'Require privgroup dlss:argo-access',
-      'WebAuthLdapAttribute suAffiliation',
-      'WebAuthLdapAttribute displayName',
-      'WebAuthLdapAttribute mail']
+                  'Require privgroup dlss:argo-access',
+                  'WebAuthLdapAttribute suAffiliation',
+                  'WebAuthLdapAttribute displayName',
+                  'WebAuthLdapAttribute mail']
 
     directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
     facet = get_workgroups_facet()

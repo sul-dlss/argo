@@ -1,6 +1,6 @@
 class String
   # remove middle from strings exceeding max length.
-  def ellipsize(options={})
+  def ellipsize(options = {})
     max = options[:max] || 40
     delimiter = options[:delimiter] || "..."
     return self if self.size <= max

@@ -9,7 +9,13 @@
 	    <td><%= job['current_user'] %></td>
 	    <td><%= job['input_file'] %></td>
 	    <td><%= job['note'] %></td>
-	    <td>in process</td>
+	    <td>
+		<% if(job['job_finish']) %>
+		  completed
+		<% else %>
+		  in process
+		<% end %>
+            </td>
 	    <td><%= job['records'] %></td>
 	    <td><%= job['records'] %></td>
 	    <td>Log</td>

@@ -16,7 +16,7 @@ require 'equivalent-xml/rspec_matchers'
 # Note: no such files, currently.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
-def druid_to_path druid, flavor='xml'
+def druid_to_path druid, flavor = 'xml'
   fixture_mask = File.join(File.dirname(__FILE__),"fixtures","*_#{druid.sub(/:/,'_')}.#{flavor}")
   other_mask   = Rails.root.join("fedora_conf","data","#{druid.sub(/druid:/,'')}.#{flavor}")
   return Dir[fixture_mask].first || Dir[other_mask].first
@@ -82,6 +82,7 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
   end
 
   # stub item and datastream repo access methods
+  # rubocop:disable Style/SingleLineMethods
   result.datastreams.each_pair do |dsid,ds|
     if ds.is_a?(other_class) && !ds.is_a?(Dor::WorkflowDs)
       ds.instance_eval do

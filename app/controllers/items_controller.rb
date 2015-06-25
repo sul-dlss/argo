@@ -42,7 +42,7 @@ class ItemsController < ApplicationController
 
   def on_hold
     %w(accession2WF accessionWF).each do |k|
-        return true if (@object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold')
+      return true if (@object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold')
     end
     return false
   rescue
@@ -78,9 +78,7 @@ class ItemsController < ApplicationController
 
   def set_collection
     can_set_collection = (@object.collections.size == 0)
-    if can_set_collection
-      @object.add_collection(params[:collection])
-    end
+    @object.add_collection(params[:collection]) if can_set_collection
     respond_to do |format|
       if params[:bulk]
         if can_set_collection
@@ -144,15 +142,18 @@ class ItemsController < ApplicationController
       }
     end
   end
+
   def workflow_history_view
     @history_xml=Dor::WorkflowService.get_workflow_xml 'dor', params[:id], nil
   end
+
   def mods
     respond_to do |format|
       format.xml  { render :xml => @object.descMetadata.content }
       format.html
     end
   end
+
   def update_mods
     @object.descMetadata.content = params[:xmlstr]
     @object.save
@@ -160,6 +161,7 @@ class ItemsController < ApplicationController
       format.xml  { render :xml => @object.descMetadata.ng_xml.to_s }
     end
   end
+
   def workflow_update
     args = params.values_at(:id, :wf_name, :process, :status)
     check_args = params.values_at(:id, :wf_name, :process)
@@ -187,6 +189,7 @@ class ItemsController < ApplicationController
       end
     end
   end
+
   def release_hold
     #this will raise and exception if the item doesnt have that workflow step
     unless Dor::WorkflowService.get_workflow_status('dor', @object.pid, 'accessionWF','sdr-ingest-transfer') == 'hold'
@@ -206,6 +209,7 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(@object.pid), :notice => 'Workflow was successfully updated' }
     end
   end
+
   def embargo_update
     if current_user.is_admin
       new_date=DateTime.parse(params[:embargo_date])
@@ -218,6 +222,7 @@ class ItemsController < ApplicationController
       render :status=> :forbidden, :text =>'forbidden'
     end
   end
+
   def datastream_update
     ds=@object.datastreams[params[:dsid]]
     #check that the content is valid xml
@@ -231,6 +236,7 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
     end
   end
+
   def get_file
     data=@object.get_file(params[:file])
     self.response.headers["Content-Type"] = "application/octet-stream"
@@ -238,6 +244,7 @@ class ItemsController < ApplicationController
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
     self.response_body = data
   end
+
   def get_preserved_file
     res=@object.get_preserved_file params[:file], params[:version]
     case res
@@ -260,6 +267,7 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Updated attributes for file '+params[:file_name]+'!' }
     end
   end
+
   def create_minimal_mods
     unless (Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'descriptive-metadata')=='error' || Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'publish')=='error')
       render :text => 'Object is not in error for descMD or publish!', :status => 500
@@ -282,6 +290,7 @@ class ItemsController < ApplicationController
       format.any { render :text => 'Set metadata ' }
     end
   end
+
   def replace_file
     @object.replace_file params[:uploaded_file],params[:file_name]
     respond_to do |format|
@@ -296,6 +305,7 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'File '+params[:uploaded_file].original_filename+' was added!' }
     end
   end
+
   def open_version
     # puts params[:description]
     vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
@@ -308,6 +318,7 @@ class ItemsController < ApplicationController
     render :status=> 500, :text =>'Object net yet accessioned'
     return
   end
+
   def get_current_version_tag(item)
     # create an instance of VersionTag for the current version of item
     ds = item.datastreams['versionMetadata']
@@ -315,6 +326,7 @@ class ItemsController < ApplicationController
     cur_tag = Dor::VersionTag.parse(ds.tag_for_version(cur_version_id))
     return cur_tag
   end
+
   def get_prior_version_tag(item)
     # create an instance of VersionTag for the second most recent version of item
     ds = item.datastreams['versionMetadata']
@@ -322,6 +334,7 @@ class ItemsController < ApplicationController
     prior_tag = Dor::VersionTag.parse(ds.tag_for_version(prior_version_id))
     return prior_tag
   end
+
   def which_severity_changed(cur_version_tag, prior_version_tag)
     # given two instances of VersionTag, find the most significant part of the field which changed
     # between the two (return nil if either instance is nil or if they're the same)
@@ -337,6 +350,7 @@ class ItemsController < ApplicationController
       return nil
     end
   end
+
   def close_version
     # as long as this isn't a bulk operation, and we get non-nil severity and description
     # values, update those fields on the version metadata datastream
@@ -362,6 +376,7 @@ class ItemsController < ApplicationController
       render :status => 500, :text => 'No version to close.'
     end
   end
+
   def source_id
     new_id=params[:new_id].strip
     @object.set_source_id(new_id)
@@ -374,6 +389,7 @@ class ItemsController < ApplicationController
       end
     end
   end
+
   def tags_bulk
     current_tags=@object.tags
     #delete all tags
@@ -395,11 +411,12 @@ class ItemsController < ApplicationController
       end
     end
   end
+
   def tags
     current_tags=@object.tags
     if params[:add]
       [:new_tag1,:new_tag2,:new_tag3].each do |k|
-        next unless(params[k] && params[k].length > 0)
+        next unless (params[k] && params[k].length > 0)
         @object.add_tag(params[k])
       end
     end
@@ -418,15 +435,18 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }
     end
   end
+
   def delete_file
     @object.remove_file(params[:file_name])
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => params[:file_name] + ' has been deleted!' }
     end
   end
+
   def resource
     @content_ds = @object.datastreams['contentMetadata']
   end
+
   def purge_object
     begin
       create_obj
@@ -445,6 +465,7 @@ class ItemsController < ApplicationController
       format.any { redirect_to '/', :notice => params[:id] + ' has been purged!' }
     end
   end
+
   def update_resource
     @object.move_resource(        params[:resource], params[:position]) if params[:position]
     @object.update_resource_label(params[:resource], params[:label   ]) if params[:label]
@@ -456,6 +477,7 @@ class ItemsController < ApplicationController
       format.any { redirect_to catalog_path(params[:id]), :notice => notice }
     end
   end
+
   def discoverable
     messages = mods_discoverable @object.descMetadata.ng_xml
     if messages.length == 0
@@ -464,9 +486,11 @@ class ItemsController < ApplicationController
       render :status => 500, :text => messages.join(' ')
     end
   end
+
   def remediate_mods
     render :status => :ok, :text => 'method disabled'
   end
+
   def schema_validation
     errors = schema_validate @object.descMetadata.ng_xml
     if errors.length == 0
@@ -475,6 +499,7 @@ class ItemsController < ApplicationController
       render :status => 500, :text => errors.join('<br>')[0...490]
     end
   end
+
   def refresh_metadata
     @object.build_datastream('descMetadata',true)
     @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
@@ -486,8 +511,8 @@ class ItemsController < ApplicationController
     %w(amp lt gt quot).each do |char|
       content=content.gsub('&amp;'+char+';', '&'+char+';')
     end
-    content=content.gsub /&amp;(\#[0-9]+;)/, '&\1'
-    content=content.gsub /&amp;(\#x[0-9A-Fa-f];)/, '&\1'
+    content=content.gsub(/&amp;(\#[0-9]+;)/, '&\1')
+    content=content.gsub(/&amp;(\#x[0-9A-Fa-f];)/, '&\1')
     Nokogiri::XML(content,nil,'UTF-8')
   end
 
@@ -500,11 +525,13 @@ class ItemsController < ApplicationController
       render :status => 500, :text => 'Has duplicates'
     end
   end
+
   def change_mods_value
     mods=Mods::Reader.new(@object.descMetadata.content)
     return unless mods.methods.include? params[:field].to_sym
     mods.send(params[:field].to_sym, params[:val])
   end
+
   def remove_duplicate_encoding
     ds=@object.descMetadata
     ng=scrubbed_content_ng_utf8(ds.content)
@@ -517,6 +544,7 @@ class ItemsController < ApplicationController
       render :status => :ok, :text => 'Has duplicates'
     end
   end
+
   def set_rights
     unless %w(stanford world none dark).include? params[:rights]
       render :status=> :forbidden, :text =>'Invalid new rights setting.'
@@ -586,6 +614,7 @@ class ItemsController < ApplicationController
   end
 
   private
+
   def reindex item
     doc=item.to_solr
     Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
@@ -603,9 +632,10 @@ class ItemsController < ApplicationController
       return
     end
   end
+
   def save_and_reindex
     @object.save
-    reindex @object unless(params[:bulk])
+    reindex @object unless (params[:bulk])
   end
 
   #check that the user can carry out this item modification
@@ -614,11 +644,13 @@ class ItemsController < ApplicationController
     render :status=> :forbidden, :text =>'forbidden'
     return false
   end
+
   def forbid_view
     return true if current_user.is_admin || @object.can_view_content?(current_user.roles @apo)
     render :status=> :forbidden, :text =>'forbidden'
     return false
   end
+
   def enforce_versioning
     #if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
     return true if @object.allows_modification? || on_hold

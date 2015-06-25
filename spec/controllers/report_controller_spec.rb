@@ -31,7 +31,7 @@ describe ReportController, :type => :controller do
       get :bulk
       expect(response).to render_template('bulk')
       expect(page).to include("Bulk update operations")
-      ["Get druids from search", "Paste a druid list", "Reindex"].each do | btn_txt |
+      ["Get druids from search", "Paste a druid list", "Reindex"].each do |btn_txt|
         expect(page).to have_button(btn_txt)
       end
     end

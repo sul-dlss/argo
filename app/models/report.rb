@@ -188,7 +188,6 @@ class Report
     }
     config.add_sort_field 'id asc', :label => 'Druid'
 
-
     config.column_model = config.report_fields.collect { |spec|
       {
         'name' => spec[:field],
@@ -202,7 +201,7 @@ class Report
     }
   end
 
-  def initialize(params = {}, fields=nil)
+  def initialize(params = {}, fields = nil)
     if fields.nil?
       @fields = self.class.blacklight_config.report_fields
     else
@@ -227,7 +226,7 @@ class Report
           toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
         elsif params[:tags]
           tags=''
-          if !rec['tag_ssim'].nil?
+          unless rec['tag_ssim'].nil?
             rec['tag_ssim'].split(';').each do |tag|
               tags+="\t"+tag.to_s
             end
@@ -272,7 +271,8 @@ class Report
   end
 
   protected
-  def docs_to_records(docs, fields=blacklight_config.report_fields)
+
+  def docs_to_records(docs, fields = blacklight_config.report_fields)
     result = []
     docs.each_with_index do |doc,index|
       row = Hash[fields.collect do |spec|

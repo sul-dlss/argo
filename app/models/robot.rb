@@ -19,6 +19,7 @@ class Robot < ActiveRecord::Base
     puts @status
     @status
   end
+
   def status_long
     ready_docs=Dor::SearchService.query("wf_wps_ssim:\"#{wf}:#{process}:ready\"")['response']['docs']
     if ready_docs.length > 0
@@ -34,6 +35,7 @@ class Robot < ActiveRecord::Base
     end
     @status
   end
+
   def recent_work
     Dor::SearchService.query("wf_#{wf}_#{process}_dttsi:[NOW-7HOURS-1HOUR  TO NOW]", {:rows => 20, :fl => 'id,dc_title_tesim,apo_title_ssim'})['response']['docs']
   end

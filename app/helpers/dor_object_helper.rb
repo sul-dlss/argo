@@ -11,12 +11,11 @@ module DorObjectHelper
     result = {}
     terms.each_pair do |term,finder|
       finder[:selector].each do |key|
-        if doc[key].present?
-          val = doc[key]
-          com = finder[:combiner]
-          result[term] = com ? com.call(val) : val.first
-          break
-        end
+        next unless doc[key].present?
+        val = doc[key]
+        com = finder[:combiner]
+        result[term] = com ? com.call(val) : val.first
+        break
       end
     end
     result
@@ -46,6 +45,7 @@ module DorObjectHelper
     end
   end
 
+  # FIXME: XXX: Nice security there.
   def is_permitted(current_user, operation, pid)
     return true
   end
@@ -88,21 +88,15 @@ module DorObjectHelper
     render :partial => 'catalog/show_milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 
-  def render_status(doc, object=nil)
-    if object.nil?
-      return doc['status_display']
-    else
-      return object.status.html_safe
-    end
+  def render_status(doc, object = nil)
+    object.nil? ? doc['status_display'] : object.status.html_safe
   end
 
-  def render_status_style(doc, object=nil)
-    if !object.nil?
+  def render_status_style(doc, object = nil)
+    unless object.nil?
       steps = Dor::Processable::STEPS
       highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
-      if highlighted_statuses.include? object.status_info[:status_code]
-        return "argo-obj-status-highlight"
-      end
+      return "argo-obj-status-highlight" if highlighted_statuses.include? object.status_info[:status_code]
     end
 
     return ""
@@ -169,17 +163,13 @@ module DorObjectHelper
   end
 
   def can_close_version? pid
-    if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && ! Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
-      true
-    else
-      false
-    end
+    Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && !Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
   end
 
-  def render_qfacet_value(facet_solr_field, item, options ={})
+  def render_qfacet_value(facet_solr_field, item, options = {})
     params=add_facet_params(facet_solr_field, item.qvalue)
     Rails.cache.fetch("route_for"+params.to_s, :expires_in => 1.hour) do
-     (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
+      (link_to_unless(options[:suppress_link], item.value, params , :class=>"facet_select") + " " + render_facet_count(item.hits)).html_safe
     end
   end
 
@@ -226,9 +216,7 @@ module DorObjectHelper
 
   def render_ds_profile_header ds
     dscd = ds.createDate
-    if dscd.is_a?(Time)
-      dscd = dscd.xmlschema
-    end
+    dscd = dscd.xmlschema if dscd.is_a?(Time)
     %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
   end
 

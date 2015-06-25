@@ -28,9 +28,7 @@ class ApplicationController < ActionController::Base
     klass = nil
     begin
       klass = Module.const_get(klass_chain.shift)
-      while klass_chain.length > 0
-        klass = klass.const_get(klass_chain.shift)
-      end
+      klass = klass.const_get(klass_chain.shift) while klass_chain.length > 0
     rescue NameError
       klass = nil
     end
@@ -69,6 +67,7 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
   def munge_parameters
     case request.content_type
     when 'application/xml','text/xml'

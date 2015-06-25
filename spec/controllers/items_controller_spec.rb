@@ -3,44 +3,41 @@ describe ItemsController, :type => :controller do
   before :each do
     # TODO: use fixtures here, this is too much stubbing
     @item = double(Dor::Item)
-    allow(@item).to receive(:to_solr)
-    @current_user=double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup=>ADMIN_GROUPS.first)
+    @pid  = 'druid:oo201oo0001'
+    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup=>ADMIN_GROUPS.first)
     allow(@current_user).to receive(:is_admin).and_return(true)
     allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
-    allow(Dor::Item).to receive(:find).with('druid:oo201oo0001').and_return(@item)
-    @event_ds=double(Dor::EventsDS)
+    allow(Dor::Item).to receive(:find).with(@pid).and_return(@item)
+    @event_ds = double(Dor::EventsDS)
     allow(@event_ds).to receive(:add_event)
-    @ds={}
-    idmd=double()
+    idmd = double()
+    apo  = double()
+    wf   = double()
     allow(idmd).to receive(:dirty=)
+    allow(apo).to receive(:pid).and_return('druid:apo')
+    allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
+    allow(@item).to receive(:to_solr)
     allow(@item).to receive(:save)
-    @ds['identityMetadata']=idmd
+    allow(@item).to receive(:delete)
     allow(@item).to receive(:identityMetadata).and_return(idmd)
-    @ds['events'] = @event_ds
-    allow(@item).to receive(:datastreams).and_return(@ds)
+    allow(@item).to receive(:datastreams).and_return({'identityMetadata' => idmd, 'events' => @event_ds})
     allow(@item).to receive(:allows_modification?).and_return(true)
     allow(@item).to receive(:can_manage_item?    ).and_return(false)
     allow(@item).to receive(:can_manage_content? ).and_return(false)
     allow(@item).to receive(:can_view_content?   ).and_return(false)
     allow(@item).to receive(:pid).and_return('object:pid')
-    allow(@item).to receive(:delete)
-    @apo=double()
-    allow(@apo).to receive(:pid).and_return('druid:apo')
-    allow(@item).to receive(:admin_policy_object).and_return(@apo)
-    wf=double()
-    allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
-    allow(@item).to receive(:workflows).and_return wf
+    allow(@item).to receive(:admin_policy_object).and_return(apo)
+    allow(@item).to receive(:workflows).and_return(wf)
     allow(Dor::SearchService.solr).to receive(:add)
-    @pid='druid:oo201oo0001'
   end
 
   describe 'datastream_update' do
     it 'should allow a non admin to update the datastream' do
       allow(@item).to receive(:can_manage_content?).and_return(true)
       allow(@item).to receive(:can_manage_desc_metadata?).and_return(true)
-      xml="<some> xml</some>"
+      xml = "<some> xml</some>"
       allow(@item.datastreams['identityMetadata']).to receive(:content=)
       post :datastream_update, :id => @pid, :dsid => 'identityMetadata', :content => xml
       expect(response.code).to eq("302")
@@ -80,14 +77,9 @@ describe ItemsController, :type => :controller do
       expect(response.code).to eq("403")
     end
     it "should call Dor::Item.update_embargo" do
-      runs=0
-      allow(@item).to receive(:update_embargo) do |a|
-        runs=1
-        true
-      end
+      expect(@item).to receive(:update_embargo)
       post :embargo_update, :id => @pid,:embargo_date => "2012-10-19T00:00:00Z"
       expect(response.code).to eq("302")
-      expect(runs).to eq(1)
     end
   end
   describe "register" do
@@ -113,11 +105,8 @@ describe ItemsController, :type => :controller do
   end
   describe "close_version" do
     it 'should call dor-services to close the version' do
-      ran=false
-      allow(@item).to receive(:close_version)do
-        ran=true
-      end
-      version_metadata=double(Dor::VersionMetadataDS)
+      expect(@item).to receive(:close_version)
+      version_metadata = double(Dor::VersionMetadataDS)
       allow(version_metadata).to receive(:current_version_id).and_return(2)
       allow(@item).to receive(:versionMetadata).and_return(version_metadata)
       expect(version_metadata).to receive(:update_current_version)
@@ -125,7 +114,6 @@ describe ItemsController, :type => :controller do
       expect(@item).to receive(:save)
       expect(Dor::SearchService.solr).to receive(:add)
       get 'close_version', :id => @pid, :severity => 'major', :description => 'something'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -187,12 +175,8 @@ describe ItemsController, :type => :controller do
     it 'should recieve an uploaded file and add it to the requested resource' do
       #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
-      ran=false
-      allow(@item).to receive(:add_file) do
-        ran=true
-      end
+      expect(@item).to receive(:add_file)
       post 'add_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you are not an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -202,12 +186,8 @@ describe ItemsController, :type => :controller do
   end
   describe "delete_file" do
     it 'should call dor services to remove the file' do
-      ran=false
-      allow(@item).to receive(:remove_file)do
-        ran=true
-      end
+      expect(@item).to receive(:remove_file)
       get 'delete_file', :id => @pid, :file_name => 'old_file'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -219,12 +199,8 @@ describe ItemsController, :type => :controller do
     it 'should recieve an uploaded file and call dor-services' do
       #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
-      ran=false
-      allow(@item).to receive(:replace_file) do
-        ran=true
-      end
+      expect(@item).to receive(:replace_file)
       post 'replace_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'
-      expect(ran).to eq(true)
     end
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
@@ -233,10 +209,12 @@ describe ItemsController, :type => :controller do
     end
   end
   describe "update_parameters" do
+    before :each do
+      @content_md = double(Dor::ContentMetadataDS)
+      allow(@item).to receive(:contentMetadata).and_return(@content_md)
+    end
     it 'should update the shelve, publish and preserve to yes (used to be true)' do
-      contentMD=double(Dor::ContentMetadataDS)
-      allow(@item).to receive(:contentMetadata).and_return(contentMD)
-      allow(contentMD).to receive(:update_attributes) do |file, publish, shelve, preserve|
+      allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
         expect(shelve  ).to eq("yes")
         expect(preserve).to eq("yes")
         expect(publish ).to eq("yes")
@@ -244,24 +222,20 @@ describe ItemsController, :type => :controller do
       post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
     end
     it 'should work ok if not all of the values are set' do
-      contentMD=double(Dor::ContentMetadataDS)
-      allow(@item).to receive(:contentMetadata).and_return(contentMD)
-      allow(contentMD).to receive(:update_attributes) do |file, publish, shelve, preserve|
+      allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
         expect(shelve  ).to eq("no")
         expect(preserve).to eq("yes")
         expect(publish ).to eq("yes")
       end
-      post 'update_attributes',  :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
+      post 'update_attributes', :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
     end
     it 'should update the shelve, publish and preserve to no (used to be false)' do
-      contentMD=double(Dor::ContentMetadataDS)
-      allow(@item).to receive(:contentMetadata).and_return(contentMD)
-      allow(contentMD).to receive(:update_attributes) do |file, publish, shelve, preserve|
+      allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
         expect(shelve  ).to eq("no")
         expect(preserve).to eq("no")
         expect(publish ).to eq("no")
       end
-      expect(contentMD).to receive(:update_attributes)
+      expect(@content_md).to receive(:update_attributes)
       post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
     end
     it 'should 403 if you arent an admin' do
@@ -292,7 +266,7 @@ describe ItemsController, :type => :controller do
       expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error(RuntimeError, 'XML was not well formed!')
     end
     it 'should call save with good xml' do
-      mock_ds=double(Dor::ContentMetadataDS)
+      mock_ds = double(Dor::ContentMetadataDS)
       allow(mock_ds).to receive(:content=)
       expect(@item).to receive(:save)
       allow(@item).to receive(:datastreams).and_return({'contentMetadata' => mock_ds})
@@ -302,7 +276,7 @@ describe ItemsController, :type => :controller do
   end
   describe 'update_sequence' do
     before :each do
-      @mock_ds=double(Dor::ContentMetadataDS)
+      @mock_ds = double(Dor::ContentMetadataDS)
       allow(@mock_ds).to receive(:dirty?).and_return(false)
       allow(@mock_ds).to receive(:save)
       allow(@item).to receive(:datastreams).and_return({'contentMetadata' => @mock_ds})
@@ -328,9 +302,9 @@ describe ItemsController, :type => :controller do
   describe 'resource' do
     it 'should set the object and datastream, then call the view' do
       expect(Dor::Item).to receive(:find)
-      mock_ds=double(Dor::ContentMetadataDS)
-      allow(@item).to receive(:datastreams).and_return({'contentMetadata' => mock_ds})
+      allow(@item).to receive(:datastreams).and_return({'contentMetadata' => double(Dor::ContentMetadataDS)})
       get 'resource', :id => @pid, :resource => '0001'
+      # XXX : isn't actually testing what it says!
     end
   end
   describe 'add_collection' do
@@ -345,18 +319,19 @@ describe ItemsController, :type => :controller do
     end
   end
   describe 'set_collection' do
+    before :each do
+      @collection_druid = 'druid:1234'
+    end
     it 'should add a collection if there is none yet' do
-      collection_druid = 'druid:1234'
       allow(@item).to receive(:collections).and_return([])
-      expect(@item).to receive(:add_collection).with(collection_druid)
-      post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
+      expect(@item).to receive(:add_collection).with(@collection_druid)
+      post 'set_collection', :id => @pid, :collection => @collection_druid, :bulk => true
       expect(response.code).to eq("200")
     end
     it 'should not add a collection if there is already one' do
-      collection_druid = 'druid:1234'
       allow(@item).to receive(:collections).and_return(['collection'])
       expect(@item).not_to receive(:add_collection)
-      post 'set_collection', :id => @pid, :collection => collection_druid, :bulk => true
+      post 'set_collection', :id => @pid, :collection => @collection_druid, :bulk => true
       expect(response.code).to eq("500")
     end
   end
@@ -367,6 +342,7 @@ describe ItemsController, :type => :controller do
     end
     it 'should 403 if they arent permitted' do
       allow(@current_user).to receive(:is_admin).and_return(false)
+      expect(@item).not_to receive(:remove_collection)
       post 'remove_collection', :id => @pid, :collection => 'druid:1234'
       expect(response.code).to eq("403")
     end
@@ -374,8 +350,8 @@ describe ItemsController, :type => :controller do
   describe 'mods' do
     it 'should return the mods xml for a GET' do
       @request.env["HTTP_ACCEPT"] = "application/xml"
-      xml='<somexml>stuff</somexml>'
-      descmd=double()
+      xml = '<somexml>stuff</somexml>'
+      descmd = double()
       expect(descmd).to receive(:content).and_return(xml)
       expect(@item).to receive(:descMetadata).and_return(descmd)
       get 'mods', :id => @pid
@@ -405,8 +381,7 @@ describe ItemsController, :type => :controller do
   end
   describe "add_workflow" do
     before :each do
-      @wf=double()
-      @mock_wf=double()
+      @wf = double()
       expect(@item).to receive(:workflows).and_return @wf
     end
     it 'should initialize the new workflow' do
@@ -416,8 +391,9 @@ describe ItemsController, :type => :controller do
     end
     it 'shouldnt initialize the workflow if one is already active' do
       expect(@item).not_to receive(:initialize_workflow)
-      expect(@mock_wf).to receive(:active?).and_return(true)
-      expect(@wf).to receive(:[]).and_return(@mock_wf)
+      mock_wf = double()
+      expect(mock_wf).to receive(:active?).and_return(true)
+      expect(@wf).to receive(:[]).and_return(mock_wf)
       post 'add_workflow', :id => @pid, :wf => 'accessionWF'
     end
   end

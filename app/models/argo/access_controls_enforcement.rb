@@ -21,7 +21,7 @@ module Argo
       else
         new_pids=[]
         pids.each do |pid|
-         new_pids << '"info:fedora/' + pid + '"'
+          new_pids << '"info:fedora/' + pid + '"'
         end
         pids=new_pids
         pids=pids.join(' OR ')

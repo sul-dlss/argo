@@ -18,40 +18,6 @@ module RegistrationHelper
   def utf_val
     "hello world ©"
   end
-  def apo_default_rights_list(*permission_keys)
-    q = 'objectType_ssim:adminPolicy'
-    unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_ssim:"#{key}"} }.join(" OR ") + ')'
-    end
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
-    result.sort! do |a,b|
-      Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
-    end
-    #for each apo, fetch the apo object so the rightsMetadata stream can be read, and the default permissions based on the chosen apo can be labeled as (apo default)
-    result.each do |apo|
-      apo_object = Dor.find(apo['id'], :lightweight => true)
-      adm_xml = apo_object.defaultObjectRights.ng_xml
-      added=false
-
-      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group').each do |read|
-        #if read.value='Stanford'
-        apo['rights'] = 'Stanford'+read.name
-        added=true
-        break
-        #end
-      end
-
-      adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').each do |read|
-        apo['rights'] = 'world'
-        added=true
-        break
-      end
-      apo['rights'] = 'dark' if apo['rights'].nil?
-    end
-    result.collect do |doc|
-      [Array( doc['rights']).first, doc['id'].to_s]
-    end
-  end
 
   def valid_object_types
     [
@@ -91,13 +57,13 @@ module RegistrationHelper
   end
 
   def generate_tracking_pdf(druids)
+    # FIXME: why not search for all druids in one query?
     druids.each do |druid|
       doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
-      if doc.nil?
-        obj = Dor.load_instance 'druid:'+druid
-        solr_doc = obj.to_solr
-        Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-      end
+      next unless doc.nil?
+      obj = Dor.load_instance 'druid:'+druid
+      solr_doc = obj.to_solr
+      Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
     end
     pdf = Prawn::Document.new(:page_size => [5.5.in, 8.5.in])
     pdf.font('Courier')
@@ -118,10 +84,10 @@ module RegistrationHelper
 
     if doc.nil?
       begin
-         obj = Dor.load_instance 'druid:'+druid
-         solr_doc = obj.to_solr
-         Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-         doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
+        obj = Dor.load_instance 'druid:'+druid
+        solr_doc = obj.to_solr
+        Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
+        doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
       rescue
         pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       end
@@ -145,10 +111,8 @@ module RegistrationHelper
     pdf.font('Courier', :size => 10)
 
     labels = doc['obj_label_ssim']
-    label  = (labels.nil? || labels.empty?) ? '' : labels.first
-    if label.length > 110
-      label = label[0..110] + '...'
-    end
+    label = (labels.nil? || labels.empty?) ? '' : labels.first
+    label = label[0..110] + '...' if label.length > 110
 
     table_data = [['Object Label:',label]]
     if project_name = doc['project_tag_ssim']
@@ -156,15 +120,11 @@ module RegistrationHelper
     end
 
     table_data.push(['Date Printed:',Time.now.strftime('%c')])
-    if doc['source_id_t'].present?
-      table_data.push(["Source ID:",Array(doc['source_id_t']).first])
-    end
+    table_data.push(["Source ID:",Array(doc['source_id_t']).first]) if doc['source_id_t'].present?
 
     table_data += ids
     tags = Array(doc['identityMetadata_tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
-    if tags.length > 0
-      table_data.push(["Tags:",tags.join("\n")])
-    end
+    table_data.push(["Tags:",tags.join("\n")]) if tags.length > 0
 
     pdf.table(table_data, :column_widths => [100,224], :cell_style => { :borders => [], :padding => 0.pt })
 
