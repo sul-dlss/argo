@@ -20,9 +20,7 @@ class RegistrationController < ApplicationController
 
   def form_list
     docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).docs
-    format_t = docs.collect { |doc|
-      doc['administrativeMetadata_metadata_format_t'] ? doc['administrativeMetadata_metadata_format_t'] : doc['metadata_format_t']
-    }.flatten.first.to_s
+    format_t = docs.collect { |doc| doc['metadata_format_ssim'] }.flatten.first.to_s
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
     result = forms[format_t.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
     respond_to do |format|
@@ -32,7 +30,7 @@ class RegistrationController < ApplicationController
 
   def workflow_list
     docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).docs
-    result = docs.collect { |doc| doc['registration_workflow_id_t'] }.compact
+    result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.administrativeMetadata.ng_xml
     adm_xml.search('//registration/workflow').each do |wf|
