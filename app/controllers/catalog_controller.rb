@@ -28,10 +28,10 @@ class CatalogController < ApplicationController
       :'f.tag_ssim.facet.sort' => 'index'
     }
 
-    config.index.title_field = 'id'
+    config.index.title_field = 'dc_title_ssi'
     config.index.display_type_field = 'content_type_ssim'
 
-    config.show.title_field = 'obj_label_ssim'
+    config.show.title_field = 'dc_title_ssi'
     config.show.display_type_field = 'objectType_ssim'
     config.show.sections = {
       :default => %w(identification datastreams history contents),
