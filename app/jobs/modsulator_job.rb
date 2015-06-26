@@ -1,3 +1,5 @@
+require 'nokogiri'
+
 class ModsulatorJob < ActiveJob::Base
   queue_as :default
 
@@ -5,7 +7,7 @@ class ModsulatorJob < ActiveJob::Base
 
   def perform(uploaded_filename, output_directory, user_login, filetype, xml_only, note)
     original_filename = File.basename(uploaded_filename)
-
+    
     if(!File.directory?(output_directory))
       FileUtils.mkdir_p(output_directory)
     end
@@ -36,8 +38,12 @@ class ModsulatorJob < ActiveJob::Base
         log.puts("note #{note}")
       end
 
-      unless xml_only
+      if(xml_only)
+        log.puts("xml_only true")
+      else
         # Load into DOR
+        log.puts("xml_only false")
+        update_metadata(response_xml, log)
       end
 
       finish_timestamp = Time.now.strftime(TIME_FORMAT)
@@ -47,4 +53,27 @@ class ModsulatorJob < ActiveJob::Base
     # Remove the (temporary) uploaded file
     FileUtils.rm(uploaded_filename, :force => true)
   end
+
+
+  def update_metadata(xml_string, log)
+    root = Nokogiri::XML(xml_string).root
+    namespace = root.namespace()
+
+    # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
+    mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
+    mods_list.each do |mods_node|
+      current_druid = 'druid:' + mods_node.attr('objectId')
+      begin
+        dor_object = Dor.find current_druid
+        if(dor_object)
+          dor_object.descMetadata.content = mods_node.to_s
+          dor_object.save
+          log.puts("saved #{current_druid}")
+        end
+      rescue ActiveFedora::ObjectNotFoundError
+        log.puts("error_notfound #{current_druid}")
+      end        
+    end
+  end
+  
 end
