@@ -46,17 +46,6 @@ GIT
       systemu (~> 2.6.0)
       uuidtools (~> 2.1.4)
 
-GIT
-  remote: https://github.com/sul-dlss/dor-workflow-service.git
-  revision: 84b862568e63f77bc9f3fb7e8b92edc0005f94c8
-  branch: upd_dependency_reqs
-  specs:
-    dor-workflow-service (1.7.5)
-      activesupport (>= 3.2.1, < 4.2.3)
-      confstruct (~> 0.2.7)
-      nokogiri (~> 1.6.0)
-      rest-client (~> 1.7)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -199,6 +188,11 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.0.1)
       nokogiri
+    dor-workflow-service (1.7.6)
+      activesupport (>= 3.2.1, < 5)
+      confstruct (>= 0.2.7, < 2)
+      nokogiri (~> 1.6.0)
+      rest-client (~> 1.7)
     druid-tools (0.4.1)
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
@@ -527,7 +521,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   dor-services (~> 5.0)!
-  dor-workflow-service!
+  dor-workflow-service (~> 1.7)
   equivalent-xml (~> 0.5.1)
   haml
   http_logger
