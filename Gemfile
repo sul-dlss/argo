@@ -36,7 +36,7 @@ gem 'blacklight', '~> 5.9.0' #TODO: BL >= 5.10.x has new deprecation warnings vs
 gem 'blacklight-hierarchy'
 gem 'blacklight-marc'
 gem 'dor-services', '~> 5.0', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'solrization_fixes2'
-gem 'dor-workflow-service', :git => 'https://github.com/sul-dlss/dor-workflow-service.git', :branch => 'upd_dependency_reqs'
+gem 'dor-workflow-service', '~> 1.7'
 gem 'is_it_working-cbeer'
 gem 'jettywrapper'
 gem 'moab-versioning'
@@ -84,4 +84,5 @@ group :deployment do
   gem 'capistrano', '=3.2.1' # pinned because inadvertent capistrano upgrades tend to cause deployment issues.
   gem 'capistrano-rails'
   gem 'lyberteam-capistrano-devel', '3.1.0'
+  gem 'capistrano3-delayed-job', '~> 1.0'
 end
