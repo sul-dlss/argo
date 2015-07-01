@@ -6,7 +6,6 @@ class CatalogController < ApplicationController
   include BlacklightSolrExtensions
   include Blacklight::Catalog
   include Argo::AccessControlsEnforcement
-  include BlacklightConfigHelper
   helper ArgoHelper
 
   before_filter :reformat_dates, :set_user_obj_instance_var
