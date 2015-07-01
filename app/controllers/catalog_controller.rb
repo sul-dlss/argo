@@ -72,7 +72,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'exploded_tag_ssim',     :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
-    #TODO: access_rights_ssim once solr has it
+    config.add_facet_field 'rights_primary_ssi',    :label => 'Access Rights'
     config.add_facet_field 'collection_title_ssim', :label => 'Collection',  :sort => 'index', :limit => 500
     config.add_facet_field 'apo_title_ssim',        :label => 'Admin Policy',:sort => 'index', :limit => 500
     config.add_facet_field 'current_version_isi',   :label => 'Version'
