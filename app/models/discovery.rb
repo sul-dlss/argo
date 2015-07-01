@@ -144,10 +144,14 @@ class Discovery
         :default => true, :width => 200
       }
     ]
+
+    # common helper method since search results and reports all do the same configuration
+    BlacklightConfigHelper.add_common_date_facet_fields_to_config config
+
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 accessioned_day_tesim published_dttsim content_file_count_teim coordinates_teim creator_tesim dc_creator_tesim dc_identifier_druid_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_sim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim resource_count_display scale_teim shelved_content_file_count_display sourceId_t tag_teim title_tesim topic_tesim},
+      :qf => %{text^3 accessioned_day_tesim published_dttsim content_file_count_teim coordinates_teim creator_tesim dc_creator_tesim dc_identifier_druid_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_sim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim resource_count_display scale_teim sourceId_t tag_teim title_tesim topic_tesim},
       :rows => 100,
       :facet => true,
       :'facet.mincount' => 1,
@@ -191,7 +195,7 @@ class Discovery
     while @document_list.length >0
       report_data.each do|rec|
         if params[:source_id]
-          toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
+          toret << rec['druid'].to_s+"\t"+rec['source_id_ssim'].to_s
         else
           toret << rec['druid']
         end

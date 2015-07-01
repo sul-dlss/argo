@@ -17,7 +17,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t coordinates_teim creator_tesim dc_creator_tesim dc_identifier_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim identityMetadata_citationCreator_t identityMetadata_citationTitle_t objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim shelved_content_file_t sourceId_t tag_ssim title_tesim topic_tesim},
+      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t coordinates_teim creator_tesim dc_creator_tesim dc_identifier_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim identityMetadata_citationCreator_t identityMetadata_citationTitle_t objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim sourceId_t tag_ssim title_tesim topic_tesim},
       :rows => 10,
       :facet => true,
       :'facet.mincount' => 1,
@@ -42,6 +42,8 @@ class CatalogController < ApplicationController
       'contents'       => :render_dor_workspace_link,
       'datastreams'    => :render_datastream_link
     }
+
+    config.index.thumbnail_method = :render_index_thumbnail
 
     config.add_index_field 'id',              :label => 'DRUID'
     config.add_index_field 'dc_creator_ssi',   :label => 'Creator'
@@ -97,38 +99,8 @@ class CatalogController < ApplicationController
       :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
     }
 
-    # Be careful using NOW: http://lucidworks.com/blog/date-math-now-and-filter-queries/
-    # tl;dr: specify coarsest granularity (/DAY or /HOUR) or lose caching
-    #
-    #TODO: update blacklight_range_limit to work w/ dates and use it.  Or something similarly powerful.
-    #      Per-query user-paramatized facet endpoints w/ auto-scaling granularity is the point.
-    #      See solr facet ranges (start/end/gap), NOT facet range queries (fq), as here.
-    config.add_facet_field 'registered_date', :label => 'Registered', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "registered_dttsim:[NOW/DAY-7DAYS TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "registered_dttsim:[NOW/DAY-30DAYS TO *]"}
-    }
-    config.add_facet_field 'submitted_date', :label => 'Submitted', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "submitted_dttsim:[NOW/DAY-7DAYS TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "submitted_dttsim:[NOW/DAY-30DAYS TO *]"}
-    }
-    config.add_facet_field 'published_date', :label => 'Published', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "published_dttsim:[NOW/DAY-7DAYS TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "published_dttsim:[NOW/DAY-30DAYS TO *]"}
-    }
-    config.add_facet_field 'deposited_date', :label => 'Deposited', :query => {
-      :days_1  => { :label => 'today',          :fq => "deposited_dttsim:[NOW/DAY TO *]"},
-      :days_7  => { :label => 'within 7 days',  :fq => "deposited_dttsim:[NOW/DAY-7DAYS TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "deposited_dttsim:[NOW/DAY-30DAYS TO *]"}
-    }
-    config.add_facet_field 'object_modified_day', :label => 'Object Last Modified', :query => {
-      :days_7  => { :label => 'within 7 days',  :fq => "modified_latest_dttsi:[NOW/DAY-7DAYS TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "modified_latest_dttsi:[NOW/DAY-30DAYS TO *]"}
-    }
-    config.add_facet_field 'version_opened', :label => 'Open Version', :query => {
-      :all     => { :label => 'All',               :fq => "opened_latest_dttsi:*"},
-      :days_7  => { :label => 'more than 7 days',  :fq => "opened_latest_dttsi:[* TO NOW/DAY-7DAYS]"},
-      :days_30 => { :label => 'more than 30 days', :fq => "opened_latest_dttsi:[* TO NOW/DAY-30DAYS]"}
-    }
+    # common helper method since search results and reports all do the same configuration
+    BlacklightConfigHelper.add_common_date_facet_fields_to_config config
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
 

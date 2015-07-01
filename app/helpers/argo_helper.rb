@@ -93,15 +93,15 @@ module ArgoHelper
 
   def render_extended_document_class(document = @document)
     result = render_document_class(document).to_s
-    if first_image(document['shelved_content_file_t'])
+    if first_image(document['shelved_content_file_count_itsi'])
       result += " has-thumbnail"
     end
     result
   end
 
   def render_document_show_thumbnail doc
-    return unless doc['first_shelved_image_display']
-    fname = doc['first_shelved_image_display'].first
+    return unless doc['first_shelved_image_ss']
+    fname = doc['first_shelved_image_ss'].first
     return unless fname
     druid = doc['id'].to_s.split(/:/).last
     fname = File.basename(fname,File.extname(fname))
@@ -109,9 +109,9 @@ module ArgoHelper
   end
 
   def render_index_thumbnail doc
-    return unless doc['first_shelved_image_display']
-    fname = doc['first_shelved_image_display'].first
-    return unless fname
+    return nil unless doc['first_shelved_image_ss']
+    fname = doc['first_shelved_image_ss'].first
+    return nil unless fname
     druid = doc['id'].to_s.split(/:/).last
     fname = File.basename(fname,File.extname(fname))
     image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'index-thumb', :alt => '', :style=>'max-width:80px;max-height:80px;'
@@ -236,9 +236,9 @@ module ArgoHelper
   end
 
   def render_mdtoolkit_link document, link_text = 'MD Toolkit', opts = {:target => '_blank'}
-    val = document.get('mdtoolkit_id_t')
+    val = document.get('mdtoolkit_id_ssim')
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
-    form = document.get('mdform_tag_t')
+    form = document.get('mdform_tag_ssim')
     collection = forms.keys.find { |k| forms[k].keys.include?(form) }
     return unless form && collection
     link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
