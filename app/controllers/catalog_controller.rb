@@ -187,7 +187,6 @@ class CatalogController < ApplicationController
 
     directory_name = Time.now.strftime("%Y_%m_%d_%H_%M_%S_%L")
     output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
-    log_filename = File.join(output_directory, 'log.txt')
 
     # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it
     temp_filename = Rails.root.join('tmp', params[:spreadsheet_file].original_filename)
@@ -245,7 +244,7 @@ class CatalogController < ApplicationController
 
   def bulk_job_metadata(dir)
     job_info = Hash.new
-    log_filename = File.join(dir, "log.txt")
+    log_filename = File.join(dir, Argo::Config.bulk_metadata_log)
     if (File.directory?(dir) && File.readable?(dir))
       if (File.exist?(log_filename) && File.readable?(log_filename))
         File.open(log_filename, 'r') { |log_file|
