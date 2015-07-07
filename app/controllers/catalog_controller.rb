@@ -139,16 +139,13 @@ class CatalogController < ApplicationController
     }
   end
 
-
   def show
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
 
-    if(valid_user?(@obj))
-      super()  # with or without an APO, if we get here, user is authorized to view
-    end
+    return unless valid_user?(@obj)
+    super()  # with or without an APO, if we get here, user is authorized to view
   end
-
 
   def datastream_view
     pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
@@ -188,10 +185,9 @@ class CatalogController < ApplicationController
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
 
-    if(valid_user?(@obj))
-      @response, @document = get_solr_response_for_doc_id params[:id]
-      @bulk_jobs = load_bulk_jobs(params[:id])
-    end
+    return unless valid_user?(@obj)
+    @response, @document = get_solr_response_for_doc_id params[:id]
+    @bulk_jobs = load_bulk_jobs(params[:id])
   end
 
   def bulk_status_help
