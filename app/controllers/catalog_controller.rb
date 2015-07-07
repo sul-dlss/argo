@@ -139,28 +139,16 @@ class CatalogController < ApplicationController
     }
   end
 
+
   def show
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
-    begin
-      @apo = @obj.admin_policy_object
-    rescue
-    end
 
-    if @apo
-      unless @user.is_admin || @user.is_viewer || @obj.can_view_metadata?(@user.roles(@apo.pid))
-        render :status=> :forbidden, :text =>'forbidden'
-        return
-      end
-    else
-      unless @user.is_admin || @user.is_viewer
-        render :status=> :forbidden, :text =>'No APO, no access'
-        return
-      end
+    if(valid_user?(@obj))
+      super()  # with or without an APO, if we get here, user is authorized to view
     end
-    # with or without an APO, if we get here, user is authorized to view
-    super()
   end
+
 
   def datastream_view
     pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
@@ -199,25 +187,11 @@ class CatalogController < ApplicationController
   def bulk_index
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
-    begin
-      @apo = @obj.admin_policy_object
-    rescue
-    end
 
-    if @apo
-      unless @user.is_admin || @user.is_viewer || @obj.can_view_metadata?(@user.roles(@apo.pid))
-        render :status=> :forbidden, :text =>'forbidden'
-        return
-      end
-    else
-      unless @user.is_admin || @user.is_viewer
-        render :status=> :forbidden, :text =>'No APO, no access'
-        return
-      end
+    if(valid_user?(@obj))
+      @response, @document = get_solr_response_for_doc_id params[:id]
+      @bulk_jobs = load_bulk_jobs(params[:id])
     end
-
-    @response, @document = get_solr_response_for_doc_id params[:id]
-    @bulk_jobs = load_bulk_jobs(params[:id])
   end
 
   def bulk_status_help
@@ -242,6 +216,7 @@ class CatalogController < ApplicationController
     end
   end
 
+  # Given a directory with bulk metadata upload information (written by ModsulatorJob), loads the job data into a hash.
   def bulk_job_metadata(dir)
     job_info = Hash.new
     log_filename = File.join(dir, Argo::Config.bulk_metadata_log)
@@ -249,6 +224,9 @@ class CatalogController < ApplicationController
       if (File.exist?(log_filename) && File.readable?(log_filename))
         File.open(log_filename, 'r') { |log_file|
           log_file.each_line do |line|
+
+            # The log file is a very simple flat file (whitespace separated) format where the first token denotes the
+            # field/type of information and the rest is the actual value.
             matched_strings = line.match(/^([^\s]+)\s+(.*)/)
             if (matched_strings && matched_strings.length == 3)
               job_info[matched_strings[1]] = matched_strings[2]
@@ -261,11 +239,13 @@ class CatalogController < ApplicationController
     return job_info
   end
 
+  # Given a DRUID, loads any metadata bulk upload information associated with that DRUID into a hash.
   def load_bulk_jobs(druid)
     directory_list = Array.new
     bulk_info = Array.new()
     bulk_load_dir = File.join(Argo::Config.bulk_metadata_directory, druid)
 
+    # The metadata bulk upload processing stores its logs and other information in a very simple directory structure
     if (File.directory?(bulk_load_dir))
       directory_list = Dir.glob("#{bulk_load_dir}/*")
     end
@@ -274,5 +254,26 @@ class CatalogController < ApplicationController
       bulk_info.push(bulk_job_metadata(d))
     end
     return bulk_info
+  end
+
+  def valid_user?(dor_object)
+    begin
+      @apo = dor_object.admin_policy_object
+    rescue
+      return false
+    end
+
+    if @apo
+      unless @user.is_admin || @user.is_viewer || dor_object.can_view_metadata?(@user.roles(@apo.pid))
+        render :status=> :forbidden, :text =>'forbidden'
+        return false
+      end
+    else
+      unless @user.is_admin || @user.is_viewer
+        render :status=> :forbidden, :text =>'No APO, no access'
+        return false
+      end
+    end
+    return true
   end
 end
