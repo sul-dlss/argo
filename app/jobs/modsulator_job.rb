@@ -28,7 +28,7 @@ class ModsulatorJob < ActiveJob::Base
       end
 
       record_count = response_xml.scan('<xmlDoc id').size
-      File.open(File.join(output_directory, 'metadata.xml'), "w") { |f| f.write(response_xml) }
+      File.open(File.join(output_directory, Argo::Config.bulk_metadata_xml), "w") { |f| f.write(response_xml) }
       log.puts("xml_written #{Time.now.strftime(TIME_FORMAT)}")
       log.puts("records #{record_count}")
 
