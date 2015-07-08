@@ -18,7 +18,7 @@ Argo::Application.routes.draw do
 
   match 'catalog/:id/bulk_upload_form',   :to => 'catalog#bulk_upload_form',  :as => 'bulk_upload_form',   :via => [:get]
   match 'catalog/:id/upload',             :to => 'catalog#upload',            :as => 'upload',             :via => [:post]
-  match 'catalog/:id/bulk_index',         :to => 'catalog#bulk_index',        :as => 'bulk_index',         :via => [:get]
+  match 'catalog/:id/bulk_jobs_index',    :to => 'catalog#bulk_jobs_index',   :as => 'bulk_jobs_index',    :via => [:get]
   match 'catalog/:id/bulk_status_help',   :to => 'catalog#bulk_status_help',  :as => 'bulk_status_help',   :via => [:get]
 
   #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?

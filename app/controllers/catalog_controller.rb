@@ -179,10 +179,10 @@ class CatalogController < ApplicationController
     FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
     ModsulatorJob.perform_later(temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
 
-    redirect_to bulk_index_path(@object.id)
+    redirect_to bulk_jobs_index_path(@object.id)
   end
 
-  def bulk_index
+  def bulk_jobs_index
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
 
