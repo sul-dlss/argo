@@ -1,12 +1,28 @@
 require 'nokogiri'
 
+# This class defines a Delayed Job task that is started when the user uploads a bulk metadata file for
+# an APO.
 class ModsulatorJob < ActiveJob::Base
   queue_as :default
 
+  # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = "%Y-%m-%d %H:%M%P"
 
+  # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
+  # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
+  #
+  # @param  [String]  uploaded_filename  The full path to the temporary uploaded file. Will be deleted upon completion.
+  # @param  [String]  output_directory   Where to store output (log, generated XML etc.).
+  # @param  [String]  user_login         The current user's username.
+  # @param  [String]  filetype           If not 'xml', the input is assumed to be an Excel spreadsheet.
+  # @param  [String]  xml_only           If true, then only generate XML - do not upload into DOR.
+  # @param  [String]  note               An optional note that the user entered to go with the job.
+  # @return [Void]
   def perform(uploaded_filename, output_directory, user_login, filetype, xml_only, note)
+    # The uploaded filename is of the form <file.xlsx.TIMESTAMP> or <file.xml.TIMESTAMP> in order to prevent
+    # collisions when 2 people upload the same file. We don't want to display the timestamp later, though.
     original_filename = File.basename(uploaded_filename)
+    original_filename = original_filename.slice(0, original_filename.rindex('.'))
 
     FileUtils.mkdir_p(output_directory) unless (File.directory?(output_directory))
 
@@ -50,6 +66,11 @@ class ModsulatorJob < ActiveJob::Base
     FileUtils.rm(uploaded_filename, :force => true)
   end
 
+  # Upload metadata into DOR.
+  #
+  # @param  [String] xml_string    A MODS XML string.
+  # @param  [File]   log           Log file handle.
+  # @return [Void]
   def update_metadata(xml_string, log)
     root = Nokogiri::XML(xml_string).root
     namespace = root.namespace()
