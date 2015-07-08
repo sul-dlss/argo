@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: da64824f33e76d720cc415b2e2f350aa10da067b
+  revision: 7f3d9d7d61c87ebe1bd45b295e2c0c13dbbb1432
   branch: solrization_fixes2
   specs:
     dor-services (5.1.0)
@@ -166,7 +166,7 @@ GEM
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
     confstruct (0.2.7)
-    daemons (1.2.2)
+    daemons (1.2.3)
     dalli (2.7.4)
     debugger (1.6.8)
       columnize (>= 0.3.1)
