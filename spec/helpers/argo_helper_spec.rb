@@ -2,7 +2,7 @@ require 'spec_helper'
 describe ArgoHelper, :type => :helper do
   describe 'render_document_show_thumbnail' do
     it 'should include a thumbnail url' do
-      doc={'first_shelved_image_ss'=>['testimage.jp2']}
+      doc = {'first_shelved_image_ss'=>'testimage.jp2'}
       expect(helper.render_document_show_thumbnail(doc)  ).to  \
         match(/src=".*testimage_thumb"/                  ).and \
         match(/style="max-width:240px;max-height:240px;"/).and \
@@ -11,10 +11,10 @@ describe ArgoHelper, :type => :helper do
   end
   describe 'render_index_thumbnail' do
     it 'should include a thumbnail url' do
-      doc={'first_shelved_image_ss'=>['testimage.jp2']}
-      expect(helper.render_document_show_thumbnail(doc)  ).to  \
+      doc = {'first_shelved_image_ss'=>'testimage.jp2'}
+      expect(helper.render_index_thumbnail(doc)  ).to  \
         match(/src=".*testimage_thumb"/                  ).and \
-        match(/style="max-width:240px;max-height:240px;"/).and \
+        match(/style="max-width:80px;max-height:80px;"/).and \
         match(/alt=""/)
     end
   end

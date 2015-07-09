@@ -93,29 +93,36 @@ module ArgoHelper
 
   def render_extended_document_class(document = @document)
     result = render_document_class(document).to_s
-    if first_image(document['shelved_content_file_count_itsi'])
+    if document['first_shelved_image_ss'] && document['first_shelved_image_ss'].length > 0
       result += " has-thumbnail"
     end
     result
   end
 
-  def render_document_show_thumbnail doc
-    return unless doc['first_shelved_image_ss']
-    fname = doc['first_shelved_image_ss'].first
-    return unless fname
+  def get_thumbnail_info doc
+    fname = doc['first_shelved_image_ss']
+    return nil unless fname
+    fname = File.basename(fname, File.extname(fname))
     druid = doc['id'].to_s.split(/:/).last
-    fname = File.basename(fname,File.extname(fname))
-    image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'document-thumb', :alt => '', :style=>'max-width:240px;max-height:240px;'
+    url = "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb"
+    return {:fname => fname, :druid => druid, :url => url}
   end
 
-  def render_index_thumbnail doc
-    return nil unless doc['first_shelved_image_ss']
-    fname = doc['first_shelved_image_ss'].first
-    return nil unless fname
-    druid = doc['id'].to_s.split(/:/).last
-    fname = File.basename(fname,File.extname(fname))
-    image_tag "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb", :class => 'index-thumb', :alt => '', :style=>'max-width:80px;max-height:80px;'
+  def render_thumbnail_helper doc, thumb_class='', thumb_alt='', thumb_style=''
+    thumbnail_info = get_thumbnail_info(doc)
+    return nil unless thumbnail_info
+    thumbnail_url = thumbnail_info[:url]
+    return image_tag thumbnail_url, :class => thumb_class, :alt => thumb_alt, :style => thumb_style
   end
+  
+  def render_document_show_thumbnail doc
+    return render_thumbnail_helper doc, 'document-thumb', '', 'max-width:240px;max-height:240px;'
+  end
+
+  def render_index_thumbnail doc, options={}
+    return render_thumbnail_helper doc, 'index-thumb', '', 'max-width:80px;max-height:80px;'
+  end
+
   #override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
   def render_facet_value(facet_solr_field, item, options = {})
     display_value = item.value =~ /druid:/ ? label_for_druid(item.value) : item.value
@@ -190,10 +197,6 @@ module ArgoHelper
       end
     end
     buttons
-  end
-
-  def first_image(a)
-    Array(a).find{|f| File.extname(f)=~ /jp2/}
   end
 
   def render_date_pickers(field_name)
