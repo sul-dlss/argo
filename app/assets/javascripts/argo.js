@@ -19,7 +19,7 @@ $(document).ready(function() {
     $('.start-open').addClass('twiddle-open');
     $('.start-open').next('ul').show();
     $('.collapsible-section').click(function(e) {
-	// Do not want a click on the bulk load button to cause collapse
+	// Do not want a click on the "MODS bulk loads" button to cause collapse
 	if(!(e.target.id === 'bulk-button')) {
 	    $(this).next('div').slideToggle();
 	    $(this).toggleClass('collapsed'); }
