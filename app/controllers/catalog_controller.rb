@@ -77,7 +77,6 @@ class CatalogController < ApplicationController
     config.add_facet_field 'current_version_isi',   :label => 'Version'
     config.add_facet_field 'processing_status_text_ssi', :label => 'Processing Status'
     config.add_facet_field 'released_to_ssim',      :label => 'Released To'
-    #TODO: does release_status and processing_status supersede lifecycle?  do we ditch that?
     config.add_facet_field 'lifecycle_ssim', :label => 'Lifecycle'
     config.add_facet_field 'wf_wps_ssim', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_ssim', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
