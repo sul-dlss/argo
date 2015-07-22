@@ -174,7 +174,7 @@ class CatalogController < ApplicationController
     output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
     temp_spreadsheet_filename = params[:spreadsheet_file].original_filename + '.' + directory_name
 
-    # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it
+    # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it when it's done.
     temp_filename = Rails.root.join('tmp', temp_spreadsheet_filename)
     FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
     ModsulatorJob.perform_later(temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
