@@ -103,7 +103,7 @@ class ModsulatorJob < ActiveJob::Base
 
   # Write initial job information to the log file.
   #
-  # @param [String]  log_file  The log file to write to.
+  # @param [File]    log_file  The log file to write to.
   # @param [String]  username  The login name of the current user.
   # @param [String]  filename  The name of this job's input file.
   # @param [String]  note      An optional comment that describes this job.
