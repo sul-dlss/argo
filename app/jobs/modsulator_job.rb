@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 # This class defines a Delayed Job task that is started when the user uploads a bulk metadata file for
-# an APO.
+# an APO. For configuration details, see app/config/initializers/delayed_job.rb.
 class ModsulatorJob < ActiveJob::Base
   queue_as :default
 
@@ -19,40 +19,23 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]  note               An optional note that the user entered to go with the job.
   # @return [Void]
   def perform(uploaded_filename, output_directory, user_login, filetype, xml_only, note)
-    # The uploaded filename is of the form <file.xlsx.TIMESTAMP> or <file.xml.TIMESTAMP> in order to prevent
-    # collisions when 2 people upload the same file. We don't want to display the timestamp later, though.
-    original_filename = File.basename(uploaded_filename)
-    original_filename = original_filename.slice(0, original_filename.rindex('.'))
-
-    FileUtils.mkdir_p(output_directory) unless (File.directory?(output_directory))
-
-    # This log will be used for generating the table of past jobs later
-    log_filename = File.join(output_directory, Argo::Config.bulk_metadata_log)
+    original_filename = generate_original_filename(uploaded_filename)
+    log_filename = generate_log_filename(output_directory)
+    
     File.open(log_filename, 'w') { |log|
-      start_timestamp = Time.now.strftime(TIME_FORMAT)
-      log.puts("job_start #{start_timestamp}")
-      log.puts("current_user #{user_login}")
-      log.puts("input_file #{original_filename}")
 
-      # Call the MODSulator web service to process the uploaded file. If a request fails, the job will fail
-      # and automatically be retried, so we do not separately retry the HTTP request.
-      response_xml = nil
-      if (filetype == "xml")    # Just clean up the given XML file
-        response_xml = RestClient.post(Argo::Config.urls.normalizer, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
-      else                               # The given file is a spreadsheet
-        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
+      start_log(log, user_login, original_filename, note)
+      response_xml = generate_xml(filetype, uploaded_filename, original_filename)
+
+      if(response_xml == nil)
+        # can this happen and what should we do?
       end
 
-      record_count = response_xml.scan('<xmlDoc id').size
-      File.open(File.join(output_directory, Argo::Config.bulk_metadata_xml), "w") { |f| f.write(response_xml) }
-      log.puts("xml_written #{Time.now.strftime(TIME_FORMAT)}")
-      log.puts("records #{record_count}")
-
-      log.puts("note #{note}") if (note)
+      save_metadata_xml(response_xml, output_directory, log)
 
       if (xml_only)
         log.puts("xml_only true")
-      else
+      elsif(filetype != 'xml')      # If the submitted file is XML, we never want to load anything into DOR
         # Load into DOR
         log.puts("xml_only false")
         update_metadata(response_xml, log)
@@ -66,6 +49,7 @@ class ModsulatorJob < ActiveJob::Base
     FileUtils.rm(uploaded_filename, :force => true)
   end
 
+  
   # Upload metadata into DOR.
   #
   # @param  [String] xml_string    A MODS XML string.
@@ -90,5 +74,75 @@ class ModsulatorJob < ActiveJob::Base
         log.puts("error_notfound #{current_druid}")
       end
     end
+  end
+
+
+  # Generate a filename for the job's log file.
+  #
+  # @param  [String] output_dir Where to store the log file.
+  # @return [String] A filename for the log file.
+  def generate_log_filename(output_dir)
+    FileUtils.mkdir_p(output_dir) unless (File.directory?(output_dir))
+
+    # This log will be used for generating the table of past jobs later
+    return log_filename = File.join(output_dir, Argo::Config.bulk_metadata_log)
+  end
+
+
+  # The uploaded filename is of the form <file.xlsx.TIMESTAMP> or <file.xml.TIMESTAMP> in order to prevent
+  # collisions when 2 people upload the same file. We don't want to display the timestamp later, though, so this method
+  # returns a nicer looking version of the filename.
+  #
+  # @param  [String] uploaded_filename  The full path to the temporary uploaded file.
+  # @return [String] A prettier version of the uploaded filename.
+  def generate_original_filename(uploaded_filename)
+    original_filename = File.basename(uploaded_filename)
+    return original_filename.slice(0, original_filename.rindex('.'))
+  end
+
+
+  # Write initial job information to the log file.
+  #
+  # @param [File]    log_file  The log file to write to.
+  # @param [String]  username  The login name of the current user.
+  # @param [String]  filename  The name of this job's input file.
+  # @param [String]  note      An optional comment that describes this job.
+  def start_log(log_file, username, filename, note)
+    log_file.puts("job_start #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("current_user #{username}")
+    log_file.puts("input_file #{filename}")
+    log_file.puts("note #{note}") if (note && note.length > 0)
+  end
+
+
+  # Calls the MODSulator web service (modsulator-app) to process the uploaded file. If a request fails, the job will fail
+  # and automatically be retried (see config/initializers/delayed_job.rb), so we do not separately retry the HTTP request.
+  #
+  # @param    [String]   filetype            The value 'xml' means that the given file is an XML file, and so should be submitted to the normalizer for cleanup.
+  #                                          Any other values indicates a spreadsheet input (.xlsx).
+  # @param    [String]   uploaded_filename   The full path to the XML/spreadsheet file.
+  # @param    [String]   original_filename   A prettified filename, which looks better in the UI.
+  # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
+  def generate_xml(filetype, uploaded_filename, original_filename)
+      response_xml = nil
+      if (filetype == "xml")    # Just clean up the given XML file
+        response_xml = RestClient.post(Argo::Config.urls.normalizer, File.read(uploaded_filename))
+      else                      # The given file is a spreadsheet
+        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
+      end
+      return response_xml
+  end
+
+
+  # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.
+  #
+  # @param  [String]  xml                An XML string, which will be written to output_directory/metadata.xml.
+  # @param  [String]  output_directory   The full path for the output directory containing the log file and metadata.xml file.
+  # @param  [File]    log_file           The log file.
+  # @return [Void]
+  def save_metadata_xml(xml, output_directory, log_file)
+    File.open(File.join(output_directory, Argo::Config.bulk_metadata_xml), "w") { |f| f.write(xml) }
+    log_file.puts("xml_written #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("records #{xml.scan('<xmlDoc id').size}")
   end
 end
