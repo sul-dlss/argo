@@ -1,24 +1,25 @@
-<div data-ajax-modal="container"><h3 class="modal-title">Update tags or delete a tag</h3>
-<%=form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :update => 'true') do%>
-  <%@object.tags.each_with_index do |tag, count|%>
-    <div class="form-group">
-      <div class="input-group">
-        <input class="form-control tag" size="100" maxlength="255" name="tag<%=count + 1%>" id="tag<%=count + 1%>" type="text" value="<%=tag%>"/>
-        <div class="input-group-addon">
-          <%= link_to image_tag('unavailable.png'), url_for(:controller => :items, :action => :tags, :id => @object.pid, :del => 'true', :tag => count + 1)%>
+<div data-ajax-modal="container">
+  <h3 class="modal-title">Update tags or delete a tag</h3>
+  <%=form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :update => 'true') do%>
+    <%@object.tags.each_with_index do |tag, count|%>
+      <div class="form-group">
+        <div class="input-group">
+          <input class="form-control tag" size="100" maxlength="255" name="tag<%=count + 1%>" id="tag<%=count + 1%>" type="text" value="<%=tag%>"/>
+          <div class="input-group-addon">
+            <%= link_to image_tag('unavailable.png'), url_for(:controller => :items, :action => :tags, :id => @object.pid, :del => 'true', :tag => count + 1)%>
+          </div>
         </div>
       </div>
-    </div>
+    <%end%>
+    <button class='btn btn-default'>Update</button>
   <%end%>
-  <button class='btn btn-default'>Update</button>
-<%end%>
-</div>
-<div>
-  <label>Add a tag</label>
-<%=form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :add => 'true') do%>
-  <input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag1" id="new_tag1" type="text" value=""/><br/>
-  <input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag2" id="new_tag2" type="text" value=""/><br/>
-  <input class="tag" size="100" maxlength="255" style="width:auto" name="new_tag3" id="new_tag3" type="text" value=""/><br/>
-  <button>Add</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
-<%end%>
+  <div>
+    <label>Add a tag</label>
+    <%=form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :add => 'true') do%>
+      <input class="tag" size="80" maxlength="255" style="width:auto" name="new_tag1" id="new_tag1" type="text" value=""/><br/>
+      <input class="tag" size="80" maxlength="255" style="width:auto" name="new_tag2" id="new_tag2" type="text" value=""/><br/>
+      <input class="tag" size="80" maxlength="255" style="width:auto" name="new_tag3" id="new_tag3" type="text" value=""/><br/>
+      <button>Add</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
+    <%end%>
+  </div>
 </div>
