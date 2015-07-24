@@ -1,8 +1,10 @@
 <% @title = "Register APO" %>
-<div style="width:1052px;background-color:0000cc;color:white;font-size:3em;">
+
+<div style="background-color:#0000cc;color:white;font-size:3em;">
   <span style="margin-left:50px;"><%=@object ? 'Edit APO' : 'Register APO'%></span>
-  </div>
-<div style="width:950px; background:white; margin-top:0px;margin-bottom:50px;padding-left:50px;padding-right:50px;border:1px;border-style:solid"%>
+</div>
+
+<div style="padding-left:50px;padding-right:50px;border:1px;border-style:solid">
 
 <%
 url_params={:controller => :apo, :action => :register}
@@ -17,8 +19,8 @@ end
   <label>Title</label><br/>
   <input type="text" style="width:auto" size="40" id="title" name="title" value="<%=@object ? @object.mods_title : ''%>"></input>
   <span id="title-err-msg-elt" class="apo-register-error"></span>
-
 </div>
+
 <br/><div class="register-div">
   <label>Agreement</label><br/>
   <%=select_tag :agreement, options_for_select(agreement_options)%>
@@ -85,8 +87,8 @@ end
   </div>
 </div>
 <div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
-<label style="font-size:1.2em">Object defaults</label>
-<p>The following defaults will apply to all newly registered objects.</p>
+  <label style="font-size:1.2em">Object defaults</label>
+  <p>The following defaults will apply to all newly registered objects.</p>
 </div>
 
 <br/><div class="register-div">
@@ -114,11 +116,13 @@ end
   <%=select_tag :workflow, options_for_select(workflow_options, (@object ? @cur_default_workflow : default_workflow_option))%>
 </div>
 <div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
-
-<button id="register" name="register"><%=@object ? 'Update APO' : 'Register APO' %></button>
-<%end%>
-<%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/', :method => :get %>
+  <button id="register" name="register"><%=@object ? 'Update APO' : 'Register APO' %></button>
+  <%end%>
+  <%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/', :method => :get %>
 </div>
+
+</div>
+
 <script type="text/javascript">
   $("#apo_form").validate({
     rules: {
