@@ -46,6 +46,7 @@ describe DorController, :type => :controller do
       </mods:mods>'))
       expect(item.workflows).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
       allow(item).to receive(:milestones).and_return []
+      allow(item).to receive(:released_for).and_return []
       allow(item).to receive(:new_version_open?).and_return false
       allow(item).to receive(:archive_workflows)
       @solr_doc=item.to_solr
