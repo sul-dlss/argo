@@ -84,9 +84,9 @@ class ApoController < ApplicationController
       populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
       populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
       @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
+    else
+      render :layout => 'blacklight'
     end
-    
-    render :layout => 'blacklight'
   end
 
   def set_apo_metadata apo, md_info
