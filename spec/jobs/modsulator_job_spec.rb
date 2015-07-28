@@ -16,12 +16,6 @@ describe ModsulatorJob, type: :job do
   end
 
 
-  describe 'perform' do
-    it "correctly performs a simple job" do
-      skip "reimplement as an integration test"
-    end
-  end
-
   describe 'update_metadata' do
     it 'raises an error given an invalid xml argument' do
       expect { @mj.update_metadata('', File.new(File.join(@output_directory, 'fake_log.txt'), 'w')) }.to raise_error(/nil:NilClass/)

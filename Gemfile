@@ -5,7 +5,7 @@ gem 'barby'
 gem 'coderay'
 gem 'confstruct', "~> 0.2.4"
 gem 'dalli'
-gem 'equivalent-xml', '~> 0.5.1'
+#gem 'equivalent-xml', '~> 0.5.1'
 gem 'haml'
 gem 'kaminari'
 gem 'kgio'
@@ -61,6 +61,7 @@ group :test, :development do
   gem 'pry-byebug',   :platform =>[:ruby_20, :ruby_21]
   gem 'pry-remote'
   gem 'pry-rails'
+#  gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 end
 
 group :development do

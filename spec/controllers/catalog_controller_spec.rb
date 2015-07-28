@@ -59,4 +59,19 @@ describe CatalogController, :type => :controller do
       # as above
     end
   end
+
+
+  describe 'bulk_jobs_index' do
+    it 'shows past bulk jobs for logged in users' do
+      skip 'implement as part of an integration test'
+    end
+  end
+
+
+  # valid_user with apo false ===> false
+  describe 'valid_user?' do
+    it 'returns false when the given object is not an APO' do
+      skip 'test private methods as part of an integration test'
+    end
+  end
 end

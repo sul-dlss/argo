@@ -124,13 +124,14 @@ class ModsulatorJob < ActiveJob::Base
   # @param    [String]   original_filename   A prettified filename, which looks better in the UI.
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
   def generate_xml(filetype, uploaded_filename, original_filename)
-      response_xml = nil
-      if (filetype == "xml")    # Just clean up the given XML file
-        response_xml = RestClient.post(Argo::Config.urls.normalizer, File.read(uploaded_filename))
-      else                      # The given file is a spreadsheet
-        response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
-      end
-      return response_xml
+    response_xml = nil
+
+    if (filetype == "xml")    # Just clean up the given XML file
+      response_xml = RestClient.post(Argo::Config.urls.normalizer, File.read(uploaded_filename))
+    else                      # The given file is a spreadsheet
+      response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
+    end
+    return response_xml
   end
 
 
