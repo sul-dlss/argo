@@ -13,10 +13,10 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: ad82a564d302f70e0bb256c135a8b3c66f71e6c1
+  revision: 2f07010366f1ab46ab127f93715a1361ae445d1a
   branch: solrization_fixes3
   specs:
-    dor-services (5.1.0)
+    dor-services (5.1.1)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       addressable (= 2.3.5)
@@ -24,7 +24,7 @@ GIT
       dor-rights-auth (~> 1.0, >= 1.0.1)
       dor-workflow-service (~> 1.7, >= 1.7.1)
       druid-tools (~> 0.4, >= 0.4.1)
-      equivalent-xml (~> 0.5.1)
+      equivalent-xml (~> 0.5, >= 0.5.1)
       json (~> 1.8.1)
       lyber-utils (~> 0.1.2)
       moab-versioning (~> 1.4.4)
