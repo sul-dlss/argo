@@ -380,7 +380,7 @@ class ItemsController < ApplicationController
   def source_id
     new_id=params[:new_id].strip
     @object.set_source_id(new_id)
-    @object.identityMetadata.dirty=true
+    @object.identityMetadata.content_will_change!
     respond_to do |format|
       if params[:bulk]
         format.html { render :status => :ok, :text => 'Updated source id.' }
@@ -401,7 +401,7 @@ class ItemsController < ApplicationController
     tags.each do |tag|
       @object.add_tag tag
     end
-    @object.identityMetadata.dirty=true
+    @object.identityMetadata.content_will_change!  # mark as dirty
     @object.identityMetadata.save
     respond_to do |format|
       if params[:bulk]
@@ -430,7 +430,7 @@ class ItemsController < ApplicationController
         count+=1
       end
     end
-    @object.identityMetadata.dirty=true
+    @object.identityMetadata.content_will_change!
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }
     end

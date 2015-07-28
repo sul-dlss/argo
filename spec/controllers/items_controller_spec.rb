@@ -15,7 +15,7 @@ describe ItemsController, :type => :controller do
     idmd = double()
     apo  = double()
     wf   = double()
-    allow(idmd).to receive(:dirty=)
+    allow(idmd).to receive(:"content_will_change!")
     allow(apo).to receive(:pid).and_return('druid:apo')
     allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
     allow(@item).to receive(:to_solr)
