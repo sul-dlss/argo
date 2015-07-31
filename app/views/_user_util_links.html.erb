@@ -1,16 +1,17 @@
 <div class='navbar-right'>
   <ul class='nav navbar-nav'>
 
-    <li><%= link_to "Home", root_path %></li>
-
     <li>
       <% if current_user %>
-        <li><%= link_to "Log&nbsp;Out".html_safe, destroy_user_session_path %></li>
-        <li><%= link_to current_user, edit_user_registration_path %></li>
+        <p class='navbar-text'>
+          <span style="font-size: 80%;">logged in as <%= current_user.to_s.html_safe %> [<%= link_to "Log Out", destroy_user_session_path %>]</span>
+        </p>
       <% else %>
         <%= link_to 'Login', new_user_session_path %>
       <% end %>
     </li>
+
+    <li><%= link_to "Home", root_path %></li>
 
     <% if session[:groups].present? %>
       <li>
