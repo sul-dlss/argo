@@ -4,7 +4,7 @@
     <li>
       <% if current_user %>
         <p class='navbar-text'>
-          <span style="font-size: 80%;">logged in as <%= current_user.to_s.html_safe %> [<%= link_to "Log Out", destroy_user_session_path %>]</span>
+          <span style="font-size: 80%;">logged in as <%= current_user.to_s.html_safe %></span>
         </p>
       <% else %>
         <%= link_to 'Login', new_user_session_path %>
