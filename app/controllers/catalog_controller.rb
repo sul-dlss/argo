@@ -93,12 +93,20 @@ class CatalogController < ApplicationController
 
     config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source'
 
+    # common helper method since search results and reports all do the same configuration
+    BlacklightConfigHelper.add_common_date_facet_fields_to_config config
+
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
       :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
     }
 
-    # common helper method since search results and reports all do the same configuration
-    BlacklightConfigHelper.add_common_date_facet_fields_to_config config
+    config.add_facet_field 'sw_format_ssim', :label => 'SW Resource Type'
+    config.add_facet_field 'sw_pub_date_facet_ssi', :label => 'SW Date'
+    config.add_facet_field 'topic_ssim', :label => 'SW Topic'
+    config.add_facet_field 'sw_subject_temporal_ssim', :label => 'SW Era'
+    config.add_facet_field 'sw_genre_ssim', :label => 'SW Genre'
+    config.add_facet_field 'sw_language_ssim', :label => 'SW Language'
+    config.add_facet_field 'mods_typeOfResource_ssim', :label => 'MODS Resource Type'
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
 

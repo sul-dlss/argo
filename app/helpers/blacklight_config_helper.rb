@@ -32,5 +32,10 @@ module BlacklightConfigHelper
       :days_7  => { :label => 'more than 7 days',  :fq => "opened_latest_dttsi:[* TO NOW/DAY-7DAYS]"},
       :days_30 => { :label => 'more than 30 days', :fq => "opened_latest_dttsi:[* TO NOW/DAY-30DAYS]"}
     }
+    config.add_facet_field 'embargo_release', :label => 'Embargo Release Date', :query => {
+      :days_7  => { :label => 'up to 7 days',  :fq => "embargo_release_dtsim:[NOW TO NOW/DAY+7DAYS]"},
+      :days_30 => { :label => 'up to 30 days', :fq => "embargo_release_dtsim:[NOW TO NOW/DAY+30DAYS]"},
+      :all     => { :label => 'All',           :fq => "embargo_release_dtsim:*"}
+    }
   end
 end
