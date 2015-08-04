@@ -13,8 +13,8 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 2f07010366f1ab46ab127f93715a1361ae445d1a
-  branch: solrization_fixes3
+  revision: 891dc597bfeaf912d5fa3a280336ff470aac9d8f
+  branch: develop
   specs:
     dor-services (5.1.1)
       active-fedora (~> 6.0)
@@ -573,3 +573,6 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   unicode
   unicorn
+
+BUNDLED WITH
+   1.10.6
