@@ -174,6 +174,7 @@ class CatalogController < ApplicationController
     @object = Dor.find params[:id]
   end
 
+  # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
   def upload
     @object = Dor.find params[:id]
 
@@ -189,6 +190,7 @@ class CatalogController < ApplicationController
     redirect_to bulk_jobs_index_path(@object.id)
   end
 
+  # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def bulk_jobs_index
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
@@ -198,6 +200,8 @@ class CatalogController < ApplicationController
     @bulk_jobs = load_bulk_jobs(params[:id])
   end
 
+  # Lets the user download the generated/cleaned XML metadata file that corresponds to a bulk metadata upload job.
+  # This functionality is defined by the bulk_jobs_index method above.
   def bulk_jobs_xml
     desc_metadata_xml_file = File.join(Argo::Config.bulk_metadata_directory, params[:xml], Argo::Config.bulk_metadata_xml)
     if(File.exist?(desc_metadata_xml_file))
