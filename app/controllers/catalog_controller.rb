@@ -273,6 +273,7 @@ class CatalogController < ApplicationController
     return bulk_info
   end
 
+  # Determines whether or not the current user has permissions to view the current DOR object.
   def valid_user?(dor_object)
     begin
       @apo = dor_object.admin_policy_object
