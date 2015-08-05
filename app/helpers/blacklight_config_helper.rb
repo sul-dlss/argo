@@ -22,16 +22,16 @@ module BlacklightConfigHelper
       :days_7  => { :label => 'within 7 days',  :fq => "submitted_latest_dttsi:[NOW/DAY-7DAYS TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "submitted_latest_dttsi:[NOW/DAY-30DAYS TO *]"}
     }
-    config.add_facet_field 'deposited_date', :label => 'Deposited', :query => {
-      :days_1  => { :label => 'today',          :fq => "deposited_dttsim:[NOW/DAY TO *]"},
-      :days_7  => { :label => 'within 7 days',  :fq => "deposited_dttsim:[NOW/DAY-7DAYS TO *]"},
-      :days_30 => { :label => 'within 30 days', :fq => "deposited_dttsim:[NOW/DAY-30DAYS TO *]"}
+    config.add_facet_field 'deposited_date', :label => 'Last Ingested', :query => {
+      :days_1  => { :label => 'today',          :fq => "deposited_latest_dttsi:[NOW/DAY TO *]"},
+      :days_7  => { :label => 'within 7 days',  :fq => "deposited_latest_dttsi:[NOW/DAY-7DAYS TO *]"},
+      :days_30 => { :label => 'within 30 days', :fq => "deposited_latest_dttsi:[NOW/DAY-30DAYS TO *]"}
     }
-    config.add_facet_field 'object_modified_date', :label => 'Object Last Modified', :query => {
+    config.add_facet_field 'object_modified_date', :label => 'Last Modified', :query => {
       :days_7  => { :label => 'within 7 days',  :fq => "modified_latest_dttsi:[NOW/DAY-7DAYS TO *]"},
       :days_30 => { :label => 'within 30 days', :fq => "modified_latest_dttsi:[NOW/DAY-30DAYS TO *]"}
     }
-    config.add_facet_field 'version_opened_date', :label => 'Open Version', :query => {
+    config.add_facet_field 'version_opened_date', :label => 'Last Opened', :query => {
       :all     => { :label => 'All',               :fq => "opened_latest_dttsi:*"},
       :days_7  => { :label => 'more than 7 days',  :fq => "opened_latest_dttsi:[* TO NOW/DAY-7DAYS]"},
       :days_30 => { :label => 'more than 30 days', :fq => "opened_latest_dttsi:[* TO NOW/DAY-30DAYS]"}
