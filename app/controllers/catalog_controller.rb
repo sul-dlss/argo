@@ -198,6 +198,15 @@ class CatalogController < ApplicationController
     @bulk_jobs = load_bulk_jobs(params[:id])
   end
 
+  def bulk_jobs_xml
+    desc_metadata_xml_file = File.join(Argo::Config.bulk_metadata_directory, params[:xml], Argo::Config.bulk_metadata_xml)
+    if(File.exist?(desc_metadata_xml_file))
+      send_file(desc_metadata_xml_file, :type => 'application/xml')
+    else
+      # Display error message and log the error
+    end
+  end
+
   def bulk_status_help
   end
 
@@ -236,7 +245,7 @@ class CatalogController < ApplicationController
               job_info[matched_strings[1]] = matched_strings[2]
             end
           end
-          job_info['dir'] = dir
+          job_info['dir'] = get_leafdir(dir)
         }
       end
     end
@@ -279,5 +288,10 @@ class CatalogController < ApplicationController
       end
     end
     return true
+  end
+
+
+  def get_leafdir(directory)
+    return directory[Argo::Config.bulk_metadata_directory.length, directory.length].sub(/^\/+(.*)/, '\1')
   end
 end

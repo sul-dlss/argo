@@ -19,7 +19,7 @@
 	    <td><%= job['records'] %></td>
 	    <td><%= job['records'] %></td>
 	    <td>Log</td>
-	    <td>XML</td>
+	    <td><%= link_to('XML', bulk_jobs_xml_path(job['dir'])) %>
 	</tr>
 	<% end %>
     </table>
