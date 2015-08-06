@@ -94,7 +94,7 @@ module RegistrationHelper
       return
     end
 
-    ids = Array(doc['mods_identifier_t']).collect do |id|
+    ids = Array(doc['identifier_ssim']).collect do |id|
       result = id.split(/:/,2)
       result[0] = "#{result[0].titleize}:"
       result
@@ -120,10 +120,10 @@ module RegistrationHelper
     end
 
     table_data.push(['Date Printed:',Time.now.strftime('%c')])
-    table_data.push(["Source ID:",Array(doc['source_id_t']).first]) if doc['source_id_t'].present?
+    table_data.push(["Source ID:",Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
 
     table_data += ids
-    tags = Array(doc['identityMetadata_tag_t']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
+    tags = Array(doc['tag_ssim']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
     table_data.push(["Tags:",tags.join("\n")]) if tags.length > 0
 
     pdf.table(table_data, :column_widths => [100,224], :cell_style => { :borders => [], :padding => 0.pt })
