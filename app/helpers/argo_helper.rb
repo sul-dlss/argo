@@ -11,13 +11,6 @@ module ArgoHelper
     Dor::SearchService.solr.uri.merge("select?#{qs}").to_s.html_safe
   end
 
-  def ensure_current_document_version
-    return unless @document.get('index_version_t').to_s < Dor::SearchService.index_version
-    id = @document.get('id')
-    Dor::SearchService.reindex(id)
-    @response, @document = get_solr_response_for_doc_id(id)
-  end
-
   def index_queue_depth
     return 0 unless Dor::Config.status && Dor::Config.status.indexer_url
     url = Dor::Config.status.indexer_url
