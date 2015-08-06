@@ -2,11 +2,11 @@ module DorObjectHelper
   # Metadata helpers
   def retrieve_terms doc
     terms = {
-      :creator   => { :selector => %w(public_dc_creator_tesim mods_creator_t mods_name_t dc_creator_tesim) },
-      :title     => { :selector => %w(public_dc_title_tesim mods_title_t dc_title_tesim obj_label_tesim), :combiner => lambda { |s| s.join(' -- ') } },
-      :place     => { :selector => ['mods_originInfo_place_placeTerm_t'] },
-      :publisher => { :selector => %w(public_dc_publisher_tesim mods_originInfo_publisher_t dc_publisher_t) },
-      :date      => { :selector => %w(public_dc_date_t mods_dateissued_t mods_datecreated_t dc_date_t) }
+      :creator   => { :selector => %w(public_dc_creator_tesim dc_creator_tesim) },
+      :title     => { :selector => %w(public_dc_title_tesim dc_title_tesim obj_label_tesim), :combiner => lambda { |s| s.join(' -- ') } },
+      :place     => { :selector => ['originInfo_place_placeTerm_tesim'] },
+      :publisher => { :selector => %w(public_dc_publisher_tesim originInfo_publisher_tesim) },
+      :date      => { :selector => %w(public_dc_date_tesim originInfo_date_created_tesim) }
     }
     result = {}
     terms.each_pair do |term,finder|
@@ -89,7 +89,7 @@ module DorObjectHelper
   end
 
   def render_status(doc, object = nil)
-    object.nil? ? doc['status_display'] : object.status.html_safe
+    object.nil? ? doc['status_ssi'] : object.status.html_safe
   end
 
   def render_status_style(doc, object = nil)
