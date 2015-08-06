@@ -39,7 +39,7 @@ class Report
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'source_id_teim', :label => "Source Id",
+        :field => 'source_id_ssim', :label => "Source Id",
         :sort => false, :default => true, :width => 100
       },
       {
@@ -94,7 +94,7 @@ class Report
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'status_ssm', :label => "Status",
+        :field => 'status_ssi', :label => "Status",
         :sort => false, :default => true, :width => 100
       },
       {
@@ -226,7 +226,7 @@ class Report
     while @document_list.length > 0
       report_data.each do |rec|
         if params[:source_id]
-          toret << rec['druid'].to_s+"\t"+rec['source_id_teim'].to_s
+          toret << rec['druid'].to_s+"\t"+rec['source_id_ssim'].to_s
         elsif params[:tags]
           tags=''
           unless rec['tag_ssim'].nil?
