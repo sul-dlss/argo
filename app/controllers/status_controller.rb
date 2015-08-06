@@ -46,7 +46,7 @@ class StatusController < ApplicationController
 
   # @return [Boolean]
   def check_recently_indexed
-    docs = Dor::SearchService.query("indexed_at_dt:[NOW-15MINUTES TO NOW]", {:rows => 1, :fl => 'indexed_at_dt'})['response']['docs']
+    docs = Dor::SearchService.query("indexed_at_dtsi:[NOW-15MINUTES TO NOW]", {:rows => 1, :fl => 'indexed_at_dtsi'})['response']['docs']
     docs.length == 1
   end
 
