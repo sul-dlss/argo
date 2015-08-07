@@ -9,7 +9,7 @@ describe DiscoveryController, :type => :controller do
       json_body=JSON.parse(response.body)
       expect(json_body).to match a_hash_including('rows')
       expect(json_body['rows']).not_to be_nil
-      expect(json_body['rows'].first).to match a_hash_including('sw_author_other_facet')
+      expect(json_body['rows'].first).to match a_hash_including('sw_format_tesim')
     end
   end
 end

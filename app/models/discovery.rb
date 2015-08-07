@@ -28,68 +28,13 @@ class Discovery
         :default => true, :width => 200
       },
       {
-        :label => "Variant Search Title",
-        :field => "sw_title_variant_search_facet",
-        :default => false, :width => 200
-      },
-      {
         :label => "Sort Title",
         :field => "title_sort_ssi",
         :default => false, :width => 200
       },
       {
-        :label => "Full Display Title",
-        :field => "title_ssim",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Person Author Facet",
-        :field => "sw_author_person_facet",
-        :default => true, :width => 200
-      },
-      {
-        :label => "Other Author Facet",
-        :field => "sw_author_other_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Corporate Author Display",
-        :field => "sw_author_corp_display_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Author Meeting Display",
-        :field => "sw_author_meeting_display_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Person Author Display",
-        :field => "sw_author_person_display_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Person Author Full Display",
-        :field => "sw_author_person_full_display_facet",
-        :default => false, :width => 200
-      },
-      {
         :label => "Topic Search",
         :field => "topic_tesim",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Geographic Search",
-        :field => "sw_geographic_search_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Other Subject",
-        :field => "sw_subject_other_search_facet",
-        :default => false, :width => 200
-      },
-      {
-        :label => "Other Subject Subvy",
-        :field => "sw_subject_other_subvy_search_facet",
         :default => false, :width => 200
       },
       {
@@ -104,23 +49,18 @@ class Discovery
       },
       {
         :label => "Geographic Facet",
-        :field => "sw_geographic_facet",
+        :field => "sw_subject_geographic_ssim",
         :default => false, :width => 200
       },
       {
         :label => "Era Facet",
-        :field => "sw_era_facet",
+        :field => "sw_subject_temporal_ssim",
         :default => false, :width => 200
       },
       {
         :label => "Language Facet",
         :field => "sw_language_tesim",
         :default => true, :width => 200
-      },
-      {
-        :label => "Pub Place Search",
-        :field => "sw_pub_search_facet",
-        :default => false, :width => 200
       },
       {
         :label => "Pub Date Sort",
