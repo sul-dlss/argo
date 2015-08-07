@@ -31,7 +31,9 @@ class ModsulatorJob < ActiveJob::Base
         # can this happen and what should we do?
       end
 
-      save_metadata_xml(response_xml, output_directory, log)
+      
+      metadata_filename = generate_xml_filename(output_directory, user_login)
+      save_metadata_xml(response_xml, File.join(output_directory, metadata_filename), log)
 
       if (xml_only)
         log.puts("xml_only true")
@@ -137,13 +139,19 @@ class ModsulatorJob < ActiveJob::Base
 
   # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.
   #
-  # @param  [String]  xml                An XML string, which will be written to output_directory/metadata.xml.
-  # @param  [String]  output_directory   The full path for the output directory containing the log file and metadata.xml file.
+  # @param  [String]  xml                An XML string, which will be written to output_filename.
+  # @param  [String]  output_filename    The full path for where to store the XML file.
   # @param  [File]    log_file           The log file.
   # @return [Void]
-  def save_metadata_xml(xml, output_directory, log_file)
-    File.open(File.join(output_directory, Argo::Config.bulk_metadata_xml), "w") { |f| f.write(xml) }
+  def save_metadata_xml(xml, output_filename, log_file)
+    File.open(output_filename, "w") { |f| f.write(xml) }
     log_file.puts("xml_written #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("xml_filename #{File.basename(output_filename)}")
     log_file.puts("records #{xml.scan('<xmlDoc id').size}")
+  end
+
+
+  def generate_xml_filename(output_directory, username)
+    return Argo::Config.bulk_metadata_xml + '_' + username + '_' + File.basename(output_directory) + '.xml'
   end
 end

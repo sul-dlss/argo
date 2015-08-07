@@ -31,7 +31,10 @@ describe ModsulatorJob, type: :job do
                   'true',
                   'anote')
 
-      expect(File.read(File.join(@output_directory, Argo::Config.bulk_metadata_xml))).to be_equivalent_to(File.read(File.join(fixtures_dir, 'crowdsourcing_bridget_1.xml'))).ignoring_attr_values('datetime', 'sourceFile')
+      # Filename is calculated based on a millisecond timestamp, so we need to look for the generated file
+      xml_filename = Dir.glob("#{@output_directory}/*.xml")[0]
+
+      expect(File.read(xml_filename)).to be_equivalent_to(File.read(File.join(fixtures_dir, 'crowdsourcing_bridget_1.xml'))).ignoring_attr_values('datetime', 'sourceFile')
       expect(File.exist?(File.join(@output_directory, Argo::Config.bulk_metadata_log))).to be_truthy
       expect(File.exist?(test_spreadsheet_path)).to be_falsey
     end

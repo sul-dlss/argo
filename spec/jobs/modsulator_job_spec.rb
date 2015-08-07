@@ -68,11 +68,12 @@ describe ModsulatorJob, type: :job do
       test_xml = 'crowdsourcing_bridget_1.xml'
       log = double('log')
       expect(log).to receive(:puts).with(/^xml_written .*/)
+      expect(log).to receive(:puts).with('xml_filename smx.xml')
       expect(log).to receive(:puts).with('records 20')
       @mj.save_metadata_xml(File.read(File.join(fixtures_dir, test_xml)),
-                            @output_directory,
+                            File.join(@output_directory, 'smx.xml'),
                             log)
-      expect(File.read(File.join(@output_directory, Argo::Config.bulk_metadata_xml))).to eq(File.read(File.join(fixtures_dir, test_xml)))
+      expect(File.read(File.join(@output_directory, 'smx.xml'))).to eq(File.read(File.join(fixtures_dir, test_xml)))
     end
   end
 end

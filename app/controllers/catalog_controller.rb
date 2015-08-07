@@ -203,7 +203,7 @@ class CatalogController < ApplicationController
   # Lets the user download the generated/cleaned XML metadata file that corresponds to a bulk metadata upload job.
   # This functionality is defined by the bulk_jobs_index method above.
   def bulk_jobs_xml
-    desc_metadata_xml_file = File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time], Argo::Config.bulk_metadata_xml)
+    desc_metadata_xml_file = find_desc_metadata_file(File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time]))
     if(File.exist?(desc_metadata_xml_file))
       send_file(desc_metadata_xml_file, :type => 'application/xml')
     else
@@ -298,5 +298,10 @@ class CatalogController < ApplicationController
 
   def get_leafdir(directory)
     return directory[Argo::Config.bulk_metadata_directory.length, directory.length].sub(/^\/+(.*)/, '\1')
+  end
+
+
+  def find_desc_metadata_file(job_output_directory)
+    return File.join(job_output_directory, bulk_job_metadata(job_output_directory)['xml_filename'])
   end
 end
