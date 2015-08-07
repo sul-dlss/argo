@@ -76,13 +76,6 @@ describe 'mods_view', :type => :request do
         expect(page).to have_content('Embargo')
       end
     end
-    context 'mods' do
-      it 'should render the mods editor' do
-        visit '/items/druid:zt570tx3016/mods'
-        #there isnt anything on the mods editor page, it is all loaded via js...
-        expect(page.status_code).to eq(200)
-      end
-    end
     context 'rights form' do
       it 'should render the access rights update ui' do
         visit '/items/druid:zt570tx3016/rights'

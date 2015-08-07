@@ -88,22 +88,5 @@ describe ArgoHelper, :type => :helper do
         end
       end
     end
-    describe "visibility without new descMetadata" do
-      before :each do
-        allow(@object.descMetadata).to receive(:new?).and_return(false)
-      end
-      it 'should inlcude the edit MODS button if there is a desc metadata ds in fedora' do
-        expect(@object.identityMetadata).to receive(:otherId).and_return([],[])
-        expect(helper.render_buttons(@doc).include?({:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true})).to be_truthy
-      end
-      it 'should exclude the edit mods button if the item has a catkey in otherids, meaning it uses symphony as its metadata source' do
-        expect(@object.identityMetadata).to receive(:otherId).and_return(['a1234567'])
-        expect(helper.render_buttons(@doc).include?({:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true})).to be_falsey
-      end
-      it 'should exclude the edit mods button if the item has a mdtoolkit value in otherids, meaning it uses mdtoolkit as its metadata source' do
-        expect(@object.identityMetadata).to receive(:otherId).and_return([],['a1234567'])
-        expect(helper.render_buttons(@doc).include?({:url=>"/items/something/mods", :label=>"Edit MODS", :new_page=>true})).to be_falsey
-      end
-    end
   end
 end

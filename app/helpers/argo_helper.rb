@@ -176,9 +176,6 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
-      if object.datastreams.include?('descMetadata') && object.datastreams['descMetadata'].new? == false && object.datastreams['identityMetadata'].otherId('catkey').length == 0 && object.datastreams['identityMetadata'].otherId('mdtoolkit').length == 0
-        buttons << {:url => url_for(:controller => :items, :action => :mods, :id => pid), :label => 'Edit MODS', :new_page => true}
-      end
     end
     if (doc.key?('embargo_status_ssim'))
       embargo_data = doc['embargo_status_ssim']

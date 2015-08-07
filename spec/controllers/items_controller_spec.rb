@@ -363,22 +363,6 @@ describe ItemsController, :type => :controller do
       expect(response.code).to eq("403")
     end
   end
-  describe 'update_mods' do
-    it 'should update the mods for a POST' do
-      xml = '<somexml>stuff</somexml>'
-      descmd = double()
-      expect(@item).to receive(:descMetadata).and_return(descmd).exactly(2).times
-      expect(descmd).to receive(:content=).with(xml)
-      expect(descmd).to receive(:ng_xml).and_return(xml)
-      post 'update_mods', :id => @pid, :xmlstr => xml, :format => 'xml'
-      expect(response.body).to eq(xml)
-    end
-    it 'should 403 if they arent permitted' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
-      get 'update_mods', :id => @pid
-      expect(response.code).to eq("403")
-    end
-  end
   describe "add_workflow" do
     before :each do
       @wf = double()
