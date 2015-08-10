@@ -32,7 +32,7 @@ class ModsulatorJob < ActiveJob::Base
       end
 
       
-      metadata_filename = generate_xml_filename(output_directory, user_login)
+      metadata_filename = generate_xml_filename(original_filename)
       save_metadata_xml(response_xml, File.join(output_directory, metadata_filename), log)
 
       if (xml_only)
@@ -151,7 +151,11 @@ class ModsulatorJob < ActiveJob::Base
   end
 
 
-  def generate_xml_filename(output_directory, username)
-    return Argo::Config.bulk_metadata_xml + '_' + username + '_' + File.basename(output_directory) + '.xml'
+  # Generates a filename for the MODS XML that this job creates.
+  #
+  # @param  [String]   original_filename    The name of the original file that the user uploaded.
+  # @return [String]
+  def generate_xml_filename(original_filename)
+    return Argo::Config.bulk_metadata_xml + '_' + File.basename(original_filename, '.*') + '.xml'
   end
 end
