@@ -26,7 +26,7 @@ module ValueHelper
     end
   end
 
-  def value_for_preserved_size_display args
+  def value_for_preserved_size_dbtsi args
     args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
   end
 
@@ -86,7 +86,7 @@ module ValueHelper
     link_to val, add_facet_params_and_redirect("project_tag_ssim", val)
   end
 
-  def value_for_objProfile_objCreateDate_dt args
+  def value_for_originInfo_date_created_tesim args
     val = Time.parse(args[:document][args[:field]].first)
     val.localtime.strftime '%Y.%m.%d %H:%M%p'
   end

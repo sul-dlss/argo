@@ -50,8 +50,8 @@ class CatalogController < ApplicationController
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type'
     config.add_show_field 'identifier_tesim',            :label => 'IDs'
-    # config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'  # TODO: not sure objProfile fields exist
-    # config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
+    config.add_show_field 'originInfo_date_created_tesim', :label => 'Created'
+    config.add_show_field 'obj_label_ssim',              :label => 'Label'
     config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy'
     config.add_show_field 'is_member_of_collection_ssim',:label => 'Collection'
     config.add_show_field 'status_ssi',                  :label => 'Status'
@@ -60,10 +60,10 @@ class CatalogController < ApplicationController
     config.add_show_field 'project_tag_ssim',            :label => 'Project'
     config.add_show_field 'source_id_ssim',              :label => 'Source'
     config.add_show_field 'tag_ssim',                    :label => 'Tags'
-    config.add_show_field 'wf_error_ssim',               :label => "Error"
-    config.add_show_field 'collection_title_ssim',       :label => "Collection Title"
+    config.add_show_field 'wf_error_ssim',               :label => 'Error'
+    config.add_show_field 'collection_title_ssim',       :label => 'Collection Title'
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
-    config.add_show_field 'preserved_size_ssm',          :label => "Preservation Size"
+    config.add_show_field 'preserved_size_dbtsi',        :label => 'Preservation Size'
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
@@ -129,7 +129,7 @@ class CatalogController < ApplicationController
     config.field_groups = {
       :identification => [
         %w(id objectType_ssim content_type_ssim status_ssi wf_error_ssim),
-        %w(is_governed_by_ssim is_member_of_collection_ssim project_tag_ssim source_id_ssim preserved_size_ssm)
+        %w(is_governed_by_ssim is_member_of_collection_ssim project_tag_ssim source_id_ssim preserved_size_dbtsi)
       ],
       :full_identification => [
         %w(id objectType_ssim content_type_ssim metadata_source_ssim),
