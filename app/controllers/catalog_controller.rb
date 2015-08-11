@@ -50,8 +50,8 @@ class CatalogController < ApplicationController
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type'
     config.add_show_field 'identifier_tesim',            :label => 'IDs'
-    # config.add_show_field 'objProfile_objCreateDate_dt', :label => 'Created:'  # TODO: not sure objProfile fields exist
-    # config.add_show_field 'objProfile_objLabel_dt',      :label => 'Label:'
+    config.add_show_field 'originInfo_date_created_tesim', :label => 'Created:'
+    config.add_show_field 'obj_label_ssim',              :label => 'Label:'
     config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy'
     config.add_show_field 'is_member_of_collection_ssim',:label => 'Collection'
     config.add_show_field 'status_ssi',                  :label => 'Status'
