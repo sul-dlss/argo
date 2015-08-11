@@ -1,49 +1,63 @@
 <div data-ajax-modal="container">
-    <%= form_tag({action: :upload}, multipart: true) do %>
+    <div id="spreadsheet-upload-container">
+	<p id="spreadsheet-upload-header" class="text-center">MODS Bulk Loads</p>
+	<%= form_tag({action: :upload}, multipart: true) do %>
         <div id="bulk-upload-form" class="container-fluid">
-	    <div class="row">
-		<div class="col-md-4">
+	    <div class="row spreadsheet-row">
+		<div class="col-md-10">
+		    <strong>Submit MODS descriptive metadata for bulk processing</strong>
+		</div>
+		<div class="col-md-2 spreadsheet-right">
+		    <%= link_to('Help', bulk_jobs_help_path, :data => { ajax_modal: 'trigger' }) %>
+		</div>
+	    </div>
+	    <div class="row spreadsheet-row">
+		<div class="col-md-2 spreadsheet-file-action-column"><strong>1. Select</strong></div>
+		<div class="col-md-4 spreadsheet-file-upload-column">
 		    <%= file_field_tag :spreadsheet_file %>
 		    <input type="hidden" name="druid" value="<%=@object.id %>" />
 		</div>
-		<div class="col-md-8"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
 	    </div>
     	    <div class="row spreadsheet-row">
-    		<div class="col-md-2"><strong>File type</strong></div>
-		<div class="col-md-6">
+		<div class="col-md-2"><strong>2. Action</strong></div>
+		<div class="col-md-8">
 		    <div class="radio spreadsheet-radio">
 			<label>
 			    <input type="radio" name="filetypes" id="filetypes_1", value="xml">
-			    XML
+			    Spreadsheet input; load into objects
 			</label>
 		    </div>
 		    <div class="radio">
 			<label>
 			    <input type="radio" name="filetypes" id="filetypes_2",  value="spreadsheet">
-			    Spreadsheet
+			    Spreadsheet input; convert to MODS, do not load
 			</label>
 		    </div>
-		    <div class="checkbox spreadsheet-checkbox">
+		    <div class="radio">
 			<label>
-			    <input type="checkbox" name="xml_only" id="convert_only" value="xml_only" disabled>
-			    Convert to XML only; do not load
+			    <input type="radio" name="filetypes" id="convert_only" value="xml_only">
+			    MODS XML input; load into objects
 			</label>
 		    </div>
 		</div>
 	    </div>
 	    <div class="row spreadsheet-row">
 		<div class="col-md-2">
-		    <label for="note" class="control-label">Note</label>
+		    <label for="note" class="control-label"><strong>3. Note</strong></label>
 		</div>
 		<div class="col-md-10">
 		    <input type="text" class="form-control" id="note_text" name="note"/>
 		</div>
 	    </div>
-    	    <div class="row spreadsheet-row">
-    		<div class="col-md-12">
+    	    <div class="row spreadsheet-row spreadsheet-bottom-row">
+    		<div class="col-md-2">
     		    <button type="submit" id="spreadsheet_submit" class="btn btn-primary">Submit</button>
+    		</div>
+		<div class="col-md-2">
+    		    <button type="button" id="spreadsheet_cancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
     		</div>
     	    </div>
     	</div>
-    <% end %>
+	<% end %>
+    </div>
 </div>

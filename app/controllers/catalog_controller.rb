@@ -214,6 +214,10 @@ class CatalogController < ApplicationController
   def bulk_status_help
   end
 
+  def bulk_jobs_help
+    @obj = Dor.find params[:id]
+  end
+
   private
 
   def set_user_obj_instance_var

@@ -1,5 +1,20 @@
 // This file contains JavaScript specific functionality for the bulk loading of spreadsheets.
 
+function enable_submit()
+{
+    $("#spreadsheet_submit").prop("disabled", false);
+}
+
+function disable_control(ctrl)
+{
+    ctrl.prop("disabled", true)
+}
+
+function enable_control(ctrl)
+{
+    ctrl.prop("disabled", false)
+}
+
 
 // The Blacklight onLoad event works better than the regular onLoad event if turbolinks is enabled.
 Blacklight.onLoad(function(){
@@ -7,34 +22,29 @@ Blacklight.onLoad(function(){
     // When the user clicks the "MODS bulk loads" button, a lightbox is opened. The event
     // "loaded.blacklight.ajax-modal" is fired just before this Blacklight lightbox is shown.
     $("#ajax-modal").on("loaded.blacklight.ajax-modal", function(e){
-
-	// Only lightboxes require the 'close' button (upper right corner)
-	$("#spreadsheet-start-header").prepend("<div class=\"row\"><div class=\".col-md-11 header-column\"><button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button></div></div>");
-
+	var input_controls = [$("#filetypes_1"), $("#filetypes_2"), $("#convert_only"), $("#note_text")]
+	var radio_buttons = input_controls.slice(0, 3)
+	
+	// Adjust the width of the lightbox when it hosts a metadata spreadsheet upload form.
+	$("#spreadsheet-upload-container").parent().parent().css("width", "650px");
+	
 	// None of the form controls should be functional until a file has been selected
-	$("#filetypes_1").prop("disabled", true);
-	$("#filetypes_2").prop("disabled", true);
-	$("#convert_only").prop("disabled", true);
 	$("#spreadsheet_submit").prop("disabled", true);
-	$("#note_text").prop("disabled", true);
+	input_controls.map(disable_control)
 
+	// Enable everything except for the submit button upon file upload
 	$("#spreadsheet_file").change(function (){
-	    $("#filetypes_1").prop("disabled", false);
-	    $("#filetypes_2").prop("disabled", false);
-	    $("#note_text").prop("disabled", false);
-	    $("#convert_only").prop("disabled", true);
+	    input_controls.map(enable_control)
 	});
+
+	// Only when the user has uploaded a file AND selected one of the radio buttons should it be possible to submit
+	radio_buttons.forEach(function(button) {
+	    button.click(function() {
+		enable_submit()
+	    });
+	});
+
 	
-	$("#filetypes_2").click(function() {
-            $("#convert_only").prop("disabled", false);
-	    $("#spreadsheet_submit").prop("disabled", false);
-	});
-	
-	$("#filetypes_1").click(function() {
-	    $("#convert_only").prop("checked", false);
-	    $("#convert_only").prop("disabled", true);
-	    $("#spreadsheet_submit").prop("disabled", false);
-	});
     });
 });
 
