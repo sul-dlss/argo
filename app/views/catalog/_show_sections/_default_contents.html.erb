@@ -5,9 +5,9 @@
   <div style="clear:left">
     <ul class="resource-tree">
       <li>
-        <%if document_has? document, 'preserved_size_display'%>
+        <%if document_has? document, 'preserved_size_dbtsi'%>
           <span class="label">Preservation Size</span>
-          <%=value_for_preserved_size_display :document => document, :field => 'preserved_size_display'%>
+          <%=value_for_preserved_size_dbtsi :document => document, :field => 'preserved_size_dbtsi'%>
           <br/>
         <%end%>
         <span class="label">Type</span>

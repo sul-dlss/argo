@@ -168,8 +168,8 @@ class Report
       },
       {
         :field => 'preserved_size', :label => "Preservation Size",
-        :proc => lambda { |doc| doc['preserved_size_display'] },
-        :solr_fields => ['preserved_size_display'],
+        :proc => lambda { |doc| doc['preserved_size_dbtsi'] },
+        :solr_fields => ['preserved_size_dbtsi'],
         :sort => false, :default => true, :width => 50
       }
     ]

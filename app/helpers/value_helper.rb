@@ -26,7 +26,7 @@ module ValueHelper
     end
   end
 
-  def value_for_preserved_size_display args
+  def value_for_preserved_size_dbtsi args
     args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
   end
 
