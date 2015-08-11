@@ -60,10 +60,10 @@ class CatalogController < ApplicationController
     config.add_show_field 'project_tag_ssim',            :label => 'Project'
     config.add_show_field 'source_id_ssim',              :label => 'Source'
     config.add_show_field 'tag_ssim',                    :label => 'Tags'
-    config.add_show_field 'wf_error_ssim',               :label => "Error"
-    config.add_show_field 'collection_title_ssim',       :label => "Collection Title"
+    config.add_show_field 'wf_error_ssim',               :label => 'Error'
+    config.add_show_field 'collection_title_ssim',       :label => 'Collection Title'
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
-    config.add_show_field 'preserved_size_dbtsi',          :label => "Preservation Size"
+    config.add_show_field 'preserved_size_dbtsi',        :label => 'Preservation Size'
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
