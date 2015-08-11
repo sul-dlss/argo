@@ -9,7 +9,7 @@
     </div>
   <% end %>
   <div style="clear:left">
-    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['objProfile_objCreateDate_dt','objProfile_objLabel_dt','identifier_t','identityMetadata_tag_t'] } %>
+    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['originInfo_date_created_tesim','obj_label_ssim','identifier_t','identityMetadata_tag_t'] } %>
 
     <%if defined?(object.status) %>
      <dl class="document-metadata dl-horizontal dl-invert">
@@ -21,7 +21,7 @@
       </dd>
      </dl>
     <%end%>
-    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['wf_error_display'] } %>
+    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['wf_error_ssim'] } %>
 
   </div>
 </div>
