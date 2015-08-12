@@ -156,6 +156,6 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]   original_filename    The name of the original file that the user uploaded.
   # @return [String]
   def generate_xml_filename(original_filename)
-    return Argo::Config.bulk_metadata_xml + '_' + File.basename(original_filename, '.*') + '.xml'
+    return File.basename(original_filename, '.*') + '-' + Argo::Config.bulk_metadata_xml + '.xml'
   end
 end
