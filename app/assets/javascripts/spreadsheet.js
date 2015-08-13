@@ -27,6 +27,9 @@ Blacklight.onLoad(function(){
 	
 	// Adjust the width of the lightbox when it hosts a metadata spreadsheet upload form.
 	$("#spreadsheet-upload-container").parent().parent().css("width", "650px");
+
+	// Width of the lightbox when hosting a metadata bulk upload log
+	$("#spreadsheet-log-container").parent().parent().css("width", "700")
 	
 	// None of the form controls should be functional until a file has been selected
 	$("#spreadsheet_submit").prop("disabled", true);
@@ -43,8 +46,6 @@ Blacklight.onLoad(function(){
 		enable_submit()
 	    });
 	});
-
-	
     });
 });
 

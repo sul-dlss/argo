@@ -211,6 +211,22 @@ class CatalogController < ApplicationController
     end
   end
 
+  def bulk_jobs_csv
+    csv_file = File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time], 'log.csv')
+    if(File.exist?(csv_file))
+      send_file(csv_file, :type => 'text/csv')
+    else
+      # Display error message and log the error
+    end
+  end
+  
+  def bulk_jobs_log
+    #bulk_jobs_info = bulk_job_metadata(File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time]))
+    @apo = params[:id]
+    @time = params[:time]
+    @druid_log = load_fake_data_and_print_csv(@apo, File.join(Argo::Config.bulk_metadata_directory, @apo, @time))
+  end
+
   def bulk_status_help
   end
 
@@ -307,5 +323,36 @@ class CatalogController < ApplicationController
 
   def find_desc_metadata_file(job_output_directory)
     return File.join(job_output_directory, bulk_job_metadata(job_output_directory)['xml_filename'])
+  end
+
+  def load_fake_data_and_print_csv(apo, job_output_directory)
+    fake_data = Hash.new
+    fake_data['job_start'] = '2014-01-01 at 19:29'
+    fake_data['druid:hv992ry2431'] = 'Success'
+    fake_data['druid:fr221nn1234'] = 'Error - this druid is not governed by the correct APO'
+    fake_data['druid:tp331re9088'] = 'Success'
+    fake_data['druid:qr22wnn1y34'] = 'Skipped: input matches current MODS'
+    fake_data['druid:ze331po9088'] = 'Success'
+    fake_data['druid:zf221nn1234'] = 'Success'
+    fake_data['druid:na331re9088'] = 'Success'
+    fake_data['druid:qt22wnn1y34'] = 'Skipped: item is currently being accessioned'
+    fake_data['druid:ze331pf9088'] = 'Success'
+    fake_data['druid:hv992ry2432'] = 'Success'
+    fake_data['druid:fr221nn1233'] = 'Error - spreadsheet contains unrecognized column name'
+    fake_data['druid:tp331re9199'] = 'Error - generated MODS XML invalid, please check your spreadsheet against the template'
+    fake_data['druid:qf22wnn1y34'] = 'Skipped: input matches current MODS'
+    fake_data['druid:zt331po9088'] = 'Success'
+    fake_data['druid:zz221nn1234'] = 'Success'
+    fake_data['druid:nz331re9088'] = 'Success'
+    fake_data['druid:ss221nn1233'] = 'Error - upload timed out'
+
+    File.open(File.join(job_output_directory, 'log.csv'), 'w') { |f|
+      f.puts("apo, #{apo}")
+      fake_data.keys.each do |key|
+        f.puts("#{key}, #{fake_data[key]}")
+      end
+    }
+
+    return fake_data
   end
 end
