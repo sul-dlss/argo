@@ -18,10 +18,10 @@
             </td>
 	    <td><%= job['records'] %></td>
 	    <td><%= job['records'] %></td>
-	    <td>Log</td>
 
 	    <% druid_and_time = job['dir'].split(/\//) %>
-	    <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %>
+	    <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger' }) %></td>
+	    <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %></td>
 		     
 	</tr>
 	<% end %>
