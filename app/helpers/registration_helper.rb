@@ -84,7 +84,7 @@ module RegistrationHelper
 
     if doc.nil?
       begin
-        obj = Dor.load_instance 'druid:'+druid
+        obj = Dor.load_instance "druid:#{druid}"
         solr_doc = obj.to_solr
         Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
         doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
@@ -93,12 +93,6 @@ module RegistrationHelper
       end
       return
     end
-
-    ids = Array(doc['identifier_ssim']).collect do |id|
-      result = id.split(/:/,2)
-      result[0] = "#{result[0].titleize}:"
-      result
-    end.reject { |id| id[0] =~ /DRUID/i }
 
     barcode = Barby::Code128B.new(druid)
     barcode.annotate_pdf(pdf, :width => bc_width, :height => bc_height,
@@ -110,21 +104,23 @@ module RegistrationHelper
 
     pdf.font('Courier', :size => 10)
 
+    table_data = []
+
     labels = doc['obj_label_ssim']
     label = (labels.nil? || labels.empty?) ? '' : labels.first
     label = label[0..110] + '...' if label.length > 110
+    table_data.push(['Object Label:', label])
 
-    table_data = [['Object Label:',label]]
     if project_name = doc['project_tag_ssim']
-      table_data.push(['Project Name:',project_name.to_s])
+      table_data.push(['Project Name:', project_name.to_s])
     end
-
-    table_data.push(['Date Printed:',Time.now.strftime('%c')])
-    table_data.push(["Source ID:",Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
-
-    table_data += ids
+    
     tags = Array(doc['tag_ssim']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
-    table_data.push(["Tags:",tags.join("\n")]) if tags.length > 0
+    table_data.push(["Tags:", tags.join("\n")]) if tags.length > 0
+    table_data.push(["Catkey:", Array(doc['catkey_id_ssim']).join(", ")]) if doc['catkey_id_ssim'].present?
+    table_data.push(["Source ID:", Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
+    table_data.push(["Barcode:", Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
+    table_data.push(["Date Printed:", Time.now.strftime('%c')])
 
     pdf.table(table_data, :column_widths => [100,224], :cell_style => { :borders => [], :padding => 0.pt })
 
@@ -135,7 +131,7 @@ module RegistrationHelper
     pdf.text " "
 
     baseline = pdf.y - top_margin - pdf.font.ascender
-    pdf.rectangle([0,baseline+pdf.font.ascender],pdf.font.ascender,pdf.font.ascender)
+    pdf.rectangle([0, baseline+pdf.font.ascender], pdf.font.ascender, pdf.font.ascender)
     pdf.indent(pdf.font.ascender + 4.pt) do
       pdf.text "Scanned by:"
       pdf.indent(pdf.width_of("Scanned by:") + 0.125.in) do
