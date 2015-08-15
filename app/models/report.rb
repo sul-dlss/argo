@@ -141,20 +141,13 @@ class Report
     ]
 
     # common helper method since search results and reports all do the same configuration
-    BlacklightConfigHelper.add_common_date_facet_fields_to_config config
+    BlacklightConfigHelper.add_common_date_facet_fields_to_config! config
 
-    config.default_solr_params = {
-      :'q.alt' => "*:*",
-      :defType => 'dismax',
-      :qf => %{text^3 published_dttsim creator_tesim dc_creator_tesim dc_identifier_druid_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim sourceId_t tag_ssim title_tesim topic_tesim is_member_of_collection_ssim is_governed_by_ssim},
-      :rows => 100,
-      :facet => true,
-      :'facet.mincount' => 1,
-      :'f.wf_wps_ssim.facet.limit' => -1,
-      :'f.wf_wsp_ssim.facet.limit' => -1,
-      :'f.wf_swp_ssim.facet.limit' => -1,
-      :fl => config.report_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
-    }
+    # common helper method since search results and reports share most of this config
+    BlacklightConfigHelper.add_common_default_solr_params_to_config! config
+    config.default_solr_params[:rows] = 100
+    config.default_solr_params[:fl] = config.report_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
+
     config.add_sort_field 'id asc', :label => 'Druid'
 
     config.column_model = config.report_fields.collect { |spec|

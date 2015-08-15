@@ -13,19 +13,9 @@ class CatalogController < ApplicationController
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
 
   configure_blacklight do |config|
-    config.default_solr_params = {
-      :'q.alt' => "*:*",
-      :defType => 'dismax',
-      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t creator_tesim dc_creator_tesim dc_identifier_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim identityMetadata_citationCreator_t identityMetadata_citationTitle_t objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim sourceId_t tag_ssim title_tesim topic_tesim},
-      :rows => 10,
-      :facet => true,
-      :'facet.mincount' => 1,
-      :'f.wf_wps_ssim.facet.limit' => -1,
-      :'f.wf_wsp_ssim.facet.limit' => -1,
-      :'f.wf_swp_ssim.facet.limit' => -1,
-      :'f.tag_ssim.facet.limit' => -1,
-      :'f.tag_ssim.facet.sort' => 'index'
-    }
+    # common helper method since search results and reports share most of this config
+    BlacklightConfigHelper.add_common_default_solr_params_to_config! config
+    config.default_solr_params[:rows] = 10
 
     config.index.title_field = 'dc_title_ssi'
     config.index.display_type_field = 'content_type_ssim'
@@ -93,7 +83,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source'
 
     # common helper method since search results and reports all do the same configuration
-    BlacklightConfigHelper.add_common_date_facet_fields_to_config config
+    BlacklightConfigHelper.add_common_date_facet_fields_to_config! config
 
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
       :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
