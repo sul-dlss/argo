@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: eddad0ecd01c1e73a8d87f2f5ab8b4428f515874
+  revision: 2aba523de770f91d6ca02a25567b55f759c3c6c9
   branch: develop
   specs:
     dor-services (5.1.1)
@@ -295,7 +295,7 @@ GEM
       mini_portile (~> 0.6.0)
     nokogiri-happymapper (0.5.9)
       nokogiri (~> 1.5)
-    nom-xml (0.5.2)
+    nom-xml (0.5.3)
       activesupport (>= 3.2.18)
       i18n
       nokogiri
@@ -481,7 +481,7 @@ GEM
     ttfunk (1.4.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uber (0.0.13)
+    uber (0.0.14)
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -576,3 +576,6 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   unicode
   unicorn
+
+BUNDLED WITH
+   1.10.6
