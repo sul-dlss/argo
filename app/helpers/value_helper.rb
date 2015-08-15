@@ -1,16 +1,5 @@
 module ValueHelper
 
-  # Calculated fields
-  def calculate_item_status_t_value doc
-    current_milestone = Array(doc['lifecycle_field']).last
-    return nil if current_milestone.nil?
-    status = current_milestone.split(/:/,2).first
-    if embargo_status = doc.get('embargo_status_field')
-      status += " (#{embargo_status})"
-    end
-    status
-  end
-
   # Renderers
   def label_for_druid druid
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
