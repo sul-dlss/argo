@@ -97,21 +97,9 @@ class Report
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'published_datetime', :label => "Pub. Datetime",
-        :proc => lambda { |doc| render_datetime(doc['published_dttsim'])},
-        :solr_fields => ['published_dttsim'],
-        :sort => true, :default => false, :width => 100
-      },
-      {
-        :field => 'preserved_datetime', :label => "Pres. Datetime",
-        :proc => lambda { |doc| render_datetime(doc['preserved_dt'])},
-        :solr_fields => ['preserved_dt'],
-        :sort => true, :default => false, :width => 100
-      },
-      {
-        :field => 'accessioned_dttsi', :label => "Accession. Datetime",
-        :proc => lambda { |doc| render_datetime(doc['accessioned_dttsi'])},
-        :solr_fields => ['accessioned_dttsi'],
+        :field => 'accessioned_dttsim', :label => "Accession. Datetime",
+        :proc => lambda { |doc| render_datetime(doc['accessioned_dttsim'])},
+        :solr_fields => ['accessioned_dttsim'],
         :sort => true, :default => false, :width => 100
       },
       {
@@ -128,8 +116,8 @@ class Report
       },
       {
         :field => 'file_count', :label => "Files",
-        :proc => lambda { |doc| doc['content_file_count_display'] },
-        :solr_fields => ['content_file_count_display'],
+        :proc => lambda { |doc| doc['content_file_count_itsi'] },
+        :solr_fields => ['content_file_count_itsi'],
         :sort => false, :default => true, :width => 50
       },
       {
@@ -140,8 +128,8 @@ class Report
       },
       {
         :field => 'resource_count', :label => "Resources",
-        :proc => lambda {|doc| doc['resource_count_display'] },
-        :solr_fields => ['resource_count_display'],
+        :proc => lambda {|doc| doc['resource_count_itsi'] },
+        :solr_fields => ['resource_count_itsi'],
         :sort => false, :default => true, :width => 50
       },
       {
@@ -158,7 +146,7 @@ class Report
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 published_dttsim content_file_count_display coordinates_teim creator_tesim dc_creator_tesim dc_identifier_druid_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim resource_count_display scale_teim sourceId_t tag_ssim title_tesim topic_tesim is_member_of_collection_ssim is_governed_by_ssim},
+      :qf => %{text^3 published_dttsim creator_tesim dc_creator_tesim dc_identifier_druid_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim sourceId_t tag_ssim title_tesim topic_tesim is_member_of_collection_ssim is_governed_by_ssim},
       :rows => 100,
       :facet => true,
       :'facet.mincount' => 1,
