@@ -16,7 +16,7 @@ class CatalogController < ApplicationController
     config.default_solr_params = {
       :'q.alt' => "*:*",
       :defType => 'dismax',
-      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t coordinates_teim creator_tesim dc_creator_tesim dc_identifier_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim identityMetadata_citationCreator_t identityMetadata_citationTitle_t objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim sourceId_t tag_ssim title_tesim topic_tesim},
+      :qf => %{text^3 citationCreator_t citationTitle_t content_file_t creator_tesim dc_creator_tesim dc_identifier_tesim dc_title_tesim dor_id_tesim event_t events_event_t events_t extent_teim identifier_tesim identityMetadata_citationCreator_t identityMetadata_citationTitle_t objectCreator_teim identityMetadata_otherId_t identityMetadata_sourceId_t lifecycle_teim originInfo_place_placeTerm_tesim originInfo_publisher_tesim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim otherId_t public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_teim sourceId_t tag_ssim title_tesim topic_tesim},
       :rows => 10,
       :facet => true,
       :'facet.mincount' => 1,
@@ -44,9 +44,9 @@ class CatalogController < ApplicationController
 
     config.index.thumbnail_method = :render_index_thumbnail
 
-    config.add_index_field 'id',              :label => 'DRUID'
+    config.add_index_field 'id',               :label => 'DRUID'
     config.add_index_field 'dc_creator_ssi',   :label => 'Creator'
-    config.add_index_field 'project_tag_ssim',:label => 'Project'
+    config.add_index_field 'project_tag_ssim', :label => 'Project'
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type'
     config.add_show_field 'identifier_tesim',            :label => 'IDs'
