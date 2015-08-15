@@ -9,7 +9,7 @@
     </div>
   <% end %>
   <div style="clear:left">
-    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['originInfo_date_created_tesim','obj_label_ssim','identifier_t','identityMetadata_tag_t'] } %>
+    <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => ['originInfo_date_created_tesim', 'obj_label_ssim', 'identifier_tesim', 'tag_ssim'] } %>
 
     <%if defined?(object.status) %>
      <dl class="document-metadata dl-horizontal dl-invert">

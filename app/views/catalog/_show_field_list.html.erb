@@ -10,7 +10,7 @@
          Rails.logger.info "Error rendering #{solr_fname}"
          end %>
     <% else %>
-      <%if solr_fname == 'metadata_source_t'%>
+      <%if solr_fname == 'metadata_source_ssi'%>
         <dt class="blacklight-<%= solr_fname.parameterize %>"><%= render_document_show_field_label :field => solr_fname %></dt>
         <dd class="blacklight-<%= solr_fname.parameterize %>"><%= metadata_source object %></dd>
       <%end%>
