@@ -24,7 +24,8 @@ describe ModsulatorJob, type: :job do
       fixtures_dir = File.join(File.expand_path('../../fixtures', __FILE__))
       FileUtils.copy_file(File.join(fixtures_dir, 'crowdsourcing_bridget_1.xlsx'), test_spreadsheet_path)
 
-      @mj.perform(test_spreadsheet_path,
+      @mj.perform(nil,
+                  test_spreadsheet_path,
                   @output_directory,
                   'random_user',
                   'xlsx',

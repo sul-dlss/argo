@@ -166,7 +166,7 @@ class CatalogController < ApplicationController
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
   def upload
-    @object = Dor.find params[:id]
+    @apo = Dor.find params[:id]
 
     directory_name = Time.now.strftime("%Y_%m_%d_%H_%M_%S_%L")
     output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
@@ -175,9 +175,9 @@ class CatalogController < ApplicationController
     # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it when it's done.
     temp_filename = Rails.root.join('tmp', temp_spreadsheet_filename)
     FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
-    ModsulatorJob.perform_later(temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
+    ModsulatorJob.perform_later(@apo, temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
 
-    redirect_to bulk_jobs_index_path(@object.id)
+    redirect_to bulk_jobs_index_path(@apo.id)
   end
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.

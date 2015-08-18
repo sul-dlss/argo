@@ -18,7 +18,7 @@ describe ModsulatorJob, type: :job do
 
   describe 'update_metadata' do
     it 'raises an error given an invalid xml argument' do
-      expect { @mj.update_metadata('', File.new(File.join(@output_directory, 'fake_log.txt'), 'w')) }.to raise_error(/nil:NilClass/)
+      expect { @mj.update_metadata('', '', File.new(File.join(@output_directory, 'fake_log.txt'), 'w')) }.to raise_error(/nil:NilClass/)
     end
   end
   

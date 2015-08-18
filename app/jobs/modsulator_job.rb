@@ -11,14 +11,15 @@ class ModsulatorJob < ActiveJob::Base
   # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
   #
-  # @param  [String]  uploaded_filename  The full path to the temporary uploaded file. Will be deleted upon completion.
-  # @param  [String]  output_directory   Where to store output (log, generated XML etc.).
-  # @param  [String]  user_login         The current user's username.
-  # @param  [String]  filetype           If not 'xml', the input is assumed to be an Excel spreadsheet.
-  # @param  [String]  xml_only           If true, then only generate XML - do not upload into DOR.
-  # @param  [String]  note               An optional note that the user entered to go with the job.
+  # @param  [Dor::AdminPolicyObject]  apo                The DOR APO that governs all of the objects we're trying to upload metadata for.
+  # @param  [String]                  uploaded_filename  The full path to the temporary uploaded file. Will be deleted upon completion.
+  # @param  [String]                  output_directory   Where to store output (log, generated XML etc.).
+  # @param  [String]                  user_login         The current user's username.
+  # @param  [String]                  filetype           If not 'xml', the input is assumed to be an Excel spreadsheet.
+  # @param  [String]                  xml_only           If true, then only generate XML - do not upload into DOR.
+  # @param  [String]                  note               An optional note that the user entered to go with the job.
   # @return [Void]
-  def perform(uploaded_filename, output_directory, user_login, filetype, xml_only, note)
+  def perform(apo, uploaded_filename, output_directory, user_login, filetype, xml_only, note)
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
     
@@ -40,7 +41,7 @@ class ModsulatorJob < ActiveJob::Base
       elsif(filetype != 'xml')      # If the submitted file is XML, we never want to load anything into DOR
         # Load into DOR
         log.puts("xml_only false")
-        update_metadata(response_xml, log)
+        update_metadata(apo.admin_policy_object_id, response_xml, log)
       end
 
       finish_timestamp = Time.now.strftime(TIME_FORMAT)
@@ -54,10 +55,11 @@ class ModsulatorJob < ActiveJob::Base
   
   # Upload metadata into DOR.
   #
+  # @param  [String] druid         The governing APO's druid.
   # @param  [String] xml_string    A MODS XML string.
   # @param  [File]   log           Log file handle.
   # @return [Void]
-  def update_metadata(xml_string, log)
+  def update_metadata(druid, xml_string, log)
     root = Nokogiri::XML(xml_string).root
     namespace = root.namespace()
 
@@ -68,9 +70,13 @@ class ModsulatorJob < ActiveJob::Base
       begin
         dor_object = Dor.find current_druid
         if (dor_object)
-          dor_object.descMetadata.content = mods_node.to_s
-          dor_object.save
-          log.puts("saved #{current_druid}")
+          if(dor_object.admin_policy_object_id == druid)
+            dor_object.descMetadata.content = mods_node.to_s
+            dor_object.save
+            log.puts("saved #{current_druid}")
+          else
+            log.puts("not_governed #{current_druid}")
+          end
         end
       rescue ActiveFedora::ObjectNotFoundError
         log.puts("error_notfound #{current_druid}")
