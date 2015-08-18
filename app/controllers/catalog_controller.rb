@@ -175,7 +175,7 @@ class CatalogController < ApplicationController
     # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it when it's done.
     temp_filename = Rails.root.join('tmp', temp_spreadsheet_filename)
     FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
-    ModsulatorJob.perform_later(@apo, temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
+    ModsulatorJob.perform_later(@apo.id, temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
 
     redirect_to bulk_jobs_index_path(@apo.id)
   end
