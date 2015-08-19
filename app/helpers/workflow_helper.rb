@@ -68,20 +68,6 @@ module WorkflowHelper
     return '-'
   end
 
-  def render_workflow_grid_toggle(field_name)
-    return unless field_name =~ /^wf_.+_ssim/
-    p = params.dup
-    img = nil
-    if show_workflow_grid?
-      img = image_tag('icons/detail_view.png', :title => "Item summary view")
-      p.merge!(:controller => :catalog, :action => 'index')
-    else
-      img = image_tag('icons/grid_view.png', :title => "Workflow grid view")
-      p.merge!(:controller => :report, :action => 'workflow_grid')
-    end
-    link_to(img.html_safe, p, :class => 'no-underline')
-  end
-
   def proc_names_for_wf(wf_name, wf_data)
     proc_names = wf_data.keys.delete_if { |k,v| !k.is_a?(String) }
     wf = Dor::WorkflowObject.find_by_name(wf_name)
