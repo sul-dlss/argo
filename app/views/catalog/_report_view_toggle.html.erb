@@ -1,14 +1,19 @@
 <div class="reportToggle">
-  <%= link_to t('blacklight.search.start_over'), url_for(:controller => 'catalog', :action=>'index'), :class => 'ui-state-default ui-corner-all' %>
-  <% case params[:controller] %>
-  <% when 'catalog' %>
-    <%= link_to t('argo.search.report_view'), report_url(params), :class => 'ui-state-default ui-corner-all' %>
-    <%= link_to 'Bulk Update', report_bulk_url(params), :class => 'ui-state-default ui-corner-all'%>
-    <%= link_to 'Discovery Report', discovery_url(params), :class => 'ui-state-default ui-corner-all'%>
-  <% when 'report' %>
-    <%= link_to t('argo.search.result_view'), catalog_index_url(params), :class => 'ui-state-default ui-corner-all' %>
-  <%when 'discovery'%>
-    <%= link_to t('argo.search.report_view'), report_url(params), :class => 'ui-state-default ui-corner-all' %>
-    <%= link_to t('argo.search.result_view'), catalog_index_url(params), :class => 'ui-state-default ui-corner-all' %>
+  <% cleaned_params = params.select { |key, value| !['controller', 'action'].include?(key) } %>
+  <%= link_to t('blacklight.search.start_over'), catalog_index_url({}), :class => 'ui-state-default ui-corner-all' %>
+  <% unless params['controller'] == 'report' && params['action'] == 'bulk' %>
+    <%= link_to 'Bulk Update', report_bulk_url(cleaned_params), :class => 'ui-state-default ui-corner-all'%>
+  <% end %>
+  <% unless params['controller'] == 'catalog' %>
+    <%= link_to t('argo.search.result_view'), catalog_index_url(cleaned_params), :class => 'ui-state-default ui-corner-all' %>
+  <% end %>
+  <% unless params['controller'] == 'report' && params['action'] == 'index' %>
+    <%= link_to t('argo.search.report_view'), report_url(cleaned_params), :class => 'ui-state-default ui-corner-all' %>
+  <% end %>
+  <% unless params['controller'] =='discovery' %>
+    <%= link_to 'Discovery Report', discovery_url(cleaned_params), :class => 'ui-state-default ui-corner-all'%>
+  <% end %>
+  <% unless params['controller'] =='report' && params['action'] == 'workflow_grid' %>
+    <%= link_to 'Workflow grid view', report_workflow_grid_url(cleaned_params), :class => 'ui-state-default ui-corner-all'%>
   <% end %>
 </div>
