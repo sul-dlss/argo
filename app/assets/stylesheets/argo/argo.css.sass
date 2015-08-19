@@ -1,16 +1,21 @@
 /* Import the common SUL styles from the sul_styles gem (colors, icons). */
 @import 'sul-styles'
 
-#header-navbar 
-  .navbar-brand
-    background: transparent image_url('/assets/argonauta.png') no-repeat top left
-    background-size: auto 65px
-
 #header-navbar.navbar-static-top
   background-color: $color-cardinal-red
   color: white
   a
     color: white
+
+#header-navbar 
+  a.navbar-brand
+    background: transparent image_url('/assets/argo3.png') no-repeat top left
+    background-size: auto 65px
+    color: #DFDCDC
+    font: bold 60px
+    letter-spacing: -1px
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
+    padding-right: 60px 
 
 a.no-underline
   text-decoration: none
