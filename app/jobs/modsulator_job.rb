@@ -22,7 +22,7 @@ class ModsulatorJob < ActiveJob::Base
   def perform(apo_id, uploaded_filename, output_directory, user_login, filetype, xml_only, note)
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
-    
+
     File.open(log_filename, 'w') { |log|
 
       start_log(log, user_login, original_filename, note)
@@ -38,6 +38,7 @@ class ModsulatorJob < ActiveJob::Base
 
       if (xml_only)
         log.puts("xml_only true")
+
       elsif(filetype != 'xml')      # If the submitted file is XML, we never want to load anything into DOR
         # Load into DOR
         log.puts("xml_only false")
@@ -66,7 +67,7 @@ class ModsulatorJob < ActiveJob::Base
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
     mods_list.each do |mods_node|
-      current_druid = 'druid:' + mods_node.attr('objectId')
+      current_druid = mods_node.attr('objectId')
       begin
         dor_object = Dor.find current_druid
         if (dor_object)
