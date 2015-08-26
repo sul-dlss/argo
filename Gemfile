@@ -11,6 +11,7 @@ gem 'kaminari'
 gem 'kgio'
 gem 'mysql2'
 gem 'net-sftp'
+gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
 gem 'prawn', '~> 1'
 gem 'prawn-table'
@@ -48,7 +49,7 @@ gem 'rsolr-client-cert', '~> 0.5.2'
 gem 'solrizer'
 gem 'sprockets', '~> 2.12' # upgrading to 3.x introduces a deployment error, where cap tries to backup a non-existent manifest-*.js file
 gem 'stanford-mods'
-gem 'sul_styles'
+gem 'sul_styles', '~> 0.3.0' # later versions require ruby 2.1 or higher
 
 group :test, :development do
   gem 'http_logger'
