@@ -8,6 +8,7 @@ app/assets/javascripts/jqgrid/
 config/certs
 config/database.yml
 config/environments/*.rb
+config/newrelic.yml
 config/solr.yml
 coverage/
 db/*.sqlite3
