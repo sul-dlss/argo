@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'equivalent-xml'
 
 # This class defines a Delayed Job task that is started when the user uploads a bulk metadata file for
 # an APO. For configuration details, see app/config/initializers/delayed_job.rb.
@@ -74,6 +75,11 @@ class ModsulatorJob < ActiveJob::Base
         dor_object = Dor.find current_druid
         if (dor_object)
           if(dor_object.admin_policy_object_id == druid)
+            current_metadata = dor_object.descMetadata.content
+            Delayed::Worker.logger.debug("current_metadata = #{current_metadata}")
+            Delayed::Worker.logger.debug("mods_node = #{mods_node}")
+            Delayed::Worker.logger.debug("current_metadata ISA #{current_metadata.class}")
+
             dor_object.descMetadata.content = mods_node.to_s
             dor_object.save
             log.puts("argo.bulk_metadata.bulk_log_save_success #{current_druid}")
