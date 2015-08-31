@@ -526,6 +526,7 @@ DEPENDENCIES
   delayed_job_active_record
   dor-services (~> 5.0)!
   dor-workflow-service (~> 1.7)
+  equivalent-xml (>= 0.6.0)
   haml
   http_logger
   is_it_working-cbeer
