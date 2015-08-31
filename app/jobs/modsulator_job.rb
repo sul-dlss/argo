@@ -10,6 +10,8 @@ class ModsulatorJob < ActiveJob::Base
 
   # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
+  # Later, this log file will be used to generate a nicer looking log for the user to view and to generate the list of
+  # spreadsheet upload jobs within the Argo UI.
   #
   # @param  [String]  apo_id             The druid of the DOR APO that governs all of the objects we're trying to upload metadata for.
   # @param  [String]  uploaded_filename  The full path to the temporary uploaded file. Will be deleted upon completion.
@@ -26,27 +28,27 @@ class ModsulatorJob < ActiveJob::Base
     File.open(log_filename, 'w') { |log|
 
       start_log(log, user_login, original_filename, note)
-      response_xml = generate_xml(filetype, uploaded_filename, original_filename)
+      response_xml = generate_xml(filetype, uploaded_filename, original_filename, log)
 
       if(response_xml == nil)
-        # can this happen and what should we do?
+        log.puts("argo.bulk_metadata.bulk_log_error_exception Got no response from server")
+        log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
       end
 
-      
       metadata_filename = generate_xml_filename(original_filename)
       save_metadata_xml(response_xml, File.join(output_directory, metadata_filename), log)
 
       if (xml_only)
-        log.puts("xml_only true")
+        log.puts("argo.bulk_metadata.bulk_log_xml_only true")
 
       elsif(filetype != 'xml')      # If the submitted file is XML, we never want to load anything into DOR
         # Load into DOR
-        log.puts("xml_only false")
+        log.puts("argo.bulk_metadata.bulk_log_xml_only false")
         update_metadata(apo_id, response_xml, log)
       end
 
       finish_timestamp = Time.now.strftime(TIME_FORMAT)
-      log.puts("job_finish #{finish_timestamp}")
+      log.puts("argo.bulk_metadata.bulk_log_job_complete #{finish_timestamp}")
     }
 
     # Remove the (temporary) uploaded file
@@ -74,13 +76,13 @@ class ModsulatorJob < ActiveJob::Base
           if(dor_object.admin_policy_object_id == druid)
             dor_object.descMetadata.content = mods_node.to_s
             dor_object.save
-            log.puts("saved #{current_druid}")
+            log.puts("argo.bulk_metadata.bulk_log_save_success #{current_druid}")
           else
-            log.puts("not_governed #{current_druid}")
+            log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
           end
         end
       rescue ActiveFedora::ObjectNotFoundError
-        log.puts("error_notfound #{current_druid}")
+        log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
       end
     end
   end
@@ -117,10 +119,10 @@ class ModsulatorJob < ActiveJob::Base
   # @param [String]  filename  The name of this job's input file.
   # @param [String]  note      An optional comment that describes this job.
   def start_log(log_file, username, filename, note)
-    log_file.puts("job_start #{Time.now.strftime(TIME_FORMAT)}")
-    log_file.puts("current_user #{username}")
-    log_file.puts("input_file #{filename}")
-    log_file.puts("note #{note}") if (note && note.length > 0)
+    log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("argo.bulk_metadata.bulk_log_user #{username}")
+    log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}")
+    log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if (note && note.length > 0)
   end
 
 
@@ -131,14 +133,35 @@ class ModsulatorJob < ActiveJob::Base
   #                                          Any other values indicates a spreadsheet input (.xlsx).
   # @param    [String]   uploaded_filename   The full path to the XML/spreadsheet file.
   # @param    [String]   original_filename   A prettified filename, which looks better in the UI.
+  # @param    [File]     log_file            The log file to write to
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
-  def generate_xml(filetype, uploaded_filename, original_filename)
+  def generate_xml(filetype, uploaded_filename, original_filename, log_file)
     response_xml = nil
+    url = nil
 
-    if (filetype == "xml")    # Just clean up the given XML file
-      response_xml = RestClient.post(Argo::Config.urls.normalizer, File.read(uploaded_filename))
-    else                      # The given file is a spreadsheet
-      response_xml = RestClient.post(Argo::Config.urls.modsulator, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
+    begin
+      if (filetype == "xml_only")  # Just clean up the given XML file
+        url = Argo::Config.urls.normalizer
+        response_xml = RestClient.post(url, File.read(uploaded_filename))
+      else                         # The given file is a spreadsheet
+        url = Argo::Config.urls.modsulator
+        response_xml = RestClient.post(url, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
+      end
+    rescue RestClient::ResourceNotFound => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
+    rescue Errno::ENOENT => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
+    rescue Errno::EACCES => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
+    rescue RestClient::InternalServerError => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
+    rescue Exception => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
     end
     return response_xml
   end
@@ -152,9 +175,9 @@ class ModsulatorJob < ActiveJob::Base
   # @return [Void]
   def save_metadata_xml(xml, output_filename, log_file)
     File.open(output_filename, "w") { |f| f.write(xml) }
-    log_file.puts("xml_written #{Time.now.strftime(TIME_FORMAT)}")
-    log_file.puts("xml_filename #{File.basename(output_filename)}")
-    log_file.puts("records #{xml.scan('<xmlDoc id').size}")
+    log_file.puts("argo.bulk_metadata.bulk_log_xml_timestamp #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("argo.bulk_metadata.bulk_log_xml_filename #{File.basename(output_filename)}")
+    log_file.puts("argo.bulk_metadata.bulk_log_record_count #{xml.scan('<xmlDoc id').size}")
   end
 
 
@@ -164,5 +187,15 @@ class ModsulatorJob < ActiveJob::Base
   # @return [String]
   def generate_xml_filename(original_filename)
     return File.basename(original_filename, '.*') + '-' + Argo::Config.bulk_metadata_xml + '.xml'
+  end
+
+
+  # Logs a remote request-related exception to the standard Delayed Job log file.
+  #
+  # @param  [Exception] e   The exception
+  # @param  [String]    url The URL that we attempted to access
+  # @return [Void]
+  def delayed_log_url(e, url)
+    Delayed::Worker.logger.error("#{__FILE__} tried to access #{url} got: #{e.message} #{e.backtrace}")
   end
 end

@@ -5,19 +5,19 @@
 	</tr>
 	<% @bulk_jobs.each do |job| %>
 	<tr>
-	    <td><%= job['job_start'] %></td>
-	    <td><%= job['current_user'] %></td>
-	    <td><%= job['input_file'] %></td>
-	    <td><%= job['note'] %></td>
+	    <td><%= job['argo.bulk_metadata.bulk_log_job_start'] %></td>
+	    <td><%= job['argo.bulk_metadata.bulk_log_user'] %></td>
+	    <td><%= job['argo.bulk_metadata.bulk_log_input_file'] %></td>
+	    <td><%= job['argo.bulk_metadata.bulk_log_note'] %></td>
 	    <td>
-		<% if(job['job_finish']) %>
+		<% if(job['argo.bulk_metadata.bulk_log_job_complete']) %>
 		  completed
 		<% else %>
 		  in process
 		<% end %>
             </td>
-	    <td><%= job['records'] %></td>
-	    <td><%= job['records'] %></td>
+	    <td><%= job['argo.bulk_metadata.bulk_log_record_count'] %></td>
+	    <td><%= job['argo.bulk_metadata.bulk_log_druids_loaded'] %></td>
 
 	    <% druid_and_time = job['dir'].split(/\//) %>
 	    <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger' }) %></td>

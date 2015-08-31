@@ -7,6 +7,7 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   include Argo::AccessControlsEnforcement
   helper ArgoHelper
+  include SpreadsheetHelper
 
   before_filter :reformat_dates, :set_user_obj_instance_var
 
@@ -211,10 +212,13 @@ class CatalogController < ApplicationController
   end
   
   def bulk_jobs_log
-    #bulk_jobs_info = bulk_job_metadata(File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time]))
     @apo = params[:id]
     @time = params[:time]
-    @druid_log = load_fake_data_and_print_csv(@apo, File.join(Argo::Config.bulk_metadata_directory, @apo, @time))
+    job_directory = File.join(Argo::Config.bulk_metadata_directory, @apo, @time)
+
+    # Generate both the actual log messages that go in the HTML and the CSV, since both need to be ready when the table is displayed to the user
+    @druid_log = load_user_log(@apo, job_directory)
+    user_log_csv(@druid_log, job_directory)
   end
 
   def bulk_status_help
@@ -313,36 +317,5 @@ class CatalogController < ApplicationController
 
   def find_desc_metadata_file(job_output_directory)
     return File.join(job_output_directory, bulk_job_metadata(job_output_directory)['xml_filename'])
-  end
-
-  def load_fake_data_and_print_csv(apo, job_output_directory)
-    fake_data = Hash.new
-    fake_data['job_start'] = '2014-01-01 at 19:29'
-    fake_data['druid:hv992ry2431'] = 'Success'
-    fake_data['druid:fr221nn1234'] = 'Error - this druid is not governed by the correct APO'
-    fake_data['druid:tp331re9088'] = 'Success'
-    fake_data['druid:qr22wnn1y34'] = 'Skipped: input matches current MODS'
-    fake_data['druid:ze331po9088'] = 'Success'
-    fake_data['druid:zf221nn1234'] = 'Success'
-    fake_data['druid:na331re9088'] = 'Success'
-    fake_data['druid:qt22wnn1y34'] = 'Skipped: item is currently being accessioned'
-    fake_data['druid:ze331pf9088'] = 'Success'
-    fake_data['druid:hv992ry2432'] = 'Success'
-    fake_data['druid:fr221nn1233'] = 'Error - spreadsheet contains unrecognized column name'
-    fake_data['druid:tp331re9199'] = 'Error - generated MODS XML invalid, please check your spreadsheet against the template'
-    fake_data['druid:qf22wnn1y34'] = 'Skipped: input matches current MODS'
-    fake_data['druid:zt331po9088'] = 'Success'
-    fake_data['druid:zz221nn1234'] = 'Success'
-    fake_data['druid:nz331re9088'] = 'Success'
-    fake_data['druid:ss221nn1233'] = 'Error - upload timed out'
-
-    File.open(File.join(job_output_directory, 'log.csv'), 'w') { |f|
-      f.puts("apo, #{apo}")
-      fake_data.keys.each do |key|
-        f.puts("#{key}, #{fake_data[key]}")
-      end
-    }
-
-    return fake_data
   end
 end
