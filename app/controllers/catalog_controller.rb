@@ -249,6 +249,7 @@ class CatalogController < ApplicationController
 
   # Given a directory with bulk metadata upload information (written by ModsulatorJob), loads the job data into a hash.
   def bulk_job_metadata(dir)
+    success = 0
     job_info = Hash.new
     log_filename = File.join(dir, Argo::Config.bulk_metadata_log)
     if (File.directory?(dir) && File.readable?(dir))
@@ -261,9 +262,14 @@ class CatalogController < ApplicationController
             matched_strings = line.match(/^([^\s]+)\s+(.*)/)
             if (matched_strings && matched_strings.length == 3)
               job_info[matched_strings[1]] = matched_strings[2]
+
+              if(matched_strings[0] == 'argo.bulk_metadata.bulk_log_job_save_success')
+                success += 1
+              end
             end
           end
           job_info['dir'] = get_leafdir(dir)
+          job_info['argo.bulk_metadata.bulk_log_druids_loaded'] = success
         }
       end
     end
