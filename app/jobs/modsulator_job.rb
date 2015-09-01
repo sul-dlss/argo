@@ -70,7 +70,7 @@ class ModsulatorJob < ActiveJob::Base
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
     mods_list.each do |mods_node|
-      current_druid = mods_node.attr('objectId')
+      current_druid = 'druid:' + mods_node.attr('objectId')
       begin
         dor_object = Dor.find current_druid
         if (dor_object)
