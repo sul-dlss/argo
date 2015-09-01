@@ -4,7 +4,7 @@
   <%= form_tag url_for(:controller => :items, :action => :datastream_update), :method => :POST do%>
     <input type="hidden" name="id" value="<%=@obj.pid %>" />
     <input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
-    <textarea style="width:100%;height:80%" name="content" id="content"><%=@obj.datastreams[params[:dsid]].content.to_s %></textarea><br/>
+    <textarea name="content" id="content"><%=@obj.datastreams[params[:dsid]].content.to_s %></textarea><br/>
     <button type="submit" id="update">Update Datastream</button>
   <% end %>
 
