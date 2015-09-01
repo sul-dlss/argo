@@ -47,10 +47,10 @@ describe ModsulatorJob, type: :job do
   describe 'start_log' do
     it 'writes the correct information to the log' do
       log = double('log')
-      expect(log).to receive(:puts).with(/^job_start .*/)
-      expect(log).to receive(:puts).with(/^current_user .*/)
-      expect(log).to receive(:puts).with(/^input_file .*/)
-      expect(log).to receive(:puts).with(/^note .*/)
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_job_start .*/)
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_user .*/)
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_input_file .*/)
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_note .*/)
       @mj.start_log(log, 'fakeuser', 'fakefile', 'fakenote')
     end
 
@@ -67,9 +67,9 @@ describe ModsulatorJob, type: :job do
       fixtures_dir = File.expand_path('../../fixtures', __FILE__)
       test_xml = 'crowdsourcing_bridget_1.xml'
       log = double('log')
-      expect(log).to receive(:puts).with(/^xml_written .*/)
-      expect(log).to receive(:puts).with('xml_filename smx.xml')
-      expect(log).to receive(:puts).with('records 20')
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_xml_timestamp .*/)
+      expect(log).to receive(:puts).with('argo.bulk_metadata.bulk_log_xml_filename smx.xml')
+      expect(log).to receive(:puts).with('argo.bulk_metadata.bulk_log_record_count 20')
       @mj.save_metadata_xml(File.read(File.join(fixtures_dir, test_xml)),
                             File.join(@output_directory, 'smx.xml'),
                             log)

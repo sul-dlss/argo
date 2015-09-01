@@ -85,6 +85,7 @@ namespace :argo do
   fedora_conf_dir   = 'fedora_conf'
   fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
   fedora_fileglob   = "#{Rails.root}/#{fedora_conf_dir}/data/*.xml"
+  fedora_files      = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
   live_solrxml_file = "jetty/solr/solr.xml"
   testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
   restcore_url = Blacklight.solr.options[:url] + "/admin/cores?action=STATUS&wt=json"
@@ -203,25 +204,36 @@ namespace :argo do
   end # :solr
 
   namespace :repo do
-    desc "Load XML file(s) into repo (fedora and solr), default: '#{fedora_fileglob}' ## note quotes around glob"
+    desc "Load XML file(s) into repo (fedora and solr), default: contents of 'load_order' file. With a glob: rake argo:repo:load[fedora_conf/data/*.xml]"
     task :load, [:glob] do |task, args|
       puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
-      args.with_defaults(:glob => fedora_fileglob)
+
+      file_list = []
+      if(args.has_key?(:glob))
+        file_list = glob_files(args[:glob])
+      else
+        puts "No file glob was specified so file order and inclusion is determined by the load_order file"
+        file_list = load_order_files(fedora_files)
+      end
+
       errors = []
       i = 0
 
-      Dir.glob(args[:glob]).each do |file|
+      file_list.each do |file|
         i += 1
+        
         ENV['foxml'] = file
         handler = proc do |e, attempt_number, total_delay|
           puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
           errors << file
         end
-        with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
-          puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
+       with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
+         puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
+
+          # Invoke the ActiveFedora gem's rake task
           Rake::Task['repo:load'].invoke
           Rake::Task['repo:load'].reenable
-        }
+       }
       end
       ENV.delete('foxml') if ENV['foxml']   # avoid ENV contamination
       puts "Done loading repo files"
@@ -245,6 +257,21 @@ namespace :argo do
       :'facet.limit'    => -1 )
     resp.facets.find { |f| f.name == apo_field }
   end
+
+
+  def load_order_files(fedora_files)
+    file_list = Array.new
+    fedora_files.each do |file|
+      file_list.push(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), file.strip))
+    end
+    return file_list
+  end
+
+
+  def glob_files(glob_expression)
+    return Dir.glob(glob_expression)
+  end
+  
 
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do

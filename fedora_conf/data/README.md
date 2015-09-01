@@ -1,4 +1,8 @@
 To add test files, EXPORT **FOXML-1.1** format in the **archive** context.
+Note that as of August 2015, Fedora 3.x export is broken, so adding test file by export does not
+actually work. Hopefully, one day we'll get a working export in Fedora.
+
+Both load order and inclusion is determined by the file "load_order".
 
 The difference between **archive** and **migrate** contexts is:
 
