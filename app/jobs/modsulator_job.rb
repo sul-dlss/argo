@@ -82,7 +82,7 @@ class ModsulatorJob < ActiveJob::Base
 
             dor_object.descMetadata.content = mods_node.to_s
             dor_object.save
-            log.puts("argo.bulk_metadata.bulk_log_save_success #{current_druid}")
+            log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
           else
             log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
           end
