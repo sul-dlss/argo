@@ -263,7 +263,7 @@ class CatalogController < ApplicationController
             if (matched_strings && matched_strings.length == 3)
               job_info[matched_strings[1]] = matched_strings[2]
 
-              if(matched_strings[0] == 'argo.bulk_metadata.bulk_log_job_save_success')
+              if(matched_strings[1] == 'argo.bulk_metadata.bulk_log_job_save_success')
                 success += 1
               end
             end
