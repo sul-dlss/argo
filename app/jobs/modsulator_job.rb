@@ -41,7 +41,6 @@ class ModsulatorJob < ActiveJob::Base
 
       if (xml_only)
         log.puts("argo.bulk_metadata.bulk_log_xml_only true")
-
       elsif(filetype != 'xml')      # If the submitted file is XML, we never want to load anything into DOR
         # Load into DOR
         log.puts("argo.bulk_metadata.bulk_log_xml_only false")
@@ -66,23 +65,28 @@ class ModsulatorJob < ActiveJob::Base
   def update_metadata(druid, xml_string, log)
     root = Nokogiri::XML(xml_string).root
     namespace = root.namespace()
-
+    
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
-    mods_list.each do |mods_node|
-      current_druid = 'druid:' + mods_node.attr('objectId')
+    mods_list.each do |xmldoc_node|
+      current_druid = 'druid:' + xmldoc_node.attr('objectId')
       begin
         dor_object = Dor.find current_druid
         if (dor_object)
+
+          # Only update objects that are governed by the correct APO
           if(dor_object.admin_policy_object_id == druid)
             current_metadata = dor_object.descMetadata.content
-            Delayed::Worker.logger.debug("current_metadata = #{current_metadata}")
-            Delayed::Worker.logger.debug("mods_node = #{mods_node}")
-            Delayed::Worker.logger.debug("current_metadata ISA #{current_metadata.class}")
 
-            dor_object.descMetadata.content = mods_node.to_s
-            dor_object.save
-            log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
+            # We only update objects if the descMetadata XML is different
+            mods_node = xmldoc_node.first_element_child
+            if(!equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node))
+              dor_object.descMetadata.content = mods_node.to_s
+              dor_object.save
+              log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
+            else
+              log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
+            end
           else
             log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
           end
@@ -91,6 +95,20 @@ class ModsulatorJob < ActiveJob::Base
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
       end
     end
+  end
+
+
+  # Check if two MODS XML nodes are equivalent.
+  #
+  # @param [Nokogiri::XML::Element]    node_1  A MODS XML node.
+  # @param [Nokogiri::XML::Element]    node_2  A MODS XML node.
+  # @param [Boolean]                   true if the given nodes are equivalent, false otherwise.
+  def equivalent_nodes(node_1, node_2)
+    EquivalentXml.equivalent?(node_1,
+                              node_2,
+                              :element_order => false,
+                              :normalize_whitespace => true,
+                              :ignore_attr_values => ['version', 'xmlns', 'xmlns:xsi', 'schemaLocation'])
   end
 
 
