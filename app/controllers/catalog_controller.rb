@@ -228,6 +228,15 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id]
   end
 
+  def bulk_jobs_delete
+    @apo = params[:id]
+
+    directory_to_delete = File.join(Argo::Config.bulk_metadata_directory, params[:dir])
+    FileUtils.remove_dir(directory_to_delete, true)
+
+    redirect_to bulk_jobs_index_path(@apo)
+  end
+
   private
 
   def set_user_obj_instance_var
