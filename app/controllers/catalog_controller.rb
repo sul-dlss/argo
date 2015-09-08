@@ -301,8 +301,8 @@ class CatalogController < ApplicationController
     end
 
     # Sort by start time (newest first)
-    bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'] }
-    return bulk_info.reverse!
+    sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'] }
+    return sorted_info.reverse!
   end
 
   # Determines whether or not the current user has permissions to view the current DOR object.
