@@ -22,8 +22,30 @@
 	    <% druid_and_time = job['dir'].split(/\//) %>
 	    <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger' }) %></td>
 	    <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %></td>
-		     
+	    <td>
+		<%= form_tag('bulk_jobs_delete', method: :delete, :id => "form-" + job['dir']) do %>
+		    <%= hidden_field_tag('dir', job['dir']) %>
+		    <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-toggle="modal" data-target="#confirm-delete-modal">Delete</button>
+		<% end %>
+	    </td>
 	</tr>
 	<% end %>
     </table>
+</div>
+
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                Confirm Delete
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
+            </div>
+	    <div class="modal-footer">
+		<a href="#" id="confirm-delete-job" class="btn btn-success success">Delete</a>
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+	</div>
+    </div>
 </div>

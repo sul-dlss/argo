@@ -49,3 +49,23 @@ Blacklight.onLoad(function(){
     });
 });
 
+
+// Confirmation modal dialog for when the user presses the delete button in the spreadsheet bulk upload table.
+$(document).ready(function() {
+
+    // The form we want to submit has both ':' and '/' in its ID, which need to be escaped
+    function escape_characters(identifier) {
+	return "#" + identifier.replace( /(:|\.|\[|\]|,|\/)/g, "\\$1" );
+    }
+
+    
+    $(".job-delete-button").click(function() {
+	var form_parent_id = $(this).parent().attr('id');
+	
+	$('#confirm-delete-job').click(function(){
+	    
+	    // Submit the form when the Delete button in the modal is clicked
+	    $(escape_characters(form_parent_id)).submit();
+	});
+    });
+});
