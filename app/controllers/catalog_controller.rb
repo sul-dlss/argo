@@ -228,6 +228,15 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id]
   end
 
+  def bulk_jobs_delete
+    @apo = params[:id]
+
+    directory_to_delete = File.join(Argo::Config.bulk_metadata_directory, params[:dir])
+    FileUtils.remove_dir(directory_to_delete, true)
+
+    redirect_to bulk_jobs_index_path(@apo)
+  end
+
   private
 
   def set_user_obj_instance_var
@@ -290,7 +299,10 @@ class CatalogController < ApplicationController
     directory_list.each do |d|
       bulk_info.push(bulk_job_metadata(d))
     end
-    return bulk_info
+
+    # Sort by start time (newest first)
+    sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'] }
+    return sorted_info.reverse!
   end
 
   # Determines whether or not the current user has permissions to view the current DOR object.

@@ -24,6 +24,7 @@ Argo::Application.routes.draw do
   match 'catalog/:id/:time/bulk_jobs_log', :to => 'catalog#bulk_jobs_log',     :as => 'bulk_jobs_log',      :via => [:get]
   match 'catalog/:id/bulk_help',           :to => 'catalog#bulk_jobs_help',    :as => 'bulk_jobs_help',     :via => [:get]
   match 'catalog/:id/:time/bulk_jobs_csv', :to => 'catalog#bulk_jobs_csv',     :as => 'bulk_jobs_csv',      :via => [:get]
+  match 'catalog/:id/bulk_jobs_delete',    :to => 'catalog#bulk_jobs_delete',  :as => 'bulk_jobs_delete',   :via => [:delete]
   
   #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
   # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
