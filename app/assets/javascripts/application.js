@@ -26,3 +26,4 @@
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require jqgrid-jquery-rails
+//= require jquery.persistentModal
