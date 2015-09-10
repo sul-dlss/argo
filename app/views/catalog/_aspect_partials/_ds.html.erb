@@ -16,7 +16,7 @@ else
 %>
   <%=
   if @user and (@user.is_admin or @obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid))) and (@obj.datastreams[params[:dsid]].respond_to? :ng_xml or params[:dsid] == 'RELS-EXT') and params[:dsid] != 'workflows'
-     link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { ajax_modal: 'trigger' }
+     link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { behavior: 'persistent-modal' }
   end
   %>
 <%
