@@ -14,5 +14,6 @@
  *= require argo
  *= require jquery-ui
  *= require jqgrid-jquery-rails
+ *= require persistent-modal
 */
 
