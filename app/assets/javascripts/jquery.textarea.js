@@ -1,4 +1,8 @@
 /*
+ * note:  the original site for this plugin is defunct as of 2015-09-02, but the project has been picked up by 
+ * another developer, and lives here: https://github.com/alanhogan/Tabby
+ */
+/*
  *	Tabby jQuery plugin version 0.12
  *
  *	Ted Devito - http://teddevito.com/demos/textarea.html
