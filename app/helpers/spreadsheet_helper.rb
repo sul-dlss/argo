@@ -19,7 +19,8 @@ module SpreadsheetHelper
                               'argo.bulk_metadata.bulk_log_nonexistent_file',
                               'argo.bulk_metadata.bulk_log_invalid_permission',
                               'argo.bulk_metadata.bulk_log_druids_loaded',
-                              'argo.bulk_metadata.bulk_log_internal_error' ]
+                              'argo.bulk_metadata.bulk_log_internal_error',
+                              'argo.bulk_metadata.bulk_log_unable_to_version']
 
 
   # Creates an array of user friendly log messages from the bulk upload log.
