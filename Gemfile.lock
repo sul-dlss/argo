@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 2353398b9279eae11e4d3a78189a95e5a27e2686
+  revision: 399a675b1a229d5c4117b383fa757dfb6c4f7807
   branch: develop
   specs:
     dor-services (5.2.0)
@@ -580,3 +580,6 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   unicode
   unicorn
+
+BUNDLED WITH
+   1.10.6
