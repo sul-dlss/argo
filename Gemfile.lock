@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 2995781bf343ceda73b8326417fbd307d746195a
+  revision: 2353398b9279eae11e4d3a78189a95e5a27e2686
   branch: develop
   specs:
     dor-services (5.2.0)
@@ -285,7 +285,7 @@ GEM
       stanford-mods
     multi_json (1.11.2)
     multipart-post (2.0.0)
-    mysql2 (0.4.0)
+    mysql2 (0.3.20)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -541,7 +541,7 @@ DEPENDENCIES
   lyberteam-capistrano-devel (= 3.1.0)
   moab-versioning
   mods_display
-  mysql2
+  mysql2 (~> 0.3.2)
   net-sftp
   newrelic_rpm
   nokogiri (~> 1.6)
