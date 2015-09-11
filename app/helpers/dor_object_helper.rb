@@ -102,7 +102,8 @@ module DorObjectHelper
     return ""
   end
 
-  def metadata_source object
+  # Rename from 'metadata_source' to 'get_metadata_source' to avoid conflict with APO 'metadata_source'
+  def get_metadata_source object
     source = "DOR"
     if object.identityMetadata.otherId('mdtoolkit').length > 0
       source = "Metadata Toolkit"

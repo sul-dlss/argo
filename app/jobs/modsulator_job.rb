@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'equivalent-xml'
+include DorObjectHelper
 
 # This class defines a Delayed Job task that is started when the user uploads a bulk metadata file for
 # an APO. For configuration details, see app/config/initializers/delayed_job.rb.
@@ -77,22 +78,60 @@ class ModsulatorJob < ActiveJob::Base
           # Only update objects that are governed by the correct APO
           if(dor_object.admin_policy_object_id == druid)
             current_metadata = dor_object.descMetadata.content
+            
+            if(in_accessioning(dor_object))
+              log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{current_druid}")
+              next
+            end
 
-            # We only update objects if the descMetadata XML is different
-            mods_node = xmldoc_node.first_element_child
-            if(!equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node))
-              dor_object.descMetadata.content = mods_node.to_s
-              dor_object.save
-              log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
-            else
-              log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
+            if(!has_been_accessioned?(dor_object.id))
+              log.puts("argo.bulk_metadata.bulk_log_skipped_not_accessioned #{current_druid}")
+              next
+            end
+            
+            if(status_ok(dor_object))
+
+              # We only update objects if the descMetadata XML is different
+              mods_node = xmldoc_node.first_element_child
+              if(!equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node))
+
+                # If the object is currently in the opened version state, then go ahead, otherwise open a new version first, but do not close it
+                if(dor_object.status_info[:status_code] != 9)
+
+                  if(can_open_version?(dor_object.id))
+                    dor_object.open_new_version()
+                  else
+                    log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{current_druid}")  # totally unexpected
+                    next
+                  end
+                end
+                
+                dor_object.descMetadata.content = mods_node.to_s
+                dor_object.save
+                log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
+              else
+                log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
+              end
             end
           else
             log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
           end
         end
-      rescue ActiveFedora::ObjectNotFoundError
+      rescue ActiveFedora::ObjectNotFoundError => e
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
+        log.puts("#{e.message}")
+        log.puts("#{e.backtrace}")
+        next
+      rescue Dor::Exception => e
+        log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
+        log.puts("#{e.message}")
+        log.puts("#{e.backtrace}")
+        next
+      rescue Exception => e
+        log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
+        log.puts("#{e.message}")
+        log.puts("#{e.backtrace}")
+        next
       end
     end
   end
@@ -221,5 +260,26 @@ class ModsulatorJob < ActiveJob::Base
   # @return [Void]
   def delayed_log_url(e, url)
     Delayed::Worker.logger.error("#{__FILE__} tried to access #{url} got: #{e.message} #{e.backtrace}")
+  end
+
+
+  # Checks whether or not a DOR object is in accessioning or not.
+  #
+  # @param  [Dor::Item]   dor_object    DOR object to check
+  # @return [Boolean]     true if the object is currently being accessioned, false otherwise
+  def in_accessioning(dor_object)
+    status = dor_object.status_info[:status_code]
+    return ((status == 2) || (status == 3) || (status == 4) || (status == 5))
+  end
+
+
+  # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only time we are
+  # not OK to update is if the object is currently being accessioned.
+  #
+  # @param  [Dor::Item]   dor_object    DOR object to check
+  # @return [Boolean]     true if the object's status allows us to update the descMetadata datastream, false otherwise
+  def status_ok(dor_object)
+    status = dor_object.status_info[:status_code]
+    return ((status == 0) || (status == 1) || (status == 6) || (status == 7) || (status == 8) || (status == 9))
   end
 end

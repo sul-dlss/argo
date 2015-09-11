@@ -334,6 +334,6 @@ class CatalogController < ApplicationController
 
 
   def find_desc_metadata_file(job_output_directory)
-    return File.join(job_output_directory, bulk_job_metadata(job_output_directory)['xml_filename'])
+    return File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
   end
 end
