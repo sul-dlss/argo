@@ -95,9 +95,10 @@ class ModsulatorJob < ActiveJob::Base
               mods_node = xmldoc_node.first_element_child
               if(!equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node))
 
-                # If the object is currently in the opened version state, then go ahead, otherwise open a new version first, but do not close it
-                if(dor_object.status_info[:status_code] != 9)
-
+                # If the object is currently in the opened version state, then go ahead, otherwise (unless the status is "Registered")
+                # open a new version first, but do not close it
+                if((dor_object.status_info[:status_code] != 9) &&
+                   (dor_object.status_info[:status_code] != 1))
                   if(can_open_version?(dor_object.id))
                     dor_object.open_new_version()
                   else
