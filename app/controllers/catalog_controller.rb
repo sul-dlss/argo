@@ -87,7 +87,28 @@ class CatalogController < ApplicationController
     BlacklightConfigHelper.add_common_date_facet_fields_to_config! config
 
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
-      :no_has_model => { :label => 'has_model_ssim',  :fq => "-has_model_ssim:*"}
+      :no_rights_characteristics => { :label => 'Missing Rights Characteristics',  :fq => "-rights_characteristics_ssim:*"},
+      :no_content_type => { :label => 'Missing Content Type',  :fq => "-content_type_ssim:*"},
+      :no_has_model => { :label => 'Missing Object Model',  :fq => "-has_model_ssim:*"},
+      :no_objectType => { :label => 'Missing Object Type',  :fq => "-objectType_ssim:*"},
+      :no_object_title => { :label => 'Missing Object Title',  :fq => "-dc_title_ssi:*"},
+      :no_is_governed_by => { :label => 'Missing APO',  :fq => "-is_governed_by_ssim:*"},  # TODO: maybe don't include objs of type apo?
+      :no_collection_title => { :label => 'Missing Collection Title',  :fq => "-collection_title_ssim:*"},
+      # TODO: copyright (?)
+      # TODO: license (?)
+      :no_public_dc_creator => { :label => 'Missing Mods Creator',  :fq => "-public_dc_creator_tesim:*"},
+      # TODO: mods extent (?)
+      # TODO: mods form (?)
+      :no_sw_genre => { :label => 'Missing SW Genre',  :fq => "-sw_genre_tesim:*"},   # spec said "mods genre"
+      :no_public_dc_language => { :label => 'Missing MODS Language',  :fq => "-public_dc_language_tesim:*"},
+      :no_public_dc_subject => { :label => 'Missing MDOS Subject',  :fq => "-public_dc_subject_tesim:*"},
+      # TODO: mods typeOfResource
+      :no_public_dc_type => { :label => 'Missing MODS Resource Type',  :fq => "-public_dc_type_tesim:*"},
+      :no_sw_pub_date_sort => { :label => 'Missing SW Date',  :fq => "-sw_pub_date_sort_ssi:*"},
+      :no_sw_subject_temporal => { :label => 'Missing SW Era',  :fq => "-sw_subject_temporal_ssim:*"},
+      :no_sw_subject_geographic => { :label => 'Missing SW Region',  :fq => "-sw_subject_geographic_ssim:*"}
+      # TODO: sw resource type (?)
+      # TODO: use and reproduction (?)
     }
 
     config.add_facet_field 'sw_format_ssim', :label => 'SW Resource Type'
