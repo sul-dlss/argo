@@ -15,7 +15,12 @@ describe ItemsController, :type => :controller do
     idmd = double()
     apo  = double()
     wf   = double()
+    idmd_ds_content = "<test-xml/>"
+    idmd_ng_xml = double(Nokogiri::XML::Document)
     allow(idmd).to receive(:"content_will_change!")
+    allow(idmd_ng_xml).to receive(:to_xml).and_return idmd_ds_content
+    allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
+    allow(idmd).to receive(:"content=").with(idmd_ds_content)
     allow(apo).to receive(:pid).and_return('druid:apo')
     allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
     allow(@item).to receive(:to_solr)

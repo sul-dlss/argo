@@ -67,7 +67,7 @@ describe 'mods_view', :type => :request do
     context 'content type' do
       it 'should render the edit content type ui' do
         visit '/items/druid:zt570tx3016/content_type'
-        expect(page).to have_content('Content type')
+        expect(page).to have_content('Set content type')
       end
     end
     context 'embargo form' do
