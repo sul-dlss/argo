@@ -34,11 +34,14 @@
 				    <% if((current_key == 'argo.bulk_metadata.bulk_log_job_save_success') ||
 				          (current_key == 'argo.bulk_metadata.bulk_log_apo_fail') ||
 				          (current_key == 'argo.bulk_metadata.bulk_log_not_exist') ||
-#				          (current_key == 'argo.bulk_metadata.bulk_log_record_count') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_record_count') ||
 				          (current_key == 'argo.bulk_metadata.bulk_log_error_exception') ||
 				          (current_key == 'argo.bulk_metadata.bulk_log_invalid_column') ||
 				          (current_key == 'argo.bulk_metadata.bulk_log_skipped_mods') ||
-				          (current_key == 'argo.bulk_metadata.bulk_log_skipped_accession')) %>
+				          (current_key == 'argo.bulk_metadata.bulk_log_skipped_accession') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_skipped_not_accessioned') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_record_count') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_unable_to_version')) %>
 			                <td>
 					    <% if(log_entry[current_key] != nil) %>
 					        <%= log_entry[current_key] %>

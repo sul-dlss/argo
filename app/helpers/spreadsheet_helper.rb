@@ -1,6 +1,7 @@
 # Helper methods that pertain to the spreadsheet bulk metadata upload routines.
 module SpreadsheetHelper
 
+  # List the messages that we're going to display to the end user
   @@user_messages = Set.new [ 'argo.bulk_metadata.bulk_log_job_start',
                               'argo.bulk_metadata.bulk_log_job_complete',
                               'argo.bulk_metadata.bulk_log_job_save_success',
@@ -12,12 +13,14 @@ module SpreadsheetHelper
                               'argo.bulk_metadata.bulk_log_invalid_column',
                               'argo.bulk_metadata.bulk_log_skipped_mods',
                               'argo.bulk_metadata.bulk_log_skipped_accession',
+                              'argo.bulk_metadata.bulk_log_skipped_not_accessioned',
                               'argo.bulk_metadata.bulk_log_no_connection',
                               'argo.bulk_metadata.bulk_log_invalid_url',
                               'argo.bulk_metadata.bulk_log_nonexistent_file',
                               'argo.bulk_metadata.bulk_log_invalid_permission',
                               'argo.bulk_metadata.bulk_log_druids_loaded',
-                              'argo.bulk_metadata.bulk_log_internal_error' ]
+                              'argo.bulk_metadata.bulk_log_internal_error',
+                              'argo.bulk_metadata.bulk_log_unable_to_version']
 
 
   # Creates an array of user friendly log messages from the bulk upload log.

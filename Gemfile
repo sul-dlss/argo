@@ -9,7 +9,7 @@ gem 'dalli'
 gem 'haml'
 gem 'kaminari'
 gem 'kgio'
-gem 'mysql2'
+gem 'mysql2', '~> 0.3.2'    # Temporary fix for mysql2/rails incompatibility, see https://github.com/brianmario/mysql2/issues/675
 gem 'net-sftp'
 gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
