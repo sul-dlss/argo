@@ -76,4 +76,43 @@ describe ModsulatorJob, type: :job do
       expect(File.read(File.join(@output_directory, 'smx.xml'))).to eq(File.read(File.join(fixtures_dir, test_xml)))
     end
   end
+
+
+  describe 'status_ok' do
+    it 'correctly queries the status of DOR objects' do
+      mock_dor_objects = [ double, double, double, double, double, double, double, double, double ]
+      mock_dor_objects.each_with_index do |m, i|
+        allow(m).to receive(:status_info).and_return({ :status_code => i })
+        
+        if((i == 0) || (i == 1) || (i == 6) || (i == 7) || (i == 8) || (i == 9))
+          expect(@mj.status_ok(m)).to be_truthy
+        else
+          expect(@mj.status_ok(m)).to be_falsy
+        end
+      end
+    end
+  end
+
+
+  describe 'in_accessioning' do
+    it 'returns true for DOR objects that are currently in acccessioning' do
+      mock_dor_objects = [ double, double, double, double, double, double, double, double, double ]
+      mock_dor_objects.each_with_index do |m, i|
+        allow(m).to receive(:status_info).and_return({ :status_code => i })
+        
+        if((i == 2) || (i == 3) || (i == 4) || (i == 5))
+          expect(@mj.in_accessioning(m)).to be_truthy
+        else
+          expect(@mj.in_accessioning(m)).to be_falsy
+        end
+      end
+    end
+  end
+
+
+  describe 'generate_xml_filename' do
+    it 'creates a new filename using the correct convention' do
+      expect(@mj.generate_xml_filename("/tmp/generate_xml_filename.xml")).to eq('generate_xml_filename-' +  Argo::Config.bulk_metadata_xml + '.xml')
+    end
+  end
 end
