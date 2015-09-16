@@ -125,6 +125,7 @@ module DorObjectHelper
     Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
   end
 
+  #TODO: switch to using Dor::Config.sdr.rest_client
   def last_accessioned_version object
     # we just want the hostname, remove the scheme, we'll build it back into the URL in a bit...
     sdr_host = Dor::Config.content.sdr_server.gsub("https://", "")
