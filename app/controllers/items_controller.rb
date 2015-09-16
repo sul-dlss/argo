@@ -368,8 +368,17 @@ class ItemsController < ApplicationController
     end
   end
 
+  #TODO: this should be a method in dor-services, invoked within set_source_id
+  def self.normalize_source_id new_source_id
+    src_id_arr = new_source_id.split(':').map { |str| str.strip }
+    if src_id_arr.length != 2
+      raise 'new source_id must be of the form "source:value"'
+    end
+    return src_id_arr.join(':')
+  end
+
   def source_id
-    new_id=params[:new_id].strip
+    new_id = ItemsController.normalize_source_id(params[:new_id])
     @object.set_source_id(new_id)
     #TODO: the content= and content_will_change! calls belong in dor-services, for this method and other similar methods.
     # can then clean up allow(idmd).to receive(:"ng_xml") (and "content_will_change!") in tests.
