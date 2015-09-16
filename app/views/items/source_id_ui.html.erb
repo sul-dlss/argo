@@ -1,8 +1,10 @@
+<h3 class="modal-title">Change source id</h3>
 <div data-ajax-modal="container">
-  <h3 class="modal-title">Change source id</h3>
   <%=form_tag url_for(:controller => :items, :action => :source_id, :id => @object.pid) do%>
     <div class="form-group">
-      <input class="longInputBox form-control" maxlength="255" name="new_id" id="new_id" type="text" value="<%=@object.identityMetadata.sourceId.gsub(':',' : ')%>"/>
+      <% source_id_txt = @object.identityMetadata.sourceId ? @object.identityMetadata.sourceId.gsub(':',' : ') : '' %>
+      <input class="longInputBox form-control" maxlength="255" name="new_id" id="new_id" type="text" value="<%= source_id_txt %>"/>
+      entries should be of the form <em>source : value</em>
     </div>
     <button class="btn btn-default">Update</button>
   <%end%>
