@@ -28,6 +28,12 @@ $(document).ready(function() {
   $('#facets a.remove').map(function() { $(this).html('') })
 });
 
+Blacklight.onLoad(function(){
+	$(Blacklight.ajaxModal.triggerLinkSelector).click(function(){
+		$('.modal-title').text($(this).text());
+	});
+});
+
 function assembleQuery(caller)
 {
 	var field_name=caller.id;
