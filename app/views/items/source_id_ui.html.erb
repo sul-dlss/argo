@@ -2,9 +2,8 @@
 <div data-ajax-modal="container">
   <%=form_tag url_for(:controller => :items, :action => :source_id, :id => @object.pid) do%>
     <div class="form-group">
-      <% source_id_txt = @object.identityMetadata.sourceId ? @object.identityMetadata.sourceId.gsub(':',' : ') : '' %>
-      <input class="longInputBox form-control" maxlength="255" name="new_id" id="new_id" type="text" value="<%= source_id_txt %>"/>
-      entries should be of the form <em>source : value</em>
+      <input class="longInputBox form-control" maxlength="255" name="new_id" id="new_id" type="text" value="<%= @object.identityMetadata.sourceId %>"/>
+      <em>entries should be of the form</em> source:value
     </div>
     <button class="btn btn-default">Update</button>
   <%end%>
