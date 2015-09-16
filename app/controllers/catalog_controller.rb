@@ -92,7 +92,7 @@ class CatalogController < ApplicationController
       :no_has_model => { :label => 'Missing Object Model',  :fq => "-has_model_ssim:*"},
       :no_objectType => { :label => 'Missing Object Type',  :fq => "-objectType_ssim:*"},
       :no_object_title => { :label => 'Missing Object Title',  :fq => "-dc_title_ssi:*"},
-      :no_is_governed_by => { :label => 'Missing APO',  :fq => "-is_governed_by_ssim:*"},  # TODO: maybe don't include objs of type apo?
+      :no_is_governed_by => { :label => 'Missing APO',  :fq => "-is_governed_by_ssim:*"},
       :no_collection_title => { :label => 'Missing Collection Title',  :fq => "-collection_title_ssim:*"},
       :no_copyright => { :label => 'Missing Copyright',  :fq => "-copyright_ssim:*"},
       # TODO: license (?)   doesn't appear to be solrized at the moment
