@@ -1,7 +1,6 @@
+<h3 class='modal-title'>Set content type</h3>
 <div data-ajax-modal="container">
-  <h3 class='modal-title'>Set content type</h3>
   <%=form_tag url_for(:controller => :items, :action => :set_content_type, :id => @object.pid) do%>
-    <label>Content type</label>
     <label>Old content type</label>
     <%=select_tag :old_content_type, options_for_select(content_types) %><br/>
     <label>Old resource type</label>
