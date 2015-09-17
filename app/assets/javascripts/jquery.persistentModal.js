@@ -1,3 +1,25 @@
+/*
+  usage:  
+    if you want to have a link load the contents of the link target in a persistent modal, add the attribute 'data-behavior="persistent-modal"'.
+    e.g.:
+      <a title="DC" data-behavior="persistent-modal" href="/view/druid:dy196vh8233/ds/DC">DC</a>
+    or, if you're building a link from ruby, something like:
+      link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :title => specs[:dsid], :data => { behavior: 'persistent-modal' }
+
+  the modal is persistent in that subsequent invocations of the modal on the same overall page load will load the same retained 
+  contents of the modal from the initial load, unless the modal was specifically closed using the "cancel" button.  useful if for
+  things like forms or datastream editing text areas, where a user might want to close the modal without losing their partial input.
+
+  like the argo's customization of the regular blacklight modal (itself a customization of the bootstrap modal), this modal will not close
+  when the user hits escape or clicks outside the modal.  it will only close if the user hits the close "x" in the title bar or the "cancel" 
+  button (which will also remove it from the DOM and force a reload if that same modal is hit again).
+
+  the modal title is pulled from the link text.
+
+  ripped off from parts of:
+    https://github.com/sul-dlss/SearchWorks/blob/2bef864ba859048ab9761d00bc7688700ea9faaf/app/assets/javascripts/jquery.requestsModal.js
+    https://github.com/projectblacklight/blacklight/blob/v5.9.4/app/assets/javascripts/blacklight/ajax_modal.js
+*/
 (function($){
   $.fn.persistentModal = function() {
 
