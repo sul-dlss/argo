@@ -28,10 +28,15 @@ $(document).ready(function() {
   $('#facets a.remove').map(function() { $(this).html('') })
 });
 
+
+// For lightboxes, set the title to be the value of the data-ajax-modal-title attribute on the link if
+// present. Otherwise just use the link text as the title.
 Blacklight.onLoad(function(){
-	$(Blacklight.ajaxModal.triggerLinkSelector).click(function(){
-		$('.modal-title').text($(this).text());
-	});
+    $(Blacklight.ajaxModal.triggerLinkSelector).click(function(){
+	if($(this).attr('data-ajax-modal-title'))
+	    $('.modal-title').text($(this).attr('data-ajax-modal-title'));
+	else $('.modal-title').text($(this).text());
+    });
 });
 
 function assembleQuery(caller)

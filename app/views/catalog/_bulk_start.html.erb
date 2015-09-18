@@ -12,6 +12,6 @@
 </div>
 <div class="row spreadsheet-row">
     <div class="col-md-12">
-	<%= link_to("Submit new file ...", bulk_upload_form_path(@obj.id), :class => "button btn btn-primary", data: { ajax_modal: 'trigger' }) %>
+	<%= link_to("Submit new file ...", bulk_upload_form_path(@obj.id), :class => "button btn btn-primary", data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Loads' }) %>
     </div>
 </div>
