@@ -1,7 +1,7 @@
 <div id="bulk-upload-table">
     <table class="table table-hover">
 	<tr>
-	    <th>When</th><th>Who</th><th>File Name</th><th>Note</th><th>Status <%= link_to bulk_status_help_path(@document.get('id')), :data => { ajax_modal: 'trigger' } do %><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span><% end %></th><th>Druids</th><th>Success</th><th/><th/>
+	    <th>When</th><th>Who</th><th>File Name</th><th>Note</th><th>Status <%= link_to bulk_status_help_path(@document.get('id')), :data => { ajax_modal: 'trigger', ajax_modal_title: 'Status Information' } do %><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span><% end %></th><th>Druids</th><th>Success</th><th/><th/>
 	</tr>
 	<% @bulk_jobs.each do |job| %>
 	<tr>
