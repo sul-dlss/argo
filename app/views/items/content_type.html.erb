@@ -1,22 +1,9 @@
 <% form_id = "content_type_form" %>
 <h3 class='modal-title'>Set content type</h3>
 <div data-ajax-modal="container">
-  <p>
-    Replace instances of the old content type and resource type with the newly specified values.  Note that "none" is not a valid choice; it's provided as a placeholder for when no reasonable default can be pre-selected.  "Old Content Type" is always the current content type, since nothing gets updated if content type doesn't get updated (so if you changed that, nothing would get updated).  "Old Resource Type" defaults to the first value in the list of types for the resource elements in the contentMetadata datastream.  "New Content Type" and "New Resource Type" default to the old values, but any of the listed values other than "none" can be chosen for the update.
-  </p>
-  <p>
-    The suggested mappings for content type to resource type are:
-    <ul>
-      <li><strong>file</strong> file</li>
-      <li><strong>image</strong> image</li>
-      <li><strong>book</strong> page</li>
-      <li><strong>manuscript</strong> page</li>
-      <li><strong>map</strong> image</li>
-    </ul>
-  </p>
-  <p>
-    More complex updates should be executed by hand on the datastream XML.
-  </p>
+  <p><%=I18n.t('argo.content_type.update_explanation_single')%></p>
+  <p><%=I18n.t('argo.content_type.suggeted_mappings').html_safe%></p>
+  <p>More complex updates should be executed by hand on the datastream XML.</p>
 
   <%=form_tag url_for(:controller => :items, :action => :set_content_type, :id => form_id) do%>
   <% old_content_type = begin @object.contentMetadata.contentType[0] rescue '' end  %>

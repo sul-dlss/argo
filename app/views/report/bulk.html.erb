@@ -178,16 +178,23 @@ ul li{
     new_resource_types = ['none'] + resource_types
   %>
   <h1>Set content and resource types</h1>
-  <p>This searches for items with the old content type and changes them to the new content type, along with changing any resources of the old type to the new type.</p>
-  <label>Old content type</label>
-  <%=select_tag :old_content_type, options_for_select(current_content_types) %><br/>
-  <label>Old resource type</label>
-  <%=select_tag :old_resource_type, options_for_select(current_resource_types) %><br/>
-  <label>New content type</label>
-  <%=select_tag :new_content_type, options_for_select(new_content_types) %><br/>
-  <label>New resource type</label>
-  <%=select_tag :new_resource_type, options_for_select(new_resource_types) %><br/>
-  <span class="bulk_button" onclick="fetch_druids(set_content_type);$('#content_type').hide(400);">Set content types</span>
+  <p>
+    Given the above list of druids, the following will be performed on each object:<br/>
+    <%=I18n.t('argo.content_type.update_explanation_bulk')%>
+  </p>
+  <p><%=I18n.t('argo.content_type.suggeted_mappings').html_safe%></p>
+  <p>More complex updates should be executed by hand on the datastream XML of individual objects.</p>
+  <p>
+    <label>Old content type</label>
+    <%=select_tag :old_content_type, options_for_select(current_content_types) %><br/>
+    <label>Old resource type</label>
+    <%=select_tag :old_resource_type, options_for_select(current_resource_types) %><br/>
+    <label>New content type</label>
+    <%=select_tag :new_content_type, options_for_select(new_content_types) %><br/>
+    <label>New resource type</label>
+    <%=select_tag :new_resource_type, options_for_select(new_resource_types) %><br/>
+    <span class="bulk_button" onclick="fetch_druids(set_content_type);$('#content_type').hide(400);">Set content types</span>
+  </p>
 </div>
 <div class="bulk_operation" id="purge" name="purge">
   <h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
