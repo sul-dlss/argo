@@ -1,14 +1,19 @@
+<% form_id = "content_type_form" %>
 <h3 class='modal-title'>Set content type</h3>
 <div data-ajax-modal="container">
-  <%=form_tag url_for(:controller => :items, :action => :set_content_type, :id => @object.pid) do%>
+  <%=form_tag url_for(:controller => :items, :action => :set_content_type, :id => form_id) do%>
+  <% old_content_type = begin @object.contentMetadata.contentType[0] rescue '' end  %>
+  <% old_resource_type = begin @object.contentMetadata.ng_xml.xpath('/contentMetadata/resource')[0]['type'] rescue '' end %>
+  <% display_content_types = ['none'] + content_types %>
+  <% display_resource_types = ['none'] + resource_types %>
     <label>Old content type</label>
-    <%=select_tag :old_content_type, options_for_select(content_types) %><br/>
+    <%=old_content_type%><%=hidden_field_tag :old_content_type, old_content_type %><br/>
     <label>Old resource type</label>
-    <%=select_tag :old_resource_type, options_for_select(resource_types) %><br/>
+    <%=select_tag :old_resource_type, options_for_select(display_resource_types, old_resource_type) %><br/>
     <label>New content type</label>
-    <%=select_tag :new_content_type, options_for_select(content_types) %><br/>
+    <%=select_tag :new_content_type, options_for_select(display_content_types, old_content_type) %><br/>
     <label>New resource type</label>
-    <%=select_tag :new_resource_type, options_for_select(resource_types) %><br/>
+    <%=select_tag :new_resource_type, options_for_select(display_resource_types, old_resource_type) %><br/>
     <button class='btn btn-default'>Update</button>
   <%end%>
 </div>
