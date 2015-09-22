@@ -381,7 +381,7 @@ class ItemsController < ApplicationController
     new_id = ItemsController.normalize_source_id(params[:new_id])
     @object.set_source_id(new_id)
     #TODO: the content= and content_will_change! calls belong in dor-services, for this method and other similar methods.
-    # can then clean up allow(idmd).to receive(:"ng_xml") (and "content_will_change!") in tests.
+    # can then clean up allow(idmd).to receive(:"ng_xml") (and "content_will_change!") in tests.  getting rid of "Metadata\.content\s*=\s*"
     @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
     @object.identityMetadata.content_will_change!
     respond_to do |format|
@@ -434,6 +434,7 @@ class ItemsController < ApplicationController
       end
     end
     @object.identityMetadata.content_will_change!
+    @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for '+params[:id]+' have been updated!' }
     end
