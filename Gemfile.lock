@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/meh/ruby-thread.git
-  revision: f77505ccdf22faca32d08a493525c043e0303fe4
+  revision: f25dd1184f4f4bee7cde0d54ad5ce5e32dc15279
   specs:
     thread (0.2.2)
 
@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: a36d3f1e387cc54db8bc72864e476c05b483ab75
+  revision: 79778ee4bac32daee566fb0d69b2e3ca4e1cb63b
   branch: develop
   specs:
     dor-services (5.2.0)
@@ -99,7 +99,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.3.5)
     arel (6.0.3)
-    autoprefixer-rails (6.0.2)
+    autoprefixer-rails (6.0.3)
       execjs
       json
     bagit (0.3.2)
@@ -269,7 +269,7 @@ GEM
     method_source (0.8.2)
     mime-types (1.25.1)
     mini_portile (0.6.2)
-    minitest (5.8.0)
+    minitest (5.8.1)
     moab-versioning (1.4.4)
       confstruct
       json
@@ -292,7 +292,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.6.8)
     netrc (0.10.3)
-    newrelic_rpm (3.13.0.299)
+    newrelic_rpm (3.13.1.300)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     nokogiri-happymapper (0.5.9)
@@ -364,7 +364,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.15.0)
     rake (10.4.2)
-    rdf (1.1.15)
+    rdf (1.1.16)
       link_header (~> 0.0, >= 0.0.8)
     rdf-rdfxml (1.0.1)
       rdf (>= 1.0)
@@ -472,9 +472,9 @@ GEM
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
-    thin (1.6.3)
+    thin (1.6.4)
       daemons (~> 1.0, >= 1.0.9)
-      eventmachine (~> 1.0)
+      eventmachine (~> 1.0, >= 1.0.4)
       rack (~> 1.0)
     thor (0.19.1)
     thread_safe (0.3.5)
@@ -580,3 +580,6 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   unicode
   unicorn
+
+BUNDLED WITH
+   1.10.6
