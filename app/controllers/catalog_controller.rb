@@ -53,6 +53,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'tag_ssim',                    :label => 'Tags'
     config.add_show_field 'wf_error_ssim',               :label => 'Error'
     config.add_show_field 'collection_title_ssim',       :label => 'Collection Title'
+    config.add_show_field 'hydrus_collection_title_ssim',       :label => 'Hydrus Collection Title'
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
     config.add_show_field 'preserved_size_dbtsi',        :label => 'Preservation Size'
 
@@ -63,8 +64,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
     config.add_facet_field 'rights_primary_ssi',    :label => 'Access Rights'
-    config.add_facet_field 'collection_title_ssim', :label => 'Collection',  :sort => 'index', :limit => 500
-    config.add_facet_field 'apo_title_ssim',        :label => 'Admin Policy',:sort => 'index', :limit => 500
+    config.add_facet_field 'nonhydrus_collection_title_ssim', :label => 'Collection',  :sort => 'index'
+    config.add_facet_field 'hydrus_collection_title_ssim', :label => 'Hydrus Collection',  :sort => 'index'
+    config.add_facet_field 'nonhydrus_apo_title_ssim',        :label => 'Admin Policy',:sort => 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim',        :label => 'Hydrus Admin Policy',:sort => 'index'
     config.add_facet_field 'current_version_isi',   :label => 'Version'
     config.add_facet_field 'processing_status_text_ssi', :label => 'Processing Status'
     config.add_facet_field 'released_to_ssim',      :label => 'Released To'
