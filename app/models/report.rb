@@ -54,6 +54,18 @@ class Report
         :sort => false, :default => true, :width => 100
       },
       {
+        :field => 'nonhydrus_apo', :label => "Non-Hydrus Admin Policy",
+        :proc => lambda { |doc| doc['nonhydrus_apo_title_ssim'] },
+        :solr_fields => ['nonhydrus_apo_title_ssim'],
+        :sort => false, :default => true, :width => 100
+      },
+      {
+        :field => 'hydrus_apo', :label => "Hydrus Admin Policy",
+        :proc => lambda { |doc| doc['hydrus_apo_title_ssim'] },
+        :solr_fields => ['hydrus_apo_title_ssim'],
+        :sort => false, :default => true, :width => 100
+      },
+      {
         :field => 'is_member_of_collection_ssim', :label => 'Collection ID',
         :proc => lambda { |doc| doc['is_member_of_collection_ssim'].map{|col| col.split(/:/).last }},
         :sort => false, :default => false, :width => 100
@@ -62,6 +74,18 @@ class Report
         :field => 'collection', :label => "Collection",
         :proc => lambda { |doc| doc['collection_title_ssim'] },
         :solr_fields => ['collection_title_ssim'],
+        :sort => false, :default => false, :width => 100
+      },
+      {
+        :field => 'nonhydrus_collection', :label => "Non-Hydrus Collection",
+        :proc => lambda { |doc| doc['nonhydrus_collection_title_ssim'] },
+        :solr_fields => ['nonhydrus_collection_title_ssim'],
+        :sort => false, :default => false, :width => 100
+      },
+      {
+        :field => 'hydrus_collection', :label => "Non-Hydrus Collection",
+        :proc => lambda { |doc| doc['hydrus_collection_title_ssim'] },
+        :solr_fields => ['hydrus_collection_title_ssim'],
         :sort => false, :default => false, :width => 100
       },
       {
