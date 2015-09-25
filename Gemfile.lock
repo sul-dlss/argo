@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 79778ee4bac32daee566fb0d69b2e3ca4e1cb63b
+  revision: 42bf3bd864b9fe9243fb3235f14b56d6a7aa732f
   branch: develop
   specs:
     dor-services (5.2.0)
@@ -174,11 +174,11 @@ GEM
       debugger-ruby_core_source (~> 1.3.5)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.3.8)
-    delayed_job (4.0.6)
+    delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
-    delayed_job_active_record (4.0.3)
-      activerecord (>= 3.0, < 5.0)
-      delayed_job (>= 3.0, < 4.1)
+    delayed_job_active_record (4.1.0)
+      activerecord (>= 3.0, < 5)
+      delayed_job (>= 3.0, < 5)
     deprecation (0.2.2)
       activesupport
     diff-lcs (1.2.5)
