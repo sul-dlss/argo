@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 42bf3bd864b9fe9243fb3235f14b56d6a7aa732f
+  revision: a1c8adb08755461767a6ae0c6cdebaeb309c929e
   branch: develop
   specs:
     dor-services (5.2.0)
@@ -320,7 +320,7 @@ GEM
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
     progressbar (0.21.0)
-    pry (0.10.1)
+    pry (0.10.2)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
