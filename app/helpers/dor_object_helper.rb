@@ -37,7 +37,7 @@ module DorObjectHelper
     #   raise 'The new date must be in the future!'
     # end
     if is_permitted(current_user, :modify, pid)
-      form_tag embargo_update_item_url(pid), :class => 'dialogLink' do
+      form_tag embargo_update_item_url(pid) do
         button_tag("Change Embargo", :type => 'submit')
       end
     else

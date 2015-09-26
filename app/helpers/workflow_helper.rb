@@ -29,7 +29,7 @@ module WorkflowHelper
     }
     new_status = allowable_changes[process.status]
     return '' unless new_status.present?
-    form_tag workflow_update_item_url(pid, process.workflow), :class => 'dialogLink' do
+    form_tag workflow_update_item_url(pid, process.workflow) do
       hidden_field_tag('process', process.name) +
       hidden_field_tag('status', new_status) +
       hidden_field_tag('repo', @repo)+
