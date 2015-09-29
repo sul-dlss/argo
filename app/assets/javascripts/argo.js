@@ -19,10 +19,10 @@ $(document).ready(function() {
     $('.start-open').addClass('twiddle-open');
     $('.start-open').next('ul').show();
     $('.collapsible-section').click(function(e) {
-	// Do not want a click on the "MODS bulk loads" button to cause collapse
-	if(!(e.target.id === 'bulk-button')) {
-	    $(this).next('div').slideToggle();
-	    $(this).toggleClass('collapsed'); }
+    // Do not want a click on the "MODS bulk loads" button to cause collapse
+    if(!(e.target.id === 'bulk-button')) {
+        $(this).next('div').slideToggle();
+        $(this).toggleClass('collapsed'); }
     });
     
   $('#facets a.remove').map(function() { $(this).html('') })
@@ -33,9 +33,18 @@ $(document).ready(function() {
 // present. Otherwise just use the link text as the title.
 Blacklight.onLoad(function(){
     $(Blacklight.ajaxModal.triggerLinkSelector).click(function(){
-	if($(this).attr('data-ajax-modal-title'))
-	    $('.modal-title').text($(this).attr('data-ajax-modal-title'));
-	else $('.modal-title').text($(this).text());
+        if($(this).attr('data-ajax-modal-title'))
+            $('.modal-title').text($(this).attr('data-ajax-modal-title'));
+        else 
+            $('.modal-title').text($(this).text());
+    });
+
+    $(".modal-dialog").resizable({handles: "n, e, w"});
+    $(".modal-dialog").draggable({});
+    $("body").on("loaded.blacklight.ajax-modal", function() {
+      $(".modal-dialog .close").on("click", function() {
+        $(".modal-dialog").attr("style", "")
+      });
     });
 });
 
