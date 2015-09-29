@@ -64,6 +64,8 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [File]   log           Log file handle.
   # @return [Void]
   def update_metadata(druid, xml_string, log)
+    return if xml_string == nil
+    
     root = Nokogiri::XML(xml_string).root
     namespace = root.namespace()
     
@@ -238,6 +240,8 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [File]    log_file           The log file.
   # @return [Void]
   def save_metadata_xml(xml, output_filename, log_file)
+    return if xml == nil
+    
     File.open(output_filename, "w") { |f| f.write(xml) }
     log_file.puts("argo.bulk_metadata.bulk_log_xml_timestamp #{Time.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_xml_filename #{File.basename(output_filename)}")
