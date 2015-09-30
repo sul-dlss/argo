@@ -44,7 +44,10 @@
       }
 
       function showModal() {
+        // hide any persistent modals that might be showing
         $('div.persistent-modal').modal('hide');
+
+        // show the current modal
         modalForTarget().modal('show');
       }
 
