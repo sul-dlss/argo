@@ -22,6 +22,18 @@ module SpreadsheetHelper
                               'argo.bulk_metadata.bulk_log_internal_error',
                               'argo.bulk_metadata.bulk_log_unable_to_version']
 
+  # List the subset of messages that indicate an error with the job
+  @@error_messages = Set.new ['argo.bulk_metadata.bulk_log_apo_fail',
+                              'argo.bulk_metadata.bulk_log_not_exist',
+                              'argo.bulk_metadata.bulk_log_error_exception',
+                              'argo.bulk_metadata.bulk_log_invalid_column',
+                              'argo.bulk_metadata.bulk_log_no_connection',
+                              'argo.bulk_metadata.bulk_log_invalid_url',
+                              'argo.bulk_metadata.bulk_log_nonexistent_file',
+                              'argo.bulk_metadata.bulk_log_invalid_permission',
+                              'argo.bulk_metadata.bulk_log_internal_error',
+                              'argo.bulk_metadata.bulk_log_unable_to_version']
+
 
   # Creates an array of user friendly log messages from the bulk upload log.
   #

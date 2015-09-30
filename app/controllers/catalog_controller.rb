@@ -204,10 +204,10 @@ class CatalogController < ApplicationController
   end
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
-  def bulk_jobs_index
+  def bulk_jobs_index 
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
-
+    
     return unless valid_user?(@obj)
     @response, @document = get_solr_response_for_doc_id params[:id]
     @bulk_jobs = load_bulk_jobs(params[:id])
@@ -296,6 +296,10 @@ class CatalogController < ApplicationController
 
               if(matched_strings[1] == 'argo.bulk_metadata.bulk_log_job_save_success')
                 success += 1
+              end
+
+              if(@@error_messages.include?(matched_strings[1]))
+                job_info['error'] = 1
               end
             end
           end
