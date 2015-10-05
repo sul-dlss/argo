@@ -233,7 +233,7 @@ class ApoController < ApplicationController
 
   def update_creative_commons
     @object.creative_commons_license = params[:creative_commons]
-    @object.creative_commons_license_human = Dor::Editable::CREATIVE_COMMONS_LICENSE_CODES[params[:creative_commons]]
+    @object.creative_commons_license_human = Dor::Editable::CREATIVE_COMMONS_USE_LICENSES[params[:creative_commons]]
     redirect
   end
 

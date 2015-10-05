@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: e8f37f9a17873b9eefd5f762f027eb060f3b1e20
+  revision: d6fdaa94a74ec0bc7a2fab629742b06c4ffc8281
   branch: new_use_license_types
   specs:
     dor-services (5.2.0)
