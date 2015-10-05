@@ -10,11 +10,6 @@ class ApoController < ApplicationController
 
   attr_accessor :cc
 
-  def initialize
-    @cc = Dor::Editable::CREATIVE_COMMONS_LICENSE_CODES
-    @odc = Dor::Editable::OPEN_DATA_COMMONS_LICENSE_CODES
-  end
-
   def is_valid_role_name role_name
     return !/^[\w-]+:[\w-]+$/.match(role_name).nil?
   end
@@ -238,7 +233,7 @@ class ApoController < ApplicationController
 
   def update_creative_commons
     @object.creative_commons_license = params[:creative_commons]
-    @object.creative_commons_license_human = @cc[params[:creative_commons]]
+    @object.creative_commons_license_human = Dor::Editable::CREATIVE_COMMONS_LICENSE_CODES[params[:creative_commons]]
     redirect
   end
 
