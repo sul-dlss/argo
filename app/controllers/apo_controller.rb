@@ -11,14 +11,8 @@ class ApoController < ApplicationController
   attr_accessor :cc
 
   def initialize
-    @cc = {
-      'by' => 'Attribution 3.0 Unported',
-      'by_sa' => 'Attribution Share Alike 3.0 Unported',      # this has got to be wrong when everything else is hyphenated!
-      'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-      'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
-      'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-      'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported'
-    }
+    @cc = Dor::Editable::CREATIVE_COMMONS_LICENSE_CODES
+    @odc = Dor::Editable::OPEN_DATA_COMMONS_LICENSE_CODES
   end
 
   def is_valid_role_name role_name
@@ -98,9 +92,8 @@ class ApoController < ApplicationController
     apo.metadata_source      = md_info[:metadata_source]
     apo.agreement            = md_info[:agreement].to_s
     apo.default_workflow     = md_info[:workflow ] unless (!md_info[:workflow] || md_info[:workflow].length < 5)
-    apo.creative_commons_license       =     md_info[:cc_license]
-    apo.creative_commons_license_human = @cc[md_info[:cc_license]]
-    apo.default_rights                 = md_info[:default_object_rights]
+    apo.use_license          = md_info[:use_license]
+    apo.default_rights       = md_info[:default_object_rights]
   end
 
   def register_new_apo

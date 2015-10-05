@@ -5,15 +5,16 @@ module ApoHelper
   end
 
   def creative_commons_options
-    [
-      ['Citation Only',''],
-      ['Attribution 3.0 Unported', 'by'],
-      ['Attribution Share Alike 3.0 Unported','by_sa'],
-      ['Attribution No Derivatives 3.0 Unported', 'by-nd'],
-      ['Attribution Non-Commercial 3.0 Unported', 'by-nc'],
-      ['Attribution Non-Commercial Share Alike 3.0 Unported', 'by-nc-sa'],
-      ['Attribution Non-commercial, No Derivatives 3.0 Unported', 'by-nc-nd']
-    ]
+    options = [['Citation Only','']] + (Dor::Editable::CREATIVE_COMMONS_LICENSE_CODES.map { |key, val| [val, key] })
+    return options
+  end
+
+  def open_data_commons_options
+    return Dor::Editable::OPEN_DATA_COMMONS_LICENSE_CODES.map { |key, val| [val, key] }
+  end
+
+  def license_options
+    creative_commons_options + open_data_commons_options
   end
 
   def default_rights_options

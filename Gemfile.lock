@@ -13,8 +13,8 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 04a2fd520594065b7ae22726869efbbe4fda27ef
-  branch: develop
+  revision: e8f37f9a17873b9eefd5f762f027eb060f3b1e20
+  branch: new_use_license_types
   specs:
     dor-services (5.2.0)
       active-fedora (~> 6.0)

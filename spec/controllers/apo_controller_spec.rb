@@ -19,7 +19,7 @@ describe ApoController, :type => :controller do
       @example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR",
               "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"",
               "collection_title"=>'col title', "collection_abstract"=>"", "default_object_rights"=>"World", "use"=>"", "copyright"=>"",
-              "cc_license"=>"", "workflow"=>"registrationWF", "register"=>""}
+              "use_license"=>"odc-by", "workflow"=>"registrationWF", "register"=>""}
       # block cascading update
       allow(controller).to receive(:update_index)
       expect(@item).to receive(:add_roleplayer).exactly(4).times
@@ -37,6 +37,7 @@ describe ApoController, :type => :controller do
         expect(params[:metadata_source]).to be_nil   #descMD is created via the form
         {:pid => 'druid:collectionpid'}
       end
+      expect(@item).to receive(:"use_license=").with(@example["use_license"])
       post 'register', @example
     end
     it 'should set apo workflows to priority 70' do
@@ -44,6 +45,7 @@ describe ApoController, :type => :controller do
         expect(params[:workflow_priority]).to eq('70')
         {:pid => 'druid:collectionpid'}
       end
+      expect(@item).to receive(:"use_license=").with(@example["use_license"])
       post 'register', @example
     end
   end

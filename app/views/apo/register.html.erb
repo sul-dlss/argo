@@ -107,8 +107,8 @@ end
   <textarea style="width:95%;height:40px" id='copyright' name="copyright"><%= if @object then @object.copyright_statement end%></textarea>
 </div>
 <br/><div class="register-div">
-  <label>Default Creative Commons license</label><br/>
-    <%=select_tag :cc_license, options_for_select(creative_commons_options, @object ? @object.creative_commons_license : '')%>
+  <label>Default use license</label><br/>
+    <%=select_tag :use_license, options_for_select(license_options, @object ? @object.use_license : '')%>
 </div>
 
 <br/><div class="register-div">
