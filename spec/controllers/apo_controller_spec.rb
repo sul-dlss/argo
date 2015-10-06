@@ -19,7 +19,7 @@ describe ApoController, :type => :controller do
       @example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR",
               "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"",
               "collection_title"=>'col title', "collection_abstract"=>"", "default_object_rights"=>"World", "use"=>"", "copyright"=>"",
-              "use_license"=>"odc-by", "workflow"=>"registrationWF", "register"=>""}
+              "use_license"=>"machine-readable-license-code", "workflow"=>"registrationWF", "register"=>""}
       # block cascading update
       allow(controller).to receive(:update_index)
       expect(@item).to receive(:add_roleplayer).exactly(4).times
