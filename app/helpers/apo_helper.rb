@@ -5,12 +5,12 @@ module ApoHelper
   end
 
   def creative_commons_options
-    options = [['Citation Only','']] + (Dor::Editable::CREATIVE_COMMONS_USE_LICENSES.map { |key, val| [val, key] })
+    options = [['Citation Only','']] + (Dor::Editable::CREATIVE_COMMONS_USE_LICENSES.map { |key, val| [val[:human_readable], key] })
     return options
   end
 
   def open_data_commons_options
-    return Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES.map { |key, val| [val, key] }
+    return Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES.map { |key, val| [val[:human_readable], key] }
   end
 
   def license_options
