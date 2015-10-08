@@ -4,6 +4,10 @@ module ApoHelper
     "hello world ©"
   end
 
+  # return a list of lists, where the sublists are pairs, with the first element being the text to display
+  # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated
+  # entries, unless the current value is a deprecated entry, in which case, include that entry with the 
+  # deprecation warning in a parenthetical.
   def options_for_use_license_type use_license_map, cur_use_license
     use_license_map.map do |key, val|
       if val[:deprecation_warning] != nil && key == cur_use_license
@@ -11,7 +15,7 @@ module ApoHelper
       elsif val[:deprecation_warning] == nil
         [val[:human_readable], key]
       end
-    end.compact
+    end.compact # the map block will produce nils for unused deprecated entries, compact will get rid of them
   end
 
   def license_options apo_obj
