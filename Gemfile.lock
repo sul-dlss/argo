@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 70b293a52a77ecd3271b33d1d79f9cbdb2bff5da
+  revision: 794562589955dff353635f5014ccd153d8881a88
   branch: new_use_license_types
   specs:
     dor-services (5.2.0)
@@ -425,7 +425,7 @@ GEM
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
     scrub_rb (1.0.1)
-    selenium-webdriver (2.47.1)
+    selenium-webdriver (2.48.0)
       childprocess (~> 0.5)
       multi_json (~> 1.0)
       rubyzip (~> 1.0)

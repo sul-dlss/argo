@@ -4,17 +4,21 @@ module ApoHelper
     "hello world ©"
   end
 
-  def creative_commons_options
-    options = [['Citation Only','']] + (Dor::Editable::CREATIVE_COMMONS_USE_LICENSES.map { |key, val| [val[:human_readable], key] })
-    return options
+  def options_for_use_license_type use_license_map, cur_use_license
+    use_license_map.map do |key, val|
+      if val[:deprecation_warning] != nil && key == cur_use_license
+        ["#{val[:human_readable]} #{val[:deprecation_warning]}", key]
+      elsif val[:deprecation_warning] == nil
+        [val[:human_readable], key]
+      end
+    end.compact
   end
 
-  def open_data_commons_options
-    return Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES.map { |key, val| [val[:human_readable], key] }
-  end
-
-  def license_options
-    creative_commons_options + open_data_commons_options
+  def license_options apo_obj
+    cur_use_license = apo_obj ? apo_obj.use_license : nil
+    [['Citation Only','']] + 
+    options_for_use_license_type(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES, cur_use_license) + 
+    options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
   end
 
   def default_rights_options

@@ -108,7 +108,7 @@ end
 </div>
 <br/><div class="register-div">
   <label>Default use license</label><br/>
-    <%=select_tag :use_license, options_for_select(license_options, @object ? @object.use_license : '')%>
+    <%=select_tag :use_license, options_for_select(license_options(@object), @object ? @object.use_license : '')%>
 </div>
 
 <br/><div class="register-div">
