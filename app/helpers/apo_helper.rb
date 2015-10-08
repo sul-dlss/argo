@@ -7,7 +7,7 @@ module ApoHelper
   def options_for_use_license_type use_license_map, cur_use_license
     use_license_map.map do |key, val|
       if val[:deprecation_warning] != nil && key == cur_use_license
-        ["#{val[:human_readable]} #{val[:deprecation_warning]}", key]
+        ["#{val[:human_readable]} (#{val[:deprecation_warning]})", key]
       elsif val[:deprecation_warning] == nil
         [val[:human_readable], key]
       end
