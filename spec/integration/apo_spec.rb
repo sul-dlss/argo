@@ -2,7 +2,7 @@ require 'spec_helper'
 
 def selects
   page.select("TEI", :from => "desc_md")
-  page.select("Attribution Share Alike 3.0 Unported", :from => "cc_license")
+  page.select("Attribution Share Alike 3.0 Unported", :from => "use_license")
   choose("collection_radio", option: "none")
 end
 
@@ -33,7 +33,7 @@ describe 'apo', :type => :request do
     expect(find_field("viewers"   ).value).to eq("sunetid:someone")
     expect(find_field("desc_md"   ).value).to eq('TEI')
     expect(find_field("collection").value).to eq('')
-    expect(find_field("cc_license").value).to eq("by_sa")
+    expect(find_field("use_license").value).to eq("by_sa")
   end
   it 'should edit an apo' do
     fill_in "managers", :with => 'dlss:developers dlss:psm-staff'
@@ -58,6 +58,6 @@ describe 'apo', :type => :request do
     #find_field("viewers").value.should == "sunetid:anyone"
     expect(find_field("desc_md"   ).value).to eq('MODS')
     expect(find_field("collection").value).to eq('')
-    expect(find_field("cc_license").value).to eq("by-nd")
+    expect(find_field("use_license").value).to eq("by-nd")
   end
 end

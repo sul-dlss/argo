@@ -4,16 +4,25 @@ module ApoHelper
     "hello world ©"
   end
 
-  def creative_commons_options
-    [
-      ['Citation Only',''],
-      ['Attribution 3.0 Unported', 'by'],
-      ['Attribution Share Alike 3.0 Unported','by_sa'],
-      ['Attribution No Derivatives 3.0 Unported', 'by-nd'],
-      ['Attribution Non-Commercial 3.0 Unported', 'by-nc'],
-      ['Attribution Non-Commercial Share Alike 3.0 Unported', 'by-nc-sa'],
-      ['Attribution Non-commercial, No Derivatives 3.0 Unported', 'by-nc-nd']
-    ]
+  # return a list of lists, where the sublists are pairs, with the first element being the text to display
+  # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated
+  # entries, unless the current value is a deprecated entry, in which case, include that entry with the 
+  # deprecation warning in a parenthetical.
+  def options_for_use_license_type use_license_map, cur_use_license
+    use_license_map.map do |key, val|
+      if val[:deprecation_warning] != nil && key == cur_use_license
+        ["#{val[:human_readable]} (#{val[:deprecation_warning]})", key]
+      elsif val[:deprecation_warning] == nil
+        [val[:human_readable], key]
+      end
+    end.compact # the map block will produce nils for unused deprecated entries, compact will get rid of them
+  end
+
+  def license_options apo_obj
+    cur_use_license = apo_obj ? apo_obj.use_license : nil
+    [['Citation Only','']] + 
+    options_for_use_license_type(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES, cur_use_license) + 
+    options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
   end
 
   def default_rights_options

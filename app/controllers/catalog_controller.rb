@@ -63,6 +63,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
     config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
     config.add_facet_field 'rights_primary_ssi',    :label => 'Access Rights'
+    config.add_facet_field 'use_license_machine_ssi', :label => 'License'
     config.add_facet_field 'nonhydrus_collection_title_ssim', :label => 'Collection',  :sort => 'index'
     config.add_facet_field 'hydrus_collection_title_ssim',    :label => 'Hydrus Collection',  :sort => 'index'
     config.add_facet_field 'nonhydrus_apo_title_ssim',        :label => 'Admin Policy',:sort => 'index'
@@ -97,7 +98,7 @@ class CatalogController < ApplicationController
       :no_is_governed_by => { :label => 'No APO',  :fq => "-is_governed_by_ssim:*"},
       :no_collection_title => { :label => 'No Collection Title',  :fq => "-collection_title_ssim:*"},
       :no_copyright => { :label => 'No Copyright',  :fq => "-copyright_ssim:*"},
-      # TODO: license (?)   doesn't appear to be solrized at the moment
+      :no_license => { :label => 'No License', :fq => "-use_license_machine_ssi:*"},
       :no_public_dc_creator => { :label => 'No MODS Creator',  :fq => "-public_dc_creator_tesim:*"},
       # TODO: mods extent (?)
       # TODO: mods form (?)
