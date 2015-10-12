@@ -26,7 +26,7 @@ $(document).ready(function() {
         }
     });
     
-  $('#facets a.remove').map(function() { $(this).html('') })
+    $('#facets a.remove').map(function() { $(this).html('') })
 });
 
 
@@ -97,4 +97,14 @@ function getXMLSchemaDateTime(d){
        s(d.getHours(),2) + ':' +
        s(d.getMinutes(),2) + ':' +
        s(d.getSeconds(),2) + 'Z';
+}
+
+
+// When a user selects a spreadsheet file for uploading via the bulk metadata upload function,
+// this function is called to verify the filename extension.
+function validate_spreadsheet_filetype()
+{
+    var filename = $('#spreadsheet_file').val().toLowerCase();
+    if(!(filename.endsWith(".xlsx") || filename.endsWith(".xls") || filename.endsWith(".xml") || filename.endsWith(".csv")))
+        $('#bulk-spreadsheet-warning').text("Note: Only spreadsheets or XML files are allowed. Please check your selected file.");
 }

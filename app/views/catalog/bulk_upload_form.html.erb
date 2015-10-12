@@ -13,7 +13,7 @@
 	    <div class="row spreadsheet-row">
 		<div class="col-md-2 spreadsheet-file-action-column"><strong>1. Select</strong></div>
 		<div class="col-md-4 spreadsheet-file-upload-column">
-		    <%= file_field_tag :spreadsheet_file %>
+		    <%= file_field_tag :spreadsheet_file, onchange: 'validate_spreadsheet_filetype()' %>
 		    <input type="hidden" name="druid" value="<%=@object.id %>" />
 		</div>
 	    </div>
@@ -55,6 +55,9 @@
 		<div class="col-md-2">
     		    <button type="button" id="spreadsheet_cancel" class="btn btn-primary" data-dismiss="modal">Cancel</button>
     		</div>
+		<div class="col-md-6">
+		    <span id="bulk-spreadsheet-warning"></span>
+		</div>
     	    </div>
     	</div>
 	<% end %>
