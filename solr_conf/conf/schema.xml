@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema name="Argo" version="1.5">
+  <!-- NOTE: this probably IS the version of schema.xml that you want to deploy to SolrCloud.
+     see https://github.com/sul-dlss/sul-solr-configs for more info/examples 
+     regarding correct configuration of SolrCloud. -->
   <!-- NOTE: various comments and unused configuration possibilities have been purged
      from this file.  Please refer to http://wiki.apache.org/solr/SchemaXml,
      as well as the default schema file included with Solr -->

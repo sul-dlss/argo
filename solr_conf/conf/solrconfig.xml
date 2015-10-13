@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
+  <!-- NOTE: this is probably NOT appropriate for use as-is in SolrCloud.  
+     see https://github.com/sul-dlss/sul-solr-configs for more info/examples 
+     regarding correct configuration of SolrCloud. -->
   <!-- NOTE: various comments and unused configuration possibilities have been purged
      from this file.  Please refer to http://wiki.apache.org/solr/SolrConfigXml,
      as well as the default solrconfig file included with Solr -->
 
   <abortOnConfigurationError>${solr.abortOnConfigurationError:true}</abortOnConfigurationError>
 
-  <luceneMatchVersion>4.9</luceneMatchVersion>
+  <luceneMatchVersion>LUCENE_4_10_4</luceneMatchVersion>
 
   <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.StandardDirectoryFactory}"/>
 
