@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 2485397379a2fa32ea2fd6f943f22600853c2f22
+  revision: 33d47f2d18a01ea859882d2542df51751206dd55
   branch: develop
   specs:
     dor-services (5.2.0)
@@ -245,7 +245,7 @@ GEM
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
     kgio (2.10.0)
-    libv8 (3.16.14.11)
+    libv8 (3.16.14.13)
     link_header (0.0.8)
     logger (1.2.8)
     loofah (2.0.3)
@@ -320,7 +320,7 @@ GEM
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
     progressbar (0.21.0)
-    pry (0.10.2)
+    pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
@@ -379,7 +379,7 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     retries (0.0.5)
-    rsolr (1.0.12)
+    rsolr (1.0.13)
       builder (>= 2.1.2)
     rsolr-client-cert (0.5.2)
       rest-client
@@ -461,7 +461,7 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh
       term-ansicolor
-    stanford-mods (1.1.4)
+    stanford-mods (1.1.5)
       mods (~> 2.0.2)
     stomp (1.3.4)
     sul_styles (0.3.0)
