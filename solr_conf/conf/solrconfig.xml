@@ -9,7 +9,8 @@
 
   <abortOnConfigurationError>${solr.abortOnConfigurationError:true}</abortOnConfigurationError>
 
-  <luceneMatchVersion>LUCENE_4_10_4</luceneMatchVersion>
+  <!-- in particular, this might not match SolrCloud.  atz says this can be specific to the deployed binary. -->
+  <luceneMatchVersion>4.9</luceneMatchVersion>
 
   <directoryFactory name="DirectoryFactory" class="${solr.directoryFactory:solr.StandardDirectoryFactory}"/>
 
