@@ -19,7 +19,16 @@ cd argo
 bundle install
 ```
     
-### Configure the solr and database yml files.  Stanford users should review internal documentation.
+### Configure the argo and database yml files.  Stanford users should review internal documentation.
+
+```bash
+cp config/database.yml.example config/database.yml
+```
+
+You will also need to acquire the following config files (per environment):
+
+ - `config/development.rb`
+ - `config/dor_development.rb`
 
 ### Install components and DB:
 
@@ -27,14 +36,38 @@ bundle install
 rake argo:jetty:clean
 rake argo:jetty:config
 rake db:setup
-rake db:migrate RAILS_ENV=test
+rake db:migrate
 rake tmp:create
+```
+
+### Optional - Increase Jetty heap size and Solr logging
+
+In the created `./jetty` directory add the following the `start.ini` to increase the heap size
+
+At LN19
+```
+--exec
+
+Djava.awt.headless=true
+-Dcom.sun.management.jmxremote
+-Dorg.eclipse.jetty.util.log.IGNORED=true
+-Dorg.eclipse.jetty.LEVEL=INFO
+-Dorg.eclipse.jetty.util.log.stderr.SOURCE=true
+-Xmx2000m
+-XX:+PrintCommandLineFlags
+-XX:+UseConcMarkSweepGC
+-XX:+CMSClassUnloadingEnabled
+-XX:PermSize=64M
+-XX:MaxPermSize=256M
+
+# Solr logging
+-Djava.util.logging.config.file=etc/logging.properties
 ```
 
 ## Run the server
 
 ```bash
-rake jetty:start
+rake jetty:start # This may take a few minutes
 rails server
 ```
 
