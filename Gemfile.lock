@@ -165,6 +165,9 @@ GEM
       execjs
     coffee-script-source (1.9.1.1)
     columnize (0.9.0)
+    config (1.0.0)
+      activesupport (>= 3.0)
+      deep_merge (~> 1.0.0)
     confstruct (0.2.7)
     coveralls (0.8.2)
       json (~> 1.8)
@@ -180,6 +183,7 @@ GEM
       debugger-ruby_core_source (~> 1.3.5)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.3.8)
+    deep_merge (1.0.1)
     delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
     delayed_job_active_record (4.1.0)
@@ -526,6 +530,7 @@ DEPENDENCIES
   capybara
   coderay
   coffee-rails
+  config
   confstruct (~> 0.2.4)
   coveralls
   daemons

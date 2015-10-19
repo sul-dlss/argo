@@ -20,3 +20,7 @@ public/.htaccess
 public/assets
 public/images/.dpg_pool
 tmp/
+
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml
