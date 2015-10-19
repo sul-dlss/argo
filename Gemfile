@@ -64,6 +64,7 @@ group :test, :development do
   gem 'pry-byebug',   :platform =>[:ruby_20, :ruby_21]
   gem 'pry-remote'
   gem 'pry-rails'
+  gem 'coveralls', require: false
 #  gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 end
 
