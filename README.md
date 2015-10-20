@@ -24,16 +24,14 @@ cd argo
 cp config/database.yml.example config/database.yml
 ```
 
-### Configure the rest of the local environment.  Stanford users should review internal documentation.
+### Configure the rest of the local environment.
 
-You will also need to acquire the following config files (per environment):
+Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain) `config/settings/development.local.yml` files to set local development variables specifically.
 
- - `config/environments/development.rb`
- - `config/environments/dor_development.rb`
- - `config/environments/test.rb`
- - `config/environments/dor_test.rb`
- - `config/certs/dlss-dev-$USER-dor-dev.crt`  # should match the value specified by cert_file in dor_development.rb
- - `config/certs/dlss-dev-$USER-dor-dev.key`  # should match the value specified by key_file in dor_development.rb
+You will also need to acquire the following certificate files (per environment):
+
+ - `config/certs/dlss-dev-$USER-dor-dev.crt`  # should match the value specified by `Settings.SSL.CERT_FILE`
+ - `config/certs/dlss-dev-$USER-dor-dev.key`  # should match the value specified by `Settings.SSL.CERT_FILE`
 
 ### Run bundler to install the Gem dependencies
 
