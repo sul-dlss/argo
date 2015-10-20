@@ -1,0 +1,54 @@
+# Example settings for configuration
+
+# Content
+CONTENT:
+  USER: 'user'
+  BASE_DIR: '/foo/bar'
+  SERVER_HOST: 'example-bar'
+  SDR_SERVER_URL: 'https://sdr.example.com'
+  SDR_USER: 'user'
+  SDR_PASSWORD: 'password'
+
+# URLs
+DOR_SERVICES_URL: 'https://user:password@dor-services.example.com'
+FEDORA_URL: 'https://fedora.example.com/fedora'
+MDTOOLKIT_URL: 'https://mdtoolkit.example.com/md'
+PURL_URL: 'https://purl.example.com'
+ROBOT_STATUS_URL: 'https://robot.example.com/robots'
+SOLRIZER_URL: 'https://solr.example.com/solr/collection'
+STACKS_FILE_URL: 'https://stacks.example.com/file'
+STACKS_URL: 'https://stacks.example.com/image' # TODO: Verify use doesn't seeem to be in use
+STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
+WORKFLOW_URL: 'https://workflow.example.com/workflow'
+
+# Metadata
+METADATA:
+  EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'
+  CATALOG_URL: 'https://catalog.example.com/catalog/mods'
+
+# Squash
+SQUASH:
+  API_HOST: 'https://squash-host.example.com'
+  API_KEY: 'squash-api-key'
+  DISABLE: <%= (Rails.env.development? || Rails.env.test?) %>
+
+# Stacks
+STACKS:
+  DOCUMENT_CACHE_STORAGE_ROOT: '/foo/document_cache'
+  DOCUMENT_CACHE_HOST: 'cache.example.com'
+  DOCUMENT_CACHE_USER: 'user'
+  LOCAL_WORKSPACE_ROOT: '/foo/workspace'
+  STORAGE_ROOT: '/bar'
+  HOST: 'stacks.example.com'
+  USER: 'user'
+
+# Stomp
+STOMP_CLIENT_ID: 'fedora_stomper'
+
+# Suri
+SURI:
+  MINT_IDS: true
+  ID_NAMESPACE: 'druid'
+  URL: 'https://suri.example.com'
+  USER: 'user'
+  PASS: 'pass'
