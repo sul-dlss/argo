@@ -45,5 +45,8 @@ Argo::Application.configure do
 
   Argo.configure do
     reindex_on_the_fly false
+    bulk_metadata_directory '/workspace/bulk/'  # Directory for storing bulk metadata job info
+    bulk_metadata_log 'log.txt'                 # Bulk metadata log file
+    bulk_metadata_xml 'metadata.xml'            # Bulk metadata XML output file
   end
 end
