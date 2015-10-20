@@ -1,5 +1,5 @@
 <%
-  @page_title = "#{application_name} - #{Array(document_show_html_title).first.to_s.ellipsize(:max => 50)}"
+  @page_title = "#{application_name} - #{truncate(Array(document_show_html_title).first.to_s, length: 50)}"
   ensure_current_document_version if Argo::Config[:reindex_on_the_fly]
 %>
 
