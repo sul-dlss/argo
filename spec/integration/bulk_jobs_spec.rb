@@ -31,7 +31,7 @@ describe ModsulatorJob, type: :job do
                   'xlsx',
                   'true',
                   'anote')
-puts "tommy: here2"
+
       # Filename is calculated based on a millisecond timestamp, so we need to look for the generated file
       xml_filename = Dir.glob("#{@output_directory}/*.xml")[0]
 
