@@ -17,7 +17,7 @@ describe ModsulatorJob, type: :job do
     FileUtils.rm_rf(@output_directory) if(Dir.exist?(@output_directory))
   end
 
-  describe 'perform' do
+  describe 'perform', :integration => true do
     it 'correctly performs a simple job' do
       test_spreadsheet = 'crowdsourcing_bridget_1.xlsx.20150101'
       test_spreadsheet_path = File.join(@output_directory, test_spreadsheet)
@@ -31,7 +31,7 @@ describe ModsulatorJob, type: :job do
                   'xlsx',
                   'true',
                   'anote')
-
+puts "tommy: here2"
       # Filename is calculated based on a millisecond timestamp, so we need to look for the generated file
       xml_filename = Dir.glob("#{@output_directory}/*.xml")[0]
 
