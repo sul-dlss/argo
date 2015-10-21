@@ -4,7 +4,7 @@ describe CatalogController, :type => :controller do
 
   before :each do
 #   log_in_as_mock_user(subject)
-    @druid = 'rn653dy9317'  # a fixture Dor::Item record
+    @druid = 'ti057vk7675'  # a fixture Dor::Item record
     @item = instantiate_fixture(@druid, Dor::Item)
     @user = double(User, :login => 'sunetid', :logged_in? => true, :is_admin => false, :is_viewer => false)
     allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
