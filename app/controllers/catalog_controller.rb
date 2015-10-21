@@ -18,6 +18,8 @@ class CatalogController < ApplicationController
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 10
 
+    config.document_solr_request_handler = '/document'
+
     config.index.title_field = 'dc_title_ssi'
     config.index.display_type_field = 'content_type_ssim'
 

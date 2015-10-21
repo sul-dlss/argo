@@ -102,7 +102,7 @@
   </requestHandler>
 
   <!-- for requests to get a single document; use id=666 instead of q=id:666 -->
-  <requestHandler name="document" class="solr.SearchHandler" >
+  <requestHandler name="/document" class="solr.SearchHandler" >
     <lst name="defaults">
       <str name="echoParams">all</str>
       <str name="fl">*</str>
