@@ -7,7 +7,6 @@
 app/assets/javascripts/jqgrid/
 config/certs
 config/database.yml
-config/environments/*.rb
 config/newrelic.yml
 config/solr.yml
 coverage/
@@ -20,3 +19,7 @@ public/.htaccess
 public/assets
 public/images/.dpg_pool
 tmp/
+
+config/settings.local.yml
+config/settings/*.local.yml
+config/environments/*.local.yml

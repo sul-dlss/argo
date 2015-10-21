@@ -30,6 +30,7 @@ gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
+gem 'config'
 
 # Stanford/Hydra related gems
 gem 'about_page'
