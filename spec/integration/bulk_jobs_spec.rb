@@ -17,7 +17,7 @@ describe ModsulatorJob, type: :job do
     FileUtils.rm_rf(@output_directory) if(Dir.exist?(@output_directory))
   end
 
-  describe 'perform', :integration => true do
+  describe 'perform', integration: true do
     it 'correctly performs a simple job' do
       test_spreadsheet = 'crowdsourcing_bridget_1.xlsx.20150101'
       test_spreadsheet_path = File.join(@output_directory, test_spreadsheet)
