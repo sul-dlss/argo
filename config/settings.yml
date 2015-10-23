@@ -9,6 +9,7 @@ REINDEX_ON_FLY: false
 BULK_METADATA:
   DIRECTORY: '/foo/bulk'
   LOG: 'log.txt'
+  CSV_LOG: 'log.csv'
   XML: 'metadata.xml'
 
 # Content

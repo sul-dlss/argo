@@ -60,8 +60,9 @@ Argo::Application.configure do
       spreadsheet           Settings.SPREADSHEET_URL
     end
     bulk_metadata_directory Settings.BULK_METADATA.DIRECTORY # Directory for storing bulk metadata job info
-    bulk_metadata_log       Settings.BULK_METADATA.LOG # Bulk metadata log file
-    bulk_metadata_xml       Settings.BULK_METADATA.XML # Bulk metadata XML output file
+    bulk_metadata_log       Settings.BULK_METADATA.LOG       # Bulk metadata log file
+    bulk_metadata_csv_log   Settings.BULK_METADATA.CSV_LOG   # Bulk metadata log file in CSV format for end users
+    bulk_metadata_xml       Settings.BULK_METADATA.XML       # Bulk metadata XML output file
   end
 
   # the following config statement gets us two important things on each log line:
