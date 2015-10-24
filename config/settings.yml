@@ -5,12 +5,19 @@ CACHE_STORE_NAME: 'argo'
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
 REINDEX_ON_FLY: false
 
+# Rails application settings
+APPLICATION:
+  CACHE_CLASSES: true
+  ASSETS:
+    COMPRESS: true
+    PRECOMPILE: ['about.css.sass', 'argo.css', 'registration.css', 'report.css', 'webcrop.css', '*.js', '*.coffee']
+
 # Bulk Metadata
 BULK_METADATA:
-  DIRECTORY: '/foo/bulk'
+  DIRECTORY: '/tmp/bulk_jobs/'
   LOG: 'log.txt'
   CSV_LOG: 'log.csv'
-  XML: 'metadata.xml'
+  XML: 'MODS'
 
 # Content
 CONTENT:
@@ -78,11 +85,14 @@ STACKS_URL: 'https://stacks.example.com/image' # TODO: Verify use doesn't seeem 
 STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
 WORKFLOW_URL: 'https://workflow.example.com/workflow'
 
-# Webauth
-WEBAUTH:
-  USER: 'user'
-  MAIL: 'user@example.com'
-  LDAPPRIVGROUP: 'group:role|anothergroup:otherrole'
-  SUAFFILIATION: 'org:group'
-  DISPLAYNAME: 'Jane Doe'
-  LDAPAUTHRULE: 'auth-rule'
+# Webauth is null by default.
+# To specify it to fake webauth credentials for dev instances,
+# use a structure like the one below.
+WEBAUTH: ~
+# WEBAUTH:
+#   USER: 'user'
+#   MAIL: 'user@example.com'
+#   LDAPPRIVGROUP: 'group:role|anothergroup:otherrole'
+#   SUAFFILIATION: 'org:group'
+#   DISPLAYNAME: 'Jane Doe'
+#   LDAPAUTHRULE: 'auth-rule'

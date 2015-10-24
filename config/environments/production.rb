@@ -12,27 +12,9 @@ Argo::Application.configure do
   config.cache_classes = Settings.APPLICATION.CACHE_CLASSES
   config.perform_caching = true
   config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
-  config.cache_store.logger.level = Logger::DEBUG
+  config.cache_store.logger.level = Logger::WARN
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
-
-  # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
-
-  # Raise exceptions instead of rendering exception templates
-  config.action_dispatch.show_exceptions = true
-
-  # Disable request forgery protection in test environment
-  config.action_controller.allow_forgery_protection = false
-
-  # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
-
-  # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
@@ -40,21 +22,6 @@ Argo::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
-  # Silences warning
-  config.eager_load = false
-
-  require 'rack-webauth/test'
-  if Settings.WEBAUTH
-    config.middleware.use(
-      Rack::Webauth::Test,
-      user: Settings.WEBAUTH.USER,
-      mail: Settings.WEBAUTH.MAIL,
-      ldapprivgroup: Settings.WEBAUTH.LDAPPRIVGROUP,
-      suaffiliation: Settings.WEBAUTH.SUAFFILIATION,
-      displayname: Settings.WEBAUTH.DISPLAYNAME,
-      ldapauthrule: Settings.WEBAUTH.LDAPAUTHRULE
-    )
-  end
   config.middleware.use(Rack::Webauth)
 
   unless Settings.APPLICATION.ASSETS.PRECOMPILE.empty?
