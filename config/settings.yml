@@ -7,10 +7,10 @@ REINDEX_ON_FLY: false
 
 # Bulk Metadata
 BULK_METADATA:
-  DIRECTORY: '/foo/bulk'
+  DIRECTORY: '/tmp/bulk_jobs/'
   LOG: 'log.txt'
   CSV_LOG: 'log.csv'
-  XML: 'metadata.xml'
+  XML: 'MODS'
 
 # Content
 CONTENT:
