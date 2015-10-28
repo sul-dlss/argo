@@ -19,6 +19,7 @@ public/.htaccess
 public/assets
 public/images/.dpg_pool
 tmp/
+workflow_service.log*
 
 config/settings.local.yml
 config/settings/*.local.yml
