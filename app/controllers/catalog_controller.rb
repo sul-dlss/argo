@@ -250,7 +250,6 @@ class CatalogController < ApplicationController
   end
 
   def bulk_jobs_help
-    @obj = Dor.find params[:id]
   end
 
   def bulk_jobs_delete
