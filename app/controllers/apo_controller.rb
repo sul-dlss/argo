@@ -95,7 +95,7 @@ class ApoController < ApplicationController
     reg_params = {:workflow_priority => '70'}
     reg_params[:label] = params[:title]
     reg_params[:object_type ] = 'adminPolicy'
-    reg_params[:admin_policy] = 'druid:hv992ry2431'
+    reg_params[:admin_policy] = 'druid:hv992ry2431' # TODO: Uber-APO druid must be pulled from config, not hardcoded
     reg_params[:workflow_id ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     apo_pid = response[:pid]

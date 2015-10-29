@@ -5,7 +5,7 @@ function DorRegistration(initOpts) {
     defaultValues: {
       objectType: 'item',
       projectName: '',
-      apoId: 'druid:hv992ry2431',
+      apoId: 'druid:hv992ry2431',   // TODO: uber APO druid must be pulled from config, not hardcoded
       workflowId: null,
       mdFormId: null,
       metadataSource: 'none',
