@@ -26,12 +26,14 @@ cp config/database.yml.example config/database.yml
 
 ### Configure the rest of the local environment.
 
-Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain) `config/settings/development.local.yml` files to set local development variables specifically.
+Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain) `config/settings/development.local.yml` and `config/settings/test.local.yml` files to set local development variables correctly.
 
-You will also need to acquire the following certificate files (per environment):
+You will also need to create or acquire the following certificate files (per environment):
 
- - `config/certs/dlss-dev-$USER-dor-dev.crt`  # should match the value specified by `Settings.SSL.CERT_FILE`
- - `config/certs/dlss-dev-$USER-dor-dev.key`  # should match the value specified by `Settings.SSL.CERT_FILE`
+ - `config/certs/argo-client.crt`  # should match the value specified by `Settings.SSL.CERT_FILE`
+ - `config/certs/argo-client.key`  # should match the value specified by `Settings.SSL.CERT_FILE`
+
+For vanilla Stanford laptop installations, the cert files and the local settings files should be available from a private DLSS repository.  You can clone this and create symlinks to the checked out config files (instead of having copies of those files in place).  That way, you can easily pull changes to the vanilla configs as defaults are changed, andyou can submit such changes back upstream, in place on your instance.  An Argo developer or DevOps person should be able to point you to the private config repo and explain how to use it.
 
 ### Run bundler to install the Gem dependencies
 

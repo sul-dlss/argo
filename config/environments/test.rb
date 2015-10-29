@@ -4,19 +4,17 @@ require 'action_dispatch/middleware/session/dalli_store'
 Argo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  # The test environment is used exclusively to run your application's
-  # test suite.  You never need to work with it otherwise.  Remember that
-  # your test database is "scratch space" for the test suite and is wiped
-  # and recreated between test runs.  Don't rely on the data there!
-  config.cache_classes = true
+  config.assets.compress = Settings.APPLICATION.ASSETS.COMPRESS
 
+  # In the development environment your application's code is reloaded on
+  # every request.  This slows down response time but is perfect for development
+  # since you don't have to restart the webserver when you make code changes.
+  config.cache_classes = Settings.APPLICATION.CACHE_CLASSES
+  config.perform_caching = true
   config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
-
+  config.cache_store.logger.level = Logger::DEBUG
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
-
-  #Set how deprecation warnings are handled.
-  config.active_support.deprecation = :log
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
@@ -33,27 +31,35 @@ Argo::Application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  # Use SQL instead of Active Record's schema dumper when creating the test database.
-  # This is necessary if your schema can't be completely dumped by the schema dumper,
-  # like if you have constraints or database-specific column types
-  # config.active_record.schema_format = :sql
+  # Don't care if the mailer can't send
+  config.action_mailer.raise_delivery_errors = false
 
-  # Print deprecation notices to the stderr
+  # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :stderr
 
+  # Only use best-standards-support built into browsers
+  config.action_dispatch.best_standards_support = :builtin
+
+  # Silences warning
+  config.eager_load = false
+
   config.middleware.use(Rack::Webauth)
-  config.assets.precompile << 'about.css.sass' << 'argo.css' << 'registration.css' << 'report.css' << 'webcrop.css' << '*.js' << '*.coffee'
+
+  unless Settings.APPLICATION.ASSETS.PRECOMPILE.empty?
+    config.assets.precompile += Settings.APPLICATION.ASSETS.PRECOMPILE
+  end
 
   Argo.configure do
     reindex_on_the_fly      Settings.REINDEX_ON_FLY
     date_format_str         Settings.DATE_FORMAT_STR
     urls do
-      stacks_file           Settings.STACKS_FILE_URL
-      stacks                Settings.STACKS_URL
       mdtoolkit             Settings.MDTOOLKIT_URL
       purl                  Settings.PURL_URL
+      stacks                Settings.STACKS_URL
+      stacks_file           Settings.STACKS_FILE_URL
       dor_services          Settings.DOR_SERVICES_URL
       workflow              Settings.WORKFLOW_URL
+      dpg                   Settings.DPG_URL
       robot_status          Settings.ROBOT_STATUS_URL
       modsulator            Settings.MODSULATOR_URL
       normalizer            Settings.NORMALIZER_URL
@@ -72,5 +78,5 @@ Argo::Application.configure do
   # 2) time stamps on each log statement, because knowing when something
   # got logged is quite nice.
   # (declared after Argo.configure since it uses one of those params)
-  config.log_tags = [:uuid, proc {DateTime.now.strftime(Argo::Config.date_format_str)}]
+  config.log_tags = [:uuid, proc {Time.zone.now.strftime(Argo::Config.date_format_str)}]
 end

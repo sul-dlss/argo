@@ -43,18 +43,6 @@ Argo::Application.configure do
   # Silences warning
   config.eager_load = false
 
-  require 'rack-webauth/test'
-  if Settings.WEBAUTH
-    config.middleware.use(
-      Rack::Webauth::Test,
-      user: Settings.WEBAUTH.USER,
-      mail: Settings.WEBAUTH.MAIL,
-      ldapprivgroup: Settings.WEBAUTH.LDAPPRIVGROUP,
-      suaffiliation: Settings.WEBAUTH.SUAFFILIATION,
-      displayname: Settings.WEBAUTH.DISPLAYNAME,
-      ldapauthrule: Settings.WEBAUTH.LDAPAUTHRULE
-    )
-  end
   config.middleware.use(Rack::Webauth)
 
   unless Settings.APPLICATION.ASSETS.PRECOMPILE.empty?
