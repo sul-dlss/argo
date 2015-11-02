@@ -9,7 +9,5 @@ email: false
 before_script:
   - if [[ -r /etc/hosts ]]; then cat /etc/hosts ; fi
   - cp config/database.yml.example config/database.yml
-  - bundle exec rails generate argo:solr
-# - bundle exec rails generate blacklight_hierarchy:install
 script: bundle exec rake ci
 sudo: false
