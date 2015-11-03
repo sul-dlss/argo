@@ -7,3 +7,6 @@ ruby:
 javascript:
   config_file: .jshintrc
   ignore_file: .jshintignore
+
+scss:
+  config_file: .scss-lint.yml
