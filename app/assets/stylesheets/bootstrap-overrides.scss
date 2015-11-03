@@ -1,0 +1,10 @@
+//
+// Overrides of Bootstrap variables can be added here. For more information
+// about available Bootstrap variables, please see:
+// http://getbootstrap.com/customize/
+
+
+// Inverted navbar
+$navbar-inverse-color: lighten($color-beige-05, 05%);
+$navbar-inverse-link-color: lighten($color-beige-05, 05%);
+$navbar-inverse-bg: $color-cardinal-red;
