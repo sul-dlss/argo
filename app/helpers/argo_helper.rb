@@ -11,15 +11,8 @@ module ArgoHelper
     Dor::SearchService.solr.uri.merge("select?#{qs}").to_s.html_safe
   end
 
-  def index_queue_depth
-    return 0 unless Dor::Config.status && Dor::Config.status.indexer_url
-    url = Dor::Config.status.indexer_url
-    resp = RestClient::Request.execute(:method => :get, :url => url, :timeout => 3, :open_timeout => 3)
-    JSON.parse(resp).first['datapoints'].first.first.to_i
-  rescue
-    return 0
-  end
-
+  ##
+  # TODO: This may be dead code to remove.
   def index_queue_velocity
     return 0 unless Dor::Config.status && Dor::Config.status.indexer_velocity_url
     url=Dor::Config.status.indexer_velocity_url

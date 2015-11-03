@@ -184,6 +184,8 @@ Argo::Application.routes.draw do
     resources :objects
   end
 
+  get 'index_queue/depth', to: 'index_queue#depth'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
