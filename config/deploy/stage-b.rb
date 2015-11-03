@@ -5,3 +5,5 @@ set :rails_env, "staging"
 set :bundle_without, %w{production development}.join(' ')
 
 set :branch, :develop
+set :deploy_to, '/opt/app/lyberadmin/argo'
+
