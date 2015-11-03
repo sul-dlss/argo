@@ -36,7 +36,7 @@ end
 namespace :argo do
   desc "Install db, jetty (fedora/solr) and configs fresh"
   task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate', 'tmp:create'] do
-    ['rails generate blacklight_hierarchy:install', 'rails generate argo:solr'].each{ |cmd|
+    ['rails generate argo:solr'].each{ |cmd|
       puts cmd
       system cmd
     }
