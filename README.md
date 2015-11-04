@@ -26,7 +26,7 @@ cp config/database.yml.example config/database.yml
 
 ### Configure the rest of the local environment.
 
-Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain) `config/settings/development.local.yml` and `config/settings/test.local.yml` files to set local development variables correctly.
+Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain in one of the argo branches in the `shared_config` repo) `config/settings/development.local.yml` and `config/settings/test.local.yml` files to set local development variables correctly.
 
 You will also need to create or acquire the following certificate files (per environment):
 
