@@ -5,7 +5,7 @@ set :application, 'argo'
 set :repo_url, 'https://github.com/sul-dlss/argo.git'
 
 # Default branch is :master
-# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 #TODO:  ask for user, should know what the name of the app is, should be able to build deploy_to from those
 #TODO:  prompt for server name and use that to build hostname (based on app name)
