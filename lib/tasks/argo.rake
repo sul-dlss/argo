@@ -212,7 +212,7 @@ namespace :argo do
       if(args.has_key?(:glob))
         file_list = glob_files(args[:glob])
       else
-        puts "No file glob was specified so file order and inclusion is determined by the load_order file"
+        puts 'No file glob was specified so file order and inclusion is determined by the load_order file'
         file_list = load_order_files(fedora_files)
       end
 
@@ -221,22 +221,22 @@ namespace :argo do
 
       file_list.each do |file|
         i += 1
-        
+
         ENV['foxml'] = file
         handler = proc do |e, attempt_number, total_delay|
           puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
           errors << file
         end
-       with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
-         puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
-
+        with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
+          puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
           # Invoke the ActiveFedora gem's rake task
-          Rake::Task['repo:load'].invoke
           Rake::Task['repo:load'].reenable
-       }
+          Rake::Task['repo:load'].invoke
+        }
       end
+      Rake::Task['repo:load'].reenable      # other things might want to load, too
       ENV.delete('foxml') if ENV['foxml']   # avoid ENV contamination
-      puts "Done loading repo files"
+      puts 'Done loading repo files'
       puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0
 #     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
       puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
@@ -271,7 +271,7 @@ namespace :argo do
   def glob_files(glob_expression)
     return Dir.glob(glob_expression)
   end
-  
+
 
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
