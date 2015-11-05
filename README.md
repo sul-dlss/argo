@@ -74,8 +74,8 @@ You may then update values in `jetty/etc/logging.properties` to change logging s
 
 ```bash
 rake jetty:start # This may take a few minutes
-rails server
 bin/delayed_job start  # Necessary only for spreadsheet bulk upload
+rails server
 ```
 
 ## Load and index records
