@@ -1,0 +1,1722 @@
+<foxml:digitalObject VERSION="1.1" PID="druid:tm388wy6148" xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd" xmlns:foxml="info:fedora/fedora-system:def/foxml#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="accessionWF"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2011-10-26T23:23:57.961Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2014-11-26T22:28:56.105Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2011-10-26T23:23:57.961Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:58.100Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:58.254Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:58.399Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>defaultObjectRights</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:58.529Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:58.721Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:58.908Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:59.102Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:59.370Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:59.556Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC10">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:59.821Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC11">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>DC</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:23:59.997Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC12">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2011-10-26T23:24:00.253Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC13">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-18T21:54:58.282Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC14">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-19T18:24:57.137Z</audit:date>
+<audit:justification>Fedora FUSE FS</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC15">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-01-28T04:33:44.029Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC16">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-24T06:08:52.831Z</audit:date>
+<audit:justification>Fedora FUSE FS</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC17">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-24T06:08:55.661Z</audit:date>
+<audit:justification>Fedora FUSE FS</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC18">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-24T06:10:21.183Z</audit:date>
+<audit:justification>Fedora FUSE FS</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC19">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-24T06:10:21.604Z</audit:date>
+<audit:justification>Fedora FUSE FS</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC20">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-03-24T06:23:23.191Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC21">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-04T16:59:43.748Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC22">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-04T22:12:21.833Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC23">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-04T22:26:28.350Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC24">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-04T22:35:51.081Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC25">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-04T22:39:41.376Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC26">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-05-05T01:36:54.060Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC27">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2012-12-12T18:20:23.642Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC28">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2012-12-12T18:22:32.998Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC29">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-01-11T01:39:12.762Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC30">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-01-12T02:28:41.896Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC31">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-02-14T23:49:05.038Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC32">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-03-02T00:57:16.357Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC33">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-06-13T22:01:04.070Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC34">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-07-08T19:19:26.578Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC35">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>administrativeMetadata</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-09-04T22:14:19.189Z</audit:date>
+<audit:justification>Purged datastream (ID=administrativeMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-10-26T16:23:59.556Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC36">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-09-04T22:14:36.763Z</audit:date>
+<audit:justification>Purged datastream (ID=technicalMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-10-26T16:23:58.399Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC37">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-09-04T22:14:48.891Z</audit:date>
+<audit:justification>Purged datastream (ID=contentMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-10-26T16:24:00.253Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC38">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>defaultObjectRights</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-09-04T22:15:05.067Z</audit:date>
+<audit:justification>Purged datastream (ID=defaultObjectRights), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-10-26T16:23:58.529Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC39">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-09-04T22:18:53.882Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC40">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2014-01-23T18:19:21.219Z</audit:date>
+<audit:justification/>
+</audit:record>
+<audit:record ID="AUDREC41">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2014-09-10T18:21:03.078Z</audit:date>
+<audit:justification>Purged datastream (ID=roleMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2011-10-26T16:23:58.908Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC42">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>workflowDefinition</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2014-09-10T18:24:07.785Z</audit:date>
+<audit:justification/>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC.1" LABEL="Dublin Core Record for this object" CREATED="2011-10-26T23:23:59.997Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="412">
+<foxml:xmlContent>
+<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<dc:title>accessionWF</dc:title>
+<dc:creator>DOR</dc:creator>
+<dc:identifier>druid:tm388wy6148</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2011-10-26T23:23:57.961Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="381">
+<foxml:xmlContent>
+<oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<dc:title>accessionWF</dc:title>
+<dc:identifier>druid:tm388wy6148</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="RDF Statements about this object" CREATED="2011-10-26T23:23:59.102Z" MIMETYPE="text/xml" SIZE="286">
+<foxml:xmlContent>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Description rdf:about="info:fedora/druid:tm388wy6148">
+<hasModel rdf:resource="info:fedora/afmodel:Dor_WorkflowObject" xmlns="info:fedora/fedora-system:def/model#"/>
+</rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="RELS-EXT.1" LABEL="RDF Statements about this object" CREATED="2013-01-11T01:39:12.762Z" MIMETYPE="text/xml" SIZE="618">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Description rdf:about="info:fedora/druid:tm388wy6148">
+<hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431"/>
+<hydra:referencesAgreement rdf:resource="info:fedora/druid:xf765cv5573"/>
+<fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_WorkflowObject" xmlns="info:fedora/fedora-system:def/model#"/>
+</rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-10-26T23:23:58.254Z" MIMETYPE="text/xml" SIZE="13">
+<foxml:xmlContent>
+<xml/>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2011-10-26T23:23:58.721Z" MIMETYPE="text/xml" SIZE="298">
+<foxml:xmlContent>
+<identityMetadata>
+<objectId>druid:tm388wy6148</objectId>
+<objectType>workflow</objectType>
+<objectCreator>DOR</objectCreator>
+<otherId name="uuid">9446c4fe-0029-11e1-b134-dc2b61fffec6</otherId>
+<agreementId>druid:xf765cv5573</agreementId>
+<tag>Project : DOR</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="provenanceMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="provenanceMetadata.0" LABEL="Provenance Metadata" CREATED="2011-10-26T23:23:59.370Z" MIMETYPE="text/xml" SIZE="13">
+<foxml:xmlContent>
+<xml/>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2011-10-26T23:23:59.821Z" MIMETYPE="text/xml" SIZE="13">
+<foxml:xmlContent>
+<xml/>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflowDefinition" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="workflowDefinition.13" LABEL="Workflow Definition" CREATED="2012-05-05T01:36:54.060Z" MIMETYPE="text/xml" SIZE="2283">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<label>Clean up workspace</label>
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.12" LABEL="Workflow Definition" CREATED="2012-05-04T22:39:41.376Z" MIMETYPE="text/xml" SIZE="2261">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="8">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="9">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="10">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="11">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="12">
+<label>Clean up workspace</label>
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.11" LABEL="Workflow Definition" CREATED="2012-05-04T22:35:51.081Z" MIMETYPE="text/xml" SIZE="1640">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.10" LABEL="Workflow Definition" CREATED="2012-05-04T22:26:28.350Z" MIMETYPE="text/xml" SIZE="2260">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<label>Clean up workspace</label>
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.9" LABEL="Workflow Definition" CREATED="2012-05-04T22:12:21.833Z" MIMETYPE="text/xml" SIZE="2538">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1" error-limit="10" name="receive-content" sequence="2">
+<label>Transfer content to workspace</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<label>Content Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<label>Descriptive Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<label>Rights Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="8">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="9">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="10">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="11">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="12">
+<label>Clean up workspace</label>
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="13">
+<label>Release Embargo</label>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.8" LABEL="Workflow Definition" CREATED="2012-05-04T16:59:43.748Z" MIMETYPE="text/xml" SIZE="2577">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1" error-limit="10" name="receive-content" sequence="2">
+<label>Transfer content to workspace</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<label>Content Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<label>Descriptive Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<label>Rights Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process barch-limit="100" error-limit="5" name="remediate-object" sequence="8">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<label>Clean up workspace</label>
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12">
+<label>Release Embargo</label>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.7" LABEL="Workflow Definition" CREATED="2012-03-24T06:23:23.191Z" MIMETYPE="text/xml" SIZE="2365">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1" error-limit="10" name="receive-content" sequence="2">
+<label>Transfer content to workspace</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<label>Content Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<label>Descriptive Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<label>Rights Metadata</label>
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<label>Clean up workspace</label>
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12">
+<label>Release Embargo</label>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.6" LABEL="Workflow Definition" CREATED="2012-03-24T06:10:21.604Z" MIMETYPE="text/xml" SIZE="2203">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process label="Start Accessioning" lifecycle="inprocess" name="start-accession" sequence="1"/>
+<process batch-limit="1" error-limit="10" label="Transfer content to workspace" name="receive-content" sequence="2">
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" label="Content Metadata" name="content-metadata" sequence="3">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" label="Descriptive Metadata" name="descriptive-metadata" sequence="4">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" label="Rights Metadata" name="rights-metadata" sequence="5">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" label="Technical Metadata" name="technical-metadata" sequence="6">
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" label="Provenance Metadata" name="provenance-metadata" sequence="7">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" label="Shelve content in Digital Stacks" name="shelve" sequence="8">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" label="Publish Metadata" lifecycle="released" name="publish" sequence="9">
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" label="Initiate Ingest into Preservation" name="sdr-ingest-transfer" sequence="10">
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" label="Clean up workspace" lifecycle="accessioned" name="cleanup" sequence="11">
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12"/>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.5" LABEL="Workflow Definition" CREATED="2012-03-24T06:10:21.183Z" MIMETYPE="text/xml" SIZE="1960">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process label="Start Accessioning" lifecycle="inprocess" name="start-accession" sequence="1"/>
+<process batch-limit="1" error-limit="10" label="Transfer content to workspace" name="receive-content" sequence="2">
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" label="Content Metadata" name="content-metadata" sequence="3">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12"/>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.4" LABEL="Workflow Definition" CREATED="2012-03-24T06:08:55.661Z" MIMETYPE="text/xml" SIZE="1960">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process label="Start Accessioning" lifecycle="inprocess" name="start-accession" sequence="1"/>
+<process batch-limit="1" error-limit="10" label="Transfer content to workspace" name="receive-content" sequence="2">
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" label="Content Metadata" name="content-metadata" sequence="3">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12"/>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.3" LABEL="Workflow Definition" CREATED="2012-03-24T06:08:52.831Z" MIMETYPE="text/xml" SIZE="1870">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1"/>
+<process batch-limit="1" error-limit="10" name="receive-content" sequence="2">
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12"/>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.2" LABEL="Workflow Definition" CREATED="2012-01-19T18:24:57.137Z" MIMETYPE="text/xml" SIZE="1870">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1"/>
+<process batch-limit="1" error-limit="10" name="receive-content" sequence="2">
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12"/>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.1" LABEL="Workflow Definition" CREATED="2012-01-18T21:54:58.282Z" MIMETYPE="text/xml" SIZE="1870">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1"/>
+<process batch-limit="1" error-limit="10" name="receive-content" sequence="2">
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="release" sequence="9">
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12"/>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.0" LABEL="Workflow Definition" CREATED="2011-10-26T23:23:58.100Z" MIMETYPE="text/xml" SIZE="1870">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="inprocess" name="start-accession" sequence="1"/>
+<process batch-limit="1" error-limit="10" name="receive-content" sequence="2">
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="3">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="descriptive-metadata" sequence="4">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="5">
+<prereq>receive-content</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="6">
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="7">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="released" name="publish" sequence="9">
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+<process name="embargo-release" sequence="12"/>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.14" LABEL="Workflow Definition" CREATED="2012-12-12T18:20:23.642Z" MIMETYPE="text/xml" SIZE="2665">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="cleanup" sequence="11">
+<label>Clean up workspace</label>
+<prereq>publish</prereq>
+<prereq repository="sdr" workflow="sdrIngestWF">complete-deposit</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.15" LABEL="Workflow Definition" CREATED="2012-12-12T18:22:32.998Z" MIMETYPE="text/xml" SIZE="2451">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.16" LABEL="Workflow Definition" CREATED="2013-01-12T02:28:41.896Z" MIMETYPE="text/xml" SIZE="2473">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.17" LABEL="Workflow Definition" CREATED="2013-02-14T23:49:05.038Z" MIMETYPE="text/xml" SIZE="2487">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10" status="hold">
+<label>Initiate Ingest into Preservation</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.18" LABEL="Workflow Definition" CREATED="2013-03-02T00:57:16.357Z" MIMETYPE="text/xml" SIZE="2528">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10" status="hold">
+<label>Initiate Ingest into Preservation</label>
+<prereq>remediate-object</prereq>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.19" LABEL="Workflow Definition" CREATED="2013-06-13T22:01:04.070Z" MIMETYPE="text/xml" SIZE="2514">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>remediate-object</prereq>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.20" LABEL="Workflow Definition" CREATED="2013-07-08T19:19:26.578Z" MIMETYPE="text/xml" SIZE="2555">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="6">
+<label>Provenance Metadata</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="7">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="8">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="9">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>remediate-object</prereq>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+<prereq>sdr-ingest-transfer</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.21" LABEL="Workflow Definition" CREATED="2013-09-04T22:18:53.882Z" MIMETYPE="text/xml" SIZE="2454">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="2">
+<label>Content Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="3">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="4">
+<label>Rights Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="6">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>technical-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="7">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="8">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="9">
+<label>Provenance Metadata</label>
+<prereq>remediate-object</prereq>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+<prereq>publish</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.22" LABEL="Workflow Definition" CREATED="2014-01-23T18:19:21.219Z" MIMETYPE="text/xml" SIZE="2459">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="2">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="3">
+<label>Rights Metadata</label>
+<prereq>descriptive-metadata</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="4">
+<label>Content Metadata</label>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="6">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>content-metadata</prereq>
+<prereq>descriptive-metadata</prereq>
+<prereq>technical-metadata</prereq>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="7">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="8">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="9">
+<label>Provenance Metadata</label>
+<prereq>remediate-object</prereq>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="12">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>sdr-ingest-received</prereq>
+<prereq>publish</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflowDefinition.23" LABEL="Workflow Definition" CREATED="2014-09-10T18:24:07.785Z" MIMETYPE="text/xml" SIZE="2553">
+<foxml:xmlContent>
+<workflow-def id="accessionWF" repository="dor">
+<process lifecycle="submitted" name="start-accession" sequence="1" status="completed">
+<label>Start Accessioning</label>
+</process>
+<process batch-limit="1000" error-limit="10" lifecycle="described" name="descriptive-metadata" sequence="2">
+<label>Descriptive Metadata</label>
+<prereq>start-accession</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="rights-metadata" sequence="3">
+<label>Rights Metadata</label>
+<prereq>descriptive-metadata</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="content-metadata" sequence="4">
+<label>Content Metadata</label>
+<prereq>rights-metadata</prereq>
+</process>
+<process batch-limit="1000" error-limit="10" name="technical-metadata" sequence="5">
+<label>Technical Metadata</label>
+<prereq>content-metadata</prereq>
+</process>
+<process batch-limit="100" error-limit="5" name="remediate-object" sequence="6">
+<label>Ensure object conforms to latest DOR standards and schemas</label>
+<prereq>technical-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="shelve" sequence="7">
+<label>Shelve content in Digital Stacks</label>
+<prereq>remediate-object</prereq>
+</process>
+<process batch-limit="100" error-limit="10" lifecycle="published" name="publish" sequence="8">
+<label>Publish Metadata</label>
+<prereq>shelve</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="provenance-metadata" sequence="9">
+<label>Provenance Metadata</label>
+<prereq>publish</prereq>
+</process>
+<process batch-limit="1" error-limit="5" name="sdr-ingest-transfer" sequence="10">
+<label>Initiate Ingest into Preservation</label>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="deposited" name="sdr-ingest-received" sequence="11" skip-queue="true">
+<label>Signal from SDR that object has been received</label>
+</process>
+<process batch-limit="1" error-limit="5" name="reset-workspace" sequence="12">
+<label>Reset workspace by renaming the druid-tree to a versioned directory</label>
+<prereq>sdr-ingest-received</prereq>
+<prereq>provenance-metadata</prereq>
+</process>
+<process batch-limit="1" error-limit="5" lifecycle="accessioned" name="end-accession" sequence="13">
+<label>Clean up any diff caches and set disseminationWF:cleanup to waiting</label>
+<prereq>reset-workspace</prereq>
+</process>
+</workflow-def>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
+<foxml:datastreamVersion ID="workflows.0" LABEL="workflows" CREATED="2012-01-28T04:33:44.029Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:tm388wy6148/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>
