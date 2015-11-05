@@ -68,6 +68,8 @@ SURI:
 
 # URLs
 DOR_SERVICES_URL: 'https://user:password@dor-services.example.com'
+DOR_SERVICES_LOGFILE: 'log/workflow_service.log'
+DOR_SERVICES_SHIFT_AGE: 'weekly'
 DPG_URL: 'https://dpg.example.com'
 FEDORA_URL: 'https://user:password@fedora.example.com:1000/fedora'
 GSEARCH_URL: 'https://server.example.com/solr/gsearch'
