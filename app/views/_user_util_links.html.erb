@@ -37,14 +37,9 @@
     <li><%= link_to "Feedback", 'mailto:argo-feedback@lists.stanford.edu' %></li>
 
     <li>
-      <% iqd = index_queue_depth() %>
-      <em>
-        <% if iqd > 1000 %>
-          <p class='navbar-text'><span style="color:red; font-weight:bold">indexer backlog: <%= iqd %></span></p>
-        <% else %>
-          <p class='navbar-text'>indexer backlog: <%= iqd %></p>
-        <% end %>
-      </em>
+      <p class='navbar-text'>
+        Indexer Backlog: <span data-index-queue-depth-url="<%= index_queue_depth_path %>"></span>
+      </p>
     </li>
 
   </ul>

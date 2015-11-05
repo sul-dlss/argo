@@ -27,3 +27,4 @@
 //= require jquery.validate.additional-methods
 //= require jqgrid-jquery-rails
 //= require jquery.persistentModal
+//= require_directory ./modules
