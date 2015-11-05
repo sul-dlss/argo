@@ -11,10 +11,11 @@ require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'equivalent-xml/rspec_matchers'
 require 'coveralls'
+require 'phantomjs'
 Coveralls.wear!('rails')
 
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, {timeout: 60})
+  Capybara::Poltergeist::Driver.new(app, {timeout: 60, phantomjs: Phantomjs.path})
 end
 Capybara.javascript_driver = :poltergeist
 
