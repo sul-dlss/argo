@@ -17,12 +17,6 @@ Install ruby 1.9.3 or later (e.g., via rvm).
 git clone https://github.com/sul-dlss/argo.git
 cd argo
 ```
-    
-### Configure the database.yml file.  Stanford users should review internal documentation.
-
-```bash
-cp config/database.yml.example config/database.yml
-```
 
 ### Configure the rest of the local environment.
 

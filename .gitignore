@@ -6,7 +6,6 @@
 .*.swp
 app/assets/javascripts/jqgrid/
 config/certs
-config/database.yml
 config/newrelic.yml
 config/solr.yml
 coverage/
