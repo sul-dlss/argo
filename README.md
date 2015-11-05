@@ -55,7 +55,7 @@ In the section that starts with the heading `If the arguments in this file inclu
 ```
 --exec
 
-Djava.awt.headless=true
+-Djava.awt.headless=true
 -Dcom.sun.management.jmxremote
 -Xmx2000m
 -XX:+PrintCommandLineFlags
