@@ -25,7 +25,7 @@ set :deploy_to, '/home/lyberadmin/argo'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/solr.yml config/default_htaccess_directives}
+set :linked_files, %w{config/database.yml config/solr.yml}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log config/certs config/environments tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
@@ -49,16 +49,5 @@ namespace :deploy do
   end
 
   after :publishing, :restart
-
-  after :restart, :initialize_htaccess do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :rake, 'argo:htaccess'
-        end
-      end
-    end
-  end
 
 end

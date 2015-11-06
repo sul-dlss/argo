@@ -279,29 +279,6 @@ namespace :argo do
     puts "#{facet.items.count} Workgroups:\n#{facet.items.collect(&:value).join(%[\n])}"
   end
 
-  desc "Update the .htaccess file from indexed APOs"
-  task :htaccess => :environment do
-    directives = ['AuthType WebAuth',
-                  'Require privgroup dlss:argo-access',
-                  'WebAuthLdapAttribute suAffiliation',
-                  'WebAuthLdapAttribute displayName',
-                  'WebAuthLdapAttribute mail']
-
-    directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
-    facet = get_workgroups_facet()
-    unless facet.nil?
-      facets = facet.items.collect &:value
-      priv_groups = facets.select { |v| v =~ /^workgroup:/ }
-      directives += priv_groups.collect { |v|
-        ["Require privgroup #{v.split(/:/,2).last}", "WebAuthLdapPrivgroup #{v.split(/:/,2).last}"]
-      }.flatten
-      File.open(File.join(Rails.root, 'public/.htaccess'),'w') do |htaccess|
-        htaccess.puts directives.sort.join("\n")
-      end
-      File.unlink('public/auth/.htaccess') if File.exist?('public/auth/.htaccess')
-    end
-  end  # :htaccess
-
   desc "Update completed/archived workflow counts"
   task :update_archive_counts => :environment do |t|
     Dor.find_all('objectType_ssim:workflow').each(&:update_index)
