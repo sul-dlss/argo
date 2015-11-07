@@ -19,6 +19,7 @@ task :default => [:ci]
 
 task :ci do
   ENV['RAILS_ENV'] = 'test'
+  WebMock.allow_net_connect!
   Rake::Task['argo:install'].invoke
   jetty_params = jettywrapper_load_config()
   error = Jettywrapper.wrap(jetty_params) do
