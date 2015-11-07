@@ -7,7 +7,6 @@
 app/assets/javascripts/jqgrid/
 config/certs
 config/newrelic.yml
-config/solr.yml
 coverage/
 db/*.sqlite3
 dpg_pool
