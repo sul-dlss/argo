@@ -214,6 +214,7 @@ namespace :argo do
       else
         puts 'No file glob was specified so file order and inclusion is determined by the load_order file'
         file_list = load_order_files(fedora_files)
+        puts "file_list=#{file_list}"
       end
 
       errors = []
@@ -224,7 +225,7 @@ namespace :argo do
 
         ENV['foxml'] = file
         handler = proc do |e, attempt_number, total_delay|
-          puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
+          puts STDERR.puts "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
           errors << file
         end
         with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
