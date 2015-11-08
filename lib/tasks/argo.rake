@@ -19,6 +19,7 @@ task :default => [:ci]
 
 task :ci do
   ENV['RAILS_ENV'] = 'test'
+  WebMock.allow_net_connect!
   Rake::Task['argo:install'].invoke
   jetty_params = jettywrapper_load_config()
   error = Jettywrapper.wrap(jetty_params) do
@@ -35,11 +36,8 @@ end
 
 namespace :argo do
   desc "Install db, jetty (fedora/solr) and configs fresh"
-  task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate', 'tmp:create'] do
-    ['rails generate argo:solr'].each{ |cmd|
-      puts cmd
-      system cmd
-    }
+  task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate'] do
+    puts 'Installed Argo'
   end
 
   desc "Bump Argo's version number before release"

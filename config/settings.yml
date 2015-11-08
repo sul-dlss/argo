@@ -28,6 +28,9 @@ CONTENT:
   SDR_USER: 'user'
   SDR_PASSWORD: 'password'
 
+# Webmock settings
+DISABLE_WEBMOCK: false
+
 # Metadata
 METADATA:
   EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'
@@ -85,7 +88,7 @@ SPREADSHEET_URL: 'https://services.example.com/v1/spreadsheet'
 STACKS_FILE_URL: 'https://stacks.example.com/file'
 STACKS_URL: 'https://stacks.example.com/image' # TODO: Verify use doesn't seeem to be in use
 STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
-WORKFLOW_URL: 'https://workflow.example.com/workflow'
+WORKFLOW_URL: 'https://workflow.example.com/workflow/'
 
 # Webauth is null by default.
 # To specify it to fake webauth credentials for dev instances,

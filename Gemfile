@@ -68,6 +68,7 @@ group :test, :development do
   gem 'coveralls', require: false
   gem 'poltergeist'
   gem 'phantomjs', :require => 'phantomjs/poltergeist'
+  gem 'webmock'
 #  gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 end
 
