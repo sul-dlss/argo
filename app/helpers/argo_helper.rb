@@ -197,23 +197,19 @@ module ArgoHelper
   end
 
   def render_dpg_link document
-    val = document.get('id').split(/:/).last
-    link_to "DPG Object Status", File.join(Argo::Config.urls.dpg, val)
+    link_to "DPG Object Status", File.join(Argo::Config.urls.dpg, document.druid)
   end
 
   def render_purl_link document, link_text = 'PURL', opts = {:target => '_blank'}
-    val = document.get('id').split(/:/).last
-    link_to link_text, File.join(Argo::Config.urls.purl, val), opts
+    link_to link_text, File.join(Argo::Config.urls.purl, document.druid), opts
   end
 
   def render_dor_link document, link_text = 'Fedora UI', opts = {:target => '_blank'}
-    val = document.get('id')
-    link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}"), opts
+    link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}"), opts
   end
 
   def render_foxml_link document, link_text = 'FoXML', opts = {:target => '_blank'}
-    val = document.get('id')
-    link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{val}/objectXML"), opts
+    link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/objectXML"), opts
   end
 
   def render_solr_link document
@@ -228,8 +224,7 @@ module ArgoHelper
   end
 
   def render_searchworks_link document, link_text = 'Searchworks', opts = {:target => '_blank'}
-    val = document.get('catkey_id_ssim')
-    link_to link_text, "http://searchworks.stanford.edu/view/#{val}", opts
+    link_to link_text, "http://searchworks.stanford.edu/view/#{document.catkey}", opts
   end
 
   def render_mdtoolkit_link document, link_text = 'MD Toolkit', opts = {:target => '_blank'}
@@ -248,11 +243,11 @@ module ArgoHelper
   end
 
   def render_full_dc_link document, link_text = "View full Dublin Core"
-    link_to link_text, dc_aspect_view_catalog_path(document.get('id')), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' }
+    link_to link_text, dc_aspect_view_catalog_path(document.id), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' }
   end
 
   def render_mods_view_link document, link_text = "View MODS"
-    link_to link_text, purl_preview_item_url(document.get('id')), :title => 'MODS View', :data => { ajax_modal: 'trigger' }
+    link_to link_text, purl_preview_item_url(document.id), :title => 'MODS View', :data => { ajax_modal: 'trigger' }
   end
 
   def render_full_view_links document
