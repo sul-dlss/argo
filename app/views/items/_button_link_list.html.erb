@@ -1,4 +1,4 @@
-<ul>
+<div class='btn-group-vertical argo-show-btn-group' role='group' aria-label='Argo action buttons'>
   <%buttons.each do |button|%>
     <%
       button_data = {}
@@ -9,6 +9,6 @@
         button_data[:ajax_modal] = 'trigger'
       end
     %>
-    <li><%= link_to button[:label], button[:url], class: 'btn button btn-primary', data: button_data %></li>
+    <%= link_to button[:label], button[:url], class: 'btn button btn-primary', data: button_data %>
   <%end%>
-</ul>
+</div>
