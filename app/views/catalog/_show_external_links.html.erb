@@ -5,9 +5,6 @@
     <% if document.catkey.present? %>
     <li><%= render_searchworks_link document %></li>
     <% end %>
-    <% if document.has? 'mdtoolkit_id_ssim' %>
-    <li><%= render_mdtoolkit_link document %></li>
-    <% end %>
     <li><%= render_dor_link document %></li>
     <li><%= render_foxml_link document %></li>
     <li><%= render_solr_link document %></li>

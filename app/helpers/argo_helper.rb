@@ -227,15 +227,6 @@ module ArgoHelper
     link_to link_text, "http://searchworks.stanford.edu/view/#{document.catkey}", opts
   end
 
-  def render_mdtoolkit_link document, link_text = 'MD Toolkit', opts = {:target => '_blank'}
-    val = document.get('mdtoolkit_id_ssim')
-    forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
-    form = document.get('mdform_tag_ssim')
-    collection = forms.keys.find { |k| forms[k].keys.include?(form) }
-    return unless form && collection
-    link_to link_text, File.join(Argo::Config.urls.mdtoolkit, collection, form, 'edit', val), opts
-  end
-
   def render_section_header_link section, document
     section_header_method = blacklight_config[:show][:section_links][section]
     return if section_header_method.nil?
