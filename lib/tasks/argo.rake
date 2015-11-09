@@ -19,7 +19,6 @@ task :default => [:ci]
 
 task :ci do
   ENV['RAILS_ENV'] = 'test'
-  WebMock.allow_net_connect!
   Rake::Task['argo:install'].invoke
   jetty_params = jettywrapper_load_config()
   error = Jettywrapper.wrap(jetty_params) do
@@ -67,6 +66,7 @@ namespace :argo do
 
     desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
     task :clean, [:target] do |t, args|
+      WebMock.allow_net_connect!
       args.with_defaults(:target=> WRAPPER_VERSION)
       jettywrapper_load_config()
       Jettywrapper.hydra_jetty_version = args[:target]
