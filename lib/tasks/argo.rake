@@ -85,7 +85,7 @@ namespace :argo do
   fedora_fileglob   = "#{Rails.root}/#{fedora_conf_dir}/data/*.xml"
   fedora_files      = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
   live_solrxml_file = "jetty/solr/solr.xml"
-  testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
+  testcores = {'development' => 'development-core' } # name => path
   restcore_url = Blacklight.solr.options[:url] + "/admin/cores?action=STATUS&wt=json"
   realcores = []
 
