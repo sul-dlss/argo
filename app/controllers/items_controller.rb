@@ -601,6 +601,8 @@ class ItemsController < ApplicationController
   end
 
   #add a workflow to an object if the workflow is not present in the active table
+  # note that the dor-services' initialize_workflow makes a synchronous REST API call
+  # to the workflow service.
   def add_workflow
     return unless params[:wf]
     wf = @object.workflows[params[:wf]]
@@ -610,6 +612,9 @@ class ItemsController < ApplicationController
       return
     end
     @object.initialize_workflow(params[:wf])
+    @object = Dor::Item.find @object.pid # XXX: force a reload of the workflow datastream before indexing
+    reindex @object, true
+
     if params[:bulk]
       render :text => "Added #{params[:wf]}"
     else
@@ -619,9 +624,10 @@ class ItemsController < ApplicationController
 
   private
 
-  def reindex item
-    doc=item.to_solr
-    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+  # XXX: note that this logic is replicated in DorController#reindex. probably should be moved to a helper
+  def reindex(item, synchronous = false)
+    Dor::SearchService.solr.add(item.to_solr, :add_attributes => {:commitWithin => 1000})
+    Dor::SearchService.solr.commit if synchronous
   end
 
   # Filters
