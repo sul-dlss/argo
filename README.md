@@ -38,12 +38,7 @@ For vanilla Stanford laptop installations, the cert files and the local settings
 ### Install components, setup DB and Solr:
 
 ```bash
-rails generate argo:solr
-rake argo:jetty:clean
-rake argo:jetty:config
-rake db:setup
-rake db:migrate
-rake tmp:create
+rake argo:install
 ```
 
 ### Optional - Increase Jetty heap size and Solr logging verbosity
@@ -82,6 +77,12 @@ rails server
 
 ```bash
 rake argo:repo:load
+```
+
+## Run the tests
+
+```bash
+rspec
 ```
 
 ## Delete records
