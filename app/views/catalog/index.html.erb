@@ -1,3 +1,5 @@
+<%# Vanilla Blacklight partial, except for this Solr request in <head> %>
+
 <% content_for(:head) do %>
   <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
 <% end %>
@@ -11,21 +13,6 @@
     <%# if there are no input/search related params, display the "home" partial -%>
     <%= render 'home' %>
   <% else %>
-    <% @page_title = "#{application_name} Search Results" %>
-    <% content_for(:head) { render_opensearch_response_metadata.html_safe } -%>
-    <% if has_search_parameters? %>
-      <%= render :partial => 'did_you_mean' %>
-      <%= render 'constraints', :localized_params=>params %>
-    <% end %>
-
-    <%= render 'results_pagination' %>
-    <%= render_document_index %>
-    <%= render 'results_pagination' %>
-
-    <% unless Rails.env.production?%>
-    <div id='debug_query' style='display:none'>
-       <%=URI.decode(@response.header.inspect) %>
-    </div>
-    <%end%>
+    <%= render 'search_results' %>
   <% end %>
 </div>
