@@ -4,13 +4,6 @@ module ArgoHelper
   include BlacklightHelper
   include ValueHelper
 
-  def build_solr_request_from_response
-    qs = @response['responseHeader']['params'].reject { |k,v| k == 'wt' }.collect do |k,v|
-      v.is_a?(Array) ? v.collect { |v1| [k,URI.encode(v1.to_s)].join('=') } : [k,URI.encode(v.to_s)].join('=')
-    end.flatten.join('&')
-    Dor::SearchService.solr.uri.merge("select?#{qs}").to_s.html_safe
-  end
-
   ##
   # TODO: This may be dead code to remove.
   def index_queue_velocity

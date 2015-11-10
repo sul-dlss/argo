@@ -1,7 +1,6 @@
 
 <%= javascript_include_tag 'bulk' %>
 <% content_for :head do %>
-<link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
 <script type="text/javascript">
 report_model = {
   total_rows: <%= @response['response']['numFound'] %>,
