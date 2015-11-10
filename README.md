@@ -11,6 +11,8 @@ http://java.com/en/download/
 
 Install ruby 1.9.3 or later (e.g., via rvm).
 
+[Install phantomjs](http://phantomjs.org/download.html) to run the tests.
+
 ### Check Out the Code
     
 ```bash
