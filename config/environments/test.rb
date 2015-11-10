@@ -4,26 +4,29 @@ require 'action_dispatch/middleware/session/dalli_store'
 Argo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  config.assets.compress = Settings.APPLICATION.ASSETS.COMPRESS
+  # The test environment is used exclusively to run your application's
+  # test suite. You never need to work with it otherwise. Remember that
+  # your test database is "scratch space" for the test suite and is wiped
+  # and recreated between test runs. Don't rely on the data there!
+  config.cache_classes = true
 
-  # In the development environment your application's code is reloaded on
-  # every request.  This slows down response time but is perfect for development
-  # since you don't have to restart the webserver when you make code changes.
-  config.cache_classes = Settings.APPLICATION.CACHE_CLASSES
-  config.perform_caching = true
-  config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
-  config.cache_store.logger.level = Logger::DEBUG
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+  # Do not eager load code on boot. This avoids loading your whole application
+  # just for the purpose of running a single test. If you are using a tool that
+  # preloads Rails for running tests, you may have to set it to true.
+  config.eager_load = false
 
-  # Show full error reports and disable caching
+  # Configure static file server for tests with Cache-Control for performance.
+  config.serve_static_files   = true
+  config.static_cache_control = 'public, max-age=3600'
+
+  # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
-  # Raise exceptions instead of rendering exception templates
-  config.action_dispatch.show_exceptions = true
+  # Raise exceptions instead of rendering exception templates.
+  config.action_dispatch.show_exceptions = false
 
-  # Disable request forgery protection in test environment
+  # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
   # Tell Action Mailer not to deliver emails to the real world.
@@ -31,23 +34,18 @@ Argo::Application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
 
-  # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
+  # Randomize the order test cases are executed.
+  config.active_support.test_order = :random
 
-  # Print deprecation notices to the Rails logger
+  # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
-  # Only use best-standards-support built into browsers
-  config.action_dispatch.best_standards_support = :builtin
-
-  # Silences warning
-  config.eager_load = false
+  # Dalli cache configuration
+  config.perform_caching = true
+  config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
+  config.cache_store.logger.level = Logger::DEBUG
 
   config.middleware.use(Rack::Webauth)
-
-  unless Settings.APPLICATION.ASSETS.PRECOMPILE.empty?
-    config.assets.precompile += Settings.APPLICATION.ASSETS.PRECOMPILE
-  end
 
   Argo.configure do
     reindex_on_the_fly      Settings.REINDEX_ON_FLY

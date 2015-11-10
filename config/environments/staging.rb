@@ -4,35 +4,50 @@ require 'action_dispatch/middleware/session/dalli_store'
 Argo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  config.assets.compress = Settings.APPLICATION.ASSETS.COMPRESS
+  # Code is not reloaded between requests.
+  config.cache_classes = true
 
-  # In the development environment your application's code is reloaded on
-  # every request.  This slows down response time but is perfect for development
-  # since you don't have to restart the webserver when you make code changes.
-  config.cache_classes = Settings.APPLICATION.CACHE_CLASSES
+  # Eager load code on boot. This eager loads most of Rails and
+  # your application in memory, allowing both threaded web servers
+  # and those relying on copy on write to perform better.
+  # Rake tasks automatically ignore this option for performance.
+  config.eager_load = true
+
+  # Full error reports are disabled and caching is turned on.
+  config.consider_all_requests_local       = false
+  config.action_controller.perform_caching = true
+
+  # Disable serving static files from the `/public` folder by default since
+  # Apache or NGINX already handles this.
+  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+
+  # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
+
+  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
+  # yet still be able to expire them through the digest params.
+  config.assets.digest = true
+
+  # Use the lowest log level to ensure availability of diagnostic information
+  # when problems arise.
+  config.log_level = :debug
+
+  # Dalli cache configuration
   config.perform_caching = true
   config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
   config.cache_store.logger.level = Logger::DEBUG
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
 
-  # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+  # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
+  # the I18n.default_locale when a translation cannot be found).
+  config.i18n.fallbacks = true
 
   # Raise exceptions instead of rendering exception templates
-  config.action_dispatch.show_exceptions = true
-
-  # Disable request forgery protection in test environment
-  config.action_controller.allow_forgery_protection = false
+  config.action_dispatch.show_exceptions = false
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-
-  # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
@@ -40,14 +55,7 @@ Argo::Application.configure do
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
-  # Silences warning
-  config.eager_load = false
-
   config.middleware.use(Rack::Webauth)
-
-  unless Settings.APPLICATION.ASSETS.PRECOMPILE.empty?
-    config.assets.precompile += Settings.APPLICATION.ASSETS.PRECOMPILE
-  end
 
   Argo.configure do
     reindex_on_the_fly      Settings.REINDEX_ON_FLY
