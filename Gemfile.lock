@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 79bac3829225bda644875b73115527472b2fffc5
+  revision: d96fb43e08547bde54084c3e0914b4d792491d06
   branch: develop
   specs:
     dor-services (5.2.0)
@@ -309,7 +309,7 @@ GEM
       mini_portile (~> 0.6.0)
     nokogiri-happymapper (0.5.9)
       nokogiri (~> 1.5)
-    nom-xml (0.5.3)
+    nom-xml (0.5.4)
       activesupport (>= 3.2.18)
       i18n
       nokogiri
@@ -386,8 +386,8 @@ GEM
     rdf-rdfxml (1.0.1)
       rdf (>= 1.0)
       rdf-xsd (>= 1.0)
-    rdf-xsd (1.1.5)
-      rdf (~> 1.1, >= 1.1.9)
+    rdf-xsd (1.1.5.1)
+      rdf (~> 1.1, >= 1.1.9, < 1.99)
     ref (2.0.0)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)

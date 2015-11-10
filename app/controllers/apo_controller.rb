@@ -87,8 +87,9 @@ class ApoController < ApplicationController
     apo.metadata_source      = md_info[:metadata_source]
     apo.agreement            = md_info[:agreement].to_s
     apo.default_workflow     = md_info[:workflow ] unless (!md_info[:workflow] || md_info[:workflow].length < 5)
-    apo.use_license          = md_info[:use_license]
     apo.default_rights       = md_info[:default_object_rights]
+    # Set the Use License given a machine-readable code for a creative commons or open data commons license
+    apo.use_license          = md_info[:use_license].blank? ? :none : md_info[:use_license]
   end
 
   def register_new_apo
