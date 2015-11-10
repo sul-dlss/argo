@@ -11,7 +11,9 @@ http://java.com/en/download/
 
 Install ruby 2.2.2 or later (e.g., via rvm or rbenv).
 
-[Install phantomjs](http://phantomjs.org/download.html) to run the tests.
+The argo tests use [poltergeist](https://github.com/teampoltergeist/poltergeist), which depends on [phantomjs](http://phantomjs.org/download.html).  The poltergeist project maintains installation instructions for phantomjs, see:
+https://github.com/teampoltergeist/poltergeist#installing-phantomjs
+
 
 ### Check Out the Code
     
