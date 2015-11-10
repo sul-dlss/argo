@@ -609,7 +609,12 @@ class ItemsController < ApplicationController
       render :status => 500, :text => "#{params[:wf]} already exists!"
       return
     end
-    @object.initialize_workflow(params[:wf])
+    @object.create_workflow(params[:wf])
+
+    # sync up the workflows datastream with workflow service and force a reindex before redirection
+    reindex Dor::Item.find(params[:id])
+    Dor::SearchService.solr.commit
+
     if params[:bulk]
       render :text => "Added #{params[:wf]}"
     else
