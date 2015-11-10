@@ -399,5 +399,6 @@ namespace :argo do
       pbar.inc(1)
     end # pids.each
     solr.commit
+    puts 'Reindexing complete'
   end   # :reindex_all
 end     # :argo
