@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sul-dlss/argo.png?branch=master)](https://travis-ci.org/sul-dlss/argo) | [![Coverage Status](https://coveralls.io/repos/sul-dlss/argo/badge.svg?branch=master&service=github)](https://coveralls.io/github/sul-dlss/argo?branch=master)
+[![Build Status](https://travis-ci.org/sul-dlss/argo.png?branch=develop)](https://travis-ci.org/sul-dlss/argo) | [![Coverage Status](https://coveralls.io/repos/sul-dlss/argo/badge.svg?branch=develop&service=github)](https://coveralls.io/github/sul-dlss/argo?branch=master)
 
 # Argo
 
@@ -9,7 +9,7 @@ Argo is the administrative interface to the Stanford Digital Repository. It uses
 Install Java 1.8 (or newer) JRE (and JDK also on Mac OSX).  It is required for the version of Solr in use.
 http://java.com/en/download/
 
-Install ruby 1.9.3 or later (e.g., via rvm).
+Install ruby 2.2.2 or later (e.g., via rvm or rbenv).
 
 [Install phantomjs](http://phantomjs.org/download.html) to run the tests.
 
@@ -77,6 +77,7 @@ rails server
 
 ## Load and index records
 
+_Note: Running this command will index the fixture data in the `development` core_
 ```bash
 rake argo:repo:load
 ```
@@ -85,6 +86,24 @@ rake argo:repo:load
 
 ```bash
 rspec
+```
+
+_Important Note: Running `rake ci` will reinstall your jetty instance and delete any custom test data you may have setup_
+
+The continuous integration build can also be run by:
+
+```bash
+bundle exec rake ci
+```
+
+_Note: Running the CI build will index fixture data into the `test` core. If you want data indexed into the `development` core for development, you probably need to clean the jetty and reload._
+
+```bash
+# Commands to clean and reload jetty for development
+bundle exec rake argo:jetty:clean
+bundle exec rake argo:jetty:config
+bundle exec rake jetty:start
+bundle exec rake argo:repo:load
 ```
 
 ## Delete records
