@@ -5,13 +5,6 @@ CACHE_STORE_NAME: 'argo'
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
 REINDEX_ON_FLY: false
 
-# Rails application settings
-APPLICATION:
-  CACHE_CLASSES: true
-  ASSETS:
-    COMPRESS: true
-    PRECOMPILE: ['about.css.sass', 'registration.css', 'report.css', 'webcrop.css', '*.js', '*.coffee']
-
 # Bulk Metadata
 BULK_METADATA:
   DIRECTORY: '/tmp/bulk_jobs/'
