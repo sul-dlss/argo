@@ -212,7 +212,6 @@ namespace :argo do
       else
         puts 'No file glob was specified so file order and inclusion is determined by the load_order file'
         file_list = load_order_files(fedora_files)
-        puts "file_list=#{file_list}"
       end
 
       errors = []
