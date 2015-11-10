@@ -1,4 +1,4 @@
 
 # URLs
-FEDORA_URL: 'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
+FEDORA_URL:   'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora-test'
 SOLRIZER_URL: 'http://localhost:8983/solr/test'
