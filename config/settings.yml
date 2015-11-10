@@ -10,7 +10,7 @@ APPLICATION:
   CACHE_CLASSES: true
   ASSETS:
     COMPRESS: true
-    PRECOMPILE: ['about.css.sass', 'argo.css', 'registration.css', 'report.css', 'webcrop.css', '*.js', '*.coffee']
+    PRECOMPILE: ['about.css.sass', 'registration.css', 'report.css', 'webcrop.css', '*.js', '*.coffee']
 
 # Bulk Metadata
 BULK_METADATA:

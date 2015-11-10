@@ -2,11 +2,21 @@ source "https://rubygems.org"
 
 gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
 gem 'barby'
+gem 'bootstrap-sass'
 gem 'coderay'
+gem 'coffee-rails'
+gem 'config'
 gem 'confstruct', "~> 0.2.4"
 gem 'dalli'
-#gem 'equivalent-xml', '~> 0.5.1'
+gem 'daemons'
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 gem 'haml'
+gem 'jqgrid-jquery-rails'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jquery-validation-rails'
 gem 'kaminari'
 gem 'kgio'
 gem 'mysql2', '~> 0.3.2'    # Temporary fix for mysql2/rails incompatibility, see https://github.com/brianmario/mysql2/issues/675
@@ -21,16 +31,14 @@ gem 'rake'
 gem 'rest-client'
 gem 'retries'
 gem 'ruby-graphviz'
+gem 'sass-rails'
 gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  #TODO: upgrading to 1.3.4 results in weird error output at end of deployment, pinning for now
 gem 'squash_ruby',  :require => 'squash/ruby'
+gem 'therubyracer', "~> 0.11"
 gem 'thin' # or mongrel
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
+gem 'uglifier', '>= 1.0.3'
 gem 'unicode'
-gem 'delayed_job'
-gem 'delayed_job_active_record'
-gem 'daemons'
-gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
-gem 'config'
 
 # Stanford/Hydra related gems
 gem 'about_page'
@@ -68,24 +76,11 @@ group :test, :development do
   gem 'coveralls', require: false
   gem 'poltergeist'
   gem 'webmock'
-#  gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 end
 
 group :development do
   gem 'ruby-prof'
   gem 'sqlite3'
-end
-
-group :assets do
-  gem 'coffee-rails'
-  gem 'uglifier', '>= 1.0.3'
-  gem 'jquery-rails'
-  gem 'jquery-ui-rails'
-  gem 'jquery-validation-rails'
-  gem 'jqgrid-jquery-rails'
-  gem 'therubyracer', "~> 0.11"
-  gem 'sass-rails'
-  gem 'bootstrap-sass'
 end
 
 group :deployment do

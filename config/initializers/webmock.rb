@@ -6,7 +6,7 @@ def mock_workflow_requests
     to_return(body: '<workflows/>')
 end
 
-unless Rails.env.production?
+if Rails.env.development? || Rails.env.test?
   require 'webmock'
   include WebMock::API
   WebMock.allow_net_connect!
