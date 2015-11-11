@@ -4,32 +4,17 @@ require 'action_dispatch/middleware/session/dalli_store'
 Argo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  config.assets.compress = Settings.APPLICATION.ASSETS.COMPRESS
-
   # In the development environment your application's code is reloaded on
   # every request.  This slows down response time but is perfect for development
   # since you don't have to restart the webserver when you make code changes.
-  config.cache_classes = Settings.APPLICATION.CACHE_CLASSES
-  config.perform_caching = true
-  config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
-  config.cache_store.logger.level = Logger::DEBUG
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
+  config.cache_classes = false
 
-  # Show full error reports and disable caching
+  # Do not eager load code on boot.
+  config.eager_load = false
+
+  # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-
-  # Raise exceptions instead of rendering exception templates
-  config.action_dispatch.show_exceptions = true
-
-  # Disable request forgery protection in test environment
-  config.action_controller.allow_forgery_protection = false
-
-  # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
@@ -37,11 +22,27 @@ Argo::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
-  # Only use best-standards-support built into browsers
-  config.action_dispatch.best_standards_support = :builtin
+  # Raise an error on page load if there are pending migrations.
+  config.active_record.migration_error = :page_load
 
-  # Silences warning
-  config.eager_load = false
+  # Debug mode disables concatenation and preprocessing of assets.
+  # This option may cause significant delays in view rendering with a large
+  # number of complex assets.
+  config.assets.debug = true
+
+  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
+  # yet still be able to expire them through the digest params.
+  config.assets.digest = true
+
+  # Adds additional error checking when serving assets at runtime.
+  # Checks for improperly declared sprockets dependencies.
+  # Raises helpful error messages.
+  config.assets.raise_runtime_errors = true
+
+  # Dalli cache configuration
+  config.perform_caching = true
+  config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
+  config.cache_store.logger.level = Logger::DEBUG
 
   require 'rack-webauth/test'
   if Settings.WEBAUTH
@@ -56,10 +57,6 @@ Argo::Application.configure do
     )
   end
   config.middleware.use(Rack::Webauth)
-
-  unless Settings.APPLICATION.ASSETS.PRECOMPILE.empty?
-    config.assets.precompile += Settings.APPLICATION.ASSETS.PRECOMPILE
-  end
 
   Argo.configure do
     reindex_on_the_fly      Settings.REINDEX_ON_FLY

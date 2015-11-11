@@ -2,6 +2,8 @@
 class SolrDocument
 
   include Blacklight::Solr::Document
+  include CatkeyConcern
+  include DruidConcern
 
   # self.unique_key = 'id'
 

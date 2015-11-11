@@ -153,6 +153,8 @@ class CatalogController < ApplicationController
       ]
     }
 
+    config.add_results_collection_tool(:report_view_toggle)
+
   end
 
   def default_solr_doc_params(id = nil)

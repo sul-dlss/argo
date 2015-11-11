@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
     enable_squash_client
   end
 
-  layout 'blacklight'
+  layout 'application'
 
   def initialize(*args)
     super

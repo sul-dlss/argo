@@ -4,7 +4,6 @@ require 'rest_client'
 require 'open-uri'
 require 'fileutils'
 require 'retries'
-require 'rspec/core/rake_task'
 
 desc "Get application version"
 task :app_version do
@@ -35,18 +34,19 @@ task :ci do
   raise "test failures: #{error}" if error
 end
 
-# Larger integration/acceptance style tests (take several minutes to complete)
-RSpec::Core::RakeTask.new(:integration_tests) do |spec|
-  spec.pattern = 'spec/integration/**/*_spec.rb'
+if ['test', 'development'].include? ENV['RAILS_ENV']
+  require 'rspec/core/rake_task'
+
+  # Larger integration/acceptance style tests (take several minutes to complete)
+  RSpec::Core::RakeTask.new(:integration_tests) do |spec|
+    spec.pattern = 'spec/integration/**/*_spec.rb'
+  end
 end
 
 namespace :argo do
   desc "Install db, jetty (fedora/solr) and configs fresh"
-  task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate', 'tmp:create'] do
-    ['rails generate argo:solr'].each{ |cmd|
-      puts cmd
-      system cmd
-    }
+  task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate'] do
+    puts 'Installed Argo'
   end
 
   desc "Bump Argo's version number before release"
@@ -76,8 +76,9 @@ namespace :argo do
 
     desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
     task :clean, [:target] do |t, args|
-      args.with_defaults(:target => WRAPPER_VERSION)
-      jettywrapper_load_config  # why is this called without catching return value?
+      WebMock.allow_net_connect!
+      args.with_defaults(:target=> WRAPPER_VERSION)
+      jettywrapper_load_config()
       Jettywrapper.hydra_jetty_version = args[:target]
       Rake::Task['jetty:clean'].invoke
     end
@@ -231,7 +232,7 @@ namespace :argo do
 
         ENV['foxml'] = file
         handler = proc do |e, attempt_number, total_delay|
-          puts STDERR.puts "ERROR loading #{file}:\n  #{e.message}"
+          puts STDERR.puts "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
           errors << file
         end
         with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
@@ -286,6 +287,13 @@ namespace :argo do
     puts "#{facet.items.count} Workgroups:\n#{facet.items.collect(&:value).join(%[\n])}"
   end
 
+  # the .htaccess file lists the workgroups that we recognize as relevant to argo.
+  # if a user is in a workgroup, and that workgroup is listed in the .htaccess file,
+  # the name of the workgroup will be in a list of workgroups for the user, passed along
+  # with other webauth info in the request headers.  we use the list of workgroups a user is
+  # in (as well as the user's sunetid) to determine what they can see and do in argo.
+  # NOTE: at present (2015-11-06), this rake task is run regularly by a cron job, so that
+  # the .htaccess file keeps up with workgroup names as listed on APOs in use in argo.
   desc "Update the .htaccess file from indexed APOs"
   task :htaccess => :environment do
     directives = ['AuthType WebAuth',
@@ -298,10 +306,15 @@ namespace :argo do
     facet = get_workgroups_facet()
     unless facet.nil?
       facets = facet.items.collect &:value
+
       priv_groups = facets.select { |v| v =~ /^workgroup:/ }
+      priv_groups += (ADMIN_GROUPS + VIEWER_GROUPS + MANAGER_GROUPS) # we know that we always want these built-in groups to be part of .htaccess
+      priv_groups.uniq! # no need to repeat ourselves (mostly there in case the builtin groups are already listed in APOs)
+
       directives += priv_groups.collect { |v|
         ["Require privgroup #{v.split(/:/,2).last}", "WebAuthLdapPrivgroup #{v.split(/:/,2).last}"]
       }.flatten
+
       File.open(File.join(Rails.root, 'public/.htaccess'),'w') do |htaccess|
         htaccess.puts directives.sort.join("\n")
       end
@@ -393,5 +406,6 @@ namespace :argo do
       pbar.inc(1)
     end # pids.each
     solr.commit
+    puts 'Reindexing complete'
   end   # :reindex_all
 end     # :argo

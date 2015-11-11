@@ -5,13 +5,6 @@ CACHE_STORE_NAME: 'argo'
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
 REINDEX_ON_FLY: false
 
-# Rails application settings
-APPLICATION:
-  CACHE_CLASSES: true
-  ASSETS:
-    COMPRESS: true
-    PRECOMPILE: ['about.css.sass', 'argo.css', 'registration.css', 'report.css', 'webcrop.css', '*.js', '*.coffee']
-
 # Bulk Metadata
 BULK_METADATA:
   DIRECTORY: '/tmp/bulk_jobs/'
@@ -27,6 +20,9 @@ CONTENT:
   SDR_SERVER_URL: 'https://sdr.example.com'
   SDR_USER: 'user'
   SDR_PASSWORD: 'password'
+
+# Webmock settings
+DISABLE_WEBMOCK: false
 
 # Metadata
 METADATA:
@@ -68,6 +64,8 @@ SURI:
 
 # URLs
 DOR_SERVICES_URL: 'https://user:password@dor-services.example.com'
+DOR_SERVICES_LOGFILE: 'log/workflow_service.log'
+DOR_SERVICES_SHIFT_AGE: 'weekly'
 DPG_URL: 'https://dpg.example.com'
 FEDORA_URL: 'https://user:password@fedora.example.com:1000/fedora'
 GSEARCH_URL: 'https://server.example.com/solr/gsearch'
@@ -77,13 +75,13 @@ MODSULATOR_URL: 'https://services.example.com/v1/modsulator'
 NORMALIZER_URL: 'https://services.example.com/v1/normalizer'
 PURL_URL: 'https://purl.example.com'
 ROBOT_STATUS_URL: 'https://robot.example.com/robots'
-SDR_URL: https://user:pass@sdr.example.com/sdr'
+SDR_URL: 'https://user:pass@sdr.example.com/sdr'
 SOLRIZER_URL: 'https://solr.example.com/solr/collection'
 SPREADSHEET_URL: 'https://services.example.com/v1/spreadsheet'
 STACKS_FILE_URL: 'https://stacks.example.com/file'
 STACKS_URL: 'https://stacks.example.com/image' # TODO: Verify use doesn't seeem to be in use
 STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
-WORKFLOW_URL: 'https://workflow.example.com/workflow'
+WORKFLOW_URL: 'https://workflow.example.com/workflow/'
 
 # Webauth is null by default.
 # To specify it to fake webauth credentials for dev instances,

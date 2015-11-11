@@ -8,6 +8,7 @@ describe 'mods_view', :type => :request do
     allow(@current_user).to receive(:is_admin).and_return(true)
     allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)
+    allow(@current_user).to receive(:permitted_apos).and_return([])
 
     # here's something odd: it seems like you need to stub ApplicationController.current_user for the "main page tests"
     # section (since it doesn't invoke ItemsController, which was stubbed already).  fine.  when i run this test file by
@@ -24,8 +25,8 @@ describe 'mods_view', :type => :request do
       visit root_path
       expect(page).to have_content('Limit your search')
     end
-    it 'should have the expected search facets' do
-      search_facets = ['Object Type', 'Content Type', 'Admin Policy', 'Lifecycle', 'Workflows (WPS)', 'Version']
+    it 'should have the expected search facets', js: true do
+      search_facets = ['Object Type', 'Content Type', 'Admin Policy', 'Version']
       visit root_path
       search_facets.each do |facet|
         expect(page).to have_content(facet)

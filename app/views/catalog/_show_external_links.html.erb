@@ -1,17 +1,17 @@
+<% document ||= @document %>
+
 <div class="show_sidebar">
   <h3 class="start-open">View in new window</h3>
-  <ul>
+  <ul class='nav nav-stacked'>
     <li><%= render_purl_link document %></li>
-    <% if document.has? 'catkey_id_ssim' %>
+    <% if document.catkey.present? %>
     <li><%= render_searchworks_link document %></li>
-    <% end %>
-    <% if document.has? 'mdtoolkit_id_ssim' %>
-    <li><%= render_mdtoolkit_link document %></li>
     <% end %>
     <li><%= render_dor_link document %></li>
     <li><%= render_foxml_link document %></li>
     <li><%= render_solr_link document %></li>
     <li><small><%= render_index_info document %></small></li>
   </ul>
+  <hr>
   <%= render(:partial => 'items/button_link_list', :locals => {:buttons => (render_buttons document, @obj)})%>
 </div>

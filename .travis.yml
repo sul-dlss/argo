@@ -7,6 +7,6 @@ jdk:
 email: false
 before_script:
   - if [[ -r /etc/hosts ]]; then cat /etc/hosts ; fi
-  - bundle exec rails generate argo:solr
 script: bundle exec rake ci
 sudo: false
+cache: bundler

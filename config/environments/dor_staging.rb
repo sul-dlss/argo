@@ -1,9 +1,7 @@
-cert_dir = File.expand_path(File.join(File.dirname(__FILE__),"../certs"))
-
 Dor.configure do
   ssl do
-    cert_file File.join(cert_dir, Settings.SSL.CERT_FILE)
-    key_file File.join(cert_dir, Settings.SSL.KEY_FILE)
+    cert_file Settings.SSL.CERT_FILE
+    key_file Settings.SSL.KEY_FILE
     key_pass Settings.SSL.KEY_PASS
   end
 
@@ -17,6 +15,8 @@ Dor.configure do
 
   workflow do
     url Settings.WORKFLOW_URL
+    logfile Settings.DOR_SERVICES_LOGFILE
+    shift_age Settings.DOR_SERVICES_SHIFT_AGE
   end
 
   dor_services do
