@@ -10,18 +10,15 @@ describe ModsulatorJob, type: :job do
     Dir.mkdir(@output_directory) unless Dir.exist?(@output_directory)
   end
 
-
   after :all do
-    FileUtils.rm_rf(@output_directory) if(Dir.exist?(@output_directory))
+    FileUtils.rm_rf(@output_directory) if (Dir.exist?(@output_directory))
   end
-
 
   describe 'update_metadata' do
     it 'raises an error given an invalid xml argument' do
       expect { @mj.update_metadata('', '', File.new(File.join(@output_directory, 'fake_log.txt'), 'w')) }.to raise_error(/nil:NilClass/)
     end
   end
-  
 
   describe 'generate_log_filename' do
     it 'returns a filename of the correct form' do
@@ -36,13 +33,11 @@ describe ModsulatorJob, type: :job do
     end
   end
 
-
   describe 'generate_original_filename' do
     it 'chops off a timestamp on the end' do
       expect(@mj.generate_original_filename('myfile.txt.20150201')).to eq('myfile.txt')
     end
   end
-
 
   describe 'start_log' do
     it 'writes the correct information to the log' do
@@ -61,7 +56,6 @@ describe ModsulatorJob, type: :job do
     end
   end
 
-
   describe 'save_metadata_xml' do
     it 'writes an xml file correctly' do
       fixtures_dir = File.expand_path('../../fixtures', __FILE__)
@@ -77,14 +71,12 @@ describe ModsulatorJob, type: :job do
     end
   end
 
-
   describe 'status_ok' do
-    it 'correctly queries the status of DOR objects' do
-      mock_dor_objects = [ double, double, double, double, double, double, double, double, double ]
-      mock_dor_objects.each_with_index do |m, i|
+    (1..9).each do |i|
+      it "correctly queries the status of DOR objects (:status_code #{i})" do
+        m = double
         allow(m).to receive(:status_info).and_return({ :status_code => i })
-        
-        if((i == 0) || (i == 1) || (i == 6) || (i == 7) || (i == 8) || (i == 9))
+        if i == 0 || i == 1 || i == 6 || i == 7 || i == 8 || i == 9
           expect(@mj.status_ok(m)).to be_truthy
         else
           expect(@mj.status_ok(m)).to be_falsy
@@ -93,14 +85,12 @@ describe ModsulatorJob, type: :job do
     end
   end
 
-
   describe 'in_accessioning' do
-    it 'returns true for DOR objects that are currently in acccessioning' do
-      mock_dor_objects = [ double, double, double, double, double, double, double, double, double ]
-      mock_dor_objects.each_with_index do |m, i|
+    (1..9).each do |i|
+      it "returns true for DOR objects that are currently in acccessioning, false otherwise (:status_code #{i})" do
+        m = double
         allow(m).to receive(:status_info).and_return({ :status_code => i })
-        
-        if((i == 2) || (i == 3) || (i == 4) || (i == 5))
+        if i == 2 || i == 3 || i == 4 || i == 5
           expect(@mj.in_accessioning(m)).to be_truthy
         else
           expect(@mj.in_accessioning(m)).to be_falsy
@@ -109,10 +99,9 @@ describe ModsulatorJob, type: :job do
     end
   end
 
-
   describe 'generate_xml_filename' do
     it 'creates a new filename using the correct convention' do
-      expect(@mj.generate_xml_filename("/tmp/generate_xml_filename.xml")).to eq('generate_xml_filename-' +  Argo::Config.bulk_metadata_xml + '.xml')
+      expect(@mj.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq('generate_xml_filename-' + Argo::Config.bulk_metadata_xml + '.xml')
     end
   end
 end

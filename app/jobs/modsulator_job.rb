@@ -8,7 +8,7 @@ class ModsulatorJob < ActiveJob::Base
   queue_as :default
 
   # A somewhat easy to understand and informative time stamp format
-  TIME_FORMAT = "%Y-%m-%d %H:%M%P"
+  TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
   # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
@@ -32,19 +32,19 @@ class ModsulatorJob < ActiveJob::Base
       start_log(log, user_login, original_filename, note)
       response_xml = generate_xml(filetype, uploaded_filename, original_filename, log)
 
-      if(response_xml == nil)
-        log.puts("argo.bulk_metadata.bulk_log_error_exception Got no response from server")
+      if response_xml.nil?
+        log.puts('argo.bulk_metadata.bulk_log_error_exception Got no response from server')
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
       end
 
       metadata_filename = generate_xml_filename(original_filename)
       save_metadata_xml(response_xml, File.join(output_directory, metadata_filename), log)
 
-      if (xml_only)
-        log.puts("argo.bulk_metadata.bulk_log_xml_only true")
-      elsif(filetype != 'xml')      # If the submitted file is XML, we never want to load anything into DOR
+      if xml_only
+        log.puts('argo.bulk_metadata.bulk_log_xml_only true')
+      elsif filetype != 'xml' # If the submitted file is XML, we never want to load anything into DOR
         # Load into DOR
-        log.puts("argo.bulk_metadata.bulk_log_xml_only false")
+        log.puts('argo.bulk_metadata.bulk_log_xml_only false')
         update_metadata(apo_id, response_xml, log)
       end
 
@@ -56,7 +56,6 @@ class ModsulatorJob < ActiveJob::Base
     FileUtils.rm(uploaded_filename, :force => true)
   end
 
-  
   # Upload metadata into DOR.
   #
   # @param  [String] druid         The governing APO's druid.
@@ -64,62 +63,56 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [File]   log           Log file handle.
   # @return [Void]
   def update_metadata(druid, xml_string, log)
-    return if xml_string == nil
-    
+    return if xml_string.nil?
+
     root = Nokogiri::XML(xml_string).root
     namespace = root.namespace()
-    
+
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
     mods_list.each do |xmldoc_node|
       current_druid = 'druid:' + xmldoc_node.attr('objectId')
       begin
         dor_object = Dor.find current_druid
-        if (dor_object)
+        next unless dor_object
 
-          # Only update objects that are governed by the correct APO
-          if(dor_object.admin_policy_object_id == druid)
-            current_metadata = dor_object.descMetadata.content
-            
-            if(in_accessioning(dor_object))
-              log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{current_druid}")
-              next
-            end
-
-            if(!has_been_accessioned?(dor_object.id))
-              log.puts("argo.bulk_metadata.bulk_log_skipped_not_accessioned #{current_druid}")
-              next
-            end
-            
-            if(status_ok(dor_object))
-
-              # We only update objects if the descMetadata XML is different
-              mods_node = xmldoc_node.first_element_child
-              if(!equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node))
-
-                # If the object is currently in the opened version state, then go ahead, otherwise (unless the status is "Registered")
-                # open a new version first, but do not close it
-                if((dor_object.status_info[:status_code] != 9) &&
-                   (dor_object.status_info[:status_code] != 1))
-                  if(can_open_version?(dor_object.id))
-                    dor_object.open_new_version()
-                  else
-                    log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{current_druid}")  # totally unexpected
-                    next
-                  end
-                end
-                
-                dor_object.descMetadata.content = mods_node.to_s
-                dor_object.save
-                log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
-              else
-                log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
-              end
-            end
-          else
-            log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
-          end
+        # Only update objects that are governed by the correct APO
+        unless dor_object.admin_policy_object_id == druid
+          log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
+          next
         end
+        if in_accessioning(dor_object)
+          log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{current_druid}")
+          next
+        end
+        unless has_been_accessioned?(dor_object.id)
+          log.puts("argo.bulk_metadata.bulk_log_skipped_not_accessioned #{current_druid}")
+          next
+        end
+
+        next unless status_ok(dor_object)
+
+        # We only update objects if the descMetadata XML is different
+        current_metadata = dor_object.descMetadata.content
+        mods_node = xmldoc_node.first_element_child
+        if equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node)
+          log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
+          next
+        end
+
+        # If the object is currently in the opened version state, then go ahead, otherwise (unless the status is "Registered")
+        # open a new version first, but do not close it
+        if dor_object.status_info[:status_code] != 9 && dor_object.status_info[:status_code] != 1
+          unless can_open_version?(dor_object.id)
+            log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{current_druid}")  # totally unexpected
+            next
+          end
+          dor_object.open_new_version()
+        end
+
+        dor_object.descMetadata.content = mods_node.to_s
+        dor_object.save
+        log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
       rescue ActiveFedora::ObjectNotFoundError => e
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
         log.puts("#{e.message}")
@@ -139,7 +132,6 @@ class ModsulatorJob < ActiveJob::Base
     end
   end
 
-
   # Check if two MODS XML nodes are equivalent.
   #
   # @param [Nokogiri::XML::Element]    node_1  A MODS XML node.
@@ -153,18 +145,15 @@ class ModsulatorJob < ActiveJob::Base
                               :ignore_attr_values => ['version', 'xmlns', 'xmlns:xsi', 'schemaLocation'])
   end
 
-
   # Generate a filename for the job's log file.
   #
   # @param  [String] output_dir Where to store the log file.
   # @return [String] A filename for the log file.
   def generate_log_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless (File.directory?(output_dir))
-
     # This log will be used for generating the table of past jobs later
-    return log_filename = File.join(output_dir, Argo::Config.bulk_metadata_log)
+    File.join(output_dir, Argo::Config.bulk_metadata_log)
   end
-
 
   # The uploaded filename is of the form <file.xlsx.TIMESTAMP> or <file.xml.TIMESTAMP> in order to prevent
   # collisions when 2 people upload the same file. We don't want to display the timestamp later, though, so this method
@@ -174,9 +163,8 @@ class ModsulatorJob < ActiveJob::Base
   # @return [String] A prettier version of the uploaded filename.
   def generate_original_filename(uploaded_filename)
     original_filename = File.basename(uploaded_filename)
-    return original_filename.slice(0, original_filename.rindex('.'))
+    original_filename.slice(0, original_filename.rindex('.'))
   end
-
 
   # Write initial job information to the log file.
   #
@@ -190,7 +178,6 @@ class ModsulatorJob < ActiveJob::Base
     log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}")
     log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if (note && note.length > 0)
   end
-
 
   # Calls the MODSulator web service (modsulator-app) to process the uploaded file. If a request fails, the job will fail
   # and automatically be retried (see config/initializers/delayed_job.rb), so we do not separately retry the HTTP request.
@@ -206,7 +193,7 @@ class ModsulatorJob < ActiveJob::Base
     url = nil
 
     begin
-      if (filetype == "xml_only")  # Just clean up the given XML file
+      if (filetype == 'xml_only')  # Just clean up the given XML file
         url = Argo::Config.urls.normalizer
         response_xml = RestClient.post(url, File.read(uploaded_filename))
       else                         # The given file is a spreadsheet
@@ -229,9 +216,8 @@ class ModsulatorJob < ActiveJob::Base
       delayed_log_url(e, url)
       log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
     end
-    return response_xml
+    response_xml
   end
-
 
   # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.
   #
@@ -240,23 +226,21 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [File]    log_file           The log file.
   # @return [Void]
   def save_metadata_xml(xml, output_filename, log_file)
-    return if xml == nil
-    
-    File.open(output_filename, "w") { |f| f.write(xml) }
+    return if xml.nil?
+
+    File.open(output_filename, 'w') { |f| f.write(xml) }
     log_file.puts("argo.bulk_metadata.bulk_log_xml_timestamp #{Time.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_xml_filename #{File.basename(output_filename)}")
     log_file.puts("argo.bulk_metadata.bulk_log_record_count #{xml.scan('<xmlDoc id').size}")
   end
-
 
   # Generates a filename for the MODS XML that this job creates.
   #
   # @param  [String]   original_filename    The name of the original file that the user uploaded.
   # @return [String]
   def generate_xml_filename(original_filename)
-    return File.basename(original_filename, '.*') + '-' + Argo::Config.bulk_metadata_xml + '.xml'
+    File.basename(original_filename, '.*') + '-' + Argo::Config.bulk_metadata_xml + '.xml'
   end
-
 
   # Logs a remote request-related exception to the standard Delayed Job log file.
   #
@@ -267,16 +251,14 @@ class ModsulatorJob < ActiveJob::Base
     Delayed::Worker.logger.error("#{__FILE__} tried to access #{url} got: #{e.message} #{e.backtrace}")
   end
 
-
   # Checks whether or not a DOR object is in accessioning or not.
   #
   # @param  [Dor::Item]   dor_object    DOR object to check
   # @return [Boolean]     true if the object is currently being accessioned, false otherwise
   def in_accessioning(dor_object)
     status = dor_object.status_info[:status_code]
-    return ((status == 2) || (status == 3) || (status == 4) || (status == 5))
+    (2..5).include?(status)
   end
-
 
   # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only time we are
   # not OK to update is if the object is currently being accessioned.
@@ -285,6 +267,6 @@ class ModsulatorJob < ActiveJob::Base
   # @return [Boolean]     true if the object's status allows us to update the descMetadata datastream, false otherwise
   def status_ok(dor_object)
     status = dor_object.status_info[:status_code]
-    return ((status == 0) || (status == 1) || (status == 6) || (status == 7) || (status == 8) || (status == 9))
+    [0, 1, 6, 7, 8, 9].include?(status)
   end
 end
