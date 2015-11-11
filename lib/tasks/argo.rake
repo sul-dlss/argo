@@ -11,15 +11,22 @@ task :app_version do
 end
 
 def jettywrapper_load_config
-  return Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
+  config = {
+    :jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),
+    :startup_wait => 240 # seconds - 4 mins
+  }
+  Jettywrapper.load_config.merge(config)
 end
 
 task :default => [:ci]
 
 task :ci do
+  if ENV['RAILS_ENV'] =~ /production/i
+    raise'NEVER run CI for RAILS_ENV=="production"'
+  end
   ENV['RAILS_ENV'] = 'test'
   Rake::Task['argo:install'].invoke
-  jetty_params = jettywrapper_load_config()
+  jetty_params = jettywrapper_load_config
   error = Jettywrapper.wrap(jetty_params) do
     Rake::Task['argo:repo:load'].invoke  # load 'em all!
     Rake::Task['spec'].invoke
