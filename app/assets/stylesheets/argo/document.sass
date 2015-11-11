@@ -51,13 +51,16 @@ h3.section-head
   padding: 2px
   color: #2A306C
   background-color: #D4E0E0
-  &.collapsible-section
-    background-position: left center
-    background-repeat: no-repeat
-    background-image: image-url('expanded-icon.png')
-    padding-left: 19px
-    &.collapsed
-      background-image: image-url('collapsed-icon.png') 
+  &.collapsible-section:before
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings'
+    content: "\e114"
+    color: grey
+    font-size: 0.8em
+    line-height: normal
+  &.collapsed:before
+    /* symbol for "collapsed" panels */
+    content: "\e080"
 
 .section-head-link
   float: right
