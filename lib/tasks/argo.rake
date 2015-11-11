@@ -14,6 +14,24 @@ def jettywrapper_load_config
   return Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
 end
 
+# def web_response_ok?(url)
+#   start = Time.now.to_i
+#   while true
+#     seconds = Time.now.to_i - start
+#     if seconds == 120
+#       puts "Failing! Will continue to try."
+#     end
+#     if seconds == 240
+#       puts "Failure!"
+#       return false
+#     end
+#     $stdout.write '.'
+#     WebMock.allow_net_connect!
+#     response = RestClient.head url
+#     return true if response.code < 400
+#   end
+# end
+
 task :default => [:ci]
 
 task :ci do
@@ -79,6 +97,23 @@ namespace :argo do
     desc "Overwrite Solr configs and JARs"
     task :config => %w[argo:solr:config] do   # TODO: argo:fedora:config
     end
+
+    # Note: this rake task is failing, with error:
+    # Errno::ECONNREFUSED: Connection refused - connect(2) for "localhost" port 8983
+    #
+    # desc "Start Jetty with Fedora/Solr checks"
+    # task :start do
+    #   Rake::Task['jetty:restart'].invoke
+    #   fedora_url = 'http://localhost:8983/fedora/'
+    #   puts "Checking Solr"
+    #   if web_response_ok? 'http://localhost:8983/solr/'
+    #     puts "Success! Solr responds"
+    #   end
+    #   if web_response_ok? 'http://localhost:8983/fedora/'
+    #     puts "Success! Fedora responds."
+    #   end
+    # end
+
   end  # :jetty
 
   ## DEFAULTS
