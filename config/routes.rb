@@ -77,8 +77,6 @@ Argo::Application.routes.draw do
   end
 
   resources :items do
-    get :crop, :on => :member
-    put :crop, :on => :member, :action => :save_crop
     get :register, :on => :collection
     get 'purl_preview', :on => :member, :action => :purl_preview, :as => 'purl_preview'
     get '/discoverable', :on => :member, :action => :discoverable, :as => 'discoverable'
