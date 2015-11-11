@@ -6,12 +6,12 @@ Argo is the administrative interface to the Stanford Digital Repository. It uses
 
 ## Getting Started
 
-Install Java 1.8 (or newer) JRE (and JDK also on Mac OSX).  It is required for the version of Solr in use.
+Install Java 1.8 (or newer) JRE (and also the JDK on Mac OSX).  It is required for the version of Solr in use.
 http://java.com/en/download/
 
-Install ruby 2.2.2 or later (e.g., via rvm or rbenv).
+Install Ruby 2.2.2 or later (e.g., via rvm or rbenv).
 
-The argo tests use [poltergeist](https://github.com/teampoltergeist/poltergeist), which depends on [phantomjs](http://phantomjs.org/download.html).  The poltergeist project maintains installation instructions for phantomjs, see:
+The Argo tests use [Poltergeist](https://github.com/teampoltergeist/poltergeist), which depends on [PhantomJS](http://phantomjs.org/download.html).  The Poltergeist project maintains installation instructions for PhantomJS, see:
 https://github.com/teampoltergeist/poltergeist#installing-phantomjs
 
 
@@ -24,14 +24,14 @@ cd argo
 
 ### Configure the rest of the local environment.
 
-Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain in one of the argo branches in the `shared_config` repo) `config/settings/development.local.yml` and `config/settings/test.local.yml` files to set local development variables correctly.
+Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain in one of the argo branches in the `shared_configs` repo) the `config/settings/development.local.yml` file to set local development variables correctly.
 
 You will also need to create or acquire the following certificate files (per environment):
 
  - `config/certs/argo-client.crt`  # should match the value specified by `Settings.SSL.CERT_FILE`
  - `config/certs/argo-client.key`  # should match the value specified by `Settings.SSL.CERT_FILE`
 
-For vanilla Stanford laptop installations, the cert files and the local settings files should be available from a private DLSS repository.  You can clone this and create symlinks to the checked out config files (instead of having copies of those files in place).  That way, you can easily pull changes to the vanilla configs as defaults are changed, andyou can submit such changes back upstream, in place on your instance.  An Argo developer or DevOps person should be able to point you to the private config repo and explain how to use it.
+For vanilla Stanford laptop installations, the cert files and the local settings file should be available from a private DLSS repository.  You can clone this and create symlinks to the checked out config files (instead of having copies of those files in place).  That way, you can easily pull changes to the vanilla configs as defaults are changed, and you can submit such changes back upstream, in place on your instance.  An Argo developer or DevOps person should be able to point you to the private config repo and explain how to use it.
 
 ### Run bundler to install the Gem dependencies
 
@@ -79,34 +79,47 @@ rails server
 
 ## Load and index records
 
-_Note: Running this command will index the fixture data in the `development` core_
+First, make sure Jetty has successfully started.
+
+This command will load fixture data to the `development` Fedora repository and index it to the `development` Solr collection:
 ```bash
 rake argo:repo:load
 ```
 
+This command will load fixture data to the `test` Fedora repository and index it to the `test` Solr collection:
+```bash
+RAILS_ENV=test bundle exec rake argo:repo:load
+```
+
+If you'd like to do a clean re-installation of jetty without running the `argo:install` task:
+```bash
+# Commands to install a fresh instance of Jetty, configure it, and start it
+rake argo:jetty:clean
+rake argo:jetty:config
+rake jetty:start
+
+# Load and index development fixtures
+rake argo:repo:load
+
+# Load and index test fixtures
+RAILS_ENV=test bundle exec rake argo:repo:load
+```
+
 ## Run the tests
 
+To run the test suite (which runs against the `test` Fedora repo/Solr collection), invoke rspec from the Argo app root
 ```bash
 rspec
 ```
 
-_Important Note: Running `rake ci` will reinstall your jetty instance and delete any custom test data you may have setup_
+_Important Note: Running `rake ci` will reinstall your jetty instance and **delete any custom test data** you may have setup in both the `development` and `test` environments, and reload fixtures from scratch for the `test` environment only._
 
 The continuous integration build can also be run by:
-
 ```bash
-bundle exec rake ci
+RAILS_ENV=test bundle exec rake ci
 ```
 
-_Note: Running the CI build will index fixture data into the `test` core. If you want data indexed into the `development` core for development, you probably need to clean the jetty and reload._
-
-```bash
-# Commands to clean and reload jetty for development
-bundle exec rake argo:jetty:clean
-bundle exec rake argo:jetty:config
-bundle exec rake jetty:start
-bundle exec rake argo:repo:load
-```
+If, after running the CI build, you want to reload fixtures into the `development` environment, you can use `rake argo:repo:load`.  The default environment is `development`, so it should not be necessary to specify `RAILS_ENV` for that task.
 
 ## Delete records
 
