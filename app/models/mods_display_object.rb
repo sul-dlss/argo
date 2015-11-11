@@ -3,8 +3,8 @@ class ModsDisplayObject
 
   attr_reader :xml
 
-  def initialize xml
-    @xml=xml
+  def initialize(xml)
+    @xml = xml
   end
 
   def modsxml

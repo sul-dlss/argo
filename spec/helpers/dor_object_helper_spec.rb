@@ -29,7 +29,7 @@ describe DorObjectHelper, :type => :helper do
 
       highlighted_statuses.each do |status_code|
         mock_dor_obj = double(Dor::Processable, :status_info => {:status_code => status_code})
-        expect(render_status_style(nil, mock_dor_obj)).to eq("argo-obj-status-highlight")
+        expect(render_status_style(nil, mock_dor_obj)).to eq('argo-obj-status-highlight')
       end
     end
 
@@ -40,12 +40,12 @@ describe DorObjectHelper, :type => :helper do
 
       non_highlighted_statuses.each do |status_code|
         mock_dor_obj = double(Dor::Processable, :status_info => {:status_code => status_code})
-        expect(render_status_style(nil, mock_dor_obj)).to eq("")
+        expect(render_status_style(nil, mock_dor_obj)).to eq('')
       end
     end
 
     it 'should not return the highlighting style for nil objects' do
-      expect(render_status_style(nil, nil)).to eq("")
+      expect(render_status_style(nil, nil)).to eq('')
     end
   end
 end

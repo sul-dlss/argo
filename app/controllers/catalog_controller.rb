@@ -92,37 +92,37 @@ class CatalogController < ApplicationController
     BlacklightConfigHelper.add_common_date_facet_fields_to_config! config
 
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
-      :no_rights_characteristics => { :label => 'No Rights Characteristics',  :fq => "-rights_characteristics_ssim:*"},
-      :no_content_type => { :label => 'No Content Type',  :fq => "-content_type_ssim:*"},
-      :no_has_model => { :label => 'No Object Model',  :fq => "-has_model_ssim:*"},
-      :no_objectType => { :label => 'No Object Type',  :fq => "-objectType_ssim:*"},
-      :no_object_title => { :label => 'No Object Title',  :fq => "-dc_title_ssi:*"},
-      :no_is_governed_by => { :label => 'No APO',  :fq => "-is_governed_by_ssim:*"},
-      :no_collection_title => { :label => 'No Collection Title',  :fq => "-collection_title_ssim:*"},
-      :no_copyright => { :label => 'No Copyright',  :fq => "-copyright_ssim:*"},
-      :no_license => { :label => 'No License', :fq => "-use_license_machine_ssi:*"},
-      :no_public_dc_creator => { :label => 'No MODS Creator',  :fq => "-public_dc_creator_tesim:*"},
+      :no_rights_characteristics   => { :label => 'No Rights Characteristics',  :fq => '-rights_characteristics_ssim:*' },
+      :no_content_type             => { :label => 'No Content Type',            :fq => '-content_type_ssim:*' },
+      :no_has_model                => { :label => 'No Object Model',            :fq => '-has_model_ssim:*' },
+      :no_objectType               => { :label => 'No Object Type',             :fq => '-objectType_ssim:*' },
+      :no_object_title             => { :label => 'No Object Title',            :fq => '-dc_title_ssi:*' },
+      :no_is_governed_by           => { :label => 'No APO',                     :fq => '-is_governed_by_ssim:*' },
+      :no_collection_title         => { :label => 'No Collection Title',        :fq => '-collection_title_ssim:*' },
+      :no_copyright                => { :label => 'No Copyright',               :fq => '-copyright_ssim:*' },
+      :no_license                  => { :label => 'No License',                 :fq => '-use_license_machine_ssi:*' },
+      :no_public_dc_creator        => { :label => 'No MODS Creator',            :fq => '-public_dc_creator_tesim:*' },
       # TODO: mods extent (?)
       # TODO: mods form (?)
-      :no_sw_genre => { :label => 'No SW Genre',  :fq => "-sw_genre_ssim:*"},   # spec said "mods genre"
-      :no_public_dc_language => { :label => 'No MODS Language',  :fq => "-public_dc_language_tesim:*"},
-      :no_public_dc_subject => { :label => 'No MODS Subject',  :fq => "-public_dc_subject_tesim:*"},
-      :no_mods_typeOfResource_ssim => { :label => 'No MODS Resource Type',  :fq => "-mods_typeOfResource_ssim:*"},
-      :no_sw_pub_date_sort => { :label => 'No SW Date',  :fq => "-sw_pub_date_sort_ssi:*"},
-      :no_sw_subject_temporal => { :label => 'No SW Era',  :fq => "-sw_subject_temporal_ssim:*"},
-      :no_sw_subject_geographic => { :label => 'No SW Region',  :fq => "-sw_subject_geographic_ssim:*"},
+      :no_sw_genre                 => { :label => 'No SW Genre',                :fq => '-sw_genre_ssim:*' },   # spec said "mods genre"
+      :no_public_dc_language       => { :label => 'No MODS Language',           :fq => '-public_dc_language_tesim:*' },
+      :no_public_dc_subject        => { :label => 'No MODS Subject',            :fq => '-public_dc_subject_tesim:*' },
+      :no_mods_typeOfResource_ssim => { :label => 'No MODS Resource Type',      :fq => '-mods_typeOfResource_ssim:*' },
+      :no_sw_pub_date_sort         => { :label => 'No SW Date',                 :fq => '-sw_pub_date_sort_ssi:*' },
+      :no_sw_subject_temporal      => { :label => 'No SW Era',                  :fq => '-sw_subject_temporal_ssim:*' },
+      :no_sw_subject_geographic    => { :label => 'No SW Region',               :fq => '-sw_subject_geographic_ssim:*' },
       # TODO: sw resource type (?)  is this different from MODS resource type?
-      :no_use_statement => { :label => 'No Use & Reproduction Statement',  :fq => "-use_statement_ssim:*"}
+      :no_use_statement            => { :label => 'No Use & Reproduction Statement', :fq => '-use_statement_ssim:*' }
     }
 
-    config.add_facet_field 'sw_format_ssim', :label => 'SW Resource Type'
-    config.add_facet_field 'sw_pub_date_facet_ssi', :label => 'SW Date'
-    config.add_facet_field 'topic_ssim', :label => 'SW Topic'
+    config.add_facet_field 'sw_format_ssim',             :label => 'SW Resource Type'
+    config.add_facet_field 'sw_pub_date_facet_ssi',      :label => 'SW Date'
+    config.add_facet_field 'topic_ssim',                 :label => 'SW Topic'
     config.add_facet_field 'sw_subject_geographic_ssim', :label => 'SW Region'
-    config.add_facet_field 'sw_subject_temporal_ssim', :label => 'SW Era'
-    config.add_facet_field 'sw_genre_ssim', :label => 'SW Genre'
-    config.add_facet_field 'sw_language_ssim', :label => 'SW Language'
-    config.add_facet_field 'mods_typeOfResource_ssim', :label => 'MODS Resource Type'
+    config.add_facet_field 'sw_subject_temporal_ssim',   :label => 'SW Era'
+    config.add_facet_field 'sw_genre_ssim',              :label => 'SW Genre'
+    config.add_facet_field 'sw_language_ssim',           :label => 'SW Language'
+    config.add_facet_field 'mods_typeOfResource_ssim',   :label => 'MODS Resource Type'
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
 
@@ -196,7 +196,7 @@ class CatalogController < ApplicationController
   def upload
     @apo = Dor.find params[:id]
 
-    directory_name = Time.now.strftime("%Y_%m_%d_%H_%M_%S_%L")
+    directory_name = Time.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
     output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
     temp_spreadsheet_filename = params[:spreadsheet_file].original_filename + '.' + directory_name
 
@@ -209,10 +209,10 @@ class CatalogController < ApplicationController
   end
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
-  def bulk_jobs_index 
+  def bulk_jobs_index
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
-    
+
     return unless valid_user?(@obj)
     @response, @document = get_solr_response_for_doc_id params[:id]
     @bulk_jobs = load_bulk_jobs(params[:id])
@@ -222,7 +222,7 @@ class CatalogController < ApplicationController
   # This functionality is defined by the bulk_jobs_index method above.
   def bulk_jobs_xml
     desc_metadata_xml_file = find_desc_metadata_file(File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time]))
-    if(File.exist?(desc_metadata_xml_file))
+    if File.exist?(desc_metadata_xml_file)
       send_file(desc_metadata_xml_file, :type => 'application/xml')
     else
       # Display error message and log the error
@@ -231,15 +231,15 @@ class CatalogController < ApplicationController
 
   def bulk_jobs_csv
     csv_file = File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time], 'log.csv')
-    if(File.exist?(csv_file))
+    if File.exist?(csv_file)
       send_file(csv_file, :type => 'text/csv')
     else
       # Display error message and log the error
     end
   end
-  
+
   def bulk_jobs_log
-    @apo = params[:id]
+    @apo  = params[:id]
     @time = params[:time]
     job_directory = File.join(Argo::Config.bulk_metadata_directory, @apo, @time)
 
@@ -256,10 +256,8 @@ class CatalogController < ApplicationController
 
   def bulk_jobs_delete
     @apo = params[:id]
-
     directory_to_delete = File.join(Argo::Config.bulk_metadata_directory, params[:dir])
     FileUtils.remove_dir(directory_to_delete, true)
-
     redirect_to bulk_jobs_index_path(@apo)
   end
 
@@ -272,10 +270,10 @@ class CatalogController < ApplicationController
   def reformat_dates
     params.each do |key, val|
       begin
-        if (key=~ /_datepicker/ && val=~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
+        if (key =~ /_datepicker/ && val =~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
           val = DateTime.parse(val).beginning_of_day.utc.xmlschema
           field = key.split( '_after_datepicker').first.split('_before_datepicker').first
-          params[:f][field] = '['+val.to_s+'Z TO *]'
+          params[:f][field] = '[' + val.to_s + 'Z TO *]'
         end
       rescue
       end
@@ -323,7 +321,7 @@ class CatalogController < ApplicationController
 
     # Sort by start time (newest first)
     sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'] }
-    return sorted_info.reverse!
+    sorted_info.reverse!
   end
 
   # Determines whether or not the current user has permissions to view the current DOR object.
@@ -336,25 +334,23 @@ class CatalogController < ApplicationController
 
     if @apo
       unless @user.is_admin || @user.is_viewer || dor_object.can_view_metadata?(@user.roles(@apo.pid))
-        render :status=> :forbidden, :text =>'forbidden'
+        render :status => :forbidden, :text => 'forbidden'
         return false
       end
     else
       unless @user.is_admin || @user.is_viewer
-        render :status=> :forbidden, :text =>'No APO, no access'
+        render :status => :forbidden, :text => 'No APO, no access'
         return false
       end
     end
-    return true
+    true
   end
-
 
   def get_leafdir(directory)
-    return directory[Argo::Config.bulk_metadata_directory.length, directory.length].sub(/^\/+(.*)/, '\1')
+    directory[Argo::Config.bulk_metadata_directory.length, directory.length].sub(/^\/+(.*)/, '\1')
   end
 
-
   def find_desc_metadata_file(job_output_directory)
-    return File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
+    File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
   end
 end

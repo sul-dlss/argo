@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
     result
   end
 
-  def self.find_or_create_by_remoteuser username
+  def self.find_or_create_by_remoteuser(username)
     self.find_or_create_by(:sunetid => username)
   end
 
@@ -22,13 +22,13 @@ class User < ActiveRecord::Base
     end
   end
 
-  @role_cache={}
-  def roles pid
+  @role_cache = {}
+  def roles(pid)
     @role_cache ||= {}
     return @role_cache[pid] if @role_cache[pid]
 
-    resp = Dor::SearchService.query('id:"'+ pid+ '"')['response']['docs'].first || {}
-    toret=[]
+    resp = Dor::SearchService.query('id:"' + pid + '"')['response']['docs'].first || {}
+    toret = []
     #search for group based roles
     #(1) for User by sunet id
     #(2) groups actually contains the sunetid, so it is just looking at different solr fields
@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
       end
     end
     #store this for now, there may be several role related calls
-    @role_cache[pid]=toret
+    @role_cache[pid] = toret
     toret
   end
 
@@ -54,9 +54,9 @@ class User < ActiveRecord::Base
 
   def permitted_apos
     query = groups.map{|g| g.gsub(':','\:')}.join(' OR ')
-    q = 'apo_role_group_manager_ssim:('+ query + ') OR apo_role_person_manager_ssim:(' + query + ')'
+    q = 'apo_role_group_manager_ssim:(' + query + ') OR apo_role_person_manager_ssim:(' + query + ')'
     known_roles.each do |role|
-      q += ' OR apo_role_'+role+'_ssim:('+query+')'
+      q += ' OR apo_role_' + role + '_ssim:(' + query + ')'
     end
     q = 'objectType_ssim:adminPolicy' if is_admin
     resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!project_tag_ssim:"Hydrus"'})['response']['docs']
@@ -65,24 +65,24 @@ class User < ActiveRecord::Base
 
   def permitted_collections
     q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
-    q+= permitted_apos.map {|pid| 'is_governed_by_ssim:"info:fedora/'+pid+'"'}.join(" OR ") unless is_admin
-    result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim'}).docs
+    q += permitted_apos.map {|pid| 'is_governed_by_ssim:"info:fedora/' + pid + '"'}.join(' OR ') unless is_admin
+    result = Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim'}).docs
 
     #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim').docs
     result.sort! do |a,b|
       a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end
     #puts 'qry '+result.first['dc_title_tesim'].encoding.inspect
-    res=[['None', '']]
-    res+=result.collect do |doc|
-      [Array(doc['dc_title_tesim']).first+ ' (' + doc['id'].to_s + ')',doc['id'].to_s]
+    res = [['None', '']]
+    res += result.collect do |doc|
+      [Array(doc['dc_title_tesim']).first + ' (' + doc['id'].to_s + ')',doc['id'].to_s]
     end
     res
   end
 
   @groups_to_impersonate = nil
   #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions
-  def set_groups_to_impersonate grps
+  def set_groups_to_impersonate(grps)
     @groups_to_impersonate = grps
   end
 
@@ -94,29 +94,29 @@ class User < ActiveRecord::Base
       perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
     end
 
-    return perm_keys
+    perm_keys
   end
 
-  def belongs_to_listed_group? group_list
+  def belongs_to_listed_group?(group_list)
     group_list.each do |group|
       return true if self.groups.include? group
     end
-    return false
+    false
   end
 
   #is the user a repository wide administrator
   def is_admin
-    return belongs_to_listed_group? ADMIN_GROUPS
+    belongs_to_listed_group? ADMIN_GROUPS
   end
 
   #is the user a repository wide viewer
   def is_viewer
-    return belongs_to_listed_group? VIEWER_GROUPS
+    belongs_to_listed_group? VIEWER_GROUPS
   end
 
   #is the user a repo wide manager
   def is_manager
-    return belongs_to_listed_group? MANAGER_GROUPS
+    belongs_to_listed_group? MANAGER_GROUPS
   end
 
   # The convention is for boolean is_XYZ methods to be interrogative (end in "?")

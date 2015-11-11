@@ -9,12 +9,12 @@ Argo::Application.routes.draw do
   match 'view/sms',        :to => 'catalog#sms',        :via => [:get, :post]
   match 'view/endnote',    :to => 'catalog#endnote',    :via => [:get, :post]
   match 'view/send_email_record', :to => 'catalog#send_email_record', :via => [:get, :post]
-  match "view/facet/:id",  :to => 'catalog#facet', :via => [:get, :post]
-  match 'view/unapi',      :to => "catalog#unapi", :via => [:get, :post], :as => 'unapi'
+  match 'view/facet/:id',  :to => 'catalog#facet', :via => [:get, :post]
+  match 'view/unapi',      :to => 'catalog#unapi', :via => [:get, :post], :as => 'unapi'
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
-  match 'view/:id/dc',                :to => "catalog#show_aspect",     :via => [:get, :post], :template => 'dc', :as => "dc_aspect_view_catalog"
-  match 'view/:id/ds/:dsid',          :to => "catalog#show_aspect",     :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
-  match 'view/:id/datastreams/:dsid', :to => "catalog#datastream_view", :via => [:get, :post], :as => "datastream_view_catalog"
+  match 'view/:id/dc',                :to => 'catalog#show_aspect',     :via => [:get, :post], :template => 'dc', :as => 'dc_aspect_view_catalog'
+  match 'view/:id/ds/:dsid',          :to => 'catalog#show_aspect',     :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
+  match 'view/:id/datastreams/:dsid', :to => 'catalog#datastream_view', :via => [:get, :post], :as => 'datastream_view_catalog'
 
   match 'catalog/:id/bulk_upload_form',    :to => 'catalog#bulk_upload_form',  :as => 'bulk_upload_form',   :via => [:get]
   match 'catalog/:id/upload',              :to => 'catalog#upload',            :as => 'upload',             :via => [:post]
@@ -25,25 +25,25 @@ Argo::Application.routes.draw do
   match 'catalog/:id/bulk_jobs_help',      :to => 'catalog#bulk_jobs_help',    :as => 'bulk_jobs_help',     :via => [:get]
   match 'catalog/:id/:time/bulk_jobs_csv', :to => 'catalog#bulk_jobs_csv',     :as => 'bulk_jobs_csv',      :via => [:get]
   match 'catalog/:id/bulk_jobs_delete',    :to => 'catalog#bulk_jobs_delete',  :as => 'bulk_jobs_delete',   :via => [:delete]
-  
+
   #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
   # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
   match '/catalog', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   match '/catalog/*all', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
   mount AboutPage::Engine => '/about(.:format)'
-  match '/report', :to => "report#index", :via => [:get, :post], :as => "report"
-  match '/report/data', :to => "report#data", :via => [:get, :post], :as => "report_data"
-  match '/report/download', :to => "report#download", :via => [:get, :post], :as => "report_download"
-  match '/report/bulk', :to => "report#bulk", :via => [:get, :post], :as => "report_bulk"
-  match 'report/pids', :to => "report#pids", :via => [:get, :post], :as => 'report_pids'
-  match '/report/workflow_grid', :to => "report#workflow_grid", :via => [:get, :post], :as => "report_workflow_grid"
-  match 'report/reset', :to => "report#reset", :via => [:get, :post], :as => 'report_reset'
+  match '/report', :to => 'report#index', :via => [:get, :post], :as => 'report'
+  match '/report/data', :to => 'report#data', :via => [:get, :post], :as => 'report_data'
+  match '/report/download', :to => 'report#download', :via => [:get, :post], :as => 'report_download'
+  match '/report/bulk', :to => 'report#bulk', :via => [:get, :post], :as => 'report_bulk'
+  match 'report/pids', :to => 'report#pids', :via => [:get, :post], :as => 'report_pids'
+  match '/report/workflow_grid', :to => 'report#workflow_grid', :via => [:get, :post], :as => 'report_workflow_grid'
+  match 'report/reset', :to => 'report#reset', :via => [:get, :post], :as => 'report_reset'
   match 'discovery', :to => 'discovery#index', :via => [:get, :post], :as => 'discovery'
-  match '/discovery/data', :to => "discovery#data", :via => [:get, :post], :as => "discovery_data"
+  match '/discovery/data', :to => 'discovery#data', :via => [:get, :post], :as => 'discovery_data'
   match 'discovery/download', :to => 'discovery#download', :via => [:get, :post], :as => 'discovery_download'
   match '/apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :via => [:get, :post], :as => 'is_valid_role_list'
 
-  root :to => "catalog#index"
+  root :to => 'catalog#index'
 
   match 'login',   :controller => 'auth', :as => 'new_user_session',       :via => [:get, :post]
   match 'logout',  :controller => 'auth', :as => 'destroy_user_session',   :via => [:get, :post]
@@ -97,7 +97,7 @@ Argo::Application.routes.draw do
     get '/file', :on => :member, :action => :get_file, :as => 'get_file'
     get '/file_list', :on => :member, :action => :file, :as => 'file'
     post '/file', :on => :member, :action => :replace_file, :as => 'replace_file'
-    get '/resource', :on => :member, :action=>:resource, :as =>'resource'
+    get '/resource', :on => :member, :action => :resource, :as => 'resource'
     delete '/file', :on => :member, :action => :delete_file, :as => 'delete_file'
     post '/add_file', :on => :member, :action => :add_file, :as => 'add_file'
     post '/file/attributes', :on => :member, :action => :update_attributes, :as => 'update_attributes'
@@ -107,7 +107,7 @@ Argo::Application.routes.draw do
     # get 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
     # post 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui'
     match 'open_version_ui', :on => :member, :action => :open_version_ui, :as => 'open_version_ui', :via => [:get, :post]
-    get '/version/open', :action=>:open_version, :as => 'open_version'
+    get '/version/open', :action => :open_version, :as => 'open_version'
     get '/source_id_ui', :on => :member, :action => :source_id_ui, :as => 'source_id_ui'
     get '/tags_ui', :on => :member, :action => :tags_ui, :as => 'tags_ui'
     # get '/tags', :on => :member, :action => :tags, :as => 'tags'
@@ -135,26 +135,26 @@ Argo::Application.routes.draw do
   end
 
   namespace :items do
-    post '/version/close', :action=>:close_version, :as => 'close_version'
-    post '/version/open', :action=>:open_version, :as => 'open_version'
+    post '/version/close', :action => :close_version, :as => 'close_version'
+    post '/version/open', :action => :open_version, :as => 'open_version'
     post '/source_id', :action => :source_id, :as => 'source_id'
     post '/add_collection', :action => :add_collection, :as => 'add_collection'
     post '/set_collection', :action => :set_collection, :as => 'set_collection'
   end
 
   namespace :status do
-    get "log"
-    get "memcached"
+    get 'log'
+    get 'memcached'
   end
 
   namespace :registration do
-    get "/", :action => :form
-    get "tracksheet"
-    get "form_list"
-    get "collection_list"
-    get "workflow_list"
-    get "/rights_list", :action => :rights_list, :as => 'rights_list'
-    get "/suggest_project", :action => 'autocomplete', :field => 'project_tag_ssim'
+    get '/', :action => :form
+    get 'tracksheet'
+    get 'form_list'
+    get 'collection_list'
+    get 'workflow_list'
+    get '/rights_list', :action => :rights_list, :as => 'rights_list'
+    get '/suggest_project', :action => 'autocomplete', :field => 'project_tag_ssim'
   end
 
   namespace :auth do

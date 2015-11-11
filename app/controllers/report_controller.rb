@@ -46,7 +46,7 @@ class ReportController < CatalogController
   def pids
     #params[:per_page]=100
     #params[:rows]=100
-    ids=Report.new(params,['druid']).pids params
+    ids = Report.new(params,['druid']).pids params
     respond_to do |format|
       format.json {
         render :json => {
@@ -58,9 +58,9 @@ class ReportController < CatalogController
 
   def download
     fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
-    params[:per_page]=10
-    self.response.headers["Content-Type"] = "application/octet-stream"
-    self.response.headers["Content-Disposition"] = "attachment; filename=report.csv"
+    params[:per_page] = 10
+    self.response.headers['Content-Type'] = 'application/octet-stream'
+    self.response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
     self.response_body = Report.new(params,fields).csv2
   end
@@ -68,10 +68,10 @@ class ReportController < CatalogController
   # an ajax call to reset workflow states for objects
   def reset
     return unless request.xhr?
-    @workflow=params[:reset_workflow]
-    @step=params[:reset_step]
-    @ids=Report.new(params,['druids']).pids params
-    @ids.each { |pid| Dor::WorkflowService.update_workflow_status 'dor',"druid:#{pid}",@workflow, @step, "waiting" }
+    @workflow = params[:reset_workflow]
+    @step = params[:reset_step]
+    @ids = Report.new(params,['druids']).pids params
+    @ids.each { |pid| Dor::WorkflowService.update_workflow_status 'dor',"druid:#{pid}",@workflow, @step, 'waiting' }
     ### XXX: Where's the authorization?
   end
 

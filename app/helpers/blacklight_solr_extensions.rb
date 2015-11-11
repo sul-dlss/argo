@@ -33,18 +33,18 @@ module BlacklightSolrExtensions
     new_params.delete(:id)
 
     # Force action to be index.
-    new_params[:action] = "index"
+    new_params[:action] = 'index'
     new_params
   end
 
-  def get_search_results *args
+  def get_search_results(*args)
     (solr_response, document_list) = super(*args)
     document_list.each do |doc|
       unless doc.key?(blacklight_config[:index][:title_field])
         doc[blacklight_config[:index][:title_field]] = doc['id']
       end
     end
-    return [solr_response, document_list]
+    [solr_response, document_list]
   end
 
   ##

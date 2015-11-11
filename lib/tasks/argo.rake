@@ -5,13 +5,13 @@ require 'open-uri'
 require 'fileutils'
 require 'retries'
 
-desc "Get application version"
+desc 'Get application version'
 task :app_version do
   puts File.read(File.expand_path('../../../VERSION',__FILE__)).strip
 end
 
 def jettywrapper_load_config
-  return Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
+  Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
 end
 
 task :default => [:ci]
@@ -37,7 +37,7 @@ if ['test', 'development'].include? ENV['RAILS_ENV']
 end
 
 namespace :argo do
-  desc "Install db, jetty (fedora/solr) and configs fresh"
+  desc 'Install db, jetty (fedora/solr) and configs fresh'
   task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate'] do
     puts 'Installed Argo'
   end
@@ -52,12 +52,12 @@ namespace :argo do
     version.pop if version.length == 4 && index < 3
     if index == 3
       rc = version.length == 4 ? version.pop : 'rc0'
-      rc.sub!(/^rc(\d+)$/) { |m| "rc#{$1.to_i+1}" }
+      rc.sub!(/^rc(\d+)$/) { |m| "rc#{$1.to_i + 1}" }
       version << rc
       puts version.inspect
     else
-      version[index] = version[index].to_i+1
-      (index+1).upto(2) { |i| version[i] = '0' }
+      version[index] = version[index].to_i + 1
+      (index + 1).upto(2) { |i| version[i] = '0' }
     end
     version = version.join('.')
     File.open(version_file,'w') { |f| f.write(version) }
@@ -65,18 +65,18 @@ namespace :argo do
   end
 
   namespace :jetty do
-    WRAPPER_VERSION = "v7.1.0" # this version has the most recent Fedora 3.x release (Fedora 3.7 and Solr 4.9)
+    WRAPPER_VERSION = 'v7.1.0' # this version has the most recent Fedora 3.x release (Fedora 3.7 and Solr 4.9)
 
     desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
     task :clean, [:target] do |t, args|
       WebMock.allow_net_connect!
-      args.with_defaults(:target=> WRAPPER_VERSION)
+      args.with_defaults(:target => WRAPPER_VERSION)
       jettywrapper_load_config()
       Jettywrapper.hydra_jetty_version = args[:target]
       Rake::Task['jetty:clean'].invoke
     end
 
-    desc "Overwrite Solr configs and JARs"
+    desc 'Overwrite Solr configs and JARs'
     task :config => %w[argo:solr:config] do   # TODO: argo:fedora:config
     end
   end  # :jetty
@@ -85,11 +85,10 @@ namespace :argo do
   solr_conf_dir     = 'solr_conf'
   fedora_conf_dir   = 'fedora_conf'
   fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
-  fedora_fileglob   = "#{Rails.root}/#{fedora_conf_dir}/data/*.xml"
   fedora_files      = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
-  live_solrxml_file = "jetty/solr/solr.xml"
+  live_solrxml_file = 'jetty/solr/solr.xml'
   testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
-  restcore_url = Blacklight.solr.options[:url] + "/admin/cores?action=STATUS&wt=json"
+  restcore_url = Blacklight.solr.options[:url] + '/admin/cores?action=STATUS&wt=json'
   realcores = []
 
   namespace :solr do
@@ -100,11 +99,11 @@ namespace :argo do
       solrxml.xpath('solr/cores/core').each do |core|
         res[core.attr('name')] = core.attr('instanceDir')
       end
-      return res
+      res
     end
 
     def json_cores(url)
-      return JSON.load(open(url))
+      JSON.load(open(url))
     end
 
     desc "List cores from REST target, default: #{restcore_url}"
@@ -113,10 +112,10 @@ namespace :argo do
       url = args[:url]
       puts "Requesting #{url}"
       json = json_cores(url)
-      json["status"].each do |k,v|
+      json['status'].each do |k,v|
         puts "#{k} in #{v['name']}"
       end
-      realcores = json["status"]
+      realcores = json['status']
     end
 
     desc "Read cores from solr.xml file, default: #{live_solrxml_file}"
@@ -127,11 +126,11 @@ namespace :argo do
       end
     end
 
-    desc "Clear all data from running core(s), default: [list from :cores]"
+    desc 'Clear all data from running core(s), default: [list from :cores]'
     task :nuke, [:cores] => :cores do |task, args|
       args.with_defaults(:cores => realcores.keys)
       args[:cores].each do |core|
-        url = Blacklight.solr.options[:url] + "/" + core + '/update?commit=true'
+        url = Blacklight.solr.options[:url] + '/' + core + '/update?commit=true'
         puts "Completely delete all data in #{core} at:\n  #{url}\nAre you sure? [y/n]"
         input = STDIN.gets.strip
         if input == 'y'
@@ -150,22 +149,22 @@ namespace :argo do
       counts = Hash.new{ |h,k| 0 }
       Dir.glob(args[:glob]).each do |file|
         reply = JSON.parse(IO.read(file))
-        reply["response"]["docs"].each do |doc|
-          puts file + " " + doc["id"]
+        reply['response']['docs'].each do |doc|
+          puts file + ' ' + doc['id']
           doc.delete('_version_')   # we can't post to an empty core while specifying that we are updating a given version!
-          docs << { "doc" => doc }
+          docs << { 'doc' => doc }
           counts[file] = counts[file] + 1
         end
       end
       puts counts
       payload = "{\n" + docs.collect{|x| '"add": ' + JSON.pretty_generate(x)}.join(",\n") + "\n}"
 
-      IO.write("temp.json", payload)
+      IO.write('temp.json', payload)
       cores = args[:cores].is_a?(String) ? args[:cores].split(' ') : args[:cores] # make sure we got an array
       cores.each do |core|
-        url = Blacklight.solr.options[:url] + "/" + core + '/update?commit=true'
+        url = Blacklight.solr.options[:url] + '/' + core + '/update?commit=true'
         puts "Adding #{docs.count} docs from #{counts.count} file(s) to #{url}"
-        RestClient.post url, payload, :content_type => "application/json"
+        RestClient.post url, payload, :content_type => 'application/json'
       end
     end
 
@@ -210,7 +209,7 @@ namespace :argo do
       puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
 
       file_list = []
-      if(args.has_key?(:glob))
+      if (args.key?(:glob))
         file_list = glob_files(args[:glob])
       else
         puts 'No file glob was specified so file order and inclusion is determined by the load_order file'
@@ -259,20 +258,17 @@ namespace :argo do
     resp.facets.find { |f| f.name == apo_field }
   end
 
-
   def load_order_files(fedora_files)
     file_list = Array.new
     fedora_files.each do |file|
       file_list.push(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), file.strip))
     end
-    return file_list
+    file_list
   end
-
 
   def glob_files(glob_expression)
-    return Dir.glob(glob_expression)
+    Dir.glob(glob_expression)
   end
-
 
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
@@ -287,7 +283,7 @@ namespace :argo do
   # in (as well as the user's sunetid) to determine what they can see and do in argo.
   # NOTE: at present (2015-11-06), this rake task is run regularly by a cron job, so that
   # the .htaccess file keeps up with workgroup names as listed on APOs in use in argo.
-  desc "Update the .htaccess file from indexed APOs"
+  desc 'Update the .htaccess file from indexed APOs'
   task :htaccess => :environment do
     directives = ['AuthType WebAuth',
                   'Require privgroup dlss:argo-access',
@@ -315,20 +311,20 @@ namespace :argo do
     end
   end  # :htaccess
 
-  desc "Update completed/archived workflow counts"
+  desc 'Update completed/archived workflow counts'
   task :update_archive_counts => :environment do |t|
     Dor.find_all('objectType_ssim:workflow').each(&:update_index)
   end
 
-  desc "Reindex all (or a subset) of DOR objects in Solr"
+  desc 'Reindex all (or a subset) of DOR objects in Solr'
   task :reindex_all, [:query] => [:environment] do |t, args|
     index_log = Logger.new(File.join(Rails.root,'log','reindex.log'))
     index_log.formatter = Logger::Formatter.new
     index_log.level = ENV['LOG_LEVEL'] ? Logger::SEV_LABEL.index(ENV['LOG_LEVEL']) : Logger::INFO
     $stdout.sync = true
     start_time = Time.now
-    $stdout.puts "Discovering PIDs..."
-    index_log.info "Discovering PIDs..."
+    $stdout.puts 'Discovering PIDs...'
+    index_log.info 'Discovering PIDs...'
     dor_pids = []
     solr_pids = []
     if args[:query] != ':ALL:'
@@ -339,7 +335,7 @@ namespace :argo do
       while resp.docs.length > 0
         solr_pids += resp.docs.collect { |doc| doc['id'] }
         start += 1000
-        $stdout.print "."
+        $stdout.print '.'
         resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
       end
       $stdout.puts
@@ -351,7 +347,7 @@ namespace :argo do
       dor_pids = []
       Dor::SearchService.iterate_over_pids(:in_groups_of => 1000, :mode => :group) do |chunk|
         dor_pids += chunk
-        $stderr.print "."
+        $stderr.print '.'
       end
       $stdout.puts
       msg = "Found #{dor_pids.length} PIDs in DOR."
@@ -365,12 +361,12 @@ namespace :argo do
     end
     pids.delete_if { |pid| pid !~ /druid:/ }
     time = Time.now - start_time
-    msg = "#{pids.length} PIDs discovered in #{[(time/3600).floor, (time/60 % 60).floor, (time % 60).floor].map{|tt| tt.to_s.rjust(2,'0')}.join(':')}"
+    msg = "#{pids.length} PIDs discovered in #{[(time / 3600).floor, (time / 60 % 60).floor, (time % 60).floor].map{|tt| tt.to_s.rjust(2,'0')}.join(':')}"
     $stdout.puts msg
     index_log.info msg
 
     solr = ActiveFedora.solr.conn
-    pbar = ProgressBar.new("Reindexing...", pids.length)
+    pbar = ProgressBar.new('Reindexing...', pids.length)
     errors = 0
     pids.each do |pid|
       begin

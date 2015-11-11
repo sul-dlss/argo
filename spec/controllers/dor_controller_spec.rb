@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe DorController, :type => :controller do
-  describe "reindex" do
+  describe 'reindex' do
     before :each do
       @mock_druid  = 'asdf:1234'
       @mock_logger = double()
@@ -12,7 +12,7 @@ describe DorController, :type => :controller do
       allow(controller).to receive(:index_logger).and_return(@mock_logger)
       allow(Argo::Config).to receive(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
     end
-    it "should reindex an object" do
+    it 'should reindex an object' do
       expect(Dor).to receive(:load_instance).with(@mock_druid).and_return(@mock_obj)
       expect(@mock_obj).to receive(:to_solr).and_return({:id => @mock_druid})
       expect(Dor::SearchService.solr).to receive(:add).with(hash_including(:id => @mock_druid), instance_of(Hash))
@@ -20,7 +20,7 @@ describe DorController, :type => :controller do
       get :reindex, :pid => @mock_druid
     end
 
-    it "should log the right thing if an object is not found" do
+    it 'should log the right thing if an object is not found' do
       expect(Dor).to receive(:load_instance).with(@mock_druid).and_raise(ActiveFedora::ObjectNotFoundError)
       expect(@mock_logger).to receive(:info).with("failed to update index for #{@mock_druid}, object not found in Fedora")
       get :reindex, :pid => @mock_druid
@@ -37,7 +37,7 @@ describe DorController, :type => :controller do
   describe 'dor indexing' do
     before :each do
       log_in_as_mock_user(subject)
-      item = instantiate_fixture("druid_bb001zc5754", Dor::Item)
+      item = instantiate_fixture('druid_bb001zc5754', Dor::Item)
       allow(item.descMetadata).to receive(:new?).and_return(false)
       allow(item.descMetadata).to receive(:ng_xml).and_return(Nokogiri::XML('<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
       <mods:titleInfo>
@@ -49,11 +49,11 @@ describe DorController, :type => :controller do
       allow(item).to receive(:released_for).and_return []
       allow(item).to receive(:new_version_open?).and_return false
       allow(item).to receive(:archive_workflows)
-      @solr_doc=item.to_solr
+      @solr_doc = item.to_solr
     end
 
     it 'the indexer should generate gryphondor fields' do
-      expect(@solr_doc).to match a_hash_including("public_dc_title_tesim" => ["AMERICA cum Supplementis PolyGlottis"])
+      expect(@solr_doc).to match a_hash_including('public_dc_title_tesim' => ['AMERICA cum Supplementis PolyGlottis'])
     end
 
     it 'relevant gdor fields should be present in the hash' do
@@ -77,18 +77,18 @@ describe DorController, :type => :controller do
     end
   end
 
-  describe "delete_from_index" do
-    it "should remove an object from the index" do
+  describe 'delete_from_index' do
+    it 'should remove an object from the index' do
       log_in_as_mock_user(subject)
       expect(Dor::SearchService.solr).to receive(:delete_by_id).with('asdf:1234')
       get :delete_from_index, :pid => 'asdf:1234'
     end
   end
 
-  describe "republish" do
+  describe 'republish' do
     it 'should republish' do
       log_in_as_mock_user(subject)
-      mock_item=double()
+      mock_item = double()
       expect(mock_item).to receive(:publish_metadata_remotely)
       allow(Dor::Item).to receive(:find).and_return(mock_item)
       get :republish, :pid => 'druid:123'

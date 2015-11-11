@@ -1,1 +1,1 @@
-LOG_FILE='log/indexer.log'
+LOG_FILE = 'log/indexer.log'

@@ -2,7 +2,7 @@ require 'spec_helper'
 describe ArgoHelper, :type => :helper do
   describe 'render_document_show_thumbnail' do
     it 'should include a thumbnail url' do
-      doc = {'first_shelved_image_ss'=>'testimage.jp2'}
+      doc = {'first_shelved_image_ss' => 'testimage.jp2'}
       expect(helper.render_document_show_thumbnail(doc)  ).to  \
         match(/src=".*testimage_thumb"/                  ).and \
         match(/style="max-width:240px;max-height:240px;"/).and \
@@ -11,7 +11,7 @@ describe ArgoHelper, :type => :helper do
   end
   describe 'render_index_thumbnail' do
     it 'should include a thumbnail url' do
-      doc = {'first_shelved_image_ss'=>'testimage.jp2'}
+      doc = {'first_shelved_image_ss' => 'testimage.jp2'}
       expect(helper.render_index_thumbnail(doc)  ).to  \
         match(/src=".*testimage_thumb"/                  ).and \
         match(/style="max-width:80px;max-height:80px;"/).and \
@@ -20,8 +20,8 @@ describe ArgoHelper, :type => :helper do
   end
   describe 'render_buttons' do
     before :each do
-      @object = instantiate_fixture("druid_zt570tx3016", Dor::Item)
-      @doc = {'id'=>'something', 'is_governed_by_ssim'=>['apo_druid']}
+      @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
+      @doc = {'id' => 'something', 'is_governed_by_ssim' => ['apo_druid']}
       @usr = double()
       allow(@usr).to receive(:is_admin).and_return(true)
       allow(@usr).to receive(:groups).and_return([])
@@ -39,7 +39,7 @@ describe ArgoHelper, :type => :helper do
       allow(desc_md).to receive(:new?).and_return(true)
       allow(id_md).to receive(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
       allow(apo).to receive(:pid).and_return('apo:druid')
-      allow(@object).to receive(:datastreams).and_return({'contentMetadata'=>nil, 'descMetadata' => desc_md, 'identityMetadata' => id_md})
+      allow(@object).to receive(:datastreams).and_return({'contentMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => id_md})
       allow(@object).to receive(:admin_policy_object).and_return(apo)
       allow(Dor).to receive(:find).and_return(@object)
     end
@@ -54,7 +54,7 @@ describe ArgoHelper, :type => :helper do
           'Edit collections'  => '/items/something/collection_ui',
           'Set content type'  => '/items/something/content_type'
         }.each_pair do |k,v|
-          expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
+          expect(buttons.include?({:label => k,:url => v})).to be_truthy
         end
       end
       it 'should generate a the same button set for a non admin' do
@@ -69,7 +69,7 @@ describe ArgoHelper, :type => :helper do
           'Edit collections'  => '/items/something/collection_ui',
           'Set content type'  => '/items/something/content_type'
         }.each_pair do |k,v|
-          expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
+          expect(buttons.include?({:label => k,:url => v})).to be_truthy
         end
       end
       it 'should include the embargo update button if the user is an admin and the object is embargoed' do
@@ -84,7 +84,7 @@ describe ArgoHelper, :type => :helper do
           'Set content type'  => '/items/something/content_type',
           'Update embargo'    => '/items/something/embargo_form'
         }.each_pair do |k,v|
-          expect(buttons.include?({:label=>k,:url=>v})).to be_truthy
+          expect(buttons.include?({:label => k,:url => v})).to be_truthy
         end
       end
     end

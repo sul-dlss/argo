@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'fileutils'
 require 'equivalent-xml'
 
-
 # Integration tests for the spreadsheet bulk uploads logic.
 describe ModsulatorJob, type: :job do
   include ActiveJob::TestHelper
@@ -14,7 +13,7 @@ describe ModsulatorJob, type: :job do
   end
 
   after :all do
-    FileUtils.rm_rf(@output_directory) if(Dir.exist?(@output_directory))
+    FileUtils.rm_rf(@output_directory) if (Dir.exist?(@output_directory))
   end
 
   describe 'perform', integration: true do
@@ -40,7 +39,6 @@ describe ModsulatorJob, type: :job do
       expect(File.exist?(test_spreadsheet_path)).to be_falsey
     end
 
-    
   end
-  
+
 end

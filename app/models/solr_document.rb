@@ -34,12 +34,12 @@ class SolrDocument
   )
 
   def self.get_versions(doc)
-    versions={}
-    recs=doc['versions_ssm']
+    versions = {}
+    recs = doc['versions_ssm']
     if recs
       recs.each do |rec|
-        (version, tag, desc)=rec.split(';')
-        versions[version]={
+        (version, tag, desc) = rec.split(';')
+        versions[version] = {
           :tag  => tag,
           :desc => desc
         }
@@ -49,7 +49,7 @@ class SolrDocument
   end
 
   def self.get_milestones(doc)
-    milestones={}
+    milestones = {}
     Array(doc['lifecycle_ssim']).each do |m|
       (name, time) = m.split(/:/,2)
       next unless time  # skip basic values like: "registered"
@@ -71,7 +71,7 @@ class SolrDocument
         :time => DateTime.parse(time)
       }
     end
-    return milestones
+    milestones
   end
 
 end

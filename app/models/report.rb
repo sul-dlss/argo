@@ -16,30 +16,30 @@ class Report
 
     config.report_fields = [
       {
-        :label => "Druid", :field => 'druid',
+        :label => 'Druid', :field => 'druid',
         :proc => lambda { |doc| doc['id'].split(/:/).last },
         :sort => true, :default => true, :width => 100
       },
       {
-        :field => 'purl', :label => "Purl",
+        :field => 'purl', :label => 'Purl',
         :proc => lambda { |doc| File.join(Argo::Config.urls.purl, doc['id'].split(/:/).last) },
         :solr_fields => ['id'],
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'title', :label => "Title",
+        :field => 'title', :label => 'Title',
         :proc => lambda { |doc| retrieve_terms(doc)[:title] },
         :solr_fields => %w(public_dc_title_tesim dc_title_tesim obj_label_ssim),
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'citation', :label => "Citation",
+        :field => 'citation', :label => 'Citation',
         :proc => lambda { |doc| render_citation(doc) },
         :solr_fields => %w(public_dc_creator_tesim dc_creator_tesim public_dc_title_tesim dc_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim public_dc_publisher_tesim originInfo_publisher_tesim public_dc_date_tesim),
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'source_id_ssim', :label => "Source Id",
+        :field => 'source_id_ssim', :label => 'Source Id',
         :sort => false, :default => true, :width => 100
       },
       {
@@ -48,19 +48,19 @@ class Report
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'apo', :label => "Admin Policy (all)",
+        :field => 'apo', :label => 'Admin Policy (all)',
         :proc => lambda { |doc| doc['apo_title_ssim'] },
         :solr_fields => ['apo_title_ssim'],
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'nonhydrus_apo', :label => "Admin Policy (Non-Hydrus)",
+        :field => 'nonhydrus_apo', :label => 'Admin Policy (Non-Hydrus)',
         :proc => lambda { |doc| doc['nonhydrus_apo_title_ssim'] },
         :solr_fields => ['nonhydrus_apo_title_ssim'],
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'hydrus_apo', :label => "Hydrus Admin Policy",
+        :field => 'hydrus_apo', :label => 'Hydrus Admin Policy',
         :proc => lambda { |doc| doc['hydrus_apo_title_ssim'] },
         :solr_fields => ['hydrus_apo_title_ssim'],
         :sort => false, :default => true, :width => 100
@@ -71,93 +71,93 @@ class Report
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'collection', :label => "Collection (all)",
+        :field => 'collection', :label => 'Collection (all)',
         :proc => lambda { |doc| doc['collection_title_ssim'] },
         :solr_fields => ['collection_title_ssim'],
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'nonhydrus_collection', :label => "Collection (Non-Hydrus)",
+        :field => 'nonhydrus_collection', :label => 'Collection (Non-Hydrus)',
         :proc => lambda { |doc| doc['nonhydrus_collection_title_ssim'] },
         :solr_fields => ['nonhydrus_collection_title_ssim'],
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'hydrus_collection', :label => "Hydrus Collection",
+        :field => 'hydrus_collection', :label => 'Hydrus Collection',
         :proc => lambda { |doc| doc['hydrus_collection_title_ssim'] },
         :solr_fields => ['hydrus_collection_title_ssim'],
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'project_tag_ssim', :label => "Project",
+        :field => 'project_tag_ssim', :label => 'Project',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'registered_by_tag_ssim', :label => "Registered By",
+        :field => 'registered_by_tag_ssim', :label => 'Registered By',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'tag_ssim', :label => "Tags",
+        :field => 'tag_ssim', :label => 'Tags',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'objectType_ssim', :label => "Object Type",
+        :field => 'objectType_ssim', :label => 'Object Type',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'content_type_ssim', :label => "Content Type",
+        :field => 'content_type_ssim', :label => 'Content Type',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'catkey_id_ssim', :label => "Catkey",
+        :field => 'catkey_id_ssim', :label => 'Catkey',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'barcode_id_ssim', :label => "Barcode",
+        :field => 'barcode_id_ssim', :label => 'Barcode',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'status_ssi', :label => "Status",
+        :field => 'status_ssi', :label => 'Status',
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'accessioned_dttsim', :label => "Accession. Datetime",
+        :field => 'accessioned_dttsim', :label => 'Accession. Datetime',
         :proc => lambda { |doc| render_datetime(doc['accessioned_dttsim'])},
         :solr_fields => ['accessioned_dttsim'],
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'published_dttsim', :label => "Pub. Date",
+        :field => 'published_dttsim', :label => 'Pub. Date',
         :proc => lambda { |doc| render_datetime(doc['published_dttsim'])},
         :solr_fields => ['published_dttsim'],
         :sort => true, :default => true, :width => 100
       },
       {
-        :field => 'workflow_status_ssim', :label => "Errors",
+        :field => 'workflow_status_ssim', :label => 'Errors',
         :proc => lambda { |doc| doc['workflow_status_ssim'].first.split('|')[2] },
         :solr_fields => ['workflow_status_ssim'],
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'file_count', :label => "Files",
+        :field => 'file_count', :label => 'Files',
         :proc => lambda { |doc| doc['content_file_count_itsi'] },
         :solr_fields => ['content_file_count_itsi'],
         :sort => false, :default => true, :width => 50
       },
       {
-        :field => 'shelved_file_count', :label => "Shelved Files",
+        :field => 'shelved_file_count', :label => 'Shelved Files',
         :proc => lambda {|doc| doc['shelved_content_file_count_itsi'] },
         :solr_fields => ['shelved_content_file_count_itsi'],
         :sort => false, :default => true, :width => 50
       },
       {
-        :field => 'resource_count', :label => "Resources",
+        :field => 'resource_count', :label => 'Resources',
         :proc => lambda {|doc| doc['resource_count_itsi'] },
         :solr_fields => ['resource_count_itsi'],
         :sort => false, :default => true, :width => 50
       },
       {
-        :field => 'preserved_size', :label => "Preservation Size",
+        :field => 'preserved_size', :label => 'Preservation Size',
         :proc => lambda { |doc| doc['preserved_size_dbtsi'] },
         :solr_fields => ['preserved_size_dbtsi'],
         :sort => false, :default => true, :width => 50
@@ -170,7 +170,7 @@ class Report
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 100
-    config.default_solr_params[:fl] = config.report_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
+    config.default_solr_params[:fl] = config.report_fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
 
     config.add_sort_field 'id asc', :label => 'Druid'
 
@@ -201,23 +201,23 @@ class Report
     @num_found = @response['response']['numFound'].to_i
   end
 
-  def pids params
+  def pids(params)
     @params[:page] = 1
     params[:per_page] = 100
     (@response, @document_list) = get_search_results
-    toret=[]
+    toret = []
     while @document_list.length > 0
       report_data.each do |rec|
         if params[:source_id]
-          toret << rec['druid'].to_s+"\t"+rec['source_id_ssim'].to_s
+          toret << rec['druid'].to_s + "\t" + rec['source_id_ssim'].to_s
         elsif params[:tags]
-          tags=''
+          tags = ''
           unless rec['tag_ssim'].nil?
             rec['tag_ssim'].split(';').each do |tag|
-              tags+="\t"+tag.to_s
+              tags += "\t" + tag.to_s
             end
           end
-          toret << rec['druid']+tags
+          toret << rec['druid'] + tags
         else
           toret << rec['druid']
         end
@@ -226,7 +226,7 @@ class Report
       (@response, @document_list) = get_search_results
     end
 
-    return toret
+    toret
   end
 
   def report_data
@@ -235,25 +235,25 @@ class Report
 
   def csv2
     @params[:page] = 1
-    headings=''
-    rows=''
+    headings = ''
+    rows = ''
     @fields.each do |f|
-      headings+=f[:label]+","
+      headings += f[:label] + ','
     end
 
-    while @document_list.length >0
-      records=docs_to_records(@document_list)
+    while @document_list.length > 0
+      records = docs_to_records(@document_list)
       records.each do |record|
-        rows+="\r\n"
+        rows += "\r\n"
         row = @fields.collect { |f| record[f[:field]] }
         row.each do |field|
-          rows << '"'+field.to_s+'"'+','
+          rows << '"' + field.to_s + '"' + ','
         end
       end
       @params[:page] += 1
       (@response, @document_list) = get_search_results
     end
-    return headings+rows
+    headings + rows
   end
 
   protected

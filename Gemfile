@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
 gem 'barby'
@@ -6,7 +6,7 @@ gem 'bootstrap-sass'
 gem 'coderay'
 gem 'coffee-rails'
 gem 'config'
-gem 'confstruct', "~> 0.2.4"
+gem 'confstruct', '~> 0.2.4'
 gem 'dalli'
 gem 'daemons'
 gem 'delayed_job'
@@ -26,7 +26,7 @@ gem 'nokogiri', '~> 1.6'
 gem 'prawn', '~> 1'
 gem 'prawn-table'
 gem 'progressbar'
-gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
+gem 'rack-webauth', :git => 'https://github.com/nilclass/rack-webauth.git'
 gem 'rake'
 gem 'rest-client'
 gem 'retries'
@@ -34,7 +34,7 @@ gem 'ruby-graphviz'
 gem 'sass-rails'
 gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  #TODO: upgrading to 1.3.4 results in weird error output at end of deployment, pinning for now
 gem 'squash_ruby',  :require => 'squash/ruby'
-gem 'therubyracer', "~> 0.11"
+gem 'therubyracer', '~> 0.11'
 gem 'thin' # or mongrel
 gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 gem 'uglifier', '>= 1.0.3'
@@ -67,10 +67,10 @@ group :test, :development do
   gem 'unicorn'
   gem 'rspec-rails', '~> 3'
   gem 'capybara'
-  gem "rack-test", :require => "rack/test"
+  gem 'rack-test', :require => 'rack/test'
   gem 'simplecov', :require => false
   gem 'pry-debugger', :platform => :ruby_19  # debugger can't handle ruby 2.x
-  gem 'pry-byebug',   :platform =>[:ruby_20, :ruby_21]
+  gem 'pry-byebug',   :platform => [:ruby_20, :ruby_21]
   gem 'pry-remote'
   gem 'pry-rails'
   gem 'coveralls', require: false

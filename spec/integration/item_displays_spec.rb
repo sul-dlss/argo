@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'mods_view', :type => :request do
   before :each do
-    @object = instantiate_fixture("druid_zt570tx3016", Dor::Item)
+    @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
     allow(Dor::Item).to receive(:find).and_return(@object)
     @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
     allow(@current_user).to receive(:is_admin).and_return(true)
@@ -20,7 +20,7 @@ describe 'mods_view', :type => :request do
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@current_user)
   end
-  context "main page tests" do
+  context 'main page tests' do
     it 'should have the expected heading for search facets' do
       visit root_path
       expect(page).to have_content('Limit your search')
@@ -85,7 +85,7 @@ describe 'mods_view', :type => :request do
     end
     context 'source id ui' do
       it 'should render the source id update ui' do
-        idmd=double(Dor::IdentityMetadataDS)
+        idmd = double(Dor::IdentityMetadataDS)
         allow(@object).to receive(:identityMetadata).and_return(idmd)
         allow(idmd).to receive(:sourceId).and_return('something123')
         visit '/items/druid:zt570tx3016/source_id_ui'
@@ -94,7 +94,7 @@ describe 'mods_view', :type => :request do
     end
     context 'tag ui' do
       it 'should render the tag ui' do
-        idmd=double(Dor::IdentityMetadataDS)
+        idmd = double(Dor::IdentityMetadataDS)
         allow(Dor::Item).to receive(:identityMetadata).and_return(idmd)
         allow(idmd).to receive(:tags).and_return(['something:123'])
         visit '/items/druid:zt570tx3016/tags_ui'

@@ -13,66 +13,66 @@
 
 ActiveRecord::Schema.define(version: 20150619200031) do
 
-  create_table "bookmarks", force: :cascade do |t|
-    t.integer  "user_id",       null: false
-    t.string   "document_id"
-    t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "user_type"
-    t.string   "document_type"
+  create_table 'bookmarks', force: :cascade do |t|
+    t.integer  'user_id',       null: false
+    t.string   'document_id'
+    t.string   'title'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.string   'user_type'
+    t.string   'document_type'
   end
 
-  add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
+  add_index 'bookmarks', ['user_id'], name: 'index_bookmarks_on_user_id'
 
-  create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
-    t.text     "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
-    t.string   "locked_by"
-    t.string   "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'delayed_jobs', force: :cascade do |t|
+    t.integer  'priority',   default: 0, null: false
+    t.integer  'attempts',   default: 0, null: false
+    t.text     'handler',                null: false
+    t.text     'last_error'
+    t.datetime 'run_at'
+    t.datetime 'locked_at'
+    t.datetime 'failed_at'
+    t.string   'locked_by'
+    t.string   'queue'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index 'delayed_jobs', ['priority', 'run_at'], name: 'delayed_jobs_priority'
 
-  create_table "indexing_exceptions", force: :cascade do |t|
-    t.string   "pid"
-    t.text     "solr_document"
-    t.string   "dor_services_version"
-    t.text     "exception"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'indexing_exceptions', force: :cascade do |t|
+    t.string   'pid'
+    t.text     'solr_document'
+    t.string   'dor_services_version'
+    t.text     'exception'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  add_index "indexing_exceptions", ["pid"], name: "index_indexing_exceptions_on_pid"
+  add_index 'indexing_exceptions', ['pid'], name: 'index_indexing_exceptions_on_pid'
 
-  create_table "robots", force: :cascade do |t|
-    t.string   "wf"
-    t.string   "process"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'robots', force: :cascade do |t|
+    t.string   'wf'
+    t.string   'process'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
-  create_table "searches", force: :cascade do |t|
-    t.text     "query_params"
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "user_type"
+  create_table 'searches', force: :cascade do |t|
+    t.text     'query_params'
+    t.integer  'user_id'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
+    t.string   'user_type'
   end
 
-  add_index "searches", ["user_id"], name: "index_searches_on_user_id"
+  add_index 'searches', ['user_id'], name: 'index_searches_on_user_id'
 
-  create_table "users", force: :cascade do |t|
-    t.string   "sunetid"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table 'users', force: :cascade do |t|
+    t.string   'sunetid'
+    t.datetime 'created_at'
+    t.datetime 'updated_at'
   end
 
 end

@@ -4,7 +4,7 @@ module RegistrationHelper
   def apo_list(*permission_keys)
     q = 'objectType_ssim:adminPolicy AND !tag_ssim:"Project : Hydrus"'
     unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_ssim:"#{key}"} }.join(" OR ") + ')'
+      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_ssim:"#{key}"} }.join(' OR ') + ')'
     end
     result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
     result.sort! do |a,b|
@@ -16,7 +16,7 @@ module RegistrationHelper
   end
 
   def utf_val
-    "hello world ©"
+    'hello world ©'
   end
 
   def valid_object_types
@@ -61,7 +61,7 @@ module RegistrationHelper
     druids.each do |druid|
       doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
       next unless doc.nil?
-      obj = Dor.load_instance 'druid:'+druid
+      obj = Dor.load_instance 'druid:' + druid
       solr_doc = obj.to_solr
       Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
     end
@@ -69,9 +69,9 @@ module RegistrationHelper
     pdf.font('Courier')
     druids.each_with_index do |druid,i|
       generate_tracking_sheet(druid, pdf)
-      pdf.start_new_page unless (i+1 == druids.length)
+      pdf.start_new_page unless (i + 1 == druids.length)
     end
-    return pdf
+    pdf
   end
 
   def generate_tracking_sheet(druid, pdf)
@@ -114,27 +114,27 @@ module RegistrationHelper
     if project_name = doc['project_tag_ssim']
       table_data.push(['Project Name:', project_name.to_s])
     end
-    
+
     tags = Array(doc['tag_ssim']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
-    table_data.push(["Tags:", tags.join("\n")]) if tags.length > 0
-    table_data.push(["Catkey:", Array(doc['catkey_id_ssim']).join(", ")]) if doc['catkey_id_ssim'].present?
-    table_data.push(["Source ID:", Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
-    table_data.push(["Barcode:", Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
-    table_data.push(["Date Printed:", Time.now.strftime('%c')])
+    table_data.push(['Tags:', tags.join("\n")]) if tags.length > 0
+    table_data.push(['Catkey:', Array(doc['catkey_id_ssim']).join(', ')]) if doc['catkey_id_ssim'].present?
+    table_data.push(['Source ID:', Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
+    table_data.push(['Barcode:', Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
+    table_data.push(['Date Printed:', Time.now.strftime('%c')])
 
     pdf.table(table_data, :column_widths => [100,224], :cell_style => { :borders => [], :padding => 0.pt })
 
     pdf.y -= 0.5.in
 
     pdf.font_size = 14
-    pdf.text "Tracking:"
-    pdf.text " "
+    pdf.text 'Tracking:'
+    pdf.text ' '
 
     baseline = pdf.y - top_margin - pdf.font.ascender
-    pdf.rectangle([0, baseline+pdf.font.ascender], pdf.font.ascender, pdf.font.ascender)
+    pdf.rectangle([0, baseline + pdf.font.ascender], pdf.font.ascender, pdf.font.ascender)
     pdf.indent(pdf.font.ascender + 4.pt) do
-      pdf.text "Scanned by:"
-      pdf.indent(pdf.width_of("Scanned by:") + 0.125.in) do
+      pdf.text 'Scanned by:'
+      pdf.indent(pdf.width_of('Scanned by:') + 0.125.in) do
         pdf.line 0, baseline, pdf.bounds.width, baseline
       end
     end

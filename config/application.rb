@@ -24,7 +24,7 @@ module Argo
     # config.i18n.default_locale = :de
 
     # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
@@ -41,7 +41,7 @@ module Argo
     # config.active_record.whitelist_attributes = true
 
     initializer :after_append_asset_paths, :group => :all, :after => :append_assets_path do
-      config.assets.paths.unshift Rails.root.join("app", "assets", "stylesheets", "jquery-ui", "custom-theme").to_s
+      config.assets.paths.unshift Rails.root.join('app', 'assets', 'stylesheets', 'jquery-ui', 'custom-theme').to_s
     end
   end
 
@@ -52,7 +52,7 @@ module Argo
       ARGO_VERSION
     end
 
-    def configure *args, &block
+    def configure(*args, &block)
       Argo::Config.configure *args, &block
     end
   end

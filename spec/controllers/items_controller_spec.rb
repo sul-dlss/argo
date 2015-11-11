@@ -4,7 +4,7 @@ describe ItemsController, :type => :controller do
     # TODO: use fixtures here, this is too much stubbing
     @item = double(Dor::Item)
     @pid  = 'druid:oo201oo0001'
-    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup=>ADMIN_GROUPS.first)
+    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
     allow(@current_user).to receive(:is_admin).and_return(true)
     allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)
@@ -15,7 +15,7 @@ describe ItemsController, :type => :controller do
     idmd = double()
     apo  = double()
     wf   = double()
-    idmd_ds_content = "<test-xml/>"
+    idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = double(Nokogiri::XML::Document)
     allow(idmd).to receive(:"content_will_change!")
     allow(idmd_ng_xml).to receive(:to_xml).and_return idmd_ds_content
@@ -42,10 +42,10 @@ describe ItemsController, :type => :controller do
     it 'should allow a non admin to update the datastream' do
       allow(@item).to receive(:can_manage_content?).and_return(true)
       allow(@item).to receive(:can_manage_desc_metadata?).and_return(true)
-      xml = "<some> xml</some>"
+      xml = '<some> xml</some>'
       allow(@item.datastreams['identityMetadata']).to receive(:content=)
       post :datastream_update, :id => @pid, :dsid => 'identityMetadata', :content => xml
-      expect(response.code).to eq("302")
+      expect(response.code).to eq('302')
     end
   end
 
@@ -72,28 +72,28 @@ describe ItemsController, :type => :controller do
     it 'should 403' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'purge_object', :id => @pid
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
-  describe "embargo_update" do
-    it "should 403 if you arent an admin" do
+  describe 'embargo_update' do
+    it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
-      post 'embargo_update', :id => @pid, :date => "12/19/2013"
-      expect(response.code).to eq("403")
+      post 'embargo_update', :id => @pid, :date => '12/19/2013'
+      expect(response.code).to eq('403')
     end
-    it "should call Dor::Item.update_embargo" do
+    it 'should call Dor::Item.update_embargo' do
       expect(@item).to receive(:update_embargo)
-      post :embargo_update, :id => @pid,:embargo_date => "2012-10-19T00:00:00Z"
-      expect(response.code).to eq("302")
+      post :embargo_update, :id => @pid,:embargo_date => '2012-10-19T00:00:00Z'
+      expect(response.code).to eq('302')
     end
   end
-  describe "register" do
-    it "should load the registration form" do
+  describe 'register' do
+    it 'should load the registration form' do
       get :register
       expect(response).to render_template('register')
     end
   end
-  describe "open_version" do
+  describe 'open_version' do
     it 'should call dor-services to open a new version' do
       allow(@item).to receive(:open_new_version)
       vers_md_upd_info = {:significance => 'major', :description => 'something', :opening_user_name => @current_user.to_s}
@@ -105,10 +105,10 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       get 'open_version', :id => @pid, :severity => 'major', :description => 'something'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
-  describe "close_version" do
+  describe 'close_version' do
     it 'should call dor-services to close the version' do
       expect(@item).to receive(:close_version)
       version_metadata = double(Dor::VersionMetadataDS)
@@ -123,24 +123,24 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       get 'close_version', :id => @pid
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
-  describe "source_id" do
+  describe 'source_id' do
     it 'should update the source id' do
       expect(@item).to receive(:set_source_id).with('new:source_id')
       expect(Dor::SearchService.solr).to receive(:add)
       post 'source_id', :id => @pid, :new_id => 'new:source_id'
     end
   end
-  describe "tags" do
+  describe 'tags' do
     before :each do
       allow(@item).to receive(:tags).and_return(['some:thing'])
       expect(Dor::SearchService.solr).to receive(:add)
     end
     it 'should update tags' do
       expect(@item).to receive(:update_tag).with('some:thing', 'some:thingelse')
-      post 'tags', :id => @pid, :update=>'true', :tag1 => 'some:thingelse'
+      post 'tags', :id => @pid, :update => 'true', :tag1 => 'some:thingelse'
     end
     it 'should delete tag' do
       expect(@item).to receive(:remove_tag).with('some:thing').and_return(true)
@@ -169,14 +169,14 @@ describe ItemsController, :type => :controller do
       post 'tags_bulk', :id => @pid, :tags => 'Process : Content Type : Book (flipbook, ltr)	 Registered By : labware'
     end
   end
-  describe "set_rights" do
+  describe 'set_rights' do
     it 'should set an item to dark' do
       expect(@item).to receive(:set_read_rights).with('dark')
       get 'set_rights', :id => @pid, :rights => 'dark'
     end
   end
 
-  describe "add_file" do
+  describe 'add_file' do
     it 'should recieve an uploaded file and add it to the requested resource' do
       #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
@@ -186,10 +186,10 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you are not an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'add_file', :uploaded_file => nil, :id => @pid, :resource => 'resourceID'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
-  describe "delete_file" do
+  describe 'delete_file' do
     it 'should call dor services to remove the file' do
       expect(@item).to receive(:remove_file)
       get 'delete_file', :id => @pid, :file_name => 'old_file'
@@ -197,10 +197,10 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       get 'delete_file', :id => @pid, :file_name => 'old_file'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
-  describe "replace_file" do
+  describe 'replace_file' do
     it 'should recieve an uploaded file and call dor-services' do
       #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
@@ -210,35 +210,35 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'replace_file', :uploaded_file => nil, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
-  describe "update_parameters" do
+  describe 'update_parameters' do
     before :each do
       @content_md = double(Dor::ContentMetadataDS)
       allow(@item).to receive(:contentMetadata).and_return(@content_md)
     end
     it 'should update the shelve, publish and preserve to yes (used to be true)' do
       allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
-        expect(shelve  ).to eq("yes")
-        expect(preserve).to eq("yes")
-        expect(publish ).to eq("yes")
+        expect(shelve  ).to eq('yes')
+        expect(preserve).to eq('yes')
+        expect(publish ).to eq('yes')
       end
       post 'update_attributes', :shelve => 'on', :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
     end
     it 'should work ok if not all of the values are set' do
       allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
-        expect(shelve  ).to eq("no")
-        expect(preserve).to eq("yes")
-        expect(publish ).to eq("yes")
+        expect(shelve  ).to eq('no')
+        expect(preserve).to eq('yes')
+        expect(publish ).to eq('yes')
       end
       post 'update_attributes', :publish => 'on', :preserve => 'on', :id => @pid, :file_name => 'something.txt'
     end
     it 'should update the shelve, publish and preserve to no (used to be false)' do
       allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
-        expect(shelve  ).to eq("no")
-        expect(preserve).to eq("no")
-        expect(publish ).to eq("no")
+        expect(shelve  ).to eq('no')
+        expect(preserve).to eq('no')
+        expect(publish ).to eq('no')
       end
       expect(@content_md).to receive(:update_attributes)
       post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
@@ -246,7 +246,7 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
   describe 'get_file' do
@@ -258,14 +258,14 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       get 'get_file', :file => 'somefile.txt', :id => @pid
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
   describe 'datastream_update' do
     it 'should 403 if you arent an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<contentMetadata/>'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
     it 'should error on malformed xml' do
       expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error(RuntimeError, 'XML was not well formed!')
@@ -289,7 +289,7 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you are not an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'update_resource', :resource => '0001', :position => '3', :id => @pid
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
     it 'should call dor-services to reorder the resources' do
       expect(@item).to receive(:move_resource)
@@ -320,7 +320,7 @@ describe ItemsController, :type => :controller do
     it 'should 403 if they arent permitted' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'add_collection', :id => @pid, :collection => 'druid:1234'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
   describe 'set_collection' do
@@ -331,13 +331,13 @@ describe ItemsController, :type => :controller do
       allow(@item).to receive(:collections).and_return([])
       expect(@item).to receive(:add_collection).with(@collection_druid)
       post 'set_collection', :id => @pid, :collection => @collection_druid, :bulk => true
-      expect(response.code).to eq("200")
+      expect(response.code).to eq('200')
     end
     it 'should not add a collection if there is already one' do
       allow(@item).to receive(:collections).and_return(['collection'])
       expect(@item).not_to receive(:add_collection)
       post 'set_collection', :id => @pid, :collection => @collection_druid, :bulk => true
-      expect(response.code).to eq("500")
+      expect(response.code).to eq('500')
     end
   end
   describe 'remove_collection' do
@@ -349,12 +349,12 @@ describe ItemsController, :type => :controller do
       allow(@current_user).to receive(:is_admin).and_return(false)
       expect(@item).not_to receive(:remove_collection)
       post 'remove_collection', :id => @pid, :collection => 'druid:1234'
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
   describe 'mods' do
     it 'should return the mods xml for a GET' do
-      @request.env["HTTP_ACCEPT"] = "application/xml"
+      @request.env['HTTP_ACCEPT'] = 'application/xml'
       xml = '<somexml>stuff</somexml>'
       descmd = double()
       expect(descmd).to receive(:content).and_return(xml)
@@ -365,10 +365,10 @@ describe ItemsController, :type => :controller do
     it 'should 403 if they arent permitted' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       get 'mods', :id => @pid
-      expect(response.code).to eq("403")
+      expect(response.code).to eq('403')
     end
   end
-  describe "add_workflow" do
+  describe 'add_workflow' do
     before :each do
       @wf = double()
       expect(@item).to receive(:workflows).and_return @wf

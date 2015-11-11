@@ -12,12 +12,12 @@ module WorkflowHelper
   end
 
   def render_workflow_name(name)
-    new_params = add_facet_params("wf_wps_ssim", name).merge(:controller => 'catalog', :action => 'index')
+    new_params = add_facet_params('wf_wps_ssim', name).merge(:controller => 'catalog', :action => 'index')
     link_to(name, new_params)
   end
 
   def render_workflow_process_name(name,process)
-    new_params = add_facet_params("wf_wps_ssim", [name,process].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
+    new_params = add_facet_params('wf_wps_ssim', [name,process].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     link_to(process, new_params)
   end
 
@@ -32,26 +32,25 @@ module WorkflowHelper
     form_tag workflow_update_item_url(pid, process.workflow) do
       hidden_field_tag('process', process.name) +
       hidden_field_tag('status', new_status) +
-      hidden_field_tag('repo', @repo)+
-      button_tag('set to ' + new_status, :type => 'submit')
+      hidden_field_tag('repo', @repo) + button_tag('set to ' + new_status, :type => 'submit')
     end
   end
 
   def render_workflow_reset_link(wf_hash, name, process, status)
     return unless (wf_hash[process] && wf_hash[process][status] && wf_hash[process][status][:_])
-    new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow=>name,:reset_step=>process)
-    raw " | " + link_to('reset', new_params,:remote=>true)
+    new_params = add_facet_params('wf_wps_ssim', [name,process,status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow => name,:reset_step => process)
+    raw ' | ' + link_to('reset', new_params,:remote => true)
   end
 
   def render_workflow_item_count(wf_hash, name, process, status)
-    new_params = add_facet_params("wf_wps_ssim", [name,process,status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
+    new_params = add_facet_params('wf_wps_ssim', [name,process,status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     rotate_facet_params('wf_wps', 'wps', facet_order('wf_wps'), new_params)
     item_count = 0
     if wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_]
       item_count = item.hits
     end
     if item_count == 0
-      item_count = content_tag :span, item_count, :class => "zero"
+      item_count = content_tag :span, item_count, :class => 'zero'
     end
     link_to(item_count, new_params)
   end
@@ -65,7 +64,7 @@ module WorkflowHelper
       end
     end
 
-    return '-'
+    '-'
   end
 
   def proc_names_for_wf(wf_name, wf_data)

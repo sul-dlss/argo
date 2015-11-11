@@ -1,6 +1,6 @@
 # This assumes dor-services is installed and accessible. It is not a dependency of sw-oai-provider
 require 'rubygems'
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path('../../config/environment', __FILE__)
 require 'dor-services'
 
 puts '<?xml version="1.0" encoding="UTF-8"?><add>'
@@ -17,4 +17,4 @@ ARGF.each_line do |druid|
   end
 end
 
-puts "</add>"
+puts '</add>'

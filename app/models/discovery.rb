@@ -9,78 +9,78 @@ class Discovery
 
     config.discovery_fields = [
       {
-        :label => "Druid", :field => 'druid',
+        :label => 'Druid', :field => 'druid',
         :proc => lambda { |doc| doc['id'].split(/:/).last },
         :sort => true, :default => true, :width => 100
       },
       {
-        :label => "Druid", :field => 'id',
+        :label => 'Druid', :field => 'id',
         :sort => true, :default => false, :width => 100
       },
       {
-        :label => "Display Title",
-        :field => "title_ssim",
+        :label => 'Display Title',
+        :field => 'title_ssim',
         :sort => true, :default => true, :width => 200
       },
       {
-        :label => "Format",
-        :field => "sw_format_tesim",
+        :label => 'Format',
+        :field => 'sw_format_tesim',
         :default => true, :width => 200
       },
       {
-        :label => "Sort Title",
-        :field => "title_sort_ssi",
+        :label => 'Sort Title',
+        :field => 'title_sort_ssi',
         :default => false, :width => 200
       },
       {
-        :label => "Topic Search",
-        :field => "topic_tesim",
+        :label => 'Topic Search',
+        :field => 'topic_tesim',
         :default => false, :width => 200
       },
       {
-        :label => "Subject All",
-        :field => "subject_topic_tesim",
+        :label => 'Subject All',
+        :field => 'subject_topic_tesim',
         :default => false, :width => 200
       },
       {
-        :label => "Topic Facet",
-        :field => "topic_tesim",
+        :label => 'Topic Facet',
+        :field => 'topic_tesim',
         :default => false, :width => 200
       },
       {
-        :label => "Geographic Facet",
-        :field => "sw_subject_geographic_ssim",
+        :label => 'Geographic Facet',
+        :field => 'sw_subject_geographic_ssim',
         :default => false, :width => 200
       },
       {
-        :label => "Era Facet",
-        :field => "sw_subject_temporal_ssim",
+        :label => 'Era Facet',
+        :field => 'sw_subject_temporal_ssim',
         :default => false, :width => 200
       },
       {
-        :label => "Language Facet",
-        :field => "sw_language_tesim",
+        :label => 'Language Facet',
+        :field => 'sw_language_tesim',
         :default => true, :width => 200
       },
       {
-        :label => "Pub Date Sort",
-        :field => "sw_pub_date_sort_ssi",
+        :label => 'Pub Date Sort',
+        :field => 'sw_pub_date_sort_ssi',
         :default => false, :width => 200
       },
       {
-        :label => "Pub Date Group Facet",
-        :field => "sw_pub_date_facet_ssi",
+        :label => 'Pub Date Group Facet',
+        :field => 'sw_pub_date_facet_ssi',
         :default => false, :width => 200
       },
 
       {
-        :label => "Pub Year Facet",
-        :field => "sw_pub_date_sort_ssi",
+        :label => 'Pub Year Facet',
+        :field => 'sw_pub_date_sort_ssi',
         :default => true, :width => 200
       },
       {
-        :label => "Pub Date Display",
-        :field => "sw_pub_date_facet_ssi",
+        :label => 'Pub Date Display',
+        :field => 'sw_pub_date_facet_ssi',
         :default => true, :width => 200
       }
     ]
@@ -91,7 +91,7 @@ class Discovery
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 100
-    config.default_solr_params[:fl] = config.discovery_fields.collect { |f| f[:solr_fields] ||  f[:field] }.flatten.uniq.join(',')
+    config.default_solr_params[:fl] = config.discovery_fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
 
     config.add_sort_field 'id asc', :label => 'Druid'
 
@@ -122,12 +122,12 @@ class Discovery
     @num_found = @response['response']['numFound'].to_i
   end
 
-  def pids params
-    toret=[]
-    while @document_list.length >0
+  def pids(params)
+    toret = []
+    while @document_list.length > 0
       report_data.each do|rec|
         if params[:source_id]
-          toret << rec['druid'].to_s+"\t"+rec['source_id_ssim'].to_s
+          toret << rec['druid'].to_s + "\t" + rec['source_id_ssim'].to_s
         else
           toret << rec['druid']
         end
@@ -143,26 +143,26 @@ class Discovery
   end
 
   def csv2
-    headings=''
-    rows=''
+    headings = ''
+    rows = ''
     @fields.each do |f|
-      label=f[:label] ? f[:label] : f[:field]
-      headings+=label+","
+      label = f[:label] ? f[:label] : f[:field]
+      headings += label + ','
     end
 
-    while @document_list.length >0
-      records=docs_to_records(@document_list)
+    while @document_list.length > 0
+      records = docs_to_records(@document_list)
       records.each do |record|
-        rows+="\r\n"
+        rows += "\r\n"
         row = @fields.collect { |f| record[f[:field]] }
         row.each do |field|
-          rows << '"'+field.to_s+'"'+','
+          rows << '"' + field.to_s + '"' + ','
         end
       end
       @params[:page] += 1
       (@response, @document_list) = get_search_results
     end
-    return headings+rows
+    headings + rows
   end
 
   protected

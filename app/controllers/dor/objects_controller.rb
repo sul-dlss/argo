@@ -5,7 +5,7 @@ class Dor::ObjectsController < ApplicationController
   end
 
   def create
-    if params[:collection] && params[:collection].length ==0
+    if params[:collection] && params[:collection].length == 0
       params.delete :collection
     end
     response = Dor::RegistrationService.create_from_request(params)

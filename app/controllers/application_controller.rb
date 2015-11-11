@@ -51,7 +51,7 @@ class ApplicationController < ActionController::Base
       cur_user.set_groups_to_impersonate session[:groups]
     end
 
-    return cur_user
+    cur_user
   end
 
   def current_or_guest_user
@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
       redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}"
       return false
     end
-    return true
+    true
   end
 
 end

@@ -8,18 +8,18 @@ describe ApoController, :type => :controller do
       allow(item).to receive(:udpate_index) unless item.nil?
       item
     end
-    @item = Dor::AdminPolicyObject.find("druid:zt570tx3016")
-    @empty_item = Dor::AdminPolicyObject.find("pw570tx3016")
+    @item = Dor::AdminPolicyObject.find('druid:zt570tx3016')
+    @empty_item = Dor::AdminPolicyObject.find('pw570tx3016')
   # ItemsController.any_instance.stub(:current_user).and_return(@current_user)
     log_in_as_mock_user(subject)
   end
 
   describe 'create' do
     before :each do
-      @example = {"title"=>"New APO Title", "agreement"=>"druid:xf765cv5573", "desc_md"=>"MODS", "metadata_source"=>"DOR",
-              "managers"=>"dlss:developers dlss:dpg-staff", "viewers"=>"sdr:viewer-role , dlss:forensics-staff", "collection_radio"=>"",
-              "collection_title"=>'col title', "collection_abstract"=>"", "default_object_rights"=>"World", "use"=>"", "copyright"=>"",
-              "use_license"=>"machine-readable-license-code", "workflow"=>"registrationWF", "register"=>""}
+      @example = {'title' => 'New APO Title', 'agreement' => 'druid:xf765cv5573', 'desc_md' => 'MODS', 'metadata_source' => 'DOR',
+              'managers' => 'dlss:developers dlss:dpg-staff', 'viewers' => 'sdr:viewer-role , dlss:forensics-staff', 'collection_radio' => '',
+              'collection_title' => 'col title', 'collection_abstract' => '', 'default_object_rights' => 'World', 'use' => '', 'copyright' => '',
+              'use_license' => 'machine-readable-license-code', 'workflow' => 'registrationWF', 'register' => ''}
       # block cascading update
       allow(controller).to receive(:update_index)
       expect(@item).to receive(:add_roleplayer).exactly(4).times
@@ -27,7 +27,7 @@ describe ApoController, :type => :controller do
     end
 
     it 'should create an apo' do
-      skip "Unimplemented"
+      skip 'Unimplemented'
     end
     ## FIXME: The next two tests still hit solr looking for druid:dd327qr3670.
     ## They should be stubbed/contained.
@@ -37,7 +37,7 @@ describe ApoController, :type => :controller do
         expect(params[:metadata_source]).to be_nil   #descMD is created via the form
         {:pid => 'druid:collectionpid'}
       end
-      expect(@item).to receive(:"use_license=").with(@example["use_license"])
+      expect(@item).to receive(:"use_license=").with(@example['use_license'])
       post 'register', @example
     end
     it 'should set apo workflows to priority 70' do
@@ -45,14 +45,14 @@ describe ApoController, :type => :controller do
         expect(params[:workflow_priority]).to eq('70')
         {:pid => 'druid:collectionpid'}
       end
-      expect(@item).to receive(:"use_license=").with(@example["use_license"])
+      expect(@item).to receive(:"use_license=").with(@example['use_license'])
       post 'register', @example
     end
   end
 
   describe 'register_collection' do
     before :each do
-      allow(Dor).to receive(:find).with('druid:forapo', :lightweight=>true).and_return(@empty_item)
+      allow(Dor).to receive(:find).with('druid:forapo', :lightweight => true).and_return(@empty_item)
       expect(@empty_item).to receive(:add_default_collection).with('druid:newcollection')
       @new_collection_druid = 'druid:newcollection'
       @mock_new_collection = double(Dor::Collection)
@@ -66,7 +66,7 @@ describe ApoController, :type => :controller do
           :label           => ':auto',
           :object_type     => 'collection',
           :admin_policy    => 'druid:forapo',
-          :other_id        => 'symphony:'+catkey,
+          :other_id        => 'symphony:' + catkey,
           :metadata_source => 'symphony',
           :rights          => 'dark'
         )
@@ -74,12 +74,12 @@ describe ApoController, :type => :controller do
       end
       expect(@mock_new_collection).to receive(:save)
       expect(@mock_new_collection).to receive(:update_index)
-      post "register_collection", "label"=>":auto", "collection_catkey"=>catkey, "collection_rights_catkey"=>"dark", 'id'=>'druid:forapo'
+      post 'register_collection', 'label' => ':auto', 'collection_catkey' => catkey, 'collection_rights_catkey' => 'dark', 'id' => 'druid:forapo'
     end
 
     it 'should create a collection from title/abstract by registering the collection, then adding the abstract' do
-      title='collection title'
-      abstract='this is the abstract'
+      title = 'collection title'
+      abstract = 'this is the abstract'
       mock_desc_md_ds = double(Dor::DescMetadataDS)
 
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
@@ -100,12 +100,12 @@ describe ApoController, :type => :controller do
       expect(@mock_new_collection).to receive(:save)
       expect(@mock_new_collection).to receive(:update_index)
 
-      post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract, "collection_rights"=>"dark", 'id'=>'druid:forapo'
+      post 'register_collection', 'collection_title' => title,'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => 'druid:forapo'
     end
 
     it 'should add the collection to the apo default collection list' do
-      title='collection title'
-      abstract='this is the abstract'
+      title = 'collection title'
+      abstract = 'this is the abstract'
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params).to match a_hash_including(
           :label           => title,
@@ -120,17 +120,17 @@ describe ApoController, :type => :controller do
       expect(@mock_new_collection).to receive(:save)
       expect(@mock_new_collection).to receive(:update_index)
 
-      post "register_collection", "collection_title"=>title,'collection_abstract'=>abstract, "collection_rights"=>"dark", 'id'=>'druid:forapo'
+      post 'register_collection', 'collection_title' => title,'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => 'druid:forapo'
     end
     it 'should set the workflow priority to 65' do
-      catkey='1234567'
+      catkey = '1234567'
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params[:workflow_priority]).to eq('65')
         {:pid => @new_collection_druid}
       end
       expect(@mock_new_collection).to receive(:save)
       expect(@mock_new_collection).to receive(:update_index)
-      post "register_collection", "label"=>":auto", "collection_catkey"=>catkey, "collection_rights_catkey"=>"dark", 'id'=>'druid:forapo'
+      post 'register_collection', 'label' => ':auto', 'collection_catkey' => catkey, 'collection_rights_catkey' => 'dark', 'id' => 'druid:forapo'
     end
   end
 

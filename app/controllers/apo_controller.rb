@@ -10,13 +10,13 @@ class ApoController < ApplicationController
 
   attr_accessor :cc
 
-  def is_valid_role_name role_name
-    return !/^[\w-]+:[\w-]+$/.match(role_name).nil?
+  def is_valid_role_name(role_name)
+    !/^[\w-]+:[\w-]+$/.match(role_name).nil?
   end
 
-  def is_valid_role_list role_list
+  def is_valid_role_list(role_list)
     # look for an invalid role name, return true if we don't find one
-    return role_list.find { |role_name| !is_valid_role_name(role_name) }.nil?
+    role_list.find { |role_name| !is_valid_role_name(role_name) }.nil?
   end
 
   def is_valid_role_list_endpoint
@@ -35,7 +35,7 @@ class ApoController < ApplicationController
     end
   end
 
-  def get_input_params_errors input_params
+  def get_input_params_errors(input_params)
     # assume no errors yet
     err_list = []
 
@@ -49,7 +49,7 @@ class ApoController < ApplicationController
       end
     end
 
-    return err_list
+    err_list
   end
 
   def register
@@ -58,7 +58,7 @@ class ApoController < ApplicationController
     if params[:title]
       input_params_errors = get_input_params_errors params
       if input_params_errors.length > 0
-        render :status=> :bad_request, :json => { :errors => input_params_errors }
+        render :status => :bad_request, :json => { :errors => input_params_errors }
         return
       end
 
@@ -68,8 +68,8 @@ class ApoController < ApplicationController
       end
     elsif params[:id]
       create_obj
-      @managers=[]
-      @viewers=[]
+      @managers = []
+      @viewers = []
       populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
       populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
       @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
@@ -79,7 +79,7 @@ class ApoController < ApplicationController
     end
   end
 
-  def set_apo_metadata apo, md_info
+  def set_apo_metadata(apo, md_info)
     apo.copyright_statement  = md_info[:copyright] if md_info[:copyright] && md_info[:copyright].length > 0
     apo.use_statement        = md_info[:use      ] if md_info[:use      ] && md_info[:use      ].length > 0
     apo.mods_title           = md_info[:title    ]
@@ -125,10 +125,10 @@ class ApoController < ApplicationController
     update_index(apo)
     notice = 'APO created. '
     notice += "Collection #{collection_pid} created." if collection_pid
-    return {:notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid}
+    {:notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid}
   end
 
-  def param_cleanup params
+  def param_cleanup(params)
     params[:title].strip! if params[:title]
     [:managers, :viewers].each do |role_param_sym|
       params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') if params[role_param_sym]
@@ -145,7 +145,7 @@ class ApoController < ApplicationController
     param_cleanup params
     input_params_errors = get_input_params_errors params
     if input_params_errors.length > 0
-      render :status=> :bad_request, :json => { :errors => input_params_errors }
+      render :status => :bad_request, :json => { :errors => input_params_errors }
       return
     end
 
@@ -178,7 +178,7 @@ class ApoController < ApplicationController
     redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
   end
 
-  def create_collection apo_pid
+  def create_collection(apo_pid)
     reg_params = {:workflow_priority => '65'}
     if params[:collection_title] && params[:collection_title].length > 0
       reg_params[:label] = params[:collection_title]
@@ -204,7 +204,7 @@ class ApoController < ApplicationController
     end
     collection.save
     update_index(collection)
-    return response[:pid]
+    response[:pid]
   end
 
   def add_roleplayer
@@ -260,13 +260,13 @@ class ApoController < ApplicationController
 
   def spreadsheet_template
     binary_string = RestClient.get(Argo::Config.urls.spreadsheet)
-    send_data(binary_string, :filename => "spreadsheet_template.xlsx", :type =>  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    send_data(binary_string, :filename => 'spreadsheet_template.xlsx', :type =>  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   end
 
   private
 
-  def reindex obj
-    doc=obj.to_solr
+  def reindex(obj)
+    doc = obj.to_solr
     Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
   end
 
@@ -274,13 +274,13 @@ class ApoController < ApplicationController
     if params[:id]
       @object = Dor.find params[:id], :lightweight => true
       @collections = @object.default_collections
-      new_col=[]
+      new_col = []
       if @collections
         @collections.each do |col|
           new_col << Dor.find(col)
         end
       end
-      @collections=new_col
+      @collections = new_col
     else
       raise 'missing druid'
     end
@@ -304,7 +304,7 @@ class ApoController < ApplicationController
   end
 
   def split_roleplayer_input_field(roleplayer_list_str)
-    return roleplayer_list_str.split(/[,\s]/).reject(&:empty?)
+    roleplayer_list_str.split(/[,\s]/).reject(&:empty?)
   end
 
   def save_and_reindex
@@ -324,11 +324,11 @@ class ApoController < ApplicationController
   #check that the user can carry out this object modification
   def forbid
     return if current_user.is_admin || @object.can_manage_content?(current_user.roles params[:id])
-    render :status=> :forbidden, :text =>'forbidden'
-    return
+    render :status => :forbidden, :text => 'forbidden'
+    nil
   end
 
-  def set_abstract collection_obj, abstract
+  def set_abstract(collection_obj, abstract)
     collection_obj.descMetadata.abstract = abstract
     collection_obj.descMetadata.content = collection_obj.descMetadata.ng_xml.to_s
     collection_obj.descMetadata.save

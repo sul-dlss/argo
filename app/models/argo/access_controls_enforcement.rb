@@ -13,20 +13,20 @@ module Argo
         return solr_parameters
       end
       solr_parameters[:fq] ||= []
-      pids=user.permitted_apos
+      pids = user.permitted_apos
       #do this as a negative query, exclude items they dont have permission rather than including items they have permission to view
       if pids.length == 0
         #they arent supposed to see anything, use a dummy value to make sure the solr query is valid
-        pids='dummy_value'
+        pids = 'dummy_value'
       else
-        new_pids=[]
+        new_pids = []
         pids.each do |pid|
           new_pids << '"info:fedora/' + pid + '"'
         end
-        pids=new_pids
-        pids=pids.join(' OR ')
+        pids = new_pids
+        pids = pids.join(' OR ')
       end
-      solr_parameters[:fq] << "is_governed_by_ssim:("+pids+")"
+      solr_parameters[:fq] << 'is_governed_by_ssim:(' + pids + ')'
       logger.debug("Solr parameters: #{ solr_parameters.inspect }")
       solr_parameters
     end

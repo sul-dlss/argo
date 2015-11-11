@@ -37,9 +37,9 @@ class DiscoveryController < CatalogController
 
   def download
     fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
-    params[:per_page]=10
-    self.response.headers["Content-Type"] = "application/octet-stream"
-    self.response.headers["Content-Disposition"] = "attachment; filename=report.csv"
+    params[:per_page] = 10
+    self.response.headers['Content-Type'] = 'application/octet-stream'
+    self.response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
     self.response.headers['Last-Modified'] = Time.now.ctime.to_s
     self.response_body = Discovery.new(params,fields).csv2
   end
