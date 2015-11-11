@@ -29,14 +29,6 @@ else
     exit 1
 fi
 
-# Ensure that everything is stopped prior to 'argo:install'
-stop_script=$(find ./ -name 'dev_stop.sh')
-$stop_script
-
-# Install components, setup DB and Solr:
-bundle install
-bundle exec rake argo:install
-
 echo
 echo "Resetting Jetty"
 rake jetty:restart
@@ -44,6 +36,3 @@ jetty_check_url 'http://localhost:8983/solr/'
 echo "Success! Solr responds"
 jetty_check_url 'http://localhost:8983/fedora/'
 echo "Success! Fedora responds."
-
-# Load and index records in the 'development' Solr core
-rake argo:repo:load

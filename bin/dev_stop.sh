@@ -13,4 +13,6 @@ if [ -e tmp/pids/delayed_job.pid ]; then
 fi
 
 echo "Stopping Jetty"
-rake jetty:stop
+if rake jetty:status | grep -q 'Running:'; then
+    rake jetty:stop
+fi
