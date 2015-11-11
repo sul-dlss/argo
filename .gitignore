@@ -14,7 +14,6 @@ gem_graph.png
 jetty/
 /log
 public/.htaccess
-public/assets
 public/images/.dpg_pool
 tmp/
 
