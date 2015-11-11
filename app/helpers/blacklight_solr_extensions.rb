@@ -12,7 +12,7 @@ module BlacklightSolrExtensions
     p = session[:search] ? session[:search].dup : {}
     p[:f] = (p[:f] || {}).dup # the command above is not deep in rails3, !@#$!@#$
 
-    new_params.each_pair do |field,value|
+    new_params.each_pair do |field, value|
       p[:f][field] = (p[:f][field] || []).dup
       p[:f][field].push(value)
     end

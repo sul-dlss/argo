@@ -24,11 +24,11 @@ module ArgoHelper
   end
 
   def structure_from_solr(solr_doc, prefix, suffix = 'display')
-    prefixed_fields = Hash[solr_doc.select { |k,v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
+    prefixed_fields = Hash[solr_doc.select { |k, v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
     result = Confstruct::HashWithStructAccess.new
-    prefixed_fields.each_pair do |path_str,value|
+    prefixed_fields.each_pair do |path_str, value|
       h = result
-      path = path_str.sub(/_[^_]+$/,'').reverse.split(/_(?=\d+)/).collect(&:reverse).reverse.collect { |k| k.split(/_(?=\d+)/) }
+      path = path_str.sub(/_[^_]+$/, '').reverse.split(/_(?=\d+)/).collect(&:reverse).reverse.collect { |k| k.split(/_(?=\d+)/) }
       path.each do |step, index|
         if index.nil?
           h[step.to_sym] = value
@@ -44,7 +44,7 @@ module ArgoHelper
   def create_rsolr_facet_field_response_for_query_facet_field(facet_name, facet_field)
     salient_facet_queries = facet_field.query.map { |k, x| x[:fq] }
     items = []
-    @response.facet_queries.select { |k,v| salient_facet_queries.include?(k) }.reject { |value, hits| hits == 0 }.map do |value,hits|
+    @response.facet_queries.select { |k, v| salient_facet_queries.include?(k) }.reject { |value, hits| hits == 0 }.map do |value, hits|
       key = facet_field.query.find{ |k, val| val[:fq] == value }.first
       items << OpenStruct.new(:value => key, :hits => hits, :label => facet_field.query[key][:label])
     end
@@ -102,18 +102,18 @@ module ArgoHelper
     render_thumbnail_helper doc, 'index-thumb', '', 'max-width:80px;max-height:80px;'
   end
 
-  #override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
+  # override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
   def render_facet_value(facet_solr_field, item, options = {})
     display_value = item.value =~ /druid:/ ? label_for_druid(item.value) : item.value
     (link_to_unless(options[:suppress_link], ((item.label if item.respond_to?(:label)) || display_value), add_facet_params_and_redirect(facet_solr_field, item.value), :class => 'facet_select') + ' ' + render_facet_count(item.hits)).html_safe
   end
 
   def render_document_sections(doc, action_name)
-    dor_object = @obj #Dor.find doc['id'].to_s, :lightweight => true
+    dor_object = @obj # Dor.find doc['id'].to_s, :lightweight => true
     format = document_partial_name(doc)
     sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
     result = ''
-    sections.each_with_index do |section_name,index|
+    sections.each_with_index do |section_name, index|
       result += render(:partial => "catalog/#{action_name}_section", :locals => {:document => doc, :object => dor_object, :format => format, :section => section_name, :collapsible => (index > 0)})
     end
     result.html_safe
@@ -123,9 +123,9 @@ module ArgoHelper
     pid = doc['id']
     object ||= Dor.find(pid)
     apo_pid = ''
-    #wf_stuff.include? 'accessionWF:completed:publish'
+    # wf_stuff.include? 'accessionWF:completed:publish'
     begin
-      apo_pid = doc['is_governed_by_ssim'].first.gsub('info:fedora/','')
+      apo_pid = doc['is_governed_by_ssim'].first.gsub('info:fedora/', '')
     rescue
     end
     buttons = []
@@ -137,23 +137,23 @@ module ArgoHelper
       end
     end
 
-    #if this is an apo and the user has permission for the apo, let them edit it.
+    # if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') && (current_user.is_admin || current_user.is_manager || object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin || current_user.is_manager
-      buttons << {:url => url_for(:controller => :dor,:action => :reindex, :pid => pid), :label => 'Reindex'}
-      buttons << {:url => url_for(:controller => :items,:action => :add_workflow, :id => pid), :label => 'Add workflow'}
+      buttons << {:url => url_for(:controller => :dor, :action => :reindex, :pid => pid), :label => 'Reindex'}
+      buttons << {:url => url_for(:controller => :items, :action => :add_workflow, :id => pid), :label => 'Add workflow'}
       if has_been_published? pid
-        buttons << {:url => url_for(:controller => :dor,:action => :republish, :pid => pid), :label => 'Republish'}
+        buttons << {:url => url_for(:controller => :dor, :action => :republish, :pid => pid), :label => 'Republish'}
       end
       unless has_been_submitted? pid
-        buttons << {:url =>  url_for(:controller => :items,:action => :purge_object, :id => pid), :label => 'Purge', :new_page => true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
+        buttons << {:url =>  url_for(:controller => :items, :action => :purge_object, :id => pid), :label => 'Purge', :new_page => true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
       end
       buttons << {:url => '/items/' + pid + '/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/' + pid + '/tags_ui', :label => 'Edit tags'}
-      unless object.datastreams.include? 'administrativeMetadata' #apos cant be members of collections
+      unless object.datastreams.include? 'administrativeMetadata' # apos cant be members of collections
         buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
       end
       if object.datastreams.include? 'contentMetadata'
@@ -163,7 +163,7 @@ module ArgoHelper
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
     end
-    if (doc.key?('embargo_status_ssim'))
+    if doc.key?('embargo_status_ssim')
       embargo_data = doc['embargo_status_ssim']
       text = embargo_data.split.first
       # date=embargo_data.split.last
@@ -183,7 +183,7 @@ module ArgoHelper
   def document_has?(document, field_name)
     return true if document.has? field_name
     return false unless self.respond_to?(:"calculate_#{field_name}_value")
-    calculated_value = self.send(:"calculate_#{field_name}_value", document)
+    calculated_value = send(:"calculate_#{field_name}_value", document)
     return false if calculated_value.nil?
     document[field_name] = [calculated_value]
     true
@@ -223,7 +223,7 @@ module ArgoHelper
   def render_section_header_link(section, document)
     section_header_method = blacklight_config[:show][:section_links][section]
     return if section_header_method.nil?
-    self.send(section_header_method, document)
+    send(section_header_method, document)
   end
 
   def render_full_dc_link(document, link_text = 'View full Dublin Core')

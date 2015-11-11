@@ -51,9 +51,9 @@ class SolrDocument
   def self.get_milestones(doc)
     milestones = {}
     Array(doc['lifecycle_ssim']).each do |m|
-      (name, time) = m.split(/:/,2)
+      (name, time) = m.split(/:/, 2)
       next unless time  # skip basic values like: "registered"
-      (time, version) = time.split(/;/,2)
+      (time, version) = time.split(/;/, 2)
       version = 1 unless version && version.length > 0
       milestones[version] ||= ActiveSupport::OrderedHash[
         'registered'  => {},  # each of these *could* have :display and :time elements

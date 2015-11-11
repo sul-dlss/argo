@@ -7,11 +7,11 @@ require 'retries'
 
 desc 'Get application version'
 task :app_version do
-  puts File.read(File.expand_path('../../../VERSION',__FILE__)).strip
+  puts File.read(File.expand_path('../../../VERSION', __FILE__)).strip
 end
 
 def jettywrapper_load_config
-  Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'),:startup_wait => 200})
+  Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'), :startup_wait => 200})
 end
 
 task :default => [:ci]
@@ -45,7 +45,7 @@ namespace :argo do
   desc "Bump Argo's version number before release"
   task :bump_version, [:level] do |t, args|
     levels = %w(major minor patch rc)
-    version_file = File.expand_path('../../../VERSION',__FILE__)
+    version_file = File.expand_path('../../../VERSION', __FILE__)
     version = File.read(version_file)
     version = version.split(/\./)
     index = levels.index(args[:level] || (version.length == 4 ? 'rc' : 'patch'))
@@ -60,7 +60,7 @@ namespace :argo do
       (index + 1).upto(2) { |i| version[i] = '0' }
     end
     version = version.join('.')
-    File.open(version_file,'w') { |f| f.write(version) }
+    File.open(version_file, 'w') { |f| f.write(version) }
     $stderr.puts "Version bumped to #{version}"
   end
 
@@ -77,13 +77,12 @@ namespace :argo do
     end
 
     desc 'Overwrite Solr configs and JARs'
-    task :config => %w[argo:solr:config] do   # TODO: argo:fedora:config
+    task :config => %w(argo:solr:config) do   # TODO: argo:fedora:config
     end
   end  # :jetty
 
   ## DEFAULTS
   solr_conf_dir     = 'solr_conf'
-  fedora_conf_dir   = 'fedora_conf'
   fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
   fedora_files      = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
   live_solrxml_file = 'jetty/solr/solr.xml'
@@ -94,7 +93,7 @@ namespace :argo do
   namespace :solr do
     ## HELPERS
     def xml_cores(file)
-      res = Hash.new
+      res = {}
       solrxml = Nokogiri.XML(File.read(file))
       solrxml.xpath('solr/cores/core').each do |core|
         res[core.attr('name')] = core.attr('instanceDir')
@@ -112,7 +111,7 @@ namespace :argo do
       url = args[:url]
       puts "Requesting #{url}"
       json = json_cores(url)
-      json['status'].each do |k,v|
+      json['status'].each do |k, v|
         puts "#{k} in #{v['name']}"
       end
       realcores = json['status']
@@ -121,7 +120,7 @@ namespace :argo do
     desc "Read cores from solr.xml file, default: #{live_solrxml_file}"
     task :xmlcores, [:solrxml] do |task, args|
       args.with_defaults(:solrxml => live_solrxml_file)
-      xml_cores(args[:solrxml]).each do |k,v|
+      xml_cores(args[:solrxml]).each do |k, v|
         puts "#{k} in #{v}"
       end
     end
@@ -146,7 +145,7 @@ namespace :argo do
     task :load, [:glob, :cores] => :cores do |task, args|
       args.with_defaults(:glob => fixtures_fileglob, :cores => realcores.keys)
       docs = []
-      counts = Hash.new{ |h,k| 0 }
+      counts = Hash.new{ |h, k| 0 }
       Dir.glob(args[:glob]).each do |file|
         reply = JSON.parse(IO.read(file))
         reply['response']['docs'].each do |doc|
@@ -209,7 +208,7 @@ namespace :argo do
       puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
 
       file_list = []
-      if (args.key?(:glob))
+      if args.key?(:glob)
         file_list = glob_files(args[:glob])
       else
         puts 'No file glob was specified so file order and inclusion is determined by the load_order file'
@@ -259,7 +258,7 @@ namespace :argo do
   end
 
   def load_order_files(fedora_files)
-    file_list = Array.new
+    file_list = []
     fedora_files.each do |file|
       file_list.push(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), file.strip))
     end
@@ -273,7 +272,7 @@ namespace :argo do
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
     facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect(&:value).join(%[\n])}"
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect(&:value).join(%(\n))}"
   end
 
   # the .htaccess file lists the workgroups that we recognize as relevant to argo.
@@ -294,17 +293,17 @@ namespace :argo do
     directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
     facet = get_workgroups_facet()
     unless facet.nil?
-      facets = facet.items.collect &:value
+      facets = facet.items.collect(&:value)
 
       priv_groups = facets.select { |v| v =~ /^workgroup:/ }
       priv_groups += (ADMIN_GROUPS + VIEWER_GROUPS + MANAGER_GROUPS) # we know that we always want these built-in groups to be part of .htaccess
       priv_groups.uniq! # no need to repeat ourselves (mostly there in case the builtin groups are already listed in APOs)
 
       directives += priv_groups.collect { |v|
-        ["Require privgroup #{v.split(/:/,2).last}", "WebAuthLdapPrivgroup #{v.split(/:/,2).last}"]
+        ["Require privgroup #{v.split(/:/, 2).last}", "WebAuthLdapPrivgroup #{v.split(/:/, 2).last}"]
       }.flatten
 
-      File.open(File.join(Rails.root, 'public/.htaccess'),'w') do |htaccess|
+      File.open(File.join(Rails.root, 'public/.htaccess'), 'w') do |htaccess|
         htaccess.puts directives.sort.join("\n")
       end
       File.unlink('public/auth/.htaccess') if File.exist?('public/auth/.htaccess')
@@ -318,7 +317,7 @@ namespace :argo do
 
   desc 'Reindex all (or a subset) of DOR objects in Solr'
   task :reindex_all, [:query] => [:environment] do |t, args|
-    index_log = Logger.new(File.join(Rails.root,'log','reindex.log'))
+    index_log = Logger.new(File.join(Rails.root, 'log', 'reindex.log'))
     index_log.formatter = Logger::Formatter.new
     index_log.level = ENV['LOG_LEVEL'] ? Logger::SEV_LABEL.index(ENV['LOG_LEVEL']) : Logger::INFO
     $stdout.sync = true
@@ -361,7 +360,7 @@ namespace :argo do
     end
     pids.delete_if { |pid| pid !~ /druid:/ }
     time = Time.now - start_time
-    msg = "#{pids.length} PIDs discovered in #{[(time / 3600).floor, (time / 60 % 60).floor, (time % 60).floor].map{|tt| tt.to_s.rjust(2,'0')}.join(':')}"
+    msg = "#{pids.length} PIDs discovered in #{[(time / 3600).floor, (time / 60 % 60).floor, (time % 60).floor].map{|tt| tt.to_s.rjust(2, '0')}.join(':')}"
     $stdout.puts msg
     index_log.info msg
 

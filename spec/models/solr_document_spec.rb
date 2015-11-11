@@ -3,8 +3,8 @@ require 'spec_helper'
 describe SolrDocument, :type => :model do
   describe 'get_milestones' do
     it 'should build an empty listing if passed an empty doc' do
-      milestones = SolrDocument.get_milestones(Hash.new)
-      milestones.each do |key,value|
+      milestones = SolrDocument.get_milestones({})
+      milestones.each do |key, value|
         expect(value).to match a_hash_excluding(:time)
       end
     end
@@ -18,7 +18,7 @@ describe SolrDocument, :type => :model do
           'registered' => { :time => be_a_kind_of(DateTime) }
         )
       )
-      versions[1].each do |key,value|
+      versions[1].each do |key, value|
         if key == 'registered'
           expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
         else
@@ -46,13 +46,13 @@ describe SolrDocument, :type => :model do
           }
         )
       )
-      versions.each do |version,milestones|
-        milestones.each do |key,value|
+      versions.each do |version, milestones|
+        milestones.each do |key, value|
           case key
             when 'registered'
               expect(value[:time]).to be_a_kind_of DateTime
               expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
-              expect(version).to eq('1')       #registration is always only on v1
+              expect(version).to eq('1')       # registration is always only on v1
             when 'opened'
               expect(value[:time]).to be_a_kind_of DateTime
               expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:39:57+00:00')

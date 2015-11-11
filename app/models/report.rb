@@ -192,7 +192,7 @@ class Report
       @fields = self.class.blacklight_config.report_fields
     else
       @fields = self.class.blacklight_config.report_fields.select { |f| fields.nil? || fields.include?(f[:field]) }
-      @fields.sort! { |a,b| fields.index(a[:field]) <=> fields.index(b[:field]) }
+      @fields.sort! { |a, b| fields.index(a[:field]) <=> fields.index(b[:field]) }
     end
     @params = params
     @params[:page] ||= 1
@@ -260,11 +260,11 @@ class Report
 
   def docs_to_records(docs, fields = blacklight_config.report_fields)
     result = []
-    docs.each_with_index do |doc,index|
+    docs.each_with_index do |doc, index|
       row = Hash[fields.collect do |spec|
         val = spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field]] rescue nil
         val = val.join('; ') if val.is_a?(Array)
-        [spec[:field],val]
+        [spec[:field], val]
       end]
       row['id'] = index + 1
       result << row

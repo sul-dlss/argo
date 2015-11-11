@@ -25,8 +25,8 @@ Capybara.javascript_driver = :poltergeist
 Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
 
 def druid_to_path(druid, flavor = 'xml')
-  fixture_mask = File.join(File.dirname(__FILE__),'fixtures',"*_#{druid.sub(/:/,'_')}.#{flavor}")
-  other_mask   = Rails.root.join('fedora_conf','data',"#{druid.sub(/druid:/,'')}.#{flavor}")
+  fixture_mask = File.join(File.dirname(__FILE__), 'fixtures', "*_#{druid.sub(/:/, '_')}.#{flavor}")
+  other_mask   = Rails.root.join('fedora_conf', 'data', "#{druid.sub(/druid:/, '')}.#{flavor}")
   Dir[fixture_mask].first || Dir[other_mask].first
 end
 
@@ -73,7 +73,7 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
       dsid = stream['ID']
       ds = result.datastreams[dsid]
       if ds.nil?
-        ds = other_class.new(result,dsid)
+        ds = other_class.new(result, dsid)
         result.add_datastream(ds)
       end
 
@@ -85,7 +85,7 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
         result.datastreams[dsid] = ds.class.from_xml(ds, stream)
       end
     rescue
-      #rescue if 1 datastream failed
+      # rescue if 1 datastream failed
     end
   end
 
@@ -94,7 +94,7 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
   result.datastreams.each_pair do |dsid, ds|
     if ds.is_a?(other_class) && !ds.is_a?(Dor::WorkflowDs)
       ds.instance_eval do
-        def content       ; self.ng_xml.to_s                 ; end
+        def content       ; ng_xml.to_s                 ; end
         def content=(val) ; self.ng_xml = Nokogiri::XML(val) ; end
       end
     end

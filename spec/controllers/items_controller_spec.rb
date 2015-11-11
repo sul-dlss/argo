@@ -51,18 +51,18 @@ describe ItemsController, :type => :controller do
 
   describe 'release_hold' do
     it 'should release an item that is on hold if its apo has been ingested' do
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('hold')
+      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
       expect(Dor::WorkflowService).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
       expect(Dor::WorkflowService).to receive(:update_workflow_status)
       post :release_hold, :id => @pid
     end
     it 'should refuse to release an item that isnt on hold' do
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('waiting')
+      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
       expect(Dor::WorkflowService).not_to receive(:update_workflow_status)
       post :release_hold, :id => @pid
     end
     it 'should refuse to release an item whose apo hasnt been ingested' do
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF','sdr-ingest-transfer').and_return('hold')
+      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
       expect(Dor::WorkflowService).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
       expect(Dor::WorkflowService).not_to receive(:update_workflow_status)
       post :release_hold, :id => @pid
@@ -83,7 +83,7 @@ describe ItemsController, :type => :controller do
     end
     it 'should call Dor::Item.update_embargo' do
       expect(@item).to receive(:update_embargo)
-      post :embargo_update, :id => @pid,:embargo_date => '2012-10-19T00:00:00Z'
+      post :embargo_update, :id => @pid, :embargo_date => '2012-10-19T00:00:00Z'
       expect(response.code).to eq('302')
     end
   end
@@ -178,7 +178,7 @@ describe ItemsController, :type => :controller do
 
   describe 'add_file' do
     it 'should recieve an uploaded file and add it to the requested resource' do
-      #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
+      # found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
       expect(@item).to receive(:add_file)
       post 'add_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID'
@@ -202,7 +202,7 @@ describe ItemsController, :type => :controller do
   end
   describe 'replace_file' do
     it 'should recieve an uploaded file and call dor-services' do
-      #found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
+      # found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
       file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
       expect(@item).to receive(:replace_file)
       post 'replace_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'

@@ -1,6 +1,6 @@
 class Robot < ActiveRecord::Base
-  #attr_accessible is deprecated after Rails 3.  also: the only thing that sets these fields
-  #is a migration, and no other models in argo use this mass assignment prevention approach.
+  # attr_accessible is deprecated after Rails 3.  also: the only thing that sets these fields
+  # is a migration, and no other models in argo use this mass assignment prevention approach.
   # attr_accessible :wf, :process
 
   def status

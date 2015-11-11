@@ -45,7 +45,7 @@ module Argo
     end
   end
 
-  ARGO_VERSION = File.read(File.join(Rails.root,'VERSION'))
+  ARGO_VERSION = File.read(File.join(Rails.root, 'VERSION'))
 
   class << self
     def version
@@ -53,7 +53,7 @@ module Argo
     end
 
     def configure(*args, &block)
-      Argo::Config.configure *args, &block
+      Argo::Config.configure(*args, &block)
     end
   end
 
@@ -61,8 +61,8 @@ module Argo
     reindex_on_the_fly false
     urls do
       mdtoolkit nil
-      purl nil
-      stacks nil
+      purl      nil
+      stacks    nil
     end
   end
 end

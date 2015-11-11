@@ -16,7 +16,7 @@ module Argo
       end
 
       def create_config_file
-        template "#{self.target_file}.erb", self.target_path
+        template "#{target_file}.erb", target_path
       end
 
       private

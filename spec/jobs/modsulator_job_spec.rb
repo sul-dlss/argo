@@ -11,7 +11,7 @@ describe ModsulatorJob, type: :job do
   end
 
   after :all do
-    FileUtils.rm_rf(@output_directory) if (Dir.exist?(@output_directory))
+    FileUtils.rm_rf(@output_directory) if Dir.exist?(@output_directory)
   end
 
   describe 'update_metadata' do

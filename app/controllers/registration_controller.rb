@@ -14,17 +14,17 @@ class RegistrationController < ApplicationController
   end
 
   def form_list
-    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).docs
+    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}")).docs
     md_format = docs.collect { |doc| doc['metadata_format_ssim'] }.flatten.first.to_s
     forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
-    result = forms[md_format.downcase].to_a.sort { |a,b| a[1].casecmp(b[1]) }
+    result = forms[md_format.downcase].to_a.sort { |a, b| a[1].casecmp(b[1]) }
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
     end
   end
 
   def workflow_list
-    docs = Dor::SearchService.query(%{id:"#{params[:apo_id]}"}).docs
+    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}")).docs
     result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.administrativeMetadata.ng_xml
@@ -64,9 +64,9 @@ class RegistrationController < ApplicationController
       # readable by world translates to World
       default_opt = 'world'
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group[text()=\'Stanford\' or text()=\'stanford\']').length > 0
-      #TODO: this is stupid, should handle "stanford" regardless of the string's case, but the xpath parser doesn't support the lower-case() fn
+      # TODO: this is stupid, should handle "stanford" regardless of the string's case, but the xpath parser doesn't support the lower-case() fn
       # readable by stanford translates to Stanford
-      #TODO: found something indicating that xpath might support regex
+      # TODO: found something indicating that xpath might support regex
       default_opt = 'stanford'
     elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').length > 0
       # readable by none is either Citation Only (formerly "None") or Dark
@@ -83,7 +83,7 @@ class RegistrationController < ApplicationController
     # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
     # we didn't find a default option, we'll just return the default list of rights options with no
     # specified selection.
-    result = Hash.new
+    result = {}
     { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'Citation Only', 'dark' => 'Dark'}.each do |key, val|
       if default_opt == key
         result['default'] = "#{val} (APO default)"

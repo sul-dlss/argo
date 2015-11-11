@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'items/_button_link_list.html.erb' do
-  let(:buttons) {
+  let(:buttons) do
     [
       {
         label: 'Click me',
@@ -18,7 +18,7 @@ describe 'items/_button_link_list.html.erb' do
         ajax_modal: true
       }
     ]
-  }
+  end
   it 'should contain button group, with specific buttons' do
     render 'items/button_link_list', buttons: buttons
     expect(rendered).to have_css '.btn-group-vertical.argo-show-btn-group'

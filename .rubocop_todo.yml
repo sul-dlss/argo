@@ -7,20 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 3
-Lint/AmbiguousOperator:
-  Exclude:
-    - 'app/controllers/items_controller.rb'
-    - 'config/application.rb'
-    - 'lib/tasks/argo.rake'
-
-# Offense count: 2
-# Configuration parameters: AllowSafeAssignment.
-Lint/AssignmentInCondition:
-  Exclude:
-    - 'app/helpers/registration_helper.rb'
-    - 'app/helpers/workflow_helper.rb'
-
-# Offense count: 3
 Lint/HandleExceptions:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
@@ -65,11 +51,6 @@ Lint/UnusedMethodArgument:
     - 'app/helpers/workflow_helper.rb'
     - 'app/models/argo/access_controls_enforcement.rb'
     - 'script/haml2erb'
-
-# Offense count: 1
-Lint/UselessAssignment:
-  Exclude:
-    - 'lib/tasks/argo.rake'
 
 # Offense count: 96
 Metrics/AbcSize:
@@ -128,25 +109,6 @@ Style/AlignHash:
     - 'app/helpers/registration_helper.rb'
     - 'lib/tasks/argo.rake'
     - 'spec/controllers/apo_controller_spec.rb'
-
-# Offense count: 19
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, ProceduralMethods, FunctionalMethods, IgnoredMethods.
-Style/BlockDelimiters:
-  Exclude:
-    - 'app/controllers/apo_controller.rb'
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/catalog_controller.rb'
-    - 'app/controllers/discovery_controller.rb'
-    - 'app/controllers/items_controller.rb'
-    - 'app/controllers/report_controller.rb'
-    - 'app/helpers/dor/objects_helper.rb'
-    - 'app/helpers/items_helper.rb'
-    - 'app/helpers/spreadsheet_helper.rb'
-    - 'app/jobs/modsulator_job.rb'
-    - 'lib/tasks/argo.rake'
-    - 'spec/spec_helper.rb'
-    - 'spec/views/items/_button_link_list.html.erb_spec.rb'
 
 # Offense count: 36
 # Cop supports --auto-correct.
@@ -252,15 +214,6 @@ Style/EmptyLinesAroundModuleBody:
     - 'app/helpers/value_helper.rb'
     - 'app/helpers/workflow_helper.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-Style/EmptyLiteral:
-  Exclude:
-    - 'app/controllers/catalog_controller.rb'
-    - 'app/controllers/registration_controller.rb'
-    - 'lib/tasks/argo.rake'
-    - 'spec/models/solr_document_spec.rb'
-
 # Offense count: 45
 # Cop supports --auto-correct.
 # Configuration parameters: AllowForAlignment.
@@ -309,11 +262,6 @@ Style/Lambda:
     - 'spec/controllers/application_controller_spec.rb'
     - 'spec/controllers/items_controller_spec.rb'
 
-# Offense count: 92
-# Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Enabled: false
-
 # Offense count: 30
 # Cop supports --auto-correct.
 Style/MethodCallParentheses:
@@ -352,44 +300,6 @@ Style/MultilineOperationIndentation:
 Style/NumericLiterals:
   MinDigits: 15
 
-# Offense count: 22
-# Cop supports --auto-correct.
-# Configuration parameters: AllowSafeAssignment.
-Style/ParenthesesAroundCondition:
-  Exclude:
-    - 'app/controllers/apo_controller.rb'
-    - 'app/controllers/catalog_controller.rb'
-    - 'app/controllers/items_controller.rb'
-    - 'app/helpers/argo_helper.rb'
-    - 'app/helpers/registration_helper.rb'
-    - 'app/helpers/spreadsheet_helper.rb'
-    - 'app/helpers/workflow_helper.rb'
-    - 'app/jobs/modsulator_job.rb'
-    - 'app/models/user.rb'
-    - 'config/initializers/numeric_byte_string.rb'
-    - 'lib/tasks/argo.rake'
-    - 'spec/integration/bulk_jobs_spec.rb'
-    - 'spec/jobs/modsulator_job_spec.rb'
-
-# Offense count: 21
-# Cop supports --auto-correct.
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Exclude:
-    - 'app/controllers/catalog_controller.rb'
-    - 'app/controllers/registration_controller.rb'
-    - 'app/helpers/blacklight_config_helper.rb'
-    - 'app/helpers/dor_object_helper.rb'
-    - 'app/helpers/registration_helper.rb'
-    - 'config/deploy.rb'
-    - 'config/deploy/dev.rb'
-    - 'config/deploy/prod-b.rb'
-    - 'config/deploy/prod.rb'
-    - 'config/deploy/stage.rb'
-    - 'lib/tasks/argo.rake'
-    - 'optparse.rb'
-    - 'spec/controllers/dor_controller_spec.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Style/PerlBackrefs:
@@ -409,19 +319,6 @@ Style/PredicateName:
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/RaiseArgs:
   Enabled: false
-
-# Offense count: 22
-# Cop supports --auto-correct.
-Style/RedundantSelf:
-  Exclude:
-    - 'app/controllers/discovery_controller.rb'
-    - 'app/controllers/items_controller.rb'
-    - 'app/controllers/report_controller.rb'
-    - 'app/helpers/argo_helper.rb'
-    - 'app/models/user.rb'
-    - 'config/initializers/numeric_byte_string.rb'
-    - 'lib/generators/argo/solr/solr_generator.rb'
-    - 'spec/spec_helper.rb'
 
 # Offense count: 8
 # Cop supports --auto-correct.
@@ -469,11 +366,6 @@ Style/SingleSpaceBeforeFirstArg:
     - 'config/routes.rb'
     - 'db/migrate/20110820000003_create_searches.rb'
     - 'db/schema.rb'
-
-# Offense count: 250
-# Cop supports --auto-correct.
-Style/SpaceAfterComma:
-  Enabled: false
 
 # Offense count: 11
 # Cop supports --auto-correct.

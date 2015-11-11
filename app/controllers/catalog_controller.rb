@@ -46,7 +46,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'originInfo_date_created_tesim', :label => 'Created'
     config.add_show_field 'obj_label_ssim',              :label => 'Label'
     config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy'
-    config.add_show_field 'is_member_of_collection_ssim',:label => 'Collection'
+    config.add_show_field 'is_member_of_collection_ssim', :label => 'Collection'
     config.add_show_field 'status_ssi',                  :label => 'Status'
     config.add_show_field 'objectType_ssim',             :label => 'Object Type'
     config.add_show_field 'id',                          :label => 'DRUID'
@@ -68,8 +68,8 @@ class CatalogController < ApplicationController
     config.add_facet_field 'use_license_machine_ssi', :label => 'License'
     config.add_facet_field 'nonhydrus_collection_title_ssim', :label => 'Collection',  :sort => 'index'
     config.add_facet_field 'hydrus_collection_title_ssim',    :label => 'Hydrus Collection',  :sort => 'index'
-    config.add_facet_field 'nonhydrus_apo_title_ssim',        :label => 'Admin Policy',:sort => 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim',           :label => 'Hydrus Admin Policy',:sort => 'index'
+    config.add_facet_field 'nonhydrus_apo_title_ssim',        :label => 'Admin Policy', :sort => 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim',           :label => 'Hydrus Admin Policy', :sort => 'index'
     config.add_facet_field 'current_version_isi',   :label => 'Version'
     config.add_facet_field 'processing_status_text_ssi', :label => 'Processing Status'
     config.add_facet_field 'released_to_ssim',      :label => 'Released To'
@@ -160,7 +160,7 @@ class CatalogController < ApplicationController
   def default_solr_doc_params(id = nil)
     id ||= params[:id]
     {
-      :q => %{id:"#{id}"}
+      :q => %(id:"#{id}")
     }
   end
 
@@ -270,7 +270,7 @@ class CatalogController < ApplicationController
   def reformat_dates
     params.each do |key, val|
       begin
-        if (key =~ /_datepicker/ && val =~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/)
+        if key =~ /_datepicker/ && val =~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/
           val = DateTime.parse(val).beginning_of_day.utc.xmlschema
           field = key.split( '_after_datepicker').first.split('_before_datepicker').first
           params[:f][field] = '[' + val.to_s + 'Z TO *]'
@@ -286,7 +286,7 @@ class CatalogController < ApplicationController
     job_info = {}
     log_filename = File.join(dir, Argo::Config.bulk_metadata_log)
     if File.directory?(dir) && File.readable?(dir) && File.exist?(log_filename) && File.readable?(log_filename)
-      File.open(log_filename, 'r') { |log_file|
+      File.open(log_filename, 'r') do |log_file|
         log_file.each_line do |line|
 
           # The log file is a very simple flat file (whitespace separated) format where the first token denotes the
@@ -299,19 +299,19 @@ class CatalogController < ApplicationController
         end
         job_info['dir'] = get_leafdir(dir)
         job_info['argo.bulk_metadata.bulk_log_druids_loaded'] = success
-      }
+      end
     end
     job_info
   end
 
   # Given a DRUID, loads any metadata bulk upload information associated with that DRUID into a hash.
   def load_bulk_jobs(druid)
-    directory_list = Array.new
-    bulk_info = Array.new()
+    directory_list = []
+    bulk_info = []
     bulk_load_dir = File.join(Argo::Config.bulk_metadata_directory, druid)
 
     # The metadata bulk upload processing stores its logs and other information in a very simple directory structure
-    if (File.directory?(bulk_load_dir))
+    if File.directory?(bulk_load_dir)
       directory_list = Dir.glob("#{bulk_load_dir}/*")
     end
 

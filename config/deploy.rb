@@ -7,8 +7,8 @@ set :repo_url, 'https://github.com/sul-dlss/argo.git'
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-#TODO:  ask for user, should know what the name of the app is, should be able to build deploy_to from those
-#TODO:  prompt for server name and use that to build hostname (based on app name)
+# TODO:  ask for user, should know what the name of the app is, should be able to build deploy_to from those
+# TODO:  prompt for server name and use that to build hostname (based on app name)
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/lyberadmin/argo'
 
@@ -25,10 +25,10 @@ set :deploy_to, '/home/lyberadmin/argo'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/solr.yml config/default_htaccess_directives}
+set :linked_files, %w(config/database.yml config/solr.yml config/default_htaccess_directives)
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log config/certs config/settings tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w(log config/certs config/settings tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

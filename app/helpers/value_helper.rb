@@ -35,7 +35,7 @@ module ValueHelper
   end
 
   def value_for_wf_error_ssim(args)
-    _wf, step, message = args[:document].get(args[:field]).split(':',3)
+    _wf, step, message = args[:document].get(args[:field]).split(':', 3)
     step + ' : ' + message
   end
 
@@ -52,7 +52,7 @@ module ValueHelper
   rescue StandardError => e
     Rails.logger.error e.message
     Rails.logger.error e.backtrace.join("\n")
-    #value_for_related_druid('is_governed_by', args)
+    # value_for_related_druid('is_governed_by', args)
   end
 
   def value_for_is_member_of_collection_ssim(args)

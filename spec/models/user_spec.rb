@@ -166,7 +166,7 @@ describe User, :type => :model do
     end
   end
 
-  #TODO
+  # TODO
   describe 'permitted_apos' do
     xit 'not implemented' do
     end

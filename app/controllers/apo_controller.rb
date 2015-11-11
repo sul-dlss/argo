@@ -29,9 +29,9 @@ class ApoController < ApplicationController
     end
 
     respond_to do |format|
-      format.json {
+      format.json do
         render :json => ret_val
-      }
+      end
     end
   end
 
@@ -86,7 +86,7 @@ class ApoController < ApplicationController
     apo.desc_metadata_format = md_info[:desc_md  ]
     apo.metadata_source      = md_info[:metadata_source]
     apo.agreement            = md_info[:agreement].to_s
-    apo.default_workflow     = md_info[:workflow ] unless (!md_info[:workflow] || md_info[:workflow].length < 5)
+    apo.default_workflow     = md_info[:workflow ] unless !md_info[:workflow] || md_info[:workflow].length < 5
     apo.default_rights       = md_info[:default_object_rights]
     # Set the Use License given a machine-readable code for a creative commons or open data commons license
     apo.use_license          = md_info[:use_license].blank? ? :none : md_info[:use_license]
@@ -102,7 +102,7 @@ class ApoController < ApplicationController
     apo_pid = response[:pid]
     apo = Dor.find(apo_pid)
 
-    #register a collection if requested
+    # register a collection if requested
     collection_pid = nil
     if params[:collection_radio] == 'create'
       collection_pid = create_collection apo_pid
@@ -131,7 +131,7 @@ class ApoController < ApplicationController
   def param_cleanup(params)
     params[:title].strip! if params[:title]
     [:managers, :viewers].each do |role_param_sym|
-      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') if params[role_param_sym]
+      params[role_param_sym] = params[role_param_sym].gsub('\n', ' ').gsub(',', ' ') if params[role_param_sym]
     end
   end
 
@@ -321,7 +321,7 @@ class ApoController < ApplicationController
     end
   end
 
-  #check that the user can carry out this object modification
+  # check that the user can carry out this object modification
   def forbid
     return if current_user.is_admin || @object.can_manage_content?(current_user.roles params[:id])
     render :status => :forbidden, :text => 'forbidden'

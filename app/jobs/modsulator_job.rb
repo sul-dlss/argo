@@ -150,7 +150,7 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String] output_dir Where to store the log file.
   # @return [String] A filename for the log file.
   def generate_log_filename(output_dir)
-    FileUtils.mkdir_p(output_dir) unless (File.directory?(output_dir))
+    FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
     # This log will be used for generating the table of past jobs later
     File.join(output_dir, Argo::Config.bulk_metadata_log)
   end
@@ -176,7 +176,7 @@ class ModsulatorJob < ActiveJob::Base
     log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_user #{username}")
     log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}")
-    log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if (note && note.length > 0)
+    log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if note && note.length > 0
   end
 
   # Calls the MODSulator web service (modsulator-app) to process the uploaded file. If a request fails, the job will fail
@@ -193,7 +193,7 @@ class ModsulatorJob < ActiveJob::Base
     url = nil
 
     begin
-      if (filetype == 'xml_only')  # Just clean up the given XML file
+      if filetype == 'xml_only'  # Just clean up the given XML file
         url = Argo::Config.urls.normalizer
         response_xml = RestClient.post(url, File.read(uploaded_filename))
       else                         # The given file is a spreadsheet

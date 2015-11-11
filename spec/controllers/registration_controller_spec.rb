@@ -3,7 +3,7 @@ require 'spec_helper'
 describe RegistrationController, :type => :controller do
   before :each do
     @item = double(Dor::Item)
-    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true,:privgroup => ADMIN_GROUPS.first)
+    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
     allow(@current_user).to receive(:is_admin).and_return(true)
     allow_any_instance_of(RegistrationController).to receive(:current_user).and_return(@current_user)
     allow(Dor::Item).to receive(:find).and_return(@item)
@@ -37,7 +37,7 @@ describe RegistrationController, :type => :controller do
       @item = double(Dor::Item)
       xml = Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
-      #using content metadata, but any datastream would do
+      # using content metadata, but any datastream would do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
@@ -72,7 +72,7 @@ describe RegistrationController, :type => :controller do
       @item = double(Dor::Item)
       xml = Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
-      #using content metadata, but any datastream would do
+      # using content metadata, but any datastream would do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
@@ -107,7 +107,7 @@ describe RegistrationController, :type => :controller do
       @item = double(Dor::Item)
       xml = Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
-      #using content metadata, but any datastream would do
+      # using content metadata, but any datastream would do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
@@ -142,7 +142,7 @@ describe RegistrationController, :type => :controller do
       @item = double(Dor::Item)
       xml = Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
-      #using content metadata, but any datastream would do
+      # using content metadata, but any datastream would do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
@@ -177,7 +177,7 @@ describe RegistrationController, :type => :controller do
       @item = double(Dor::Item)
       xml = Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
-      #using content metadata, but any datastream would do
+      # using content metadata, but any datastream would do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
@@ -190,7 +190,7 @@ describe RegistrationController, :type => :controller do
       @item = double(Dor::Item)
       xml = Nokogiri::XML(content)
       allow(Dor).to receive(:find).and_return(@item)
-      #using content metadata, but any datastream would do
+      # using content metadata, but any datastream would do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights

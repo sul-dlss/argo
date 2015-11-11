@@ -26,10 +26,10 @@ Argo::Application.routes.draw do
   match 'catalog/:id/:time/bulk_jobs_csv', :to => 'catalog#bulk_jobs_csv',     :as => 'bulk_jobs_csv',      :via => [:get]
   match 'catalog/:id/bulk_jobs_delete',    :to => 'catalog#bulk_jobs_delete',  :as => 'bulk_jobs_delete',   :via => [:delete]
 
-  #TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
+  # TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
   # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
-  match '/catalog', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
-  match '/catalog/*all', :via => [:get, :post], :to => redirect { |params,req| req.fullpath.sub(%r{^/catalog},'/view') }
+  match '/catalog', :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }
+  match '/catalog/*all', :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }
   mount AboutPage::Engine => '/about(.:format)'
   match '/report', :to => 'report#index', :via => [:get, :post], :as => 'report'
   match '/report/data', :to => 'report#data', :via => [:get, :post], :as => 'report_data'

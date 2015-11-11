@@ -9,7 +9,7 @@ module DorObjectHelper
       :date      => { :selector => %w(public_dc_date_tesim originInfo_date_created_tesim) }
     }
     result = {}
-    terms.each_pair do |term,finder|
+    terms.each_pair do |term, finder|
       finder[:selector].each do |key|
         next unless doc[key].present?
         val = doc[key]
@@ -58,7 +58,7 @@ module DorObjectHelper
 
   def render_datetime(datetime)
     return '' if datetime.nil? || datetime == ''
-    #this needs to use the timezone set in config.time_zone
+    # this needs to use the timezone set in config.time_zone
     begin
       zone = ActiveSupport::TimeZone.new('Pacific Time (US & Canada)')
       d = datetime.is_a?(Time) ? datetime : DateTime.parse(datetime).in_time_zone(zone)
@@ -70,7 +70,7 @@ module DorObjectHelper
   end
 
   def render_events(doc, obj)
-    events = structure_from_solr(doc,'event')
+    events = structure_from_solr(doc, 'event')
     unless events.empty?
       events = events.event.collect do |event|
         next if event.nil?
@@ -125,7 +125,7 @@ module DorObjectHelper
     Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
   end
 
-  #TODO: switch to using Dor::Config.sdr.rest_client
+  # TODO: switch to using Dor::Config.sdr.rest_client
   def last_accessioned_version(object)
     # we just want the hostname, remove the scheme, we'll build it back into the URL in a bit...
     sdr_host = Dor::Config.content.sdr_server.gsub('https://', '')
@@ -178,7 +178,7 @@ module DorObjectHelper
   def render_workflows(doc, obj)
     workflows = {}
     Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :symbol)]).each do |line|
-      (wf,status,errors,repo) = line.split(/\|/)
+      (wf, status, errors, repo) = line.split(/\|/)
       workflows[wf] = { :status => status, :errors => errors.to_i, :repo => repo }
     end
     render :partial => 'catalog/show_workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
@@ -187,7 +187,7 @@ module DorObjectHelper
   # Datastream helpers
   CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
   def parse_specs(spec_string)
-    Hash[[:dsid,:control_group,:mime_type,:version,:size,:label].zip(spec_string.split(/\|/))]
+    Hash[[:dsid, :control_group, :mime_type, :version, :size, :label].zip(spec_string.split(/\|/))]
   end
 
   def render_ds_control_group(doc, specs)
@@ -209,7 +209,7 @@ module DorObjectHelper
 
   def render_ds_size(doc, specs)
     val = specs[:size].to_i.bytestring('%.1f%s').downcase
-    val.sub(/\.?0+([a-z]?b)$/,'\1')
+    val.sub(/\.?0+([a-z]?b)$/, '\1')
   end
 
   def render_ds_label(doc, specs)
@@ -219,7 +219,7 @@ module DorObjectHelper
   def render_ds_profile_header(ds)
     dscd = ds.createDate
     dscd = dscd.xmlschema if dscd.is_a?(Time)
-    %{<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">}
+    %(<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">)
   end
 
 end

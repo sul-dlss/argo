@@ -63,11 +63,11 @@ describe DorController, :type => :controller do
       #    sw_pub_date_sort_ssi
       #    sw_pub_date_facet
       # these are guaranteed (have a default-fill value)
-      %w{
+      %w(
         sw_language_tesim
         sw_genre_tesim
         sw_format_tesim
-      }.each do |key|
+      ).each do |key|
         expect(@solr_doc).to match a_hash_including(key)
       end
     end

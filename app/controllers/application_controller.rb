@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   def initialize(*args)
     super
 
-    klass_chain = self.class.name.sub(/Controller$/,'Helper').split(/::/)
+    klass_chain = self.class.name.sub(/Controller$/, 'Helper').split(/::/)
     klass = nil
     begin
       klass = Module.const_get(klass_chain.shift)
@@ -32,10 +32,10 @@ class ApplicationController < ActionController::Base
     rescue NameError
       klass = nil
     end
-    @help = Class.new {
+    @help = Class.new do
       include klass unless klass.nil?
       include ApplicationHelper
-    }.new
+    end.new
     self
   end
 
@@ -70,9 +70,9 @@ class ApplicationController < ActionController::Base
 
   def munge_parameters
     case request.content_type
-    when 'application/xml','text/xml'
+    when 'application/xml', 'text/xml'
       help.merge_params(Hash.from_xml(request.body.read))
-    when 'application/json','text/json'
+    when 'application/json', 'text/json'
       help.merge_params(JSON.parse(request.body.read))
     end
   end
@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
 
   def authorize!
     unless current_user
-      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}"
+      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/, '')}"
       return false
     end
     true

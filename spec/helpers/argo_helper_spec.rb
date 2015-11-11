@@ -53,8 +53,8 @@ describe ArgoHelper, :type => :helper do
           'Edit tags'         => '/items/something/tags_ui',
           'Edit collections'  => '/items/something/collection_ui',
           'Set content type'  => '/items/something/content_type'
-        }.each_pair do |k,v|
-          expect(buttons.include?({:label => k,:url => v})).to be_truthy
+        }.each_pair do |k, v|
+          expect(buttons.include?({:label => k, :url => v})).to be_truthy
         end
       end
       it 'should generate a the same button set for a non admin' do
@@ -68,8 +68,8 @@ describe ArgoHelper, :type => :helper do
           'Edit tags'         => '/items/something/tags_ui',
           'Edit collections'  => '/items/something/collection_ui',
           'Set content type'  => '/items/something/content_type'
-        }.each_pair do |k,v|
-          expect(buttons.include?({:label => k,:url => v})).to be_truthy
+        }.each_pair do |k, v|
+          expect(buttons.include?({:label => k, :url => v})).to be_truthy
         end
       end
       it 'should include the embargo update button if the user is an admin and the object is embargoed' do
@@ -83,8 +83,8 @@ describe ArgoHelper, :type => :helper do
           'Edit collections'  => '/items/something/collection_ui',
           'Set content type'  => '/items/something/content_type',
           'Update embargo'    => '/items/something/embargo_form'
-        }.each_pair do |k,v|
-          expect(buttons.include?({:label => k,:url => v})).to be_truthy
+        }.each_pair do |k, v|
+          expect(buttons.include?({:label => k, :url => v})).to be_truthy
         end
       end
     end

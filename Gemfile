@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
+gem 'addressable', '=2.3.5' # >=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
 gem 'barby'
 gem 'bootstrap-sass'
 gem 'coderay'
@@ -32,7 +32,7 @@ gem 'rest-client'
 gem 'retries'
 gem 'ruby-graphviz'
 gem 'sass-rails'
-gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  #TODO: upgrading to 1.3.4 results in weird error output at end of deployment, pinning for now
+gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  # TODO: upgrading to 1.3.4 results in weird error output at end of deployment, pinning for now
 gem 'squash_ruby',  :require => 'squash/ruby'
 gem 'therubyracer', '~> 0.11'
 gem 'thin' # or mongrel
@@ -43,7 +43,7 @@ gem 'unicode'
 # Stanford/Hydra related gems
 gem 'about_page'
 gem 'active-fedora'
-gem 'blacklight', '~> 5.9.0' #TODO: BL >= 5.10.x has new deprecation warnings vs <= 5.9.x, will investigate and unpin after current upgrade stuff has settled
+gem 'blacklight', '~> 5.9.0' # TODO: BL >= 5.10.x has new deprecation warnings vs <= 5.9.x, will investigate and unpin after current upgrade stuff has settled
 gem 'blacklight-hierarchy'
 gem 'blacklight-marc'
 gem 'dor-services', '~> 5.0', :git => 'https://github.com/sul-dlss/dor-services.git', :branch => 'develop'

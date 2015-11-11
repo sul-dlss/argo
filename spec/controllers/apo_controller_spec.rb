@@ -34,7 +34,7 @@ describe ApoController, :type => :controller do
     it 'should hit the registration service to register an apo and a collection' do
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params).to match a_hash_including(:label => 'New APO Title', :object_type => 'adminPolicy', :admin_policy => 'druid:hv992ry2431')
-        expect(params[:metadata_source]).to be_nil   #descMD is created via the form
+        expect(params[:metadata_source]).to be_nil   # descMD is created via the form
         {:pid => 'druid:collectionpid'}
       end
       expect(@item).to receive(:"use_license=").with(@example['use_license'])
@@ -100,7 +100,7 @@ describe ApoController, :type => :controller do
       expect(@mock_new_collection).to receive(:save)
       expect(@mock_new_collection).to receive(:update_index)
 
-      post 'register_collection', 'collection_title' => title,'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => 'druid:forapo'
+      post 'register_collection', 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => 'druid:forapo'
     end
 
     it 'should add the collection to the apo default collection list' do
@@ -120,7 +120,7 @@ describe ApoController, :type => :controller do
       expect(@mock_new_collection).to receive(:save)
       expect(@mock_new_collection).to receive(:update_index)
 
-      post 'register_collection', 'collection_title' => title,'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => 'druid:forapo'
+      post 'register_collection', 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => 'druid:forapo'
     end
     it 'should set the workflow priority to 65' do
       catkey = '1234567'

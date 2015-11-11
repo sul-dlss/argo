@@ -3,7 +3,7 @@ module BlacklightConfigHelper
     # Be careful using NOW: http://lucidworks.com/blog/date-math-now-and-filter-queries/
     # tl;dr: specify coarsest granularity (/DAY or /HOUR) or lose caching
     #
-    #TODO: update blacklight_range_limit to work w/ dates and use it.  Or something similarly powerful.
+    # TODO: update blacklight_range_limit to work w/ dates and use it.  Or something similarly powerful.
     #      Per-query user-paramatized facet endpoints w/ auto-scaling granularity is the point.
     #      See solr facet ranges (start/end/gap), NOT facet range queries (fq), as here.
     config.add_facet_field 'registered_date', :label => 'Registered', :query => {
@@ -47,7 +47,7 @@ module BlacklightConfigHelper
     config.default_solr_params = {
       :'q.alt' => '*:*',
       :defType => 'dismax',
-      :qf => %{text^3 creator_tesim dc_creator_tesim dc_identifier_druid_tesim dc_title_tesim dor_id_tesim extent_ssim identifier_tesim lifecycle_ssim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_ssim source_id_ssim tag_ssim title_tesim topic_tesim},
+      :qf => %(text^3 creator_tesim dc_creator_tesim dc_identifier_druid_tesim dc_title_tesim dor_id_tesim extent_ssim identifier_tesim lifecycle_ssim obj_label_tesim obj_state_tesim originInfo_place_placeTerm_tesim originInfo_publisher_tesim public_dc_contributor_tesim public_dc_coverage_tesim public_dc_creator_tesim public_dc_date_tesim public_dc_description_tesim public_dc_format_tesim public_dc_identifier_tesim public_dc_language_tesim public_dc_publisher_tesim public_dc_relation_tesim public_dc_rights_tesim public_dc_subject_tesim public_dc_title_tesim public_dc_type_tesim scale_ssim source_id_ssim tag_ssim title_tesim topic_tesim),
       :facet => true,
       :'facet.mincount' => 1,
       :'f.wf_wps_ssim.facet.limit' => -1,

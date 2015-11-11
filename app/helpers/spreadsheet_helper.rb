@@ -45,7 +45,7 @@ module SpreadsheetHelper
 
     # Each line in the log is assumed to be of the format "<keyword> <string>", where <keyword> is a phrase from
     # the en.yml file and <string> is a more informative message. Note that <string> may be empty for certain exceptions.
-    File.open(File.join(job_output_directory, Argo::Config.bulk_metadata_log), 'r') { |log_file|
+    File.open(File.join(job_output_directory, Argo::Config.bulk_metadata_log), 'r') do |log_file|
       log_file.each_line do |log_line|
         split_line = log_line.split(/\s+/, 2)
 
@@ -62,7 +62,7 @@ module SpreadsheetHelper
           log_items.push(current_hash)
         end
       end
-    }
+    end
     log_items.push({ 'argo.bulk_metadata.bulk_log_druids_loaded' => druids_loaded})
     log_items
   end
@@ -74,14 +74,14 @@ module SpreadsheetHelper
   # @param [String]       job_output_directory   The bulk upload job output directory
   # @return [Void]
   def user_log_csv(user_messages, job_output_directory)
-    File.open(File.join(job_output_directory, Argo::Config.bulk_metadata_csv_log), 'w') { |csv_file|
+    File.open(File.join(job_output_directory, Argo::Config.bulk_metadata_csv_log), 'w') do |csv_file|
       user_messages.each do |message|
         key = message.keys[0]
 
-        if (@@user_messages.include?(key))
+        if @@user_messages.include?(key)
           csv_file.puts("\"#{I18n.t(key)}\",\"#{message[key]}\"")
         end
       end
-    }
+    end
   end
 end

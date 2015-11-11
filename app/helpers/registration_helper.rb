@@ -4,14 +4,14 @@ module RegistrationHelper
   def apo_list(*permission_keys)
     q = 'objectType_ssim:adminPolicy AND !tag_ssim:"Project : Hydrus"'
     unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.collect { |key| %{apo_register_permissions_ssim:"#{key}"} }.join(' OR ') + ')'
+      q += '(' + permission_keys.flatten.collect { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ') + ')'
     end
     result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
-    result.sort! do |a,b|
+    result.sort! do |a, b|
       Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end
     result.collect do |doc|
-      [Array(doc['dc_title_tesim']).first,doc['id'].to_s]
+      [Array(doc['dc_title_tesim']).first, doc['id'].to_s]
     end
   end
 
@@ -22,7 +22,7 @@ module RegistrationHelper
   def valid_object_types
     [
       %w(Item item),
-      ['Workflow Definition','workflow']
+      ['Workflow Definition', 'workflow']
     ]
   end
 
@@ -30,7 +30,7 @@ module RegistrationHelper
     [
       %w(World world),
       %w(Stanford stanford),
-      ['Dark (Preserve Only)','dark'],
+      ['Dark (Preserve Only)', 'dark'],
       %w(None none)
     ]
   end
@@ -59,7 +59,7 @@ module RegistrationHelper
   def generate_tracking_pdf(druids)
     # FIXME: why not search for all druids in one query?
     druids.each do |druid|
-      doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
+      doc = Dor::SearchService.query(%(id:"druid:#{druid}"), :rows => 1).docs.first
       next unless doc.nil?
       obj = Dor.load_instance 'druid:' + druid
       solr_doc = obj.to_solr
@@ -67,9 +67,9 @@ module RegistrationHelper
     end
     pdf = Prawn::Document.new(:page_size => [5.5.in, 8.5.in])
     pdf.font('Courier')
-    druids.each_with_index do |druid,i|
+    druids.each_with_index do |druid, i|
       generate_tracking_sheet(druid, pdf)
-      pdf.start_new_page unless (i + 1 == druids.length)
+      pdf.start_new_page unless i + 1 == druids.length
     end
     pdf
   end
@@ -80,14 +80,14 @@ module RegistrationHelper
 
     top_margin = (pdf.page.size[1] - pdf.bounds.absolute_top)
 
-    doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
+    doc = Dor::SearchService.query(%(id:"druid:#{druid}"), :rows => 1).docs.first
 
     if doc.nil?
       begin
         obj = Dor.load_instance "druid:#{druid}"
         solr_doc = obj.to_solr
         Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-        doc = Dor::SearchService.query(%{id:"druid:#{druid}"}, :rows => 1).docs.first
+        doc = Dor::SearchService.query(%(id:"druid:#{druid}"), :rows => 1).docs.first
       rescue
         pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
       end
@@ -110,10 +110,7 @@ module RegistrationHelper
     label = (labels.nil? || labels.empty?) ? '' : labels.first
     label = label[0..110] + '...' if label.length > 110
     table_data.push(['Object Label:', label])
-
-    if project_name = doc['project_tag_ssim']
-      table_data.push(['Project Name:', project_name.to_s])
-    end
+    table_data.push(['Project Name:', doc['project_tag_ssim'].to_s]) if doc['project_tag_ssim']
 
     tags = Array(doc['tag_ssim']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/,  Prawn::Text::NBSP) }.compact
     table_data.push(['Tags:', tags.join("\n")]) if tags.length > 0
@@ -122,7 +119,7 @@ module RegistrationHelper
     table_data.push(['Barcode:', Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
     table_data.push(['Date Printed:', Time.now.strftime('%c')])
 
-    pdf.table(table_data, :column_widths => [100,224], :cell_style => { :borders => [], :padding => 0.pt })
+    pdf.table(table_data, :column_widths => [100, 224], :cell_style => { :borders => [], :padding => 0.pt })
 
     pdf.y -= 0.5.in
 
@@ -153,7 +150,7 @@ module RegistrationHelper
 
   def extract_identifiers(xml)
     xml.search('/mods:mods/mods:identifier | /msDesc/msIdentifier/*', { 'mods' => 'http://www.loc.gov/mods/v3' }).collect do |elem|
-      unless (elem.text.empty?)
+      unless elem.text.empty?
         ["#{(elem['displayLabel'] || elem.name).titleize}:", elem.text]
       end
     end.compact
