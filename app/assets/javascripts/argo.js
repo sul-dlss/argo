@@ -14,7 +14,6 @@ function pathTo(path) {
 
 
 $(document).ready(function() {
-    $('#page').wrapInner('<div id="argonauta"/>');
     $('#logo h1').remove();
     $('.start-open').addClass('twiddle-open');
     $('.start-open').next('ul').show();
