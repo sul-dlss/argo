@@ -22,3 +22,6 @@ $jetty_startup
 
 # Load and index records in the 'development' Solr core
 rake argo:repo:load
+
+# Load and index records in the 'test' Solr core
+RAILS_ENV=test bundle exec rake argo:repo:load
