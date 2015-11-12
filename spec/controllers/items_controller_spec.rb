@@ -374,12 +374,12 @@ describe ItemsController, :type => :controller do
       expect(@item).to receive(:workflows).and_return @wf
     end
     it 'should initialize the new workflow' do
-      expect(@item).to receive(:initialize_workflow)
-      expect(@wf).to receive(:[]).and_return(nil)
+      expect(@item).to receive(:create_workflow)
+      expect(@wf).to receive(:[]).with('accessionWF').and_return(nil)
       post 'add_workflow', :id => @pid, :wf => 'accessionWF'
     end
     it 'shouldnt initialize the workflow if one is already active' do
-      expect(@item).not_to receive(:initialize_workflow)
+      expect(@item).not_to receive(:create_workflow)
       mock_wf = double()
       expect(mock_wf).to receive(:active?).and_return(true)
       expect(@wf).to receive(:[]).and_return(mock_wf)
