@@ -62,7 +62,8 @@
 })(jQuery);	
 	
 
-// The Blacklight onLoad event works better than the regular onLoad event if turbolinks is enabled.
+// The Blacklight onLoad event works better than the regular onLoad event if
+// turbolinks is enabled.
 Blacklight.onLoad(function(){
 
     console.log('blight onload');
@@ -71,7 +72,7 @@ Blacklight.onLoad(function(){
     // 'loaded.blacklight.ajax-modal' is fired just before this Blacklight lightbox is shown.
     //$('#ajax-modal').on('loaded.blacklight.ajax-modal', function(e){
     $('#spreadsheet-upload-container').argoSpreadsheet();
-    
+
     // When the user clicks the 'MODS bulk loads' button, a lightbox is opened.
     // The event 'loaded.blacklight.ajax-modal' is fired just before this
     // Blacklight lightbox is shown.
@@ -84,9 +85,8 @@ Blacklight.onLoad(function(){
 // Confirmation modal dialog for when the user presses the delete button in the
 // spreadsheet bulk upload table.
 $(document).ready(function() {
-    console.log('doc ready executing');
-
-    // The form we want to submit has both ':' and '/' in its ID, which need to be escaped
+    // The form we want to submit has both ':' and '/' in its ID, which need to
+    // be escaped
     function escapeCharacters(identifier) {
 	return '#' + identifier.replace( /(:|\.|\[|\]|,|\/)/g, '\\$1' );
     }
