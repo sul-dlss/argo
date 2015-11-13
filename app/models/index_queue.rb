@@ -22,8 +22,8 @@ class IndexQueue
   end
 
   def parsed_response
-    JSON.parse(response).first['datapoints'].first.first
-  rescue JSON::ParserError, TypeError
+    JSON.parse(response.to_s).first['datapoints'].first.first
+  rescue JSON::ParserError, TypeError, NoMethodError
     raise Argo::Exceptions::IndexQueueInvalidResponse,
           "Could not parse the response from #{url} as JSON"
   end

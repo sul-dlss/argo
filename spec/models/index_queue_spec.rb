@@ -17,6 +17,18 @@ describe IndexQueue do
         expect(subject.depth).to be_nil
       end
     end
+    describe 'when response is nil' do
+      it 'cannot be parsed' do
+        expect(subject).to receive(:response).and_return nil
+        expect(subject.depth).to be_nil
+      end
+    end
+    describe 'when response is not string' do
+      it 'cannot be parsed' do
+        expect(subject).to receive(:response).and_return []
+        expect(subject.depth).to be_nil
+      end
+    end
     describe 'when response is not expected JSON' do
       it 'cannot be parsed' do
         expect(subject).to receive(:response).
