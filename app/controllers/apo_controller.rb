@@ -184,7 +184,7 @@ class ApoController < ApplicationController
     else
       reg_params[:rights] = params[:collection_rights]
     end
-    reg_params[:rights] = reg_params[:rights].downcase if reg_params[:rights]
+    reg_params[:rights] &&= reg_params[:rights].downcase
     col_catkey = params[:collection_catkey] || ''
     reg_params[:object_type    ] = 'collection'
     reg_params[:admin_policy   ] = apo_pid
@@ -265,19 +265,10 @@ class ApoController < ApplicationController
   end
 
   def create_obj
-    if params[:id]
-      @object = Dor.find params[:id], :lightweight => true
-      @collections = @object.default_collections
-      new_col = []
-      if @collections
-        @collections.each do |col|
-          new_col << Dor.find(col)
-        end
-      end
-      @collections = new_col
-    else
-      raise 'missing druid'
-    end
+    raise 'missing druid' unless params[:id]
+    @object = Dor.find params[:id], :lightweight => true
+    pids = @object.default_collections || []
+    @collections = pids.map { |pid| Dor.find(pid) }
   end
 
   def add_roleplayers_to_object(object, roleplayer_list, role)
