@@ -8,8 +8,6 @@ class ApoController < ApplicationController
 
   DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
 
-  attr_accessor :cc
-
   def is_valid_role_name(role_name)
     !/^[\w-]+:[\w-]+$/.match(role_name).nil?
   end
@@ -36,8 +34,7 @@ class ApoController < ApplicationController
   end
 
   def get_input_params_errors(input_params)
-    # assume no errors yet
-    err_list = []
+    err_list = [] # assume no errors yet
 
     # error if title is empty
     err_list.push(:title) if input_params[:title].strip.length == 0
@@ -69,7 +66,7 @@ class ApoController < ApplicationController
     elsif params[:id]
       create_obj
       @managers = []
-      @viewers = []
+      @viewers  = []
       populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
       populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
       @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
@@ -104,9 +101,7 @@ class ApoController < ApplicationController
 
     # register a collection if requested
     collection_pid = nil
-    if params[:collection_radio] == 'create'
-      collection_pid = create_collection apo_pid
-    end
+    collection_pid = create_collection apo_pid if params[:collection_radio] == 'create'
     if collection_pid
       apo.add_default_collection collection_pid
     elsif params[:collection] && params[:collection].length > 0
@@ -149,9 +144,8 @@ class ApoController < ApplicationController
       return
     end
 
-    if params[:collection_radio] == 'create'
-      collection_pid = create_collection @object.pid
-    end
+    collection_pid = create_collection @object.pid if params[:collection_radio] == 'create'
+
     if params[:collection] && params[:collection].length > 0
       @object.add_default_collection params[:collection]
     else
@@ -162,7 +156,7 @@ class ApoController < ApplicationController
 
     @object.purge_roles
     managers = split_roleplayer_input_field(params[:managers])
-    viewers = split_roleplayer_input_field(params[:viewers])
+    viewers  = split_roleplayer_input_field(params[:viewers])
     add_roleplayers_to_object(@object, managers, 'dor-apo-manager')
     add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
 
@@ -260,7 +254,7 @@ class ApoController < ApplicationController
 
   def spreadsheet_template
     binary_string = RestClient.get(Argo::Config.urls.spreadsheet)
-    send_data(binary_string, :filename => 'spreadsheet_template.xlsx', :type =>  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    send_data(binary_string, :filename => 'spreadsheet_template.xlsx', :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   end
 
   private
