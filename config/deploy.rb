@@ -50,4 +50,20 @@ namespace :deploy do
 
   after :publishing, :restart
 
+  # it's necessary to run the 'argo:htaccess' rake task after restarting, because
+  # the public folder (which contains the generated .htaccess file) is committed
+  # in argo's git repo, and so a fresh copy (without the generated .htaccess file)
+  # will get written with each deployment.  the .htaccess file with the correct
+  # list of workgroups is required for argo's permissions checking mechanism to function.
+  after :restart, :initialize_htaccess do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'argo:htaccess'
+        end
+      end
+    end
+  end
+
 end
