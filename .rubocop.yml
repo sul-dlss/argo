@@ -11,3 +11,7 @@ Style/FileName:
 
 Style/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
+
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: single_quotes
