@@ -37,26 +37,28 @@ For vanilla Stanford laptop installations, the cert files and the local settings
 
 `bundle install`
 
-`bundle install` may complain if MySQL isn't installed.  You can either comment out the mysql2 inclusion in Gemfile and come back to it later (you can develop using sqlite), or you can install MySQL.
+Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the mysql2 inclusion in Gemfile and come back to it later (you can develop using sqlite), or you can install MySQL.
 
-### Install components, setup DB and Solr:
+### Install components
+
+This will setup the database, Fedora, and Solr:
 
 ```bash
 rake argo:install
 ```
 
 ### Optional - Increase Jetty heap size and Solr logging verbosity
-#### Delving into this is only recemmended if you run into more trouble than usual starting jetty or getting it to run stably (or if you know you have some other reason to make these sorts of changes).
 
-In the created `./jetty` directory add the following to the `start.ini` to increase the heap size, allow the debugger to attach, and to explicitly specify logging properties.
+Delving into this is only recommended if you run into more trouble than usual starting jetty or getting it to run stably (or if you know you have some other reason to make these sorts of changes).
 
-In the section that starts with the heading `If the arguments in this file include JVM arguments` (at LN19 as of this README update):
+In the created `./jetty` directory add the following to the `start.ini` to increase the heap size, allow the debugger to attach, and to explicitly specify logging properties. In the section that starts with the heading `If the arguments in this file include JVM arguments` (at LN19 as of this README update):
+
 ```
 --exec
-
+# increase VM memory usage to 2GB
+-Xmx2000m
 -Djava.awt.headless=true
 -Dcom.sun.management.jmxremote
--Xmx2000m
 -XX:+PrintCommandLineFlags
 -XX:+UseConcMarkSweepGC
 -XX:+CMSClassUnloadingEnabled
@@ -69,10 +71,10 @@ In the section that starts with the heading `If the arguments in this file inclu
 
 You may then update values in `jetty/etc/logging.properties` to change logging settings (e.g., set `.level = FINEST`).
 
-## Run the server
+## Run the servers
 
 ```bash
-rake jetty:start # This may take a few minutes
+rake jetty:start       # This may take a few minutes to boot Fedora and Solr
 bin/delayed_job start  # Necessary only for spreadsheet bulk upload
 rails server
 ```
@@ -86,10 +88,12 @@ This command will load fixture data to the `development` Fedora repository and i
 rake argo:repo:load
 ```
 
-This command will load fixture data to the `test` Fedora repository and index it to the `test` Solr collection:
+This command, which is needed for testing, will load fixture data to the `test` Fedora repository and index it to the `test` Solr collection:
 ```bash
-RAILS_ENV=test bundle exec rake argo:repo:load
+RAILS_ENV=test rake argo:repo:load
 ```
+
+## Rebuilding Jetty instance without re-install
 
 If you'd like to do a clean re-installation of jetty without running the `argo:install` task:
 ```bash
@@ -102,15 +106,17 @@ rake jetty:start
 rake argo:repo:load
 
 # Load and index test fixtures
-RAILS_ENV=test bundle exec rake argo:repo:load
+RAILS_ENV=test rake argo:repo:load
 ```
 
 ## Run the tests
 
-To run the test suite (which runs against the `test` Fedora repo/Solr collection), invoke rspec from the Argo app root
+To run the test suite (which runs against the `test` Fedora repo/Solr collection), invoke `rspec` from the Argo app root
 ```bash
 rspec
 ```
+
+## Run the continuous integration build
 
 _Important Note: Running `rake ci` will reinstall your jetty instance and **delete any custom test data** you may have setup in both the `development` and `test` environments, and reload fixtures from scratch for the `test` environment only._
 
@@ -130,5 +136,4 @@ For example, using `rails console` to target one ID, or five:
 ```ruby
 Dor::Item.find("druid:pv820dk6668").destroy
 %w[pv820dk6668 rn653dy9317 xb482bw3979 hj185vb7593 hv992ry2431].each{ |pid| Dor::Item.find("druid:#{pid}").destroy }
-
 ```
