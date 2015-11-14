@@ -29,7 +29,7 @@ Settings configuration is managed using the [config](https://github.com/railscon
 You will also need to create or acquire the following certificate files (per environment):
 
  - `config/certs/argo-client.crt`  # should match the value specified by `Settings.SSL.CERT_FILE`
- - `config/certs/argo-client.key`  # should match the value specified by `Settings.SSL.CERT_FILE`
+ - `config/certs/argo-client.key`  # should match the value specified by `Settings.SSL.KEY_FILE`
 
 For vanilla Stanford laptop installations, the cert files and the local settings file should be available from a private DLSS repository.  You can clone this and create symlinks to the checked out config files (instead of having copies of those files in place).  That way, you can easily pull changes to the vanilla configs as defaults are changed, and you can submit such changes back upstream, in place on your instance.  An Argo developer or DevOps person should be able to point you to the private config repo and explain how to use it.
 
