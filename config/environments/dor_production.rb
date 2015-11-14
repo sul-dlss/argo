@@ -17,8 +17,8 @@ Dor.configure do
 
   workflow do
     url Settings.WORKFLOW_URL
-    logfile Settings.DOR_SERVICES_LOGFILE
-    shift_age Settings.DOR_SERVICES_SHIFT_AGE
+    logfile Settings.WORKFLOW.LOGFILE
+    shift_age Settings.WORKFLOW.SHIFT_AGE
   end
 
   dor_services do
