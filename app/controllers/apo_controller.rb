@@ -4,21 +4,24 @@ require 'rest-client'
 class ApoController < ApplicationController
 
   before_filter :create_obj, :except => [:register, :is_valid_role_list_endpoint, :spreadsheet_template]
-  after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
+  after_action :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
 
   DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
 
+  # @param [String] role_name
+  # @return [Boolean] true if name is valid
   def is_valid_role_name(role_name)
     !/^[\w-]+:[\w-]+$/.match(role_name).nil?
   end
 
+  # @param [Array[String]] role_list
+  # @return [Boolean] true if we don't find an invalid role name
   def is_valid_role_list(role_list)
-    # look for an invalid role name, return true if we don't find one
     role_list.find { |role_name| !is_valid_role_name(role_name) }.nil?
   end
 
   def is_valid_role_list_endpoint
-    # this should only get one of the params at a time
+    # Only checks the first found relevant param
     role_list_str = params[:managers] || params[:viewers] || params[:role_list] || nil
     if !role_list_str
       ret_val = false
@@ -266,7 +269,7 @@ class ApoController < ApplicationController
 
   def create_obj
     raise 'missing druid' unless params[:id]
-    @object = Dor.find params[:id], :lightweight => true
+    @object = Dor.find params[:id] # , :lightweight => true
     pids = @object.default_collections || []
     @collections = pids.map { |pid| Dor.find(pid) }
   end
@@ -292,12 +295,8 @@ class ApoController < ApplicationController
     roleplayer_list_str.split(/[,\s]/).reject(&:empty?)
   end
 
-  def save_and_reindex
-    @object.save
-  end
-
   def save_and_index
-    @object.save
+    @object.save # indexing happens automatically
   end
 
   def redirect
