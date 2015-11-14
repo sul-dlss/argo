@@ -38,8 +38,16 @@ end
 
 namespace :argo do
   desc 'Install db, jetty (fedora/solr) and configs fresh'
-  task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate'] do
+  task :install => ['argo:log_dir', 'argo:tmp_dir', 'argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate'] do
     puts 'Installed Argo'
+  end
+
+  task :log_dir do
+    FileUtils.mkdir_p 'log'
+  end
+
+  task :tmp_dir do
+    FileUtils.mkdir_p 'tmp'
   end
 
   desc "Bump Argo's version number before release"
