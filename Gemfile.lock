@@ -1,10 +1,4 @@
 GIT
-  remote: https://github.com/meh/ruby-thread.git
-  revision: f25dd1184f4f4bee7cde0d54ad5ce5e32dc15279
-  specs:
-    thread (0.2.2)
-
-GIT
   remote: https://github.com/nilclass/rack-webauth.git
   revision: 353eb1d893dc54fd02ae5097df6e1219391cf3ae
   specs:
@@ -603,8 +597,10 @@ DEPENDENCIES
   sul_styles (~> 0.3.0)
   therubyracer (~> 0.11)
   thin
-  thread!
   uglifier (>= 1.0.3)
   unicode
   unicorn
   webmock
+
+BUNDLED WITH
+   1.10.6

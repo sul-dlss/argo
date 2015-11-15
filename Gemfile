@@ -36,7 +36,6 @@ gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  # TODO: upgrading to 1
 gem 'squash_ruby',  :require => 'squash/ruby'
 gem 'therubyracer', '~> 0.11'
 gem 'thin' # or mongrel
-gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
 gem 'uglifier', '>= 1.0.3'
 gem 'unicode'
 
