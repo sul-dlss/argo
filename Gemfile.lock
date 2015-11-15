@@ -204,7 +204,6 @@ GEM
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
-    eventmachine (1.0.8)
     execjs (2.6.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
@@ -484,10 +483,6 @@ GEM
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
-    thin (1.6.4)
-      daemons (~> 1.0, >= 1.0.9)
-      eventmachine (~> 1.0, >= 1.0.4)
-      rack (~> 1.0)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -596,7 +591,6 @@ DEPENDENCIES
   stanford-mods
   sul_styles (~> 0.3.0)
   therubyracer (~> 0.11)
-  thin
   uglifier (>= 1.0.3)
   unicode
   unicorn
