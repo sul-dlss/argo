@@ -119,6 +119,11 @@ module ArgoHelper
     result.html_safe
   end
 
+  ##
+  # Ideally this method should not make calls to external services to determine
+  # what buttons should be rendered. These external requests are blocking and
+  # will not allow the page to load until all requests are finished.
+  # @return [Array]
   def render_buttons(doc, object = nil)
     pid = doc['id']
     object ||= Dor.find(pid)
@@ -130,11 +135,17 @@ module ArgoHelper
     end
     buttons = []
     if pid
-      if can_close_version?(pid)
-        buttons << {:url => '/items/' + pid + '/close_version_ui', :label => 'Close Version'}
-      elsif can_open_version?(pid)
-        buttons << {:url => '/items/' + pid + '/open_version_ui', :label => 'Open for modification'}
-      end
+      buttons << {
+        url: close_version_ui_item_path(pid),
+        label: 'Close Version',
+        check_url: workflow_service_closeable_path(pid)
+      }
+
+      buttons << {
+        url: open_version_ui_item_path(pid),
+        label: 'Open for modification',
+        check_url: workflow_service_openable_path(pid)
+      }
     end
 
     # if this is an apo and the user has permission for the apo, let them edit it.
@@ -145,12 +156,21 @@ module ArgoHelper
     if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin || current_user.is_manager
       buttons << {:url => url_for(:controller => :dor, :action => :reindex, :pid => pid), :label => 'Reindex'}
       buttons << {:url => url_for(:controller => :items, :action => :add_workflow, :id => pid), :label => 'Add workflow'}
-      if has_been_published? pid
-        buttons << {:url => url_for(:controller => :dor, :action => :republish, :pid => pid), :label => 'Republish'}
-      end
-      unless has_been_submitted? pid
-        buttons << {:url =>  url_for(:controller => :items, :action => :purge_object, :id => pid), :label => 'Purge', :new_page => true, :confirm => 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?'}
-      end
+
+      buttons << {
+        url: url_for(:controller => :dor, :action => :republish, :pid => pid),
+        label: 'Republish',
+        check_url: workflow_service_published_path(pid)
+      }
+
+      buttons << {
+        url:  url_for(:controller => :items, :action => :purge_object, :id => pid),
+        label: 'Purge',
+        new_page: true,
+        confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
+        check_url: workflow_service_submitted_path(pid)
+      }
+
       buttons << {:url => '/items/' + pid + '/source_id_ui', :label => 'Change source id'}
       buttons << {:url => '/items/' + pid + '/tags_ui', :label => 'Edit tags'}
       unless object.datastreams.include? 'administrativeMetadata' # apos cant be members of collections

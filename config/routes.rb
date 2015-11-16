@@ -184,6 +184,29 @@ Argo::Application.routes.draw do
 
   get 'index_queue/depth', to: 'index_queue#depth'
 
+  namespace :workflow_service do
+    get '/:pid/closeable',
+        action: 'closeable',
+        as: 'closeable',
+        defaults: { format: :json }
+    get '/:pid/openable',
+        action: 'openable',
+        as: 'openable',
+        defaults: { format: :json }
+    get '/:pid/published',
+        action: 'published',
+        as: 'published',
+        defaults: { format: :json }
+    get '/:pid/submitted',
+        action: 'submitted',
+        as: 'submitted',
+        defaults: { format: :json }
+    get '/:pid/accessioned',
+        action: 'accessioned',
+        as: 'accessioned',
+        defaults: { format: :json }
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

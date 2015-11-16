@@ -29,7 +29,6 @@ describe ArgoHelper, :type => :helper do
       allow(@usr).to receive(:roles).with('apo_druid').and_return([])
       allow(Dor::WorkflowService).to receive(:get_active_lifecycle).and_return(true)
       allow(Dor::WorkflowService).to receive(:get_lifecycle).and_return(true)
-      allow(helper).to receive(:has_been_published?).and_return(true)
       allow(helper).to receive(:current_user).and_return(@usr)
       allow(@object).to receive(:can_manage_item?).and_return(true)
       allow(@object).to receive(:pid).and_return('druid:123')
@@ -44,47 +43,57 @@ describe ArgoHelper, :type => :helper do
       allow(Dor).to receive(:find).and_return(@object)
     end
     describe 'visibility with new descMetadata' do
+      let(:default_buttons) do
+        [
+          {
+            label: 'Reindex',
+            url: '/dor/reindex/something'
+          },
+          {
+            label: 'Republish',
+            url: '/dor/republish/something',
+            check_url: '/workflow_service/something/published'
+          },
+          {
+            label: 'Change source id',
+            url: '/items/something/source_id_ui'
+          },
+          {
+            label: 'Edit tags',
+            url: '/items/something/tags_ui'
+          },
+          {
+            label: 'Edit collections',
+            url: '/items/something/collection_ui'
+          },
+          {
+            label: 'Set content type',
+            url: '/items/something/content_type'
+          }
+        ]
+      end
       it 'should create a hash with the needed button info for an admin' do
         buttons = helper.render_buttons(@doc)
-        {
-          'Reindex'           => '/dor/reindex/something',
-          'Republish'         => '/dor/republish/something',
-          'Change source id'  => '/items/something/source_id_ui',
-          'Edit tags'         => '/items/something/tags_ui',
-          'Edit collections'  => '/items/something/collection_ui',
-          'Set content type'  => '/items/something/content_type'
-        }.each_pair do |k, v|
-          expect(buttons.include?({:label => k, :url => v})).to be_truthy
+        default_buttons.each do |button|
+          expect(buttons).to include(button)
         end
       end
       it 'should generate a the same button set for a non admin' do
         allow(@usr).to receive(:is_admin).and_return(false)
         allow(@object).to receive(:can_manage_item?).and_return(true)
         buttons = helper.render_buttons(@doc)
-        {
-          'Reindex'           => '/dor/reindex/something',
-          'Republish'         => '/dor/republish/something',
-          'Change source id'  => '/items/something/source_id_ui',
-          'Edit tags'         => '/items/something/tags_ui',
-          'Edit collections'  => '/items/something/collection_ui',
-          'Set content type'  => '/items/something/content_type'
-        }.each_pair do |k, v|
-          expect(buttons.include?({:label => k, :url => v})).to be_truthy
+        default_buttons.each do |button|
+          expect(buttons).to include(button)
         end
       end
       it 'should include the embargo update button if the user is an admin and the object is embargoed' do
         @doc['embargo_status_ssim'] = ['2012-10-19T00:00:00Z']
         buttons = helper.render_buttons(@doc)
-        {
-          'Reindex'           => '/dor/reindex/something',
-          'Republish'         => '/dor/republish/something',
-          'Change source id'  => '/items/something/source_id_ui',
-          'Edit tags'         => '/items/something/tags_ui',
-          'Edit collections'  => '/items/something/collection_ui',
-          'Set content type'  => '/items/something/content_type',
-          'Update embargo'    => '/items/something/embargo_form'
-        }.each_pair do |k, v|
-          expect(buttons.include?({:label => k, :url => v})).to be_truthy
+        default_buttons.push({
+          label: 'Update embargo',
+          url: '/items/something/embargo_form'
+        }).each do |button|
+          expect(buttons).to include(button)
         end
       end
     end

@@ -113,14 +113,23 @@ module DorObjectHelper
     source
   end
 
+  ##
+  # @deprecated Please use non-blocking requests rather than blocking helpers.
+  # See WorkflowServiceController#published for JSON API to this logic
   def has_been_published?(pid)
     Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
   end
 
+  ##
+  # @deprecated Please use non-blocking requests rather than blocking helpers.
+  # See WorkflowServiceController#submitted for JSON API to this logic
   def has_been_submitted?(pid)
     Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
   end
 
+  ##
+  # @deprecated Please use non-blocking requests rather than blocking helpers.
+  # See WorkflowServiceController#accesssioned for JSON API to this logic
   def has_been_accessioned?(pid)
     Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
   end
@@ -157,6 +166,9 @@ module DorObjectHelper
     response_doc.xpath('/currentVersion/text()')
   end
 
+  ##
+  # @deprecated Please use non-blocking requests rather than blocking helpers.
+  # See WorkflowServiceController#openable for JSON API to this logic
   def can_open_version?(pid)
     return false unless Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
     return false if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
@@ -164,6 +176,9 @@ module DorObjectHelper
     true
   end
 
+  ##
+  # @deprecated Please use non-blocking requests rather than blocking helpers.
+  # See WorkflowServiceController#closeable for JSON API to this logic
   def can_close_version?(pid)
     Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && !Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
   end
