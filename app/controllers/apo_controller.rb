@@ -80,23 +80,23 @@ class ApoController < ApplicationController
   end
 
   def set_apo_metadata(apo, md_info)
-    apo.copyright_statement  = md_info[:copyright] if md_info[:copyright] && md_info[:copyright].length > 0
-    apo.use_statement        = md_info[:use      ] if md_info[:use      ] && md_info[:use      ].length > 0
     apo.mods_title           = md_info[:title    ]
     apo.desc_metadata_format = md_info[:desc_md  ]
     apo.metadata_source      = md_info[:metadata_source]
-    apo.agreement            = md_info[:agreement].to_s
-    apo.default_workflow     = md_info[:workflow ] unless !md_info[:workflow] || md_info[:workflow].length < 5
+    apo.agreement            = md_info[:agreement]
+    apo.default_workflow     = md_info[:workflow ]
     apo.default_rights       = md_info[:default_object_rights]
     # Set the Use License given a machine-readable code for a creative commons or open data commons license
-    apo.use_license          = md_info[:use_license].blank? ? :none : md_info[:use_license]
+    apo.use_license          = md_info[:use_license]
+    apo.copyright_statement  = md_info[:copyright]
+    apo.use_statement        = md_info[:use      ]
   end
 
   def register_new_apo
     reg_params = {:workflow_priority => '70'}
     reg_params[:label] = params[:title]
     reg_params[:object_type ] = 'adminPolicy'
-    reg_params[:admin_policy] = 'druid:hv992ry2431' # TODO: Uber-APO druid must be pulled from config, not hardcoded
+    reg_params[:admin_policy] = SolrDocument::UBER_APO_ID
     reg_params[:workflow_id ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     apo_pid = response[:pid]
