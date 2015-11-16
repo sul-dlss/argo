@@ -1,5 +1,10 @@
 inherit_from: .rubocop_todo.yml
 
+AllCops:
+  Excludes:
+    - db/migrate/**
+    - db/schema.rb
+
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
   Max: 180
