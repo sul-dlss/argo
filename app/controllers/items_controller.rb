@@ -507,12 +507,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def change_mods_value
-    mods = Mods::Reader.new(@object.descMetadata.content)
-    return unless mods.methods.include? params[:field].to_sym
-    mods.send(params[:field].to_sym, params[:val])
-  end
-
   def remove_duplicate_encoding
     ds = @object.descMetadata
     ng = scrubbed_content_ng_utf8(ds.content)
