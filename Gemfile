@@ -55,7 +55,7 @@ gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'rsolr-client-cert', '~> 0.5.2'
 gem 'solrizer'
-gem 'sprockets', '~> 2.12' # upgrading to 3.x introduces a deployment error, where cap tries to backup a non-existent manifest-*.js file
+gem 'sprockets', '~> 3.4'
 gem 'stanford-mods'
 gem 'sul_styles', '~> 0.3.0' # later versions require ruby 2.1 or higher
 
