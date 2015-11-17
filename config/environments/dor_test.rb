@@ -13,8 +13,8 @@ Dor.configure do
 
   dor_services do
     url Settings.DOR_SERVICES_URL
-    logfile Settings.DOR_SERVICES_LOGFILE
-    shift_age Settings.DOR_SERVICES_SHIFT_AGE
+    logfile Settings.WORKFLOW.LOGFILE
+    shift_age Settings.WORKFLOW.SHIFT_AGE
   end
 
   suri do
