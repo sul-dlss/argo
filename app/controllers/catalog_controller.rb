@@ -270,11 +270,10 @@ class CatalogController < ApplicationController
   def reformat_dates
     params.each do |key, val|
       begin
-        if key =~ /_datepicker/ && val =~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/
-          val = DateTime.parse(val).beginning_of_day.utc.xmlschema
-          field = key.split( '_after_datepicker').first.split('_before_datepicker').first
-          params[:f][field] = '[' + val.to_s + 'Z TO *]'
-        end
+        next unless key =~ /_datepicker/ && val =~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/
+        val = DateTime.parse(val).beginning_of_day.utc.xmlschema
+        field = key.split( '_after_datepicker').first.split('_before_datepicker').first
+        params[:f][field] = '[' + val.to_s + 'Z TO *]'
       rescue
       end
     end
