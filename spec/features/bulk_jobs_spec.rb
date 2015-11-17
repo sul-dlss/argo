@@ -2,7 +2,6 @@ require 'spec_helper'
 
 # Feature tests for the spreadsheet bulk uploads view.
 feature 'Bulk jobs view', js: true do
-
   before :each do
     @current_user = double(
       :webauth_user,
