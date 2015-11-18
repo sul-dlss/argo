@@ -6,7 +6,6 @@
 .*.swp
 app/assets/javascripts/jqgrid/
 config/certs
-config/newrelic.yml
 coverage/
 db/*.sqlite3
 dpg_pool
