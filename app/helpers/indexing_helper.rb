@@ -1,4 +1,23 @@
 module IndexingHelper
+  def reindex_object obj
+    doc = obj.to_solr
+    Dor::SearchService.solr.add(doc)
+  end
+
+  def reindex_pid pid
+    obj = Dor.load_instance pid
+    reindex_object obj
+  end
+
+  def reindex_pid_list pid_list
+    pid_list.each do |pid|
+      reindex_pid pid
+    end
+  end
+
+
+
+
   def reindex_all args
     index_log = Logger.new(File.join(Rails.root, 'log', 'reindex.log'))
     index_log.formatter = Logger::Formatter.new
