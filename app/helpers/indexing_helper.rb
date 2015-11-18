@@ -9,12 +9,16 @@ module IndexingHelper
     reindex_object obj
   end
 
-  def reindex_pid_list pid_list
+  def reindex_pid_list pid_list, should_commit=false
     pid_list.each do |pid|
       reindex_pid pid
     end
+    ActiveFedora.solr.conn.commit if should_commit
   end
 
+  def get_pids_for_model_type model_type
+    Dor::SearchService.risearch "select $object from <#ri> where $object <fedora-model:hasModel> #{model_type}"
+  end
 
 
 
