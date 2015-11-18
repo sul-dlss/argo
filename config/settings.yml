@@ -29,6 +29,12 @@ METADATA:
   EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'
   CATALOG_URL: 'https://catalog.example.com/catalog/mods'
 
+# Newrelic
+NEWRELIC:
+  ENABLED: false
+  LICENSE_KEY: 'super secret api key'
+  APP_NAME: 'Argo - name should be specific to server'
+
 # Squash
 SQUASH:
   API_HOST: 'https://squash-host.example.com'
