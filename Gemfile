@@ -50,6 +50,7 @@ gem 'rails', '~> 4.0' # specifying because we expect a major vers upgrade to bre
 gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'rsolr-client-cert', '~> 0.5.2'
+gem 'ruby-prof'
 gem 'solrizer'
 gem 'sprockets', '~> 3.4'
 gem 'stanford-mods'
