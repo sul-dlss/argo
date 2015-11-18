@@ -84,7 +84,6 @@ Argo::Application.routes.draw do
     get '/schema_validate', :on => :member, :action => :schema_validation, :as => 'schema_validation'
     get '/remediate_mods', :on => :member, :action => :remediate_mods, :as => 'remediate_mods'
     get '/mods', :on => :member, :action => :mods, :as => 'mods'
-    post '/mods', :on => :member, :action => :update_mods, :as => 'update_mods'
     get '/remove_duplicate_encoding', :on => :member, :action => :remove_duplicate_encoding, :as => 'remove_duplicate_encoding'
     get '/detect_duplicate_encoding', :on => :member, :action => :detect_duplicate_encoding, :as => 'detect_duplicate_encoding'
     get '/create_minimal_mods', :on => :member, :action => :create_minimal_mods, :as => 'create_minimal_mods'
