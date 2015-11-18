@@ -8,7 +8,10 @@
       elsif !button[:new_page]
         button_data[:ajax_modal] = 'trigger'
       end
+      if button[:check_url]
+        button_data[:check_url] = button[:check_url]
+      end
     %>
-    <%= link_to button[:label], button[:url], class: 'btn button btn-primary', data: button_data %>
+    <%= link_to button[:label], button[:url], class: "btn button btn-primary #{'disabled' if button[:check_url]}", data: button_data %>
   <%end%>
 </div>
