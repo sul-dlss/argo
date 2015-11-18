@@ -40,6 +40,11 @@ Argo::Application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Adds additional error checking when serving assets at runtime.
+  # Checks for improperly declared sprockets dependencies.
+  # Raises helpful error messages.
+  config.assets.raise_runtime_errors = true
+
   # Dalli cache configuration
   config.perform_caching = true
   config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
