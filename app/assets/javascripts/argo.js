@@ -104,6 +104,10 @@ function getXMLSchemaDateTime(d){
 function validate_spreadsheet_filetype()
 {
     var filename = $('#spreadsheet_file').val().toLowerCase();
-    if(!(filename.endsWith(".xlsx") || filename.endsWith(".xls") || filename.endsWith(".xml") || filename.endsWith(".csv")))
-        $('#bulk-spreadsheet-warning').text("Note: Only spreadsheets or XML files are allowed. Please check your selected file.");
+    $('span#bulk-spreadsheet-warning').text("");
+    
+    // Use lastIndexOf() since endsWith() is part of the latest ECMAScript 6 standard and not implemented
+    // in Poltergeist/PhantomJS yet.
+    if((filename.lastIndexOf(".xlsx") == -1) && (filename.lastIndexOf(".xls") == -1) &&  (filename.lastIndexOf(".xml") == -1) && (filename.lastIndexOf(".csv") == -1))
+        $('span#bulk-spreadsheet-warning').text("Note: Only spreadsheets or XML files are allowed. Please check your selected file.");
 }
