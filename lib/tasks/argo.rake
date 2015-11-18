@@ -17,14 +17,17 @@ end
 task :default => [:ci]
 
 task :ci do
-  ENV['RAILS_ENV'] = 'test'
-  Rake::Task['argo:install'].invoke
-  jetty_params = jettywrapper_load_config()
-  error = Jettywrapper.wrap(jetty_params) do
-    Rake::Task['argo:repo:load'].invoke  # load 'em all!
-    Rake::Task['spec'].invoke
+  if Rails.env.test?
+    Rake::Task['argo:install'].invoke
+    jetty_params = jettywrapper_load_config()
+    error = Jettywrapper.wrap(jetty_params) do
+      Rake::Task['argo:repo:load'].invoke  # load 'em all!
+      Rake::Task['spec'].invoke
+    end
+    raise "test failures: #{error}" if error
+  else
+    system('RAILS_ENV=test rake ci')
   end
-  raise "test failures: #{error}" if error
 end
 
 if ['test', 'development'].include? ENV['RAILS_ENV']
