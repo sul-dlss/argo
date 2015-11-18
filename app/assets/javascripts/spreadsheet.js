@@ -65,12 +65,6 @@
 // The Blacklight onLoad event works better than the regular onLoad event if
 // turbolinks is enabled.
 Blacklight.onLoad(function(){
-
-    console.log('blight onload');
-    
-    // When the user clicks the 'MODS bulk loads' button, a lightbox is opened. The event
-    // 'loaded.blacklight.ajax-modal' is fired just before this Blacklight lightbox is shown.
-    //$('#ajax-modal').on('loaded.blacklight.ajax-modal', function(e){
     $('#spreadsheet-upload-container').argoSpreadsheet();
 
     // When the user clicks the 'MODS bulk loads' button, a lightbox is opened.
