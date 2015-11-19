@@ -1,0 +1,207 @@
+<foxml:digitalObject VERSION="1.1" PID="druid:pb873ty1662"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Annual report of the State Corporation Commission showing the condition of the incorporated state banks and other institutions operating in Virginia at the close of business"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="argo.stanford.edu"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2014-07-31T22:56:35.559Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2014-07-31T23:01:45.441Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2014-07-31T22:56:35.559Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:56:35.683Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:56:35.773Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:56:35.899Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:56:36.020Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>versionMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:56:36.142Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:57:05.996Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:59:01.772Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T22:59:01.872Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2014-07-31T23:01:45.441Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2014-07-31T22:56:35.559Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="543">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Annual report of the State Corporation Commission showing the condition of the incorporated state banks and other institutions operating in Virginia at the close of business</dc:title>
+  <dc:identifier>druid:pb873ty1662</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2014-07-31T22:56:35.683Z" MIMETYPE="application/rdf+xml" SIZE="464">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:pb873ty1662">
+    <hydra:isGovernedBy rdf:resource="info:fedora/druid:fg464dn8891"></hydra:isGovernedBy>
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Collection"></fedora-model:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2014-07-31T22:56:35.773Z" MIMETYPE="text/xml" SIZE="518">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:pb873ty1662</objectId>
+  <objectCreator>DOR</objectCreator>
+  <objectLabel>Annual report of the State Corporation Commission showing the condition of the incorporated state banks and other institutions operating in Virginia at the close of business</objectLabel>
+  <objectType>collection</objectType>
+  <adminPolicy>druid:fg464dn8891</adminPolicy>
+  <otherId name="catkey">420563</otherId>
+  <otherId name="uuid">eb4da2a2-1905-11e4-8e6a-0050569b3c3c</otherId>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.1" LABEL="Identity Metadata" CREATED="2014-07-31T22:59:01.772Z" MIMETYPE="text/xml" SIZE="555">
+<foxml:xmlContent>
+<identityMetadata>
+  <objectId>druid:pb873ty1662</objectId>
+  <objectCreator>DOR</objectCreator>
+  <objectLabel>Annual report of the State Corporation Commission showing the condition of the incorporated state banks and other institutions operating in Virginia at the close of business</objectLabel>
+  <objectType>collection</objectType>
+  <adminPolicy>druid:fg464dn8891</adminPolicy>
+  <otherId name="catkey">420563</otherId>
+  <otherId name="uuid">eb4da2a2-1905-11e4-8e6a-0050569b3c3c</otherId>
+  <tag>Remediated By : 4.6.6.2</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
+<foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2014-07-31T22:56:35.899Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-prod.stanford.edu/workflow/dor/objects/druid:pb873ty1662/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2014-07-31T22:56:36.020Z" MIMETYPE="text/xml" SIZE="670">
+<foxml:xmlContent>
+<rightsMetadata>
+  <access type="discover">
+    <machine>
+      <world></world>
+    </machine>
+  </access>
+  <access type="read">
+    <machine>
+      <world></world>
+    </machine>
+  </access>
+  <use>
+    <human type="useAndReproduction">These works have been digitized and made accessible with the permission of the State.  States may limit further reuse.  Please contact govinfolib@lists.stanford.edu with questions about reuse or access.</human>
+    <human type="creativeCommons"></human>
+    <machine type="creativeCommons"></machine>
+  </use>
+  <copyright>
+    <human>Copyright © Stanford University. All Rights Reserved.</human>
+  </copyright>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="versionMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="versionMetadata.0" LABEL="Version Metadata" CREATED="2014-07-31T22:56:36.142Z" MIMETYPE="text/xml" SIZE="136">
+<foxml:xmlContent>
+<versionMetadata>
+  <version tag="1.0.0" versionId="1">
+    <description>Initial Version</description>
+  </version>
+</versionMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="events.0" LABEL="Events" CREATED="2014-07-31T22:59:01.872Z" MIMETYPE="text/xml" SIZE="146">
+<foxml:xmlContent>
+<events>
+  <event type="remediation" when="2014-07-31T15:59:01-07:00" who="Dor::Identifiable 3.6.1">Record Remediation Version</event>
+</events>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="provenanceMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="provenanceMetadata.0" LABEL="Provenance Metadata" CREATED="2014-07-31T23:01:45.441Z" MIMETYPE="text/xml" SIZE="265">
+<foxml:xmlContent>
+<provenanceMetadata objectId="druid:pb873ty1662">
+  <agent name="DOR">
+    <what object="druid:pb873ty1662">
+      <event when="2014-07-31T16:01:45-07:00" who="DOR-accessionWF">DOR Common Accessioning completed</event>
+    </what>
+  </agent>
+</provenanceMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

@@ -2,8 +2,11 @@
 class SolrDocument
 
   include Blacklight::Solr::Document
+  include ApoConcern
   include CatkeyConcern
+  include CollectionConcern
   include DruidConcern
+  include TitleConcern
 
   # self.unique_key = 'id'
 
@@ -27,7 +30,7 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Solr::Document::DublinCore)
   field_semantics.merge!(
-    :title    => 'dc_title_ssi',
+    :title    => FIELD_TITLE,
     :author   => 'dc_creator_ssi',
     :language => 'public_dc_language_tesim',
     :format   => 'public_dc_format_tesim'
