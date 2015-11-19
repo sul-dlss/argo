@@ -10,7 +10,6 @@ describe ApoController, :type => :controller do
     end
     @item = Dor::AdminPolicyObject.find('druid:zt570tx3016')
     @empty_item = Dor::AdminPolicyObject.find('pw570tx3016')
-  # ItemsController.any_instance.stub(:current_user).and_return(@current_user)
     log_in_as_mock_user(subject)
   end
 
@@ -22,27 +21,23 @@ describe ApoController, :type => :controller do
               'use_license' => 'machine-readable-license-code', 'workflow' => 'registrationWF', 'register' => ''}
       # block cascading update
       allow(controller).to receive(:update_index)
-      expect(@item).to receive(:add_roleplayer).exactly(4).times
-      expect(Dor).to receive(:find).with('druid:collectionpid').and_return(@item)
     end
 
     it 'should create an apo' do
-      skip 'Unimplemented'
+      skip 'Unimplemented test'
     end
-    ## FIXME: The next two tests still hit solr looking for druid:dd327qr3670.
-    ## They should be stubbed/contained.
+
     it 'should hit the registration service to register an apo and a collection' do
+      expect(@item).to receive(:add_roleplayer).exactly(4).times
+      expect(Dor).to receive(:find).with('druid:collectionpid').and_return(@item)
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
-        expect(params).to match a_hash_including(:label => 'New APO Title', :object_type => 'adminPolicy', :admin_policy => 'druid:hv992ry2431')
+        expect(params).to match a_hash_including(
+          :label        => 'New APO Title',
+          :object_type  => 'adminPolicy',
+          :admin_policy => 'druid:hv992ry2431',
+          :workflow_priority => '70'
+        )
         expect(params[:metadata_source]).to be_nil   # descMD is created via the form
-        {:pid => 'druid:collectionpid'}
-      end
-      expect(@item).to receive(:"use_license=").with(@example['use_license'])
-      post 'register', @example
-    end
-    it 'should set apo workflows to priority 70' do
-      expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
-        expect(params[:workflow_priority]).to eq('70')
         {:pid => 'druid:collectionpid'}
       end
       expect(@item).to receive(:"use_license=").with(@example['use_license'])
@@ -52,7 +47,7 @@ describe ApoController, :type => :controller do
 
   describe 'register_collection' do
     before :each do
-      allow(Dor).to receive(:find).with('druid:forapo', :lightweight => true).and_return(@empty_item)
+      allow(Dor).to receive(:find).with('druid:forapo').and_return(@empty_item)
       expect(@empty_item).to receive(:add_default_collection).with('druid:newcollection')
       @new_collection_druid = 'druid:newcollection'
       @mock_new_collection = double(Dor::Collection)
