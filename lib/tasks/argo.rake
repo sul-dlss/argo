@@ -320,7 +320,6 @@ namespace :argo do
 
   desc 'Reindex all (or a subset) of DOR objects in Solr'
   task :reindex_all, [:query] => [:environment] do |t, args|
-    include IndexingHelper
-    reindex_all args
+    Argo::Indexer.new.reindex_all args
   end   # :reindex_all
 end     # :argo
