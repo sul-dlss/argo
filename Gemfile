@@ -12,7 +12,6 @@ gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
-gem 'haml'
 gem 'jqgrid-jquery-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'

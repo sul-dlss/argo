@@ -215,8 +215,6 @@ GEM
       diff-lcs (~> 1.1)
       mime-types (~> 1.15)
       posix-spawn (~> 0.3.6)
-    haml (4.0.7)
-      tilt
     hooks (0.3.6)
       uber (~> 0.0.4)
     http-cookie (1.0.2)
@@ -539,7 +537,6 @@ DEPENDENCIES
   dor-services (~> 5.0)!
   dor-workflow-service (~> 1.7)
   equivalent-xml (>= 0.6.0)
-  haml
   http_logger
   is_it_working-cbeer
   jettywrapper
