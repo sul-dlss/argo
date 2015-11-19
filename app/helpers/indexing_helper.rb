@@ -1,4 +1,13 @@
 module IndexingHelper
+  SimpleLogJob = Struct.new(:log_val) do
+    def perform
+      sleep(rand 5)
+      job_logger = Logger.new(File.open("tmp/simple_job.log"))
+      job_logger.unknown "#{log_val}"
+    end
+  end
+
+
   def reindex_object obj
     doc = obj.to_solr
     Dor::SearchService.solr.add(doc)
