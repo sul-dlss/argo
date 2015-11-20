@@ -15,15 +15,15 @@ class ModsulatorJob < ActiveJob::Base
   # Later, this log file will be used to generate a nicer looking log for the user to view and to generate the list of
   # spreadsheet upload jobs within the Argo UI.
   #
-  # @param  [String]  apo_id             The druid of the DOR APO that governs all of the objects we're trying to upload metadata for.
-  # @param  [String]  uploaded_filename  The full path to the temporary uploaded file. Will be deleted upon completion.
+  # @param  [String]  apo_id             DRUID of the DOR APO that governs all of the objects we're trying to upload metadata for.
+  # @param  [String]  uploaded_filename  Full path to the temporary uploaded file. Deleted upon completion.
   # @param  [String]  output_directory   Where to store output (log, generated XML etc.).
-  # @param  [String]  user_login         The current user's username.
+  # @param  [String]  user_login         Acting user's username.
   # @param  [String]  filetype           If not 'xml', the input is assumed to be an Excel spreadsheet.
-  # @param  [String]  xml_only           If true, then only generate XML - do not upload into DOR.
+  # @param  [Boolean]  xml_only          If true, then only generate XML - do not upload into DOR.
   # @param  [String]  note               An optional note that the user entered to go with the job.
   # @return [Void]
-  def perform(apo_id, uploaded_filename, output_directory, user_login, filetype, xml_only, note)
+  def perform(apo_id, uploaded_filename, output_directory, user_login, filetype = 'xlsx', xml_only = false, note = '')
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
 
@@ -35,25 +35,23 @@ class ModsulatorJob < ActiveJob::Base
       if response_xml.nil?
         log.puts('argo.bulk_metadata.bulk_log_error_exception Got no response from server')
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
+        return
       end
 
-      metadata_filename = generate_xml_filename(original_filename)
-      save_metadata_xml(response_xml, File.join(output_directory, metadata_filename), log)
+      metadata_path = File.join(output_directory, generate_xml_filename(original_filename))
+      save_metadata_xml(response_xml, metadata_path, log)
 
       if xml_only
         log.puts('argo.bulk_metadata.bulk_log_xml_only true')
       elsif filetype != 'xml' # If the submitted file is XML, we never want to load anything into DOR
-        # Load into DOR
         log.puts('argo.bulk_metadata.bulk_log_xml_only false')
-        update_metadata(apo_id, response_xml, log)
+        update_metadata(apo_id, response_xml, log) # Load into DOR
       end
 
-      finish_timestamp = Time.now.strftime(TIME_FORMAT)
-      log.puts("argo.bulk_metadata.bulk_log_job_complete #{finish_timestamp}")
+      log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
     }
-
-    # Remove the (temporary) uploaded file
-    FileUtils.rm(uploaded_filename, :force => true)
+  ensure
+    FileUtils.rm(uploaded_filename, :force => true) # Remove the (temporary) uploaded file
   end
 
   # Upload metadata into DOR.
@@ -118,12 +116,7 @@ class ModsulatorJob < ActiveJob::Base
         log.puts("#{e.message}")
         log.puts("#{e.backtrace}")
         next
-      rescue Dor::Exception => e
-        log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
-        log.puts("#{e.message}")
-        log.puts("#{e.backtrace}")
-        next
-      rescue Exception => e
+      rescue Dor::Exception, Exception => e
         log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
         log.puts("#{e.message}")
         log.puts("#{e.backtrace}")
@@ -134,9 +127,9 @@ class ModsulatorJob < ActiveJob::Base
 
   # Check if two MODS XML nodes are equivalent.
   #
-  # @param [Nokogiri::XML::Element]    node_1  A MODS XML node.
-  # @param [Nokogiri::XML::Element]    node_2  A MODS XML node.
-  # @param [Boolean]                   true if the given nodes are equivalent, false otherwise.
+  # @param [Nokogiri::XML::Element]  node_1  A MODS XML node.
+  # @param [Nokogiri::XML::Element]  node_2  A MODS XML node.
+  # @return [Boolean] true if the given nodes are equivalent, false otherwise.
   def equivalent_nodes(node_1, node_2)
     EquivalentXml.equivalent?(node_1,
                               node_2,
@@ -172,11 +165,12 @@ class ModsulatorJob < ActiveJob::Base
   # @param [String]  username  The login name of the current user.
   # @param [String]  filename  The name of this job's input file.
   # @param [String]  note      An optional comment that describes this job.
-  def start_log(log_file, username, filename, note)
+  def start_log(log_file, username, filename, note = '')
     log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_user #{username}")
     log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}")
     log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if note && note.length > 0
+    log_file.flush # record start in case of crash
   end
 
   # Calls the MODSulator web service (modsulator-app) to process the uploaded file. If a request fails, the job will fail
@@ -189,34 +183,31 @@ class ModsulatorJob < ActiveJob::Base
   # @param    [File]     log_file            The log file to write to
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
   def generate_xml(filetype, uploaded_filename, original_filename, log_file)
-    response_xml = nil
-    url = nil
-
-    begin
-      if filetype == 'xml_only'  # Just clean up the given XML file
-        url = Argo::Config.urls.normalizer
-        response_xml = RestClient.post(url, File.read(uploaded_filename))
-      else                         # The given file is a spreadsheet
-        url = Argo::Config.urls.modsulator
-        response_xml = RestClient.post(url, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
-      end
-    rescue RestClient::ResourceNotFound => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
-    rescue Errno::ENOENT => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
-    rescue Errno::EACCES => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
-    rescue RestClient::InternalServerError => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
-    rescue Exception => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
+    if filetype == 'xml_only'  # Just clean up the given XML file
+      url = Argo::Config.urls.normalizer
+      response_xml = RestClient.post(url, File.read(uploaded_filename))
+    else                       # The given file is a spreadsheet
+      url = Argo::Config.urls.modsulator
+      response_xml = RestClient.post(url, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
     end
     response_xml
+  rescue RestClient::ResourceNotFound => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
+  rescue Errno::ENOENT => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
+  rescue Errno::EACCES => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
+  rescue RestClient::InternalServerError => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
+  rescue Exception => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
+  ensure
+    log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
   end
 
   # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.
