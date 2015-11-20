@@ -1,10 +1,22 @@
+require 'new_relic/agent/method_tracer'
+
 module Argo
   class SimpleLogJob
-    @@simple_job_logger = Logger.new("tmp/simple_job.log")
-    def perform
-      sleep(rand 5)
-      @@simple_job_logger.unknown "#{log_val}"
+    include ::NewRelic::Agent::MethodTracer
+
+    def initialize(log_val)
+      @log_val = log_val
     end
+
+    def perform
+      sleep(rand 10)
+
+      log_filename = "tmp/simple_job.log"
+      File.open(log_filename, 'a') { |log|
+        log.puts "#{@log_val}"
+      }
+    end
+    add_method_tracer :perform, 'Custom/Argo::SimpleLogJob.perform'
   end
 
   class Indexer
