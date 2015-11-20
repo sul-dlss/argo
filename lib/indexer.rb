@@ -1,38 +1,35 @@
 module Argo
-  class Indexer
-    SimpleLogJob = Struct.new(:log_val) do
-      def perform
-        sleep(rand 5)
-        job_logger = Logger.new(File.open("tmp/simple_job.log"))
-        job_logger.unknown "#{log_val}"
-      end
+  class SimpleLogJob
+    @@simple_job_logger = Logger.new("tmp/simple_job.log")
+    def perform
+      sleep(rand 5)
+      @@simple_job_logger.unknown "#{log_val}"
     end
+  end
 
-
-    def reindex_object obj
+  class Indexer
+    def self.reindex_object obj
       doc = obj.to_solr
       Dor::SearchService.solr.add(doc)
     end
 
-    def reindex_pid pid
+    def self.reindex_pid pid
       obj = Dor.load_instance pid
       reindex_object obj
     end
 
-    def reindex_pid_list pid_list, should_commit=false
+    def self.reindex_pid_list pid_list, should_commit=false
       pid_list.each do |pid|
         reindex_pid pid
       end
       ActiveFedora.solr.conn.commit if should_commit
     end
 
-    def get_pids_for_model_type model_type
+    def self.get_pids_for_model_type model_type
       Dor::SearchService.risearch "select $object from <#ri> where $object <fedora-model:hasModel> #{model_type}"
     end
 
-
-
-    def reindex_all args
+    def self.reindex_all args
       index_log = Logger.new(File.join(Rails.root, 'log', 'reindex.log'))
       index_log.formatter = Logger::Formatter.new
       index_log.level = ENV['LOG_LEVEL'] ? Logger::SEV_LABEL.index(ENV['LOG_LEVEL']) : Logger::INFO
