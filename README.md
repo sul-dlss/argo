@@ -9,6 +9,8 @@ Argo is the administrative interface to the Stanford Digital Repository. It uses
 Install Java 1.8 (or newer) JRE (and also the JDK on Mac OSX).  It is required for the version of Solr in use.
 http://java.com/en/download/
 
+Install MySQL.
+
 Install Ruby 2.2.2 or later (e.g., via rvm or rbenv).
 
 The Argo tests use [Poltergeist](https://github.com/teampoltergeist/poltergeist), which depends on [PhantomJS](http://phantomjs.org/download.html).  The Poltergeist project maintains installation instructions for PhantomJS, see:
@@ -36,8 +38,6 @@ For vanilla Stanford laptop installations, the cert files and the local settings
 ### Run bundler to install the Gem dependencies
 
 `bundle install`
-
-Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the mysql2 inclusion in Gemfile and come back to it later (you can develop using sqlite), or you can install MySQL.
 
 ### Install components
 
