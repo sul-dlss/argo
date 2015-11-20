@@ -14,22 +14,6 @@ module Argo
     end
   end
 
-  class ReindexPidListJob
-    def initialize(pid_list, should_commit=false, should_profile=false)
-      @pid_list=pid_list
-      @should_commit=should_commit
-      @should_profile=should_profile
-    end
-
-    def perform
-      if @should_profile
-        Argo::Indexer.reindex_pid_list_with_profiling @pid_list, @should_commit
-      else
-        Argo::Indexer.reindex_pid_list @pid_list, @should_commit
-      end
-    end
-  end
-
   #TODO: DRY up the repetition btwn here and dor_controller
   class Indexer
     @@index_logger = nil
