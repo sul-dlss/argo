@@ -1,9 +1,5 @@
-require 'new_relic/agent/method_tracer'
-
 module Argo
   class SimpleLogJob
-    include ::NewRelic::Agent::MethodTracer
-
     def initialize(log_val)
       @log_val = log_val
     end
@@ -16,18 +12,52 @@ module Argo
         log.puts "#{@log_val}"
       }
     end
-    add_method_tracer :perform, 'Custom/Argo::SimpleLogJob.perform'
   end
 
+  class ReindexPidListJob
+    def initialize(pid_list, should_commit=false, should_profile=false)
+      @pid_list=pid_list
+      @should_commit=should_commit
+      @should_profile=should_profile
+    end
+
+    def perform
+      if @should_profile
+        Argo::Indexer.reindex_pid_list_with_profiling @pid_list, @should_commit
+      else
+        Argo::Indexer.reindex_pid_list @pid_list, @should_commit
+      end
+    end
+  end
+
+  #TODO: DRY up the repetition btwn here and dor_controller
   class Indexer
+    @@index_logger = nil
+    def self.index_logger
+      return @@index_logger if @@index_logger
+
+      @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
+      @@index_logger.formatter = proc do |severity, datetime, progname, msg|
+        date_format_str = Argo::Config.date_format_str
+        "[---] [#{datetime.utc.strftime(date_format_str)}] #{msg}\n"
+      end
+      @@index_logger
+    end
+
     def self.reindex_object obj
-      doc = obj.to_solr
-      Dor::SearchService.solr.add(doc)
+      solr_doc = obj.to_solr
+      Dor::SearchService.solr.add(solr_doc)
     end
 
     def self.reindex_pid pid
       obj = Dor.load_instance pid
       reindex_object obj
+      index_logger.info "updated index for #{pid}"
+      # index_logger.debug 'Status:ok<br> Solr Document: ' + solr_doc.inspect
+    rescue ActiveFedora::ObjectNotFoundError # => e
+      index_logger.info "failed to update index for #{pid}, object not found in Fedora"
+    rescue StandardError => se
+      index_logger.error "failed to update index for #{pid}, unexpected error: #{se}"
     end
 
     def self.reindex_pid_list pid_list, should_commit=false
@@ -37,9 +67,16 @@ module Argo
       ActiveFedora.solr.conn.commit if should_commit
     end
 
+    def self.reindex_pid_list_with_profiling pid_list, should_commit=false
+      require 'argo_profiler'
+      out_file_id = "#{Time.now.iso8601}-#{Process.pid}"
+      Argo::Profiler.prof(out_file_id) { Argo::Indexer.reindex_pid_list pid_list, should_commit }
+    end
+
     def self.get_pids_for_model_type model_type
       Dor::SearchService.risearch "select $object from <#ri> where $object <fedora-model:hasModel> #{model_type}"
     end
+
 
     def self.reindex_all args
       index_log = Logger.new(File.join(Rails.root, 'log', 'reindex.log'))
