@@ -3,13 +3,6 @@
 class IndexingJob < ActiveJob::Base
   queue_as :indexing
 
-  # def initialize(pid_list, priority, should_commit = false, should_profile = false)
-  #   @pid_list = pid_list
-  #   @priority = priority
-  #   @should_commit = should_commit
-  #   @should_profile = should_profile
-  # end
-
   ##
   # Perform indexing job
   # @param [Array] pid_list
