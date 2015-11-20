@@ -15,6 +15,7 @@ module Argo
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     require 'indexer'
+    require 'profiler'
 
     config.active_job.queue_adapter = :delayed_job
 
