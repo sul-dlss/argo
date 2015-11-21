@@ -8,7 +8,7 @@ module Argo
 
     def self.reindex_all(should_commit = true, should_profile = true)
       Argo::Indexer.get_pid_lists_for_full_reindex.each_with_index do |pid_list, priority|
-        Argo::BulkReindexer.queue_pid_reindexing_jobs pid_list, priority, should_commit, should_profile
+        Argo::BulkReindexer.queue_pid_reindexing_jobs pid_list, should_commit, should_profile, priority
       end
     end
   end
