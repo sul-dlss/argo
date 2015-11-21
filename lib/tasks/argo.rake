@@ -315,8 +315,8 @@ namespace :argo do
     Dor.find_all('objectType_ssim:workflow').each(&:update_index)
   end
 
-  desc 'Reindex all (or a subset) of DOR objects in Solr'
+  desc 'Reindex all DOR objects to Solr'
   task :reindex_all, [:query] => [:environment] do |t, args|
-    Argo::Indexer.reindex_all args
-  end   # :reindex_all
+    Argo::BulkReindexer.reindex_all
+  end
 end     # :argo

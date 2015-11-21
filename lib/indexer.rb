@@ -52,8 +52,43 @@ module Argo
     end
 
     def self.reindex_pid_list_with_profiling(pid_list, should_commit=false)
-      out_file_id = "#{Time.now.iso8601}-#{Process.pid}"
+      out_file_id = "reindex_pid_list_#{Time.now.iso8601}-#{Process.pid}"
+      index_logger.info "#{out_file_id} traces bulk reindex for #{pid_list}"
       Argo::Profiler.prof(out_file_id) { Argo::Indexer.reindex_pid_list pid_list, should_commit }
+    end
+
+    def self.get_all_pids
+      dor_pids = []
+      Dor::SearchService.iterate_over_pids(:in_groups_of => 1000, :mode => :group) do |chunk|
+        dor_pids += chunk
+      end
+      dor_pids
+    end
+
+    def self.get_pid_lists_for_full_reindex
+      # TODO: get the sub-lists:
+      #  uber APO 'druid:hv992ry2431'
+      #  workflows  '<info:fedora/afmodel:Dor_WorkflowObject>'
+      #  agreements  '<info:fedora/afmodel:agreement>'
+      #  Hydrus Uber APO  'druid:zw306xn5593'
+      #  All APOs (hydrus and non-hydrus)  '<info:fedora/afmodel:Dor_AdminPolicyObject>' '<info:fedora/afmodel:Hydrus_AdminPolicyObject>'
+      #  collections/sets (most sets are collections as well)  '<info:fedora/afmodel:Dor_Collection>' '<info:fedora/afmodel:Hydrus_Collection>' '<info:fedora/afmodel:Dor_Set>'
+      #  all the rest (items etc)   get_all_pids - all the pids we've already encountered
+
+      uber_apo_pids = ['druid:hv992ry2431']
+      workflow_pids = Argo::Indexer.get_pids_for_model_type '<info:fedora/afmodel:Dor_WorkflowObject>'
+      agreement_pids = Argo::Indexer.get_pids_for_model_type '<info:fedora/afmodel:agreement>'
+      hydrus_uber_apo_pids = ['druid:zw306xn5593']
+      apo_pids = Argo::Indexer.get_pids_for_model_type '<info:fedora/afmodel:Dor_AdminPolicyObject>'
+      hydrus_apo_pids = Argo::Indexer.get_pids_for_model_type '<info:fedora/afmodel:Hydrus_AdminPolicyObject>'
+      collection_pids = Argo::Indexer.get_pids_for_model_type '<info:fedora/afmodel:Dor_Collection>'
+      hydrus_collection_pids = Argo::Indexer.get_pids_for_model_type '<info:fedora/afmodel:Hydrus_Collection>'
+      set_pids = Argo::Indexer.get_pids_for_model_type '<info:fedora/afmodel:Dor_Set>'
+
+      all_pids = Argo::Indexer.get_all_pids
+      remaining_pids = all_pids - (uber_apo_pids+workflow_pids+agreement_pids+hydrus_uber_apo_pids+apo_pids+hydrus_apo_pids+collection_pids+hydrus_collection_pids+set_pids)
+
+      [uber_apo_pids, workflow_pids, agreement_pids, hydrus_uber_apo_pids, apo_pids, hydrus_apo_pids, collection_pids, hydrus_collection_pids, set_pids, remaining_pids]
     end
 
     def self.get_pids_for_model_type(model_type)
@@ -61,7 +96,7 @@ module Argo
     end
 
 
-    def self.reindex_all(args)
+    def self.reindex_all_legacy(args)
       warn '[DEPRECATION] `reindex_all` is deprecated.  Please use the bulk reindexing system instead.'
       index_log = Logger.new(File.join(Rails.root, 'log', 'reindex.log'))
       index_log.formatter = Logger::Formatter.new
