@@ -4,7 +4,9 @@ describe ItemsController, :type => :controller do
     # TODO: use fixtures here, this is too much stubbing
     @item = double(Dor::Item)
     @pid  = 'druid:oo201oo0001'
-    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
+    @current_user = User.find_or_create_by_webauth(
+      double('webauth', :login => 'sunetid', :attributes => { 'DISPLAYNAME' => 'Rando User'}, :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
+    )
     allow(@current_user).to receive(:is_admin).and_return(true)
     allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)

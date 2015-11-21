@@ -1,7 +1,5 @@
 class ItemsController < ApplicationController
   before_filter :authorize!
-  require 'net/ssh'
-  require 'net/sftp'
   require 'equivalent-xml'
   include ItemsHelper
   include DorObjectHelper
@@ -21,9 +19,9 @@ class ItemsController < ApplicationController
     %w(accession2WF accessionWF).each do |k|
       return true if @object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold'
     end
-    return false
+    false
   rescue
-    return false
+    false
   end
 
   # open a new version if needed. 400 if the item is in a state that doesnt allow opening a version.
@@ -96,17 +94,12 @@ class ItemsController < ApplicationController
   end
 
   def register
-    @perm_keys = ["sunetid:#{current_user.login}"]
-    if webauth && webauth.privgroup.present?
-      @perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
-    end
-    render :register, :layout => 'application'
+    @perm_keys = current_user.groups
   end
 
   def workflow_view
-    @obj = @object
     @workflow_id = params[:wf_name]
-    @workflow = @workflow_id == 'workflow' ? @obj.workflows : @obj.workflows.get_workflow(@workflow_id, params[:repo])
+    @workflow = @workflow_id == 'workflow' ? @object.workflows : @object.workflows.get_workflow(@workflow_id, params[:repo])
 
     respond_to do |format|
       format.html
@@ -169,25 +162,24 @@ class ItemsController < ApplicationController
       return
     end
     Dor::WorkflowService.update_workflow_status 'dor', @object.pid, 'accessionWF', 'sdr-ingest-transfer', 'waiting'
+    if params[:bulk]
+      render :status => 200, :text => 'Updated!'
+      return
+    end
     respond_to do |format|
-      if params[:bulk]
-        render :status => 200, :text => 'Updated!'
-        return
-      end
       format.any { redirect_to catalog_path(@object.pid), :notice => 'Workflow was successfully updated' }
     end
   end
 
   def embargo_update
-    if current_user.is_admin
-      new_date = DateTime.parse(params[:embargo_date])
-      @object.update_embargo(new_date)
-      @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
-      respond_to do |format|
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
-      end
-    else
+    unless current_user.is_admin
       render :status => :forbidden, :text => 'forbidden'
+      return
+    end
+    @object.update_embargo(DateTime.parse(params[:embargo_date]))
+    @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
+    respond_to do |format|
+      format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
     end
   end
 
@@ -232,10 +224,14 @@ class ItemsController < ApplicationController
     end
     @object.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Updated attributes for file ' + params[:file_name] + '!' }
+      format.any { redirect_to catalog_path(params[:id]), :notice => "Updated attributes for file #{params[:file_name]}!" }
     end
   end
 
+  # HELL. This makes:
+  #  ~ 3-4 remote GET requests to WFS,
+  #  ~ possibly 2 writes to WFS (each one triggers async object reindex),
+  #  ~ plus an object save (more WFS requests, Fedora write, Solr reindex)
   def create_minimal_mods
     unless Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'descriptive-metadata') == 'error' || Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'publish') == 'error'
       render :text => 'Object is not in error for descMD or publish!', :status => 500
@@ -255,7 +251,7 @@ class ItemsController < ApplicationController
       Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'publish', 'waiting'
     end
     respond_to do |format|
-      format.any { render :text => 'Set metadata ' }
+      format.any { render :text => 'Set metadata' }
     end
   end
 
@@ -287,41 +283,37 @@ class ItemsController < ApplicationController
     return
   end
 
+  # create an instance of VersionTag for the current version of item
+  # @return [String] current tag
   def get_current_version_tag(item)
-    # create an instance of VersionTag for the current version of item
     ds = item.datastreams['versionMetadata']
-    cur_version_id = ds.current_version_id
-    cur_tag = Dor::VersionTag.parse(ds.tag_for_version(cur_version_id))
-    cur_tag
+    Dor::VersionTag.parse(ds.tag_for_version(ds.current_version_id))
   end
 
+  # create an instance of VersionTag for the second most recent version of item
+  # @return [String] prior tag
   def get_prior_version_tag(item)
-    # create an instance of VersionTag for the second most recent version of item
     ds = item.datastreams['versionMetadata']
     prior_version_id = (Integer(ds.current_version_id) - 1).to_s
-    prior_tag = Dor::VersionTag.parse(ds.tag_for_version(prior_version_id))
-    prior_tag
+    Dor::VersionTag.parse(ds.tag_for_version(prior_version_id))
   end
 
+  # Given two instances of VersionTag, find the most significant difference
+  # between the two (return nil if either one is nil or if they're the same)
+  # @param [String] cur_version_tag   current version tag
+  # @param [String] prior_version_tag prior version tag
+  # @return [Symbol] :major, :minor, :admin or nil
   def which_severity_changed(cur_version_tag, prior_version_tag)
-    # given two instances of VersionTag, find the most significant part of the field which changed
-    # between the two (return nil if either instance is nil or if they're the same)
-    if cur_version_tag.nil? || prior_version_tag.nil?
-      return nil
-    elsif cur_version_tag.major != prior_version_tag.major
-      return :major
-    elsif cur_version_tag.minor != prior_version_tag.minor
-      return :minor
-    elsif cur_version_tag.admin != prior_version_tag.admin
-      return :admin
-    else
-      return nil
-    end
+    return nil if cur_version_tag.nil? || prior_version_tag.nil?
+    return :major if cur_version_tag.major != prior_version_tag.major
+    return :minor if cur_version_tag.minor != prior_version_tag.minor
+    return :admin if cur_version_tag.admin != prior_version_tag.admin
+    nil
   end
 
+  # as long as this isn't a bulk operation, and we get non-nil severity and description
+  # values, update those fields on the version metadata datastream
   def close_version
-    # as long as this isn't a bulk operation, and we get non-nil severity and description
-    # values, update those fields on the version metadata datastream
     unless params[:bulk] || !params[:severity] || !params[:description]
       severity = params[:severity]
       desc = params[:description]
@@ -347,10 +339,8 @@ class ItemsController < ApplicationController
 
   # TODO: this should be a method in dor-services, invoked within set_source_id
   def self.normalize_source_id(new_source_id)
-    src_id_arr = new_source_id.split(':').map { |str| str.strip }
-    if src_id_arr.length != 2
-      raise 'new source_id must be of the form "source:value"'
-    end
+    src_id_arr = new_source_id.split(':').map(&:strip)
+    raise 'new source_id must be of the form "source:value"' if src_id_arr.length != 2
     src_id_arr.join(':')
   end
 
@@ -373,21 +363,17 @@ class ItemsController < ApplicationController
   def tags_bulk
     current_tags = @object.tags
     # delete all tags
-    current_tags.each do |cur_tag|
-      @object.remove_tag cur_tag
-    end
+    current_tags.each { |tag| @object.remove_tag tag }
     # add all of the recieved tags as new tags
     tags = params[:tags].split(/\t/)
-    tags.each do |tag|
-      @object.add_tag tag
-    end
+    tags.each { |tag| @object.add_tag tag }
     @object.identityMetadata.content_will_change!  # mark as dirty
     @object.identityMetadata.save
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :text => 'Tags updated.'}
+        format.html {render :status => :ok, :text => "#{tags.size} Tags updated."}
       else
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for ' + params[:id] + ' have been updated!' }
+        format.any { redirect_to catalog_path(params[:id]), :notice => "#{tags.size} Tags for #{params[:id]} have been updated!" }
       end
     end
   end
@@ -431,8 +417,7 @@ class ItemsController < ApplicationController
   def purge_object
     begin
       create_obj
-      # return because rendering already happened
-      return unless forbid_modify
+      return unless forbid_modify # return because rendering already happened
     rescue
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
