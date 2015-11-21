@@ -81,6 +81,15 @@ namespace :argo do
 
     desc 'Overwrite Solr configs and JARs'
     task :config => %w(argo:solr:config) do   # TODO: argo:fedora:config
+      # Enable Fedora Resource Index
+      fedora_configs = ['jetty/fedora/default/server/config/fedora.fcfg', 'jetty/fedora/test/server/config/fedora.fcfg']
+      fedora_configs.each do |file_name|
+        text = File.read(file_name)
+        new_contents = text.gsub('<param name="level" value="0">', '<param name="level" value="1">')
+        File.open(file_name, 'w') {|file| file.puts new_contents }
+      end
+      # Remove this file, because it causes the Resource Index to crash
+      FileUtils.rm('jetty/lib/ext/slf4j-log4j12-1.7.6.jar')
     end
   end  # :jetty
 
