@@ -15,6 +15,8 @@ module ValueHelper
     end
   end
 
+  # TODO: dynamically generate these methods so we don't hardcode Solr field identifiers
+
   def value_for_preserved_size_dbtsi(args)
     args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
   end
@@ -39,35 +41,44 @@ module ValueHelper
     step + ' : ' + message
   end
 
-  def value_for_is_governed_by_ssim(args)
-    target_id = args[:document].get('is_governed_by_ssim')
-    target_name = ''
-    links = ''
-    target_id.split(',').each do |targ|
-      target_name = args[:document].get('apo_title_ssim')
-      links += link_to target_name, catalog_path(targ.split(/\//).last)
-      links += '<br/>'
+  # @return [String] human-readable, HTML-safe value for the APO
+  define_method("value_for_#{SolrDocument::FIELD_APO_ID}") do |args|
+    begin
+      target_id = args[:document].apo_id
+      target_name = ''
+      links = ''
+      target_id.split(',').each do |targ|
+        target_name = args[:document].apo_title
+        links += link_to target_name, catalog_path(targ.split(/\//).last)
+        links += '<br/>'
+      end
+      links.html_safe
+    rescue StandardError => e
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
+      # value_for_related_druid('is_governed_by', args)
     end
-    links.html_safe
-  rescue StandardError => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
-    # value_for_related_druid('is_governed_by', args)
   end
 
-  def value_for_is_member_of_collection_ssim(args)
-    target_id = args[:document].get('is_member_of_collection_ssim')
-    target_name = ''
-    links = ''
-    target_id.split(',').each do |targ|
-      target_name = args[:document].get('collection_title_ssim')
-      links += link_to target_name, catalog_path(targ.split(/\//).last)
-      links += '<br/>'
+  # @return [String] human-readable, HTML-safe value for the Collection(s)
+  define_method("value_for_#{SolrDocument::FIELD_COLLECTION_ID}") do |args|
+    begin
+      target_id = args[:document].collection_id
+      target_name = ''
+      links = ''
+      # TODO: this code assumes the ordering of the ids and titles are the same
+      i = 0
+      target_id.split(',').each do |targ|
+        target_name = args[:document].collection_titles[i]
+        links += link_to target_name, catalog_path(targ.split(/\//).last)
+        links += '<br/>'
+        i += 1
+      end
+      links.html_safe
+    rescue StandardError => e
+      Rails.logger.error e.message
+      Rails.logger.error e.backtrace.join("\n")
     end
-    links.html_safe
-  rescue StandardError => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
   end
 
   def value_for_project_tag_ssim(args)

@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
   # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (PID)", "PID"]
   def permitted_collections
     q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
-    q += permitted_apos.map {|pid| 'is_governed_by_ssim:"info:fedora/' + pid + '"'}.join(' OR ') unless is_admin
+    q += permitted_apos.map {|pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\""}.join(' OR ') unless is_admin
     result = Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim'}).docs
 
     # result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim').docs

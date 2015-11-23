@@ -45,8 +45,8 @@ class CatalogController < ApplicationController
     config.add_show_field 'identifier_tesim',            :label => 'IDs'
     config.add_show_field 'originInfo_date_created_tesim', :label => 'Created'
     config.add_show_field 'obj_label_ssim',              :label => 'Label'
-    config.add_show_field 'is_governed_by_ssim',         :label => 'Admin Policy'
-    config.add_show_field 'is_member_of_collection_ssim', :label => 'Collection'
+    config.add_show_field SolrDocument::FIELD_APO_ID,    :label => 'Admin Policy'
+    config.add_show_field SolrDocument::FIELD_COLLECTION_ID, :label => 'Collection'
     config.add_show_field 'status_ssi',                  :label => 'Status'
     config.add_show_field 'objectType_ssim',             :label => 'Object Type'
     config.add_show_field 'id',                          :label => 'DRUID'
@@ -54,7 +54,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'source_id_ssim',              :label => 'Source'
     config.add_show_field 'tag_ssim',                    :label => 'Tags'
     config.add_show_field 'wf_error_ssim',               :label => 'Error'
-    config.add_show_field 'collection_title_ssim',       :label => 'Collection Title'
+    config.add_show_field SolrDocument::FIELD_COLLECTION_TITLE, :label => 'Collection Title'
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
     config.add_show_field 'preserved_size_dbtsi',        :label => 'Preservation Size'
 
@@ -97,8 +97,8 @@ class CatalogController < ApplicationController
       :no_has_model                => { :label => 'No Object Model',            :fq => '-has_model_ssim:*' },
       :no_objectType               => { :label => 'No Object Type',             :fq => '-objectType_ssim:*' },
       :no_object_title             => { :label => 'No Object Title',            :fq => '-dc_title_ssi:*' },
-      :no_is_governed_by           => { :label => 'No APO',                     :fq => '-is_governed_by_ssim:*' },
-      :no_collection_title         => { :label => 'No Collection Title',        :fq => '-collection_title_ssim:*' },
+      :no_is_governed_by           => { :label => 'No APO',                     :fq => "-#{SolrDocument::FIELD_APO_ID}:*" },
+      :no_collection_title         => { :label => 'No Collection Title',        :fq => "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
       :no_copyright                => { :label => 'No Copyright',               :fq => '-copyright_ssim:*' },
       :no_license                  => { :label => 'No License',                 :fq => '-use_license_machine_ssi:*' },
       :no_public_dc_creator        => { :label => 'No MODS Creator',            :fq => '-public_dc_creator_tesim:*' },
@@ -145,11 +145,11 @@ class CatalogController < ApplicationController
     config.field_groups = {
       :identification => [
         %w(id objectType_ssim content_type_ssim status_ssi wf_error_ssim),
-        %w(is_governed_by_ssim is_member_of_collection_ssim project_tag_ssim source_id_ssim preserved_size_dbtsi)
+        [SolrDocument::FIELD_APO_ID, SolrDocument::FIELD_COLLECTION_ID].map(&:to_s) + %w(project_tag_ssim source_id_ssim preserved_size_dbtsi)
       ],
       :full_identification => [
         %w(id objectType_ssim content_type_ssim metadata_source_ssim),
-        %w(is_governed_by_ssim is_member_of_collection_ssim project_tag_ssim source_id_ssim)
+        [SolrDocument::FIELD_APO_ID, SolrDocument::FIELD_COLLECTION_ID].map(&:to_s) + %w(project_tag_ssim source_id_ssim)
       ]
     }
 

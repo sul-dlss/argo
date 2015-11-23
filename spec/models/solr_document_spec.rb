@@ -74,5 +74,4 @@ describe SolrDocument, :type => :model do
       expect(versions['2']).to match a_hash_including(:tag => '1.1.0', :desc => 'Minor change')
     end
   end
-
 end

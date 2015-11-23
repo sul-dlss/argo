@@ -123,16 +123,15 @@ module ArgoHelper
   # Ideally this method should not make calls to external services to determine
   # what buttons should be rendered. These external requests are blocking and
   # will not allow the page to load until all requests are finished.
+  # @param [SolrDocument] doc
   # @return [Array]
   def render_buttons(doc, object = nil)
     pid = doc['id']
     object ||= Dor.find(pid)
-    apo_pid = ''
     # wf_stuff.include? 'accessionWF:completed:publish'
-    begin
-      apo_pid = doc['is_governed_by_ssim'].first.gsub('info:fedora/', '')
-    rescue
-    end
+
+    apo_pid = doc.apo_pid
+
     buttons = []
     if pid
       buttons << {
