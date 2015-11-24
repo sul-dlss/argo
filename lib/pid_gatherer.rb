@@ -2,6 +2,14 @@ module Argo
   ##
   # Gatherer of the PIDS, used for Argo indexing
   class PidGatherer
+    def initialize(should_log_to_stdout = true)
+      if should_log_to_stdout
+        @logger = Logger.new(STDOUT)
+      else
+        @logger = Argo::Indexer.index_logger
+      end
+    end
+
     ##
     # @return [Array<Array<String>>]
     def pid_lists_for_full_reindex
@@ -65,6 +73,8 @@ module Argo
     ##
     # @return [Array<String>]
     def all_pids
+      @logger.info 'querying fedora for all pids...'
+
       @all_pids ||= begin
         dor_pids = []
         Dor::SearchService.iterate_over_pids(in_groups_of: 1000, mode: :group) do |chunk|
@@ -72,6 +82,9 @@ module Argo
         end
         dor_pids
       end
+      @logger.info "found #{@all_pids.length} pids in fedora (all pids)"
+
+      @all_pids
     end
 
     ##
@@ -89,8 +102,13 @@ module Argo
     ##
     # Query the Dor SearchService for a specific model
     def pids_for_model_type(model_type)
-      Dor::SearchService.risearch 'select $object from <#ri> where $object ' \
+      @logger.info "querying fedora for pids for model_type=#{model_type}..."
+
+      pid_list = Dor::SearchService.risearch 'select $object from <#ri> where $object ' \
         "<fedora-model:hasModel> #{model_type}"
+      @logger.info "found #{pid_list.length} pids for #{model_type}"
+
+      pid_list
     end
   end
 end
