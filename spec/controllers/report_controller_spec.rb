@@ -31,4 +31,36 @@ describe ReportController, :type => :controller do
       expect(response).to render_template('bulk')
     end
   end
+  describe 'POST reset' do
+    let(:workflow) { 'accessionWF' }
+    let(:step) { 'descriptive-metadata' }
+    let(:ids) { [1, 2, 3, 4, 5] }
+    it 'sets instance variable and calls update workflow service' do
+      expect(controller).to receive(:pids_from_report).and_return(ids)
+      expect(controller).to receive(:repo_from_workflow)
+        .and_return('dor')
+      ids.each do |id|
+        expect(Dor::WorkflowService).to receive(:update_workflow_status)
+          .with('dor', "druid:#{id}", workflow, step, 'waiting')
+      end
+      xhr :post, :reset, reset_workflow: workflow, reset_step: step
+      expect(assigns(:workflow)).to eq workflow
+      expect(assigns(:step)).to eq step
+      expect(assigns(:ids)).to eq ids
+      expect(response.status).to eq 200
+    end
+    it 'gets the correct pids from a new Report' do
+      expect(Report).to receive(:new).and_return(double('report', pids: []))
+      xhr :post, :reset, reset_workflow: workflow, reset_step: step
+      expect(response.status).to eq 200
+    end
+    it 'gets repo from the WorkflowObject' do
+      expect(controller).to receive(:pids_from_report).and_return([])
+      expect(Dor::WorkflowObject).to receive(:find_by_name)
+        .and_return double(definition: double(repo: 'dor'))
+      xhr :post, :reset, reset_workflow: workflow, reset_step: step
+      expect(assigns(:repo)).to eq 'dor'
+      expect(response.status).to eq 200
+    end
+  end
 end

@@ -38,8 +38,14 @@ module WorkflowHelper
 
   def render_workflow_reset_link(wf_hash, name, process, status)
     return unless wf_hash[process] && wf_hash[process][status] && wf_hash[process][status][:_]
-    new_params = add_facet_params('wf_wps_ssim', [name, process, status].compact.join(':')).merge(:controller => 'report', :action => 'reset', :reset_workflow => name, :reset_step => process)
-    raw ' | ' + link_to('reset', new_params, :remote => true)
+    new_params = add_facet_params(
+      'wf_wps_ssim',
+      [name, process, status].compact.join(':'))
+        .merge(
+          reset_workflow: name,
+          reset_step: process
+        )
+    raw ' | ' + link_to('reset', report_reset_path(new_params), remote: true, method: :post)
   end
 
   def render_workflow_item_count(wf_hash, name, process, status)

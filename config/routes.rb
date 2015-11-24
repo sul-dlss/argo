@@ -37,7 +37,7 @@ Argo::Application.routes.draw do
   match '/report/bulk', :to => 'report#bulk', :via => [:get, :post], :as => 'report_bulk'
   match 'report/pids', :to => 'report#pids', :via => [:get, :post], :as => 'report_pids'
   match '/report/workflow_grid', :to => 'report#workflow_grid', :via => [:get, :post], :as => 'report_workflow_grid'
-  match 'report/reset', :to => 'report#reset', :via => [:get, :post], :as => 'report_reset'
+  match 'report/reset', :to => 'report#reset', :via => [:post], :as => 'report_reset'
   match 'discovery', :to => 'discovery#index', :via => [:get, :post], :as => 'discovery'
   match '/discovery/data', :to => 'discovery#data', :via => [:get, :post], :as => 'discovery_data'
   match 'discovery/download', :to => 'discovery#download', :via => [:get, :post], :as => 'discovery_download'
