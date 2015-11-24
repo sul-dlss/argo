@@ -67,11 +67,20 @@ class ReportController < CatalogController
 
   # an ajax call to reset workflow states for objects
   def reset
-    return unless request.xhr?
+    render nothing: true, status: 501 unless request.xhr?
     @workflow = params[:reset_workflow]
     @step = params[:reset_step]
-    @ids = Report.new(params, ['druids']).pids params
-    @ids.each { |pid| Dor::WorkflowService.update_workflow_status 'dor', "druid:#{pid}", @workflow, @step, 'waiting' }
+    @ids = pids_from_report(params)
+    @repo = repo_from_workflow(params[:reset_workflow])
+    @ids.each do |pid|
+      Dor::WorkflowService.update_workflow_status(
+        @repo,
+        "druid:#{pid}",
+        @workflow,
+        @step,
+        'waiting'
+      )
+    end
     ### XXX: Where's the authorization?
   end
 
@@ -87,5 +96,19 @@ class ReportController < CatalogController
       format.json
       format.html
     end
+  end
+
+  private
+
+  ##
+  # @return [Array]
+  def pids_from_report(params)
+    Report.new(params, ['druids']).pids params
+  end
+
+  ##
+  # @return [String, nil]
+  def repo_from_workflow(workflow)
+    Dor::WorkflowObject.find_by_name(workflow).try(:definition).try(:repo)
   end
 end
