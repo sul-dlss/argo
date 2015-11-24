@@ -148,7 +148,7 @@ class CatalogController < ApplicationController
         [SolrDocument::FIELD_APO_ID, SolrDocument::FIELD_COLLECTION_ID].map(&:to_s) + %w(project_tag_ssim source_id_ssim preserved_size_dbtsi)
       ],
       :full_identification => [
-        %w(id objectType_ssim content_type_ssim metadata_source_ssim),
+        %w(id objectType_ssim content_type_ssim metadata_source_ssi),
         [SolrDocument::FIELD_APO_ID, SolrDocument::FIELD_COLLECTION_ID].map(&:to_s) + %w(project_tag_ssim source_id_ssim)
       ]
     }
