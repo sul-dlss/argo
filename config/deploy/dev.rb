@@ -5,3 +5,5 @@ set :rails_env, 'development'
 set :bundle_without, %w(production test).join(' ')
 
 set :deploy_to, '/opt/app/lyberadmin/argo'
+
+set :delayed_job_workers, 1
