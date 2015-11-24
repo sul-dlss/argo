@@ -6,3 +6,9 @@ set :bundle_without, %w(test development).join(' ')
 
 set :deploy_to, '/opt/app/lyberadmin/argo'
 
+set :delayed_job_workers, 6
+
+set :delayed_job_pools, {
+  :indexing => 4,
+  :* => 2
+}
