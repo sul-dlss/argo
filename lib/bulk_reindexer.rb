@@ -28,7 +28,7 @@ module Argo
 
     ##
     # Prioritize and send pid_lists to be enqueued with a priority
-    def prioritize_pid_lists
+    def queue_prioritized_pid_lists_for_reindexing
       pid_lists.each_with_index do |pid_list, priority|
         queue_pid_reindexing_jobs pid_list, priority
       end
@@ -44,7 +44,7 @@ module Argo
         should_commit,
         should_profile,
         Argo::PidGatherer.new.pid_lists_for_full_reindex
-      ).prioritize_pid_lists
+      ).queue_prioritized_pid_lists_for_reindexing
     end
   end
 end
