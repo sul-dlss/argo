@@ -9,12 +9,12 @@ Dor.configure do
 
   workflow do
     url Settings.WORKFLOW_URL
+    logfile Settings.WORKFLOW.LOGFILE
+    shift_age Settings.WORKFLOW.SHIFT_AGE
   end
 
   dor_services do
     url Settings.DOR_SERVICES_URL
-    logfile Settings.WORKFLOW.LOGFILE
-    shift_age Settings.WORKFLOW.SHIFT_AGE
   end
 
   suri do
