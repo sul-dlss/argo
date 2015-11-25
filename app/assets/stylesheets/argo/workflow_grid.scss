@@ -1,0 +1,9 @@
+.workflow-grid-table {
+  .zero {
+    @extend .text-muted;
+  }
+}
+
+.errors a {
+  @extend .text-danger;
+}
