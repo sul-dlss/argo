@@ -66,8 +66,7 @@ group :test, :development do
   gem 'capybara'
   gem 'rack-test', :require => 'rack/test'
   gem 'simplecov', :require => false
-  gem 'pry-debugger', :platform => :ruby_19  # debugger can't handle ruby 2.x
-  gem 'pry-byebug',   :platform => [:ruby_20, :ruby_21]
+  gem 'pry-byebug'
   gem 'pry-remote'
   gem 'pry-rails'
   gem 'coveralls', require: false
