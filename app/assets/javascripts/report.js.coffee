@@ -38,7 +38,11 @@ $(document).ready ->
     caption: "Columns"
     title: "Choose Columns"
     buttonicon: 'ui-icon-script'
-    onClickButton: -> $('#report_grid').jqGrid('columnChooser')
+    onClickButton: -> $('#report_grid').jqGrid('columnChooser', {
+      done: (stuff) -> (
+        this.resize()
+      )
+    })
 
   $('#report_grid').jqGrid 'navButtonAdd', '#preport_grid',
     caption: "Download"
