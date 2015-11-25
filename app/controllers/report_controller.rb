@@ -62,7 +62,7 @@ class ReportController < CatalogController
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
     response.headers['Last-Modified'] = Time.now.ctime.to_s
-    self.response_body = Report.new(params, fields).csv2
+    self.response_body = Report.new(params, fields).to_csv
   end
 
   # an ajax call to reset workflow states for objects

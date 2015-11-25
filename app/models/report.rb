@@ -2,6 +2,7 @@ class Report
   include BlacklightSolrExtensions
   include Blacklight::Configurable
   include Blacklight::SolrHelper
+  include CsvConcern
 
   class << self
     include DorObjectHelper
@@ -206,29 +207,6 @@ class Report
     docs_to_records(@document_list)
   end
 
-  def csv2
-    @params[:page] = 1
-    headings = ''
-    rows = ''
-    @fields.each do |f|
-      headings += f[:label] + ','
-    end
-
-    while @document_list.length > 0
-      records = docs_to_records(@document_list)
-      records.each do |record|
-        rows += "\r\n"
-        row = @fields.collect { |f| record[f[:field]] }
-        row.each do |field|
-          rows << '"' + field.to_s + '"' + ','
-        end
-      end
-      @params[:page] += 1
-      (@response, @document_list) = get_search_results
-    end
-    headings + rows
-  end
-
   protected
 
   def docs_to_records(docs, fields = blacklight_config.report_fields)
@@ -244,5 +222,4 @@ class Report
     end
     result
   end
-
 end

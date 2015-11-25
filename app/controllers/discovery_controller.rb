@@ -41,6 +41,6 @@ class DiscoveryController < CatalogController
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
     response.headers['Last-Modified'] = Time.now.ctime.to_s
-    self.response_body = Discovery.new(params, fields).csv2
+    self.response_body = Discovery.new(params, fields).to_csv
   end
 end

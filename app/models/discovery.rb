@@ -1,7 +1,10 @@
+require 'csv'
+
 class Discovery
   include BlacklightSolrExtensions
   include Blacklight::Configurable
   include Blacklight::SolrHelper
+  include CsvConcern
 
   attr_reader :response, :document_list, :num_found, :params
 
@@ -140,29 +143,6 @@ class Discovery
 
   def report_data
     docs_to_records(@document_list)
-  end
-
-  def csv2
-    headings = ''
-    rows = ''
-    @fields.each do |f|
-      label = f[:label] ? f[:label] : f[:field]
-      headings += label + ','
-    end
-
-    while @document_list.length > 0
-      records = docs_to_records(@document_list)
-      records.each do |record|
-        rows += "\r\n"
-        row = @fields.collect { |f| record[f[:field]] }
-        row.each do |field|
-          rows << '"' + field.to_s + '"' + ','
-        end
-      end
-      @params[:page] += 1
-      (@response, @document_list) = get_search_results
-    end
-    headings + rows
   end
 
   protected
