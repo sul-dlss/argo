@@ -12,8 +12,12 @@ en:
         default: "%Y-%m-%d %I:%M%p"
   argo:
     search:
+      bulk_update_view: 'Bulk Update View'
+      catalog_view: 'Results View'
+      discovery_view: 'Discovery Report View'
       report_view: 'Report View'
       result_view: 'Results View'
+      workflow_grid_view: 'Workflow Grid View'
     bulk_metadata:
       bulk_log_xml_only:           	     'Generate XML only - do not load'
       bulk_log_job_start:          	     'Job started'

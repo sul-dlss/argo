@@ -1,23 +1,16 @@
 <div class='report-toggle'>
   <% cleaned_params = params.select { |key, value| !['controller', 'action'].include?(key) } %>
-
-  <% unless params['controller'] == 'report' && params['action'] == 'bulk' %>
-    <%= link_to 'Bulk Update', report_bulk_url(cleaned_params), class: 'btn btn-default' %>
-  <% end %>
-
-  <% unless params['controller'] == 'catalog' %>
-    <%= link_to t('argo.search.result_view'), catalog_index_url(cleaned_params), class: 'btn btn-default' %>
-  <% end %>
-
-  <% unless params['controller'] == 'report' && params['action'] == 'index' %>
-    <%= link_to t('argo.search.report_view'), report_url(cleaned_params), class: 'btn btn-default' %>
-  <% end %>
-
-  <% unless params['controller'] =='discovery' %>
-    <%= link_to 'Discovery Report', discovery_url(cleaned_params), class: 'btn btn-default' %>
-  <% end %>
-
-  <% unless params['controller'] =='report' && params['action'] == 'workflow_grid' %>
-    <%= link_to 'Workflow Grid View', report_workflow_grid_url(cleaned_params), class: 'btn btn-default'  %>
-  <% end %>
+  <div class='btn-group'>
+    <button class='btn btn-default dropdown-toggle' type='button' id='argo-view-dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
+      Select View
+      <span class='caret'></span>
+    </button>
+    <ul class='dropdown-menu <%= "dropdown-menu-right" if catalog_view?(params) %>' aria-labelledby='argo-view-dropdown'>
+      <% views_to_switch.each do |view| %>
+        <li class=<%= 'active' if send("#{view.name}_view?", params)%>>
+          <%= link_to t("argo.search.#{view.name}_view"), send(view.path, cleaned_params) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
 </div>
