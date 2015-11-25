@@ -316,7 +316,7 @@ namespace :argo do
   end
 
   desc 'Reindex all DOR objects to Solr'
-  task :reindex_all, [:query] => [:environment] do |t, args|
+  task :reindex_all => [:environment] do |t, args|
     Argo::BulkReindexer.reindex_all
   end
 end     # :argo
