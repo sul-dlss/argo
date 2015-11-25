@@ -63,4 +63,12 @@ describe ReportController, :type => :controller do
       expect(response.status).to eq 200
     end
   end
+  describe 'download' do
+    it 'should download valid CSV data' do
+      get :download
+      expect(response.status).to eq(200)
+      expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
+      expect { CSV.parse(response.body) }.not_to raise_error
+    end
+  end
 end
