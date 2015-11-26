@@ -39,7 +39,7 @@ module Argo
     # enqueue all of the pids
     # @param [Boolean] should_commit
     # @param [Boolean] should_profile
-    def self.reindex_all(should_commit = true, should_profile = true)
+    def self.reindex_all(should_commit = true, should_profile = false)
       new(
         should_commit,
         should_profile,
