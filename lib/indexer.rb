@@ -56,7 +56,7 @@ module Argo
       index_logger.info "#{out_file_id} traces bulk reindex for #{pid_list}"
       profiler = Argo::Profiler.new
       profiler.prof { Argo::Indexer.reindex_pid_list pid_list, should_commit }
-      profiler.print_results_call_tree(out_file_id, 3)
+      profiler.print_results_call_tree(out_file_id)
     end
   end
 end
