@@ -255,7 +255,9 @@ describe ItemsController, :type => :controller do
     it 'should have dor-services fetch a file from the workspace' do
       allow(@item).to receive(:get_file).and_return('abc')
       expect(@item).to receive(:get_file)
+      allow(Time).to receive(:now).and_return(Time.parse 'Mon, 30 Nov 2015 20:19:43 UTC')
       get 'get_file', :file => 'somefile.txt', :id => @pid
+      expect(response.headers['Last-Modified']).to eq 'Mon, 30 Nov 2015 20:19:43 -0000'
     end
     it 'should 403 if you are not an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)

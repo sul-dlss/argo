@@ -51,9 +51,9 @@ module DorObjectHelper
   end
 
   def get_dor_obj_if_exists(obj_id)
-    return Dor.find(obj_id)
+    Dor.find(obj_id)
   rescue ActiveFedora::ObjectNotFoundError # => e
-    return nil
+    nil
   end
 
   def render_datetime(datetime)
@@ -98,19 +98,16 @@ module DorObjectHelper
       highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
       return 'argo-obj-status-highlight' if highlighted_statuses.include? object.status_info[:status_code]
     end
-
     ''
   end
 
   # Rename from 'metadata_source' to 'get_metadata_source' to avoid conflict with APO 'metadata_source'
+  # @param [Dor::Item]
+  # @return [String]
   def get_metadata_source(object)
-    source = 'DOR'
-    if object.identityMetadata.otherId('mdtoolkit').length > 0
-      source = 'Metadata Toolkit'
-    elsif object.identityMetadata.otherId('catkey').length > 0
-      source = 'Symphony'
-    end
-    source
+    return 'Metadata Toolkit' if object.identityMetadata.otherId('mdtoolkit').length > 0
+    return 'Symphony'         if object.identityMetadata.otherId('catkey').length > 0
+    'DOR'
   end
 
   ##

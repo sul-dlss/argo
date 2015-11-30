@@ -61,7 +61,7 @@ class ReportController < CatalogController
     params[:per_page] = 10
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
-    response.headers['Last-Modified'] = Time.now.ctime.to_s
+    response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
     self.response_body = Report.new(params, fields).to_csv
   end
 
@@ -70,7 +70,7 @@ class ReportController < CatalogController
     render nothing: true, status: 501 unless request.xhr?
     @workflow = params[:reset_workflow]
     @step = params[:reset_step]
-    @ids = pids_from_report(params)
+    @ids  = pids_from_report(params)
     @repo = repo_from_workflow(params[:reset_workflow])
     @ids.each do |pid|
       Dor::WorkflowService.update_workflow_status(

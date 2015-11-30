@@ -201,7 +201,7 @@ class ItemsController < ApplicationController
     data = @object.get_file(params[:file])
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=' + params[:file]
-    response.headers['Last-Modified'] = Time.now.ctime.to_s
+    response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
     self.response_body = data
   end
 
@@ -211,7 +211,7 @@ class ItemsController < ApplicationController
     when Net::HTTPSuccess then
       response.headers['Content-Type'] = 'application/octet-stream'
       response.headers['Content-Disposition'] = 'attachment; filename=' + params[:file]
-      response.headers['Last-Modified'] = Time.now.ctime.to_s
+      response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
       self.response_body = res.body
     else
       raise res.value
