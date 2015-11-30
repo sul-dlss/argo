@@ -1,24 +1,22 @@
-<%object=Dor::Item.find(params[:id])%>
-<% content_ds = object.datastreams['contentMetadata'] %>
-<% workspace_files=object.list_files%>
+<% content_ds = @object.datastreams['contentMetadata'] %>
 <%
-
-  if workspace_files.include?(params[:file])
-    link='/items/'+params[:id]+'/file/?file='+params[:file]
+  # @NOTE: list_files performs remote SSH connection, may fail!
+  # @TODO: do list_files inside app and pass files to template for render, or ideally make it async
+  if @object.list_files.include?(params[:file])
+    link = "/items/#{params[:id]}/file/?file=#{params[:file]}"
     %>
-    Workspace: <a href=<%= link%>><%=params[:file]%><a/>
+    Workspace: <a href="<%= link %>"><%= params[:file] %><a/>
     <%
   end
-  accessioned=has_been_accessioned? object.pid
-  content_ds.ng_xml.search('//file[@id=\''+params[:file]+'\']').each do |file|
+  content_ds.ng_xml.search('//file[@id=\'' + params[:file] + '\']').each do |file|
     if file['shelve'] == 'yes'
       %>
-      <br/>Stacks: <a href=<%= stacks_url_full_size(object,params[:file])%>><%=params[:file]%></a>
+      <br/>Stacks: <a href="<%= stacks_url_full_size(@object, params[:file]) %>"><%= params[:file] %></a>
       <%
     end
-    if (accessioned) and file['preserve'] == 'yes'
+    if has_been_accessioned?(@object.pid) && file['preserve'] == 'yes'
       %>
-      <br/>Preservation: <%=%> <%=link_to params[:file], url_for(:controller => :items, :action => :get_preserved_file, :id => params[:id], :file => params[:file], :version => last_accessioned_version(object))%>
+      <br/>Preservation: <%=link_to params[:file], url_for(:controller => :items, :action => :get_preserved_file, :id => params[:id], :file => params[:file], :version => last_accessioned_version(@object))%>
       <%
     end
   end
