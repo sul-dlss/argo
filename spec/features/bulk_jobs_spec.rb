@@ -47,7 +47,7 @@ feature 'Bulk jobs view', js: true do
     page.execute_script("$('#spreadsheet_file').trigger('change')")
 
     expect(find('input#filetypes_1').disabled?).to be_falsy
-    expect(page).to have_css('span#bulk-spreadsheet-warning', text: "")
+    expect(page).to have_css('span#bulk-spreadsheet-warning', text: '')
     expect(find('button#spreadsheet_submit').disabled?).to be_truthy
     expect(find('input#filetypes_1').disabled?).to be_falsy
     choose('filetypes_1')
@@ -61,6 +61,6 @@ feature 'Bulk jobs view', js: true do
 
     # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
     page.execute_script("$('#spreadsheet_file').trigger('change')")
-    expect(page).to have_css('span#bulk-spreadsheet-warning', text: "Note: Only spreadsheets or XML files are allowed. Please check your selected file.")
+    expect(page).to have_css('span#bulk-spreadsheet-warning', text: 'Note: Only spreadsheets or XML files are allowed. Please check your selected file.')
   end
 end

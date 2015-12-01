@@ -7,7 +7,7 @@ module CsvConcern
   #
   # @return [String] data in CSV format
   def to_csv
-    @params[:page] = 1    
+    @params[:page] = 1
     CSV.generate(force_quotes: true) do |csv|
       csv << @fields.map { |f| f[:label] } # header
       while @document_list.length > 0
