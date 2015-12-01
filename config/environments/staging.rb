@@ -1,6 +1,3 @@
-require 'active_support/cache/dalli_store'
-require 'action_dispatch/middleware/session/dalli_store'
-
 Argo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -32,10 +29,8 @@ Argo::Application.configure do
   # when problems arise.
   config.log_level = :debug
 
-  # Dalli cache configuration
+  # cache configuration
   config.perform_caching = true
-  config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
-  config.cache_store.logger.level = Logger::DEBUG
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

@@ -1,6 +1,3 @@
-require 'active_support/cache/dalli_store'
-require 'action_dispatch/middleware/session/dalli_store'
-
 Argo::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -45,10 +42,8 @@ Argo::Application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
-  # Dalli cache configuration
+  # cache configuration
   config.perform_caching = true
-  config.cache_store = :dalli_store, { namespace: Settings.CACHE_STORE_NAME }
-  config.cache_store.logger.level = Logger::DEBUG
 
   config.middleware.use(Rack::Webauth)
 

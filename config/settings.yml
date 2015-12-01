@@ -1,7 +1,6 @@
 # Example settings for configuration
 
 # General
-CACHE_STORE_NAME: 'argo'
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
 REINDEX_ON_FLY: false
 
