@@ -580,11 +580,6 @@ class ItemsController < ApplicationController
 
   private
 
-  def reindex(item)
-    doc = item.to_solr
-    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
-  end
-
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
@@ -600,7 +595,8 @@ class ItemsController < ApplicationController
 
   def save_and_reindex
     @object.save
-    reindex @object unless params[:bulk]
+    Argo::Indexer.reindex_object(@object) unless params[:bulk]
+    nil # paranoid avoidance of memory leak
   end
 
   # check that the user can carry out this item modification
