@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-gem 'addressable', '=2.3.5' # >=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
 gem 'barby'
 gem 'bootstrap-sass'
 gem 'coderay'
