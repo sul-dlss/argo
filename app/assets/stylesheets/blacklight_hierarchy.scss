@@ -1,3 +1,5 @@
-/*
- *= require blacklight/hierarchy/hierarchy
- */
+@import 'blacklight/hierarchy/hierarchy';
+
+#facets ul.facet-hierarchy {
+  margin-left: -28px;
+}
