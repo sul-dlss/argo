@@ -140,7 +140,6 @@ Argo::Application.routes.draw do
 
   namespace :status do
     get 'log'
-    get 'memcached'
   end
 
   namespace :registration do
