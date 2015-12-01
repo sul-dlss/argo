@@ -71,6 +71,9 @@ group :test, :development do
   gem 'pry-rails'
   gem 'coveralls', require: false
   gem 'poltergeist'
+end
+
+group :test do
   gem 'webmock'
 end
 
