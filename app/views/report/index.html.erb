@@ -22,7 +22,7 @@
     <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
     <% if has_search_parameters? %>
       <%= render :partial => 'did_you_mean' %>
-      <%= render 'constraints', :localized_params=>params %>
+      <%= render 'constraints', :localized_params => params %>
     <% end %>
 
     <%= render 'catalog/report_view_toggle' %>

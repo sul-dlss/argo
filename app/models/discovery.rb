@@ -94,11 +94,11 @@ class Discovery
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 100
-    config.default_solr_params[:fl] = config.discovery_fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
+    config.default_solr_params[:fl] = config.discovery_fields.map { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
 
     config.add_sort_field 'id asc', :label => 'Druid'
 
-    config.column_model = config.discovery_fields.collect { |spec|
+    config.column_model = config.discovery_fields.map { |spec|
       {
         'name'     => spec[:field],
         'jsonmap'  => spec[:field],
@@ -148,16 +148,14 @@ class Discovery
   protected
 
   def docs_to_records(docs, fields = blacklight_config.discovery_fields)
-    result = []
-    docs.each_with_index do |doc, index|
-      row = Hash[fields.collect do |spec|
+    docs.each_with_index.map do |doc, index|
+      row = Hash[fields.map do |spec|
         val = spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field]] rescue nil
         val = val.join('; ') if val.is_a?(Array)
         [spec[:field], val]
       end]
       row['id'] = index + 1
-      result << row
+      row
     end
-    result
   end
 end

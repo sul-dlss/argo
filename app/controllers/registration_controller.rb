@@ -5,8 +5,8 @@ class RegistrationController < ApplicationController
   end
 
   def tracksheet
-    druids = Array(params[:druid])
-    name = params[:name] || 'tracksheet'
+    druids   = Array(params[:druid])
+    name     = params[:name] || 'tracksheet'
     sequence = params[:sequence] || 1
     response['content-disposition'] = "attachment; filename=#{name}-#{sequence}.pdf"
     pdf = help.generate_tracking_pdf(druids)
@@ -58,6 +58,7 @@ class RegistrationController < ApplicationController
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.defaultObjectRights.ng_xml
 
+    # FIXME: should not be in Controller
     # figure out what the default option (if any) should be
     default_opt = nil
     if adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').length > 0
@@ -84,7 +85,7 @@ class RegistrationController < ApplicationController
     # we didn't find a default option, we'll just return the default list of rights options with no
     # specified selection.
     result = {}
-    { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'Citation Only', 'dark' => 'Dark'}.each do |key, val|
+    { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'Citation Only', 'dark' => 'Dark' }.each do |key, val|
       if default_opt == key
         result['default'] = "#{val} (APO default)"
       else
