@@ -6,7 +6,7 @@ describe CatalogController, :type => :controller do
 #   log_in_as_mock_user(subject)
     @druid = 'rn653dy9317'  # a fixture Dor::Item record
     @item = instantiate_fixture(@druid, Dor::Item)
-    @user = User.find_or_create_by_webauth double('WebAuth', :login => 'sunetid', :logged_in? => true, :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => "")
+    @user = User.find_or_create_by_webauth double('WebAuth', :login => 'sunetid', :logged_in? => true, :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => '')
     allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
     allow(Dor::Item).to receive(:find).with("druid:#{@druid}").and_return(@item)
   end

@@ -35,7 +35,7 @@ class ModsulatorJob < ActiveJob::Base
       if response_xml.nil?
         log.puts('argo.bulk_metadata.bulk_log_error_exception Got no response from server')
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
-        return
+        return nil
       end
 
       metadata_path = File.join(output_directory, generate_xml_filename(original_filename))

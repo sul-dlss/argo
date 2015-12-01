@@ -22,27 +22,13 @@ describe Report, :type => :model do
     end
 
     it 'should handle a title with double quotes in it' do
-      found_example = false
-      CSV.parse(@csv).each do |row|
-        if row[0] == 'hj185vb7593'
-          expect(row[2]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
-          found_example = true
-          break
-        end
-      end
-      expect(found_example).to be_truthy
+      row = CSV.parse(@csv).find { |row| row[0] == 'hj185vb7593' }
+      expect(row[2]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
     end
 
     it 'should handle a multivalued fields' do
-      found_example = false
-      CSV.parse(@csv).each do |row|
-        if row[0] == 'xb482bw3979'
-          expect(row[11].split('; ').length).to eq(2)
-          found_example = true
-          break
-        end
-      end
-      expect(found_example).to be_truthy
+      row = CSV.parse(@csv).find { |row| row[0] == 'xb482bw3979' }
+      expect(row[11].split('; ').length).to eq(2)
     end
   end
 end
