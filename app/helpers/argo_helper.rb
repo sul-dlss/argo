@@ -41,17 +41,6 @@ module ArgoHelper
     result
   end
 
-  def create_rsolr_facet_field_response_for_query_facet_field(facet_name, facet_field)
-    salient_facet_queries = facet_field.query.map { |k, x| x[:fq] }
-    items = []
-    @response.facet_queries.select { |k, v| salient_facet_queries.include?(k) }.reject { |value, hits| hits == 0 }.map do |value, hits|
-      key = facet_field.query.find{ |k, val| val[:fq] == value }.first
-      items << OpenStruct.new(:value => key, :hits => hits, :label => facet_field.query[key][:label])
-    end
-
-    RSolr::Ext::Response::Facets::FacetField.new facet_name, items
-  end
-
   def render_index_field_value(args)
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
@@ -192,11 +181,6 @@ module ArgoHelper
       end
     end
     buttons
-  end
-
-  def render_date_pickers(field_name)
-    return unless field_name =~ /_date/
-    render(:partial => 'catalog/show_date_choice', :locals => {:field_name => field_name})
   end
 
   def document_has?(document, field_name)
