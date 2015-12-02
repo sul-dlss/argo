@@ -42,6 +42,9 @@ module Argo
       index_logger.info "failed to update index for #{pid}, object not found in Fedora"
     rescue StandardError => se
       index_logger.error "failed to update index for #{pid}, unexpected error: #{se}"
+    rescue SystemStackError => sse
+      index_logger.error "failed to update index for #{pid}, unexpected stack overflow: #{sse}"
+      raise # stack overflow is serious enough that we'll just let it propogate, assuming we can even catch it successfully
     end
 
     def self.reindex_pid_list(pid_list, should_commit=false)
