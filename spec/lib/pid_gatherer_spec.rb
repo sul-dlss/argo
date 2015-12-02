@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Argo::PidGatherer do
   let(:pid_gatherer) { described_class.new }
+  let(:pid_gatherer_unfiltered) { described_class.new true, false }
   describe '#pid_lists_for_full_reindex' do
     it 'queries fedora and returns list' do
       expect(pid_gatherer.pid_lists_for_full_reindex.count).to eq 10
@@ -9,7 +10,7 @@ RSpec.describe Argo::PidGatherer do
   end
   describe '#uber_apo_pids' do
     it 'returns uber apo pid' do
-      expect(pid_gatherer.uber_apo_pids).to eq ['druid:hv992ry2431']
+      expect(pid_gatherer.uber_apo_pids).to eq [SolrDocument::UBER_APO_ID]
     end
   end
   describe '#workflow_pids' do
@@ -32,7 +33,7 @@ RSpec.describe Argo::PidGatherer do
   end
   describe '#hydrus_uber_apo_pids' do
     it 'returns uber apo pid' do
-      expect(pid_gatherer.hydrus_uber_apo_pids).to eq ['druid:zw306xn5593']
+      expect(pid_gatherer.hydrus_uber_apo_pids).to eq [SolrDocument::HYDRUS_UBER_APO_ID]
     end
   end
   describe '#apo_pids' do
@@ -88,8 +89,11 @@ RSpec.describe Argo::PidGatherer do
         expect(pid_gatherer.all_pids).to be_an Array
       end
     end
-    it 'queries fedora' do
-      expect(pid_gatherer.all_pids.count).to eq 52
+    it 'queries fedora and only returns valid druids' do
+      expect(pid_gatherer.all_pids.count).to eq 53
+    end
+    it 'queries fedora and returns everything' do
+      expect(pid_gatherer_unfiltered.all_pids.count).to eq 57
     end
   end
   describe '#remaining_pids' do
