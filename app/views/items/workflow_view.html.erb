@@ -4,10 +4,10 @@
   <% else %>
     <span class="section-head-link">
       View:
-      <%= link_to 'Diagram', workflow_view_item_path(@obj.pid, @workflow_id, :format => 'svg', :repo => params[:repo]), :title => @workflow_id, :data => { ajax_modal: 'trigger' } %> |
-      <%= link_to 'XML', workflow_view_item_path(@obj.pid, @workflow_id, :raw => 'true', :repo => params[:repo]), :title => @workflow_id, :data => { ajax_modal: 'trigger' } %>
+      <%= link_to 'Diagram', workflow_view_item_path(@object.pid, @workflow_id, :format => 'svg', :repo => params[:repo]), :title => @workflow_id, :data => { ajax_modal: 'trigger' } %> |
+      <%= link_to 'XML', workflow_view_item_path(@object.pid, @workflow_id, :raw => 'true', :repo => params[:repo]), :title => @workflow_id, :data => { ajax_modal: 'trigger' } %>
     </span>
-    <%= @obj.pid %>
+    <%= @object.pid %>
     <table class="detail">
       <thead>
         <tr>
@@ -30,7 +30,7 @@
               <td><%=index+1%>.</td>
               <td><%=process.name%></td>
               <td><%=process.status%></td>
-              <td><%=render_workflow_process_reset(@obj.pid, process)%></td>
+              <td><%=render_workflow_process_reset(@object.pid, process)%></td>
               <td><%=render_datetime(process.datetime)%></td>
               <td><%=process.elapsed ? '%.3f' % process.elapsed : ''%></td>
               <td><%=process.attempts%></td>
