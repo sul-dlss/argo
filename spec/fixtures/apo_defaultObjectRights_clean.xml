@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<rightsMetadata>
+  <copyright>
+    <human type="copyright">My copyright statement</human>
+  </copyright>
+  <access type="discover">
+    <machine>
+      <world/>
+    </machine>
+  </access>
+  <access type="read">
+    <machine>
+      <world/>
+    </machine>
+  </access>
+  <use>
+    <human type="useAndReproduction">My use and reproduction statement</human>
+    <machine type="creativeCommons" uri="https://creativecommons.org/licenses/by-nc/3.0/">by-nc</machine>
+    <human type="creativeCommons">Attribution Non-Commercial 3.0 Unported</human>
+  </use>
+</rightsMetadata>
