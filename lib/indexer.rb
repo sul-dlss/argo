@@ -47,14 +47,12 @@ module Argo
       raise # stack overflow is serious enough that we'll just let it propogate, assuming we can even catch it successfully
     end
 
-    def self.reindex_pid_list(pid_list, should_commit=false)
-      pid_list.each do |pid|
-        reindex_pid pid
-      end
+    def self.reindex_pid_list(pid_list, should_commit = false)
+      pid_list.each { |pid| reindex_pid pid }
       ActiveFedora.solr.conn.commit if should_commit
     end
 
-    def self.reindex_pid_list_with_profiling(pid_list, should_commit=false)
+    def self.reindex_pid_list_with_profiling(pid_list, should_commit = false)
       out_file_id = "reindex_pid_list_#{Time.now.iso8601}-#{Process.pid}"
       index_logger.info "#{out_file_id} traces bulk reindex for #{pid_list}"
       profiler = Argo::Profiler.new
