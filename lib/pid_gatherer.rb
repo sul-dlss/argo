@@ -11,9 +11,20 @@ module Argo
     end
 
     ##
+    # A list of lists for reindexing all of the objects in Fedora.  Each list represents a group of objects for a given object type, and lists are returned
+    # in the order that the groups should be indexed (e.g. uber_apo_pids are the 0th group, and should be indexed before all other lists, and so on).
     # @return [Array<Array<String>>]
     def pid_lists_for_full_reindex
       [uber_apo_pids, workflow_pids, agreement_pids, hydrus_uber_apo_pids, apo_pids, hydrus_apo_pids, collection_pids, hydrus_collection_pids, set_pids, remaining_pids]
+    end
+
+    ##
+    # Same structure as pid_lists_for_full_reindex, but only returns pids that aren't yet in solr.
+    # @return [Array<Array<String>>]
+    def pid_lists_for_unindexed
+      pid_lists_for_full_reindex.map do |pid_list|
+        pid_list - solr_pids
+      end
     end
 
     ##
@@ -85,6 +96,30 @@ module Argo
       @logger.info "found #{@all_pids.length} pids in fedora (all pids)"
 
       @all_pids
+    end
+
+    def solr_pids
+      @logger.info 'querying solr for indexed pids...'
+
+      @solr_pids ||= begin
+        q = '*:*'
+        start = 0
+        solr_pids = []
+        resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
+        while resp.docs.length > 0
+          solr_pids += resp.docs.collect { |doc| doc['id'] }
+          start += 1000
+          resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
+        end
+        solr_pids
+      end
+      @logger.info "found #{@solr_pids.length} pids in solr"
+
+      @solr_pids
+    end
+
+    def unindexed_pids
+      all_pids - solr_pids
     end
 
     ##
