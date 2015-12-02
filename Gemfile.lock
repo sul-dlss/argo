@@ -176,6 +176,8 @@ GEM
       thor (~> 0.19.1)
     daemons (1.2.3)
     deep_merge (1.0.1)
+    delayed-web (0.3.0)
+      rails (>= 3.2.13, < 4.3.0)
     delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
     delayed_job_active_record (4.1.0)
@@ -547,6 +549,7 @@ DEPENDENCIES
   confstruct (~> 0.2.4)
   coveralls
   daemons
+  delayed-web
   delayed_job
   delayed_job_active_record
   dor-services (~> 5.0)!

@@ -30,6 +30,7 @@ Argo::Application.routes.draw do
 
   # TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
   # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
+  mount Delayed::Web::Engine, at: '/jobs'
   mount AboutPage::Engine => '/about(.:format)'
   match 'report',          :to => 'report#index',    :via => [:get, :post], :as => 'report'
   match 'report/data',     :to => 'report#data',     :via => [:get, :post], :as => 'report_data'
