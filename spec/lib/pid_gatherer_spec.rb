@@ -2,6 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Argo::PidGatherer do
   let(:pid_gatherer) { described_class.new }
+  let(:pid_gatherer_unfiltered) { described_class.new true, false }
   describe '#pid_lists_for_full_reindex' do
     it 'queries fedora and returns list' do
       expect(pid_gatherer.pid_lists_for_full_reindex.count).to eq 10
@@ -88,8 +89,11 @@ RSpec.describe Argo::PidGatherer do
         expect(pid_gatherer.all_pids).to be_an Array
       end
     end
-    it 'queries fedora' do
+    it 'queries fedora and only returns valid druids' do
       expect(pid_gatherer.all_pids.count).to eq 52
+    end
+    it 'queries fedora and returns everything' do
+      expect(pid_gatherer_unfiltered.all_pids.count).to eq 56
     end
   end
   describe '#remaining_pids' do
