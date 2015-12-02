@@ -504,7 +504,6 @@ PLATFORMS
 DEPENDENCIES
   about_page
   active-fedora
-  addressable (= 2.3.5)
   barby
   blacklight (~> 5.9.0)
   blacklight-hierarchy
