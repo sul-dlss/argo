@@ -21,7 +21,7 @@ CONTENT:
   SDR_PASSWORD: 'password'
 
 # Webmock settings
-DISABLE_WEBMOCK: false
+DISABLE_WEBMOCK: true
 
 # Metadata
 METADATA:

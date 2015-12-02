@@ -1,3 +1,4 @@
+DISABLE_WEBMOCK: false
 
 # URLs
 FEDORA_URL:   'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora-test'
