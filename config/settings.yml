@@ -41,6 +41,7 @@ NEWRELIC:
 
 PROFILER:
   CALLTREE_PRINTER_MIN_PERCENT: 1
+  MEASURE_MODE: 'wall'
   OUTPUT_DIR: 'log/profiler'
 
 # Squash
