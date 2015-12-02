@@ -4,6 +4,9 @@
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
 REINDEX_ON_FLY: false
 
+BULK_REINDEXER:
+  BATCH_SIZE: 10
+
 # Bulk Metadata
 BULK_METADATA:
   DIRECTORY: '/tmp/bulk_jobs/'
@@ -23,6 +26,10 @@ CONTENT:
 # Webmock settings
 DISABLE_WEBMOCK: false
 
+INDEXING_JOB:
+  SHOULD_COMMIT_BATCHES: true
+  SHOULD_PROFILE: false
+
 # Metadata
 METADATA:
   EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'
@@ -33,6 +40,10 @@ NEWRELIC:
   ENABLED: false
   LICENSE_KEY: 'super secret api key'
   APP_NAME: 'Argo - name should be specific to server'
+
+PROFILER:
+  CALLTREE_PRINTER_MIN_PERCENT: 1
+  OUTPUT_DIR: 'log/profiler'
 
 # Squash
 SQUASH:

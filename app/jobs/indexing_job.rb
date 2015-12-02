@@ -6,13 +6,11 @@ class IndexingJob < ActiveJob::Base
   ##
   # Perform indexing job
   # @param [Array] pid_list
-  # @param [Boolean] should_commit
-  # @param [Boolean] should_profile
-  def perform(pid_list, should_commit = false, should_profile = false)
-    if should_profile
-      Argo::Indexer.reindex_pid_list_with_profiling pid_list, should_commit
+  def perform(pid_list)
+    if Settings.INDEXING_JOB.SHOULD_PROFILE
+      Argo::Indexer.reindex_pid_list_with_profiling pid_list, Settings.INDEXING_JOB.SHOULD_COMMIT_BATCHES
     else
-      Argo::Indexer.reindex_pid_list pid_list, should_commit
+      Argo::Indexer.reindex_pid_list pid_list, Settings.INDEXING_JOB.SHOULD_COMMIT_BATCHES
     end
   end
 end
