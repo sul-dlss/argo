@@ -1,10 +1,18 @@
-<script>
-  $(function() {
-    $( "#<%=field_name%>_after_datepicker" ).datepicker();
-    $( "#<%=field_name%>_before_datepicker" ).datepicker();
-  });
-</script>
-<li><label for="<%=field_name%>_after_datepicker">From:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label> <input style="width:auto;" maxlength="10" size="10" name="<%=field_name%>_after_datepicker" id="<%=field_name%>_after_datepicker" type="text"></li>
-<li><label for="<%=field_name%>_before_datepicker">Through:</label> <input style="width:auto;" maxlength="10" size="10" name="<%=field_name%>_before_datepicker" id="<%=field_name%>_before_datepicker" type="text"></li>
-<li><button id="<%=field_name%>" onclick="assembleQuery(this);">Apply</button></li>
+<%# Display the query facet lists %>
+<ul class='facet-values list-unstyled'>
+  <%= render_facet_limit_list facet_paginator(facet_field, display_facet), facet_field.field %>
+</ul>
 
+<div data-range-query data-range-path = '<%= catalog_index_path %>'>
+  <div class='form-group'>
+    <label for="<%=facet_field.field%>_after_datepicker">From:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input maxlength="10" size="10" id="<%=facet_field.field%>_after_datepicker" type="text" data-datepicker data-range-after>
+  </div>
+  <div class='form-group'>
+    <label for="<%=facet_field.field%>_before_datepicker">Through:</label>
+    <input maxlength="10" size="10" id="<%=facet_field.field%>_before_datepicker" type="text" data-datepicker data-range-before>
+  </div>
+  <button id="<%=facet_field.field%>" class='btn btn-primary' data-facet-query='<%= facet_field.raw_facet_field %>'>
+    Apply
+  </button>
+</div>

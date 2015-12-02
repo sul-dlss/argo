@@ -7,6 +7,7 @@ class SolrDocument
   include CollectionConcern
   include DruidConcern
   include TitleConcern
+  include DocumentDateConcern
 
   # self.unique_key = 'id'
 
