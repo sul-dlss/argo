@@ -325,8 +325,7 @@ namespace :argo do
   end
 
   desc 'Reindex all DOR objects to Solr'
-  task :reindex_all, [:should_commit, :should_profile] => [:environment] do |t, args|
-    args.with_defaults(:should_commit => true, :should_profile => false)
-    Argo::BulkReindexer.reindex_all args[:should_commit], args[:should_profile]
+  task :reindex_all => [:environment] do |t, args|
+    Argo::BulkReindexer.reindex_all
   end
 end     # :argo
