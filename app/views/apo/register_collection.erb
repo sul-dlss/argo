@@ -19,15 +19,17 @@ url_params={:controller => :apo, :action => :register_collection}
   <div id="create-collection" class="collection_div">
     <div class="collection-register-label-div">Collection Title</div><input type="text" id="collection_title" name="collection_title" style="width:80%" value=""/>
     <div class="collection-register-label-div">Collection Abstract</div><textarea id="collection_abstract" name="collection_abstract" style="width:80%" ></textarea><br/>
-    <div class="collection-register-label-div">Collection Object Visibility<img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/></div>
+    <div class="collection-register-label-div">
+      Collection Object Visibility
+    </div>
       <%=select_tag :collection_rights, options_for_select(default_rights_options, 'world' )%><br/>
   </div>
-  <div style="display:none">
-  <%=render :partial => '/items/rights_help'%>
-  </div>
+
   <div id="create-collection-catkey" class=" collection_div" style="display:none">
     <div class="collection-register-label-div">Collection Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:80%" value=""/>
-    <div class="collection-register-label-div">Collection Object Visibility<img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>
+    <div class="collection-register-label-div">
+      Collection Object Visibility
+    </div>
   </div>
       <%=select_tag :collection_rights_catkey, options_for_select(default_rights_options, 'world' )%><br/>
 </div>

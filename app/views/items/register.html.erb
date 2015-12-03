@@ -11,7 +11,7 @@
         <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :'data-rcparam' => 'apoId' %></div>
         <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', :'data-rcparam' => 'collection' %></div>
 
-        <div class="property-item"><label for="rights"><img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>Rights</label><%= select_tag :rights, options_for_select(valid_rights_options), :'data-tagname' => 'Process : Rights' %></div>
+        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(valid_rights_options), :'data-tagname' => 'Process : Rights' %></div>
         <div class="property-item"><label for="id_source">Metadata Source</label><%= select_tag :id_source, options_for_select(metadata_sources), :'data-rcparam' => 'metadataSource' %></div>
         <div class="property-item spacer"></div>
         <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
@@ -42,7 +42,6 @@
       Please specify both an Admin Policy and a Metadata Source before continuing.
     </p>
   </div>
-  <%=render :partial => 'rights_help'%>
   <div id='progress_dialog'>
     <div id='progress'></div>
   </div>
