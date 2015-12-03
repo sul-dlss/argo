@@ -8,6 +8,7 @@ class CatalogController < ApplicationController
   include Argo::AccessControlsEnforcement
   helper ArgoHelper
   include SpreadsheetHelper
+  include DateFacetConfigurations
 
   before_filter :reformat_dates, :set_user_obj_instance_var
 
@@ -88,8 +89,8 @@ class CatalogController < ApplicationController
 
     config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source'
 
-    # common helper method since search results and reports all do the same configuration
-    BlacklightConfigHelper.add_common_date_facet_fields_to_config! config
+    # common method since search results and reports all do the same configuration
+    add_common_date_facet_fields_to_config! config
 
     config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
       :no_rights_characteristics   => { :label => 'No Rights Characteristics',  :fq => '-rights_characteristics_ssim:*' },
