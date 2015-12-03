@@ -58,7 +58,7 @@ module DateFacetConfigurations
         :days_30 => { :label => 'up to 30 days', :fq => "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:[NOW TO NOW/DAY+30DAYS]"},
         :all     => { :label => 'All',           :fq => "#{SolrDocument::FIELD_EMBARGO_RELEASE_DATE}:*"}
       }, partial: 'catalog/show_date_choice', raw_facet_field: SolrDocument::FIELD_EMBARGO_RELEASE_DATE
-      config.add_facet_field SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: 'Embargo Release Date'
+      config.add_facet_field SolrDocument::FIELD_EMBARGO_RELEASE_DATE, label: 'Embargo Release Date', show: false
     end
   end
 end
