@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150619200031) do
+ActiveRecord::Schema.define(version: 20151112054510) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer  "user_id",       null: false
@@ -73,6 +73,25 @@ ActiveRecord::Schema.define(version: 20150619200031) do
     t.string   "sunetid"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "wfs_rails_workflows", force: :cascade do |t|
+    t.string   "druid",                                                  null: false
+    t.string   "datastream",                                             null: false
+    t.string   "process",                                                null: false
+    t.string   "status"
+    t.text     "error_msg"
+    t.binary   "error_txt"
+    t.integer  "attempts",                           default: 0,         null: false
+    t.string   "lifecycle"
+    t.decimal  "elapsed",    precision: 9, scale: 3
+    t.string   "repository"
+    t.integer  "version",                            default: 1
+    t.text     "note"
+    t.integer  "priority",                           default: 0
+    t.string   "lane_id",                            default: "default", null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
   end
 
 end
