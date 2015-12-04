@@ -38,9 +38,22 @@ class CatalogController < ApplicationController
 
     config.index.thumbnail_method = :render_index_thumbnail
 
-    config.add_index_field 'id',               :label => 'DRUID'
-    config.add_index_field 'dc_creator_ssi',   :label => 'Creator'
-    config.add_index_field 'project_tag_ssim', :label => 'Project'
+    config.add_index_field 'content_type_ssim', label: 'Content Type'
+    config.add_index_field 'identifier_tesim', label: 'IDs', helper_method: :value_for_identifier_tesim
+    config.add_index_field 'originInfo_date_created_tesim', label: 'Created'
+    config.add_index_field 'obj_label_ssim', label: 'Label'
+    config.add_index_field SolrDocument::FIELD_APO_ID, label: 'Admin Policy'
+    config.add_index_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection'
+    config.add_index_field 'status_ssi', label: 'Status'
+    config.add_index_field 'objectType_ssim', label: 'Object Type'
+    config.add_index_field 'id', label: 'DRUID'
+    config.add_index_field 'project_tag_ssim', label: 'Project'
+    config.add_index_field 'source_id_ssim', label: 'Source'
+    config.add_index_field 'tag_ssim', label: 'Tags'
+    config.add_index_field 'wf_error_ssim', label: 'Error'
+    config.add_index_field SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection Title'
+    config.add_index_field 'metadata_source_ssi', label: 'MD Source'
+    config.add_index_field 'preserved_size_dbtsi', label: 'Preservation Size'
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type'
     config.add_show_field 'identifier_tesim',            :label => 'IDs'
@@ -155,6 +168,10 @@ class CatalogController < ApplicationController
     }
 
     config.add_results_collection_tool(:report_view_toggle)
+
+    ##
+    # Configure document actions framework
+    config.index.document_actions.delete(:bookmark)
 
   end
 

@@ -41,15 +41,6 @@ module ArgoHelper
     result
   end
 
-  def render_index_field_value(args)
-    handler = "value_for_#{args[:field]}".to_sym
-    if respond_to?(handler)
-      send(handler, args)
-    else
-      super(args)
-    end
-  end
-
   def render_document_show_field_value(args)
     handler = "value_for_#{args[:field]}".to_sym
     if respond_to?(handler)
