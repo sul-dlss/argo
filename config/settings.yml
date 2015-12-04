@@ -20,9 +20,6 @@ CONTENT:
   SDR_USER: 'user'
   SDR_PASSWORD: 'password'
 
-# Webmock settings
-DISABLE_WEBMOCK: false
-
 # Metadata
 METADATA:
   EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'

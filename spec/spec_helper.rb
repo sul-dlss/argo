@@ -4,6 +4,18 @@ if ENV['COVERAGE'] && RUBY_VERSION =~ /^1.9/
 end
 
 ENV['RAILS_ENV'] ||= 'test'
+
+##
+# Requires the WebMock testing framework which is bundled in the :test environment.
+# We require that all outbound HTTP requests be stubbed out, except those to 
+# our jetty instance on localhost. This needs to be initialized before the rails 
+# app is initialized.
+#
+require 'webmock'
+include WebMock::API
+WebMock.disable_net_connect!(allow_localhost: true) # assumes FEDORA_URL and SOLRIZER_URL are localhost
+
+# Initialize the application
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'capybara/rails'
@@ -18,6 +30,22 @@ Capybara.register_driver :poltergeist do |app|
 end
 Capybara.javascript_driver = :poltergeist
 Capybara.default_wait_time = 10
+
+# We stub out some of the Workflow Service requests
+def mock_workflow_requests
+  # stub_request(:any, Settings.WORKFLOW_URL).to_return(status: 404)
+  escaped_url = Settings.WORKFLOW_URL.gsub('/', '\/')
+  stub_request(:get, /#{escaped_url}workflow_archive.*/).
+    to_return(body: '<objects count="1"/>')
+  stub_request(:get, /#{escaped_url}dor.*/).
+    to_return(body: '<workflows/>')
+end
+mock_workflow_requests
+
+def mock_status_requests
+  stub_request(:get, Settings.STATUS_INDEXER_URL).to_return(status: 404)
+end
+mock_status_requests
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
