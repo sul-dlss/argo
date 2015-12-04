@@ -40,4 +40,33 @@ feature 'Search results' do
       end
     end
   end
+  scenario 'contains appropriate metadata fields' do
+    visit catalog_index_path f: { objectType_ssim: ['item'] }
+    within('.document', match: :first) do
+      within '.document-metadata' do
+        expect(page).to have_css 'dt', text: 'DRUID:'
+        expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
+        expect(page).to have_css 'dt', text: 'Object Type:'
+        expect(page).to have_css 'dd', text: 'item'
+        expect(page).to have_css 'dt', text: 'Content Type:'
+        expect(page).to have_css 'dd', text: 'image'
+        expect(page).to have_css 'dt', text: 'Status:'
+        expect(page).to have_css 'dd', text: 'v1 Unknown Status'
+        expect(page).to have_css 'dt', text: 'Admin Policy:'
+        expect(page).to have_css 'dd a', text: 'Stanford University Libraries - Special Collections'
+        expect(page).to have_css 'dt', text: 'Project:'
+        expect(page).to have_css 'dd a', text: 'Fuller Slides'
+        expect(page).to have_css 'dt', text: 'IDs'
+        expect(page).to have_css 'dd', text: 'fuller:M1090_S15_B02_F01_0126, uuid:ad2d8894-7eba-11e1-b714-0016034322e7'
+        expect(page).to have_css 'dt', text: 'Label:'
+        expect(page).to have_css 'dd', text: 'M1090_S15_B02_F01_0126'
+        expect(page).to have_css 'dt', text: 'Source:'
+        expect(page).to have_css 'dd', text: 'fuller:M1090_S15_B02_F01_0126'
+        expect(page).to have_css 'dt', text: 'Preservation Size:'
+        expect(page).to have_css 'dd', text: '53.2 MB'
+      end
+    end
+    expect(page).to have_css 'dt', text: 'Collection:'
+    expect(page).to have_css 'dd a', text: /Annual report/
+  end
 end

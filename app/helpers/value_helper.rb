@@ -17,7 +17,7 @@ module ValueHelper
 
   # TODO: dynamically generate these methods so we don't hardcode Solr field identifiers
 
-  def value_for_preserved_size_dbtsi(args)
+  def value_for_preserved_size(args)
     args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
   end
 
@@ -36,54 +36,35 @@ module ValueHelper
     Rails.logger.error e.backtrace.join("\n")
   end
 
-  def value_for_wf_error_ssim(args)
+  def value_for_wf_error(args)
     _wf, step, message = args[:document].get(args[:field]).split(':', 3)
     step + ' : ' + message
   end
 
-  # @return [String] human-readable, HTML-safe value for the APO
-  define_method("value_for_#{SolrDocument::FIELD_APO_ID}") do |args|
-    begin
-      target_id = args[:document].apo_id
-      target_name = ''
-      links = ''
-      target_id.split(',').each do |targ|
-        target_name = args[:document].apo_title
-        links += link_to target_name, catalog_path(targ.split(/\//).last)
-        links += '<br/>'
-      end
-      links.html_safe
-    rescue StandardError => e
-      Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
-      # value_for_related_druid('is_governed_by', args)
-    end
+  ##
+  # Links to an admin policy for a given document. This can be abstracted away
+  # from using `apo_title` when Argo updates to a version of Blacklight which
+  # allows us to send config parameters along. This has already been implemented
+  # in https://github.com/projectblacklight/blacklight/commit/c0e3b2232cfd3247e158a4f0297ffd8bbf1c524f
+  # @param [Hash] args
+  # @see Blacklight::DocumentPresenter#get_field_values
+  # @return [String]
+  def link_to_admin_policy(args)
+    link_to args[:document].apo_title, catalog_path(args[:document].apo_pid)
   end
 
-  # @return [String] human-readable, HTML-safe value for the Collection(s)
-  define_method("value_for_#{SolrDocument::FIELD_COLLECTION_ID}") do |args|
-    begin
-      target_id = args[:document].collection_id
-      target_name = ''
-      links = ''
-      # TODO: this code assumes the ordering of the ids and titles are the same
-      i = 0
-      target_id.split(',').each do |targ|
-        target_name = args[:document].collection_titles[i]
-        links += link_to target_name, catalog_path(targ.split(/\//).last)
-        links += '<br/>'
-        i += 1
-      end
-      links.html_safe
-    rescue StandardError => e
-      Rails.logger.error e.message
-      Rails.logger.error e.backtrace.join("\n")
-    end
-  end
-
-  def value_for_project_tag_ssim(args)
-    val = args[:document].get(args[:field]).split(':').first
-    link_to val, add_facet_params_and_redirect('project_tag_ssim', val)
+  ##
+  # Could be combined with #link_to_admin_policy when config parameters version
+  # of Blacklight is updated.
+  # @see #link_to_admin_policy
+  # @return [String]
+  def links_to_collections(args)
+    args[:value].map.with_index do |val, i|
+      link_to(
+        args[:document].collection_titles[i],
+        catalog_path(val.gsub('info:fedora/', ''))
+      )
+    end.join('<br>').html_safe
   end
 
   def value_for_originInfo_date_created_tesim(args)

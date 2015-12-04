@@ -7,7 +7,7 @@
       <li>
         <%if document_has? document, 'preserved_size_dbtsi'%>
           <span class="label">Preservation Size</span>
-          <%=value_for_preserved_size_dbtsi :document => document, :field => 'preserved_size_dbtsi'%>
+          <%= value_for_preserved_size document: document, field: 'preserved_size_dbtsi' %>
           <br/>
         <%end%>
         <span class="label">Type</span>
