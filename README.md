@@ -79,6 +79,9 @@ bin/delayed_job start  # Necessary only for spreadsheet bulk upload
 rails server
 ```
 
+## Important note about Workflow Services integration
+The Argo code repository includes the [wfs_rails](https://github.com/sul-dlss/wfs_rails) gem, a Rails Engine, which mocks and stubs several of the Workflow Services routes within the Argo application. This engine is booted using [Capybara::Discoball](https://github.com/thoughtbot/capybara_discoball) and uses the local database as storage for Workflow Service data. This integration can be turned off by not setting Settings.WORKFLOW_URL to an instance of Capybara::Discoball and by configuring Settings.WFS_RAILS.ENABLE to `false`.
+
 ## Load and index records
 
 First, make sure Jetty has successfully started.

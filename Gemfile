@@ -68,7 +68,8 @@ group :test, :development do
   gem 'pry-rails'
   gem 'coveralls', require: false
   gem 'poltergeist'
-  gem 'webmock'
+  gem 'capybara_discoball'
+  gem 'wfs_rails', '~> 0.0.2'
 end
 
 group :development do
