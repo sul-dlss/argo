@@ -5,6 +5,7 @@ class Discovery
   include Blacklight::Configurable
   include Blacklight::SolrHelper
   include CsvConcern
+  include DateFacetConfigurations
 
   attr_reader :response, :document_list, :num_found, :params
 
@@ -88,8 +89,8 @@ class Discovery
       }
     ]
 
-    # common helper method since search results and reports all do the same configuration
-    BlacklightConfigHelper.add_common_date_facet_fields_to_config! config
+    # common method since search results and reports all do the same configuration
+    add_common_date_facet_fields_to_config! config
 
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config

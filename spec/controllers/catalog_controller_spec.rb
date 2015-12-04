@@ -97,4 +97,33 @@ describe CatalogController, :type => :controller do
       it_behaves_like 'APO-independent auth'
     end
   end
+  describe 'blacklight config' do
+    let(:config) { controller.blacklight_config }
+    it 'should have the date facets' do
+      keys = config.facet_fields.keys
+      expect(keys).to include 'registered_date', SolrDocument::FIELD_REGISTERED_DATE.to_s
+      expect(keys).to include 'accessioned_latest_date', SolrDocument::FIELD_LAST_ACCESSIONED_DATE.to_s
+      expect(keys).to include 'published_latest_date', SolrDocument::FIELD_LAST_PUBLISHED_DATE.to_s
+      expect(keys).to include 'submitted_latest_date', SolrDocument::FIELD_LAST_SUBMITTED_DATE.to_s
+      expect(keys).to include 'deposited_date', SolrDocument::FIELD_LAST_DEPOSITED_DATE.to_s
+      expect(keys).to include 'object_modified_date', SolrDocument::FIELD_LAST_MODIFIED_DATE.to_s
+      expect(keys).to include 'version_opened_date', SolrDocument::FIELD_LAST_OPENED_DATE.to_s
+      expect(keys).to include 'embargo_release_date', SolrDocument::FIELD_EMBARGO_RELEASE_DATE.to_s
+    end
+    it 'should not show raw date field facets' do
+      raw_fields = [
+        SolrDocument::FIELD_REGISTERED_DATE,
+        SolrDocument::FIELD_LAST_ACCESSIONED_DATE,
+        SolrDocument::FIELD_LAST_PUBLISHED_DATE,
+        SolrDocument::FIELD_LAST_SUBMITTED_DATE,
+        SolrDocument::FIELD_LAST_DEPOSITED_DATE,
+        SolrDocument::FIELD_LAST_MODIFIED_DATE,
+        SolrDocument::FIELD_LAST_OPENED_DATE,
+        SolrDocument::FIELD_EMBARGO_RELEASE_DATE
+      ].map(&:to_s)
+      config.facet_fields.each do |field|
+        expect(field[1].show).to be_falsey if raw_fields.include?(field[0])
+      end
+    end
+  end
 end

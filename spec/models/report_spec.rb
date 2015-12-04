@@ -31,4 +31,18 @@ describe Report, :type => :model do
       expect(row[11].split('; ').length).to eq(2)
     end
   end
+  describe 'blacklight config' do
+    let(:config) { subject.instance_variable_get(:@blacklight_config) }
+    it 'should have the date facets' do
+      keys = config.facet_fields.keys
+      expect(keys).to include 'registered_date', SolrDocument::FIELD_REGISTERED_DATE.to_s
+      expect(keys).to include 'accessioned_latest_date', SolrDocument::FIELD_LAST_ACCESSIONED_DATE.to_s
+      expect(keys).to include 'published_latest_date', SolrDocument::FIELD_LAST_PUBLISHED_DATE.to_s
+      expect(keys).to include 'submitted_latest_date', SolrDocument::FIELD_LAST_SUBMITTED_DATE.to_s
+      expect(keys).to include 'deposited_date', SolrDocument::FIELD_LAST_DEPOSITED_DATE.to_s
+      expect(keys).to include 'object_modified_date', SolrDocument::FIELD_LAST_MODIFIED_DATE.to_s
+      expect(keys).to include 'version_opened_date', SolrDocument::FIELD_LAST_OPENED_DATE.to_s
+      expect(keys).to include 'embargo_release_date', SolrDocument::FIELD_EMBARGO_RELEASE_DATE.to_s
+    end
+  end
 end
