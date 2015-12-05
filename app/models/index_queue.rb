@@ -35,7 +35,7 @@ class IndexQueue
       timeout: timeout,
       open_timeout: timeout
     )
-  rescue SocketError
+  rescue SocketError, RestClient::Exception
     raise Argo::Exceptions::IndexQueueRequestFailed,
           "Request to index queue at #{url} failed"
   end
