@@ -5,9 +5,9 @@
   <div style="clear:left">
     <ul class="resource-tree">
       <li>
-        <%if document_has? document, 'preserved_size_dbtsi'%>
+        <% if document.preservation_size.present? %>
           <span class="label">Preservation Size</span>
-          <%=value_for_preserved_size_dbtsi :document => document, :field => 'preserved_size_dbtsi'%>
+          <%= number_to_human_size(document.preservation_size) %>
           <br/>
         <%end%>
         <span class="label">Type</span>
@@ -59,7 +59,7 @@
                               <%=file['id']%>
                             <%end%>
                             (<%= file['mimetype'] %>, 
-                             <%= file['size'].to_i.bytestring('%.1f%s') %>,
+                             <%= number_to_human_size(file['size']) %>,
                              <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
                           </li>
                         <% end %>
@@ -77,7 +77,7 @@
                     <%else%>
                       <%=file['id']%>
                     <%end%>
-                    (<%= file['mimetype'] %>, <%= file['size'].to_i.bytestring('%.1f%s') %>,
+                    (<%= file['mimetype'] %>, <%= number_to_human_size(file['size']) %>,
                      <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
                   </li>
                 <% end %>
