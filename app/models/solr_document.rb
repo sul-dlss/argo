@@ -8,6 +8,7 @@ class SolrDocument
   include DruidConcern
   include TitleConcern
   include DocumentDateConcern
+  include PreservationSizeConcern
 
   # self.unique_key = 'id'
 

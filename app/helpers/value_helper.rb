@@ -17,8 +17,10 @@ module ValueHelper
 
   # TODO: dynamically generate these methods so we don't hardcode Solr field identifiers
 
-  def value_for_preserved_size(args)
-    args[:document].get(args[:field]).to_i.bytestring('%.1f%s')
+  ##
+  # @return [String]
+  def preserved_size_human(args)
+    number_to_human_size(args[:document].preservation_size)
   end
 
   def value_for_related_druid(predicate, args)

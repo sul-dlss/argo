@@ -50,7 +50,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'obj_label_ssim',                  label: 'Label'
     config.add_index_field 'source_id_ssim',                  label: 'Source'
     config.add_index_field 'wf_error_ssim',                   label: 'Error',             helper_method: :value_for_wf_error
-    config.add_index_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :value_for_preserved_size
+    config.add_index_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :preserved_size_human
 
     config.add_show_field 'content_type_ssim',           :label => 'Content Type'
     config.add_show_field 'identifier_tesim',            :label => 'IDs', helper_method: :value_for_identifier_tesim
@@ -67,7 +67,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'wf_error_ssim',               :label => 'Error', helper_method: :value_for_wf_error
     config.add_show_field SolrDocument::FIELD_COLLECTION_TITLE, :label => 'Collection Title'
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
-    config.add_show_field 'preserved_size_dbtsi',        :label => 'Preservation Size', helper_method: :value_for_preserved_size
+    config.add_show_field 'preserved_size_dbtsi',        :label => 'Preservation Size', helper_method: :preserved_size_human
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim

@@ -220,8 +220,7 @@ module DorObjectHelper
   end
 
   def render_ds_size(doc, specs)
-    val = specs[:size].to_i.bytestring('%.1f%s').downcase
-    val.sub(/\.?0+([a-z]?b)$/, '\1')
+    number_to_human_size(specs[:size])
   end
 
   def render_ds_label(doc, specs)
