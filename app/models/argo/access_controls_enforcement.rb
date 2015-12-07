@@ -3,9 +3,11 @@ module Argo
   module AccessControlsEnforcement
     extend ActiveSupport::Concern
 
-    def add_access_controls_to_solr_params(solr_parameters, user_params)
-      apply_gated_discovery(solr_parameters, @user)
+    def add_access_controls_to_solr_params(solr_parameters)
+      apply_gated_discovery(solr_parameters, scope.current_user)
     end
+
+    private
 
     def apply_gated_discovery(solr_parameters, user)
       # Repository wide admin, manager and viewer users access everything
