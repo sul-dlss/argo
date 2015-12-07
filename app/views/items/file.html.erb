@@ -5,13 +5,13 @@
   if @object.list_files.include?(params[:file])
     link = "/items/#{params[:id]}/file/?file=#{params[:file]}"
     %>
-    Workspace: <a href="<%= link %>"><%= params[:file] %><a/>
+    Workspace: <%= link_to params[:file], link %>
     <%
   end
   content_ds.ng_xml.search('//file[@id=\'' + params[:file] + '\']').each do |file|
     if file['shelve'] == 'yes'
       %>
-      <br/>Stacks: <a href="<%= stacks_url_full_size(@object, params[:file]) %>"><%= params[:file] %></a>
+      <br/>Stacks: <%= link_to params[:file], stacks_url_full_size(@object, params[:file]) %>
       <%
     end
     if has_been_accessioned?(@object.pid) && file['preserve'] == 'yes'
