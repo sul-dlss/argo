@@ -1,9 +1,7 @@
-cert_dir = File.expand_path(File.join(File.dirname(__FILE__), '../certs'))
-
 Dor.configure do
   ssl do
-    cert_file File.join(cert_dir, Settings.SSL.CERT_FILE)
-    key_file File.join(cert_dir, Settings.SSL.KEY_FILE)
+    cert_file Settings.SSL.CERT_FILE
+    key_file Settings.SSL.KEY_FILE
     key_pass Settings.SSL.KEY_PASS
   end
 
