@@ -97,22 +97,6 @@ class ItemsController < ApplicationController
     @perm_keys = current_user.groups
   end
 
-  def workflow_view
-    @workflow_id = params[:wf_name]
-    @workflow = @workflow_id == 'workflow' ? @object.workflows : @object.workflows.get_workflow(@workflow_id, params[:repo])
-
-    respond_to do |format|
-      format.html
-      format.xml  { render :xml => @workflow.ng_xml.to_xml }
-      format.any(:png, :svg, :jpeg) do
-        graph = @workflow.graph
-        raise ActionController::RoutingError.new('Not Found') if graph.nil?
-        image_data = graph.output(request.format.to_sym => String)
-        send_data image_data, :type => request.format.to_s, :disposition => 'inline'
-      end
-    end
-  end
-
   def workflow_history_view
     @history_xml = Dor::WorkflowService.get_workflow_xml 'dor', params[:id], nil
   end
@@ -123,30 +107,66 @@ class ItemsController < ApplicationController
     end
   end
 
+  ##
+  # Renders a view with process-level state information for a given object's workflow.
+  #
+  # @option params [String] `:id` The druid for the object.
+  # @option params [String] `:wf_name` The workflow name. e.g., accessionWF.
+  # @option params [String] `:repo` The workflow's repository. e.g., dor.
+  def workflow_view
+    fail ArgumentError, "Missing parameters: #{params.inspect}" unless params[:wf_name].present? && params[:repo].present?
+
+    # Set variables for views
+    # determine which workflow we're supposed to render and honor a special value of 'workflow'
+    @workflow_id = params[:wf_name]
+    @workflow = @workflow_id == 'workflow' ? @object.workflows : @object.workflows.get_workflow(@workflow_id, params[:repo])
+
+    # render different views (HTML, XML, or Image) based on requested format
+    respond_to do |format|
+      format.html
+      format.xml  { render :xml => @workflow.ng_xml.to_xml }
+      format.any(:png, :svg, :jpeg) do
+        graph = @workflow.graph
+        fail ActionController::RoutingError.new('Not Found') if graph.nil?
+        send_data graph.output(request.format.to_sym => String), :type => request.format.to_s, :disposition => 'inline'
+      end
+    end
+  end
+
+  ##
+  # Updates the status of a specific workflow process step to a given status.
+  #
+  # @option params [String] `:id` The druid for the object.
+  # @option params [String] `:wf_name` The workflow name. e.g., accessionWF.
+  # @option params [String] `:process` The workflow step. e.g., publish.
+  # @option params [String] `:status` The status to which we want to reset the workflow.
+  # @option params [String] `:repo` The repo to which the workflow applies (optional).
   def workflow_update
     args = params.values_at(:id, :wf_name, :process, :status)
-    check_args = params.values_at(:id, :wf_name, :process)
-
     if args.all?(&:present?)
-      # this will raise and exception if the item doesnt have that workflow step
-      Dor::WorkflowService.get_workflow_status params[:repo], *check_args
+      # the :repo parameter is optional, so fetch it based on the workflow name if blank
+      params[:repo] ||= Dor::WorkflowObject.find_by_name(params[:wf_name]).definition.repo
+
+      # this will raise an exception if the item doesn't have that workflow step
+      Dor::WorkflowService.get_workflow_status params[:repo], *args.take(3)
+
+      # update the status for the step and redirect to the workflow view page
       Dor::WorkflowService.update_workflow_status params[:repo], *args
-      @item = Dor.find params[:id]
 
       respond_to do |format|
-        if params[:bulk]
+        if params[:bulk].present?
           render :status => 200, :text => 'Updated!'
-          return
+        else
+          format.any { redirect_to catalog_path(params[:id]), :notice => "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:wf_name]}" }
         end
-        format.any { redirect_to workflow_view_item_path(@item.pid, params[:wf_name], :repo => params[:repo]), :notice => 'Workflow was successfully updated' }
       end
     else
       respond_to do |format|
-        if params[:bulk]
+        if params[:bulk].present?
           render :status => :bad_request, :text => 'Bad request!'
-          return
+        else
+          fail ArgumentError, "Missing arguments: #{args.inspect}"
         end
-        format.any { render format.to_sym => 'Bad Request', :status => :bad_request }
       end
     end
   end
