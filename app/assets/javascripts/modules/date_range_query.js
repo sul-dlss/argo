@@ -42,7 +42,7 @@
       $button.on('click', function(e) {
         e.preventDefault();
         var query = assembleQuery($el, facet);
-        document.location = path + '?' + query;
+        window.location.href = path + '?' + query;
       });
     });
 
