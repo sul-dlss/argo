@@ -28,16 +28,18 @@ module Argo
       @@index_logger
     end
 
+    # @return [nil]
     def self.reindex_object(obj)
-      solr_doc = obj.to_solr
-      Dor::SearchService.solr.add(solr_doc)
+      Dor::SearchService.solr.add(obj.to_solr)
+      nil # paranoid avoidance of memory leak
     end
 
+    # @return [nil]
     def self.reindex_pid(pid)
-      obj = Dor.load_instance pid
-      reindex_object obj
+      reindex_object Dor.load_instance(pid)
       index_logger.info "updated index for #{pid}"
       # index_logger.debug 'Status:ok<br> Solr Document: ' + solr_doc.inspect
+      nil # paranoid avoidance of memory leak
     rescue ActiveFedora::ObjectNotFoundError # => e
       index_logger.info "failed to update index for #{pid}, object not found in Fedora"
     rescue StandardError => se
@@ -50,6 +52,7 @@ module Argo
     def self.reindex_pid_list(pid_list, should_commit = false)
       pid_list.each { |pid| reindex_pid pid }
       ActiveFedora.solr.conn.commit if should_commit
+      nil # paranoid avoidance of memory leak
     end
 
     def self.reindex_pid_list_with_profiling(pid_list, should_commit = false)
