@@ -117,7 +117,7 @@ class CatalogController < ApplicationController
       :no_sw_genre                 => { :label => 'No SW Genre',                :fq => '-sw_genre_ssim:*' },   # spec said "mods genre"
       :no_public_dc_language       => { :label => 'No MODS Language',           :fq => '-public_dc_language_tesim:*' },
       :no_public_dc_subject        => { :label => 'No MODS Subject',            :fq => '-public_dc_subject_tesim:*' },
-      :no_mods_typeOfResource_ssim => { :label => 'No MODS Resource Type',      :fq => '-mods_typeOfResource_ssim:*' },
+      :no_mods_typeOfResource_ssim => { :label => 'No MODS typeOfResource',      :fq => '-mods_typeOfResource_ssim:*' },
       :no_sw_pub_date_sort         => { :label => 'No SW Date',                 :fq => '-sw_pub_date_sort_ssi:*' },
       :no_sw_subject_temporal      => { :label => 'No SW Era',                  :fq => '-sw_subject_temporal_ssim:*' },
       :no_sw_subject_geographic    => { :label => 'No SW Region',               :fq => '-sw_subject_geographic_ssim:*' },
@@ -132,7 +132,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'sw_subject_temporal_ssim',   :label => 'SW Era'
     config.add_facet_field 'sw_genre_ssim',              :label => 'SW Genre'
     config.add_facet_field 'sw_language_ssim',           :label => 'SW Language'
-    config.add_facet_field 'mods_typeOfResource_ssim',   :label => 'MODS Resource Type'
+    config.add_facet_field 'mods_typeOfResource_ssim',   :label => 'MODS typeOfResource'
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
 
