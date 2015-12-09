@@ -261,9 +261,12 @@ namespace :argo do
   end
 
   def load_order_files(fedora_files)
+    data_path = File.expand_path('../../../fedora_conf/data/', __FILE__)
     file_list = []
     fedora_files.each do |file|
-      file_list.push(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), file.strip))
+      file_name = file.strip
+      next if file_name.empty?
+      file_list.push(File.join(data_path, file_name))
     end
     file_list
   end
