@@ -91,7 +91,7 @@ class ApplicationController < ActionController::Base
 
   def authorize!
     unless current_user
-      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/, '')}"
+      render nothing: true, status: :unauthorized
       return false
     end
     true

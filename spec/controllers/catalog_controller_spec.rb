@@ -16,7 +16,7 @@ describe CatalogController, :type => :controller do
       it 'basic get redirects to login' do
         expect(subject).to receive(:webauth).and_return(nil)
         get 'show', :id => @druid
-        expect(response.code).to eq('302')  # redirect for auth
+        expect(response.code).to eq('401')  # Unauthorized without webauth, no place to redirect
       end
     end
     describe 'with user (valid_user)' do

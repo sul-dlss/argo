@@ -46,10 +46,6 @@ Argo::Application.routes.draw do
 
   root :to => 'catalog#index'
 
-  match 'login',   :controller => 'auth', :as => 'new_user_session',       :via => [:get, :post]
-  match 'logout',  :controller => 'auth', :as => 'destroy_user_session',   :via => [:get, :post]
-  match 'profile', :controller => 'auth', :as => 'edit_user_registration', :via => [:get, :post]
-
   namespace :report do
     get 'workflow_grid'
   end
@@ -153,9 +149,6 @@ Argo::Application.routes.draw do
   end
 
   namespace :auth do
-    get 'login'
-    get 'logout'
-    get 'profile'
     get 'groups'
     post 'remember_impersonated_groups'
     get 'forget_impersonated_groups'
