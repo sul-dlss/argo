@@ -8,7 +8,9 @@ describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 6
+      expect(rendered).to have_css 'li', count: 7
+      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register Items'
+      expect(rendered).to_not have_css 'li.dropdown ul li a', text: 'Register APO'
     end
   end
   context 'with admin user' do
@@ -18,7 +20,9 @@ describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 8
+      expect(rendered).to have_css 'li', count: 9
+      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register Items'
+      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register APO'
     end
   end
   context 'with manager user' do
@@ -28,7 +32,7 @@ describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 7
+      expect(rendered).to have_css 'li', count: 8
     end
   end
 end
