@@ -241,7 +241,7 @@ namespace :argo do
       puts 'Done loading repo files'
       puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0
 #     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
-      puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
+      puts "travis_fold:end:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
     end
   end # :repo
 
