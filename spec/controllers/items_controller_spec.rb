@@ -390,4 +390,26 @@ describe ItemsController, :type => :controller do
       post 'add_workflow', :id => @pid, :wf => 'accessionWF'
     end
   end
+  describe '#workflow_view' do
+    it 'should require workflow and repo parameters' do
+      expect { get :workflow_view, id: @pid, wf_name: 'accessionWF' }.to raise_error(ArgumentError)
+    end
+    it 'should fetch the workflow on valid parameters' do
+      expect(@item.workflows).to receive(:get_workflow)
+      get :workflow_view, id: @pid, wf_name: 'accessionWF', repo: 'dor', format: :html
+      expect(response.status).to eq 200
+    end
+  end
+  describe '#workflow_update' do
+    it 'should require various workflow parameters' do
+      expect { post :workflow_update, id: @pid, wf_name: 'accessionWF' }.to raise_error(ArgumentError)
+    end
+    it 'should change the status' do
+      expect(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(double(definition: double(repo: 'dor')))
+      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'publish').and_return(nil)
+      expect(Dor::WorkflowService).to receive(:update_workflow_status).with('dor', @pid, 'accessionWF', 'publish', 'ready').and_return(nil)
+      post :workflow_update, id: @pid, wf_name: 'accessionWF', process: 'publish', status: 'ready'
+      expect(subject).to redirect_to(catalog_path)
+    end
+  end
 end
