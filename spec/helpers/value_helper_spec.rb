@@ -12,7 +12,6 @@ RSpec.describe ValueHelper do
       }
     end
     it 'creates a link to the admin policies catalog path' do
-      puts helper.link_to_admin_policy(args)
       expect(helper.link_to_admin_policy(args))
         .to have_css 'a[href="/catalog/druid:yolo"]', text: 'Y.O.L.O.'
     end
