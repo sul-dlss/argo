@@ -5,16 +5,16 @@ class CatalogController < ApplicationController
 
   include BlacklightSolrExtensions
   include Blacklight::Catalog
-  include Argo::AccessControlsEnforcement
   helper ArgoHelper
   include SpreadsheetHelper
   include DateFacetConfigurations
 
   before_filter :reformat_dates, :set_user_obj_instance_var
 
-  CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
-
   configure_blacklight do |config|
+    ## Class for converting Blacklight's url parameters to into request parameters for the search index
+    config.search_builder_class = ::SearchBuilder
+
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 10
