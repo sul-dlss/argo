@@ -66,50 +66,77 @@ ul li{
   <h1>Druids</h1>
   <p>Bulk actions will be performed on this list of druids. Modify the list or paste a list of druids here to operate on them instead.</p>
   <br/><textarea id="pids" name="pids"></textarea><br/>
-  <div id="buttons">
-  <ul class="button_list">
-    <label>Versioning</label>
-    <li><span class="bulk_button" id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</span>
-    <li><span class="bulk_button" onclick="$('#close').show(400)">Close versions</span>
-  </ul>
-  <ul class="button_list">
-    <label>Harmless stuff</label>
-    <li><span class="bulk_button" id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</span>
-    <li><span class="bulk_button" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</span>
-    <li><span class="bulk_button" id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</span>
-  </ul>
-  <ul class="button_list">
-    <label>Metadata</label>
-    <li><span class="bulk_button" onclick="$('#create_desc_md').show(400)">Create MODS from label  </span>
-    <li><span class="bulk_button" onclick="$('#discoverable').show(400)">Check discoverability</span>
-    <li><span class="bulk_button" onclick="$('#schema_validate').show(400)">Validate MODS</span>
-    <li><span class="bulk_button" onclick="$('#refresh_metadata').show(400)">Refresh MODS</span>
-    <li><span class="bulk_button" onclick="$('#detect_duplicate_encoding').show(400)">Detect duplicate xml encoding</span>
-  </ul>
-  <ul class="button_list">
-    <label>Dangerous Stuff</label>
-    <li><span class="bulk_button" onclick="$('#purge').show(400)">Purge</span>
-    <li><span class="bulk_button" onclick="$('#release_hold').show(400)">Release for ingest</span>
-    <li><span class="bulk_button" onclick="$('#apply_apo_defaults').show(400)">Apply APO Defaults</span>
-    <li><span class="bulk_button" onclick="$('#add_workflow').show(400)">Add a Workflow</span>
-  </ul>
-
-  <%if current_user.is_admin%>
-    <ul class="button_list">
-      <label>Admin Only Actions</label>
-      <li><span class="bulk_button" onclick="$('#fix_provenance').show(400)">Add missing Provenance</span>
-      <!-- <li><span class="bulk_button" onclick="$('#remediate_mods').show(400)">Remediate MODS</span> disabled for now -->
-    </ul>
-  <%end%>
-
-    <ul class="button_list">
-      <label>Object Updates, you must prepare first!</label>
-      <li><span class="bulk_button" class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Source Id</span>
-      <li><span class="bulk_button" class="update_buttons" disabled onclick="$('#content_type').show(400)">Content type</span>
-      <li><span class="bulk_button" class="update_buttons" disabled onclick="$('#rights').show(400)">Object rights</span>
-      <li><span class="bulk_button" class="update_buttons" onclick="$('#set_collection').show(400)">Set collection</span>
-      <li><span class="bulk_button" class="update_buttons" onclick="$('#add_collection').show(400)">Add collection</span>
-    </ul>
+  <div id="buttons" class="row bulk-buttons">
+      <div id="versioning_heading" class="row bulk-buttons-row">
+	  <strong>Options that require versioning</strong>
+      </div>
+      <div id="versioning_buttons" class="row bulk-buttons-row">
+	  <div id="versioning_buttons_col_1" class="col-md-2">
+	      <div id="col_1_row_1" class="row">
+		  <span class="bulk_button btn-block" id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</span>
+	      </div>
+	      <div id="col_1_row_1" class="row">
+		  Open items not yet open for versioning
+	      </div>
+	  </div>
+	  <div id="versioning_buttons_col_2" class="col-md-6">
+	      <div id="col_2_row_1" class="row">
+		  <div id="col_2_row_1_col_1" class="col-md-4">
+		      <span class="bulk_button btn-block" onclick="$('#refresh_metadata').show(400)">Refresh MODS</span>
+		  </div>
+		  <div id="col_2_row_1_col_2" class="col-md-4">
+		      <span class="bulk_button btn-block" class="update_buttons" disabled onclick="$('#content_type').show(400)">Set content type</span>
+		  </div>
+		  <div id="col_2_row_1_col_3" class="col-md-4">
+		      <span class="bulk_button btn-block bulk-btn-danger" onclick="$('#apply_apo_defaults').show(400)">Apply APO defaults</span>
+		  </div>
+	      </div>
+	      <div id="col_2_row_2" class="row">
+		  <div id="col_2_row_2_col_1" class="col-md-4">
+		      <span class="bulk_button btn-block" class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Set source Id</span>
+		  </div>
+		  <div id="col_2_row_2_col_2" class="col-md-4">
+		      <span class="bulk_button btn-block" class="update_buttons" onclick="$('#set_collection').show(400)">Set collection</span>
+		  </div>
+		  <div id="col_2_row_2_col_3" class="col-md-4">
+		      <span class="bulk_button bulk-btn-danger btn-block" onclick="$('#add_workflow').show(400)">Add a workflow</span>
+		  </div>
+	      </div>
+	      <div id="col_2_row_3" class="row">
+		  <div id="col_2_row_3_col_1" class="col-md-4">
+		      <span class="bulk_button btn-block" class="update_buttons" disabled onclick="$('#rights').show(400)">Set object rights</span>
+		  </div>
+		  <div id="col_2_row_3_col_2" class="col-md-4">
+		      <span class="bulk_button btn-block" class="update_buttons" onclick="$('#add_collection').show(400)">Add collection</span>
+		  </div>
+	      </div>
+	  </div>
+	  <div id="versioning_buttons_col_3" class="col-md-4">
+	      <div id="col_3_row_1" class="row">
+		  <span class="bulk_button btn-block" onclick="$('#close').show(400)">Close versions</span>
+	      </div>
+	      <div id="col_3_row_2" class="row">
+		  Submit & accession changed objects
+	      </div>
+	  </div>
+      </div>
+      <div id="no_versioning_heading" class="row bulk-buttons-row">
+	  <strong>Options that do not require versioning</strong>
+      </div>
+      <div id="no_versioning_buttons" class="row">
+	  <div id="no_versioning_buttons_col_1" class="col-md-2">
+	      <span class="bulk_button btn-block" id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</span>
+	  </div>
+	  <div id="no_versioning_buttons_col_2" class="col-md-2">
+	      <span class="bulk_button btn-block" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</span>
+	  </div>
+	  <div id="no_versioning_buttons_col_3" class="col-md-2">
+	      <span class="bulk_button btn-block" id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</span>
+	  </div>
+	  <div id="no_versioning_buttons_col_4" class="col-md-2">
+	      <span class="bulk_button bulk-btn-danger btn-block" onclick="$('#purge').show(400)">Purge</span>
+	  </div>
+      </div>
   </div>
 </div>
 <div class="bulk_operation" id="open" name="open">
@@ -136,7 +163,7 @@ ul li{
 </div>
 
 <div class="bulk_operation" id="apply_apo_defaults" name="apply_apo_defaults">
-  <h1>Reset the rights metadata to match teh APO default.</h1>
+  <h1>Reset the rights metadata to match the APO default.</h1>
   <p>This will overwrite any changes in the rights metadata, including embargo.</p>
   <span class="bulk_button" onclick="fetch_druids(apply_apo_defaults);$('#apply_apo_defaults').hide(400);">Apply defaults.</span><br/>
 </div>
