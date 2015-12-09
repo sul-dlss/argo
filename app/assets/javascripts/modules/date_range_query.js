@@ -3,46 +3,43 @@
 
 (function($) {
   /*
-    jQuery plugin that enables date range selections. Ported from legacy Argo 
-    code in app/assets/javascript/argo.js
+    jQuery plugin that enables date range selections. Updates hidden query field
+    for the form.
   */
 
   $.fn.dateRangeQuery = function() {
 
-    function assembleQuery($el, facet) {
-    	var beforeDate = $el.find('[data-range-before]')
-        .datepicker({ dateFormat: 'yyyy-mm-dd' }).val();
-      var afterDate = $el.find('[data-range-after]')
-        .datepicker({ dateFormat: 'dd-mm-yy' }).val();
-      var qf='f[' + facet + '][]=';
-
-      if (afterDate !== '') {
-        afterDate = new Date(Date.parse(afterDate));
-        qf += '[' + afterDate.toISOString() + ' TO';
+    function craftQuery($beforeDate, $afterDate) {
+      var afterDate = $afterDate.val();
+      var beforeDate = $beforeDate.val();
+      var query = '[';
+      if (afterDate.length > 0) {
+        query += new Date(Date.parse(afterDate)).toISOString() + ' TO ';
       } else {
-        qf += '[* TO';
-    	}
-      
-    	if (beforeDate !== '') {
-        beforeDate = new Date(Date.parse(beforeDate));
-        qf += ' ' + beforeDate.toISOString() + ']';
+        query += '* TO ';
+      }
+      if (beforeDate.length > 0) {
+        // Add the selected date + 23 hours, 59 minutes, 59 seconds
+        query += new Date(Date.parse(beforeDate) + 86399000)
+          .toISOString() + ']';
       } else {
-        qf += ' *]';
-    	}
-    	return qf;
+        query += '*]';
+      }
+      return query;
     }
-
 
     return this.each(function() {
       var $el = $(this);
-      var $button = $el.find('button');
-      var facet = $button.data().facetQuery;
-      var path = $el.data().rangePath;
+      var $beforeDate = $el.find('[data-range-before]');
+      var $afterDate = $el.find('[data-range-after]');
+      var $queryField = $el.find('[data-range-value]');
       
-      $button.on('click', function(e) {
-        e.preventDefault();
-        var query = assembleQuery($el, facet);
-        document.location = path + '?' + query;
+      $beforeDate.on('change', function() {
+        $queryField.val(craftQuery($beforeDate, $afterDate));
+      });
+      
+      $afterDate.on('change', function() {
+        $queryField.val(craftQuery($beforeDate, $afterDate));
       });
     });
 
