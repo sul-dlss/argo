@@ -10,15 +10,14 @@ describe 'mods_view', :type => :request do
     allow(@current_user).to receive(:is_manager).and_return(false)
     allow(@current_user).to receive(:permitted_apos).and_return([])
 
-    # here's something odd: it seems like you need to stub ApplicationController.current_user for the "main page tests"
-    # section (since it doesn't invoke ItemsController, which was stubbed already).  fine.  when i run this test file by
-    # itself ("rspec spec/integration/item_displays_spec.rb"), stubbing ApplicationController.current_user is sufficient
-    # setup for all the tests (ItemsController subclasses ApplicationController).  however, when i run the entire test suite (by
-    # just calling "rspec"), i have to stub both ItemsController.current_user and ApplicationController.current_user, or all
-    # the tests that hit '/items/' fail.  either behavior feels defensible, but the inconsistency is puzzling.  anyway, i'm stubbing
-    # both.  JM, 2015-03-10
+    ##
+    # Stubbing of both ItemsController and CatalogController which are the
+    # controllers used in this spec, needing a valid return from current_user. A
+    # higher level up the inheritance chain stub of `ApplicationController` is
+    # insufficient here, due to a possible bug in rspec-mocks or our overuse of
+    # `allow_any_instance_of`.
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@current_user)
+    allow_any_instance_of(CatalogController).to receive(:current_user).and_return(@current_user)
   end
   context 'main page tests' do
     it 'should have the expected heading for search facets' do
