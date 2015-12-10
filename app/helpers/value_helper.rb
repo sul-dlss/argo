@@ -69,9 +69,14 @@ module ValueHelper
     end.join('<br>').html_safe
   end
 
+  # Discussed removing this method because the field should not be modified.
   def value_for_originInfo_date_created_tesim(args)
-    val = Time.parse(args[:document][args[:field]].first)
+    field_value = args[:document][args[:field]].first
+    # Try to parse the string as a time value
+    val = Time.parse(field_value)
     val.localtime.strftime '%Y.%m.%d %H:%M%p'
+  rescue
+    field_value
   end
 
   def value_for_identifier_tesim(args)

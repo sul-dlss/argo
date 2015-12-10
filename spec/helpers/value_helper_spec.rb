@@ -31,4 +31,25 @@ RSpec.describe ValueHelper do
       expect(helper.links_to_collections(args)).to have_css 'br'
     end
   end
+
+  describe 'originInfo_date_created_tesim' do
+    it 'does not modify a year string' do
+      field = 'originInfo_date_created_tesim'
+      value = ['1966', 'anything_after_first_element_ignored']
+      document = SolrDocument.new({ field => value })
+      args = { document: document, field: field }
+      expect(helper.value_for_originInfo_date_created_tesim(args))
+        .to eq(value.first)
+    end
+    it 'does normalize a time stamp string' do
+      now_utc = Time.now.utc.to_s
+      now_loc = Time.parse(now_utc).localtime.strftime '%Y.%m.%d %H:%M%p'
+      field = 'originInfo_date_created_tesim'
+      value = [now_utc, 'anything_after_first_element_ignored']
+      document = SolrDocument.new({ field => value })
+      args = { document: document, field: field }
+      expect(helper.value_for_originInfo_date_created_tesim(args))
+        .to eq(now_loc)
+    end
+  end
 end
