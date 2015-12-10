@@ -46,7 +46,7 @@ class CatalogController < ApplicationController
     config.add_index_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
     config.add_index_field 'project_tag_ssim',                label: 'Project',           link_to_search: true
     config.add_index_field 'identifier_tesim',                label: 'IDs',               helper_method: :value_for_identifier_tesim
-    config.add_index_field 'originInfo_date_created_tesim',   label: 'Created'
+    config.add_index_field 'originInfo_date_created_tesim',   label: 'Created',           helper_method: :value_for_date
     config.add_index_field 'obj_label_ssim',                  label: 'Label'
     config.add_index_field 'source_id_ssim',                  label: 'Source'
     config.add_index_field 'wf_error_ssim',                   label: 'Error',             helper_method: :value_for_wf_error

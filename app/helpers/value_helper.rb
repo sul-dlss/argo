@@ -70,13 +70,16 @@ module ValueHelper
   end
 
   # Discussed removing this method because the field should not be modified.
-  def value_for_originInfo_date_created_tesim(args)
-    field_value = args[:document][args[:field]].first
-    # Try to parse the string as a time value
-    val = Time.parse(field_value)
+  def value_for_date(args)
+    date_value = args[:document][args[:field]].first
+    # Try to return the date in local time zone;
+    # assume it can be parsed according to app time zone.
+    return '' if date_value.nil?
+    val = Time.zone.parse(date_value)
+    return date_value if val.nil?
     val.localtime.strftime '%Y.%m.%d %H:%M%p'
-  rescue
-    field_value
+  rescue ArgumentError
+    date_value.to_s
   end
 
   def value_for_identifier_tesim(args)
