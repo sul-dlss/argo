@@ -31,4 +31,30 @@ RSpec.describe ValueHelper do
       expect(helper.links_to_collections(args)).to have_css 'br'
     end
   end
+
+  describe 'value_for_date' do
+    it 'returns "" for nil' do
+      field = 'originInfo_date_created_tesim'
+      value = [nil, 'anything_after_first_element_ignored']
+      document = SolrDocument.new({ field => value })
+      args = { document: document, field: field }
+      expect(helper.value_for_date_as_localtime(args)).to eq('')
+    end
+    it 'returns the value if it cannot parse the date' do
+      field = 'originInfo_date_created_tesim'
+      value = ['1966', 'anything_after_first_element_ignored']
+      document = SolrDocument.new({ field => value })
+      args = { document: document, field: field }
+      expect(helper.value_for_date_as_localtime(args)).to eq(value.first)
+    end
+    it 'returns a normalized local time for a valid time stamp' do
+      now_utc = Time.zone.now.to_s
+      now_loc = Time.zone.parse(now_utc).localtime.strftime '%Y.%m.%d %H:%M%p'
+      field = 'originInfo_date_created_tesim'
+      value = [now_utc, 'anything_after_first_element_ignored']
+      document = SolrDocument.new({ field => value })
+      args = { document: document, field: field }
+      expect(helper.value_for_date_as_localtime(args)).to eq(now_loc)
+    end
+  end
 end
