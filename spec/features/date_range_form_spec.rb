@@ -20,16 +20,16 @@ RSpec.feature 'Date range form', js: true do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
-      find('#object_modified_date').click
+      click_button 'submit'
     end
-    # Wait for the new page to load
-    page.evaluate_script('window.location.reload()')
-    find('#appliedParams')
-    within '.constraints-container' do
-      expect(page).to have_css '.filterName', text: 'Last Modified'
-      expect(page).to have_css(
-        '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO 20.*00:00.000Z\]/
-      )
+    using_wait_time 45 do
+      find('#appliedParams')
+      within '.constraints-container' do
+        expect(page).to have_css '.filterName', text: 'Last Modified'
+        expect(page).to have_css(
+          '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO 20.*59:59.000Z\]/
+        )
+      end
     end
     within '.page_links' do
       expect(page).to have_css '.page_entries', text: /1 - \d+ of \d+/
@@ -38,31 +38,31 @@ RSpec.feature 'Date range form', js: true do
   scenario 'with no after date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
-      find('#object_modified_date').click
+      click_button 'submit'
     end
-    # Wait for the new page to load
-    page.evaluate_script('window.location.reload()')
-    find('#appliedParams')
-    within '.constraints-container' do
-      expect(page).to have_css '.filterName', text: 'Last Modified'
-      expect(page).to have_css(
-        '.filterValue', text: /^\[\* TO 20.*00:00.000Z\]/
-      )
+    using_wait_time 45 do
+      find('#appliedParams')
+      within '.constraints-container' do
+        expect(page).to have_css '.filterName', text: 'Last Modified'
+        expect(page).to have_css(
+          '.filterValue', text: /^\[\* TO 20.*59:59.000Z\]/
+        )
+      end
     end
   end
   scenario 'with no before date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
-      find('#object_modified_date').click
+      click_button 'submit'
     end
-    # Wait for the new page to load
-    page.evaluate_script('window.location.reload()')
-    find('#appliedParams')
-    within '.constraints-container' do
-      expect(page).to have_css '.filterName', text: 'Last Modified'
-      expect(page).to have_css(
-        '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO \*\]/
-      )
+    using_wait_time 45 do
+      find('#appliedParams')
+      within '.constraints-container' do
+        expect(page).to have_css '.filterName', text: 'Last Modified'
+        expect(page).to have_css(
+          '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO \*\]/
+        )
+      end
     end
   end
 end
