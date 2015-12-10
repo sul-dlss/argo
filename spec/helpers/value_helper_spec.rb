@@ -38,14 +38,14 @@ RSpec.describe ValueHelper do
       value = [nil, 'anything_after_first_element_ignored']
       document = SolrDocument.new({ field => value })
       args = { document: document, field: field }
-      expect(helper.value_for_date(args)).to eq('')
+      expect(helper.value_for_date_as_localtime(args)).to eq('')
     end
     it 'returns the value if it cannot parse the date' do
       field = 'originInfo_date_created_tesim'
       value = ['1966', 'anything_after_first_element_ignored']
       document = SolrDocument.new({ field => value })
       args = { document: document, field: field }
-      expect(helper.value_for_date(args)).to eq(value.first)
+      expect(helper.value_for_date_as_localtime(args)).to eq(value.first)
     end
     it 'returns a normalized local time for a valid time stamp' do
       now_utc = Time.zone.now.to_s
@@ -54,7 +54,7 @@ RSpec.describe ValueHelper do
       value = [now_utc, 'anything_after_first_element_ignored']
       document = SolrDocument.new({ field => value })
       args = { document: document, field: field }
-      expect(helper.value_for_date(args)).to eq(now_loc)
+      expect(helper.value_for_date_as_localtime(args)).to eq(now_loc)
     end
   end
 end

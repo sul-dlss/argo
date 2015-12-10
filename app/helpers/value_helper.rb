@@ -69,14 +69,14 @@ module ValueHelper
     end.join('<br>').html_safe
   end
 
-  # Discussed removing this method because the field should not be modified.
-  def value_for_date(args)
+  # @return [String]
+  def value_for_date_as_localtime(args)
     date_value = args[:document][args[:field]].first
     # Try to return the date in local time zone;
     # assume it can be parsed according to app time zone.
     return '' if date_value.nil?
     val = Time.zone.parse(date_value)
-    return date_value if val.nil?
+    return date_value.to_s if val.nil?
     val.localtime.strftime '%Y.%m.%d %H:%M%p'
   rescue ArgumentError
     date_value.to_s
