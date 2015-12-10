@@ -13,11 +13,8 @@ class ApplicationController < ActionController::Base
 
   attr_reader :help
 
-  if Rails.env.production?
-    require 'squash/rails'
-    include Squash::Ruby::ControllerMethods
-    enable_squash_client
-  end
+  include Squash::Ruby::ControllerMethods
+  enable_squash_client
 
   layout 'application'
 
