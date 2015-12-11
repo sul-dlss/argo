@@ -66,74 +66,44 @@ ul li{
   <h1>Druids</h1>
   <p>Bulk actions will be performed on this list of druids. Modify the list or paste a list of druids here to operate on them instead.</p>
   <br/><textarea id="pids" name="pids"></textarea><br/>
-  <div id="buttons" class="row bulk-buttons">
-    <div id="versioning_heading" class="row bulk-buttons-row">
-      <strong>Options that require versioning</strong>
-    </div>
+  <div id="buttons">
     <div class="row bulk-buttons-row">
-      <div class="col-md-2">
-        <div class="row">
-          <button class="bulk_button btn-block" id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</button>
-	</div>
-        <div class="row">
-          Open items not yet open for versioning
-	</div>
+      <div class="col-sm-2">
+        <strong>Options that require versioning</strong>
+        <button class="bulk_button btn-block" id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</button>
+        Open items not yet open for versioning
       </div>
-      <div class="col-md-6">
-        <div class="row">
-	  <div class="col-md-4">
-	    <button class="bulk_button btn-block" onclick="$('#refresh_metadata').show(400)">Refresh MODS</button>
-          </div>
-          <div class="col-md-4">
-            <button class="bulk_button btn-block" class="update_buttons" disabled onclick="$('#content_type').show(400)">Set content type</button>
-          </div>
-          <div class="col-md-4">
-            <button class="bulk_button btn-block bulk-btn-danger" onclick="$('#apply_apo_defaults').show(400)">Apply APO defaults</button>
-          </div>
-        </div>
-        <div class="row">
-	  <div class="col-md-4">
-	    <button class="bulk_button btn-block" class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Set source Id</button>
-	  </div>
-	  <div class="col-md-4">
-	    <button class="bulk_button btn-block" class="update_buttons" onclick="$('#set_collection').show(400)">Set collection</button>
-	  </div>
-	  <div class="col-md-4">
-	    <button class="bulk_button bulk-btn-danger btn-block" onclick="$('#add_workflow').show(400)">Add a workflow</button>
-	  </div>
-	</div>
-	<div class="row">
-	  <div class="col-md-4">
-	    <button class="bulk_button btn-block" class="update_buttons" disabled onclick="$('#rights').show(400)">Set object rights</button>
-	  </div>
-	  <div class="col-md-4">
-	    <button class="bulk_button btn-block" class="update_buttons" onclick="$('#add_collection').show(400)">Add collection</button>
-	  </div>
-	</div>
+      <div class="col-sm-2">
+        <button class="bulk_button btn-block" onclick="$('#refresh_metadata').show(400)">Refresh MODS</button>
+        <button class="bulk_button btn-block" class="update_buttons" disabled id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Set source Id</button>
+        <button class="bulk_button btn-block" class="update_buttons" disabled onclick="$('#rights').show(400)">Set object rights</button>
       </div>
-      <div class="col-md-4">
-	<div class="row">
-	  <button class="bulk_button btn-block" onclick="$('#close').show(400)">Close versions</button>
-	</div>
-	<div class="row">
-	  Submit & accession changed objects
-	</div>
+      <div class="col-sm-2">
+        <button class="bulk_button btn-block" class="update_buttons" disabled onclick="$('#content_type').show(400)">Set content type</button>
+        <button class="bulk_button btn-block" class="update_buttons" onclick="$('#set_collection').show(400)">Set collection</button>
+        <button class="bulk_button btn-block" class="update_buttons" onclick="$('#add_collection').show(400)">Add collection</button>
+      </div>
+      <div class="col-sm-2">
+        <button class="bulk_button btn-block bulk-btn-danger" onclick="$('#apply_apo_defaults').show(400)">Apply APO defaults</button>
+        <button class="bulk_button bulk-btn-danger btn-block" onclick="$('#add_workflow').show(400)">Add a workflow</button>
+      </div>
+      <div class="col-sm-2">
+        <button class="bulk_button btn-block" onclick="$('#close').show(400)">Close versions</button>
+	Submit & accession changed objects
       </div>
     </div>
     <div class="row bulk-buttons-row">
-      <strong>Options that do not require versioning</strong>
-    </div>
-    <div class="row">
-      <div class="col-md-2">
+      <div class="col-sm-2">
+        <strong>Options that do not require versioning</strong>
 	<button class="bulk_button btn-block" id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
       </div>
-      <div class="col-md-2">
-	<button class="bulk_button btn-block" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
+      <div class="col-sm-2">
+        <button class="bulk_button btn-block" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
       </div>
-      <div class="col-md-2">
+      <div class="col-sm-2">
 	<button class="bulk_button btn-block" id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</button>
       </div>
-      <div class="col-md-2">
+      <div class="col-sm-2">
 	<button class="bulk_button bulk-btn-danger btn-block" onclick="$('#purge').show(400)">Purge</button>
       </div>
     </div>
