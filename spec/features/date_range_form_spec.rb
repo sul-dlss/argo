@@ -15,6 +15,14 @@ RSpec.feature 'Date range form', js: true do
     visit root_path
     find('[data-target="#facet-object_modified_date"]').click
   end
+  def wait_for_applied_params
+    counter = 1
+    loop do
+      break if first('#appliedParams')
+      sleep 2 * Math.log(counter += 1)
+      expect(true).to be false if counter > 45
+    end
+  end
   let(:tomorrow) { (Time.current + 1.day).strftime('%m/%d/%Y') }
   scenario 'navigates to date range search' do
     within '#facet-object_modified_date' do
@@ -22,14 +30,12 @@ RSpec.feature 'Date range form', js: true do
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
       find('input[type="submit"]').trigger(:click)
     end
-    using_wait_time 45 do
-      find('#appliedParams')
-      within '.constraints-container' do
-        expect(page).to have_css '.filterName', text: 'Last Modified'
-        expect(page).to have_css(
-          '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO 20.*59:59.000Z\]/
-        )
-      end
+    wait_for_applied_params
+    within '.constraints-container' do
+      expect(page).to have_css '.filterName', text: 'Last Modified'
+      expect(page).to have_css(
+        '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO 20.*59:59.000Z\]/
+      )
     end
     within '.page_links' do
       expect(page).to have_css '.page_entries', text: /1 - \d+ of \d+/
@@ -40,14 +46,12 @@ RSpec.feature 'Date range form', js: true do
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
       find('input[type="submit"]').trigger(:click)
     end
-    using_wait_time 45 do
-      find('#appliedParams')
-      within '.constraints-container' do
-        expect(page).to have_css '.filterName', text: 'Last Modified'
-        expect(page).to have_css(
-          '.filterValue', text: /^\[\* TO 20.*59:59.000Z\]/
-        )
-      end
+    wait_for_applied_params
+    within '.constraints-container' do
+      expect(page).to have_css '.filterName', text: 'Last Modified'
+      expect(page).to have_css(
+        '.filterValue', text: /^\[\* TO 20.*59:59.000Z\]/
+      )
     end
   end
   scenario 'with no before date' do
@@ -55,14 +59,12 @@ RSpec.feature 'Date range form', js: true do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
       find('input[type="submit"]').trigger(:click)
     end
-    using_wait_time 45 do
-      find('#appliedParams')
-      within '.constraints-container' do
-        expect(page).to have_css '.filterName', text: 'Last Modified'
-        expect(page).to have_css(
-          '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO \*\]/
-        )
-      end
+    wait_for_applied_params
+    within '.constraints-container' do
+      expect(page).to have_css '.filterName', text: 'Last Modified'
+      expect(page).to have_css(
+        '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO \*\]/
+      )
     end
   end
 end
