@@ -69,11 +69,6 @@ module ValueHelper
     end.join('<br>').html_safe
   end
 
-  def value_for_originInfo_date_created_tesim(args)
-    val = Time.parse(args[:document][args[:field]].first)
-    val.localtime.strftime '%Y.%m.%d %H:%M%p'
-  end
-
   def value_for_identifier_tesim(args)
     val = args[:document][args[:field]]
     Array(val).reject { |v| v == args[:document]['id'] }.sort.uniq.join(', ')
