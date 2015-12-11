@@ -5,7 +5,7 @@ describe RegistrationController, :type => :controller do
     @item = double(Dor::Item)
     @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
     allow(@current_user).to receive(:is_admin).and_return(true)
-    allow_any_instance_of(RegistrationController).to receive(:current_user).and_return(@current_user)
+    allow(controller).to receive(:current_user).and_return(@current_user)
     allow(Dor::Item).to receive(:find).and_return(@item)
   end
 
@@ -213,6 +213,55 @@ describe RegistrationController, :type => :controller do
       test_seq_no = 7
       get 'tracksheet', :druid => 'xb482bw3979', :name => test_name, :sequence => test_seq_no
       expect(response.headers['content-disposition']).to eq("attachment; filename=#{test_name}-#{test_seq_no}.pdf")
+    end
+  end
+
+  describe '#collection_list' do
+    it 'should handle invalid parameters' do
+      expect { get 'collection_list' }.to raise_error(ArgumentError)
+    end
+
+    it 'should handle a bogus APO' do
+      expect { get 'collection_list', apo_id: 'druid:aa111bb2222' }.to raise_error(ActiveFedora::ObjectNotFoundError)
+    end
+
+    it 'should handle an APO with no collections' do
+      get 'collection_list', apo_id: 'druid:zt570tx3016', format: :json
+      data = JSON.parse(response.body)
+      expect(data).to include('' => 'None')
+      expect(data.length).to eq(1)
+    end
+
+    it 'should handle an APO with some collections both found and not found in Solr/Fedora' do
+      get 'collection_list', apo_id: 'druid:fg464dn8891', format: :json
+      data = JSON.parse(response.body)
+      expect(data['druid:pb873ty1662']).to start_with 'Annual report of the State Corporation Commission'
+      expect(data['druid:gg191kg3953']).to eq 'Unknown Collection (gg191kg3953)'
+      expect(data.length).to eq(11)
+    end
+  end
+
+  describe '#workflow_list' do
+    it 'should handle an APO with a single default workflow' do
+      get 'workflow_list', apo_id: 'druid:fg464dn8891', format: :json
+      data = JSON.parse(response.body)
+      expect(data).to include 'dpgImageWF'
+      expect(data.length).to eq(1)
+    end
+
+    it 'should handle an APO with multiple workfllows' do
+      get 'workflow_list', apo_id: 'druid:ww057vk7675', format: :json
+      data = JSON.parse(response.body)
+      expect(data).to include 'digitizationWF'
+      expect(data).to include 'dpgImageWF'
+      expect(data.length).to eq(2)
+      expect(data.sort).to eq(data)
+    end
+  end
+
+  context '#autocomplete' do
+    it 'has no spec yet' do
+      skip
     end
   end
 end

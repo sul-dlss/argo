@@ -168,4 +168,11 @@ module RegistrationHelper
     table_data
   end
 
+  private
+
+  # @param [String] s string to truncate at word boundary
+  # @param [Integer] truncate_limit character limit for truncation target
+  def short_label(s, truncate_limit = 60)
+    s.truncate(truncate_limit, separator: /\s/)
+  end
 end

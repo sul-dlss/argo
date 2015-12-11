@@ -14,16 +14,6 @@ class RegistrationController < ApplicationController
     render :text => pdf.render, :content_type => :pdf
   end
 
-  def form_list
-    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}")).docs
-    md_format = docs.collect { |doc| doc['metadata_format_ssim'] }.flatten.first.to_s
-    forms = JSON.parse(RestClient.get('http://lyberapps-prod.stanford.edu/forms.json'))
-    result = forms[md_format.downcase].to_a.sort { |a, b| a[1].casecmp(b[1]) }
-    respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => result }
-    end
-  end
-
   def workflow_list
     docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}")).docs
     result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
@@ -34,24 +24,37 @@ class RegistrationController < ApplicationController
     end
 
     respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => result.flatten.sort }
+      format.any(:json, :xml) { render request.format.to_sym => result.flatten.uniq.sort }
     end
   end
 
+  ##
+  # Data route to return all the registration collections listed for the given APO
+  # @option params [String] `:apo_id` the druid for the APO
+  # @option params [String] `:truncate` word boundary truncation limit
   def collection_list
-    res = {'' => 'None'}
-    apo_object = Dor.find(params[:apo_id], :lightweight => true)
-    adm_xml = apo_object.administrativeMetadata.ng_xml
-    adm_xml.search('//registration/collection').each do |col|
-      solr_doc = Blacklight.solr.find({:q => "id:\"#{col['id']}\"", :rows => 1, :fl => 'id,tag_ssim,dc_title_tesim'}).docs
-      if solr_doc.first['dc_title_tesim'] && solr_doc.first['dc_title_tesim'].first
-        res[col['id']] = "#{solr_doc.first['dc_title_tesim'].first}(#{col['id']})"
+    truncate_limit = (params[:truncate] || 60).to_i
+    collections = { '' => 'None' }
+    apo_object = Dor.find(params[:apo_id])
+    apo_object.administrativeMetadata.ng_xml.search('//registration/collection/@id').each do |node|
+      col_id = node.to_s
+      col_druid = col_id.gsub(/^druid:/, '')
+      col_title_field = SolrDocument::FIELD_TITLE
+      # grab the collection title from Solr, or fall back to DOR
+      solr_doc = Blacklight.solr.find({:q => "id:\"#{col_id}\"", :rows => 1, :fl => col_title_field}).docs.first
+      if solr_doc.present? && solr_doc[col_title_field].present?
+        collections[col_id] = "#{short_label(solr_doc[col_title_field], truncate_limit)} (#{col_druid})"
       else
-        res[col['id']] = "#{col['id']}"
+        begin # Title not found in Solr, so check DOR
+          collection = Dor.find(col_id)
+          collections[col_id] = "#{short_label(collection.label, truncate_limit)} (#{col_druid})"
+        rescue ActiveFedora::ObjectNotFoundError
+          collections[col_id] = "Unknown Collection (#{col_druid})"
+        end
       end
     end
     respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => res }
+      format.any(:json, :xml) { render request.format.to_sym => collections }
     end
   end
 
@@ -106,5 +109,4 @@ class RegistrationController < ApplicationController
       format.any(:json, :xml) { render request.format.to_sym => result }
     end
   end
-
 end

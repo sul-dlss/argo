@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe RegistrationHelper do
-  it 'does something' do
-
+  it 'tests nothing' do
+    skip
   end
 end
