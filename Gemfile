@@ -72,6 +72,7 @@ group :test, :development do
 end
 
 group :development do
+  gem 'rubocop', require: false
   gem 'ruby-prof'
   gem 'sqlite3'
 end
