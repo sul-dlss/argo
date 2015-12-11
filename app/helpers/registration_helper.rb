@@ -40,12 +40,14 @@ module RegistrationHelper
       'Book (flipbook, ltr)',
       'Book (flipbook, rtl)',
       'Book (image-only)',
-      'Image',
       'File',
+      'Image',
       'Manuscript (flipbook, ltr)',
       'Manuscript (flipbook, rtl)',
       'Manuscript (image-only)',
-      'Map'
+      'Map',
+      'Media',
+      'Software'
     ]
   end
 
