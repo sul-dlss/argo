@@ -18,24 +18,6 @@ class ApplicationController < ActionController::Base
 
   layout 'application'
 
-  def initialize(*args)
-    super
-
-    klass_chain = self.class.name.sub(/Controller$/, 'Helper').split(/::/)
-    klass = nil
-    begin
-      klass = Module.const_get(klass_chain.shift)
-      klass = klass.const_get(klass_chain.shift) while klass_chain.length > 0
-    rescue NameError
-      klass = nil
-    end
-    @help = Class.new do
-      include klass unless klass.nil?
-      include ApplicationHelper
-    end.new
-    self
-  end
-
   def current_user
     cur_user = nil
     if webauth && webauth.logged_in?
