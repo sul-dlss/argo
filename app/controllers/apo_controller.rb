@@ -273,11 +273,6 @@ class ApoController < ApplicationController
 
   private
 
-  def reindex(obj)
-    doc = obj.to_solr
-    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
-  end
-
   def create_obj
     raise 'missing druid' unless params[:id]
     @object = Dor.find params[:id] # , :lightweight => true
