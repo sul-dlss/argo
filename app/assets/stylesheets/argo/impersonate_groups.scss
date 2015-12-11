@@ -1,0 +1,12 @@
+.auth-groups {
+  margin: 0 auto;
+  width: 500px;
+}
+
+.navbar-nav > li > a.impersonating {
+  color: $brand-warning;
+
+  &:hover {
+    color: darken($brand-warning, 0.75);
+  }
+}
