@@ -76,10 +76,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'content_type_ssim',               label: 'Content Type',        limit: 10
     config.add_facet_field 'rights_primary_ssi',              label: 'Access Rights',       limit: 10
     config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10
-    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 10, sort: 'index'
-    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 10, sort: 'index'
-    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        limit: 10, sort: 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 10, sort: 'index'
+    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 9999, sort: 'index'
+    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 9999, sort: 'index'
     config.add_facet_field 'current_version_isi',             label: 'Version',             limit: 10
     config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   limit: 10
     config.add_facet_field 'released_to_ssim',                label: 'Released To',         limit: 10
