@@ -20,7 +20,7 @@ RSpec.feature 'Date range form', js: true do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
-      click_button 'submit'
+      find('input[type="submit"]').trigger(:click)
     end
     using_wait_time 45 do
       find('#appliedParams')
@@ -38,7 +38,7 @@ RSpec.feature 'Date range form', js: true do
   scenario 'with no after date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
-      click_button 'submit'
+      find('input[type="submit"]').trigger(:click)
     end
     using_wait_time 45 do
       find('#appliedParams')
@@ -53,7 +53,7 @@ RSpec.feature 'Date range form', js: true do
   scenario 'with no before date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
-      click_button 'submit'
+      find('input[type="submit"]').trigger(:click)
     end
     using_wait_time 45 do
       find('#appliedParams')
