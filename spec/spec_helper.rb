@@ -92,22 +92,5 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
       # rescue if 1 datastream failed
     end
   end
-
-  # stub item and datastream repo access methods
-  # rubocop:disable Style/SingleLineMethods
-  result.datastreams.each_pair do |dsid, ds|
-    if ds.is_a?(other_class) && !ds.is_a?(Dor::WorkflowDs)
-      ds.instance_eval do
-        def content       ; ng_xml.to_s                 ; end
-        def content=(val) ; self.ng_xml = Nokogiri::XML(val) ; end
-      end
-    end
-    ds.instance_eval do
-      def save          ; true                      ; end
-    end
-  end
-  result.instance_eval do
-    def save ; true ; end
-  end
   result
 end

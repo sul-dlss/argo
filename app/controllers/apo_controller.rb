@@ -79,6 +79,7 @@ class ApoController < ApplicationController
     end
   end
 
+  # TODO: spec testing requires this method to be public
   def set_apo_metadata(apo, md_info)
     apo.mods_title           = md_info[:title    ]
     apo.desc_metadata_format = md_info[:desc_md  ]
@@ -92,6 +93,10 @@ class ApoController < ApplicationController
     apo.use_statement        = md_info[:use      ]
   end
 
+  ##
+  # Register a new APO and a create a default collection if requested.
+  # Uses `params` and `Dor::RegistrationService`
+  #
   def register_new_apo
     reg_params = {:workflow_priority => '70'}
     reg_params[:label] = params[:title]
@@ -100,30 +105,36 @@ class ApoController < ApplicationController
     reg_params[:workflow_id ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     apo_pid = response[:pid]
+    notice = "APO #{apo_pid} created."
+
+    # Once it's been created we populate it with its metadata
     apo = Dor.find(apo_pid)
-
-    # register a collection if requested
-    collection_pid = nil
-    collection_pid = create_collection apo_pid if params[:collection_radio] == 'create'
-    if collection_pid
-      apo.add_default_collection collection_pid
-    elsif params[:collection] && params[:collection].length > 0
-      apo.add_default_collection params[:collection]
-    end
-
     set_apo_metadata apo, params
     apo.add_tag('Registered By : ' + current_user.login)
 
+    # and populate it with the correct roleMetadata
     managers = split_roleplayer_input_field(params[:managers])
     viewers  = split_roleplayer_input_field(params[:viewers])
     add_roleplayers_to_object(apo, managers, 'dor-apo-manager')
     add_roleplayers_to_object(apo, viewers, 'dor-apo-viewer')
 
+    # requires a synchronous index update as we will redirect to the show page
     apo.save
     update_index(apo)
-    notice = 'APO created. '
-    notice += "Collection #{collection_pid} created." if collection_pid
-    {:notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid}
+
+    # register a collection and make it the default if requested
+    collection_pid = nil
+    case params[:collection_radio]
+    when 'create'
+      collection_pid = create_collection apo_pid
+      apo.add_default_collection collection_pid
+      apo.save
+      notice += " Collection #{collection_pid} created."
+    when 'select'
+      notice += ' Cannot select a default collection when registering an APO. Use Edit APO instead.'
+    end
+
+    { :notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid }
   end
 
   def param_cleanup(params)
@@ -147,14 +158,6 @@ class ApoController < ApplicationController
       return
     end
 
-    collection_pid = create_collection @object.pid if params[:collection_radio] == 'create'
-
-    if params[:collection] && params[:collection].length > 0
-      @object.add_default_collection params[:collection]
-    else
-      @object.add_default_collection collection_pid if collection_pid
-    end
-
     set_apo_metadata @object, params
 
     @object.purge_roles
@@ -164,15 +167,16 @@ class ApoController < ApplicationController
     add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
 
     @object.save
-    update_index(@object)
-    redirect
-  end
+    update_index(@object) # TODO: does this really require a synchronous index update?
 
-  def register_collection
-    return unless params[:collection_title] || params[:collection_catkey]
-    collection_pid = create_collection params[:id]
-    @object.add_default_collection collection_pid
-    redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
+    collection_pid = create_collection @object.pid if params[:collection_radio] == 'create'
+    if params[:collection] && params[:collection].length > 0
+      @object.add_default_collection params[:collection]
+    else
+      @object.add_default_collection collection_pid if collection_pid
+    end
+
+    redirect
   end
 
   def create_collection(apo_pid)
@@ -200,8 +204,15 @@ class ApoController < ApplicationController
       set_abstract(collection, params[:collection_abstract])
     end
     collection.save
-    update_index(collection)
+    update_index(collection) # TODO: does this actually require a synchronous index update?
     response[:pid]
+  end
+
+  def register_collection
+    return unless params[:collection_title] || params[:collection_catkey]
+    collection_pid = create_collection params[:id]
+    @object.add_default_collection collection_pid
+    redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
   end
 
   def add_roleplayer
