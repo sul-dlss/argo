@@ -6,8 +6,6 @@
         <p class='navbar-text'>
           <span style="font-size: 80%;">logged in as <%= current_user.to_s.html_safe %></span>
         </p>
-      <% else %>
-        <%= link_to 'Login', new_user_session_path %>
       <% end %>
     </li>
 
