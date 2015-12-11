@@ -14,7 +14,7 @@ require 'coveralls'
 Coveralls.wear!('rails')
 
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, {timeout: 60})
+  Capybara::Poltergeist::Driver.new(app, {timeout: 60, debug: true})
 end
 Capybara.javascript_driver = :poltergeist
 Capybara.default_max_wait_time = 10
