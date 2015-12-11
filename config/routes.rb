@@ -141,7 +141,6 @@ Argo::Application.routes.draw do
   namespace :registration do
     get '/', :action => :form
     get 'tracksheet'
-    get 'form_list'
     get 'collection_list'
     get 'workflow_list'
     get 'rights_list'
