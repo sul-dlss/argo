@@ -1,4 +1,5 @@
 class RegistrationController < ApplicationController
+  include RegistrationHelper
 
   def form
     redirect_to register_items_url
@@ -9,7 +10,7 @@ class RegistrationController < ApplicationController
     name     = params[:name] || 'tracksheet'
     sequence = params[:sequence] || 1
     response['content-disposition'] = "attachment; filename=#{name}-#{sequence}.pdf"
-    pdf = help.generate_tracking_pdf(druids)
+    pdf = generate_tracking_pdf(druids)
     render :text => pdf.render, :content_type => :pdf
   end
 
