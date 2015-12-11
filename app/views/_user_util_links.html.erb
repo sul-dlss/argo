@@ -14,15 +14,20 @@
     <li><%= link_to "Home", root_path %></li>
 
     <% if session[:groups].present? %>
-      <li>
-        <span class="impersonating-highlight">
+      <li class='dropdown'>
+        <a href='#' class='dropdown-toggle impersonating' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
           Impersonating: <%= session[:groups].join(' ') %>
-        </span>
-        <a style="display: inline" href="/auth/forget_impersonated_groups">x</a>
+          <span class='caret'></span>
+        </a>
+        <ul class='dropdown-menu'>
+          <li>
+            <%= link_to 'Stop Impersonating', auth_forget_impersonated_groups_path %>
+          </li>
+        </ul>
       </li>
     <% elsif current_user.is_admin %>
       <li>
-        <a href="/auth/groups.html">Impersonate</a>
+        <%= link_to 'Impersonate', auth_groups_path %>
       </li>
     <% end %>
 
