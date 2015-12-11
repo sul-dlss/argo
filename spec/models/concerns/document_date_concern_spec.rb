@@ -59,12 +59,4 @@ RSpec.describe DocumentDateConcern do
       expect(document.opened_date).to match_array(single_date)
     end
   end
-  describe '#embargo_release_date' do
-    let(:document_attributes) do
-      { SolrDocument::FIELD_EMBARGO_RELEASE_DATE => single_date }
-    end
-    it 'returns date' do
-      expect(document.embargo_release_date).to match_array(single_date)
-    end
-  end
 end
