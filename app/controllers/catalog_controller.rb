@@ -71,22 +71,22 @@ class CatalogController < ApplicationController
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
-    config.add_facet_field 'exploded_tag_ssim',     :label => 'Tag', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'objectType_ssim',       :label => 'Object Type'
-    config.add_facet_field 'content_type_ssim',     :label => 'Content Type'
-    config.add_facet_field 'rights_primary_ssi',    :label => 'Access Rights'
-    config.add_facet_field 'use_license_machine_ssi', :label => 'License'
-    config.add_facet_field 'nonhydrus_collection_title_ssim', :label => 'Collection',  :sort => 'index'
-    config.add_facet_field 'hydrus_collection_title_ssim',    :label => 'Hydrus Collection',  :sort => 'index'
-    config.add_facet_field 'nonhydrus_apo_title_ssim',        :label => 'Admin Policy', :sort => 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim',           :label => 'Hydrus Admin Policy', :sort => 'index'
-    config.add_facet_field 'current_version_isi',   :label => 'Version'
-    config.add_facet_field 'processing_status_text_ssi', :label => 'Processing Status'
-    config.add_facet_field 'released_to_ssim',      :label => 'Released To'
-    config.add_facet_field 'wf_wps_ssim', :label => 'Workflows (WPS)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_wsp_ssim', :label => 'Workflows (WSP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_swp_ssim', :label => 'Workflows (SWP)', :partial => 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'has_model_ssim',  :label => 'Object Model'
+    config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 partial: 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         limit: 10
+    config.add_facet_field 'content_type_ssim',               label: 'Content Type',        limit: 10
+    config.add_facet_field 'rights_primary_ssi',              label: 'Access Rights',       limit: 10
+    config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10
+    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 9999, sort: 'index'
+    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 9999, sort: 'index'
+    config.add_facet_field 'current_version_isi',             label: 'Version',             limit: 10
+    config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   limit: 10
+    config.add_facet_field 'released_to_ssim',                label: 'Released To',         limit: 10
+    config.add_facet_field 'wf_wps_ssim',                     label: 'Workflows (WPS)',     limit: 10, partial: 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_wsp_ssim',                     label: 'Workflows (WSP)',     partial: 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_swp_ssim',                     label: 'Workflows (SWP)',     partial: 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'has_model_ssim',                  label: 'Object Model',        limit: 10
 
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
@@ -125,14 +125,14 @@ class CatalogController < ApplicationController
       :no_use_statement            => { :label => 'No Use & Reproduction Statement', :fq => '-use_statement_ssim:*' }
     }
 
-    config.add_facet_field 'sw_format_ssim',             :label => 'SW Resource Type'
-    config.add_facet_field 'sw_pub_date_facet_ssi',      :label => 'SW Date'
-    config.add_facet_field 'topic_ssim',                 :label => 'SW Topic'
-    config.add_facet_field 'sw_subject_geographic_ssim', :label => 'SW Region'
-    config.add_facet_field 'sw_subject_temporal_ssim',   :label => 'SW Era'
-    config.add_facet_field 'sw_genre_ssim',              :label => 'SW Genre'
-    config.add_facet_field 'sw_language_ssim',           :label => 'SW Language'
-    config.add_facet_field 'mods_typeOfResource_ssim',   :label => 'MODS typeOfResource'
+    config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',   limit: 10
+    config.add_facet_field 'sw_pub_date_facet_ssi',      label: 'SW Date',            limit: 10
+    config.add_facet_field 'topic_ssim',                 label: 'SW Topic',           limit: 10
+    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region',          limit: 10
+    config.add_facet_field 'sw_subject_temporal_ssim',   label: 'SW Era',             limit: 10
+    config.add_facet_field 'sw_genre_ssim',              label: 'SW Genre',           limit: 10
+    config.add_facet_field 'sw_language_ssim',           label: 'SW Language',        limit: 10
+    config.add_facet_field 'mods_typeOfResource_ssim',   label: 'MODS Resource Type', limit: 10
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
 
