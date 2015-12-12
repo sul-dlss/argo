@@ -28,10 +28,6 @@ INDEXING_JOB:
   SHOULD_COMMIT_BATCHES: true
   SHOULD_PROFILE: false
 
-INDEXING_JOB:
-  SHOULD_COMMIT_BATCHES: true
-  SHOULD_PROFILE: false
-
 # Metadata
 METADATA:
   EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'

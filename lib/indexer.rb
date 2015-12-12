@@ -1,19 +1,4 @@
 module Argo
-  class SimpleLogJob
-    def initialize(log_val)
-      @log_val = log_val
-    end
-
-    def perform
-      sleep(rand 10)
-
-      log_filename = 'tmp/simple_job.log'
-      File.open(log_filename, 'a') do |log|
-        log.puts "#{@log_val}"
-      end
-    end
-  end
-
   # TODO: DRY up the repetition btwn here and dor_controller
   class Indexer
     @@index_logger = nil

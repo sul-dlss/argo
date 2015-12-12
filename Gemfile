@@ -9,6 +9,7 @@ gem 'confstruct', '~> 0.2.4'
 gem 'daemons'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
+gem 'delayed_job_groups_plugin'
 gem 'delayed-web'
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 gem 'jqgrid-jquery-rails'
