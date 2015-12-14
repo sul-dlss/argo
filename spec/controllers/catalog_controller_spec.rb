@@ -125,5 +125,8 @@ describe CatalogController, :type => :controller do
         expect(field[1].show).to be_falsey if raw_fields.include?(field[0])
       end
     end
+    it 'should use POST as the http method' do
+      expect(config.http_method).to eq :post
+    end
   end
 end
