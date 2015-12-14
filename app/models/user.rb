@@ -4,6 +4,12 @@ class User < ActiveRecord::Base
 
   attr_accessor :webauth
 
+  delegate :permitted_apos, :permitted_collections, to: :permitted_queries
+
+  def permitted_queries
+    @permitted_queries ||= PermittedQueries.new(groups, known_roles, is_admin)
+  end
+
   def self.find_or_create_by_webauth(webauth)
     result = find_or_create_by(:sunetid => webauth.login)
     result.webauth = webauth
@@ -50,37 +56,6 @@ class User < ActiveRecord::Base
   # @return [Array<String>] list of apos the user is allowed to view
   def known_roles
     ['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer', 'dor-apo-creator', 'dor-apo-manager', 'dor-apo-depositor', 'dor-apo-reviewer', 'dor-apo-metadata', 'dor-apo-viewer']
-  end
-
-  # Also queries Solr based on groups
-  # @return [Array[String]] list of DRUIDs from APOs that this User can view
-  def permitted_apos
-    query = groups.map{|g| g.gsub(':', '\:')}.join(' OR ')
-    q = 'apo_role_group_manager_ssim:(' + query + ') OR apo_role_person_manager_ssim:(' + query + ')'
-    known_roles.each do |role|
-      q += ' OR apo_role_' + role + '_ssim:(' + query + ')'
-    end
-    q = 'objectType_ssim:adminPolicy' if is_admin
-    resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!project_tag_ssim:"Hydrus"'})['response']['docs']
-    resp.map{|doc| doc['id']}
-  end
-
-  # Queries Solr yet again! But in a different way! Doesn't use filter query.
-  # FIXME: seems to include display logic
-  # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (PID)", "PID"]
-  def permitted_collections
-    q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
-    q += permitted_apos.map {|pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\""}.join(' OR ') unless is_admin
-    result = Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim'}).docs
-
-    # result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_ssim,dc_title_tesim').docs
-    result.sort! do |a, b|
-      a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
-    end
-
-    [['None', '']] + result.collect do |doc|
-      [Array(doc['dc_title_tesim']).first + ' (' + doc['id'].to_s + ')', doc['id'].to_s]
-    end
   end
 
   @groups_to_impersonate = nil
