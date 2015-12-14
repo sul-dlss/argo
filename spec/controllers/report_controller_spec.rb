@@ -71,4 +71,10 @@ describe ReportController, :type => :controller do
       expect { CSV.parse(response.body) }.not_to raise_error
     end
   end
+  describe 'config' do
+    let(:config) { controller.blacklight_config }
+    it 'should use POST as the http method' do
+      expect(config.http_method).to eq :post
+    end
+  end
 end
