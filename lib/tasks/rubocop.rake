@@ -1,5 +1,9 @@
-require 'rubocop/rake_task'
+begin
+  require 'rubocop/rake_task'
 
-RuboCop::RakeTask.new do |task|
-  task.options = %w(--format simple)
+  RuboCop::RakeTask.new do |task|
+    task.options = %w(--format simple)
+  end
+rescue LoadError
+  puts 'Unable to load RuboCop.'
 end
