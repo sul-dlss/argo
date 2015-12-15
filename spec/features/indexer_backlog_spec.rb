@@ -7,7 +7,8 @@ feature 'Indexer Backlog status', js: true do
       login: 'sunetid',
       logged_in?: true,
       permitted_apos: [],
-      is_admin: true
+      is_admin: true,
+      can_view_something?: true
     )
     allow_any_instance_of(ApplicationController).to receive(:current_user).
       and_return(@current_user)
