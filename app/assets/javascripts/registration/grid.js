@@ -78,7 +78,7 @@ var gridContext = function() {
       $('#tabs').height(tabDivHeight);
       var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
       $('#id_list').height(tabDivHeight - tabHeadHeight);
-      $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100 + $('#properties').outerHeight()));
+      $('#data').setGridWidth($('#main-container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100 + $('#properties').outerHeight()));
       // Make up for width calculation error in jqgrid header code.
       $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
       if ($('#id_list').css('display') != 'none') {
@@ -293,6 +293,7 @@ var gridContext = function() {
           return $t.processValue(cellname, value);
         }
       });
+      $('#gbox_data').addClass('col-md-12');
       $(window).trigger('resize')
       $('#t_data').html('<div id="icons"/>')
       $('#properties').show().insertBefore($('#dynamic .ui-userdata'))

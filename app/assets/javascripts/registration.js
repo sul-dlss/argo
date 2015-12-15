@@ -1,9 +1,3 @@
-//= require jquery
-//= require jquery-ui
-//= require jquery_ujs
-//= require jqgrid-jquery-rails
-//= require blacklight/blacklight
-//= require argo
 //= require jquery.defaultText
 //= require jquery.textarea
 //= require jquery.ajaxQ.min
