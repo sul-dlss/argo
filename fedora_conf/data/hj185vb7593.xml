@@ -216,6 +216,17 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:xmlContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
+<foxml:datastream ID="embargoMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
+<foxml:datastreamVersion ID="embargoMetadata.0" LABEL="Embargo metadata" CREATED="2014-01-16T22:30:51.005Z" MIMETYPE="text/xml" SIZE="248">
+<foxml:xmlContent>
+<embargoMetadata>
+  <status>embargoed</status>
+  <releaseDate>2259-02-24T15:47:52-07:00</releaseDate>
+  <releaseAccess></releaseAccess>
+</embargoMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
 <foxml:datastream ID="technicalMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
 <foxml:datastreamVersion ID="technicalMetadata.0" LABEL="Technical Metadata" CREATED="2012-04-17T20:38:30.809Z" MIMETYPE="text/xml" SIZE="-1">
 <foxml:binaryContent> 
