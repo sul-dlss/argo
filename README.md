@@ -2,16 +2,18 @@
 
 # Argo
 
-Argo is the administrative interface to the Stanford Digital Repository. It uses Blacklight and ActiveFedora to expose the repository contents, and DorServices to enable editing and updating. 
+Argo is the administrative interface to the Stanford Digital Repository.
 
-## Getting Started
+## Installation
 
-Install Java 1.8 (or newer) JRE (and also the JDK on Mac OSX).  It is required for the version of Solr in use.
+### System Requirements
+
+1. Install Java 1.8 JRE (and also the JDK on Mac OSX).  It is required for the version of Solr in use.
 http://java.com/en/download/
 
-Install Ruby 2.2.2 or later (e.g., via rvm or rbenv).
+2. Install Ruby 2.2.2 (e.g., via rvm or rbenv).
 
-The Argo tests use [Poltergeist](https://github.com/teampoltergeist/poltergeist), which depends on [PhantomJS](http://phantomjs.org/download.html).  The Poltergeist project maintains installation instructions for PhantomJS, see:
+3. Install PhantomJS. The Argo tests use [Poltergeist](https://github.com/teampoltergeist/poltergeist), which depends on [PhantomJS](http://phantomjs.org/download.html).  The Poltergeist project maintains installation instructions for PhantomJS, see:
 https://github.com/teampoltergeist/poltergeist#installing-phantomjs
 
 
@@ -22,7 +24,7 @@ git clone https://github.com/sul-dlss/argo.git
 cd argo
 ```
 
-### Configure the rest of the local environment.
+### Configure the local environment and settings
 
 Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain in one of the argo branches in the `shared_configs` repo) the `config/settings/development.local.yml` file to set local development variables correctly.
 
@@ -35,9 +37,11 @@ For vanilla Stanford laptop installations, the cert files and the local settings
 
 ### Run bundler to install the Gem dependencies
 
-`bundle install`
+```bash
+bundle install
+```
 
-Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the mysql2 inclusion in Gemfile and come back to it later (you can develop using sqlite), or you can install MySQL.
+Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the `mysql2` inclusion in `Gemfile` and come back to it later (you can develop using `sqlite3`), or you can install MySQL.
 
 ### Install components
 
@@ -49,6 +53,7 @@ rake argo:install
 
 ### Optional - Increase Jetty heap size and Solr logging verbosity
 
+Fedora and Solr are hosted inside a local Jetty instance in the `./jetty/` folder.
 Delving into this is only recommended if you run into more trouble than usual starting jetty or getting it to run stably (or if you know you have some other reason to make these sorts of changes).
 
 In the created `./jetty` directory add the following to the `start.ini` to increase the heap size, allow the debugger to attach, and to explicitly specify logging properties. In the section that starts with the heading `If the arguments in this file include JVM arguments` (at LN19 as of this README update):
@@ -75,32 +80,35 @@ You may then update values in `jetty/etc/logging.properties` to change logging s
 
 ```bash
 rake jetty:start       # This may take a few minutes to boot Fedora and Solr
-bin/delayed_job start  # Necessary only for spreadsheet bulk upload
+bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
 rails server
 ```
 
-## Important note about Workflow Services integration
-The Argo code repository includes the [wfs_rails](https://github.com/sul-dlss/wfs_rails) gem, a Rails Engine, which mocks and stubs several of the Workflow Services routes within the Argo application. This engine is booted using [Capybara::Discoball](https://github.com/thoughtbot/capybara_discoball) and uses the local database as storage for Workflow Service data. This integration can be turned off by not setting Settings.WORKFLOW_URL to an instance of Capybara::Discoball and by configuring Settings.WFS_RAILS.ENABLE to `false`.
+### Important note about Workflow Services integration
+In development and test environments, Argo includes the [wfs_rails](https://github.com/sul-dlss/wfs_rails) gem, a Rails Engine, which mocks and stubs several of the Workflow Services routes within the Argo application. This engine is booted using [Capybara::Discoball](https://github.com/thoughtbot/capybara_discoball) and uses the local database as storage for Workflow Service data. This integration can be turned off by not setting `Settings.WORKFLOW_URL` to an instance of `Capybara::Discoball` and by configuring `Settings.WFS_RAILS.ENABLE` to `false`.
 
 ## Load and index records
 
-First, make sure Jetty has successfully started.
+1. Make sure Jetty has successfully started by going to [Fedora](http://localhost:8983/fedora) and [Solr](http://localhost:8983/solr).
 
-This command will load fixture data to the `development` Fedora repository and index it to the `development` Solr collection:
+2. Load fixture data to the `development` Fedora repository and index it to the `development` Solr collection:
 ```bash
 rake argo:repo:load
 ```
 
-This command, which is needed for testing, will load fixture data to the `test` Fedora repository and index it to the `test` Solr collection:
+3. Load fixture data to the `test` Fedora repository and index it to the `test` Solr collection. This is needed for testing (i.e., running specs):
 ```bash
 RAILS_ENV=test rake argo:repo:load
 ```
 
-## Rebuilding Jetty instance without re-install
+## Common tasks
+
+### Rebuilding Jetty instance without re-install
 
 If you'd like to do a clean re-installation of jetty without running the `argo:install` task:
 ```bash
 # Commands to install a fresh instance of Jetty, configure it, and start it
+rake jetty:stop
 rake argo:jetty:clean
 rake argo:jetty:config
 rake jetty:start
@@ -112,14 +120,14 @@ rake argo:repo:load
 RAILS_ENV=test rake argo:repo:load
 ```
 
-## Run the tests
+### Run the tests
 
 To run the test suite (which runs against the `test` Fedora repo/Solr collection), invoke `rspec` from the Argo app root
 ```bash
 rspec
 ```
 
-## Run the continuous integration build
+### Run the continuous integration build
 
 _Important Note: Running `rake ci` will reinstall your jetty instance and **delete any custom test data** you may have setup in both the `development` and `test` environments, and reload fixtures from scratch for the `test` environment only._
 
@@ -130,7 +138,7 @@ RAILS_ENV=test bundle exec rake ci
 
 If, after running the CI build, you want to reload fixtures into the `development` environment, you can use `rake argo:repo:load`.  The default environment is `development`, so it should not be necessary to specify `RAILS_ENV` for that task.
 
-## Delete records
+### Delete records
 
 You cannot just load records twice and overwrite.  The repo namespace has been provisioned and you need to remove the old record first.
 
@@ -140,3 +148,25 @@ For example, using `rails console` to target one ID, or five:
 Dor::Item.find("druid:pv820dk6668").destroy
 %w[pv820dk6668 rn653dy9317 xb482bw3979 hj185vb7593 hv992ry2431].each{ |pid| Dor::Item.find("druid:#{pid}").destroy }
 ```
+
+## Internals
+
+Argo uses Blacklight and ActiveFedora to expose the repository contents, and `dor-services` to enable editing and updating. Its key components include:
+
+- Rails 4
+- Blacklight 5
+- dor-services
+  - ActiveFedora
+  - dor-workflow-service
+- RSolr
+- DelayedJob
+- Bootstrap
+- JQuery
+
+and in development or testing mode:
+
+- Jetty
+- RSpec
+- Capybara
+- Poltergeist / PhantomJS
+ 
