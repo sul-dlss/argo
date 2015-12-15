@@ -8,7 +8,8 @@ RSpec.feature 'Date range form', js: true do
       logged_in?: true,
       permitted_apos: [],
       is_admin: true,
-      roles: []
+      roles: [],
+      can_view_something?: true
     )
     allow_any_instance_of(ApplicationController).to receive(:current_user).
       and_return(@current_user)
