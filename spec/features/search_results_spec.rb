@@ -19,7 +19,7 @@ feature 'Search results' do
     end
     within '#sortAndPerPage' do
       within '.page_links' do
-        expect(page).to have_css '.page_entries', text: '1 - 10 of 37'
+        expect(page).to have_css '.page_entries', text: '1 - 10 of 38'
         expect(page).to have_css 'a', text: 'Next »'
       end
     end
