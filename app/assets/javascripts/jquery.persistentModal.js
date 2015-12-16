@@ -49,6 +49,13 @@
 
         // show the current modal
         modalForTarget().modal('show');
+
+        // Fire an event when the modal is loaded
+        var e = $.Event('loaded.persistent-modal');
+        $('body').trigger(e);
+        if (e.isDefaultPrevented()) {
+          return;
+        }
       }
 
       function receiveAjax(data) {      
