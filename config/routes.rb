@@ -162,11 +162,11 @@ Argo::Application.routes.draw do
     match 'reindex/:pid',   :action => :reindex, :as => 'reindex', :via => [:get, :post]
     match 'delete_from_index/:pid', :action => :delete_from_index, :via => [:get, :post]
     get 'index_exceptions'
-    resources :objects
+    resources :objects, :only => :create # we only implement create for object registration
   end
 
   namespace :legacy do
-    resources :objects
+    resources :objects # TODO: do we know what this does?
   end
 
   get 'index_queue/depth', to: 'index_queue#depth'

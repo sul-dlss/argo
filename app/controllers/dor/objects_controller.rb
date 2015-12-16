@@ -1,8 +1,6 @@
 class Dor::ObjectsController < ApplicationController
+  include ApplicationHelper # for fedora_base
   before_filter :munge_parameters
-
-  def index
-  end
 
   def create
     if params[:collection] && params[:collection].length == 0
@@ -12,30 +10,23 @@ class Dor::ObjectsController < ApplicationController
     pid = response[:pid]
 
     respond_to do |format|
-      format.json { render :json => response, :location => help.object_location(pid) }
-      format.xml  { render :xml  => response, :location => help.object_location(pid) }
-      format.text { render :text => pid, :location => help.object_location(pid) }
-      format.html { redirect_to help.object_location(pid) }
+      format.json { render :json => response, :location => object_location(pid) }
+      format.xml  { render :xml  => response, :location => object_location(pid) }
+      format.text { render :text => pid, :location => object_location(pid) }
+      format.html { redirect_to object_location(pid) }
     end
   rescue Dor::ParameterError => e
     render :text => e.message, :status => 400
   rescue Dor::DuplicateIdError => e
-    render :text => e.message, :status => 409, :location => help.object_location(e.pid)
+    render :text => e.message, :status => 409, :location => object_location(e.pid)
   rescue StandardError => e
     logger.info e.inspect.to_s
     raise
   end
 
-  def show
-  end
+  private
 
-  def edit
+  def object_location(pid)
+    fedora_base.merge("objects/#{pid}").to_s
   end
-
-  def update
-  end
-
-  def destroy
-  end
-
 end
