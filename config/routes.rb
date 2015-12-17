@@ -50,8 +50,7 @@ Argo::Application.routes.draw do
     get 'workflow_grid'
   end
 
-  resources :robot do
-  end
+  resources :robot, only: [:index, :show]
 
   resources :apo do
     collection do

@@ -1,42 +1,38 @@
-<style>
-img.resize{
-  width:9px; /* you can use % */
-  height: auto;
-}
-</style>
-
-<%
-wf = ''
-@robots.each do |robot|
-  %>
-  <br/>
-  <%
-  if wf != robot.wf
-    wf = robot.wf
-  %><br/>
-  <h2><%=robot.wf%></h2>
-
-  <%
-  end
-  %>
-  <% if robot.status == 'activity' %>
-    <img class="resize" src="/assets/Green_Light_Icon.svg"/>
-  <%else%>
-  <% if robot.status_long == 'activity'%>
-    <img class="resize" src="/assets/Yellow_Light_Icon.svg"/>
-  <% else %>
-  <%if robot.status == 'sleep'%>
-    <img class="resize" src="/assets/Blue_Light_Icon.svg"/>
-  <%else%>
-    <img class="resize" src="/assets/Red_Light_Icon.svg"/>
-  <%end%>
-  <%end%>
-  <%end%>
-  <%=link_to(robot.process, robot_url(robot)) %>
-  <%
-end
-%><br/><br/><br/>
-  <img class="resize" src="/assets/Green_Light_Icon.svg"/> Active in the last hour<br/>
-  <img class="resize" src="/assets/Yellow_Light_Icon.svg"/> Active in the last 4 hours<br/>
-  <img class="resize" src="/assets/Blue_Light_Icon.svg"/> No work in the queue<br/>
-  <img class="resize" src="/assets/Red_Light_Icon.svg"/> Work do do, but nothing done in the last 4 hours <br/>
+<div class='col-md-12'>
+  <% wf = '' %>
+  <% @robots.each do |robot| %>
+    <% if wf != robot.wf %>
+      <% wf = robot.wf %>
+      <h2><%= robot.wf %></h2>
+    <% end %>
+    <% if robot.status == 'activity' %>
+      <span class='label label-success'>&nbsp;</span>
+    <% else %>
+      <% if robot.status_long == 'activity'%>
+        <span class='label label-warning'>&nbsp;</span>
+      <% else %>
+        <% if robot.status == 'sleep' %>
+          <span class='label label-primary'>&nbsp;</span>
+        <% else %>
+          <span class='label label-danger'>&nbsp;</span>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= link_to(robot.process, robot_url(robot)) %><br>
+  <% end %>
+  <hr>
+  <ul class='list-unstyled'>
+    <li>
+      <span class='label label-success'>Active in the last hour</span>
+    </li>
+    <li>
+      <span class='label label-warning'>Active in the last 4 hours</span>
+    </li>
+    <li>
+      <span class='label label-primary'>No work in the queue</span>
+    </li>
+    <li>
+      <span class='label label-danger'>Work do do, but nothing done in the last 4 hours</span>
+    </li>
+  </ul>
+</div>
