@@ -2,6 +2,8 @@ module Argo
   ##
   # Gatherer of the PIDS, used for Argo indexing
   class PidGatherer
+    # by setting these fields manually, e.g. from the contents of a file with query results, you can save yourself the actual query, and customize what's
+    # used in these lists, while still leveraging the capability of this class to build prioritized lists for full reindexing.
     attr_writer :all_pids, :solr_pids, :workflow_pids, :agreement_pids, :apo_pids, :hydrus_apo_pids, :collection_pids, :hydrus_collection_pids, :set_pids, :item_pids
 
     def initialize(should_log_to_stdout = true, should_exclude_invalid_druids = true)

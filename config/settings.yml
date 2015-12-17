@@ -23,6 +23,10 @@ CONTENT:
   SDR_USER: 'user'
   SDR_PASSWORD: 'password'
 
+INDEXER:
+  LOG: 'log/indexer.log'
+  LOG_ROTATION_INTERVAL: 'daily'
+
 # Behavior for indexing jobs
 INDEXING_JOB:
   SHOULD_COMMIT_BATCHES: true

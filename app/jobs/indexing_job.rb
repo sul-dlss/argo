@@ -4,7 +4,7 @@ class IndexingJob < ActiveJob::Base
   queue_as :indexing
 
   ##
-  # Perform indexing job
+  # Perform indexing job on a list of pids
   # @param [Array] pid_list
   def perform(pid_list)
     if Settings.INDEXING_JOB.SHOULD_PROFILE
