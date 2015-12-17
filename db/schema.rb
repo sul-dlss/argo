@@ -52,13 +52,6 @@ ActiveRecord::Schema.define(version: 20151112054510) do
 
   add_index "indexing_exceptions", ["pid"], name: "index_indexing_exceptions_on_pid"
 
-  create_table "robots", force: :cascade do |t|
-    t.string   "wf"
-    t.string   "process"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "searches", force: :cascade do |t|
     t.text     "query_params"
     t.integer  "user_id"
