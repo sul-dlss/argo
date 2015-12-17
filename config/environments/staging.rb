@@ -36,9 +36,6 @@ Argo::Application.configure do
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
-  # Raise exceptions instead of rendering exception templates
-  config.action_dispatch.show_exceptions = false
-
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
