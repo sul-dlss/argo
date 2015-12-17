@@ -563,14 +563,14 @@ var gridContext = function() {
           "Cancel": function() { $(this).dialog("close"); }
         },
         modal: true,
-        height: 140,
+        height: 200,
         title: 'Confirm',
         resizable: false
       });
 
       $('#progress_dialog').dialog({
         autoOpen: false,
-        height: 56,
+        height: 140,
         title: 'Progress',
         resizable: false
       });
