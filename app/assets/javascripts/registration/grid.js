@@ -9,8 +9,9 @@ var gridContext = function() {
   };
 
   var statusFormatter = function(val, opts, rowObj) {
-    if (val in $t.statusImages) {
-      var result = '<image src="'+$t.statusImages[val]+'" title="'+(rowObj.error||val)+'"/>';
+    if (val in $t.statusIcons) {
+      var result = '<span class="' + $t.statusIcons[val] + '" title="' + 
+        (rowObj.error||val)+'" aria-hidden="true"></span>';
       if (rowObj.druid) {
         var href = dor_path + "objects/druid:" + rowObj.druid;
         return '<a href="'+href+'" target="_blank">'+result+'</a>';
@@ -58,7 +59,7 @@ var gridContext = function() {
 
   var $t = {
     rc: createRegistrationContext(),
-    statusImages: {},
+    statusIcons: {},
 
     processValue: function(cellname, value) {
       // Strip leading and trailing punctuation from everything but label
@@ -210,17 +211,14 @@ var gridContext = function() {
     },
 
     initializeContext: function() {
-      $t.statusImages = {
-        queued:  pathTo('/assets/icons/queued.png'),
-        pending: pathTo('/assets/icons/spinner.gif'),
-        success: pathTo('/assets/icons/accept.png'),
-        error:   pathTo('/assets/icons/exclamation.png'),
-        abort:   pathTo('/assets/icons/cancel.png'),
-        preloadImages: function() {
-          $([this.queued, this.pending, this.success, this.error, this.abort]).preload();
-        }
-      }
-      this.statusImages.preloadImages();
+      $t.statusIcons = {
+        queued:  'registration-status glyphicon glyphicon-forward',
+        pending: 'registration-status glyphicon glyphicon-refresh ' +
+          'glyphicon-spin',
+        success: 'registration-status glyphicon glyphicon-ok-sign',
+        error:   'registration-status glyphicon glyphicon-exclamation-sign',
+        abort: 'registration-status glyphicon glyphicon-remove-sign'
+      };
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
         $t.resizeGrid();
@@ -565,14 +563,14 @@ var gridContext = function() {
           "Cancel": function() { $(this).dialog("close"); }
         },
         modal: true,
-        height: 140,
+        height: 200,
         title: 'Confirm',
         resizable: false
       });
 
       $('#progress_dialog').dialog({
         autoOpen: false,
-        height: 56,
+        height: 140,
         title: 'Progress',
         resizable: false
       });
