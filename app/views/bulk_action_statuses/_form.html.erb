@@ -1,0 +1,29 @@
+<%= form_for(@bulk_action_status) do |f| %>
+  <% if @bulk_action_status.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bulk_action_status.errors.count, "error") %> prohibited this bulk_action_status from being saved:</h2>
+
+      <ul>
+      <% @bulk_action_status.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :success %><br>
+    <%= f.check_box :success %>
+  </div>
+  <div class="field">
+    <%= f.label :completed %><br>
+    <%= f.check_box :completed %>
+  </div>
+  <div class="field">
+    <%= f.label :started %><br>
+    <%= f.check_box :started %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

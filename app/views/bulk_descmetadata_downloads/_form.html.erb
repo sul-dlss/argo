@@ -1,0 +1,21 @@
+<%= form_for(@bulk_descmetadata_download) do |f| %>
+  <% if @bulk_descmetadata_download.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bulk_descmetadata_download.errors.count, "error") %> prohibited this bulk_descmetadata_download from being saved:</h2>
+
+      <ul>
+      <% @bulk_descmetadata_download.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :filename %><br>
+    <%= f.text_field :filename %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

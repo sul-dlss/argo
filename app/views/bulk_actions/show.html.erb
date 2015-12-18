@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @bulk_action.start_time %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @bulk_action.end_time %>
+</p>
+
+<p>
+  <strong>Bulk actionable:</strong>
+  <%= @bulk_action.bulk_actionable_id %>
+</p>
+
+<p>
+  <strong>Bulk actionable type:</strong>
+  <%= @bulk_action.bulk_actionable_type %>
+</p>
+
+<%= link_to 'Edit', edit_bulk_action_path(@bulk_action) %> |
+<%= link_to 'Back', bulk_actions_path %>

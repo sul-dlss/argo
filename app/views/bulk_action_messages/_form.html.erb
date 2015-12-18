@@ -1,0 +1,25 @@
+<%= form_for(@bulk_action_message) do |f| %>
+  <% if @bulk_action_message.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bulk_action_message.errors.count, "error") %> prohibited this bulk_action_message from being saved:</h2>
+
+      <ul>
+      <% @bulk_action_message.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :message %><br>
+    <%= f.text_field :message %>
+  </div>
+  <div class="field">
+    <%= f.label :druid %><br>
+    <%= f.text_field :druid %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

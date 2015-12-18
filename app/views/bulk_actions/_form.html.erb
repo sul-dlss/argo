@@ -1,0 +1,33 @@
+<%= form_for(@bulk_action) do |f| %>
+  <% if @bulk_action.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bulk_action.errors.count, "error") %> prohibited this bulk_action from being saved:</h2>
+
+      <ul>
+      <% @bulk_action.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :start_time %><br>
+    <%= f.datetime_select :start_time %>
+  </div>
+  <div class="field">
+    <%= f.label :end_time %><br>
+    <%= f.datetime_select :end_time %>
+  </div>
+  <div class="field">
+    <%= f.label :bulk_actionable_id %><br>
+    <%= f.number_field :bulk_actionable_id %>
+  </div>
+  <div class="field">
+    <%= f.label :bulk_actionable_type %><br>
+    <%= f.text_field :bulk_actionable_type %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

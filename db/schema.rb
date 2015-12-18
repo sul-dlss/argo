@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112054510) do
+ActiveRecord::Schema.define(version: 20151217233823) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer  "user_id",       null: false
@@ -24,6 +24,44 @@ ActiveRecord::Schema.define(version: 20151112054510) do
   end
 
   add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
+
+  create_table "bulk_action_messages", force: :cascade do |t|
+    t.string   "message"
+    t.string   "druid"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "bulk_action_statuses_id"
+  end
+
+  add_index "bulk_action_messages", ["bulk_action_statuses_id"], name: "index_bulk_action_messages_on_bulk_action_statuses_id"
+
+  create_table "bulk_action_statuses", force: :cascade do |t|
+    t.boolean  "success"
+    t.boolean  "completed"
+    t.boolean  "started"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "bulk_actions_id"
+  end
+
+  add_index "bulk_action_statuses", ["bulk_actions_id"], name: "index_bulk_action_statuses_on_bulk_actions_id"
+
+  create_table "bulk_actions", force: :cascade do |t|
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer  "bulk_actionable_id"
+    t.string   "bulk_actionable_type"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "bulk_actions", ["bulk_actionable_id", "bulk_actionable_type"], name: "bulk_actionable_index"
+
+  create_table "bulk_descmetadata_downloads", force: :cascade do |t|
+    t.string   "filename"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false

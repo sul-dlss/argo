@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Bulk Descmetadata Downloads</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Filename</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bulk_descmetadata_downloads.each do |bulk_descmetadata_download| %>
+      <tr>
+        <td><%= bulk_descmetadata_download.filename %></td>
+        <td><%= link_to 'Show', bulk_descmetadata_download %></td>
+        <td><%= link_to 'Edit', edit_bulk_descmetadata_download_path(bulk_descmetadata_download) %></td>
+        <td><%= link_to 'Destroy', bulk_descmetadata_download, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bulk descmetadata download', new_bulk_descmetadata_download_path %>
