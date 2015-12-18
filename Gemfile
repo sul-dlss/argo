@@ -70,6 +70,7 @@ group :test, :development do
   gem 'poltergeist'
   gem 'capybara_discoball'
   gem 'wfs_rails', '~> 0.0.2'
+  gem 'database_cleaner'
 end
 
 group :development do
