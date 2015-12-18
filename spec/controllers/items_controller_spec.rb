@@ -40,17 +40,6 @@ describe ItemsController, :type => :controller do
     allow(Dor::SearchService.solr).to receive(:add)
   end
 
-  describe 'datastream_update' do
-    it 'should allow a non admin to update the datastream' do
-      allow(@item).to receive(:can_manage_content?).and_return(true)
-      allow(@item).to receive(:can_manage_desc_metadata?).and_return(true)
-      xml = '<some> xml</some>'
-      allow(@item.datastreams['identityMetadata']).to receive(:content=)
-      post :datastream_update, :id => @pid, :dsid => 'identityMetadata', :content => xml
-      expect(response.code).to eq('302')
-    end
-  end
-
   describe 'release_hold' do
     it 'should release an item that is on hold if its apo has been ingested' do
       expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
@@ -265,22 +254,44 @@ describe ItemsController, :type => :controller do
       expect(response.code).to eq('403')
     end
   end
-  describe 'datastream_update' do
-    it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
-      post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<contentMetadata/>'
-      expect(response.code).to eq('403')
+  describe '#datastream_update' do
+    let(:xml) { '<contentMetadata/>' }
+    context 'save cases' do
+      before :each do
+        expect(@item).to receive(:datastreams).and_return({
+          'contentMetadata' => double(Dor::ContentMetadataDS, :'content=' => xml)
+        })
+        expect(@item).to receive(:save)
+      end
+      it 'should allow an admin to update the datastream' do
+        expect(@current_user).to receive(:is_admin).and_return(true)
+        post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => xml
+        expect(response).to have_http_status(:found)
+      end
+      it 'should allow access if you are not an admin but have management access' do
+        expect(@current_user).to receive(:is_admin).and_return(false)
+        expect(@item).to receive(:can_manage_content?).and_return(true)
+        post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => xml
+        expect(response).to have_http_status(:found)
+      end
     end
-    it 'should error on malformed xml' do
-      expect(lambda {post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.'}).to raise_error(RuntimeError, 'XML was not well formed!')
-    end
-    it 'should call save with good xml' do
-      mock_ds = double(Dor::ContentMetadataDS)
-      allow(mock_ds).to receive(:content=)
-      expect(@item).to receive(:save)
-      allow(@item).to receive(:datastreams).and_return({'contentMetadata' => mock_ds})
-      allow(mock_ds).to receive(:dirty?).and_return(false)
-      post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<contentMetadata><text>hello world</text></contentMetadata>'
+    context 'error cases' do
+      it 'should prevent access if you are not an admin and without management access' do
+        expect(@current_user).to receive(:is_admin).and_return(false)
+        expect(@item).to receive(:can_manage_content?).and_return(false)
+        expect(@item).not_to receive(:save)
+        post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => xml
+        expect(response).to have_http_status(:forbidden)
+      end
+      it 'should error on empty xml' do
+        expect { post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => ' ' }.to raise_error(ArgumentError)
+      end
+      it 'should error on malformed xml' do
+        expect { post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => '<this>isnt well formed.' }.to raise_error(ArgumentError)
+      end
+      it 'should error on missing dsid parameter' do
+        expect { post 'datastream_update', :id => @pid, :content => xml }.to raise_error(ArgumentError)
+      end
     end
   end
   describe 'update_sequence' do

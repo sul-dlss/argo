@@ -203,15 +203,20 @@ class ItemsController < ApplicationController
     end
   end
 
+  ##
+  # @option params [String] `:content` the XML with which to replace the datastream
+  # @option params [String] `:dsid` the identifier for the datastream, e.g., `identityMetadata`
+  # @option params [String] `:id` the druid to modify
   def datastream_update
-    ds = @object.datastreams[params[:dsid]]
-    # check that the content is valid xml
+    fail ArgumentError, 'Missing content' unless params[:content].present?
+    fail ArgumentError, 'Missing datastream identifier' unless params[:dsid].present?
     begin
-      content = Nokogiri::XML(params[:content]){ |config| config.strict }
-    rescue
-      raise 'XML was not well formed!'
+      # check that the content is well-formed xml
+      Nokogiri::XML(params[:content]) { |config| config.strict }
+    rescue Nokogiri::XML::SyntaxError
+      fail ArgumentError, 'XML is not well formed!'
     end
-    ds.content = content.to_s
+    @object.datastreams[params[:dsid]].content = params[:content] # set the XML to be verbatim as posted
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
     end
