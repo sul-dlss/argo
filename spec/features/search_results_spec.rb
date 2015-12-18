@@ -1,16 +1,20 @@
 require 'spec_helper'
 
 feature 'Search results' do
-  before :each do
-    @current_user = double(
+  let(:current_user) do
+    double(
       :webauth_user,
       login: 'sunetid',
       logged_in?: true,
       permitted_apos: [],
-      is_admin: true
+      is_admin: true,
+      roles: [],
+      groups: []
     )
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-      and_return(@current_user)
+  end
+  before :each do
+    allow_any_instance_of(CatalogController).to receive(:current_user).
+      and_return(current_user)
   end
   scenario 'contains Blacklight default index page tools' do
     visit catalog_index_path f: { empties: ['no_rights_characteristics'] }
