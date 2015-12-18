@@ -7,6 +7,7 @@ class CreateBulkActions < ActiveRecord::Migration
       t.string :bulk_actionable_type
 
       t.timestamps null: false
+      t.belongs_to :user, index: true
     end
     add_index :bulk_actions, [:bulk_actionable_id, :bulk_actionable_type], name: 'bulk_actionable_index'
   end

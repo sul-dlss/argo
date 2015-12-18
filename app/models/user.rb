@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
   include Blacklight::User
 
   attr_accessor :webauth
+  has_many :bulk_actions
 
   delegate :permitted_apos, :permitted_collections, to: :permitted_queries
 
