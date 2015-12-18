@@ -15,15 +15,6 @@ class ItemsController < ApplicationController
     @mods_display = ModsDisplayObject.new(@object.descMetadata.ng_xml.to_s)
   end
 
-  def on_hold
-    %w(accession2WF accessionWF).each do |k|
-      return true if @object.workflows.include?(k) && Dor::WorkflowService.get_workflow_status('dor', pid, k, 'sdr-ingest-transfer') == 'hold'
-    end
-    false
-  rescue
-    false
-  end
-
   # open a new version if needed. 400 if the item is in a state that doesnt allow opening a version.
   def prepare
     if can_open_version? @object.pid
@@ -638,8 +629,8 @@ class ItemsController < ApplicationController
 
   def enforce_versioning
     # if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
-    return true if @object.allows_modification? || on_hold
-    render :status => :forbidden, :text => 'Object cannot be modified in its current state.'
+    return true if @object.allows_modification?
+    render status: :forbidden, text: 'Object cannot be modified in its current state.'
     false
   end
 end
