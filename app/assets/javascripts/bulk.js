@@ -85,7 +85,7 @@ function fetch_druids(fun) {
 	if(pids_txt.length > 5) {
 		var druids = extract_pids_list(pids_txt);
 
-		log.innerHTML = "Using " + druids.length + " user supplied druids.\n<br>";
+		log.innerHTML = "Using " + druids.length + " user supplied druids.\n<br/>";
 		job_count = [];
 		for(i=druids.length; i>0; i--) {
 			job_count.push(i);
@@ -94,10 +94,10 @@ function fetch_druids(fun) {
 	} else {
 		job_count = [];
 		total_rows = report_model['total_rows'];
-		var wait_msg = "Fetching all " + total_rows + " druids.<br>\n";
+		var wait_msg = "Fetching all " + total_rows + " druids.<br/>\n";
 		var druid_each_callback = function(i, s) { report_model['druids'].push(s); job_count.push(total_rows-i); };
 		var postprocessing_callback = function() {
-			log.innerHTML = log.innerHTML + "Received " + report_model['druids'].length + " pids, starting work<br>\n";
+			log.innerHTML = log.innerHTML + "Received " + report_model['druids'].length + " pids, starting work<br/>\n";
 			fun(report_model['druids']);
 		};
 		get_druids_req(log, wait_msg, druid_each_callback, null, postprocessing_callback);
@@ -222,10 +222,10 @@ function success_handler(object_link, desc, after) {
 	}
 
 	var log = document.getElementById('log');
-	log.innerHTML = job_count.pop()+" "+object_link+' '+desc+"<br>\n"+log.innerHTML;
+	log.innerHTML = '&nbsp;' + job_count.pop() + ' ' + object_link + ' : <span class="text-success">' + desc + "</span><br/>\n" + log.innerHTML;
 	if (job_count.length == 0) {
-		log.innerHTML = "Done!\n<br>"+log.innerHTML;
-    	$(".stop_button").hide();
+		log.innerHTML = "Done!\n<br/>"+log.innerHTML;
+    $(".stop_button").hide();
 	}
 }
 
@@ -233,17 +233,12 @@ function error_handler(xhr, status, err, object_link, index, after) {
 	if (job_count.length == 1 && after != null) {
 		after();
 	}
-
-	var msg = '';
-	if (xhr.responseText && xhr.responseText.length < 500) {
-		msg = xhr.responseText;
-	} else {
-		msg = err;
-	}
-
-	log.innerHTML = "<span class=\"error\"> " + index + " " + object_link + " : " + msg + "</span><br>\n" + log.innerHTML;	
+  err = (xhr.responseText) ? xhr.responseText.substr(0, 500) : err; // truncate message if too long
+  err = jQuery('<div>' + err + '</div>').text(); // strip any HTML from error message, adding <div> ensures there's HTML
+	var log = document.getElementById('log');
+	log.innerHTML = '&nbsp;' + index + ' ' + object_link + ' : <span class="text-danger">' + err + "</span><br/>\n" + log.innerHTML;
 	if (job_count.length == 0) {
-		log.innerHTML = "Done!<br>\n" + log.innerHTML;
+		log.innerHTML = "Done!<br/>\n" + log.innerHTML;
 		$(".stop_button").hide();
 	}
 	
@@ -268,7 +263,7 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 		row_result = row_processing_fn(dr);
 		druid_upd_rows.push(row_result);
 	}
-	log.innerHTML = "Using " + druid_upd_lines.length + " " + custom_wait_msg + "<br>\n";
+	log.innerHTML = "Using " + druid_upd_lines.length + " " + custom_wait_msg + "<br/>\n";
 
 	$.each(druid_upd_rows, function(i, upd_info) {
 		//get rid of blank lines
@@ -279,7 +274,7 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 		
 		//skip bad rows
 		if(is_invalid_row_fn(upd_info)) {
-			log.innerHTML = "<span class=\"error\"> "+job_count.pop()+" "+object_link+" : "+invalid_row_err_msg+" '"+upd_info['upd_data']+"'</span><br>\n"+log.innerHTML;
+			log.innerHTML = "<span class=\"text-danger\"> "+job_count.pop()+" "+object_link+" : "+invalid_row_err_msg+" '"+upd_info['upd_data']+"'</span><br/>\n"+log.innerHTML;
 			return;
 		}
 		var params = get_upd_req_params_from_row_fn(upd_info);
