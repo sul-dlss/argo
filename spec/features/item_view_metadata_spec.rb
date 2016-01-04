@@ -1,17 +1,20 @@
 require 'spec_helper'
 
 feature 'Item view metadata' do
-  before do
-    @current_user = double(
+  let(:current_user) do
+    double(
       :webauth_user,
       login: 'sunetid',
       logged_in?: true,
       permitted_apos: [],
       is_admin: true,
-      roles: []
+      roles: [],
+      groups: []
     )
-    allow_any_instance_of(ApplicationController).to receive(:current_user)
-      .and_return(@current_user)
+  end
+  before do
+    expect_any_instance_of(CatalogController).to receive(:current_user)
+      .at_least(1).times.and_return(current_user)
   end
 
   scenario 'MD Source is "DOR"' do
