@@ -39,9 +39,28 @@ Argo::Application.routes.draw do
   match 'report/reset',    :to => 'report#reset',    :via => [:post],       :as => 'report_reset'
   match 'report/workflow_grid', :to => 'report#workflow_grid', :via => [:get, :post], :as => 'report_workflow_grid'
 
+  ##
+  # This route provides access to CatalogController#facet so facet links can be
+  # generated.
+  resources :report, only: [] do
+    member do
+      get :facet
+    end
+  end
+
   match 'discovery',          :to => 'discovery#index',    :via => [:get, :post], :as => 'discovery'
   match 'discovery/data',     :to => 'discovery#data',     :via => [:get, :post], :as => 'discovery_data'
   match 'discovery/download', :to => 'discovery#download', :via => [:get, :post], :as => 'discovery_download'
+
+  ##
+  # This route provides access to CatalogController#facet so facet links can be
+  # generated.
+  resources :discovery, only: [] do
+    member do
+      get :facet
+    end
+  end
+
   match 'apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :via => [:get, :post], :as => 'is_valid_role_list'
 
   root :to => 'catalog#index'
