@@ -30,15 +30,6 @@ $(document).ready(function() {
 
 
 Blacklight.onLoad(function(){
-    // For lightboxes, set the title to be the value of the data-ajax-modal-title attribute on the link if
-    // present. Otherwise just use the link text as the title.
-    $(Blacklight.ajaxModal.triggerLinkSelector).click(function(){
-        if($(this).attr('data-ajax-modal-title'))
-            $('.modal-title').text($(this).attr('data-ajax-modal-title'));
-        else 
-            $('.modal-title').text($(this).text());
-    });
-
     // make the default modal resizable and draggable.  resize from top and side borders (things got
     // wonky with corner and bottom resizing, in what little testing i did).
     $(".modal-dialog").resizable({handles: "n, e, w"});

@@ -1,0 +1,27 @@
+<%=form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :update => 'true') do%>
+  <%@object.tags.each_with_index do |tag, count|%>
+    <div class="form-group">
+      <div class="input-group">
+        <input class="form-control tag" name="tag<%=count + 1%>" id="tag<%=count + 1%>" type="text" value="<%=tag%>"/>
+        <span class='input-group-btn'>
+          <%= link_to url_for(:controller => :items, :action => :tags, :id => @object.pid, :del => 'true', :tag => count + 1), class: 'btn btn-default' do %>
+            <span class='glyphicon glyphicon-remove glyphicon text-danger'></span>
+          <% end %>
+        </span>
+      </div>
+    </div>
+  <% end %>
+  <button class='btn btn-primary'>Update</button>
+<%end%>
+<hr>
+<div>
+  <%= form_tag url_for(:controller => :items, :action => :tags, :id => @object.pid, :add => 'true') do %>
+    <div class='form-group'>
+      <label>Add a tag</label>
+      <input class="form-control" name="new_tag1" id="new_tag1" type="text" value=""/>
+      <input class="form-control" name="new_tag2" id="new_tag2" type="text" value=""/>
+      <input class="form-control" name="new_tag3" id="new_tag3" type="text" value=""/>
+    </div>
+    <button class='btn btn-primary'>Add</button>
+  <%end%>
+</div>

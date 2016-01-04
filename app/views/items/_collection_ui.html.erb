@@ -1,0 +1,30 @@
+<div class='panel panel-default'>
+  <div class='panel-heading'>
+    <h3 class="panel-title">Remove existing collections</h3>
+  </div>
+  <div class='panel-body'>
+    <ul class='list-group'>
+      <% @object.collections.each do |col| %>
+        <li class='list-group-item'>
+          <%= col.label %>
+          <%= link_to url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid) do %>
+            <span class='glyphicon glyphicon-remove text-danger'></span>
+          <% end %>
+        </li>
+      <% end %>
+  </div>
+</div>
+
+<div class='panel panel-default'>
+  <div class='panel-heading'>
+    <h3 class="panel-title">Add a collection</h3>
+  </div>
+  <div class='panel-body'>
+    <%= form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid) do %>
+      <div class='form-group'>
+        <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-control' %>
+      </div>
+      <button class='btn btn-primary'>Add Collection</button>
+    <% end %>
+  </div>
+</div>

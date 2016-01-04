@@ -1,7 +1,4 @@
-<div data-ajax-modal="container">
-  <h3 class='modal-title'>Set rights</h3>
-  <%=form_tag url_for(:controller => :items, :action => :set_rights, :id => @object.pid) do%>
-    <%=select_tag :rights, options_for_select(['world','dark', 'stanford', 'none'])%>
-    <button class='btn btn-default'>Update</button>
-  <%end%>
+<div class='container'>
+  <h1>Set rights</h1>
+  <%= render partial: 'rights' %>
 </div>
