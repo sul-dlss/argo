@@ -604,14 +604,9 @@ class ItemsController < ApplicationController
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
-    begin
-      @object = Dor::Item.find params[:id]
-      @apo = @object.admin_policy_object
-      @apo = ( @apo ? @apo.pid : '' )
-    rescue ActiveFedora::ObjectNotFoundError # => e
-      render :status => 500, :text => 'Object doesnt exist in Fedora.'
-      return
-    end
+    @object = Dor::Item.find params[:id]
+    @apo = @object.admin_policy_object
+    @apo = ( @apo ? @apo.pid : '' )
   end
 
   def save_and_reindex
