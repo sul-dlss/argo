@@ -129,4 +129,13 @@ describe CatalogController, :type => :controller do
       expect(config.http_method).to eq :post
     end
   end
+  describe 'error handling' do
+    let(:druid) { 'druid:zz999zz9999' }
+    it 'should 404 on missing item' do
+      expect(subject).to receive(:current_user).and_return(double('WebAuth', is_admin: true)).twice
+      expect(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
+      get 'show', :id => druid
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end

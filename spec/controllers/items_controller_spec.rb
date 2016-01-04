@@ -408,7 +408,12 @@ describe ItemsController, :type => :controller do
     it 'should fetch the workflow on valid parameters' do
       expect(@item.workflows).to receive(:get_workflow)
       get :workflow_view, id: @pid, wf_name: 'accessionWF', repo: 'dor', format: :html
-      expect(response.status).to eq 200
+      expect(response).to have_http_status(:ok)
+    end
+    it 'should 404 on missing item' do
+      expect(Dor::Item).to receive(:find).with(@pid).and_raise(ActiveFedora::ObjectNotFoundError)
+      get :workflow_view, id: @pid, wf_name: 'accessionWF', repo: 'dor', format: :html
+      expect(response).to have_http_status(:not_found)
     end
   end
   describe '#workflow_update' do

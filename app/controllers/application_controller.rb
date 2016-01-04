@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   before_filter :authorize!
   before_filter :fedora_setup
 
+  rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render text: 'Object Not Found', status: :not_found }
+
   helper_method :current_or_guest_user
 
   include Rack::Webauth::Helpers

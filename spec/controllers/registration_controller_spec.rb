@@ -222,7 +222,8 @@ describe RegistrationController, :type => :controller do
     end
 
     it 'should handle a bogus APO' do
-      expect { get 'collection_list', apo_id: 'druid:aa111bb2222' }.to raise_error(ActiveFedora::ObjectNotFoundError)
+      get 'collection_list', apo_id: 'druid:aa111bb2222'
+      expect(response).to have_http_status(:not_found)
     end
 
     it 'should handle an APO with no collections' do
