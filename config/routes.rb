@@ -118,7 +118,7 @@ Argo::Application.routes.draw do
       post 'file/attributes',    :action => :update_attributes, :as => 'update_attributes'
       match 'close_version_ui',  :action => :close_version_ui,  :as => 'close_version_ui', :via => [:get, :post]
       match 'open_version_ui',   :action => :open_version_ui,   :as => 'open_version_ui',  :via => [:get, :post]
-      get 'version/open',        :action => :open_version,      :as => 'open_version'
+      post 'version/open',        :action => :open_version,      :as => 'open_version'
       get 'source_id_ui'
       get 'tags_ui'
       match 'tags',      :via => [:get, :post]
