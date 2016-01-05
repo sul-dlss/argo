@@ -6,7 +6,7 @@
         <input type="hidden" name="id" value="<%=@obj.pid %>" />
         <input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
         <div class="form-group">
-          <textarea name="content" id="content"><%=@obj.datastreams[params[:dsid]].content.to_s %></textarea>
+          <textarea name="content" id="content" class='form-control'><%=@obj.datastreams[params[:dsid]].content.to_s %></textarea>
         </div>
         <div class="form-group">
           <button type="submit" id="update" class="btn btn-primary">Update Datastream</button>
@@ -19,7 +19,7 @@
 %>
   <%=
     if @user and (@user.is_admin or @obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid))) and (@obj.datastreams[params[:dsid]].respond_to? :ng_xml or params[:dsid] == 'RELS-EXT') and params[:dsid] != 'workflows'
-      link_to 'Edit', ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { behavior: 'persistent-modal' }
+      link_to "Edit #{params[:dsid]}", ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { behavior: 'persistent-modal' }
     end
   %>
 <%

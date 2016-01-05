@@ -1,3 +1,4 @@
+/*global Blacklight */
 /*
   usage:  
     if you want to have a link load the contents of the link target in a persistent modal, add the attribute 'data-behavior="persistent-modal"'.
@@ -76,7 +77,6 @@
         $('body').append(persistentModalHtml(contents));
         modalForTarget().find('.modal-title').text(linkText);
         modalForTarget().find('[data-behavior="persistent-modal"]').persistentModal();
-        applyModalCloseBehavior();
         showModal();
       }
 
@@ -89,13 +89,6 @@
         jqxhr.always( receiveAjax );
       }
 
-      function applyModalCloseBehavior() {
-        modalForTarget().find('[data-behavior="cancel-link"]').on('click', function() {
-          modalForTarget().modal('hide');
-          modalForTarget().remove();
-        });
-      }
-
       function modalForTarget() {
         return $('[data-persistent-modal-url="' + linkTarget + '"]');
       }
@@ -105,20 +98,23 @@
       }
 
       function persistentModalHtml(modalBody) {
-        modalHtml = [
+        var modalHtml = [
+
           // the 'data-backdrop="static"' and 'data-keyboard="false"' attributes keep the modal from closing on clickaway or escape, respectively
           '<div class="modal persistent-modal" tabindex="-1" role="modal" data-persistent-modal-url="' + linkTarget + '" data-backdrop="static" data-keyboard="false">',
-          '  <div class="modal-dialog">',
-          '    <div class="modal-header">',
-          '      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
-          '      <h3 class="modal-title">TITLE</h3>',
-          '    </div>',
+          '  <div class="modal-dialog modal-lg">',
           '    <div class="modal-content">',
-          '      <div class="modal-body">',
-          '        '+modalBody,
+          '      <div class="modal-header">',
+          '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
+          '        <h3 class="modal-title">TITLE</h3>',
           '      </div>',
-          '      <div class="form-group cancel-footer">',
-          '        <button data-behavior="cancel-link" class="cancel-link btn btn-link">Cancel</button>',
+          '      <div class="modal-body">',
+          '        ' + modalBody,
+          '      </div>',
+          '      <div class="modal-footer">',
+          '        <button data-dismiss="modal" class="btn btn-default">',
+          '          Cancel',
+          '        </button>',
           '      </div>',
           '    </div>',
           '  </div>',
