@@ -8,4 +8,8 @@ class BulkAction < ActiveRecord::Base
   # Each BulkAction has a BulkActionStatus, which holds job information and error messages. A BulkAction
   # instance is only 'metadata' for jobs - it's not intended to actually run jobs itself. BulkAction could
   # provide the entry point for users to start new bulk jobs and view their old bulk jobs.
+
+  def initialize(owner)
+    
+  end
 end

@@ -13,6 +13,8 @@ class BulkDescmetadataDownloadsController < ApplicationController
   # GET /bulk_descmetadata_downloads/new
   def new
     @bulk_descmetadata_download = BulkDescmetadataDownload.new
+    @druid_list = Array.new('druid:hj185vb7593', 'druid:kv840rx2720', 'druid:pv820dk6668', 'druid:qq613vj0238', 'druid:rn653dy9317', 'druid:xb482bw3979')
+    @bulk_action = BulkAction.create(current_user)
   end
 
   # GET /bulk_descmetadata_downloads/1/edit
