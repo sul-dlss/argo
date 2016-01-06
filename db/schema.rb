@@ -53,9 +53,11 @@ ActiveRecord::Schema.define(version: 20151217233823) do
     t.string   "bulk_actionable_type"
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.integer  "user_id"
   end
 
   add_index "bulk_actions", ["bulk_actionable_id", "bulk_actionable_type"], name: "bulk_actionable_index"
+  add_index "bulk_actions", ["user_id"], name: "index_bulk_actions_on_user_id"
 
   create_table "bulk_descmetadata_downloads", force: :cascade do |t|
     t.string   "filename"
