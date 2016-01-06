@@ -1,5 +1,10 @@
 module Argo
   class Profiler
+    # takes a block of code, starts the profiler, runs the code, stops the profiler and returns the results of the profiling.
+    # example usage:
+    #  profiler = Argo::Profiler.new
+    #  profiler.prof { Argo::Indexer.reindex_pid_list pid_list, should_commit }
+    #  profiler.print_results_call_tree(out_file_id)
     def prof
       RubyProf.start
       yield
