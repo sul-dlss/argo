@@ -2,12 +2,6 @@ module BlacklightSolrExtensions
   extend ActiveSupport::Concern
   include Blacklight::SolrHelper
 
-  # TODO: Remove this after all documents are reindexed with id instead of PID
-#  def render_document_index_label doc, opts
-#    opts[:label] ||= render_citation(doc)
-#    super(doc, opts)
-#  end
-
   def add_params_to_current_search(new_params)
     p = session[:search] ? session[:search].dup : {}
     p[:f] = (p[:f] || {}).dup # the command above is not deep in rails3, !@#$!@#$

@@ -2,7 +2,7 @@
   <%= render_document_show_thumbnail document %>
 </div>
 <div>
-  <h4><%= render_citation document %></h4>
+  <%= render_document_heading(document, tag: :h4) %>
   <% blacklight_config[:field_groups][:full_identification].each do |field_names| %>
     <div class="narrow column">
       <%= render :partial => "catalog/show_field_list", :locals => {:document => document, :field_names => field_names, :object => object } %>
