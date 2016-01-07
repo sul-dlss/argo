@@ -3,18 +3,18 @@ describe ArgoHelper, :type => :helper do
   describe 'render_document_show_thumbnail' do
     it 'should include a thumbnail url' do
       doc = {'first_shelved_image_ss' => 'testimage.jp2'}
-      expect(helper.render_document_show_thumbnail(doc)  ).to  \
-        match(/src=".*testimage_thumb"/                  ).and \
-        match(/style="max-width:240px;max-height:240px;"/).and \
+      expect(helper.render_document_show_thumbnail(doc)            ).to  \
+        match(%r{src=".*testimage\/full\/!400,400\/0\/default.jpg"}).and \
+        match(/style="max-width:240px;max-height:240px;"/          ).and \
         match(/alt=""/)
     end
   end
   describe 'render_index_thumbnail' do
     it 'should include a thumbnail url' do
       doc = {'first_shelved_image_ss' => 'testimage.jp2'}
-      expect(helper.render_index_thumbnail(doc)  ).to  \
-        match(/src=".*testimage_thumb"/                  ).and \
-        match(/style="max-width:80px;max-height:80px;"/).and \
+      expect(helper.render_index_thumbnail(doc)                    ).to  \
+        match(%r{src=".*testimage\/full\/!400,400\/0\/default.jpg"}).and \
+        match(/style="max-width:240px;max-height:240px;"/          ).and \
         match(/alt=""/)
     end
   end

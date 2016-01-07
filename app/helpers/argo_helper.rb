@@ -63,7 +63,7 @@ module ArgoHelper
     return nil unless fname
     fname = File.basename(fname, File.extname(fname))
     druid = doc['id'].to_s.split(/:/).last
-    url = "#{Argo::Config.urls.stacks}/#{druid}/#{fname}_thumb"
+    url = "#{Argo::Config.urls.stacks}/iiif/#{druid}%2F#{fname}/full/!400,400/0/default.jpg"
     {:fname => fname, :druid => druid, :url => url}
   end
 
@@ -79,7 +79,7 @@ module ArgoHelper
   end
 
   def render_index_thumbnail(doc, options = {})
-    render_thumbnail_helper doc, 'index-thumb', '', 'max-width:80px;max-height:80px;'
+    render_thumbnail_helper doc, 'index-thumb', '', 'max-width:240px;max-height:240px;'
   end
 
   # override blacklight so apo and collection facets list title rather than druid. This will go away when we modify the index to include title with druid
