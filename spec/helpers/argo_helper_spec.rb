@@ -100,4 +100,10 @@ describe ArgoHelper, :type => :helper do
       end
     end
   end
+  describe 'render_facet_value' do
+    it 'should not override Blacklight version' do
+      expect(helper.respond_to?(:render_facet_value)).to be_truthy
+      expect(helper.method(:render_facet_value).owner).to eq(Blacklight::FacetsHelperBehavior)
+    end
+  end
 end
