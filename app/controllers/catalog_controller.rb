@@ -11,6 +11,7 @@ class CatalogController < ApplicationController
   include DateFacetConfigurations
 
   before_filter :reformat_dates, :set_user_obj_instance_var
+  before_action :show_aspect, only: [:dc, :ds]
 
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
 
@@ -195,11 +196,10 @@ class CatalogController < ApplicationController
     send_data data, :type => 'xml', :disposition => 'inline'
   end
 
-  def show_aspect
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @obj ||= Dor.find(pid)
-    @response, @document = get_solr_response_for_doc_id pid
-    render :layout => request.xhr? ? false : true
+  def dc
+  end
+
+  def ds
   end
 
   def bulk_upload_form
@@ -276,6 +276,12 @@ class CatalogController < ApplicationController
   end
 
   private
+
+  def show_aspect
+    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
+    @obj ||= Dor.find(pid)
+    @response, @document = get_solr_response_for_doc_id pid
+  end
 
   def set_user_obj_instance_var
     @user = current_user

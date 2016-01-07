@@ -12,8 +12,8 @@ Argo::Application.routes.draw do
   match 'view/facet/:id',  :to => 'catalog#facet', :via => [:get, :post]
   match 'view/unapi',      :to => 'catalog#unapi', :via => [:get, :post], :as => 'unapi'
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
-  match 'view/:id/dc',                :to => 'catalog#show_aspect',     :via => [:get, :post], :template => 'dc', :as => 'dc_aspect_view_catalog'
-  match 'view/:id/ds/:dsid',          :to => 'catalog#show_aspect',     :via => [:get, :post], :template => 'ds', :as => 'ds_aspect_view_catalog'
+  match 'view/:id/dc',                :to => 'catalog#dc', :via => [:get, :post], :as => 'dc_aspect_view_catalog'
+  match 'view/:id/ds/:dsid',          :to => 'catalog#ds', :via => [:get, :post], :as => 'ds_aspect_view_catalog'
   match 'view/:id/datastreams/:dsid', :to => 'catalog#datastream_view', :via => [:get, :post], :as => 'datastream_view_catalog'
 
   get 'catalog/:id/bulk_upload_form',    :to => 'catalog#bulk_upload_form',  :as => 'bulk_upload_form'

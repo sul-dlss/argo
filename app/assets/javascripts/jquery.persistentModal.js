@@ -62,8 +62,8 @@
       function receiveAjax(data) {      
         //default to error text, replace if we got something back
         var contents = "Error retrieving content";
-        if (data.readyState != 0) {
-          contents = data;
+        if (data.readyState !== 0) {
+          contents = data.responseText;
         }
 
         // does it have a data- selector for container?  if so, just use the contents of that container
@@ -83,7 +83,7 @@
       function createModal() {
         var jqxhr = $.ajax({
           url: linkTarget,
-          dataType: 'text'
+          dataType: 'script'
         });
 
         jqxhr.always( receiveAjax );
@@ -104,13 +104,7 @@
           '<div class="modal persistent-modal" tabindex="-1" role="modal" data-persistent-modal-url="' + linkTarget + '" data-backdrop="static" data-keyboard="false">',
           '  <div class="modal-dialog modal-lg">',
           '    <div class="modal-content">',
-          '      <div class="modal-header">',
-          '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>',
-          '        <h3 class="modal-title">TITLE</h3>',
-          '      </div>',
-          '      <div class="modal-body">',
-          '        ' + modalBody,
-          '      </div>',
+          '      ' + modalBody,
           '      <div class="modal-footer">',
           '        <button data-dismiss="modal" class="btn btn-default">',
           '          Cancel',
