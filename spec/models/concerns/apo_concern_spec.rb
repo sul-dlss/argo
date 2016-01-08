@@ -21,6 +21,15 @@ describe ApoConcern do
       end
     end
 
+    context 'with Hydrus Uber-y data' do
+      let(:document_attributes) { { :id => SolrDocument::HYDRUS_UBER_APO_ID, SolrDocument::FIELD_TITLE => 'My title' } }
+      it 'should handle an Uber-APO' do
+        expect(document.apo_id).to eq(SolrDocument::HYDRUS_UBER_APO_ID)
+        expect(document.apo_pid).to eq(SolrDocument::HYDRUS_UBER_APO_ID)
+        expect(document.apo_title).to eq('My title')
+      end
+    end
+
     context 'without data' do
       let(:document_attributes) { { } }
       it 'should handle missing APO' do
