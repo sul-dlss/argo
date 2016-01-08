@@ -13,20 +13,23 @@ describe DorController, :type => :controller do
     end
 
     it 'should reindex an object' do
+      request.env['HTTP_REFERER'] = root_path
       expect(Argo::Indexer).to receive(:generate_index_logger).and_return(@mock_logger)
       expect(Argo::Indexer).to receive(:reindex_pid).with(@mock_druid, @mock_logger).and_return(@mock_solr_doc)
       expect(Dor::SearchService).to receive(:solr).and_return(@mock_solr_conn)
       expect(@mock_solr_conn).to receive(:commit)
       get :reindex, :pid => @mock_druid
-      expect(response.code).to eq('200')
+      expect(flash[:notice]).to eq 'Successfully updated index for asdf:1234'
+      expect(response.code).to eq '302'
     end
 
     it 'should give the right status if an object is not found' do
+      request.env['HTTP_REFERER'] = root_path
       expect(Argo::Indexer).to receive(:generate_index_logger).and_return(@mock_logger)
       expect(Argo::Indexer).to receive(:reindex_pid).with(@mock_druid, @mock_logger).and_raise(ActiveFedora::ObjectNotFoundError)
       get :reindex, :pid => @mock_druid
-      expect(response.code).to eq('404')
-      expect(response.body).to eq('Object does not exist in Fedora.')
+      expect(flash[:error]).to eq 'Object does not exist in Fedora.'
+      expect(response.code).to eq '302'
     end
   end
 
