@@ -182,17 +182,15 @@ class CatalogController < ApplicationController
   end
 
   def show
-    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-
+    @obj = find_druid(params[:id])
     return unless valid_user?(@obj)
-    super()  # with or without an APO, if we get here, user is authorized to view
+    # super is supposed to be Blacklight::Catalog#show
+    super # with or without an APO, if we get here, user is authorized to view
   end
 
   def datastream_view
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @response, @document = get_solr_response_for_doc_id pid
-    @obj = Dor.find pid, :lightweight => true
+    @obj = find_druid params[:id], :lightweight => true
+    @response, @document = get_solr_response_for_doc_id @obj.pid
     data = @obj.datastreams[params[:dsid]].content
     raise ActionController::RoutingError.new('Not Found') if data.nil?
     send_data data, :type => 'xml', :disposition => 'inline'
@@ -205,12 +203,12 @@ class CatalogController < ApplicationController
   end
 
   def bulk_upload_form
-    @object = Dor.find params[:id]
+    @obj = find_druid(params[:id])
   end
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
   def upload
-    @apo = Dor.find params[:id]
+    @apo = find_druid(params[:id])
 
     directory_name = Time.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
     output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
@@ -226,12 +224,10 @@ class CatalogController < ApplicationController
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def bulk_jobs_index
-    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-
+    @obj = find_druid(params[:id])
     return unless valid_user?(@obj)
-    @response, @document = get_solr_response_for_doc_id params[:id]
-    @bulk_jobs = load_bulk_jobs(params[:id])
+    @response, @document = get_solr_response_for_doc_id @obj.pid
+    @bulk_jobs = load_bulk_jobs(@obj.pid)
   end
 
   # Lets the user download the generated/cleaned XML metadata file that corresponds to a bulk metadata upload job.
@@ -280,9 +276,8 @@ class CatalogController < ApplicationController
   private
 
   def show_aspect
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @obj ||= Dor.find(pid)
-    @response, @document = get_solr_response_for_doc_id pid
+    @obj ||= find_druid(params[:id])
+    @response, @document = get_solr_response_for_doc_id @obj.pid
   end
 
   def set_user_obj_instance_var
@@ -345,26 +340,18 @@ class CatalogController < ApplicationController
     sorted_info.reverse!
   end
 
-  # Determines whether or not the current user has permissions to view the current DOR object.
+  # Determines whether the current user has permissions to view the object.
   def valid_user?(dor_object)
-    begin
-      @apo = dor_object.admin_policy_object
-    rescue
-      return false
-    end
-
-    if @apo
-      unless @user.is_admin || @user.is_viewer || dor_object.can_view_metadata?(@user.roles(@apo.pid))
-        render :status => :forbidden, :text => 'forbidden'
-        return false
-      end
+    return true if @user.can_view?(dor_object)
+    if dor_object.admin_policy_object
+      msg = 'Governing APO forbids access'
+    elsif dor_object.is_a? Dor::AdminPolicyObject
+      msg = 'Item is an APO that forbids access'
     else
-      unless @user.is_admin || @user.is_viewer
-        render :status => :forbidden, :text => 'No APO, no access'
-        return false
-      end
+      msg = 'Item has no APO that allows access'
     end
-    true
+    render :status => :forbidden, :text => msg
+    false
   end
 
   def get_leafdir(directory)

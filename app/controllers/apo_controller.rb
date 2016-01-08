@@ -3,10 +3,25 @@ require 'rest-client'
 
 class ApoController < ApplicationController
 
-  before_filter :create_obj, :except => [:register, :is_valid_role_list_endpoint, :spreadsheet_template]
-  after_action :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
+  before_filter :create_obj, :except => [
+    :is_valid_role_list_endpoint,
+    :register,
+    :spreadsheet_template
+  ]
+  after_action :save_and_index, :only => [
+    :add_roleplayer,
+    :add_collection, :delete_collection,
+    :update_copyright, :update_creative_commons,
+    :update_default_object_rights, :update_desc_metadata,
+    :update_title, :update_use,
+    :delete_role,
+    :register_collection
+  ]
 
-  DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
+  # These manager workgroups are specific to APO permissions and they are
+  # distinct from the repository-wide permissions in User.MANAGER_GROUPS
+  # This is used in app/views/apo/register.html.erb
+  DEFAULT_MANAGER_WORKGROUPS = %w(sdr:developer sdr:service-manager sdr:metadata-staff).freeze
 
   # @param [String] role_name
   # @return [Boolean] true if name is valid
@@ -61,7 +76,9 @@ class ApoController < ApplicationController
         render :status => :bad_request, :json => { :errors => input_params_errors }
         return
       end
-
+      # At present, the controller allows anyone authorized to create a new APO.
+      # The UI restricts access to this functionality by limiting the display of
+      # access to management buttons.
       apo_info = register_new_apo
       respond_to do |format|
         format.any { redirect_to catalog_path(apo_info[:apo_pid]), :notice => apo_info[:notice] }
@@ -87,7 +104,8 @@ class ApoController < ApplicationController
     apo.agreement            = md_info[:agreement]
     apo.default_workflow     = md_info[:workflow ]
     apo.default_rights       = md_info[:default_object_rights]
-    # Set the Use License given a machine-readable code for a creative commons or open data commons license
+    # Set the Use License given a machine-readable code for a creative commons
+    # or open data commons license
     apo.use_license          = md_info[:use_license]
     apo.copyright_statement  = md_info[:copyright]
     apo.use_statement        = md_info[:use      ]
@@ -108,7 +126,7 @@ class ApoController < ApplicationController
     notice = "APO #{apo_pid} created."
 
     # Once it's been created we populate it with its metadata
-    apo = Dor.find(apo_pid)
+    apo = find_druid(apo_pid)
     set_apo_metadata apo, params
     apo.add_tag('Registered By : ' + current_user.login)
 
@@ -199,7 +217,7 @@ class ApoController < ApplicationController
     reg_params[:other_id       ] = "symphony:#{col_catkey}" unless col_catkey.blank?
     reg_params[:workflow_id    ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
-    collection = Dor.find(response[:pid])
+    collection = find_druid(response[:pid])
     if params[:collection_abstract] && params[:collection_abstract].length > 0
       set_abstract(collection, params[:collection_abstract])
     end
@@ -268,16 +286,19 @@ class ApoController < ApplicationController
 
   def spreadsheet_template
     binary_string = RestClient.get(Argo::Config.urls.spreadsheet)
-    send_data(binary_string, :filename => 'spreadsheet_template.xlsx', :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    send_data(
+      binary_string,
+      :filename => 'spreadsheet_template.xlsx',
+      :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
   end
 
   private
 
   def create_obj
-    raise 'missing druid' unless params[:id]
-    @object = Dor.find params[:id] # , :lightweight => true
+    @object = find_druid(params[:id])
     pids = @object.default_collections || []
-    @collections = pids.map { |pid| Dor.find(pid) }
+    @collections = pids.map { |pid| find_druid(pid) }
   end
 
   def add_roleplayers_to_object(object, roleplayer_list, role)
@@ -313,6 +334,13 @@ class ApoController < ApplicationController
 
   # check that the user can carry out this object modification
   def forbid
+    # TODO: this could be a more granular permission request, see the
+    # Dor::Permissable#can_create_apo? and Dor::Permissable#can_manage_apo? in
+    # https://github.com/sul-dlss/dor-services/blob/permissable/lib/dor/models/permissable.rb
+    #return if current_user.can_manage?(@object, 'apo')
+    #
+    # Note that this is different from User#can_manage? because it
+    # excludes current_user.is_manager
     return if current_user.is_admin || @object.can_manage_content?(current_user.roles params[:id])
     render :status => :forbidden, :text => 'forbidden'
     nil
