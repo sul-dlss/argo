@@ -45,9 +45,11 @@ class DorController < ApplicationController
   def reindex
     @solr_doc = Argo::Indexer.reindex_pid params[:pid], index_logger
     Dor::SearchService.solr.commit # reindex_pid doesn't commit, but callers of this method may expect the update to be committed immediately
+    flash[:notice] = "Successfully updated index for #{params[:pid]}"
+    redirect_to :back
   rescue ActiveFedora::ObjectNotFoundError # => e
-    render :status => 404, :text => 'Object does not exist in Fedora.'
-    return
+    flash[:error] = 'Object does not exist in Fedora.'
+    redirect_to :back
   end
 
   def delete_from_index
