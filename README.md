@@ -169,4 +169,13 @@ and in development or testing mode:
 - RSpec
 - Capybara
 - Poltergeist / PhantomJS
- 
+
+## Further reading
+
+### Indexing (including bulk reindexing)
+
+For further reading on how indexing from Fedora to Solr works in Argo, see [INDEXING.md](INDEXING.md).  This explains how single object reindexing works, how the bulk reindexing mechanism works, and how to build custom reindexing runs.
+
+### Profiling
+
+For information on how to profile the app in the event of performance issues, see [PROFILING.md](PROFILING.md).  This explains how to collect profiling info, how to analyze it, how to approach the issue generally, and alternatives/complements to Argo's main built-in profiling tool.

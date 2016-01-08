@@ -3,34 +3,30 @@ require 'spec_helper'
 describe DorController, :type => :controller do
   describe 'reindex' do
     before :each do
-      @mock_druid  = 'asdf:1234'
-      @mock_logger = double()
-      @mock_obj    = double()
+      @mock_druid     = 'asdf:1234'
+      @mock_logger    = double(Logger)
+      @mock_solr_conn = double(Dor::SearchService.solr)
+      @mock_req_uuid  = 'ab12-cd34-ef56'
+      @mock_solr_doc  = {id: @mock_druid, text_field_tesim: 'a field to be searched'}
 
       log_in_as_mock_user(subject)
-
-      allow(controller).to receive(:index_logger).and_return(@mock_logger)
-      allow(Argo::Config).to receive(:date_format_str).and_return('%Y-%m-%d %H:%M:%S.%L') # doesn't get pulled from config file, which leads to test failure
     end
+
     it 'should reindex an object' do
-      expect(Dor).to receive(:load_instance).with(@mock_druid).and_return(@mock_obj)
-      expect(@mock_obj).to receive(:to_solr).and_return({:id => @mock_druid})
-      expect(Dor::SearchService.solr).to receive(:add).with(hash_including(:id => @mock_druid), instance_of(Hash))
-      expect(@mock_logger).to receive(:info).with("updated index for #{@mock_druid}")
+      expect(Argo::Indexer).to receive(:generate_index_logger).and_return(@mock_logger)
+      expect(Argo::Indexer).to receive(:reindex_pid).with(@mock_druid, @mock_logger).and_return(@mock_solr_doc)
+      expect(Dor::SearchService).to receive(:solr).and_return(@mock_solr_conn)
+      expect(@mock_solr_conn).to receive(:commit)
       get :reindex, :pid => @mock_druid
+      expect(response.code).to eq('200')
     end
 
-    it 'should log the right thing if an object is not found' do
-      expect(Dor).to receive(:load_instance).with(@mock_druid).and_raise(ActiveFedora::ObjectNotFoundError)
-      expect(@mock_logger).to receive(:info).with("failed to update index for #{@mock_druid}, object not found in Fedora")
+    it 'should give the right status if an object is not found' do
+      expect(Argo::Indexer).to receive(:generate_index_logger).and_return(@mock_logger)
+      expect(Argo::Indexer).to receive(:reindex_pid).with(@mock_druid, @mock_logger).and_raise(ActiveFedora::ObjectNotFoundError)
       get :reindex, :pid => @mock_druid
-    end
-
-    it "should log the right thing if there's an unexpected error" do
-      err_msg = "didn't see that one coming"
-      expect(Dor).to receive(:load_instance).with(@mock_druid).and_raise(err_msg)
-      expect(@mock_logger).to receive(:error).with("failed to update index for #{@mock_druid}, unexpected error, see main app log")
-      expect {get :reindex, :pid => @mock_druid}.to raise_error(err_msg)
+      expect(response.code).to eq('404')
+      expect(response.body).to eq('Object does not exist in Fedora.')
     end
   end
 

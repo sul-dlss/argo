@@ -5,6 +5,8 @@ module ApoConcern
   FIELD_APO_TITLE = :apo_title_ssim
 
   UBER_APO_ID = 'druid:hv992ry2431' # TODO: Uber-APO is hardcoded
+  HYDRUS_UBER_APO_ID = 'druid:zw306xn5593' # TODO: Hydrus Uber-APO is hardcoded
+  UBER_APO_IDS = [UBER_APO_ID, HYDRUS_UBER_APO_ID]
 
   ##
   # Access a SolrDocument's APO druid
@@ -12,7 +14,7 @@ module ApoConcern
   def apo_id
     fetch(FIELD_APO_ID).first
   rescue KeyError
-    id == UBER_APO_ID ? id : nil
+    UBER_APO_IDS.include?(id) ? id : nil
   end
 
   ##
@@ -30,6 +32,6 @@ module ApoConcern
   def apo_title
     fetch(FIELD_APO_TITLE).first
   rescue KeyError
-    id == UBER_APO_ID ? title : nil
+    UBER_APO_IDS.include?(id) ? title : nil
   end
 end
