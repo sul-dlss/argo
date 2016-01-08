@@ -114,7 +114,8 @@ class ItemsController < ApplicationController
 
     # render different views (HTML, XML, or Image) based on requested format
     respond_to do |format|
-      format.html
+      format.js { render 'workflow_view', layout: false }
+      format.html { render 'workflow_view' }
       format.xml  { render :xml => @workflow.ng_xml.to_xml }
       format.any(:png, :svg, :jpeg) do
         graph = @workflow.graph

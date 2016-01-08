@@ -1,0 +1,8 @@
+<%= form_tag add_workflow_item_url do %>
+  <div class='form-group'>
+    <%= select_tag :wf, options_for_select(workflow_options, default_workflow_option), class: 'form-control' %>
+  </div>
+  <button class='btn btn-primary'>
+    Add
+  </button>
+<% end %>

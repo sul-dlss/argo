@@ -1,16 +1,4 @@
-<div data-ajax-modal="container">
-  <div>
-    <h3 class="modal-title">Remove existing collections</h3>
-    <% @object.collections.each do |col| %>
-      <%= col.label %>
-      <%=link_to image_tag('unavailable.png'), url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid)%><br/>
-    <% end %>
-  </div>
-  <div>
-    <h3 class="modal-title">Add a collection</h3>
-    <%= form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid) do%>
-      <%= select_tag :collection, options_for_select(current_user.permitted_collections)%>
-      <button class='btn btn-default'>Add Collection</button>
-    <%end%>
-  </div>
+<div class='container'>
+  <h1>Edit collections</h1>
+  <%= render partial: 'collection_ui' %>
 </div>

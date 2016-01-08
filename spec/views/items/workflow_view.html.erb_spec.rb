@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 describe 'items/workflow_view.html.erb' do
-  it 'should render' do
-    assign(:object, double('object', pid: 'druid:aa111bb2222'))
-    assign(:workflow_id, 'accessionWF')
+  it 'renders the HTML template' do
+    stub_template 'items/_workflow_view.html.erb' => 'stubbed_workflow_view'
     render
-    expect(rendered).to have_css 'table.detail'
+    expect(rendered)
+      .to have_css '.container h1', text: 'Workflow view'
+    expect(rendered).to have_css '.container', text: 'stubbed_workflow_view'
   end
 end

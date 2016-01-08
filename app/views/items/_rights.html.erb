@@ -1,0 +1,6 @@
+<%=form_tag url_for(:controller => :items, :action => :set_rights, :id => @object.pid) do%>
+  <div class='form-group'>
+    <%= select_tag :rights, options_for_select(['world','dark', 'stanford', 'none']), class: 'form-control' %>
+  </div>
+  <button class='btn btn-primary'>Update</button>
+<% end %>
