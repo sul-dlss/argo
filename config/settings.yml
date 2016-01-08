@@ -4,7 +4,9 @@
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
 REINDEX_ON_FLY: false
 
+# BulkReindexer
 BULK_REINDEXER:
+  # the batch size that reindexing lists are broken into for consumption by delayed_job workers
   BATCH_SIZE: 10
 
 # Bulk Metadata
@@ -23,13 +25,18 @@ CONTENT:
   SDR_USER: 'user'
   SDR_PASSWORD: 'password'
 
+# Indexer
 INDEXER:
+  # the file to which the indexer log is written
   LOG: 'log/indexer.log'
+  # the interval at which the indexer log is rotated
   LOG_ROTATION_INTERVAL: 'daily'
 
 # Behavior for indexing jobs
 INDEXING_JOB:
+  # whether indexing jobs should specify immediate commit on completion of reindexing its batch
   SHOULD_COMMIT_BATCHES: true
+  # whether indexing jobs should use the profiled version of the reindexing method
   SHOULD_PROFILE: false
 
 # Metadata
@@ -43,9 +50,16 @@ NEWRELIC:
   LICENSE_KEY: 'super secret api key'
   APP_NAME: 'Argo - name should be specific to server'
 
+# Profiler
 PROFILER:
+  # when outputting results in callgrind format (e.g. via print_results_call_tree), stats are
+  # only printed for methods consuming this percentage or more of the resource being profiled
   CALLTREE_PRINTER_MIN_PERCENT: 1
+  # Defaults to 'wall' (WALL_TIME, or real-world elapsed time for the method being measured).  Other measurement modes include 'memory', though
+  # our limited testing was only successful when measuring wall time.  Values recognized by 'RubyProf' are:  'wall', 'process', 'cpu', 'allocations',
+  # 'memory', 'gc_time', and 'gc_runs'.  For more detailed info, see https://github.com/ruby-prof/ruby-prof#measurements
   MEASURE_MODE: 'wall'
+  # location where Argo::Profiler sends RubyProf output from print_results_* methods
   OUTPUT_DIR: 'log/profiler'
 
 # Squash
