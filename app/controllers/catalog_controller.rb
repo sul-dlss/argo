@@ -180,11 +180,11 @@ class CatalogController < ApplicationController
   end
 
   def show
-    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-
+    @obj = find_druid(params[:id])
+    return if @obj.nil?
     return unless valid_user?(@obj)
-    super()  # with or without an APO, if we get here, user is authorized to view
+    # super is supposed to be Blacklight::Catalog#show
+    super # with or without an APO, if we get here, user is authorized to view
   end
 
   def datastream_view
@@ -203,12 +203,12 @@ class CatalogController < ApplicationController
   end
 
   def bulk_upload_form
-    @object = Dor.find params[:id]
+    @obj = find_druid(params[:id])
   end
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
   def upload
-    @apo = Dor.find params[:id]
+    @apo = find_druid(params[:id])
 
     directory_name = Time.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
     output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
@@ -224,9 +224,7 @@ class CatalogController < ApplicationController
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def bulk_jobs_index
-    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-
+    @obj = find_druid(params[:id])
     return unless valid_user?(@obj)
     @response, @document = get_solr_response_for_doc_id params[:id]
     @bulk_jobs = load_bulk_jobs(params[:id])
@@ -278,8 +276,7 @@ class CatalogController < ApplicationController
   private
 
   def show_aspect
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @obj ||= Dor.find(pid)
+    @obj ||= find_druid(params[:id])
     @response, @document = get_solr_response_for_doc_id pid
   end
 
@@ -345,24 +342,29 @@ class CatalogController < ApplicationController
 
   # Determines whether or not the current user has permissions to view the current DOR object.
   def valid_user?(dor_object)
-    begin
-      @apo = dor_object.admin_policy_object
-    rescue
-      return false
-    end
-
+    # First check the workgroups defined for admin, manager or viewer; see
+    # User::ADMIN_GROUPS, User::MANAGER_GROUPS and User::VIEWER_GROUPS
+    return true if @user.is_admin || @user.is_manager || @user.is_viewer
+    # If that fails, check an APO for permitted roles of the current_user.
+    valid = false
+    @apo = dor_object.admin_policy_object rescue nil
     if @apo
-      unless @user.is_admin || @user.is_viewer || dor_object.can_view_metadata?(@user.roles(@apo.pid))
-        render :status => :forbidden, :text => 'forbidden'
-        return false
-      end
+      valid = dor_object.can_view_metadata?(@user.roles(@apo.pid))
+      msg = 'Governing APO forbids access' unless valid
     else
-      unless @user.is_admin || @user.is_viewer
-        render :status => :forbidden, :text => 'No APO, no access'
-        return false
+      # In the absence of a governing APO, allow an APO object to authorize
+      # access to itself.
+      if dor_object.is_a? Dor::AdminPolicyObject
+        valid = dor_object.can_view_metadata?(@user.roles(dor_object.pid))
+        msg = 'Item is an APO that forbids access' unless valid
+      else
+        msg = 'Item has no APO that allows access'
       end
     end
-    true
+    unless valid
+      render :status => :forbidden, :text => msg
+    end
+    valid
   end
 
   def get_leafdir(directory)

@@ -5,8 +5,8 @@ class ItemsController < ApplicationController
   include DorObjectHelper
   include ModsDisplay::ControllerExtension
   before_filter :create_obj, :except => [:register, :open_bulk, :purge_object]
-  before_filter :forbid_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id, :delete_file, :close_version, :open_version, :resource, :add_file, :replace_file, :update_attributes, :update_resource, :mods, :datastream_update ]
-  before_filter :forbid_view,   :only => [:get_preserved_file, :get_file]
+  before_filter :allow_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id, :delete_file, :close_version, :open_version, :resource, :add_file, :replace_file, :update_attributes, :update_resource, :mods, :datastream_update ]
+  before_filter :allow_view,   :only => [:get_preserved_file, :get_file]
   before_filter :enforce_versioning, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :tags, :source_id, :set_source_id, :set_content_type, :set_rights]
   after_filter  :save_and_reindex,   :only => [:add_collection, :set_collection, :remove_collection, :open_version, :close_version, :tags, :tags_bulk, :source_id, :set_rights, :set_content_type, :apply_apo_defaults]
 
@@ -213,7 +213,7 @@ class ItemsController < ApplicationController
     # Catch reindexing errors here to avoid cascading errors
     begin
       save_and_reindex
-    rescue ActiveFedora::ObjectNotFoundError => e
+    rescue ActiveFedora::ObjectNotFoundError
       render text: 'The object was not found in Fedora. Please recheck the RELS-EXT XML.', status: :not_found
       return
     end
@@ -289,8 +289,7 @@ class ItemsController < ApplicationController
   end
   # add a file to a resource, not to be confused with add a resource to an object
   def add_file
-    item = Dor::Item.find(params[:id])
-    item.add_file params[:uploaded_file], params[:resource], params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
+    @object.add_file params[:uploaded_file], params[:resource], params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'File ' + params[:uploaded_file].original_filename + ' was added!' }
     end
@@ -443,7 +442,7 @@ class ItemsController < ApplicationController
   def purge_object
     begin
       create_obj
-      return unless forbid_modify # return because rendering already happened
+      return unless allow_modify # return because rendering already happened
     rescue
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
@@ -585,54 +584,46 @@ class ItemsController < ApplicationController
   # add a workflow to an object if the workflow is not present in the active table
   def add_workflow
     return unless params[:wf]
-    wf = @object.workflows[params[:wf]]
-    # check for this workflow is present and active (not archived)
+    wf_name = params[:wf]
+    wf = @object.workflows[wf_name]
+    # check the workflow is present and active (not archived)
     if wf && wf.active?
-      render :status => 500, :text => "#{params[:wf]} already exists!"
+      render :status => 500, :text => "#{wf_name} already exists!"
       return
     end
-    @object.create_workflow(params[:wf])
+    @object.create_workflow(wf_name)
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
-    reindex Dor::Item.find(params[:id])
+    reindex find_druid(params[:id])
     Dor::SearchService.solr.commit
 
+    msg = "Added #{wf_name}"
     if params[:bulk]
-      render :text => "Added #{params[:wf]}"
+      render :text => msg
+      return
     else
-      redirect_to catalog_path(params[:id]), :notice => "Added #{params[:wf]}"
+      redirect_to catalog_path(params[:id]), notice: msg
+      return
     end
   end
 
   private
 
-  def reindex(item)
-    Dor::SearchService.solr.add item.to_solr
-  end
-
-  # Filters
-  def create_obj
-    raise 'missing druid' unless params[:id]
-    @object = Dor::Item.find params[:id]
-    @apo = @object.admin_policy_object
-    @apo = ( @apo ? @apo.pid : '' )
-  end
-
-  def save_and_reindex
-    @object.save
-    reindex @object unless params[:bulk]
-  end
-
   # check that the user can carry out this item modification
-  def forbid_modify
-    return true if current_user.is_admin || @object.can_manage_content?(current_user.roles @apo)
+  def allow_modify
+    return true if current_user.can_manage_object?(@object)
     render :status => :forbidden, :text => 'forbidden'
     false
   end
 
-  def forbid_view
-    return true if current_user.is_admin || @object.can_view_content?(current_user.roles @apo)
+  def allow_view
+    return true if current_user.can_manage_object?(@object)
+    if @apo
+      return true if @object.can_view_content?(current_user.roles @apo.pid)
+    elsif @object.is_a?(Dor::AdminPolicyObject)
+      return true if @object.can_view_content(current_user.roles(@object.pid))
+    end
     render :status => :forbidden, :text => 'forbidden'
     false
   end
@@ -643,4 +634,20 @@ class ItemsController < ApplicationController
     render status: :forbidden, text: 'Object cannot be modified in its current state.'
     false
   end
+
+  def create_obj
+    @object = find_druid(params[:id])
+    return if @object.nil?
+    @apo = @object.admin_policy_object
+  end
+
+  def reindex(item)
+    Dor::SearchService.solr.add item.to_solr
+  end
+
+  def save_and_reindex
+    @object.save
+    reindex @object unless params[:bulk]
+  end
+
 end

@@ -6,7 +6,12 @@ class ApoController < ApplicationController
   before_filter :create_obj, :except => [:register, :is_valid_role_list_endpoint, :spreadsheet_template]
   after_action :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
 
+  # These manager workgroups are specific to APO permissions.
+  # This is used in app/views/apo/register.html.erb
   DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
+  # These are distinct from the repository-wide permissions defined by
+  # config/initialize/permissions, i.e.
+  # MANAGER_GROUPS = ['workgroup:sdr:manager-role', 'workgroup:dlss:dor-manager']
 
   # @param [String] role_name
   # @return [Boolean] true if name is valid
@@ -61,7 +66,9 @@ class ApoController < ApplicationController
         render :status => :bad_request, :json => { :errors => input_params_errors }
         return
       end
-
+      # At present, the controller allows anyone authorized to create a new APO.
+      # The UI restricts access to this functionality by limiting the display of
+      # access to management buttons.
       apo_info = register_new_apo
       respond_to do |format|
         format.any { redirect_to catalog_path(apo_info[:apo_pid]), :notice => apo_info[:notice] }
@@ -275,7 +282,8 @@ class ApoController < ApplicationController
 
   def create_obj
     raise 'missing druid' unless params[:id]
-    @object = Dor.find params[:id] # , :lightweight => true
+    @object = find_druid(params[:id])
+    return if @object.nil?
     pids = @object.default_collections || []
     @collections = pids.map { |pid| Dor.find(pid) }
   end

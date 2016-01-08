@@ -104,8 +104,6 @@ module ArgoHelper
     object ||= Dor.find(pid)
     # wf_stuff.include? 'accessionWF:completed:publish'
 
-    apo_pid = doc.apo_pid
-
     buttons = []
     if pid
       buttons << {
@@ -113,7 +111,6 @@ module ArgoHelper
         label: 'Close Version',
         check_url: workflow_service_closeable_path(pid)
       }
-
       buttons << {
         url: open_version_ui_item_path(pid),
         label: 'Open for modification',
@@ -121,25 +118,37 @@ module ArgoHelper
       }
     end
 
-    # if this is an apo and the user has permission for the apo, let them edit it.
-    if (object.datastreams.include? 'roleMetadata') && (current_user.is_admin || current_user.is_manager || object.can_manage_item?(current_user.roles(apo_pid)))
-      buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
-      buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection'}
-    end
-    if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin || current_user.is_manager
+    if current_user.can_manage_object?(object)
+      # APO controller buttons
+      # if this is an apo, provide access to edit it.
+      if object.datastreams.include? 'roleMetadata'
+        buttons << {
+          url: url_for(:controller => :apo, :action => :register, :id => pid),
+          label: 'Edit APO',
+          new_page: true
+        }
+        buttons << {
+          url: url_for(:controller => :apo, :action => :register_collection, :id => pid),
+          label: 'Create Collection',
+          new_page: true
+        }
+      end
+      # DOR controller buttons
       buttons << {
         url: url_for(controller: :dor, action: :reindex, pid: pid),
         label: 'Reindex',
         new_page: true
       }
-      buttons << {:url => url_for(:controller => :items, :action => :add_workflow, :id => pid), :label => 'Add workflow'}
-
       buttons << {
         url: url_for(:controller => :dor, :action => :republish, :pid => pid),
         label: 'Republish',
         check_url: workflow_service_published_path(pid)
       }
-
+      # ITEMS controller buttons
+      buttons << {
+        url: url_for(:controller => :items, :action => :add_workflow, :id => pid),
+        label: 'Add workflow'
+      }
       buttons << {
         url:  url_for(:controller => :items, :action => :purge_object, :id => pid),
         label: 'Purge',
@@ -147,17 +156,31 @@ module ArgoHelper
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
         check_url: workflow_service_submitted_path(pid)
       }
-
-      buttons << {:url => '/items/' + pid + '/source_id_ui', :label => 'Change source id'}
-      buttons << {:url => '/items/' + pid + '/tags_ui', :label => 'Edit tags'}
+      buttons << {
+        url: '/items/' + pid + '/source_id_ui',
+        label: 'Change source id'
+      }
+      buttons << {
+        url: '/items/' + pid + '/tags_ui',
+        label: 'Edit tags'
+      }
       unless object.datastreams.include? 'administrativeMetadata' # apos cant be members of collections
-        buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+        buttons << {
+          url: url_for(:controller => :items, :action => :collection_ui, :id => pid),
+          label: 'Edit collections'
+        }
       end
       if object.datastreams.include? 'contentMetadata'
-        buttons << {:url => url_for(:controller => :items, :action => :content_type, :id => pid), :label => 'Set content type'}
+        buttons << {
+          url: url_for(:controller => :items, :action => :content_type, :id => pid),
+          label: 'Set content type'
+        }
       end
       if object.datastreams.include? 'rightsMetadata'
-        buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
+        buttons << {
+          url: url_for(:controller => :items, :action => :rights, :id => pid),
+          label: 'Set rights'
+        }
       end
     end
     if doc.key?('embargo_status_ssim')
@@ -166,7 +189,12 @@ module ArgoHelper
       # date=embargo_data.split.last
       if text != 'released'
         # TODO: add a date picker and button to change the embargo date for those who should be able to.
-        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if current_user.is_admin
+        if current_user.is_admin
+          buttons << {
+            url: embargo_form_item_path(pid),
+            label: 'Update embargo'
+          }
+        end
       end
     end
     buttons

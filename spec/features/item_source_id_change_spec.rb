@@ -1,21 +1,10 @@
 require 'spec_helper'
 
-RSpec.feature 'Item source id change' do
-  let(:current_user) do
-    double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: [],
-      groups: []
-    )
+feature 'Item source id change' do
+  before :each do
+    admin_user # see spec_helper
   end
-  before do
-    allow_any_instance_of(ItemsController).to receive(:current_user)
-      .and_return(current_user)
-  end
+
   feature 'when modification is not allowed' do
     scenario 'cannot change the source id' do
       expect_any_instance_of(Dor::Item)
@@ -27,10 +16,9 @@ RSpec.feature 'Item source id change' do
         'its current state.'
     end
   end
+
   feature 'when modification is allowed' do
     scenario 'changes the source id' do
-      expect_any_instance_of(CatalogController).to receive(:current_user)
-        .at_least(1).times.and_return(current_user)
       expect_any_instance_of(Dor::Item)
         .to receive(:allows_modification?).and_return(true)
       visit source_id_ui_item_path 'druid:kv840rx2720'
