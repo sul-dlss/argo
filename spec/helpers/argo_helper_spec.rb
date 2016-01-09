@@ -49,8 +49,7 @@ describe ArgoHelper, :type => :helper do
         [
           {
             label: 'Reindex',
-            url: "/dor/reindex/#{@item_id}",
-            new_page: true
+            url: "/dor/reindex/#{@item_id}"
           },
           {
             label: 'Republish',
