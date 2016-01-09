@@ -127,11 +127,7 @@ module ArgoHelper
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin || current_user.is_manager
-      buttons << {
-        url: url_for(controller: :dor, action: :reindex, pid: pid),
-        label: 'Reindex',
-        new_page: true
-      }
+      buttons << {:url => url_for(:controller => :dor, :action => :reindex, :pid => pid), :label => 'Reindex'}
       buttons << {:url => url_for(:controller => :items, :action => :add_workflow, :id => pid), :label => 'Add workflow'}
 
       buttons << {
