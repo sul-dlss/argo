@@ -78,4 +78,15 @@ class ApplicationController < ActionController::Base
     true
   end
 
+  ##
+  # A ported over Rails 5 enhancement to ActionPack
+  # @see https://github.com/rails/rails/commit/13fd5586cef628a71e0e2900820010742a911099
+  def redirect_back(fallback_location:, **args)
+    if (referer = request.headers['Referer'])
+      redirect_to referer, **args
+    else
+      redirect_to fallback_location, **args
+    end
+  end
+
 end
