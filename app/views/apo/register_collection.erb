@@ -22,7 +22,7 @@ url_params={:controller => :apo, :action => :register_collection}
     <div class="collection-register-label-div">
       Collection Object Visibility
     </div>
-      <%=select_tag :collection_rights, options_for_select(default_rights_options, 'world' )%><br/>
+      <%=select_tag :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' )%><br/>
   </div>
 
   <div id="create-collection-catkey" class=" collection_div" style="display:none">
@@ -31,7 +31,7 @@ url_params={:controller => :apo, :action => :register_collection}
       Collection Object Visibility
     </div>
   </div>
-      <%=select_tag :collection_rights_catkey, options_for_select(default_rights_options, 'world' )%><br/>
+      <%=select_tag :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' )%><br/>
 </div>
 </div>
 

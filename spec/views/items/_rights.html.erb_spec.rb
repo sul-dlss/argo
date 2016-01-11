@@ -6,13 +6,13 @@ RSpec.describe 'items/_rights.html.erb' do
     assign(:object, object)
     render
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'world'
+      .to have_css '.form-group select.form-control option', text: 'World'
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'dark'
+      .to have_css '.form-group select.form-control option', text: 'Dark (Preserve Only)'
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'stanford'
+      .to have_css '.form-group select.form-control option', text: 'Stanford'
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'none'
+      .to have_css '.form-group select.form-control option', text: 'Citation Only'
     expect(rendered).to have_css 'button.btn.btn-primary', text: 'Update'
   end
 end

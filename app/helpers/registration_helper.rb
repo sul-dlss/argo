@@ -26,15 +26,6 @@ module RegistrationHelper
     ]
   end
 
-  def valid_rights_options
-    [
-      %w(World world),
-      %w(Stanford stanford),
-      ['Dark (Preserve Only)', 'dark'],
-      %w(None none)
-    ]
-  end
-
   def valid_content_types
     [
       'Book (flipbook, ltr)',

@@ -147,7 +147,7 @@ describe RegistrationController, :type => :controller do
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
       get 'rights_list', :apo_id => 'abc', :format => :xml
-      expect(response.body.include?('Dark (APO default)')).to eq(true)
+      expect(response.body.include?('Dark (Preserve Only) (APO default)')).to eq(true)
     end
 
     it 'should show Citation Only as the default if discover is world and read is none' do
@@ -198,7 +198,7 @@ describe RegistrationController, :type => :controller do
       expect(response.body.include?('World (APO default)')).to eq(false)
       expect(response.body.include?('Stanford (APO default)')).to eq(false)
       expect(response.body.include?('Citation Only (APO default)')).to eq(false)
-      expect(response.body.include?('Dark (APO default)')).to eq(false)
+      expect(response.body.include?('Dark (Preserve Only) (APO default)')).to eq(false)
     end
   end
 

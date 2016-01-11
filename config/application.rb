@@ -18,6 +18,7 @@ module Argo
     require 'pid_gatherer'
     require 'bulk_reindexer'
     require 'profiler'
+    require 'constants'
 
     config.active_job.queue_adapter = :delayed_job
 
