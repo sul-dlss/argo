@@ -46,10 +46,16 @@ class DorController < ApplicationController
     @solr_doc = Argo::Indexer.reindex_pid params[:pid], index_logger
     Dor::SearchService.solr.commit # reindex_pid doesn't commit, but callers of this method may expect the update to be committed immediately
     flash[:notice] = "Successfully updated index for #{params[:pid]}"
-    redirect_to :back
+    render status: 200, text: flash[:notice] and return unless request.headers['Referer']
+    redirect_back(
+      fallback_location: proc { catalog_path(params[:pid])}
+    )
   rescue ActiveFedora::ObjectNotFoundError # => e
     flash[:error] = 'Object does not exist in Fedora.'
-    redirect_to :back
+    render status: 404, text: flash[:error] and return unless request.headers['Referer']
+    redirect_back(
+      fallback_location: proc { catalog_path(params[:pid])}
+    )
   end
 
   def delete_from_index
