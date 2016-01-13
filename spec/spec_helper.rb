@@ -1,8 +1,3 @@
-if ENV['COVERAGE'] && RUBY_VERSION =~ /^1.9/
-  require 'simplecov'
-  SimpleCov.start
-end
-
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
@@ -10,8 +5,18 @@ require 'capybara/rails'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'equivalent-xml/rspec_matchers'
+
+require 'simplecov'
 require 'coveralls'
-Coveralls.wear!('rails')
+SimpleCov.profiles.define 'argo' do
+  add_filter 'spec'
+  add_filter 'vendor'
+end
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+])
+SimpleCov.start 'argo'
 
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, {timeout: 60})
