@@ -89,11 +89,11 @@ class RegistrationController < ApplicationController
     # we didn't find a default option, we'll just return the default list of rights options with no
     # specified selection.
     result = {}
-    { 'world' => 'World', 'stanford' => 'Stanford', 'none' => 'Citation Only', 'dark' => 'Dark' }.each do |key, val|
-      if default_opt == key
-        result['default'] = "#{val} (APO default)"
+    Constants::DEFAULT_RIGHTS_OPTIONS.each do |val|
+      if default_opt == val[1]
+        result['default'] = "#{val[0]} (APO default)"
       else
-        result[key] = val
+        result[val[1]] = val[0]
       end
     end
 

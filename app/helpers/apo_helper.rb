@@ -25,15 +25,6 @@ module ApoHelper
     options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
   end
 
-  def default_rights_options
-    [
-      %w(World world),
-      %w(Stanford stanford),
-      ['Dark (Preserve Only)', 'dark'],
-      ['Citation Only', 'none']
-    ]
-  end
-
   def options_for_desc_md
     [
       ['MODS'], ['TEI']

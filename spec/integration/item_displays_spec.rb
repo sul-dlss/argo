@@ -79,7 +79,7 @@ describe 'mods_view', :type => :request do
     context 'rights form' do
       it 'should render the access rights update ui' do
         visit '/items/druid:zt570tx3016/rights'
-        expect(page).to have_content('dark')
+        expect(page).to have_content('Dark (Preserve Only)')
       end
     end
     context 'source id ui' do
