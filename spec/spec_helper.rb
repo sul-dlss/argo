@@ -6,19 +6,16 @@ require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'equivalent-xml/rspec_matchers'
 
-# require 'coveralls'
-# Coveralls.wear!('rails')
-
 require 'simplecov'
 require 'coveralls'
 SimpleCov.profiles.define 'argo' do
   add_filter 'spec'
   add_filter 'vendor'
 end
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
-]
+])
 SimpleCov.start 'argo'
 
 Capybara.register_driver :poltergeist do |app|

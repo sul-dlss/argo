@@ -168,12 +168,13 @@ GEM
       activesupport (>= 3.0)
       deep_merge (~> 1.0.0)
     confstruct (0.2.7)
-    coveralls (0.8.3)
+    coveralls (0.8.10)
       json (~> 1.8)
       rest-client (>= 1.6.8, < 2)
-      simplecov (~> 0.10.0)
+      simplecov (~> 0.11.0)
       term-ansicolor (~> 1.3)
       thor (~> 0.19.1)
+      tins (~> 1.6.0)
     daemons (1.2.3)
     database_cleaner (1.5.1)
     deep_merge (1.0.1)
@@ -455,7 +456,7 @@ GEM
       multi_json (~> 1.0)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
-    simplecov (0.10.0)
+    simplecov (0.11.1)
       docile (~> 1.1.0)
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
@@ -606,4 +607,4 @@ DEPENDENCIES
   wfs_rails (~> 0.0.2)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
