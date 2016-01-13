@@ -256,6 +256,7 @@ describe ItemsController, :type => :controller do
   end
   describe '#datastream_update' do
     let(:xml) { '<contentMetadata/>' }
+    let(:invalid_apo_xml) { '<hydra:isGovernedBy rdf:resource="info:fedora/druid:not_exist"/>' }
     context 'save cases' do
       before :each do
         expect(@item).to receive(:datastreams).and_return({
@@ -291,6 +292,16 @@ describe ItemsController, :type => :controller do
       end
       it 'should error on missing dsid parameter' do
         expect { post 'datastream_update', :id => @pid, :content => xml }.to raise_error(ArgumentError)
+      end
+
+      it 'should display an error message if an invalid APO is entered as governor', :focus => true do
+        @mock_ds = double(Dor::ContentMetadataDS)
+        allow(@mock_ds).to receive(:content=).and_return(true)
+        allow(@item).to receive(:to_solr).and_raise(ActiveFedora::ObjectNotFoundError)
+        allow(@item).to receive(:datastreams).and_return({'contentMetadata' => @mock_ds})
+        post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => invalid_apo_xml
+        expect(response.code).to eq('404')
+        expect(response.body).to include('The object was not found in Fedora. Please recheck the RELS-EXT XML.')
       end
     end
   end

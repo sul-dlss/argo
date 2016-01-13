@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
   before_filter :forbid_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id, :delete_file, :close_version, :open_version, :resource, :add_file, :replace_file, :update_attributes, :update_resource, :mods, :datastream_update ]
   before_filter :forbid_view,   :only => [:get_preserved_file, :get_file]
   before_filter :enforce_versioning, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :tags, :source_id, :set_source_id, :set_content_type, :set_rights]
-  after_filter  :save_and_reindex,   :only => [:add_collection, :set_collection, :remove_collection, :open_version, :close_version, :tags, :tags_bulk, :source_id, :datastream_update, :set_rights, :set_content_type, :apply_apo_defaults]
+  after_filter  :save_and_reindex,   :only => [:add_collection, :set_collection, :remove_collection, :open_version, :close_version, :tags, :tags_bulk, :source_id, :set_rights, :set_content_type, :apply_apo_defaults]
 
   def purl_preview
     @object.add_collection_reference @object.descMetadata.ng_xml
@@ -209,6 +209,15 @@ class ItemsController < ApplicationController
       fail ArgumentError, 'XML is not well formed!'
     end
     @object.datastreams[params[:dsid]].content = params[:content] # set the XML to be verbatim as posted
+
+    # Catch reindexing errors here to avoid cascading errors
+    begin
+      save_and_reindex
+    rescue ActiveFedora::ObjectNotFoundError => e
+      render text: 'The object was not found in Fedora. Please recheck the RELS-EXT XML.', status: :not_found
+      return
+    end
+
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
     end
