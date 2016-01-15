@@ -73,4 +73,8 @@ feature 'Search results' do
     expect(page).to have_css 'dt', text: 'Collection:'
     expect(page).to have_css 'dd a', text: /Annual report/
   end
+  scenario 'contains document image thumbnail' do
+    visit catalog_index_path f: { objectType_ssim: ['item'] }
+    expect(page).to have_css '.document-thumbnail a img'
+  end
 end
