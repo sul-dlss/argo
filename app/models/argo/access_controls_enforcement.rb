@@ -27,7 +27,6 @@ module Argo
         pids = pids.join(' OR ')
       end
       solr_parameters[:fq] << "#{SolrDocument::FIELD_APO_ID}:(#{pids})"
-      logger.debug("Solr parameters: #{ solr_parameters.inspect }")
       solr_parameters
     end
   end
