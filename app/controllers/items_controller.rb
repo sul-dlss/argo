@@ -593,7 +593,8 @@ class ItemsController < ApplicationController
     end
     @object.create_workflow(params[:wf])
 
-    # sync up the workflows datastream with workflow service and force a reindex before redirection
+    # We need to sync up the workflows datastream with workflow service (using #find)
+    # and then force a committed Solr update before redirection.
     reindex Dor::Item.find(params[:id])
     Dor::SearchService.solr.commit
 
@@ -607,8 +608,7 @@ class ItemsController < ApplicationController
   private
 
   def reindex(item)
-    doc = item.to_solr
-    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
+    Dor::SearchService.solr.add item.to_solr
   end
 
   # Filters
