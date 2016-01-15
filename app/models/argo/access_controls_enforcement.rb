@@ -3,7 +3,7 @@ module Argo
   module AccessControlsEnforcement
     extend ActiveSupport::Concern
 
-    def add_access_controls_to_solr_params(solr_parameters, user)
+    def add_access_controls_to_solr_params(solr_parameters, user_params)
       apply_gated_discovery(solr_parameters, @user)
     end
 
