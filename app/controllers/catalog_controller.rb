@@ -71,22 +71,22 @@ class CatalogController < ApplicationController
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
-    # to get the hierarchy.
-    config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
+    # to get the hierarchy. limit == -1 is unlimited facet values
+    config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 limit: -1, partial: 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         limit: 10
     config.add_facet_field 'content_type_ssim',               label: 'Content Type',        limit: 10
     config.add_facet_field 'rights_primary_ssi',              label: 'Access Rights',       limit: 10
     config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10
-    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 9999, sort: 'index'
-    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 9999, sort: 'index'
+    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: -1, sort: 'index'
+    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: -1, sort: 'index'
+    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        limit: -1, sort: 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: -1, sort: 'index'
     config.add_facet_field 'current_version_isi',             label: 'Version',             limit: 10
     config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   limit: 10
     config.add_facet_field 'released_to_ssim',                label: 'Released To',         limit: 10
-    config.add_facet_field 'wf_wps_ssim',                     label: 'Workflows (WPS)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_wsp_ssim',                     label: 'Workflows (WSP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_swp_ssim',                     label: 'Workflows (SWP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_wps_ssim',                     label: 'Workflows (WPS)',     limit: -1, partial: 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_wsp_ssim',                     label: 'Workflows (WSP)',     limit: -1, partial: 'blacklight/hierarchy/facet_hierarchy'
+    config.add_facet_field 'wf_swp_ssim',                     label: 'Workflows (SWP)',     limit: -1, partial: 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'has_model_ssim',                  label: 'Object Model',        limit: 10
 
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
