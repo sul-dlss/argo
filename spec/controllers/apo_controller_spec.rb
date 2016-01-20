@@ -134,6 +134,13 @@ describe ApoController, :type => :controller do
   end
 
   describe 'register_collection' do
+    it 'should show the create collection form' do
+      get :register_collection, 'id' => @apo.pid
+      expect(response).to have_http_status(:ok)
+      expect(response).to render_template('apo/register_collection')
+      expect(response.body).to eq ''
+    end
+
     it 'should create a collection via catkey' do
       catkey = '1234567'
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
@@ -148,7 +155,8 @@ describe ApoController, :type => :controller do
         { :pid => @collection.pid }
       end
 
-      post 'register_collection', 'label' => ':auto', 'collection_catkey' => catkey, 'collection_rights_catkey' => 'dark', 'id' => @apo.pid
+      post :register_collection, 'label' => ':auto', 'collection_catkey' => catkey, 'collection_rights_catkey' => 'dark', 'id' => @apo.pid
+      expect(response).to have_http_status(:found) # redirects to catalog page
     end
 
     it 'should create a collection from title/abstract by registering the collection, then adding the abstract' do
@@ -172,7 +180,8 @@ describe ApoController, :type => :controller do
       end
       expect(@collection).to receive(:descMetadata).and_return(mock_desc_md_ds).exactly(4).times
 
-      post 'register_collection', 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => @apo.pid
+      post :register_collection, 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => @apo.pid
+      expect(response).to have_http_status(:found) # redirects to catalog page
     end
 
     it 'should add the collection to the apo default collection list' do
@@ -191,7 +200,8 @@ describe ApoController, :type => :controller do
       expect(controller).to receive(:set_abstract)
       expect(@apo).to receive(:add_default_collection).with(@collection.pid)
 
-      post 'register_collection', 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => @apo.pid
+      post :register_collection, 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => @apo.pid
+      expect(response).to have_http_status(:found) # redirects to catalog page
     end
   end
 

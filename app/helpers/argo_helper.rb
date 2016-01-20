@@ -124,7 +124,7 @@ module ArgoHelper
     # if this is an apo and the user has permission for the apo, let them edit it.
     if (object.datastreams.include? 'roleMetadata') && (current_user.is_admin || current_user.is_manager || object.can_manage_item?(current_user.roles(apo_pid)))
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
-      buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection', :new_page => true}
+      buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection'}
     end
     if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin || current_user.is_manager
       buttons << {
