@@ -25,9 +25,9 @@
           <td><%= bulk_action.description %></td>
           <td><%= bulk_action.status %></td>
           <td>
+            <%= bulk_action.druid_count_total %> /
             <%= bulk_action.druid_count_success %> /
-            <%= bulk_action.druid_count_fail %> /
-            <%= bulk_action.druid_count_total %>
+            <%= bulk_action.druid_count_fail %>
           </td>
           <td>
             <%= link_to 'Delete', bulk_action, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
