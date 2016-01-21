@@ -1,5 +1,5 @@
 class BulkActionsController < ApplicationController
-  before_action :set_bulk_action, only: [:show, :edit, :update, :destroy]
+#  before_action :set_bulk_action, only: [:show, :edit, :update, :destroy]
 
   # GET /bulk_actions
   def index
@@ -21,9 +21,16 @@ class BulkActionsController < ApplicationController
 
   # POST /bulk_actions
   def create
-    @bulk_action = BulkAction.new(bulk_action_params)
+#    @bulk_action = BulkAction.new(bulk_action_params)
+    @bulk_action = BulkAction.new(druid_count_success: 0, druid_count_fail: 0, druid_count_total: 5)
+#    binding.pry
+    @bulk_action.save
+    puts "tommy"
 
     if @bulk_action.save
+#      binding.pry
+      @druid_list = ['druid:hj185vb7593', 'druid:kv840rx2720', 'druid:pv820dk6668', 'druid:qq613vj0238', 'druid:rn653dy9317', 'druid:xb482bw3979']
+      DescmetadataDownloadJob.perform_later(@druid_list, @bulk_action.id, '/tmp/')
       redirect_to @bulk_action, notice: 'Bulk action was successfully created.'
     else
       render :new
@@ -47,12 +54,12 @@ class BulkActionsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_bulk_action
-      @bulk_action = BulkAction.find(params[:id])
-    end
+#    def set_bulk_action
+#      @bulk_action = BulkAction.find(params[:id])
+#    end
 
     # Only allow a trusted parameter "white list" through.
-    def bulk_action_params
-      params.require(:bulk_action).permit(:action_type, :status, :log_name, :description, :druid_count_total)
-    end
+#    def bulk_action_params
+#      params.require(:bulk_action).permit(:action_type, :status, :log_name, :description, :druid_count_total)
+#    end
 end
