@@ -23,7 +23,7 @@ class StatusController < ApplicationController
       render :status => 500, :text => "Nothing indexed recently. Even after saving '#{params[:test_obj]}'."
       return
     end
-  rescue ActiveFedora::ObjectNotFoundError
+  rescue ActiveFedora::ObjectNotFoundError, Rubydora::FedoraInvalidRequest
     render :status => 404, :text => "No object '#{params[:test_obj]}' found"
   end
 
