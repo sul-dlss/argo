@@ -5,11 +5,14 @@ class BulkAction < ActiveRecord::Base
 
   # Creates a new BulkAction.
   # @param[Integer] druid_count     Number of druids to work on, by default zero.
-  def initialize(druid_count=0)
-    @druid_count_success = 0
-    @druid_count_fail = 0
-    @druid_count_total = druid_count
-  end
+#  def initialize(druid_count=0)
+    #    binding.pry
+#    super.initialize
+#    druid_count_success = 0
+#    @druid_count_fail = 0
+#    @druid_count_total = druid_count
+#    super.initialize
+#  end
 
   def increment_success
     @druid_count_success += 1

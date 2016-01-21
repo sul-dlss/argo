@@ -42,6 +42,8 @@ en:
       bulk_log_invalid_permission: 	     'Error - the application does not have permission to read a file'
       bulk_log_internal_error:     	     'Error - there was an error within the MODSulator server'
       bulk_log_druids_loaded:      	     'Druids loaded'
+      bulk_log_bulk_action_not_found:        'Internal error - the expected BulkAction does not exist'
+      bulk_log_bulk_action_success:          'Success'
     content_type:
       # putting these strings here so that their content stays consistent, since it's used across disparate parts of the application.
       update_explanation_single:         "Replace instances of the old content type and resource type with the newly specified values.  Note that \"none\" is not a valid choice; it's provided as a placeholder for when no reasonable default can be pre-selected.  \"Old Content Type\" is always the current content type, since nothing gets updated if content type doesn't get updated (so if you changed that, nothing would get updated).  \"Old Resource Type\" defaults to the first value in the list of types for the resource elements in the contentMetadata datastream.  \"New Content Type\" and \"New Resource Type\" default to the old values, but any of the listed values other than \"none\" can be chosen for the update."

@@ -15,6 +15,7 @@ BULK_METADATA:
   LOG: 'log.txt'
   CSV_LOG: 'log.csv'
   XML: 'MODS'
+  ZIP: 'zipfile.zip'
 
 # Content
 CONTENT:
