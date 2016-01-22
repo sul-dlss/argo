@@ -1,0 +1,60 @@
+<% fail ArgumentError unless @object.present? %>
+<h4>
+  APO
+  &mdash;
+  <%= @object.label %>
+</h4>
+<div class="col-md-6">
+<%= form_tag url_for(controller: :apo, action: :register_collection, id: @object.pid), id: 'collection_form', role: 'form', class: 'form-horizontal' do %>
+  <div class="form-group" style="padding-left:20px">
+    <label class="radio">
+      <%= radio_button_tag 'collection_radio', 'create', true, onclick: "$('.collection_div').hide();$('#create-collection').show();" %>
+      Create a Collection from Title/Abstract
+    </label>
+    <label class="radio">
+      <%= radio_button_tag 'collection_radio', 'create', false, onclick: "$('.collection_div').hide();$('#create-collection-catkey').show();" %>
+      Create a Collection from Symphony
+    </label>
+  </div>
+  <div id="create-collection" class="collection_div">
+    <div class="form-group">      
+      <label for="collection_title">
+        Collection Title
+      </label>
+      <%= text_field_tag 'collection_title', nil, class: 'form-control' %>
+    </div>
+    <div class="form-group">      
+      <label for="collection_abstract">
+        Collection Abstract
+      </label>
+      <%= text_area_tag 'collection_abstract', nil, class: 'form-control'%>
+    </div>
+    <div class="form-group">                        
+      <label for="collection_rights">
+        Collection Object Visibility
+      </label>
+      <%=select_tag :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' ), class: 'form-control' %>
+    </div>
+  </div>
+  <div id="create-collection-catkey" class="collection_div" style="display:none">
+    <div class="form-group">                  
+      <label for="collection_catkey">
+        Collection Catkey
+      </label>
+      <%= text_field_tag 'collection_catkey', nil, class: 'form-control' %>
+    </div>
+    <div class="form-group">                        
+      <label for="collection_rights_catkey">
+        Collection Object Visibility
+      </label>
+      <%=select_tag :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' ), class: 'form-control' %>
+    </div>
+  </div>
+  <div class="form-group">
+    <%= button_tag 'register', id: 'register', class: 'btn btn-default' do 'Register Collection' end %>
+  </div>
+  <% end %>
+  <div class="form-group">
+    <%= button_to 'Cancel', catalog_path(@object.pid), method: :get, class: 'btn btn-default' %>
+  </div>
+</div>

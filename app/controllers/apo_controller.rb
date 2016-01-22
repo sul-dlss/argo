@@ -209,7 +209,7 @@ class ApoController < ApplicationController
   end
 
   def register_collection
-    return unless params[:collection_title] || params[:collection_catkey]
+    return unless params[:collection_title].present? || params[:collection_catkey].present?
     collection_pid = create_collection params[:id]
     @object.add_default_collection collection_pid
     redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
