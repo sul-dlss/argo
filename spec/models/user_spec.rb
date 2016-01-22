@@ -97,25 +97,25 @@ describe User, :type => :model do
     before(:each) do
       @answer = {}
       @doc = {
-        'apo_role_dor-administrator_ssim' => ['dlss:groupA', 'dlss:groupB'],
-        'apo_role_sdr-administrator_ssim' => ['dlss:groupA', 'dlss:groupB'],
-        'apo_role_dor-apo-manager_ssim'   => ['dlss:groupC', 'dlss:groupD'],
-        'apo_role_dor-viewer_ssim'        => ['dlss:groupE', 'dlss:groupF'],
-        'apo_role_sdr-viewer_ssim'        => ['dlss:groupE', 'dlss:groupF'],
+        'apo_role_dor-administrator_ssim' => ['workgroup:dlss:groupA', 'workgroup:dlss:groupB'],
+        'apo_role_sdr-administrator_ssim' => ['workgroup:dlss:groupA', 'workgroup:dlss:groupB'],
+        'apo_role_dor-apo-manager_ssim'   => ['workgroup:dlss:groupC', 'workgroup:dlss:groupD'],
+        'apo_role_dor-viewer_ssim'        => ['workgroup:dlss:groupE', 'workgroup:dlss:groupF'],
+        'apo_role_sdr-viewer_ssim'        => ['workgroup:dlss:groupE', 'workgroup:dlss:groupF'],
         'apo_role_person_dor-viewer_ssim' => ['sunetid:tcramer'],
         'apo_role_person_sdr-viewer_ssim' => ['sunetid:tcramer'],
-        'apo_role_group_manager_ssim'     => ['dlss:groupR']
+        'apo_role_group_manager_ssim'     => ['workgroup:dlss:groupR']
       }
       @answer['response'] = { 'docs' => [@doc] }
       allow(Dor::SearchService).to receive(:query).and_return(@answer)
       @user = User.find_or_create_by_webauth(double('webauth', :login => 'asdf'))
     end
     it 'should build a set of roles' do
-      expect(@user).to receive(:groups).and_return(['dlss:groupF', 'dlss:groupA'])
+      expect(@user).to receive(:groups).and_return(['workgroup:dlss:groupF', 'workgroup:dlss:groupA'])
       expect(@user.roles('pid')).to eq(['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer'])
     end
     it 'should translate the old "manager" role into dor-apo-manager' do
-      expect(@user).to receive(:groups).and_return(['dlss:groupR'])
+      expect(@user).to receive(:groups).and_return(['workgroup:dlss:groupR'])
       expect(@user.roles('pid')).to eq(['dor-apo-manager'])
     end
     it 'should work correctly if the individual is named in the apo, but isnt in any groups that matter' do
@@ -123,7 +123,7 @@ describe User, :type => :model do
       expect(@user.roles('pid')).to eq(['dor-viewer', 'sdr-viewer'])
     end
     it 'should hang onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
-      expect(@user).to receive(:groups).and_return(['sunetid:tcramer'])
+      expect(@user).to receive(:groups).and_return(['testdoesnotcarewhatishere'])
       expect(Dor::SearchService).to receive(:query).once
       @user.roles('pid')
       @user.roles('pid')
