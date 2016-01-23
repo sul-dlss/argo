@@ -11,7 +11,8 @@ class StatusController < ApplicationController
       render :status => 500, :text => 'Nothing indexed recently.'
       return
     end
-    test_item = Dor::Item.find(params[:test_obj])
+    test_item = find_druid(params[:test_obj])
+    return if test_item.nil?
     test_item.identityMetadata.content_will_change!  # mark as dirty
     test_item.save
     secs = params[:sleep].nil? ? 10.0 : params[:sleep].to_i  # allow override to speed testing

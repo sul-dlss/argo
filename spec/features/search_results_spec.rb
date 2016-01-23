@@ -1,21 +1,10 @@
 require 'spec_helper'
 
 feature 'Search results' do
-  let(:current_user) do
-    double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: [],
-      groups: []
-    )
-  end
   before :each do
-    allow_any_instance_of(CatalogController).to receive(:current_user).
-      and_return(current_user)
+    admin_user # see spec_helper
   end
+
   scenario 'contains Blacklight default index page tools' do
     visit catalog_index_path f: { empties: ['no_rights_characteristics'] }
     within '.constraints-container' do
@@ -44,6 +33,7 @@ feature 'Search results' do
       end
     end
   end
+
   scenario 'contains appropriate metadata fields' do
     visit catalog_index_path f: { objectType_ssim: ['item'] }
     within('.document', match: :first) do
@@ -73,6 +63,7 @@ feature 'Search results' do
     expect(page).to have_css 'dt', text: 'Collection:'
     expect(page).to have_css 'dd a', text: /Annual report/
   end
+
   scenario 'contains document image thumbnail' do
     visit catalog_index_path f: { objectType_ssim: ['item'] }
     expect(page).to have_css '.document-thumbnail a img'

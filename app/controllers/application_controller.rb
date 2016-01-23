@@ -20,6 +20,25 @@ class ApplicationController < ActionController::Base
 
   layout 'application'
 
+  # A common method for controllers to find a Dor object.  It accepts any valid
+  # PID (druid:aa111aa1111) or DRUID (aa111aa1111).  DruidTools::Druid parses
+  # input and returns a uniform PID, which is input to Dor.find to obtain a Dor
+  # object.
+  # @see https://github.com/sul-dlss/druid-tools
+  # @param druid [String]
+  # @return object [ActiveFedora::Base] any Dor object
+  # @raises ArgumentError
+  def find_druid(druid)
+    druid = DruidTools::Druid.new(druid).druid
+    Dor.find(druid)
+  rescue ArgumentError
+    flash[:error] = "Invalid DRUID: #{druid}"
+    render status: 400, text: flash[:error] and return
+  rescue ActiveFedora::ObjectNotFoundError # => e
+    flash[:error] = 'Object does not exist in Fedora.'
+    render status: 404, text: flash[:error] and return
+  end
+
   def current_user
     cur_user = nil
     if webauth && webauth.logged_in?
@@ -71,11 +90,9 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize!
-    unless current_user
-      render nothing: true, status: :unauthorized
-      return false
-    end
-    true
+    return true if current_user
+    render nothing: true, status: :unauthorized
+    false
   end
 
   ##
