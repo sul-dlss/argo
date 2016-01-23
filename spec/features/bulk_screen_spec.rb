@@ -9,7 +9,7 @@ feature 'Bulk actions view', js: true do
       logged_in?: true,
       permitted_apos: [],
       is_admin: true,
-      permitted_collections: [ [ "string" ] ]
+      permitted_collections: [["string"]]
     )
 
     expect_any_instance_of(ApplicationController).to receive(:current_user).exactly(8).times.and_return(@current_user)
