@@ -79,11 +79,11 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'status_ok' do
-    (1..9).each do |i|
+    (0..9).each do |i|
       it "correctly queries the status of DOR objects (:status_code #{i})" do
         m = double
         allow(m).to receive(:status_info).and_return({ :status_code => i })
-        if i == 0 || i == 1 || i == 6 || i == 7 || i == 8 || i == 9
+        if i == 1 || i == 6 || i == 7 || i == 8 || i == 9
           expect(@mj.status_ok(m)).to be_truthy
         else
           expect(@mj.status_ok(m)).to be_falsy
@@ -93,7 +93,7 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'in_accessioning' do
-    (1..9).each do |i|
+    (0..9).each do |i|
       it "returns true for DOR objects that are currently in acccessioning, false otherwise (:status_code #{i})" do
         m = double
         allow(m).to receive(:status_info).and_return({ :status_code => i })
