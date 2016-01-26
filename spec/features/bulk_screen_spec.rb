@@ -12,7 +12,7 @@ feature 'Bulk actions view', js: true do
       permitted_collections: [["string"]]
     )
 
-    expect_any_instance_of(ApplicationController).to receive(:current_user).exactly(8).times.and_return(@current_user)
+    expect_any_instance_of(ApplicationController).to receive(:current_user).at_least(:once).and_return(@current_user)
   end
 
   scenario 'basic page renders ok', :focus => true do
