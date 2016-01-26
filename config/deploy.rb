@@ -1,4 +1,3 @@
-# config valid only for Capistrano 3.1
 lock '3.2.1'
 
 set :application, 'argo'
@@ -39,17 +38,6 @@ set :linked_dirs, %w(log config/certs config/settings tmp/pids tmp/cache tmp/soc
 before 'deploy:publishing', 'squash:write_revision'
 
 namespace :deploy do
-
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
-    end
-  end
-
-  after :publishing, :restart
-
   # it's necessary to run the 'argo:htaccess' rake task after restarting, because
   # the public folder (which contains the generated .htaccess file) is committed
   # in argo's git repo, and so a fresh copy (without the generated .htaccess file)

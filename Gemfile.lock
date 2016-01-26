@@ -137,12 +137,14 @@ GEM
       sshkit (~> 1.2)
     capistrano-one_time_key (0.0.1)
       capistrano (~> 3.0)
-    capistrano-rails (1.1.5)
+    capistrano-passenger (0.2.0)
+      capistrano (~> 3.0)
+    capistrano-rails (1.1.6)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capistrano-releaseboard (0.0.1)
       faraday
-    capistrano3-delayed-job (1.4.1)
+    capistrano3-delayed-job (1.5.0)
       capistrano (>= 3.0.0)
     capybara (2.5.0)
       mime-types (>= 1.16)
@@ -186,6 +188,11 @@ GEM
     deprecation (0.2.2)
       activesupport
     diff-lcs (1.2.5)
+    dlss-capistrano (3.2.0)
+      capistrano (~> 3.0)
+      capistrano-bundle_audit (>= 0.0.3)
+      capistrano-one_time_key
+      capistrano-releaseboard
     docile (1.1.5)
     docopt (0.5.0)
     domain_name (0.5.25)
@@ -257,11 +264,6 @@ GEM
       nokogiri (>= 1.4.3.1)
       systemu (>= 1.2.0)
       validatable
-    lyberteam-capistrano-devel (3.1.0)
-      capistrano (~> 3.0)
-      capistrano-bundle_audit (>= 0.0.3)
-      capistrano-one_time_key
-      capistrano-releaseboard
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     marc (1.0.0)
@@ -539,6 +541,7 @@ DEPENDENCIES
   blacklight-marc
   bootstrap-sass
   capistrano (= 3.2.1)
+  capistrano-passenger
   capistrano-rails
   capistrano3-delayed-job (~> 1.0)
   capybara
@@ -552,6 +555,7 @@ DEPENDENCIES
   database_cleaner
   delayed_job
   delayed_job_active_record
+  dlss-capistrano (~> 3.1)
   dor-services (~> 5.0)!
   equivalent-xml (>= 0.6.0)
   http_logger
@@ -563,7 +567,6 @@ DEPENDENCIES
   jquery-validation-rails
   kaminari
   kgio
-  lyberteam-capistrano-devel (= 3.1.0)
   moab-versioning
   mods_display
   mysql2 (~> 0.3.2)
