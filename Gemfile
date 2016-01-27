@@ -65,6 +65,7 @@ group :test, :development do
   gem 'rack-test', :require => 'rack/test'
   gem 'simplecov', :require => false
   gem 'pry-byebug'
+  gem 'pry-doc'
   gem 'pry-remote'
   gem 'pry-rails'
   gem 'coveralls', require: false
