@@ -1,5 +1,9 @@
 Argo::Application.routes.draw do
 
+  resources :bulk_action_statuses
+  resources :bulk_action_messages
+  resources :bulk_actions
+  resources :bulk_descmetadata_downloads
   Blacklight::Marc.add_routes(self)
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Message:</strong>
+  <%= @bulk_action_message.message %>
+</p>
+
+<p>
+  <strong>Druid:</strong>
+  <%= @bulk_action_message.druid %>
+</p>
+
+<%= link_to 'Edit', edit_bulk_action_message_path(@bulk_action_message) %> |
+<%= link_to 'Back', bulk_action_messages_path %>

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Success:</strong>
+  <%= @bulk_action_status.success %>
+</p>
+
+<p>
+  <strong>Completed:</strong>
+  <%= @bulk_action_status.completed %>
+</p>
+
+<p>
+  <strong>Started:</strong>
+  <%= @bulk_action_status.started %>
+</p>
+
+<%= link_to 'Edit', edit_bulk_action_status_path(@bulk_action_status) %> |
+<%= link_to 'Back', bulk_action_statuses_path %>

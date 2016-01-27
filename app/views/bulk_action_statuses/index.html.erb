@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Bulk Action Statuses</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Success</th>
+      <th>Completed</th>
+      <th>Started</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bulk_action_statuses.each do |bulk_action_status| %>
+      <tr>
+        <td><%= bulk_action_status.success %></td>
+        <td><%= bulk_action_status.completed %></td>
+        <td><%= bulk_action_status.started %></td>
+        <td><%= link_to 'Show', bulk_action_status %></td>
+        <td><%= link_to 'Edit', edit_bulk_action_status_path(bulk_action_status) %></td>
+        <td><%= link_to 'Destroy', bulk_action_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bulk action status', new_bulk_action_status_path %>

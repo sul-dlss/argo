@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Bulk Actions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Start time</th>
+      <th>End time</th>
+      <th>Bulk actionable</th>
+      <th>Bulk actionable type</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bulk_actions.each do |bulk_action| %>
+      <tr>
+        <td><%= bulk_action.start_time %></td>
+        <td><%= bulk_action.end_time %></td>
+        <td><%= bulk_action.bulk_actionable_id %></td>
+        <td><%= bulk_action.bulk_actionable_type %></td>
+        <td><%= link_to 'Show', bulk_action %></td>
+        <td><%= link_to 'Edit', edit_bulk_action_path(bulk_action) %></td>
+        <td><%= link_to 'Destroy', bulk_action, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bulk action', new_bulk_action_path %>
