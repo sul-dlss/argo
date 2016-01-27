@@ -81,7 +81,8 @@ end
 
 group :deployment do
   gem 'capistrano', '=3.2.1' # pinned because inadvertent capistrano upgrades tend to cause deployment issues.
-  gem 'capistrano-rails'
-  gem 'lyberteam-capistrano-devel', '3.1.0'
+  gem 'capistrano-rails', '=1.1.5' # pinned because otherwise deployment fails with:  NoMethodError: undefined method `verbosity' for "/usr/bin/env deploy:migrating\n":String
+  gem 'capistrano-passenger'
+  gem 'dlss-capistrano', '~> 3.1'
   gem 'capistrano3-delayed-job', '~> 1.0'
 end
