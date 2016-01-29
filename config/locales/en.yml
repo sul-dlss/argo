@@ -12,7 +12,6 @@ en:
         default: "%Y-%m-%d %I:%M%p"
   argo:
     search:
-      bulk_update_view: 'Bulk Update View'
       catalog_view: 'Results View'
       discovery_view: 'Discovery Report View'
       report_view: 'Report View'

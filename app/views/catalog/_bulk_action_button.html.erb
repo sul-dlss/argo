@@ -1,0 +1,4 @@
+<div id='bulk_action_link' class='btn-group'>
+  <% cleaned_params = params.select { |key, value| !['controller', 'action'].include?(key) } %>
+  <%= link_to('Bulk Actions', send(:report_bulk_url, cleaned_params), class: 'btn btn-default', type: 'button', id: 'bulk_update_view') %>
+</div>

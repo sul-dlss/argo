@@ -22,7 +22,6 @@ module ApplicationHelper
   # @return [Array<ViewSwitcher>]
   def views_to_switch
     [
-      ViewSwitcher.new(:bulk_update, :report_bulk_url),
       ViewSwitcher.new(:catalog, :catalog_index_url),
       ViewSwitcher.new(:report, :report_url),
       ViewSwitcher.new(:discovery, :discovery_url),
