@@ -8,12 +8,10 @@ class DescmetadataDownloadJob < ActiveJob::Base
   # @param[Integer]        bulk_action_id   ActiveRecord identifier of the BulkAction object that originated this job.
   # @param[String]         output_directory Where to store the log and zip files.
   def perform(druid_list, bulk_action_id, output_directory)
-    Delayed::Worker.logger.debug('started the job')
     log_filename = generate_log_filename(output_directory)
     zip_filename = generate_zip_filename(output_directory)
     
     File.open(log_filename, 'w') { |log|
-      Delayed::Worker.logger.debug('opende file')
       # Get the BulkAction that initiated this job and fail with an error message if it doesn't exist
       current_bulk_action = get_bulk_action(bulk_action_id)
       if current_bulk_action == nil
@@ -21,16 +19,14 @@ class DescmetadataDownloadJob < ActiveJob::Base
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
       else
         start_log(log, current_bulk_action.user_id, '', current_bulk_action.description)
-        Delayed::Worker.logger.debug('about to open zip')
+
         Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
           druid_list.each do |current_druid|
             begin
-              Delayed::Worker.logger.debug("starting to process druid #{current_druid}")
               dor_object = Dor.find current_druid
               descMetadata = dor_object.descMetadata.content
-              Delayed::Worker.logger.debug("gotcontnet")
-              write_to_zip(descMetadata, current_druid, zipfile)
-              Delayed::Worker.logger.debug("wrotecontent")
+
+              write_to_zip(descMetadata, current_druid, zip_file)
               log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
             rescue ActiveFedora::ObjectNotFoundError => e
               log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
@@ -89,9 +85,7 @@ class DescmetadataDownloadJob < ActiveJob::Base
   # @param  [String] output_dir Where to store the zip file.
   # @return [String] A filename for the zip file.
   def generate_zip_filename(output_dir)
-    Delayed::Worker.logger.debug('about to open dir')
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
-    Delayed::Worker.logger.debug('about to open zip')
     File.join(output_dir, Argo::Config.bulk_metadata_zip)
   end
 
