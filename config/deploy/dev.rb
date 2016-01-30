@@ -6,4 +6,4 @@ set :bundle_without, %w(production test).join(' ')
 
 set :deploy_to, '/opt/app/lyberadmin/argo'
 
-set :delayed_job_workers, 1
+set :delayed_job_workers, 2 # NOTE: should be >= 2, see config/eye/delayed_job_workers.eye for explanation

@@ -56,4 +56,24 @@ namespace :deploy do
     end
   end
 
+  # execute the eye script located in the deployed argo's bin directory, since
+  # eye may not be installed system-wide.  load the delayed_job_workers.eye config,
+  # which should monitor workers for memory consumption (restarting them individually
+  # if and when they exceed the configured threshold).
+  after :restart, :load_eye_dj_config do
+    on roles(:app) do
+      within release_path do
+        # :delayed_job_workers is set by the env specific cap configs.  it won't
+        # yet be set when this task is defined (though it will be by the time it's
+        # executed).
+        with rails_env: fetch(:rails_env), argo_delayed_job_worker_count: fetch(:delayed_job_workers) do
+          # quit first to make sure the new config is loaded
+          execute :'./bin/eye', :quit
+
+          # avoid spaces in the command name, see http://capistranorb.com/documentation/getting-started/tasks/
+          execute :'./bin/eye', :load, :'config/eye/delayed_job_workers.eye'
+        end
+      end
+    end
+  end
 end
