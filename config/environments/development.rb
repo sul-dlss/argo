@@ -73,6 +73,7 @@ Argo::Application.configure do
     bulk_metadata_log       Settings.BULK_METADATA.LOG       # Bulk metadata log file
     bulk_metadata_csv_log   Settings.BULK_METADATA.CSV_LOG   # Bulk metadata log file in CSV format for end users
     bulk_metadata_xml       Settings.BULK_METADATA.XML       # Bulk metadata XML output file
+    bulk_metadata_zip       Settings.BULK_METADATA.ZIP       # Descriptive metadata download output file
   end
 
   # the following config statement gets us two important things on each log line:

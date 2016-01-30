@@ -15,14 +15,6 @@ RSpec.feature 'View switcher' do
   end
 
   feature 'is present' do
-    scenario 'bulk update' do
-      expect_any_instance_of(ReportController).to receive(:current_user)
-        .at_least(1).times.and_return(current_user)
-      visit report_bulk_url f: { objectType_ssim: ['item'] }
-      within '.report-toggle' do
-        expect(page).to have_css 'li.active a', text: 'Bulk Update View'
-      end
-    end
     scenario 'catalog results' do
       expect_any_instance_of(CatalogController).to receive(:current_user)
         .at_least(1).times.and_return(current_user)

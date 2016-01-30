@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Action type:</strong>
+  <%= @bulk_action.action_type %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @bulk_action.status %>
+</p>
+
+<p>
+  <strong>Log name:</strong>
+  <%= @bulk_action.log_name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @bulk_action.description %>
+</p>
+
+<p>
+  <strong>Druid count total:</strong>
+  <%= @bulk_action.druid_count_total %>
+</p>
+
+<p>
+  <strong>Druid count success:</strong>
+  <%= @bulk_action.druid_count_success %>
+</p>
+
+<p>
+  <strong>Druid count fail:</strong>
+  <%= @bulk_action.druid_count_fail %>
+</p>
+
+<%= link_to 'Edit', edit_bulk_action_path(@bulk_action) %> |
+<%= link_to 'Back', bulk_actions_path %>

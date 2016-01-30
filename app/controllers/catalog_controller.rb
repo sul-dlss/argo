@@ -12,6 +12,7 @@ class CatalogController < ApplicationController
 
   before_filter :reformat_dates, :set_user_obj_instance_var
   before_action :show_aspect, only: [:dc, :ds]
+  before_action :sort_collection_actions_buttons, only: [:index]
 
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
 
@@ -165,6 +166,8 @@ class CatalogController < ApplicationController
     }
 
     config.add_results_collection_tool(:report_view_toggle)
+    config.add_results_collection_tool(:bulk_update_view_button)
+    config.add_results_collection_tool(:bulk_action_button)
 
     ##
     # Configure document actions framework
@@ -371,5 +374,21 @@ class CatalogController < ApplicationController
 
   def find_desc_metadata_file(job_output_directory)
     File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
+  end
+
+
+  # Sorts the Blacklight collection actions buttons so that the "Bulk Action" and "Bulk Update View" buttons appear
+  # at the front of the list.
+  def sort_collection_actions_buttons
+    collection_actions_order = blacklight_config.index.collection_actions.keys
+    collection_actions_order.delete(:bulk_action_button)
+    collection_actions_order.delete(:bulk_update_view_button)
+    collection_actions_order.insert(0, :bulk_update_view_button)
+    collection_actions_order.insert(0, :bulk_action_button)
+
+    # Use the order of indices in the collection_actions_order array for the Blacklight hash
+    blacklight_config.index.collection_actions = blacklight_config.index.collection_actions.to_h.sort do |(key1, value1), (key2, value2)|
+      collection_actions_order.index(key1) <=> collection_actions_order.index(key2)
+    end
   end
 end
