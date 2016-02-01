@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'catalog/_show_default.html.erb' do
+RSpec.describe 'catalog/show.html.erb' do
   let(:document) do
     SolrDocument.new(
       id: 1,
@@ -15,9 +15,12 @@ RSpec.describe 'catalog/_show_default.html.erb' do
     assign(:document, document)
   end
   it 'assigns page title, truncating it' do
-    expect(view).to receive(:render_document_sections)
+    expect(view).to receive(:render_document_sidebar_partial)
+    expect(view).to receive(:item_page_entry_info)
+    expect(view).to receive(:render_document_partial)
+    expect(view).to receive(:current_search_session)
     render
     expect(view.instance_variable_get(:@page_title))
-      .to eq 'Argo - Long title that should be truncated at 50 chara...'
+      .to eq 'Long title that should be truncated at 50 chara... - Argo'
   end
 end
