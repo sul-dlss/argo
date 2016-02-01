@@ -3,7 +3,6 @@ require 'spec_helper'
 RSpec.describe ApplicationHelper do
   describe '#views_to_switch' do
     it 'returns the view switchers' do
-      expect(helper.views_to_switch.length).to eq 5
       helper.views_to_switch.each do |view|
         expect(view).to be_an ViewSwitcher
       end

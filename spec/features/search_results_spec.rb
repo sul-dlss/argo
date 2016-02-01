@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'spec_helper'
 
 feature 'Search results' do
@@ -28,6 +29,9 @@ feature 'Search results' do
       end
     end
     within '.search-widgets' do
+      within '#bulk-update-button' do
+        expect(page).to have_css 'a.btn.btn-default', text: 'Bulk Update'
+      end
       within '#sort-dropdown' do
         expect(page).to have_css 'button', text: 'Sort by Druid'
         expect(page).to have_css 'ul li', count: 3
@@ -37,7 +41,6 @@ feature 'Search results' do
         expect(page).to have_css 'ul li', count: 4
       end
       within '.report-toggle' do
-        expect(page).to have_css 'a', text: 'Bulk Update'
         expect(page).to have_css 'a', text: 'Report View'
         expect(page).to have_css 'a', text: 'Discovery Report'
         expect(page).to have_css 'a', text: 'Workflow Grid View'
