@@ -4,13 +4,19 @@ class DescmetadataDownloadJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
+  around_perform do |job, block|
+    bulk_action = BulkAction.find(job.arguments[1])
+    bulk_action.update_attribute(:status, 'Processing')
+    block.call
+    bulk_action.update_attribute(:status, 'Completed')
+  end
+
   # @param[Array<String>]  druid_list       Identifiers for what objects to act on.
   # @param[Integer]        bulk_action_id   ActiveRecord identifier of the BulkAction object that originated this job.
   # @param[String]         output_directory Where to store the log and zip files.
   def perform(druid_list, bulk_action_id, output_directory)
     log_filename = generate_log_filename(output_directory)
     zip_filename = generate_zip_filename(output_directory)
-    Delayed::Worker.logger.debug("before open #{zip_filename}")
     File.open(log_filename, 'w') { |log|
       # Get the BulkAction that initiated this job and fail with an error message if it doesn't exist
       current_bulk_action = get_bulk_action(bulk_action_id)
