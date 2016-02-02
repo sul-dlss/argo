@@ -30,11 +30,11 @@ ActiveRecord::Schema.define(version: 20160114000925) do
     t.string   "status"
     t.string   "log_name"
     t.string   "description"
-    t.integer  "druid_count_total"
-    t.integer  "druid_count_success"
-    t.integer  "druid_count_fail"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.integer  "druid_count_total",   default: 0
+    t.integer  "druid_count_success", default: 0
+    t.integer  "druid_count_fail",    default: 0
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "user_id"
   end
 

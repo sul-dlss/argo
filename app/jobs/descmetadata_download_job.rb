@@ -10,7 +10,7 @@ class DescmetadataDownloadJob < ActiveJob::Base
   def perform(druid_list, bulk_action_id, output_directory)
     log_filename = generate_log_filename(output_directory)
     zip_filename = generate_zip_filename(output_directory)
-    
+    Delayed::Worker.logger.debug("before open #{zip_filename}")
     File.open(log_filename, 'w') { |log|
       # Get the BulkAction that initiated this job and fail with an error message if it doesn't exist
       current_bulk_action = get_bulk_action(bulk_action_id)

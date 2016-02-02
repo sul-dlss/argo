@@ -11,35 +11,17 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :action_type %><br>
-    <%= f.text_field :action_type %>
+  <div class='radio'>
+    <label>
+      <%= f.radio_button(:action_type, 'DescmetadataDownloadJob') %>
+      Download Descriptive Metadata
+    </label>
   </div>
-  <div class="field">
-    <%= f.label :status %><br>
-    <%= f.text_field :status %>
+  <div class='form-group'>
+    <%= f.label :description %>
+    <%= f.text_area :description, class: 'form-control' %>
   </div>
-  <div class="field">
-    <%= f.label :log_name %><br>
-    <%= f.text_field :log_name %>
-  </div>
-  <div class="field">
-    <%= f.label :description %><br>
-    <%= f.text_field :description %>
-  </div>
-  <div class="field">
-    <%= f.label :druid_count_total %><br>
-    <%= f.number_field :druid_count_total %>
-  </div>
-  <div class="field">
-    <%= f.label :druid_count_success %><br>
-    <%= f.number_field :druid_count_success %>
-  </div>
-  <div class="field">
-    <%= f.label :druid_count_fail %><br>
-    <%= f.number_field :druid_count_fail %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class=''>
+    <button type='submit' class='btn btn-primary'>Submit</button>
   </div>
 <% end %>
