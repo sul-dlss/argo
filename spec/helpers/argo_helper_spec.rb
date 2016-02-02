@@ -24,25 +24,27 @@ describe ArgoHelper, :type => :helper do
       @apo_id = 'druid:hv992ry2431'
       @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
       @doc = SolrDocument.new({'id' => @item_id, SolrDocument::FIELD_APO_ID => [@apo_id]})
-      @usr = double()
-      allow(@usr).to receive(:is_admin).and_return(true)
-      allow(@usr).to receive(:groups).and_return([])
-      allow(@usr).to receive(:is_manager).and_return(false)
-      allow(@usr).to receive(:roles).with(@apo_id).and_return([])
-      allow(Dor::WorkflowService).to receive(:get_active_lifecycle).and_return(true)
-      allow(Dor::WorkflowService).to receive(:get_lifecycle).and_return(true)
-      allow(helper).to receive(:current_user).and_return(@usr)
       allow(@object).to receive(:can_manage_item?).and_return(true)
       allow(@object).to receive(:pid).and_return(@item_id)
       desc_md = double(Dor::DescMetadataDS)
       id_md   = double(Dor::DescMetadataDS)
-      apo     = double()
+      apo = double(Dor::AdminPolicyObject)
+      allow(apo).to receive(:pid).and_return(@apo_id)
       allow(desc_md).to receive(:new?).and_return(true)
       allow(id_md).to receive(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
       allow(apo).to receive(:pid).and_return(@apo_id)
       allow(@object).to receive(:datastreams).and_return({'contentMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => id_md})
       allow(@object).to receive(:admin_policy_object).and_return(apo)
       allow(Dor).to receive(:find).with(@item_id).and_return(@object)
+      allow(Dor::WorkflowService).to receive(:get_active_lifecycle).and_return(true)
+      allow(Dor::WorkflowService).to receive(:get_lifecycle).and_return(true)
+      # User mocks
+      @usr = double()
+      allow(@usr).to receive(:is_admin).and_return(true)
+      allow(@usr).to receive(:groups).and_return([])
+      allow(@usr).to receive(:is_manager).and_return(false)
+      allow(@usr).to receive(:roles).with(@apo_id).and_return([])
+      allow(helper).to receive(:current_user).and_return(@usr)
     end
     describe 'visibility with new descMetadata' do
       let(:default_buttons) do
@@ -76,6 +78,7 @@ describe ArgoHelper, :type => :helper do
         ]
       end
       it 'should create a hash with the needed button info for an admin' do
+        allow(@usr).to receive(:can_manage?).and_return(true)
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|
           expect(buttons).to include(button)
@@ -83,6 +86,8 @@ describe ArgoHelper, :type => :helper do
       end
       it 'should generate a the same button set for a non admin' do
         allow(@usr).to receive(:is_admin).and_return(false)
+        allow(@usr).to receive(:is_manager).and_return(false)
+        allow(@usr).to receive(:can_manage?).and_return(true)
         allow(@object).to receive(:can_manage_item?).and_return(true)
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|
@@ -90,6 +95,7 @@ describe ArgoHelper, :type => :helper do
         end
       end
       it 'should include the embargo update button if the user is an admin and the object is embargoed' do
+        allow(@usr).to receive(:can_manage?).and_return(true)
         @doc['embargo_status_ssim'] = ['2012-10-19T00:00:00Z']
         buttons = helper.render_buttons(@doc)
         default_buttons.push({
