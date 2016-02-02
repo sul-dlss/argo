@@ -5,7 +5,6 @@ class DescmetadataDownloadJob < ActiveJob::Base
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
   around_perform do |job, block|
-    bulk_action = BulkAction.find(job.arguments[1])
     bulk_action.update_attribute(:status, 'Processing')
     block.call
     bulk_action.update_attribute(:status, 'Completed')
@@ -27,6 +26,7 @@ class DescmetadataDownloadJob < ActiveJob::Base
         start_log(log, current_bulk_action.user_id, '', current_bulk_action.description)
 
         Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
+          bulk_action.update_attribute(:druid_count_total, druid_list.length)
           druid_list.each do |current_druid|
             begin
               dor_object = Dor.find current_druid
@@ -34,15 +34,18 @@ class DescmetadataDownloadJob < ActiveJob::Base
 
               write_to_zip(descMetadata, current_druid, zip_file)
               log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
+              bulk_action.increment(:druid_count_success)
             rescue ActiveFedora::ObjectNotFoundError => e
               log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
               log.puts("#{e.message}")
               log.puts("#{e.backtrace}")
+              bulk_action.increment(:druid_count_fail)
               next
             rescue Dor::Exception, Exception => e
               log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
               log.puts("#{e.message}")
               log.puts("#{e.backtrace}")
+              bulk_action.increment(:druid_count_fail)
               next
             end
           end
@@ -109,5 +112,9 @@ class DescmetadataDownloadJob < ActiveJob::Base
       end
     end
     return nil
+  end
+
+  def bulk_action
+    @bulk_action ||= BulkAction.find(self.arguments[1])
   end
 end
