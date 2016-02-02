@@ -38,7 +38,7 @@ class ItemsController < ApplicationController
     @changed_severity = which_severity_changed(get_current_version_tag(@object), get_prior_version_tag(@object))
     @severity_selected = {}
     [:major, :minor, :admin].each do |severity|
-      @severity_selected[severity] = (@changed_severity == severity ? ' selected' : '')
+      @severity_selected[severity] = (@changed_severity == severity)
     end
   end
 
@@ -355,7 +355,7 @@ class ItemsController < ApplicationController
         if params[:bulk]
           format.html {render :status => :ok, :text => 'Version Closed.'}
         else
-          format.any { redirect_to catalog_path(params[:id]), :notice => 'Version ' + @object.current_version + ' of ' + params[:id] + ' has been closed!' }
+          format.any { redirect_to catalog_path(params[:id]), :notice => 'Version ' + @object.current_version + ' of ' + @object.pid + ' has been closed!' }
         end
       end
     rescue Dor::Exception # => e

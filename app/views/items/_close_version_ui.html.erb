@@ -3,8 +3,8 @@
     <label for="severity">Type</label>
     <select id="severity" name="severity" class='form-control'>
       <%- # loop through the severity levels and pre-select the one that was chosen when opening the version -%>
-      <% @severity_levels.try(:each) do |severity| %>
-        <option value="<%=severity.to_s-%>"<%=@severity_selected[severity]-%>><%=severity.to_s.capitalize-%></option>
+      <% @severity_selected.keys.each do |severity| %>
+        <option value="<%=severity.to_s-%>"<%=@severity_selected[severity] ? ' selected' : ''-%>><%=severity.to_s.capitalize-%></option>
       <% end %>
     </select>
   </div>
