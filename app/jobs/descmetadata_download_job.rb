@@ -14,16 +14,14 @@ class DescmetadataDownloadJob < ActiveJob::Base
   # @param[Integer]        bulk_action_id   ActiveRecord identifier of the BulkAction object that originated this job.
   # @param[String]         output_directory Where to store the log and zip files.
   def perform(druid_list, bulk_action_id, output_directory)
-    log_filename = generate_log_filename(output_directory)
     zip_filename = generate_zip_filename(output_directory)
-    File.open(log_filename, 'w') { |log|
-      # Get the BulkAction that initiated this job and fail with an error message if it doesn't exist
-      current_bulk_action = get_bulk_action(bulk_action_id)
-      if current_bulk_action == nil
+    File.open(bulk_action.log_name, 'w') { |log|
+      #  Fail with an error message if the calling BulkAction doesn't exist
+      if bulk_action.nil?
         log.puts("argo.bulk_metadata.bulk_log_bulk_action_not_found (looking for #{bulk_action_id})")
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
       else
-        start_log(log, current_bulk_action.user_id, '', current_bulk_action.description)
+        start_log(log, bulk_action.user_id, '',bulk_action.description)
 
         Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
           bulk_action.update_attribute(:druid_count_total, druid_list.length)
@@ -77,17 +75,6 @@ class DescmetadataDownloadJob < ActiveJob::Base
   end
 
   
-  # Generate a filename for the job's log file.
-  #
-  # @param  [String] output_dir Where to store the log file.
-  # @return [String] A filename for the log file.
-  def generate_log_filename(output_dir)
-    FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
-    # This log will be used for generating the table of past jobs later
-    File.join(output_dir, Argo::Config.bulk_metadata_log)
-  end
-
-
   # Generate a filename for the job's zip output file.
   #
   # @param  [String] output_dir Where to store the zip file.
