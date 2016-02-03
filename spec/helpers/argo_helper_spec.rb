@@ -55,7 +55,8 @@ describe ArgoHelper, :type => :helper do
           {
             label: 'Republish',
             url: "/dor/republish/#{@item_id}",
-            check_url: "/workflow_service/#{@item_id}/published"
+            check_url: "/workflow_service/#{@item_id}/published",
+            new_page: true
           },
           {
             label: 'Change source id',
