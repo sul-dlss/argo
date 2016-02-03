@@ -547,7 +547,7 @@ class ItemsController < ApplicationController
   end
   # set the content type in the content metadata
   def set_content_type
-    unless %w(book file image map manuscript).include? params[:new_content_type]
+    unless Constants::CONTENT_TYPES.include? params[:new_content_type]
       render :status => :forbidden, :text => 'Invalid new content type.'
       return
     end

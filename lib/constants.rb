@@ -7,4 +7,6 @@ module Constants
     ['Dark (Preserve Only)', 'dark'],
     ['Citation Only', 'none']
   ]
+  CONTENT_TYPES = %w(image book file manuscript map media).freeze
+  RESOURCE_TYPES = %w(image page file audio video).freeze
 end
