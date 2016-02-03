@@ -1,5 +1,6 @@
 class BulkActionsController < ApplicationController
-  before_action :set_bulk_action, only: [:destroy]
+  before_action :set_bulk_action, only: [:destroy, :file]
+
   rescue_from ActiveRecord::RecordNotFound, with: -> { render text: 'Record Not Found', status: :not_found }
 
   # GET /bulk_actions
@@ -28,6 +29,11 @@ class BulkActionsController < ApplicationController
   def destroy
     @bulk_action.destroy
     redirect_to bulk_actions_url, notice: 'Bulk action was successfully destroyed.'
+  end
+
+  # GET /bulk_actions/1/file
+  def file
+    send_file(@bulk_action.file(params[:filename]), type: params[:mime_type]) if @bulk_action.present?
   end
 
   private

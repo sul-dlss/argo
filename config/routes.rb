@@ -1,6 +1,11 @@
 Argo::Application.routes.draw do
 
-  resources :bulk_actions, except: [:edit, :show, :update]
+  resources :bulk_actions, except: [:edit, :show, :update] do
+    member do
+      get :file
+    end
+  end
+
   Blacklight::Marc.add_routes(self)
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
