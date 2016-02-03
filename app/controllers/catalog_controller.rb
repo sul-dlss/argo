@@ -6,6 +6,7 @@ class CatalogController < ApplicationController
   include BlacklightSolrExtensions
   include Blacklight::Catalog
   include Argo::AccessControlsEnforcement
+  include Argo::CustomSearch
   helper ArgoHelper
   include SpreadsheetHelper
   include DateFacetConfigurations
@@ -15,6 +16,7 @@ class CatalogController < ApplicationController
   before_action :sort_collection_actions_buttons, only: [:index]
 
   CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
+  CatalogController.solr_search_params_logic << :pids_only
 
   configure_blacklight do |config|
     # common helper method since search results and reports share most of this config

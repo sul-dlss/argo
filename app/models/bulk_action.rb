@@ -14,7 +14,7 @@ class BulkAction < ActiveRecord::Base
   def prefix
     "#{action_type}_#{id}"
   end
-  
+
   def output_directory
     File.join(Settings.BULK_METADATA.DIRECTORY, prefix)
   end
@@ -29,12 +29,20 @@ class BulkAction < ActiveRecord::Base
     FileUtils.mkdir_p(output_directory) unless File.directory?(output_directory)
   end
 
-  
+  ##
+  # Returns a has of custom params that were sent through on initialization of
+  # class, but aren't persisted and need to be passed to job.
+  # @return [Hash]
+  def job_params
+    {
+      pids: pids.split
+    }
+  end
+
   def process_bulk_action_type
-    druid_list = ['druid:hj185vb7593', 'druid:kv840rx2720', 'druid:pv820dk6668', 'druid:qq613vj0238', 'druid:rn653dy9317', 'druid:xb482bw3979']
     create_output_directory
     create_log_file
-    action_type.constantize.perform_later(druid_list, id, output_directory)
+    action_type.constantize.perform_later(job_params[:pids], id, output_directory)
     update_attribute(:status, 'Scheduled Action')
   end
 end

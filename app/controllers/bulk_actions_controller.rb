@@ -11,6 +11,7 @@ class BulkActionsController < ApplicationController
   # GET /bulk_actions/new
   def new
     @bulk_action = BulkAction.new
+    @last_search = session[:search].present? ? searches_from_history.find(session[:search]['id']) : searches_from_history.first
   end
 
   # POST /bulk_actions
@@ -45,6 +46,6 @@ class BulkActionsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def bulk_action_params
-    params.require(:bulk_action).permit(:action_type, :description)
+    params.require(:bulk_action).permit(:action_type, :description, :pids)
   end
 end
