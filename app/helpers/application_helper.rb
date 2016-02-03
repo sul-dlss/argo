@@ -58,4 +58,13 @@ module ApplicationHelper
   def workflow_grid_view?(params)
     params['controller'] == 'report' && params['action'] == 'workflow_grid'
   end
+
+  ##
+  # Add a pids_only=true parameter to create a "search of pids" to an existing
+  # Blacklight::Search
+  # @param [Blacklight::Search]
+  # @return [Hash]
+  def search_of_pids(search)
+    search.query_params.to_unsafe_hash.merge('pids_only' => true)
+  end
 end
