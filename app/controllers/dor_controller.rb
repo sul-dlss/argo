@@ -4,10 +4,6 @@ class DorController < ApplicationController
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
 
-  def index_logger
-    @index_logger ||= Argo::Indexer.generate_index_logger { request.uuid }
-  end
-
   def configuration
     result = Dor::Config.to_hash.merge({
       :environment => Rails.env,
@@ -43,7 +39,7 @@ class DorController < ApplicationController
   end
 
   def reindex
-    @solr_doc = Argo::Indexer.reindex_pid params[:pid], index_logger
+    @solr_doc = Argo::Indexer.reindex_pid params[:pid], Argo::Indexer.generate_index_logger { request.uuid }
     Dor::SearchService.solr.commit # reindex_pid doesn't commit, but callers of this method may expect the update to be committed immediately
     flash[:notice] = "Successfully updated index for #{params[:pid]}"
     render status: 200, text: flash[:notice] and return unless request.headers['Referer']
