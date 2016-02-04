@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/sul-dlss/dor-services.git
-  revision: 24c77cdc06b562bc6d3e61cd46d2cf0597453f4b
+  revision: fcf348f8d6a6ccb3d2fd318119a8fc65fd353b26
   branch: develop
   specs:
     dor-services (5.3.2)
@@ -195,7 +195,7 @@ GEM
       capistrano-releaseboard
     docile (1.1.5)
     docopt (0.5.0)
-    domain_name (0.5.25)
+    domain_name (0.5.20160128)
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.0.2)
       nokogiri
@@ -513,7 +513,7 @@ GEM
       json (>= 1.8.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.1)
+    unf_ext (0.0.7.2)
     unicode (0.4.4.2)
     unicorn (5.0.1)
       kgio (~> 2.6)
