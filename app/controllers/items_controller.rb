@@ -196,6 +196,17 @@ class ItemsController < ApplicationController
   end
 
   ##
+  # Brings up a modal dialog that lists all locations of the file
+  # @option params [String] `:file` the filename for which to locate
+  def file
+    fail ArgumentError, 'Missing file parameter' unless params[:file].present?
+    @available_in_workspace_error = nil
+    @available_in_workspace = @object.list_files.include?(params[:file]) # NOTE: ideally this should be async
+  rescue Net::SSH::Exception => e
+    @available_in_workspace_error = "#{e.class}: #{e}"
+  end
+
+  ##
   # @option params [String] `:content` the XML with which to replace the datastream
   # @option params [String] `:dsid` the identifier for the datastream, e.g., `identityMetadata`
   # @option params [String] `:id` the druid to modify

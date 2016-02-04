@@ -439,4 +439,30 @@ describe ItemsController, :type => :controller do
       expect(subject).to redirect_to(catalog_path)
     end
   end
+  describe '#file' do
+    it 'should require a file parameter' do
+      expect { get :file, id: @pid }.to raise_error(ArgumentError)
+    end
+    it 'should check for a file in the workspace' do
+      expect(@item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      get :file, id: @pid, file: 'foo.jp2'
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:available_in_workspace)).to be_truthy
+      expect(assigns(:available_in_workspace_error)).to be_nil
+    end
+    it 'should handle missing files in the workspace' do
+      expect(@item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      get :file, id: @pid, file: 'bar.tif'
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:available_in_workspace)).to be_falsey
+      expect(assigns(:available_in_workspace_error)).to be_nil
+    end
+    it 'should handle SFTP errors' do
+      expect(@item).to receive(:list_files).and_raise(Net::SSH::AuthenticationFailed)
+      get :file, id: @pid, file: 'foo.jp2'
+      expect(response).to have_http_status(:ok)
+      expect(assigns(:available_in_workspace)).to be_falsey
+      expect(assigns(:available_in_workspace_error)).to match(/Net::SSH::AuthenticationFailed/)
+    end
+  end
 end
