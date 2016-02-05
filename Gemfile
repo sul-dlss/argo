@@ -73,6 +73,7 @@ group :test, :development do
   gem 'capybara_discoball'
   gem 'wfs_rails', '~> 0.0.2'
   gem 'database_cleaner'
+  gem 'factory_girl_rails'
 end
 
 group :development do
