@@ -1,6 +1,10 @@
 class BulkAction < ActiveRecord::Base
   belongs_to :user
-  after_create :process_bulk_action_type
+  after_create do
+    create_output_directory
+    create_log_file
+    process_bulk_action_type
+  end
 
   # A virtual attribute used for job creation but not persisted
   attr_accessor :pids
@@ -40,8 +44,6 @@ class BulkAction < ActiveRecord::Base
   end
 
   def process_bulk_action_type
-    create_output_directory
-    create_log_file
     action_type.constantize.perform_later(job_params[:pids], id, output_directory)
     update_attribute(:status, 'Scheduled Action')
   end
