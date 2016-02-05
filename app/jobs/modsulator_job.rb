@@ -83,10 +83,6 @@ class ModsulatorJob < ActiveJob::Base
           log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{current_druid}")
           next
         end
-        unless has_been_accessioned?(dor_object.id)
-          log.puts("argo.bulk_metadata.bulk_log_skipped_not_accessioned #{current_druid}")
-          next
-        end
 
         next unless status_ok(dor_object)
 
@@ -251,13 +247,13 @@ class ModsulatorJob < ActiveJob::Base
     (2..5).include?(status)
   end
 
-  # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only time we are
-  # not OK to update is if the object is currently being accessioned.
+  # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only times we are
+  # not OK to update is if the object is currently being accessioned and if the object has status unknown.
   #
   # @param  [Dor::Item]   dor_object    DOR object to check
   # @return [Boolean]     true if the object's status allows us to update the descMetadata datastream, false otherwise
   def status_ok(dor_object)
     status = dor_object.status_info[:status_code]
-    [0, 1, 6, 7, 8, 9].include?(status)
+    [1, 6, 7, 8, 9].include?(status)
   end
 end
