@@ -137,7 +137,8 @@ module ArgoHelper
       buttons << {
         url: url_for(:controller => :dor, :action => :republish, :pid => pid),
         label: 'Republish',
-        check_url: workflow_service_published_path(pid)
+        check_url: workflow_service_published_path(pid),
+        new_page: true
       }
 
       buttons << {
