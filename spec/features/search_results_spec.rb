@@ -32,6 +32,7 @@ feature 'Search results' do
       within '#bulk-update-button' do
         expect(page).to have_css 'a.btn.btn-default', text: 'Bulk Update'
       end
+      expect(page).to have_css 'a.btn.btn-default', text: 'Bulk Action'
       within '#sort-dropdown' do
         expect(page).to have_css 'button', text: 'Sort by Druid'
         expect(page).to have_css 'ul li', count: 3

@@ -169,6 +169,7 @@ class CatalogController < ApplicationController
 
     config.add_results_collection_tool(:report_view_toggle)
     config.add_results_collection_tool(:bulk_update_view_button)
+    config.add_results_collection_tool(:bulk_action_button)
 
     ##
     # Configure document actions framework
@@ -383,6 +384,8 @@ class CatalogController < ApplicationController
     collection_actions_order = blacklight_config.index.collection_actions.keys
     collection_actions_order.delete(:bulk_update_view_button)
     collection_actions_order.insert(0, :bulk_update_view_button)
+    collection_actions_order.delete(:bulk_action_button)
+    collection_actions_order.insert(1, :bulk_action_button)
 
     # Use the order of indices in the collection_actions_order array for the Blacklight hash
     blacklight_config.index.collection_actions = blacklight_config.index.collection_actions.to_h.sort do |(key1, _value1), (key2, _value2)|
