@@ -56,4 +56,26 @@ RSpec.describe BulkAction do
       )
     @bulk_action.run_callbacks(:create) { true }
   end
+  describe 'before_destroy callbacks' do
+    it 'calls #remove_output_directory' do
+      @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
+      expect(@bulk_action).to receive(:remove_output_directory)
+      @bulk_action.run_callbacks(:destroy) { true }
+    end
+  end
+  describe '#remove_output_directory' do
+    let(:directory) do
+      File.join(
+        Settings.BULK_METADATA.DIRECTORY,
+        "#{@bulk_action.action_type}_#{@bulk_action.id}"
+      )
+    end
+    it 'cleans up output directory' do
+      @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
+      @bulk_action.run_callbacks(:create) { true }
+      expect(Dir.exist?(directory)).to be true
+      @bulk_action.destroy
+      expect(Dir.exist?(directory)).to be false
+    end
+  end
 end

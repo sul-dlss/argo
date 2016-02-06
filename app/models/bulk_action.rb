@@ -5,6 +5,7 @@ class BulkAction < ActiveRecord::Base
     create_log_file
     process_bulk_action_type
   end
+  before_destroy :remove_output_directory
 
   # A virtual attribute used for job creation but not persisted
   attr_accessor :pids
@@ -31,6 +32,10 @@ class BulkAction < ActiveRecord::Base
 
   def create_output_directory
     FileUtils.mkdir_p(output_directory) unless File.directory?(output_directory)
+  end
+
+  def remove_output_directory
+    FileUtils.rm_rf(output_directory)
   end
 
   ##
