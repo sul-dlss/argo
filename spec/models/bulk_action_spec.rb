@@ -49,10 +49,12 @@ RSpec.describe BulkAction do
     @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: 'a b c')
     expect(GenericJob).to receive(:perform_later)
       .with(
-        %w(a b c),
         @bulk_action.id,
-        Settings.BULK_METADATA.DIRECTORY +
-          "#{@bulk_action.action_type}_#{@bulk_action.id}"
+        {
+          pids: %w(a b c),
+          output_directory: Settings.BULK_METADATA.DIRECTORY +
+            "#{@bulk_action.action_type}_#{@bulk_action.id}"
+        }
       )
     @bulk_action.run_callbacks(:create) { true }
   end

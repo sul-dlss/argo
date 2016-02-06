@@ -1,48 +1,42 @@
-class DescmetadataDownloadJob < ActiveJob::Base
+class DescmetadataDownloadJob < GenericJob
   queue_as :default
 
-  # A somewhat easy to understand and informative time stamp format
-  TIME_FORMAT = '%Y-%m-%d %H:%M%P'
-
-  around_perform do |job, block|
-    bulk_action.update_attribute(:status, 'Processing')
-    block.call
-    bulk_action.update_attribute(:status, 'Completed')
-  end
-
-  # @param[Array<String>]  druid_list       Identifiers for what objects to act on.
-  # @param[Integer]        bulk_action_id   ActiveRecord identifier of the BulkAction object that originated this job.
-  # @param[String]         output_directory Where to store the log and zip files.
-  def perform(druid_list, bulk_action_id, output_directory)
-    zip_filename = generate_zip_filename(output_directory)
-    File.open(bulk_action.log_name, 'w') { |log|
+  ##
+  # @param [Integer] bulk_action_id   ActiveRecord identifier of the BulkAction
+  # object that originated this job.
+  # @param [Hash] params Custom params for this job. DescmetadataDownloadJob
+  # requires `:pids` (an Array of pids) and output_directory
+  def perform(bulk_action_id, params)
+    zip_filename = generate_zip_filename(params[:output_directory])
+    File.open(bulk_action.log_name, 'w') do |log|
       #  Fail with an error message if the calling BulkAction doesn't exist
       if bulk_action.nil?
         log.puts("argo.bulk_metadata.bulk_log_bulk_action_not_found (looking for #{bulk_action_id})")
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
       else
-        start_log(log, bulk_action.user_id, '',bulk_action.description)
+        start_log(log, bulk_action.user_id, '', bulk_action.description)
 
+        bulk_action.update(druid_count_total: params[:pids].length)
+        bulk_action.save
         Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
-          bulk_action.update_attribute(:druid_count_total, druid_list.length)
-          druid_list.each do |current_druid|
+          params[:pids].each do |current_druid|
             begin
               dor_object = Dor.find current_druid
-              descMetadata = dor_object.descMetadata.content
+              desc_metadata = dor_object.descMetadata.content
 
-              write_to_zip(descMetadata, current_druid, zip_file)
+              write_to_zip(desc_metadata, current_druid, zip_file)
               log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
               bulk_action.increment(:druid_count_success).save
             rescue ActiveFedora::ObjectNotFoundError => e
               log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
-              log.puts("#{e.message}")
-              log.puts("#{e.backtrace}")
+              log.puts(e.message)
+              log.puts(e.backtrace)
               bulk_action.increment(:druid_count_fail).save
               next
-            rescue Dor::Exception, Exception => e
+            rescue Dor::Exception, StandardError => e
               log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
-              log.puts("#{e.message}")
-              log.puts("#{e.backtrace}")
+              log.puts(e.message)
+              log.puts(e.backtrace)
               bulk_action.increment(:druid_count_fail).save
               next
             end
@@ -51,14 +45,12 @@ class DescmetadataDownloadJob < ActiveJob::Base
         end
       end
       log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
-    }
+    end
   end
-
 
   def write_to_zip(value, entry_name, zip_file)
     zip_file.get_output_stream(entry_name) { |f| f.puts(value) }
   end
-
 
   # Write initial job information to the log file.
   #
@@ -74,33 +66,12 @@ class DescmetadataDownloadJob < ActiveJob::Base
     log_file.flush # record start in case of crash
   end
 
-  
+  ##
   # Generate a filename for the job's zip output file.
-  #
   # @param  [String] output_dir Where to store the zip file.
   # @return [String] A filename for the zip file.
   def generate_zip_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
     File.join(output_dir, Settings.BULK_METADATA.ZIP)
-  end
-
-  
-  # @param[Integer]       identifier   ActiveRecord identifier for a BulkAction object
-  # @return[BulkAction]   The BulkAction corresponding to the given identifier, or nil if the BulkAction is not found
-  def get_bulk_action(identifier)
-    bulk_action_class = String.new('BulkAction').safe_constantize
-    unless bulk_action_class == nil
-      begin
-        bulk_action_object = bulk_action_class.find(identifier)
-        return bulk_action_object
-      rescue ActiveRecord::RecordNotFound
-        return nil
-      end
-    end
-    return nil
-  end
-
-  def bulk_action
-    @bulk_action ||= BulkAction.find(self.arguments[1])
   end
 end

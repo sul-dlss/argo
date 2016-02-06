@@ -44,12 +44,13 @@ class BulkAction < ActiveRecord::Base
   # @return [Hash]
   def job_params
     {
-      pids: pids.split
+      pids: pids.split,
+      output_directory: output_directory
     }
   end
 
   def process_bulk_action_type
-    action_type.constantize.perform_later(job_params[:pids], id, output_directory)
+    action_type.constantize.perform_later(id, job_params)
     update_attribute(:status, 'Scheduled Action')
   end
 end
