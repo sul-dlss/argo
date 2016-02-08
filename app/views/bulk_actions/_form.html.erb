@@ -1,0 +1,27 @@
+<%= form_for(@bulk_action) do |f| %>
+  <% if @bulk_action.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@bulk_action.errors.count, "error") %> prohibited this bulk_action from being saved:</h2>
+
+      <ul>
+      <% @bulk_action.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class='radio'>
+    <label>
+      <%= f.radio_button(:action_type, 'DescmetadataDownloadJob') %>
+      Download Descriptive Metadata
+    </label>
+  </div>
+  <div class='form-group'>
+    <%= f.label :description %>
+    <%= f.text_area :description, class: 'form-control' %>
+  </div>
+  <div class=''>
+    <button type='submit' class='btn btn-primary'>Submit</button>
+  </div>
+<% end %>

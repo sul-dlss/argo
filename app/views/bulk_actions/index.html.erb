@@ -1,0 +1,39 @@
+<div class='container'>
+  <p id="notice"><%= notice %></p>
+
+  <h1>Bulk Actions</h1>
+  <%= link_to 'New Bulk Action', new_bulk_action_path, class: 'btn btn-success' %>
+
+  <table class='table'>
+    <thead>
+      <tr>
+        <th>Submitted</th>
+        <th>Action</th>
+        
+        <th>Description</th>
+        <th>Status</th>
+        <th>Total / Success / Failed</th>
+        <th colspan="3"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @bulk_actions.each do |bulk_action| %>
+        <tr>
+          <td><%= l bulk_action.created_at.localtime %></td>
+          <td><%= bulk_action.action_type %></td>
+          <td><%= bulk_action.description %></td>
+          <td><%= bulk_action.status %></td>
+          <td>
+            <%= bulk_action.druid_count_success %> /
+            <%= bulk_action.druid_count_fail %> /
+            <%= bulk_action.druid_count_total %>
+          </td>
+          <td>
+            <%= link_to 'Delete', bulk_action, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
