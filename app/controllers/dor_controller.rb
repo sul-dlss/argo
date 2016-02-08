@@ -1,22 +1,7 @@
 class DorController < ApplicationController
-  around_filter :development_only!, :only => :configuration
   before_filter :authorize!
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
-
-  def configuration
-    result = Dor::Config.to_hash.merge({
-      :environment => Rails.env,
-      :webauth => {
-        :authrule => webauth.authrule,
-        :logged_in => webauth.logged_in?,
-        :login => webauth.login,
-        :attributes => webauth.attributes,
-        :privgroup => webauth.privgroup
-      }
-    })
-    respond_with(result)
-  end
 
   def query_by_id
     unless params[:id]

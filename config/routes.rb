@@ -170,7 +170,6 @@ Argo::Application.routes.draw do
   end
 
   namespace :dor do
-    get 'configuration'
     get 'label'
     get 'query_by_id'
     match 'republish/:pid', :action => :republish,                 :via => [:get, :post]

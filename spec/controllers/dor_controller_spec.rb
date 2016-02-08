@@ -6,7 +6,6 @@ describe DorController, :type => :controller do
       @mock_druid     = 'asdf:1234'
       @mock_logger    = double(Logger)
       @mock_solr_conn = double(Dor::SearchService.solr)
-      @mock_req_uuid  = 'ab12-cd34-ef56'
       @mock_solr_doc  = {id: @mock_druid, text_field_tesim: 'a field to be searched'}
 
       log_in_as_mock_user(subject)
@@ -22,7 +21,7 @@ describe DorController, :type => :controller do
         expect(Dor::SearchService).to receive(:solr).and_return(@mock_solr_conn)
         expect(@mock_solr_conn).to receive(:commit)
         get :reindex, :pid => @mock_druid
-        expect(flash[:notice]).to eq 'Successfully updated index for asdf:1234'
+        expect(flash[:notice]).to eq "Successfully updated index for #{@mock_druid}"
         expect(response.code).to eq '302'
       end
 
@@ -41,7 +40,7 @@ describe DorController, :type => :controller do
         expect(Dor::SearchService).to receive(:solr).and_return(@mock_solr_conn)
         expect(@mock_solr_conn).to receive(:commit)
         get :reindex, :pid => @mock_druid
-        expect(response.body).to eq 'Successfully updated index for asdf:1234'
+        expect(response.body).to eq "Successfully updated index for #{@mock_druid}"
         expect(response.code).to eq '200'
       end
 
