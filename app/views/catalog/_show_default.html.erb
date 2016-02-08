@@ -1,5 +1,4 @@
 <%
-  @page_title = "#{application_name} - #{truncate(document_show_html_title, length: 50)}"
   ensure_current_document_version if Argo::Config[:reindex_on_the_fly]
 %>
 
