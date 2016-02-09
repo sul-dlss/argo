@@ -12,8 +12,6 @@ describe ItemsController, :type => :controller do
     allow(@current_user).to receive(:is_manager).and_return(false)
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
     allow(Dor::Item).to receive(:find).with(@pid).and_return(@item)
-    @event_ds = double(Dor::EventsDS)
-    allow(@event_ds).to receive(:add_event)
     idmd = double()
     apo  = double()
     wf   = double()
@@ -29,7 +27,7 @@ describe ItemsController, :type => :controller do
     allow(@item).to receive(:save)
     allow(@item).to receive(:delete)
     allow(@item).to receive(:identityMetadata).and_return(idmd)
-    allow(@item).to receive(:datastreams).and_return({'identityMetadata' => idmd, 'events' => @event_ds})
+    allow(@item).to receive(:datastreams).and_return({'identityMetadata' => idmd, 'events' => Dor::EventsDS.new})
     allow(@item).to receive(:allows_modification?).and_return(true)
     allow(@item).to receive(:can_manage_item?    ).and_return(false)
     allow(@item).to receive(:can_manage_content? ).and_return(false)
@@ -70,12 +68,22 @@ describe ItemsController, :type => :controller do
     it 'should 403 if you are not an admin' do
       allow(@current_user).to receive(:is_admin).and_return(false)
       post 'embargo_update', :id => @pid, :date => '12/19/2013'
-      expect(response.code).to eq('403')
+      expect(response).to have_http_status(:forbidden)
     end
     it 'should call Dor::Item.update_embargo' do
       expect(@item).to receive(:update_embargo)
-      post :embargo_update, :id => @pid, :embargo_date => '2012-10-19T00:00:00Z'
-      expect(response.code).to eq('302')
+      expect(@item.datastreams['events']).to receive(:add_event).and_call_original
+      expect(controller).to receive(:save_and_reindex)
+      expect(controller).to receive(:flush_index).and_call_original
+      expect(Dor::SearchService.solr).to receive(:commit) # from flush_index internals
+      post :embargo_update, :id => @pid, :embargo_date => '2100-01-01T00:00:00Z'
+      expect(response).to have_http_status(:found) # redirect to catalog page
+    end
+    it 'should require a date' do
+      expect { post :embargo_update, :id => @pid }.to raise_error(ArgumentError)
+    end
+    it 'should die on a malformed date' do
+      expect { post :embargo_update, :id => @pid, :embargo_date => 'not-a-date' }.to raise_error(ArgumentError)
     end
   end
   describe 'register' do
@@ -402,6 +410,7 @@ describe ItemsController, :type => :controller do
     it 'should initialize the new workflow' do
       expect(@item).to receive(:create_workflow)
       expect(@wf).to receive(:[]).with('accessionWF').and_return(nil)
+      expect(controller).to receive(:flush_index)
       post 'add_workflow', :id => @pid, :wf => 'accessionWF'
     end
     it 'shouldnt initialize the workflow if one is already active' do
