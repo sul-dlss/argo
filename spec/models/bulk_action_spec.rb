@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe BulkAction do
+  describe 'valid action_types' do
+    it 'does not allow nonspecified action_types' do
+      expect(BulkAction.create(action_type: 'YoloJob').save).to be false
+    end
+  end
   describe '#file' do
     it 'returns a full path filename' do
       @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
