@@ -193,7 +193,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
-<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2012-04-17T18:18:44.128Z" MIMETYPE="text/xml" SIZE="749">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2012-04-17T18:18:44.128Z" MIMETYPE="text/xml" SIZE="806">
 <foxml:xmlContent>
 <rightsMetadata>
   <copyright>
@@ -207,6 +207,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <access type="read">
     <machine>
       <group>stanford</group>
+      <embargoReleaseDate>2259-02-24</embargoReleaseDate>
     </machine>
   </access>
   <use>
