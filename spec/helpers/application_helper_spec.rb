@@ -36,14 +36,6 @@ RSpec.describe ApplicationHelper do
       expect(helper.report_view?(params)).to be_truthy
     end
   end
-  describe '#discovery_view?' do
-    it 'checks params' do
-      params = {}
-      expect(helper.discovery_view?(params)).to be_falsey
-      params['controller'] = 'discovery'
-      expect(helper.discovery_view?(params)).to be_truthy
-    end
-  end
   describe '#workflow_grid_view?' do
     it 'checks params' do
       params = {}

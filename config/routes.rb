@@ -48,19 +48,6 @@ Argo::Application.routes.draw do
     end
   end
 
-  match 'discovery',          :to => 'discovery#index',    :via => [:get, :post], :as => 'discovery'
-  match 'discovery/data',     :to => 'discovery#data',     :via => [:get, :post], :as => 'discovery_data'
-  match 'discovery/download', :to => 'discovery#download', :via => [:get, :post], :as => 'discovery_download'
-
-  ##
-  # This route provides access to CatalogController#facet so facet links can be
-  # generated.
-  resources :discovery, only: [] do
-    member do
-      get :facet
-    end
-  end
-
   match 'apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :via => [:get, :post], :as => 'is_valid_role_list'
 
   root :to => 'catalog#index'

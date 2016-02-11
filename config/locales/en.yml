@@ -13,7 +13,6 @@ en:
   argo:
     search:
       catalog_view: 'Results View'
-      discovery_view: 'Discovery Report View'
       report_view: 'Report View'
       result_view: 'Results View'
       workflow_grid_view: 'Workflow Grid View'
