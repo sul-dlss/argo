@@ -24,7 +24,6 @@ module ApplicationHelper
     [
       ViewSwitcher.new(:catalog, :catalog_index_url),
       ViewSwitcher.new(:report, :report_url),
-      ViewSwitcher.new(:discovery, :discovery_url),
       ViewSwitcher.new(:workflow_grid, :report_workflow_grid_url)
     ]
   end
@@ -45,12 +44,6 @@ module ApplicationHelper
   # @return [Boolean]
   def report_view?(params)
     params['controller'] == 'report' && params['action'] == 'index'
-  end
-
-  ##
-  # @return [Boolean]
-  def discovery_view?(params)
-    params['controller'] == 'discovery'
   end
 
   ##

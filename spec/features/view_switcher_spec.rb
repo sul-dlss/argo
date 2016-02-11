@@ -31,14 +31,6 @@ RSpec.feature 'View switcher' do
         expect(page).to have_css 'li.active a', text: 'Report View'
       end
     end
-    scenario 'discovery report' do
-      expect_any_instance_of(DiscoveryController).to receive(:current_user)
-        .at_least(1).times.and_return(current_user)
-      visit discovery_url f: { objectType_ssim: ['item'] }
-      within '.report-toggle' do
-        expect(page).to have_css 'li.active a', text: 'Discovery Report View'
-      end
-    end
     scenario 'workflow grid' do
       expect_any_instance_of(ReportController).to receive(:current_user)
         .at_least(1).times.and_return(current_user)

@@ -42,7 +42,6 @@ feature 'Search results' do
       end
       within '.report-toggle' do
         expect(page).to have_css 'a', text: 'Report View'
-        expect(page).to have_css 'a', text: 'Discovery Report'
         expect(page).to have_css 'a', text: 'Workflow Grid View'
       end
     end
