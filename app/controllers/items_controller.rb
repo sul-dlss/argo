@@ -8,7 +8,10 @@ class ItemsController < ApplicationController
   before_filter :forbid_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id, :delete_file, :close_version, :open_version, :resource, :add_file, :replace_file, :update_attributes, :update_resource, :mods, :datastream_update ]
   before_filter :forbid_view,   :only => [:get_preserved_file, :get_file]
   before_filter :enforce_versioning, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :tags, :source_id, :set_source_id, :set_content_type, :set_rights]
-  after_filter  :save_and_reindex,   :only => [:add_collection, :set_collection, :remove_collection, :open_version, :close_version, :tags, :tags_bulk, :source_id, :set_rights, :set_content_type, :apply_apo_defaults]
+  after_filter :save_and_reindex, :only => [:add_collection, :set_collection, :remove_collection,
+               :open_version, :close_version, :tags, :tags_bulk, :source_id,
+               :set_rights, :set_content_type, :apply_apo_defaults, :embargo_update]
+  prepend_after_filter :flush_index, :only => [:embargo_update, :add_workflow] # must run after save_and_reindex
 
   def purl_preview
     @object.add_collection_reference @object.descMetadata.ng_xml
@@ -188,6 +191,7 @@ class ItemsController < ApplicationController
       render :status => :forbidden, :text => 'forbidden'
       return
     end
+    fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
     @object.update_embargo(DateTime.parse(params[:embargo_date]))
     @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
     respond_to do |format|
@@ -607,7 +611,6 @@ class ItemsController < ApplicationController
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
     reindex Dor::Item.find(params[:id])
-    Dor::SearchService.solr.commit
 
     if params[:bulk]
       render :text => "Added #{params[:wf]}"
@@ -620,6 +623,10 @@ class ItemsController < ApplicationController
 
   def reindex(item)
     Dor::SearchService.solr.add item.to_solr
+  end
+
+  def flush_index
+    Dor::SearchService.solr.commit
   end
 
   # Filters
