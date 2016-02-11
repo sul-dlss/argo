@@ -46,4 +46,18 @@ RSpec.describe ApplicationHelper do
       expect(helper.workflow_grid_view?(params)).to be_truthy
     end
   end
+  describe '#search_of_pids' do
+    context 'when nil' do
+      it 'returns an empty string' do
+        expect(helper.search_of_pids(nil)).to eq ''
+      end
+    end
+    context 'when a Blacklight::Search' do
+      it 'adds a pids_only param' do
+        search = Search.new
+        search.query_params = {q: 'cool catz'}
+        expect(helper.search_of_pids(search)).to include(q: 'cool catz', 'pids_only' => true)
+      end
+    end
+  end
 end

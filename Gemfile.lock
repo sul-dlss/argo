@@ -212,6 +212,11 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     execjs (2.6.0)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.5.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
     faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
@@ -561,6 +566,7 @@ DEPENDENCIES
   dlss-capistrano (~> 3.1)
   dor-services (~> 5.0)!
   equivalent-xml (>= 0.6.0)
+  factory_girl_rails
   http_logger
   is_it_working-cbeer
   jettywrapper

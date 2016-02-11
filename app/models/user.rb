@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   # Connects this user object to Blacklights Bookmarks and Folders.
   include Blacklight::User
+  has_many :bulk_actions
 
   attr_accessor :webauth
 
