@@ -22,6 +22,6 @@
 
 <div id="content" class="col-md-9 col-sm-8">
   <%= render 'catalog/report_view_toggle' %>
-  <div style="float:right"><a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a></div>
+  <a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a>
   <%= render :partial => 'workflow_grid' %>
 </div>
