@@ -1,9 +1,5 @@
 <% @page_title = "#{application_name} Queue Status" %>
 <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
-<% if has_search_parameters? %>
-  <%= render :partial => 'did_you_mean' %>
-  <%= render 'constraints', :localized_params=>params %>
-<% end %>
 
 <% content_for :head do %>
   <script type="text/javascript">
@@ -21,6 +17,10 @@
 </div>
 
 <div id="content" class="col-md-9 col-sm-8">
+  <% if has_search_parameters? %>
+    <%= render :partial => 'did_you_mean' %>
+    <%= render 'constraints', :localized_params=>params %>
+  <% end %>
   <%= render 'catalog/report_view_toggle' %>
   <a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a>
   <%= render :partial => 'workflow_grid' %>
