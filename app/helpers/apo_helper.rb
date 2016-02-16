@@ -1,4 +1,3 @@
-# encoding: utf-8
 module ApoHelper
   def utf_val
     'hello world ©'

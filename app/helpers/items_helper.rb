@@ -1,4 +1,3 @@
-# encoding: utf-8
 require 'stanford-mods'
 module ItemsHelper
   def valid_resource_types(type)

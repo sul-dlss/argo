@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 require 'blacklight/catalog'
 
 class ReportController < CatalogController
