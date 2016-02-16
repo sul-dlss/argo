@@ -53,29 +53,6 @@ Argo::Application.configure do
   end
   config.middleware.use(Rack::Webauth)
 
-  Argo.configure do
-    reindex_on_the_fly      Settings.REINDEX_ON_FLY
-    date_format_str         Settings.DATE_FORMAT_STR
-    urls do
-      mdtoolkit             Settings.MDTOOLKIT_URL
-      purl                  Settings.PURL_URL
-      stacks                Settings.STACKS_URL
-      stacks_file           Settings.STACKS_FILE_URL
-      dor_services          Settings.DOR_SERVICES_URL
-      workflow              Settings.WORKFLOW_URL
-      dpg                   Settings.DPG_URL
-      robot_status          Settings.ROBOT_STATUS_URL
-      modsulator            Settings.MODSULATOR_URL
-      normalizer            Settings.NORMALIZER_URL
-      spreadsheet           Settings.SPREADSHEET_URL
-    end
-    bulk_metadata_directory Settings.BULK_METADATA.DIRECTORY # Directory for storing bulk metadata job info
-    bulk_metadata_log       Settings.BULK_METADATA.LOG       # Bulk metadata log file
-    bulk_metadata_csv_log   Settings.BULK_METADATA.CSV_LOG   # Bulk metadata log file in CSV format for end users
-    bulk_metadata_xml       Settings.BULK_METADATA.XML       # Bulk metadata XML output file
-    bulk_metadata_zip       Settings.BULK_METADATA.ZIP       # Descriptive metadata download output file
-  end
-
   # the following config statement gets us two important things on each log line:
   # 1) unique IDs per request, so that it's easier to correlate
   # logging statements associated with a given request when multiple
@@ -83,5 +60,5 @@ Argo::Application.configure do
   # 2) time stamps on each log statement, because knowing when something
   # got logged is quite nice.
   # (declared after Argo.configure since it uses one of those params)
-  config.log_tags = [:uuid, proc {Time.zone.now.strftime(Argo::Config.date_format_str)}]
+  config.log_tags = [:uuid, proc {Time.zone.now.strftime(Settings.DATE_FORMAT_STR)}]
 end

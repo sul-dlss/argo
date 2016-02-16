@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def robot_status_url
-    Argo::Config.urls.robot_status
+    Settings.ROBOT_STATUS_URL
   end
 
   ##

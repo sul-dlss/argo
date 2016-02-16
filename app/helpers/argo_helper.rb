@@ -63,7 +63,7 @@ module ArgoHelper
     return nil unless fname
     fname = File.basename(fname, File.extname(fname))
     druid = doc['id'].to_s.split(/:/).last
-    url = "#{Argo::Config.urls.stacks}/iiif/#{druid}%2F#{fname}/full/!400,400/0/default.jpg"
+    url = "#{Settings.STACKS_URL}/iiif/#{druid}%2F#{fname}/full/!400,400/0/default.jpg"
     {:fname => fname, :druid => druid, :url => url}
   end
 
@@ -183,11 +183,11 @@ module ArgoHelper
   end
 
   def render_dpg_link(document)
-    link_to 'DPG Object Status', File.join(Argo::Config.urls.dpg, document.druid)
+    link_to 'DPG Object Status', File.join(Settings.DPG_URL, document.druid)
   end
 
   def render_purl_link(document, link_text = 'PURL', opts = {:target => '_blank'})
-    link_to link_text, File.join(Argo::Config.urls.purl, document.druid), opts
+    link_to link_text, File.join(Settings.PURL_URL, document.druid), opts
   end
 
   def render_dor_link(document, link_text = 'Fedora UI', opts = {:target => '_blank'})

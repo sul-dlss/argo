@@ -24,7 +24,7 @@ describe ModsulatorJob, type: :job do
 
   describe 'generate_log_filename' do
     it 'returns a filename of the correct form' do
-      expected_filename = File.join(@output_directory, Argo::Config.bulk_metadata_log)
+      expected_filename = File.join(@output_directory, Settings.BULK_METADATA.LOG)
       expect(@mj.generate_log_filename(@output_directory)).to eq(expected_filename)
     end
 
@@ -108,7 +108,7 @@ describe ModsulatorJob, type: :job do
 
   describe 'generate_xml_filename' do
     it 'creates a new filename using the correct convention' do
-      expect(@mj.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq('generate_xml_filename-' + Argo::Config.bulk_metadata_xml + '.xml')
+      expect(@mj.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq('generate_xml_filename-' + Settings.BULK_METADATA.XML + '.xml')
     end
   end
 
@@ -135,7 +135,7 @@ describe ModsulatorJob, type: :job do
       expect(output_filename).not_to be_nil
       expect(File.exist? output_filename).to be_truthy
       expect(File.read output_filename).to be_equivalent_to(xml_data).ignoring_attr_values('datetime', 'sourceFile')
-      expect(File.exist?(File.join(@output_directory, Argo::Config.bulk_metadata_log))).to be_truthy
+      expect(File.exist?(File.join(@output_directory, Settings.BULK_METADATA.LOG))).to be_truthy
       expect(File.exist? test_spreadsheet_path).to be_falsey
     end
   end

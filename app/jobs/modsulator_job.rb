@@ -141,7 +141,7 @@ class ModsulatorJob < ActiveJob::Base
   def generate_log_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
     # This log will be used for generating the table of past jobs later
-    File.join(output_dir, Argo::Config.bulk_metadata_log)
+    File.join(output_dir, Settings.BULK_METADATA.LOG)
   end
 
   # The uploaded filename is of the form <file.xlsx.TIMESTAMP> or <file.xml.TIMESTAMP> in order to prevent
@@ -180,10 +180,10 @@ class ModsulatorJob < ActiveJob::Base
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
   def generate_xml(filetype, uploaded_filename, original_filename, log_file)
     if filetype == 'xml_only'  # Just clean up the given XML file
-      url = Argo::Config.urls.normalizer
+      url = Settings.NORMALIZER_URL
       response_xml = RestClient.post(url, File.read(uploaded_filename))
     else                       # The given file is a spreadsheet
-      url = Argo::Config.urls.modsulator
+      url = Settings.MODSULATOR_URL
       response_xml = RestClient.post(url, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
     end
     response_xml
@@ -226,7 +226,7 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]   original_filename    The name of the original file that the user uploaded.
   # @return [String]
   def generate_xml_filename(original_filename)
-    File.basename(original_filename, '.*') + '-' + Argo::Config.bulk_metadata_xml + '.xml'
+    File.basename(original_filename, '.*') + '-' + Settings.BULK_METADATA.XML + '.xml'
   end
 
   # Logs a remote request-related exception to the standard Delayed Job log file.

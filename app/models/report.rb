@@ -24,7 +24,7 @@ class Report
       },
       {
         :field => 'purl', :label => 'Purl',
-        :proc => lambda { |doc| File.join(Argo::Config.urls.purl, doc['id'].split(/:/).last) },
+        :proc => lambda { |doc| File.join(Settings.PURL_URL, doc['id'].split(/:/).last) },
         :solr_fields => ['id'],
         :sort => false, :default => false, :width => 100
       },

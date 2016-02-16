@@ -18,7 +18,7 @@ module ItemsHelper
 
   def stacks_url_full_size(obj, file_name)
     druid = obj.pid
-    "#{Argo::Config.urls.stacks_file}/#{druid}/#{URI.encode(file_name)}"
+    "#{Settings.STACKS_FILE_URL}/#{druid}/#{URI.encode(file_name)}"
   end
 
   # remove all namespaces and add back mods and xsi with the schema declaration
