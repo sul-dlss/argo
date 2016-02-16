@@ -1,4 +1,3 @@
-# encoding: utf-8
 module RegistrationHelper
 
   def apo_list(*permission_keys)
