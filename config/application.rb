@@ -58,18 +58,5 @@ module Argo
     def version
       ARGO_VERSION
     end
-
-    def configure(*args, &block)
-      Argo::Config.configure(*args, &block)
-    end
-  end
-
-  Config = Confstruct::Configuration.new do
-    reindex_on_the_fly false
-    urls do
-      mdtoolkit nil
-      purl      nil
-      stacks    nil
-    end
   end
 end

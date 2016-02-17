@@ -215,7 +215,7 @@ class CatalogController < ApplicationController
     @apo = Dor.find params[:id]
 
     directory_name = Time.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
-    output_directory = File.join(Argo::Config.bulk_metadata_directory, params[:druid], directory_name)
+    output_directory = File.join(Settings.BULK_METADATA.DIRECTORY, params[:druid], directory_name)
     temp_spreadsheet_filename = params[:spreadsheet_file].original_filename + '.' + directory_name
 
     # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it when it's done.
@@ -239,7 +239,7 @@ class CatalogController < ApplicationController
   # Lets the user download the generated/cleaned XML metadata file that corresponds to a bulk metadata upload job.
   # This functionality is defined by the bulk_jobs_index method above.
   def bulk_jobs_xml
-    desc_metadata_xml_file = find_desc_metadata_file(File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time]))
+    desc_metadata_xml_file = find_desc_metadata_file(File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time]))
     if File.exist?(desc_metadata_xml_file)
       send_file(desc_metadata_xml_file, :type => 'application/xml')
     else
@@ -248,7 +248,7 @@ class CatalogController < ApplicationController
   end
 
   def bulk_jobs_csv
-    csv_file = File.join(Argo::Config.bulk_metadata_directory, params[:id], params[:time], 'log.csv')
+    csv_file = File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time], 'log.csv')
     if File.exist?(csv_file)
       send_file(csv_file, :type => 'text/csv')
     else
@@ -259,7 +259,7 @@ class CatalogController < ApplicationController
   def bulk_jobs_log
     @apo  = params[:id]
     @time = params[:time]
-    job_directory = File.join(Argo::Config.bulk_metadata_directory, @apo, @time)
+    job_directory = File.join(Settings.BULK_METADATA.DIRECTORY, @apo, @time)
 
     # Generate both the actual log messages that go in the HTML and the CSV, since both need to be ready when the table is displayed to the user
     @druid_log = load_user_log(@apo, job_directory)
@@ -274,7 +274,7 @@ class CatalogController < ApplicationController
 
   def bulk_jobs_delete
     @apo = params[:id]
-    directory_to_delete = File.join(Argo::Config.bulk_metadata_directory, params[:dir])
+    directory_to_delete = File.join(Settings.BULK_METADATA.DIRECTORY, params[:dir])
     FileUtils.remove_dir(directory_to_delete, true)
     redirect_to bulk_jobs_index_path(@apo)
   end
@@ -307,7 +307,7 @@ class CatalogController < ApplicationController
   def bulk_job_metadata(dir)
     success = 0
     job_info = {}
-    log_filename = File.join(dir, Argo::Config.bulk_metadata_log)
+    log_filename = File.join(dir, Settings.BULK_METADATA.LOG)
     if File.directory?(dir) && File.readable?(dir) && File.exist?(log_filename) && File.readable?(log_filename)
       File.open(log_filename, 'r') do |log_file|
         log_file.each_line do |line|
@@ -331,7 +331,7 @@ class CatalogController < ApplicationController
   def load_bulk_jobs(druid)
     directory_list = []
     bulk_info = []
-    bulk_load_dir = File.join(Argo::Config.bulk_metadata_directory, druid)
+    bulk_load_dir = File.join(Settings.BULK_METADATA.DIRECTORY, druid)
 
     # The metadata bulk upload processing stores its logs and other information in a very simple directory structure
     if File.directory?(bulk_load_dir)
@@ -370,7 +370,7 @@ class CatalogController < ApplicationController
   end
 
   def get_leafdir(directory)
-    directory[Argo::Config.bulk_metadata_directory.length, directory.length].sub(/^\/+(.*)/, '\1')
+    directory[Settings.BULK_METADATA.DIRECTORY.length, directory.length].sub(/^\/+(.*)/, '\1')
   end
 
   def find_desc_metadata_file(job_output_directory)

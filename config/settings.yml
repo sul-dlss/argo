@@ -100,9 +100,6 @@ SURI:
 DOR_SERVICES_URL: 'https://user:password@dor-services.example.com'
 DPG_URL: 'https://dpg.example.com'
 FEDORA_URL: 'https://user:password@fedora.example.com:1000/fedora'
-GSEARCH_URL: 'https://server.example.com/solr/gsearch'
-GSEARCH_REST_URL: 'https://server.example.com/gsearch/rest'
-MDTOOLKIT_URL: 'https://mdtoolkit.example.com/md'
 MODSULATOR_URL: 'https://services.example.com/v1/modsulator'
 NORMALIZER_URL: 'https://services.example.com/v1/normalizer'
 PURL_URL: 'https://purl.example.com'
@@ -111,7 +108,7 @@ SDR_URL: 'https://user:pass@sdr.example.com/sdr'
 SOLRIZER_URL: 'https://solr.example.com/solr/collection'
 SPREADSHEET_URL: 'https://services.example.com/v1/spreadsheet'
 STACKS_FILE_URL: 'https://stacks.example.com/file'
-STACKS_URL: 'https://stacks.example.com/image' # TODO: Verify use doesn't seeem to be in use
+STACKS_URL: 'https://stacks.example.com/image'
 STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
 WORKFLOW_URL: 'https://workflow.example.com/workflow'
 
