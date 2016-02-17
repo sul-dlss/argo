@@ -302,7 +302,7 @@ describe ItemsController, :type => :controller do
         expect { post 'datastream_update', :id => @pid, :content => xml }.to raise_error(ArgumentError)
       end
 
-      it 'should display an error message if an invalid APO is entered as governor', :focus => true do
+      it 'should display an error message if an invalid APO is entered as governor' do
         @mock_ds = double(Dor::ContentMetadataDS)
         allow(@mock_ds).to receive(:content=).and_return(true)
         allow(@item).to receive(:to_solr).and_raise(ActiveFedora::ObjectNotFoundError)
