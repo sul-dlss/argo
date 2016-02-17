@@ -1,12 +1,9 @@
 require 'spec_helper'
 
-RSpec.describe BulkActionsController do
-  let(:current_user) do
-    create(:user)
-  end
+describe BulkActionsController, :type => :controller do
+  let(:current_user) { create(:user) }
   before(:each) do
-    expect_any_instance_of(BulkActionsController).to receive(:current_user)
-      .at_least(:once).and_return(current_user)
+    allow(subject).to receive(:current_user).and_return(current_user)
   end
 
   describe 'GET index' do

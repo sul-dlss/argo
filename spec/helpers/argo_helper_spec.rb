@@ -20,71 +20,78 @@ describe ArgoHelper, :type => :helper do
   end
   describe 'render_buttons' do
     before :each do
-      @item_id = 'druid:zt570tx3016'
-      @apo_id = 'druid:hv992ry2431'
-      @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
-      @doc = SolrDocument.new({'id' => @item_id, SolrDocument::FIELD_APO_ID => [@apo_id]})
-      @usr = double()
-      allow(@usr).to receive(:is_admin).and_return(true)
-      allow(@usr).to receive(:groups).and_return([])
-      allow(@usr).to receive(:is_manager).and_return(false)
-      allow(@usr).to receive(:roles).with(@apo_id).and_return([])
+      @item = instantiate_fixture('druid_zt570tx3016', Dor::Item)
+      allow(Dor).to receive(:find).with(@item.pid).and_return(@item)
+      allow(@item).to receive(:can_manage_item?).and_return(true)
+
+      @apo = @item.admin_policy_object
+      @doc = SolrDocument.new({'id' => @item.pid, SolrDocument::FIELD_APO_ID => [@apo.pid]})
+
+      desc_md = double(Dor::DescMetadataDS)
+      allow(desc_md).to receive(:new?).and_return(true)
+      id_md = double(Dor::DescMetadataDS)
+      allow(id_md).to receive(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
+      allow(@item).to receive(:datastreams).and_return({
+        'contentMetadata' => nil,
+        'descMetadata' => desc_md,
+        'identityMetadata' => id_md
+      })
+
       allow(Dor::WorkflowService).to receive(:get_active_lifecycle).and_return(true)
       allow(Dor::WorkflowService).to receive(:get_lifecycle).and_return(true)
+
+      @usr = double()
+      allow(@usr).to receive(:is_admin).and_return(true)
+      allow(@usr).to receive(:is_manager).and_return(false)
+      allow(@usr).to receive(:groups).and_return([])
+      allow(@usr).to receive(:roles).with(@apo.pid).and_return([])
       allow(helper).to receive(:current_user).and_return(@usr)
-      allow(@object).to receive(:can_manage_item?).and_return(true)
-      allow(@object).to receive(:pid).and_return(@item_id)
-      desc_md = double(Dor::DescMetadataDS)
-      id_md   = double(Dor::DescMetadataDS)
-      apo     = double()
-      allow(desc_md).to receive(:new?).and_return(true)
-      allow(id_md).to receive(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
-      allow(apo).to receive(:pid).and_return(@apo_id)
-      allow(@object).to receive(:datastreams).and_return({'contentMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => id_md})
-      allow(@object).to receive(:admin_policy_object).and_return(apo)
-      allow(Dor).to receive(:find).with(@item_id).and_return(@object)
     end
     describe 'visibility with new descMetadata' do
       let(:default_buttons) do
         [
           {
             label: 'Reindex',
-            url: "/dor/reindex/#{@item_id}",
+            url: "/dor/reindex/#{@item.pid}",
             new_page: true
           },
           {
             label: 'Republish',
-            url: "/dor/republish/#{@item_id}",
-            check_url: "/workflow_service/#{@item_id}/published",
+            url: "/dor/republish/#{@item.pid}",
+            check_url: "/workflow_service/#{@item.pid}/published",
             new_page: true
           },
           {
             label: 'Change source id',
-            url: "/items/#{@item_id}/source_id_ui"
+            url: "/items/#{@item.pid}/source_id_ui"
           },
           {
             label: 'Edit tags',
-            url: "/items/#{@item_id}/tags_ui"
+            url: "/items/#{@item.pid}/tags_ui"
           },
           {
             label: 'Edit collections',
-            url: "/items/#{@item_id}/collection_ui"
+            url: "/items/#{@item.pid}/collection_ui"
           },
           {
             label: 'Set content type',
-            url: "/items/#{@item_id}/content_type"
+            url: "/items/#{@item.pid}/content_type"
           }
         ]
       end
       it 'should create a hash with the needed button info for an admin' do
+        allow(@item).to receive(:can_manage_item?).and_return(false)
+        expect(@usr).to receive(:is_admin).at_least(:once)
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|
           expect(buttons).to include(button)
         end
       end
-      it 'should generate a the same button set for a non admin' do
+      it 'should generate the same button set for a non admin' do
         allow(@usr).to receive(:is_admin).and_return(false)
-        allow(@object).to receive(:can_manage_item?).and_return(true)
+        allow(@usr).to receive(:is_manager).and_return(false)
+        expect(@usr).to receive(:roles).at_least(:once)
+        expect(@item).to receive(:can_manage_item?).at_least(:once).and_return(true)
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|
           expect(buttons).to include(button)
@@ -95,7 +102,7 @@ describe ArgoHelper, :type => :helper do
         buttons = helper.render_buttons(@doc)
         default_buttons.push({
           label: 'Update embargo',
-          url: "/items/#{@item_id}/embargo_form"
+          url: "/items/#{@item.pid}/embargo_form"
         }).each do |button|
           expect(buttons).to include(button)
         end

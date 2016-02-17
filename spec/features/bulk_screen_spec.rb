@@ -11,19 +11,15 @@ feature 'Bulk actions view', js: true do
       is_admin: true,
       permitted_collections: [["string"]]
     )
-
-    expect_any_instance_of(ApplicationController).to receive(:current_user).at_least(:once).and_return(@current_user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@current_user)
   end
 
   scenario 'basic page renders ok' do
     visit report_bulk_path
-
     expect(page).to have_css('h1', 'Bulk update operations')
     expect(find(:xpath, "//span[@class='bulk_button'][text()='Get druids from search'][not(@disabled)]")).to be_truthy
     expect(find(:xpath, "//span[@class='bulk_button'][text()='Paste a druid list'][not(@disabled)]")).to be_truthy
-
     find(:xpath, "//span[@class='bulk_button'][text()='Get druids from search'][not(@disabled)]").click
-    
     expect(find_button('Prepare objects')).to be_truthy
     expect(page).to have_button('Prepare objects', disabled: false)
     expect(page).to have_button('Refresh MODS', disabled: false)

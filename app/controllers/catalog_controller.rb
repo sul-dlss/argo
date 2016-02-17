@@ -184,17 +184,15 @@ class CatalogController < ApplicationController
   end
 
   def show
-    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-
+    @obj = find_druid(params[:id])
     return unless valid_user?(@obj)
-    super()  # with or without an APO, if we get here, user is authorized to view
+    # super is supposed to be Blacklight::Catalog#show
+    super # with or without an APO, if we get here, user is authorized to view
   end
 
   def datastream_view
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @response, @document = get_solr_response_for_doc_id pid
-    @obj = Dor.find pid, :lightweight => true
+    @obj = find_druid params[:id], :lightweight => true
+    @response, @document = get_solr_response_for_doc_id @obj.pid
     data = @obj.datastreams[params[:dsid]].content
     raise ActionController::RoutingError.new('Not Found') if data.nil?
     send_data data, :type => 'xml', :disposition => 'inline'
@@ -207,12 +205,12 @@ class CatalogController < ApplicationController
   end
 
   def bulk_upload_form
-    @object = Dor.find params[:id]
+    @obj = find_druid(params[:id])
   end
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
   def upload
-    @apo = Dor.find params[:id]
+    @apo = find_druid(params[:id])
 
     directory_name = Time.zone.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
     output_directory = File.join(Settings.BULK_METADATA.DIRECTORY, params[:druid], directory_name)
@@ -228,12 +226,10 @@ class CatalogController < ApplicationController
 
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def bulk_jobs_index
-    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-
+    @obj = find_druid(params[:id])
     return unless valid_user?(@obj)
-    @response, @document = get_solr_response_for_doc_id params[:id]
-    @bulk_jobs = load_bulk_jobs(params[:id])
+    @response, @document = get_solr_response_for_doc_id @obj.pid
+    @bulk_jobs = load_bulk_jobs(@obj.pid)
   end
 
   # Lets the user download the generated/cleaned XML metadata file that corresponds to a bulk metadata upload job.
@@ -282,9 +278,8 @@ class CatalogController < ApplicationController
   private
 
   def show_aspect
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @obj ||= Dor.find(pid)
-    @response, @document = get_solr_response_for_doc_id pid
+    @obj ||= find_druid(params[:id])
+    @response, @document = get_solr_response_for_doc_id @obj.pid
   end
 
   def set_user_obj_instance_var

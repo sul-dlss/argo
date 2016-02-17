@@ -5,15 +5,15 @@ describe ApoController, :type => :controller do
 
   before :each do
     @apo = instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject)
-    allow(Dor).to receive(:find).with(@apo.pid).and_return(@apo)
+    allow(Dor).to receive(:find).with(@apo.pid, {}).and_return(@apo)
     allow(@apo).to receive(:save)
 
     @collection = instantiate_fixture('pb873ty1662', Dor::Collection)
-    allow(Dor).to receive(:find).with(@collection.pid).and_return(@collection)
+    allow(Dor).to receive(:find).with(@collection.pid, {}).and_return(@collection)
     allow(@collection).to receive(:save)
 
     @agreement = instantiate_fixture('dd327qr3670', Dor::Item)
-    allow(Dor).to receive(:find).with(@agreement.pid).and_return(@agreement)
+    allow(Dor).to receive(:find).with(@agreement.pid, {}).and_return(@agreement)
 
     allow(controller).to receive(:update_index)
 
@@ -207,7 +207,7 @@ describe ApoController, :type => :controller do
 
   describe 'overly literal tests' do
     before :each do
-      expect(Dor).to receive(:find).with(@apo.pid).and_return @apo
+      expect(Dor).to receive(:find).with(@apo.pid, {}).and_return(@apo)
     end
     describe 'add_roleplayer' do
       it 'adds a roleplayer' do

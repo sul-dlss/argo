@@ -1,22 +1,26 @@
 require 'spec_helper'
 
 describe CatalogController, :type => :controller do
-
   before :each do
-#   log_in_as_mock_user(subject)
-    @druid = 'rn653dy9317'  # a fixture Dor::Item record
-    @item = instantiate_fixture(@druid, Dor::Item)
-    @user = User.find_or_create_by_webauth double('WebAuth', :login => 'sunetid', :logged_in? => true, :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => '')
-    allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
-    allow(Dor::Item).to receive(:find).with("druid:#{@druid}").and_return(@item)
+    @item = instantiate_fixture('rn653dy9317', Dor::Item)
+    allow(Dor).to receive(:find).with(@item.pid, {}).and_return(@item)
+    webauth = double(
+      'WebAuth',
+      login: 'sunetid',
+      logged_in?: true,
+      attributes: {'DISPLAYNAME' => 'Example User'},
+      privgroup: ''
+    )
+    @user = User.find_or_create_by_webauth(webauth)
+    allow(subject).to receive(:current_user).and_return(@user)
   end
 
   shared_examples 'APO-independent auth' do
     describe 'no user' do
       it 'basic get redirects to login' do
-        expect(subject).to receive(:webauth).and_return(nil)
-        get 'show', :id => @druid
-        expect(response.code).to eq('401')  # Unauthorized without webauth, no place to redirect
+        expect(subject).to receive(:current_user).and_return(nil)
+        get 'show', :id => @item.pid
+        expect(response.code).to eq('401')  # Unauthorized, no place to redirect
       end
     end
     describe 'with user (valid_user)' do
@@ -25,33 +29,32 @@ describe CatalogController, :type => :controller do
         allow(subject).to receive(:current_user).and_return(@user)
       end
       it 'unauthorized_user' do
-        get 'show', :id => @druid
+        get 'show', :id => @item.pid
         expect(response.code).to eq('403')  # two different flavors
-        # expect(response.body).to include 'No APO'
       end
       it 'is_admin' do
         allow(@user).to receive(:is_admin).and_return(true)
-        get 'show', :id => @druid
+        get 'show', :id => @item.pid
         expect(response.code).to eq('200')
       end
       it 'is_viewer' do
         allow(@user).to receive(:is_viewer).and_return(true)
-        get 'show', :id => @druid
+        get 'show', :id => @item.pid
         expect(response.code).to eq('200')
       end
       it 'impersonating nobody' do
         @user.set_groups_to_impersonate(['some:irrelevance'])
-        get 'show', :id => @druid
+        get 'show', :id => @item.pid
         expect(response.code).to eq('403')
       end
       it 'impersonating viewer' do
         @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:viewer-role'])
-        get 'show', :id => @druid
+        get 'show', :id => @item.pid
         expect(response.code).to eq('200')
       end
       it 'impersonating admin' do
         @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:administrator-role'])
-        get 'show', :id => @druid
+        get 'show', :id => @item.pid
         expect(response.code).to eq('200')
       end
     end
@@ -65,7 +68,7 @@ describe CatalogController, :type => :controller do
       describe 'impersonating user with no extra powers' do
         it 'is forbidden since there is no APO' do
           allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
+          get 'show', :id => @item.pid
           expect(response.code).to eq('403')  # Forbidden
           expect(response.body).to include 'No APO'
         end
@@ -75,22 +78,19 @@ describe CatalogController, :type => :controller do
 
     describe 'with APO' do
       before :each do
-        @apo_druid = 'druid:hv992ry2431'
         @apo = instantiate_fixture('hv992ry2431', Dor::AdminPolicyObject)
         allow(@item).to receive(:admin_policy_object).and_return(@apo)
-        allow(@user).to receive(:roles).with(@apo_druid).and_return([])
       end
       describe 'impersonating_user with no extra powers' do
         it 'is forbidden if roles do not match' do
-          allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
+          allow(@user).to receive(:roles).with(@apo.pid).and_return([])
+          get 'show', :id => @item.pid
           expect(response.code).to eq('403')  # Forbidden
           expect(response.body).to include 'forbidden'
         end
         it 'succeeds if roles match' do
-          allow(@user).to receive(:roles).with(@apo_druid).and_return(['dor-viewer'])
-          allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
+          allow(@user).to receive(:roles).with(@apo.pid).and_return(['dor-viewer'])
+          get 'show', :id => @item.pid
           expect(response.code).to eq('200')
         end
       end
@@ -125,15 +125,18 @@ describe CatalogController, :type => :controller do
         expect(field[1].show).to be_falsey if raw_fields.include?(field[0])
       end
     end
+
     it 'should use POST as the http method' do
       expect(config.http_method).to eq :post
     end
   end
+
   describe 'error handling' do
     let(:druid) { 'druid:zz999zz9999' }
+
     it 'should 404 on missing item' do
       expect(subject).to receive(:current_user).and_return(double('WebAuth', is_admin: true)).twice
-      expect(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
+      expect(Dor).to receive(:find).with(druid, {}).and_raise(ActiveFedora::ObjectNotFoundError)
       get 'show', :id => druid
       expect(response).to have_http_status(:not_found)
     end

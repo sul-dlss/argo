@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
   include DorObjectHelper
   include ModsDisplay::ControllerExtension
   before_action :authorize!
-  before_action :create_obj, :except => [
+  before_action :create_object, :except => [
     :open_bulk,
     :purge_object,
     :register
@@ -13,6 +13,7 @@ class ItemsController < ApplicationController
     :add_collection, :set_collection, :remove_collection,
     :add_file, :delete_file,
     :datastream_update,
+    :embargo_update,
     :mods,
     :open_version, :close_version,
     :replace_file,
@@ -523,13 +524,9 @@ class ItemsController < ApplicationController
     end
   end
 
-  def resource
-    @content_ds = @object.datastreams['contentMetadata']
-  end
-
   def purge_object
     begin
-      create_obj
+      create_object
       return unless forbid_modify # return because rendering already happened
     rescue
       Dor::SearchService.solr.delete_by_id(params[:id])
@@ -543,6 +540,10 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.any { redirect_to '/', :notice => params[:id] + ' has been purged!' }
     end
+  end
+
+  def resource
+    @content_ds = @object.datastreams['contentMetadata']
   end
 
   def update_resource
@@ -690,9 +691,8 @@ class ItemsController < ApplicationController
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
-    reindex Dor::Item.find(params[:id])
+    reindex find_druid(params[:id])
     msg = "Added #{wf_name}"
-
     if params[:bulk]
       render :text => msg
     else
@@ -702,20 +702,20 @@ class ItemsController < ApplicationController
 
   private
 
-  def reindex(item)
-    Dor::SearchService.solr.add item.to_solr
+  # ---
+  # Object management
+
+  def create_object
+    @object = find_druid(params[:id])
+    @apo = @object.admin_policy_object
   end
 
   def flush_index
     Dor::SearchService.solr.commit
   end
 
-  # Filters
-  def create_obj
-    raise 'missing druid' unless params[:id]
-    @object = Dor::Item.find params[:id]
-    @apo = @object.admin_policy_object
-    @apo = ( @apo ? @apo.pid : '' )
+  def reindex(item)
+    Dor::SearchService.solr.add item.to_solr
   end
 
   def save_and_reindex

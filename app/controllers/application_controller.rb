@@ -7,7 +7,23 @@ class ApplicationController < ActionController::Base
   before_action :authorize!
   before_action :fedora_setup
 
-  rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render text: 'Object Not Found', status: :not_found }
+  rescue_from ActionController::BadRequest do
+    msg = "Bad request: #{params}"
+    logger.error msg
+    render text: msg, status: :bad_request
+  end
+
+  rescue_from ActiveFedora::ObjectNotFoundError do
+    msg = "Object Not Found: #{params}"
+    logger.error msg
+    render text: msg, status: :not_found
+  end
+
+  rescue_from Rubydora::FedoraInvalidRequest do
+    msg = "Fedora Rejected Object Request: #{params}"
+    logger.error msg
+    render text: msg, status: :bad_request
+  end
 
   helper_method :current_or_guest_user
 
@@ -48,6 +64,33 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  # A common method for controllers to find a Dor object.  It accepts any valid
+  # DRUID (druid:aa111aa1111) or ID (aa111aa1111).  DruidTools::Druid parses
+  # input and returns a uniform DRUID, which is input to Dor.find to obtain a Dor
+  # object.  If the object identifier is not a valid DRUID, it will generate
+  # a UI alert and log a warning, but allow Dor.find to try to get it.
+  # @see https://github.com/sul-dlss/druid-tools
+  # @param id [String]
+  # @param options [Hash] options for Dor.find
+  # @return object [ActiveFedora::Base] anything returned by Dor.find
+  # @raises ActionController::BadRequest when id.blank?
+  # @raises exceptions from Dor.find
+  def find_druid(id, options = {})
+    raise ActionController::BadRequest if id.blank?
+    druid = begin
+              DruidTools::Druid.new(id).druid
+            rescue ArgumentError
+              # Allow Argo to find anything using Dor.find,
+              # in case there is bad IDs that need to be remediated.
+              # The Dor.find method should be read-only access.
+              msg = "Trying to find an invalid DRUID: #{id}; "
+              logger.warn msg + "params: #{params}"
+              flash[:alert] = msg
+              id
+            end
+    Dor.find(druid, options)
+  end
 
   def munge_parameters
     case request.content_type
