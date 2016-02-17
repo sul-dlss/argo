@@ -15,7 +15,7 @@ feature 'Bulk actions view', js: true do
     expect_any_instance_of(ApplicationController).to receive(:current_user).at_least(:once).and_return(@current_user)
   end
 
-  scenario 'basic page renders ok', :focus => true do
+  scenario 'basic page renders ok' do
     visit report_bulk_path
 
     expect(page).to have_css('h1', 'Bulk update operations')
