@@ -30,19 +30,6 @@ Capybara.default_max_wait_time = 10
 # Note: no such files, currently.
 Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
 
-def druid_to_path(druid, flavor = 'xml')
-  fixture_mask = File.join(File.dirname(__FILE__), 'fixtures', "*_#{druid.sub(/:/, '_')}.#{flavor}")
-  other_mask   = Rails.root.join('fedora_conf', 'data', "#{druid.sub(/druid:/, '')}.#{flavor}")
-  Dir[fixture_mask].first || Dir[other_mask].first
-end
-
-def instantiate_fixture(druid, klass = ActiveFedora::Base)
-  fname = druid_to_path(druid)
-  Rails.logger.debug "instantiate_fixture(#{druid}) ==> #{fname}"
-  return nil if fname.nil?
-  item_from_foxml(File.read(fname), klass)
-end
-
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -72,8 +59,21 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
-def log_in_as_mock_user(subject)
-  allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
+
+################################################################
+# Dor objects
+
+def druid_to_path(druid, flavor = 'xml')
+  fixture_mask = File.join(File.dirname(__FILE__), 'fixtures', "*_#{druid.sub(/:/, '_')}.#{flavor}")
+  other_mask   = Rails.root.join('fedora_conf', 'data', "#{druid.sub(/druid:/, '')}.#{flavor}")
+  Dir[fixture_mask].first || Dir[other_mask].first
+end
+
+def instantiate_fixture(druid, klass = ActiveFedora::Base)
+  fname = druid_to_path(druid)
+  Rails.logger.debug "instantiate_fixture(#{druid}) ==> #{fname}"
+  return nil if fname.nil?
+  item_from_foxml(File.read(fname), klass)
 end
 
 # Highly similar to https://github.com/sul-dlss/dor-services/blob/master/spec/foxml_helper.rb
@@ -108,4 +108,83 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
     end
   end
   result
+end
+
+################################################################
+# Users
+
+def log_in_as_mock_user(subject)
+  user = double(
+    :webauth_user,
+    :login => 'sunetid',
+    :logged_in? => true,
+  )
+  allow(subject).to receive(:webauth).and_return(user)
+end
+
+# A User with `is_admin` privilege.  This is the ultimate privilege.
+# This user is configured to be the ApplicationController#current_user.
+# @return admin_user [User] An admin user
+def admin_user
+  webauth = double(
+    'WebAuth',
+    :login => 'sunetid',
+    :attributes => {'DISPLAYNAME' => 'Admin'}
+  )
+  admin_user = User.find_or_create_by_webauth(webauth)
+  allow(admin_user).to receive(:groups).and_return(User::ADMIN_GROUPS)
+  # admin privilege supercedes all others, no need to mock anything else.
+  allow(admin_user).to receive(:is_admin).and_return(true)
+  # Could impose additional restraints, but it's likely overkill
+  # in the spec helper methods (individual specs could do so), e.g.
+  # expect(admin_user).not_to receive(:is_manager)
+  # expect(admin_user).not_to receive(:is_viewer)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:current_user)
+    .and_return(admin_user)
+  admin_user
+end
+
+# A User without `is_admin` privilege, but with `is_manager` privilege.  The
+# `is_manager` privilege will trump all lower privileges.
+# This user is configured to be the ApplicationController#current_user.
+# @return manager_user [User] A manager user
+def manager_user
+  webauth = double(
+    'WebAuth',
+    :login => 'sunetid',
+    :attributes => {'DISPLAYNAME' => 'Manager'}
+  )
+  manager_user = User.find_or_create_by_webauth(webauth)
+  allow(manager_user).to receive(:groups).and_return(User::MANAGER_GROUPS)
+  allow(manager_user).to receive(:is_admin).and_return(false)
+  allow(manager_user).to receive(:is_manager).and_return(true)
+  # Could impose additional restraints, but it's likely overkill
+  # in the spec helper methods (individual specs could do so), e.g.
+  # expect(manager_user).not_to receive(:is_viewer)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:current_user)
+    .and_return(manager_user)
+  manager_user
+end
+
+# A User without `is_admin` or `is_manager` privileges, but with `is_viewer`.
+# The `is_viewer` privilege will trump all lower privileges (workgroups).
+# This user is configured to be the ApplicationController#current_user.
+# @return view_user [User] A viewer user
+def view_user
+  webauth = double(
+    'WebAuth',
+    :login => 'sunetid',
+    :attributes => {'DISPLAYNAME' => 'Viewer'}
+  )
+  view_user = User.find_or_create_by_webauth(webauth)
+  allow(view_user).to receive(:groups).and_return(User::VIEWER_GROUPS)
+  allow(view_user).to receive(:is_admin).and_return(false)
+  allow(view_user).to receive(:is_manager).and_return(false)
+  allow(view_user).to receive(:is_viewer).and_return(true)
+  allow_any_instance_of(ApplicationController)
+    .to receive(:current_user)
+    .and_return(view_user)
+  view_user
 end
