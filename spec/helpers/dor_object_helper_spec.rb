@@ -48,4 +48,31 @@ describe DorObjectHelper, :type => :helper do
       expect(render_status_style(nil, nil)).to eq('')
     end
   end
+
+  describe 'get_metadata_source' do
+    it 'should return Metadata Toolkit when identityMetadata.otherId contains mdtoolkit' do
+      id_metadata = double('identity_metadata')
+      mock_obj = double('Dor::Item', { :identityMetadata => id_metadata })
+
+      allow(id_metadata).to receive(:otherId).with('mdtoolkit').and_return(['1'])
+      expect(get_metadata_source(mock_obj)).to eq('Metadata Toolkit')
+    end
+
+    it 'should return Symphony when identityMetadata.otherId contains catkey' do
+      id_metadata = double('identity_metadata')
+      mock_obj = double('Dor::Item', { :identityMetadata => id_metadata })
+
+      allow(id_metadata).to receive(:otherId).with('mdtoolkit').and_return(['1'])
+      expect(get_metadata_source(mock_obj)).to eq('Metadata Toolkit')
+    end
+
+    it 'should return DOR when identityMetadata.otherId contains neither mdtoolkit nor catkey' do
+      id_metadata = double('identity_metadata')
+      mock_obj = double('Dor::Item', { :identityMetadata => id_metadata })
+
+      allow(id_metadata).to receive(:otherId).with('mdtoolkit').and_return([])
+      allow(id_metadata).to receive(:otherId).with('catkey').and_return([])
+      expect(get_metadata_source(mock_obj)).to eq('DOR')
+    end
+  end
 end
