@@ -100,6 +100,13 @@ describe ArgoHelper, :type => :helper do
           expect(buttons).to include(button)
         end
       end
+      it 'should not generate errors given an object that has no associated APO' do
+        allow(@doc).to receive(:apo_pid).and_return(nil)
+        allow(@usr).to receive(:roles).with(nil).and_return([])
+        buttons = helper.render_buttons(@doc)
+        expect(buttons).not_to be_nil
+        expect(buttons.length).to be > 0
+      end
     end
   end
   describe 'render_facet_value' do

@@ -102,7 +102,6 @@ module ArgoHelper
   def render_buttons(doc, object = nil)
     pid = doc['id']
     object ||= Dor.find(pid)
-    # wf_stuff.include? 'accessionWF:completed:publish'
 
     apo_pid = doc.apo_pid
 
