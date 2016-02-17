@@ -28,5 +28,22 @@ RSpec.describe 'catalog/_show_field_list.html.erb' do
       field_value = [nil, 'does_not_have_to_be_date_value']
       validate_rendering(field_value)
     end
+
+    context 'when field is metadata_source_ssi' do
+      let(:field) { 'metadata_source_ssi' }
+      let(:label) { 'MD Source' }
+
+      it 'renders a document with no metadata_source_ssi without crashing' do
+        id_metadata = double('identity_metadata')
+        mock_obj = double('Dor::Item', { :identityMetadata => id_metadata })
+        allow(id_metadata).to receive(:otherId).with('mdtoolkit').and_return(['1']) # Non-zero length array of any value OK
+        allow(view).to receive(:object).and_return(mock_obj)
+        document = SolrDocument.new(id: 1)
+        allow(view).to receive(:document).and_return(document)
+        render
+        expect(rendered).not_to be_nil
+        expect(rendered).to have_css('dt', text: 'MD Source:')
+      end
+    end
   end
 end
