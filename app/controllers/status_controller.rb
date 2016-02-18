@@ -4,11 +4,11 @@ class StatusController < ApplicationController
 
   def log
     if check_recently_indexed
-      render :status => 200, :text => 'All good! <br/>'
+      render status: 200, text: 'All good! <br/>'
       return
     end
     if params[:test_obj].nil?
-      render :status => 500, :text => 'Nothing indexed recently.'
+      render status: 500, text: 'Nothing indexed recently.'
       return
     end
     test_item = Dor::Item.find(params[:test_obj])
@@ -17,21 +17,29 @@ class StatusController < ApplicationController
     secs = params[:sleep].nil? ? 10.0 : params[:sleep].to_i  # allow override to speed testing
     sleep secs
     if check_recently_indexed
-      render :status => 200, :text => "All good! <br/>Saved #{params[:test_obj]}"
-      return
+      msg = "All good! <br/>Saved #{params[:test_obj]}"
+      render status: 200, text: msg
     else
-      render :status => 500, :text => "Nothing indexed recently. Even after saving '#{params[:test_obj]}'."
-      return
+      msg = "Nothing indexed recently. Even after saving '#{params[:test_obj]}'."
+      render status: 500, text: msg
     end
   rescue ActiveFedora::ObjectNotFoundError
-    render :status => 404, :text => "No object '#{params[:test_obj]}' found"
+    msg = "No object '#{params[:test_obj]}' found"
+    render status: 404, text: msg
   end
 
   protected
 
   # @return [Boolean]
   def check_recently_indexed
-    docs = Dor::SearchService.query('indexed_at_dtsi:[NOW-15MINUTES TO NOW]', {:rows => 1, :fl => 'indexed_at_dtsi'})['response']['docs']
+    result = Dor::SearchService.query(
+      'indexed_at_dtsi:[NOW-15MINUTES TO NOW]',
+      {
+        rows: 1,
+        fl: 'indexed_at_dtsi'
+      }
+    )
+    docs = result['response']['docs']
     docs.length == 1
   end
 
