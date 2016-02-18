@@ -8,7 +8,7 @@ feature 'APO views' do
       # use a viewing user that depends on workgroup roles for access
       @view_user = view_user # see spec_helper
       allow(@view_user).to receive(:is_viewer).and_return(false)
-      allow(Dor).to receive(:find).with(druid, {}).and_return(item)
+      allow(Dor).to receive(:find).with(druid).and_return(item)
     end
 
     it 'allows a user of an authorized workgroup to view an APO' do
@@ -36,7 +36,7 @@ feature 'APO views' do
       # user does not belong to any authorized workgroups.
       allow(@view_user).to receive(:roles).and_return([])
       visit catalog_path druid
-      expect(page).to have_content('APO forbids access')
+      expect(page).to have_content('forbidden')
     end
   end
 end
