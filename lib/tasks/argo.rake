@@ -158,7 +158,7 @@ namespace :argo do
         end
       end
       puts counts
-      payload = "{\n" + docs.collect{|x| '"add": ' + JSON.pretty_generate(x)}.join(",\n") + "\n}"
+      payload = "{\n" + docs.map{|x| '"add": ' + JSON.pretty_generate(x)}.join(",\n") + "\n}"
 
       IO.write('temp.json', payload)
       cores = args[:cores].is_a?(String) ? args[:cores].split(' ') : args[:cores] # make sure we got an array
@@ -272,7 +272,7 @@ namespace :argo do
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
     facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.collect(&:value).join(%(\n))}"
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.map(&:value).join(%(\n))}"
   end
 
   # the .htaccess file lists the workgroups that we recognize as relevant to argo.
@@ -293,8 +293,7 @@ namespace :argo do
     directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
     facet = get_workgroups_facet()
     unless facet.nil?
-      facets = facet.items.collect(&:value)
-
+      facets = facet.items.map(&:value)
       priv_groups = facets.select { |v| v =~ /^workgroup:/ }
       priv_groups += (ADMIN_GROUPS + VIEWER_GROUPS + MANAGER_GROUPS) # we know that we always want these built-in groups to be part of .htaccess
       priv_groups.uniq! # no need to repeat ourselves (mostly there in case the builtin groups are already listed in APOs)
