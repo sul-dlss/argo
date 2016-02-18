@@ -57,8 +57,6 @@ gem 'sul_styles', '~> 0.3.0' # later versions require ruby 2.1 or higher
 
 group :test, :development do
   gem 'http_logger'
-  gem 'selenium-webdriver'
-  gem 'unicorn'
   gem 'rspec-rails', '~> 3'
   gem 'capybara'
   gem 'rack-test', :require => 'rack/test'
