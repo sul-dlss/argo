@@ -1,6 +1,6 @@
 class Dor::ObjectsController < ApplicationController
   include ApplicationHelper # for fedora_base
-  before_filter :munge_parameters
+  before_action :munge_parameters
 
   def create
     if params[:collection] && params[:collection].length == 0

@@ -1,17 +1,17 @@
 class ItemsController < ApplicationController
-  before_filter :authorize!
+  before_action :authorize!
   require 'equivalent-xml'
   include ItemsHelper
   include DorObjectHelper
   include ModsDisplay::ControllerExtension
-  before_filter :create_obj, :except => [:register, :open_bulk, :purge_object]
-  before_filter :forbid_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id, :delete_file, :close_version, :open_version, :resource, :add_file, :replace_file, :update_attributes, :update_resource, :mods, :datastream_update ]
-  before_filter :forbid_view,   :only => [:get_preserved_file, :get_file]
-  before_filter :enforce_versioning, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :tags, :source_id, :set_source_id, :set_content_type, :set_rights]
-  after_filter :save_and_reindex, :only => [:add_collection, :set_collection, :remove_collection,
+  before_action :create_obj, :except => [:register, :open_bulk, :purge_object]
+  before_action :forbid_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id, :delete_file, :close_version, :open_version, :resource, :add_file, :replace_file, :update_attributes, :update_resource, :mods, :datastream_update ]
+  before_action :forbid_view,   :only => [:get_preserved_file, :get_file]
+  before_action :enforce_versioning, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :tags, :source_id, :set_source_id, :set_content_type, :set_rights]
+  after_action :save_and_reindex, :only => [:add_collection, :set_collection, :remove_collection,
                :open_version, :close_version, :tags, :tags_bulk, :source_id,
                :set_rights, :set_content_type, :apply_apo_defaults, :embargo_update]
-  prepend_after_filter :flush_index, :only => [:embargo_update, :add_workflow] # must run after save_and_reindex
+  prepend_after_action :flush_index, :only => [:embargo_update, :add_workflow] # must run after save_and_reindex
 
   def purl_preview
     @object.add_collection_reference @object.descMetadata.ng_xml

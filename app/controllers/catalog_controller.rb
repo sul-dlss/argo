@@ -10,7 +10,7 @@ class CatalogController < ApplicationController
   include SpreadsheetHelper
   include DateFacetConfigurations
 
-  before_filter :reformat_dates, :set_user_obj_instance_var
+  before_action :reformat_dates, :set_user_obj_instance_var
   before_action :show_aspect, only: [:dc, :ds]
   before_action :sort_collection_actions_buttons, only: [:index]
 

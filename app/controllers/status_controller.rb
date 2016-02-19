@@ -1,6 +1,6 @@
 class StatusController < ApplicationController
   include ActionView::Helpers::DateHelper
-  skip_before_filter :authorize!
+  skip_before_action :authorize!
 
   def log
     if check_recently_indexed
