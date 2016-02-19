@@ -50,7 +50,7 @@ ul li{
 }
 </style>
 <% end %>
-
+<div class="container">
 <% @page_title = "#{application_name} Search Results" %>
 <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
 <% if has_search_parameters? %>
@@ -73,21 +73,21 @@ ul li{
         <button class="bulk_button btn-block" id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</button>
         Open items not yet open for versioning
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-offset-1">
         <button class="bulk_button btn-block" onclick="$('#refresh_metadata').show(400)">Refresh MODS</button>
         <button class="bulk_button btn-block" class="update_buttons" id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Set source Id</button>
         <button class="bulk_button btn-block" class="update_buttons" onclick="$('#rights').show(400)">Set object rights</button>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-offset-1">
         <button class="bulk_button btn-block" class="update_buttons" onclick="$('#content_type').show(400)">Set content type</button>
         <button class="bulk_button btn-block" class="update_buttons" onclick="$('#set_collection').show(400)">Set collection</button>
         <button class="bulk_button btn-block" class="update_buttons" onclick="$('#add_collection').show(400)">Add collection</button>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-offset-1">
         <button class="bulk_button btn-block bulk-btn-danger" onclick="$('#apply_apo_defaults').show(400)">Apply APO defaults</button>
         <button class="bulk_button bulk-btn-danger btn-block" onclick="$('#add_workflow').show(400)">Add a workflow</button>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-offset-1">
         <button class="bulk_button btn-block" onclick="$('#close').show(400)">Close versions</button>
 	Submit & accession changed objects
       </div>
@@ -97,13 +97,13 @@ ul li{
       <div class="col-sm-2">
 	<button class="bulk_button btn-block" id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-offset-1">
         <button class="bulk_button btn-block" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-offset-1">
 	<button class="bulk_button btn-block" id="show_tags" name="show_tags" onclick="$('#tag').show(400);get_tags();">Tags</button>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-2 col-xs-offset-1">
 	<button class="bulk_button bulk-btn-danger btn-block" onclick="$('#purge').show(400)">Purge</button>
       </div>
 
@@ -270,3 +270,4 @@ ul li{
 <span class="bulk_button" id="stop" class="stop_button" style="display:none" name="stop" onclick="stop_all();">Stop</span>
 
 <br/><div style="display:none;width:50%" id="log" name="log"></div></div>
+</div>
