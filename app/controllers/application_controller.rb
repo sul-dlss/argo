@@ -4,8 +4,8 @@ class ApplicationController < ActionController::Base
   # Please be sure to impelement current_user and user_session. Blacklight depends on
   # these methods in order to perform user specific actions.
 
-  before_filter :authorize!
-  before_filter :fedora_setup
+  before_action :authorize!
+  before_action :fedora_setup
 
   rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render text: 'Object Not Found', status: :not_found }
 

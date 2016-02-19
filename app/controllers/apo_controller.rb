@@ -3,7 +3,7 @@ require 'rest-client'
 
 class ApoController < ApplicationController
 
-  before_filter :create_obj, :except => [:register, :is_valid_role_list_endpoint, :spreadsheet_template]
+  before_action :create_obj, :except => [:register, :is_valid_role_list_endpoint, :spreadsheet_template]
   after_action :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
 
   DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
