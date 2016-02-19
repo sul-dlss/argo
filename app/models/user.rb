@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
   # @param [String] DRUID, fully qualified
   # @return [Array[String]] list of roles
   def roles(pid)
+    return [] if pid.nil?
     @role_cache ||= {}
     return @role_cache[pid] if @role_cache[pid]
 

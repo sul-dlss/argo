@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 require 'spec_helper'
 
 describe User, :type => :model do
@@ -127,6 +125,9 @@ describe User, :type => :model do
       expect(Dor::SearchService).to receive(:query).once
       @user.roles('pid')
       @user.roles('pid')
+    end
+    it 'should return an empty array given a nil pid' do
+      expect(@user.roles(nil)).to eq([])
     end
   end
 
