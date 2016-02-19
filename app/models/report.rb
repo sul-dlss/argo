@@ -1,7 +1,7 @@
 class Report
   include BlacklightSolrExtensions
   include Blacklight::Configurable
-  include Blacklight::SolrHelper
+  include Blacklight::SearchHelper
   include CsvConcern
   include DateFacetConfigurations
 

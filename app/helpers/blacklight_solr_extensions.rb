@@ -1,6 +1,6 @@
 module BlacklightSolrExtensions
   extend ActiveSupport::Concern
-  include Blacklight::SolrHelper
+  include Blacklight::SearchHelper
 
   def add_params_to_current_search(new_params)
     p = session[:search] ? session[:search].dup : {}
