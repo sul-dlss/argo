@@ -1,17 +1,55 @@
 class ItemsController < ApplicationController
-  before_action :authorize!
   require 'equivalent-xml'
   include ItemsHelper
   include DorObjectHelper
   include ModsDisplay::ControllerExtension
-  before_action :create_obj, :except => [:register, :open_bulk, :purge_object]
-  before_action :forbid_modify, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :set_content_type, :tags, :tags_bulk, :source_id, :delete_file, :close_version, :open_version, :resource, :add_file, :replace_file, :update_attributes, :update_resource, :mods, :datastream_update ]
-  before_action :forbid_view,   :only => [:get_preserved_file, :get_file]
-  before_action :enforce_versioning, :only => [:add_collection, :set_collection, :remove_collection, :update_rights, :tags, :source_id, :set_source_id, :set_content_type, :set_rights]
-  after_action :save_and_reindex, :only => [:add_collection, :set_collection, :remove_collection,
-               :open_version, :close_version, :tags, :tags_bulk, :source_id,
-               :set_rights, :set_content_type, :apply_apo_defaults, :embargo_update]
-  prepend_after_action :flush_index, :only => [:embargo_update, :add_workflow] # must run after save_and_reindex
+  before_action :authorize!
+  before_action :create_obj, :except => [
+    :open_bulk,
+    :purge_object,
+    :register
+  ]
+  before_action :forbid_modify, :only => [
+    :add_collection, :set_collection, :remove_collection,
+    :add_file, :delete_file,
+    :datastream_update,
+    :mods,
+    :open_version, :close_version,
+    :replace_file,
+    :resource, :update_resource,
+    :set_content_type,
+    :source_id,
+    :tags, :tags_bulk,
+    :update_rights,
+    :update_attributes
+  ]
+  before_action :forbid_view, :only => [
+    :get_file,
+    :get_preserved_file
+  ]
+  before_action :enforce_versioning, :only => [
+    :add_collection, :set_collection, :remove_collection,
+    :source_id, :set_source_id,
+    :set_content_type,
+    :set_rights,
+    :tags,
+    :update_rights
+  ]
+  after_action :save_and_reindex, :only => [
+    :add_collection, :set_collection, :remove_collection,
+    :apply_apo_defaults,
+    :embargo_update,
+    :open_version, :close_version,
+    :tags, :tags_bulk,
+    :source_id,
+    :set_rights,
+    :set_content_type
+  ]
+  # must run after save_and_reindex
+  prepend_after_action :flush_index, :only => [
+    :add_workflow,
+    :embargo_update
+  ]
 
   def purl_preview
     @object.add_collection_reference @object.descMetadata.ng_xml
@@ -22,7 +60,11 @@ class ItemsController < ApplicationController
   def prepare
     if can_open_version? @object.pid
       begin
-        vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
+        vers_md_upd_info = {
+          :significance => params[:severity],
+          :description => params[:description],
+          :opening_user_name => current_user.to_s
+        }
         @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
       rescue Dor::Exception => e
         render :status => :precondition_failed, :text => e
@@ -56,11 +98,12 @@ class ItemsController < ApplicationController
           format.html { render :status => 500, :text => 'Collection not set, already has collection(s)' }
         end
       else
-        if can_set_collection
-          format.html { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully set' }
-        else
-          format.html { redirect_to catalog_path(params[:id]), :notice => 'Collection not set, already has collection(s)' }
-        end
+        msg = if can_set_collection
+                'Collection successfully set'
+              else
+                'Collection not set, already has collection(s)'
+              end
+        format.html { redirect_to catalog_path(params[:id]), :notice => msg }
       end
     end
   end
@@ -108,14 +151,17 @@ class ItemsController < ApplicationController
   # @option params [String] `:wf_name` The workflow name. e.g., accessionWF.
   # @option params [String] `:repo` The workflow's repository. e.g., dor.
   def workflow_view
-    fail ArgumentError, "Missing parameters: #{params.inspect}" unless params[:wf_name].present? && params[:repo].present?
-
-    # Set variables for views
-    # determine which workflow we're supposed to render and honor a special value of 'workflow'
+    unless params[:wf_name].present? && params[:repo].present?
+      fail ArgumentError, "Missing parameters: #{params.inspect}"
+    end
+    # Set variables for views; determine which workflow we're supposed to
+    # render and honor a special value of 'workflow'
     @workflow_id = params[:wf_name]
-    @workflow = @workflow_id == 'workflow' ? @object.workflows : @object.workflows.get_workflow(@workflow_id, params[:repo])
-
-    # render different views (HTML, XML, or Image) based on requested format
+    @workflow = if @workflow_id == 'workflow'
+                  @object.workflows
+                else
+                  @object.workflows.get_workflow(@workflow_id, params[:repo])
+                end
     respond_to do |format|
       format.js { render 'workflow_view', layout: false }
       format.html { render 'workflow_view' }
@@ -123,7 +169,11 @@ class ItemsController < ApplicationController
       format.any(:png, :svg, :jpeg) do
         graph = @workflow.graph
         fail ActionController::RoutingError.new('Not Found') if graph.nil?
-        send_data graph.output(request.format.to_sym => String), :type => request.format.to_s, :disposition => 'inline'
+        send_data(
+          graph.output(request.format.to_sym => String),
+          :type => request.format.to_s,
+          :disposition => 'inline'
+        )
       end
     end
   end
@@ -141,42 +191,36 @@ class ItemsController < ApplicationController
     if args.all?(&:present?)
       # the :repo parameter is optional, so fetch it based on the workflow name if blank
       params[:repo] ||= Dor::WorkflowObject.find_by_name(params[:wf_name]).definition.repo
-
       # this will raise an exception if the item doesn't have that workflow step
       Dor::WorkflowService.get_workflow_status params[:repo], *args.take(3)
-
       # update the status for the step and redirect to the workflow view page
       Dor::WorkflowService.update_workflow_status params[:repo], *args
-
       respond_to do |format|
         if params[:bulk].present?
-          render :status => 200, :text => 'Updated!'
+          render status: 200, text: 'Updated!'
         else
-          format.any { redirect_to catalog_path(params[:id]), :notice => "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:wf_name]}" }
+          msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:wf_name]}"
+          format.any { redirect_to catalog_path(params[:id]), notice: msg }
         end
       end
+    elsif params[:bulk].present?
+      render status: :bad_request, text: 'Bad request!'
     else
-      respond_to do |format|
-        if params[:bulk].present?
-          render :status => :bad_request, :text => 'Bad request!'
-        else
-          fail ArgumentError, "Missing arguments: #{args.inspect}"
-        end
-      end
+      fail ArgumentError, "Missing arguments: #{args.inspect}"
     end
   end
 
   def release_hold
     # this will raise and exception if the item doesnt have that workflow step
-    unless Dor::WorkflowService.get_workflow_status('dor', @object.pid, 'accessionWF', 'sdr-ingest-transfer') == 'hold'
+    unless dor_accession_status(@object, 'sdr-ingest-transfer') == 'hold'
       render :status => :bad_request, :text => 'Item isnt on hold!'
       return
     end
-    unless Dor::WorkflowService.get_lifecycle('dor', @object.admin_policy_object.pid, 'accessioned')
+    unless dor_lifecycle(@object.admin_policy_object, 'accessioned')
       render :status => :bad_request, :text => "Item's APO #{@object.admin_policy_object.pid} hasnt been ingested!"
       return
     end
-    Dor::WorkflowService.update_workflow_status 'dor', @object.pid, 'accessionWF', 'sdr-ingest-transfer', 'waiting'
+    set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
     if params[:bulk]
       render :status => 200, :text => 'Updated!'
       return
@@ -228,7 +272,7 @@ class ItemsController < ApplicationController
     # Catch reindexing errors here to avoid cascading errors
     begin
       save_and_reindex
-    rescue ActiveFedora::ObjectNotFoundError => e
+    rescue ActiveFedora::ObjectNotFoundError
       render text: 'The object was not found in Fedora. Please recheck the RELS-EXT XML.', status: :not_found
       return
     end
@@ -263,9 +307,15 @@ class ItemsController < ApplicationController
     [:publish, :shelve, :preserve].each do |k|
       params[k] = (params[k].nil? || params[k] != 'on') ? 'no' : 'yes'
     end
-    @object.contentMetadata.update_attributes(params[:file_name], params[:publish], params[:shelve], params[:preserve])
+    @object.contentMetadata.update_attributes(
+      params[:file_name],
+      params[:publish],
+      params[:shelve],
+      params[:preserve]
+    )
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => "Updated attributes for file #{params[:file_name]}!" }
+      msg = "Updated attributes for file #{params[:file_name]}!"
+      format.any { redirect_to catalog_path(params[:id]), notice: msg }
     end
   end
 
@@ -274,22 +324,23 @@ class ItemsController < ApplicationController
   #  ~ possibly 2 writes to WFS (each one triggers async object reindex),
   #  ~ plus an object save (more WFS requests, Fedora write, Solr reindex)
   def create_minimal_mods
-    unless Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'descriptive-metadata') == 'error' || Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'publish') == 'error'
-      render :text => 'Object is not in error for descMD or publish!', :status => 500
+    unless dor_accession_error?(@object, 'descriptive-metadata') ||
+       dor_accession_error?(@object, 'publish')
+      render status: 500, text: 'Object is not in error for descMD or publish!'
       return
     end
     unless @object.descMetadata.new?
-      render :text => 'This service cannot overwrite existing data!', :status => 500
+      render status: 500, text: 'This service cannot overwrite existing data!'
       return
     end
     @object.descMetadata.content = ''
     @object.set_desc_metadata_using_label
     @object.save
-    if Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'descriptive-metadata') == 'error'
-      Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'descriptive-metadata', 'waiting'
+    if dor_accession_error?(@object, 'descriptive-metadata')
+      set_dor_accession_status(@object, 'descriptive-metadata', 'waiting')
     end
-    if Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'publish') == 'error'
-      Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'publish', 'waiting'
+    if dor_accession_error?(@object, 'publish')
+      set_dor_accession_status(@object, 'publish', 'waiting')
     end
     respond_to do |format|
       format.any { render :text => 'Set metadata' }
@@ -299,24 +350,34 @@ class ItemsController < ApplicationController
   def replace_file
     @object.replace_file params[:uploaded_file], params[:file_name]
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'File ' + params[:file_name] + ' was replaced!' }
+      msg = "File #{params[:file_name]} was replaced!"
+      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
     end
   end
+
   # add a file to a resource, not to be confused with add a resource to an object
   def add_file
-    item = Dor::Item.find(params[:id])
-    item.add_file params[:uploaded_file], params[:resource], params[:uploaded_file].original_filename, Rack::Mime.mime_type(File.extname(params[:uploaded_file].original_filename))
+    file = params[:uploaded_file]
+    file_name = file.original_filename
+    file_mtype = Rack::Mime.mime_type(File.extname(file_name))
+    @object.add_file file, params[:resource], file_name, file_mtype
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'File ' + params[:uploaded_file].original_filename + ' was added!' }
+      msg = "File #{file_name} was added!"
+      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
     end
   end
 
   def open_version
     # puts params[:description]
-    vers_md_upd_info = {:significance => params[:severity], :description => params[:description], :opening_user_name => current_user.to_s}
+    vers_md_upd_info = {
+      :significance => params[:severity],
+      :description => params[:description],
+      :opening_user_name => current_user.to_s
+    }
     @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => params[:id] + ' is open for modification!' }
+      msg = params[:id] + ' is open for modification!'
+      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
     end
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
@@ -359,18 +420,23 @@ class ItemsController < ApplicationController
       severity = params[:severity]
       desc = params[:description]
       ds = @object.versionMetadata
-      ds.update_current_version({:description => desc, :significance => severity.to_sym})
+      ds.update_current_version({
+        :description => desc,
+        :significance => severity.to_sym
+      })
       @object.save
     end
 
     begin
       @object.close_version
-      @object.datastreams['events'].add_event('close', current_user.to_s , 'Version ' + @object.versionMetadata.current_version_id.to_s + ' closed')
+      msg = "Version #{@object.versionMetadata.current_version_id} closed"
+      @object.datastreams['events'].add_event('close', current_user.to_s , msg)
       respond_to do |format|
         if params[:bulk]
           format.html {render :status => :ok, :text => 'Version Closed.'}
         else
-          format.any { redirect_to catalog_path(params[:id]), :notice => 'Version ' + @object.current_version + ' of ' + @object.pid + ' has been closed!' }
+          msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
+          format.any { redirect_to catalog_path(params[:id]), :notice => msg }
         end
       end
     rescue Dor::Exception # => e
@@ -388,15 +454,18 @@ class ItemsController < ApplicationController
   def source_id
     new_id = ItemsController.normalize_source_id(params[:new_id])
     @object.set_source_id(new_id)
-    # TODO: the content= and content_will_change! calls belong in dor-services, for this method and other similar methods.
-    # can then clean up allow(idmd).to receive(:"ng_xml") (and "content_will_change!") in tests.  getting rid of "Metadata\.content\s*=\s*"
+    # TODO: the content= and content_will_change! calls belong in dor-services,
+    # for this method and other similar methods. can then clean up
+    # allow(idmd).to receive(:"ng_xml") (and "content_will_change!") in tests.
+    # getting rid of "Metadata\.content\s*=\s*"
     @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
     @object.identityMetadata.content_will_change!
     respond_to do |format|
       if params[:bulk]
         format.html { render :status => :ok, :text => 'Updated source id.' }
       else
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Source Id for ' + params[:id] + ' has been updated!' }
+        msg = "Source Id for #{params[:id]} has been updated!"
+        format.any { redirect_to catalog_path(params[:id]), :notice => msg }
       end
     end
   end
@@ -414,7 +483,8 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html {render :status => :ok, :text => "#{tags.size} Tags updated."}
       else
-        format.any { redirect_to catalog_path(params[:id]), :notice => "#{tags.size} Tags for #{params[:id]} have been updated!" }
+        msg = "#{tags.size} tags for #{params[:id]} have been updated!"
+        format.any { redirect_to catalog_path(params[:id]), :notice => msg }
       end
     end
   end
@@ -440,14 +510,16 @@ class ItemsController < ApplicationController
     @object.identityMetadata.content_will_change!
     @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Tags for ' + params[:id] + ' have been updated!' }
+      msg = "Tags for #{params[:id]} have been updated!"
+      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
     end
   end
 
   def delete_file
     @object.remove_file(params[:file_name])
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => params[:file_name] + ' has been deleted!' }
+      msg = params[:file_name] + ' has been deleted!'
+      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
     end
   end
 
@@ -463,7 +535,7 @@ class ItemsController < ApplicationController
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
     end
-    if Dor::WorkflowService.get_lifecycle('dor', @object.pid, 'submitted')
+    if dor_lifecycle(@object, 'submitted')
       render :status => :forbidden, :text => 'Cannot purge an object after it is submitted.'
       return
     end
@@ -570,7 +642,12 @@ class ItemsController < ApplicationController
       render :status => :forbidden, :text => 'Object doesnt have a content metadata datastream to update.'
       return
     end
-    @object.contentMetadata.set_content_type(params[:old_content_type], params[:old_resource_type], params[:new_content_type], params[:new_resource_type])
+    @object.contentMetadata.set_content_type(
+      params[:old_content_type],
+      params[:old_resource_type],
+      params[:new_content_type],
+      params[:new_resource_type]
+    )
     respond_to do |format|
       if params[:bulk]
         format.html {render :status => :ok, :text => 'Content type updated.'}
@@ -580,14 +657,16 @@ class ItemsController < ApplicationController
     end
   end
 
-  # if an item errored in sdr-ingest-transfer due to missing provenance metadata, create the datastream and reset the error
+  # if an item errored in sdr-ingest-transfer due to missing provenance
+  # metadata, create the datastream and reset the error
   def fix_missing_provenance
-    if Dor::WorkflowService.get_workflow_status('dor', @object.id, 'accessionWF', 'sdr-ingest-transfer') == 'error' && @object.provenanceMetadata.new?
+    if dor_accession_error?(@object, 'sdr-ingest-transfer') && @object.provenanceMetadata.new?
       @object.build_provenanceMetadata_datastream('accessionWF', 'DOR Common Accessioning completed')
-      Dor::WorkflowService.update_workflow_status 'dor', @object.id, 'accessionWF', 'sdr-ingest-transfer', 'waiting'
+      set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
       render :text => 'ok.'
     else
-      render :status => 500, :text => 'Item not in error for sdr-ingest-transfer or provenance metadata already exists!'
+      msg = 'Item not in error for sdr-ingest-transfer or provenance metadata already exists!'
+      render :status => 500, :text => msg
     end
   end
 
@@ -600,22 +679,24 @@ class ItemsController < ApplicationController
   # add a workflow to an object if the workflow is not present in the active table
   def add_workflow
     return unless params[:wf]
-    wf = @object.workflows[params[:wf]]
-    # check for this workflow is present and active (not archived)
+    wf_name = params[:wf]
+    wf = @object.workflows[wf_name]
+    # check the workflow is present and active (not archived)
     if wf && wf.active?
-      render :status => 500, :text => "#{params[:wf]} already exists!"
+      render :status => 500, :text => "#{wf_name} already exists!"
       return
     end
-    @object.create_workflow(params[:wf])
+    @object.create_workflow(wf_name)
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
     reindex Dor::Item.find(params[:id])
+    msg = "Added #{wf_name}"
 
     if params[:bulk]
-      render :text => "Added #{params[:wf]}"
+      render :text => msg
     else
-      redirect_to catalog_path(params[:id]), :notice => "Added #{params[:wf]}"
+      redirect_to catalog_path(params[:id]), notice: msg
     end
   end
 
@@ -642,15 +723,18 @@ class ItemsController < ApplicationController
     reindex @object unless params[:bulk]
   end
 
+  # ---
+  # Permissions
+
   # check that the user can carry out this item modification
   def forbid_modify
-    return true if current_user.is_admin || @object.can_manage_content?(current_user.roles @apo)
+    return true if current_user.is_admin || @object.can_manage_content?(current_user.roles(@apo))
     render :status => :forbidden, :text => 'forbidden'
     false
   end
 
   def forbid_view
-    return true if current_user.is_admin || @object.can_view_content?(current_user.roles @apo)
+    return true if current_user.is_admin || @object.can_view_content?(current_user.roles(@apo))
     render :status => :forbidden, :text => 'forbidden'
     false
   end
@@ -660,5 +744,24 @@ class ItemsController < ApplicationController
     return true if @object.allows_modification?
     render status: :forbidden, text: 'Object cannot be modified in its current state.'
     false
+  end
+
+  # ---
+  # Dor::Workflow utils
+
+  def dor_accession_error?(object, task)
+    dor_accession_status(object, task) == 'error'
+  end
+
+  def dor_accession_status(object, task)
+    Dor::WorkflowService.get_workflow_status('dor', object.pid, 'accessionWF', task)
+  end
+
+  def dor_lifecycle(object, stage)
+    Dor::WorkflowService.get_lifecycle('dor', object.pid, stage)
+  end
+
+  def set_dor_accession_status(object, task, status)
+    Dor::WorkflowService.update_workflow_status('dor', object.pid, 'accessionWF', task, status)
   end
 end

@@ -65,20 +65,20 @@ class RegistrationController < ApplicationController
     # FIXME: should not be in Controller
     # figure out what the default option (if any) should be
     default_opt = nil
-    if adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').length > 0
+    if !adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').empty?
       # readable by world translates to World
       default_opt = 'world'
-    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group[text()=\'Stanford\' or text()=\'stanford\']').length > 0
+    elsif !adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group[text()=\'Stanford\' or text()=\'stanford\']').empty?
       # TODO: this is stupid, should handle "stanford" regardless of the string's case, but the xpath parser doesn't support the lower-case() fn
       # readable by stanford translates to Stanford
       # TODO: found something indicating that xpath might support regex
       default_opt = 'stanford'
-    elsif adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').length > 0
+    elsif !adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').empty?
       # readable by none is either Citation Only (formerly "None") or Dark
-      if adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/world').length > 0
+      if !adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/world').empty?
         # discoverable by world but readable by none translates to Citation Only/none
         default_opt = 'none'
-      elsif adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').length > 0
+      elsif !adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').empty?
         # discoverable by none and readable by none translates to Dark
         default_opt = 'dark'
       end
@@ -103,8 +103,19 @@ class RegistrationController < ApplicationController
   end
 
   def autocomplete
-    response = Dor::SearchService.query('*:*', :rows => 0, :facets => { :fields => [params[:field]] }, :'facet.prefix' => params[:term].titlecase, :'facet.mincount' => 1, :'facet.limit' => 15 )
-    result = response.facets.find { |f| f.name == params[:field] }.items.collect(&:value).sort
+    facet_field = params[:field]
+    facet_fields = { fields: [facet_field] }
+    response = Dor::SearchService.query(
+      '*:*',
+      {
+        rows: 0,
+        facets: facet_fields,
+        :'facet.prefix' => params[:term].titlecase,
+        :'facet.mincount' => 1,
+        :'facet.limit' => 15
+      }
+    )
+    result = response.facets.find { |f| f.name == facet_field }.items.map(&:value).sort
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
     end

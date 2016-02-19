@@ -1,6 +1,13 @@
 <%
+  apo = @obj.admin_policy_object
   if(params[:edit])
-    if @user and (@user.is_admin or (@obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid)) and @obj.can_manage_desc_metadata?(@user.roles(@obj.admin_policy_object.pid)))) 
+    if @user &&
+      (@user.is_admin ||
+        (
+          @obj.can_manage_content?(@user.roles(apo.pid)) &&
+          @obj.can_manage_desc_metadata?(@user.roles(apo.pid))
+        )
+      )
 %>
       <%= form_tag url_for(:controller => :items, :action => :datastream_update), :id => 'xmlEditForm', :method => :POST do%>
         <input type="hidden" name="id" value="<%=@obj.pid %>" />
@@ -15,10 +22,19 @@
 <%
     end
   else
-  #if the user is a repo admin or is permitted to manage both content and rights, display raw xml editing
+    # If the user is a repo admin or is permitted to manage both content and
+    # rights, display raw xml editing
 %>
   <%=
-    if @user and (@user.is_admin or @obj.can_manage_content?(@user.roles(@obj.admin_policy_object.pid))) and (@obj.datastreams[params[:dsid]].respond_to? :ng_xml or params[:dsid] == 'RELS-EXT') and params[:dsid] != 'workflows'
+    if @user &&
+      (
+        @user.is_admin || @obj.can_manage_content?(@user.roles(apo.pid))
+      ) &&
+      (
+        @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||
+        params[:dsid] == 'RELS-EXT'
+      ) &&
+        params[:dsid] != 'workflows'
       link_to "Edit #{params[:dsid]}", ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { behavior: 'persistent-modal' }
     end
   %>

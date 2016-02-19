@@ -1,9 +1,13 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  TargetRubyVersion: 2.2
   Exclude:
     - db/migrate/**
     - db/schema.rb
+
+Rails:
+  Enabled: true
 
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:

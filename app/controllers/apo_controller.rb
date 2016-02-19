@@ -3,10 +3,22 @@ require 'rest-client'
 
 class ApoController < ApplicationController
 
-  before_action :create_obj, :except => [:register, :is_valid_role_list_endpoint, :spreadsheet_template]
-  after_action :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
+  before_action :create_obj, :except => [
+    :is_valid_role_list_endpoint,
+    :register,
+    :spreadsheet_template
+  ]
+  after_action :save_and_index, :only => [
+    :add_roleplayer,
+    :add_collection, :delete_collection,
+    :update_copyright, :update_creative_commons,
+    :update_default_object_rights, :update_desc_metadata,
+    :update_title, :update_use,
+    :delete_role,
+    :register_collection
+  ]
 
-  DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
+  DEFAULT_MANAGER_WORKGROUPS = %w(sdr:developer sdr:service-manager sdr:metadata-staff).freeze
 
   # @param [String] role_name
   # @return [Boolean] true if name is valid
@@ -23,11 +35,11 @@ class ApoController < ApplicationController
   def is_valid_role_list_endpoint
     # Only checks the first found relevant param
     role_list_str = params[:managers] || params[:viewers] || params[:role_list] || nil
-    if !role_list_str
-      ret_val = false
-    else
-      ret_val = is_valid_role_list(split_roleplayer_input_field(role_list_str))
-    end
+    ret_val = if !role_list_str
+                false
+              else
+                is_valid_role_list(split_roleplayer_input_field(role_list_str))
+              end
 
     respond_to do |format|
       format.json do
@@ -87,7 +99,8 @@ class ApoController < ApplicationController
     apo.agreement            = md_info[:agreement]
     apo.default_workflow     = md_info[:workflow ]
     apo.default_rights       = md_info[:default_object_rights]
-    # Set the Use License given a machine-readable code for a creative commons or open data commons license
+    # Set the Use License given a machine-readable code for a creative commons
+    # or open data commons license
     apo.use_license          = md_info[:use_license]
     apo.copyright_statement  = md_info[:copyright]
     apo.use_statement        = md_info[:use      ]
@@ -172,8 +185,8 @@ class ApoController < ApplicationController
     collection_pid = create_collection @object.pid if params[:collection_radio] == 'create'
     if params[:collection] && params[:collection].length > 0
       @object.add_default_collection params[:collection]
-    else
-      @object.add_default_collection collection_pid if collection_pid
+    elsif collection_pid
+      @object.add_default_collection collection_pid
     end
 
     redirect
@@ -181,16 +194,16 @@ class ApoController < ApplicationController
 
   def create_collection(apo_pid)
     reg_params = {:workflow_priority => '65'}
-    if params[:collection_title] && params[:collection_title].length > 0
-      reg_params[:label] = params[:collection_title]
-    else
-      reg_params[:label] = ':auto'
-    end
-    if reg_params[:label] == ':auto'
-      reg_params[:rights] = params[:collection_rights_catkey]
-    else
-      reg_params[:rights] = params[:collection_rights]
-    end
+    reg_params[:label] = if !params[:collection_title].blank?
+                           params[:collection_title]
+                         else
+                           ':auto'
+                         end
+    reg_params[:rights] = if reg_params[:label] == ':auto'
+                            params[:collection_rights_catkey]
+                          else
+                            params[:collection_rights]
+                          end
     reg_params[:rights] &&= reg_params[:rights].downcase
     col_catkey = params[:collection_catkey] || ''
     reg_params[:object_type    ] = 'collection'
@@ -268,7 +281,11 @@ class ApoController < ApplicationController
 
   def spreadsheet_template
     binary_string = RestClient.get(Settings.SPREADSHEET_URL)
-    send_data(binary_string, :filename => 'spreadsheet_template.xlsx', :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    send_data(
+      binary_string,
+      :filename => 'spreadsheet_template.xlsx',
+      :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
   end
 
   private
@@ -313,7 +330,7 @@ class ApoController < ApplicationController
 
   # check that the user can carry out this object modification
   def forbid
-    return if current_user.is_admin || @object.can_manage_content?(current_user.roles params[:id])
+    return if current_user.is_admin || @object.can_manage_content?(current_user.roles(params[:id]))
     render :status => :forbidden, :text => 'forbidden'
     nil
   end

@@ -214,7 +214,7 @@ class CatalogController < ApplicationController
   def upload
     @apo = Dor.find params[:id]
 
-    directory_name = Time.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
+    directory_name = Time.zone.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
     output_directory = File.join(Settings.BULK_METADATA.DIRECTORY, params[:druid], directory_name)
     temp_spreadsheet_filename = params[:spreadsheet_file].original_filename + '.' + directory_name
 

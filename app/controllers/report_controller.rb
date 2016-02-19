@@ -35,7 +35,7 @@ class ReportController < CatalogController
           :rows    => @report.report_data
         }
       end
-      format.xml  { render :xml  => @report.report_data }
+      format.xml { render :xml => @report.report_data }
     end
   end
 
