@@ -35,7 +35,7 @@ gem 'uglifier', '>= 1.0.3'
 # Stanford/Hydra related gems
 gem 'about_page'
 gem 'active-fedora'
-gem 'blacklight', '~> 5.9.0' # TODO: BL >= 5.10.x has new deprecation warnings vs <= 5.9.x, will investigate and unpin after current upgrade stuff has settled
+gem 'blacklight', '~> 5.11.3' # More deprecation warnings from 5.11.3 to 5.16
 gem 'blacklight-hierarchy'
 gem 'dor-services', '~> 5.3', '>= 5.3.4'
 gem 'is_it_working-cbeer'
