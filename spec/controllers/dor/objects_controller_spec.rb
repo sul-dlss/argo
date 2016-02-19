@@ -10,6 +10,9 @@ describe Dor::ObjectsController, :type => :controller do
       expect(Dor::RegistrationService)
         .to receive(:create_from_request)
         .and_return(dor_registration)
+      expect(Dor::IndexingService)
+        .to receive(:reindex_pid_list)
+        .with([dor_registration[:pid]], true) # commits reindex
       post :create
     end
   end
