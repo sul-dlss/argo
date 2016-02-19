@@ -23,11 +23,14 @@ gem 'prawn', '~> 1'
 gem 'prawn-table'
 gem 'progressbar'
 gem 'rack-webauth', :git => 'https://github.com/nilclass/rack-webauth.git'
+gem 'rails', '~> 4.0' # specifying because we expect a major vers upgrade to break things
 gem 'rake'
 gem 'rest-client'
 gem 'retries'
 gem 'ruby-graphviz'
+gem 'ruby-prof'
 gem 'sass-rails'
+gem 'sprockets', '~> 3.4'
 gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  # TODO: upgrading to 1.3.4 results in weird error output at end of deployment, pinning for now
 gem 'squash_ruby',  :require => 'squash/ruby'
 gem 'therubyracer', '~> 0.11'
@@ -45,13 +48,10 @@ gem 'is_it_working-cbeer'
 gem 'jettywrapper'
 gem 'moab-versioning'
 gem 'mods_display'
-gem 'rails', '~> 4.0' # specifying because we expect a major vers upgrade to break things
 gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'rsolr-client-cert', '~> 0.5.2'
-gem 'ruby-prof'
 gem 'solrizer'
-gem 'sprockets', '~> 3.4'
 gem 'stanford-mods'
 gem 'sul_styles', '~> 0.3.0' # later versions require ruby 2.1 or higher
 
