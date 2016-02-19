@@ -1,74 +1,87 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem 'stanford-mods'
-gem 'mods_display'
-gem 'dor-services', "~> 4.19"
-gem 'dor-workflow-service', '~> 1.5'
-gem "moab-versioning"
-gem 'rails', '3.2.21'
-gem "blacklight", '~>3.7'
-gem 'blacklight-hierarchy', "~> 0.0.3"
-gem 'net-sftp'
-gem 'rake'
-gem 'about_page'
-gem 'is_it_working-cbeer'
-gem 'rack-webauth', :git => "https://github.com/nilclass/rack-webauth.git"
-gem 'thin' # or mongrel
-gem 'prawn'
-gem 'prawn-table'
 gem 'barby'
-gem 'ruby-graphviz'
-gem "solrizer-fedora"
-gem 'active-fedora'
-gem "rsolr", :git => "https://github.com/sul-dlss/rsolr.git", :branch => "nokogiri"
-gem "rsolr-client-cert", "~> 0.5.2"
-gem 'confstruct', "~> 0.2.4"
-gem "mysql2"
-gem "progressbar"
-gem "haml"
-gem "coderay"
-gem "dalli"
-gem "kgio"  
-gem 'rest-client'
-gem 'jettywrapper'
+gem 'bootstrap-sass'
+gem 'coderay'
+gem 'coffee-rails'
+gem 'config'
+gem 'daemons'
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
+gem 'jqgrid-jquery-rails'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jquery-validation-rails'
 gem 'kaminari'
-gem 'thread', :git => 'https://github.com/meh/ruby-thread.git'
-gem 'addressable', '=2.3.5' #>=2.3.6 breaks things w/ the following error on rails startup:  "can't modify frozen Addressable::URI"
+gem 'kgio'
+gem 'mysql2', '~> 0.3.2'    # Temporary fix for mysql2/rails incompatibility, see https://github.com/brianmario/mysql2/issues/675
+gem 'net-sftp'
+gem 'newrelic_rpm'
+gem 'nokogiri', '~> 1.6'
+gem 'prawn', '~> 1'
+gem 'prawn-table'
+gem 'progressbar'
+gem 'rack-webauth', :git => 'https://github.com/nilclass/rack-webauth.git'
+gem 'rails', '~> 4.0' # specifying because we expect a major vers upgrade to break things
+gem 'rake'
+gem 'rest-client'
+gem 'retries'
+gem 'ruby-graphviz'
+gem 'ruby-prof'
+gem 'sass-rails'
+gem 'sprockets', '~> 3.4'
+gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  # TODO: upgrading to 1.3.4 results in weird error output at end of deployment, pinning for now
 gem 'squash_ruby',  :require => 'squash/ruby'
-gem 'squash_rails', :require => 'squash/rails'
+gem 'therubyracer', '~> 0.11'
+gem 'uglifier', '>= 1.0.3'
+gem 'unicode'
+
+# Stanford/Hydra related gems
+gem 'about_page'
+gem 'active-fedora'
+gem 'blacklight', '~> 5.9.0' # TODO: BL >= 5.10.x has new deprecation warnings vs <= 5.9.x, will investigate and unpin after current upgrade stuff has settled
+gem 'blacklight-hierarchy'
+gem 'blacklight-marc'
+gem 'dor-services', '~> 5.3', '>= 5.3.4'
+gem 'is_it_working-cbeer'
+gem 'jettywrapper'
+gem 'moab-versioning'
+gem 'mods_display'
+gem 'responders', '~> 2.0'
+gem 'rsolr'
+gem 'rsolr-client-cert', '~> 0.5.2'
+gem 'solrizer'
+gem 'stanford-mods'
+gem 'sul_styles', '~> 0.3.0' # later versions require ruby 2.1 or higher
 
 group :test, :development do
   gem 'http_logger'
-  gem 'selenium-webdriver'
-  gem 'unicorn'
   gem 'rspec-rails', '~> 3'
   gem 'capybara'
-  gem "rack-test", :require => "rack/test"
+  gem 'rack-test', :require => 'rack/test'
   gem 'simplecov', :require => false
-  gem 'pry'
-  gem 'pry-debugger'
+  gem 'pry-byebug'
+  gem 'pry-doc'
   gem 'pry-remote'
   gem 'pry-rails'
+  gem 'coveralls', require: false
+  gem 'poltergeist'
+  gem 'capybara_discoball'
+  gem 'wfs_rails', '~> 0.0.2'
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
 end
 
 group :development do
-  gem 'ruby-prof'
+  gem 'rubocop', require: false
   gem 'sqlite3'
 end
 
-group :assets do
-  gem 'coffee-rails', '~> 3.2.1'
-  gem 'uglifier', '>= 1.0.3'
-  gem 'jquery-rails', '=2.1.4'  # jquery-rails vers 2.1.4 uses jquery vers 1.8.3
-  gem 'jquery-validation-rails'
-  gem 'therubyracer', "~> 0.11"
-  gem 'sass-rails', '~> 3.2.0'
-  gem 'compass-rails', '~> 1.0.0'
-  gem 'compass-susy-plugin', '~> 0.9.0'
-end
-
 group :deployment do
-  gem 'capistrano', '~> 3.0'
-  gem 'capistrano-rails'
-  gem 'lyberteam-capistrano-devel', '=3.1.0.pre1'
+  gem 'capistrano', '=3.2.1' # pinned because inadvertent capistrano upgrades tend to cause deployment issues.
+  gem 'capistrano-rails', '=1.1.5' # pinned because otherwise deployment fails with:  NoMethodError: undefined method `verbosity' for "/usr/bin/env deploy:migrating\n":String
+  gem 'capistrano-passenger'
+  gem 'dlss-capistrano', '~> 3.1'
+  gem 'capistrano3-delayed-job', '~> 1.0'
 end

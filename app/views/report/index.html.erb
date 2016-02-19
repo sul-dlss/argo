@@ -1,5 +1,5 @@
-<% extra_head_content << capture do %>
-  <link rel="alternate" type="application/xml" title="Solr" href="<%=build_solr_request_from_response%>">
+<% content_for :head do %>
+  <%= javascript_include_tag 'report' %>
   <script type="text/javascript">
     report_model = {
       total_rows: <%= @response['response']['numFound'] %>,
@@ -9,24 +9,27 @@
     }
   </script>
 <% end %>
-<% unless has_search_parameters? %>
-	<%# if there are no input/search related params, display the "home" partial -%>
-	<%= render 'home' %>
-<% else %>
-  <% @page_title = "#{application_name} Search Results" %>
-  <% extra_head_content << render_opensearch_response_metadata.html_safe %>
-	<%= render :partial => 'search_form' %>
-  <% if has_search_parameters? %>
-    <%= render :partial => 'did_you_mean' %>
-    <%= render 'constraints', :localized_params=>params %>
-  <% end %>
-  
-	<% sidebar_items << capture do %>
-    <%= render :partial=>'facets' %>
-	<% end %>
 
-  <div id="report_container">
-    <table id="report_grid"></table>
-    <div id="preport_grid"></div>
-  </div>
-<% end %>
+<div id="sidebar" class="col-md-3 col-sm-4">
+  <%= render 'search_sidebar' %>
+</div>
+<div id="content" class="col-md-9 col-sm-8">
+  <% unless has_search_parameters? %>
+    <%# if there are no input/search related params, display the "home" partial -%>
+    <%= render 'home' %>
+  <% else %>
+    <% @page_title = "#{application_name} Search Results" %>
+    <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
+    <% if has_search_parameters? %>
+      <%= render :partial => 'did_you_mean' %>
+      <%= render 'constraints', :localized_params => params %>
+    <% end %>
+
+    <%= render 'catalog/report_view_toggle' %>
+
+    <div id="report_container">
+      <table id="report_grid"></table>
+      <div id="preport_grid"></div>
+    </div>
+  <% end %>
+</div>

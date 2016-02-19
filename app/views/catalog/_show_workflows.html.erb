@@ -1,0 +1,25 @@
+<table class="detail">
+  <thead>
+  <tr><th>name</th><th>status</th></tr>
+  </thead>
+  <tbody>
+  <%- if workflows.length > 0 -%>
+    <%- 
+      workflows.keys.sort.each do |wf|
+        status = workflows[wf]
+    -%>
+      <tr>
+        <td><%= link_to wf, workflow_view_item_path(document.get('id'), wf, :repo => status[:repo]), :title => wf, :data => { ajax_modal: 'trigger' } %></td>
+        <td>
+          <%=status[:status] %>
+          <% if status[:errors] > 0 -%>
+            <span class="errortext">(<%= inflect('error', status[:errors]) %>)</span>
+          <% end %>
+        </td>
+      </tr>
+    <%- end -%>
+  <%- else -%>
+    <tr><td colspan="3">No workflows</td></tr>
+  <%- end -%>
+  </tbody>
+</table>

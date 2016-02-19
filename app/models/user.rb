@@ -1,178 +1,106 @@
 class User < ActiveRecord::Base
   # Connects this user object to Blacklights Bookmarks and Folders.
   include Blacklight::User
+  has_many :bulk_actions
 
   attr_accessor :webauth
 
+  delegate :permitted_apos, :permitted_collections, to: :permitted_queries
+
+  def permitted_queries
+    @permitted_queries ||= PermittedQueries.new(groups, known_roles, is_admin)
+  end
+
   def self.find_or_create_by_webauth(webauth)
-    result = self.find_or_create_by_sunetid(webauth.login)
+    result = find_or_create_by(:sunetid => webauth.login)
     result.webauth = webauth
     result
   end
 
-  def self.find_or_create_by_remoteuser username
-    result = self.find_or_create_by_sunetid(username)
-    result
+  def self.find_or_create_by_remoteuser(username)
+    find_or_create_by(:sunetid => username)
   end
 
   def to_s
-    if webauth
-      webauth.attributes['DISPLAYNAME'] || webauth.login
-    else
-      sunetid
-    end
+    return sunetid unless webauth
+    webauth.attributes['DISPLAYNAME'] || webauth.login
   end
 
-  @role_cache={}
-  def roles pid
-    if not @role_cache
-      @role_cache={}
-    end
+  @role_cache = {}
 
-    if @role_cache[pid]
-      return @role_cache[pid]
-    end
-    resp = Dor::SearchService.query('id:"'+ pid+ '"')['response']['docs'].first
-    if not resp
-      resp={}
-    end
-    toret=[]
-    #search for group based roles
-    #this is a legacy role that has to be translated
-    if(resp['apo_role_group_manager_t'] and (resp['apo_role_group_manager_t'] & groups).length > 0)
-      toret << 'dor-apo-manager'
-    end
+  # Queries Solr for a given record, returning synthesized role strings that are defined. Searches:
+  # (1) for User by sunet id
+  # (2) groups actually contains the sunetid, so it is just looking at different solr fields
+  # NOTE: includes legacy roles that have to be translated
+  # @param [String] DRUID, fully qualified
+  # @return [Array[String]] list of roles
+  def roles(pid)
+    return [] if pid.nil?
+    @role_cache ||= {}
+    return @role_cache[pid] if @role_cache[pid]
 
-    known_roles.each do |role|
-      if(resp['apo_role_'+role+'_t'] and (resp['apo_role_' + role + '_t'] & groups).length >0)
-        toret << role
-      end
-    end
-    #now look to see if there are roles for this person by sunet id. groups actually contains the sunetid, so it is just looking at different solr fields
-    #this is a legacy role that has to be translated
-    if(resp['apo_role_person_manager_t'] and (resp['apo_role_person_manager_t'] & groups).length > 0)
-      toret << 'dor-apo-manager'
+    resp = Dor::SearchService.query('id:"' + pid + '"')['response']['docs'].first || {}
+    toret = []
+    my_groups = groups
+    %w(apo_role_group_manager_ssim apo_role_person_manager_ssim).each do |key|
+      toret << 'dor-apo-manager' if resp[key] && (resp[key] & my_groups).length > 0
     end
 
     known_roles.each do |role|
-      if(resp['apo_role_person_'+role+'_t'] and (resp['apo_role_person_' + role + '_t'] & groups).length >0)
-        toret << role
+      ["apo_role_#{role}_ssim", "apo_role_person_#{role}_ssim"].each do |key|
+        toret << role if resp[key] && (resp[key] & my_groups).length > 0
       end
     end
-    #store this for now, there may be several role related calls
-    @role_cache[pid]=toret
+    @role_cache[pid] = toret # store this for now, there may be several role related calls
     toret
   end
 
-  #array of apos the user is allowed to view
+  # @return [Array<String>] list of apos the user is allowed to view
   def known_roles
     ['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer', 'dor-apo-creator', 'dor-apo-manager', 'dor-apo-depositor', 'dor-apo-reviewer', 'dor-apo-metadata', 'dor-apo-viewer']
   end
 
-  def permitted_apos
-    query=""
-    first=true
-    groups.each do |group|
-      if first
-        query+=' '+group.gsub(':','\:')
-        first=false
-      else
-        query+=' OR '+group.gsub(':','\:')
-      end
-    end
-    q='apo_role_group_manager_t:('+ query + ') OR apo_role_person_manager_t:(' + query + ')'
-    known_roles.each do |role|
-      q+=' OR apo_role_'+role+'_t:('+query+')'
-    end
-    if is_admin
-      q='objectType_facet:adminPolicy'
-    end
-    resp = Dor::SearchService.query(q, {:rows => 1000, :fl => 'id', :fq => '!tag_facet:"Project : Hydrus"'})['response']['docs']
-    pids=[]
-    count=1
-    resp.each do |doc|
-      pids << doc['id']
-    end
-    pids
-  end
-
-  def permitted_collections
-    q = 'objectType_t:collection AND !tag_facet:"Project : Hydrus" '
-    qrys=[]
-    permitted_apos.each do |pid|
-      qrys << 'is_governed_by_s:"info:fedora/'+pid+'"'
-    end
-    if not is_admin
-      q+=qrys.join " OR "
-    end
-    result= Blacklight.solr.find({:q => q, :rows => 1000, :fl => 'id,tag_t,dc_title_t'}).docs
-
-    #result = Dor::SearchService.query(q, :rows => 1000, :fl => 'id,tag_t,dc_title_t').docs
-    result.sort! do |a,b|
-      a['dc_title_t'].to_s <=> b['dc_title_t'].to_s
-    end
-    #puts 'qry '+result.first['dc_title_t'].encoding.inspect
-    res=[['None', '']]
-    res+=result.collect do |doc|
-      [Array(doc['dc_title_t']).first+ ' (' + doc['id'].to_s + ')',doc['id'].to_s]
-    end
-    res.each do |ar|
-      ar[0] =chomp_title ar.first
-    end
-    res
-  end
-
-  #this is a nasty way to deal with the bizzare ascii results coming from solr. Upgrading to blacklight 4.2 looks like it will remove the need for this
-  def chomp_title title
-    title.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
-  end
-
-  @groups_to_impersonate
-  #create a set of groups in a cookie store to allow a repository admin to see the repository as if they had a different set of permissions
-  def set_groups_to_impersonate grps
+  @groups_to_impersonate = nil
+  # Allow a repository admin to see the repository as if they had a different set of permissions
+  # @param [Array<String>] set of groups
+  def set_groups_to_impersonate(grps)
     @groups_to_impersonate = grps
   end
 
   def groups
     return @groups_to_impersonate if @groups_to_impersonate
-
-    perm_keys = ["sunetid:#{self.login}"]
-    if webauth and webauth.privgroup.present?
-      perm_keys += webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
-    end
-
-    return perm_keys
+    perm_keys = ["sunetid:#{login}"]
+    return perm_keys unless webauth && webauth.privgroup.present?
+    perm_keys + webauth.privgroup.split(/\|/).collect { |g| "workgroup:#{g}" }
   end
 
-  def belongs_to_listed_group? group_list
-    group_list.each do |group|
-      if self.groups.include? group
-        return true
-      end
-    end
-    return false
-  end
-
-  #is the user a repository wide administrator
+  # @return [Boolean] is the user a repository wide administrator
   def is_admin
-    return belongs_to_listed_group? ADMIN_GROUPS
+    !(groups & ADMIN_GROUPS).empty?
   end
 
-  #is the user a repository wide viewer
+  # @return [Boolean] is the user a repository wide viewer
   def is_viewer
-    return belongs_to_listed_group? VIEWER_GROUPS
+    !(groups & VIEWER_GROUPS).empty?
   end
 
-  #is the user a repo wide manager
+  # @return [Boolean] is the user a repo wide manager
   def is_manager
-    return belongs_to_listed_group? MANAGER_GROUPS
+    !(groups & MANAGER_GROUPS).empty?
   end
+
+  # The convention is for boolean is_XYZ methods to be interrogative (end in "?")
+  alias_method :is_admin?,   :is_admin
+  alias_method :is_viewer?,  :is_viewer
+  alias_method :is_manager?, :is_manager
 
   def login
-    if webauth
-      webauth.login
-    else
-      sunetid
-    end
+    webauth ? webauth.login : sunetid
+  end
+
+  ##
+  # @return [Boolean]
+  def can_view_something?
+    is_admin || is_manager || is_viewer || permitted_apos.length > 0
   end
 end

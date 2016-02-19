@@ -1,8 +1,8 @@
 # encoding: utf-8
 require 'spec_helper'
-describe ItemsHelper do
-  before(:each) do
-    @full_doc='  <mods:mods xmlns:xxi="http://orbeon.org/oxf/xml/xinclude" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:exforms="http://www.exforms.org/exf/1-0" xmlns:pipeline="java:org.orbeon.oxf.processor.pipeline.PipelineFunctionLibrary" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:dl="http://dl.lib.brown.edu/editor/mods/dl" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms">
+describe ItemsHelper, :type => :helper do
+  before :each do
+    @full_doc = '  <mods:mods xmlns:xxi="http://orbeon.org/oxf/xml/xinclude" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:exforms="http://www.exforms.org/exf/1-0" xmlns:pipeline="java:org.orbeon.oxf.processor.pipeline.PipelineFunctionLibrary" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:dl="http://dl.lib.brown.edu/editor/mods/dl" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms">
     <mods:identifier type="local" displayLabel="SU DRUID">druid:sm817db3005</mods:identifier>
     <mods:identifier type="local" displayLabel="Post publication map number">1143</mods:identifier>
     <mods:titleInfo type="main">
@@ -105,7 +105,7 @@ describe ItemsHelper do
     </mods:physicalDescription>
     <mods:note displayLabel="statement of responsibility">Glen McLaughlin with Nancy H. Mayo.</mods:note>
     <mods:note>Includes bibliographical references (p. xv-xvi) and indexes.</mods:note>
-    <mods:note displayLabel="state_node_6" type="state 4">hello</mods:note> 	 
+    <mods:note displayLabel="state_node_6" type="state 4">hello</mods:note>
     <mods:note displayLabel="" type="state 5">goodbye</mods:note>
     <mods:subject>
     <mods:geographicCode authority="marcgac">n-us-ca</mods:geographicCode>
@@ -140,77 +140,77 @@ describe ItemsHelper do
     </mods:recordInfo>
     </mods:relatedItem>
     </mods:mods>'
-    xml='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
-    <mods:note displayLabel="" type=""/> 	
-    <mods:note displayLabel="general note" type=""/> 	 
-    <mods:note displayLabel="general note" type="state_note"/>	
-    <mods:note displayLabel="general note"/> 
-    <mods:note displayLabel="general_state_note"/> 	
-    <mods:note displayLabel="state_note"/>	
+    xml = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+    <mods:note displayLabel="" type=""/>
+    <mods:note displayLabel="general note" type=""/>
+    <mods:note displayLabel="general note" type="state_note"/>
+    <mods:note displayLabel="general note"/>
+    <mods:note displayLabel="general_state_note"/>
+    <mods:note displayLabel="state_note"/>
     <mods:note displayLabel="state note" type="state_note"/>
     <mods:note displayLabel="state_note" type=""/>
-    <mods:note/> 	
-    <mods:note displayLabel="" type="content"/> 	
-    <mods:note displayLabel="general note" type="content"/> 	 
-    <mods:note displayLabel="general_state_note" type="content"/> 
-    <mods:note displayLabel="state_note" type="content"/> 	
+    <mods:note/>
+    <mods:note displayLabel="" type="content"/>
+    <mods:note displayLabel="general note" type="content"/>
+    <mods:note displayLabel="general_state_note" type="content"/>
+    <mods:note displayLabel="state_note" type="content"/>
     <mods:note type="content"/>
-    <mods:note displayLabel="" type="statement_of_responsibility"/> 	
+    <mods:note displayLabel="" type="statement_of_responsibility"/>
     <mods:note displayLabel="state_node_1" type="statement_of_responsibility"  />
-    <mods:note displayLabel="state_note" type="statement_of_responsibility"/> 		 
-    <mods:note type="statement_of_responsibility"/> 	
+    <mods:note displayLabel="state_note" type="statement_of_responsibility"/>
+    <mods:note type="statement_of_responsibility"/>
     <mods:note displayLabel="" type="publications"/>
-    <mods:note displayLabel="general note" type="publications"/> 	 
-    <mods:note displayLabel="state_note" type="publications"/>      
-    <mods:note displayLabel="" type="references"/>  
-    <mods:note displayLabel="general note" type="reference"/> 	
-    <mods:note displayLabel="general note" type="references"/> 		
-    <mods:note displayLabel="citation/reference"/> 
-    <mods:note displayLabel="" type="state 1"/> 	
-    <mods:note displayLabel="general note" type="state 1"/> 	
-    <mods:note displayLabel="state_node_1" type="state 1"/> 	
-    <mods:note displayLabel="state_node_1"/> 	
-    <mods:note displayLabel="" type="state 2"/> 	
-    <mods:note displayLabel="general note" type="state 2"/> 	 
-    <mods:note displayLabel="State 2" type="state_note"/> 	
-    <mods:note displayLabel="state_node_2"/> 	
-    <mods:note displayLabel="state_node_4" type="state 2"/> 
-    <mods:note displayLabel="" type="state 3"/> 	
-    <mods:note displayLabel="general note" type="state 3"/> 	 
-    <mods:note displayLabel="state_node_3"/> 
-    <mods:note displayLabel="state_node_4" type="state 3"/> 	 
-    <mods:note displayLabel="state_node_5" type="state 3"/> 	
-    <mods:note displayLabel="state_node_4" type="state_note"/> 	 
-    <mods:note displayLabel="state_node_4"/> 	
-    <mods:note displayLabel="state_node_6" type="state 4"/> 	 
-    <mods:note displayLabel="" type="state 5"/> 	
-    <mods:note displayLabel="state_node_5"/> 	
-    <mods:note displayLabel="state_node_7" type="state 5"/> 		 
-    <mods:note displayLabel="State 6" type="state_note"/> 	
-    <mods:note displayLabel="state_node_6"/> 	
-    <mods:note displayLabel="state_node_8" type="state 6"/> 	
-    <mods:note displayLabel="" type="state 7"/> 	
-    <mods:note displayLabel="state_node_7"/> 	
-    <mods:note displayLabel="state_node_9" type="state 7"/> 	 
-    <mods:note displayLabel="state_node_8"/> 	
-    <mods:note displayLabel="state_node_10" type="state 8"/> 	 
-    <mods:note displayLabel="state_node_9"/> 	
-    <mods:note displayLabel="state_node_11" type="state 9"/> 		 
-    <mods:note displayLabel="state_node_10"/> 	
-    <mods:note displayLabel="state_node_2" type="state 10"/> 		 
-    <mods:note displayLabel="state_node_11"/> 	
-    <mods:note displayLabel="state_node_5" type="state 11"/> 	 	 
+    <mods:note displayLabel="general note" type="publications"/>
+    <mods:note displayLabel="state_note" type="publications"/>
+    <mods:note displayLabel="" type="references"/>
+    <mods:note displayLabel="general note" type="reference"/>
+    <mods:note displayLabel="general note" type="references"/>
+    <mods:note displayLabel="citation/reference"/>
+    <mods:note displayLabel="" type="state 1"/>
+    <mods:note displayLabel="general note" type="state 1"/>
+    <mods:note displayLabel="state_node_1" type="state 1"/>
+    <mods:note displayLabel="state_node_1"/>
+    <mods:note displayLabel="" type="state 2"/>
+    <mods:note displayLabel="general note" type="state 2"/>
+    <mods:note displayLabel="State 2" type="state_note"/>
+    <mods:note displayLabel="state_node_2"/>
+    <mods:note displayLabel="state_node_4" type="state 2"/>
+    <mods:note displayLabel="" type="state 3"/>
+    <mods:note displayLabel="general note" type="state 3"/>
+    <mods:note displayLabel="state_node_3"/>
+    <mods:note displayLabel="state_node_4" type="state 3"/>
+    <mods:note displayLabel="state_node_5" type="state 3"/>
+    <mods:note displayLabel="state_node_4" type="state_note"/>
+    <mods:note displayLabel="state_node_4"/>
+    <mods:note displayLabel="state_node_6" type="state 4"/>
+    <mods:note displayLabel="" type="state 5"/>
+    <mods:note displayLabel="state_node_5"/>
+    <mods:note displayLabel="state_node_7" type="state 5"/>
+    <mods:note displayLabel="State 6" type="state_note"/>
+    <mods:note displayLabel="state_node_6"/>
+    <mods:note displayLabel="state_node_8" type="state 6"/>
+    <mods:note displayLabel="" type="state 7"/>
+    <mods:note displayLabel="state_node_7"/>
+    <mods:note displayLabel="state_node_9" type="state 7"/>
+    <mods:note displayLabel="state_node_8"/>
+    <mods:note displayLabel="state_node_10" type="state 8"/>
+    <mods:note displayLabel="state_node_9"/>
+    <mods:note displayLabel="state_node_11" type="state 9"/>
+    <mods:note displayLabel="state_node_10"/>
+    <mods:note displayLabel="state_node_2" type="state 10"/>
+    <mods:note displayLabel="state_node_11"/>
+    <mods:note displayLabel="state_node_5" type="state 11"/>
     <mods:note displayLabel="location_code" type="content"/>
     <mods:note displayLabel="location_code"/>
     </mods:mods>'
-    @doc=Nokogiri::XML(xml)
-    subject='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"><mods:subject>
+    @doc = Nokogiri::XML(xml)
+    subject = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd"><mods:subject>
     <mods:topic>America--Maps--To 1800</mods:topic>
     <mods:topic>America--Maps--1675</mods:topic>
     <mods:topic>California as an island--Maps--1675</mods:topic>
     <mods:topic>Pacific Ocean--Maps--To 1800</mods:topic>
     </mods:subject>'
-    @subject_doc=Nokogiri::XML(subject)
+    @subject_doc = Nokogiri::XML(subject)
     identifier = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
     <mods:identifier displayLabel="Original McLaughlin Book Number (1995 edition) "
     <mods:identifier displayLabel="Original McLaughlin book number (1995 edition) with latest state information"/>
@@ -230,8 +230,8 @@ describe ItemsHelper do
     <mods:identifier displayLabel="book_number"/>
     <mods:identifier displayLabel="record_number"/>
     <mods:identifier displayLabel="filename"/>'
-    @identifier_doc=Nokogiri::XML(identifier)
-    empty_nodes='
+    @identifier_doc = Nokogiri::XML(identifier)
+    empty_nodes = '
     <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
     <mods:mods>
     <mods:name>
@@ -269,8 +269,8 @@ describe ItemsHelper do
     </mods:subject>
     </mods:mods>
     '
-    @emptynode_doc=Nokogiri::XML(empty_nodes)
-    carto='
+    @emptynode_doc = Nokogiri::XML(empty_nodes)
+    carto = '
     <mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
     <mods:mods>
     <mods:cartographics>
@@ -282,8 +282,8 @@ describe ItemsHelper do
 
     </mods:mods>
     '
-    @carto_doc=Nokogiri::XML(carto)
-    collection_record='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+    @carto_doc = Nokogiri::XML(carto)
+    collection_record = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
     <mods:mods>
     <mods:typeOfResource collection="yes"/>
     </mods:mods/>
@@ -336,180 +336,135 @@ describe ItemsHelper do
     <mods:topic>Northern Hemisphere--Maps</mods:topic>
   </mods:subject>
 </mods:mods>'
-    @collection_record=Nokogiri::XML(collection_record)
+    @collection_record = Nokogiri::XML(collection_record)
   end
   context 'mclaughlin_cleanup_notes' do
     it 'should remove useless displayLabels and types' do
-      count=0
       mclaughlin_cleanup_notes @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node.attribute_nodes().length==0 
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node.attribute_nodes().length == 0
       end
       expect(count).to eq(14)
     end
   end
   context 'mclaughlin_cleanup_statement' do
     it 'should normalize statements of responsibility' do
-      count=0
       mclaughlin_cleanup_statement @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'Statement of responsibility' and node['type'] == 'statement_of_responsibility'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'Statement of responsibility' && node['type'] == 'statement_of_responsibility'
       end
       expect(count).to eq(4)
     end
   end
   context 'mclaughlin_cleanup_publication' do
     it 'should normalize publication statements' do
-      count=0
       mclaughlin_cleanup_publication @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'Publications' and node['type'] == 'publications'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'Publications' && node['type'] == 'publications'
       end
       expect(count).to eq(3)
     end
   end
   context 'mclaughlin_cleanup_references' do
     it 'should normalize references' do
-      count=0
       mclaughlin_cleanup_references @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'References' and node['type'] == 'reference'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'References' && node['type'] == 'reference'
       end
       expect(count).to eq(4)
     end
   end
   context 'mclaughlin_cleanup_states' do
     it 'should normalize states' do
-      count=0
       mclaughlin_cleanup_states @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 1' and node['type'] == nil
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'State 1' && node['type'].nil?
       end
       expect(count).to eq(5)
     end
-    it 'should normalize state2' do
-      count = 0
+    it 'should normalize state 2' do
       mclaughlin_cleanup_states @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 2'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'State 2'
       end
       expect(count).to eq(5)
     end
     it 'should normalize state 3' do
-      count = 0
       mclaughlin_cleanup_states @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 3'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'State 3'
       end
       expect(count).to eq(5)
     end
     it 'should normalize state 10' do
-      count = 0
       mclaughlin_cleanup_states @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 10'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'State 10'
       end
       expect(count).to eq(2)
     end
     it 'should normalize state 11' do
-      count = 0
       mclaughlin_cleanup_states @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'State 11'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'State 11'
       end
       expect(count).to eq(2)
     end
     it 'should reorder states' do
-      count = 0
       mclaughlin_cleanup_states @doc
       mclaughlin_reorder_states @doc
-      @doc = Nokogiri.XML(@doc.to_s) do |config|
-        config.default_xml.noblanks
-      end
+      expect{ Nokogiri.XML(@doc.to_s) {|conf| conf.default_xml.noblanks} }.not_to raise_error()
+      # TODO: actually check the output.  get a real expectation
     end
   end
   context 'mclaughlin_ignore_fields' do
     it 'should ignore some fields' do
-      count = 0
       mclaughlin_ignore_fields @doc
-      @doc.search('//mods:note','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        if node['displayLabel'] == 'location_code'
-          count+=1
-        end
+      count = @doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3').count do |node|
+        node['displayLabel'] == 'location_code'
       end
       expect(count).to eq(0)
     end
   end
   context 'mclaughlin_fix_subjects' do
     it 'should split subjects' do
-      count = 0
       mclaughlin_fix_subjects @subject_doc
-      @subject_doc.search('//mods:subject','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        count+=1
-      end
-      expect(count).to eq(4)
+      expect(@subject_doc.search('//mods:subject', 'mods' => 'http://www.loc.gov/mods/v3').size).to eq(4)
     end
   end
   context 'mclaughlin_prune_identifiers' do
     it 'should prune identifiers' do
-      count = 0
       mclaughlin_prune_identifiers @identifier_doc
-      @identifier_doc.search('//mods:identifier','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        count+=1
-      end
-      expect(count).to eq(6)
+      expect(@identifier_doc.search('//mods:identifier', 'mods' => 'http://www.loc.gov/mods/v3').size).to eq(6)
     end
   end
   context 'remove_empty_nodes' do
     it 'should remove empty nodes' do
-      count = 0
       remove_empty_nodes @emptynode_doc
-      @emptynode_doc.search('//mods:nonSort','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        count+=1
-      end
-      expect(count).to eq(0)
+      expect(@emptynode_doc.search('//mods:nonSort', 'mods' => 'http://www.loc.gov/mods/v3').size).to eq(0)
     end
     it 'should fix a mclaughlin record' do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
       remove_empty_nodes doc
-      expect(doc.search('/mods:mods/mods:originInfo/mods:place','mods'=>'http://www.loc.gov/mods/v3').length).to eq(0)
-      expect(doc.search('/mods:mods/mods:originInfo','mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
+      expect(doc.search('/mods:mods/mods:originInfo/mods:place', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(0)
+      expect(doc.search('/mods:mods/mods:originInfo', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(1)
     end
   end
   context 'mclaughlin_reorder_cartographics' do
     it 'should reorder carographics children' do
       mclaughlin_reorder_cartographics @carto_doc
       count = 0
-      @carto_doc.search('//mods:cartographics','mods'=>'http://www.loc.gov/mods/v3').each do |node|
-        count+=1
-        children=node.children
+      @carto_doc.search('//mods:cartographics', 'mods' => 'http://www.loc.gov/mods/v3').each do |node|
+        count += 1
+        children = node.children
         expect(children[4].name).to eq('scale')
         expect(children[5].name).to eq('projection')
       end
       expect(count).to eq(1)
     end
   end
-  \
   context 'schema_validate' do
     it 'should validate a document' do
       doc = Nokogiri.XML(@full_doc) do |config|
@@ -521,14 +476,14 @@ describe ItemsHelper do
   context 'remove_empty_nodes' do
     it 'should preserve the empty typeofresource with collection=yes' do
       remove_empty_nodes(@collection_record)
-      expect(@collection_record.search('//mods:typeOfResource','mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
+      expect(@collection_record.search('//mods:typeOfResource', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(1)
     end
     it 'should strip leading and trailing whitespaces' do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
       remove_empty_nodes doc
-      expect(doc.search('/mods:mods/mods:titleInfo/mods:title','mods'=>'http://www.loc.gov/mods/v3').first.text).to eq("A New and Curious Map of the World")
+      expect(doc.search('/mods:mods/mods:titleInfo/mods:title', 'mods' => 'http://www.loc.gov/mods/v3').first.text).to eq('A New and Curious Map of the World')
     end
   end
   context 'mclaughlin_remove_newlines' do
@@ -537,7 +492,7 @@ describe ItemsHelper do
         config.default_xml.noblanks
       end
       mclaughlin_remove_newlines doc
-      expect(doc.search('/mods:mods/mods:accessCondition','mods'=>'http://www.loc.gov/mods/v3').first.text).to eq("Stanford University Libraries and Academic Information Resources - Terms ofUse SULAIR Web sites are subject to Stanford University's standard Terms ofUse (See http://www.stanford.edu/home/atoz/terms.html) These terms include alimited personal, non-exclusive, non-transferable license to access and usethe sites, and to download - where permitted - material for personal,non-commercial, non-display use only. Please contact the UniversityLibrarian to request permission to use SULAIR Web sites and contents beyondthe scope of the above license, including but not limited to republicationto a group or republishing the Web site or parts of the Web site. SULAIRprovides access to a variety of external databases and resources, whichsites are governed by their own Terms of Use, as well as contractual accessrestrictions. The Terms of Use on these external sites always govern thedata available there. Please consult with library staff if you havequestions about data access and availability.")
+      expect(doc.search('/mods:mods/mods:accessCondition', 'mods' => 'http://www.loc.gov/mods/v3').first.text).to eq("Stanford University Libraries and Academic Information Resources - Terms ofUse SULAIR Web sites are subject to Stanford University's standard Terms ofUse (See http://www.stanford.edu/home/atoz/terms.html) These terms include alimited personal, non-exclusive, non-transferable license to access and usethe sites, and to download - where permitted - material for personal,non-commercial, non-display use only. Please contact the UniversityLibrarian to request permission to use SULAIR Web sites and contents beyondthe scope of the above license, including but not limited to republicationto a group or republishing the Web site or parts of the Web site. SULAIRprovides access to a variety of external databases and resources, whichsites are governed by their own Terms of Use, as well as contractual accessrestrictions. The Terms of Use on these external sites always govern thedata available there. Please consult with library staff if you havequestions about data access and availability.")
     end
   end
   context 'mclaughlin_discoverable' do
@@ -545,7 +500,7 @@ describe ItemsHelper do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
-      errors=mods_discoverable(doc)
+      errors = mods_discoverable(doc)
       expect(errors.length).to eq(0)
     end
   end
@@ -564,60 +519,56 @@ describe ItemsHelper do
       end
       mclaughlin_remediation doc
       mclaughlin_reorder_notes doc
-      notes=doc.search('//mods:note', 'mods'=>'http://www.loc.gov/mods/v3')
+      notes = doc.search('//mods:note', 'mods' => 'http://www.loc.gov/mods/v3')
       expect(notes.length).to eq(8  )
       notes.each_with_index do |note, index|
-        if index == 6
-          expect(note['type']).to eq('references')
-        end
-        if index ==  7
-          expect(note['type']).to eq('statement_of_responsibility')
-        end
+        expect(note['type']).to eq('references') if index == 6
+        expect(note['type']).to eq('statement_of_responsibility') if index == 7
       end
     end
   end
   context 'mclaughlin_remove_keydate' do
     it 'should remove keyDate="no"' do
-      xml='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+      xml = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
       <mods:mods>
       <mods:titleInfo>
       <mods:title keyDate="no">hello world</mods:title>
       </mods:titleInfo>
       </mods:mods/>
       '
-      doc=Nokogiri::XML(xml)
+      doc = Nokogiri::XML(xml)
       mclaughlin_remove_keydate doc
-      expect(doc.search("//title",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(0)
+      expect(doc.search('//title', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(0)
     end
   end
   context 'mclaughlin_fix_cartographics' do
     before :each do
-      @old_coords=["W0000000 W0000000 N900000 N900000","W0180000 E0510000 N370000 S350000","W0200000 E1600000 N900000 S900000","W0210000 E1590000 N900000 S900000","W0700000 E1100000 N630000 S530000","W0830000 W0690000 N470000 N310000","W0921500 W0771000 N183000 N071000","W1243000 W1141500 N420000 N323000","W1730000 W0100000 N840000 N071000","W1800000 E1800000 N850000 S850000","W1730000 W0100000 N840000 N080000","W0820000 W0350000 N130000 S550000","W0000000 W0000000 S900000 S900000","W1280000 W0650000 N510000 N250000"]
-      @new_coords=["W0000000 W0000000 N0900000 N0900000","W0180000 E0510000 N0370000 S0350000","W1600000 E0200000 N0900000 S0900000","W0210000 E1590000 N0900000 S0900000","E1100000 W0700000 N0630000 S0530000","W1250000 W1100000 N0470000 N0310000","W0921500 W0771000 N0183000 N0071000","W1243000 W1141500 N0420000 N0323000","W1730000 W0100000 N0840000 N0071000","W1800000 E1800000 N0850000 S0850000","W1730000 W0100000 N0840000 N0080000","W0820000 W0350000 N0130000 S0550000","W0000000 W0000000 S0900000 S0900000","W1280000 W0650000 N0510000 N0250000"]
-      @display_coords=["(W 0° --E 0°/N 90° --N 90°)","(W 18° --E 51°/N 37° --S 35°)","(W 160° --E 20°/N 90° --S 90°)","(W 21° --E 159°/N 90° --S 90°)","(E 110° --W 70°/N 63° --S 53°)","(W 125° --W 110°/N 47° --N 31°)","(W 92°15ʹ --W 77°10ʹ/N 18°30ʹ --N 7°10ʹ)","(W 124°30ʹ --W 114°15ʹ/N 42°00ʹ --N 32°30)","(W 173°00ʹ --W 10°00ʹ/N 84°00ʹ --N 7°10ʹ)","(W 180° --E 180°/N 85° --S 85°)","(W 173° --W 10°/N 84° --N 8°)","(W 82° --W 35°/N 13° --S 55°)","(W 0° --W 0°/S 90° --S 90°)","(W 128° --W 65°/N 51° --N 25°)"]
+      @old_coords = ['W0000000 W0000000 N900000 N900000', 'W0180000 E0510000 N370000 S350000', 'W0200000 E1600000 N900000 S900000', 'W0210000 E1590000 N900000 S900000', 'W0700000 E1100000 N630000 S530000', 'W0830000 W0690000 N470000 N310000', 'W0921500 W0771000 N183000 N071000', 'W1243000 W1141500 N420000 N323000', 'W1730000 W0100000 N840000 N071000', 'W1800000 E1800000 N850000 S850000', 'W1730000 W0100000 N840000 N080000', 'W0820000 W0350000 N130000 S550000', 'W0000000 W0000000 S900000 S900000', 'W1280000 W0650000 N510000 N250000']
+      @new_coords = ['W0000000 W0000000 N0900000 N0900000', 'W0180000 E0510000 N0370000 S0350000', 'W1600000 E0200000 N0900000 S0900000', 'W0210000 E1590000 N0900000 S0900000', 'E1100000 W0700000 N0630000 S0530000', 'W1250000 W1100000 N0470000 N0310000', 'W0921500 W0771000 N0183000 N0071000', 'W1243000 W1141500 N0420000 N0323000', 'W1730000 W0100000 N0840000 N0071000', 'W1800000 E1800000 N0850000 S0850000', 'W1730000 W0100000 N0840000 N0080000', 'W0820000 W0350000 N0130000 S0550000', 'W0000000 W0000000 S0900000 S0900000', 'W1280000 W0650000 N0510000 N0250000']
+      @display_coords = ['(W 0° --E 0°/N 90° --N 90°)', '(W 18° --E 51°/N 37° --S 35°)', '(W 160° --E 20°/N 90° --S 90°)', '(W 21° --E 159°/N 90° --S 90°)', '(E 110° --W 70°/N 63° --S 53°)', '(W 125° --W 110°/N 47° --N 31°)', '(W 92°15ʹ --W 77°10ʹ/N 18°30ʹ --N 7°10ʹ)', '(W 124°30ʹ --W 114°15ʹ/N 42°00ʹ --N 32°30)', '(W 173°00ʹ --W 10°00ʹ/N 84°00ʹ --N 7°10ʹ)', '(W 180° --E 180°/N 85° --S 85°)', '(W 173° --W 10°/N 84° --N 8°)', '(W 82° --W 35°/N 13° --S 55°)', '(W 0° --W 0°/S 90° --S 90°)', '(W 128° --W 65°/N 51° --N 25°)']
     end
 
     it 'should add a display counterpart to the encoded coordinates' do
       count = 0
       @old_coords.each do |coord|
-        xml='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">'+"
+        xml = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">' + "
         <mods:subject>
         <mods:cartographics>
         <mods:coordinates>#{coord}</mods:coordinates>
         </mods:cartographics>
         </mods:subject></mods:mods>"
-        doc=Nokogiri::XML(xml)
+        doc = Nokogiri::XML(xml)
         mclaughlin_fix_cartographics doc
-        expect(doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').first.text).to eq(@display_coords[count])
-        #the encoded coordinates should be gone(they used to get copied to a new node)
-        expect(doc.search("//mods:subject/mods:cartographics/mods:coordinates",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
+        expect(doc.search('//mods:subject/mods:cartographics/mods:coordinates', 'mods' => 'http://www.loc.gov/mods/v3').first.text).to eq(@display_coords[count])
+        # the encoded coordinates should be gone(they used to get copied to a new node)
+        expect(doc.search('//mods:subject/mods:cartographics/mods:coordinates', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(1)
         count += 1
       end
     end
   end
   context 'mclaughlin_combine_cartographics' do
     it 'should combine scale, projection and coordinates into one cartographics' do
-      xml='<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">'+"
+      xml = '<mods:mods xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">' + "
       <mods:subject>
       <mods:cartographics>
       <mods:coordinates>W0000000 W0000000 N900000 N900000</mods:coordinates>
@@ -629,14 +580,14 @@ describe ItemsHelper do
         <mods:projection>magic</mods:projection>
       </mods:cartographics>
       </mods:subject></mods:mods>"
-      doc=Nokogiri::XML(xml)
+      doc = Nokogiri::XML(xml)
       mclaughlin_combine_cartographics doc
       remove_empty_nodes doc
-    # puts doc.to_s
-      #should be merged into a single cartographics
-      expect(doc.search("//mods:subject/mods:cartographics",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
-      expect(doc.search("//mods:subject/mods:cartographics/mods:scale",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
-      expect(doc.search("//mods:subject/mods:cartographics/mods:projection",'mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
+      # puts doc.to_s
+      # should be merged into a single cartographics
+      expect(doc.search('//mods:subject/mods:cartographics', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(1)
+      expect(doc.search('//mods:subject/mods:cartographics/mods:scale', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(1)
+      expect(doc.search('//mods:subject/mods:cartographics/mods:projection', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(1)
     end
   end
   context 'mclaughlin_remove_related_item' do
@@ -644,18 +595,17 @@ describe ItemsHelper do
       doc = Nokogiri.XML(@full_doc) do |config|
         config.default_xml.noblanks
       end
-      expect(doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length).to eq(1)
+      expect(doc.search('//mods:relatedItem', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(1)
       mclaughlin_remove_related_item doc
-      expect(doc.search('//mods:relatedItem','mods'=>'http://www.loc.gov/mods/v3').length).to eq(0)
+      expect(doc.search('//mods:relatedItem', 'mods' => 'http://www.loc.gov/mods/v3').length).to eq(0)
     end
   end
   context 'mclaughlin_replace_problematic_characters' do
-    it "should replace the bad character" do
-      pending
-      bad_string = "&#x2013; &#x2018; &#x2019; &#x2018; &#x2019 ;&#x201C; &#x201D; &#x2026; &#x2070; &#x30A; &#xBA; &#xB6;"
-      good_string = "-- &apos; &apos; &quot; &quot; ... &#xB0; &#xB0; &#xB0; "
-      xml=Nokogiri::XML("<something>#{bad_string}</something>")
-      expect(mclaughlin_replace_problematic_characters(xml).to_s).to eq(good_string)
+    it 'should replace the bad character' do
+      bad_string  = '&#x2013; &#x2018; &#x2019; &#x201C; &#x201D; &#x2026; &#x2070; &#x30A; &#xBA; &#xB6; &quot;xyz'
+      good_string = '-- &apos; &apos; &quot; &quot; ... &#xB0; &#xB0; &#xB0; &quot;xyz'
+      bad_xml = Nokogiri::XML("<something> #{bad_string}</ something> ")
+      expect(mclaughlin_replace_problematic_characters(bad_xml).content).to be_equivalent_to Nokogiri::XML("<test>#{good_string} </test>").content
     end
   end
 end

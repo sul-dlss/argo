@@ -1,0 +1,10 @@
+@import 'jquery-ui/custom-theme/jquery-ui-1.8.13.custom';
+@import './argo/*';
+
+.ui-jqgrid td {
+  border: none;
+}
+
+.argo-obj-status-highlight {
+  color: $argo-status-highlight-color;
+}

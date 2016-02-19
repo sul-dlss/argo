@@ -1,0 +1,21 @@
+<%# Display the query facet lists %>
+<ul class='facet-values list-unstyled'>
+  <%= render_facet_limit_list facet_paginator(facet_field, display_facet), facet_field.field %>
+</ul>
+
+<div data-range-query data-range-path = '<%= catalog_index_path %>'>
+  <div class='form-group'>
+    <label for="<%=facet_field.field%>_after_datepicker">From:</label>
+    <input maxlength="10" size="10" id="<%=facet_field.field%>_after_datepicker" type="text" data-datepicker data-range-after>
+  </div>
+  <div class='form-group'>
+    <label for="<%=facet_field.field%>_before_datepicker">Through:</label>
+    <input maxlength="10" size="10" id="<%=facet_field.field%>_before_datepicker" type="text" data-datepicker data-range-before>
+  </div>
+  <div>
+    <%= form_tag catalog_index_path, method: :get do %>
+      <%= hidden_field_tag "f[#{facet_field.raw_facet_field}][]", '[* TO *]', data: { range_value: ''} %>
+      <%= submit_tag('submit', class: 'btn btn-primary') %>
+    <% end %>
+  </div>
+</div>

@@ -1,67 +1,77 @@
 require 'spec_helper'
 
-describe SolrDocument do
+describe SolrDocument, :type => :model do
   describe 'get_milestones' do
     it 'should build an empty listing if passed an empty doc' do
-      milestones=get_milestones(Hash.new)
-      milestones.each do |key,value|
-        expect(value[:time]).to eq 'pending'
+      milestones = SolrDocument.get_milestones({})
+      milestones.each do |key, value|
+        expect(value).to match a_hash_excluding(:time)
       end
     end
     it 'should generate a correct lifecycle with the old format that lacks version info' do
-      lifecycle_data=Array.new
-      lifecycle_data << 'registered:2012-02-25T01:40:57Z'
-      doc={ 'lifecycle_display' => lifecycle_data }
-      
-      versions=get_milestones(doc)
-      versions.each do |version,milestones|
-        milestones.each do |key,value|
-          expect(version).to eq(1)
-          if value[:display]=='Registered'
-            expect(I18n.l(value[:time])).to eq('2012-02-24 05:40PM')
-          else
-            expect(value[:time]).to eq 'pending'
-          end
+      doc = { 'lifecycle_ssim' => ['registered:2012-02-25T01:40:57Z'] }
+
+      versions = SolrDocument.get_milestones(doc)
+      expect(versions.keys).to eq [1]
+      expect(versions).to match a_hash_including(
+        1 => a_hash_including(
+          'registered' => { :time => be_a_kind_of(DateTime) }
+        )
+      )
+      versions[1].each do |key, value|
+        if key == 'registered'
+          expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
+        else
+          expect(value[:time]).to be_nil
         end
       end
     end
     it 'should recognize versions and bundle versions together' do
-      lifecycle_data=Array.new
-      lifecycle_data << 'registered:2012-02-25T01:40:57Z;1'
-      lifecycle_data << 'opened:2012-02-25T01:39:57Z;2'
-      doc={ 'lifecycle_display' => lifecycle_data }
-      versions=get_milestones(doc)
-      expect(versions['1'].length).to eq(8)
-      expect(versions['1']['registered'].nil?).to eq(false)
-      expect(versions['2'].length).to eq(8)
-      expect(versions['2']['registered'].nil?).to eq(true)
-      expect(versions['2']['opened'].nil?).to eq(false)
-      versions.each do |version,milestones|
-        milestones.each do|key,value|
-      
-          case value[:display]
-            when 'Registered'
-              expect(I18n.l(value[:time])).to eq('2012-02-24 05:40PM') #the hour/minute here is wrong...dont know why
-              expect(version).to eq('1')                               #registration is always only v1
-            when 'Opened'
-              expect(I18n.l(value[:time])).to eq('2012-02-24 05:39PM') #the hour/minute here is wrong...dont know why
+      lifecycle_data = ['registered:2012-02-25T01:40:57Z;1', 'opened:2012-02-25T01:39:57Z;2']
+      versions = SolrDocument.get_milestones({ 'lifecycle_ssim' => lifecycle_data })
+      expect(versions['1'].size).to eq(8)
+      expect(versions['2'].size).to eq(8)
+      expect(versions['1']['registered']).not_to be_nil
+      expect(versions['2']['registered']).to be_nil
+      expect(versions['2']['opened']).not_to be_nil
+      expect(versions).to match a_hash_including(
+        '1' => a_hash_including(
+          'registered' => {
+            :time => be_a_kind_of(DateTime)
+          }
+        ),
+        '2' => a_hash_including(
+          'opened' => {
+            :time => be_a_kind_of(DateTime)
+          }
+        )
+      )
+      versions.each do |version, milestones|
+        milestones.each do |key, value|
+          case key
+            when 'registered'
+              expect(value[:time]).to be_a_kind_of DateTime
+              expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
+              expect(version).to eq('1')       # registration is always only on v1
+            when 'opened'
+              expect(value[:time]).to be_a_kind_of DateTime
+              expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:39:57+00:00')
               expect(version).to eq('2')
             else
-              expect(value[:time]).to eq('pending')
+              expect(value[:time]).to be_nil
           end
         end
       end
-    end  
+    end
   end
   describe 'get_versions' do
     it 'should build a version hash' do
-      data=[]
+      data = []
       data << '1;1.0.0;Initial version'
       data << '2;1.1.0;Minor change'
-      doc={'versions_display' => data}
-      versions=get_versions(doc)
-      expect(versions['1'][:tag]).to eq('1.0.0')
+      versions = SolrDocument.get_versions({'versions_ssm' => data})
+      expect(versions['1']).to match a_hash_including(:tag => '1.0.0', :desc => 'Initial version')
+      expect(versions['2']).to match a_hash_including(:tag => '1.1.0', :desc => 'Minor change')
     end
   end
-  
 end

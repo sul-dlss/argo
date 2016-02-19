@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="druid:fm300jh1784"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Hydrus"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="hydrus-prod.stanford.edu"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2013-11-20T04:51:17.524Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2013-12-10T23:02:23.739Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2013-11-20T04:51:17.524Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:17.671Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:17.784Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:17.852Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyObject</audit:action>
+<audit:componentID></audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:22.725Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:22.854Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:22.962Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC7">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>versionMetadata</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:23.073Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC8">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>hydrusProperties</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:23.179Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC9">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:23.289Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC10">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:23.398Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC11">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:51:23.534Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC12">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:54:06.257Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC13">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>hydrusProperties</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:54:06.505Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC14">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:54:06.622Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC15">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>hydrusProperties</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:55:17.439Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC16">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:55:17.544Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC17">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>hydrus-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T04:55:17.774Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC18">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>descMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T22:56:22.360Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC19">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T22:56:55.068Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC20">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T22:58:18.771Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC21">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>roleMetadata</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-11-20T22:59:37.071Z</audit:date>
+<audit:justification>Purged datastream (ID=roleMetadata), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 1 datastream version(s) (2013-11-19T20:51:23.289Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC22">
+<audit:process type="Fedora API-M"/>
+<audit:action>purgeDatastream</audit:action>
+<audit:componentID>hydrusProperties</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-11-20T22:59:53.704Z</audit:date>
+<audit:justification>Purged datastream (ID=hydrusProperties), versions ranging from the beginning of time to the end of time.  This resulted in the permanent removal of 3 datastream version(s) (2013-11-19T20:51:23.179Z, 2013-11-19T20:54:06.505Z, 2013-11-19T20:55:17.439Z) and all associated audit records.</audit:justification>
+</audit:record>
+<audit:record ID="AUDREC23">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>workflow@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T23:02:29.436Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC24">
+<audit:process type="Fedora API-M"/>
+<audit:action>setDatastreamVersionable</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>workflow@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-20T23:02:29.436Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC25">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-11-21T02:24:27.763Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC26">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>lmcrae</audit:responsibility>
+<audit:date>2013-11-21T02:25:02.942Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC27">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-11-21T02:39:59.215Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC28">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>workflows</audit:componentID>
+<audit:responsibility>workflow@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-21T02:40:31.138Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC29">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-22T09:10:53.534Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC30">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>technicalMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-22T09:10:55.495Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC31">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>identityMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-22T09:12:01.916Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC32">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>events</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-22T09:12:02.040Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC33">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-22T09:12:02.199Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC34">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>provenanceMetadata</audit:componentID>
+<audit:responsibility>robots@sul-lyberservices-prod.stanford.edu</audit:responsibility>
+<audit:date>2013-11-22T09:22:34.026Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC35">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByReference</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-11-22T18:36:24.806Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC36">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>contentMetadata</audit:componentID>
+<audit:responsibility>argo.stanford.edu</audit:responsibility>
+<audit:date>2013-12-10T23:02:23.739Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2013-11-20T04:51:17.524Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="376">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:title>Hydrus</dc:title>
+  <dc:identifier>druid:fm300jh1784</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2013-11-20T04:51:17.671Z" MIMETYPE="application/rdf+xml" SIZE="458">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:fm300jh1784">
+    <hydra:isGovernedBy rdf:resource="info:fedora/druid:kw703dd9121"></hydra:isGovernedBy>
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Item"></fedora-model:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="RELS-EXT.1" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2013-11-20T04:51:22.854Z" MIMETYPE="application/rdf+xml" SIZE="724">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:fm300jh1784">
+    <hydra:isGovernedBy rdf:resource="info:fedora/druid:kw703dd9121"></hydra:isGovernedBy>
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Hydrus_Item"></fedora-model:hasModel>
+    <fedora:isMemberOf rdf:resource="info:fedora/druid:wb200fy9252"></fedora:isMemberOf>
+    <fedora:isMemberOfCollection rdf:resource="info:fedora/druid:wb200fy9252"></fedora:isMemberOfCollection>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="RELS-EXT.2" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2013-11-20T22:58:18.771Z" MIMETYPE="application/rdf+xml" SIZE="427">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora="info:fedora/fedora-system:def/relations-external#" xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:fm300jh1784">
+    <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431"></hydra:isGovernedBy>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="RELS-EXT.3" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2013-11-22T09:12:02.199Z" MIMETYPE="application/rdf+xml" SIZE="458">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:fm300jh1784">
+    <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431"></hydra:isGovernedBy>
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Item"></fedora-model:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="identityMetadata.0" LABEL="Identity Metadata" CREATED="2013-11-20T04:51:17.784Z" MIMETYPE="text/xml" SIZE="409">
+<foxml:xmlContent>
+<identityMetadata>
+  <sourceId source="Hydrus">item-hfrost-2013-11-20T04:51:13.926Z</sourceId>
+  <objectId>druid:fm300jh1784</objectId>
+  <objectCreator>DOR</objectCreator>
+  <objectLabel>Hydrus</objectLabel>
+  <objectType>item</objectType>
+  <adminPolicy>druid:kw703dd9121</adminPolicy>
+  <otherId name="uuid">62d2383a-519f-11e3-a2d4-0050569b3c6e</otherId>
+  <tag>Project : Hydrus</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.1" LABEL="Identity Metadata" CREATED="2013-11-20T22:56:55.068Z" MIMETYPE="text/xml" SIZE="384">
+<foxml:xmlContent>
+<identityMetadata>
+  <sourceId source="Hydrus">item-hfrost-2013-11-20T04:51:13.926Z</sourceId>
+  <objectId>druid:fm300jh1784</objectId>
+  <objectCreator>DOR</objectCreator>
+  <objectLabel>Hydrus</objectLabel>
+  <objectType>agreement</objectType>
+  <adminPolicy>druid:kw703dd9121</adminPolicy>
+  <otherId name="uuid">62d2383a-519f-11e3-a2d4-0050569b3c6e</otherId>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.2" LABEL="Identity Metadata" CREATED="2013-11-21T02:39:59.215Z" MIMETYPE="text/xml" SIZE="417">
+<foxml:xmlContent>
+<identityMetadata>
+  <sourceId source="Hydrus">item-hfrost-2013-11-20T04:51:13.926Z</sourceId>
+  <objectId>druid:fm300jh1784</objectId>
+  <objectCreator>DOR</objectCreator>
+  <objectLabel>Stafford - Hoover Agreement: 2013-11-19</objectLabel>
+  <objectType>agreement</objectType>
+  <adminPolicy>druid:kw703dd9121</adminPolicy>
+  <otherId name="uuid">62d2383a-519f-11e3-a2d4-0050569b3c6e</otherId>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="identityMetadata.3" LABEL="Identity Metadata" CREATED="2013-11-22T09:12:01.916Z" MIMETYPE="text/xml" SIZE="453">
+<foxml:xmlContent>
+<identityMetadata>
+  <sourceId source="Hydrus">item-hfrost-2013-11-20T04:51:13.926Z</sourceId>
+  <objectId>druid:fm300jh1784</objectId>
+  <objectCreator>DOR</objectCreator>
+  <objectLabel>Stafford - Hoover Agreement: 2013-11-19</objectLabel>
+  <objectType>agreement</objectType>
+  <adminPolicy>druid:kw703dd9121</adminPolicy>
+  <otherId name="uuid">62d2383a-519f-11e3-a2d4-0050569b3c6e</otherId>
+  <tag>Remediated By : 3.25.3</tag>
+</identityMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
+<foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2013-11-20T04:51:17.852Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://sul-lyberservices-prod.stanford.edu/workflow/dor/objects/druid:fm300jh1784/workflows"/>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="workflows.2" LABEL="Workflow" CREATED="2013-11-21T02:40:31.138Z" MIMETYPE="application/xml">
+<foxml:contentLocation TYPE="URL" REF="https://lyberservices-prod.stanford.edu/workflow/dor/objects/druid:fm300jh1784/workflows"/>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="versionMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="versionMetadata.0" LABEL="Version Metadata" CREATED="2013-11-20T04:51:23.073Z" MIMETYPE="text/xml" SIZE="136">
+<foxml:xmlContent>
+<versionMetadata>
+  <version tag="1.0.0" versionId="1">
+    <description>Initial Version</description>
+  </version>
+</versionMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2013-11-20T04:51:23.398Z" MIMETYPE="text/xml" SIZE="870">
+<foxml:binaryContent> 
+              PG1vZHMgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnhzaT0i
+              aHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vd3d3
+              LmxvYy5nb3YvbW9kcy92MyIgdmVyc2lvbj0iMy4zIiB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly93
+              d3cubG9jLmdvdi9tb2RzL3YzIGh0dHA6Ly93d3cubG9jLmdvdi9zdGFuZGFyZHMvbW9kcy92My9tb2Rz
+              LTMtMy54c2QiPgogIDx0aXRsZUluZm8+CiAgICA8dGl0bGUvPgogIDwvdGl0bGVJbmZvPgogIDxuYW1l
+              PgogICAgPG5hbWVQYXJ0Lz4KICAgIDxyb2xlPgogICAgICA8cm9sZVRlcm0gYXV0aG9yaXR5PSJtYXJj
+              cmVsYXRvciIgdHlwZT0idGV4dCIvPgogICAgPC9yb2xlPgogIDwvbmFtZT4KICA8b3JpZ2luSW5mbz4K
+              ICAgIDxkYXRlQ3JlYXRlZC8+CiAgPC9vcmlnaW5JbmZvPgogIDx0eXBlT2ZSZXNvdXJjZT5vdGhlcjwv
+              dHlwZU9mUmVzb3VyY2U+CiAgPGFic3RyYWN0Lz4KICA8bm90ZSB0eXBlPSJwcmVmZXJyZWQgY2l0YXRp
+              b24iIGRpc3BsYXlMYWJlbD0iUHJlZmVycmVkIENpdGF0aW9uIi8+CiAgPG5vdGUgdHlwZT0iY2l0YXRp
+              b24vcmVmZXJlbmNlIiBkaXNwbGF5TGFiZWw9IlJlbGF0ZWQgUHVibGljYXRpb24iLz4KICA8bm90ZSB0
+              eXBlPSJjb250YWN0IiBkaXNwbGF5TGFiZWw9IkNvbnRhY3QiLz4KICA8c3ViamVjdD4KICAgIDx0b3Bp
+              Yy8+CiAgPC9zdWJqZWN0PgogIDxyZWxhdGVkSXRlbT4KICAgIDx0aXRsZUluZm8+CiAgICAgIDx0aXRs
+              ZS8+CiAgICA8L3RpdGxlSW5mbz4KICAgIDxsb2NhdGlvbj4KICAgICAgPHVybC8+CiAgICA8L2xvY2F0
+              aW9uPgogIDwvcmVsYXRlZEl0ZW0+CjwvbW9kcz4K
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="descMetadata.1" LABEL="Descriptive Metadata" CREATED="2013-11-20T04:54:06.622Z" MIMETYPE="text/xml" SIZE="951">
+<foxml:binaryContent> 
+              PG1vZHMgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnhzaT0i
+              aHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vd3d3
+              LmxvYy5nb3YvbW9kcy92MyIgdmVyc2lvbj0iMy4zIiB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly93
+              d3cubG9jLmdvdi9tb2RzL3YzIGh0dHA6Ly93d3cubG9jLmdvdi9zdGFuZGFyZHMvbW9kcy92My9tb2Rz
+              LTMtMy54c2QiPgogIDx0aXRsZUluZm8+CiAgICA8dGl0bGU+U3RhZmZvcmQgLSBIb292ZXIgQWdyZWVt
+              ZW50PC90aXRsZT4KICA8L3RpdGxlSW5mbz4KICAKICA8b3JpZ2luSW5mbz4KICAgIDxkYXRlQ3JlYXRl
+              ZD4yMDEzLTExLTE5PC9kYXRlQ3JlYXRlZD4KICA8L29yaWdpbkluZm8+CiAgPHR5cGVPZlJlc291cmNl
+              Pm90aGVyPC90eXBlT2ZSZXNvdXJjZT4KICA8YWJzdHJhY3QvPgogIDxub3RlIHR5cGU9InByZWZlcnJl
+              ZCBjaXRhdGlvbiIgZGlzcGxheUxhYmVsPSJQcmVmZXJyZWQgQ2l0YXRpb24iLz4KICA8bm90ZSB0eXBl
+              PSJjaXRhdGlvbi9yZWZlcmVuY2UiIGRpc3BsYXlMYWJlbD0iUmVsYXRlZCBQdWJsaWNhdGlvbiIvPgog
+              IDxub3RlIHR5cGU9ImNvbnRhY3QiIGRpc3BsYXlMYWJlbD0iQ29udGFjdCI+c2RyLWNvbnRhY3RAbGlz
+              dHMuc3RhbmZvcmQuZWR1PC9ub3RlPgogIAogIDxyZWxhdGVkSXRlbT4KICAgIDx0aXRsZUluZm8+CiAg
+              ICAgIDx0aXRsZS8+CiAgICA8L3RpdGxlSW5mbz4KICAgIDxsb2NhdGlvbj4KICAgICAgCiAgICA8L2xv
+              Y2F0aW9uPgogIDwvcmVsYXRlZEl0ZW0+CjxuYW1lIHR5cGU9InBlcnNvbmFsIj48bmFtZVBhcnQ+Tmd1
+              eWVuLCBMaXNhPC9uYW1lUGFydD48cm9sZT48cm9sZVRlcm0gYXV0aG9yaXR5PSJtYXJjcmVsYXRvciIg
+              dHlwZT0idGV4dCI+QXV0aG9yPC9yb2xlVGVybT48L3JvbGU+PC9uYW1lPjwvbW9kcz4K
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="descMetadata.2" LABEL="Descriptive Metadata" CREATED="2013-11-20T04:55:17.544Z" MIMETYPE="text/xml" SIZE="1093">
+<foxml:binaryContent> 
+              PG1vZHMgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnhzaT0i
+              aHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vd3d3
+              LmxvYy5nb3YvbW9kcy92MyIgdmVyc2lvbj0iMy4zIiB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly93
+              d3cubG9jLmdvdi9tb2RzL3YzIGh0dHA6Ly93d3cubG9jLmdvdi9zdGFuZGFyZHMvbW9kcy92My9tb2Rz
+              LTMtMy54c2QiPgogIDx0aXRsZUluZm8+CiAgICA8dGl0bGU+U3RhZmZvcmQgLSBIb292ZXIgQWdyZWVt
+              ZW50PC90aXRsZT4KICA8L3RpdGxlSW5mbz4KICAKICA8b3JpZ2luSW5mbz4KICAgIDxkYXRlQ3JlYXRl
+              ZD4yMDEzLTExLTE5PC9kYXRlQ3JlYXRlZD4KICA8L29yaWdpbkluZm8+CiAgPHR5cGVPZlJlc291cmNl
+              Pm90aGVyPC90eXBlT2ZSZXNvdXJjZT4KICA8YWJzdHJhY3Q+Rm9yIHRoZSBTdGFmZm9yZCBjb2xsZWN0
+              aW9uLCBhIHBpbG90IHByb2plY3Qgd2l0aCBIb292ZXIgTGlicmFyeSBhbmQgQXJjaGl2ZXMuPC9hYnN0
+              cmFjdD4KICA8bm90ZSB0eXBlPSJwcmVmZXJyZWQgY2l0YXRpb24iIGRpc3BsYXlMYWJlbD0iUHJlZmVy
+              cmVkIENpdGF0aW9uIi8+CiAgPG5vdGUgdHlwZT0iY2l0YXRpb24vcmVmZXJlbmNlIiBkaXNwbGF5TGFi
+              ZWw9IlJlbGF0ZWQgUHVibGljYXRpb24iLz4KICA8bm90ZSB0eXBlPSJjb250YWN0IiBkaXNwbGF5TGFi
+              ZWw9IkNvbnRhY3QiPnNkci1jb250YWN0QGxpc3RzLnN0YW5mb3JkLmVkdTwvbm90ZT4KICAKICA8cmVs
+              YXRlZEl0ZW0+CiAgICA8dGl0bGVJbmZvPgogICAgICA8dGl0bGUvPgogICAgPC90aXRsZUluZm8+CiAg
+              ICA8bG9jYXRpb24+CiAgICAgIAogICAgPHVybD48L3VybD48L2xvY2F0aW9uPgogIDwvcmVsYXRlZEl0
+              ZW0+CjxuYW1lIHR5cGU9InBlcnNvbmFsIj48bmFtZVBhcnQ+Tmd1eWVuLCBMaXNhPC9uYW1lUGFydD48
+              cm9sZT48cm9sZVRlcm0gYXV0aG9yaXR5PSJtYXJjcmVsYXRvciIgdHlwZT0idGV4dCI+QXV0aG9yPC9y
+              b2xlVGVybT48L3JvbGU+PC9uYW1lPjxzdWJqZWN0Pjx0b3BpYz5hZ3JlZW1lbnQ8L3RvcGljPjwvc3Vi
+              amVjdD48L21vZHM+Cg==
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="descMetadata.3" LABEL="Descriptive Metadata" CREATED="2013-11-20T22:56:22.360Z" MIMETYPE="text/xml" SIZE="853">
+<foxml:binaryContent> 
+              PG1vZHMgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnhzaT0i
+              aHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zPSJodHRwOi8vd3d3
+              LmxvYy5nb3YvbW9kcy92MyIgdmVyc2lvbj0iMy4zIiB4c2k6c2NoZW1hTG9jYXRpb249Imh0dHA6Ly93
+              d3cubG9jLmdvdi9tb2RzL3YzIGh0dHA6Ly93d3cubG9jLmdvdi9zdGFuZGFyZHMvbW9kcy92My9tb2Rz
+              LTMtMy54c2QiPgogIDx0aXRsZUluZm8+CiAgICA8dGl0bGU+U3RhZmZvcmQgLSBIb292ZXIgQWdyZWVt
+              ZW50PC90aXRsZT4KICA8L3RpdGxlSW5mbz4KICAgIDxvcmlnaW5JbmZvPgogICAgPGRhdGVDcmVhdGVk
+              PjIwMTMtMTEtMTk8L2RhdGVDcmVhdGVkPgogIDwvb3JpZ2luSW5mbz4KICA8dHlwZU9mUmVzb3VyY2U+
+              b3RoZXI8L3R5cGVPZlJlc291cmNlPgogIDxhYnN0cmFjdD5Gb3IgdGhlIFN0YWZmb3JkIGNvbGxlY3Rp
+              b24sIGEgcGlsb3QgcHJvamVjdCB3aXRoIEhvb3ZlciBMaWJyYXJ5IGFuZCBBcmNoaXZlcy48L2Fic3Ry
+              YWN0PgogIDxub3RlIHR5cGU9ImNvbnRhY3QiIGRpc3BsYXlMYWJlbD0iQ29udGFjdCI+c2RyLWNvbnRh
+              Y3RAbGlzdHMuc3RhbmZvcmQuZWR1PC9ub3RlPgogIDxuYW1lIHR5cGU9InBlcnNvbmFsIj4KICAgIDxu
+              YW1lUGFydD5OZ3V5ZW4sIExpc2E8L25hbWVQYXJ0PgogICAgPHJvbGU+CiAgICAgIDxyb2xlVGVybSBh
+              dXRob3JpdHk9Im1hcmNyZWxhdG9yIiB0eXBlPSJ0ZXh0Ij5BdXRob3I8L3JvbGVUZXJtPgogICAgPC9y
+              b2xlPjwvbmFtZT4KICA8c3ViamVjdD4KICAgIDx0b3BpYz5hZ3JlZW1lbnQ8L3RvcGljPgogIDwvc3Vi
+              amVjdD4KPC9tb2RzPg==
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2013-11-20T04:51:23.534Z" MIMETYPE="text/xml" SIZE="566">
+<foxml:binaryContent> 
+              PHJpZ2h0c01ldGFkYXRhPgogIDxhY2Nlc3MgdHlwZT0iZGlzY292ZXIiPgogICAgPG1hY2hpbmU+CiAg
+              ICAgIDx3b3JsZC8+CiAgICA8L21hY2hpbmU+CiAgPC9hY2Nlc3M+CiAgPGFjY2VzcyB0eXBlPSJyZWFk
+              Ij4KICAgIDxtYWNoaW5lPgogICAgICA8Z3JvdXA+c3RhbmZvcmQ8L2dyb3VwPgogICAgPC9tYWNoaW5l
+              PgogIDwvYWNjZXNzPgogIDx1c2U+CiAgICA8aHVtYW4gdHlwZT0idXNlQW5kUmVwcm9kdWN0aW9uIj5V
+              c2VyIGFncmVlcyB0aGF0LCB3aGVyZSBhcHBsaWNhYmxlLCBjb250ZW50IHdpbGwgbm90IGJlIHVzZWQg
+              dG8gaWRlbnRpZnkgb3IgdG8gb3RoZXJ3aXNlIGluZnJpbmdlIHRoZSBwcml2YWN5IG9yIGNvbmZpZGVu
+              dGlhbGl0eSByaWdodHMgb2YgaW5kaXZpZHVhbHMuIENvbnRlbnQgZGlzdHJpYnV0ZWQgdmlhIHRoZSBT
+              dGFuZm9yZCBEaWdpdGFsIFJlcG9zaXRvcnkgbWF5IGJlIHN1YmplY3QgdG8gYWRkaXRpb25hbCBsaWNl
+              bnNlIGFuZCB1c2UgcmVzdHJpY3Rpb25zIGFwcGxpZWQgYnkgdGhlIGRlcG9zaXRvci48L2h1bWFuPgog
+              IDwvdXNlPgo8L3JpZ2h0c01ldGFkYXRhPgo=
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="rightsMetadata.1" LABEL="Rights Metadata" CREATED="2013-11-22T18:36:24.806Z" MIMETYPE="text/xml" SIZE="194">
+<foxml:binaryContent> 
+              PHJpZ2h0c01ldGFkYXRhPgogIDxhY2Nlc3MgdHlwZT0iZGlzY292ZXIiPgogICAgPG1hY2hpbmU+CiAg
+              ICAgIDxub25lLz4KICAgIDwvbWFjaGluZT4KICA8L2FjY2Vzcz4KICA8YWNjZXNzIHR5cGU9InJlYWQi
+              PgogICAgPG1hY2hpbmU+CiAgICAgIDxub25lLz4KICAgIDwvbWFjaGluZT4KICA8L2FjY2Vzcz4KPC9y
+              aWdodHNNZXRhZGF0YT4=
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="technicalMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="technicalMetadata.0" LABEL="Technical Metadata" CREATED="2013-11-22T09:10:53.534Z" MIMETYPE="text/xml" SIZE="962">
+<foxml:binaryContent> 
+              PHRlY2huaWNhbE1ldGFkYXRhIG9iamVjdElkPSdkcnVpZDpmbTMwMGpoMTc4NCcgZGF0ZXRpbWU9JzIw
+              MTMtMTEtMjJUMDk6MTA6NTJaJwogICAgeG1sbnM6amhvdmU9J2h0dHA6Ly9odWwuaGFydmFyZC5lZHUv
+              b2lzL3htbC9ucy9qaG92ZScKICAgIHhtbG5zOm1peD0naHR0cDovL3d3dy5sb2MuZ292L21peC92MTAn
+              CiAgICB4bWxuczp0ZXh0bWQ9J2luZm86bGMveG1sbnMvdGV4dE1ELXYzJyA+CiAgPGZpbGUgaWQ9J1NE
+              Ul9EZXBvc2l0QWdyZWVtZW50Rm9ybV9Ib292ZXJfU3RhZmZvcmRfMjAxMzExMDUuZG9jeCc+CiAgICA8
+              amhvdmU6cmVwb3J0aW5nTW9kdWxlIHJlbGVhc2U9JzEuMycgZGF0ZT0nMjAwNy0wNC0xMCc+QllURVNU
+              UkVBTTwvamhvdmU6cmVwb3J0aW5nTW9kdWxlPgogICAgPGpob3ZlOnNpemU+ODg4Mzc8L2pob3ZlOnNp
+              emU+CiAgICA8amhvdmU6Zm9ybWF0PmJ5dGVzdHJlYW08L2pob3ZlOmZvcm1hdD4KICAgIDxqaG92ZTpz
+              dGF0dXM+V2VsbC1Gb3JtZWQgYW5kIHZhbGlkPC9qaG92ZTpzdGF0dXM+CiAgICA8amhvdmU6bWltZVR5
+              cGU+YXBwbGljYXRpb24vb2N0ZXQtc3RyZWFtPC9qaG92ZTptaW1lVHlwZT4KICA8L2ZpbGU+CiAgPGZp
+              bGUgaWQ9J1NEUl9TTEFfSG9vdmVyX3Byb3Zpc2lvbmFsLmRvY3gnPgogICAgPGpob3ZlOnJlcG9ydGlu
+              Z01vZHVsZSByZWxlYXNlPScxLjMnIGRhdGU9JzIwMDctMDQtMTAnPkJZVEVTVFJFQU08L2pob3ZlOnJl
+              cG9ydGluZ01vZHVsZT4KICAgIDxqaG92ZTpzaXplPjk1MjAwPC9qaG92ZTpzaXplPgogICAgPGpob3Zl
+              OmZvcm1hdD5ieXRlc3RyZWFtPC9qaG92ZTpmb3JtYXQ+CiAgICA8amhvdmU6c3RhdHVzPldlbGwtRm9y
+              bWVkIGFuZCB2YWxpZDwvamhvdmU6c3RhdHVzPgogICAgPGpob3ZlOm1pbWVUeXBlPmFwcGxpY2F0aW9u
+              L29jdGV0LXN0cmVhbTwvamhvdmU6bWltZVR5cGU+CiAgPC9maWxlPgo8L3RlY2huaWNhbE1ldGFkYXRh
+              Pgo=
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="technicalMetadata.1" LABEL="Technical Metadata" CREATED="2013-11-22T09:10:55.495Z" MIMETYPE="text/xml" SIZE="962">
+<foxml:binaryContent> 
+              PHRlY2huaWNhbE1ldGFkYXRhIG9iamVjdElkPSdkcnVpZDpmbTMwMGpoMTc4NCcgZGF0ZXRpbWU9JzIw
+              MTMtMTEtMjJUMDk6MTA6NTJaJwogICAgeG1sbnM6amhvdmU9J2h0dHA6Ly9odWwuaGFydmFyZC5lZHUv
+              b2lzL3htbC9ucy9qaG92ZScKICAgIHhtbG5zOm1peD0naHR0cDovL3d3dy5sb2MuZ292L21peC92MTAn
+              CiAgICB4bWxuczp0ZXh0bWQ9J2luZm86bGMveG1sbnMvdGV4dE1ELXYzJyA+CiAgPGZpbGUgaWQ9J1NE
+              Ul9EZXBvc2l0QWdyZWVtZW50Rm9ybV9Ib292ZXJfU3RhZmZvcmRfMjAxMzExMDUuZG9jeCc+CiAgICA8
+              amhvdmU6cmVwb3J0aW5nTW9kdWxlIHJlbGVhc2U9JzEuMycgZGF0ZT0nMjAwNy0wNC0xMCc+QllURVNU
+              UkVBTTwvamhvdmU6cmVwb3J0aW5nTW9kdWxlPgogICAgPGpob3ZlOnNpemU+ODg4Mzc8L2pob3ZlOnNp
+              emU+CiAgICA8amhvdmU6Zm9ybWF0PmJ5dGVzdHJlYW08L2pob3ZlOmZvcm1hdD4KICAgIDxqaG92ZTpz
+              dGF0dXM+V2VsbC1Gb3JtZWQgYW5kIHZhbGlkPC9qaG92ZTpzdGF0dXM+CiAgICA8amhvdmU6bWltZVR5
+              cGU+YXBwbGljYXRpb24vb2N0ZXQtc3RyZWFtPC9qaG92ZTptaW1lVHlwZT4KICA8L2ZpbGU+CiAgPGZp
+              bGUgaWQ9J1NEUl9TTEFfSG9vdmVyX3Byb3Zpc2lvbmFsLmRvY3gnPgogICAgPGpob3ZlOnJlcG9ydGlu
+              Z01vZHVsZSByZWxlYXNlPScxLjMnIGRhdGU9JzIwMDctMDQtMTAnPkJZVEVTVFJFQU08L2pob3ZlOnJl
+              cG9ydGluZ01vZHVsZT4KICAgIDxqaG92ZTpzaXplPjk1MjAwPC9qaG92ZTpzaXplPgogICAgPGpob3Zl
+              OmZvcm1hdD5ieXRlc3RyZWFtPC9qaG92ZTpmb3JtYXQ+CiAgICA8amhvdmU6c3RhdHVzPldlbGwtRm9y
+              bWVkIGFuZCB2YWxpZDwvamhvdmU6c3RhdHVzPgogICAgPGpob3ZlOm1pbWVUeXBlPmFwcGxpY2F0aW9u
+              L29jdGV0LXN0cmVhbTwvamhvdmU6bWltZVR5cGU+CiAgPC9maWxlPgo8L3RlY2huaWNhbE1ldGFkYXRh
+              Pgo=
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="events" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="events.3" LABEL="Events" CREATED="2013-11-22T09:12:02.040Z" MIMETYPE="text/xml" SIZE="666">
+<foxml:xmlContent>
+<events>
+  <event type="hydrus" when="2013-11-19T20:51:22-08:00" who="hfrost">Item created</event>
+  <event type="hydrus" when="2013-11-19T20:54:05-08:00" who="hfrost">Item modified: title, files</event>
+  <event type="hydrus" when="2013-11-19T20:55:16-08:00" who="hfrost">Terms of deposit accepted</event>
+  <event type="hydrus" when="2013-11-19T20:55:17-08:00" who="hfrost">Item modified: abstract</event>
+  <event type="remediation" when="2013-11-22T01:12:01-08:00" who="Dor::Identifiable 3.6.1">Assert correct models</event>
+  <event type="remediation" when="2013-11-22T01:12:01-08:00" who="Dor::Identifiable 3.6.1">Record Remediation Version</event>
+</events>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="provenanceMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="provenanceMetadata.0" LABEL="Provenance Metadata" CREATED="2013-11-22T09:22:34.026Z" MIMETYPE="text/xml" SIZE="265">
+<foxml:xmlContent>
+<provenanceMetadata objectId="druid:fm300jh1784">
+  <agent name="DOR">
+    <what object="druid:fm300jh1784">
+      <event when="2013-11-22T01:22:33-08:00" who="DOR-accessionWF">DOR Common Accessioning completed</event>
+    </what>
+  </agent>
+</provenanceMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="contentMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="contentMetadata.2" LABEL="Content Metadata" CREATED="2013-12-10T23:02:23.739Z" MIMETYPE="text/xml" SIZE="922">
+<foxml:xmlContent>
+<contentMetadata objectId="druid:fm300jh1784" type="file">
+  <resource id="File1" sequence="1" type="file">
+    <file id="SDR_DepositAgreementForm_Hoover_Stafford_20131105.docx" mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document" preserve="yes" publish="no" shelve="no" size="88837">
+      <checksum type="md5">1cb564f3b5f2d5c901ea398a2f4f6d41</checksum>
+      <checksum type="sha1">8fb5befaa20768b16dad3df092aa9123b410c9bb</checksum>
+    </file>
+  </resource>
+  <resource id="File2" sequence="2" type="file">
+    <file id="SDR_SLA_Hoover_provisional.docx" mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document" preserve="yes" publish="no" shelve="no" size="95200">
+      <checksum type="md5">125c1da04dd0172c73f9eda912411a17</checksum>
+      <checksum type="sha1">fb5fc4e185be95495ce8f5e26cde394aea9fcb38</checksum>
+    </file>
+  </resource>
+</contentMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

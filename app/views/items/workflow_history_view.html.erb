@@ -1,1 +1,4 @@
-<%= CodeRay::Duo[:xml, :div].highlight(Nokogiri::XML(@history_xml).prettify).html_safe %>
+<div class='container'>
+  <h1>Workflow history</h1>
+  <%= render partial: 'workflow_history_view' %>
+</div>

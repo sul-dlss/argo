@@ -1,0 +1,12 @@
+$argo-status-highlight-color: #00f;
+
+// Import the common SUL styles from the sul_styles gem (colors, icons).
+@import 'sul-styles';
+
+@import 'bootstrap-overrides';
+@import 'blacklight';
+@import 'blacklight_hierarchy';
+@import 'argo';
+@import 'jquery-ui';
+@import 'jqgrid-jquery-rails';
+@import 'ui.jqgrid';

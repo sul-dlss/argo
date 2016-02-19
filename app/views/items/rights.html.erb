@@ -1,4 +1,4 @@
-<%=form_tag url_for(:controller => :items, :action => :set_rights, :id => @object.pid) do%>
-	<%=select_tag :rights, options_for_select(['world','dark', 'stanford', 'none'])%>
-	<button>Update</button><button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
-<%end%>
+<div class='container'>
+  <h1>Set rights</h1>
+  <%= render partial: 'rights' %>
+</div>

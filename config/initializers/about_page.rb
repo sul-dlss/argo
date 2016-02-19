@@ -3,7 +3,7 @@ AboutPage.configure do |config|
 
   config.dependencies = AboutPage::Dependencies.new
 
-  config.environment = AboutPage::Environment.new({ 
+  config.environment = AboutPage::Environment.new({
     'Ruby' => /^(RUBY|GEM_|rvm)/
   })
 

@@ -11,19 +11,18 @@
         <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(*(@perm_keys))), :'data-rcparam' => 'apoId' %></div>
         <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', :'data-rcparam' => 'collection' %></div>
 
-        <div class="property-item"><label for="rights"><img class='help_icon' alt="help" src="/assets/help.png" onclick="$('#help_dialog').dialog('open');"/>Rights</label><%= select_tag :rights, options_for_select(valid_rights_options), :'data-tagname' => 'Process : Rights' %></div>
+        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS), :'data-tagname' => 'Process : Rights' %></div>
         <div class="property-item"><label for="id_source">Metadata Source</label><%= select_tag :id_source, options_for_select(metadata_sources), :'data-rcparam' => 'metadataSource' %></div>
         <div class="property-item spacer"></div>
         <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
         <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), :class => 'tag-field', :'data-tagname' => 'Process : Content Type' %></div>
-        <div class="property-item"><label for='mdform_id'>MDtoolkit Form</label><%= select_tag :mdform_id, '', :class => 'tag-field', :'data-tagname' => 'MDForm' %></div>
         <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, :class => 'tag-field', :'data-tagname' => 'Project', :'data-rcparam' => 'projectName' %></div>
         <div class="property-item wide"><label for='tag_1'>Tags</label>
           <span id="tags" style="width: auto">
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_0', :class => 'free tag-field' %> 
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %> 
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_0', :class => 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %>
             <%= text_field_tag :'tags[]', nil, :id => 'tags_2', :class => 'free tag-field' %>
-			<%= text_field_tag :'tags[]', nil, :id => 'tags_3', :class => 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_3', :class => 'free tag-field' %>
             <%= hidden_field_tag :registered_by, current_user.login, :class => 'tag-field ', :'data-tagname' => 'Registered By' %>
           </span>
         </div>
@@ -42,7 +41,6 @@
       Please specify both an Admin Policy and a Metadata Source before continuing.
     </p>
   </div>
-  <%=render :partial => 'rights_help'%>
   <div id='progress_dialog'>
     <div id='progress'></div>
   </div>
@@ -51,15 +49,15 @@
       Are you sure you want to clear the grid?
     </p>
   </div>
-	<div id='editing_dialog'>
+  <div id='editing_dialog'>
     <p>
       You are still editing a cell. Please use tab or enter to finish editing before trying to register items.
     </p>
   </div>
 </div>
-  
+
 </div>
-<div id='dynamic'>
+<div id='dynamic' class='row'>
   <table id='data'></table>
   <div id='pdata'></div><%= text_area_tag :id_list, '', :class => 'full-width', :id => :id_list, :rows => 7 %>
 </div>

@@ -1,0 +1,11 @@
+// Start moving registration styles to this pattern
+
+.registration-status {
+  &.glyphicon-exclamation-sign {
+    color: $brand-danger;
+  }
+
+  &.glyphicon-remove-sign {
+    color: $brand-danger;
+  }
+}

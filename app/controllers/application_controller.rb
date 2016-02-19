@@ -1,47 +1,28 @@
 class ApplicationController < ActionController::Base
-  # Adds a few additional behaviors into the application controller 
+  # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
-  # Please be sure to impelement current_user and user_session. Blacklight depends on 
-  # these methods in order to perform user specific actions. 
+  # Please be sure to impelement current_user and user_session. Blacklight depends on
+  # these methods in order to perform user specific actions.
 
-  before_filter :authorize!
-  before_filter :fedora_setup
+  before_action :authorize!
+  before_action :fedora_setup
+
+  rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render text: 'Object Not Found', status: :not_found }
 
   helper_method :current_or_guest_user
-  
+
   include Rack::Webauth::Helpers
 
   attr_reader :help
 
-  if Rails.env.production?
-    require 'squash/rails'
-    include Squash::Ruby::ControllerMethods
-    enable_squash_client
-  end
-  
-  def initialize(*args)
-    super
-    
-    klass_chain = self.class.name.sub(/Controller$/,'Helper').split(/::/)
-    klass = nil
-    begin
-      klass = Module.const_get(klass_chain.shift)
-      while klass_chain.length > 0
-        klass = klass.const_get(klass_chain.shift)
-      end
-    rescue NameError
-      klass = nil
-    end
-    @help = Class.new {
-      include klass unless klass.nil?
-      include ApplicationHelper
-    }.new
-    self
-  end
-  
+  include Squash::Ruby::ControllerMethods
+  enable_squash_client
+
+  layout 'application'
+
   def current_user
     cur_user = nil
-    if webauth and webauth.logged_in?
+    if webauth && webauth.logged_in?
       cur_user = User.find_or_create_by_webauth(webauth)
     elsif request.env['REMOTE_USER']
       cur_user = User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
@@ -51,13 +32,13 @@ class ApplicationController < ActionController::Base
       cur_user.set_groups_to_impersonate session[:groups]
     end
 
-    return cur_user
+    cur_user
   end
 
   def current_or_guest_user
     current_user
   end
-  
+
   def user_session
     session
   end
@@ -65,13 +46,14 @@ class ApplicationController < ActionController::Base
   def default_html_head
     stylesheet_links << ['argo']
   end
-  
+
   protected
+
   def munge_parameters
     case request.content_type
-    when 'application/xml','text/xml'
+    when 'application/xml', 'text/xml'
       help.merge_params(Hash.from_xml(request.body.read))
-    when 'application/json','text/json'
+    when 'application/json', 'text/json'
       help.merge_params(JSON.parse(request.body.read))
     end
   end
@@ -81,19 +63,30 @@ class ApplicationController < ActionController::Base
   end
 
   def development_only!
-    if Rails.env.development? or ENV['DOR_SERVICES_DEBUG_MODE']
+    if Rails.env.development? || ENV['DOR_SERVICES_DEBUG_MODE']
       yield
     else
       render :text => 'Not Found', :status => :not_found
     end
   end
-  
+
   def authorize!
     unless current_user
-      redirect_to "#{auth_login_url}?return=#{request.fullpath.sub(/reset_webauth=true&?/,'')}" 
+      render nothing: true, status: :unauthorized
       return false
     end
-    return true
+    true
+  end
+
+  ##
+  # A ported over Rails 5 enhancement to ActionPack
+  # @see https://github.com/rails/rails/commit/13fd5586cef628a71e0e2900820010742a911099
+  def redirect_back(fallback_location:, **args)
+    if (referer = request.headers['Referer'])
+      redirect_to referer, **args
+    else
+      redirect_to fallback_location, **args
+    end
   end
 
 end

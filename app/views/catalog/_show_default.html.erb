@@ -1,0 +1,7 @@
+<%
+  ensure_current_document_version if Settings.REINDEX_ON_FLY
+%>
+
+<div id="document-sections">
+  <%= render_document_sections(@document, :show) %>
+</div>

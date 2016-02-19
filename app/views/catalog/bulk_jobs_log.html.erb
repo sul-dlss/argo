@@ -1,0 +1,69 @@
+<div data-ajax-modal="container">
+    <div id="spreadsheet-log-container">
+	<div class="row">
+	    <div class="col-md-12 text-right">
+		<%= link_to('CSV', bulk_jobs_csv_path(@apo, @time)) %>
+	    </div>
+	</div>
+	<div class="row">
+	    <div id="spreadsheet-log-table-container" class="col-md-12">
+		<table id="spreadsheet-log-table" class="table">
+		    <% start_time =  @druid_log.select { |log_entry| log_entry.keys.first == 'argo.bulk_metadata.bulk_log_job_start' } %>
+		    <% if(start_time.length == 1) %>
+		        <caption>Job started at <%= start_time[0]['argo.bulk_metadata.bulk_log_job_start'] %></caption>
+		    <% end %>
+		    <thead>
+			<tr>
+			    <th>Item</th>
+			    <th>Outcome</th>
+			</tr>
+		    </thead>
+		    <tbody>
+			<% @druid_log.each do |log_entry| %>
+			    <% current_key = log_entry.keys.first %>
+			    <% if((current_key != 'argo.bulk_metadata.bulk_log_job_start') &&
+			          (current_key != 'argo.bulk_metadata.bulk_log_user') &&
+			          (current_key != 'argo.bulk_metadata.bulk_log_input_file') &&
+                                  (current_key != 'argo.bulk_metadata.bulk_log_xml_timestamp') &&
+			          (current_key != 'argo.bulk_metadata.bulk_log_xml_filename') &&
+			          (current_key != 'argo.bulk_metadata.bulk_log_xml_only')) %>
+			        <tr>
+				    <% if((current_key == 'argo.bulk_metadata.bulk_log_job_save_success') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_apo_fail') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_not_exist') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_record_count') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_error_exception') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_invalid_column') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_skipped_mods') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_skipped_accession') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_skipped_not_accessioned') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_record_count') ||
+				          (current_key == 'argo.bulk_metadata.bulk_log_unable_to_version')) %>
+			                <td>
+					    <% if(log_entry[current_key] != nil) %>
+					        <%= log_entry[current_key] %>
+					    <% end %>
+				        </td>
+    				        <td><%= I18n.t(current_key) %></td>
+                                    <% else %>
+				        <td><%= I18n.t(current_key) %></td>
+					<td>
+					    <% if(log_entry[current_key] != nil) %>
+					        <%= log_entry[current_key] %>
+					    <% end %>
+				        </td>
+				    <% end %>
+			        </tr>
+			    <% end %>
+			<% end %>
+		    </tbody>
+		</table>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="col-md-2">
+    		<button type="button" id="spreadsheet_cancel" class="btn btn-primary" data-dismiss="modal">Close</button>
+    	    </div>
+	</div>
+    </div>
+</div>

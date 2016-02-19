@@ -9,8 +9,9 @@ var gridContext = function() {
   };
 
   var statusFormatter = function(val, opts, rowObj) {
-    if (val in $t.statusImages) {
-      var result = '<image src="'+$t.statusImages[val]+'" title="'+(rowObj.error||val)+'"/>';
+    if (val in $t.statusIcons) {
+      var result = '<span class="' + $t.statusIcons[val] + '" title="' + 
+        (rowObj.error||val)+'" aria-hidden="true"></span>';
       if (rowObj.druid) {
         var href = dor_path + "objects/druid:" + rowObj.druid;
         return '<a href="'+href+'" target="_blank">'+result+'</a>';
@@ -58,7 +59,7 @@ var gridContext = function() {
 
   var $t = {
     rc: createRegistrationContext(),
-    statusImages: {},
+    statusIcons: {},
 
     processValue: function(cellname, value) {
       // Strip leading and trailing punctuation from everything but label
@@ -78,7 +79,7 @@ var gridContext = function() {
       $('#tabs').height(tabDivHeight);
       var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
       $('#id_list').height(tabDivHeight - tabHeadHeight);
-      $('#data').setGridWidth($('#container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100 + $('#properties').outerHeight()));
+      $('#data').setGridWidth($('#main-container').width(),true).setGridHeight($(window).attr('innerHeight') - ($('#header').outerHeight() + 100 + $('#properties').outerHeight()));
       // Make up for width calculation error in jqgrid header code.
       $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
       if ($('#id_list').css('display') != 'none') {
@@ -210,17 +211,14 @@ var gridContext = function() {
     },
 
     initializeContext: function() {
-      $t.statusImages = {
-        queued:  pathTo('/assets/icons/queued.png'),
-        pending: pathTo('/assets/icons/spinner.gif'),
-        success: pathTo('/assets/icons/accept.png'),
-        error:   pathTo('/assets/icons/exclamation.png'),
-        abort:   pathTo('/assets/icons/cancel.png'),
-        preloadImages: function() {
-          $([this.queued, this.pending, this.success, this.error, this.abort]).preload();
-        }
-      }
-      this.statusImages.preloadImages();
+      $t.statusIcons = {
+        queued:  'registration-status glyphicon glyphicon-forward',
+        pending: 'registration-status glyphicon glyphicon-refresh ' +
+          'glyphicon-spin',
+        success: 'registration-status glyphicon glyphicon-ok-sign',
+        error:   'registration-status glyphicon glyphicon-exclamation-sign',
+        abort: 'registration-status glyphicon glyphicon-remove-sign'
+      };
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
         $t.resizeGrid();
@@ -280,7 +278,7 @@ var gridContext = function() {
           {label:'Metadata ID',name:'metadata_id',index:'metadata_id',width:150,editable:true,formatter:metadataIdFormatter},
           {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true,formatter:sourceIdFormatter},
           {label:'DRUID',name:'druid',index:'druid',width:150,editable:true,formatter:druidFormatter},
-          {label:'Label',name:'label',index:'label', width:($('#content').width() - 468),editable:true,formatter:labelFormatter },
+          {label:'Label',name:'label',index:'label', width:($('#dynamic').width() - 468),editable:true,formatter:labelFormatter },
           {label:'Error',name:'error',index:'error',hidden:true}
         ],
         hidegrid: false,
@@ -293,6 +291,7 @@ var gridContext = function() {
           return $t.processValue(cellname, value);
         }
       });
+      $('#gbox_data').addClass('col-md-12');
       $(window).trigger('resize')
       $('#t_data').html('<div id="icons"/>')
       $('#properties').show().insertBefore($('#dynamic .ui-userdata'))
@@ -429,9 +428,9 @@ var gridContext = function() {
       $('#object_type').change(function(evt) {
         var sender = evt.target
         var valid_controls = {
-          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3", "tag_4", "collection"],
-          'set'        : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
-          'collection' : ["object_type", "apo_id", "rights", "id_source", "mdform_id", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
+          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3", "tag_4", "collection"],
+          'set'        : ["object_type", "apo_id", "rights", "id_source", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
+          'collection' : ["object_type", "apo_id", "rights", "id_source", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3"],
           'adminPolicy': ["object_type", "registered_by"],
           'workflow'   : ["object_type", "registered_by"]
         }
@@ -525,19 +524,6 @@ var gridContext = function() {
           }
         })
 
-        $.ajax({
-          type: 'GET',
-          url: pathTo('/registration/form_list'),
-          dataType: 'json',
-          data: { apo_id: $('#apo_id').val() },
-          success: function(response,status,xhr) {
-            if (response) {
-              var optionsHtml = '<option value="">None</option>'
-              optionsHtml += response.map(function(v) { return '<option value="'+v[0]+'">'+v[1]+'</option>' }).join('');
-              $('#mdform_id').html(optionsHtml);
-            }
-          }
-        })
       });
 
       $('#specify').dialog({
@@ -577,14 +563,14 @@ var gridContext = function() {
           "Cancel": function() { $(this).dialog("close"); }
         },
         modal: true,
-        height: 140,
+        height: 200,
         title: 'Confirm',
         resizable: false
       });
 
       $('#progress_dialog').dialog({
         autoOpen: false,
-        height: 56,
+        height: 140,
         title: 'Progress',
         resizable: false
       });

@@ -1,19 +1,15 @@
 class ModsDisplayObject
   include ModsDisplay::ModelExtension
-  
-  def initialize xml
-    @xml=xml
+
+  attr_reader :xml
+
+  def initialize(xml)
+    @xml = xml
   end
 
-  def xml
-    @xml
-  end
   def modsxml
     @xml
   end
-  
-  mods_xml_source do |obj|
-    puts obj.xml
-      obj.xml
-  end
+
+  mods_xml_source(&:xml)
 end

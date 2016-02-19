@@ -1,32 +1,7 @@
 class DorController < ApplicationController
-  around_filter :development_only!, :only => :configuration
-  before_filter :authorize!
+  before_action :authorize!
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
-
-  
-  def index_logger
-    @@index_logger ||= Logger.new("#{Rails.root}/log/indexer.log", 10, 3240000)
-    @@index_logger.formatter = proc do |severity, datetime, progname, msg|
-      date_format_str = Argo::Config.date_format_str
-      "[#{request.uuid}] [#{datetime.strftime(date_format_str)}] #{msg}\n"
-    end
-    @@index_logger
-  end
-
-  def configuration
-    result = Dor::Config.to_hash.merge({
-      :environment => Rails.env, 
-      :webauth => { 
-        :authrule => webauth.authrule,
-        :logged_in => webauth.logged_in?,
-        :login => webauth.login,
-        :attributes => webauth.attributes,
-        :privgroup => webauth.privgroup
-      }
-    })
-    respond_with(result)
-  end
 
   def query_by_id
     unless params[:id]
@@ -49,20 +24,25 @@ class DorController < ApplicationController
   end
 
   def reindex
-    begin
-      obj = Dor.load_instance params[:pid]
-      solr_doc = obj.to_solr
-      Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000}) unless obj.nil?
-      index_logger.info "updated index for #{params[:pid]}"
-      render :text => 'Status:ok<br> Solr Document: '+solr_doc.inspect
-    rescue ActiveFedora::ObjectNotFoundError => e
-      index_logger.info "failed to update index for #{params[:pid]}, object not found in Fedora"
-      render :status=> 500, :text =>'Object doesnt exist in Fedora.'
+    @solr_doc = Argo::Indexer.reindex_pid params[:pid], Argo::Indexer.generate_index_logger { request.uuid }
+    Dor::SearchService.solr.commit # reindex_pid doesn't commit, but callers of this method may expect the update to be committed immediately
+    flash[:notice] = "Successfully updated index for #{params[:pid]}"
+    unless request.headers['Referer']
+      render status: 200, text: flash[:notice]
       return
-    rescue StandardError => se
-      index_logger.error "failed to update index for #{params[:pid]}, unexpected error, see main app log"
-      raise se
     end
+    redirect_back(
+      fallback_location: proc { catalog_path(params[:pid])}
+    )
+  rescue ActiveFedora::ObjectNotFoundError
+    flash[:error] = 'Object does not exist in Fedora.'
+    unless request.headers['Referer']
+      render status: 404, text: flash[:error]
+      return
+    end
+    redirect_back(
+      fallback_location: proc { catalog_path(params[:pid])}
+    )
   end
 
   def delete_from_index
@@ -74,6 +54,6 @@ class DorController < ApplicationController
   def republish
     obj = Dor::Item.find(params[:pid])
     obj.publish_metadata_remotely
-    render :text => 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
+    redirect_to catalog_path(params[:pid]), notice: 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
   end
 end

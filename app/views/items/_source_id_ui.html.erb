@@ -1,0 +1,9 @@
+<%= form_tag url_for(controller: :items, action: :source_id, id: @object.pid) do %>
+  <div class="form-group">
+    <input class="form-control" name="new_id" id="new_id" type="text" value="<%= @object.identityMetadata.sourceId %>"/>
+    <p class='help-block'>
+      <em>entries should be of the form</em> source:value
+    </p>
+  </div>
+  <button class="btn btn-primary">Update</button>
+<% end %>

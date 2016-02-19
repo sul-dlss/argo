@@ -1,0 +1,12 @@
+<% document ||= @document %>
+
+<% if document.embargoed? && document.embargo_release_date.present? %>
+  <div class='panel panel-warning embargo-panel'>
+    <div class='panel-heading'>
+      <h3 class='panel-title'>Embargo</h3>
+    </div>
+    <div class='panel-body'>
+      This item is embargoed until <%= Time.parse(document.embargo_release_date).strftime('%Y.%m.%d') %>
+    </div>
+  </div>
+<% end %>

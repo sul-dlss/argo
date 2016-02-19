@@ -1,0 +1,27 @@
+<div class="container"><%# Need additional container here %>
+  <div class="row">
+    Workspace:
+  <% if @available_in_workspace %>
+    <%= link_to params[:file], "/items/#{params[:id]}/file/?file=#{params[:file]}" -%>
+  <% else %>
+    not available <span class="text-danger"><%= @available_in_workspace_error -%></span>
+  <% end %>
+  </div>
+
+<%# TODO: Use the contentMetadata OM for parsing metadata record %>
+<% @object.contentMetadata.ng_xml.search("//file[@id='#{params[:file]}']").each do |file| %>
+<%   if file['shelve'] == 'yes' %>
+      <div class="row">
+        Stacks:
+        <%= link_to params[:file], stacks_url_full_size(@object, params[:file]) -%>
+      </div>
+<%   end %>
+<%# TODO: has_been_accessioned? is deprecated, migrate to async call %>
+<%   if file['preserve'] == 'yes' && has_been_accessioned?(@object.pid) %>
+      <div class="row">
+        Preservation:
+        <%= link_to params[:file], url_for(:controller => :items, :action => :get_preserved_file, :id => params[:id], :file => params[:file], :version => last_accessioned_version(@object)) -%>
+      </div>
+<%   end %>
+<% end %>
+</div>

@@ -1,0 +1,606 @@
+<?xml version="1.0"?>
+<xmlDocs xmlns="http://library.stanford.edu/xmlDocs" datetime="2015-04-24 04:24:18PM" sourceFile="crowdsourcing_bridget_1.xlsx">
+  <xmlDoc id="descMetadata" objectId="wm622gf4218">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of a Glossarium</title>
+        <partNumber>Box 1, Folder 10</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Eastern France or Germany</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">early in the second half of the 9th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">Partial parchment bifolium, arranged in three columns per page. Ruled in dry point. Pricking on outer column of each leaf. Folds and excisions indicate later use in a binding.</note>
+      </physicalDescription>
+      <abstract>Carolingian glossary of Latin words with their variant definitions and uses. Likely from either the Glossarium Ansileubi or Librum Glossarum. Arrangement is alphabetical. Sources cited in the margins make references to classical authors, including Cicero, Virgil, and Isidore. Contents of this description initially drawn from bookseller's description and augmentedy by undergraduate and graduate student research done in Stanford paleography and codicology courses from the 1970s-present. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Early Carolingian miniscule.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="sc860xt5920">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of a Carolingian compilation on the Psalms</title>
+        <partNumber>Box 1, Folder 11, Item 1</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">France, probably north of the Loire</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">10th-11th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">1 leaf: 330 mm x 262 mm. Writing box: 260mm x 204mm. Two columns of 34 lines each, columns 15mm apart. Ruling with a hard point, four single vertical bounding lines in center column, double vertical bounding lines on margin. Prickings clearly visible 14 mm from outer edge.</note>
+      </physicalDescription>
+      <abstract>This leaf is one of two Stanford-owned leaves originating from the same dispersed book. The texts on the two leaves appear to have been compiled as prefatory matter, either before a commentary or preceding a Psalter. They include a hitherto unrecorded commentary on the Psalms, apparently of Carolingian authorship, and an early appearance of a prologue attributed to Bede, or pesudo-Bede. This leaf contains 4 sequential texts. Text 1 begins (mid-word) "-brius succidatur. Unde consueta" and ends "de purissimo fonte potare" : identified as part of Jerome's preface to the 'Hebrew Psalter,' Patrologia Latina 29, cols 118-120. Text 2 begins "Dum multa corpora liborum" and ends "per bonefacium presbiterum heirosolima": identified as Letter 5 of Pseudo-Damasus to Jerome, Patrologia Latina 13, col. 440. Text 3 begins "Beatissimo pape damaso sedix apostolicae hieronomus simplex. Legi litteras" and ends (on verso) "laudis semper canatur": identified as Ep. XLVII, Letter of Pseudo-Jerome to Pope Damasus, Patrologia Latina, 30 cols. 294-5. Text 4 begins on the first leaf with "David filius iesse cum esset in regno suo." The text is from a commentary on the pslams and continues on the second leaf but the text is non-continuous."  See also M0389. Box 1, Folder 02, Item 2. Contents of this abstract drawn from accompanying dealer's notes and related correspondance.</abstract>
+      <note displayLabel="Hand Note">The script is a slightly sloping caroline minuscule, with uncial headings for the letters and a rustic captial heading for the prologue. Abbreviations are limited and standard. Corrections are generally neat interlinear insertions with the word to be corrected indicated by a line of dots placed under it.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="xc968pw6268">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of a Carolingian compilation on the Psalms</title>
+        <partNumber>Box 1, Folder 11, Item 2</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">France, probably north of the Loire</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">10th-11th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">1 leaf: originally 330 mm x 262 mm. Writing box: 260 mm x 204 mm. This leaf has been cut down irregularly to approximately 180 mm wide. Two columns of 34 lines each, columns 15mm apart. Ruling with a hard point, four single vertical bounding lines in center column, double vertical bounding lines on margin. Prickings clearly visible 14 mm from outer edge.</note>
+      </physicalDescription>
+      <abstract>This leaf is one of two Stanford-owned leaves originating from the same dispersed book. The texts on the two leaves appear to have been compiled as prefatory matter, either before a commentary or preceding a Psalter. They include a hitherto unrecorded commentary on the Psalms, apparently of Carolingian authorship, and an early appearance of a prologue attributed to Bede, or pesudo-Bede. This leaf contains part of a commentary on the psalms, which begins as text 4 on the first in this folder. The text begins "delectatio terrore iuxta conpugeretur" and ends "Quid utique inpossible est ut quis."  This commentary is included in Bede's Dubia et Spuria, Patrologia Latina 93, cols. 477-80. It was  See also M0389. Box 1, Folder 02, Item 1. Contents of this abstract drawn from accompanying dealer's notes and related correspondance.</abstract>
+      <note displayLabel="Hand Note">The script is a slightly sloping caroline minuscule, with uncial headings for the letters and a rustic captial heading for the prologue. Abbreviations are limited and standard. Corrections are generally neat interlinear insertions with the word to be corrected indicated by a line of dots placed under it.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="vp031sb9866">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from a monastic diurnal antiphonary</title>
+        <partNumber>Box 1, Folder 12</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Germany</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">second half of the 10th or first half of the 11th c.</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">1 bifolium leaf of parchment measuring 300 mm x 215 mm. Text is written in a single column of 24 written lines. Ruling is with dry point done on the hair side.First line of text written above the top ruling line. No prickings are visible. Membrane is quite thin in places, some holes</note>
+      </physicalDescription>
+      <abstract>Contains chants and readings for the celebration of the day hours of the Office, starting with the end of Dec 27 through the middle of December 28th (Offices for the Holy Innocents). Possibly from a collectar. The second folio contains chant and readings for December 30 and December 31 (feast of St. Silvester). Antiphons, short responsories, and a single hymn are present. Music was added after the words. The notation is a Germanic variant of the unheighted St. Gall neumatic system. Contents of this description drawn from student research done in Stanford paleography and codicology courses. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Continental caroline minuscule of two sizes. Litterae notabiliores are in uncial.</note>
+      <note displayLabel="Deco Note">Orange decorative initials begin each prayer or scripture reading. Rubrics of the same color indicate the beginning of each hour of the Office.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="qz375sq9900">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of Liturgy, Ottonian sacramentary</title>
+        <partNumber>Box 1, Folder 13</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Germany</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">first half of the 11th c.</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">Bifolium comprising one complete leaf and most of the second.</note>
+      </physicalDescription>
+      <abstract>Bifolium comprising one complete leaf and most of the second. Temporal, readings for Quadragesima Sunday. Missal, Votive Masses for Priest(s).</abstract>
+      <note displayLabel="Hand Note">Late Carolingian minuscule.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="kh686yw0435">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from a Beneventan Psalter</title>
+        <partNumber>Box 1, Folder 14</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Southern Italy</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">late 11th c. or early 12th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">Bifolium of parchment measuring 295 mm x 210 mm. Single column of 18 lines. Ruling in dry point on the hair side. Double bounding lines for each column. Cut down from original size for use in a later binding. Hair follicles vixible. Margins and one line of text have been lost as a result of trimming, as well as any prickings or quire marks. Walter damage and plentiful wormholes apparent along left side of the recto. Fragment likely used as endleaf in a later book.</note>
+      </physicalDescription>
+      <abstract>Fragment from a Beneventan psalter, containing most of Psalm 36: verses 1-29. For an early printed edition of this text in its relation to other versions of the psalter, see Jacques Lefevre d'Etaples's Quincuplex Psalterium, 1513. Contents of this description drawn from student research done in Stanford paleography and codicology courses. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Large Beneventan script. Initials show elements of uncial and rustic captial letter forms.</note>
+      <note displayLabel="Deco Note">Psalm begins with an initial drawn in pen with interlaced design, partially colored in red and yellow. Versals are set in the left margin and written in red, filled with yellow.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="xx784tk1987">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from St. Augustine's" Tractus in Iohannem"</title>
+        <partNumber>Box 1, Folder 15</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Central Italy</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">first half of the 12th c. Possibly c. 1130</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">Single parchment leaf measuring 42.5 cm x 30 cm. Two columns of 44 lines each. Ruling in dry point. Prickings appear in right margin of recto.</note>
+      </physicalDescription>
+      <abstract>Fragment of St. Augustine's "Tractatus in Johannem," including tracts 49.27 to 50.6 in the modern numbering. This manuscript numbers the same tracts as the end of tract 50 through beginning of 51. See Corpus Christianorum Series Latina XXXVI, pp. 432-35. Contents of this description drawn from student research done in Stanford paleography and codicology courses. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Roman minuscule (derived from Carolingian minuscule) of two sizes. Moderate amount of standard abbreviation.</note>
+      <note displayLabel="Deco Note">White-vine 'H' in red, yellow, green, brown, and blue at the beginning of tract 51. This style of full-shafted initials is peculiar to central Italy, and was standard, especially with use of red and and yellow fillets, in the second quarter of the twelfth century. 3.4cm red 'I' in column b on verso, marking a division of the text.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="cr248fh1273">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of a Grammar of the Latin language</title>
+        <partNumber>Box 1, Folder 16</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England?</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">mid-12th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">1 bifolium.</note>
+      </physicalDescription>
+      <abstract>Bifolium. One of two Stanford-owned bifolia originating from the same dispersed book. Contains discussion of grammatical phenomena including inchoative verbs, supines, and gerundives. Forms of amo are especially represented, but other verbs too are discussed.  See also, M0389. Box 1, Folder 07, Item 2.</abstract>
+      <note displayLabel="Hand Note">Late Carolingian hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="df438vg0115">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of a Grammar of the Latin language</title>
+        <partNumber>Box 1, Folder 17</partNumber>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England?</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">mid-12th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">1 bifolium.</note>
+      </physicalDescription>
+      <abstract>Bifolium. One of two Stanford-owned bifolia originating from the same dispersed book. Contains discussion of grammatical phenomena including inchoative verbs, supines, and gerundives. Forms of amo are especially represented, but other verbs too are discussed.  See also, M0389. Box 1, Folder 07, Item 1.</abstract>
+      <note displayLabel="Hand Note">Late Carolingian hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="jz358zs5073">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of Church music, secular antiphoner</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Central Italy</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">12th c.</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">1 single folio.</note>
+      </physicalDescription>
+      <abstract>Leaf. From the Office of Matins for the feast of the Conversion of St. Paul (25 January).</abstract>
+      <note displayLabel="Hand Note">Late Carolingian hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="dq857ns4054">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from a Bible</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">first half of the 13th c.</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">Bible text is written in a single column of 27 lines with two columns of marginal and interlinear gloss.</note>
+      </physicalDescription>
+      <abstract>Isaiah, ch. 33, 23-35. One chapter has commentary from the Glossa Ordinaria. Bible text is written in a single column of 27 lines with two columns of marginal and interlinear gloss.</abstract>
+      <note displayLabel="Hand Note">Angular gothic hand in three sizes.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="vc534gk4207">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of Church music, secular breviary</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Central or nothern France</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">mid- to late-13th c.</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">1 parchment folio measuring 24.3 cm x 17 cm. Text is written in two columns. Any pricking has been lost by trimming. A thin strip of modern material runs along the inner edge of the verso.</note>
+      </physicalDescription>
+      <abstract>Fragment from a secular breviary marking the feast day of St. John the Evangelist (December 27) with office text and noted music. Music notation on 4-line staves. Contents of this description drawn from student research done in Stanford paleography and codicology courses. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Small Gothic script with frequent abbreviations</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="ty629qm9142">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from Latin translation of Aristotle's Physical with commentary by Averroes</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">second half of the 13th c.</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">1 leaf.</note>
+      </physicalDescription>
+      <abstract>Leaf. One of two Stanford-owned leaves originating from the same dispersed book. Contains Aristotle's work in Latin translation accompanied by commentary by Averroes. Fol. 1 includes text of Physics 1.5 with commentary. Likely from a scholastic textbook.  See also, M0389. Box 1, Folder 11, Item 2. Contents of this description drawn from student research done in Stanford paleography and codicology courses. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Gothic bookhand. Side-notes in a cursive 14th-c. hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="hf970tz9706">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from Latin translation of Aristotle's Physical with commentary by Averroes</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">second half of the 13th c.</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">1 leaf.</note>
+      </physicalDescription>
+      <abstract>Leaf. One of two Stanford-owned leaves originating from the same dispersed book. Contains Aristotle's work in Latin translation with commentary by Averroes. Fol. 2 includes text of Physics 2.1 with commentary. Likely from a scholastic textbook.  See also, M0389. Box 1, Folder 11, Item 1. Contents of this abstract enriched by student research done in Stanford paleography and codicology courses. Student transcriptions available upon request.</abstract>
+      <note displayLabel="Hand Note">Gothic bookhand. Side-notes in a cursive 14th-c. hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="yh511rb2522">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from a Latin Bible</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Southwestern (?) France</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">ca. 1300</dateCreated>
+      </originInfo>
+      <physicalDescription>
+        <note displayLabel="Note">3 columns written in brown ink.</note>
+      </physicalDescription>
+      <abstract>Fragment of Interpretations of Hebrew Names. 3 columns written in brown ink.</abstract>
+      <note displayLabel="Hand Note">Rounded Gothic bookhand.</note>
+      <note displayLabel="Deco Note">Part of the letter J.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="mg396bb4703">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of a theological work</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Italy</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">first half of the 14th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <abstract>Perhaps a commentary. Discusses 1 Peter 5:6, on humility.</abstract>
+      <note displayLabel="Hand Note">Cursive, highly tachygraphic personal hand in brown ink.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="gv658bn6323">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Venetian Guild of Rag Merchants Inventory</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Venice</placeTerm>
+        </place>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Italian</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">Single leaf on parchment. Fold marks and excisions indicate this leaf's use in bookbinding.</note>
+      </physicalDescription>
+      <abstract>Leaf containing what appears to be an inventory of the Venetian Guild of Rag Merchants. Contents of this description drawn from student research done in Stanford paleography and codicology courses. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Square Italian bookhand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="zp222bp8388">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment from Guillaume de Peraldo, "Tractus de professione monachorum"</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">Germany or the Netherlands</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">mid-15th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">1 non-consecutive bifolium of parchment. Fol. 1 measures 19.5 mm x 15.3 mm. Fol. 2 measures 19.3 mm x 14.7 mm -- MM?! REALLY?! 1 Column of 31 lines. Ruling in plummet. Seven sewing holes along center fold.</note>
+      </physicalDescription>
+      <abstract>Fragment from Tractatus de Professione Monachorum, by Guillaume de Peraldo (or Perault), a manual on the proper behavior of monks, using classical and biblical references to demonstrate proper conduct. Contents of this description drawn from student research done in Stanford paleography and codicology courses. Student transcriptions and research papers are available upon request.</abstract>
+      <note displayLabel="Hand Note">Gothic bookhand. Numerous manicula throughout both folios and a few marginal annotations.</note>
+      <note displayLabel="Deco Note">Rubrication of some captials and the first letter of new paragraphs. 10-line rubricated 'S' on fol. 1r.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="yg312vf4900">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of a Latin poem</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">second half of the 15th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">Partial leaf.</note>
+      </physicalDescription>
+      <abstract>Partial leaf. Contains elegiac verses about nature and the fates.</abstract>
+      <note displayLabel="Hand Note">Secretary hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+  <xmlDoc id="descMetadata" objectId="pf471js7858">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>Fragment of commentary on First Corinthians</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Medieval manuscript fragments, ca. 850-1499</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">second half of the 15th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">1 leaf.</note>
+      </physicalDescription>
+      <abstract>Leaf. Text includes an account of an adulterer named Aldhelm, who lived in Leicestershire about 1450.</abstract>
+      <note displayLabel="Hand Note">Secretary hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
+</xmlDocs>

@@ -1,13 +1,14 @@
 
 <h3>Welcome to Argo!</h3>
-<%
-	user=current_user
- if user.permitted_apos.length>0 or user.is_admin or user.is_manager or user.is_viewer%>
-<p>Enter one or more search terms or select a facet on the left to begin.</p>
-<%else%>
-<p>You dont appear to have permission to view any items in Argo. Please contact an administrator.</p>
-<%end%>
+<% if current_user.can_view_something? %>
+  <p>
+    Enter one or more search terms or select a facet on the left to begin.
+  </p>
+<% else %>
+  <p>
+    You do not appear to have permission to view any items in Argo. Please contact an administrator.
+  </p>
+<% end %>
 <img src="https://sulstats.stanford.edu/render/?width=400&height=300&from=-3months&target=stats.sdr.preservation.terabytes&lineMode=connected&title=SDR%20Preserved%20Terabytes&hideLegend=true" alt="sdr preserved terabytes graph"/>
 
 <img src="https://sulstats.stanford.edu/render/?width=400&height=300&from=-3months&lineMode=connected&title=SDR%20Preserved%20Objects&hideLegend=true&logBase=0&target=stats.sdr.preservation.objects" alt="sdr preserved objects graph"/>
-

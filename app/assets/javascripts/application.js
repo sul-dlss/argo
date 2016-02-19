@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
 //
 // Required by Blacklight
 //= require blacklight/blacklight
@@ -22,8 +21,10 @@
 //
 // Required by Argo
 //= require argo
-//= require lightbox
-//= require grid.locale-en
-//= require jquery.jqGrid.min
+//= require spreadsheet
+//= require jquery-ui
 //= require jquery.validate
 //= require jquery.validate.additional-methods
+//= require jqgrid-jquery-rails
+//= require jquery.persistentModal
+//= require_directory ./modules

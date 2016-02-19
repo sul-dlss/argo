@@ -1,16 +1,28 @@
-<%if current_user.is_admin 
-	%>Current groups<br><%
- current_user.groups.each do |group| 
-	%>
-	<div><%= group%></div>
-	<%
-	end	
-	%>
-	<br>
-	Enter a group or a comma separated list of groups to impersonate<br>
-	<%= form_tag('/auth/remember_impersonated_groups') do%>
-	<%= text_field_tag(:groups) %>
-	  <%= submit_tag("Impersonate") %>
-	<%end%>
-	<%end%>
-	
+<div class='auth-groups well'>
+  <% if current_user.is_admin %>
+    <div class='panel panel-info'>
+      <div class='panel-heading'>
+        <h3 class='panel-title'>Your Current Groups</h3>
+      </div>
+      <div class='panel-body'>
+        <ul class='list-unstyled'>
+          <% current_user.groups.each do |group| %>
+            <li>
+              <%= group %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <%= form_tag(auth_remember_impersonated_groups_path) do %>
+        <div class='form-group'>
+          <%= label_tag :groups, 'Enter a group or a comma separated list of groups to impersonate' %>
+          <%= text_field_tag :groups, nil, class: 'form-control' %>
+        </div>
+        <%= submit_tag 'Impersonate', class: 'btn btn-primary btn-lg btn-block' %>
+        <%= link_to 'Cancel', :back, class:'btn btn btn-default btn-lg btn-block' %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

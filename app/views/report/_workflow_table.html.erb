@@ -1,26 +1,28 @@
 <h2>Workflow: <%= render_workflow_name(wf_name) %></h2>
-<table border="1" cellspacing="0" cellpadding="3">
+<table class='table table-striped table-hover table-condensed workflow-grid-table'>
   <tbody>
-    <tr bgcolor="#990000">
+    <tr>
       <th class="process" colspan="2">Process</th>
       <th class="description">Description</th>
-      <th class="count waiting">Waiting</th>
-      <th class="count hold">Hold</th>
-      <th class="count ready">Ready</th>
-      <th class="count queued">Queued</th>
-      <th class="count errors">Error</th>
-      <th class="count skipped">Skipped</th>
-      <th class="count completed">Completed</th>
+      <th class="count waiting info">Waiting</th>
+      <th class="count hold info">Hold</th>
+      <th class="count ready warning">Ready</th>
+      <th class="count queued warning">Queued</th>
+      <th class="count errors danger">Error</th>
+      <th class="count skipped success">Skipped</th>
+      <th class="count completed success">Completed</th>
     </tr>
     <% 
 
     %>
-<%= render :partial => 'workflow_table_process', :collection => proc_names_for_wf(wf_name, wf_data).to_a, :as => :process_info, :locals => { :wf_data => wf_data, :wf_name => wf_name } -%>
-    <tr>
-      <td class="totals">&nbsp;</td>
-      <td class="totals" colspan="4">&nbsp;</td>
-      <td class="totals" colspan="3">Completed/archived workflows</td>
-      <td class="totals"><%= render_workflow_archive_count('dor',wf_name) %></td>
-    </tr>
+    <%=
+      render(
+        partial: 'workflow_table_process',
+        collection: proc_names_for_wf(wf_name, wf_data).to_a,
+        as: :process_info,
+        locals: { wf_data: wf_data, wf_name: wf_name }
+      )
+    %>
   </tbody>
 </table>
+<hr>

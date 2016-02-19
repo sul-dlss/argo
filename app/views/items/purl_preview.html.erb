@@ -1,7 +1,4 @@
-<div id="mods_view">
-  <h3>
-	  <%=render_mods_display(@mods_display).title.first.html_safe%>
-  </h3>	
-  
-<%=render_mods_display(@mods_display).body.html_safe%>
+<div class='container'>
+  <h1><%= render_mods_display(@mods_display).title.first.html_safe %></h1>
+  <%= render partial: 'purl_preview' %>
 </div>

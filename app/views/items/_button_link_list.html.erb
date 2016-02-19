@@ -1,11 +1,17 @@
-<%buttons.each do |button|%>
-	<%if button[:new_page]%>
-	<li><a class="button" href="<%=button[:url]%>" ><%=button[:label]%></a></li>
-	<%else%>
-	<%if button[:confirm]%>
-		<li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
-	<%else%>
-		<li><%= link_to button[:label], button[:url], :class => "smallDialogLink button", :confirm => button[:confirm]%></li>
-	<%end%>
-	<%end%>
-<%end%>
+<div class='btn-group-vertical argo-show-btn-group' role='group' aria-label='Argo action buttons'>
+  <%buttons.each do |button|%>
+    <%
+      button_data = {}
+      if button[:confirm]
+        # :confirm trumps :ajax_modal, because :ajax_modal would negate :confirm by firing the ajax request regardless of the user's decision
+        button_data[:confirm] = button[:confirm]
+      elsif !button[:new_page]
+        button_data[:ajax_modal] = 'trigger'
+      end
+      if button[:check_url]
+        button_data[:check_url] = button[:check_url]
+      end
+    %>
+    <%= link_to button[:label], button[:url], class: "btn button btn-primary #{'disabled' if button[:check_url]}", data: button_data %>
+  <%end%>
+</div>

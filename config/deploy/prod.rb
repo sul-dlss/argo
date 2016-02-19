@@ -1,4 +1,6 @@
-server 'argo-prod.stanford.edu', user: 'lyberadmin', roles: %w{web db app}
+server 'argo-prod.stanford.edu', user: 'lyberadmin', roles: %w(web db app)
 
 Capistrano::OneTimeKey.generate_one_time_key!
-set :rails_env, "production"
+set :rails_env, 'production'
+
+set :delayed_job_workers, 16

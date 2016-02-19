@@ -1,61 +1,67 @@
+require 'fileutils'
+require 'rest-client'
+
 class ApoController < ApplicationController
 
-  before_filter :create_obj, :except => [:register, :is_valid_role_list_endpoint]
-  after_filter :save_and_index, :only => [:delete_collection, :delete_collection, :add_collection, :update_title, :update_creative_commons, :update_use, :update_copyright, :update_default_object_rights, :add_roleplayer, :update_desc_metadata, :delete_role, :register_collection]
+  before_action :create_obj, :except => [
+    :is_valid_role_list_endpoint,
+    :register,
+    :spreadsheet_template
+  ]
+  after_action :save_and_index, :only => [
+    :add_roleplayer,
+    :add_collection, :delete_collection,
+    :update_copyright, :update_creative_commons,
+    :update_default_object_rights, :update_desc_metadata,
+    :update_title, :update_use,
+    :delete_role,
+    :register_collection
+  ]
 
-  DEFAULT_MANAGER_WORKGROUPS = ['sdr:developer', 'sdr:service-manager', 'sdr:metadata-staff']
+  DEFAULT_MANAGER_WORKGROUPS = %w(sdr:developer sdr:service-manager sdr:metadata-staff).freeze
 
-  @@cc = {
-    'by' => 'Attribution 3.0 Unported',
-    'by_sa' => 'Attribution Share Alike 3.0 Unported',      # this has got to be wrong when everything else is hyphenated!
-    'by-nd' => 'Attribution No Derivatives 3.0 Unported',
-    'by-nc' => 'Attribution Non-Commercial 3.0 Unported',
-    'by-nc-sa' => 'Attribution Non-Commercial Share Alike 3.0 Unported',
-    'by-nc-nd' => 'Attribution Non-commercial, No Derivatives 3.0 Unported',
-  }
-
-  def is_valid_role_name role_name
-    return /^[\w-]+:[\w-]+$/.match(role_name) != nil
+  # @param [String] role_name
+  # @return [Boolean] true if name is valid
+  def is_valid_role_name(role_name)
+    !/^[\w-]+:[\w-]+$/.match(role_name).nil?
   end
 
-  def is_valid_role_list role_list
-    # look for an invalid role name, return true if we don't find one
-    return role_list.find { |role_name| !is_valid_role_name(role_name) } == nil
+  # @param [Array[String]] role_list
+  # @return [Boolean] true if we don't find an invalid role name
+  def is_valid_role_list(role_list)
+    role_list.find { |role_name| !is_valid_role_name(role_name) }.nil?
   end
 
   def is_valid_role_list_endpoint
-    # this should only get one of the params at a time
+    # Only checks the first found relevant param
     role_list_str = params[:managers] || params[:viewers] || params[:role_list] || nil
-    if !role_list_str
-      ret_val = false
-    else
-      ret_val = is_valid_role_list(split_roleplayer_input_field(role_list_str))
-    end
+    ret_val = if !role_list_str
+                false
+              else
+                is_valid_role_list(split_roleplayer_input_field(role_list_str))
+              end
 
     respond_to do |format|
-      format.json {
+      format.json do
         render :json => ret_val
-      }
+      end
     end
   end
 
-  def get_input_params_errors input_params
-    # assume no errors yet
-    err_list = []
+  def get_input_params_errors(input_params)
+    err_list = [] # assume no errors yet
 
     # error if title is empty
-    if input_params[:title].strip.length == 0
-      err_list.push(:title)
-    end
+    err_list.push(:title) if input_params[:title].strip.length == 0
 
     # error if managers or viewers role list is invalid
     [:managers, :viewers].each do |roleplayer_list|
-      if !is_valid_role_list(split_roleplayer_input_field(input_params[roleplayer_list]))
+      unless is_valid_role_list(split_roleplayer_input_field(input_params[roleplayer_list]))
         err_list.push(roleplayer_list)
       end
     end
 
-    return err_list
+    err_list
   end
 
   def register
@@ -64,7 +70,7 @@ class ApoController < ApplicationController
     if params[:title]
       input_params_errors = get_input_params_errors params
       if input_params_errors.length > 0
-        render :status=> :bad_request, :json => { :errors => input_params_errors }
+        render :status => :bad_request, :json => { :errors => input_params_errors }
         return
       end
 
@@ -74,145 +80,152 @@ class ApoController < ApplicationController
       end
     elsif params[:id]
       create_obj
-      @managers=[]
-      @viewers=[]
+      @managers = []
+      @viewers  = []
       populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
       populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
       @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
+      render :layout => 'blacklight'
+    else
+      render :layout => 'blacklight'
     end
   end
 
-  def set_apo_metadata apo, md_info
-    apo.copyright_statement = md_info[:copyright] if md_info[:copyright] && md_info[:copyright].length > 0
-    apo.use_statement = md_info[:use] if md_info[:use] && md_info[:use].length > 0
-    apo.mods_title = md_info[:title]
-    apo.desc_metadata_format = md_info[:desc_md]
-    apo.metadata_source = md_info[:metadata_source]
-    apo.agreement = md_info[:agreement].to_s
-    apo.default_workflow = md_info[:workflow] unless (not md_info[:workflow] || md_info[:workflow].length < 5)
-    apo.creative_commons_license = md_info[:cc_license]
-    apo.creative_commons_license_human = @@cc[md_info[:cc_license]]
-    apo.default_rights = md_info[:default_object_rights]
+  # TODO: spec testing requires this method to be public
+  def set_apo_metadata(apo, md_info)
+    apo.mods_title           = md_info[:title    ]
+    apo.desc_metadata_format = md_info[:desc_md  ]
+    apo.metadata_source      = md_info[:metadata_source]
+    apo.agreement            = md_info[:agreement]
+    apo.default_workflow     = md_info[:workflow ]
+    apo.default_rights       = md_info[:default_object_rights]
+    # Set the Use License given a machine-readable code for a creative commons
+    # or open data commons license
+    apo.use_license          = md_info[:use_license]
+    apo.copyright_statement  = md_info[:copyright]
+    apo.use_statement        = md_info[:use      ]
   end
 
+  ##
+  # Register a new APO and a create a default collection if requested.
+  # Uses `params` and `Dor::RegistrationService`
+  #
   def register_new_apo
     reg_params = {:workflow_priority => '70'}
     reg_params[:label] = params[:title]
-    reg_params[:object_type] = 'adminPolicy'
-    reg_params[:admin_policy] = 'druid:hv992ry2431'
-    reg_params[:workflow_id] = 'accessionWF'
+    reg_params[:object_type ] = 'adminPolicy'
+    reg_params[:admin_policy] = SolrDocument::UBER_APO_ID
+    reg_params[:workflow_id ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     apo_pid = response[:pid]
+    notice = "APO #{apo_pid} created."
+
+    # Once it's been created we populate it with its metadata
     apo = Dor.find(apo_pid)
-
-    #register a collection if requested
-    collection_pid = nil
-    if params[:collection_radio] == 'create'
-      collection_pid = create_collection apo_pid
-    end
-    if collection_pid
-      apo.add_default_collection collection_pid
-    else
-      if params[:collection] && params[:collection].length > 0
-        apo.add_default_collection params[:collection]
-      end
-    end
-
     set_apo_metadata apo, params
     apo.add_tag('Registered By : ' + current_user.login)
 
+    # and populate it with the correct roleMetadata
     managers = split_roleplayer_input_field(params[:managers])
-    viewers = split_roleplayer_input_field(params[:viewers])
+    viewers  = split_roleplayer_input_field(params[:viewers])
     add_roleplayers_to_object(apo, managers, 'dor-apo-manager')
     add_roleplayers_to_object(apo, viewers, 'dor-apo-viewer')
 
+    # requires a synchronous index update as we will redirect to the show page
     apo.save
-    apo.update_index
-    notice = 'APO created. '
-    if collection_pid
-      notice += "Collection #{collection_pid} created."
+    update_index(apo)
+
+    # register a collection and make it the default if requested
+    collection_pid = nil
+    case params[:collection_radio]
+    when 'create'
+      collection_pid = create_collection apo_pid
+      apo.add_default_collection collection_pid
+      apo.save
+      notice += " Collection #{collection_pid} created."
+    when 'select'
+      notice += ' Cannot select a default collection when registering an APO. Use Edit APO instead.'
     end
-    return {:notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid}
+
+    { :notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid }
   end
 
-  def param_cleanup params
-    params[:title].strip! unless not params[:title]
+  def param_cleanup(params)
+    params[:title].strip! if params[:title]
     [:managers, :viewers].each do |role_param_sym|
-      params[role_param_sym] = params[role_param_sym].gsub('\n',' ').gsub(',',' ') unless not params[role_param_sym]
+      params[role_param_sym] = params[role_param_sym].gsub('\n', ' ').gsub(',', ' ') if params[role_param_sym]
     end
+  end
+
+  # wrapper around call to update_index for various objects (APO, collection, item)
+  # provides easily-stubbed method for testing (instead of all object types)
+  def update_index(obj)
+    obj.update_index
   end
 
   def update
     param_cleanup params
     input_params_errors = get_input_params_errors params
     if input_params_errors.length > 0
-      render :status=> :bad_request, :json => { :errors => input_params_errors }
+      render :status => :bad_request, :json => { :errors => input_params_errors }
       return
-    end
-
-    if params[:collection_radio] == 'create'
-      collection_pid = create_collection @object.pid
-    end
-    if params[:collection] && params[:collection].length > 0
-      @object.add_default_collection params[:collection]
-    else
-      if collection_pid
-        @object.add_default_collection collection_pid
-      end
     end
 
     set_apo_metadata @object, params
 
     @object.purge_roles
     managers = split_roleplayer_input_field(params[:managers])
-    viewers = split_roleplayer_input_field(params[:viewers])
+    viewers  = split_roleplayer_input_field(params[:viewers])
     add_roleplayers_to_object(@object, managers, 'dor-apo-manager')
     add_roleplayers_to_object(@object, viewers, 'dor-apo-viewer')
 
     @object.save
-    @object.update_index
+    update_index(@object) # TODO: does this really require a synchronous index update?
+
+    collection_pid = create_collection @object.pid if params[:collection_radio] == 'create'
+    if params[:collection] && params[:collection].length > 0
+      @object.add_default_collection params[:collection]
+    elsif collection_pid
+      @object.add_default_collection collection_pid
+    end
+
     redirect
   end
 
-  def register_collection
-    if params[:collection_title] or params[:collection_catkey]
-      collection_pid = create_collection params[:id], 'label'
-      @object.add_default_collection collection_pid
-      redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
-    end
-  end
-
-  def create_collection apo_pid, metadata_source_init_value=nil
+  def create_collection(apo_pid)
     reg_params = {:workflow_priority => '65'}
-    if params[:collection_title] && params[:collection_title].length > 0
-      reg_params[:label] = params[:collection_title]
-    else
-      reg_params[:label] = ':auto'
-    end
-    if reg_params[:label] == ':auto'
-      reg_params[:rights] = params[:collection_rights_catkey]
-    else
-      reg_params[:rights] = params[:collection_rights]
-    end
-    if reg_params[:rights]
-      reg_params[:rights] = reg_params[:rights].downcase
-    end
-    reg_params[:object_type] = 'collection'
-    reg_params[:admin_policy] = apo_pid
-    reg_params[:metadata_source] = metadata_source_init_value if metadata_source_init_value
-    reg_params[:metadata_source] = 'symphony' if params[:collection_catkey] && params[:collection_catkey].length > 0
-    reg_params[:other_id] = 'symphony:' + params[:collection_catkey] if params[:collection_catkey] && params[:collection_catkey].length > 0
-    reg_params[:metadata_source] = 'label' unless params[:collection_catkey] && params[:collection_catkey].length > 0
-    reg_params[:workflow_id] = 'accessionWF'
+    reg_params[:label] = if !params[:collection_title].blank?
+                           params[:collection_title]
+                         else
+                           ':auto'
+                         end
+    reg_params[:rights] = if reg_params[:label] == ':auto'
+                            params[:collection_rights_catkey]
+                          else
+                            params[:collection_rights]
+                          end
+    reg_params[:rights] &&= reg_params[:rights].downcase
+    col_catkey = params[:collection_catkey] || ''
+    reg_params[:object_type    ] = 'collection'
+    reg_params[:admin_policy   ] = apo_pid
+    reg_params[:metadata_source] = col_catkey.blank? ? 'label' : 'symphony'
+    reg_params[:other_id       ] = "symphony:#{col_catkey}" unless col_catkey.blank?
+    reg_params[:workflow_id    ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
-    collection_pid = response[:pid]
-    collection = Dor.find(collection_pid)
+    collection = Dor.find(response[:pid])
     if params[:collection_abstract] && params[:collection_abstract].length > 0
       set_abstract(collection, params[:collection_abstract])
     end
     collection.save
-    collection.update_index
-    return collection_pid
+    update_index(collection) # TODO: does this actually require a synchronous index update?
+    response[:pid]
+  end
+
+  def register_collection
+    return unless params[:collection_title].present? || params[:collection_catkey].present?
+    collection_pid = create_collection params[:id]
+    @object.add_default_collection collection_pid
+    redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
   end
 
   def add_roleplayer
@@ -241,8 +254,8 @@ class ApoController < ApplicationController
   end
 
   def update_creative_commons
-    @object.creative_commons_license = params[:creative_commons]
-    @object.creative_commons_license_human = @@cc[params[:creative_commons]]
+    @object.creative_commons_license = params[:cc_license]
+    @object.creative_commons_license_human = Dor::Editable::CREATIVE_COMMONS_USE_LICENSES[params[:cc_license]][:human_readable]
     redirect
   end
 
@@ -266,29 +279,22 @@ class ApoController < ApplicationController
     redirect
   end
 
-
+  def spreadsheet_template
+    binary_string = RestClient.get(Settings.SPREADSHEET_URL)
+    send_data(
+      binary_string,
+      :filename => 'spreadsheet_template.xlsx',
+      :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+  end
 
   private
 
-  def reindex obj
-    doc=obj.to_solr
-    Dor::SearchService.solr.add(doc, :add_attributes => {:commitWithin => 1000})
-  end
-
   def create_obj
-    if params[:id]
-      @object = Dor.find params[:id], :lightweight => true
-      @collections = @object.default_collections
-      new_col=[]
-      if @collections
-        @collections.each do |col|
-          new_col << Dor.find(col)
-        end
-      end
-      @collections=new_col
-    else
-      raise 'missing druid'
-    end
+    raise 'missing druid' unless params[:id]
+    @object = Dor.find params[:id] # , :lightweight => true
+    pids = @object.default_collections || []
+    @collections = pids.map { |pid| Dor.find(pid) }
   end
 
   def add_roleplayers_to_object(object, roleplayer_list, role)
@@ -302,23 +308,18 @@ class ApoController < ApplicationController
   end
 
   def populate_role_form_field_var(role_list, form_field_var)
-    if role_list
-      role_list.each do |entity|
-        form_field_var << entity.gsub('workgroup:', '').gsub('person:', '')
-      end
+    return unless role_list
+    role_list.each do |entity|
+      form_field_var << entity.gsub('workgroup:', '').gsub('person:', '')
     end
   end
 
   def split_roleplayer_input_field(roleplayer_list_str)
-    return roleplayer_list_str.split(/[,\s]/).reject(){|str| str.empty?}
-  end
-
-  def save_and_reindex
-    @object.save
+    roleplayer_list_str.split(/[,\s]/).reject(&:empty?)
   end
 
   def save_and_index
-    @object.save
+    @object.save # indexing happens automatically
   end
 
   def redirect
@@ -327,15 +328,14 @@ class ApoController < ApplicationController
     end
   end
 
-  #check that the user can carry out this object modification
+  # check that the user can carry out this object modification
   def forbid
-    if not current_user.is_admin and not @object.can_manage_content?(current_user.roles params[:id])
-      render :status=> :forbidden, :text =>'forbidden'
-      return
-    end
+    return if current_user.is_admin || @object.can_manage_content?(current_user.roles(params[:id]))
+    render :status => :forbidden, :text => 'forbidden'
+    nil
   end
 
-  def set_abstract collection_obj, abstract
+  def set_abstract(collection_obj, abstract)
     collection_obj.descMetadata.abstract = abstract
     collection_obj.descMetadata.content = collection_obj.descMetadata.ng_xml.to_s
     collection_obj.descMetadata.save

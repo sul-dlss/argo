@@ -1,0 +1,133 @@
+# Example settings for configuration
+
+# General
+DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
+REINDEX_ON_FLY: false
+
+# BulkReindexer
+BULK_REINDEXER:
+  # the batch size that reindexing lists are broken into for consumption by delayed_job workers
+  BATCH_SIZE: 10
+
+# Bulk Metadata
+BULK_METADATA:
+  DIRECTORY: '/tmp/bulk_jobs/'
+  LOG: 'log.txt'
+  CSV_LOG: 'log.csv'
+  XML: 'MODS'
+  ZIP: 'desc_metadata_download.zip'
+
+# Content
+CONTENT:
+  USER: 'user'
+  BASE_DIR: '/foo/bar/'
+  SERVER_HOST: 'example-bar'
+  SDR_SERVER_URL: 'https://sdr.example.com'
+  SDR_USER: 'user'
+  SDR_PASSWORD: 'password'
+
+# Indexer
+INDEXER:
+  # the file to which the indexer log is written
+  LOG: 'log/indexer.log'
+  # the interval at which the indexer log is rotated
+  LOG_ROTATION_INTERVAL: 'daily'
+
+# Behavior for indexing jobs
+INDEXING_JOB:
+  # whether indexing jobs should specify immediate commit on completion of reindexing its batch
+  SHOULD_COMMIT_BATCHES: true
+  # whether indexing jobs should use the profiled version of the reindexing method
+  SHOULD_PROFILE: false
+
+# Metadata
+METADATA:
+  EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'
+  CATALOG_URL: 'https://catalog.example.com/catalog/mods'
+
+# Newrelic
+NEWRELIC:
+  ENABLED: false
+  LICENSE_KEY: 'super secret api key'
+  APP_NAME: 'Argo - name should be specific to server'
+
+# Profiler
+PROFILER:
+  # when outputting results in callgrind format (e.g. via print_results_call_tree), stats are
+  # only printed for methods consuming this percentage or more of the resource being profiled
+  CALLTREE_PRINTER_MIN_PERCENT: 1
+  # Defaults to 'wall' (WALL_TIME, or real-world elapsed time for the method being measured).  Other measurement modes include 'memory', though
+  # our limited testing was only successful when measuring wall time.  Values recognized by 'RubyProf' are:  'wall', 'process', 'cpu', 'allocations',
+  # 'memory', 'gc_time', and 'gc_runs'.  For more detailed info, see https://github.com/ruby-prof/ruby-prof#measurements
+  MEASURE_MODE: 'wall'
+  # location where Argo::Profiler sends RubyProf output from print_results_* methods
+  OUTPUT_DIR: 'log/profiler'
+
+# Squash
+SQUASH:
+  API_HOST: 'https://squash-host.example.com'
+  API_KEY: 'squash-api-key'
+  DISABLE: <%= (Rails.env.development? || Rails.env.test?) %>
+
+# SSL
+SSL:
+  CERT_FILE: 'cert_name.crt'
+  KEY_FILE: 'key_name.key'
+  KEY_PASS: 'password'
+
+# Stacks
+STACKS:
+  DOCUMENT_CACHE_STORAGE_ROOT: '/foo/document_cache'
+  DOCUMENT_CACHE_HOST: 'cache.example.com'
+  DOCUMENT_CACHE_USER: 'user'
+  LOCAL_WORKSPACE_ROOT: '/foo/workspace'
+  STORAGE_ROOT: '/bar'
+  HOST: 'stacks.example.com'
+  USER: 'user'
+
+# Stomp
+STOMP_CLIENT_ID: 'fedora_stomper'
+
+# Suri
+SURI:
+  MINT_IDS: true
+  ID_NAMESPACE: 'druid'
+  URL: 'https://suri.example.com'
+  USER: 'user'
+  PASS: 'pass'
+
+# URLs
+DOR_SERVICES_URL: 'https://user:password@dor-services.example.com'
+DPG_URL: 'https://dpg.example.com'
+FEDORA_URL: 'https://user:password@fedora.example.com:1000/fedora'
+MODSULATOR_URL: 'https://services.example.com/v1/modsulator'
+NORMALIZER_URL: 'https://services.example.com/v1/normalizer'
+PURL_URL: 'https://purl.example.com'
+ROBOT_STATUS_URL: 'https://robot.example.com/robots'
+SDR_URL: 'https://user:pass@sdr.example.com/sdr'
+SOLRIZER_URL: 'https://solr.example.com/solr/collection'
+SPREADSHEET_URL: 'https://services.example.com/v1/spreadsheet'
+STACKS_FILE_URL: 'https://stacks.example.com/file'
+STACKS_URL: 'https://stacks.example.com/image'
+STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
+WORKFLOW_URL: 'https://workflow.example.com/workflow'
+
+# Webauth is null by default.
+# To specify it to fake webauth credentials for dev instances,
+# use a structure like the one below.
+WEBAUTH: ~
+# WEBAUTH:
+#   USER: 'user'
+#   MAIL: 'user@example.com'
+#   LDAPPRIVGROUP: 'group:role|anothergroup:otherrole'
+#   SUAFFILIATION: 'org:group'
+#   DISPLAYNAME: 'Jane Doe'
+#   LDAPAUTHRULE: 'auth-rule'
+
+WFS_RAILS:
+  ENABLE: <%= (Rails.env.development? || Rails.env.test?) %>
+
+# Workflow
+WORKFLOW:
+  LOGFILE: 'log/workflow_service.log'
+  SHIFT_AGE: 'weekly'

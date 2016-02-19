@@ -1,17 +1,4 @@
-<% if current_user and current_user.is_admin %>
-
-<script>
-	$(function() {
-		$( "#embargo_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-	});
-	
-
-</script>
-<div id='embargo_update'>
-<%= form_tag url_for(:controller => :items, :action => :embargo_update), :method => :POST do%>
-	
-	New date: <input name="embargo_date" id="embargo_date" type="text">
-	<button id="submit_embargo" type="submit">Update Embargo</button> <button onclick="$('.lightBox').dialog('close');return false;">Cancel</button>
-<% end %>
-
-</div><%end%>
+<div class='container'>
+  <h1>Update embargo</h1>
+  <%= render partial: 'embargo_form' %>
+</div>

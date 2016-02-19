@@ -1,23 +1,23 @@
 require 'spec_helper'
-describe DorObjectHelper do
+describe DorObjectHelper, :type => :helper do
   describe 'get_dor_obj_if_exists' do
     it 'should return an object if there is one' do
       obj_id = 'druid:fakedruid'
       mock_dor_obj = double(Dor::Processable)
-      Dor.should_receive(:find).with(obj_id).and_return(mock_dor_obj)
+      expect(Dor).to receive(:find).with(obj_id).and_return(mock_dor_obj)
 
       expect(get_dor_obj_if_exists(obj_id)).to eq(mock_dor_obj)
     end
 
     it 'should return nil if there is no object' do
       obj_id = 'druid:fakedruid'
-      Dor.should_receive(:find).with(obj_id).and_raise(ActiveFedora::ObjectNotFoundError)
+      expect(Dor).to receive(:find).with(obj_id).and_raise(ActiveFedora::ObjectNotFoundError)
       expect(get_dor_obj_if_exists(obj_id)).to eq(nil)
     end
 
     it 'should propogate unexpected errors' do
       obj_id = 'druid:fakedruid'
-      Dor.should_receive(:find).with(obj_id).and_raise(StandardError)
+      expect(Dor).to receive(:find).with(obj_id).and_raise(StandardError)
       expect { get_dor_obj_if_exists(obj_id) }.to raise_error(StandardError)
     end
   end
@@ -29,7 +29,7 @@ describe DorObjectHelper do
 
       highlighted_statuses.each do |status_code|
         mock_dor_obj = double(Dor::Processable, :status_info => {:status_code => status_code})
-        expect(render_status_style(nil, mock_dor_obj)).to eq("argo-obj-status-highlight")
+        expect(render_status_style(nil, mock_dor_obj)).to eq('argo-obj-status-highlight')
       end
     end
 
@@ -40,12 +40,12 @@ describe DorObjectHelper do
 
       non_highlighted_statuses.each do |status_code|
         mock_dor_obj = double(Dor::Processable, :status_info => {:status_code => status_code})
-        expect(render_status_style(nil, mock_dor_obj)).to eq("")
+        expect(render_status_style(nil, mock_dor_obj)).to eq('')
       end
     end
 
     it 'should not return the highlighting style for nil objects' do
-      expect(render_status_style(nil, nil)).to eq("")
+      expect(render_status_style(nil, nil)).to eq('')
     end
   end
 end
