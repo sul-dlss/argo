@@ -89,10 +89,11 @@ class User < ActiveRecord::Base
     !(groups & MANAGER_GROUPS).empty?
   end
 
+  # https://github.com/bbatsov/ruby-style-guide#alias-method-lexically
   # The convention is for boolean is_XYZ methods to be interrogative (end in "?")
-  alias_method :is_admin?,   :is_admin
-  alias_method :is_viewer?,  :is_viewer
-  alias_method :is_manager?, :is_manager
+  alias is_admin? is_admin
+  alias is_manager? is_manager
+  alias is_viewer? is_viewer
 
   def login
     webauth ? webauth.login : sunetid
