@@ -7,15 +7,13 @@
       <dd class="blacklight-<%= solr_fname.parameterize %>">
         <%= render_document_show_field_value :document => document, :field => solr_fname %>
       </dd>
-    <% else %>
-      <% if solr_fname == 'metadata_source_ssi' %>
+    <% elsif solr_fname == 'metadata_source_ssi' %>
         <dt class="blacklight-<%= solr_fname.parameterize %>">
           <%= render_document_show_field_label :field => solr_fname %>
         </dt>
         <dd class="blacklight-<%= solr_fname.parameterize %>">
-          <%= metadata_source object %>
+          <%= get_metadata_source object %>
         </dd>
-      <% end %>
     <% end -%>
   <% end -%>
 </dl>
