@@ -340,10 +340,10 @@ describe ItemsController, :type => :controller do
   end
   describe 'resource' do
     it 'should set the object and datastream, then call the view' do
-      expect(Dor::Item).to receive(:find)
-      allow(@item).to receive(:datastreams).and_return({'contentMetadata' => double(Dor::ContentMetadataDS)})
-      get 'resource', :id => @pid, :resource => '0001'
-      # XXX : isn't actually testing what it says!
+      skip 'test unimplemented'
+      # expect(Dor::Item).to receive(:find)
+      # expect(@item).to receive(:datastreams).and_return({'contentMetadata' => double(Dor::ContentMetadataDS)})
+      # get 'resource', :id => @pid, :resource => '0001'
     end
   end
   describe 'add_collection' do
