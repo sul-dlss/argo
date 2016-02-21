@@ -2,23 +2,11 @@ require 'spec_helper'
 
 describe 'mods_view', :type => :request do
   before :each do
-    @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
+    @object = instantiate_fixture('zt570tx3016', Dor::Item)
     allow(Dor::Item).to receive(:find).and_return(@object)
-    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first, can_view_something?: true)
-    allow(@current_user).to receive(:is_admin).and_return(true)
-    allow(@current_user).to receive(:roles).and_return([])
-    allow(@current_user).to receive(:is_manager).and_return(false)
-    allow(@current_user).to receive(:permitted_apos).and_return([])
-
-    ##
-    # Stubbing of both ItemsController and CatalogController which are the
-    # controllers used in this spec, needing a valid return from current_user. A
-    # higher level up the inheritance chain stub of `ApplicationController` is
-    # insufficient here, due to a possible bug in rspec-mocks or our overuse of
-    # `allow_any_instance_of`.
-    allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
-    allow_any_instance_of(CatalogController).to receive(:current_user).and_return(@current_user)
+    @current_user = admin_user # see spec_helper
   end
+
   context 'main page tests' do
     it 'should have the expected heading for search facets' do
       visit root_path
@@ -32,12 +20,14 @@ describe 'mods_view', :type => :request do
       end
     end
   end
+
   context 'mods view' do
     it 'should render the mods view including a title' do
       visit '/items/druid:zt570tx3016/purl_preview'
       expect(page).to have_content('Ampex')
     end
   end
+
   context 'item dialogs' do
     context 'open version ui' do
       it 'should render the open version ui' do
