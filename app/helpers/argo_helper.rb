@@ -93,7 +93,14 @@ module ArgoHelper
     result.html_safe
   end
 
-  ##
+  # General documentation about roles and permissions is on SUL Consul at
+  # https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
+  #
+  # This method is the primary controller of what a user is permitted to do
+  # in Argo.  Through the display or enabling of action buttons, this method
+  # effects user roles.  This is the intersection of Dor object permissions and
+  # user roles.
+  #
   # Ideally this method should not make calls to external services to determine
   # what buttons should be rendered. These external requests are blocking and
   # will not allow the page to load until all requests are finished.
@@ -103,16 +110,16 @@ module ArgoHelper
     pid = doc['id']
     object ||= Dor.find(pid)
 
-    apo_pid = doc.apo_pid
-
     buttons = []
     if pid
+      # Workflow buttons
+      # These are not currently regulated by user role
+      # (assuming this is how it should be).
       buttons << {
         url: close_version_ui_item_path(pid),
         label: 'Close Version',
         check_url: workflow_service_closeable_path(pid)
       }
-
       buttons << {
         url: open_version_ui_item_path(pid),
         label: 'Open for modification',
@@ -120,26 +127,46 @@ module ArgoHelper
       }
     end
 
-    # if this is an apo and the user has permission for the apo, let them edit it.
-    if (object.datastreams.include? 'roleMetadata') && (current_user.is_admin || current_user.is_manager || object.can_manage_item?(current_user.roles(apo_pid)))
-      buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
-      buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection'}
+    # TODO: the APO access could use more granular permissions, see the
+    # Dor::Permissable#can_create_apo? and Dor::Permissable#can_manage_apo? in
+    # https://github.com/sul-dlss/dor-services/blob/permissable/lib/dor/models/permissable.rb
+    # current_user.can_admin?(@object, 'apo')  # don't allow managers
+    # current_user.can_manage?(@object, 'apo') # or allow managers too
+
+    if current_user.can_manage?(object)
+      # APO controller buttons
+      if object.datastreams.include? 'roleMetadata'
+        buttons << {
+          url: url_for(:controller => :apo, :action => :register, :id => pid),
+          label: 'Edit APO',
+          new_page: true
+        }
+        buttons << {
+          url: url_for(:controller => :apo, :action => :register_collection, :id => pid),
+          label: 'Create Collection',
+          new_page: true
+        }
+      end
     end
-    if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin || current_user.is_manager
+
+    if current_user.can_manage?(object)
+      # DOR controller buttons
       buttons << {
         url: url_for(controller: :dor, action: :reindex, pid: pid),
         label: 'Reindex',
         new_page: true
       }
-      buttons << {:url => url_for(:controller => :items, :action => :add_workflow, :id => pid), :label => 'Add workflow'}
-
       buttons << {
         url: url_for(:controller => :dor, :action => :republish, :pid => pid),
         label: 'Republish',
         check_url: workflow_service_published_path(pid),
         new_page: true
       }
-
+      # ITEMS controller buttons
+      buttons << {
+        url: url_for(:controller => :items, :action => :add_workflow, :id => pid),
+        label: 'Add workflow'
+      }
       buttons << {
         url:  url_for(:controller => :items, :action => :purge_object, :id => pid),
         label: 'Purge',
@@ -147,17 +174,31 @@ module ArgoHelper
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
         check_url: workflow_service_submitted_path(pid)
       }
-
-      buttons << {:url => '/items/' + pid + '/source_id_ui', :label => 'Change source id'}
-      buttons << {:url => '/items/' + pid + '/tags_ui', :label => 'Edit tags'}
+      buttons << {
+        url: '/items/' + pid + '/source_id_ui',
+        label: 'Change source id'
+      }
+      buttons << {
+        url: '/items/' + pid + '/tags_ui',
+        label: 'Edit tags'
+      }
       unless object.datastreams.include? 'administrativeMetadata' # apos cant be members of collections
-        buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+        buttons << {
+          url: url_for(:controller => :items, :action => :collection_ui, :id => pid),
+          label: 'Edit collections'
+        }
       end
       if object.datastreams.include? 'contentMetadata'
-        buttons << {:url => url_for(:controller => :items, :action => :content_type, :id => pid), :label => 'Set content type'}
+        buttons << {
+          url: url_for(:controller => :items, :action => :content_type, :id => pid),
+          label: 'Set content type'
+        }
       end
       if object.datastreams.include? 'rightsMetadata'
-        buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
+        buttons << {
+          url: url_for(:controller => :items, :action => :rights, :id => pid),
+          label: 'Set rights'
+        }
       end
     end
     if doc.key?('embargo_status_ssim')
@@ -166,7 +207,16 @@ module ArgoHelper
       # date=embargo_data.split.last
       if text != 'released'
         # TODO: add a date picker and button to change the embargo date for those who should be able to.
-        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if current_user.is_admin
+
+        # TODO: this could be a more granular permission request, see the
+        # current_user.can_admin?(@object, 'embargo')  # don't allow managers
+        # current_user.can_manage?(@object, 'embargo') # or allow managers too
+        if current_user.is_admin
+          buttons << {
+            url: embargo_form_item_path(pid),
+            label: 'Update embargo'
+          }
+        end
       end
     end
     buttons

@@ -345,26 +345,18 @@ class CatalogController < ApplicationController
     sorted_info.reverse!
   end
 
-  # Determines whether or not the current user has permissions to view the current DOR object.
+  # Determines whether the current user has permissions to view the object.
   def valid_user?(dor_object)
-    begin
-      @apo = dor_object.admin_policy_object
-    rescue
-      return false
-    end
-
-    if @apo
-      unless @user.is_admin || @user.is_viewer || dor_object.can_view_metadata?(@user.roles(@apo.pid))
-        render :status => :forbidden, :text => 'forbidden'
-        return false
-      end
-    else
-      unless @user.is_admin || @user.is_viewer
-        render :status => :forbidden, :text => 'No APO, no access'
-        return false
-      end
-    end
-    true
+    return true if @user.can_view?(dor_object)
+    msg = if dor_object.admin_policy_object
+            'Governing APO forbids access'
+          elsif dor_object.is_a? Dor::AdminPolicyObject
+            'Item is an APO that forbids access'
+          else
+            'Item has no APO that allows access'
+          end
+    render :status => :forbidden, :text => msg
+    false
   end
 
   def get_leafdir(directory)
