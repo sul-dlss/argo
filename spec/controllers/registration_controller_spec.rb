@@ -3,7 +3,12 @@ require 'spec_helper'
 describe RegistrationController, :type => :controller do
   before :each do
     @item = double(Dor::Item)
-    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
+    @current_user = double(
+      :webauth_user,
+      :login => 'sunetid',
+      :logged_in? => true,
+      :privgroup => User::ADMIN_GROUPS.first
+    )
     allow(@current_user).to receive(:is_admin).and_return(true)
     allow(controller).to receive(:current_user).and_return(@current_user)
     allow(Dor::Item).to receive(:find).and_return(@item)

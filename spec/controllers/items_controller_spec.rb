@@ -5,11 +5,17 @@ describe ItemsController, :type => :controller do
     @item = double(Dor::Item)
     @pid  = 'druid:oo201oo0001'
     @current_user = User.find_or_create_by_webauth(
-      double('webauth', :login => 'sunetid', :attributes => { 'DISPLAYNAME' => 'Rando User'}, :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
+      double(
+        'webauth',
+        :login => 'sunetid',
+        :attributes => { 'DISPLAYNAME' => 'Rando User'},
+        :logged_in? => true,
+        :privgroup => User::ADMIN_GROUPS.first
+      )
     )
     allow(@current_user).to receive(:is_admin).and_return(true)
-    allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)
+    allow(@current_user).to receive(:roles).and_return([])
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
     allow(Dor::Item).to receive(:find).with(@pid).and_return(@item)
     idmd = double()
