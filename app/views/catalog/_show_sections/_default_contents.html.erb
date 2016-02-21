@@ -17,9 +17,9 @@
           if admin_policy_object
             apo_pid = admin_policy_object.pid
           end
-          
-          can_manage = current_user.is_admin || current_user.is_manager || (apo_pid && object.can_manage_content?(current_user.roles(apo_pid)))
-          can_view = current_user.is_admin || current_user.is_manager || (apo_pid && object.can_view_content?(current_user.roles(apo_pid)))
+
+          can_manage = current_user.can_manage?(object)
+          can_view = current_user.can_view?(object)
           version_open = can_close_version? object.pid
 
           content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource, index| %>
