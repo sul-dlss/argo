@@ -344,6 +344,376 @@ describe User, :type => :model do
     end
   end
 
+  describe '#can_admin?' do
+    before :each do
+      expect(subject).not_to receive(:is_manager)
+      expect(subject).not_to receive(:is_viewer)
+    end
+
+    shared_examples 'Argo grants permission to manage object' do
+      it 'permits admin' do
+        expect(subject).to receive(:is_admin).once.and_return(true)
+        expect(subject).not_to receive(:is_manager)
+        expect(subject).not_to receive(:is_viewer)
+        expect(subject.can_admin?(item)).to be true
+      end
+      it 'denies manager' do
+        expect(subject).to receive(:is_admin).once.and_return(false)
+        expect(subject).not_to receive(:is_manager)
+        expect(subject).not_to receive(:is_viewer)
+        expect(subject.can_admin?(item)).to be false
+      end
+    end
+
+    context 'checks object permissions' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+        end
+        it 'using default "can_manage_item?"' do
+          expect(item).to receive(:can_manage_item?).at_least(:once)
+          subject.can_admin?(item)
+        end
+        it 'using custom "can_manage_content?"' do
+          expect(item).to receive(:can_manage_content?).at_least(:once)
+          subject.can_admin?(item, 'content')
+        end
+        it 'raises ArgumentError for invalid permissions' do
+          expect{subject.can_admin?(item, 'WTF')}.to raise_error(ArgumentError)
+        end
+      end
+    end
+
+    context 'DOR object is an APO with a governing APO' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
+      let(:apo) { item.admin_policy_object }
+      it_behaves_like 'Argo grants permission to manage object'
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+        end
+        it 'allows user with authorized role in governing APO' do
+          # This checks the governing APO and grants permission.
+          role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([role])
+          expect(subject).not_to receive(:roles).with(item.pid)
+          expect(item).to receive(:can_manage_item?).with([role]).once.and_return(true)
+          expect(subject.can_admin?(item)).to be true
+        end
+        it 'allows user with authorized role in item APO' do
+          # This checks the governing APO and does not grant permission;
+          # it then checks the item APO and grants permission.
+          apo_role = 'not-administrator'
+          item_role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([apo_role])
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([item_role])
+          expect(item).to receive(:can_manage_item?).with([apo_role]).once.and_return(false)
+          expect(item).to receive(:can_manage_item?).with([item_role]).once.and_return(true)
+          expect(subject.can_admin?(item)).to be true
+        end
+        it 'forbids user without authorized role in any APO' do
+          # This checks the governing APO and does not grant permission;
+          # it then checks the item APO and does not grant permission.
+          role = 'sdr-viewer'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([role])
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_manage_item?).with([role]).twice.and_return(false)
+          expect(subject.can_admin?(item)).to be false
+        end
+      end
+    end
+
+    context 'DOR object is an APO without a governing APO' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) do
+        item = instantiate_fixture(druid, Dor::AdminPolicyObject)
+        allow(item).to receive(:admin_policy_object).and_return(nil)
+        item
+      end
+      it_behaves_like 'Argo grants permission to manage object'
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+        end
+        it 'allows user with authorized role' do
+          # There is no governing APO to grant permission, so
+          # it checks the item APO and grants permission.
+          role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_manage_item?).with([role]).once.and_return(true)
+          expect(subject.can_admin?(item)).to be true
+        end
+        it 'forbids user without authorized role' do
+          # There is no governing APO to grant permission, so
+          # it checks the item APO and does not grant permission.
+          role = 'sdr-viewer'
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_manage_item?).with([role]).once.and_return(false)
+          expect(subject.can_admin?(item)).to be false
+        end
+      end
+    end
+  end
+
+  describe '#can_manage?' do
+    before :each do
+      expect(subject).not_to receive(:is_viewer)
+    end
+
+    shared_examples 'Argo grants permission to manage object' do
+      it 'permits admin' do
+        expect(subject).to receive(:is_admin).once.and_return(true)
+        expect(subject).not_to receive(:is_manager)
+        expect(subject).not_to receive(:is_viewer)
+        expect(subject.can_manage?(item)).to be true
+      end
+      it 'permits manager' do
+        expect(subject).to receive(:is_admin).once.and_return(false)
+        expect(subject).to receive(:is_manager).once.and_return(true)
+        expect(subject).not_to receive(:is_viewer)
+        expect(subject.can_manage?(item)).to be true
+      end
+    end
+
+    context 'checks object permissions' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+          expect(subject).to receive(:is_manager).once.and_return(false)
+        end
+        it 'using default "can_manage_item?"' do
+          expect(item).to receive(:can_manage_item?).at_least(:once)
+          subject.can_manage?(item)
+        end
+        it 'using custom "can_manage_content?"' do
+          expect(item).to receive(:can_manage_content?).at_least(:once)
+          subject.can_manage?(item, 'content')
+        end
+        it 'raises ArgumentError for invalid permissions' do
+          expect{subject.can_manage?(item, 'WTF')}.to raise_error(ArgumentError)
+        end
+      end
+    end
+
+    context 'DOR object is an APO with a governing APO' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
+      let(:apo) { item.admin_policy_object }
+      it_behaves_like 'Argo grants permission to manage object'
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+          expect(subject).to receive(:is_manager).once.and_return(false)
+        end
+        it 'allows user with authorized role in governing APO' do
+          # This checks the governing APO and grants permission.
+          role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([role])
+          expect(subject).not_to receive(:roles).with(item.pid)
+          expect(item).to receive(:can_manage_item?).with([role]).once.and_return(true)
+          expect(subject.can_manage?(item)).to be true
+        end
+        it 'allows user with authorized role in item APO' do
+          # This checks the governing APO and does not grant permission;
+          # it then checks the item APO and grants permission.
+          apo_role = 'not-administrator'
+          item_role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([apo_role])
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([item_role])
+          expect(item).to receive(:can_manage_item?).with([apo_role]).once.and_return(false)
+          expect(item).to receive(:can_manage_item?).with([item_role]).once.and_return(true)
+          expect(subject.can_manage?(item)).to be true
+        end
+        it 'forbids user without authorized role in any APO' do
+          # This checks the governing APO and does not grant permission;
+          # it then checks the item APO and does not grant permission.
+          role = 'sdr-viewer'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([role])
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_manage_item?).with([role]).twice.and_return(false)
+          expect(subject.can_manage?(item)).to be false
+        end
+      end
+    end
+
+    context 'DOR object is an APO without a governing APO' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) do
+        item = instantiate_fixture(druid, Dor::AdminPolicyObject)
+        allow(item).to receive(:admin_policy_object).and_return(nil)
+        item
+      end
+      it_behaves_like 'Argo grants permission to manage object'
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+          expect(subject).to receive(:is_manager).once.and_return(false)
+        end
+        it 'allows user with authorized role' do
+          # There is no governing APO to grant permission, so
+          # it checks the item APO and grants permission.
+          role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_manage_item?).with([role]).once.and_return(true)
+          expect(subject.can_manage?(item)).to be true
+        end
+        it 'forbids user without authorized role' do
+          # There is no governing APO to grant permission, so
+          # it checks the item APO and does not grant permission.
+          role = 'sdr-viewer'
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_manage_item?).with([role]).once.and_return(false)
+          expect(subject.can_manage?(item)).to be false
+        end
+      end
+    end
+  end
+
+  describe '#can_view?' do
+    shared_examples 'Argo grants permission to view object' do
+      it 'permits admin' do
+        expect(subject).to receive(:is_admin).once.and_return(true)
+        expect(subject).not_to receive(:is_manager)
+        expect(subject).not_to receive(:is_viewer)
+        expect(subject.can_view?(item)).to be true
+      end
+      it 'permits manager' do
+        expect(subject).to receive(:is_admin).once.and_return(false)
+        expect(subject).to receive(:is_manager).once.and_return(true)
+        expect(subject).not_to receive(:is_viewer)
+        expect(subject.can_view?(item)).to be true
+      end
+      it 'permits viewer' do
+        expect(subject).to receive(:is_admin).once.and_return(false)
+        expect(subject).to receive(:is_manager).once.and_return(false)
+        expect(subject).to receive(:is_viewer).once.and_return(true)
+        expect(subject.can_view?(item)).to be true
+      end
+    end
+
+    context 'checks object permissions' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+          expect(subject).to receive(:is_manager).once.and_return(false)
+          expect(subject).to receive(:is_viewer).once.and_return(false)
+        end
+        it 'using default "can_view_metadata?"' do
+          expect(item).to receive(:can_view_metadata?).at_least(:once)
+          subject.can_view?(item)
+        end
+        it 'using custom "can_view_content?"' do
+          expect(item).to receive(:can_view_content?).at_least(:once)
+          subject.can_view?(item, 'content')
+        end
+        it 'raises ArgumentError for invalid permissions' do
+          expect{subject.can_view?(item, 'WTF')}.to raise_error(ArgumentError)
+        end
+      end
+    end
+
+    context 'DOR object is an APO with a governing APO' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
+      let(:apo) { item.admin_policy_object }
+      it_behaves_like 'Argo grants permission to view object'
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+          expect(subject).to receive(:is_manager).once.and_return(false)
+          expect(subject).to receive(:is_viewer).once.and_return(false)
+        end
+        it 'allows user with authorized role in governing APO' do
+          # This checks the governing APO and grants permission.
+          role = 'sdr-viewer'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([role])
+          expect(subject).not_to receive(:roles).with(item.pid)
+          expect(item).to receive(:can_view_metadata?).with([role]).once.and_return(true)
+          expect(subject.can_view?(item)).to be true
+        end
+        it 'allows user with authorized role in item APO' do
+          # This checks the governing APO and does not grant permission;
+          # it then checks the item APO and grants permission.
+          apo_role = 'not-administrator'
+          item_role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([apo_role])
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([item_role])
+          expect(item).to receive(:can_view_metadata?).with([apo_role]).once.and_return(false)
+          expect(item).to receive(:can_view_metadata?).with([item_role]).once.and_return(true)
+          expect(subject.can_view?(item)).to be true
+        end
+        it 'forbids user without authorized role in any APO' do
+          # This checks the governing APO and does not grant permission;
+          # it then checks the item APO and does not grant permission.
+          role = 'sdr-viewer'
+          expect(subject).to receive(:roles).with(apo.pid).once.and_return([role])
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_view_metadata?).with([role]).twice.and_return(false)
+          expect(subject.can_view?(item)).to be false
+        end
+      end
+    end
+
+    context 'DOR object is an APO without a governing APO' do
+      let(:druid) { 'druid:hv992ry2431' }
+      let(:item) do
+        item = instantiate_fixture(druid, Dor::AdminPolicyObject)
+        allow(item).to receive(:admin_policy_object).and_return(nil)
+        item
+      end
+      it_behaves_like 'Argo grants permission to view object'
+      context 'when user has no Argo permissions' do
+        before :each do
+          expect(subject).to receive(:is_admin).once.and_return(false)
+          expect(subject).to receive(:is_manager).once.and_return(false)
+          expect(subject).to receive(:is_viewer).once.and_return(false)
+        end
+        it 'allows user with authorized role' do
+          # There is no governing APO to grant permission, so
+          # it checks the item APO and grants permission.
+          role = 'sdr-administrator'
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_view_metadata?).with([role]).once.and_return(true)
+          expect(subject.can_view?(item)).to be true
+        end
+        it 'forbids user without authorized role' do
+          # There is no governing APO to grant permission, so
+          # it checks the item APO and does not grant permission.
+          role = 'sdr-viewer'
+          expect(subject).to receive(:roles).with(item.pid).once.and_return([role])
+          expect(item).to receive(:can_view_metadata?).with([role]).once.and_return(false)
+          expect(subject.can_view?(item)).to be false
+        end
+      end
+    end
+  end
+
+  describe '#get_dor_object' do
+    # These specs call `subject.send(:get_dor_object)` because it is private.
+    let(:druid) { 'mt603cr6214' }
+    it 'returns a DOR object, as is' do
+      item = instantiate_fixture(druid)
+      expect(Dor).not_to receive(:find)
+      obj = subject.send(:get_dor_object, item)
+      expect(obj.pid).to eq(item.pid)
+    end
+    it 'uses Dor.find to get a DOR object' do
+      expect(Dor).to receive(:find).with(druid)
+      subject.send(:get_dor_object, druid)
+    end
+    it 'a PID that does not exist will raise ActiveFedora::ObjectNotFoundError' do
+      expect(Dor).to receive(:find).and_call_original
+      expect{subject.send(:get_dor_object, 'aa111aa1111')}.to raise_error(ActiveFedora::ObjectNotFoundError)
+    end
+  end
+
   # TODO
   describe 'permitted_apos' do
     it 'not implemented'
