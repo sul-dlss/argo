@@ -40,54 +40,112 @@ describe User, :type => :model do
   end
 
   describe 'is_admin' do
+    def expect_admin(value)
+      expect(subject.is_admin).to be value
+      expect(subject.is_admin?).to be value
+    end
     it 'should be true if the group is an admin group' do
       allow(subject).to receive(:groups).and_return(['workgroup:sdr:administrator-role'])
-      expect(subject.is_admin).to be_truthy
+      expect_admin true
     end
-    it 'should be true if the group is a deprecated admin group' do
+    it 'should be false if the group is a deprecated admin group' do
       allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-admin'])
-      expect(subject.is_admin).to be_truthy
+      expect_admin false
     end
-    it 'should be false otherwise' do
+    it 'should be false for a blank group' do
       allow(subject).to receive(:groups).and_return([])
-      expect(subject.is_admin).to be_falsey
+      expect_admin false
+      allow(subject).to receive(:groups).and_return(nil)
+      expect_admin false
     end
-    it 'should be false even with an inadequate group membership' do
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not_an_admin'])
-      expect(subject.is_admin).to be_falsey
-      expect(subject.is_admin?).to be_falsey
+    it 'should be false with an inadequate group membership' do
+      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-admin'])
+      expect_admin false
+    end
+    it 'should be true for ADMIN_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::ADMIN_GROUPS)
+      expect_admin true
+    end
+    it 'should be false for MANAGER_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::MANAGER_GROUPS)
+      expect_admin false
+    end
+    it 'should be false for VIEWER_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::VIEWER_GROUPS)
+      expect_admin false
     end
   end
 
   describe 'is_manager' do
+    def expect_manager(value)
+      expect(subject.is_manager).to be value
+      expect(subject.is_manager?).to be value
+    end
     it 'should be true if the group is a manager group' do
       allow(subject).to receive(:groups).and_return(['workgroup:sdr:manager-role'])
-      expect(subject.is_manager).to be_truthy
+      expect_manager true
     end
-    it 'should be true if the group is a deprecated manager group' do
+    it 'should be false if the group is a deprecated manager group' do
       allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-manager'])
-      expect(subject.is_manager).to be_truthy
+      expect_manager false
     end
-    it 'should be false otherwise' do
+    it 'should be false for a blank group' do
       allow(subject).to receive(:groups).and_return([])
-      expect(subject.is_manager).to be_falsey
-      expect(subject.is_manager?).to be_falsey
+      expect_manager false
+      allow(subject).to receive(:groups).and_return(nil)
+      expect_manager false
+    end
+    it 'should be false with an inadequate group membership' do
+      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-manager'])
+      expect_manager false
+    end
+    it 'should be false for ADMIN_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::ADMIN_GROUPS)
+      expect_manager false
+    end
+    it 'should be true for MANAGER_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::MANAGER_GROUPS)
+      expect_manager true
+    end
+    it 'should be false for VIEWER_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::VIEWER_GROUPS)
+      expect_manager false
     end
   end
 
   describe 'is_viewer' do
+    def expect_viewer(value)
+      expect(subject.is_viewer).to be value
+      expect(subject.is_viewer?).to be value
+    end
     it 'should be true if the group is a viewer group' do
       allow(subject).to receive(:groups).and_return(['workgroup:sdr:viewer-role'])
-      expect(subject.is_viewer).to be_truthy
+      expect_viewer true
     end
-    it 'should be true if the group is a deprecated viewer group' do
+    it 'should be false if the group is a deprecated viewer group' do
       allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-viewer'])
-      expect(subject.is_viewer).to be_truthy
+      expect_viewer false
     end
-    it 'should be false otherwise' do
+    it 'should be false for a blank group' do
       allow(subject).to receive(:groups).and_return([])
-      expect(subject.is_viewer).to be_falsey
-      expect(subject.is_viewer?).to be_falsey
+      expect_viewer false
+      allow(subject).to receive(:groups).and_return(nil)
+      expect_viewer false
+    end
+    it 'should be false for ADMIN_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::ADMIN_GROUPS)
+      expect_viewer false
+    end
+    it 'should be false for MANAGER_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::MANAGER_GROUPS)
+      expect_viewer false
+    end
+    it 'should be true for VIEWER_GROUPS' do
+      allow(subject).to receive(:groups).and_return(User::VIEWER_GROUPS)
+      expect_viewer true
+    end
+  end
+
     end
   end
 
@@ -151,30 +209,30 @@ describe User, :type => :model do
       webauth_privgroup_str = 'sdr:administrator-role|sdr:manager-role|sdr:viewer-role'
       mock_webauth = double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => webauth_privgroup_str)
       user = User.find_or_create_by_webauth(mock_webauth)
-      expect(user.is_admin  ).to be_truthy
-      expect(user.is_manager).to be_truthy
-      expect(user.is_viewer ).to be_truthy
-      user.set_groups_to_impersonate(['workgroup:sdr:not-an-administrator-role', 'workgroup:sdr:not-a-manager-role', 'workgroup:sdr:not-a-viewer-role'])
-      expect(user.is_admin  ).to be_falsey
-      expect(user.is_manager).to be_falsey
-      expect(user.is_viewer ).to be_falsey
+      expect(user.is_admin).to be true
+      expect(user.is_manager).to be true
+      expect(user.is_viewer).to be true
+      user.set_groups_to_impersonate(%w(workgroup:sdr:not-an-administrator-role workgroup:sdr:not-a-manager-role workgroup:sdr:not-a-viewer-role))
+      expect(user.is_admin).to be false
+      expect(user.is_manager).to be false
+      expect(user.is_viewer).to be false
     end
   end
   describe '#can_view_something?' do
     it 'returns false' do
-      expect(subject.can_view_something?).to be_falsey
+      expect(subject.can_view_something?).to be false
     end
     context 'when admin' do
       it 'returns true' do
         expect(subject).to receive(:is_admin).and_return(true)
-        expect(subject.can_view_something?).to be_truthy
+        expect(subject.can_view_something?).to be true
       end
     end
     context 'when manager' do
       it 'returns true' do
         expect(subject).to receive(:is_admin).and_return(false)
         expect(subject).to receive(:is_manager).and_return(true)
-        expect(subject.can_view_something?).to be_truthy
+        expect(subject.can_view_something?).to be true
       end
     end
     context 'when viewer' do
@@ -182,7 +240,7 @@ describe User, :type => :model do
         expect(subject).to receive(:is_admin).and_return(false)
         expect(subject).to receive(:is_manager).and_return(false)
         expect(subject).to receive(:is_viewer).and_return(true)
-        expect(subject.can_view_something?).to be_truthy
+        expect(subject.can_view_something?).to be true
       end
     end
     context 'with permitted_apos' do
@@ -191,7 +249,7 @@ describe User, :type => :model do
         expect(subject).to receive(:is_manager).and_return(false)
         expect(subject).to receive(:is_viewer).and_return(false)
         expect(subject).to receive(:permitted_apos).and_return([1])
-        expect(subject.can_view_something?).to be_truthy
+        expect(subject.can_view_something?).to be true
       end
     end
   end

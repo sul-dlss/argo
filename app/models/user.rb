@@ -3,6 +3,11 @@ class User < ActiveRecord::Base
   include Blacklight::User
   has_many :bulk_actions
 
+  # The code base requires Arrays for these constants, for intersection ops.
+  ADMIN_GROUPS = %w(workgroup:sdr:administrator-role).freeze
+  MANAGER_GROUPS = %w(workgroup:sdr:manager-role).freeze
+  VIEWER_GROUPS = %w(workgroup:sdr:viewer-role).freeze
+
   attr_accessor :webauth
 
   delegate :permitted_apos, :permitted_collections, to: :permitted_queries
@@ -76,17 +81,17 @@ class User < ActiveRecord::Base
 
   # @return [Boolean] is the user a repository wide administrator
   def is_admin
-    !(groups & ADMIN_GROUPS).empty?
-  end
-
-  # @return [Boolean] is the user a repository wide viewer
-  def is_viewer
-    !(groups & VIEWER_GROUPS).empty?
+    !(groups & ADMIN_GROUPS).blank?
   end
 
   # @return [Boolean] is the user a repo wide manager
   def is_manager
-    !(groups & MANAGER_GROUPS).empty?
+    !(groups & MANAGER_GROUPS).blank?
+  end
+
+  # @return [Boolean] is the user a repository wide viewer
+  def is_viewer
+    !(groups & VIEWER_GROUPS).blank?
   end
 
   # https://github.com/bbatsov/ruby-style-guide#alias-method-lexically
