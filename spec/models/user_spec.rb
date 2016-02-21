@@ -1,4 +1,8 @@
+# encoding: UTF-8
 require 'spec_helper'
+
+# General documentation about roles and permissions is on SUL Consul at
+# https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
 
 describe User, :type => :model do
   describe '.find_or_create_by_webauth' do
@@ -146,46 +150,89 @@ describe User, :type => :model do
     end
   end
 
+  describe 'solr_role_allowed' do
+    let(:solr_doc) do
+      {
+        'roleA' => ['dlss:groupA', 'dlss:groupB'],
+        'roleB' => ['dlss:groupA', 'dlss:groupC']
+      }
+    end
+    before :each do
+      allow(subject).to receive(:groups).and_return(['dlss:groupA'])
+    end
+    it 'returns true when DOR solr document has a role with values that include a user group' do
+      expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be true
+    end
+    it 'returns false when DOR solr document has a role with values that do not include a user group' do
+      allow(subject).to receive(:groups).and_return(['dlss:groupX'])
+      expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be false
+    end
+    it 'returns false when DOR solr document has no matching roles' do
+      expect(subject.solr_role_allowed?(solr_doc, 'roleX')).to be false
+    end
+    it 'returns false when DOR solr document is empty' do
+      expect(subject.solr_role_allowed?({}, 'roleA')).to be false
+    end
+    it 'returns false when user belongs to no groups' do
+      allow(subject).to receive(:groups).and_return([])
+      expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be false
     end
   end
 
   describe 'roles' do
-    before(:each) do
-      @answer = {}
-      @doc = {
-        'apo_role_dor-administrator_ssim' => ['workgroup:dlss:groupA', 'workgroup:dlss:groupB'],
-        'apo_role_sdr-administrator_ssim' => ['workgroup:dlss:groupA', 'workgroup:dlss:groupB'],
-        'apo_role_dor-apo-manager_ssim'   => ['workgroup:dlss:groupC', 'workgroup:dlss:groupD'],
-        'apo_role_dor-viewer_ssim'        => ['workgroup:dlss:groupE', 'workgroup:dlss:groupF'],
-        'apo_role_sdr-viewer_ssim'        => ['workgroup:dlss:groupE', 'workgroup:dlss:groupF'],
-        'apo_role_person_dor-viewer_ssim' => ['sunetid:tcramer'],
-        'apo_role_person_sdr-viewer_ssim' => ['sunetid:tcramer'],
-        'apo_role_group_manager_ssim'     => ['workgroup:dlss:groupR']
+    # The exact DRUID is not important in these specs, because
+    # the Dor::SearchService is mocked to return solr_doc.
+    let(:druid) { 'druid:ab123cd4567' }
+    let(:answer) do
+      {
+        'response' => { 'docs' => [solr_doc] }
       }
-      @answer['response'] = { 'docs' => [@doc] }
-      allow(Dor::SearchService).to receive(:query).and_return(@answer)
-      @user = User.find_or_create_by_webauth(double('webauth', :login => 'asdf'))
     end
-    it 'should build a set of roles' do
-      expect(@user).to receive(:groups).and_return(['workgroup:dlss:groupF', 'workgroup:dlss:groupA'])
-      expect(@user.roles('pid')).to eq(['dor-administrator', 'sdr-administrator', 'dor-viewer', 'sdr-viewer'])
+    let(:solr_doc) do
+      {
+        'apo_role_sdr-administrator_ssim' => %w(workgroup:dlss:groupA workgroup:dlss:groupB),
+        'apo_role_sdr-viewer_ssim'        => %w(workgroup:dlss:groupE workgroup:dlss:groupF),
+        'apo_role_dor-apo-manager_ssim'   => %w(workgroup:dlss:groupC workgroup:dlss:groupD),
+        'apo_role_person_dor-viewer_ssim' => %w(sunetid:tcramer),
+        'apo_role_person_sdr-viewer_ssim' => %w(sunetid:tcramer),
+        'apo_role_group_manager_ssim'     => %w(workgroup:dlss:groupR)
+      }
+    end
+    before(:each) do
+      allow(Dor::SearchService).to receive(:query).and_return(answer)
+    end
+    it 'should accept any object identifier' do
+      expect{subject.roles(druid)}.not_to raise_error
+      expect{subject.roles('anyStringOK')}.not_to raise_error
+    end
+    it 'should raise ArgumentError for a blank object identifer' do
+      expect{subject.roles('')}.to raise_error ArgumentError
+    end
+    it 'should build a set of roles from groups' do
+      doc_groups = %w(workgroup:dlss:groupF workgroup:dlss:groupA)
+      doc_roles = %w(sdr-administrator sdr-viewer).sort
+      expect(subject).to receive(:groups).and_return(doc_groups).at_least(:once)
+      expect(subject.roles(druid)).to eq(doc_roles)
     end
     it 'should translate the old "manager" role into dor-apo-manager' do
-      expect(@user).to receive(:groups).and_return(['workgroup:dlss:groupR'])
-      expect(@user.roles('pid')).to eq(['dor-apo-manager'])
+      expect(subject).to receive(:groups).and_return(['workgroup:dlss:groupR']).at_least(:once)
+      expect(subject.roles(druid)).to eq(['dor-apo-manager'])
     end
-    it 'should work correctly if the individual is named in the apo, but isnt in any groups that matter' do
-      expect(@user).to receive(:groups).and_return(['sunetid:tcramer'])
-      expect(@user.roles('pid')).to eq(['dor-viewer', 'sdr-viewer'])
+    it 'should return an empty set of roles if the DRUID solr search fails' do
+      empty_doc = { 'response' => { 'docs' => [] } }
+      allow(Dor::SearchService).to receive(:query).and_return(empty_doc)
+      expect(subject).not_to receive(:groups) # short circuit for empty solr doc
+      expect(subject.roles(druid)).to be_empty
+    end
+    it 'should work correctly if the individual is named in the apo, but is not in any groups that matter' do
+      expect(subject).to receive(:groups).and_return(['sunetid:tcramer']).at_least(:once)
+      expect(subject.roles(druid)).to eq(['sdr-viewer'])
     end
     it 'should hang onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
-      expect(@user).to receive(:groups).and_return(['testdoesnotcarewhatishere'])
+      expect(subject).to receive(:groups).and_return(['testdoesnotcarewhatishere']).at_least(:once)
       expect(Dor::SearchService).to receive(:query).once
-      @user.roles('pid')
-      @user.roles('pid')
-    end
-    it 'should return an empty array given a nil pid' do
-      expect(@user.roles(nil)).to eq([])
+      subject.roles(druid)
+      subject.roles(druid)
     end
   end
 
@@ -200,7 +247,7 @@ describe User, :type => :model do
         expect(@user.groups).to eq(expected_groups)
       end
       it 'should return the groups by impersonation' do
-        impersonated_groups = ['workgroup:dlss:impersonatedgroup1', 'workgroup:dlss:impersonatedgroup2']
+        impersonated_groups = %w(workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2)
         @user.set_groups_to_impersonate(impersonated_groups)
         expect(@user.groups).to eq(impersonated_groups)
       end
@@ -218,6 +265,49 @@ describe User, :type => :model do
       expect(user.is_viewer).to be false
     end
   end
+
+  describe 'set_groups_to_impersonate' do
+    def groups_to_impersonate
+      subject.instance_variable_get(:@groups_to_impersonate)
+    end
+    before :each do
+      subject.instance_variable_set(:@groups_to_impersonate, %w(a b))
+    end
+    it 'resets the role_cache' do
+      subject.instance_variable_set(:@role_cache, {a: 1})
+      subject.set_groups_to_impersonate []
+      expect(subject.instance_variable_get(:@role_cache)).to be_empty
+    end
+    it 'removes impersonation groups when given nil' do
+      subject.set_groups_to_impersonate nil
+      expect(groups_to_impersonate).to be_blank
+    end
+    it 'removes impersonation groups when given an empty String' do
+      subject.set_groups_to_impersonate ''
+      expect(groups_to_impersonate).to be_blank
+    end
+    it 'removes impersonation groups when given an empty Array' do
+      subject.set_groups_to_impersonate []
+      expect(groups_to_impersonate).to be_blank
+    end
+    it 'removes impersonation groups when given an empty Hash' do
+      subject.set_groups_to_impersonate({})
+      expect(groups_to_impersonate).to be_blank
+    end
+    it 'accepts a String argument' do
+      subject.set_groups_to_impersonate 'groupA'
+      expect(groups_to_impersonate).to eq ['groupA']
+    end
+    it 'accepts an Array<String> argument' do
+      subject.set_groups_to_impersonate ['groupA']
+      expect(groups_to_impersonate).to eq ['groupA']
+    end
+    it 'raises ArgumentError for other arguments' do
+      expect{subject.set_groups_to_impersonate({a: 1})}.to raise_error ArgumentError
+      expect{subject.set_groups_to_impersonate(0)}.to raise_error ArgumentError
+    end
+  end
+
   describe '#can_view_something?' do
     it 'returns false' do
       expect(subject.can_view_something?).to be false
@@ -256,11 +346,9 @@ describe User, :type => :model do
 
   # TODO
   describe 'permitted_apos' do
-    xit 'not implemented' do
-    end
+    it 'not implemented'
   end
   describe 'permitted_collections' do
-    xit 'not implemented' do
-    end
+    it 'not implemented'
   end
 end

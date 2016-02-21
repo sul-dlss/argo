@@ -8,25 +8,18 @@ module Argo
     end
 
     def apply_gated_discovery(solr_parameters, user)
-      # repository wide admin and viewer users shouldnt be restricted in any way
-      if user.is_admin || user.is_viewer || user.is_manager
-        return solr_parameters
-      end
-      solr_parameters[:fq] ||= []
+      # Repository wide admin, manager and viewer users access everything
+      return solr_parameters if user.is_admin || user.is_manager || user.is_viewer
       pids = user.permitted_apos
-      # do this as a negative query, exclude items they dont have permission rather than including items they have permission to view
-      if pids.length == 0
-        # they arent supposed to see anything, use a dummy value to make sure the solr query is valid
-        pids = 'dummy_value'
-      else
-        new_pids = []
-        pids.each do |pid|
-          new_pids << '"info:fedora/' + pid + '"'
-        end
-        pids = new_pids
-        pids = pids.join(' OR ')
-      end
-      solr_parameters[:fq] << "#{SolrDocument::FIELD_APO_ID}:(#{pids})"
+      # Do this as a negative query, exclude items they cannot access
+      # rather than including items they can access.
+      solr_pids = pids.map {|p| '"info:fedora/' + p + '"' }.join(' OR ')
+      # Check for an empty set of PIDs.  If empty, they aren't supposed to see
+      # anything, but use a dummy value to make sure the solr query is valid.
+      solr_pids = 'dummy_value' if solr_pids.blank?
+      # Initialize and/or append to :fq
+      solr_parameters[:fq] ||= []
+      solr_parameters[:fq] << "#{SolrDocument::FIELD_APO_ID}:(#{solr_pids})"
       solr_parameters
     end
   end
