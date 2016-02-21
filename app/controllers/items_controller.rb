@@ -9,9 +9,10 @@ class ItemsController < ApplicationController
     :purge_object,
     :register
   ]
-  before_action :forbid_modify, :only => [
+  before_action :allow_admin, :only => [
     :add_collection, :set_collection, :remove_collection,
     :datastream_update,
+    :embargo_update,
     :mods,
     :open_version, :close_version,
     :update_resource,
@@ -21,27 +22,26 @@ class ItemsController < ApplicationController
     :update_rights,
     :update_attributes
   ]
-  before_action :forbid_view, :only => [
+  before_action :allow_view, :only => [
     :get_file,
     :get_preserved_file
   ]
   before_action :enforce_versioning, :only => [
     :add_collection, :set_collection, :remove_collection,
-    :source_id, :set_source_id,
     :set_content_type,
-    :set_rights,
-    :tags,
-    :update_rights
+    :set_rights, :update_rights,
+    :set_source_id, :source_id,
+    :tags
   ]
   after_action :save_and_reindex, :only => [
     :add_collection, :set_collection, :remove_collection,
     :apply_apo_defaults,
     :embargo_update,
     :open_version, :close_version,
-    :tags, :tags_bulk,
-    :source_id,
+    :set_content_type,
     :set_rights,
-    :set_content_type
+    :source_id,
+    :tags, :tags_bulk
   ]
   # must run after save_and_reindex
   prepend_after_action :flush_index, :only => [
@@ -229,10 +229,9 @@ class ItemsController < ApplicationController
   end
 
   def embargo_update
-    unless current_user.is_admin
-      render :status => :forbidden, :text => 'forbidden'
-      return
-    end
+    # This could be a more granular permission request, i.e.
+    # apo = @object.admin_policy_object
+    # current_user.can_manage?(apo, 'embargo')
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
     @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
     @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
@@ -496,7 +495,7 @@ class ItemsController < ApplicationController
   def purge_object
     begin
       create_obj
-      return unless forbid_modify # return because rendering already happened
+      return unless allow_admin # return because rendering already happened
     rescue
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
@@ -668,20 +667,21 @@ class ItemsController < ApplicationController
 
   private
 
-  def reindex(item)
-    Dor::SearchService.solr.add item.to_solr
+  # ---
+  # Object management
+
+  def create_obj
+    raise 'missing druid' unless params[:id]
+    @object = Dor::Item.find params[:id]
+    @apo = @object.admin_policy_object
   end
 
   def flush_index
     Dor::SearchService.solr.commit
   end
 
-  # Filters
-  def create_obj
-    raise 'missing druid' unless params[:id]
-    @object = Dor::Item.find params[:id]
-    @apo = @object.admin_policy_object
-    @apo = ( @apo ? @apo.pid : '' )
+  def reindex(item)
+    Dor::SearchService.solr.add item.to_solr
   end
 
   def save_and_reindex
@@ -693,20 +693,21 @@ class ItemsController < ApplicationController
   # Permissions
 
   # check that the user can carry out this item modification
-  def forbid_modify
-    return true if current_user.is_admin || @object.can_manage_content?(current_user.roles(@apo))
+  def allow_admin
+    return true if current_user.can_admin?(@object, 'item')
     render :status => :forbidden, :text => 'forbidden'
     false
   end
 
-  def forbid_view
-    return true if current_user.is_admin || @object.can_view_content?(current_user.roles(@apo))
+  def allow_view
+    return true if current_user.can_view?(@object, 'item')
     render :status => :forbidden, :text => 'forbidden'
     false
   end
 
   def enforce_versioning
-    # if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
+    # if this object has been submitted, doesnt have an open version, and isnt
+    # sitting at sdr-ingest with a hold, they cannot change it.
     return true if @object.allows_modification?
     render status: :forbidden, text: 'Object cannot be modified in its current state.'
     false
