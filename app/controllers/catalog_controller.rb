@@ -207,7 +207,7 @@ class CatalogController < ApplicationController
   end
 
   def bulk_upload_form
-    @object = Dor.find params[:id]
+    @obj = Dor.find params[:id]
   end
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
