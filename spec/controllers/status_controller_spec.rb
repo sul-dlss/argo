@@ -46,10 +46,18 @@ describe StatusController, :type => :controller do
     before :each do
       @item = instantiate_fixture(@druid)
     end
-    it 'should 404 instead of 500 on bad IDs' do
+    it 'should 400 instead of 500 on bad IDs' do
+      bad_pid = 'junk'
       expect(subject).to receive(:check_recently_indexed).and_return(false)
-      expect(Dor::Item).to receive(:find).with('junk').and_call_original
-      get 'log', :test_obj => 'junk'
+      expect(Dor::Item).to receive(:find).with(bad_pid).and_call_original
+      get 'log', :test_obj => bad_pid
+      expect(response).to have_http_status 400
+    end
+    it 'should 404 instead of 500 on missing IDs' do
+      missing_pid = 'druid:aa111aa1111'
+      expect(subject).to receive(:check_recently_indexed).and_return(false)
+      expect(Dor::Item).to receive(:find).with(missing_pid).and_call_original
+      get 'log', :test_obj => missing_pid
       expect(response).to have_http_status 404
     end
     it 'succeeds with recently indexed items' do
