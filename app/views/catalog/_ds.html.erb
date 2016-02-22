@@ -1,13 +1,6 @@
 <%
-  apo = @obj.admin_policy_object
   if(params[:edit])
-    if @user &&
-      (@user.is_admin ||
-        (
-          @obj.can_manage_content?(@user.roles(apo.pid)) &&
-          @obj.can_manage_desc_metadata?(@user.roles(apo.pid))
-        )
-      )
+    if @user && @user.can_admin?(@obj, 'content') && @user.can_admin?(@obj, 'desc_metadata')
 %>
       <%= form_tag url_for(:controller => :items, :action => :datastream_update), :id => 'xmlEditForm', :method => :POST do%>
         <input type="hidden" name="id" value="<%=@obj.pid %>" />
@@ -26,10 +19,7 @@
     # rights, display raw xml editing
 %>
   <%=
-    if @user &&
-      (
-        @user.is_admin || @obj.can_manage_content?(@user.roles(apo.pid))
-      ) &&
+    if @user && @user.can_admin?(@obj, 'content') &&
       (
         @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||
         params[:dsid] == 'RELS-EXT'

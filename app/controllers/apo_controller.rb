@@ -9,15 +9,17 @@ class ApoController < ApplicationController
     :spreadsheet_template
   ]
   after_action :save_and_index, :only => [
-    :add_roleplayer,
+    :add_roleplayer, :delete_role,
     :add_collection, :delete_collection,
     :update_copyright, :update_creative_commons,
     :update_default_object_rights, :update_desc_metadata,
     :update_title, :update_use,
-    :delete_role,
     :register_collection
   ]
 
+  # These manager workgroups are specific to APO permissions and they are
+  # distinct from the repository-wide permissions in User.MANAGER_GROUPS
+  # This is used in app/views/apo/register.html.erb
   DEFAULT_MANAGER_WORKGROUPS = %w(sdr:developer sdr:service-manager sdr:metadata-staff).freeze
 
   # @param [String] role_name
@@ -73,7 +75,9 @@ class ApoController < ApplicationController
         render :status => :bad_request, :json => { :errors => input_params_errors }
         return
       end
-
+      # At present, the controller allows anyone authorized to create a new APO.
+      # The UI restricts access to this functionality by limiting the display of
+      # access to management buttons.
       apo_info = register_new_apo
       respond_to do |format|
         format.any { redirect_to catalog_path(apo_info[:apo_pid]), :notice => apo_info[:notice] }
@@ -330,7 +334,11 @@ class ApoController < ApplicationController
 
   # check that the user can carry out this object modification
   def forbid
-    return if current_user.is_admin || @object.can_manage_content?(current_user.roles(params[:id]))
+    # TODO: this could be a more granular permission request, see the
+    # Dor::Permissable#can_create_apo? and Dor::Permissable#can_manage_apo? in
+    # https://github.com/sul-dlss/dor-services/blob/permissable/lib/dor/models/permissable.rb
+    # return if current_user.can_admin?(@object, 'apo')
+    current_user.can_admin?(@object, 'content')
     render :status => :forbidden, :text => 'forbidden'
     nil
   end
