@@ -11,12 +11,10 @@ class ItemsController < ApplicationController
   ]
   before_action :forbid_modify, :only => [
     :add_collection, :set_collection, :remove_collection,
-    :add_file, :delete_file,
     :datastream_update,
     :mods,
     :open_version, :close_version,
-    :replace_file,
-    :resource, :update_resource,
+    :update_resource,
     :set_content_type,
     :source_id,
     :tags, :tags_bulk,
@@ -347,26 +345,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def replace_file
-    @object.replace_file params[:uploaded_file], params[:file_name]
-    respond_to do |format|
-      msg = "File #{params[:file_name]} was replaced!"
-      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
-    end
-  end
-
-  # add a file to a resource, not to be confused with add a resource to an object
-  def add_file
-    file = params[:uploaded_file]
-    file_name = file.original_filename
-    file_mtype = Rack::Mime.mime_type(File.extname(file_name))
-    @object.add_file file, params[:resource], file_name, file_mtype
-    respond_to do |format|
-      msg = "File #{file_name} was added!"
-      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
-    end
-  end
-
   def open_version
     # puts params[:description]
     vers_md_upd_info = {
@@ -513,18 +491,6 @@ class ItemsController < ApplicationController
       msg = "Tags for #{params[:id]} have been updated!"
       format.any { redirect_to catalog_path(params[:id]), :notice => msg }
     end
-  end
-
-  def delete_file
-    @object.remove_file(params[:file_name])
-    respond_to do |format|
-      msg = params[:file_name] + ' has been deleted!'
-      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
-    end
-  end
-
-  def resource
-    @content_ds = @object.datastreams['contentMetadata']
   end
 
   def purge_object

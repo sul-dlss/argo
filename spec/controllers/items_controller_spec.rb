@@ -174,44 +174,6 @@ describe ItemsController, :type => :controller do
       get 'set_rights', :id => @pid, :rights => 'dark'
     end
   end
-
-  describe 'add_file' do
-    it 'should recieve an uploaded file and add it to the requested resource' do
-      # found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
-      file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
-      expect(@item).to receive(:add_file)
-      post 'add_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID'
-    end
-    it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
-      post 'add_file', :uploaded_file => nil, :id => @pid, :resource => 'resourceID'
-      expect(response.code).to eq('403')
-    end
-  end
-  describe 'delete_file' do
-    it 'should call dor services to remove the file' do
-      expect(@item).to receive(:remove_file)
-      get 'delete_file', :id => @pid, :file_name => 'old_file'
-    end
-    it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
-      get 'delete_file', :id => @pid, :file_name => 'old_file'
-      expect(response.code).to eq('403')
-    end
-  end
-  describe 'replace_file' do
-    it 'should recieve an uploaded file and call dor-services' do
-      # found the UploadedFile approach at: http://stackoverflow.com/questions/7280204/rails-post-command-in-rspec-controllers-files-arent-passing-through-is-the
-      file = Rack::Test::UploadedFile.new('spec/fixtures/cerenkov_radiation_160.jpg', 'image/jpg')
-      expect(@item).to receive(:replace_file)
-      post 'replace_file', :uploaded_file => file, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'
-    end
-    it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
-      post 'replace_file', :uploaded_file => nil, :id => @pid, :resource => 'resourceID', :file_name => 'somefile.txt'
-      expect(response.code).to eq('403')
-    end
-  end
   describe 'update_parameters' do
     before :each do
       @content_md = double(Dor::ContentMetadataDS)
@@ -336,14 +298,6 @@ describe ItemsController, :type => :controller do
     it 'should call dor-services to update the resource type' do
       expect(@item).to receive(:update_resource_type)
       post 'update_resource', :resource => '0001', :type => 'book', :id => @pid
-    end
-  end
-  describe 'resource' do
-    it 'should set the object and datastream, then call the view' do
-      skip 'test unimplemented'
-      # expect(Dor::Item).to receive(:find)
-      # expect(@item).to receive(:datastreams).and_return({'contentMetadata' => double(Dor::ContentMetadataDS)})
-      # get 'resource', :id => @pid, :resource => '0001'
     end
   end
   describe 'add_collection' do
