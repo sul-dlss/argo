@@ -2,11 +2,9 @@ require 'spec_helper'
 
 describe RegistrationController, :type => :controller do
   before :each do
-    @item = double(Dor::Item)
     @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first)
     allow(@current_user).to receive(:is_admin).and_return(true)
-    allow(controller).to receive(:current_user).and_return(@current_user)
-    allow(Dor::Item).to receive(:find).and_return(@item)
+    allow(subject).to receive(:current_user).and_return(@current_user)
   end
 
   describe 'rights_list' do
@@ -217,8 +215,18 @@ describe RegistrationController, :type => :controller do
   end
 
   describe '#collection_list' do
-    it 'should handle invalid parameters' do
-      expect { get 'collection_list' }.to raise_error(ArgumentError)
+    it 'should handle a missing "apo_id" parameter' do
+      # The RegistrationController#collection_list can be called without
+      # an :apo_id parameter when registering a new item, see
+      # spec/features/item_registration_spec.rb
+      # So, it's not simple to enforce say ActionController::BadRequest for
+      # a missing parameter.  The method must accept a missing parameter.
+      # In this first call with a missing parameter, it doesn't specify a
+      # known format (:json, :xml), so it fails to respond.
+      expect { get 'collection_list' }.to raise_error(ActionController::UnknownFormat)
+      # When a known format is given, it's OK.
+      expect { get 'collection_list', format: :json }.not_to raise_error
+      expect { get 'collection_list', format: :xml }.not_to raise_error
     end
 
     it 'should handle a bogus APO' do

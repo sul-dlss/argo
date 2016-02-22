@@ -3,6 +3,8 @@ require 'spec_helper'
 # Feature tests for the spreadsheet bulk uploads view.
 feature 'Bulk jobs view', js: true do
   before :each do
+    @druid = 'druid:hv992ry2431'  # a Dor object fixture
+    @druid_id = DruidTools::Druid.new(@druid).id
     @current_user = double(
       :webauth_user,
       login: 'sunetid',
@@ -11,23 +13,22 @@ feature 'Bulk jobs view', js: true do
       is_admin: true
     )
     allow(@current_user).to receive(:roles).and_return([])  # necessary to determine if current user has right permissions
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-                                                    and_return(@current_user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@current_user)
   end
 
   scenario 'the submit button exists' do
-    visit bulk_jobs_index_path('druid:hv992ry2431')
-    expect(page).to have_link('Submit new file ...', href: '/catalog/druid:hv992ry2431/bulk_upload_form')
+    visit bulk_jobs_index_path(id: @druid_id)
+    expect(page).to have_link('Submit new file ...', href: "/catalog/#{@druid}/bulk_upload_form")
   end
 
   scenario 'click submit button opens bulk upload form' do
-    visit bulk_upload_form_path(id: 'druid:hv992ry2431')
+    visit bulk_upload_form_path(id: @druid_id)
     expect(page).to have_css('div#spreadsheet-upload-container form div#bulk-upload-form')
     expect(page).to have_css('input#spreadsheet_file')
   end
 
   scenario 'bulk upload form buttons are disabled upon first page visit' do
-    visit bulk_upload_form_path(id: 'druid:hv992ry2431')
+    visit bulk_upload_form_path(id: @druid_id)
     expect(find('input#filetypes_1').disabled?).to be_truthy
     expect(find('input#filetypes_2').disabled?).to be_truthy
     expect(find('input#convert_only').disabled?).to be_truthy
@@ -37,7 +38,7 @@ feature 'Bulk jobs view', js: true do
   end
 
   scenario 'selecting a file to upload and selecting one of the radio buttons enables the submit button' do
-    visit bulk_upload_form_path(id: 'druid:hv992ry2431')
+    visit bulk_upload_form_path(id: @druid_id)
     expect(page).to have_css('#spreadsheet_file')
     expect(find('input#filetypes_1').disabled?).to be_truthy
 
@@ -55,7 +56,7 @@ feature 'Bulk jobs view', js: true do
   end
 
   scenario 'uploading a file with an invalid extension displays a warning' do
-    visit bulk_upload_form_path(id: 'druid:hv992ry2431')
+    visit bulk_upload_form_path(id: @druid_id)
     expect(page).to have_css('#spreadsheet_file')
     attach_file('spreadsheet_file', File.absolute_path(__FILE__))
 

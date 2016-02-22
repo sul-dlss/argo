@@ -121,7 +121,7 @@ class ApoController < ApplicationController
     notice = "APO #{apo_pid} created."
 
     # Once it's been created we populate it with its metadata
-    apo = Dor.find(apo_pid)
+    apo = find_druid(apo_pid)
     set_apo_metadata apo, params
     apo.add_tag('Registered By : ' + current_user.login)
 
@@ -212,7 +212,7 @@ class ApoController < ApplicationController
     reg_params[:other_id       ] = "symphony:#{col_catkey}" unless col_catkey.blank?
     reg_params[:workflow_id    ] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
-    collection = Dor.find(response[:pid])
+    collection = find_druid(response[:pid])
     if params[:collection_abstract] && params[:collection_abstract].length > 0
       set_abstract(collection, params[:collection_abstract])
     end
@@ -291,10 +291,9 @@ class ApoController < ApplicationController
   private
 
   def create_obj
-    raise 'missing druid' unless params[:id]
-    @object = Dor.find params[:id] # , :lightweight => true
+    @object = find_druid(params[:id])
     pids = @object.default_collections || []
-    @collections = pids.map { |pid| Dor.find(pid) }
+    @collections = pids.map { |pid| find_druid(pid) }
   end
 
   def add_roleplayers_to_object(object, roleplayer_list, role)
