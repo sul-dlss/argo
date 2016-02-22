@@ -3,21 +3,21 @@ require 'spec_helper'
 feature 'APO views' do
   context 'with viewing user' do
     let(:druid) { 'druid:hv992ry2431' }
-    let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
+    let(:apo) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
     before :each do
       # use a viewing user that depends on workgroup roles for access
       @view_user = view_user # see spec_helper
       allow(@view_user).to receive(:is_viewer).and_return(false)
-      allow(Dor).to receive(:find).with(druid, {}).and_return(item)
+      allow(Dor).to receive(:find).with(druid).and_return(apo)
     end
 
     it 'allows a user of an authorized workgroup to view an APO' do
       # Ensure all user authority methods return false and the
       # user belongs to at least one authorized workgroup.
-      dor_viewer_roles = %w(dor-viewer sdr-viewer)
+      dor_viewer_roles = %w(sdr-viewer)
       dor_viewer_roles.each do |role|
         allow(@view_user).to receive(:roles).and_return([role])
-        allow(item).to receive(:can_view_content?).with([role]).and_return(true)
+        allow(apo).to receive(:can_view_content?).with([role]).and_return(true)
         visit catalog_path druid
         expect(page).to have_content(druid)
         expect(page).to have_content('adminPolicy')

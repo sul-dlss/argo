@@ -244,7 +244,8 @@ class User < ActiveRecord::Base
     # could break the flexibility of this method and dor-services designs.
     dor_object = get_dor_object(dor_object)
     unless dor_object.respond_to? permission
-      raise ArgumentError.new("DOR object doesn't respond to: #{permission}")
+      msg = "DOR object (#{dor_object.pid}) does not respond to: #{permission}"
+      raise ArgumentError.new(msg)
     end
     # The authorization is first requested using the governing APO.
     apo = dor_object.admin_policy_object

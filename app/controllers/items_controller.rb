@@ -704,7 +704,8 @@ class ItemsController < ApplicationController
   # Object management
 
   def create_obj
-    raise 'missing druid' unless params[:id]
+    raise ArgumentError.new('missing druid') unless params[:id]
+    params[:id] = 'druid:' + params[:id] unless params[:id] =~ /^druid:/
     @object = Dor::Item.find params[:id]
     @apo = @object.admin_policy_object
   end
