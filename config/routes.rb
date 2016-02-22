@@ -104,10 +104,6 @@ Argo::Application.routes.draw do
       post 'datastream',         :action => :datastream_update,     :as => 'datastream_update'
       get 'file',                :action => :get_file,          :as => 'get_file'
       get 'file_list',           :action => :file,              :as => 'file'
-      post 'file',               :action => :replace_file,      :as => 'replace_file'
-      get 'resource',            :action => :resource,          :as => 'resource'
-      delete 'file',             :action => :delete_file,       :as => 'delete_file'
-      post 'add_file'
       post 'file/attributes',    :action => :update_attributes, :as => 'update_attributes'
       match 'close_version_ui',  :action => :close_version_ui,  :as => 'close_version_ui', :via => [:get, :post]
       match 'open_version_ui',   :action => :open_version_ui,   :as => 'open_version_ui',  :via => [:get, :post]

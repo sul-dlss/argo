@@ -20,15 +20,10 @@
           
           can_manage = current_user.is_admin || current_user.is_manager || (apo_pid && object.can_manage_content?(current_user.roles(apo_pid)))
           can_view = current_user.is_admin || current_user.is_manager || (apo_pid && object.can_view_content?(current_user.roles(apo_pid)))
-          version_open = can_close_version? object.pid
 
           content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource, index| %>
             <li class="resource">
               <span class="label">Resource (<%=index+1%>)</span> <%= resource['type']%>
-              <%if can_manage && version_open
-                edit_resource_link="/items/#{params[:id]}/resource/?edit=true&resource=#{resource['id']}"%>
-                <%= link_to "(edit)", edit_resource_link, :data => {ajax_modal: 'trigger'} %>
-              <%end%>
               <% if resource.at('label') %>
                 <li><span class="label">Label</span> <%= resource.at('label').text %></li>
               <% end %>
@@ -41,10 +36,6 @@
                     <li class="resource">
                       <span class="label">Resource (<%=inner_index%>)</span>
                       <%= child['type']%>
-                      <%if can_manage && version_open
-                        edit_resource_link = '/items/'+params[:id]+'/resource/?edit=true&resource='+child['id'] %>
-                        <%= link_to "(edit)", edit_resource_link, :data => {ajax_modal: 'trigger'} %>
-                      <%end%>
                       <ul>
                         <% if child.at('label') %>
                           <li> <span class="label">Label</span> <%= child.at('label').text %></li>
