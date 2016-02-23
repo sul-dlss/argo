@@ -6,4 +6,4 @@ Example:
     rails generate argo:solr 'http://your.production.solr-server.com/solr'
 
     This will create:
-        config/solr.yml
+        config/blacklight.yml

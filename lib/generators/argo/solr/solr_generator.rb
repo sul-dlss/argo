@@ -11,7 +11,7 @@ module Argo
 
       def initialize(*args)
         super(*args)
-        @target_file = 'solr.yml'
+        @target_file = 'blacklight.yml'
         @target_path = File.join('config', @target_file)
       end
 
