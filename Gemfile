@@ -37,7 +37,6 @@ gem 'about_page'
 gem 'active-fedora'
 gem 'blacklight', '~> 5.9.0' # TODO: BL >= 5.10.x has new deprecation warnings vs <= 5.9.x, will investigate and unpin after current upgrade stuff has settled
 gem 'blacklight-hierarchy'
-gem 'blacklight-marc'
 gem 'dor-services', '~> 5.3', '>= 5.3.4'
 gem 'is_it_working-cbeer'
 gem 'jettywrapper'
