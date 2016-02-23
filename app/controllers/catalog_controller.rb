@@ -189,7 +189,7 @@ class CatalogController < ApplicationController
 
   def datastream_view
     pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @response, @document = get_solr_response_for_doc_id pid
+    @response, @document = fetch pid
     @obj = Dor.find pid, :lightweight => true
     data = @obj.datastreams[params[:dsid]].content
     raise ActionController::RoutingError.new('Not Found') if data.nil?
@@ -228,7 +228,7 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id]
 
     return unless valid_user?(@obj)
-    @response, @document = get_solr_response_for_doc_id params[:id]
+    @response, @document = fetch params[:id]
     @bulk_jobs = load_bulk_jobs(params[:id])
   end
 
@@ -280,7 +280,7 @@ class CatalogController < ApplicationController
   def show_aspect
     pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
     @obj ||= Dor.find(pid)
-    @response, @document = get_solr_response_for_doc_id pid
+    @response, @document = fetch pid
   end
 
   def set_user_obj_instance_var
