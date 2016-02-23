@@ -295,10 +295,11 @@ namespace :argo do
     unless facet.nil?
       facets = facet.items.map(&:value)
       priv_groups = facets.select { |v| v =~ /^workgroup:/ }
-      priv_groups += (ADMIN_GROUPS + VIEWER_GROUPS + MANAGER_GROUPS) # we know that we always want these built-in groups to be part of .htaccess
-      priv_groups.uniq! # no need to repeat ourselves (mostly there in case the builtin groups are already listed in APOs)
-
-      directives += priv_groups.collect { |v|
+      # we always want these built-in groups to be part of .htaccess
+      priv_groups += User::ADMIN_GROUPS
+      priv_groups += User::MANAGER_GROUPS
+      priv_groups += User::VIEWER_GROUPS
+      directives += priv_groups.uniq.map { |v|
         ["Require privgroup #{v.split(/:/, 2).last}", "WebAuthLdapPrivgroup #{v.split(/:/, 2).last}"]
       }.flatten
 

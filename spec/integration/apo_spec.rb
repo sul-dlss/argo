@@ -1,11 +1,16 @@
 require 'spec_helper'
 
 def user_stub
-  webauth = double('WebAuth', :login => 'sunetid', :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => ADMIN_GROUPS.first)
+  webauth = double(
+    'WebAuth',
+    :login => 'sunetid',
+    :attributes => {'DISPLAYNAME' => 'Example User'},
+    :privgroup => User::ADMIN_GROUPS.first
+  )
   @current_user = User.find_or_create_by_webauth(webauth)
   allow(@current_user).to receive(:is_admin).and_return(true)
-  allow(@current_user).to receive(:roles).and_return([])
   allow(@current_user).to receive(:is_manager).and_return(false)
+  allow(@current_user).to receive(:roles).and_return([])
   allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@current_user)
 end
 
