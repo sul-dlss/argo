@@ -45,7 +45,7 @@ gem 'mods_display'
 gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'stanford-mods'
-gem 'sul_styles', '~> 0.3.0' # later versions require ruby 2.1 or higher
+gem 'sul_styles', '~> 0.3'
 
 group :test, :development do
   gem 'http_logger'
