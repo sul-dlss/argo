@@ -31,16 +31,6 @@ module BlacklightSolrExtensions
     new_params
   end
 
-  def get_search_results(*args)
-    (solr_response, document_list) = super(*args)
-    document_list.each do |doc|
-      unless doc.key?(blacklight_config[:index][:title_field])
-        doc[blacklight_config[:index][:title_field]] = doc['id']
-      end
-    end
-    [solr_response, document_list]
-  end
-
   ##
   # Convert a facet/value pair into a solr fq parameter
   def facet_value_to_fq_string(facet_field, value)
