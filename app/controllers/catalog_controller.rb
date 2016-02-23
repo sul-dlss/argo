@@ -1,7 +1,5 @@
 require 'blacklight/catalog'
 class CatalogController < ApplicationController
-  include Blacklight::Marc::Catalog
-
   include BlacklightSolrExtensions
   include Blacklight::Catalog
   include Argo::AccessControlsEnforcement
