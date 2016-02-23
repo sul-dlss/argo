@@ -41,7 +41,11 @@ class RegistrationController < ApplicationController
       col_druid = col_id.gsub(/^druid:/, '')
       col_title_field = SolrDocument::FIELD_TITLE
       # grab the collection title from Solr, or fall back to DOR
-      solr_doc = Blacklight.solr.find({:q => "id:\"#{col_id}\"", :rows => 1, :fl => col_title_field}).docs.first
+      solr_doc = Blacklight.default_index.connection.find({
+        q: "id:\"#{col_id}\"",
+        rows: 1,
+        fl: col_title_field
+      }).docs.first
       if solr_doc.present? && solr_doc[col_title_field].present?
         collections[col_id] = "#{short_label(solr_doc[col_title_field], truncate_limit)} (#{col_druid})"
       else
