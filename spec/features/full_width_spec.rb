@@ -2,17 +2,9 @@ require 'spec_helper'
 
 feature 'Full width' do
   before :each do
-    @current_user = double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      can_view_something?: true
-    )
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-      and_return(@current_user)
+    admin_user # see spec_helper
   end
+
   scenario 'has bootstrap full width classes' do
     visit root_path
     expect(page).to have_css '#main-container.container-fluid'

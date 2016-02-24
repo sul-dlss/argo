@@ -3,16 +3,7 @@ require 'spec_helper'
 # Feature/view tests for the (old) bulk actions view.
 feature 'Bulk actions view', js: true do
   before :each do
-    @current_user = double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      permitted_collections: [["string"]]
-    )
-
-    expect_any_instance_of(ApplicationController).to receive(:current_user).at_least(:once).and_return(@current_user)
+    admin_user # see spec_helper
   end
 
   scenario 'basic page renders ok' do

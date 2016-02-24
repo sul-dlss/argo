@@ -330,7 +330,11 @@ class ApoController < ApplicationController
 
   # check that the user can carry out this object modification
   def forbid
-    return if current_user.is_admin || @object.can_manage_content?(current_user.roles(params[:id]))
+    # TODO: this could be a more granular permission request, see the
+    # Dor::Permissable#can_create_apo? and Dor::Permissable#can_manage_apo? in
+    # https://github.com/sul-dlss/dor-services/blob/permissable/lib/dor/models/permissable.rb
+    # return if current_user.can_admin?(@object, 'apo')
+    current_user.can_admin?(@object, 'content')
     render :status => :forbidden, :text => 'forbidden'
     nil
   end

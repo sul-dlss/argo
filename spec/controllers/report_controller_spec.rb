@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe ReportController, :type => :controller do
   before :each do
-    log_in_as_mock_user(subject)
-    allow_any_instance_of(User).to receive(:groups).and_return(['sdr:administrator-role'])
+    admin_user # see spec_helper
   end
   describe ':workflow_grid' do
     it 'should work' do
