@@ -2,24 +2,27 @@ require 'spec_helper'
 
 feature 'APO views' do
   context 'with viewing user' do
-    let(:druid) { 'druid:hv992ry2431' }
-    let(:item) { instantiate_fixture(druid, Dor::AdminPolicyObject) }
-    before :each do
-      # use a viewing user that depends on workgroup roles for access
-      @view_user = view_user # see spec_helper
-      allow(@view_user).to receive(:is_viewer).and_return(false)
-      allow(Dor).to receive(:find).with(druid, {}).and_return(item)
+    let(:apo) do
+      object = instantiate_fixture('hv992ry2431', Dor::AdminPolicyObject)
+      allow(Dor).to receive(:find).with(object.pid).and_return(object)
+      object
+    end
+    let(:current_user) do
+      # To ensure all Argo user authority methods return false and the
+      # user does not belong to any authorized workgroups, use a
+      # view_user that depends on workgroup roles for access.
+      user = view_user # see spec_helper
+      allow(user).to receive(:is_viewer).and_return(false)
+      user
     end
 
     it 'allows a user of an authorized workgroup to view an APO' do
-      # Ensure all user authority methods return false and the
-      # user belongs to at least one authorized workgroup.
-      dor_viewer_roles = %w(dor-viewer sdr-viewer)
-      dor_viewer_roles.each do |role|
-        allow(@view_user).to receive(:roles).and_return([role])
-        allow(item).to receive(:can_view_content?).with([role]).and_return(true)
-        visit catalog_path druid
-        expect(page).to have_content(druid)
+      viewer_roles = %w(sdr-viewer)
+      viewer_roles.each do |role|
+        expect(current_user).to receive(:roles).at_least(:once).and_return([role])
+        expect(apo).to receive(:can_view_metadata?).with([role]).at_least(:once).and_return(true)
+        visit catalog_path apo.pid
+        expect(page).to have_content(apo.pid)
         expect(page).to have_content('adminPolicy')
         # A viewer cannot do admin tasks on the APO, so Argo
         # should not display or activate the Admin links. See
@@ -31,11 +34,19 @@ feature 'APO views' do
       end
     end
 
+    it 'does not allow a user of an obsolete workgroup to view an existing APO' do
+      viewer_roles = %w(dor-viewer)
+      viewer_roles.each do |role|
+        expect(current_user).to receive(:roles).with(apo.pid).at_least(:once).and_return([role])
+        expect(apo).to receive(:can_view_metadata?).with([role]).at_least(:once).and_return(false)
+        visit catalog_path apo.pid
+        expect(page).to have_content('APO forbids access')
+      end
+    end
+
     it 'does not allow any unauthorized user to view an existing APO' do
-      # Ensure all user authority methods return false and the
-      # user does not belong to any authorized workgroups.
-      allow(@view_user).to receive(:roles).and_return([])
-      visit catalog_path druid
+      expect(current_user).to receive(:roles).at_least(:once).and_return([])
+      visit catalog_path apo.pid
       expect(page).to have_content('APO forbids access')
     end
   end
