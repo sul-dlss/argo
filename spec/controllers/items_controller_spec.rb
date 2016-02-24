@@ -5,12 +5,11 @@ describe ItemsController, :type => :controller do
     # Item
     item_pid = 'druid:rn653dy9317'
     @item = instantiate_fixture(item_pid, Dor::Item)
-    # allow(Dor).to receive(:find).with(@item.pid).and_return(@item)
     allow(Dor::Item).to receive(:find).with(@item.pid).and_return(@item)
+    # APO
     apo_pid = @item.admin_policy_object.pid
     @apo = instantiate_fixture(apo_pid, Dor::AdminPolicyObject)
     allow(Dor).to receive(:find).with(@apo.pid).and_return(@apo)
-    # allow(Dor::Item).to receive(:find).with(@item.pid).and_return(@item)
   end
 
   describe 'release_hold' do
@@ -379,19 +378,21 @@ describe ItemsController, :type => :controller do
       expect(response).to have_http_status(:ok)
     end
     it 'should 404 on missing item' do
-      expect(Dor::Item).to receive(:find).with(@druid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get :workflow_view, id: @item.pid, wf_name: 'accessionWF', repo: 'dor', format: :html
+      pid = 'druid:zz999zz9999'
+      expect(Dor::Item).to receive(:find).with(pid).and_raise(ActiveFedora::ObjectNotFoundError)
+      get :workflow_view, id: pid, wf_name: 'accessionWF', repo: 'dor', format: :html
       expect(response).to have_http_status(:not_found)
     end
   end
   describe '#workflow_update' do
     it 'should require various workflow parameters' do
+      # params required are (:id, :wf_name, :process, :status)
       expect { post :workflow_update, id: @item.pid, wf_name: 'accessionWF' }.to raise_error(ArgumentError)
     end
     it 'should change the status' do
       expect(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(double(definition: double(repo: 'dor')))
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', @druid, 'accessionWF', 'publish').and_return(nil)
-      expect(Dor::WorkflowService).to receive(:update_workflow_status).with('dor', @druid, 'accessionWF', 'publish', 'ready').and_return(nil)
+      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', @item.pid, 'accessionWF', 'publish').and_return(nil)
+      expect(Dor::WorkflowService).to receive(:update_workflow_status).with('dor', @item.pid, 'accessionWF', 'publish', 'ready').and_return(nil)
       post :workflow_update, id: @item.pid, wf_name: 'accessionWF', process: 'publish', status: 'ready'
       expect(subject).to redirect_to(catalog_path)
     end
