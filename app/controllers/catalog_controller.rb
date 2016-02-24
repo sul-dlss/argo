@@ -1,6 +1,5 @@
 require 'blacklight/catalog'
 class CatalogController < ApplicationController
-  include BlacklightSolrExtensions
   include Blacklight::Catalog
   helper ArgoHelper
   include SpreadsheetHelper

@@ -2,7 +2,6 @@ require 'blacklight/catalog'
 
 class ReportController < CatalogController
 
-  include BlacklightSolrExtensions
   include Blacklight::Catalog
   helper ArgoHelper
   copy_blacklight_config_from CatalogController

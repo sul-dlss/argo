@@ -1,5 +1,4 @@
 class Report
-  include BlacklightSolrExtensions
   include Blacklight::Configurable
   include Blacklight::SearchHelper
   include CsvConcern
