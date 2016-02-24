@@ -54,6 +54,7 @@
                              <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
                           </li>
                         <% end %>
+                        <%= render partial: 'catalog/_show_sections/default_contents_external_file', locals: { resource: child } -%>
                       </ul>
                     </li>
                   <% end %>
@@ -72,7 +73,7 @@
                      <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
                   </li>
                 <% end %>
-                
+                <%= render partial: 'catalog/_show_sections/default_contents_external_file', locals: { resource: resource } -%>
               </ul>
             </li>
           <% end %>

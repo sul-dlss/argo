@@ -234,7 +234,7 @@ class ItemsController < ApplicationController
       return
     end
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
-    @object.update_embargo(DateTime.parse(params[:embargo_date]))
+    @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
     @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
     respond_to do |format|
       format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
