@@ -13,9 +13,8 @@ gem_graph.png
 jetty/
 public/.htaccess
 public/images/.dpg_pool
-
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
-
+workflow_service.log*
 vendor/ruby/
