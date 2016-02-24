@@ -726,7 +726,11 @@ describe User, :type => :model do
     end
     it 'a PID that does not exist will raise ActiveFedora::ObjectNotFoundError' do
       expect(Dor).to receive(:find).and_call_original
-      expect{subject.send(:get_dor_object, 'aa111aa1111')}.to raise_error(ActiveFedora::ObjectNotFoundError)
+      expect{subject.send(:get_dor_object, 'druid:aa111aa1111')}.to raise_error(ActiveFedora::ObjectNotFoundError)
+    end
+    it 'a PID without a "druid:" prefix will raise Rubydora::FedoraInvalidRequest' do
+      expect(Dor).to receive(:find).and_call_original
+      expect{subject.send(:get_dor_object, 'aa111aa1111')}.to raise_error(Rubydora::FedoraInvalidRequest)
     end
   end
 
