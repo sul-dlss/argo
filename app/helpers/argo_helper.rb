@@ -4,25 +4,6 @@ module ArgoHelper
   include BlacklightHelper
   include ValueHelper
 
-  ##
-  # TODO: This may be dead code to remove.
-  def index_queue_velocity
-    return 0 unless Dor::Config.status && Dor::Config.status.indexer_velocity_url
-    url = Dor::Config.status.indexer_velocity_url
-    data = JSON.parse(open(url).read)
-    points = []
-    data.first['datapoints'].each do |datum|
-      points << datum.first.to_i
-    end
-    if points.length > 1
-      diff = points.last - points.first
-      return diff / (points.length - 1)
-    end
-    return 0
-  rescue
-    return 0
-  end
-
   def structure_from_solr(solr_doc, prefix, suffix = 'display')
     prefixed_fields = Hash[solr_doc.select { |k, v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
     result = Confstruct::HashWithStructAccess.new
