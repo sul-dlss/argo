@@ -173,8 +173,6 @@ Argo::Application.routes.draw do
     resources :objects # TODO: do we know what this does?
   end
 
-  get 'index_queue/depth', to: 'index_queue#depth'
-
   namespace :workflow_service do
     get '/:pid/closeable',
         action: 'closeable',
