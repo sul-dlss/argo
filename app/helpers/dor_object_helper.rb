@@ -131,36 +131,8 @@ module DorObjectHelper
     Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
   end
 
-  # TODO: switch to using Dor::Config.sdr.rest_client
   def last_accessioned_version(object)
-    # we just want the hostname, remove the scheme, we'll build it back into the URL in a bit...
-    sdr_host = Dor::Config.content.sdr_server.gsub('https://', '')
-    sdr_user = Dor::Config.content.sdr_user
-    sdr_pass = Dor::Config.content.sdr_pass
-
-    # build an https URL for basic auth using the info we got above
-    cur_vers_url = "https://#{sdr_user}:#{sdr_pass}@#{sdr_host}/sdr/objects/#{object.pid}/current_version"
-
-    res = RestClient.get(cur_vers_url) do |response, request, result|
-      # make the REST call to SDR.  if the response code is 200, we can use
-      # the returned XML (and parse the version number out later).  if the
-      # response code is 404, that indicates the object hasn't made it to
-      # preservation core, so raise the same error this method used to about
-      # the object not being accessioned yet.  otherwise, raise a generic
-      # unknown error.
-      case response.code
-      when 200
-        response
-      when 404
-        raise 'Cant get preservation core version for an object that hasnt been accessioned.'
-      else
-        raise 'Unexpected exception: #{response}'
-      end
-    end
-
-    # we expect a response along the lines of: <currentVersion>5</currentVersion>
-    response_doc = Nokogiri::XML(res)
-    response_doc.xpath('/currentVersion/text()')
+    Sdr::Client.current_version(object.pid)
   end
 
   ##
