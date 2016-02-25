@@ -1,3 +1,11 @@
+<!--
+  TODO: this could be a more granular permission request, see the
+  Dor::Governable#can_manage_embargo?
+  https://github.com/sul-dlss/dor-services/blob/develop/lib/dor/models/governable.rb
+  If this is done, the permission code is:
+  current_user.can_admin?(@object, 'embargo')  # only admin
+  current_user.can_manage?(@object, 'embargo') # admin or manager
+ -->
 <% if current_user && current_user.is_admin %>
 
   <script>

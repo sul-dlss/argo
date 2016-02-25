@@ -48,8 +48,8 @@ describe StatusController, :type => :controller do
     end
     it 'should 404 instead of 500 on bad IDs' do
       expect(subject).to receive(:check_recently_indexed).and_return(false)
-      expect(Dor::Item).to receive(:find).with('junk').and_call_original
-      get 'log', :test_obj => 'junk'
+      expect(Dor::Item).to receive(:find).with('xxx:junk').and_call_original
+      get 'log', :test_obj => 'xxx:junk'
       expect(response).to have_http_status 404
     end
     it 'succeeds with recently indexed items' do

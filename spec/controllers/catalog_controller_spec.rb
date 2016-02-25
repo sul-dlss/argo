@@ -2,101 +2,190 @@ require 'spec_helper'
 
 describe CatalogController, :type => :controller do
 
-  before :each do
-#   log_in_as_mock_user(subject)
-    @druid = 'rn653dy9317'  # a fixture Dor::Item record
-    @item = instantiate_fixture(@druid, Dor::Item)
-    @user = User.find_or_create_by_webauth double('WebAuth', :login => 'sunetid', :logged_in? => true, :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => '')
-    allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
-    allow(Dor::Item).to receive(:find).with("druid:#{@druid}").and_return(@item)
+  let(:item) do
+    object = instantiate_fixture('rn653dy9317', Dor::Item)
+    allow(Dor).to receive(:find).with(object.pid).and_return(object)
+    object
+  end
+  let(:apo) do
+    object = instantiate_fixture('hv992ry2431', Dor::AdminPolicyObject)
+    allow(Dor).to receive(:find).with(object.pid).and_return(object)
+    object
+  end
+  let(:current_user) do
+    webauth = double(
+      'WebAuth',
+      login: 'sunetid',
+      logged_in?: true,
+      attributes: {'DISPLAYNAME' => 'Example User'},
+      privgroup: ''
+    )
+    user = User.find_or_create_by_webauth(webauth)
+    allow(subject).to receive(:current_user).and_return(user)
+    user
   end
 
-  shared_examples 'APO-independent auth' do
-    describe 'no user' do
+  # These specs do not depend on an APO to authorize privileged roles.
+  # Argo has global privileges based on webauth groups.
+  shared_examples 'APO-independent auth for show' do
+    context 'no user' do
       it 'basic get redirects to login' do
-        expect(subject).to receive(:webauth).and_return(nil)
-        get 'show', :id => @druid
-        expect(response.code).to eq('401')  # Unauthorized without webauth, no place to redirect
+        # ApplicationController#authorize! returns :unauthorized
+        expect(subject).not_to receive(:valid_user?)
+        expect(subject).to receive(:current_user).and_return(nil)
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:unauthorized)
       end
     end
-    describe 'with user (valid_user)' do
+    context 'with valid user' do
       before :each do
-        expect(subject).to receive(:valid_user?).with(@item).and_call_original # called every time
-        allow(subject).to receive(:current_user).and_return(@user)
+        # Ensure the `current_user` is instantiated for all these examples
+        expect(current_user).to receive('can_view?').with(item).and_call_original
+        expect(subject).to receive(:valid_user?).with(item).and_call_original
       end
       it 'unauthorized_user' do
-        get 'show', :id => @druid
-        expect(response.code).to eq('403')  # two different flavors
-        # expect(response.body).to include 'No APO'
+        # CatalogController#valid_user? returns :forbidden
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:forbidden)
       end
       it 'is_admin' do
-        allow(@user).to receive(:is_admin).and_return(true)
-        get 'show', :id => @druid
-        expect(response.code).to eq('200')
+        expect(current_user).to receive(:is_admin).at_least(:once).and_return(true)
+        expect(current_user).not_to receive(:is_manager)
+        expect(current_user).not_to receive(:is_viewer)
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:ok)
+      end
+      it 'is_manager' do
+        expect(current_user).to receive(:is_admin).at_least(:once).and_return(false)
+        expect(current_user).to receive(:is_manager).at_least(:once).and_return(true)
+        expect(current_user).not_to receive(:is_viewer)
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:ok)
       end
       it 'is_viewer' do
-        allow(@user).to receive(:is_viewer).and_return(true)
-        get 'show', :id => @druid
-        expect(response.code).to eq('200')
+        expect(current_user).to receive(:is_admin).at_least(:once).and_return(false)
+        expect(current_user).to receive(:is_manager).at_least(:once).and_return(false)
+        expect(current_user).to receive(:is_viewer).at_least(:once).and_return(true)
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:ok)
       end
-      it 'impersonating nobody' do
-        @user.set_groups_to_impersonate(['some:irrelevance'])
-        get 'show', :id => @druid
-        expect(response.code).to eq('403')
-      end
-      it 'impersonating viewer' do
-        @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:viewer-role'])
-        get 'show', :id => @druid
-        expect(response.code).to eq('200')
+    end
+  end
+
+  # These specs all depend on an APO that can validate that a user
+  # is authorized for privileged roles.  These roles depend on
+  # methods and roles defined in Dor::Governable
+  shared_examples 'APO-dependent auth for show' do
+    context 'with valid user' do
+      before :each do
+        expect(subject).to receive(:valid_user?).with(item).and_call_original
+        allow(current_user).to receive(:is_admin).and_return(false)
+        allow(current_user).to receive(:is_manager).and_return(false)
+        allow(current_user).to receive(:is_viewer).and_return(false)
       end
       it 'impersonating admin' do
-        @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:administrator-role'])
-        get 'show', :id => @druid
-        expect(response.code).to eq('200')
+        skip 'TODO: enable Dor::Governable#groups_which_admin_item to exclude managers'
+        # If Dor::Governable#groups_which_admin_item exists, enable this spec.
+        # roles = item.groups_which_admin_item
+        # expect(current_user).to receive(:roles).with(apo.pid).at_least(:once).and_return(roles)
+        # get 'show', :id => item.pid
+        # expect(response).to have_http_status(:ok)
+      end
+      it 'impersonating manager' do
+        roles = item.groups_which_manage_item
+        expect(current_user).to receive(:roles).with(apo.pid).at_least(:once).and_return(roles)
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:ok)
+      end
+      it 'impersonating viewer' do
+        roles = ['sdr-viewer']
+        expect(current_user).to receive(:roles).with(apo.pid).at_least(:once).and_return(roles)
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:ok)
+      end
+      it 'impersonating nobody' do
+        expect(current_user).to receive(:roles).with(apo.pid).at_least(:once).and_return([])
+        get 'show', :id => item.pid
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
 
   describe '#show enforces permissions' do
-    describe 'without APO' do
-      before :each do
-        allow(@item).to receive(:admin_policy_object).and_return(nil)
-      end
-      describe 'impersonating user with no extra powers' do
-        it 'is forbidden since there is no APO' do
-          allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
-          expect(response.code).to eq('403')  # Forbidden
-          expect(response.body).to include 'No APO'
+    context 'without a governing APO' do
+      context 'item is not an APO' do
+        before :each do
+          allow(item).to receive(:admin_policy_object).and_return(nil)
+          expect(current_user).not_to receive(:roles)
         end
+        describe 'user without authorized role' do
+          it 'is forbidden since there is no APO' do
+            get 'show', :id => item.pid
+            expect(response).to have_http_status(:forbidden)
+            expect(response.body).to include 'Item has no APO that allows access'
+          end
+        end
+        it_behaves_like 'APO-independent auth for show'
+        # No user roles can be tested because there is no APO to validate them.
+        # So it cannot behave like 'APO-dependent auth'
       end
-      it_behaves_like 'APO-independent auth'
+
+      context 'item is an APO' do
+        # Override the definition of `item` so it's an APO without a governing
+        # APO.  It must be `item` for the shared examples used in this context.
+        # So this let(:item) effectively assigns `item = apo`.
+        # In the shared examples, the `user.roles` should receive the `apo.pid`
+        # only because the `item == apo`; so there is no point in these specs
+        # expecting `current_user.roles(item.pid)`
+        # instead of `current_user.roles(apo.pid)`
+        # although they could (and they must if `item != apo`).
+        let(:item) do
+          allow(apo).to receive(:admin_policy_object).and_return(nil)
+          apo
+        end
+        describe 'impersonating user with no extra powers' do
+          it 'is forbidden since there is no role in this APO' do
+            expect(item).to be_instance_of Dor::AdminPolicyObject
+            expect(current_user).to receive(:roles).with(item.pid).at_least(:once).and_return([])
+            get 'show', :id => item.pid
+            expect(response).to have_http_status(:forbidden)
+            expect(response.body).to include 'Item is an APO that forbids access'
+          end
+        end
+        # These shared examples all use the `item` defined in the most
+        # recent `let(:item)`, so that will be the apo, as noted above.
+        it_behaves_like 'APO-independent auth for show'
+        it_behaves_like 'APO-dependent auth for show'
+      end
     end
 
-    describe 'with APO' do
+    context 'with a governing APO' do
       before :each do
-        @apo_druid = 'druid:hv992ry2431'
-        @apo = instantiate_fixture('hv992ry2431', Dor::AdminPolicyObject)
-        allow(@item).to receive(:admin_policy_object).and_return(@apo)
-        allow(@user).to receive(:roles).with(@apo_druid).and_return([])
+        # Ensure the APO for `item` is an instantiated APO fixture, which
+        # is defined in the overall context at the top of this file.
+        allow(item).to receive(:admin_policy_object).and_return(apo)
       end
+
       describe 'impersonating_user with no extra powers' do
         it 'is forbidden if roles do not match' do
-          allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
-          expect(response.code).to eq('403')  # Forbidden
-          expect(response.body).to include 'forbidden'
+          allow(current_user).to receive(:roles).with(apo.pid).and_return([])
+          get 'show', :id => item.pid
+          expect(response).to have_http_status(:forbidden)
+          expect(response.body).to include 'APO forbids access'
         end
+
         it 'succeeds if roles match' do
-          allow(@user).to receive(:roles).with(@apo_druid).and_return(['dor-viewer'])
-          allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
+          roles = ['sdr-viewer']
+          allow(current_user).to receive(:roles).with(apo.pid).and_return(roles)
+          get 'show', :id => item.pid
           expect(response.code).to eq('200')
         end
       end
-      it_behaves_like 'APO-independent auth'
+      it_behaves_like 'APO-independent auth for show'
+      it_behaves_like 'APO-dependent auth for show'
     end
   end
+
   describe 'blacklight config' do
     let(:config) { controller.blacklight_config }
     it 'should have the date facets' do
@@ -129,13 +218,22 @@ describe CatalogController, :type => :controller do
       expect(config.http_method).to eq :post
     end
   end
+
   describe 'error handling' do
-    let(:druid) { 'druid:zz999zz9999' }
+    before :each do
+      allow(subject).to receive(:current_user).and_return(admin_user)
+    end
     it 'should 404 on missing item' do
-      expect(subject).to receive(:current_user).and_return(double('WebAuth', is_admin: true)).twice
-      expect(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get 'show', :id => druid
+      pid = 'druid:zz999zz9999'
+      expect(Dor).to receive(:find).with(pid).and_raise(ActiveFedora::ObjectNotFoundError)
+      get 'show', :id => pid
       expect(response).to have_http_status(:not_found)
+    end
+    it 'should add a "druid:" prefix for an ID without it' do
+      pid = item.pid.sub('druid:', '')
+      expect(Dor).to receive(:find).with("druid:#{pid}").and_call_original
+      get 'show', :id => pid
+      expect(response).to have_http_status(:ok)
     end
   end
 end

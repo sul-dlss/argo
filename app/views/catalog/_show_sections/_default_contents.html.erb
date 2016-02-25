@@ -17,9 +17,9 @@
           if admin_policy_object
             apo_pid = admin_policy_object.pid
           end
-          
-          can_manage = current_user.is_admin || current_user.is_manager || (apo_pid && object.can_manage_content?(current_user.roles(apo_pid)))
-          can_view = current_user.is_admin || current_user.is_manager || (apo_pid && object.can_view_content?(current_user.roles(apo_pid)))
+
+          can_manage = current_user.can_manage?(object)
+          can_view = current_user.can_view?(object)
 
           content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource, index| %>
             <li class="resource">
@@ -49,7 +49,7 @@
                             <%else%>
                               <%=file['id']%>
                             <%end%>
-                            (<%= file['mimetype'] %>, 
+                            (<%= file['mimetype'] %>,
                              <%= number_to_human_size(file['size']) %>,
                              <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
                           </li>
@@ -59,11 +59,11 @@
                     </li>
                   <% end %>
                 <% end %>
-                
+
                 <% resource.xpath('file').each do |file| %>
                   <li class="file">
                     <span class="label">File</span>
-                    <%if can_view 
+                    <%if can_view
                       file_link = '/items/'+params[:id]+'/file_list/?file='+URI.escape(file['id']) %>
                       <%= link_to file['id'], file_link, :data => {ajax_modal: 'trigger'} %>
                     <%else%>
