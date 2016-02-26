@@ -30,3 +30,8 @@ require 'capistrano/delayed-job'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
+
+# Override squash from trying to do a git rev-parse on the remote filesystem
+set :_squash_current_revision, fetch(:current_revision)
+
+
