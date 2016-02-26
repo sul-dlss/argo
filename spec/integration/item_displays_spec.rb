@@ -4,10 +4,16 @@ describe 'mods_view', :type => :request do
   before :each do
     @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
     allow(Dor::Item).to receive(:find).and_return(@object)
-    @current_user = double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => ADMIN_GROUPS.first, can_view_something?: true)
+    @current_user = double(
+      :webauth_user,
+      :login => 'sunetid',
+      :logged_in? => true,
+      :privgroup => User::ADMIN_GROUPS.first,
+      can_view_something?: true
+    )
     allow(@current_user).to receive(:is_admin).and_return(true)
-    allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:is_manager).and_return(false)
+    allow(@current_user).to receive(:roles).and_return([])
     allow(@current_user).to receive(:permitted_apos).and_return([])
 
     ##

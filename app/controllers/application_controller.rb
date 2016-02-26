@@ -71,11 +71,9 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize!
-    unless current_user
-      render nothing: true, status: :unauthorized
-      return false
-    end
-    true
+    return true if current_user
+    render nothing: true, status: :unauthorized
+    false
   end
 
   ##

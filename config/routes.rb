@@ -6,7 +6,6 @@ Argo::Application.routes.draw do
     end
   end
 
-  Blacklight::Marc.add_routes(self)
   Blacklight.add_routes(self, :except => [:catalog])
   # Catalog stuff.
   match 'view/opensearch', :to => 'catalog#opensearch', :via => [:get, :post]

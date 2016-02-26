@@ -1,4 +1,4 @@
-lock '3.2.1'
+lock '3.4.0'
 
 set :application, 'argo'
 set :repo_url, 'https://github.com/sul-dlss/argo.git'

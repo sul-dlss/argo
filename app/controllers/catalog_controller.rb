@@ -1,7 +1,5 @@
 require 'blacklight/catalog'
 class CatalogController < ApplicationController
-  include Blacklight::Marc::Catalog
-
   include BlacklightSolrExtensions
   include Blacklight::Catalog
   include Argo::AccessControlsEnforcement
@@ -207,7 +205,7 @@ class CatalogController < ApplicationController
   end
 
   def bulk_upload_form
-    @object = Dor.find params[:id]
+    @obj = Dor.find params[:id]
   end
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
