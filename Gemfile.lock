@@ -456,10 +456,9 @@ GEM
       squash_ruby
     squash_ruby (2.0.0)
       json
-    sshkit (1.3.0)
+    sshkit (1.8.1)
       net-scp (>= 1.1.2)
-      net-ssh
-      term-ansicolor
+      net-ssh (>= 2.8.0)
     stanford-mods (1.5.3)
       activesupport
       mods (~> 2.0.2)
