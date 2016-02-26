@@ -89,86 +89,8 @@ namespace :argo do
   fedora_files      = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
   live_solrxml_file = 'jetty/solr/solr.xml'
   testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
-  restcore_url = Blacklight.default_index.connection.options[:url] + '/admin/cores?action=STATUS&wt=json'
-  realcores = []
 
   namespace :solr do
-    ## HELPERS
-    def xml_cores(file)
-      res = {}
-      solrxml = Nokogiri.XML(File.read(file))
-      solrxml.xpath('solr/cores/core').each do |core|
-        res[core.attr('name')] = core.attr('instanceDir')
-      end
-      res
-    end
-
-    def json_cores(url)
-      JSON.load(open(url))
-    end
-
-    desc "List cores from REST target, default: #{restcore_url}"
-    task :cores, [:url] do |task, args|
-      args.with_defaults(:url => restcore_url)
-      url = args[:url]
-      puts "Requesting #{url}"
-      json = json_cores(url)
-      json['status'].each do |k, v|
-        puts "#{k} in #{v['name']}"
-      end
-      realcores = json['status']
-    end
-
-    desc "Read cores from solr.xml file, default: #{live_solrxml_file}"
-    task :xmlcores, [:solrxml] do |task, args|
-      args.with_defaults(:solrxml => live_solrxml_file)
-      xml_cores(args[:solrxml]).each do |k, v|
-        puts "#{k} in #{v}"
-      end
-    end
-
-    desc 'Clear all data from running core(s), default: [list from :cores]'
-    task :nuke, [:cores] => :cores do |task, args|
-      args.with_defaults(:cores => realcores.keys)
-      args[:cores].each do |core|
-        url = Blacklight.default_index.connection.options[:url] + '/' + core + '/update?commit=true'
-        puts "Completely delete all data in #{core} at:\n  #{url}\nAre you sure? [y/n]"
-        input = STDIN.gets.strip
-        if input == 'y'
-          Faraday.post url, '<delete><query>*:*</query></delete>', :content_type => 'text/xml; charset=utf-8'
-          puts "Nuked #{core}"
-        else
-          puts "Skipping #{core}"
-        end
-      end
-    end
-
-    desc "Load Solr data into running core(s), default: '#{fixtures_fileglob}' ==> [list from :cores] ## note quotes around glob"
-    task :load, [:glob, :cores] => :cores do |task, args|
-      args.with_defaults(:glob => fixtures_fileglob, :cores => realcores.keys)
-      docs = []
-      counts = Hash.new{ |h, k| 0 }
-      Dir.glob(args[:glob]).each do |file|
-        reply = JSON.parse(IO.read(file))
-        reply['response']['docs'].each do |doc|
-          puts file + ' ' + doc['id']
-          doc.delete('_version_')   # we can't post to an empty core while specifying that we are updating a given version!
-          docs << { 'doc' => doc }
-          counts[file] = counts[file] + 1
-        end
-      end
-      puts counts
-      payload = "{\n" + docs.map{|x| '"add": ' + JSON.pretty_generate(x)}.join(",\n") + "\n}"
-
-      IO.write('temp.json', payload)
-      cores = args[:cores].is_a?(String) ? args[:cores].split(' ') : args[:cores] # make sure we got an array
-      cores.each do |core|
-        url = Blacklight.default_index.connection.options[:url] + '/' + core + '/update?commit=true'
-        puts "Adding #{docs.count} docs from #{counts.count} file(s) to #{url}"
-        Faraday.post url, payload, :content_type => 'application/json'
-      end
-    end
-
     desc "Configure Solr root and core(s) from source dir, default: #{solr_conf_dir}"
     task :config, [:dir] => ['argo:solr:config_root', 'argo:solr:config_cores'] do |task, args|
     end
