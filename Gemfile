@@ -37,7 +37,7 @@ gem 'about_page'
 gem 'active-fedora'
 gem 'blacklight', '~> 5.11.3' # More deprecation warnings from 5.11.3 to 5.16
 gem 'blacklight-hierarchy'
-gem 'dor-services', '~> 5.3', '>= 5.3.4'
+gem 'dor-services', '~> 5.4', '>= 5.4.2'
 gem 'is_it_working-cbeer'
 gem 'jettywrapper'
 gem 'moab-versioning'
