@@ -1,9 +1,6 @@
 require 'blacklight/catalog'
 class CatalogController < ApplicationController
-  include BlacklightSolrExtensions
   include Blacklight::Catalog
-  include Argo::AccessControlsEnforcement
-  include Argo::CustomSearch
   helper ArgoHelper
   include SpreadsheetHelper
   include DateFacetConfigurations
@@ -12,10 +9,10 @@ class CatalogController < ApplicationController
   before_action :show_aspect, only: [:dc, :ds]
   before_action :sort_collection_actions_buttons, only: [:index]
 
-  CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
-  CatalogController.solr_search_params_logic << :pids_only
-
   configure_blacklight do |config|
+    ## Class for converting Blacklight's url parameters to into request parameters for the search index
+    config.search_builder_class = ::SearchBuilder
+
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 10
@@ -191,7 +188,7 @@ class CatalogController < ApplicationController
 
   def datastream_view
     pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @response, @document = get_solr_response_for_doc_id pid
+    @response, @document = fetch pid
     @obj = Dor.find pid, :lightweight => true
     data = @obj.datastreams[params[:dsid]].content
     raise ActionController::RoutingError.new('Not Found') if data.nil?
@@ -230,7 +227,7 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id]
 
     return unless valid_user?(@obj)
-    @response, @document = get_solr_response_for_doc_id params[:id]
+    @response, @document = fetch params[:id]
     @bulk_jobs = load_bulk_jobs(params[:id])
   end
 
@@ -282,7 +279,7 @@ class CatalogController < ApplicationController
   def show_aspect
     pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
     @obj ||= Dor.find(pid)
-    @response, @document = get_solr_response_for_doc_id pid
+    @response, @document = fetch pid
   end
 
   def set_user_obj_instance_var

@@ -1,7 +1,7 @@
 ##
 # Determine user authorization based on index
 class PermittedQueries
-  include Blacklight::SolrHelper
+  include Blacklight::SearchHelper
 
   attr_reader :groups, :known_roles, :is_admin
 
@@ -26,7 +26,7 @@ class PermittedQueries
       q += ' OR apo_role_' + role + '_ssim:(' + query + ')'
     end
     q = 'objectType_ssim:adminPolicy' if is_admin
-    resp = solr_repository.search(
+    resp = repository.search(
       q: q,
       rows: 1000,
       fl: 'id',
@@ -43,7 +43,7 @@ class PermittedQueries
   def permitted_collections
     q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
     q += permitted_apos.map { |pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\"" }.join(' OR ') unless is_admin
-    result = solr_repository.search(
+    result = repository.search(
       q: q,
       rows: 1000,
       fl: 'id,tag_ssim,dc_title_tesim'

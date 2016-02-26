@@ -3,7 +3,7 @@ require 'csv'
 module CsvConcern
   ##
   # Converts the `report_data` into CSV data
-  # TODO: this method uses data iteration and `get_search_results` assumed to be in the model already
+  # TODO: this method uses data iteration and `search_results` assumed to be in the model already
   #
   # @return [String] data in CSV format
   def to_csv
@@ -15,7 +15,7 @@ module CsvConcern
           csv << @fields.map { |f| record[f[:field]].to_s }
         end
         @params[:page] += 1
-        (@response, @document_list) = get_search_results
+        (@response, @document_list) = search_results(params, search_params_logic)
       end
     end
   end

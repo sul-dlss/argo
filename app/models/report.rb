@@ -1,7 +1,6 @@
 class Report
-  include BlacklightSolrExtensions
   include Blacklight::Configurable
-  include Blacklight::SolrHelper
+  include Blacklight::SearchHelper
   include CsvConcern
   include DateFacetConfigurations
 
@@ -172,14 +171,14 @@ class Report
     @params = params
     @params[:page] ||= 1
 
-    (@response, @document_list) = get_search_results
+    (@response, @document_list) = search_results(params, search_params_logic)
     @num_found = @response['response']['numFound'].to_i
   end
 
   def pids(params)
     @params[:page] = 1
     params[:per_page] = 100
-    (@response, @document_list) = get_search_results
+    (@response, @document_list) = search_results(params, search_params_logic)
     toret = []
     while @document_list.length > 0
       report_data.each do |rec|
@@ -198,7 +197,7 @@ class Report
         end
       end
       @params[:page] += 1
-      (@response, @document_list) = get_search_results
+      (@response, @document_list) = search_results(params, search_params_logic)
     end
 
     toret

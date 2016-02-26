@@ -65,13 +65,13 @@ GEM
       docopt (~> 0.5.0)
       validatable (~> 1.6)
     barby (0.6.2)
-    blacklight (5.9.4)
+    blacklight (5.11.3)
       bootstrap-sass (~> 3.2)
       deprecation
       kaminari (~> 0.13)
       nokogiri (~> 1.6)
       rails (>= 3.2.6, < 5)
-      rsolr (~> 1.0.6)
+      rsolr (~> 1.0.11)
     blacklight-hierarchy (0.1.1)
       blacklight (~> 5, < 6)
       rails (~> 4.1)
@@ -515,7 +515,7 @@ DEPENDENCIES
   about_page
   active-fedora
   barby
-  blacklight (~> 5.9.0)
+  blacklight (~> 5.11.3)
   blacklight-hierarchy
   bootstrap-sass
   capistrano (= 3.4.0)

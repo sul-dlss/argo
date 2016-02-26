@@ -2,7 +2,6 @@ require 'blacklight/catalog'
 
 class ReportController < CatalogController
 
-  include BlacklightSolrExtensions
   include Blacklight::Catalog
   helper ArgoHelper
   copy_blacklight_config_from CatalogController
@@ -12,7 +11,7 @@ class ReportController < CatalogController
   end
 
   def bulk
-    (@response, @document_list) = get_search_results
+    (@response, @document_list) = search_results(params, search_params_logic)
   end
 
   def data
@@ -84,7 +83,7 @@ class ReportController < CatalogController
   end
 
   def workflow_grid
-    (@response, @document_list) = get_search_results
+    (@response, @document_list) = search_results(params, search_params_logic)
 
     if request.xhr?
       render :partial => 'workflow_grid'

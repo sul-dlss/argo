@@ -89,7 +89,7 @@ namespace :argo do
   fedora_files      = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
   live_solrxml_file = 'jetty/solr/solr.xml'
   testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
-  restcore_url = Blacklight.solr.options[:url] + '/admin/cores?action=STATUS&wt=json'
+  restcore_url = Blacklight.default_index.connection.options[:url] + '/admin/cores?action=STATUS&wt=json'
   realcores = []
 
   namespace :solr do
@@ -131,7 +131,7 @@ namespace :argo do
     task :nuke, [:cores] => :cores do |task, args|
       args.with_defaults(:cores => realcores.keys)
       args[:cores].each do |core|
-        url = Blacklight.solr.options[:url] + '/' + core + '/update?commit=true'
+        url = Blacklight.default_index.connection.options[:url] + '/' + core + '/update?commit=true'
         puts "Completely delete all data in #{core} at:\n  #{url}\nAre you sure? [y/n]"
         input = STDIN.gets.strip
         if input == 'y'
@@ -163,7 +163,7 @@ namespace :argo do
       IO.write('temp.json', payload)
       cores = args[:cores].is_a?(String) ? args[:cores].split(' ') : args[:cores] # make sure we got an array
       cores.each do |core|
-        url = Blacklight.solr.options[:url] + '/' + core + '/update?commit=true'
+        url = Blacklight.default_index.connection.options[:url] + '/' + core + '/update?commit=true'
         puts "Adding #{docs.count} docs from #{counts.count} file(s) to #{url}"
         RestClient.post url, payload, :content_type => 'application/json'
       end
