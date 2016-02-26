@@ -1,9 +1,8 @@
 require 'spec_helper'
 describe ItemsController, :type => :controller do
   before :each do
-    # TODO: use fixtures here, this is too much stubbing
-    @item = double(Dor::Item)
     @pid  = 'druid:oo201oo0001'
+    @item = Dor::Item.new pid: @pid
     @current_user = User.find_or_create_by_webauth(
       double(
         'webauth',
