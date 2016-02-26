@@ -497,7 +497,7 @@ class ItemsController < ApplicationController
     begin
       create_obj
       return unless forbid_modify # return because rendering already happened
-    rescue
+    rescue ActiveFedora::ObjectNotFoundError
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
     end
