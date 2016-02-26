@@ -1,15 +1,13 @@
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
-  before_action :authorize!
   before_action :create_obj, :except => [
     :open_bulk,
     :purge_object,
     :register
   ]
-  before_action :forbid_modify, :only => [
+  before_action :authorize_manage_obj_content!, :only => [
     :add_collection, :set_collection, :remove_collection,
     :datastream_update,
-    :embargo_update,
     :mods,
     :open_version, :close_version,
     :update_resource,
@@ -19,9 +17,13 @@ class ItemsController < ApplicationController
     :update_rights,
     :update_attributes
   ]
-  before_action :forbid_view, :only => [
+  before_action :authorize_view_obj!, :only => [
     :get_file,
     :get_preserved_file
+  ]
+  before_action :authorize_manage_item!, :only => [
+    :embargo_update,
+    :embargo_form
   ]
   before_action :enforce_versioning, :only => [
     :add_collection, :set_collection, :remove_collection,
@@ -490,7 +492,7 @@ class ItemsController < ApplicationController
   def purge_object
     begin
       create_obj
-      return unless forbid_modify # return because rendering already happened
+      authorize_manage_obj_content!
     rescue ActiveFedora::ObjectNotFoundError
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
@@ -687,16 +689,16 @@ class ItemsController < ApplicationController
   # Permissions
 
   # check that the user can carry out this item modification
-  def forbid_modify
-    return true if current_user.is_admin? || @object.can_manage_content?(current_user.roles(@apo))
-    render :status => :forbidden, :text => 'forbidden'
-    false
+  def authorize_manage_obj_content!
+    authorize! :manage_content, @object
   end
 
-  def forbid_view
-    return true if current_user.is_admin? || @object.can_view_content?(current_user.roles(@apo))
-    render :status => :forbidden, :text => 'forbidden'
-    false
+  def authorize_view_obj!
+    authorize! :view_content, @object
+  end
+
+  def authorize_manage_item!
+    authorize! :manage_item, @object
   end
 
   def enforce_versioning

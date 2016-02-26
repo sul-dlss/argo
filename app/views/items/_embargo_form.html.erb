@@ -1,17 +1,14 @@
-<% if current_user && current_user.is_admin? %>
-
-  <script>
-    $(function() {
-      $( "#embargo_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-    });
-  </script>
-  <div id='embargo_update'>
-    <%= form_tag url_for(:controller => :items, :action => :embargo_update), :method => :POST do%>
-      <div class='form-group'>
-        <label for='embargo_date'>New date</label>
-        <input name="embargo_date" id="embargo_date" type="text">
-      </div>
-      <button id="submit_embargo" type="submit" class='btn btn-primary'>Update Embargo</button>
-    <% end %>
-  </div>
-<% end %>
+<script>
+  $(function() {
+    $( "#embargo_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
+  });
+</script>
+<div id='embargo_update'>
+  <%= form_tag url_for(:controller => :items, :action => :embargo_update), :method => :POST do%>
+    <div class='form-group'>
+      <label for='embargo_date'>New date</label>
+      <input name="embargo_date" id="embargo_date" type="text">
+    </div>
+    <button id="submit_embargo" type="submit" class='btn btn-primary'>Update Embargo</button>
+  <% end %>
+</div>

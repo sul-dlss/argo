@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'barby'
 gem 'bootstrap-sass'
+gem 'cancancan'
 gem 'coderay'
 gem 'coffee-rails'
 gem 'config'

@@ -1,6 +1,6 @@
 class AuthController < ApplicationController
   before_action(except: [:forget_impersonated_groups]) do
-    render :status => :forbidden, :text => 'forbidden' unless current_user && current_user.is_webauth_admin?
+    authorize! :impersonate, User
   end
 
   def remember_impersonated_groups

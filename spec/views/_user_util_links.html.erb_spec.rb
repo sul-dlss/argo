@@ -3,6 +3,7 @@ require 'spec_helper'
 describe '_user_util_links.html.erb' do
   before do
     allow(view).to receive(:current_user).and_return(current_user)
+    allow(controller).to receive(:current_user).and_return(current_user)
   end
 
   context 'with regular user' do
