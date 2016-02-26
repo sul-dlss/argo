@@ -130,9 +130,122 @@ class User < ActiveRecord::Base
     webauth ? webauth.login : sunetid
   end
 
-  ##
+  # Notes on definitions for known roles in dor-services:
+  #
+  # At present, there are a few methods that all do the same thing;
+  # see all the `can_manage_*` methods in Dor::Governable, i.e.
+  # https://github.com/sul-dlss/dor-services/blob/develop/lib/dor/models/governable.rb
+  #
+  # The upshot of this is that it is not yet clear how Argo should query a Dor
+  # object about management rights. That is, it is not clear how granular the
+  # management privilege should be. The consensus from discussions is to use a
+  # default query for `dor_object.can_manage_item?` (without recourse to
+  # `dor_object.can_manage_content?` etc.)
+  #
+  # When more granular permissions are required, these methods can adapt
+  # because the `permission` parameter can be changed as required.
+
+  # Authorize object administration permissions using Argo user roles.
+  # This includes User#is_admin, it excludes User#is_manager;
+  # otherwise permissions are determined by the object.
+  #
+  # @param dor_object [String|Dor::Base] Accepts a PID string or
+  #                                      any subclass of Dor::Base
+  # @param permission [String] dor_object.can_manage_{permission}?
+  #                            The default is dor_object.can_manage_item?
+  # @return [Boolean]
+  def can_admin?(dor_object, permission = 'item')
+    # Any administrator can manage any object.
+    return true if is_admin
+    # Check user roles permitted to manage the object.
+    permission_method = "can_manage_#{permission}?"
+    request_object_permission(dor_object, permission_method)
+  end
+
+  # Authorize object management permissions using Argo user roles.
+  # This includes User#is_admin and User#is_manager;
+  # otherwise permissions are determined by the object.
+  #
+  # @param dor_object [String|Dor::Base] Accepts a PID string or
+  #                                      any subclass of Dor::Base
+  # @param permission [String] dor_object.can_manage_{permission}?
+  #                            The default is dor_object.can_manage_item?
+  # @return [Boolean]
+  def can_manage?(dor_object, permission = 'item')
+    # Any administrator or manager can manage any object.
+    return true if is_admin || is_manager
+    # Check user roles permitted to manage the object.
+    permission_method = "can_manage_#{permission}?"
+    request_object_permission(dor_object, permission_method)
+  end
+
+  # Authorize object view permissions using Argo user roles.
+  # This includes User#is_admin, User#is_manager, and User#is_viewer;
+  # otherwise permissions are determined by the object.
+  #
+  # @param dor_object [String|Dor::Base] Accepts a PID string or
+  #                                      any subclass of Dor::Base
+  # @param permission [String] dor_object.can_view_{permission}?
+  #                            The default is dor_object.can_view_metadata?
+  # @return [Boolean]
+  def can_view?(dor_object, permission = 'metadata')
+    # Any administrator, manager or viewer can view any object.
+    return true if is_admin || is_manager || is_viewer
+    # Check user roles permitted to view the object.
+    permission_method = "can_view_#{permission}?"
+    request_object_permission(dor_object, permission_method)
+  end
+
+  # Do argo permissions allow viewing anything.
   # @return [Boolean]
   def can_view_something?
     is_admin || is_manager || is_viewer || permitted_apos.length > 0
+  end
+
+  private
+
+  # Find a Dor object, whether the argument is a PID or a Dor object.  When the
+  # argument is a PID, Dor.find(pid) will return a Dor object.  When the argument
+  # is already a Dor object, it is returned as is.
+  # @param object [String|ActiveFedora::Base]
+  def get_dor_object(pid)
+    if pid.is_a? String
+      Dor.find(pid)
+    else
+      # Dor objects inherit from ActiveFedora::Base, so this could be checked
+      # here and raise ArgumentError if 'pid' is not a Dor object.  However,
+      # this breaks specs that use a mock double.  So, if it's not a String,
+      # just return it as is.
+      pid
+    end
+  end
+
+  # Authorize object permissions using Argo user roles.
+  # First check permissions on the governing APO of the object.
+  # If that fails and the object is an APO, let it authorize permission.
+  #
+  # @param dor_object [String|Dor::Base] Accepts a PID string or
+  #                                      any subclass of Dor::Base
+  # @param permission [String] dor_object.send(permission)
+  # @return [Boolean]
+  def request_object_permission(dor_object, permission)
+    # Check that we can request a specific permission.  Note that this could
+    # be more specific by checking that the `permission` method is defined in
+    # Dor::Governable from dor-services, but that level of detail in this check
+    # could break the flexibility of this method and dor-services designs.
+    dor_object = get_dor_object(dor_object)
+    unless dor_object.respond_to? permission
+      raise ArgumentError.new("DOR object doesn't respond to: #{permission}")
+    end
+    # The authorization is first requested using the governing APO.
+    apo = dor_object.admin_policy_object
+    if apo
+      return true if dor_object.send(permission, roles(apo.pid))
+    end
+    # Failing that, if the object is an APO, it can grant permission.
+    if dor_object.is_a? Dor::AdminPolicyObject
+      return true if dor_object.send(permission, roles(dor_object.pid))
+    end
+    false
   end
 end
