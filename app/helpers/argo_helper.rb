@@ -94,11 +94,11 @@ module ArgoHelper
     end
 
     # if this is an apo and the user has permission for the apo, let them edit it.
-    if (object.datastreams.include? 'roleMetadata') && (current_user.is_admin? || current_user.is_manager? || object.can_manage_item?(current_user.roles(apo_pid)))
+    if object.datastreams.include?('roleMetadata') && can?(:manage_item, object)
       buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
       buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection'}
     end
-    if object.can_manage_item?(current_user.roles(apo_pid)) || current_user.is_admin? || current_user.is_manager?
+    if can?(:manage_item, object)
       buttons << {
         url: url_for(controller: :dor, action: :reindex, pid: pid),
         label: 'Reindex',
@@ -139,7 +139,7 @@ module ArgoHelper
       # date=embargo_data.split.last
       if text != 'released'
         # TODO: add a date picker and button to change the embargo date for those who should be able to.
-        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if current_user.is_admin?
+        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if can?(:manage_item, object)
       end
     end
     buttons

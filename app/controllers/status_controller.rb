@@ -1,5 +1,5 @@
 class StatusController < ApplicationController
-  skip_before_action :authorize!
+  skip_before_action :authenticate_user!
 
   def log
     if check_recently_indexed

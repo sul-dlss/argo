@@ -1,7 +1,6 @@
 <% if object.datastreams.keys.include?('contentMetadata') &&
   (not object.datastreams['contentMetadata'].new?) && object.datastreams['contentMetadata'].metadata? %>
   <% content_ds = object.datastreams['contentMetadata'] %>
-  <% admin_policy_object = @apo %>
   <div style="clear:left">
     <ul class="resource-tree">
       <li>
@@ -13,14 +12,7 @@
         <span class="label">Type</span>
         <%= content_ds.ng_xml.root['type'] %>
         <ul>
-          <% apo_pid = nil
-          if admin_policy_object
-            apo_pid = admin_policy_object.pid
-          end
-          
-          can_manage = current_user.is_admin? || current_user.is_manager? || (apo_pid && object.can_manage_content?(current_user.roles(apo_pid)))
-          can_view = current_user.is_admin? || current_user.is_manager? || (apo_pid && object.can_view_content?(current_user.roles(apo_pid)))
-
+          <%
           content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource, index| %>
             <li class="resource">
               <span class="label">Resource (<%=index+1%>)</span> <%= resource['type']%>
@@ -43,7 +35,7 @@
                         <% child.xpath('file').each do |file| %>
                           <li class="file">
                             <span class="label">File</span>
-                            <% if can_manage %>
+                            <% if can? :manage_content, object %>
                               <% manage_file_link = '/items/'+params[:id]+'/file_list/?file='+URI.escape(file['id']) %>
                               <%= link_to file['id'], manage_file_link, :data => {ajax_modal: 'trigger'} %>
                             <%else%>
@@ -63,7 +55,7 @@
                 <% resource.xpath('file').each do |file| %>
                   <li class="file">
                     <span class="label">File</span>
-                    <%if can_view 
+                    <% if can? :view_content, object
                       file_link = '/items/'+params[:id]+'/file_list/?file='+URI.escape(file['id']) %>
                       <%= link_to file['id'], file_link, :data => {ajax_modal: 'trigger'} %>
                     <%else%>

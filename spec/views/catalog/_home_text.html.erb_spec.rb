@@ -3,6 +3,7 @@ require 'spec_helper'
 RSpec.describe 'catalog/_home_text.html.erb' do
   before do
     allow(view).to receive(:current_user).and_return(current_user)
+    allow(controller).to receive(:current_user).and_return(current_user)
   end
 
   context 'as someone who can view something' do

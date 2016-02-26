@@ -181,7 +181,7 @@ class CatalogController < ApplicationController
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
 
-    return unless valid_user?(@obj)
+    authorize! :view_metadata, @obj
     super()  # with or without an APO, if we get here, user is authorized to view
   end
 
@@ -225,7 +225,7 @@ class CatalogController < ApplicationController
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
 
-    return unless valid_user?(@obj)
+    authorize! :view_metadata, @obj
     @response, @document = fetch params[:id]
     @bulk_jobs = load_bulk_jobs(params[:id])
   end
@@ -340,28 +340,6 @@ class CatalogController < ApplicationController
     # Sort by start time (newest first)
     sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'] }
     sorted_info.reverse!
-  end
-
-  # Determines whether or not the current user has permissions to view the current DOR object.
-  def valid_user?(dor_object)
-    begin
-      @apo = dor_object.admin_policy_object
-    rescue
-      return false
-    end
-
-    if @apo
-      unless @user.is_admin? || @user.is_viewer? || dor_object.can_view_metadata?(@user.roles(@apo.pid))
-        render :status => :forbidden, :text => 'forbidden'
-        return false
-      end
-    else
-      unless @user.is_admin? || @user.is_viewer?
-        render :status => :forbidden, :text => 'No APO, no access'
-        return false
-      end
-    end
-    true
   end
 
   def get_leafdir(directory)

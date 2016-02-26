@@ -27,6 +27,7 @@ describe ArgoHelper, :type => :helper do
       @usr = mock_user(is_admin?: true)
       allow(Dor::Config.workflow.client).to receive(:get_active_lifecycle).and_return(true)
       allow(Dor::Config.workflow.client).to receive(:get_lifecycle).and_return(true)
+      allow(controller).to receive(:current_user).and_return(@usr)
       allow(helper).to receive(:current_user).and_return(@usr)
       allow(@object).to receive(:can_manage_item?).and_return(true)
       allow(@object).to receive(:pid).and_return(@item_id)

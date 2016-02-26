@@ -4,10 +4,11 @@ class ApplicationController < ActionController::Base
   # Please be sure to impelement current_user and user_session. Blacklight depends on
   # these methods in order to perform user specific actions.
 
-  before_action :authorize!
+  before_action :authenticate_user!
   before_action :fedora_setup
 
   rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render text: 'Object Not Found', status: :not_found }
+  rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, text: 'forbidden' }
 
   helper_method :current_or_guest_user
 
@@ -59,7 +60,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authorize!
+  def authenticate_user!
     return true if current_user
     render nothing: true, status: :unauthorized
     false

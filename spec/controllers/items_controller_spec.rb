@@ -72,7 +72,6 @@ describe ItemsController, :type => :controller do
   describe 'embargo_update' do
     it 'should 403 if you are not an admin' do
       expect(@current_user).to receive(:is_admin?).and_return(false)
-      expect(@item).to receive(:can_manage_content?).and_return(false)
       expect(subject).not_to receive(:save_and_reindex)
       expect(subject).not_to receive(:flush_index)
       post :embargo_update, :id => @pid, :embargo_date => '2100-01-01'

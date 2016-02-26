@@ -1,5 +1,5 @@
 <div class='auth-groups well'>
-  <% if current_user.is_admin? %>
+  <% if can? :impersonate, User %>
     <div class='panel panel-info'>
       <div class='panel-heading'>
         <h3 class='panel-title'>Your Current Groups</h3>
