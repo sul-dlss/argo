@@ -66,7 +66,6 @@ describe CatalogController, :type => :controller do
           allow(subject).to receive(:current_user).and_return(@user)
           get 'show', :id => @druid
           expect(response.code).to eq('403')  # Forbidden
-          expect(response.body).to include 'No APO'
         end
       end
       it_behaves_like 'APO-independent auth'
