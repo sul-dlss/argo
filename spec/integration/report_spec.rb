@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ReportController, :type => :feature do
   let(:current_user) do
     mock_user(
-      is_admin: true
+      is_admin?: true
     )
   end
   before :each do

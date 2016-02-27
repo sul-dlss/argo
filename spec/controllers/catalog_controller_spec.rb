@@ -28,12 +28,12 @@ describe CatalogController, :type => :controller do
         expect(response.code).to eq('403')  # two different flavors
         # expect(response.body).to include 'No APO'
       end
-      it 'is_admin' do
+      it 'is_admin?' do
         allow(@user).to receive(:is_admin?).and_return(true)
         get 'show', :id => @druid
         expect(response.code).to eq('200')
       end
-      it 'is_viewer' do
+      it 'is_viewer?' do
         allow(@user).to receive(:is_viewer?).and_return(true)
         get 'show', :id => @druid
         expect(response.code).to eq('200')

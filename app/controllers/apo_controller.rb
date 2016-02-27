@@ -330,7 +330,7 @@ class ApoController < ApplicationController
 
   # check that the user can carry out this object modification
   def forbid
-    return if current_user.is_admin || @object.can_manage_content?(current_user.roles(params[:id]))
+    return if current_user.is_admin? || @object.can_manage_content?(current_user.roles(params[:id]))
     render :status => :forbidden, :text => 'forbidden'
     nil
   end

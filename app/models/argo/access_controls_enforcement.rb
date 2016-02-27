@@ -11,7 +11,7 @@ module Argo
 
     def apply_gated_discovery(solr_parameters, user)
       # Repository wide admin, manager and viewer users access everything
-      return solr_parameters if user.is_admin || user.is_manager || user.is_viewer
+      return solr_parameters if user.is_admin? || user.is_manager? || user.is_viewer?
       pids = user.permitted_apos
       # Do this as a negative query, exclude items they cannot access
       # rather than including items they can access.

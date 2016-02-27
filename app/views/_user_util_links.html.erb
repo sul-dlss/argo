@@ -23,7 +23,7 @@
           </li>
         </ul>
       </li>
-    <% elsif current_user.is_admin %>
+    <% elsif current_user.is_admin? %>
       <li>
         <%= link_to 'Impersonate', auth_groups_path %>
       </li>
@@ -39,7 +39,7 @@
         <li>
           <%= link_to 'Register Items', register_items_path %>
         </li>
-        <% if current_user.is_admin || current_user.is_manager %>
+        <% if current_user.is_admin? || current_user.is_manager? %>
           <li>
             <%= link_to 'Register APO'.html_safe, register_apo_index_path %>
           </li>

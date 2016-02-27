@@ -351,12 +351,12 @@ class CatalogController < ApplicationController
     end
 
     if @apo
-      unless @user.is_admin || @user.is_viewer || dor_object.can_view_metadata?(@user.roles(@apo.pid))
+      unless @user.is_admin? || @user.is_viewer? || dor_object.can_view_metadata?(@user.roles(@apo.pid))
         render :status => :forbidden, :text => 'forbidden'
         return false
       end
     else
-      unless @user.is_admin || @user.is_viewer
+      unless @user.is_admin? || @user.is_viewer?
         render :status => :forbidden, :text => 'No APO, no access'
         return false
       end
