@@ -62,6 +62,7 @@ group :test, :development do
   gem 'wfs_rails', '~> 0.0.2'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'webmock', require: false
 end
 
 group :development do
