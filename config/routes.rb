@@ -168,10 +168,6 @@ Argo::Application.routes.draw do
     resources :objects, :only => :create # we only implement create for object registration
   end
 
-  namespace :legacy do
-    resources :objects # TODO: do we know what this does?
-  end
-
   namespace :workflow_service do
     get '/:pid/closeable',
         action: 'closeable',
