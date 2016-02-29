@@ -179,15 +179,19 @@ class ModsulatorJob < ActiveJob::Base
   # @param    [File]     log_file            The log file to write to
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
   def generate_xml(filetype, uploaded_filename, original_filename, log_file)
-    if filetype == 'xml_only'  # Just clean up the given XML file
+    response = if filetype == 'xml_only'  # Just clean up the given XML file
       url = Settings.NORMALIZER_URL
-      response_xml = RestClient.post(url, File.read(uploaded_filename))
+      client.post(url) do |req|
+        req.body = File.read(uploaded_filename)
+      end
     else                       # The given file is a spreadsheet
       url = Settings.MODSULATOR_URL
-      response_xml = RestClient.post(url, :file => File.new(uploaded_filename, 'rb'), :filename => original_filename)
+      payload = Faraday::UploadIO.new(uploaded_filename, 'application/octet-stream')
+      client.post(url, :file => payload, :filename => original_filename)
     end
-    response_xml
-  rescue RestClient::ResourceNotFound => e
+
+    response_xml = response.body
+  rescue Faraday::ResourceNotFound => e
     delayed_log_url(e, url)
     log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
   rescue Errno::ENOENT => e
@@ -196,7 +200,7 @@ class ModsulatorJob < ActiveJob::Base
   rescue Errno::EACCES => e
     delayed_log_url(e, url)
     log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
-  rescue RestClient::InternalServerError => e
+  rescue Faraday::ClientError => e
     delayed_log_url(e, url)
     log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
   rescue Exception => e
@@ -255,5 +259,16 @@ class ModsulatorJob < ActiveJob::Base
   def status_ok(dor_object)
     status = dor_object.status_info[:status_code]
     [1, 6, 7, 8, 9].include?(status)
+  end
+
+  private
+
+  def client
+    Faraday.new do |f|
+      f.use Faraday::Response::RaiseError
+      f.request :multipart
+      f.request :url_encoded
+      f.adapter :net_http
+    end
   end
 end

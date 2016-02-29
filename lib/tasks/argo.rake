@@ -135,7 +135,7 @@ namespace :argo do
         puts "Completely delete all data in #{core} at:\n  #{url}\nAre you sure? [y/n]"
         input = STDIN.gets.strip
         if input == 'y'
-          RestClient.post url, '<delete><query>*:*</query></delete>', :content_type => 'text/xml; charset=utf-8'
+          Faraday.post url, '<delete><query>*:*</query></delete>', :content_type => 'text/xml; charset=utf-8'
           puts "Nuked #{core}"
         else
           puts "Skipping #{core}"
@@ -165,7 +165,7 @@ namespace :argo do
       cores.each do |core|
         url = Blacklight.default_index.connection.options[:url] + '/' + core + '/update?commit=true'
         puts "Adding #{docs.count} docs from #{counts.count} file(s) to #{url}"
-        RestClient.post url, payload, :content_type => 'application/json'
+        Faraday.post url, payload, :content_type => 'application/json'
       end
     end
 

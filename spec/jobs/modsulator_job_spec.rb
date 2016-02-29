@@ -141,7 +141,37 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'generate_xml' do
-    pending
+    let(:log_file) { double(puts: nil) }
+
+    context 'cleaning up an XML file' do
+      it 'sends requests to the normalizer' do
+        file_path = "#{::Rails.root}/spec/fixtures/crowdsourcing_bridget_1.xml"
+
+        stub_request(:post, Settings.NORMALIZER_URL).with(body: /Fragment of a Glossarium/).to_return(body: 'abc')
+        response = @mj.generate_xml('xml_only', file_path, 'crowdsourcing_bridget_1', log_file)
+        expect(response).to eq 'abc'
+      end
+
+      it 'handles HTTP errors' do
+        file_path = "#{::Rails.root}/spec/fixtures/crowdsourcing_bridget_1.xml"
+
+        stub_request(:post, Settings.NORMALIZER_URL).with(body: /Fragment of a Glossarium/).to_return(status: 500)
+        expect(log_file).to receive(:puts).with(/argo.bulk_metadata.bulk_log_internal_error/)
+
+        response = @mj.generate_xml('xml_only', file_path, 'crowdsourcing_bridget_1', log_file)
+        expect(response).to be_blank
+      end
+    end
+
+    context 'with a spreadsheet' do
+      it 'sends a request to the modsulator' do
+        file_path = "#{::Rails.root}/spec/fixtures/crowdsourcing_bridget_1.xlsx"
+
+        stub_request(:post, Settings.MODSULATOR_URL).with(body: /Content-Disposition: form-data; name="file"/).to_return(body: 'abc')
+        response = @mj.generate_xml('spreadsheet', file_path, 'crowdsourcing_bridget_1', log_file)
+        expect(response).to eq 'abc'
+      end
+    end
   end
 
 end

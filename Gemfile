@@ -8,6 +8,7 @@ gem 'config'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
+gem 'faraday'
 gem 'jqgrid-jquery-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -21,7 +22,6 @@ gem 'prawn-table'
 gem 'rack-webauth', :git => 'https://github.com/nilclass/rack-webauth.git'
 gem 'rails', '~> 4.0' # specifying because we expect a major vers upgrade to break things
 gem 'rake'
-gem 'rest-client'
 gem 'retries'
 gem 'ruby-graphviz'
 gem 'ruby-prof'
@@ -62,6 +62,7 @@ group :test, :development do
   gem 'wfs_rails', '~> 0.0.2'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
+  gem 'webmock', require: false
 end
 
 group :development do

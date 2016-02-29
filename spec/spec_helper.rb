@@ -5,6 +5,8 @@ require 'capybara/rails'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'equivalent-xml/rspec_matchers'
+require 'webmock/rspec'
+WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
 require 'simplecov'
 require 'coveralls'
