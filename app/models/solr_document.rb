@@ -9,6 +9,7 @@ class SolrDocument
   include DocumentDateConcern
   include PreservationSizeConcern
   include EmbargoConcern
+  include ObjectTypeConcern
 
   # self.unique_key = 'id'
 
