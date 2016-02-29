@@ -22,8 +22,7 @@ class ReportController < CatalogController
     # params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i, 1].max
-
-    @report = Report.new(params)
+    @report = Report.new(params, current_user: current_user)
 
     respond_to do |format|
       format.json do
@@ -44,7 +43,7 @@ class ReportController < CatalogController
   def pids
     # params[:per_page]=100
     # params[:rows]=100
-    ids = Report.new(params, ['druid']).pids params
+    ids = Report.new(params, ['druid'], current_user: current_user).pids params
     respond_to do |format|
       format.json do
         render :json => {
@@ -60,7 +59,7 @@ class ReportController < CatalogController
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    self.response_body = Report.new(params, fields).to_csv
+    self.response_body = Report.new(params, fields, current_user: current_user).to_csv
   end
 
   # an ajax call to reset workflow states for objects
@@ -101,7 +100,7 @@ class ReportController < CatalogController
   ##
   # @return [Array]
   def pids_from_report(params)
-    Report.new(params, ['druids']).pids params
+    Report.new(params, ['druids'], current_user: current_user).pids params
   end
 
   ##
