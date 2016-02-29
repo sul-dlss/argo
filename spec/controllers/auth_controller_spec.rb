@@ -5,7 +5,7 @@ describe AuthController, :type => :controller do
   describe 'test impersonation' do
     context 'as an admin' do
       before :each do
-        log_in_as_mock_user(subject, is_admin?: true)
+        log_in_as_mock_user(subject, is_webauth_admin?: true)
       end
 
       it 'should be able to remember and forget impersonated groups' do
@@ -20,7 +20,7 @@ describe AuthController, :type => :controller do
 
     context 'as an ordinary user' do
       before :each do
-        log_in_as_mock_user(subject, is_admin?: false)
+        log_in_as_mock_user(subject, is_webauth_admin?: false)
       end
 
       it 'should be able to remember and forget impersonated groups' do
