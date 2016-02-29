@@ -68,7 +68,7 @@ namespace :argo do
   end
 
   namespace :jetty do
-    WRAPPER_VERSION = 'v7.2.0' # the most recent Fedora 3.x release (Fedora 3.8.1 and Solr 4.10.2)
+    WRAPPER_VERSION = 'v7.3.0' # the most recent Fedora 3.x release (Fedora 3.8.1 and Solr 4.10.4)
 
     desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
     task :clean, [:target] do |t, args|
