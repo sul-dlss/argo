@@ -367,7 +367,7 @@ Style/SignalException:
 
 # Offense count: 137
 # Cop supports --auto-correct.
-Style/SingleSpaceBeforeFirstArg:
+Style/SpaceBeforeFirstArg:
   Exclude:
     - 'app/controllers/items_controller.rb'
     - 'config/application.rb'
