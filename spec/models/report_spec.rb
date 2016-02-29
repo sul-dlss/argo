@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Report, :type => :model do
   context 'csv' do
     before :each do
-      @csv = subject.to_csv
+      @csv = described_class.new(
+        current_user: mock_user(is_admin?: true)
+      ).to_csv
     end
 
     it 'should generate data in valid CSV format' do

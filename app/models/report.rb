@@ -9,7 +9,7 @@ class Report
     include ValueHelper
   end
 
-  attr_reader :response, :document_list, :num_found, :params
+  attr_reader :response, :document_list, :num_found, :params, :current_user
 
   @blacklight_config = blacklight_config.deep_copy if @blacklight_config.nil?
 
@@ -161,7 +161,8 @@ class Report
     }
   end
 
-  def initialize(params = {}, fields = nil)
+  def initialize(params = {}, fields = nil, current_user: NullUser.new)
+    @current_user = current_user
     if fields.nil?
       @fields = self.class.blacklight_config.report_fields
     else
