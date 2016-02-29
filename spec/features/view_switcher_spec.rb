@@ -2,16 +2,7 @@ require 'spec_helper'
 
 RSpec.feature 'View switcher' do
   let(:current_user) do
-    double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: [],
-      groups: [],
-      permitted_collections: []
-    )
+    mock_user(is_admin?: true)
   end
 
   feature 'is present' do

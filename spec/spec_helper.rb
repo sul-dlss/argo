@@ -76,8 +76,8 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 end
 
-def log_in_as_mock_user(subject)
-  allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
+def log_in_as_mock_user(subject, attributes = {})
+  allow(subject).to receive(:current_user).and_return(mock_user(attributes))
 end
 
 # Highly similar to https://github.com/sul-dlss/dor-services/blob/master/spec/foxml_helper.rb
@@ -112,4 +112,20 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
     end
   end
   result
+end
+
+def mock_user(attributes = {})
+  double(:webauth_user, {
+    login: 'sunetid',
+    logged_in?: true,
+    privgroup: [],
+    groups: [],
+    can_view_something?: false,
+    is_admin?: false,
+    is_manager?: false,
+    is_viewer?: false,
+    roles: [],
+    permitted_apos: [],
+    permitted_collections: []
+  }.merge(attributes))
 end

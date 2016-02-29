@@ -2,20 +2,12 @@ require 'spec_helper'
 
 describe ReportController, :type => :feature do
   let(:current_user) do
-    double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: [],
-      groups: [],
-      permitted_collections: []
+    mock_user(
+      is_admin: true
     )
   end
   before :each do
-    expect_any_instance_of(ReportController).to receive(:current_user)
-      .at_least(1).times.and_return(current_user)
+    allow_any_instance_of(ReportController).to receive(:current_user).and_return(current_user)
   end
   describe 'bulk' do
     it 'should return a page with the expected elements' do

@@ -2,14 +2,7 @@ require 'spec_helper'
 
 feature 'Enable buttons' do
   before do
-    @current_user = double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: []
-    )
+    @current_user = mock_user(is_admin?: true)
     @obj = double(
       'item',
       admin_policy_object: false,

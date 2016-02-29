@@ -19,9 +19,8 @@ describe CatalogController, :type => :controller do
         expect(response.code).to eq('401')  # Unauthorized without webauth, no place to redirect
       end
     end
-    describe 'with user (valid_user)' do
+    describe 'with user' do
       before :each do
-        expect(subject).to receive(:valid_user?).with(@item).and_call_original # called every time
         allow(subject).to receive(:current_user).and_return(@user)
       end
       it 'unauthorized_user' do
@@ -30,12 +29,12 @@ describe CatalogController, :type => :controller do
         # expect(response.body).to include 'No APO'
       end
       it 'is_admin' do
-        allow(@user).to receive(:is_admin).and_return(true)
+        allow(@user).to receive(:is_admin?).and_return(true)
         get 'show', :id => @druid
         expect(response.code).to eq('200')
       end
       it 'is_viewer' do
-        allow(@user).to receive(:is_viewer).and_return(true)
+        allow(@user).to receive(:is_viewer?).and_return(true)
         get 'show', :id => @druid
         expect(response.code).to eq('200')
       end
@@ -132,7 +131,7 @@ describe CatalogController, :type => :controller do
   describe 'error handling' do
     let(:druid) { 'druid:zz999zz9999' }
     it 'should 404 on missing item' do
-      expect(subject).to receive(:current_user).and_return(double('WebAuth', is_admin: true)).twice
+      allow(subject).to receive(:current_user).and_return(double('WebAuth', is_admin?: true))
       expect(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
       get 'show', :id => druid
       expect(response).to have_http_status(:not_found)
