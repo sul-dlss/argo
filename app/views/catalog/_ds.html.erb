@@ -2,7 +2,7 @@
   apo = @obj.admin_policy_object
   if(params[:edit])
     if @user &&
-      (@user.is_admin ||
+      (@user.is_admin? ||
         (
           @obj.can_manage_content?(@user.roles(apo.pid)) &&
           @obj.can_manage_desc_metadata?(@user.roles(apo.pid))
@@ -28,7 +28,7 @@
   <%=
     if @user &&
       (
-        @user.is_admin || @obj.can_manage_content?(@user.roles(apo.pid))
+        @user.is_admin? || @obj.can_manage_content?(@user.roles(apo.pid))
       ) &&
       (
         @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||

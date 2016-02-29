@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   delegate :permitted_apos, :permitted_collections, to: :permitted_queries
 
   def permitted_queries
-    @permitted_queries ||= PermittedQueries.new(groups, KNOWN_ROLES, is_admin)
+    @permitted_queries ||= PermittedQueries.new(groups, KNOWN_ROLES, is_admin?)
   end
 
   def self.find_or_create_by_webauth(webauth)
@@ -106,25 +106,19 @@ class User < ActiveRecord::Base
   end
 
   # @return [Boolean] is the user a repository wide administrator
-  def is_admin
+  def is_admin?
     !(groups & ADMIN_GROUPS).blank?
   end
 
   # @return [Boolean] is the user a repository wide manager
-  def is_manager
+  def is_manager?
     !(groups & MANAGER_GROUPS).blank?
   end
 
   # @return [Boolean] is the user a repository wide viewer
-  def is_viewer
+  def is_viewer?
     !(groups & VIEWER_GROUPS).blank?
   end
-
-  # https://github.com/bbatsov/ruby-style-guide#alias-method-lexically
-  # The convention is for boolean is_XYZ methods to be interrogative (end in "?")
-  alias is_admin? is_admin
-  alias is_manager? is_manager
-  alias is_viewer? is_viewer
 
   def login
     webauth ? webauth.login : sunetid
@@ -133,6 +127,6 @@ class User < ActiveRecord::Base
   ##
   # @return [Boolean]
   def can_view_something?
-    is_admin || is_manager || is_viewer || permitted_apos.length > 0
+    is_admin? || is_manager? || is_viewer? || permitted_apos.any?
   end
 end

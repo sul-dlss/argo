@@ -8,7 +8,7 @@ RSpec.describe 'items/_collection_ui.html.erb' do
     double('object', collections: [collection, collection], pid: 'druid:abc123')
   end
   let(:current_user) do
-    double('current_user', permitted_collections: ['Catz are our legacy'])
+    mock_user(permitted_collections: ['Catz are our legacy'])
   end
   it 'renders the partial content' do
     assign(:object, object)

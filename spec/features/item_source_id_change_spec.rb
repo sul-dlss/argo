@@ -2,15 +2,7 @@ require 'spec_helper'
 
 RSpec.feature 'Item source id change' do
   let(:current_user) do
-    double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: [],
-      groups: []
-    )
+    mock_user(is_admin?: true)
   end
   before do
     allow_any_instance_of(ItemsController).to receive(:current_user)

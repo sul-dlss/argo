@@ -2,15 +2,7 @@ require 'spec_helper'
 
 describe 'about_page', :type => :request do
   before :each do
-    @current_user = double(
-      :webauth_user,
-      :login => 'sunetid',
-      :logged_in? => true,
-      :privgroup => User::ADMIN_GROUPS.first
-    )
-    allow(@current_user).to receive(:is_admin).and_return(true)
-    allow(@current_user).to receive(:is_manager).and_return(false)
-    allow(@current_user).to receive(:roles).and_return([])
+    @current_user = mock_user(is_admin?: true)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@current_user)
   end
 

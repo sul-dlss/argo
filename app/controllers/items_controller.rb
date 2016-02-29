@@ -229,7 +229,7 @@ class ItemsController < ApplicationController
   end
 
   def embargo_update
-    unless current_user.is_admin
+    unless current_user.is_admin?
       render :status => :forbidden, :text => 'forbidden'
       return
     end
@@ -497,7 +497,7 @@ class ItemsController < ApplicationController
     begin
       create_obj
       return unless forbid_modify # return because rendering already happened
-    rescue
+    rescue ActiveFedora::ObjectNotFoundError
       Dor::SearchService.solr.delete_by_id(params[:id])
       Dor::SearchService.solr.commit
     end
@@ -694,13 +694,13 @@ class ItemsController < ApplicationController
 
   # check that the user can carry out this item modification
   def forbid_modify
-    return true if current_user.is_admin || @object.can_manage_content?(current_user.roles(@apo))
+    return true if current_user.is_admin? || @object.can_manage_content?(current_user.roles(@apo))
     render :status => :forbidden, :text => 'forbidden'
     false
   end
 
   def forbid_view
-    return true if current_user.is_admin || @object.can_view_content?(current_user.roles(@apo))
+    return true if current_user.is_admin? || @object.can_view_content?(current_user.roles(@apo))
     render :status => :forbidden, :text => 'forbidden'
     false
   end

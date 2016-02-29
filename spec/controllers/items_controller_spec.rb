@@ -1,9 +1,8 @@
 require 'spec_helper'
 describe ItemsController, :type => :controller do
   before :each do
-    # TODO: use fixtures here, this is too much stubbing
-    @item = double(Dor::Item)
     @pid  = 'druid:oo201oo0001'
+    @item = Dor::Item.new pid: @pid
     @current_user = User.find_or_create_by_webauth(
       double(
         'webauth',
@@ -13,8 +12,8 @@ describe ItemsController, :type => :controller do
         :privgroup => User::ADMIN_GROUPS.first
       )
     )
-    allow(@current_user).to receive(:is_admin).and_return(true)
-    allow(@current_user).to receive(:is_manager).and_return(false)
+    allow(@current_user).to receive(:is_admin?).and_return(true)
+    allow(@current_user).to receive(:is_manager?).and_return(false)
     allow(@current_user).to receive(:roles).and_return([])
     allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
     allow(Dor::Item).to receive(:find).with(@pid).and_return(@item)
@@ -65,14 +64,14 @@ describe ItemsController, :type => :controller do
   end
   describe 'purge' do
     it 'should 403' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       post 'purge_object', :id => @pid
       expect(response.code).to eq('403')
     end
   end
   describe 'embargo_update' do
     it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       post 'embargo_update', :id => @pid, :date => '12/19/2013'
       expect(response).to have_http_status(:forbidden)
     end
@@ -108,7 +107,7 @@ describe ItemsController, :type => :controller do
       get 'open_version', :id => @pid, :severity => vers_md_upd_info[:significance], :description => vers_md_upd_info[:description]
     end
     it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       get 'open_version', :id => @pid, :severity => 'major', :description => 'something'
       expect(response.code).to eq('403')
     end
@@ -126,7 +125,7 @@ describe ItemsController, :type => :controller do
       get 'close_version', :id => @pid, :severity => 'major', :description => 'something'
     end
     it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       get 'close_version', :id => @pid
       expect(response.code).to eq('403')
     end
@@ -211,7 +210,7 @@ describe ItemsController, :type => :controller do
       post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
     end
     it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       post 'update_attributes', :shelve => 'no', :publish => 'no', :preserve => 'no', :id => @pid, :file_name => 'something.txt'
       expect(response.code).to eq('403')
     end
@@ -225,7 +224,7 @@ describe ItemsController, :type => :controller do
       expect(response.headers['Last-Modified']).to eq 'Mon, 30 Nov 2015 20:19:43 -0000'
     end
     it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       get 'get_file', :file => 'somefile.txt', :id => @pid
       expect(response.code).to eq('403')
     end
@@ -241,12 +240,12 @@ describe ItemsController, :type => :controller do
         expect(@item).to receive(:save)
       end
       it 'should allow an admin to update the datastream' do
-        expect(@current_user).to receive(:is_admin).and_return(true)
+        expect(@current_user).to receive(:is_admin?).and_return(true)
         post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => xml
         expect(response).to have_http_status(:found)
       end
       it 'should allow access if you are not an admin but have management access' do
-        expect(@current_user).to receive(:is_admin).and_return(false)
+        expect(@current_user).to receive(:is_admin?).and_return(false)
         expect(@item).to receive(:can_manage_content?).and_return(true)
         post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => xml
         expect(response).to have_http_status(:found)
@@ -254,7 +253,7 @@ describe ItemsController, :type => :controller do
     end
     context 'error cases' do
       it 'should prevent access if you are not an admin and without management access' do
-        expect(@current_user).to receive(:is_admin).and_return(false)
+        expect(@current_user).to receive(:is_admin?).and_return(false)
         expect(@item).to receive(:can_manage_content?).and_return(false)
         expect(@item).not_to receive(:save)
         post 'datastream_update', :dsid => 'contentMetadata', :id => @pid, :content => xml
@@ -289,7 +288,7 @@ describe ItemsController, :type => :controller do
       allow(@item).to receive(:datastreams).and_return({'contentMetadata' => @mock_ds})
     end
     it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       post 'update_resource', :resource => '0001', :position => '3', :id => @pid
       expect(response.code).to eq('403')
     end
@@ -312,7 +311,7 @@ describe ItemsController, :type => :controller do
       post 'add_collection', :id => @pid, :collection => 'druid:1234'
     end
     it 'should 403 if they are not permitted' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       post 'add_collection', :id => @pid, :collection => 'druid:1234'
       expect(response.code).to eq('403')
     end
@@ -340,7 +339,7 @@ describe ItemsController, :type => :controller do
       post 'remove_collection', :id => @pid, :collection => 'druid:1234'
     end
     it 'should 403 if they are not permitted' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       expect(@item).not_to receive(:remove_collection)
       post 'remove_collection', :id => @pid, :collection => 'druid:1234'
       expect(response.code).to eq('403')
@@ -357,7 +356,7 @@ describe ItemsController, :type => :controller do
       expect(response.body).to eq(xml)
     end
     it 'should 403 if they are not permitted' do
-      allow(@current_user).to receive(:is_admin).and_return(false)
+      allow(@current_user).to receive(:is_admin?).and_return(false)
       get 'mods', :id => @pid
       expect(response.code).to eq('403')
     end

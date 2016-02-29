@@ -24,11 +24,7 @@ describe ArgoHelper, :type => :helper do
       @apo_id = 'druid:hv992ry2431'
       @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
       @doc = SolrDocument.new({'id' => @item_id, SolrDocument::FIELD_APO_ID => [@apo_id]})
-      @usr = double()
-      allow(@usr).to receive(:is_admin).and_return(true)
-      allow(@usr).to receive(:groups).and_return([])
-      allow(@usr).to receive(:is_manager).and_return(false)
-      allow(@usr).to receive(:roles).with(@apo_id).and_return([])
+      @usr = mock_user(is_admin?: true)
       allow(Dor::WorkflowService).to receive(:get_active_lifecycle).and_return(true)
       allow(Dor::WorkflowService).to receive(:get_lifecycle).and_return(true)
       allow(helper).to receive(:current_user).and_return(@usr)
@@ -83,7 +79,7 @@ describe ArgoHelper, :type => :helper do
         end
       end
       it 'should generate a the same button set for a non admin' do
-        allow(@usr).to receive(:is_admin).and_return(false)
+        allow(@usr).to receive(:is_admin?).and_return(false)
         allow(@object).to receive(:can_manage_item?).and_return(true)
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|

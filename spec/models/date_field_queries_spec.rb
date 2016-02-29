@@ -8,7 +8,7 @@ end
 
 describe 'Argo::DateFieldQueries' do
   let(:user) do
-    double('user', is_manager: false, is_admin: false, is_viewer: false)
+    double('user', is_manager?: false, is_admin?: false, is_viewer?: false)
   end
   subject { TestClass.new }
 

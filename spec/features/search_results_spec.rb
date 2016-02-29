@@ -3,15 +3,7 @@ require 'spec_helper'
 
 feature 'Search results' do
   let(:current_user) do
-    double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: [],
-      groups: []
-    )
+    mock_user(is_admin?: true)
   end
   before :each do
     allow_any_instance_of(CatalogController).to receive(:current_user).

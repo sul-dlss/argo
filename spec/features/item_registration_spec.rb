@@ -2,19 +2,10 @@ require 'spec_helper'
 
 RSpec.describe 'Item registration page', js: true do
   let(:current_user) do
-    double(
-      :webauth_user,
-      login: 'sunetid',
-      logged_in?: true,
-      permitted_apos: [],
-      is_admin: true,
-      roles: [],
-      groups: []
-    )
+    mock_user(is_admin?: true)
   end
   before do
-    expect_any_instance_of(ItemsController).to receive(:current_user)
-      .at_least(7).times.and_return(current_user)
+    allow_any_instance_of(ItemsController).to receive(:current_user).and_return(current_user)
   end
   it 'loads page with registration form' do
     visit register_items_path
