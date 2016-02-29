@@ -75,6 +75,20 @@ describe User, :type => :model do
     end
   end
 
+  describe 'is_webauth_admin?' do
+    it 'should be true for ADMIN_GROUPS' do
+      allow(subject).to receive(:webauth_groups).and_return(User::ADMIN_GROUPS)
+      expect(subject.is_webauth_admin?).to be true
+    end
+
+    it 'should be true when impersonating other group membership' do
+      allow(subject).to receive(:webauth_groups).and_return(User::ADMIN_GROUPS)
+      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-admin'])
+
+      expect(subject.is_webauth_admin?).to be true
+    end
+  end
+
   describe 'is_manager?' do
     it 'should be true if the group is a manager group' do
       allow(subject).to receive(:groups).and_return(['workgroup:sdr:manager-role'])
@@ -262,6 +276,17 @@ describe User, :type => :model do
       expect(user.is_admin?).to be false
       expect(user.is_manager?).to be false
       expect(user.is_viewer?).to be false
+    end
+  end
+
+  describe '#webauth_groups' do
+    before :each do
+      @webauth_privgroup_str = 'dlss:testgroup1|dlss:testgroup2|dlss:testgroup3'
+      @user = User.find_or_create_by_webauth(double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => @webauth_privgroup_str))
+    end
+    it 'should return the groups by webauth' do
+      expected_groups = ['sunetid:asdf'] + @webauth_privgroup_str.split(/\|/).map { |g| "workgroup:#{g}" }
+      expect(@user.webauth_groups).to eq(expected_groups)
     end
   end
 

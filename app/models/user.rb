@@ -98,7 +98,11 @@ class User < ActiveRecord::Base
 
   def groups
     return @groups_to_impersonate unless @groups_to_impersonate.blank?
-    @groups ||= begin
+    webauth_groups
+  end
+
+  def webauth_groups
+    @webauth_groups ||= begin
       perm_keys = ["sunetid:#{login}"]
       return perm_keys unless webauth && webauth.privgroup.present?
       perm_keys + webauth.privgroup.split(/\|/).map {|g| "workgroup:#{g}"}
@@ -108,6 +112,12 @@ class User < ActiveRecord::Base
   # @return [Boolean] is the user a repository wide administrator
   def is_admin?
     !(groups & ADMIN_GROUPS).blank?
+  end
+
+  # @return [Boolean] is the user a repository wide administrator without
+  #     taking into account impersonation.
+  def is_webauth_admin?
+    !(webauth_groups & ADMIN_GROUPS).blank?
   end
 
   # @return [Boolean] is the user a repository wide manager
