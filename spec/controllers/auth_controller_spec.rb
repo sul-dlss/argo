@@ -27,6 +27,9 @@ describe AuthController, :type => :controller do
         impersonated_groups_str = 'workgroup:dlss:impersonatedgroup1,workgroup:dlss:impersonatedgroup2'
         post :remember_impersonated_groups, {:groups => impersonated_groups_str}
         expect(session[:groups]).to be_blank
+
+        post :forget_impersonated_groups
+        expect(response.status).to_not eq 403
       end
     end
   end

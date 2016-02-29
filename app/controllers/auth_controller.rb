@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  before_action do
+  before_action(except: [:forget_impersonated_groups]) do
     render :status => :forbidden, :text => 'forbidden' unless current_user && current_user.is_admin?
   end
 
