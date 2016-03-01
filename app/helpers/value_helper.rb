@@ -81,9 +81,4 @@ module ValueHelper
     end
     tags.join('<br/>').html_safe
   end
-
-  # not actually called yet, requires Blacklight 4.2.0
-  def facet_model_helper(value)
-    value.gsub(/^info:fedora\/(afmodel:)?/, '')
-  end
 end

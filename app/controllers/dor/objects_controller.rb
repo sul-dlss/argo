@@ -36,6 +36,24 @@ class Dor::ObjectsController < ApplicationController
 
   private
 
+  def munge_parameters
+    case request.content_type
+    when 'application/xml', 'text/xml'
+      merge_params(Hash.from_xml(request.body.read))
+    when 'application/json', 'text/json'
+      merge_params(JSON.parse(request.body.read))
+    end
+  end
+
+  def merge_params(hash)
+    # convert camelCase parameter names to under_score, and string keys to symbols
+    # e.g., 'objectType' to :object_type
+    hash.each_pair do |k, v|
+      key = k.underscore
+      params[key.to_sym] = v
+    end
+  end
+
   def object_location(pid)
     fedora_base.merge("objects/#{pid}").to_s
   end
