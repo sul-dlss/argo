@@ -19,6 +19,7 @@ module Argo
     require 'bulk_reindexer'
     require 'profiler'
     require 'constants'
+    require 'fileutils'
 
     config.active_job.queue_adapter = :delayed_job
 

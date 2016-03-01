@@ -1,5 +1,4 @@
 class StatusController < ApplicationController
-  include ActionView::Helpers::DateHelper
   skip_before_action :authorize!
 
   def log
