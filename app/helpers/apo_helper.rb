@@ -1,8 +1,4 @@
 module ApoHelper
-  def utf_val
-    'hello world ©'
-  end
-
   # return a list of lists, where the sublists are pairs, with the first element being the text to display
   # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated
   # entries, unless the current value is a deprecated entry, in which case, include that entry with the

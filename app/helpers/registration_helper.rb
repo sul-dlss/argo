@@ -14,10 +14,6 @@ module RegistrationHelper
     end
   end
 
-  def utf_val
-    'hello world ©'
-  end
-
   def valid_object_types
     [
       %w(Item item),

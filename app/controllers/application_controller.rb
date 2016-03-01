@@ -49,15 +49,6 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def munge_parameters
-    case request.content_type
-    when 'application/xml', 'text/xml'
-      help.merge_params(Hash.from_xml(request.body.read))
-    when 'application/json', 'text/json'
-      help.merge_params(JSON.parse(request.body.read))
-    end
-  end
-
   def fedora_setup
     Dor::Config.fedora.post_config
   end
@@ -86,5 +77,4 @@ class ApplicationController < ActionController::Base
       redirect_to fallback_location, **args
     end
   end
-
 end

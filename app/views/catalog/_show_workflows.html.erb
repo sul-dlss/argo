@@ -13,7 +13,7 @@
         <td>
           <%=status[:status] %>
           <% if status[:errors] > 0 -%>
-            <span class="errortext">(<%= inflect('error', status[:errors]) %>)</span>
+            <span class="errortext">(<%= pluralize(status[:errors], 'error') %>)</span>
           <% end %>
         </td>
       </tr>

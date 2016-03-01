@@ -31,14 +31,6 @@ module ArgoHelper
     end
   end
 
-  def render_extended_document_class(document = @document)
-    result = render_document_class(document).to_s
-    if document['first_shelved_image_ss'] && document['first_shelved_image_ss'].length > 0
-      result += ' has-thumbnail'
-    end
-    result
-  end
-
   def get_thumbnail_info(doc)
     fname = doc['first_shelved_image_ss']
     return nil unless fname
@@ -151,19 +143,6 @@ module ArgoHelper
       end
     end
     buttons
-  end
-
-  def document_has?(document, field_name)
-    return true if document.has? field_name
-    return false unless self.respond_to?(:"calculate_#{field_name}_value")
-    calculated_value = send(:"calculate_#{field_name}_value", document)
-    return false if calculated_value.nil?
-    document[field_name] = [calculated_value]
-    true
-  end
-
-  def render_dpg_link(document)
-    link_to 'DPG Object Status', File.join(Settings.DPG_URL, document.druid)
   end
 
   def render_purl_link(document, link_text = 'PURL', opts = {:target => '_blank'})

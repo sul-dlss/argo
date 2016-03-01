@@ -9,10 +9,6 @@ module ApplicationHelper
     URI.parse(Dor::Config.fedora.safeurl.sub(/\/*$/, '/'))
   end
 
-  def inflect(str, num)
-    '%d %s' % [num, (num == 1 ? str.singularize : str.pluralize)]
-  end
-
   def robot_status_url
     Settings.ROBOT_STATUS_URL
   end
