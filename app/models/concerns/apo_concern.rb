@@ -12,26 +12,28 @@ module ApoConcern
   # Access a SolrDocument's APO druid
   # @return [String, nil]
   def apo_id
-    fetch(FIELD_APO_ID).first
-  rescue KeyError
-    UBER_APO_IDS.include?(id) ? id : nil
+    if has? FIELD_APO_ID
+      first(FIELD_APO_ID)
+    elsif UBER_APO_IDS.include?(id)
+      id
+    end
   end
 
   ##
   # Access a SolrDocument's APO druid without the `info:fedora/` prefix
   # @return [String, nil]
   def apo_pid
-    apo_id.gsub('info:fedora/', '')
-  rescue NoMethodError
-    nil
+    apo_id.gsub('info:fedora/', '') if apo_id
   end
 
   ##
   # Access a SolrDocument's APO title
   # @return [String, nil]
   def apo_title
-    fetch(FIELD_APO_TITLE).first
-  rescue KeyError
-    UBER_APO_IDS.include?(id) ? title : nil
+    if has? FIELD_APO_TITLE
+      first(FIELD_APO_TITLE)
+    elsif UBER_APO_IDS.include?(id)
+      title
+    end
   end
 end

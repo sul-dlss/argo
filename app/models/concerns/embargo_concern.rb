@@ -9,14 +9,10 @@ module EmbargoConcern
   end
 
   def embargo_status
-    fetch(FIELD_EMBARGO_STATUS).first
-  rescue NoMethodError, KeyError
-    nil
+    first(FIELD_EMBARGO_STATUS)
   end
 
   def embargo_release_date
-    fetch(FIELD_EMBARGO_RELEASE_DATE).first
-  rescue NoMethodError, KeyError
-    nil
+    first(FIELD_EMBARGO_RELEASE_DATE)
   end
 end

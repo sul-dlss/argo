@@ -5,8 +5,6 @@ module PreservationSizeConcern
   FIELD_PRESERVATION_SIZE = :preserved_size_dbtsi
 
   def preservation_size
-    fetch(FIELD_PRESERVATION_SIZE)
-  rescue KeyError
-    nil
+    fetch(FIELD_PRESERVATION_SIZE, nil)
   end
 end

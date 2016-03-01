@@ -7,8 +7,6 @@ module TitleConcern
   # Access a SolrDocument's title
   # @return [String, nil]
   def title
-    fetch(FIELD_TITLE)
-  rescue KeyError
-    nil
+    fetch(FIELD_TITLE, nil)
   end
 end
