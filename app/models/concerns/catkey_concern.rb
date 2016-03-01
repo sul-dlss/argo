@@ -7,17 +7,13 @@ module CatkeyConcern
   # Access a SolrDocument's catkey
   # @return [String, nil]
   def catkey
-    fetch(FIELD_CATKEY_ID).first
-  rescue KeyError, NoMethodError
-    nil
+    first(FIELD_CATKEY_ID)
   end
 
   ##
   # Access a SolrDocument's catkey identifier
   # @return [String, nil]
   def catkey_id
-    catkey.gsub(/^catkey:/, '')
-  rescue NoMethodError
-    nil
+    catkey.gsub(/^catkey:/, '') if catkey
   end
 end
