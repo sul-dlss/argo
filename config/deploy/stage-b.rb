@@ -6,4 +6,4 @@ set :bundle_without, %w(test development).join(' ')
 
 set :deploy_to, '/opt/app/lyberadmin/argo'
 
-set :delayed_job_workers, 10
+set :delayed_job_workers, 4
