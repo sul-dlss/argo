@@ -58,8 +58,8 @@ module DorObjectHelper
   end
 
   def render_milestones(doc, obj)
-    milestones = SolrDocument.get_milestones(doc)
-    version_hash = SolrDocument.get_versions(doc)
+    milestones = doc.get_milestones
+    version_hash = doc.get_versions
     render :partial => 'catalog/show_milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
   end
 

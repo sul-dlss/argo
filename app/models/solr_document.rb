@@ -32,9 +32,9 @@ class SolrDocument
     :format   => 'public_dc_format_tesim'
   )
 
-  def self.get_versions(doc)
+  def get_versions
     versions = {}
-    recs = doc['versions_ssm']
+    recs = self['versions_ssm']
     if recs
       recs.each do |rec|
         (version, tag, desc) = rec.split(';')
@@ -47,9 +47,9 @@ class SolrDocument
     versions
   end
 
-  def self.get_milestones(doc)
+  def get_milestones
     milestones = {}
-    Array(doc['lifecycle_ssim']).each do |m|
+    Array(self['lifecycle_ssim']).each do |m|
       (name, time) = m.split(/:/, 2)
       next unless time  # skip basic values like: "registered"
       (time, version) = time.split(/;/, 2)
