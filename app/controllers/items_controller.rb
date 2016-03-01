@@ -9,6 +9,7 @@ class ItemsController < ApplicationController
   before_action :forbid_modify, :only => [
     :add_collection, :set_collection, :remove_collection,
     :datastream_update,
+    :embargo_update,
     :mods,
     :open_version, :close_version,
     :update_resource,
@@ -226,10 +227,6 @@ class ItemsController < ApplicationController
   end
 
   def embargo_update
-    unless current_user.is_admin?
-      render :status => :forbidden, :text => 'forbidden'
-      return
-    end
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
     @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
     @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
