@@ -1,6 +1,3 @@
-require 'fileutils'
-require 'rest-client'
-
 class ApoController < ApplicationController
 
   before_action :create_obj, :except => [

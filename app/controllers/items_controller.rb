@@ -1,7 +1,4 @@
 class ItemsController < ApplicationController
-  require 'equivalent-xml'
-  include ItemsHelper
-  include DorObjectHelper
   include ModsDisplay::ControllerExtension
   before_action :authorize!
   before_action :create_obj, :except => [

@@ -31,31 +31,6 @@ module DorObjectHelper
     result.html_safe
   end
 
-  def render_embargo_date_reset(pid, current_user)
-    # new_date=Datetime.parse(new_date)
-    # if(new_date.past?)
-    #   raise 'The new date must be in the future!'
-    # end
-    if is_permitted(current_user, :modify, pid)
-      form_tag embargo_update_item_url(pid) do
-        button_tag('Change Embargo', :type => 'submit')
-      end
-    else
-      ''
-    end
-  end
-
-  # FIXME: XXX: Nice security there.
-  def is_permitted(current_user, operation, pid)
-    true
-  end
-
-  def get_dor_obj_if_exists(obj_id)
-    Dor.find(obj_id)
-  rescue ActiveFedora::ObjectNotFoundError # => e
-    nil
-  end
-
   def render_datetime(datetime)
     return '' if datetime.nil? || datetime == ''
     # this needs to use the timezone set in config.time_zone
@@ -112,20 +87,6 @@ module DorObjectHelper
 
   ##
   # @deprecated Please use non-blocking requests rather than blocking helpers.
-  # See WorkflowServiceController#published for JSON API to this logic
-  def has_been_published?(pid)
-    Dor::WorkflowService.get_lifecycle('dor', pid, 'published')
-  end
-
-  ##
-  # @deprecated Please use non-blocking requests rather than blocking helpers.
-  # See WorkflowServiceController#submitted for JSON API to this logic
-  def has_been_submitted?(pid)
-    Dor::WorkflowService.get_lifecycle('dor', pid, 'submitted')
-  end
-
-  ##
-  # @deprecated Please use non-blocking requests rather than blocking helpers.
   # See WorkflowServiceController#accesssioned for JSON API to this logic
   def has_been_accessioned?(pid)
     Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
@@ -143,13 +104,6 @@ module DorObjectHelper
     return false if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
     return false if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
     true
-  end
-
-  ##
-  # @deprecated Please use non-blocking requests rather than blocking helpers.
-  # See WorkflowServiceController#closeable for JSON API to this logic
-  def can_close_version?(pid)
-    Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened') && !Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
   end
 
   def render_qfacet_value(facet_solr_field, item, options = {})
