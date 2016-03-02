@@ -71,8 +71,11 @@ describe ItemsController, :type => :controller do
   end
   describe 'embargo_update' do
     it 'should 403 if you are not an admin' do
-      allow(@current_user).to receive(:is_admin?).and_return(false)
-      post 'embargo_update', :id => @pid, :date => '12/19/2013'
+      expect(@current_user).to receive(:is_admin?).and_return(false)
+      expect(@item).to receive(:can_manage_content?).and_return(false)
+      expect(subject).not_to receive(:save_and_reindex)
+      expect(subject).not_to receive(:flush_index)
+      post :embargo_update, :id => @pid, :embargo_date => '2100-01-01'
       expect(response).to have_http_status(:forbidden)
     end
     it 'should call Dor::Item.update_embargo' do
@@ -81,7 +84,7 @@ describe ItemsController, :type => :controller do
       expect(controller).to receive(:save_and_reindex)
       expect(controller).to receive(:flush_index).and_call_original
       expect(Dor::SearchService.solr).to receive(:commit) # from flush_index internals
-      post :embargo_update, :id => @pid, :embargo_date => '2100-01-01T00:00:00Z'
+      post :embargo_update, :id => @pid, :embargo_date => '2100-01-01'
       expect(response).to have_http_status(:found) # redirect to catalog page
     end
     it 'should require a date' do
