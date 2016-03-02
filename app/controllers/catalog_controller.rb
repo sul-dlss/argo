@@ -2,7 +2,6 @@ require 'blacklight/catalog'
 class CatalogController < ApplicationController
   include Blacklight::Catalog
   helper ArgoHelper
-  include SpreadsheetHelper
   include DateFacetConfigurations
 
   before_action :reformat_dates, :set_user_obj_instance_var
@@ -257,8 +256,7 @@ class CatalogController < ApplicationController
     job_directory = File.join(Settings.BULK_METADATA.DIRECTORY, @apo, @time)
 
     # Generate both the actual log messages that go in the HTML and the CSV, since both need to be ready when the table is displayed to the user
-    @druid_log = load_user_log(@apo, job_directory)
-    user_log_csv(@druid_log, job_directory)
+    UserLog.new(@apo, job_directory).to_csv
   end
 
   def bulk_status_help

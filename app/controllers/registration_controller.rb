@@ -1,6 +1,4 @@
 class RegistrationController < ApplicationController
-  include RegistrationHelper
-
   def form
     redirect_to register_items_url
   end
@@ -10,7 +8,7 @@ class RegistrationController < ApplicationController
     name     = params[:name] || 'tracksheet'
     sequence = params[:sequence] || 1
     response['content-disposition'] = "attachment; filename=#{name}-#{sequence}.pdf"
-    pdf = generate_tracking_pdf(druids)
+    pdf = TrackSheet.new(druids).generate_tracking_pdf
     render :text => pdf.render, :content_type => :pdf
   end
 
@@ -123,5 +121,13 @@ class RegistrationController < ApplicationController
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
     end
+  end
+
+  private
+
+  # @param [String] s string to truncate at word boundary
+  # @param [Integer] truncate_limit character limit for truncation target
+  def short_label(s, truncate_limit = 60)
+    s.truncate(truncate_limit, separator: /\s/)
   end
 end
