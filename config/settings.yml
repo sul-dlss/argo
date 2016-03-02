@@ -12,6 +12,7 @@ BULK_REINDEXER:
 # Bulk Metadata
 BULK_METADATA:
   DIRECTORY: '/tmp/bulk_jobs/'
+  TEMPORARY_DIRECTORY: '/tmp/bulk_jobs/tmp/'
   LOG: 'log.txt'
   CSV_LOG: 'log.csv'
   XML: 'MODS'
