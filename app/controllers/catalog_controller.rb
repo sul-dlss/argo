@@ -256,7 +256,9 @@ class CatalogController < ApplicationController
     job_directory = File.join(Settings.BULK_METADATA.DIRECTORY, @apo, @time)
 
     # Generate both the actual log messages that go in the HTML and the CSV, since both need to be ready when the table is displayed to the user
-    UserLog.new(@apo, job_directory).to_csv
+    user_log = UserLog.new(@apo, job_directory)
+    @druid_log = user_log.user_messages
+    user_log.user_log_csv
   end
 
   def bulk_status_help
@@ -311,7 +313,7 @@ class CatalogController < ApplicationController
           next unless matched_strings && matched_strings.length == 3
           job_info[matched_strings[1]] = matched_strings[2]
           success += 1 if matched_strings[1] == 'argo.bulk_metadata.bulk_log_job_save_success'
-          job_info['error'] = 1 if @@error_messages.include?(matched_strings[1])
+          job_info['error'] = 1 if UserLog::ERROR_MESSAGES.include?(matched_strings[1])
         end
         job_info['dir'] = get_leafdir(dir)
         job_info['argo.bulk_metadata.bulk_log_druids_loaded'] = success
