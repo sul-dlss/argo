@@ -18,11 +18,6 @@
       end
       workflows[wf_name][:processes][process_name] = p
     end
-
-    completed_count = render_workflow_archive_count('dor',wf_name)
-    completed_count = 0 if completed_count == '-'
-
-    workflows[wf_name][:totals] =  { :completed =>  completed_count }
   end
 
 -%>

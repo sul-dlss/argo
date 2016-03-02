@@ -62,18 +62,6 @@ module WorkflowHelper
     link_to(item_count, new_params)
   end
 
-  def render_workflow_archive_count(repo, name)
-    query_results = Dor::SearchService.query("objectType_ssim:workflow title_tesim:#{name}")
-    if query_results
-      wf_doc = query_results.docs.first
-      if wf_doc && wf_doc["#{name}_archived_isi"]
-        return wf_doc["#{name}_archived_isi"]
-      end
-    end
-
-    '-'
-  end
-
   def proc_names_for_wf(wf_name, wf_data)
     proc_names = wf_data.keys.delete_if { |k, v| !k.is_a?(String) }
     wf = Dor::WorkflowObject.find_by_name(wf_name)
