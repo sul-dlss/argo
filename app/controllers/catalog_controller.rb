@@ -213,7 +213,7 @@ class CatalogController < ApplicationController
     temp_spreadsheet_filename = params[:spreadsheet_file].original_filename + '.' + directory_name
 
     # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it when it's done.
-    temp_filename = Rails.root.join('tmp', temp_spreadsheet_filename)
+    temp_filename = make_tmp_filename(temp_spreadsheet_filename)
     FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
     ModsulatorJob.perform_later(@apo.id, temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
 
@@ -368,6 +368,11 @@ class CatalogController < ApplicationController
 
   def find_desc_metadata_file(job_output_directory)
     File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
+  end
+
+  def make_tmp_filename(temp_spreadsheet_filename)
+    FileUtils.mkdir_p(Settings.BULK_METADATA.TEMPORARY_DIRECTORY) if !File.exist?(Settings.BULK_METADATA.TEMPORARY_DIRECTORY)
+    File.join(Settings.BULK_METADATA.TEMPORARY_DIRECTORY, temp_spreadsheet_filename)
   end
 
   # Sorts the Blacklight collection actions buttons so that the "Bulk Action" and "Bulk Update View" buttons appear
