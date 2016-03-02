@@ -9,7 +9,7 @@ Dor.configure do
     url Settings.FEDORA_URL
   end
 
-  solrizer do
+  solr do
     url Settings.SOLRIZER_URL
   end
 
