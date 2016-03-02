@@ -10,10 +10,6 @@ describe ReportController, :type => :controller do
       get :workflow_grid
       expect(response).to render_template('workflow_grid')
     end
-    it 'should work in :format => json' do
-      get :workflow_grid, :format => :json
-      expect(response).to render_template('workflow_grid')
-    end
   end
   describe ':data' do
     it 'should return json' do
