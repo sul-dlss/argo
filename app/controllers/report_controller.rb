@@ -90,7 +90,6 @@ class ReportController < CatalogController
     end
 
     respond_to do |format|
-      format.json
       format.html
     end
   end
