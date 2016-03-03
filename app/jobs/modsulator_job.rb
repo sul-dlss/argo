@@ -97,7 +97,7 @@ class ModsulatorJob < ActiveJob::Base
         # If the object is currently in the opened version state, then go ahead, otherwise (unless the status is "Registered")
         # open a new version first, but do not close it
         if dor_object.status_info[:status_code] != 9 && dor_object.status_info[:status_code] != 1
-          unless can_open_version?(dor_object.id)
+          unless DorObjectWorkflowStatus.new(dor_object.pid).can_open_version?
             log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{current_druid}")  # totally unexpected
             next
           end

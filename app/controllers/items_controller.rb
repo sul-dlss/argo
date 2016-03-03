@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
 
   # open a new version if needed. 400 if the item is in a state that doesnt allow opening a version.
   def prepare
-    if can_open_version? @object.pid
+    if DorObjectWorkflowStatus.new(@object.pid).can_open_version?
       begin
         vers_md_upd_info = {
           :significance => params[:severity],

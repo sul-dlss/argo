@@ -96,16 +96,6 @@ module DorObjectHelper
     Sdr::Client.current_version(object.pid)
   end
 
-  ##
-  # @deprecated Please use non-blocking requests rather than blocking helpers.
-  # See WorkflowServiceController#openable for JSON API to this logic
-  def can_open_version?(pid)
-    return false unless Dor::Config.workflow.client.get_lifecycle('dor', pid, 'accessioned')
-    return false if Dor::Config.workflow.client.get_active_lifecycle('dor', pid, 'submitted')
-    return false if Dor::Config.workflow.client.get_active_lifecycle('dor', pid, 'opened')
-    true
-  end
-
   def render_qfacet_value(facet_solr_field, item, options = {})
     params = add_facet_params(facet_solr_field, item.qvalue)
     Rails.cache.fetch('route_for' + params.to_s, :expires_in => 1.hour) do
