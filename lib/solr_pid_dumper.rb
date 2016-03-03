@@ -14,27 +14,27 @@
 
 module Argo
   class SolrPidDumper
-    OBJ_TYPE_FIELD_NAME = 'objectType_facet'
-    OBJ_TYPES = %w{workflow agreement adminPolicy collection set}
-    BASE_DIR = 'solr_pid_dumps/'
+    OBJ_TYPE_FIELD_NAME = "objectType_facet".freeze
+    OBJ_TYPES = %w{workflow agreement adminPolicy collection set}.freeze
+    BASE_DIR = "solr_pid_dumps/".freeze
 
-    def self.solr_pids(q = '*:*')
+    def self.solr_pids(q = "*:*")
       puts "querying solr for indexed pids, (q=#{q})..."
 
       start = 0
       solr_pids = []
-      resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
+      resp = Dor::SearchService.query(q, sort: "id asc", rows: 1000, start: start, fl: ["id"])
       while resp.docs.length > 0
-          solr_pids += resp.docs.map { |doc| doc['id'] }
-          start += 1000
-          resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
-        end
+        solr_pids += resp.docs.map { |doc| doc["id"] }
+        start += 1000
+        resp = Dor::SearchService.query(q, sort: "id asc", rows: 1000, start: start, fl: ["id"])
+      end
       puts "found #{solr_pids.length} pids in solr"
       solr_pids
     end
 
     def self.write_solr_pids_by_obj_type
-      cur_datetime_str = DateTime.now.strftime('%Y-%m-%d_%H:%M:%S')
+      cur_datetime_str = DateTime.now.strftime("%Y-%m-%d_%H:%M:%S")
 
       pid_lists = {}
       OBJ_TYPES.each do |obj_type|
