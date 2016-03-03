@@ -131,7 +131,7 @@ class ItemsController < ApplicationController
   end
 
   def workflow_history_view
-    @history_xml = Dor::WorkflowService.get_workflow_xml 'dor', params[:id], nil
+    @history_xml = Dor::Config.workflow.client.get_workflow_xml 'dor', params[:id], nil
   end
 
   def mods
@@ -188,9 +188,9 @@ class ItemsController < ApplicationController
       # the :repo parameter is optional, so fetch it based on the workflow name if blank
       params[:repo] ||= Dor::WorkflowObject.find_by_name(params[:wf_name]).definition.repo
       # this will raise an exception if the item doesn't have that workflow step
-      Dor::WorkflowService.get_workflow_status params[:repo], *args.take(3)
+      Dor::Config.workflow.client.get_workflow_status params[:repo], *args.take(3)
       # update the status for the step and redirect to the workflow view page
-      Dor::WorkflowService.update_workflow_status params[:repo], *args
+      Dor::Config.workflow.client.update_workflow_status params[:repo], *args
       respond_to do |format|
         if params[:bulk].present?
           render status: 200, text: 'Updated!'
@@ -714,14 +714,14 @@ class ItemsController < ApplicationController
   end
 
   def dor_accession_status(object, task)
-    Dor::WorkflowService.get_workflow_status('dor', object.pid, 'accessionWF', task)
+    Dor::Config.workflow.client.get_workflow_status('dor', object.pid, 'accessionWF', task)
   end
 
   def dor_lifecycle(object, stage)
-    Dor::WorkflowService.get_lifecycle('dor', object.pid, stage)
+    Dor::Config.workflow.client.get_lifecycle('dor', object.pid, stage)
   end
 
   def set_dor_accession_status(object, task, status)
-    Dor::WorkflowService.update_workflow_status('dor', object.pid, 'accessionWF', task, status)
+    Dor::Config.workflow.client.update_workflow_status('dor', object.pid, 'accessionWF', task, status)
   end
 end

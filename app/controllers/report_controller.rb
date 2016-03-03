@@ -70,7 +70,7 @@ class ReportController < CatalogController
     @ids  = pids_from_report(params)
     @repo = repo_from_workflow(params[:reset_workflow])
     @ids.each do |pid|
-      Dor::WorkflowService.update_workflow_status(
+      Dor::Config.workflow.client.update_workflow_status(
         @repo,
         "druid:#{pid}",
         @workflow,

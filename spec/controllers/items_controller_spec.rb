@@ -45,20 +45,20 @@ describe ItemsController, :type => :controller do
 
   describe 'release_hold' do
     it 'should release an item that is on hold if its apo has been ingested' do
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
-      expect(Dor::WorkflowService).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
-      expect(Dor::WorkflowService).to receive(:update_workflow_status)
+      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
+      expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
+      expect(Dor::Config.workflow.client).to receive(:update_workflow_status)
       post :release_hold, :id => @pid
     end
     it 'should refuse to release an item that isnt on hold' do
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
-      expect(Dor::WorkflowService).not_to receive(:update_workflow_status)
+      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
+      expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
       post :release_hold, :id => @pid
     end
     it 'should refuse to release an item whose apo hasnt been ingested' do
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
-      expect(Dor::WorkflowService).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
-      expect(Dor::WorkflowService).not_to receive(:update_workflow_status)
+      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
+      expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
+      expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
       post :release_hold, :id => @pid
     end
   end
@@ -404,8 +404,8 @@ describe ItemsController, :type => :controller do
     end
     it 'should change the status' do
       expect(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(double(definition: double(repo: 'dor')))
-      expect(Dor::WorkflowService).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'publish').and_return(nil)
-      expect(Dor::WorkflowService).to receive(:update_workflow_status).with('dor', @pid, 'accessionWF', 'publish', 'ready').and_return(nil)
+      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'publish').and_return(nil)
+      expect(Dor::Config.workflow.client).to receive(:update_workflow_status).with('dor', @pid, 'accessionWF', 'publish', 'ready').and_return(nil)
       post :workflow_update, id: @pid, wf_name: 'accessionWF', process: 'publish', status: 'ready'
       expect(subject).to redirect_to(catalog_path)
     end

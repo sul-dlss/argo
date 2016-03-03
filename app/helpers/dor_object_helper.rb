@@ -89,7 +89,7 @@ module DorObjectHelper
   # @deprecated Please use non-blocking requests rather than blocking helpers.
   # See WorkflowServiceController#accesssioned for JSON API to this logic
   def has_been_accessioned?(pid)
-    Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
+    Dor::Config.workflow.client.get_lifecycle('dor', pid, 'accessioned')
   end
 
   def last_accessioned_version(object)
@@ -100,9 +100,9 @@ module DorObjectHelper
   # @deprecated Please use non-blocking requests rather than blocking helpers.
   # See WorkflowServiceController#openable for JSON API to this logic
   def can_open_version?(pid)
-    return false unless Dor::WorkflowService.get_lifecycle('dor', pid, 'accessioned')
-    return false if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'submitted')
-    return false if Dor::WorkflowService.get_active_lifecycle('dor', pid, 'opened')
+    return false unless Dor::Config.workflow.client.get_lifecycle('dor', pid, 'accessioned')
+    return false if Dor::Config.workflow.client.get_active_lifecycle('dor', pid, 'submitted')
+    return false if Dor::Config.workflow.client.get_active_lifecycle('dor', pid, 'opened')
     true
   end
 
