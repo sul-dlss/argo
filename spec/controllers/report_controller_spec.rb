@@ -36,7 +36,7 @@ describe ReportController, :type => :controller do
       expect(controller).to receive(:repo_from_workflow)
         .and_return('dor')
       ids.each do |id|
-        expect(Dor::WorkflowService).to receive(:update_workflow_status)
+        expect(Dor::Config.workflow.client).to receive(:update_workflow_status)
           .with('dor', "druid:#{id}", workflow, step, 'waiting')
       end
       xhr :post, :reset, reset_workflow: workflow, reset_step: step

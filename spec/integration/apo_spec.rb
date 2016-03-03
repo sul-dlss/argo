@@ -29,7 +29,7 @@ describe 'apo', :type => :request do
 
   it 'should register an apo' do
     expect(Dor::SuriService).to receive(:mint_id).and_return(@new_druid)
-    expect(Dor::WorkflowService).to receive(:create_workflow)
+    expect(Dor::Config.workflow.client).to receive(:create_workflow)
     # go to the registration form and fill it in
     visit '/apo/register'
     fill_in 'title',     :with => 'APO Title'
