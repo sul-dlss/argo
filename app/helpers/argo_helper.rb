@@ -157,13 +157,6 @@ module ArgoHelper
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/objectXML"), opts
   end
 
-  def render_solr_link(document)
-    return '' unless current_user.is_admin?
-
-    solr_doc_url = "#{Dor::Config.solrizer.url}/select?q=id:\"#{@document.id}\"&wt=json&indent=true"
-    link_to 'Solr document', solr_doc_url, {:target => '_blank'}
-  end
-
   def render_index_info(document)
     "indexed by DOR Services v#{@document.first(Dor::INDEX_VERSION_FIELD)}"
   end
