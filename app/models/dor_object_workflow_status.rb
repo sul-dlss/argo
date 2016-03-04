@@ -9,40 +9,44 @@ class DorObjectWorkflowStatus
 
   ##
   # @return [Boolean]
+  def accessioned?
+    get_lifecycle('accessioned') ? true : false
+  end
+
+  ##
+  # @return [Boolean]
   def can_open_version?
-    return false unless accessioned?
-    return false if get_active_lifecycle('submitted')
-    return false if get_active_lifecycle('opened')
-    true
+    accessioned? && !(submitted_now? || opened_now?)
   end
 
   ##
   # @return [Boolean]
   def can_close_version?
-    return true if get_active_lifecycle('opened') &&
-                  !get_active_lifecycle('submitted')
-    false
+    opened_now? && !submitted_now?
+  end
+
+  ##
+  # @return [Boolean]
+  def opened_now?
+    get_active_lifecycle('opened') ? true : false
   end
 
   ##
   # @return [Boolean]
   def published?
-    return true if get_lifecycle('published')
-    false
+    get_lifecycle('published') ? true : false
   end
 
   ##
   # @return [Boolean]
   def submitted?
-    return true if get_lifecycle('submitted')
-    false
+    get_lifecycle('submitted') ? true : false
   end
 
   ##
   # @return [Boolean]
-  def accessioned?
-    return true if get_lifecycle('accessioned')
-    false
+  def submitted_now?
+    get_active_lifecycle('submitted') ? true : false
   end
 
   private
