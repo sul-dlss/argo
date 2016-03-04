@@ -1,42 +1,39 @@
 class WorkflowServiceController < ApplicationController
+  before_action :set_workflow_status
+
   ##
   # Is a document closeable?
   def closeable
-    @status = workflow_status.can_close_version?
-    render json: @status
+    render json: @workflow_status.can_close_version?
   end
 
   ##
   # Is a document openable?
   def openable
-    @status = workflow_status.can_open_version?
-    render json: @status
+    render json: @workflow_status.can_open_version?
   end
 
   ##
   # Has an object been published?
   def published
-    @status = workflow_status.published?
-    render json: @status
+    render json: @workflow_status.published?
   end
 
   ##
   # Has an object been submitted?
   def submitted
-    @status = workflow_status.submitted?
-    render json: @status
+    render json: @workflow_status.submitted?
   end
 
   ##
   # Has an object been accessioned?
   def accessioned
-    @status = workflow_status.accessioned?
-    render json: @status
+    render json: @workflow_status.accessioned?
   end
 
   private
 
-  def workflow_status
-    DorObjectWorkflowStatus.new(params[:pid])
+  def set_workflow_status
+    @workflow_status = DorObjectWorkflowStatus.new(params[:pid])
   end
 end
