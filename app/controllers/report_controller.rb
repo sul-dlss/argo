@@ -54,7 +54,7 @@ class ReportController < CatalogController
   end
 
   def download
-    fields = params['fields'] ? params.delete('fields').split(/\s*,\s*/) : nil
+    fields = params['fields'].present? ? params.delete('fields').split(/\s*,\s*/) : nil
     params[:per_page] = 10
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=report.csv'

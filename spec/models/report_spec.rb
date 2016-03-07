@@ -16,7 +16,7 @@ describe Report, :type => :model do
       rows = CSV.parse(@csv)
       expect(rows.is_a?(Array)).to be_truthy
       expect(rows.length).to be > 1    # at least headers + data
-      expect(rows[0].length).to eq(24) # default headers
+      expect(rows[0].length).to eq(25) # default headers
     end
 
     it 'should force double quotes for all fields' do
@@ -25,12 +25,12 @@ describe Report, :type => :model do
 
     it 'should handle a title with double quotes in it' do
       row = CSV.parse(@csv).find { |row| row[0] == 'hj185vb7593' }
-      expect(row[2]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+      expect(row[2]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953') # 2 == title field
     end
 
     it 'should handle a multivalued fields' do
       row = CSV.parse(@csv).find { |row| row[0] == 'xb482bw3979' }
-      expect(row[11].split('; ').length).to eq(2)
+      expect(row[12].split('; ').length).to eq(2) # 12 == tag field
     end
   end
   describe 'blacklight config' do
@@ -45,6 +45,10 @@ describe Report, :type => :model do
       expect(keys).to include 'object_modified_date', SolrDocument::FIELD_LAST_MODIFIED_DATE.to_s
       expect(keys).to include 'version_opened_date', SolrDocument::FIELD_LAST_OPENED_DATE.to_s
       expect(keys).to include 'embargo_release_date', SolrDocument::FIELD_EMBARGO_RELEASE_DATE.to_s
+    end
+    it 'should have report fields' do
+      expect(config.report_fields.length).to eq(25)
+      expect(config.report_fields.all? { |f| f[:field].is_a? Symbol }).to be_truthy # all :field keys are symbols
     end
   end
 end
