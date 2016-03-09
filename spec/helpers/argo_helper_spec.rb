@@ -111,4 +111,13 @@ describe ArgoHelper, :type => :helper do
       expect(helper.method(:render_facet_value).owner).to eq(Blacklight::FacetsHelperBehavior)
     end
   end
+  describe 'purge button' do
+    it 'is enabled for registered only item' do
+      expect(helper.registered_only?({ 'processing_status_text_ssi' => 'Registered'})).to be_truthy
+      expect(helper.registered_only?({ 'processing_status_text_ssi' => 'Unknown Status'})).to be_truthy
+    end
+    it 'is disabled for items beyond registered only' do
+      expect(helper.registered_only?({ 'processing_status_text_ssi' => 'In accessioning'})).to be_falsey
+    end
+  end
 end
