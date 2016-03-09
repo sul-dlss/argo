@@ -63,10 +63,6 @@ Dor.configure do
     user                        Settings.STACKS.USER
   end
 
-  sdr do
-    url Settings.SDR_URL
-  end
-
   indexing_svc do
     log Settings.INDEXER.LOG
     log_date_format_str Settings.DATE_FORMAT_STR
