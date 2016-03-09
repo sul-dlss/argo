@@ -17,30 +17,30 @@ class Report
 
     config.report_fields = [
       {
-        :label => 'Druid', :field => 'druid',
+        :field => :druid, :label => 'Druid',
         :proc => lambda { |doc| doc['id'].split(/:/).last },
         :sort => true, :default => true, :width => 100
       },
       {
-        :field => 'purl', :label => 'Purl',
+        :field => :purl, :label => 'Purl',
         :proc => lambda { |doc| File.join(Settings.PURL_URL, doc['id'].split(/:/).last) },
-        :solr_fields => ['id'],
+        :solr_fields => %w(id),
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'title', :label => 'Title',
+        :field => :title, :label => 'Title',
         :proc => lambda { |doc| retrieve_terms(doc)[:title] },
         :solr_fields => %w(public_dc_title_tesim dc_title_tesim obj_label_ssim),
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'citation', :label => 'Citation',
+        :field => :citation, :label => 'Citation',
         :proc => lambda { |doc| render_citation(doc) },
         :solr_fields => %w(public_dc_creator_tesim dc_creator_tesim public_dc_title_tesim dc_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim public_dc_publisher_tesim originInfo_publisher_tesim public_dc_date_tesim),
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'source_id_ssim', :label => 'Source Id',
+        :field => :source_id_ssim, :label => 'Source Id',
         :sort => false, :default => true, :width => 100
       },
       {
@@ -63,23 +63,28 @@ class Report
         :sort => false, :default => false, :width => 100
       },
       {
-        :field => 'project_tag_ssim', :label => 'Project',
+        :field => :project_tag_ssim, :label => 'Project',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'registered_by_tag_ssim', :label => 'Registered By',
+        :field => :registered_by_tag_ssim, :label => 'Registered By',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'tag_ssim', :label => 'Tags',
+        :field => :registered_earliest_dttsi, :label => 'Registered',
+        :proc => lambda { |doc| render_datetime(doc[:registered_earliest_dttsi])},
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'objectType_ssim', :label => 'Object Type',
+        :field => :tag_ssim, :label => 'Tags',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'content_type_ssim', :label => 'Content Type',
+        :field => :objectType_ssim, :label => 'Object Type',
+        :sort => true, :default => false, :width => 100
+      },
+      {
+        :field => :content_type_ssim, :label => 'Content Type',
         :sort => true, :default => false, :width => 100
       },
       {
@@ -87,51 +92,48 @@ class Report
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'barcode_id_ssim', :label => 'Barcode',
+        :field => :barcode_id_ssim, :label => 'Barcode',
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'status_ssi', :label => 'Status',
+        :field => :status_ssi, :label => 'Status',
         :sort => false, :default => true, :width => 100
       },
       {
-        :field => 'accessioned_dttsim', :label => 'Accession. Datetime',
-        :proc => lambda { |doc| render_datetime(doc['accessioned_dttsim'])},
-        :solr_fields => ['accessioned_dttsim'],
+        :field => :accessioned_dttsim, :label => 'Accession. Datetime',
+        :proc => lambda { |doc| render_datetime(doc[:accessioned_dttsim])},
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'published_dttsim', :label => 'Pub. Date',
-        :proc => lambda { |doc| render_datetime(doc['published_dttsim'])},
-        :solr_fields => ['published_dttsim'],
+        :field => :published_dttsim, :label => 'Pub. Date',
+        :proc => lambda { |doc| render_datetime(doc[:published_dttsim])},
         :sort => true, :default => true, :width => 100
       },
       {
-        :field => 'workflow_status_ssim', :label => 'Errors',
-        :proc => lambda { |doc| doc['workflow_status_ssim'].first.split('|')[2] },
-        :solr_fields => ['workflow_status_ssim'],
+        :field => :workflow_status_ssim, :label => 'Errors',
+        :proc => lambda { |doc| doc[:workflow_status_ssim].first.split('|')[2] },
         :sort => true, :default => false, :width => 100
       },
       {
-        :field => 'file_count', :label => 'Files',
-        :proc => lambda { |doc| doc['content_file_count_itsi'] },
-        :solr_fields => ['content_file_count_itsi'],
+        :field => :file_count, :label => 'Files',
+        :proc => lambda { |doc| doc[:content_file_count_itsi] },
+        :solr_fields => %w(content_file_count_itsi),
         :sort => false, :default => true, :width => 50
       },
       {
-        :field => 'shelved_file_count', :label => 'Shelved Files',
-        :proc => lambda {|doc| doc['shelved_content_file_count_itsi'] },
-        :solr_fields => ['shelved_content_file_count_itsi'],
+        :field => :shelved_file_count, :label => 'Shelved Files',
+        :proc => lambda {|doc| doc[:shelved_content_file_count_itsi] },
+        :solr_fields => %w(shelved_content_file_count_itsi),
         :sort => false, :default => true, :width => 50
       },
       {
-        :field => 'resource_count', :label => 'Resources',
-        :proc => lambda {|doc| doc['resource_count_itsi'] },
-        :solr_fields => ['resource_count_itsi'],
+        :field => :resource_count, :label => 'Resources',
+        :proc => lambda {|doc| doc[:resource_count_itsi] },
+        :solr_fields => %w(resource_count_itsi),
         :sort => false, :default => true, :width => 50
       },
       {
-        :field => 'preserved_size', :label => 'Preservation Size',
+        :field => :preserved_size, :label => 'Preservation Size',
         :proc => lambda { |doc| doc.preservation_size },
         :solr_fields => [SolrDocument::FIELD_PRESERVATION_SIZE],
         :sort => false, :default => true, :width => 50
@@ -161,12 +163,13 @@ class Report
     }
   end
 
+  # @param [Array<String>] fields
   def initialize(params = {}, fields = nil, current_user: NullUser.new)
     @current_user = current_user
     if fields.nil?
       @fields = self.class.blacklight_config.report_fields
     else
-      @fields = self.class.blacklight_config.report_fields.select { |f| fields.nil? || fields.include?(f[:field]) }
+      @fields = self.class.blacklight_config.report_fields.select { |f| fields.include?(f[:field].to_s) }
       @fields.sort! { |a, b| fields.index(a[:field]) <=> fields.index(b[:field]) }
     end
     @params = params
@@ -210,6 +213,9 @@ class Report
 
   protected
 
+  # @param [Array<SolrDocument>] docs
+  # @param [Array<Hash>] fields
+  # @return [Array<Hash>]
   def docs_to_records(docs, fields = blacklight_config.report_fields)
     result = []
     docs.each_with_index do |doc, index|
