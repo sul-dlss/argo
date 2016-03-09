@@ -50,5 +50,42 @@ describe Report, :type => :model do
       expect(config.report_fields.length).to eq(25)
       expect(config.report_fields.all? { |f| f[:field].is_a? Symbol }).to be_truthy # all :field keys are symbols
     end
+    it 'should have all the mandatory, default report fields' do
+      [
+        :druid,
+        :purl,
+        :citation,
+        :source_id_ssim,
+        SolrDocument::FIELD_APO_TITLE,
+        :status_ssi,
+        :published_dttsim,
+        :file_count,
+        :shelved_file_count,
+        :resource_count,
+        :preserved_size
+      ].each do |k|
+        expect(config.report_fields.any? { |f| f[:field] == k}).to be_truthy
+      end
+    end
+    it 'should have all the mandatory, non-default report fields' do
+      [
+        :title,
+        SolrDocument::FIELD_APO_ID,
+        SolrDocument::FIELD_COLLECTION_ID,
+        SolrDocument::FIELD_COLLECTION_TITLE,
+        :project_tag_ssim,
+        :registered_by_tag_ssim,
+        :registered_earliest_dttsi,
+        :tag_ssim,
+        :objectType_ssim,
+        :content_type_ssim,
+        SolrDocument::FIELD_CATKEY_ID,
+        :barcode_id_ssim,
+        :accessioned_dttsim,
+        :workflow_status_ssim
+      ].each do |k|
+        expect(config.report_fields.any? { |f| f[:field] == k}).to be_truthy
+      end
+    end
   end
 end
