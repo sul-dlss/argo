@@ -118,7 +118,7 @@ module ArgoHelper
         label: 'Purge',
         new_page: true,
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-        check_url: workflow_service_submitted_path(pid)
+        check_url: !registered_only?(doc)
       }
 
       buttons << {:url => '/items/' + pid + '/source_id_ui', :label => 'Change source id'}
@@ -191,4 +191,9 @@ module ArgoHelper
     link_to 'MODS bulk loads', bulk_jobs_index_path(@document), :id => 'bulk-button', :class => 'button btn btn-primary'
   end
 
+  protected
+
+  def registered_only?(document)
+    ['Registered', 'Unknown Status'].include?(document['processing_status_text_ssi'])
+  end
 end

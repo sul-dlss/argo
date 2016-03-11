@@ -18,7 +18,6 @@ feature 'Enable buttons' do
     expect(page).to have_css 'a.disabled', text: 'Close Version'
     expect(page).to have_css 'a.disabled', text: 'Open for modification'
     expect(page).to have_css 'a.disabled', text: 'Republish'
-    expect(page).to have_css 'a.disabled', text: 'Purge'
   end
   scenario 'buttons are enabled if their services return true', js: true do
     allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_close_version).and_return(true)
@@ -26,6 +25,5 @@ feature 'Enable buttons' do
     expect(page).to_not have_css 'a.disabled', text: 'Close Version'
     expect(page).to_not have_css 'a.disabled', text: 'Open for modification'
     expect(page).to_not have_css 'a.disabled', text: 'Republish'
-    expect(page).to_not have_css 'a.disabled', text: 'Purge'
   end
 end
