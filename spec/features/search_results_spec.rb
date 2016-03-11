@@ -66,7 +66,8 @@ feature 'Search results' do
       end
     end
     expect(page).to have_css 'dt', text: 'Collection:'
-    expect(page).to have_css 'dd a', text: /Annual report/
+    expect(page).to have_css 'dd a', text: 'druid:pb873ty1662'
+    expect(page).to have_css 'dd a', text: 'State Banking Commission Annual Reports'
   end
   scenario 'contains document image thumbnail' do
     visit catalog_index_path f: { objectType_ssim: ['item'] }
