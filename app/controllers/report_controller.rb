@@ -15,11 +15,7 @@ class ReportController < CatalogController
   end
 
   def data
-    # if !params[:sidx] || params[:sidx] == 'druid'
-    #  params[:sidx] = 'id'
-    # end
     params[:sord] ||= 'asc'
-    # params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i, 1].max
     @report = Report.new(params, current_user: current_user)
@@ -41,13 +37,13 @@ class ReportController < CatalogController
   end
 
   def pids
-    # params[:per_page]=100
-    # params[:rows]=100
-    ids = Report.new(params, ['druid'], current_user: current_user).pids params
     respond_to do |format|
       format.json do
         render :json => {
-          :druids => ids
+          :druids => Report.new(params, current_user: current_user).pids(
+            source_id: params[:source_id].present?,
+            tags: params[:tags].present?
+          )
         }
       end
     end
@@ -99,7 +95,10 @@ class ReportController < CatalogController
   ##
   # @return [Array]
   def pids_from_report(params)
-    Report.new(params, ['druids'], current_user: current_user).pids params
+    Report.new(params, ['druids'], current_user: current_user).pids(
+      source_id: params[:source_id].present?,
+      tags: params[:tags].present?
+    )
   end
 
   ##
