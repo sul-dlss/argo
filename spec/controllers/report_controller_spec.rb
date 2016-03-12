@@ -21,6 +21,13 @@ describe ReportController, :type => :controller do
       expect{ JSON.parse(response.body) }.not_to raise_error()
     end
   end
+  describe ':pids' do
+    it 'should return json' do
+      get :pids, :format => :json
+      pids = JSON.parse(response.body)['druids']
+      expect(pids.is_a?(Array)).to be_truthy
+    end
+  end
   describe 'bulk' do
     it 'should render the correct template' do
       get :bulk
