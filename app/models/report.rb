@@ -187,17 +187,17 @@ class Report
     while @document_list.length > 0
       report_data.each do |rec|
         if params[:source_id]
-          toret << rec['druid'].to_s + "\t" + rec['source_id_ssim'].to_s
+          toret << rec[:druid].to_s + "\t" + rec[:source_id_ssim].to_s
         elsif params[:tags]
           tags = ''
-          unless rec['tag_ssim'].nil?
-            rec['tag_ssim'].split(';').each do |tag|
+          unless rec[:tag_ssim].nil?
+            rec[:tag_ssim].split(';').each do |tag|
               tags += "\t" + tag.to_s
             end
           end
-          toret << rec['druid'] + tags
+          toret << rec[:druid] + tags
         else
-          toret << rec['druid']
+          toret << rec[:druid]
         end
       end
       @params[:page] += 1
