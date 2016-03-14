@@ -15,11 +15,7 @@ class ReportController < CatalogController
   end
 
   def data
-    # if !params[:sidx] || params[:sidx] == 'druid'
-    #  params[:sidx] = 'id'
-    # end
     params[:sord] ||= 'asc'
-    # params[:sort] = "#{params.delete(:sidx)} #{params.delete(:sord)}" if params[:sidx].present?
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10
     params[:per_page] = rows_per_page * [params.delete(:npage).to_i, 1].max
     @report = Report.new(params, current_user: current_user)
@@ -41,13 +37,13 @@ class ReportController < CatalogController
   end
 
   def pids
-    # params[:per_page]=100
-    # params[:rows]=100
-    ids = Report.new(params, ['druid'], current_user: current_user).pids params
     respond_to do |format|
       format.json do
         render :json => {
-          :druids => ids
+          :druids => Report.new(params, current_user: current_user).pids(
+            source_id: params[:source_id].present?,
+            tags: params[:tags].present?
+          )
         }
       end
     end
@@ -65,10 +61,13 @@ class ReportController < CatalogController
   # an ajax call to reset workflow states for objects
   def reset
     render nothing: true, status: 501 unless request.xhr?
+    fail ArgumentError, 'Missing reset_workflow' unless params[:reset_workflow].present?
+    fail ArgumentError, 'Missing reset_step' unless params[:reset_step].present?
+
     @workflow = params[:reset_workflow]
     @step = params[:reset_step]
-    @ids  = pids_from_report(params)
-    @repo = repo_from_workflow(params[:reset_workflow])
+    @repo = repo_from_workflow(@workflow)
+    @ids  = Report.new(params, current_user: current_user).pids
     @ids.each do |pid|
       Dor::Config.workflow.client.update_workflow_status(
         @repo,
@@ -95,12 +94,6 @@ class ReportController < CatalogController
   end
 
   private
-
-  ##
-  # @return [Array]
-  def pids_from_report(params)
-    Report.new(params, ['druids'], current_user: current_user).pids params
-  end
 
   ##
   # @return [String, nil]

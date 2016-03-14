@@ -170,41 +170,41 @@ class Report
       @fields = self.class.blacklight_config.report_fields
     else
       @fields = self.class.blacklight_config.report_fields.select { |f| fields.include?(f[:field].to_s) }
-      @fields.sort! { |a, b| fields.index(a[:field]) <=> fields.index(b[:field]) }
+      @fields.sort! { |a, b| fields.index(a[:field].to_s) <=> fields.index(b[:field].to_s) }
     end
     @params = params
     @params[:page] ||= 1
 
-    (@response, @document_list) = search_results(params, search_params_logic)
+    (@response, @document_list) = search_results(@params, search_params_logic)
     @num_found = @response['response']['numFound'].to_i
   end
 
-  def pids(params)
-    @params[:page] = 1
+  def pids(opts = {})
+    params[:page] = 1
     params[:per_page] = 100
     (@response, @document_list) = search_results(params, search_params_logic)
-    toret = []
+    pids = []
     while @document_list.length > 0
       report_data.each do |rec|
-        if params[:source_id]
-          toret << rec['druid'].to_s + "\t" + rec['source_id_ssim'].to_s
-        elsif params[:tags]
+        if opts[:source_id].present?
+          pids << rec[:druid] + "\t" + rec[:source_id_ssim]
+        elsif opts[:tags].present?
           tags = ''
-          unless rec['tag_ssim'].nil?
-            rec['tag_ssim'].split(';').each do |tag|
-              tags += "\t" + tag.to_s
+          unless rec[:tag_ssim].nil?
+            rec[:tag_ssim].split(';').each do |tag|
+              tags += "\t" + tag
             end
           end
-          toret << rec['druid'] + tags
+          pids << rec[:druid] + tags
         else
-          toret << rec['druid']
+          pids << rec[:druid]
         end
       end
-      @params[:page] += 1
+      params[:page] += 1
       (@response, @document_list) = search_results(params, search_params_logic)
     end
 
-    toret
+    pids
   end
 
   def report_data
@@ -215,16 +215,16 @@ class Report
 
   # @param [Array<SolrDocument>] docs
   # @param [Array<Hash>] fields
-  # @return [Array<Hash>]
+  # @return [Array<Hash(Symbol => String)>]
   def docs_to_records(docs, fields = blacklight_config.report_fields)
     result = []
     docs.each_with_index do |doc, index|
       row = Hash[fields.collect do |spec|
-        val = spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field]] rescue nil
+        val = spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s] rescue nil
         val = val.join('; ') if val.is_a?(Array)
-        [spec[:field], val]
+        [spec[:field].to_sym, val.to_s]
       end]
-      row['id'] = index + 1
+      row[:id] = index + 1
       result << row
     end
     result

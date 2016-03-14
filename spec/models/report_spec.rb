@@ -88,4 +88,24 @@ describe Report, :type => :model do
       end
     end
   end
+  describe '#pids' do
+    it 'should return unqualified druids by default' do
+      expect(described_class.new(
+        { q: 'report' }, %w(druid),
+        current_user: mock_user(is_admin?: true)
+      ).pids).to eq(%w(fg464dn8891 pb873ty1662 qq613vj0238))
+    end
+    it 'should return druids and source ids' do
+      expect(described_class.new(
+        { q: 'report' }, %w(druid source_id_ssim),
+        current_user: mock_user(is_admin?: true)
+      ).pids(source_id: true)).to include "qq613vj0238\tsul:36105011952764"
+    end
+    it 'should return druids and tags' do
+      expect(described_class.new(
+        { q: 'report' }, %w(druid tag_ssim),
+        current_user: mock_user(is_admin?: true)
+      ).pids(tags: true)).to include "fg464dn8891\tRegistered By : llam813\t Remediated By : 4.6.6.2"
+    end
+  end
 end
