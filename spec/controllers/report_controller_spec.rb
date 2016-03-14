@@ -2,35 +2,45 @@ require 'spec_helper'
 
 describe ReportController, :type => :controller do
   before :each do
-    log_in_as_mock_user(subject)
-    allow_any_instance_of(User).to receive(:groups).and_return(['sdr:administrator-role'])
+    @current_user = mock_user(is_admin?: true, can_view_something?: true)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).
+      and_return(@current_user)
   end
   describe ':workflow_grid' do
     it 'should work' do
       get :workflow_grid
+      expect(response).to have_http_status(:ok)
       expect(response).to render_template('workflow_grid')
     end
   end
   describe ':data' do
     it 'should return json' do
       get :data, :format => :json, :rows => 5
-      expect{ JSON.parse(response.body) }.not_to raise_error()
+      expect(response).to have_http_status(:ok)
+      data = JSON.parse(response.body)
+      expect(data['rows'].length).to eq(5)
     end
     it 'should default to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in' do
       get :data, :format => :json
-      expect{ JSON.parse(response.body) }.not_to raise_error()
+      expect(response).to have_http_status(:ok)
+      data = JSON.parse(response.body)
+      expect(data['rows'].length).to eq(10)
     end
   end
   describe ':pids' do
     it 'should return json' do
       get :pids, :format => :json
+      expect(response).to have_http_status(:ok)
       pids = JSON.parse(response.body)['druids']
       expect(pids.is_a?(Array)).to be_truthy
+      expect(pids.length > 1).to be_truthy
+      expect(pids.first).to eq('br481xz7820')
     end
   end
   describe 'bulk' do
     it 'should render the correct template' do
       get :bulk
+      expect(response).to have_http_status(:ok)
       expect(response).to render_template('bulk')
     end
   end
@@ -50,12 +60,12 @@ describe ReportController, :type => :controller do
       expect(assigns(:workflow)).to eq workflow
       expect(assigns(:step)).to eq step
       expect(assigns(:ids)).to eq ids
-      expect(response.status).to eq 200
+      expect(response).to have_http_status(:ok)
     end
     it 'gets the correct pids from a new Report' do
       expect(Report).to receive(:new).and_return(double('report', pids: []))
       xhr :post, :reset, reset_workflow: workflow, reset_step: step
-      expect(response.status).to eq 200
+      expect(response).to have_http_status(:ok)
     end
     it 'gets repo from the WorkflowObject' do
       expect(controller).to receive(:pids_from_report).and_return([])
@@ -63,7 +73,7 @@ describe ReportController, :type => :controller do
         .and_return double(definition: double(repo: 'dor'))
       xhr :post, :reset, reset_workflow: workflow, reset_step: step
       expect(assigns(:repo)).to eq 'dor'
-      expect(response.status).to eq 200
+      expect(response).to have_http_status(:ok)
     end
   end
   describe 'download' do
@@ -71,12 +81,18 @@ describe ReportController, :type => :controller do
       get :download, fields: ' '
       expect(response).to have_http_status(:ok)
       expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
-      expect { CSV.parse(response.body) }.not_to raise_error
+      data = CSV.parse(response.body)
+      expect(data.first.length).to eq(25)
+      expect(data.length > 1).to be_truthy
+      expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
     end
     it 'should download valid CSV data for specific fields' do
       get :download, fields: 'druid,purl,source_id_ssim,tag_ssim'
       expect(response).to have_http_status(:ok)
-      expect(response.body.strip).to eq('"Druid","Purl","Source Id","Tags"')
+      data = CSV.parse(response.body)
+      expect(data.first).to eq(%w(Druid Purl Source\ Id Tags))
+      expect(data.length > 1).to be_truthy
+      expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
     end
   end
   describe 'config' do
