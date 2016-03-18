@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160114000925) do
+ActiveRecord::Schema.define(version: 20160318203331) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer  "user_id",       null: false
@@ -41,9 +41,9 @@ ActiveRecord::Schema.define(version: 20160114000925) do
   add_index "bulk_actions", ["user_id"], name: "index_bulk_actions_on_user_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   default: 0, null: false
-    t.integer  "attempts",   default: 0, null: false
-    t.text     "handler",                null: false
+    t.integer  "priority",                      default: 0, null: false
+    t.integer  "attempts",                      default: 0, null: false
+    t.text     "handler",    limit: 4294967295,             null: false
     t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
