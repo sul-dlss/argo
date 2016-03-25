@@ -21,7 +21,9 @@ feature 'Enable buttons' do
   end
   scenario 'buttons are enabled if their services return true', js: true do
     allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_close_version).and_return(true)
-    allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_open_verison).and_return(true)
+    allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_open_version).and_return(true)
+    allow_any_instance_of(WorkflowServiceController).to receive(:check_if_published).and_return(true)
+    visit catalog_path 'druid:hj185vb7593'
     expect(page).to_not have_css 'a.disabled', text: 'Close Version'
     expect(page).to_not have_css 'a.disabled', text: 'Open for modification'
     expect(page).to_not have_css 'a.disabled', text: 'Republish'
