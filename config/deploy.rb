@@ -3,6 +3,8 @@ lock '3.4.0'
 set :application, 'argo'
 set :repo_url, 'https://github.com/sul-dlss/argo.git'
 
+set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
