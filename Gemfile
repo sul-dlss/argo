@@ -31,6 +31,7 @@ gem 'squash_rails', '=1.3.3', :require => 'squash/rails'  # TODO: upgrading to 1
 gem 'squash_ruby',  :require => 'squash/ruby'
 gem 'therubyracer', '~> 0.11'
 gem 'uglifier', '>= 1.0.3'
+gem 'whenever', require: false
 
 # Stanford/Hydra related gems
 gem 'about_page'
