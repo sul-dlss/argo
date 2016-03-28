@@ -1,5 +1,4 @@
 <%
-  apo = @obj.admin_policy_object
   if(params[:edit])
     if can?(:manage_content, @obj) && can?(:manage_desc_metadata, @obj)
 %>
