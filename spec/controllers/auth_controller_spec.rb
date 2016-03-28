@@ -23,13 +23,14 @@ describe AuthController, :type => :controller do
         log_in_as_mock_user(subject, is_admin?: false)
       end
 
-      it 'should be able to remember and forget impersonated groups' do
+      it 'should be able to forget but not remember impersonated groups' do
         impersonated_groups_str = 'workgroup:dlss:impersonatedgroup1,workgroup:dlss:impersonatedgroup2'
         post :remember_impersonated_groups, {:groups => impersonated_groups_str}
         expect(session[:groups]).to be_blank
 
         post :forget_impersonated_groups
         expect(response.status).to_not eq 403
+        expect(session[:groups]).to be_blank
       end
     end
   end
