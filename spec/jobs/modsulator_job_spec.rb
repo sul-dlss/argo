@@ -18,7 +18,7 @@ describe ModsulatorJob, type: :job do
 
   describe 'update_metadata' do
     it 'raises an error given an invalid xml argument' do
-      expect { @mj.update_metadata('', '', File.new(File.join(@output_directory, 'fake_log.txt'), 'w')) }.to raise_error(/nil:NilClass/)
+      expect { @mj.update_metadata('', '', '', '', File.new(File.join(@output_directory, 'fake_log.txt'), 'w')) }.to raise_error(/nil:NilClass/)
     end
   end
 
@@ -106,9 +106,78 @@ describe ModsulatorJob, type: :job do
     end
   end
 
+  describe 'accessioned' do
+    (0..9).each do |i|
+      it "returns true for DOR objects that are acccessioned, false otherwise (:status_code #{i})" do
+        m = double
+        allow(m).to receive(:status_info).and_return({ :status_code => i })
+        if i == 6 || i == 7 || i == 8
+          expect(@mj.accessioned(m)).to be_truthy
+        else
+          expect(@mj.accessioned(m)).to be_falsy
+        end
+      end
+    end
+  end
+
   describe 'generate_xml_filename' do
     it 'creates a new filename using the correct convention' do
       expect(@mj.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq('generate_xml_filename-' + Settings.BULK_METADATA.XML + '.xml')
+    end
+  end
+
+  describe 'commit_new_version' do
+    let(:dor_test_object) { double('dor_item')}
+
+    it 'opens a new minor version with filename and username' do
+      expect(dor_test_object).to receive(:open_new_version).with({
+        vers_md_upd_info: {
+          significance: 'minor',
+          description: 'Descriptive metadata upload from testfile.xlsx',
+          opening_user_name: 'username'
+        }
+      }).and_return(true)
+      @mj.commit_new_version(dor_test_object, 'testfile.xlsx', 'username')
+    end
+  end
+
+  describe 'version_object' do
+    before :each do
+      @dor_object = double(pid: 'druid:123abc')
+      @workflow = double('workflow')
+      @log = double('log')
+    end
+
+    it 'writes a log error message if a version cannot be opened' do
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 6})
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(false)
+      expect(@log).to receive(:puts).with("argo.bulk_metadata.bulk_log_unable_to_version #{@dor_object.pid}")
+
+      @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
+    end
+
+    it 'does not update the version if the object is in the registered state' do
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 1})
+      expect(@mj).not_to receive(:commit_new_version)
+
+      @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
+    end
+
+    it 'does not update the version if the object is in the opened state' do
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 9})
+      expect(@mj).not_to receive(:commit_new_version)
+
+      @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
+    end
+
+    it 'updates the version if the object is past the registered state' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(true)
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 6})
+      expect(@mj).to receive(:commit_new_version)
+
+      @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
     end
   end
 
@@ -146,7 +215,6 @@ describe ModsulatorJob, type: :job do
     context 'cleaning up an XML file' do
       it 'sends requests to the normalizer' do
         file_path = "#{::Rails.root}/spec/fixtures/crowdsourcing_bridget_1.xml"
-
         stub_request(:post, Settings.NORMALIZER_URL).with(body: /Fragment of a Glossarium/).to_return(body: 'abc')
         response = @mj.generate_xml('xml_only', file_path, 'crowdsourcing_bridget_1', log_file)
         expect(response).to eq 'abc'

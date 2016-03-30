@@ -45,7 +45,7 @@ class ModsulatorJob < ActiveJob::Base
         log.puts('argo.bulk_metadata.bulk_log_xml_only true')
       elsif filetype != 'xml' # If the submitted file is XML, we never want to load anything into DOR
         log.puts('argo.bulk_metadata.bulk_log_xml_only false')
-        update_metadata(apo_id, response_xml, log) # Load into DOR
+        update_metadata(apo_id, response_xml, original_filename, user_login, log) # Load into DOR
       end
 
       log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
@@ -56,11 +56,13 @@ class ModsulatorJob < ActiveJob::Base
 
   # Upload metadata into DOR.
   #
-  # @param  [String] druid         The governing APO's druid.
-  # @param  [String] xml_string    A MODS XML string.
-  # @param  [File]   log           Log file handle.
+  # @param  [String] druid               The governing APO's druid.
+  # @param  [String] xml_string          A MODS XML string.
+  # @param  [File]   log                 Log file handle.
+  # @param  [String] user_login          The login name of the current user_login
+  # @param  [String] original_filename   The name of the uploaded file
   # @return [Void]
-  def update_metadata(druid, xml_string, log)
+  def update_metadata(druid, xml_string, original_filename, user_login, log)
     return if xml_string.nil?
 
     root = Nokogiri::XML(xml_string).root
@@ -94,15 +96,7 @@ class ModsulatorJob < ActiveJob::Base
           next
         end
 
-        # If the object is currently in the opened version state, then go ahead, otherwise (unless the status is "Registered")
-        # open a new version first, but do not close it
-        if dor_object.status_info[:status_code] != 9 && dor_object.status_info[:status_code] != 1
-          unless DorObjectWorkflowStatus.new(dor_object.pid).can_open_version?
-            log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{current_druid}")  # totally unexpected
-            next
-          end
-          dor_object.open_new_version()
-        end
+        version_object(dor_object, original_filename, user_login, log)
 
         dor_object.descMetadata.content = mods_node.to_s
         dor_object.save
@@ -119,6 +113,40 @@ class ModsulatorJob < ActiveJob::Base
         next
       end
     end
+  end
+
+  # Open a new version for the given object if it is in the accessioned state.
+  # @param   [Dor::Item]  dor_object          The object to version
+  # @param   [String]     original_filename   The name of the uploaded file
+  # @param   [String]     user_login          The current user_login
+  # @param   [File]       log                 Log file handle
+  def version_object(dor_object, original_filename, user_login, log)
+    if accessioned(dor_object)
+      if !DorObjectWorkflowStatus.new(dor_object.pid).can_open_version?
+        log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{dor_object.pid}")  # totally unexpected
+        return
+      end
+      commit_new_version(dor_object, original_filename, user_login)
+    end
+  end
+
+  # Open a new version for the given object.
+  # @param   [Dor::Item]  dor_object          The object to version
+  # @param   [String]     original_filename   The name of the uploaded file
+  # @param   [String]     user_login          The current user_login
+  def commit_new_version(dor_object, original_filename, user_login)
+    vers_md_upd_info = {
+      :significance => 'minor',
+      :description => "Descriptive metadata upload from #{original_filename}",
+      :opening_user_name => user_login
+    }
+    dor_object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+  end
+
+  # Returns true if the given object is accessioned, false otherwise.
+  # @param   [Dor::Item]  dor_object  A DOR object
+  def accessioned(dor_object)
+    (6..8).cover?(dor_object.status_info[:status_code])
   end
 
   # Check if two MODS XML nodes are equivalent.
@@ -191,23 +219,23 @@ class ModsulatorJob < ActiveJob::Base
     end
 
     response_xml = response.body
-  rescue Faraday::ResourceNotFound => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
-  rescue Errno::ENOENT => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
-  rescue Errno::EACCES => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
-  rescue Faraday::ClientError => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
-  rescue Exception => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
-  ensure
-    log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
+    rescue Faraday::ResourceNotFound => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
+    rescue Errno::ENOENT => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
+    rescue Errno::EACCES => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
+    rescue Faraday::ClientError => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
+    rescue Exception => e
+      delayed_log_url(e, url)
+      log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
+    ensure
+      log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
   end
 
   # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.
@@ -248,7 +276,7 @@ class ModsulatorJob < ActiveJob::Base
   # @return [Boolean]     true if the object is currently being accessioned, false otherwise
   def in_accessioning(dor_object)
     status = dor_object.status_info[:status_code]
-    (2..5).include?(status)
+    (2..5).cover?(status)
   end
 
   # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only times we are
