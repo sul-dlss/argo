@@ -70,4 +70,14 @@ describe DescmetadataDownloadJob, type: :job do
       end
     end
   end
+
+  describe 'initialize_counters' do
+    it 'sets the three bulk job counters to zero' do
+      bulk_action = double('bulk_action')
+      expect(bulk_action).to receive(:update).with(druid_count_fail: 0)
+      expect(bulk_action).to receive(:update).with(druid_count_success: 0)
+      expect(bulk_action).to receive(:update).with(druid_count_total: 0)
+      @download_job.initialize_counters(bulk_action)
+    end
+  end
 end
