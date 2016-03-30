@@ -157,11 +157,11 @@ GEM
       capistrano-releaseboard
     docile (1.1.5)
     docopt (0.5.0)
-    domain_name (0.5.20160309)
+    domain_name (0.5.20160310)
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.0.2)
       nokogiri
-    dor-services (5.6.0)
+    dor-services (5.7.0)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       confstruct (~> 0.2.7)
@@ -175,7 +175,6 @@ GEM
       modsulator (~> 0.0.7)
       net-sftp (~> 2.1)
       nokogiri (~> 1.6)
-      nokogiri-pretty (~> 0.1)
       om (~> 3.0)
       rdf (~> 1.1.7)
       rest-client (~> 1.7)
@@ -290,15 +289,13 @@ GEM
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
       net-ssh (>= 2.6.5)
-    net-ssh (3.0.2)
+    net-ssh (3.1.1)
     netrc (0.11.0)
     newrelic_rpm (3.15.0.314)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     nokogiri-happymapper (0.5.9)
       nokogiri (~> 1.5)
-    nokogiri-pretty (0.1.0)
-      nokogiri
     nom-xml (0.5.4)
       activesupport (>= 3.2.18)
       i18n
@@ -535,7 +532,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   dlss-capistrano (~> 3.1)
-  dor-services (~> 5.6, >= 5.6.0)
+  dor-services (~> 5.7.0)
   equivalent-xml (>= 0.6.0)
   factory_girl_rails
   faraday
