@@ -1,5 +1,4 @@
 class DorController < ApplicationController
-  before_action :authorize!
   respond_to :json, :xml
   respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
 

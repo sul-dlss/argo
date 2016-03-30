@@ -124,6 +124,7 @@ def mock_user(attributes = {})
     groups: [],
     can_view_something?: false,
     is_admin?: false,
+    is_webauth_admin?: attributes[:is_admin?],
     is_manager?: false,
     is_viewer?: false,
     roles: [],

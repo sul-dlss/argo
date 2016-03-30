@@ -5,6 +5,7 @@ RSpec.describe 'items/_embargo_form.html.erb' do
 
   before do
     allow(view).to receive(:current_user).and_return(current_user)
+    allow(controller).to receive(:current_user).and_return(current_user)
   end
 
   # let(:object) { double('object', pid: 'druid:abc123')}

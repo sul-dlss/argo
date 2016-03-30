@@ -5,7 +5,7 @@ describe AuthController, :type => :controller do
   describe 'test impersonation' do
     context 'as an admin' do
       before :each do
-        log_in_as_mock_user(subject, is_webauth_admin?: true)
+        log_in_as_mock_user(subject, is_admin?: true)
       end
 
       it 'should be able to remember and forget impersonated groups' do
@@ -20,16 +20,17 @@ describe AuthController, :type => :controller do
 
     context 'as an ordinary user' do
       before :each do
-        log_in_as_mock_user(subject, is_webauth_admin?: false)
+        log_in_as_mock_user(subject, is_admin?: false)
       end
 
-      it 'should be able to remember and forget impersonated groups' do
+      it 'should be able to forget but not remember impersonated groups' do
         impersonated_groups_str = 'workgroup:dlss:impersonatedgroup1,workgroup:dlss:impersonatedgroup2'
         post :remember_impersonated_groups, {:groups => impersonated_groups_str}
         expect(session[:groups]).to be_blank
 
         post :forget_impersonated_groups
         expect(response.status).to_not eq 403
+        expect(session[:groups]).to be_blank
       end
     end
   end

@@ -15,6 +15,12 @@ class ApoController < ApplicationController
     :register_collection
   ]
 
+  before_action :authorize, :except => [
+    :is_valid_role_list_endpoint,
+    :register,
+    :spreadsheet_template
+  ]
+
   DEFAULT_MANAGER_WORKGROUPS = %w(sdr:developer sdr:service-manager sdr:metadata-staff).freeze
 
   # @param [String] role_name
@@ -62,6 +68,8 @@ class ApoController < ApplicationController
   end
 
   def register
+    authorize! :create, Dor::AdminPolicyObject
+
     param_cleanup params
 
     if params[:title]
@@ -325,16 +333,13 @@ class ApoController < ApplicationController
     end
   end
 
-  # check that the user can carry out this object modification
-  def forbid
-    return if current_user.is_admin? || @object.can_manage_content?(current_user.roles(params[:id]))
-    render :status => :forbidden, :text => 'forbidden'
-    nil
-  end
-
   def set_abstract(collection_obj, abstract)
     collection_obj.descMetadata.abstract = abstract
     collection_obj.descMetadata.content = collection_obj.descMetadata.ng_xml.to_s
     collection_obj.descMetadata.save
+  end
+
+  def authorize
+    authorize! :manage_item, @object
   end
 end

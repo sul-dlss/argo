@@ -3,6 +3,7 @@ require 'spec_helper'
 RSpec.describe 'auth/groups.html.erb' do
   before do
     allow(view).to receive(:current_user).and_return(user)
+    allow(controller).to receive(:current_user).and_return(user)
   end
   context 'as admin' do
     let(:user) { mock_user(is_admin?: true, groups: %w(dlss dpg)) }
