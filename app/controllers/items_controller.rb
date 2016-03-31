@@ -287,7 +287,7 @@ class ItemsController < ApplicationController
   def get_preserved_file
     file_content = @object.get_preserved_file params[:file], params[:version].to_i
     response.headers['Content-Type'] = 'application/octet-stream'
-    response.headers['Content-Disposition'] = 'attachment; filename=' + params[:file]
+    response.headers['Content-Disposition'] = "attachment; filename=#{params[:file]}"
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
     self.response_body = file_content
   end

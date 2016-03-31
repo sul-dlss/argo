@@ -44,9 +44,6 @@ Dor.configure do
     content_user     Settings.CONTENT.USER
     content_base_dir Settings.CONTENT.BASE_DIR
     content_server   Settings.CONTENT.SERVER_HOST
-    sdr_server       Settings.CONTENT.SDR_SERVER_URL
-    sdr_user         Settings.CONTENT.SDR_USER
-    sdr_pass         Settings.CONTENT.SDR_PASSWORD
   end
 
   status do
