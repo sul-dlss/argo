@@ -114,6 +114,27 @@ GEM
       xpath (~> 2.0)
     capybara_discoball (0.0.1)
       capybara
+    celluloid (0.17.3)
+      celluloid-essentials
+      celluloid-extras
+      celluloid-fsm
+      celluloid-pool
+      celluloid-supervision
+      timers (>= 4.1.1)
+    celluloid-essentials (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-extras (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-fsm (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-io (0.17.3)
+      celluloid (>= 0.17.2)
+      nio4r (>= 1.1)
+      timers (>= 4.1.1)
+    celluloid-pool (0.20.5)
+      timers (>= 4.1.1)
+    celluloid-supervision (0.20.5)
+      timers (>= 4.1.1)
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
@@ -199,6 +220,12 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     execjs (2.6.0)
+    eye (0.8)
+      celluloid (~> 0.17.2)
+      celluloid-io (~> 0.17.0)
+      sigar (~> 0.7.3)
+      state_machine
+      thor
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.6.0)
@@ -215,6 +242,7 @@ GEM
       mime-types (~> 1.15)
       posix-spawn (~> 0.3.6)
     hashdiff (0.3.0)
+    hitimes (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
     http-cookie (1.0.2)
@@ -292,6 +320,7 @@ GEM
     net-ssh (3.1.1)
     netrc (0.11.0)
     newrelic_rpm (3.15.1.316)
+    nio4r (1.2.1)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     nokogiri-happymapper (0.5.9)
@@ -434,6 +463,7 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    sigar (0.7.3)
     simplecov (0.11.2)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -465,6 +495,7 @@ GEM
     stanford-mods (1.5.3)
       activesupport
       mods (~> 2.0.2)
+    state_machine (1.2.0)
     stomp (1.3.5)
     sul_styles (0.6.0)
       rails (~> 4.1)
@@ -477,6 +508,8 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.2)
+    timers (4.1.1)
+      hitimes
     tins (1.6.0)
     ttfunk (1.4.0)
     tzinfo (1.2.2)
@@ -533,6 +566,7 @@ DEPENDENCIES
   dlss-capistrano (~> 3.1)
   dor-services (~> 5.8, >= 5.8.0)
   equivalent-xml (>= 0.6.0)
+  eye
   factory_girl_rails
   faraday
   http_logger
