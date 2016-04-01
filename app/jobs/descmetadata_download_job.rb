@@ -1,6 +1,9 @@
 class DescmetadataDownloadJob < GenericJob
   queue_as :default
 
+  MAX_TRIES = 3
+  SLEEP_SECONDS = 3
+
   ##
   # @param [Integer] bulk_action_id   ActiveRecord identifier of the BulkAction
   # object that originated this job.
@@ -22,7 +25,13 @@ class DescmetadataDownloadJob < GenericJob
         Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
           params[:pids].each do |current_druid|
             begin
-              dor_object = Dor.find current_druid
+              dor_object = query_dor(current_druid, log)
+
+              if dor_object.nil?
+                bulk_action.increment(:druid_count_fail).save
+                next
+              end
+
               desc_metadata = dor_object.descMetadata.content
 
               write_to_zip(desc_metadata, current_druid, zip_file)
@@ -47,6 +56,25 @@ class DescmetadataDownloadJob < GenericJob
       end
       log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
     end
+  end
+
+  # Queries DOR for a given druid, attempting up to MAX_TRIES times in case of failure.
+  # @param [String]   druid   The ID of the object to find
+  # @param [File]     log     Log file to write to
+  # @return  The Dor::Item corresponding to the given druid, or nil if none was found.
+  def query_dor(druid, log)
+    attempts ||= MAX_TRIES
+    dor_object = Dor.find druid
+  rescue RestClient::RequestTimeout
+    if (attempts -= 1) > 0
+      log.puts "argo.bulk_metadata.bulk_log_retry #{druid}"
+      sleep(SLEEP_SECONDS ** attempts) unless ENV['RAILS_ENV'] == 'test'
+      retry
+    else
+      log.puts "argo.bulk_metadata.bulk_log_timeout #{druid}"
+      return nil
+    end
+    return dor_object
   end
 
   # Initialize the counters for the originating bulk action. This is necessary to avoid invalid counters

@@ -30,25 +30,27 @@ en:
       bulk_log_xml_filename:       	     'XML output filename'
       bulk_log_record_count:       	     'Number of records'
       bulk_log_error_exception:    	     'Exception'
-      bulk_log_unable_to_version:    	     'Error - Unable to create new object version, please report this'
+      bulk_log_unable_to_version:    	   'Error - Unable to create new object version, please report this'
       bulk_log_invalid_column:     	     'Error - spreadsheet contains unrecognized column name'
-      bulk_log_skipped_mods:	   	     'Skipped - input matches current MODS'
+      bulk_log_skipped_mods:	   	       'Skipped - input matches current MODS'
       bulk_log_skipped_accession:  	     'Skipped - item is currently being accessioned'
-      bulk_log_skipped_not_accessioned:      'Skipped - item has not yet been accessioned'
+      bulk_log_skipped_not_accessioned:  'Skipped - item has not yet been accessioned'
       bulk_log_no_connection:      	     'Error - unable to connect to the MODSulator server'
       bulk_log_invalid_url:        	     'Error - the requested MODSulator URL does not exist'
       bulk_log_nonexistent_file:   	     'Error - the uploaded file was lost'
       bulk_log_invalid_permission: 	     'Error - the application does not have permission to read a file'
       bulk_log_internal_error:     	     'Error - there was an error within the MODSulator server'
       bulk_log_druids_loaded:      	     'Druids loaded'
-      bulk_log_bulk_action_not_found:        'Internal error - the expected BulkAction does not exist'
-      bulk_log_bulk_action_success:          'Success'
+      bulk_log_bulk_action_not_found:    'Internal error - the expected BulkAction does not exist'
+      bulk_log_bulk_action_success:      'Success'
+      bulk_log_timeout:                  'DOR request timed out'
+      bulk_log_retry:                  'Retrying request'
     content_type:
       # putting these strings here so that their content stays consistent, since it's used across disparate parts of the application.
       update_explanation_single:         "Replace instances of the old content type and resource type with the newly specified values.  Note that \"none\" is not a valid choice; it's provided as a placeholder for when no reasonable default can be pre-selected.  \"Old Content Type\" is always the current content type, since nothing gets updated if content type doesn't get updated (so if you changed that, nothing would get updated).  \"Old Resource Type\" defaults to the first value in the list of types for the resource elements in the contentMetadata datastream.  \"New Content Type\" and \"New Resource Type\" default to the old values, but any of the listed values other than \"none\" can be chosen for the update."
       update_explanation_bulk:           "Replace instances of the old content type and resource type with the newly specified values.  Note that \"none\" is not a valid choice; it's provided as a placeholder since no reasonable default can be pre-selected.  For each object, resource type will only be updated if the parent content type was also updated."
       suggeted_mappings:                 "    The suggested mappings for content type to resource type are:\n    <ul>\n      <li><strong>file</strong> file</li>\n      <li><strong>image</strong> image</li>\n      <li><strong>book</strong> page</li>\n      <li><strong>manuscript</strong> page</li>\n      <li><strong>map</strong> image</li>\n    </ul>\n  </p>"
-    
+
   blacklight:
     search:
       start_over: 'Start Over'
