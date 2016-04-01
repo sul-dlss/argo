@@ -231,6 +231,23 @@ describe ItemsController, :type => :controller do
       expect(response.code).to eq('403')
     end
   end
+  describe 'get_preserved_file' do
+    it 'should return a response with the preserved file content as the body and the right headers' do
+      mock_file_name = 'preserved_file'
+      mock_version = 2
+      mock_content = 'preserved file content'
+      allow(@item).to receive(:get_preserved_file).with(mock_file_name, mock_version).and_return(mock_content)
+
+      last_modified_lower_bound = Time.now.utc.rfc2822
+      get 'get_preserved_file', :file => mock_file_name, :version => mock_version, :id => @pid
+      expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
+      expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
+      expect(response.headers['Content-Type']).to eq('application/octet-stream')
+      expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{mock_file_name}")
+      expect(response.code).to eq('200')
+      expect(response.body).to eq(mock_content)
+    end
+  end
   describe '#datastream_update' do
     let(:xml) { '<contentMetadata/>' }
     let(:invalid_apo_xml) { '<hydra:isGovernedBy rdf:resource="info:fedora/druid:not_exist"/>' }
