@@ -8,9 +8,19 @@ describe DescmetadataDownloadJob, type: :job do
     @output_directory = Settings.BULK_METADATA.DIRECTORY
     @output_zip_filename = File.join(@output_directory, Settings.BULK_METADATA.ZIP)
     @download_job = described_class.new
+    @pid_list_short = ['druid:hj185vb7593']
+    @pid_list_long = ['druid:hj185vb7593', 'druid:kv840rx2720']
+    @zip_params_short = {
+      output_directory: @output_directory,
+      pids: @pid_list_short
+    }
+    @zip_params_long = {
+      output_directory: @output_directory,
+      pids: @pid_list_long
+    }
   end
 
-  after :all do
+  after :each do
     FileUtils.rm_rf(@output_directory) if Dir.exist?(@output_directory)
   end
 
@@ -54,19 +64,30 @@ describe DescmetadataDownloadJob, type: :job do
 
   describe 'perform' do
     it 'creates a valid zip file' do
-      pid_list = ['druid:hj185vb7593', 'druid:kv840rx2720']
-      zip_params = {
-        output_directory: @output_directory,
-        pids: pid_list
-      }
-      bulk_action = create(:bulk_action, action_type: 'DescmetadataDownloadJob', pids: pid_list)
+      bulk_action = create(:bulk_action, action_type: 'DescmetadataDownloadJob', pids: @pid_list_long)
       expect(@download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
-      @download_job.perform(bulk_action.id, zip_params)
+      @download_job.perform(bulk_action.id, @zip_params_long)
 
       expect(File.exist?(@output_zip_filename)).to be_truthy
       Zip::File.open(@output_zip_filename) do |open_file|
         expect(open_file.glob('*').length).to eq 2
+      end
+    end
+
+    it 'retries DOR connections upon failure' do
+      dor_double = class_double('Dor').as_stubbed_const(:transfer_nested_constants => false)
+      expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
+      bulk_action = create(:bulk_action, action_type: 'DescmetadataDownloadJob', pids: @pid_list_short)
+      allow(bulk_action).to receive_message_chain(:increment, :save)
+      expect(bulk_action).to receive(:increment).with(:druid_count_fail)
+      expect(@download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
+
+      @download_job.perform(bulk_action.id, @zip_params_short)
+
+      expect(File.exist?(@output_zip_filename)).to be_truthy
+      Zip::File.open(@output_zip_filename) do |open_file|
+        expect(open_file.glob('*').length).to eq 0
       end
     end
   end
@@ -78,6 +99,27 @@ describe DescmetadataDownloadJob, type: :job do
       expect(bulk_action).to receive(:update).with(druid_count_success: 0)
       expect(bulk_action).to receive(:update).with(druid_count_total: 0)
       @download_job.initialize_counters(bulk_action)
+    end
+  end
+
+  describe 'query_dor' do
+    before :each do
+      @log = double('log')
+    end
+
+    it 'does not log anything upon success' do
+      result = @download_job.query_dor('druid:hj185vb7593', @log)
+      expect(result).not_to be_nil
+      expect(@log).not_to receive(:puts)
+    end
+
+    it 'attempts three connections and logs failures' do
+      dor_double = class_double('Dor').as_stubbed_const(:transfer_nested_constants => false)
+      expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
+      expect(@log).to receive(:puts).exactly(2).times.with('argo.bulk_metadata.bulk_log_retry druid:123')
+      expect(@log).to receive(:puts).once.with('argo.bulk_metadata.bulk_log_timeout druid:123')
+      result = @download_job.query_dor('druid:123', @log)
+      expect(result).to eq(nil)
     end
   end
 end
