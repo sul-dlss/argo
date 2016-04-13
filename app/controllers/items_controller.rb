@@ -670,7 +670,11 @@ class ItemsController < ApplicationController
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
-    @object = Dor::Item.find params[:id]
+    create_obj_and_apo params[:id]
+  end
+
+  def create_obj_and_apo(obj_pid)
+    @object = Dor.find obj_pid
     @apo = @object.admin_policy_object
     @apo = ( @apo ? @apo.pid : '' )
   end
