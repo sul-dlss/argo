@@ -647,7 +647,7 @@ class ItemsController < ApplicationController
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
-    reindex Dor::Item.find(params[:id])
+    reindex Dor.find(params[:id])
     msg = "Added #{wf_name}"
 
     if params[:bulk]

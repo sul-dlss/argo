@@ -388,7 +388,6 @@ describe ItemsController, :type => :controller do
     it 'should initialize the new workflow' do
       expect(@item).to receive(:create_workflow)
       expect(@wf).to receive(:[]).with('accessionWF').and_return(nil)
-      allow(Dor::Item).to receive(:find).with(@pid).and_return(@item)
       expect(controller).to receive(:flush_index)
       post 'add_workflow', :id => @pid, :wf => 'accessionWF'
     end
