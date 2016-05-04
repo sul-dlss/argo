@@ -21,14 +21,23 @@
 	    <td><%= job['argo.bulk_metadata.bulk_log_record_count'] %></td>
 	    <td><%= job['argo.bulk_metadata.bulk_log_druids_loaded'] %></td>
 
-	    <% druid_and_time = job['dir'].split(/\//) %>
-	    <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
-	    <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %></td>
+      <% if(job.has_key?('dir')) %>
+        <% druid_and_time = job['dir'].split(/\//) %>
+        <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
+        <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %></td>
+      <% else %>
+        <td>error:  job log dir not found</td>
+        <td>error:  job log dir not found</td>
+      <% end %>
 	    <td>
-		<%= form_tag('bulk_jobs_delete', method: :delete, :id => "form-" + job['dir']) do %>
-		    <%= hidden_field_tag('dir', job['dir']) %>
-		    <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-toggle="modal" data-target="#confirm-delete-modal">Delete</button>
-		<% end %>
+    <% if(job.has_key?('dir')) %>
+      <%= form_tag('bulk_jobs_delete', method: :delete, :id => "form-" + job['dir']) do %>
+          <%= hidden_field_tag('dir', job['dir']) %>
+          <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-toggle="modal" data-target="#confirm-delete-modal">Delete</button>
+      <% end %>
+    <% else %>
+      error:  job log dir not found
+    <% end %>
 	    </td>
 	</tr>
 	<% end %>
