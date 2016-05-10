@@ -7,10 +7,10 @@ RSpec.describe BulkAction do
     end
   end
   describe '#file' do
-    it 'returns a full path filename' do
+    it 'returns the filename with path' do
       @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
       expect(@bulk_action.file('hello_world.txt'))
-        .to eq "/tmp/bulk_jobs/GenericJob_#{@bulk_action.id}/hello_world.txt"
+        .to eq "#{Settings.BULK_METADATA.DIRECTORY}GenericJob_#{@bulk_action.id}/hello_world.txt"
     end
   end
   describe 'triggers after_create callbacks' do

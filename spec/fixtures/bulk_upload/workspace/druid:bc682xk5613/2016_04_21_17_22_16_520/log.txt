@@ -1,0 +1,8 @@
+argo.bulk_metadata.bulk_log_job_start 2016-04-21 10:22am
+argo.bulk_metadata.bulk_log_user tommyi
+argo.bulk_metadata.bulk_log_input_file SriLanka_BulkUpload.xlsx
+argo.bulk_metadata.bulk_log_note convertonly
+argo.bulk_metadata.bulk_log_internal_error Net::ReadTimeout
+argo.bulk_metadata.bulk_log_empty_response ERROR: No response from https://modsulator-app-stage.stanford.edu/v1/modsulator
+argo.bulk_metadata.bulk_log_error_exception Got no response from server
+argo.bulk_metadata.bulk_log_job_complete 2016-04-21 10:23am
