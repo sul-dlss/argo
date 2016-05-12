@@ -1,62 +1,62 @@
 <div id="bulk-upload-table">
-    <table class="table table-hover">
-	<tr>
-	    <th>When</th><th>Who</th><th>File Name</th><th>Note</th><th>Status <%= link_to bulk_status_help_path, :data => { ajax_modal: 'trigger', ajax_modal_title: 'Status Information' } do %><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span><% end %></th><th>Druids</th><th>Success</th><th/><th/>
-	</tr>
-	<% @bulk_jobs.each do |job| %>
-	<tr>
-	    <td><%= job['argo.bulk_metadata.bulk_log_job_start'] %></td>
-	    <td><%= job['argo.bulk_metadata.bulk_log_user'] %></td>
-	    <td><%= job['argo.bulk_metadata.bulk_log_input_file'] %></td>
-	    <td><%= job['argo.bulk_metadata.bulk_log_note'] %></td>
-	    <td>
-		<% if(job.has_key?('error')) %>
-		  system errors
-		<% elsif(job['argo.bulk_metadata.bulk_log_job_complete']) %>
-		  completed
-		<% else %>
-		  in process
-		<% end %>
-            </td>
-	    <td><%= job['argo.bulk_metadata.bulk_log_record_count'] %></td>
-	    <td><%= job['argo.bulk_metadata.bulk_log_druids_loaded'] %></td>
+  <table class="table table-hover">
+    <tr>
+      <th>When</th><th>Who</th><th>File Name</th><th>Note</th><th>Status <%= link_to bulk_status_help_path, :data => { ajax_modal: 'trigger', ajax_modal_title: 'Status Information' } do %><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span><% end %></th><th>Druids</th><th>Success</th><th/><th/>
+    </tr>
+    <% @bulk_jobs.each do |job| %>
+      <tr>
+        <td><%= job['argo.bulk_metadata.bulk_log_job_start'] %></td>
+        <td><%= job['argo.bulk_metadata.bulk_log_user'] %></td>
+        <td><%= job['argo.bulk_metadata.bulk_log_input_file'] %></td>
+        <td><%= job['argo.bulk_metadata.bulk_log_note'] %></td>
+        <td>
+          <% if(job.has_key?('error')) %>
+            system errors
+          <% elsif(job['argo.bulk_metadata.bulk_log_job_complete']) %>
+            completed
+          <% else %>
+            in process
+          <% end %>
+        </td>
+        <td><%= job['argo.bulk_metadata.bulk_log_record_count'] %></td>
+        <td><%= job['argo.bulk_metadata.bulk_log_druids_loaded'] %></td>
 
-      <% if(job.has_key?('dir')) %>
-        <% druid_and_time = job['dir'].split(/\//) %>
-        <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
-        <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %></td>
-      <% else %>
-        <td>error:  job log dir not found</td>
-        <td>error:  job log dir not found</td>
-      <% end %>
-	    <td>
-    <% if(job.has_key?('dir')) %>
-      <%= form_tag('bulk_jobs_delete', method: :delete, :id => "form-" + job['dir']) do %>
-          <%= hidden_field_tag('dir', job['dir']) %>
-          <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-toggle="modal" data-target="#confirm-delete-modal">Delete</button>
-      <% end %>
-    <% else %>
-      error:  job log dir not found
+        <% if(job.has_key?('dir')) %>
+          <% druid_and_time = job['dir'].split(/\//) %>
+          <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
+          <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %></td>
+        <% else %>
+          <td>error:  job log dir not found</td>
+          <td>error:  job log dir not found</td>
+        <% end %>
+        <td>
+          <% if(job.has_key?('dir')) %>
+            <%= form_tag('bulk_jobs_delete', method: :delete, :id => "form-" + job['dir']) do %>
+              <%= hidden_field_tag('dir', job['dir']) %>
+              <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-toggle="modal" data-target="#confirm-delete-modal">Delete</button>
+            <% end %>
+          <% else %>
+            error:  job log dir not found
+          <% end %>
+        </td>
+      </tr>
     <% end %>
-	    </td>
-	</tr>
-	<% end %>
-    </table>
+  </table>
 </div>
 
 <div class="modal fade" id="confirm-delete-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                Confirm Delete
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
-            </div>
-	    <div class="modal-footer">
-		<a href="#" id="confirm-delete-job" class="btn btn-success success">Delete</a>
-		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-	</div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          Confirm Delete
+      </div>
+      <div class="modal-body">
+          Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="confirm-delete-job" class="btn btn-success success">Delete</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
     </div>
+  </div>
 </div>
