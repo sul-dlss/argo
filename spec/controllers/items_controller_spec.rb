@@ -62,11 +62,29 @@ describe ItemsController, :type => :controller do
       post :release_hold, :id => @pid
     end
   end
-  describe 'purge' do
+  describe '#purge_object' do
     it 'should 403' do
       allow(@current_user).to receive(:is_admin?).and_return(false)
       post 'purge_object', :id => @pid
       expect(response.code).to eq('403')
+    end
+    it 'redirects to root and flashes a confirmation notice when successful' do
+      post 'purge_object', :id => @pid
+      expect(response.code).to eq('302')
+      expect(response).to redirect_to(root_path)
+      expect(flash[:notice]).to eq("#{@pid} has been purged!")
+    end
+    it 'deletes the object from fedora and solr' do
+      expect(@item).to receive(:delete)
+      expect(Dor::SearchService.solr).to receive(:delete_by_id).with(@pid)
+      expect(Dor::SearchService.solr).to receive(:commit)
+      post 'purge_object', :id => @pid
+    end
+    it 'blocks purge on submitted objects' do
+      expect(controller).to receive(:dor_lifecycle).with(@item, 'submitted').and_return(true)
+      post 'purge_object', :id => @pid
+      expect(response.code).to eq('403')
+      expect(response.body).to eq('Cannot purge an object after it is submitted.')
     end
   end
   describe 'embargo_update' do
