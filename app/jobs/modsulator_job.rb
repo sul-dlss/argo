@@ -10,6 +10,9 @@ class ModsulatorJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
+  # Wait 30 minutes for remote requests to complete
+  TIMEOUT = 1800
+
   # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
   # Later, this log file will be used to generate a nicer looking log for the user to view and to generate the list of
@@ -207,35 +210,49 @@ class ModsulatorJob < ActiveJob::Base
   # @param    [File]     log_file            The log file to write to
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
   def generate_xml(filetype, uploaded_filename, original_filename, log_file)
-    response = if filetype == 'xml_only'  # Just clean up the given XML file
+    response_xml = nil
+    url = nil
+    content_type = nil
+
+    if filetype == 'xml_only'            # Just clean up the given XML file
       url = Settings.NORMALIZER_URL
-      client.post(url) do |req|
-        req.body = File.read(uploaded_filename)
-      end
-    else                       # The given file is a spreadsheet
+      content_type = 'application/xml'
+    else                                 # The given file is a spreadsheet
       url = Settings.MODSULATOR_URL
-      payload = Faraday::UploadIO.new(uploaded_filename, 'application/octet-stream')
-      client.post(url, :file => payload, :filename => original_filename)
+      content_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     end
 
-    response_xml = response.body
-    rescue Faraday::ResourceNotFound => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
-    rescue Errno::ENOENT => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
-    rescue Errno::EACCES => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
-    rescue Faraday::ClientError => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
-    rescue Exception => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
-    ensure
-      log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
+    request = RestClient::Request.new(:method => :post,
+                                      :url => url,
+                                      :timeout => TIMEOUT,
+                                      :payload => {
+                                        :multipart => true,
+                                        :file => File.new(uploaded_filename, 'rb'),
+                                        :filename => original_filename
+                                      },
+                                      :headers => {
+                                        :content_type => content_type,
+                                        :accept_charset => 'utf-8'
+                                      })
+    response_xml = request.execute
+    response_xml
+  rescue RestClient::ResourceNotFound => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
+  rescue Errno::ENOENT => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
+  rescue Errno::EACCES => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
+  rescue RestClient::InternalServerError => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
+  rescue Exception => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
+  ensure
+    log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
   end
 
   # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.
@@ -287,16 +304,5 @@ class ModsulatorJob < ActiveJob::Base
   def status_ok(dor_object)
     status = dor_object.status_info[:status_code]
     [1, 6, 7, 8, 9].include?(status)
-  end
-
-  private
-
-  def client
-    Faraday.new do |f|
-      f.use Faraday::Response::RaiseError
-      f.request :multipart
-      f.request :url_encoded
-      f.adapter :net_http
-    end
   end
 end

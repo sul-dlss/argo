@@ -285,9 +285,9 @@ class ApoController < ApplicationController
   end
 
   def spreadsheet_template
-    binary_string = Faraday.get(Settings.SPREADSHEET_URL)
+    binary_string = RestClient.get(Settings.SPREADSHEET_URL)
     send_data(
-      binary_string.body,
+      binary_string,
       :filename => 'spreadsheet_template.xlsx',
       :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
