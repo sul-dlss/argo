@@ -205,6 +205,13 @@ describe ApoController, :type => :controller do
     end
   end
 
+  describe 'spreadsheet_template' do
+    it 'calls the correct URL' do
+      expect(RestClient).to receive(:get).with(Settings.SPREADSHEET_URL)
+      get 'spreadsheet_template', :id => @apo.pid
+    end
+  end
+
   describe 'overly literal tests' do
     before :each do
       expect(Dor).to receive(:find).with(@apo.pid).and_return @apo
