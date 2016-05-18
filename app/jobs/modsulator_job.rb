@@ -53,8 +53,9 @@ class ModsulatorJob < ActiveJob::Base
 
       log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
     }
-  ensure
-    FileUtils.rm(uploaded_filename, :force => true) # Remove the (temporary) uploaded file
+    # Remove the (temporary) uploaded file only if everything worked. Removing upon catching an exception causes
+    # subsequent job attempts to fail.
+    FileUtils.rm(uploaded_filename, :force => true)
   end
 
   # Upload metadata into DOR.
