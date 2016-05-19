@@ -2,7 +2,6 @@ class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :create_obj, :except => [
     :open_bulk,
-    :purge_object,
     :register
   ]
   before_action :authorize_manage_obj_content!, :only => [
@@ -10,6 +9,7 @@ class ItemsController < ApplicationController
     :datastream_update,
     :mods,
     :open_version, :close_version,
+    :purge_object,
     :update_resource,
     :set_content_type,
     :source_id,
@@ -485,18 +485,15 @@ class ItemsController < ApplicationController
   end
 
   def purge_object
-    begin
-      create_obj
-      authorize_manage_obj_content!
-    rescue ActiveFedora::ObjectNotFoundError
-      Dor::SearchService.solr.delete_by_id(params[:id])
-      Dor::SearchService.solr.commit
-    end
     if dor_lifecycle(@object, 'submitted')
       render :status => :forbidden, :text => 'Cannot purge an object after it is submitted.'
       return
     end
+
     @object.delete
+    Dor::SearchService.solr.delete_by_id(params[:id])
+    Dor::SearchService.solr.commit
+
     respond_to do |format|
       format.any { redirect_to '/', :notice => params[:id] + ' has been purged!' }
     end
