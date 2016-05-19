@@ -338,7 +338,7 @@ class CatalogController < ApplicationController
     end
 
     # Sort by start time (newest first)
-    sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'] }
+    sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'].to_s }
     sorted_info.reverse!
   end
 

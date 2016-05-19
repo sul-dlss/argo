@@ -5,7 +5,7 @@ describe DescmetadataDownloadJob, type: :job do
   include ActiveJob::TestHelper
 
   before :all do
-    @output_directory = Settings.BULK_METADATA.DIRECTORY
+    @output_directory = File.join(File.expand_path('../../../tmp/', __FILE__), 'descmetadata_download_job_spec')
     @output_zip_filename = File.join(@output_directory, Settings.BULK_METADATA.ZIP)
     @download_job = described_class.new
     @pid_list_short = ['druid:hj185vb7593']
