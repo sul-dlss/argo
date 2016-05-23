@@ -568,7 +568,6 @@ DEPENDENCIES
   equivalent-xml (>= 0.6.0)
   eye
   factory_girl_rails
-  faraday
   http_logger
   is_it_working-cbeer
   jettywrapper
@@ -593,6 +592,7 @@ DEPENDENCIES
   rails (~> 4.0)
   rake
   responders (~> 2.0)
+  rest-client
   retries
   rsolr
   rspec-rails (~> 3)

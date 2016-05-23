@@ -9,7 +9,7 @@ gem 'config'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
-gem 'faraday'
+gem 'rest-client'
 gem 'eye'  # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'jqgrid-jquery-rails'
 gem 'jquery-rails'
