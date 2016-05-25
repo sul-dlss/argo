@@ -10,6 +10,9 @@ class ModsulatorJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
+  # Wait 30 minutes for remote requests to complete
+  TIMEOUT = 1800
+
   # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
   # Later, this log file will be used to generate a nicer looking log for the user to view and to generate the list of
@@ -50,8 +53,9 @@ class ModsulatorJob < ActiveJob::Base
 
       log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
     }
-  ensure
-    FileUtils.rm(uploaded_filename, :force => true) # Remove the (temporary) uploaded file
+    # Remove the (temporary) uploaded file only if everything worked. Removing upon catching an exception causes
+    # subsequent job attempts to fail.
+    FileUtils.rm(uploaded_filename, :force => true)
   end
 
   # Upload metadata into DOR.
@@ -207,18 +211,33 @@ class ModsulatorJob < ActiveJob::Base
   # @param    [File]     log_file            The log file to write to
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
   def generate_xml(filetype, uploaded_filename, original_filename, log_file)
-    response = if filetype == 'xml_only'  # Just clean up the given XML file
+    response_xml = nil
+    url = nil
+    payload = nil
+
+    if filetype == 'xml_only'            # Just clean up the given XML file
       url = Settings.NORMALIZER_URL
-      client.post(url) do |req|
-        req.body = File.read(uploaded_filename)
-      end
-    else                       # The given file is a spreadsheet
+      payload = Faraday::UploadIO.new(uploaded_filename, 'application/xml')
+    else                                 # The given file is a spreadsheet
       url = Settings.MODSULATOR_URL
-      payload = Faraday::UploadIO.new(uploaded_filename, 'application/octet-stream')
-      client.post(url, :file => payload, :filename => original_filename)
+      payload = Faraday::UploadIO.new(uploaded_filename, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     end
 
-    response_xml = response.body
+    connection = Faraday.new(url: url) do |faraday|
+      faraday.use Faraday::Response::RaiseError
+      faraday.request :multipart
+      faraday.request :url_encoded
+      faraday.adapter :net_http     # A MUST for file upload to work with UploadIO
+    end
+
+    response_xml = connection.post do |req|
+      req.url url
+      req.options.timeout = TIMEOUT
+      req.options.open_timeout = TIMEOUT
+      req.body = { :file => payload, :filename => original_filename }
+    end
+    response_xml.body
+
     rescue Faraday::ResourceNotFound => e
       delayed_log_url(e, url)
       log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
@@ -287,16 +306,5 @@ class ModsulatorJob < ActiveJob::Base
   def status_ok(dor_object)
     status = dor_object.status_info[:status_code]
     [1, 6, 7, 8, 9].include?(status)
-  end
-
-  private
-
-  def client
-    Faraday.new do |f|
-      f.use Faraday::Response::RaiseError
-      f.request :multipart
-      f.request :url_encoded
-      f.adapter :net_http
-    end
   end
 end
