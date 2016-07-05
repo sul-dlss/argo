@@ -21,16 +21,23 @@ class PermittedQueries
   # @return [Array[String]] list of DRUIDs from APOs that this User can view
   def permitted_apos
     query = groups.map { |g| g.gsub(':', '\:') }.join(' OR ')
-    q = 'apo_role_group_manager_ssim:(' + query + ') OR apo_role_person_manager_ssim:(' + query + ')'
-    known_roles.each do |role|
-      q += ' OR apo_role_' + role + '_ssim:(' + query + ')'
+
+    q = ''
+    if is_admin
+      q += '*:*'
+    else
+      q += 'apo_role_group_manager_ssim:(' + query + ') OR apo_role_person_manager_ssim:(' + query + ')'
+      known_roles.each do |role|
+        q += ' OR apo_role_' + role + '_ssim:(' + query + ')'
+      end
     end
-    q = 'objectType_ssim:adminPolicy' if is_admin
+
     resp = repository.search(
       q: q,
+      defType: 'lucene',
       rows: 1000,
       fl: 'id',
-      fq: '!project_tag_ssim:"Hydrus"'
+      fq: ['objectType_ssim:adminPolicy', '!project_tag_ssim:"Hydrus"']
     )['response']['docs']
     resp.map { |doc| doc['id'] }
   end
@@ -41,12 +48,20 @@ class PermittedQueries
   # FIXME: seems to include display logic
   # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (PID)", "PID"]
   def permitted_collections
-    q = 'objectType_ssim:collection AND !project_tag_ssim:"Hydrus" '
-    q += permitted_apos.map { |pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\"" }.join(' OR ') unless is_admin
+    q = if is_admin
+          '*:*'
+        elsif permitted_apos.empty?
+          '-id:[* TO *]'
+        else
+          permitted_apos.map { |pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\"" }.join(' OR ')
+        end
+
     result = repository.search(
       q: q,
+      defType: 'lucene',
       rows: 1000,
-      fl: 'id,tag_ssim,dc_title_tesim'
+      fl: 'id,tag_ssim,dc_title_tesim',
+      fq: ['objectType_ssim:collection', '!project_tag_ssim:"Hydrus"']
     ).docs
 
     result.sort! do |a, b|
