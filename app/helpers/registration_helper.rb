@@ -5,10 +5,7 @@ module RegistrationHelper
   def apo_list(permission_keys)
     return [] if permission_keys.blank?
 
-    q = ''
-    unless permission_keys.empty?
-      q += permission_keys.flatten.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
-    end
+    q = permission_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
 
     result = Dor::SearchService.query(
       q,
