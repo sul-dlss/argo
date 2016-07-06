@@ -86,7 +86,7 @@ class DescmetadataDownloadJob < GenericJob
   end
 
   def write_to_zip(value, entry_name, zip_file)
-    zip_file.get_output_stream(entry_name) { |f| f.puts(value) }
+    zip_file.get_output_stream("#{entry_name}.xml") { |f| f.puts(value) }
   end
 
   # Write initial job information to the log file.
