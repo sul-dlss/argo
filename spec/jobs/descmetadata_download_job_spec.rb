@@ -56,7 +56,7 @@ describe DescmetadataDownloadJob, type: :job do
       druid = 'druid:123'
       output_file = double('zip_output_file')
       string_value = 'descMetadata.xml'
-      expect(zip).to receive(:get_output_stream).with(druid).and_yield(output_file)
+      expect(zip).to receive(:get_output_stream).with("#{druid}.xml").and_yield(output_file)
       expect(output_file).to receive(:puts).with(string_value)
       @download_job.write_to_zip(string_value, druid, zip)
     end
