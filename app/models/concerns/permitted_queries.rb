@@ -37,7 +37,7 @@ class PermittedQueries
       defType: 'lucene',
       rows: 1000,
       fl: 'id',
-      fq: ['objectType_ssim:adminPolicy', '!project_tag_ssim:"Hydrus"']
+      fq: ['objectType_ssim:adminPolicy', '!project_tag_ssim:Hydrus']
     )['response']['docs']
     resp.map { |doc| doc['id'] }
   end
@@ -51,7 +51,7 @@ class PermittedQueries
     q = if is_admin
           '*:*'
         elsif permitted_apos.empty?
-          '-id:[* TO *]'
+          '-id:*'
         else
           permitted_apos.map { |pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\"" }.join(' OR ')
         end
@@ -61,7 +61,7 @@ class PermittedQueries
       defType: 'lucene',
       rows: 1000,
       fl: 'id,tag_ssim,dc_title_tesim',
-      fq: ['objectType_ssim:collection', '!project_tag_ssim:"Hydrus"']
+      fq: ['objectType_ssim:collection', '!project_tag_ssim:Hydrus']
     ).docs
 
     result.sort! do |a, b|
