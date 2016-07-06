@@ -180,9 +180,9 @@ GEM
     docopt (0.5.0)
     domain_name (0.5.20160310)
       unf (>= 0.0.5, < 1.0.0)
-    dor-rights-auth (1.0.2)
+    dor-rights-auth (1.1.0)
       nokogiri
-    dor-services (5.8.0)
+    dor-services (5.8.2)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       confstruct (~> 0.2.7)
@@ -412,7 +412,7 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     retries (0.0.5)
-    roo (2.3.2)
+    roo (2.4.0)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
     rsolr (1.0.13)
@@ -566,7 +566,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   dlss-capistrano (~> 3.1)
-  dor-services (~> 5.8, >= 5.8.0)
+  dor-services (~> 5.8, >= 5.8.2)
   equivalent-xml (>= 0.6.0)
   eye
   factory_girl_rails
