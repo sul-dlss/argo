@@ -1,11 +1,20 @@
 module RegistrationHelper
 
-  def apo_list(*permission_keys)
-    q = 'objectType_ssim:adminPolicy AND !tag_ssim:"Project : Hydrus"'
-    unless permission_keys.empty?
-      q += '(' + permission_keys.flatten.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ') + ')'
-    end
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
+  # permission_keys will likely be a list of workgroups to which a user belongs plus
+  # the user's sunetid, to determine which APOs grant the user registration permissions.
+  def apo_list(permission_keys)
+    return [] if permission_keys.blank?
+
+    q = permission_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
+
+    result = Dor::SearchService.query(
+      q,
+      :defType => 'lucene',
+      :rows => 99999,
+      :fl => 'id,tag_ssim,dc_title_tesim',
+      :fq => ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
+    ).docs
+
     result.sort! do |a, b|
       Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end
