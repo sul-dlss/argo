@@ -5,13 +5,14 @@ describe RegistrationHelper do
     let(:perm_keys) { ['sunetid:user', 'workgroup:dlss:mock-group1', 'workgroup:dlss:mock-group2'] }
 
     it 'runs the appropriate query for the given permission keys' do
-      q = 'objectType_ssim:adminPolicy AND !tag_ssim:"Project : Hydrus"'
-      q += '(' + perm_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ') + ')'
+      q = perm_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
 
       expect(Dor::SearchService).to receive(:query).with(
         q,
+        defType: 'lucene',
         rows: 99999,
-        fl: 'id,tag_ssim,dc_title_tesim'
+        fl: 'id,tag_ssim,dc_title_tesim',
+        fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
       ).and_return(double(docs: []))
 
       apo_list(*perm_keys)
@@ -28,5 +29,10 @@ describe RegistrationHelper do
       apos = apo_list(*perm_keys)
       expect(apos).to eq [['y', '2'], ['x', '3'], ['z', '1']]
     end
+  end
+
+  it 'returns nothing when permission_keys is empty' do
+    expect(Dor::SearchService).to_not receive(:query)
+    expect(apo_list(*[])).to eq []
   end
 end
