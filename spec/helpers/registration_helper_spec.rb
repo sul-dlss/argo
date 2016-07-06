@@ -15,7 +15,7 @@ describe RegistrationHelper do
         fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
       ).and_return(double(docs: []))
 
-      apo_list(*perm_keys)
+      apo_list(perm_keys)
     end
 
     it 'sorts the results and formats them correctly' do
@@ -26,13 +26,13 @@ describe RegistrationHelper do
       ]
       expect(Dor::SearchService).to receive(:query).and_return(double(docs: result_rows))
 
-      apos = apo_list(*perm_keys)
+      apos = apo_list(perm_keys)
       expect(apos).to eq [['y', '2'], ['x', '3'], ['z', '1']]
     end
   end
 
   it 'returns nothing when permission_keys is empty' do
     expect(Dor::SearchService).to_not receive(:query)
-    expect(apo_list(*[])).to eq []
+    expect(apo_list([])).to eq []
   end
 end
