@@ -1,10 +1,15 @@
+# a simple script for dumping the full list of druids from a fedora instance.
+#
 ## assumptions:
-# * you're running this on the same machine as the fedora instance you want to dump from
-# * the user you're running it as can execute the 'mysql' command, and can write to '/tmp'
-# * the user can temporarily write a sql script to the place from which their running this script
-# * .fedora.my.cnf is a config file with a line like "  password = supersecretcredential"
-# * the password in .fedora.my.cnf will get you into fedora sql db for it's user (which defaults to "fedora")
-# * .fedora.my.cnf exists in the same directory from which you're running this script, and can be read by the user running it
+# * you're running this script on the same machine as the fedora instance from which you want to dump.
+# * the unix user you're running this script as can execute the 'mysql' command, and can write to '/tmp'.
+# * that unix user can temporarily write a sql script file to the dir from which it's running this script.
+# * the mysql user you're logging in as has permission to write files from the mysql client.
+#   * if the mysql user doesn't have permission to write files, you can ksu to the root account, run 'mysql', and issue something like this grant:
+#     GRANT FILE ON *.* TO 'fedora'@'localhost';
+# * .fedora.my.cnf is a config file with a line like "  password = supersecretcredential".
+# * the password in .fedora.my.cnf will get you into fedora sql db for its user (which defaults to "fedora").
+# * .fedora.my.cnf exists in the same directory from which you're running this script, and can be read by the user running it.
 #
 # if all that's true, you should be able to do "ruby dump_fedora_pids.rb"
 # and it should tell you where it wrote the pids
