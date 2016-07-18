@@ -71,7 +71,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         limit: 10
     config.add_facet_field 'content_type_ssim',               label: 'Content Type',        limit: 10
-    config.add_facet_field 'rights_primary_ssi',              label: 'Access Rights',       limit: 10
+    config.add_facet_field 'rights_descriptions_ssim',        label: 'Access Rights',       limit: 1000, sort: 'index'
     config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10
     config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 9999, sort: 'index'
     config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 9999, sort: 'index'
@@ -122,6 +122,7 @@ class CatalogController < ApplicationController
       :no_use_statement            => { :label => 'No Use & Reproduction Statement', :fq => '-use_statement_ssim:*' }
     }
 
+    config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', limit: 10
     config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',   limit: 10
     config.add_facet_field 'sw_pub_date_facet_ssi',      label: 'SW Date',            limit: 10
     config.add_facet_field 'topic_ssim',                 label: 'SW Topic',           limit: 10
