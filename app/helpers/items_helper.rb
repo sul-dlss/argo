@@ -6,7 +6,7 @@ module ItemsHelper
   end
 
   def schema_validate(xml)
-    @xsd ||= Nokogiri::XML::Schema(File.read(File.expand_path(File.dirname(__FILE__) + '/xslt/mods-3-4.xsd')))
+    @xsd ||= Nokogiri::XML::Schema(File.read(File.expand_path(File.dirname(__FILE__) + '/xml/mods-3-4.xsd')))
     errors = []
     unless @xsd.valid?(xml)
       @xsd.validate(xml).each do |er|
