@@ -68,7 +68,7 @@ class DescmetadataDownloadJob < GenericJob
   rescue RestClient::RequestTimeout
     if (attempts -= 1) > 0
       log.puts "argo.bulk_metadata.bulk_log_retry #{druid}"
-      sleep(SLEEP_SECONDS ** attempts) unless ENV['RAILS_ENV'] == 'test'
+      sleep(SLEEP_SECONDS ** attempts) unless Rails.env == 'test'
       retry
     else
       log.puts "argo.bulk_metadata.bulk_log_timeout #{druid}"

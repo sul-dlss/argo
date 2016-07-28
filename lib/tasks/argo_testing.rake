@@ -37,7 +37,7 @@ rescue LoadError
   end
 end
 
-if ['test', 'development'].include? ENV['RAILS_ENV']
+if ['test', 'development'].include? Rails.env
   require 'jettywrapper'
   def jettywrapper_load_config
     Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'), :startup_wait => 200})
