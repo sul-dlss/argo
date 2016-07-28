@@ -33,7 +33,7 @@ if ['test', 'development'].include? ENV['RAILS_ENV']
 
   require 'rspec/core/rake_task'
 
-  desc "Larger integration/acceptance style tests (take several minutes to complete)"
+  desc 'Larger integration/acceptance style tests (take several minutes to complete)'
   RSpec::Core::RakeTask.new(:integration_tests) do |spec|
     spec.pattern = 'spec/integration/**/*_spec.rb'
   end
