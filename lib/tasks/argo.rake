@@ -1,5 +1,3 @@
-#require 'open-uri' # is this used?
-
 def apo_field_default
   'apo_register_permissions_ssim'
 end

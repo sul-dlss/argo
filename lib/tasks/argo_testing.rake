@@ -1,4 +1,3 @@
-#require 'open-uri' # is this used?
 require 'fileutils'
 require 'retries'
 
@@ -8,7 +7,10 @@ def load_order_files(fedora_files)
   fedora_files.map {|f| File.join(data_path, f.strip) }
 end
 
-task default: :ci
+task default: :ci_w_rubocop
+
+desc 'run specs and rubocop (like we want ci to do)'
+task ci_w_rubocop: [:ci, :rubocop]
 
 desc 'run specs after loading up solr, fedora, etc.'
 task :ci do
@@ -22,6 +24,16 @@ task :ci do
     raise "test failures: #{error}" if error
   else
     system('RAILS_ENV=test rake ci')
+  end
+end
+
+begin
+  require 'rubocop/rake_task'
+  RuboCop::RakeTask.new
+rescue LoadError
+  desc 'Run rubocop'
+  task :rubocop do
+    abort 'Please install the rubocop gem to run rubocop.'
   end
 end
 
