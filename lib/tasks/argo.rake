@@ -1,50 +1,23 @@
-require 'jettywrapper'
-require 'json'
-require 'rest_client'
-require 'open-uri'
-require 'fileutils'
-require 'retries'
+def apo_field_default
+  'apo_register_permissions_ssim'
+end
+
+def get_workgroups_facet(apo_field = nil)
+  apo_field = apo_field_default() if apo_field.nil?
+  resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
+    :facets => { :fields => [apo_field] },
+    :'facet.prefix'   => 'workgroup:',
+    :'facet.mincount' => 1,
+    :'facet.limit'    => -1 )
+  resp.facets.find { |f| f.name == apo_field }
+end
 
 desc 'Get application version'
 task :app_version do
   puts File.read(File.expand_path('../../../VERSION', __FILE__)).strip
 end
 
-def jettywrapper_load_config
-  Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'), :startup_wait => 200})
-end
-
-task :default => [:ci]
-
-task :ci do
-  if Rails.env.test?
-    Rake::Task['argo:install'].invoke
-    jetty_params = jettywrapper_load_config()
-    error = Jettywrapper.wrap(jetty_params) do
-      Rake::Task['argo:repo:load'].invoke  # load 'em all!
-      Rake::Task['spec'].invoke
-    end
-    raise "test failures: #{error}" if error
-  else
-    system('RAILS_ENV=test rake ci')
-  end
-end
-
-if ['test', 'development'].include? ENV['RAILS_ENV']
-  require 'rspec/core/rake_task'
-
-  # Larger integration/acceptance style tests (take several minutes to complete)
-  RSpec::Core::RakeTask.new(:integration_tests) do |spec|
-    spec.pattern = 'spec/integration/**/*_spec.rb'
-  end
-end
-
 namespace :argo do
-  desc 'Install db, jetty (fedora/solr) and configs fresh'
-  task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate'] do
-    puts 'Installed Argo'
-  end
-
   desc "Bump Argo's version number before release"
   task :bump_version, [:level] do |t, args|
     levels = %w(major minor patch rc)
@@ -65,136 +38,6 @@ namespace :argo do
     version = version.join('.')
     File.open(version_file, 'w') { |f| f.write(version) }
     $stderr.puts "Version bumped to #{version}"
-  end
-
-  namespace :jetty do
-    WRAPPER_VERSION = 'v7.3.0' # the most recent Fedora 3.x release (Fedora 3.8.1 and Solr 4.10.4)
-
-    desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
-    task :clean, [:target] do |t, args|
-      args.with_defaults(:target => WRAPPER_VERSION)
-      jettywrapper_load_config()
-      Jettywrapper.hydra_jetty_version = args[:target]
-      Rake::Task['jetty:clean'].invoke
-    end
-
-    desc 'Overwrite Solr configs and JARs'
-    task :config => %w(argo:solr:config) do   # TODO: argo:fedora:config
-    end
-  end  # :jetty
-
-  ## DEFAULTS
-  solr_conf_dir     = 'solr_conf'
-  fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
-  fedora_files      = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
-  live_solrxml_file = 'jetty/solr/solr.xml'
-  testcores = {'development' => 'development-core', 'test' => 'test-core'}  # name => path
-
-  namespace :solr do
-    desc "Configure Solr root and core(s) from source dir, default: #{solr_conf_dir}"
-    task :config, [:dir] => ['argo:solr:config_root', 'argo:solr:config_cores'] do |task, args|
-    end
-
-    desc "Configure Solr root from source dir, default: #{solr_conf_dir}"
-    task :config_root, [:dir] do |task, args|
-      args.with_defaults(:dir => solr_conf_dir)
-      cp("#{args[:dir]}/solr.xml", 'jetty/solr/', verbose: true)
-    end
-
-    desc "Copies configs to matching local Solr instanceDir(s), default: #{solr_conf_dir} ==> #{testcores.keys.sort}"
-    task :config_cores, [:dir, :cores] do |task, args|
-      args.with_defaults(:dir => solr_conf_dir, :cores => testcores.keys.sort)
-      args[:cores].each do |core|
-        instancedir = testcores[core] || core
-        puts "travis_fold:start:argo-config_cores-#{core}\r" if ENV['TRAVIS'] == 'true'
-        puts "**** #{core} in #{instancedir}"
-        FileUtils.mkdir_p("jetty/solr/#{instancedir}/conf/", verbose: true)
-        FileList["#{args[:dir]}/conf/*"].each do |f|
-          cp(f, "jetty/solr/#{instancedir}/conf/", verbose: true)
-        end
-        ## Mac OSX sed requires -i bak file
-        ## puts "sed -i.bak -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml"   # tweak solrconfig
-        ## system("sed -i.bak -e 's/core1/#{core}/g;' jetty/solr/#{instancedir}/conf/solrconfig.xml")
-        propfile = "jetty/solr/#{instancedir}/core.properties"
-        open(propfile, 'w') { |f|
-          f.puts "name=#{core}"
-        }
-        puts "Added #{propfile}"
-        puts "travis_fold:end:argo-config_cores-#{core}\r" if ENV['TRAVIS'] == 'true'
-      end
-    end
-
-  end # :solr
-
-  namespace :repo do
-    desc "Load XML file(s) into repo (fedora and solr), default: contents of 'load_order' file. With a glob: rake argo:repo:load[fedora_conf/data/*.xml]"
-    task :load, [:glob] do |task, args|
-      puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
-
-      file_list = []
-      if args.key?(:glob)
-        file_list = glob_files(args[:glob])
-      else
-        puts 'No file glob was specified so file order and inclusion is determined by the load_order file'
-        file_list = load_order_files(fedora_files)
-      end
-
-      errors = []
-      i = 0
-
-      file_list.each do |file|
-        i += 1
-
-        ENV['foxml'] = file
-        handler = proc do |e, attempt_number, total_delay|
-          puts STDERR.puts "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
-          errors << file
-        end
-        with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
-          puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
-          # Invoke the ActiveFedora gem's rake task
-          Rake::Task['repo:load'].reenable
-          Rake::Task['repo:load'].invoke
-        }
-      end
-      Rake::Task['repo:load'].reenable      # other things might want to load, too
-      ENV.delete('foxml') if ENV['foxml']   # avoid ENV contamination
-      puts 'Done loading repo files'
-      puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0
-#     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
-      puts "travis_fold:end:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
-    end
-  end # :repo
-
-  # some helper methods
-  def apo_field_default
-    'apo_register_permissions_ssim'
-  end
-
-  def get_workgroups_facet(apo_field = nil)
-    apo_field = apo_field_default() if apo_field.nil?
-    resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
-      :facets => { :fields => [apo_field] },
-      :'facet.prefix'   => 'workgroup:',
-      :'facet.mincount' => 1,
-      :'facet.limit'    => -1 )
-    resp.facets.find { |f| f.name == apo_field }
-  end
-
-  def load_order_files(fedora_files)
-    data_path = File.expand_path('../../../fedora_conf/data/', __FILE__)
-    fedora_files.delete_if {|f| f.strip.empty? }
-    fedora_files.map {|f| File.join(data_path, f.strip) }
-  end
-
-  def glob_files(glob_expression)
-    Dir.glob(glob_expression)
-  end
-
-  desc "List APO workgroups from Solr (#{apo_field_default()})"
-  task :workgroups => :environment do
-    facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.map(&:value).join(%(\n))}"
   end
 
   # the .htaccess file lists the workgroups that we recognize as relevant to argo.
@@ -241,4 +84,12 @@ namespace :argo do
   task :reindex_all => [:environment] do |t, args|
     Argo::BulkReindexer.reindex_all
   end
-end     # :argo
+
+  desc "List APO workgroups from Solr (#{apo_field_default()})"
+  task :workgroups => :environment do
+    facet = get_workgroups_facet()
+    puts "#{facet.items.count} Workgroups:\n#{facet.items.map(&:value).join(%(\n))}"
+  end
+
+
+end # :argo
