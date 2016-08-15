@@ -68,7 +68,7 @@ group :test, :development do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 3'
+  gem 'rspec-rails', '< 3.5' # rspec 3.5 under ruby 2.2 isn't compatible with the way we mock users in integration tests.
   gem 'poltergeist' # for js testing
   gem 'webmock', require: false
   gem 'simplecov', require: false
