@@ -19,3 +19,6 @@ config/environments/*.local.yml
 workflow_service.log*
 vendor/ruby/
 /spec/fixtures/bulk_upload/workspace
+.ruby-version
+.ruby-gemset
+
