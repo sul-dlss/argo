@@ -185,11 +185,11 @@ GEM
       capistrano-releaseboard
     docile (1.1.5)
     docopt (0.5.0)
-    domain_name (0.5.20160615)
+    domain_name (0.5.20160826)
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.2.0)
       nokogiri
-    dor-services (5.9.1)
+    dor-services (5.10.1)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       confstruct (~> 0.2.7)
@@ -417,7 +417,7 @@ GEM
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
     retries (0.0.5)
-    roo (2.5.0)
+    roo (2.5.1)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
     rsolr (1.0.13)
@@ -572,7 +572,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   dlss-capistrano (~> 3.1)
-  dor-services (~> 5.9, >= 5.9.1)
+  dor-services (~> 5.10, >= 5.10.1)
   equivalent-xml (>= 0.6.0)
   eye
   factory_girl_rails
