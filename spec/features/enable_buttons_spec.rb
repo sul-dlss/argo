@@ -7,7 +7,8 @@ feature 'Enable buttons' do
       'item',
       admin_policy_object: false,
       datastreams: {},
-      can_manage_item?: true
+      can_manage_item?: true,
+      release_tags: []
     )
     allow_any_instance_of(ApplicationController).to receive(:current_user).
       and_return(@current_user)

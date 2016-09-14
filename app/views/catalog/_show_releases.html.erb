@@ -1,0 +1,22 @@
+<table class='table'>
+  <thead>
+    <tr>
+      <th>Release</th>
+      <th>What</th>
+      <th>To</th>
+      <th>Who</th>
+      <th>When</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% object.release_tags.each do |release_tag| %>
+      <tr>
+        <td><%= release_tag[1][0]['release'] %></td>
+        <td><%= release_tag[1][0]['what'] %></td>
+        <td><%= release_tag[0] %></td>
+        <td><%= release_tag[1][0]['who'] %></td>
+        <td><%= release_tag[1][0]['when'] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

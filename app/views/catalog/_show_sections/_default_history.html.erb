@@ -28,3 +28,14 @@
     </dd>
   </dl>
 </div>
+
+<% if object.respond_to? :release_tags %>
+  <div>
+    <dl>
+      <dt>Releases</dt>
+      <dd>
+        <%= render partial: 'show_releases', locals: { object: object } %>
+      </dd>
+    </dl>
+  </div>
+<% end %>
