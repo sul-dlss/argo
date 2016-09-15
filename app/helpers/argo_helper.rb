@@ -22,15 +22,6 @@ module ArgoHelper
     result
   end
 
-  def render_document_show_field_value(args)
-    handler = "value_for_#{args[:field]}".to_sym
-    if respond_to?(handler)
-      send(handler, args)
-    else
-      super(args)
-    end
-  end
-
   def get_thumbnail_info(doc)
     fname = doc['first_shelved_image_ss']
     return nil unless fname
@@ -40,30 +31,11 @@ module ArgoHelper
     {:fname => fname, :druid => druid, :url => url}
   end
 
-  def render_thumbnail_helper(doc, thumb_class = '', thumb_alt = '', thumb_style = '')
+  def render_thumbnail_helper(doc, thumb_class = '', thumb_alt = '', thumb_style = 'max-width:240px;max-height:240px;')
     thumbnail_info = get_thumbnail_info(doc)
     return nil unless thumbnail_info
     thumbnail_url = thumbnail_info[:url]
     image_tag thumbnail_url, :class => thumb_class, :alt => thumb_alt, :style => thumb_style
-  end
-
-  def render_document_show_thumbnail(doc)
-    render_thumbnail_helper doc, 'document-thumb', '', 'max-width:240px;max-height:240px;'
-  end
-
-  def render_index_thumbnail(doc, options = {})
-    render_thumbnail_helper doc, 'index-thumb', '', 'max-width:240px;max-height:240px;'
-  end
-
-  def render_document_sections(doc, action_name)
-    dor_object = @obj # Dor.find doc['id'].to_s, :lightweight => true
-    format = document_partial_name(doc)
-    sections = blacklight_config[:show][:sections][format.to_sym] || blacklight_config[:show][:sections][:default]
-    result = ''
-    sections.each_with_index do |section_name, index|
-      result += render(:partial => "catalog/#{action_name}_section", :locals => {:document => doc, :object => dor_object, :format => format, :section => section_name, :collapsible => (index > 0)})
-    end
-    result.html_safe
   end
 
   ##
@@ -163,27 +135,6 @@ module ArgoHelper
 
   def render_searchworks_link(document, link_text = 'Searchworks', opts = {:target => '_blank'})
     link_to link_text, "http://searchworks.stanford.edu/view/#{document.catkey}", opts
-  end
-
-  def render_section_header_link(section, document)
-    section_header_method = blacklight_config[:show][:section_links][section]
-    return if section_header_method.nil?
-    send(section_header_method, document)
-  end
-
-  def render_full_dc_link(document, link_text = 'View full Dublin Core')
-    link_to link_text, dc_aspect_view_catalog_path(document.id), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' }
-  end
-
-  def render_mods_view_link(document, link_text = 'View MODS')
-    link_to link_text, purl_preview_item_url(document.id), :title => 'MODS View', :data => { ajax_modal: 'trigger' }
-  end
-
-  def render_full_view_links(document)
-    render_full_dc_link(document) + ' / ' + render_mods_view_link(document)
-  end
-
-  def render_dor_workspace_link(document, link_text = 'View DOR workspace')
   end
 
   def render_datastream_link(document)

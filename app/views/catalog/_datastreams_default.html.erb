@@ -1,0 +1,22 @@
+<h3 id="document-datastreams-head" class="section-head collapsible-section">
+  <span class="section-head-link"><%= render_datastream_link(document) %></span>
+  Datastreams
+</h3>
+<div id="document-datastreams-section" class="document-section">
+  <table class="detail">
+    <% 
+      document['ds_specs_ssim'].try(:each) do |dspecs| 
+        specs = parse_specs(dspecs)
+    %>
+      <tr>
+        <td><%= render_ds_id document, specs %></td>
+        <td><%= render_ds_control_group document, specs %></td>
+        <td><%= render_ds_mime_type document, specs %></td>
+        <td><%= render_ds_version document, specs %></td>
+        <td><%= render_ds_size document, specs %></td>
+        <td><%= render_ds_label document, specs %></td>
+      </tr>
+    <% end %>
+  </table>
+
+</div>

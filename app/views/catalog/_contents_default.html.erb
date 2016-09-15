@@ -1,0 +1,89 @@
+<h3 id="document-contents-head" class="section-head collapsible-section">
+  Contents
+</h3>
+<div id="document-contents-section" class="document-section">
+  <% if object.datastreams.keys.include?('contentMetadata') &&
+    (not object.datastreams['contentMetadata'].new?) && object.datastreams['contentMetadata'].metadata? %>
+    <% content_ds = object.datastreams['contentMetadata'] %>
+    <div style="clear:left">
+      <ul class="resource-tree">
+        <li>
+          <% if document.preservation_size.present? %>
+            <span class="label">Preservation Size</span>
+            <%= number_to_human_size(document.preservation_size) %>
+            <br/>
+          <%end%>
+          <span class="label">Type</span>
+          <%= content_ds.ng_xml.root['type'] %>
+          <ul>
+            <%
+            content_ds.ng_xml.xpath('/contentMetadata/resource').each_with_index do |resource, index| %>
+              <li class="resource">
+                <span class="label">Resource (<%=index+1%>)</span> <%= resource['type']%>
+                <% if resource.at('label') %>
+                  <li><span class="label">Label</span> <%= resource.at('label').text %></li>
+                <% end %>
+                <ul>
+                  <% children = resource.children
+                  inner_index = 0
+                  children.each do |child|
+                    if child.node_name() == 'resource'
+                      inner_index = inner_index+1 %>
+                      <li class="resource">
+                        <span class="label">Resource (<%=inner_index%>)</span>
+                        <%= child['type']%>
+                        <ul>
+                          <% if child.at('label') %>
+                            <li> <span class="label">Label</span> <%= child.at('label').text %></li>
+                          <% end %>
+                          <% child.xpath('file').each do |file| %>
+                            <li class="file">
+                              <span class="label">File</span>
+                              <% if can? :manage_content, object %>
+                                <% manage_file_link = '/items/'+params[:id]+'/file_list/?file='+URI.escape(file['id']) %>
+                                <%= link_to file['id'], manage_file_link, :data => {ajax_modal: 'trigger'} %>
+                              <%else%>
+                                <%=file['id']%>
+                              <%end%>
+                              (<%= file['mimetype'] %>, 
+                               <%= number_to_human_size(file['size']) %>,
+                               <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
+                            </li>
+                          <% end %>
+                          <%= render partial: 'catalog/_show_sections/default_contents_external_file', locals: { resource: child } -%>
+                        </ul>
+                      </li>
+                    <% end %>
+                  <% end %>
+                  
+                  <% resource.xpath('file').each do |file| %>
+                    <li class="file">
+                      <span class="label">File</span>
+                      <% if can? :view_content, object
+                        file_link = '/items/'+params[:id]+'/file_list/?file='+URI.escape(file['id']) %>
+                        <%= link_to file['id'], file_link, :data => {ajax_modal: 'trigger'} %>
+                      <%else%>
+                        <%=file['id']%>
+                      <%end%>
+                      (<%= file['mimetype'] %>, <%= number_to_human_size(file['size']) %>,
+                       <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
+                    </li>
+                  <% end %>
+                  <%= render partial: 'catalog/_show_sections/default_contents_external_file', locals: { resource: resource } -%>
+                </ul>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  <% else %>
+    <div style="clear:left">
+      <ul class="resource-tree">
+        <li>
+          <span class="label">Preservation Size</span> 0 bytes
+        </li>
+      </ul>
+    </div>
+  <% end %>
+</div>

@@ -15,6 +15,6 @@ RSpec.feature 'Consistent titles' do
   end
   scenario 'catalog show view' do
     visit catalog_path 'druid:hj185vb7593'
-    expect(page).to have_css 'h4', text: title
+    expect(page).to have_css 'h1', text: title
   end
 end

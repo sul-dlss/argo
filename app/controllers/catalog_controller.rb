@@ -23,17 +23,8 @@ class CatalogController < ApplicationController
     config.index.display_type_field = 'content_type_ssim'
 
     config.show.display_type_field = 'objectType_ssim'
-    config.show.sections = {
-      :default => %w(identification datastreams history contents),
-      :item    => %w(identification datastreams history contents child_objects)
-    }
-    config.show.section_links = {
-      'identification' => :render_full_view_links,
-      'contents'       => :render_dor_workspace_link,
-      'datastreams'    => :render_datastream_link
-    }
 
-    config.index.thumbnail_method = :render_index_thumbnail
+    config.index.thumbnail_method = :render_thumbnail_helper
 
     config.add_index_field 'id',                              label: 'DRUID'
     config.add_index_field 'objectType_ssim',                 label: 'Object Type'
@@ -55,15 +46,16 @@ class CatalogController < ApplicationController
     config.add_show_field 'obj_label_ssim',              :label => 'Label'
     config.add_show_field SolrDocument::FIELD_APO_ID,    :label => 'Admin Policy',      helper_method: :link_to_admin_policy
     config.add_show_field SolrDocument::FIELD_COLLECTION_ID, :label => 'Collection',    helper_method: :links_to_collections
-    config.add_show_field 'status_ssi',                  :label => 'Status'
     config.add_show_field 'objectType_ssim',             :label => 'Object Type'
     config.add_show_field 'id',                          :label => 'DRUID'
     config.add_show_field 'project_tag_ssim',            :label => 'Project',           link_to_search: true
     config.add_show_field 'source_id_ssim',              :label => 'Source'
-    config.add_show_field 'tag_ssim',                    :label => 'Tags'
-    config.add_show_field 'wf_error_ssim',               :label => 'Error',             helper_method: :value_for_wf_error
+    config.add_show_field 'tag_ssim',                    :label => 'Tags', helper_method: :value_for_tag_ssim
     config.add_show_field 'metadata_source_ssi',         :label => 'MD Source'
     config.add_show_field 'preserved_size_dbtsi',        :label => 'Preservation Size', helper_method: :preserved_size_human
+    config.add_show_field 'released_to_ssim',            label: 'Released to'
+    config.add_show_field 'status_ssi',                  label: 'Status'
+    config.add_show_field 'wf_error_ssim',               label: 'Error',             helper_method: :value_for_wf_error
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
@@ -150,17 +142,6 @@ class CatalogController < ApplicationController
       }
     }
 
-    config.field_groups = {
-      :identification => [
-        %w(id objectType_ssim content_type_ssim status_ssi wf_error_ssim),
-        [SolrDocument::FIELD_APO_ID, SolrDocument::FIELD_COLLECTION_ID].map(&:to_s) + %w(project_tag_ssim source_id_ssim preserved_size_dbtsi)
-      ],
-      :full_identification => [
-        %w(id objectType_ssim content_type_ssim metadata_source_ssi),
-        [SolrDocument::FIELD_APO_ID, SolrDocument::FIELD_COLLECTION_ID].map(&:to_s) + %w(project_tag_ssim source_id_ssim)
-      ]
-    }
-
     config.add_results_collection_tool(:report_view_toggle)
     config.add_results_collection_tool(:bulk_update_view_button)
     config.add_results_collection_tool(:bulk_action_button)
@@ -168,6 +149,8 @@ class CatalogController < ApplicationController
     ##
     # Configure document actions framework
     config.index.document_actions.delete(:bookmark)
+
+    config.show.partials = %w(show_header full_view_links thumbnail show datastreams history contents)
 
   end
 
