@@ -11,12 +11,61 @@
     </div>
   <% end %>
 
-  <div class='radio'>
-    <label>
-      <%= f.radio_button(:action_type, 'DescmetadataDownloadJob', checked: true) %>
-      Download Descriptive Metadata
-    </label>
+  <% if false #multiline comment %>
+    This button/radio form element is used to define Bulk Action Job types that 
+    a user can select from. The `.tab-content` area below it can define a
+    description and additional form input used for each type of custom job.
+  <% end %>
+
+  <div class='form-group'>
+    <div class='btn-group' data-toggle='buttons'>
+      <label href='#desc_metadata_download_custom_options' class='btn btn-default active' data-toggle='tab'>
+        <%= f.radio_button(:action_type, 'DescmetadataDownloadJob', checked: true, autocomplete: 'off') %>
+        Download Descriptive Metadata
+      </label>
+      <label href='#manage_release_custom_options' data-toggle='tab' class='btn btn-default'>
+        <%= f.radio_button(:action_type, 'ReleaseObjectJob', autocomplete: 'off') %>
+        Manage release
+      </label>
+    </div>
+
+    <div class='tab-content'>
+      <div role='tabpanel' class= 'tab-pane active' id='desc_metadata_download_custom_options'>
+        <span class='help-block'>
+          Download descriptive metadata for objects.
+        </span>
+      </div>
+      <div role='tabpanel' class= 'tab-pane' id='manage_release_custom_options'>
+        <span class='help-block'>
+          Adds release tags to individual objects.
+        </span>
+        <div>
+          <%= f.fields_for :manage_release do |manage_release_fields| %>
+            <div class='form-group'>
+              <div class='radio'>
+                <label class='checkbox-inline'>
+                  <%= manage_release_fields.radio_button(:tag, true, checked: true) %>
+                  Release this object*
+                </label>
+                <label class='checkbox-inline'>
+                  <%= manage_release_fields.radio_button(:tag, false) %>
+                  Do not release this object*
+                </label>
+              </div>
+            </div>
+            <div class='form-group'>
+              <label for='bulk_action_manage_release_to'>to</label>
+              <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, { class: 'form-control' } %>
+            </div>
+            <%= manage_release_fields.hidden_field('what', value: 'self') %>
+            <%= manage_release_fields.hidden_field('who', value: current_user.sunetid) %>
+          <% end %>
+        </div>
+        <span class='help-block'>* for items this overrides any collection release instructions; for a collection this releases the collection object itself, not its members</span>
+      </div>
+    </div>
   </div>
+
   <a class='btn btn-primary' data-populate-druids="<%= catalog_index_path(search_of_pids(@last_search)) %>" data-target='#pids'>
     Populate with previous search
   </a>

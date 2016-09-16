@@ -9,4 +9,7 @@ module Constants
   ]
   CONTENT_TYPES = %w(image book file manuscript map media).freeze
   RESOURCE_TYPES = %w(image page file audio video).freeze
+  RELEASE_TARGETS = [
+    %w(SearchWorks SearchWorks)
+  ].freeze
 end
