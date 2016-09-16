@@ -11,7 +11,7 @@ feature 'Item view metadata' do
 
   scenario 'MD Source is "DOR"' do
     visit catalog_path 'druid:hj185vb7593'
-    within '#document-identification-section' do
+    within '.dl-horizontal' do
       expect(page).to have_css 'dt', text: 'DRUID:'
       expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
       expect(page).to have_css 'dt', text: 'Object Type:'
@@ -40,7 +40,7 @@ feature 'Item view metadata' do
 
   scenario 'MD Source is "Symphony"' do
     visit catalog_path 'druid:kv840rx2720'
-    within '#document-identification-section' do
+    within '.dl-horizontal' do
       expect(page).to have_css 'dt.blacklight-metadata_source_ssi', text: 'MD Source'
       expect(page).to have_css 'dd.blacklight-metadata_source_ssi', text: 'Symphony'
     end
