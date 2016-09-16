@@ -46,6 +46,11 @@ class BulkActionsController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def bulk_action_params
-    params.require(:bulk_action).permit(:action_type, :description, :pids)
+    params.require(:bulk_action).permit(
+      :action_type,
+      :description,
+      :pids,
+      manage_release: [:tag, :what, :who, :to]
+    ).merge(webauth: { privgroup: webauth.privgroup, login: webauth.login })
   end
 end
