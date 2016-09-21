@@ -4,7 +4,6 @@
 .powenv
 .sass-cache
 .*.swp
-app/assets/javascripts/jqgrid/
 config/certs
 coverage/
 db/*.sqlite3
