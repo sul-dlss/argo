@@ -189,7 +189,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.2.0)
       nokogiri
-    dor-services (5.10.1)
+    dor-services (5.10.2)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       confstruct (~> 0.2.7)
@@ -212,7 +212,7 @@ GEM
       ruby-graphviz
       rubydora (~> 1.6.5)
       solrizer (~> 3.0)
-      stanford-mods (= 1.5.3)
+      stanford-mods (>= 2.2.2)
       systemu (~> 2.6)
       uuidtools (~> 2.1.4)
     dor-workflow-service (2.0.1)
@@ -499,7 +499,7 @@ GEM
     sshkit (1.11.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    stanford-mods (1.5.3)
+    stanford-mods (2.2.2)
       activesupport
       mods (~> 2.0.2)
     state_machine (1.2.0)
@@ -572,7 +572,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   dlss-capistrano (~> 3.1)
-  dor-services (~> 5.10, >= 5.10.1)
+  dor-services (>= 5.10.2, < 6)
   equivalent-xml (>= 0.6.0)
   eye
   factory_girl_rails
