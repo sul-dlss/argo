@@ -25,8 +25,11 @@ class ReleaseObjectJob < GenericJob
       update_druid_count
 
       pids.each do |current_druid|
-        next unless can_manage?(current_druid)
         log.puts("#{Time.current} Beginning ReleaseObjectJob for #{current_druid}")
+        unless can_manage?(current_druid)
+          log.puts("#{Time.current} Not authorized for #{current_druid}")
+          next
+        end
         log.puts("#{Time.current} Adding release tag for #{manage_release['to']}")
         begin
           response = post_to_release(current_druid, params_to_body(manage_release))

@@ -126,15 +126,15 @@ describe ReleaseObjectJob do
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
       end
-      # no information leakage to an unauthorized user
-      it 'logs no druid info to logfile' do
-        # Stub out the file, and send it to a string buffer instead
+      it 'logs druid info to logfile' do
         buffer = StringIO.new
         expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'w').and_yield(buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
         pids.each do |pid|
-          expect(buffer.string).to_not include "Beginning ReleaseObjectJob for #{pid}"
+          expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
+          expect(buffer.string).to include "Not authorized for #{pid}"
+          expect(buffer.string).to_not include 'Adding release tag for'
         end
         expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
       end
