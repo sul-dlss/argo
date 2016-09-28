@@ -9,13 +9,13 @@
     </tr>
   </thead>
   <tbody>
-    <% object.release_tags.each do |release_tag| %>
+    <% ReleaseTags.from_dor_object(object).each do |release_tag| %>
       <tr>
-        <td><%= release_tag[1][0]['release'] %></td>
-        <td><%= release_tag[1][0]['what'] %></td>
-        <td><%= release_tag[0] %></td>
-        <td><%= release_tag[1][0]['who'] %></td>
-        <td><%= release_tag[1][0]['when'] %></td>
+        <td><%= release_tag.release %></td>
+        <td><%= release_tag.what %></td>
+        <td><%= release_tag.to %></td>
+        <td><%= release_tag.who %></td>
+        <td><%= release_tag.when %></td>
       </tr>
     <% end %>
   </tbody>
