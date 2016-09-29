@@ -179,6 +179,8 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <tag>DPG : State Banking Commission Annual Reports : Virginia</tag>
   <tag>DPG : Curator Request : Kasianovitz</tag>
   <tag>Registered By : llam813</tag>
+  <release to="SEARCHWORKS" what="self" when="2016-09-12T20:00:00.000Z" who="pjreed">false</release>
+  <release to="SEARCHWORKS" what="self" when="2016-09-13T20:00:00.000Z" who="pjreed">true</release>
 </identityMetadata>
 </foxml:xmlContent>
 </foxml:datastreamVersion>
@@ -199,8 +201,9 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <tag>DPG : State Banking Commission Annual Reports : Virginia</tag>
   <tag>DPG : Curator Request : Kasianovitz</tag>
   <tag>Registered By : llam813</tag>
-  <tag>Remediated By : 4.6.6.2</tag>
+  <release to="SEARCHWORKS" what="self" when="2016-09-12T20:00:00.000Z" who="pjreed">false</release>
   <release to="SEARCHWORKS" what="self" when="2016-09-13T20:00:00.000Z" who="pjreed">true</release>
+  <tag>Remediated By : 4.6.6.2</tag>
 </identityMetadata>
 </foxml:xmlContent>
 </foxml:datastreamVersion>
