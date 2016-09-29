@@ -4,6 +4,9 @@ RSpec.describe BulkActionsController do
   let(:current_user) do
     create(:user)
   end
+  let(:webauth) do
+    double('webauth', privgroup: '', login: '')
+  end
   before(:each) do
     expect_any_instance_of(BulkActionsController).to receive(:current_user)
       .at_least(:once).and_return(current_user)
@@ -52,28 +55,36 @@ RSpec.describe BulkActionsController do
     end
   end
   describe 'POST create' do
-    it 'assigns @bulk_action to current_user' do
-      post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
-      expect(assigns(:bulk_action)).to be_an BulkAction
-      expect(assigns(:bulk_action).user).to eq current_user
-    end
-    it 'creates a new BulkAction' do
-      expect do
+    context 'with correct parameters' do
+      before(:each) do
+        expect_any_instance_of(BulkActionsController).to receive(:webauth)
+          .at_least(:once).and_return(webauth)
+      end
+      it 'assigns @bulk_action to current_user' do
         post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
-      end.to change(BulkAction, :count).by(1)
+        expect(assigns(:bulk_action)).to be_an BulkAction
+        expect(assigns(:bulk_action).user).to eq current_user
+      end
+      it 'creates a new BulkAction' do
+        expect do
+          post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
+        end.to change(BulkAction, :count).by(1)
+      end
+      it 'has a 302 status code' do
+        post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
+        expect(response.status).to eq 302
+      end
+      it 'when not saveable render new' do
+        fake_bulk_action = double('fake', save: false, 'user=' => nil)
+        expect(BulkAction).to receive(:new).and_return fake_bulk_action
+        post :create, bulk_action: {action_type: 'GenericJob'}
+        expect(response).to render_template('new')
+      end
     end
-    it 'has a 302 status code' do
-      post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
-      expect(response.status).to eq 302
-    end
-    it 'requires bulk_action parameter' do
-      expect{ post :create }.to raise_error ActionController::ParameterMissing
-    end
-    it 'when not saveable render new' do
-      fake_bulk_action = double('fake', save: false, 'user=' => nil)
-      expect(BulkAction).to receive(:new).and_return fake_bulk_action
-      post :create, bulk_action: {action_type: 'GenericJob'}
-      expect(response).to render_template('new')
+    context 'without current parameters' do
+      it 'requires bulk_action parameter' do
+        expect{ post :create }.to raise_error ActionController::ParameterMissing
+      end
     end
   end
   describe 'DELETE destroy' do
