@@ -76,15 +76,6 @@ module DorObjectHelper
     ''
   end
 
-  # Rename from 'metadata_source' to 'get_metadata_source' to avoid conflict with APO 'metadata_source'
-  # @param [Dor::Item]
-  # @return [String]
-  def get_metadata_source(object)
-    return 'Metadata Toolkit' if object.identityMetadata.otherId('mdtoolkit').length > 0
-    return 'Symphony'         if object.identityMetadata.otherId('catkey').length > 0
-    'DOR'
-  end
-
   ##
   # @deprecated Please use non-blocking requests rather than blocking helpers.
   # See WorkflowServiceController#accesssioned for JSON API to this logic
