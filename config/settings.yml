@@ -63,6 +63,10 @@ PROFILER:
   MEASURE_MODE: 'wall'
   # location where Argo::Profiler sends RubyProf output from print_results_* methods
   OUTPUT_DIR: 'log/profiler'
+  ##
+  # A bit different but for RackMiniProfiler https://github.com/MiniProfiler/rack-mini-profiler
+  # useful for profiling blocking HTTP requests and partial rendering
+  RACKMINI_ENABLED: false
 
 # Squash
 SQUASH:
