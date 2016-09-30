@@ -1,0 +1,16 @@
+
+<%= form_for(@bulk_action) do |f| %>
+  <%= f.hidden_field(:action_type, value: 'ReleaseObjectJob') %>
+  <%= f.hidden_field('pids', value: @document.id) %>
+  <div class='form-group'>
+    <label>Manage release to discovery applications for <%= @document.object_type %> <%= @document.id %></label>
+  </div>
+  <h2><%= @document.title %></h2>
+  <div class='form-group'>
+    <label>Released for:</label> <%= @document.fetch(:released_to_ssim, ['']).to_sentence %>
+  </div>
+  <%= render "#{@document.object_type}_manage_release_bulk_action_form", f: f %>
+  <div class='form-group'>
+    <button type='submit' class='btn btn-primary'>Submit</button>
+  </div>
+<% end %>

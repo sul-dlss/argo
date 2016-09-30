@@ -104,6 +104,7 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
+      buttons << { url: manage_release_path(pid), label: 'Manage release' }
     end
     if doc.key?('embargo_status_ssim')
       embargo_data = doc['embargo_status_ssim']

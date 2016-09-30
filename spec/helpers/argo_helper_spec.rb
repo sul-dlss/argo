@@ -52,6 +52,10 @@ describe ArgoHelper, :type => :helper do
           {
             label: 'Set content type',
             url: "/items/#{@item_id}/content_type"
+          },
+          {
+            label: 'Manage release',
+            url: "/catalog/#{@item_id}/manage_release"
           }
         ]
       end

@@ -254,6 +254,12 @@ class CatalogController < ApplicationController
     redirect_to bulk_jobs_index_path(@apo)
   end
 
+  def manage_release
+    authorize! :manage_item, Dor.find(params[:id])
+    @response, @document = fetch params[:id]
+    @bulk_action = BulkAction.new
+  end
+
   private
 
   def show_aspect
