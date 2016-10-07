@@ -48,8 +48,7 @@ module RegistrationHelper
 
   def metadata_sources
     [
-      %w(Auto auto),
-      %w(None none)
+      %w(Auto auto)
     ]
   end
 end
