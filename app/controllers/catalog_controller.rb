@@ -48,7 +48,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'identifier_tesim',                label: 'IDs',               helper_method: :value_for_identifier_tesim
     config.add_show_field 'originInfo_date_created_tesim',   label: 'Created'
     config.add_show_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :preserved_size_human
-    config.add_show_field 'tag_ssim',                        label: 'Tags',              helper_method: :value_for_tag_ssim
+    config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_search: true
     config.add_show_field 'released_to_ssim',                label: 'Released to'
     config.add_show_field 'status_ssi',                      label: 'Status'
     config.add_show_field 'wf_error_ssim',                   label: 'Error',             helper_method: :value_for_wf_error
