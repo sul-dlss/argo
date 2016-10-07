@@ -1,0 +1,23 @@
+<div>
+  <%= f.fields_for :manage_release do |manage_release_fields| %>
+    <div class='form-group'>
+      <div class='radio'>
+        <label class='checkbox-inline'>
+          <%= manage_release_fields.radio_button(:tag, true, checked: true) %>
+          Release this object*
+        </label>
+        <label class='checkbox-inline'>
+          <%= manage_release_fields.radio_button(:tag, false) %>
+          Do not release this object*
+        </label>
+      </div>
+    </div>
+    <div class='form-group'>
+      <label for='bulk_action_manage_release_to'>to</label>
+      <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, { class: 'form-control' } %>
+    </div>
+    <%= manage_release_fields.hidden_field('what', value: 'self') %>
+    <%= manage_release_fields.hidden_field('who', value: current_user.sunetid) %>
+  <% end %>
+</div>
+<span class='help-block'>* for items this overrides any collection release instructions; for a collection this releases the collection object itself, not its members</span>
