@@ -73,12 +73,4 @@ module ValueHelper
     val = args[:document][args[:field]]
     Array(val).reject { |v| v == args[:document]['id'] }.sort.uniq.join(', ')
   end
-
-  def value_for_tag_ssim(args)
-    val = args[:document][args[:field]]
-    tags = Array(val).uniq.collect do |v|
-      link_to v, add_facet_params_and_redirect('tag_ssim', v)
-    end
-    tags.join('<br/>').html_safe
-  end
 end
