@@ -68,6 +68,10 @@ group :test, :development do
   gem 'sqlite3'
 end
 
+group :development do
+  gem 'rack-mini-profiler', require: false # used for performance profiling
+end
+
 group :test do
   gem 'poltergeist' # for js testing
   gem 'webmock', require: false
