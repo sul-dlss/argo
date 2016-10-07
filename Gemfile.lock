@@ -189,7 +189,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.2.0)
       nokogiri
-    dor-services (5.10.3)
+    dor-services (5.11.1)
       active-fedora (~> 6.0)
       activesupport (>= 3.2.18)
       confstruct (~> 0.2.7)
@@ -572,7 +572,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   dlss-capistrano (~> 3.1)
-  dor-services (>= 5.10.3, < 6)
+  dor-services (>= 5.11.1, < 6)
   equivalent-xml (>= 0.6.0)
   eye
   factory_girl_rails
@@ -622,4 +622,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   1.13.1
+   1.13.2
