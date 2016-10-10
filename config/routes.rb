@@ -17,6 +17,7 @@ Argo::Application.routes.draw do
   match 'view/:id/dc',                :to => 'catalog#dc', :via => [:get, :post], :as => 'dc_aspect_view_catalog'
   match 'view/:id/ds/:dsid',          :to => 'catalog#ds', :via => [:get, :post], :as => 'ds_aspect_view_catalog'
   match 'view/:id/datastreams/:dsid', :to => 'catalog#datastream_view', :via => [:get, :post], :as => 'datastream_view_catalog'
+  get 'catalog/:id/manage_release', to: 'catalog#manage_release', as: 'manage_release'
 
   get 'catalog/:id/bulk_upload_form',    :to => 'catalog#bulk_upload_form',  :as => 'bulk_upload_form'
   get 'catalog/:id/bulk_jobs_index',     :to => 'catalog#bulk_jobs_index',   :as => 'bulk_jobs_index'

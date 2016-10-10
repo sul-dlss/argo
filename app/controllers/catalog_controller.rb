@@ -27,7 +27,7 @@ class CatalogController < ApplicationController
     config.index.thumbnail_method = :render_thumbnail_helper
 
     config.add_index_field 'id',                              label: 'DRUID'
-    config.add_index_field 'objectType_ssim',                 label: 'Object Type'
+    config.add_index_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
     config.add_index_field 'content_type_ssim',               label: 'Content Type'
     config.add_index_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy
     config.add_index_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
@@ -39,7 +39,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'wf_error_ssim',                   label: 'Error',             helper_method: :value_for_wf_error
 
     config.add_show_field 'id',                              label: 'DRUID'
-    config.add_show_field 'objectType_ssim',                 label: 'Object Type'
+    config.add_show_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
     config.add_show_field 'content_type_ssim',               label: 'Content Type'
     config.add_show_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy
     config.add_show_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
@@ -252,6 +252,12 @@ class CatalogController < ApplicationController
     directory_to_delete = File.join(Settings.BULK_METADATA.DIRECTORY, params[:dir])
     FileUtils.remove_dir(directory_to_delete, true)
     redirect_to bulk_jobs_index_path(@apo)
+  end
+
+  def manage_release
+    authorize! :manage_item, Dor.find(params[:id])
+    @response, @document = fetch params[:id]
+    @bulk_action = BulkAction.new
   end
 
   private

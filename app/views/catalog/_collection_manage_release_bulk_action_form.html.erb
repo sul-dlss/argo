@@ -1,0 +1,33 @@
+<%= f.fields_for :manage_release do |manage_release_fields| %>
+  <div class='form-group'>
+    <label>What should be released/withdrawn?</label>
+    <div class='radio'>
+      <label class='radio-inline'>
+        <%= manage_release_fields.radio_button(:what, 'collection') %>
+        This collection and all its members*
+      </label>
+      <label class='radio-inline'>
+        <%= manage_release_fields.radio_button(:what, 'self') %>
+        Only this collection description but not any of its members
+      </label>
+    </div>
+  </div>
+  <div class='form-group'>
+    <label>Should it be released or withdrawn?</label>
+    <div class='radio'>
+      <label class='radio-inline'>
+        <%= manage_release_fields.radio_button(:tag, true) %>
+        Release it
+      </label>
+      <label class='radio-inline'>
+        <%= manage_release_fields.radio_button(:tag, false) %>
+        Do not release it (withdraw)
+      </label>
+    </div>
+  </div>
+  <p class='help-block'>* Any members that have their own overriding release information will not be affected</p>
+  <div class='form-group'>
+    <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, { class: 'form-control' } %>
+  </div>
+  <%= manage_release_fields.hidden_field('who', value: current_user.sunetid) %>
+<% end %>

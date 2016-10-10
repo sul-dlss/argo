@@ -170,4 +170,19 @@ describe CatalogController, :type => :controller do
         'argo.bulk_metadata.bulk_log_druids_loaded' => 0})
     end
   end
+  describe '#manage_release' do
+    before do
+      expect(subject).to receive(:current_user).and_return(@user).at_least(:twice)
+    end
+    it 'authorizes the view for content managers' do
+      expect(@user).to receive(:is_admin?).and_return(true)
+      get :show, id: @druid
+      expect(response).to have_http_status(:success)
+    end
+    it 'responds accordingly for unauthorized_user' do
+      expect(@user).to receive(:is_admin?).and_return(false)
+      get :show, id: @druid
+      expect(response).to have_http_status(:forbidden)
+    end
+  end
 end
