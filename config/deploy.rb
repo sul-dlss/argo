@@ -75,3 +75,6 @@ namespace :deploy do
     end
   end
 end
+
+# honeybadger_env otherwise defaults to rails_env
+set :honeybadger_env, fetch(:stage)
