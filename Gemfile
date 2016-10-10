@@ -11,6 +11,7 @@ gem 'delayed_job_active_record'
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 gem 'faraday'
 gem 'eye'  # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
+gem 'honeybadger', '~> 2.0'
 gem 'jqgrid-jquery-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -29,8 +30,6 @@ gem 'ruby-graphviz'
 gem 'ruby-prof'
 gem 'sass-rails'
 gem 'sprockets', '~> 3.4'
-gem 'squash_rails', '=1.3.3', require: 'squash/rails'  # TODO: upgrading to 1.3.4 results in weird error output at end of deployment, pinning for now
-gem 'squash_ruby', require: 'squash/ruby'
 gem 'therubyracer', '~> 0.11'
 gem 'uglifier', '>= 1.0.3'
 gem 'whenever', require: false
