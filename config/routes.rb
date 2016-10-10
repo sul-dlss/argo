@@ -12,10 +12,7 @@ Argo::Application.routes.draw do
   match 'view/citation',   :to => 'catalog#citation',   :via => [:get, :post]
   match 'view/email',      :to => 'catalog#email',      :via => [:get, :post]
   match 'view/sms',        :to => 'catalog#sms',        :via => [:get, :post]
-  match 'view/endnote',    :to => 'catalog#endnote',    :via => [:get, :post]
-  match 'view/send_email_record', :to => 'catalog#send_email_record', :via => [:get, :post]
   match 'view/facet/:id',  :to => 'catalog#facet', :via => [:get, :post]
-  match 'view/unapi',      :to => 'catalog#unapi', :via => [:get, :post], :as => 'unapi'
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
   match 'view/:id/dc',                :to => 'catalog#dc', :via => [:get, :post], :as => 'dc_aspect_view_catalog'
   match 'view/:id/ds/:dsid',          :to => 'catalog#ds', :via => [:get, :post], :as => 'ds_aspect_view_catalog'
@@ -33,8 +30,6 @@ Argo::Application.routes.draw do
   match 'catalog',      :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }
   match 'catalog/*all', :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }
 
-  # TODO: looks like Blacklight::Marc.add_routes deals w/ librarian_view now?
-  # match 'view/:id/librarian_view', :to => "catalog#librarian_view", :via => [:get, :post], :as => "librarian_view_catalog"
   mount AboutPage::Engine => '/about(.:format)'
   match 'report',          :to => 'report#index',    :via => [:get, :post], :as => 'report'
   match 'report/data',     :to => 'report#data',     :via => [:get, :post], :as => 'report_data'
