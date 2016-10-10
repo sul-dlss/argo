@@ -68,12 +68,6 @@ PROFILER:
   # useful for profiling blocking HTTP requests and partial rendering
   RACKMINI_ENABLED: false
 
-# Squash
-SQUASH:
-  API_HOST: 'https://squash-host.example.com'
-  API_KEY: 'squash-api-key'
-  DISABLE: <%= (Rails.env.development? || Rails.env.test?) %>
-
 # SSL
 SSL:
   CERT_FILE: 'cert_name.crt'

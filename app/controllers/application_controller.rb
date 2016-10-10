@@ -14,9 +14,6 @@ class ApplicationController < ActionController::Base
 
   include Rack::Webauth::Helpers
 
-  include Squash::Ruby::ControllerMethods
-  enable_squash_client
-
   layout 'application'
 
   def current_user

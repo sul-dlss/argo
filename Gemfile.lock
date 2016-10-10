@@ -250,6 +250,7 @@ GEM
       posix-spawn (~> 0.3.6)
     hashdiff (0.3.0)
     hitimes (1.2.4)
+    honeybadger (2.6.1)
     hooks (0.3.6)
       uber (~> 0.0.4)
     http-cookie (1.0.2)
@@ -492,10 +493,6 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.11)
-    squash_rails (1.3.3)
-      squash_ruby
-    squash_ruby (2.0.1)
-      json
     sshkit (1.11.2)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -577,6 +574,7 @@ DEPENDENCIES
   eye
   factory_girl_rails
   faraday
+  honeybadger (~> 2.0)
   http_logger
   is_it_working-cbeer
   jettywrapper
@@ -612,8 +610,6 @@ DEPENDENCIES
   simplecov
   sprockets (~> 3.4)
   sqlite3
-  squash_rails (= 1.3.3)
-  squash_ruby
   stanford-mods
   sul_styles (~> 0.3)
   therubyracer (~> 0.11)

@@ -26,7 +26,7 @@ set :deploy_to, '/home/lyberadmin/argo'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w(config/database.yml config/secrets.yml config/blacklight.yml config/default_htaccess_directives)
+set :linked_files, %w(config/database.yml config/secrets.yml config/blacklight.yml config/honeybadger.yml config/default_htaccess_directives)
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w(log config/certs config/settings tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
@@ -36,8 +36,6 @@ set :linked_dirs, %w(log config/certs config/settings tmp/pids tmp/cache tmp/soc
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
-
-before 'deploy:publishing', 'squash:write_revision'
 
 namespace :deploy do
   # it's necessary to run the 'argo:htaccess' rake task after restarting, because
