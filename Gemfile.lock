@@ -108,6 +108,7 @@ GEM
       capistrano-bundler (~> 1.1)
     capistrano-releaseboard (0.0.1)
       faraday
+    capistrano-shared_configs (0.1.1)
     capistrano3-delayed-job (1.7.2)
       capistrano (~> 3.0, >= 3.0.0)
     capybara (2.8.0)
@@ -557,6 +558,7 @@ DEPENDENCIES
   capistrano (= 3.6.0)
   capistrano-passenger
   capistrano-rails
+  capistrano-shared_configs
   capistrano3-delayed-job (~> 1.0)
   capybara
   capybara_discoball

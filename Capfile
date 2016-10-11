@@ -22,13 +22,13 @@ require 'capistrano/deploy'
 # require 'capistrano/rails/migrations'
 
 require 'capistrano/bundler'
-require 'capistrano/rails'
-require 'capistrano/passenger'
-require 'dlss/capistrano'
 require 'capistrano/delayed_job'
+require 'capistrano/honeybadger'
+require 'capistrano/passenger'
+require 'capistrano/rails'
+require 'capistrano/shared_configs'
+require 'dlss/capistrano'
 require 'whenever/capistrano'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
-
-require 'capistrano/honeybadger'
