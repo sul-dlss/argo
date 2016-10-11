@@ -95,7 +95,7 @@ describe ApoController, :type => :controller do
         expect(@apo.metadata_source).to      eq(@md_info[:metadata_source])
         expect(@apo.agreement).to            eq(@md_info[:agreement])
         expect(@apo.default_workflows).to    eq([@md_info[:workflow]])
-        expect(@apo.default_rights).to       eq(@md_info[:default_object_rights].capitalize)
+        expect(@apo.default_rights).to       eq(@md_info[:default_object_rights])
         expect(@apo.use_license).to          eq(@md_info[:use_license])
         expect(@apo.use_license_uri).to      eq(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES[@md_info[:use_license]][:uri])
         expect(@apo.use_license_human).to    eq(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES[@md_info[:use_license]][:human_readable])

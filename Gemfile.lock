@@ -110,7 +110,7 @@ GEM
       capistrano (~> 3.0)
     capistrano-passenger (0.2.0)
       capistrano (~> 3.0)
-    capistrano-rails (1.1.8)
+    capistrano-rails (1.2.0)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capistrano-releaseboard (0.0.1)
@@ -198,7 +198,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.2.0)
       nokogiri
-    dor-services (5.13.0)
+    dor-services (5.14.0)
       active-fedora (>= 6.0, < 9.a)
       activesupport (>= 3.2.18)
       confstruct (~> 0.2.7)
@@ -663,7 +663,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   dlss-capistrano (~> 3.1)
-  dor-services (>= 5.11.1, < 6)
+  dor-services (>= 5.14.0, < 6)
   ebnf (= 1.0.0)
   equivalent-xml (>= 0.6.0)
   eye
@@ -719,4 +719,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   1.13.5
+   1.13.6
