@@ -9,16 +9,57 @@ class DorObjectWorkflowStatus
 
   ##
   # @return [Boolean]
+  def accessioned?
+    get_lifecycle('accessioned') ? true : false
+  end
+
+  ##
+  # @return [Boolean]
   def can_open_version?
-    return false unless workflow.get_lifecycle('dor', pid, 'accessioned')
-    return false if workflow.get_active_lifecycle('dor', pid, 'submitted')
-    return false if workflow.get_active_lifecycle('dor', pid, 'opened')
-    true
+    accessioned? && !(submitted_now? || opened_now?)
+  end
+
+  ##
+  # @return [Boolean]
+  def can_close_version?
+    opened_now? && !submitted_now?
+  end
+
+  ##
+  # @return [Boolean]
+  def opened_now?
+    get_active_lifecycle('opened') ? true : false
+  end
+
+  ##
+  # @return [Boolean]
+  def published?
+    get_lifecycle('published') ? true : false
+  end
+
+  ##
+  # @return [Boolean]
+  def submitted?
+    get_lifecycle('submitted') ? true : false
+  end
+
+  ##
+  # @return [Boolean]
+  def submitted_now?
+    get_active_lifecycle('submitted') ? true : false
   end
 
   private
 
   def workflow
     Dor::Config.workflow.client
+  end
+
+  def get_lifecycle(task)
+    workflow.get_lifecycle('dor', pid, task)
+  end
+
+  def get_active_lifecycle(task)
+    workflow.get_active_lifecycle('dor', pid, task)
   end
 end

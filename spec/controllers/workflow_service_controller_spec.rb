@@ -15,7 +15,6 @@ describe WorkflowServiceController do
           .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
           .and_return(false)
         get :closeable, pid: druid, format: :json
-        expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
       end
     end
@@ -26,7 +25,6 @@ describe WorkflowServiceController do
             .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
             .and_return(false)
           get :closeable, pid: druid, format: :json
-          expect(assigns(:status)).to eq false
           expect(response.body).to eq 'false'
         end
       end
@@ -39,7 +37,6 @@ describe WorkflowServiceController do
             .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
             .and_return(true)
           get :closeable, pid: druid, format: :json
-          expect(assigns(:status)).to eq false
           expect(response.body).to eq 'false'
         end
       end
@@ -52,7 +49,6 @@ describe WorkflowServiceController do
           .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
           .and_return(false)
         get :openable, pid: druid, format: :json
-        expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
       end
     end
@@ -65,7 +61,6 @@ describe WorkflowServiceController do
           .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
           .and_return(true)
         get :openable, pid: druid, format: :json
-        expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
       end
     end
@@ -81,7 +76,6 @@ describe WorkflowServiceController do
           .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
           .and_return(true)
         get :openable, pid: druid, format: :json
-        expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
       end
     end
@@ -97,7 +91,6 @@ describe WorkflowServiceController do
           .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
           .and_return(false)
         get :openable, pid: druid, format: :json
-        expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
       end
     end
@@ -109,7 +102,6 @@ describe WorkflowServiceController do
           .to receive(:get_lifecycle).with('dor', druid, 'published')
           .and_return(true)
         get :published, pid: druid, format: :json
-        expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
       end
     end
@@ -119,7 +111,6 @@ describe WorkflowServiceController do
           .to receive(:get_lifecycle).with('dor', druid, 'published')
           .and_return(false)
         get :published, pid: druid, format: :json
-        expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
       end
     end
@@ -131,7 +122,6 @@ describe WorkflowServiceController do
           .to receive(:get_lifecycle).with('dor', druid, 'submitted')
           .and_return(true)
         get :submitted, pid: druid, format: :json
-        expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
       end
     end
@@ -141,7 +131,6 @@ describe WorkflowServiceController do
           .to receive(:get_lifecycle).with('dor', druid, 'submitted')
           .and_return(false)
         get :submitted, pid: druid, format: :json
-        expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
       end
     end
@@ -153,7 +142,6 @@ describe WorkflowServiceController do
           .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
           .and_return(true)
         get :accessioned, pid: druid, format: :json
-        expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
       end
     end
@@ -163,7 +151,6 @@ describe WorkflowServiceController do
           .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
           .and_return(false)
         get :accessioned, pid: druid, format: :json
-        expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
       end
     end
