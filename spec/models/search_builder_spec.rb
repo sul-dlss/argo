@@ -44,5 +44,16 @@ RSpec.describe SearchBuilder do
       expect(subject.processor_chain
         .count { |x| x == :add_date_field_queries }).to eq 1
     end
+    it 'contains add_profile_queries once' do
+      expect(subject.processor_chain)
+        .to include :add_profile_queries
+      expect(subject.processor_chain
+        .count { |x| x == :add_profile_queries }).to eq 1
+      new_search = described_class.new(subject.processor_chain, context)
+      expect(new_search.processor_chain)
+        .to include :add_profile_queries
+      expect(subject.processor_chain
+        .count { |x| x == :add_profile_queries }).to eq 1
+    end
   end
 end
