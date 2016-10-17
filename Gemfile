@@ -16,6 +16,7 @@ gem 'jqgrid-jquery-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-validation-rails'
+gem 'linkeddata', '~> 1.99' # pinned for faster dependency resolution
 gem 'mysql2', '~> 0.3.2'    # Temporary fix for mysql2/rails incompatibility, see https://github.com/brianmario/mysql2/issues/675
 gem 'net-sftp'
 gem 'newrelic_rpm'
@@ -23,8 +24,14 @@ gem 'nokogiri', '~> 1.6'
 gem 'prawn', '~> 1'
 gem 'prawn-table'
 gem 'rack-webauth', git: 'https://github.com/nilclass/rack-webauth.git'
-gem 'rails', '~> 4.0' # specifying because we expect a major vers upgrade to break things
+gem 'rails', '4.2.7.1'
+gem 'activemodel', '4.2.7.1'
 gem 'rake'
+gem 'rdf', '~> 1.99' # pinned for faster dependency resolution
+gem 'ebnf', '1.0.0' # 1.0 requires rdf 2.x; bundler bug stops it from resolving correctly
+gem 'rdf-reasoner', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
+gem 'rdf-tabular', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
+gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'retries'
 gem 'ruby-graphviz'
 gem 'ruby-prof'
@@ -36,7 +43,7 @@ gem 'whenever', require: false
 
 # Stanford/Hydra related gems
 gem 'about_page'
-gem 'active-fedora'
+gem 'active-fedora', '~> 8.2'
 gem 'blacklight', '~> 5.18'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '>= 5.11.1', '< 6'

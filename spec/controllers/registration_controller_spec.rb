@@ -5,7 +5,6 @@ describe RegistrationController, :type => :controller do
     @item = double(Dor::Item)
     @current_user = mock_user(is_admin?: true)
     allow(controller).to receive(:current_user).and_return(@current_user)
-    allow(Dor::Item).to receive(:find).and_return(@item)
   end
 
   describe 'rights_list' do

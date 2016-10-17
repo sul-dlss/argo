@@ -110,7 +110,7 @@ describe DorController, :type => :controller do
       log_in_as_mock_user(subject)
       mock_item = double()
       expect(mock_item).to receive(:publish_metadata_remotely)
-      allow(Dor::Item).to receive(:find).and_return(mock_item)
+      allow(Dor).to receive(:find).and_return(mock_item)
       get :republish, :pid => 'druid:123'
       expect(response).to have_http_status(:found)
     end
