@@ -29,3 +29,21 @@
     <%= render partial: 'table_row',  collection: @presenter.content_type, as: :item %>
   </table>
 </div>
+
+<div id='rights-information'>
+  <h4>Rights information</h4>
+  <table class='table table-fixed-layout'>
+    <tr>
+      <td><h5>Use & Reproduction</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.use_statement, as: :item %>
+    <tr>
+      <td><h5>Copyright</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.copyright, as: :item %>
+    <tr>
+      <td><h5>License</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.use_license_machine, as: :item %>
+  </table>
+</div>

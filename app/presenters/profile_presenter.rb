@@ -27,4 +27,16 @@ class ProfilePresenter
   def content_type
     aggregations['content_type_ssim'].items
   end
+
+  def use_statement
+    aggregations['use_statement_ssim'].items
+  end
+
+  def copyright
+    aggregations['copyright_ssim'].items
+  end
+
+  def use_license_machine
+    aggregations['use_license_machine_ssi'].items
+  end
 end

@@ -48,4 +48,19 @@ describe 'Profile' do
       end
     end
   end
+  describe 'Rights information' do
+    it 'lists rights information and counts' do
+      visit profile_index_path f: { objectType_ssim: ['item'] }
+      within '#rights-information' do
+        expect(page).to have_css 'h4', text: 'Rights information'
+        expect(page).to have_css 'h5', text: 'Use & Reproduction'
+        expect(page).to have_css 'h5', text: 'Copyright'
+        expect(page).to have_css 'h5', text: 'License'
+        expect(page).to have_css 'td:nth-child(1)', text: /govinfolib@lists.stanford.edu/
+        expect(page).to have_css 'td:nth-child(2)', text: '3'
+        expect(page).to have_css 'td:nth-child(1)', text: 'Copyright © Stanford University. All Rights Reserved.'
+        expect(page).to have_css 'td:nth-child(2)', text: '1'
+      end
+    end
+  end
 end
