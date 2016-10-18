@@ -1,0 +1,31 @@
+<% @presenter = ProfilePresenter.new(@response) %>
+
+<h3>Profile</h3>
+
+<div id="admin-policies">
+  <h4>Admin Policies</h4>
+  <table class='table table-fixed-layout'>
+    <%= render partial: 'table_row',  collection: @presenter.apo_titles, as: :item %>
+  </table>
+</div>
+
+<div id="collection">
+  <h4>Collection</h4>
+  <table class='table table-fixed-layout'>
+    <%= render partial: 'table_row',  collection: @presenter.collection_titles, as: :item %>
+  </table>
+</div>
+
+<div id='rights'>
+  <h4>Rights</h4>
+  <table class='table table-fixed-layout'>
+    <%= render partial: 'table_row',  collection: @presenter.rights_descriptions, as: :item %>
+  </table>
+</div>
+
+<div id='contents'>
+  <h4>Contents</h4>
+  <table class='table table-fixed-layout'>
+    <%= render partial: 'table_row',  collection: @presenter.content_type, as: :item %>
+  </table>
+</div>

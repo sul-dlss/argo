@@ -7,6 +7,8 @@ Argo::Application.routes.draw do
   end
 
   Blacklight.add_routes(self, :except => [:catalog])
+  resources :profile, only: [:index]
+
   # Catalog stuff.
   match 'view/opensearch', :to => 'catalog#opensearch', :via => [:get, :post]
   match 'view/citation',   :to => 'catalog#citation',   :via => [:get, :post]

@@ -20,7 +20,8 @@ module ApplicationHelper
     [
       ViewSwitcher.new(:catalog, :catalog_index_url),
       ViewSwitcher.new(:report, :report_url),
-      ViewSwitcher.new(:workflow_grid, :report_workflow_grid_url)
+      ViewSwitcher.new(:workflow_grid, :report_workflow_grid_url),
+      ViewSwitcher.new(:profile, :profile_index_url)
     ]
   end
 
@@ -46,6 +47,12 @@ module ApplicationHelper
   # @return [Boolean]
   def workflow_grid_view?(params)
     params['controller'] == 'report' && params['action'] == 'workflow_grid'
+  end
+
+  ##
+  # @return [Boolean]
+  def profile_view?(params)
+    params['controller'] == 'profile' && params['action'] == 'index'
   end
 
   ##
