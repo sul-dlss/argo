@@ -23,14 +23,23 @@ describe Argo::ProfileQueries do
         'content_type_ssim',
         'use_statement_ssim',
         'copyright_ssim',
-        'use_license_machine_ssi'
+        'use_license_machine_ssi',
+        'sw_format_ssim',
+        'sw_language_ssim',
+        'topic_ssim',
+        'sw_subject_geographic_ssim',
+        'sw_subject_temporal_ssim',
+        'sw_genre_ssim'
       ]
       expect(facet_fields).to include(*required_fields)
     end
     it 'adds in requred stats fields' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
+      stats_fields = solr_parameters['stats.field']
+      required_fields = ['sw_pub_date_facet_ssi']
       expect(solr_parameters['stats']).to be true
+      expect(stats_fields).to include(*required_fields)
     end
   end
   context 'in another Controller' do

@@ -39,4 +39,38 @@ class ProfilePresenter
   def use_license_machine
     aggregations['use_license_machine_ssi'].items
   end
+
+  def sw_resource_type
+    aggregations['sw_format_ssim'].items
+  end
+
+  def sw_date
+    stats_field['sw_pub_date_facet_ssi']
+  end
+
+  def sw_language
+    aggregations['sw_language_ssim'].items
+  end
+
+  def sw_topic
+    aggregations['topic_ssim'].items
+  end
+
+  def sw_region
+    aggregations['sw_subject_geographic_ssim'].items
+  end
+
+  def sw_era
+    aggregations['sw_subject_temporal_ssim'].items
+  end
+
+  def sw_genre
+    aggregations['sw_genre_ssim'].items
+  end
+
+  private
+
+  def stats_field
+    response['stats']['stats_fields']
+  end
 end

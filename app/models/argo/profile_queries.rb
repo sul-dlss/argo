@@ -15,7 +15,7 @@ module Argo
       solr_parameters['stats'] = true
       solr_parameters['stats.field'] ||= []
       # Use this paradigm to compute needed statistics
-      # solr_parameters['stats.field'] << 'published_dttsim'
+      solr_parameters['stats.field'] << 'sw_pub_date_facet_ssi'
       solr_parameters
     end
   end
