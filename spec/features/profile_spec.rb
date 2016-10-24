@@ -88,4 +88,18 @@ describe 'Profile' do
       end
     end
   end
+  describe 'Mods Values (summary)' do
+    it 'lists title and counts' do
+      visit profile_index_path f: { exploded_tag_ssim: ['Project'] }
+      within '#mods-values-summary' do
+        expect(page).to have_css 'h4', text: 'MODS Values (summary)'
+        expect(page).to have_css 'h5', text: 'title'
+        expect(page).to have_css 'h5', text: 'creator'
+        expect(page).to have_css 'td:nth-child(1)', text: 'has value'
+        expect(page).to have_css 'td:nth-child(2)', text: '12'
+        expect(page).to have_css 'td:nth-child(1)', text: 'value missing'
+        expect(page).to have_css 'td:nth-child(2)', text: '10'
+      end
+    end
+  end
 end

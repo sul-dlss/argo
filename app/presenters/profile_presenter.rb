@@ -45,7 +45,7 @@ class ProfilePresenter
   end
 
   def sw_date
-    stats_field['sw_pub_date_facet_ssi']
+    [stats_field['sw_pub_date_facet_ssi']]
   end
 
   def sw_language
@@ -66,6 +66,14 @@ class ProfilePresenter
 
   def sw_genre
     aggregations['sw_genre_ssim'].items
+  end
+
+  def mods_title
+    [stats_field['title_ssi']]
+  end
+
+  def mods_creator
+    [stats_field['creator_ssi']]
   end
 
   private

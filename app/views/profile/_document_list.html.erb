@@ -58,14 +58,7 @@
     <tr>
       <td><h5>Date</h5></td><td></td>
     </tr>
-    <tr>
-      <td>has value</td>
-      <td><%= @presenter.sw_date['count'] %></td>
-    </tr>
-    <tr>
-      <td>value missing</td>
-      <td><%= @presenter.sw_date['missing'] %></td>
-    </tr>
+    <%= render partial: 'table_row_stats', collection: @presenter.sw_date, as: :item %>
     <tr>
       <td><h5>Language</h5></td><td></td>
     </tr>
@@ -86,5 +79,19 @@
       <td><h5>Genre</h5></td><td></td>
     </tr>
     <%= render partial: 'table_row',  collection: @presenter.sw_genre, as: :item %>
+  </table>
+</div>
+
+<div id='mods-values-summary'>
+  <h4>MODS Values (summary)</h4>
+  <table class='table table-fixed-layout'>
+    <tr>
+      <td><h5>title</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row_stats', collection: @presenter.mods_title, as: :item %>
+    <tr>
+      <td><h5>creator</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row_stats',  collection: @presenter.mods_creator, as: :item %>
   </table>
 </div>

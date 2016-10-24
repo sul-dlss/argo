@@ -37,7 +37,7 @@ describe Argo::ProfileQueries do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
       stats_fields = solr_parameters['stats.field']
-      required_fields = ['sw_pub_date_facet_ssi']
+      required_fields = %w(sw_pub_date_facet_ssi title_ssi creator_ssi)
       expect(solr_parameters['stats']).to be true
       expect(stats_fields).to include(*required_fields)
     end

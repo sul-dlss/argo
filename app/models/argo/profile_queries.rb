@@ -16,6 +16,8 @@ module Argo
       solr_parameters['stats.field'] ||= []
       # Use this paradigm to compute needed statistics
       solr_parameters['stats.field'] << 'sw_pub_date_facet_ssi'
+      solr_parameters['stats.field'] << 'title_ssi'
+      solr_parameters['stats.field'] << 'creator_ssi'
       solr_parameters
     end
   end
