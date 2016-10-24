@@ -23,6 +23,24 @@
   </table>
 </div>
 
+<div id='number-of-items'>
+  <h4>Number of items</h4>
+  <table class='table table-fixed-layout'>
+    <% @presenter.type_status_pivot.each do |facet_field| %>
+      <tr>
+        <td><%= facet_field['value'] %></td><td><%= facet_field['count'] %>
+      </tr>
+      <% if facet_field['pivot'].present? %>
+        <% facet_field['pivot'].each do |pivot| %>
+          <tr>
+            <td class='indented'><%= pivot['value'] %></td><td><%= pivot['count'] %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+
 <div id='contents'>
   <h4>Contents</h4>
   <table class='table table-fixed-layout'>

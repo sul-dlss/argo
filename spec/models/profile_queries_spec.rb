@@ -41,6 +41,13 @@ describe Argo::ProfileQueries do
       expect(solr_parameters['stats']).to be true
       expect(stats_fields).to include(*required_fields)
     end
+    it 'adds in required pivot fields' do
+      catalog_config = CatalogController.blacklight_config.deep_copy
+      solr_parameters = subject.add_profile_queries(catalog_config)
+      pivot_fields = solr_parameters['facet.pivot']
+      required_fields = ["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+      expect(pivot_fields).to include(*required_fields)
+    end
   end
   context 'in another Controller' do
     let(:blacklight_params) { { 'controller' => 'catalog' } }

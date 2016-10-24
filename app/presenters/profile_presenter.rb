@@ -68,9 +68,17 @@ class ProfilePresenter
     aggregations['sw_genre_ssim'].items
   end
 
+  def type_status_pivot
+    pivots_field["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+  end
+
   private
 
   def stats_field
     response['stats']['stats_fields']
+  end
+
+  def pivots_field
+    response['facet_counts']['facet_pivot']
   end
 end

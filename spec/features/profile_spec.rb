@@ -88,4 +88,16 @@ describe 'Profile' do
       end
     end
   end
+  describe 'Number of items' do
+    it 'lists object type and pivot facets' do
+      visit profile_index_path f: { exploded_tag_ssim: ['Project'] }
+      within '#number-of-items' do
+        expect(page).to have_css 'h4', text: 'Number of items'
+        expect(page).to have_css 'td:nth-child(1)', text: 'item'
+        expect(page).to have_css 'td:nth-child(2)', text: '6'
+        expect(page).to have_css 'td.indented:nth-child(1)', text: 'Unknown Status'
+        expect(page).to have_css 'td:nth-child(2)', text: '4'
+      end
+    end
+  end
 end
