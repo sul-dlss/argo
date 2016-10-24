@@ -29,3 +29,69 @@
     <%= render partial: 'table_row',  collection: @presenter.content_type, as: :item %>
   </table>
 </div>
+
+<div id='rights-information'>
+  <h4>Rights information</h4>
+  <table class='table table-fixed-layout'>
+    <tr>
+      <td><h5>Use & Reproduction</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.use_statement, as: :item %>
+    <tr>
+      <td><h5>Copyright</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.copyright, as: :item %>
+    <tr>
+      <td><h5>License</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.use_license_machine, as: :item %>
+  </table>
+</div>
+
+<div id='searchworks-facet-values'>
+  <h4>SearchWorks facet values</h4>
+  <table class='table table-fixed-layout'>
+    <tr>
+      <td><h5>Resource Type</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.sw_resource_type, as: :item %>
+    <tr>
+      <td><h5>Date</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row_stats', collection: @presenter.sw_date, as: :item %>
+    <tr>
+      <td><h5>Language</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.sw_language, as: :item %>
+    <tr>
+      <td><h5>Topic</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.sw_topic, as: :item %>
+    <tr>
+      <td><h5>Region</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.sw_region, as: :item %>
+    <tr>
+      <td><h5>Era</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.sw_era, as: :item %>
+    <tr>
+      <td><h5>Genre</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row',  collection: @presenter.sw_genre, as: :item %>
+  </table>
+</div>
+
+<div id='mods-values-summary'>
+  <h4>MODS Values (summary)</h4>
+  <table class='table table-fixed-layout'>
+    <tr>
+      <td><h5>title</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row_stats', collection: @presenter.mods_title, as: :item %>
+    <tr>
+      <td><h5>creator</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row_stats',  collection: @presenter.mods_creator, as: :item %>
+  </table>
+</div>
