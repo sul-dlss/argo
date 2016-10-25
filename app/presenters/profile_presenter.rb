@@ -72,6 +72,18 @@ class ProfilePresenter
     pivots_field["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
   end
 
+  def content_file_count
+    stats_field['content_file_count_itsi']
+  end
+
+  def shelved_content_file_count
+    stats_field['shelved_content_file_count_itsi']
+  end
+
+  def preserved_file_size
+    stats_field['preserved_size_dbtsi']
+  end
+
   private
 
   def stats_field

@@ -45,6 +45,8 @@ describe 'Profile' do
         expect(page).to have_css 'h4', text: 'Contents'
         expect(page).to have_css 'td:nth-child(1)', text: 'image'
         expect(page).to have_css 'td:nth-child(2)', text: '3'
+        expect(page).to have_css 'td:nth-child(1)', text: 'Preserved file size'
+        expect(page).to have_css 'td:nth-child(2)', text: '160 MB'
       end
     end
   end

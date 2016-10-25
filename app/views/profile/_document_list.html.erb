@@ -45,6 +45,18 @@
   <h4>Contents</h4>
   <table class='table table-fixed-layout'>
     <%= render partial: 'table_row',  collection: @presenter.content_type, as: :item %>
+    <tr>
+      <td>Total files</td>
+      <td><%= @presenter.content_file_count['sum'].to_i %></td>
+    </tr>
+    <tr>
+      <td class='indented'>Shelved</td>
+      <td><%= @presenter.shelved_content_file_count['sum'].to_i %></td>
+    </tr>
+    <tr>
+      <td>Preserved file size</td>
+      <td><%= number_to_human_size(@presenter.preserved_file_size['sum']) %></td>
+    </tr>
   </table>
 </div>
 
