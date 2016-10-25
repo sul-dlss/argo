@@ -28,6 +28,20 @@ describe 'Profile' do
       end
     end
   end
+  describe 'Discovery' do
+    it 'lists discovery and counts' do
+      visit profile_index_path f: { objectType_ssim: ['item'] }
+      within '#discovery' do
+        expect(page).to have_css 'h4', text: 'Discovery'
+        expect(page).to have_css 'td:nth-child(1)', text: 'Published to PURL'
+        expect(page).to have_css 'td:nth-child(2)', text: '0'
+        expect(page).to have_css 'td:nth-child(1)', text: 'SEARCHWORKS'
+        expect(page).to have_css 'h5', text: 'Catkeys'
+        expect(page).to have_css 'td:nth-child(1)', text: 'has value'
+        expect(page).to have_css 'td:nth-child(2)', text: '2'
+      end
+    end
+  end
   describe 'Rights' do
     it 'lists rights and counts' do
       visit profile_index_path f: { objectType_ssim: ['item'] }

@@ -16,6 +16,31 @@
   </table>
 </div>
 
+<div id='discovery'>
+  <h4>Discovery</h4>
+  <table class='table table-fixed-layout'>
+    <tr>
+      <td>Published to PURL</td>
+      <td><%= @presenter.published_to_purl %>
+    </tr>
+    <tr>
+      <td><h5>Released to</h5></td><td></td>
+    </tr>
+    <%= render partial: 'table_row', collection: @presenter.released_to, as: :item %>
+    <tr>
+      <td><h5>Catkeys</h5></td><td></td>
+    </tr>
+    <tr>
+      <td>has value</td>
+      <td><%= @presenter.catkey['count'] %></td>
+    </tr>
+    <tr>
+      <td>value missing</td>
+      <td><%= @presenter.catkey['missing'] %></td>
+    </tr>
+  </table>
+</div>
+
 <div id='rights'>
   <h4>Rights</h4>
   <table class='table table-fixed-layout'>
@@ -26,18 +51,7 @@
 <div id='number-of-items'>
   <h4>Number of items</h4>
   <table class='table table-fixed-layout'>
-    <% @presenter.type_status_pivot.each do |facet_field| %>
-      <tr>
-        <td><%= facet_field['value'] %></td><td><%= facet_field['count'] %>
-      </tr>
-      <% if facet_field['pivot'].present? %>
-        <% facet_field['pivot'].each do |pivot| %>
-          <tr>
-            <td class='indented'><%= pivot['value'] %></td><td><%= pivot['count'] %></td>
-          </tr>
-        <% end %>
-      <% end %>
-    <% end %>
+    <%= render partial: 'table_row_pivot', collection: @presenter.type_status_pivot, as: :facet_field %>
   </table>
 </div>
 

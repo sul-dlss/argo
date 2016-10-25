@@ -19,9 +19,13 @@ module Argo
       solr_parameters['stats.field'] << 'content_file_count_itsi'
       solr_parameters['stats.field'] << 'shelved_content_file_count_itsi'
       solr_parameters['stats.field'] << 'preserved_size_dbtsi'
+      solr_parameters['stats.field'] << 'catkey_id_ssim'
       # Use this paradigm to add pivot facets
       solr_parameters['facet.pivot'] ||= []
       solr_parameters['facet.pivot'] << "#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"
+      # Use this paradigm to add facet queries
+      solr_parameters['facet.query'] ||= []
+      solr_parameters['facet.query'] << '-rights_primary_ssi:"dark" AND published_dttsim:*'
       solr_parameters
     end
   end
