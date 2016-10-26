@@ -11,7 +11,7 @@ class ReportController < CatalogController
   end
 
   def bulk
-    (@response, @document_list) = search_results(params, search_params_logic)
+    (@response, @document_list) = search_results(params)
   end
 
   def data
@@ -81,7 +81,7 @@ class ReportController < CatalogController
   end
 
   def workflow_grid
-    (@response, @document_list) = search_results(params, search_params_logic)
+    (@response, @document_list) = search_results(params)
 
     if request.xhr?
       render :partial => 'workflow_grid'
