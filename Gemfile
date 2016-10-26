@@ -44,7 +44,7 @@ gem 'whenever', require: false
 # Stanford/Hydra related gems
 gem 'about_page'
 gem 'active-fedora', '~> 8.2'
-gem 'blacklight', '~> 5.18'
+gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '>= 5.14.0', '< 6'
 gem 'is_it_working-cbeer'
