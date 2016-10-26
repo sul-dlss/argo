@@ -39,6 +39,7 @@ describe RegistrationController, :type => :controller do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
+      allow(@item).to receive(:default_rights).and_return 'stanford'
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?('Stanford (APO default)')).to eq(true)
     end
@@ -74,6 +75,7 @@ describe RegistrationController, :type => :controller do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
+      allow(@item).to receive(:default_rights).and_return nil
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?('Stanford (APO default)')).to eq(false)
     end
@@ -109,6 +111,7 @@ describe RegistrationController, :type => :controller do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
+      allow(@item).to receive(:default_rights).and_return 'world'
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?('World (APO default)')).to eq(true)
     end
@@ -144,6 +147,7 @@ describe RegistrationController, :type => :controller do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
+      allow(@item).to receive(:default_rights).and_return 'dark'
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?('Dark (Preserve Only) (APO default)')).to eq(true)
     end
@@ -179,6 +183,7 @@ describe RegistrationController, :type => :controller do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
+      allow(@item).to receive(:default_rights).and_return 'none'
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?('Citation Only (APO default)')).to eq(true)
     end
@@ -192,6 +197,7 @@ describe RegistrationController, :type => :controller do
       object_rights = double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
       allow(@item).to receive(:defaultObjectRights).and_return object_rights
+      allow(@item).to receive(:default_rights).and_return nil
       get 'rights_list', :apo_id => 'abc', :format => :xml
       expect(response.body.include?('World (APO default)')).to eq(false)
       expect(response.body.include?('Stanford (APO default)')).to eq(false)
