@@ -18,7 +18,8 @@ class CatalogController < ApplicationController
 
     config.document_solr_request_handler = '/document'
 
-    config.document_presenter_class = ArgoPresenter
+    config.index.document_presenter_class = ArgoIndexPresenter
+    config.show.document_presenter_class = ArgoShowPresenter
 
     config.index.display_type_field = 'content_type_ssim'
 
