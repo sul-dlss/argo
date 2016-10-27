@@ -10,10 +10,12 @@ module Argo
       solr_parameters['facet.field'] ||= []
       solr_parameters['facet.field'] << SolrDocument::FIELD_APO_TITLE.to_s
       solr_parameters['facet.field'] << SolrDocument::SolrDocument::FIELD_COLLECTION_TITLE.to_s
+      solr_parameters['facet.field'] << 'use_statement_ssim'
+      solr_parameters['facet.field'] << 'copyright_ssim'
       solr_parameters['stats'] = true
       solr_parameters['stats.field'] ||= []
       # Use this paradigm to compute needed statistics
-      # solr_parameters['stats.field'] << 'published_dttsim'
+      solr_parameters['stats.field'] << 'sw_pub_date_facet_ssi'
       solr_parameters
     end
   end
