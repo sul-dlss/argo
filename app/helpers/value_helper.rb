@@ -29,7 +29,7 @@ module ValueHelper
     links = ''
     target_id.split(',').each do |targ|
       target_name = label_for_druid(targ)
-      links += link_to target_name, catalog_path(targ.split(/\//).last)
+      links += link_to target_name, solr_document_path(targ.split(/\//).last)
       links += '<br/>'
     end
     links.html_safe
@@ -52,7 +52,7 @@ module ValueHelper
   # @see Blacklight::DocumentPresenter#get_field_values
   # @return [String]
   def link_to_admin_policy(args)
-    link_to args[:document].apo_title, catalog_path(args[:document].apo_pid)
+    link_to args[:document].apo_title, solr_document_path(args[:document].apo_pid)
   end
 
   ##
@@ -64,7 +64,7 @@ module ValueHelper
     args[:value].map.with_index do |val, i|
       link_to(
         args[:document].collection_titles[i],
-        catalog_path(val.gsub('info:fedora/', ''))
+        solr_document_path(val.gsub('info:fedora/', ''))
       )
     end.join('<br>').html_safe
   end

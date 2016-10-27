@@ -4,7 +4,7 @@
       External File
     </span>
     <%= external_file['fileId'] -%>
-    (from item '<%= link_to external_file['objectId'], catalog_path(external_file['objectId']) unless external_file['objectId'].blank? -%>',
+    (from item '<%= link_to external_file['objectId'], solr_document_path(external_file['objectId']) unless external_file['objectId'].blank? -%>',
      resource '<%= external_file['resourceId'] -%>')
   </li>
 <% end %>
