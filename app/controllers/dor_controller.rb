@@ -51,7 +51,7 @@ class DorController < ApplicationController
   end
 
   def republish
-    obj = Dor::Item.find(params[:pid])
+    obj = Dor.find(params[:pid])
     obj.publish_metadata_remotely
     redirect_to catalog_path(params[:pid]), notice: 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
   end

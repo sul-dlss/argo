@@ -45,7 +45,14 @@ def instantiate_fixture(druid, klass = ActiveFedora::Base)
   fname = druid_to_path(druid)
   Rails.logger.debug "instantiate_fixture(#{druid}) ==> #{fname}"
   return nil if fname.nil?
-  item_from_foxml(File.read(fname), klass)
+
+  item = item_from_foxml(File.read(fname), klass)
+
+  if klass == ActiveFedora::Base
+    item.adapt_to_cmodel
+  else
+    item
+  end
 end
 
 # Checks for pending migrations before tests are run.
@@ -113,8 +120,24 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
         result.datastreams[dsid] = ds.class.from_xml(ds, stream)
       end
     rescue
-      # rescue if 1 datastream failed
+      # TODO: (?) rescue if 1 datastream failed
     end
+  end
+
+  # stub item and datastream repo access methods
+  result.datastreams.each_pair do |dsid, ds|
+    # if ds.is_a?(ActiveFedora::OmDatastream) && !ds.is_a?(Dor::WorkflowDs)
+    #   ds.instance_eval do
+    #     def content       ; self.ng_xml.to_s                 ; end
+    #     def content=(val) ; self.ng_xml = Nokogiri::XML(val) ; end
+    #   end
+    # end
+    ds.instance_eval do
+      def save ; true ; end
+    end
+  end
+  result.instance_eval do
+    def save ; true ; end
   end
   result
 end

@@ -149,8 +149,8 @@ You cannot just load records twice and overwrite.  The repo namespace has been p
 For example, using `rails console` to target one ID, or five:
 
 ```ruby
-Dor::Item.find("druid:pv820dk6668").destroy
-%w[pv820dk6668 rn653dy9317 xb482bw3979 hj185vb7593 hv992ry2431].each{ |pid| Dor::Item.find("druid:#{pid}").destroy }
+Dor.find("druid:pv820dk6668").destroy
+%w[pv820dk6668 rn653dy9317 xb482bw3979 hj185vb7593 hv992ry2431].each{ |pid| Dor.find("druid:#{pid}").destroy }
 ```
 
 ## Internals
