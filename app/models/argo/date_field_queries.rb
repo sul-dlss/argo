@@ -11,7 +11,7 @@ module Argo
       solr_parameters[:fq] ||= []
       blacklight_params['f'].each do |query|
         if query[0] =~ /.+_dt/
-          solr_parameters[:fq].delete("{!raw f=#{query[0]}}#{query[1][0]}")
+          solr_parameters[:fq].delete("{!term f=#{query[0]}}#{query[1][0]}")
           solr_parameters[:fq] << "#{query[0]}:#{query[1][0]}"
         end
       end
