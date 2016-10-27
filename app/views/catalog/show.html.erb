@@ -1,4 +1,4 @@
-<% @page_title = t('blacklight.search.show.title', :document_title => truncate(strip_tags(document_heading), length: 50), :application_name => application_name) %>
+<% @page_title = t('blacklight.search.show.title', :document_title => truncate(strip_tags(document_show_html_title), length: 50), :application_name => application_name) %>
 <% content_for(:head) { render_link_rel_alternates } -%>
 <div id="sidebar" class="col-md-3 col-sm-4">
   <%= render_document_sidebar_partial %>

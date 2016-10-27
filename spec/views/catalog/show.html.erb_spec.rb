@@ -1,24 +1,20 @@
 require 'spec_helper'
 
 RSpec.describe 'catalog/show.html.erb' do
-  let(:document) do
-    SolrDocument.new(
-      id: 1,
-      dc_title_ssi: 'Long title that should be truncated at 50 characters'
-    )
-  end
+  let(:document) { SolrDocument.new :id => 'xyz', :format => 'a' }
+  let(:title) { 'Long title that should be truncated at 50 characters' }
+  let(:blacklight_config) { Blacklight::Configuration.new }
   before(:each) do
-    @config = Blacklight::Configuration.new do |config|
-      config.index.title_field = 'dc_title_ssi'
-    end
-    allow(view).to receive(:blacklight_config).and_return(@config)
-    assign(:document, document)
+    assign :document, document
+    allow(view).to receive(:blacklight_config).and_return(blacklight_config)
   end
   it 'assigns page title, truncating it' do
+    expect(view).to receive(:document_show_html_title).and_return(title)
     expect(view).to receive(:render_document_sidebar_partial)
     expect(view).to receive(:item_page_entry_info)
     expect(view).to receive(:render_document_partial).twice
     expect(view).to receive(:current_search_session)
+    expect(view).to receive(:should_render_field?).at_least(:once).and_return false
     render
     expect(view.instance_variable_get(:@page_title))
       .to eq 'Long title that should be truncated at 50 chara... - Argo'
