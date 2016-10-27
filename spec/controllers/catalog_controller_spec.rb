@@ -8,7 +8,6 @@ describe CatalogController, :type => :controller do
     @item = instantiate_fixture(@druid, Dor::Item)
     @user = User.find_or_create_by_webauth double('WebAuth', :login => 'sunetid', :logged_in? => true, :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => '')
     allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
-    allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
   end
 
   shared_examples 'APO-independent auth' do
