@@ -264,7 +264,7 @@ ul li{
 </div>
 <div class="bulk_operation" id="rights" name="rights">
   <h1>Set object rights</h1>
-  <%=select_tag :rights_select, options_for_select(['world','stanford', 'none', 'dark'])%>
+  <%=select_tag :rights_select, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS)%>
   <span class="bulk_button" id="rights_button" name="rights_button" onclick="fetch_druids(set_rights);$('#rights').hide(400);">Set rights</span>
 </div>
 <span class="bulk_button" id="stop" class="stop_button" style="display:none" name="stop" onclick="stop_all();">Stop</span>

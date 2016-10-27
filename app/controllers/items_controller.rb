@@ -573,11 +573,8 @@ class ItemsController < ApplicationController
   end
 
   def set_rights
-    unless %w(stanford world none dark).include? params[:rights]
-      render :status => :forbidden, :text => 'Invalid new rights setting.'
-      return
-    end
     @object.set_read_rights(params[:rights])
+
     respond_to do |format|
       if params[:bulk]
         format.html {render :status => :ok, :text => 'Rights updated.'}
@@ -585,7 +582,10 @@ class ItemsController < ApplicationController
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }
       end
     end
+  rescue ArgumentError
+    render :status => :forbidden, :text => 'Invalid new rights setting.'
   end
+
   # set the content type in the content metadata
   def set_content_type
     unless Constants::CONTENT_TYPES.include? params[:new_content_type]

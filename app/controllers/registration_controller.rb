@@ -62,29 +62,8 @@ class RegistrationController < ApplicationController
 
   def rights_list
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
-    adm_xml = apo_object.defaultObjectRights.ng_xml
 
-    # FIXME: should not be in Controller
-    # figure out what the default option (if any) should be
-    default_opt = nil
-    if !adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/world').empty?
-      # readable by world translates to World
-      default_opt = 'world'
-    elsif !adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/group[text()=\'Stanford\' or text()=\'stanford\']').empty?
-      # TODO: this is stupid, should handle "stanford" regardless of the string's case, but the xpath parser doesn't support the lower-case() fn
-      # readable by stanford translates to Stanford
-      # TODO: found something indicating that xpath might support regex
-      default_opt = 'stanford'
-    elsif !adm_xml.xpath('//rightsMetadata/access[@type=\'read\']/machine/none').empty?
-      # readable by none is either Citation Only (formerly "None") or Dark
-      if !adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/world').empty?
-        # discoverable by world but readable by none translates to Citation Only/none
-        default_opt = 'none'
-      elsif !adm_xml.xpath('//rightsMetadata/access[@type=\'discover\']/machine/none').empty?
-        # discoverable by none and readable by none translates to Dark
-        default_opt = 'dark'
-      end
-    end
+    default_opt = apo_object.default_rights
 
     # iterate through the default version of the rights list.  if we found a default option
     # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
