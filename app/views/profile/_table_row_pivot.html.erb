@@ -1,0 +1,10 @@
+<tr>
+  <td><%= facet_field['value'] %></td><td><%= facet_field['count'] %>
+</tr>
+<% if facet_field['pivot'].present? %>
+  <% facet_field['pivot'].each do |pivot| %>
+    <tr>
+      <td class='indented'><%= pivot['value'] %></td><td><%= pivot['count'] %></td>
+    </tr>
+  <% end %>
+<% end %>

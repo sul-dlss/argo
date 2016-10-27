@@ -68,9 +68,45 @@ class ProfilePresenter
     aggregations['sw_genre_ssim'].items
   end
 
+  def type_status_pivot
+    pivots_field["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+  end
+
+  def content_file_count
+    stats_field['content_file_count_itsi']
+  end
+
+  def shelved_content_file_count
+    stats_field['shelved_content_file_count_itsi']
+  end
+
+  def preserved_file_size
+    stats_field['preserved_size_dbtsi']
+  end
+
+  def published_to_purl
+    facet_query_field['-rights_primary_ssi:"dark" AND published_dttsim:*']
+  end
+
+  def released_to
+    aggregations['released_to_ssim'].items
+  end
+
+  def catkey
+    stats_field['catkey_id_ssim']
+  end
+
   private
 
   def stats_field
     response['stats']['stats_fields']
+  end
+
+  def pivots_field
+    response['facet_counts']['facet_pivot']
+  end
+
+  def facet_query_field
+    response['facet_counts']['facet_queries']
   end
 end

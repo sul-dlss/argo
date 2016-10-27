@@ -37,9 +37,29 @@ describe Argo::ProfileQueries do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
       stats_fields = solr_parameters['stats.field']
-      required_fields = ['sw_pub_date_facet_ssi']
+      required_fields = %w(
+        sw_pub_date_facet_ssi
+        content_file_count_itsi
+        shelved_content_file_count_itsi
+        preserved_size_dbtsi
+        catkey_id_ssim
+      )
       expect(solr_parameters['stats']).to be true
       expect(stats_fields).to include(*required_fields)
+    end
+    it 'adds in required pivot fields' do
+      catalog_config = CatalogController.blacklight_config.deep_copy
+      solr_parameters = subject.add_profile_queries(catalog_config)
+      pivot_fields = solr_parameters['facet.pivot']
+      required_fields = ["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
+      expect(pivot_fields).to include(*required_fields)
+    end
+    it 'adds in required facet queries' do
+      catalog_config = CatalogController.blacklight_config.deep_copy
+      solr_parameters = subject.add_profile_queries(catalog_config)
+      facet_query = solr_parameters['facet.query']
+      required_fields = ['-rights_primary_ssi:"dark" AND published_dttsim:*']
+      expect(facet_query).to include(*required_fields)
     end
   end
   context 'in another Controller' do

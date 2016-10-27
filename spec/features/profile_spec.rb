@@ -28,6 +28,20 @@ describe 'Profile' do
       end
     end
   end
+  describe 'Discovery' do
+    it 'lists discovery and counts' do
+      visit profile_index_path f: { objectType_ssim: ['item'] }
+      within '#discovery' do
+        expect(page).to have_css 'h4', text: 'Discovery'
+        expect(page).to have_css 'td:nth-child(1)', text: 'Published to PURL'
+        expect(page).to have_css 'td:nth-child(2)', text: '0'
+        expect(page).to have_css 'td:nth-child(1)', text: 'SEARCHWORKS'
+        expect(page).to have_css 'h5', text: 'Catkeys'
+        expect(page).to have_css 'td:nth-child(1)', text: 'has value'
+        expect(page).to have_css 'td:nth-child(2)', text: '2'
+      end
+    end
+  end
   describe 'Rights' do
     it 'lists rights and counts' do
       visit profile_index_path f: { objectType_ssim: ['item'] }
@@ -45,6 +59,8 @@ describe 'Profile' do
         expect(page).to have_css 'h4', text: 'Contents'
         expect(page).to have_css 'td:nth-child(1)', text: 'image'
         expect(page).to have_css 'td:nth-child(2)', text: '3'
+        expect(page).to have_css 'td:nth-child(1)', text: 'Preserved file size'
+        expect(page).to have_css 'td:nth-child(2)', text: '160 MB'
       end
     end
   end
@@ -85,6 +101,18 @@ describe 'Profile' do
         expect(page).to have_css 'td:nth-child(2)', text: '1'
         expect(page).to have_css 'td:nth-child(1)', text: 'Bermuda Islands'
         expect(page).to have_css 'td:nth-child(2)', text: '1'
+      end
+    end
+  end
+  describe 'Number of items' do
+    it 'lists object type and pivot facets' do
+      visit profile_index_path f: { exploded_tag_ssim: ['Project'] }
+      within '#number-of-items' do
+        expect(page).to have_css 'h4', text: 'Number of items'
+        expect(page).to have_css 'td:nth-child(1)', text: 'item'
+        expect(page).to have_css 'td:nth-child(2)', text: '6'
+        expect(page).to have_css 'td.indented:nth-child(1)', text: 'Unknown Status'
+        expect(page).to have_css 'td:nth-child(2)', text: '4'
       end
     end
   end
