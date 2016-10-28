@@ -39,7 +39,7 @@ module ValueHelper
   end
 
   def value_for_wf_error(args)
-    _wf, step, message = args[:document].get(args[:field]).split(':', 3)
+    _wf, step, message = args[:document].fetch(args[:field], ['::']).first.split(':', 3)
     step + ' : ' + message
   end
 
