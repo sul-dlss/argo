@@ -23,21 +23,6 @@ module ValueHelper
     number_to_human_size(args[:document].preservation_size)
   end
 
-  def value_for_related_druid(predicate, args)
-    target_id = args[:document].get("#{predicate}_ssim")
-    target_name = ''
-    links = ''
-    target_id.split(',').each do |targ|
-      target_name = label_for_druid(targ)
-      links += link_to target_name, solr_document_path(targ.split(/\//).last)
-      links += '<br/>'
-    end
-    links.html_safe
-  rescue StandardError => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
-  end
-
   def value_for_wf_error(args)
     _wf, step, message = args[:document].fetch(args[:field], ['::']).first.split(':', 3)
     step + ' : ' + message
