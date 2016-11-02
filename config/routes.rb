@@ -15,9 +15,6 @@ Argo::Application.routes.draw do
 
   # Catalog stuff.
   match 'view/opensearch', :to => 'catalog#opensearch', :via => [:get, :post]
-  match 'view/citation',   :to => 'catalog#citation',   :via => [:get, :post]
-  match 'view/email',      :to => 'catalog#email',      :via => [:get, :post]
-  match 'view/sms',        :to => 'catalog#sms',        :via => [:get, :post]
   match 'view/facet/:id',  :to => 'catalog#facet', :via => [:get, :post]
   resources :catalog, :path => '/view', :only => [:index, :show, :update]
   match 'view/:id/dc',                :to => 'catalog#dc', :via => [:get, :post], :as => 'dc_aspect_view_catalog'
