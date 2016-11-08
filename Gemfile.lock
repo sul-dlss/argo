@@ -274,7 +274,6 @@ GEM
       domain_name (~> 0.5)
     http_logger (0.5.1)
     i18n (0.7.0)
-    is_it_working-cbeer (1.0.16)
     iso-639 (0.2.8)
     jbuilder (2.6.0)
       activesupport (>= 3.0.0, < 5.1)
@@ -378,6 +377,7 @@ GEM
       activesupport (>= 3.2.18)
       i18n
       nokogiri
+    okcomputer (1.13.0)
     om (3.1.1)
       activemodel
       activesupport
@@ -680,7 +680,6 @@ DEPENDENCIES
   faraday
   honeybadger (~> 2.0)
   http_logger
-  is_it_working-cbeer
   jbuilder (~> 2.0)
   jettywrapper
   jqgrid-jquery-rails
@@ -694,6 +693,7 @@ DEPENDENCIES
   net-sftp
   newrelic_rpm
   nokogiri (~> 1.6)
+  okcomputer
   poltergeist
   prawn (~> 1)
   prawn-table
