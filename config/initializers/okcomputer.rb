@@ -61,9 +61,7 @@ OkComputer::Registry.register 'workflow_url', OkComputer::HttpCheck.new(Settings
 OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(Settings.SURI.URL)
 
 # Stacks
-OkComputer::Registry.register 'stacks_doc_cache_storage_root', OkComputer::DirectoryCheck.new(Settings.STACKS.DOCUMENT_CACHE_STORAGE_ROOT)
 OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.STACKS.LOCAL_WORKSPACE_ROOT)
-OkComputer::Registry.register 'stacks_storage_root', OkComputer::DirectoryCheck.new(Settings.STACKS.STORAGE_ROOT)
 OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.STACKS.HOST}")
 OkComputer::Registry.register 'stacks_file_url', OkComputer::HttpCheck.new(Settings.STACKS_FILE_URL)
 OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(Settings.STACKS_URL)
@@ -96,11 +94,9 @@ OkComputer.make_optional %w(
   normalizer_url
   robot_status_url
   spreadsheet_url
-  stacks_doc_cache_storage_root
   stacks_file_url
   stacks_host
   stacks_local_workspace_root
-  stacks_storage_root
   stacks_thumbnail_url
   suri_url
   workflow_url
