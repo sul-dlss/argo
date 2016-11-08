@@ -65,7 +65,7 @@ group :test, :development do
   gem 'capybara_discoball' # use external server just for capybara; relied on by 'wfs_rails'
   gem 'jettywrapper'
   gem 'http_logger'
-  gem 'rspec-rails', '< 3.5' # rspec 3.5 under ruby 2.2 isn't compatible with the way we mock users in integration tests.
+  gem 'rspec-rails', '~> 3.5'
   gem 'pry-doc'
   gem 'pry-remote'  # allows you to attach remote session to pry
   gem 'wfs_rails', '~> 0.0.2'
