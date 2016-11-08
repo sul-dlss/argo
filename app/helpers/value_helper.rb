@@ -23,23 +23,8 @@ module ValueHelper
     number_to_human_size(args[:document].preservation_size)
   end
 
-  def value_for_related_druid(predicate, args)
-    target_id = args[:document].get("#{predicate}_ssim")
-    target_name = ''
-    links = ''
-    target_id.split(',').each do |targ|
-      target_name = label_for_druid(targ)
-      links += link_to target_name, catalog_path(targ.split(/\//).last)
-      links += '<br/>'
-    end
-    links.html_safe
-  rescue StandardError => e
-    Rails.logger.error e.message
-    Rails.logger.error e.backtrace.join("\n")
-  end
-
   def value_for_wf_error(args)
-    _wf, step, message = args[:document].get(args[:field]).split(':', 3)
+    _wf, step, message = args[:document].fetch(args[:field], ['::']).first.split(':', 3)
     step + ' : ' + message
   end
 
@@ -52,7 +37,7 @@ module ValueHelper
   # @see Blacklight::DocumentPresenter#get_field_values
   # @return [String]
   def link_to_admin_policy(args)
-    link_to args[:document].apo_title, catalog_path(args[:document].apo_pid)
+    link_to args[:document].apo_title, solr_document_path(args[:document].apo_pid)
   end
 
   ##
@@ -64,7 +49,7 @@ module ValueHelper
     args[:value].map.with_index do |val, i|
       link_to(
         args[:document].collection_titles[i],
-        catalog_path(val.gsub('info:fedora/', ''))
+        solr_document_path(val.gsub('info:fedora/', ''))
       )
     end.join('<br>').html_safe
   end

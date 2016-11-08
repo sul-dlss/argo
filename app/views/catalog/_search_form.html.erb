@@ -1,5 +1,5 @@
 <div id="search" class="search">
-  <%= form_tag catalog_index_path, :method => :get, class: 'search-query-form clearfix navbar-form' do %>
+  <%= form_tag search_catalog_path, :method => :get, class: 'search-query-form clearfix navbar-form' do %>
     <h2 class="search sr-only"><%= label_tag(:q, "Search ") %></h2>
     <div class='input-group search-input-group'>
       <%= text_field_tag :q, params[:q], :class => "search_q q form-control" %>

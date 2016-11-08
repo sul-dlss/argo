@@ -6,7 +6,7 @@ end
 
 describe Argo::ProfileQueries do
   subject { TestClass.new }
-  # let(:blacklight_params) { { controller: 'profile' } }
+  let(:blacklight_params) { { controller: 'profile' } }
   before do
     allow(subject).to receive(:blacklight_params).and_return(blacklight_params)
   end
@@ -65,7 +65,9 @@ describe Argo::ProfileQueries do
   context 'in another Controller' do
     let(:blacklight_params) { { 'controller' => 'catalog' } }
     it 'does not modify solr_params' do
-      expect(subject.add_profile_queries(CatalogController.blacklight_config.deep_copy)).to eq CatalogController.blacklight_config.deep_copy
+      catalog_config = CatalogController.blacklight_config.deep_copy
+      solr_parameters = subject.add_profile_queries(catalog_config)
+      expect(solr_parameters['facet.field']).to eq catalog_config['facet.field']
     end
   end
 end

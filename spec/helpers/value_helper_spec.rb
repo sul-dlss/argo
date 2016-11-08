@@ -31,4 +31,15 @@ RSpec.describe ValueHelper do
       expect(helper.links_to_collections(args)).to have_css 'br'
     end
   end
+  describe '#value_for_wf_error' do
+    let(:document_attributes) do
+      {
+        'wf_error_ssim' => ['accessionWF:technical-metadata:401 Unauthorized']
+      }
+    end
+    let(:args) { { document: document, field: 'wf_error_ssim' } }
+    it 'returns a formatted wf error message' do
+      expect(helper.value_for_wf_error(args)).to eq 'technical-metadata : 401 Unauthorized'
+    end
+  end
 end

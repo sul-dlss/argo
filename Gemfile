@@ -12,6 +12,7 @@ gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 gem 'faraday'
 gem 'eye'  # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'honeybadger', '~> 2.0'
+gem 'jbuilder', '~> 2.0'
 gem 'jqgrid-jquery-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -44,7 +45,7 @@ gem 'whenever', require: false
 # Stanford/Hydra related gems
 gem 'about_page'
 gem 'active-fedora', '~> 8.2'
-gem 'blacklight', '~> 5.18'
+gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '>= 5.14.0', '< 6'
 gem 'is_it_working-cbeer'

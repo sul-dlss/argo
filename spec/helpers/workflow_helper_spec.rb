@@ -6,8 +6,11 @@ describe WorkflowHelper, :type => :helper do
     let(:process) { 'descriptive-metadata' }
     let(:status) { 'error' }
     let(:blacklight_config) { Blacklight::Configuration.new }
+    let(:query_params) { { controller: 'report', action: 'workflow_grid' } }
+    let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }
     before(:each) do
       allow(helper).to receive(:blacklight_config).and_return blacklight_config
+      allow(helper).to receive(:search_state).and_return search_state
     end
     describe 'wf_hash structure' do
       it 'without process' do

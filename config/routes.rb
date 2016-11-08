@@ -6,11 +6,23 @@ Argo::Application.routes.draw do
     end
   end
 
-  Blacklight.add_routes(self, :except => [:catalog])
+  mount Blacklight::Engine => '/'
+
   resources :profile, only: [:index] do
     member do
       get :facet
     end
+  end
+
+  concern :searchable, Blacklight::Routes::Searchable.new
+  concern :exportable, Blacklight::Routes::Exportable.new
+
+  resource :catalog, only: [:index], controller: 'catalog' do
+    concerns :searchable
+  end
+
+  resources :solr_documents, only: [:show], controller: 'catalog', path: '/catalog' do
+    concerns :exportable
   end
 
   # Catalog stuff.
