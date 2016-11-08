@@ -88,7 +88,7 @@ group :test do
 end
 
 group :deployment do
-  gem 'capistrano', '= 3.6.0' # pinned because inadvertent capistrano upgrades tend to cause deployment issues.
+  gem 'capistrano', '~> 3.6'
   gem 'capistrano-rails'
   gem 'capistrano-passenger'
   gem 'capistrano-shared_configs'
