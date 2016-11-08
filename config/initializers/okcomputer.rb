@@ -45,7 +45,8 @@ OkComputer::Registry.register 'rails_cache', OkComputer::GenericCacheCheck.new
 OkComputer::Registry.register 'active_fedora_conn', RubydoraCheck.new(client: ActiveFedora::Base.connection_for_pid(0))
 # FEDORA_URL is covered by checking ActiveFedora::Base.connection_for_pid(0)
 
-OkComputer::Registry.register 'dor_search_service_solr', OkComputer::SolrCheck.new(Dor::SearchService.solr.uri)
+# remove trailing slashes to avoid constructing bad solr ping URLs
+OkComputer::Registry.register 'dor_search_service_solr', OkComputer::SolrCheck.new(Dor::SearchService.solr.uri.to_s.sub(%r{/$}, ''))
 # SOLRIZER_URL is coverd by checking Dor::SearchService.solr.uri
 
 # ------------------------------------------------------------------------------
@@ -70,7 +71,8 @@ OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(
 OkComputer::Registry.register 'content_base_dir', OkComputer::DirectoryCheck.new(Settings.CONTENT.BASE_DIR)
 OkComputer::Registry.register 'content_server_host', OkComputer::HttpCheck.new("https://#{Settings.CONTENT.SERVER_HOST}")
 
-OkComputer::Registry.register 'metadata_catalog_url', OkComputer::HttpCheck.new(Settings.METADATA.CATALOG_URL)
+# the catalog service needs an explicit catkey.
+OkComputer::Registry.register 'metadata_catalog_url', OkComputer::HttpCheck.new(Settings.METADATA.CATALOG_URL + '?catkey=1')
 
 # Bulk Metadata - probably for bulk downloads
 OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.BULK_METADATA.DIRECTORY)
