@@ -97,7 +97,7 @@ GEM
       thor (~> 0.18)
     byebug (9.0.6)
     cancancan (1.15.0)
-    capistrano (3.6.0)
+    capistrano (3.6.1)
       airbrussh (>= 1.0.0)
       capistrano-harrow
       i18n
@@ -656,7 +656,7 @@ DEPENDENCIES
   blacklight-hierarchy
   bootstrap-sass
   cancancan
-  capistrano (= 3.6.0)
+  capistrano (~> 3.6)
   capistrano-passenger
   capistrano-rails
   capistrano-shared_configs
