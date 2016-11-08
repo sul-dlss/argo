@@ -10,16 +10,13 @@ WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
 require 'simplecov'
 require 'coveralls'
-require 'codeclimate-test-reporter'
-CodeClimate::TestReporter.start
 SimpleCov.profiles.define 'argo' do
   add_filter 'spec'
   add_filter 'vendor'
 end
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter,
-  CodeClimate::TestReporter::Formatter
+  Coveralls::SimpleCov::Formatter
 ])
 SimpleCov.start 'argo'
 

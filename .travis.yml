@@ -8,5 +8,7 @@ email: false
 before_script:
   - if [[ -r /etc/hosts ]]; then cat /etc/hosts ; fi
 script: bundle exec rake ci
+after_script:
+- bundle exec codeclimate-test-reporter
 sudo: false
 cache: bundler
