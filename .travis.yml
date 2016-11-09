@@ -1,13 +1,18 @@
 language: ruby
 rvm:
   - 2.3.1
+
 jdk:
   - oraclejdk8
+
 email: false
+
 before_script:
   - if [[ -r /etc/hosts ]]; then cat /etc/hosts ; fi
+  - bin/rails db:test:prepare
 script: bundle exec rake ci
 after_script:
 - bundle exec codeclimate-test-reporter
+
 sudo: false
 cache: bundler

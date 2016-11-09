@@ -55,7 +55,7 @@ if ['test', 'development'].include? Rails.env
 
   namespace :argo do
     desc 'Install db, jetty (fedora/solr) and configs fresh'
-    task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:setup', 'db:migrate'] do
+    task :install => ['argo:jetty:clean', 'argo:jetty:config'] do
       puts 'Installed Argo'
     end
 

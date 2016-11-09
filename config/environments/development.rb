@@ -1,22 +1,37 @@
-Argo::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb
+Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
-  # every request.  This slows down response time but is perfect for development
-  # since you don't have to restart the webserver when you make code changes.
+  # every request. This slows down response time but is perfect for development
+  # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
   # Do not eager load code on boot.
   config.eager_load = false
 
-  # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = false
+  # Show full error reports.
+  config.consider_all_requests_local = true
 
-  # Don't care if the mailer can't send
+  # Enable/disable caching. By default caching is disabled.
+  if Rails.root.join('tmp/caching-dev.txt').exist?
+    config.action_controller.perform_caching = true
+
+    config.cache_store = :memory_store
+    config.public_file_server.headers = {
+      'Cache-Control' => 'public, max-age=172800'
+    }
+  else
+    config.action_controller.perform_caching = false
+
+    config.cache_store = :null_store
+  end
+
+  # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
-  # Print deprecation notices to the Rails logger
+  config.action_mailer.perform_caching = false
+
+  # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
   # Raise an error on page load if there are pending migrations.
@@ -27,17 +42,15 @@ Argo::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
-  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
-  # yet still be able to expire them through the digest params.
-  config.assets.digest = true
+  # Suppress logger output for asset requests.
+  config.assets.quiet = true
 
-  # Adds additional error checking when serving assets at runtime.
-  # Checks for improperly declared sprockets dependencies.
-  # Raises helpful error messages.
-  config.assets.raise_runtime_errors = true
+  # Raises error for missing translations
+  # config.action_view.raise_on_missing_translations = true
 
-  # cache configuration
-  config.perform_caching = true
+  # Use an evented file watcher to asynchronously detect changes in source code,
+  # routes, locales, etc. This feature depends on the listen gem.
+  # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   require 'rack-webauth/test'
   if Settings.WEBAUTH
@@ -60,5 +73,5 @@ Argo::Application.configure do
   # 2) time stamps on each log statement, because knowing when something
   # got logged is quite nice.
   # (declared after Argo.configure since it uses one of those params)
-  config.log_tags = [:uuid, proc {Time.zone.now.strftime(Settings.DATE_FORMAT_STR)}]
+  config.log_tags = [:request_id, proc {Time.zone.now.strftime(Settings.DATE_FORMAT_STR)}]
 end

@@ -103,18 +103,30 @@ RSpec.describe BulkActionsController do
     end
   end
   describe 'GET file' do
+    let(:bulk_action) { create(:bulk_action, user_id: user_id) }
+    let(:user_id) { current_user.id }
+    let(:file) { bulk_action.file('test.log') }
+
+    before do
+      File.new(file, 'w')
+    end
+
+    after do
+      File.delete(file)
+    end
+
     it 'sends through a BulkActions file' do
-      b_action = create(:bulk_action, user: current_user)
-      expect(controller).to receive(:render)
-      expect(controller).to receive(:send_file)
-      get :file, id: b_action.id, filename: 'test.log'
+      get :file, id: bulk_action.id, filename: 'test.log', mime_type: 'text/plain'
       expect(response.status).to eq 200
     end
-    it 'does not send file for other users files' do
-      b_action = create(:bulk_action, user_id: current_user.id + 1)
-      expect(controller).to_not receive(:send_file)
-      get :file, id: b_action.id, filename: 'not_my_log.log'
-      expect(response.status).to eq 404
+
+    context 'for other users files' do
+      let(:user_id) { current_user.id + 1 }
+      it 'does not send file for other users files' do
+        expect(controller).to_not receive(:send_file)
+        get :file, id: bulk_action.id, filename: 'not_my_log.log'
+        expect(response.status).to eq 404
+      end
     end
   end
 end
