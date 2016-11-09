@@ -4,7 +4,7 @@
 <script type="text/javascript">
 report_model = {
   total_rows: <%= @response['response']['numFound'] %>,
-  data_url: <%= report_pids_url(params.merge(:format => 'json')).to_json.html_safe %>,
+  data_url: <%= report_pids_url(params.to_unsafe_h.merge(:format => 'json')).to_json.html_safe %>,
 }
 cons=[];
 function catalog_url(element)
