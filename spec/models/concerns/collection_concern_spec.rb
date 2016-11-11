@@ -20,7 +20,7 @@ describe CollectionConcern do
         expect(document.collection_id).to be_nil
         expect(document.collection_ids).to be_nil
         expect(document.collection_title).to be_nil
-        expect(document.collection_titles).to be_nil
+        expect(document.collection_titles).to eq []
       end
     end
   end

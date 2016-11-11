@@ -22,13 +22,13 @@ module CollectionConcern
   # Access a SolrDocument's *first* Collection title
   # @return [String, nil]
   def collection_title
-    collection_titles.first if collection_titles
+    collection_titles.first
   end
 
   ##
   # Access a SolrDocument's Collection(s) title
   # @return [Array<String>, nil]
   def collection_titles
-    fetch(FIELD_COLLECTION_TITLE, nil)
+    fetch(FIELD_COLLECTION_TITLE, [])
   end
 end
