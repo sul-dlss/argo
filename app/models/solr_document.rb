@@ -28,8 +28,8 @@ class SolrDocument
   field_semantics.merge!(
     :title    => FIELD_TITLE,
     :author   => 'dc_creator_ssi',
-    :language => 'public_dc_language_tesim',
-    :format   => 'public_dc_format_tesim'
+    :language => 'sw_language_ssim',
+    :format   => 'sw_format_ssim'
   )
 
   def get_versions

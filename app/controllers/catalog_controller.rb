@@ -97,17 +97,17 @@ class CatalogController < ApplicationController
       :no_collection_title         => { :label => 'No Collection Title',        :fq => "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
       :no_copyright                => { :label => 'No Copyright',               :fq => '-copyright_ssim:*' },
       :no_license                  => { :label => 'No License',                 :fq => '-use_license_machine_ssi:*' },
-      :no_public_dc_creator        => { :label => 'No MODS Creator',            :fq => '-public_dc_creator_tesim:*' },
+      :no_sw_author_ssim           => { :label => 'No SW Author',               :fq => '-sw_author_ssim:*' },
       # TODO: mods extent (?)
       # TODO: mods form (?)
       :no_sw_genre                 => { :label => 'No SW Genre',                :fq => '-sw_genre_ssim:*' },   # spec said "mods genre"
-      :no_public_dc_language       => { :label => 'No MODS Language',           :fq => '-public_dc_language_tesim:*' },
-      :no_public_dc_subject        => { :label => 'No MODS Subject',            :fq => '-public_dc_subject_tesim:*' },
-      :no_mods_typeOfResource_ssim => { :label => 'No MODS typeOfResource',      :fq => '-mods_typeOfResource_ssim:*' },
+      :no_sw_language_ssim         => { :label => 'No SW Language',             :fq => '-sw_language_ssim:*' },
+      :no_mods_typeOfResource_ssim => { :label => 'No MODS typeOfResource',     :fq => '-mods_typeOfResource_ssim:*' },
       :no_sw_pub_date_sort         => { :label => 'No SW Date',                 :fq => '-sw_pub_date_sort_ssi:*' },
+      :no_sw_topic_ssim            => { :label => 'No SW Topic',                :fq => '-sw_topic_ssim:*' },
       :no_sw_subject_temporal      => { :label => 'No SW Era',                  :fq => '-sw_subject_temporal_ssim:*' },
       :no_sw_subject_geographic    => { :label => 'No SW Region',               :fq => '-sw_subject_geographic_ssim:*' },
-      # TODO: sw resource type (?)  is this different from MODS resource type?
+      :no_sw_format                => { :label => 'No SW Resource Type',        :fq => '-sw_format_ssim:*' },
       :no_use_statement            => { :label => 'No Use & Reproduction Statement', :fq => '-use_statement_ssim:*' }
     }
 
