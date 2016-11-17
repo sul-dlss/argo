@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -21,9 +20,8 @@ ActiveRecord::Schema.define(version: 20160318203331) do
     t.datetime "updated_at"
     t.string   "user_type"
     t.string   "document_type"
+    t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
-
-  add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
 
   create_table "bulk_actions", force: :cascade do |t|
     t.string   "action_type"
@@ -36,9 +34,8 @@ ActiveRecord::Schema.define(version: 20160318203331) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "user_id"
+    t.index ["user_id"], name: "index_bulk_actions_on_user_id"
   end
-
-  add_index "bulk_actions", ["user_id"], name: "index_bulk_actions_on_user_id"
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",                      default: 0, null: false
@@ -52,9 +49,8 @@ ActiveRecord::Schema.define(version: 20160318203331) do
     t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
 
   create_table "indexing_exceptions", force: :cascade do |t|
     t.string   "pid"
@@ -63,9 +59,8 @@ ActiveRecord::Schema.define(version: 20160318203331) do
     t.text     "exception"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["pid"], name: "index_indexing_exceptions_on_pid"
   end
-
-  add_index "indexing_exceptions", ["pid"], name: "index_indexing_exceptions_on_pid"
 
   create_table "searches", force: :cascade do |t|
     t.text     "query_params"
@@ -73,9 +68,8 @@ ActiveRecord::Schema.define(version: 20160318203331) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "user_type"
+    t.index ["user_id"], name: "index_searches_on_user_id"
   end
-
-  add_index "searches", ["user_id"], name: "index_searches_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "sunetid"

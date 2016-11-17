@@ -1,5 +1,5 @@
-Argo::Application.configure do
-  # Settings specified here will take precedence over those in config/application.rb
+Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -16,45 +16,73 @@ Argo::Application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+
+  # Compress JavaScripts and CSS.
+  config.assets.js_compressor = :uglifier
+  # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
 
-  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
-  # yet still be able to expire them through the digest params.
-  config.assets.digest = true
+  # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
+
+  # Enable serving of images, stylesheets, and JavaScripts from an asset server.
+  # config.action_controller.asset_host = 'http://assets.example.com'
+
+  # Specifies the header that your server uses for sending files.
+  # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
+  # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
+
+  # Mount Action Cable outside main process or domain
+  # config.action_cable.mount_path = nil
+  # config.action_cable.url = 'wss://example.com/cable'
+  # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
+
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  # config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   config.log_level = :debug
 
-  # cache configuration
-  config.perform_caching = true
+  # Prepend all log lines with the following tags.
+  config.log_tags = [ :request_id, proc {Time.zone.now.strftime(Settings.DATE_FORMAT_STR)} ]
+
+  # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
+
+  # Use a real queuing backend for Active Job (and separate queues per environment)
+  # config.active_job.queue_adapter     = :resque
+  # config.active_job.queue_name_prefix = "argo_#{Rails.env}"
+  config.action_mailer.perform_caching = false
+
+  # Ignore bad email addresses and do not raise email delivery errors.
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # config.action_mailer.raise_delivery_errors = false
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true
 
-  # Tell Action Mailer not to deliver emails to the real world.
-  # The :test delivery method accumulates sent emails in the
-  # ActionMailer::Base.deliveries array.
-  config.action_mailer.delivery_method = :test
+  # Send deprecation notices to registered listeners.
+  config.active_support.deprecation = :notify
 
-  # Print deprecation notices to the Rails logger
-  config.active_support.deprecation = :log
+  # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
 
-  # Only use best-standards-support built into browsers
-  config.action_dispatch.best_standards_support = :builtin
+  # Use a different logger for distributed setups.
+  # require 'syslog/logger'
+  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
+
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
+    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
+  end
+
+  # Do not dump schema after migrations.
+  config.active_record.dump_schema_after_migration = false
 
   config.middleware.use(Rack::Webauth)
-
-  # the following config statement gets us two important things on each log line:
-  # 1) unique IDs per request, so that it's easier to correlate
-  # logging statements associated with a given request when multiple
-  # simultaneous requests have interleaved log statements.
-  # 2) time stamps on each log statement, because knowing when something
-  # got logged is quite nice.
-  # (declared after Argo.configure since it uses one of those params)
-  config.log_tags = [:uuid, proc {Time.zone.now.strftime(Settings.DATE_FORMAT_STR)}]
 end

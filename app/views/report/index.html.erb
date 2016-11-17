@@ -3,8 +3,8 @@
   <script type="text/javascript">
     report_model = {
       total_rows: <%= @response['response']['numFound'] %>,
-      data_url: <%= report_data_url(params.merge(:format => 'json')).to_json.html_safe %>,
-      download_url: <%= report_download_url(params).to_json.html_safe %>,
+      data_url: <%= report_data_url(params.to_unsafe_h.merge(:format => 'json')).to_json.html_safe %>,
+      download_url: <%= report_download_url(params.to_unsafe_h).to_json.html_safe %>,
       column_model: <%= Report.blacklight_config.column_model.to_json.html_safe %>
     }
   </script>
