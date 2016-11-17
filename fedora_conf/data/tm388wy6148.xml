@@ -392,9 +392,13 @@
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
-<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-10-26T23:23:58.254Z" MIMETYPE="text/xml" SIZE="13">
+<foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata" CREATED="2011-10-26T23:23:58.254Z" MIMETYPE="text/xml" SIZE="286">
 <foxml:xmlContent>
-<xml/>
+  <mods xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.3" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-3.xsd">
+    <titleInfo>
+      <title>accessionWF</title>
+    </titleInfo>
+  </mods>
 </foxml:xmlContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
