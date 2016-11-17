@@ -168,7 +168,6 @@ Argo::Application.routes.draw do
   namespace :dor do
     match 'republish/:pid', :action => :republish,                 :via => [:get, :post]
     match 'reindex/:pid',   :action => :reindex, :as => 'reindex', :via => [:get, :post]
-    match 'delete_from_index/:pid', :action => :delete_from_index, :via => [:get, :post]
     resources :objects, :only => :create # we only implement create for object registration
   end
 
