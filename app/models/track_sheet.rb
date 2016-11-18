@@ -104,13 +104,13 @@ class TrackSheet
     table_data.push(['Date Printed:', Time.now.strftime('%c')])
     table_data
   end
-  
+
   # @param [String] druid unqualified DRUID identifier
   # @return [Hash] doc from Solr or to_solr
   # @note To the extent we use Solr input filters or copyField(s), the Solr version will differ from the to_solr hash.
   # @note That difference shouldn't be important for the few known fields we use here.
   def find_or_create_in_solr_by_id(druid)
-    doc = Dor::SearchService.query(%(id:"druid:#{druid}"), :rows => 1).docs.first
+    doc = Dor::SearchService.query(%(id:"druid:#{druid}"), :rows => 1)['response']['docs'].first
     return doc unless doc.nil?
     obj = Dor.load_instance "druid:#{druid}"
     solr_doc = obj.to_solr

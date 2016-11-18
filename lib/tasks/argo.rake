@@ -5,11 +5,12 @@ end
 def get_workgroups_facet(apo_field = nil)
   apo_field = apo_field_default() if apo_field.nil?
   resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
-    :facets => { :fields => [apo_field] },
+    :'facet.field' => apo_field,
     :'facet.prefix'   => 'workgroup:',
     :'facet.mincount' => 1,
-    :'facet.limit'    => -1 )
-  resp.facets.find { |f| f.name == apo_field }
+    :'facet.limit'    => -1,
+    :'json.nl' => 'map' )
+  resp['facet_counts']['facet_fields'][apo_field]
 end
 
 desc 'Get application version'
@@ -58,7 +59,7 @@ namespace :argo do
     directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
     facet = get_workgroups_facet()
     unless facet.nil?
-      facets = facet.items.map(&:value)
+      facets = facet.keys
       priv_groups = facets.select { |v| v =~ /^workgroup:/ }
       # we always want these built-in groups to be part of .htaccess
       priv_groups += User::ADMIN_GROUPS
@@ -88,7 +89,7 @@ namespace :argo do
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task :workgroups => :environment do
     facet = get_workgroups_facet()
-    puts "#{facet.items.count} Workgroups:\n#{facet.items.map(&:value).join(%(\n))}"
+    puts "#{facet.length} Workgroups:\n#{facet.keys.join(%(\n))}"
   end
 
 

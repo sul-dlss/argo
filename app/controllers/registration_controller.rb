@@ -13,7 +13,7 @@ class RegistrationController < ApplicationController
   end
 
   def workflow_list
-    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}")).docs
+    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}"))['response']['docs']
     result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.administrativeMetadata.ng_xml
@@ -39,11 +39,10 @@ class RegistrationController < ApplicationController
       col_druid = col_id.gsub(/^druid:/, '')
       col_title_field = SolrDocument::FIELD_TITLE
       # grab the collection title from Solr, or fall back to DOR
-      solr_doc = Blacklight.default_index.connection.find({
-        q: "id:\"#{col_id}\"",
+      solr_doc = Dor::SearchService.query("id:\"#{col_id}\"", {
         rows: 1,
         fl: col_title_field
-      }).docs.first
+      })['response']['docs'].first
       if solr_doc.present? && solr_doc[col_title_field].present?
         collections[col_id] = "#{short_label(solr_doc[col_title_field], truncate_limit)} (#{col_druid})"
       else
@@ -90,13 +89,14 @@ class RegistrationController < ApplicationController
       '*:*',
       {
         rows: 0,
-        facets: facet_fields,
+        :'facet.field' => facet_fields,
         :'facet.prefix' => params[:term].titlecase,
         :'facet.mincount' => 1,
-        :'facet.limit' => 15
+        :'facet.limit' => 15,
+        :'json.nl' => 'map'
       }
     )
-    result = response.facets.find { |f| f.name == facet_field }.items.map(&:value).sort
+    result = response['facet_counts']['facet_fields'][facet_field].keys.sort
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
     end
