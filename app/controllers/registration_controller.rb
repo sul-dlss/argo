@@ -13,7 +13,7 @@ class RegistrationController < ApplicationController
   end
 
   def workflow_list
-    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}")).docs
+    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}"))['response']['docs']
     result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
     apo_object = Dor.find(params[:apo_id], :lightweight => true)
     adm_xml = apo_object.administrativeMetadata.ng_xml
@@ -43,7 +43,7 @@ class RegistrationController < ApplicationController
         q: "id:\"#{col_id}\"",
         rows: 1,
         fl: col_title_field
-      }).docs.first
+      })['response']['docs'].first
       if solr_doc.present? && solr_doc[col_title_field].present?
         collections[col_id] = "#{short_label(solr_doc[col_title_field], truncate_limit)} (#{col_druid})"
       else

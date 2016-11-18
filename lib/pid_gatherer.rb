@@ -49,8 +49,8 @@ module Argo
         start = 0
         solr_pids = []
         resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
-        while resp.docs.length > 0
-          solr_pids += resp.docs.map { |doc| doc['id'] }
+        while resp['response']['docs'].length > 0
+          solr_pids += resp['response']['docs'].map { |doc| doc['id'] }
           start += 1000
           resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
         end

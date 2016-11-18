@@ -32,7 +32,7 @@ module ApoHelper
 
   def workflow_options
     q = 'objectType_ssim:workflow '
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim')['response']['docs']
     result.sort! do |a, b|
       a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end
@@ -47,7 +47,7 @@ module ApoHelper
 
   def agreement_options
     q = 'objectType_ssim:agreement '
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim').docs
+    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,dc_title_tesim')['response']['docs']
     result.sort! do |a, b|
       a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
     end

@@ -62,7 +62,7 @@ class PermittedQueries
       rows: 1000,
       fl: 'id,tag_ssim,dc_title_tesim',
       fq: ['objectType_ssim:collection', '!project_tag_ssim:Hydrus']
-    ).docs
+    )['response']['docs']
 
     result.sort! do |a, b|
       a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s

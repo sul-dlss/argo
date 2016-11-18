@@ -13,7 +13,7 @@ module RegistrationHelper
       :rows => 99999,
       :fl => 'id,tag_ssim,dc_title_tesim',
       :fq => ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
-    ).docs
+    )['response']['docs']
 
     result.sort! do |a, b|
       Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
