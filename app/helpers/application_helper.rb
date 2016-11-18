@@ -18,10 +18,10 @@ module ApplicationHelper
   # @return [Array<ViewSwitcher>]
   def views_to_switch
     [
-      ViewSwitcher.new(:catalog, :catalog_index_url),
+      ViewSwitcher.new(:catalog, :search_catalog_url),
       ViewSwitcher.new(:report, :report_url),
       ViewSwitcher.new(:workflow_grid, :report_workflow_grid_url),
-      ViewSwitcher.new(:profile, :profile_index_url)
+      ViewSwitcher.new(:profile, :search_profile_url)
     ]
   end
 

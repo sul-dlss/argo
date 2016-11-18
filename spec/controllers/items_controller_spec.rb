@@ -441,7 +441,7 @@ describe ItemsController, :type => :controller do
       expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'publish').and_return(nil)
       expect(Dor::Config.workflow.client).to receive(:update_workflow_status).with('dor', @pid, 'accessionWF', 'publish', 'ready').and_return(nil)
       post :workflow_update, params: { id: @pid, wf_name: 'accessionWF', process: 'publish', status: 'ready' }
-      expect(subject).to redirect_to(catalog_path)
+      expect(subject).to redirect_to(solr_document_path(@pid))
     end
   end
   describe '#file' do

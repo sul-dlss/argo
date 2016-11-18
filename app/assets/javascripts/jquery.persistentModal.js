@@ -5,7 +5,7 @@
     e.g.:
       <a title="DC" data-behavior="persistent-modal" href="/view/druid:dy196vh8233/ds/DC">DC</a>
     or, if you're building a link from ruby, something like:
-      link_to specs[:dsid], ds_aspect_view_catalog_path(doc['id'], specs[:dsid]), :title => specs[:dsid], :data => { behavior: 'persistent-modal' }
+      link_to specs[:dsid], ds_solr_document_path(doc['id'], specs[:dsid]), :title => specs[:dsid], :data => { behavior: 'persistent-modal' }
 
   the modal is persistent in that subsequent invocations of the modal on the same overall page load will load the same retained 
   contents of the modal from the initial load, unless the modal was specifically closed using the "cancel" button.  useful if for

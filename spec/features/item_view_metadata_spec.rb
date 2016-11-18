@@ -10,7 +10,7 @@ feature 'Item view metadata' do
   end
 
   scenario 'MD Source is "DOR"' do
-    visit catalog_path 'druid:hj185vb7593'
+    visit solr_document_path 'druid:hj185vb7593'
     within '.dl-horizontal' do
       expect(page).to have_css 'dt', text: 'DRUID:'
       expect(page).to have_css 'dd', text: 'druid:hj185vb7593'

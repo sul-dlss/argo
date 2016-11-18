@@ -9,7 +9,7 @@ RSpec.feature 'View switcher' do
     scenario 'catalog results' do
       expect_any_instance_of(CatalogController).to receive(:current_user)
         .at_least(1).times.and_return(current_user)
-      visit catalog_index_path f: { objectType_ssim: ['item'] }
+      visit search_catalog_path f: { objectType_ssim: ['item'] }
       within '.report-toggle' do
         expect(page).to have_css 'ul.dropdown-menu-right li.active a', text: 'Results View'
       end

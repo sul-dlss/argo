@@ -53,7 +53,7 @@ end
   if @object and @object.default_collections
     %><label>Default Collections</label><br/><%
     @collections.each do |col|
-      %><%=link_to col.label, catalog_path(:id =>col.pid)%> <%=link_to('(remove)',delete_collection_apo_path(:collection => col.pid, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br/><%
+      %><%=link_to col.label, solr_document_path(:id =>col.pid)%> <%=link_to('(remove)',delete_collection_apo_path(:collection => col.pid, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br/><%
     end
   end
   %>
@@ -115,7 +115,7 @@ end
 <div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
   <button id="register" name="register"><%=@object ? 'Update APO' : 'Register APO' %></button>
   <%end%>
-  <%=button_to 'Cancel', @object ? catalog_path(@object.pid) : '/', :method => :get %>
+  <%=button_to 'Cancel', @object ? solr_document_path(@object.pid) : '/', :method => :get %>
 </div>
 
 </div>

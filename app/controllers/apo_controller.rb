@@ -81,7 +81,7 @@ class ApoController < ApplicationController
 
       apo_info = register_new_apo
       respond_to do |format|
-        format.any { redirect_to catalog_path(apo_info[:apo_pid]), :notice => apo_info[:notice] }
+        format.any { redirect_to solr_document_path(apo_info[:apo_pid]), :notice => apo_info[:notice] }
       end
     elsif params[:id]
       create_obj
@@ -230,7 +230,7 @@ class ApoController < ApplicationController
     return unless params[:collection_title].present? || params[:collection_catkey].present?
     collection_pid = create_collection params[:id]
     @object.add_default_collection collection_pid
-    redirect_to catalog_path(params[:id]), :notice => "Created collection #{collection_pid}"
+    redirect_to solr_document_path(params[:id]), :notice => "Created collection #{collection_pid}"
   end
 
   def add_roleplayer
@@ -329,7 +329,7 @@ class ApoController < ApplicationController
 
   def redirect
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'APO updated.' }
+      format.any { redirect_to solr_document_path(params[:id]), :notice => 'APO updated.' }
     end
   end
 

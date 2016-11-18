@@ -9,31 +9,27 @@ Argo::Application.routes.draw do
 
   mount Blacklight::Engine => '/'
 
-  resources :profile, only: [:index] do
-    member do
-      get :facet
-    end
-  end
 
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :exportable, Blacklight::Routes::Exportable.new
 
-  resource :catalog, only: [:index], controller: 'catalog' do
+  resource :profile, controller: 'profile', only: [:index] do
     concerns :searchable
   end
 
-  resources :solr_documents, only: [:show], controller: 'catalog', path: '/catalog' do
-    concerns :exportable
+  resource :catalog, only: [:index], controller: 'catalog', path: '/catalog' do
+    concerns :searchable
   end
 
-  # Catalog stuff.
-  match 'view/opensearch', :to => 'catalog#opensearch', :via => [:get, :post]
-  match 'view/facet/:id',  :to => 'catalog#facet', :via => [:get, :post]
-  resources :catalog, :path => '/view', :only => [:index, :show, :update]
-  match 'view/:id/dc',                :to => 'catalog#dc', :via => [:get, :post], :as => 'dc_aspect_view_catalog'
-  match 'view/:id/ds/:dsid',          :to => 'catalog#ds', :via => [:get, :post], :as => 'ds_aspect_view_catalog'
-  match 'view/:id/datastreams/:dsid', :to => 'catalog#datastream_view', :via => [:get, :post], :as => 'datastream_view_catalog'
-  get 'catalog/:id/manage_release', to: 'catalog#manage_release', as: 'manage_release'
+  resources :solr_documents, only: [:show, :update], controller: 'catalog', path: '/catalog' do
+    concerns :exportable
+
+    member do
+      get 'dc', to: 'catalog#dc'
+      get 'ds/:dsid', to: 'catalog#ds', as: 'ds'
+      get 'manage_release', to: 'catalog#manage_release'
+    end
+  end
 
   get 'catalog/:id/bulk_upload_form',    :to => 'catalog#bulk_upload_form',  :as => 'bulk_upload_form'
   get 'catalog/:id/bulk_jobs_index',     :to => 'catalog#bulk_jobs_index',   :as => 'bulk_jobs_index'
@@ -44,8 +40,8 @@ Argo::Application.routes.draw do
   get 'catalog/:id/:time/bulk_jobs_csv', :to => 'catalog#bulk_jobs_csv',     :as => 'bulk_jobs_csv'
   post 'catalog/:id/upload',             :to => 'catalog#upload',            :as => 'upload'
   delete 'catalog/:id/bulk_jobs_delete', :to => 'catalog#bulk_jobs_delete',  :as => 'bulk_jobs_delete'
-  match 'catalog',      :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }
-  match 'catalog/*all', :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }
+  match 'catalog',      :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'search_catalog_redirect'
+  match 'catalog/*all', :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'catalog_redirect'
 
   mount AboutPage::Engine => '/about(.:format)'
   match 'report',          :to => 'report#index',    :via => [:get, :post], :as => 'report'
@@ -59,10 +55,8 @@ Argo::Application.routes.draw do
   ##
   # This route provides access to CatalogController#facet so facet links can be
   # generated.
-  resources :report, only: [] do
-    member do
-      get :facet
-    end
+  resource :report, controller: 'report', only: [] do
+    concerns :searchable
   end
 
   match 'apo/is_valid_role_list', :to => 'apo#is_valid_role_list_endpoint', :via => [:get, :post], :as => 'is_valid_role_list'

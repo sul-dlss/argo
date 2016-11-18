@@ -10,7 +10,7 @@ feature 'Search results' do
       and_return(current_user)
   end
   scenario 'contains Blacklight default index page tools' do
-    visit catalog_index_path f: { empties: ['no_rights_characteristics'] }
+    visit search_catalog_path f: { empties: ['no_rights_characteristics'] }
     within '.constraints-container' do
       expect(page).to have_css '#startOverLink', text: 'Start Over'
     end
@@ -40,7 +40,7 @@ feature 'Search results' do
     end
   end
   scenario 'contains appropriate metadata fields' do
-    visit catalog_index_path f: { objectType_ssim: ['item'] }
+    visit search_catalog_path f: { objectType_ssim: ['item'] }
     within('.document', match: :first) do
       within '.document-metadata' do
         expect(page).to have_css 'dt', text: 'DRUID:'
@@ -66,7 +66,7 @@ feature 'Search results' do
     expect(page).to have_css 'dd a', text: 'State Banking Commission Annual Reports'
   end
   scenario 'contains document image thumbnail' do
-    visit catalog_index_path f: { objectType_ssim: ['item'] }
+    visit search_catalog_path f: { objectType_ssim: ['item'] }
     expect(page).to have_css '.document-thumbnail a img'
   end
 end

@@ -101,7 +101,7 @@ class ItemsController < ApplicationController
               else
                 'Collection not set, already has collection(s)'
               end
-        format.html { redirect_to catalog_path(params[:id]), :notice => msg }
+        format.html { redirect_to solr_document_path(params[:id]), :notice => msg }
       end
     end
   end
@@ -112,7 +112,7 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html {render :status => :ok, :plain => 'Collection added!'}
       else
-        format.html { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
+        format.html { redirect_to solr_document_path(params[:id]), :notice => 'Collection successfully added' }
       end
     end
   end
@@ -123,7 +123,7 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html {render :status => :ok, :plain => 'Collection removed!'}
       else
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully removed' }
+        format.any { redirect_to solr_document_path(params[:id]), :notice => 'Collection successfully removed' }
       end
     end
   end
@@ -198,7 +198,7 @@ class ItemsController < ApplicationController
           render status: 200, plain: 'Updated!'
         else
           msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:wf_name]}"
-          format.any { redirect_to catalog_path(params[:id]), notice: msg }
+          format.any { redirect_to solr_document_path(params[:id]), notice: msg }
         end
       end
     elsif params[:bulk].present?
@@ -224,7 +224,7 @@ class ItemsController < ApplicationController
       return
     end
     respond_to do |format|
-      format.any { redirect_to catalog_path(@object.pid), :notice => 'Workflow was successfully updated' }
+      format.any { redirect_to solr_document_path(@object.pid), :notice => 'Workflow was successfully updated' }
     end
   end
 
@@ -233,7 +233,7 @@ class ItemsController < ApplicationController
     @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
     @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Embargo was successfully updated' }
+      format.any { redirect_to solr_document_path(params[:id]), :notice => 'Embargo was successfully updated' }
     end
   end
 
@@ -272,7 +272,7 @@ class ItemsController < ApplicationController
     end
 
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => 'Datastream was successfully updated' }
+      format.any { redirect_to solr_document_path(params[:id]), :notice => 'Datastream was successfully updated' }
     end
   end
 
@@ -304,7 +304,7 @@ class ItemsController < ApplicationController
     )
     respond_to do |format|
       msg = "Updated attributes for file #{params[:file_name]}!"
-      format.any { redirect_to catalog_path(params[:id]), notice: msg }
+      format.any { redirect_to solr_document_path(params[:id]), notice: msg }
     end
   end
 
@@ -346,7 +346,7 @@ class ItemsController < ApplicationController
     @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
     respond_to do |format|
       msg = params[:id] + ' is open for modification!'
-      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
+      format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
     end
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
@@ -405,7 +405,7 @@ class ItemsController < ApplicationController
           format.html {render :status => :ok, :plain => 'Version Closed.'}
         else
           msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
-          format.any { redirect_to catalog_path(params[:id]), :notice => msg }
+          format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
         end
       end
     rescue Dor::Exception # => e
@@ -434,7 +434,7 @@ class ItemsController < ApplicationController
         format.html { render :status => :ok, :plain => 'Updated source id.' }
       else
         msg = "Source Id for #{params[:id]} has been updated!"
-        format.any { redirect_to catalog_path(params[:id]), :notice => msg }
+        format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
       end
     end
   end
@@ -453,7 +453,7 @@ class ItemsController < ApplicationController
         format.html {render :status => :ok, :plain => "#{tags.size} Tags updated."}
       else
         msg = "#{tags.size} tags for #{params[:id]} have been updated!"
-        format.any { redirect_to catalog_path(params[:id]), :notice => msg }
+        format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
       end
     end
   end
@@ -480,7 +480,7 @@ class ItemsController < ApplicationController
     @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
     respond_to do |format|
       msg = "Tags for #{params[:id]} have been updated!"
-      format.any { redirect_to catalog_path(params[:id]), :notice => msg }
+      format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
     end
   end
 
@@ -507,7 +507,7 @@ class ItemsController < ApplicationController
     @object.save if acted
     notice = (acted ? 'updated' : 'no action received for') + " resource #{params[:resource]}!"
     respond_to do |format|
-      format.any { redirect_to catalog_path(params[:id]), :notice => notice }
+      format.any { redirect_to solr_document_path(params[:id]), :notice => notice }
     end
   end
 
@@ -579,7 +579,7 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html {render :status => :ok, :plain => 'Rights updated.'}
       else
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }
+        format.any { redirect_to solr_document_path(params[:id]), :notice => 'Rights updated!' }
       end
     end
   rescue ArgumentError
@@ -606,7 +606,7 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html {render :status => :ok, :plain => 'Content type updated.'}
       else
-        format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }
+        format.any { redirect_to solr_document_path(params[:id]), :notice => 'Content type updated!' }
       end
     end
   end
@@ -650,7 +650,7 @@ class ItemsController < ApplicationController
     if params[:bulk]
       render :plain => msg
     else
-      redirect_to catalog_path(params[:id]), notice: msg
+      redirect_to solr_document_path(params[:id]), notice: msg
     end
   end
 

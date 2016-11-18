@@ -10,7 +10,7 @@ describe 'Profile' do
   end
   describe 'Admin Policies' do
     it 'lists admin policies and counts' do
-      visit profile_index_path f: { objectType_ssim: ['item'] }
+      visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#admin-policies' do
         expect(page).to have_css 'h4', text: 'Admin Policies'
         expect(page).to have_css 'td:nth-child(1)', text: 'Stanford University Libraries - Special Collections'
@@ -20,7 +20,7 @@ describe 'Profile' do
   end
   describe 'Collection' do
     it 'lists collections and counts' do
-      visit profile_index_path f: { objectType_ssim: ['item'] }
+      visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#collection' do
         expect(page).to have_css 'h4', text: 'Collection'
         expect(page).to have_css 'td:nth-child(1)', text: 'druid:pb873ty1662'
@@ -30,7 +30,7 @@ describe 'Profile' do
   end
   describe 'Discovery' do
     it 'lists discovery and counts' do
-      visit profile_index_path f: { objectType_ssim: ['item'] }
+      visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#discovery' do
         expect(page).to have_css 'h4', text: 'Discovery'
         expect(page).to have_css 'td:nth-child(1)', text: 'Published to PURL'
@@ -44,7 +44,7 @@ describe 'Profile' do
   end
   describe 'Rights' do
     it 'lists rights and counts' do
-      visit profile_index_path f: { objectType_ssim: ['item'] }
+      visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#rights' do
         expect(page).to have_css 'h4', text: 'Rights'
         expect(page).to have_css 'td:nth-child(1)', text: 'dark'
@@ -54,7 +54,7 @@ describe 'Profile' do
   end
   describe 'Contents' do
     it 'lists content type and counts' do
-      visit profile_index_path f: { objectType_ssim: ['item'] }
+      visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#contents' do
         expect(page).to have_css 'h4', text: 'Contents'
         expect(page).to have_css 'td:nth-child(1)', text: 'image'
@@ -66,7 +66,7 @@ describe 'Profile' do
   end
   describe 'Rights information' do
     it 'lists rights information and counts' do
-      visit profile_index_path f: { objectType_ssim: ['item'] }
+      visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#rights-information' do
         expect(page).to have_css 'h4', text: 'Rights information'
         expect(page).to have_css 'h5', text: 'Use & Reproduction'
@@ -81,7 +81,7 @@ describe 'Profile' do
   end
   describe 'SearchWorks facet values' do
     it 'lists content type and counts' do
-      visit profile_index_path f: { objectType_ssim: ['item'] }
+      visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#searchworks-facet-values' do
         expect(page).to have_css 'h4', text: 'SearchWorks facet values'
         expect(page).to have_css 'h5', text: 'Resource Type'
@@ -106,7 +106,7 @@ describe 'Profile' do
   end
   describe 'Number of items' do
     it 'lists object type and pivot facets' do
-      visit profile_index_path f: { exploded_tag_ssim: ['Project'] }
+      visit search_profile_path f: { exploded_tag_ssim: ['Project'] }
       within '#number-of-items' do
         expect(page).to have_css 'h4', text: 'Number of items'
         expect(page).to have_css 'td:nth-child(1)', text: 'item'
