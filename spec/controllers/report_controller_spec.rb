@@ -15,13 +15,13 @@ describe ReportController, :type => :controller do
   end
   describe ':data' do
     it 'should return json' do
-      get :data, :format => :json, :rows => 5
+      get :data, params: { :format => :json, :rows => 5 }
       expect(response).to have_http_status(:ok)
       data = JSON.parse(response.body)
       expect(data['rows'].length).to eq(5)
     end
     it 'should default to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in' do
-      get :data, :format => :json
+      get :data, params: { :format => :json }
       expect(response).to have_http_status(:ok)
       data = JSON.parse(response.body)
       expect(data['rows'].length).to eq(10)
@@ -29,7 +29,7 @@ describe ReportController, :type => :controller do
   end
   describe ':pids' do
     it 'should return json' do
-      get :pids, :format => :json
+      get :pids, params: { :format => :json }
       expect(response).to have_http_status(:ok)
       pids = JSON.parse(response.body)['druids']
       expect(pids.is_a?(Array)).to be_truthy
@@ -49,16 +49,16 @@ describe ReportController, :type => :controller do
     let(:workflow) { 'accessionWF' }
     let(:step) { 'descriptive-metadata' }
     it 'requires parameters' do
-      expect { xhr :post, :reset }.to raise_error(ArgumentError)
-      expect { xhr :post, :reset, reset_workflow: workflow }.to raise_error(ArgumentError)
-      expect { xhr :post, :reset, reset_step: step }.to raise_error(ArgumentError)
+      expect { post :reset, xhr: true }.to raise_error(ArgumentError)
+      expect { post :reset, xhr: true, params: { reset_workflow: workflow } }.to raise_error(ArgumentError)
+      expect { post :reset, xhr: true, params: { reset_step: step } }.to raise_error(ArgumentError)
     end
     it 'sets instance variables and calls update workflow service' do
       expect(controller).to receive(:repo_from_workflow)
         .and_return(repo)
       expect(Dor::Config.workflow.client).to receive(:update_workflow_status)
         .with(repo, 'druid:xb482bw3979', workflow, step, 'waiting')
-      xhr :post, :reset, reset_workflow: workflow, reset_step: step, q: 'Cephalopods' # has single match
+      post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
       expect(assigns(:workflow)).to eq workflow
       expect(assigns(:step)).to eq step
       expect(assigns(:ids)).to eq(%w(xb482bw3979))
@@ -68,14 +68,14 @@ describe ReportController, :type => :controller do
     it 'gets repo from the WorkflowObject' do
       expect(Dor::WorkflowObject).to receive(:find_by_name)
         .and_return double(definition: double(repo: repo)) # mocks dor-services call
-      xhr :post, :reset, reset_workflow: workflow, reset_step: step, q: 'NoMatchesForThisString'
+      post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'NoMatchesForThisString' }
       expect(assigns(:repo)).to eq repo
       expect(response).to have_http_status(:ok)
     end
   end
   describe 'download' do
     it 'should download valid CSV data' do
-      get :download, fields: ' '
+      get :download, params: { fields: ' ' }
       expect(response).to have_http_status(:ok)
       expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
       data = CSV.parse(response.body)
@@ -84,7 +84,7 @@ describe ReportController, :type => :controller do
       expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
     end
     it 'should download valid CSV data for specific fields' do
-      get :download, fields: 'druid,purl,source_id_ssim,tag_ssim'
+      get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
       expect(response).to have_http_status(:ok)
       data = CSV.parse(response.body)
       expect(data.first).to eq(%w(Druid Purl Source\ Id Tags))

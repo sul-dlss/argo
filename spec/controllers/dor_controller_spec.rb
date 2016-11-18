@@ -20,7 +20,7 @@ describe DorController, :type => :controller do
           .with(@mock_druid, @mock_logger).and_return(@mock_solr_doc)
         expect(Dor::SearchService).to receive(:solr).and_return(@mock_solr_conn)
         expect(@mock_solr_conn).to receive(:commit)
-        get :reindex, :pid => @mock_druid
+        get :reindex, params: { :pid => @mock_druid }
         expect(flash[:notice]).to eq "Successfully updated index for #{@mock_druid}"
         expect(response.code).to eq '302'
       end
@@ -28,7 +28,7 @@ describe DorController, :type => :controller do
       it 'should give the right status if an object is not found' do
         expect(Argo::Indexer).to receive(:reindex_pid)
           .with(@mock_druid, @mock_logger).and_raise(ActiveFedora::ObjectNotFoundError)
-        get :reindex, :pid => @mock_druid
+        get :reindex, params: { :pid => @mock_druid }
         expect(flash[:error]).to eq 'Object does not exist in Fedora.'
         expect(response.code).to eq '302'
       end
@@ -39,7 +39,7 @@ describe DorController, :type => :controller do
           .with(@mock_druid, @mock_logger).and_return(@mock_solr_doc)
         expect(Dor::SearchService).to receive(:solr).and_return(@mock_solr_conn)
         expect(@mock_solr_conn).to receive(:commit)
-        get :reindex, :pid => @mock_druid
+        get :reindex, params: { :pid => @mock_druid }
         expect(response.body).to eq "Successfully updated index for #{@mock_druid}"
         expect(response.code).to eq '200'
       end
@@ -47,7 +47,7 @@ describe DorController, :type => :controller do
       it 'should give the right status if an object is not found' do
         expect(Argo::Indexer).to receive(:reindex_pid)
           .with(@mock_druid, @mock_logger).and_raise(ActiveFedora::ObjectNotFoundError)
-        get :reindex, :pid => @mock_druid
+        get :reindex, params: { :pid => @mock_druid }
         expect(response.body).to eq 'Object does not exist in Fedora.'
         expect(response.code).to eq '404'
       end
@@ -101,7 +101,7 @@ describe DorController, :type => :controller do
     it 'should remove an object from the index' do
       log_in_as_mock_user(subject)
       expect(Dor::SearchService.solr).to receive(:delete_by_id).with('asdf:1234')
-      get :delete_from_index, :pid => 'asdf:1234'
+      get :delete_from_index, params: { :pid => 'asdf:1234' }
     end
   end
 
@@ -111,7 +111,7 @@ describe DorController, :type => :controller do
       mock_item = double()
       expect(mock_item).to receive(:publish_metadata_remotely)
       allow(Dor).to receive(:find).and_return(mock_item)
-      get :republish, :pid => 'druid:123'
+      get :republish, params: { :pid => 'druid:123' }
       expect(response).to have_http_status(:found)
     end
   end

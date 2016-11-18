@@ -61,23 +61,23 @@ RSpec.describe BulkActionsController do
           .at_least(:once).and_return(webauth)
       end
       it 'assigns @bulk_action to current_user' do
-        post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
+        post :create, params: { bulk_action: {action_type: 'GenericJob', pids: ''} }
         expect(assigns(:bulk_action)).to be_an BulkAction
         expect(assigns(:bulk_action).user).to eq current_user
       end
       it 'creates a new BulkAction' do
         expect do
-          post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
+          post :create, params: { bulk_action: {action_type: 'GenericJob', pids: ''} }
         end.to change(BulkAction, :count).by(1)
       end
       it 'has a 302 status code' do
-        post :create, bulk_action: {action_type: 'GenericJob', pids: ''}
+        post :create, params: { bulk_action: {action_type: 'GenericJob', pids: ''} }
         expect(response.status).to eq 302
       end
       it 'when not saveable render new' do
         fake_bulk_action = double('fake', save: false, 'user=' => nil)
         expect(BulkAction).to receive(:new).and_return fake_bulk_action
-        post :create, bulk_action: {action_type: 'GenericJob'}
+        post :create, params: { bulk_action: {action_type: 'GenericJob'} }
         expect(response).to render_template('new')
       end
     end
@@ -91,13 +91,13 @@ RSpec.describe BulkActionsController do
     it 'assigns and deletes current_users BulkAction by id param' do
       b_action = create(:bulk_action, user: current_user)
       expect do
-        delete :destroy, id: b_action.id
+        delete :destroy, params: { id: b_action.id }
       end.to change(BulkAction, :count).by(-1)
     end
     it 'does not delete other users bulk actions' do
       b_action = create(:bulk_action, user_id: current_user.id + 1)
       expect do
-        delete :destroy, id: b_action.id
+        delete :destroy, params: { id: b_action.id }
       end.to_not change(BulkAction, :count)
       expect(response.status).to eq 404
     end
@@ -116,7 +116,7 @@ RSpec.describe BulkActionsController do
     end
 
     it 'sends through a BulkActions file' do
-      get :file, id: bulk_action.id, filename: 'test.log', mime_type: 'text/plain'
+      get :file, params: { id: bulk_action.id, filename: 'test.log', mime_type: 'text/plain' }
       expect(response.status).to eq 200
     end
 
@@ -124,7 +124,7 @@ RSpec.describe BulkActionsController do
       let(:user_id) { current_user.id + 1 }
       it 'does not send file for other users files' do
         expect(controller).to_not receive(:send_file)
-        get :file, id: bulk_action.id, filename: 'not_my_log.log'
+        get :file, params: { id: bulk_action.id, filename: 'not_my_log.log' }
         expect(response.status).to eq 404
       end
     end
