@@ -36,9 +36,9 @@ The `Argo::Indexer` class provides re-usable methods for indexing:
   def reindex
     solr_doc = Argo::Indexer.reindex_pid params[:pid], index_logger
     Dor::SearchService.solr.commit
-    render :text => "Status:ok<br> Solr Document: #{solr_doc.inspect}"
+    render :plain => "Status:ok<br> Solr Document: #{solr_doc.inspect}"
   rescue ActiveFedora::ObjectNotFoundError # => e
-    render :status => 404, :text => 'Object does not exist in Fedora.'
+    render :status => 404, :plain => 'Object does not exist in Fedora.'
     return
   end
 ```

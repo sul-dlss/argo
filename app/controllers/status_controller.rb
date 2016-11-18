@@ -3,11 +3,11 @@ class StatusController < ApplicationController
 
   def log
     if check_recently_indexed
-      render status: 200, text: 'All good! <br/>'
+      render status: 200, plain: 'All good! <br/>'
       return
     end
     if params[:test_obj].nil?
-      render status: 500, text: 'Nothing indexed recently.'
+      render status: 500, plain: 'Nothing indexed recently.'
       return
     end
     test_item = Dor.find(params[:test_obj])
@@ -17,14 +17,14 @@ class StatusController < ApplicationController
     sleep secs
     if check_recently_indexed
       msg = "All good! <br/>Saved #{params[:test_obj]}"
-      render status: 200, text: msg
+      render status: 200, plain: msg
     else
       msg = "Nothing indexed recently. Even after saving '#{params[:test_obj]}'."
-      render status: 500, text: msg
+      render status: 500, plain: msg
     end
   rescue ActiveFedora::ObjectNotFoundError
     msg = "No object '#{params[:test_obj]}' found"
-    render status: 404, text: msg
+    render status: 404, plain: msg
   end
 
   protected

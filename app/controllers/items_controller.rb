@@ -65,11 +65,11 @@ class ItemsController < ApplicationController
         }
         @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
       rescue Dor::Exception => e
-        render :status => :precondition_failed, :text => e
+        render :status => :precondition_failed, :plain => e
         return
       end
     end
-    render :status => :ok, :text => 'All good'
+    render :status => :ok, :plain => 'All good'
   end
 
   def close_version_ui
@@ -91,9 +91,9 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if params[:bulk]
         if can_set_collection
-          format.html { render :status => :ok, :text => 'Collection set!' }
+          format.html { render :status => :ok, :plain => 'Collection set!' }
         else
-          format.html { render :status => 500, :text => 'Collection not set, already has collection(s)' }
+          format.html { render :status => 500, :plain => 'Collection not set, already has collection(s)' }
         end
       else
         msg = if can_set_collection
@@ -110,7 +110,7 @@ class ItemsController < ApplicationController
     @object.add_collection(params[:collection])
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :text => 'Collection added!'}
+        format.html {render :status => :ok, :plain => 'Collection added!'}
       else
         format.html { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully added' }
       end
@@ -121,7 +121,7 @@ class ItemsController < ApplicationController
     @object.remove_collection(params[:collection])
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :text => 'Collection removed!'}
+        format.html {render :status => :ok, :plain => 'Collection removed!'}
       else
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Collection successfully removed' }
       end
@@ -195,14 +195,14 @@ class ItemsController < ApplicationController
       Dor::Config.workflow.client.update_workflow_status params[:repo], *args
       respond_to do |format|
         if params[:bulk].present?
-          render status: 200, text: 'Updated!'
+          render status: 200, plain: 'Updated!'
         else
           msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:wf_name]}"
           format.any { redirect_to catalog_path(params[:id]), notice: msg }
         end
       end
     elsif params[:bulk].present?
-      render status: :bad_request, text: 'Bad request!'
+      render status: :bad_request, plain: 'Bad request!'
     else
       fail ArgumentError, "Missing arguments: #{args.inspect}"
     end
@@ -211,16 +211,16 @@ class ItemsController < ApplicationController
   def release_hold
     # this will raise and exception if the item doesnt have that workflow step
     unless dor_accession_status(@object, 'sdr-ingest-transfer') == 'hold'
-      render :status => :bad_request, :text => 'Item isnt on hold!'
+      render :status => :bad_request, :plain => 'Item isnt on hold!'
       return
     end
     unless dor_lifecycle(@object.admin_policy_object, 'accessioned')
-      render :status => :bad_request, :text => "Item's APO #{@object.admin_policy_object.pid} hasnt been ingested!"
+      render :status => :bad_request, :plain => "Item's APO #{@object.admin_policy_object.pid} hasnt been ingested!"
       return
     end
     set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
     if params[:bulk]
-      render :status => 200, :text => 'Updated!'
+      render :status => 200, :plain => 'Updated!'
       return
     end
     respond_to do |format|
@@ -267,7 +267,7 @@ class ItemsController < ApplicationController
     begin
       save_and_reindex
     rescue ActiveFedora::ObjectNotFoundError
-      render text: 'The object was not found in Fedora. Please recheck the RELS-EXT XML.', status: :not_found
+      render plain: 'The object was not found in Fedora. Please recheck the RELS-EXT XML.', status: :not_found
       return
     end
 
@@ -315,11 +315,11 @@ class ItemsController < ApplicationController
   def create_minimal_mods
     unless dor_accession_error?(@object, 'descriptive-metadata') ||
        dor_accession_error?(@object, 'publish')
-      render status: 500, text: 'Object is not in error for descMD or publish!'
+      render status: 500, plain: 'Object is not in error for descMD or publish!'
       return
     end
     unless @object.descMetadata.new?
-      render status: 500, text: 'This service cannot overwrite existing data!'
+      render status: 500, plain: 'This service cannot overwrite existing data!'
       return
     end
     @object.descMetadata.content = ''
@@ -332,7 +332,7 @@ class ItemsController < ApplicationController
       set_dor_accession_status(@object, 'publish', 'waiting')
     end
     respond_to do |format|
-      format.any { render :text => 'Set metadata' }
+      format.any { render :plain => 'Set metadata' }
     end
   end
 
@@ -350,7 +350,7 @@ class ItemsController < ApplicationController
     end
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
-    render :status => 500, :text => 'Object net yet accessioned'
+    render :status => 500, :plain => 'Object net yet accessioned'
     return
   end
 
@@ -402,14 +402,14 @@ class ItemsController < ApplicationController
       @object.datastreams['events'].add_event('close', current_user.to_s , msg)
       respond_to do |format|
         if params[:bulk]
-          format.html {render :status => :ok, :text => 'Version Closed.'}
+          format.html {render :status => :ok, :plain => 'Version Closed.'}
         else
           msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
           format.any { redirect_to catalog_path(params[:id]), :notice => msg }
         end
       end
     rescue Dor::Exception # => e
-      render :status => 500, :text => 'No version to close.'
+      render :status => 500, :plain => 'No version to close.'
     end
   end
 
@@ -431,7 +431,7 @@ class ItemsController < ApplicationController
     @object.identityMetadata.content_will_change!
     respond_to do |format|
       if params[:bulk]
-        format.html { render :status => :ok, :text => 'Updated source id.' }
+        format.html { render :status => :ok, :plain => 'Updated source id.' }
       else
         msg = "Source Id for #{params[:id]} has been updated!"
         format.any { redirect_to catalog_path(params[:id]), :notice => msg }
@@ -450,7 +450,7 @@ class ItemsController < ApplicationController
     @object.identityMetadata.save
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :text => "#{tags.size} Tags updated."}
+        format.html {render :status => :ok, :plain => "#{tags.size} Tags updated."}
       else
         msg = "#{tags.size} tags for #{params[:id]} have been updated!"
         format.any { redirect_to catalog_path(params[:id]), :notice => msg }
@@ -486,7 +486,7 @@ class ItemsController < ApplicationController
 
   def purge_object
     if dor_lifecycle(@object, 'submitted')
-      render :status => :forbidden, :text => 'Cannot purge an object after it is submitted.'
+      render :status => :forbidden, :plain => 'Cannot purge an object after it is submitted.'
       return
     end
 
@@ -514,22 +514,22 @@ class ItemsController < ApplicationController
   def discoverable
     messages = mods_discoverable @object.descMetadata.ng_xml
     if messages.length == 0
-      render :status => :ok, :text => 'Discoverable.'
+      render :status => :ok, :plain => 'Discoverable.'
     else
-      render :status => 500, :text => messages.join(' ')
+      render :status => 500, :plain => messages.join(' ')
     end
   end
 
   def remediate_mods
-    render :status => :ok, :text => 'method disabled'
+    render :status => :ok, :plain => 'method disabled'
   end
 
   def schema_validation
     errors = schema_validate @object.descMetadata.ng_xml
     if errors.length == 0
-      render :status => :ok, :text => 'Valid.'
+      render :status => :ok, :plain => 'Valid.'
     else
-      render :status => 500, :text => errors.join('<br>')[0...490]
+      render :status => 500, :plain => errors.join('<br>')[0...490]
     end
   end
 
@@ -537,7 +537,7 @@ class ItemsController < ApplicationController
     @object.build_datastream('descMetadata', true)
     @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
     @object.descMetadata.save
-    render :status => :ok, :text => 'Refreshed.'
+    render :status => :ok, :plain => 'Refreshed.'
   end
 
   def scrubbed_content_ng_utf8(content)
@@ -553,9 +553,9 @@ class ItemsController < ApplicationController
     ds = @object.descMetadata
     ng = scrubbed_content_ng_utf8(ds.content)
     if EquivalentXml.equivalent?(ng, ds.ng_xml)
-      render :status => :ok, :text => 'No change'
+      render :status => :ok, :plain => 'No change'
     else
-      render :status => 500, :text => 'Has duplicates'
+      render :status => 500, :plain => 'Has duplicates'
     end
   end
 
@@ -563,12 +563,12 @@ class ItemsController < ApplicationController
     ds = @object.descMetadata
     ng = scrubbed_content_ng_utf8(ds.content)
     if EquivalentXml.equivalent?(ng, ds.ng_xml)
-      render :status => 500, :text => 'No duplicate encoding'
+      render :status => 500, :plain => 'No duplicate encoding'
     else
       ds.ng_xml = ng
       ds.content = ng.to_s
       @object.save
-      render :status => :ok, :text => 'Has duplicates'
+      render :status => :ok, :plain => 'Has duplicates'
     end
   end
 
@@ -577,23 +577,23 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :text => 'Rights updated.'}
+        format.html {render :status => :ok, :plain => 'Rights updated.'}
       else
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Rights updated!' }
       end
     end
   rescue ArgumentError
-    render :status => :forbidden, :text => 'Invalid new rights setting.'
+    render :status => :forbidden, :plain => 'Invalid new rights setting.'
   end
 
   # set the content type in the content metadata
   def set_content_type
     unless Constants::CONTENT_TYPES.include? params[:new_content_type]
-      render :status => :forbidden, :text => 'Invalid new content type.'
+      render :status => :forbidden, :plain => 'Invalid new content type.'
       return
     end
     unless @object.datastreams.include? 'contentMetadata'
-      render :status => :forbidden, :text => 'Object doesnt have a content metadata datastream to update.'
+      render :status => :forbidden, :plain => 'Object doesnt have a content metadata datastream to update.'
       return
     end
     @object.contentMetadata.set_content_type(
@@ -604,7 +604,7 @@ class ItemsController < ApplicationController
     )
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :text => 'Content type updated.'}
+        format.html {render :status => :ok, :plain => 'Content type updated.'}
       else
         format.any { redirect_to catalog_path(params[:id]), :notice => 'Content type updated!' }
       end
@@ -617,17 +617,17 @@ class ItemsController < ApplicationController
     if dor_accession_error?(@object, 'sdr-ingest-transfer') && @object.provenanceMetadata.new?
       @object.build_provenanceMetadata_datastream('accessionWF', 'DOR Common Accessioning completed')
       set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
-      render :text => 'ok.'
+      render :plain => 'ok.'
     else
       msg = 'Item not in error for sdr-ingest-transfer or provenance metadata already exists!'
-      render :status => 500, :text => msg
+      render :status => 500, :plain => msg
     end
   end
 
   # set the rightsMetadata to the APO's defaultObjectRights
   def apply_apo_defaults
     @object.reapplyAdminPolicyObjectDefaults
-    render :status => 200, :text => 'Defaults applied.'
+    render :status => 200, :plain => 'Defaults applied.'
   end
 
   # add a workflow to an object if the workflow is not present in the active table
@@ -637,7 +637,7 @@ class ItemsController < ApplicationController
     wf = @object.workflows[wf_name]
     # check the workflow is present and active (not archived)
     if wf && wf.active?
-      render :status => 500, :text => "#{wf_name} already exists!"
+      render :status => 500, :plain => "#{wf_name} already exists!"
       return
     end
     @object.create_workflow(wf_name)
@@ -648,7 +648,7 @@ class ItemsController < ApplicationController
     msg = "Added #{wf_name}"
 
     if params[:bulk]
-      render :text => msg
+      render :plain => msg
     else
       redirect_to catalog_path(params[:id]), notice: msg
     end
@@ -700,7 +700,7 @@ class ItemsController < ApplicationController
   def enforce_versioning
     # if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
     return true if @object.allows_modification?
-    render status: :forbidden, text: 'Object cannot be modified in its current state.'
+    render status: :forbidden, plain: 'Object cannot be modified in its current state.'
     false
   end
 
