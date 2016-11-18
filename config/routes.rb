@@ -21,7 +21,7 @@ Argo::Application.routes.draw do
     concerns :searchable
   end
 
-  resources :solr_documents, only: [:show, :update], controller: 'catalog', path: '/catalog' do
+  resources :solr_documents, only: [:show, :update], controller: 'catalog', path: '/view' do
     concerns :exportable
 
     member do

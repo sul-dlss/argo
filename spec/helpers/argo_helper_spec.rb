@@ -55,7 +55,7 @@ describe ArgoHelper, :type => :helper do
           },
           {
             label: 'Manage release',
-            url: "/catalog/#{@item_id}/manage_release"
+            url: "/view/#{@item_id}/manage_release"
           }
         ]
       end
