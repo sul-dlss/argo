@@ -152,7 +152,7 @@ describe ItemsController, :type => :controller do
   end
   describe 'source_id' do
     it 'should update the source id' do
-      expect(@item).to receive(:set_source_id).with('new:source_id')
+      expect(@item).to receive(:source_id=).with('new:source_id')
       expect(Dor::SearchService.solr).to receive(:add)
       post 'source_id', params: { :id => @pid, :new_id => 'new:source_id' }
     end

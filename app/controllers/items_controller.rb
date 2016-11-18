@@ -422,7 +422,7 @@ class ItemsController < ApplicationController
 
   def source_id
     new_id = ItemsController.normalize_source_id(params[:new_id])
-    @object.set_source_id(new_id)
+    @object.source_id = new_id
     # TODO: the content= and content_will_change! calls belong in dor-services,
     # for this method and other similar methods. can then clean up
     # allow(idmd).to receive(:"ng_xml") (and "content_will_change!") in tests.
