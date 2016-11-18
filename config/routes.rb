@@ -150,10 +150,6 @@ Argo::Application.routes.draw do
     post 'set_collection'
   end
 
-  namespace :status do
-    get 'log'
-  end
-
   namespace :registration do
     get '/', :action => :form
     get 'tracksheet'
@@ -170,13 +166,9 @@ Argo::Application.routes.draw do
   end
 
   namespace :dor do
-    get 'label'
-    get 'query_by_id'
     match 'republish/:pid', :action => :republish,                 :via => [:get, :post]
-    match 'archive/:pid',   :action => :archive_workflows,         :via => [:get, :post]
     match 'reindex/:pid',   :action => :reindex, :as => 'reindex', :via => [:get, :post]
     match 'delete_from_index/:pid', :action => :delete_from_index, :via => [:get, :post]
-    get 'index_exceptions'
     resources :objects, :only => :create # we only implement create for object registration
   end
 

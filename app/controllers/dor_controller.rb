@@ -1,26 +1,6 @@
 class DorController < ApplicationController
   respond_to :json, :xml
-  respond_to :text, :only => [:query_by_id, :reindex, :delete_from_index]
-
-  def query_by_id
-    unless params[:id]
-      response.status = 400
-      return
-    end
-
-    result = Dor::SearchService.query_by_id(params[:id]).collect do |pid|
-      { :id => pid, :url => url_for(:controller => 'dor/objects', :id => pid) }
-    end
-
-    respond_with(result) do |format|
-      format.any(:json, :xml) { render request.format.to_sym => result }
-      format.text { render :plain => result.collect { |v| v[:id] }.join("\n") }
-    end
-  end
-
-  def label
-    respond_with params.merge('label' => Dor::MetadataService.label_for(params[:source_id]))
-  end
+  respond_to :text, :only => [:reindex, :delete_from_index]
 
   def reindex
     @solr_doc = Argo::Indexer.reindex_pid params[:pid], Argo::Indexer.generate_index_logger { request.uuid }
