@@ -74,7 +74,7 @@ describe ArgoHelper, :type => :helper do
         end
       end
       it 'should include the embargo update button if the user is an admin and the object is embargoed' do
-        @doc['embargo_status_ssim'] = ['2012-10-19T00:00:00Z']
+        @doc = SolrDocument.new(@doc.to_h.merge('embargo_status_ssim' => ['2012-10-19T00:00:00Z']))
         buttons = helper.render_buttons(@doc)
         default_buttons.push({
           label: 'Update embargo',

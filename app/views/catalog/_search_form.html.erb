@@ -3,7 +3,7 @@
     <h2 class="search sr-only"><%= label_tag(:q, "Search ") %></h2>
     <div class='input-group search-input-group'>
       <%= text_field_tag :q, params[:q], :class => "search_q q form-control" %>
-      <%= render_hash_as_hidden_fields(params_for_search().except(:q, :search_field, :qt, :page, :utf8)) %>
+      <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:q, :search_field, :qt, :page, :utf8)) %>
       <span class="input-group-btn">
         <button type="submit" class="btn btn-primary search-btn" id="search">
           <span class="submit-search-text"><%=t('blacklight.search.form.submit')%></span>
