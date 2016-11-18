@@ -5,7 +5,7 @@ module ArgoHelper
   include ValueHelper
 
   def structure_from_solr(solr_doc, prefix, suffix = 'display')
-    prefixed_fields = Hash[solr_doc.select { |k, v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
+    prefixed_fields = Hash[solr_doc.to_h.select { |k, v| k =~ /^#{prefix}_\d+_.+_#{suffix}$/ }]
     result = Confstruct::HashWithStructAccess.new
     prefixed_fields.each_pair do |path_str, value|
       h = result

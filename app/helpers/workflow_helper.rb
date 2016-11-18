@@ -12,12 +12,12 @@ module WorkflowHelper
   end
 
   def render_workflow_name(name)
-    new_params = add_facet_params('wf_wps_ssim', name).merge(:controller => 'catalog', :action => 'index')
+    new_params = search_state.add_facet_params('wf_wps_ssim', name).merge(:controller => 'catalog', :action => 'index')
     link_to(name, new_params)
   end
 
   def render_workflow_process_name(name, process)
-    new_params = add_facet_params('wf_wps_ssim', [name, process].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
+    new_params = search_state.add_facet_params('wf_wps_ssim', [name, process].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     link_to(process, new_params)
   end
 
@@ -39,7 +39,7 @@ module WorkflowHelper
 
   def render_workflow_reset_link(wf_hash, name, process, status)
     return unless wf_hash[process] && wf_hash[process][status] && wf_hash[process][status][:_]
-    new_params = add_facet_params(
+    new_params = search_state.add_facet_params(
       'wf_wps_ssim',
       [name, process, status].compact.join(':'))
         .merge(
@@ -50,7 +50,7 @@ module WorkflowHelper
   end
 
   def render_workflow_item_count(wf_hash, name, process, status)
-    new_params = add_facet_params('wf_wps_ssim', [name, process, status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
+    new_params = search_state.add_facet_params('wf_wps_ssim', [name, process, status].compact.join(':')).merge(:controller => 'catalog', :action => 'index')
     rotate_facet_params('wf_wps', 'wps', facet_order('wf_wps'), new_params)
     item_count = 0
     if wf_hash[process] && wf_hash[process][status] && item = wf_hash[process][status][:_] # rubocop:disable Lint/AssignmentInCondition
