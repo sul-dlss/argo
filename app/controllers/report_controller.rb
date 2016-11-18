@@ -60,7 +60,8 @@ class ReportController < CatalogController
 
   # an ajax call to reset workflow states for objects
   def reset
-    head status: 501 unless request.xhr?
+    head 501 unless request.xhr?
+
     fail ArgumentError, 'Missing reset_workflow' unless params[:reset_workflow].present?
     fail ArgumentError, 'Missing reset_step' unless params[:reset_step].present?
 
