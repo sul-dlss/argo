@@ -18,7 +18,7 @@ describe Argo::ProfileQueries do
       facet_fields = solr_parameters.facet_fields.map{ |f| f[0] } + solr_parameters['facet.field']
       required_fields = [
         SolrDocument::FIELD_APO_TITLE.to_s,
-        SolrDocument::SolrDocument::FIELD_COLLECTION_TITLE.to_s,
+        SolrDocument::FIELD_COLLECTION_TITLE.to_s,
         'rights_descriptions_ssim',
         'content_type_ssim',
         'use_statement_ssim',
