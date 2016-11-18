@@ -39,8 +39,7 @@ class RegistrationController < ApplicationController
       col_druid = col_id.gsub(/^druid:/, '')
       col_title_field = SolrDocument::FIELD_TITLE
       # grab the collection title from Solr, or fall back to DOR
-      solr_doc = Blacklight.default_index.connection.find({
-        q: "id:\"#{col_id}\"",
+      solr_doc = Dor::SearchService.query("id:\"#{col_id}\"", {
         rows: 1,
         fl: col_title_field
       })['response']['docs'].first
@@ -90,13 +89,14 @@ class RegistrationController < ApplicationController
       '*:*',
       {
         rows: 0,
-        facets: facet_fields,
+        :'facet.field' => facet_fields,
         :'facet.prefix' => params[:term].titlecase,
         :'facet.mincount' => 1,
-        :'facet.limit' => 15
+        :'facet.limit' => 15,
+        :'json.nl' => 'map'
       }
     )
-    result = response.facets.find { |f| f.name == facet_field }.items.map(&:value).sort
+    result = response['facet_counts']['facet_fields'][facet_field].keys.sort
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
     end
