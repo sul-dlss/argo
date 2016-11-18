@@ -59,7 +59,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     return true if current_user
-    render nothing: true, status: :unauthorized
+    head status: :unauthorized
     false
   end
 
