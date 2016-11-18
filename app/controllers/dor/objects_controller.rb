@@ -22,13 +22,13 @@ class Dor::ObjectsController < ApplicationController
     respond_to do |format|
       format.json { render :json => response, :location => object_location(pid) }
       format.xml  { render :xml  => response, :location => object_location(pid) }
-      format.text { render :text => pid, :location => object_location(pid) }
+      format.text { render :plain => pid, :location => object_location(pid) }
       format.html { redirect_to object_location(pid) }
     end
   rescue Dor::ParameterError => e
-    render :text => e.message, :status => 400
+    render :plain => e.message, :status => 400
   rescue Dor::DuplicateIdError => e
-    render :text => e.message, :status => 409, :location => object_location(e.pid)
+    render :plain => e.message, :status => 409, :location => object_location(e.pid)
   rescue StandardError => e
     logger.info e.inspect.to_s
     raise

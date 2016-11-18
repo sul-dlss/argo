@@ -7,7 +7,7 @@ describe IndexQueueController do
       allow(subject).to receive(:webauth).
         and_return(double(:webauth_user, login: 'sunetid', logged_in?: true))
       expect(IndexQueue).to receive(:new).and_return(index_queue)
-      get :depth, format: :json
+      get :depth, params: { format: :json }
       expect(response.body).to eq '100'
     end
   end

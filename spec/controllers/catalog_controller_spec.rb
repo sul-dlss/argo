@@ -14,7 +14,7 @@ describe CatalogController, :type => :controller do
     describe 'no user' do
       it 'basic get redirects to login' do
         expect(subject).to receive(:webauth).and_return(nil)
-        get 'show', :id => @druid
+        get 'show', params: { :id => @druid }
         expect(response.code).to eq('401')  # Unauthorized without webauth, no place to redirect
       end
     end
@@ -23,33 +23,33 @@ describe CatalogController, :type => :controller do
         allow(subject).to receive(:current_user).and_return(@user)
       end
       it 'unauthorized_user' do
-        get 'show', :id => @druid
+        get 'show', params: { :id => @druid }
         expect(response.code).to eq('403')  # two different flavors
         # expect(response.body).to include 'No APO'
       end
       it 'is_admin?' do
         allow(@user).to receive(:is_admin?).and_return(true)
-        get 'show', :id => @druid
+        get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
       it 'is_viewer?' do
         allow(@user).to receive(:is_viewer?).and_return(true)
-        get 'show', :id => @druid
+        get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
       it 'impersonating nobody' do
         @user.set_groups_to_impersonate(['some:irrelevance'])
-        get 'show', :id => @druid
+        get 'show', params: { :id => @druid }
         expect(response.code).to eq('403')
       end
       it 'impersonating viewer' do
         @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:viewer-role'])
-        get 'show', :id => @druid
+        get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
       it 'impersonating admin' do
         @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:administrator-role'])
-        get 'show', :id => @druid
+        get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
     end
@@ -63,7 +63,7 @@ describe CatalogController, :type => :controller do
       describe 'impersonating user with no extra powers' do
         it 'is forbidden since there is no APO' do
           allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
+          get 'show', params: { :id => @druid }
           expect(response.code).to eq('403')  # Forbidden
         end
       end
@@ -80,14 +80,14 @@ describe CatalogController, :type => :controller do
       describe 'impersonating_user with no extra powers' do
         it 'is forbidden if roles do not match' do
           allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
+          get 'show', params: { :id => @druid }
           expect(response.code).to eq('403')  # Forbidden
           expect(response.body).to include 'forbidden'
         end
         it 'succeeds if roles match' do
           allow(@user).to receive(:roles).with(@apo_druid).and_return(['dor-viewer'])
           allow(subject).to receive(:current_user).and_return(@user)
-          get 'show', :id => @druid
+          get 'show', params: { :id => @druid }
           expect(response.code).to eq('200')
         end
       end
@@ -131,7 +131,7 @@ describe CatalogController, :type => :controller do
     it 'should 404 on missing item' do
       allow(subject).to receive(:current_user).and_return(double('WebAuth', is_admin?: true))
       expect(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get 'show', :id => druid
+      get 'show', params: { :id => druid }
       expect(response).to have_http_status(:not_found)
     end
   end
@@ -175,12 +175,12 @@ describe CatalogController, :type => :controller do
     end
     it 'authorizes the view for content managers' do
       expect(@user).to receive(:is_admin?).and_return(true)
-      get :show, id: @druid
+      get :show, params: { id: @druid }
       expect(response).to have_http_status(:success)
     end
     it 'responds accordingly for unauthorized_user' do
       expect(@user).to receive(:is_admin?).and_return(false)
-      get :show, id: @druid
+      get :show, params: { id: @druid }
       expect(response).to have_http_status(:forbidden)
     end
   end

@@ -1,7 +1,7 @@
 class BulkActionsController < ApplicationController
   before_action :set_bulk_action, only: [:destroy, :file]
 
-  rescue_from ActiveRecord::RecordNotFound, with: -> { render text: 'Record Not Found', status: :not_found }
+  rescue_from ActiveRecord::RecordNotFound, with: -> { render plain: 'Record Not Found', status: :not_found }
 
   # GET /bulk_actions
   def index

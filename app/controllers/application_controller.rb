@@ -7,8 +7,8 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :fedora_setup
 
-  rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render text: 'Object Not Found', status: :not_found }
-  rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, text: 'forbidden' }
+  rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render plain: 'Object Not Found', status: :not_found }
+  rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, plain: 'forbidden' }
 
   helper_method :current_or_guest_user
 
@@ -53,13 +53,13 @@ class ApplicationController < ActionController::Base
     if Rails.env.development? || ENV['DOR_SERVICES_DEBUG_MODE']
       yield
     else
-      render :text => 'Not Found', :status => :not_found
+      render :plain => 'Not Found', :status => :not_found
     end
   end
 
   def authenticate_user!
     return true if current_user
-    render nothing: true, status: :unauthorized
+    head status: :unauthorized
     false
   end
 

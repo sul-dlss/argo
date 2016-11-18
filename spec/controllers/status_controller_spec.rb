@@ -46,13 +46,13 @@ describe StatusController, :type => :controller do
     it 'should 404 instead of 500 on bad IDs' do
       expect(subject).to receive(:check_recently_indexed).and_return(false)
       expect(Dor).to receive(:find).with('junk').and_call_original
-      get 'log', :test_obj => 'junk'
+      get 'log', params: { :test_obj => 'junk' }
       expect(response).to have_http_status 404
     end
     it 'succeeds with recently indexed items' do
       expect(subject).to receive(:check_recently_indexed).and_return(true)
       expect(Dor).not_to receive(:find)
-      get 'log', :test_obj => @druid
+      get 'log', params: { :test_obj => @druid }
       expect(response).to have_http_status 200
       expect(response.body).to include 'All good!'
     end
@@ -63,14 +63,14 @@ describe StatusController, :type => :controller do
       end
       it 'should 200 after reindexing stale druid' do
         expect(subject).to receive(:check_recently_indexed).and_return(false, true)
-        get 'log', :test_obj => @druid, :sleep => 0
+        get 'log', params: { :test_obj => @druid, :sleep => 0 }
         expect(response).to have_http_status 200
         expect(response.body).to include 'All good!'
         expect(response.body).to include "Saved #{@druid}"
       end
       it 'should 500 if reindexing fails' do
         expect(subject).to receive(:check_recently_indexed).and_return(false, false)
-        get 'log', :test_obj => @druid, :sleep => 0
+        get 'log', params: { :test_obj => @druid, :sleep => 0 }
         expect(response).to have_http_status 500
         expect(response.body).not_to include 'All good!'
         expect(response.body).to include 'Nothing indexed recently'

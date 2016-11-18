@@ -9,7 +9,7 @@ class RegistrationController < ApplicationController
     sequence = params[:sequence] || 1
     response['content-disposition'] = "attachment; filename=#{name}-#{sequence}.pdf"
     pdf = TrackSheet.new(druids).generate_tracking_pdf
-    render :text => pdf.render, :content_type => :pdf
+    render :plain => pdf.render, :content_type => :pdf
   end
 
   def workflow_list

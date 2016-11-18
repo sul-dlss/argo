@@ -14,7 +14,7 @@ class DorController < ApplicationController
 
     respond_with(result) do |format|
       format.any(:json, :xml) { render request.format.to_sym => result }
-      format.text { render :text => result.collect { |v| v[:id] }.join("\n") }
+      format.text { render :plain => result.collect { |v| v[:id] }.join("\n") }
     end
   end
 
@@ -27,7 +27,7 @@ class DorController < ApplicationController
     Dor::SearchService.solr.commit # reindex_pid doesn't commit, but callers of this method may expect the update to be committed immediately
     flash[:notice] = "Successfully updated index for #{params[:pid]}"
     unless request.headers['Referer']
-      render status: 200, text: flash[:notice]
+      render status: 200, plain: flash[:notice]
       return
     end
     redirect_back(
@@ -36,7 +36,7 @@ class DorController < ApplicationController
   rescue ActiveFedora::ObjectNotFoundError
     flash[:error] = 'Object does not exist in Fedora.'
     unless request.headers['Referer']
-      render status: 404, text: flash[:error]
+      render status: 404, plain: flash[:error]
       return
     end
     redirect_back(
@@ -47,7 +47,7 @@ class DorController < ApplicationController
   def delete_from_index
     Dor::SearchService.solr.delete_by_id(params[:pid])
     Dor::SearchService.solr.commit
-    render :text => params[:pid]
+    render :plain => params[:pid]
   end
 
   def republish
