@@ -4,17 +4,18 @@
 
 Argo uses Solr as an index for faceting and searching data in the corresponding Fedora repository.
 
-Objects can be reindexed by Argo as a result of a couple different things:
-* An object is edited in Fedora (by Argo or another application), and a message is sent to an Argo endpoint (`/dor/reindx/PID`), triggering a reindex of the object.
-* An object is part of a batch of objects queued for bulk indexing.
+Objects can be reindexed as a result of a couple different things:
+* An object is edited in Fedora (by Argo or another application), and a message is sent to an endpoint in the dor_indexing_app service (`/dor/reindex/PID`), triggering a reindex of the object.
+* An object is part of a batch of objects queued for bulk indexing within Argo (deprecated)
 
-In both cases, Argo uses dor-services to:
+To support indexing, dor-services will:
 * load the object from Fedora.
 * create a Solr document representing the object (using its `to_solr` method).
 * save the document to the Solr instance specified in the configuration, possibly committing immediately.
 
-
 ## Argo::Indexer
+
+This is deprecated for `Dor::IndexingService` in `dor-services`.
 
 ### Reusable methods
 
@@ -22,29 +23,9 @@ The `Argo::Indexer` class provides re-usable methods for indexing:
 * `Argo::Indexer.reindex_pid` takes a PID (druid) and reindexes it as per the above explanation (load from Fedora, create Solr doc, save to Solr).  It also takes an optional logger to use instead of the default (which might be useful for something like logging info about a request triggering the reindex from in the Rails app).  Finally, it gives the option to swallow exceptions.  The default is to let them bubble up, but a caller doing bulk indexing might wish to proceed and index everything it can, with the expectation that the logs will be reviewed later for errors (though note that only `StandardError` errors get trapped, all others always propogate).  The outcome of each indexing attempt is logged, with the PID (druid) and status of the attempt.
 * `Argo::Indexer.generate_index_logger` will create a logger instance that writes to the file specified in `Settings.INDEXER.LOG` with leading string obtained by executing the block provided to `generate_index_logger`.
 
-### Example usage by DorController (which backs the `/dor/reindex` endpoint in Argo)
-
-`DorController.index_logger` uses `Argo::Indexer.generate_index_logger` to generate a logger that leads with the request ID, since those logging events will be triggered from a web request:
-```ruby
-  def index_logger
-    @index_logger ||= Argo::Indexer.generate_index_logger { request.uuid }
-  end
-```
-
-`DorController.reindex` calls `Argo::Indexer.reindex_pid` with the logger instantiated by `index_logger`, and asks Solr to commit the added document (since calling code may expect the update to be available immediately).  Since it uses the default behavior of letting errors bubble up, it specifically deals with `ActiveFedora::ObjectNotFoundError`, rendering a 404 response.
-```ruby
-  def reindex
-    solr_doc = Argo::Indexer.reindex_pid params[:pid], index_logger
-    Dor::SearchService.solr.commit
-    render :plain => "Status:ok<br> Solr Document: #{solr_doc.inspect}"
-  rescue ActiveFedora::ObjectNotFoundError # => e
-    render :status => 404, :plain => 'Object does not exist in Fedora.'
-    return
-  end
-```
-
-
 ## Bulk reindexing
+
+This approach is deprecated, but we haven't yet ironed out a process for doing a full reindex from scratch. One alternate option to this approach would be to queue the IDs of the objects that need to be reindexed using `sulmq`, for processing by `dor_indexing_app`. See the [`dor_indexing_app`](https://github.com/sul-dlss/dor_indexing_app) Wiki for the new methods. The `Argo::PidGatherer`, in particular, is not migrated, but we've had issues with our Fedora instance's `risearch` results (see Issue \#380). As such, this [dump script](https://github.com/sul-dlss/argo/blob/master/bin/dump_fedora_pids.rb) may be useful in obtaining a full PID list from DOR, in the event that there's no _trustworthy_ Solr index from which to get a list of IDs.
 
 There are many scenarios where you might want to reindex many or all of the objects in Fedora in bulk.  E.g.: migrating bad data that resulted from a bug in a dor-services `to_solr` method once that bug is fixed, catching up the index if some indexing messages from other applications got dropped (e.g. due to network or Karaf trouble), or rebuilding the index after inadvertent corruption or deletion.
 
