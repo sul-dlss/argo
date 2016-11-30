@@ -30,13 +30,13 @@ class Report
       {
         :field => :title, :label => 'Title',
         :proc => lambda { |doc| retrieve_terms(doc)[:title] },
-        :solr_fields => %w(public_dc_title_tesim dc_title_tesim obj_label_ssim),
+        :solr_fields => %w(sw_display_title_tesim obj_label_ssim),
         :sort => false, :default => false, :width => 100
       },
       {
         :field => :citation, :label => 'Citation',
         :proc => lambda { |doc| render_citation(doc) },
-        :solr_fields => %w(public_dc_creator_tesim dc_creator_tesim public_dc_title_tesim dc_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim public_dc_publisher_tesim originInfo_publisher_tesim public_dc_date_tesim),
+        :solr_fields => %w(sw_author_tesim sw_display_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim originInfo_publisher_tesim),
         :sort => false, :default => true, :width => 100
       },
       {
