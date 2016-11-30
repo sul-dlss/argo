@@ -56,7 +56,7 @@ gem 'faraday'
 gem 'eye'  # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'honeybadger', '~> 2.0'
 gem 'jqgrid-jquery-rails'
-gem 'jquery-ui-rails'
+gem 'jquery-ui-rails', '~> 5.0'
 gem 'jquery-validation-rails'
 gem 'linkeddata', '~> 1.99' # pinned for faster dependency resolution
 gem 'mysql2', '~> 0.4.5'
