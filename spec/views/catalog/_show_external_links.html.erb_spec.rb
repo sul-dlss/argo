@@ -18,6 +18,6 @@ describe 'catalog/_show_external_links.html.erb' do
     expect(rendered).to have_css '.show_sidebar'
     expect(rendered).to have_css 'ul.nav.nav-stacked'
     expect(rendered).to have_css 'li', count: 6
-    expect(rendered).to have_css 'a[href="/catalog/druid:abc123.json"]', text: 'Solr document'
+    expect(rendered).to have_css 'a[href="/view/druid:abc123.json"]', text: 'Solr document'
   end
 end

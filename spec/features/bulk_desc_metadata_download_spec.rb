@@ -11,7 +11,7 @@ RSpec.feature 'Bulk Descriptive Metadata Download' do
   scenario 'New page has a populate druids div with last search' do
     expect_any_instance_of(CatalogController).to receive(:current_user)
       .at_least(:once).and_return(current_user)
-    visit catalog_index_path q: 'stanford'
+    visit search_catalog_path q: 'stanford'
     click_link 'Bulk Actions'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     click_link 'New Bulk Action'

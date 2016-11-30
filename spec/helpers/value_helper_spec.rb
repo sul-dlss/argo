@@ -13,7 +13,7 @@ RSpec.describe ValueHelper do
     end
     it 'creates a link to the admin policies catalog path' do
       expect(helper.link_to_admin_policy(args))
-        .to have_css 'a[href="/catalog/druid:yolo"]', text: 'Y.O.L.O.'
+        .to have_css 'a[href="/view/druid:yolo"]', text: 'Y.O.L.O.'
     end
   end
   describe '#links_to_collections' do
@@ -25,9 +25,9 @@ RSpec.describe ValueHelper do
     end
     it 'creates multiple links delimited by a line break' do
       expect(helper.links_to_collections(args))
-        .to have_css 'a[href="/catalog/druid:supercool"]', text: 'Super Cool'
+        .to have_css 'a[href="/view/druid:supercool"]', text: 'Super Cool'
       expect(helper.links_to_collections(args))
-        .to have_css 'a[href="/catalog/druid:extracool"]', text: 'Extra Cool'
+        .to have_css 'a[href="/view/druid:extracool"]', text: 'Extra Cool'
       expect(helper.links_to_collections(args)).to have_css 'br'
     end
   end

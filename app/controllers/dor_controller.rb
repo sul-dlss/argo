@@ -18,7 +18,7 @@ class DorController < ApplicationController
       end
     else
       redirect_back(
-        fallback_location: proc { catalog_path(params[:pid])}
+        fallback_location: proc { solr_document_path(params[:pid])}
       )
     end
   end
@@ -27,6 +27,6 @@ class DorController < ApplicationController
   def republish
     obj = Dor.find(params[:pid])
     obj.publish_metadata_remotely
-    redirect_to catalog_path(params[:pid]), notice: 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
+    redirect_to solr_document_path(params[:pid]), notice: 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
   end
 end

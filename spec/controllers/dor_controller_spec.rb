@@ -12,7 +12,7 @@ describe DorController, :type => :controller do
         get :reindex, params: { pid: druid }
         expect(flash[:notice]).to eq "Successfully updated index for #{druid}"
         expect(response).to have_http_status(:found)
-        expect(response).to redirect_to(catalog_path(druid))
+        expect(response).to redirect_to(solr_document_path(druid))
       end
 
       it 'redirects to show page and sets flash error on failure' do
@@ -21,7 +21,7 @@ describe DorController, :type => :controller do
         get :reindex, params: { pid: druid }
         expect(flash[:error]).to eq "Failed to update index for #{druid}"
         expect(response).to have_http_status(:found)
-        expect(response).to redirect_to(catalog_path(druid))
+        expect(response).to redirect_to(solr_document_path(druid))
       end
     end
     context 'from bulk action' do

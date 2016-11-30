@@ -17,11 +17,11 @@ RSpec.feature 'Collection manage release' do
   end
   let(:druid) { 'druid:pb873ty1662' }
   scenario 'Has a manage release button' do
-    visit catalog_path(druid)
+    visit solr_document_path(druid)
     expect(page).to have_css 'a', text: 'Manage release'
   end
   scenario 'Creates a new bulk action' do
-    visit manage_release_path(druid)
+    visit manage_release_solr_document_path(druid)
     expect(page).to have_css 'label', text: "Manage release to discovery applications for collection #{druid}"
     choose 'This collection and all its members*'
     choose 'Release it'

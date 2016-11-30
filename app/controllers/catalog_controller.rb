@@ -166,15 +166,6 @@ class CatalogController < ApplicationController
     super()  # with or without an APO, if we get here, user is authorized to view
   end
 
-  def datastream_view
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @response, @document = fetch pid
-    @obj = Dor.find pid, :lightweight => true
-    data = @obj.datastreams[params[:dsid]].content
-    raise ActionController::RoutingError.new('Not Found') if data.nil?
-    send_data data, :type => 'xml', :disposition => 'inline'
-  end
-
   def dc
   end
 

@@ -25,7 +25,7 @@
         params[:dsid] == 'RELS-EXT'
       ) &&
         params[:dsid] != 'workflows'
-      link_to "Edit #{params[:dsid]}", ds_aspect_view_catalog_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { behavior: 'persistent-modal' }
+      link_to "Edit #{params[:dsid]}", ds_solr_document_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { behavior: 'persistent-modal' }
     end
   %>
 <%

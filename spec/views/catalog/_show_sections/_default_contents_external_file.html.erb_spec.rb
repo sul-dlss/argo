@@ -15,7 +15,7 @@ RSpec.describe 'catalog/_show_sections/default_contents_external_file.html.erb',
     expect(rendered).to have_css('li.external-file span.label', text: 'External File')
     expect(rendered).to have_css('li.external-file', text: '2542A.jp2')
     expect(rendered).to have_css('li.external-file', text: 'from item \'druid:cg767mn6478\'')
-    expect(rendered).to have_link('druid:cg767mn6478', href: '/catalog/druid:cg767mn6478')
+    expect(rendered).to have_link('druid:cg767mn6478', href: '/view/druid:cg767mn6478')
     expect(rendered).to have_css('li.external-file', text: 'resource \'cg767mn6478_1\'')
   end
   it 'shows an external file even if it has bad data' do
@@ -33,12 +33,12 @@ RSpec.describe 'catalog/_show_sections/default_contents_external_file.html.erb',
     expect(rendered).to have_css('li[1].external-file span.label', text: 'External File')
     expect(rendered).to have_css('li[1].external-file', text: '2542A.jp2')
     expect(rendered).to have_css('li[1].external-file', text: 'from item \'druid:cg767mn6478\'')
-    expect(rendered).to have_link('druid:cg767mn6478', href: '/catalog/druid:cg767mn6478')
+    expect(rendered).to have_link('druid:cg767mn6478', href: '/view/druid:cg767mn6478')
     expect(rendered).to have_css('li[1].external-file', text: 'resource \'cg767mn6478_1\'')
     expect(rendered).to have_css('li[2].external-file span.label', text: 'External File')
     expect(rendered).to have_css('li[2].external-file', text: '2542B.jp2')
     expect(rendered).to have_css('li[2].external-file', text: 'from item \'druid:cg767mn6479\'')
-    expect(rendered).to have_link('druid:cg767mn6479', href: '/catalog/druid:cg767mn6479')
+    expect(rendered).to have_link('druid:cg767mn6479', href: '/view/druid:cg767mn6479')
     expect(rendered).to have_css('li[2].external-file', text: 'resource \'cg767mn6479_1\'')
   end
 end
