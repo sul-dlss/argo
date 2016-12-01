@@ -68,11 +68,11 @@ PROFILER:
   # useful for profiling blocking HTTP requests and partial rendering
   RACKMINI_ENABLED: false
 
-# SSL
-SSL:
-  CERT_FILE: 'cert_name.crt'
-  KEY_FILE: 'key_name.key'
-  KEY_PASS: 'password'
+# # SSL
+# SSL:
+#   CERT_FILE: 'cert_name.crt'
+#   KEY_FILE: 'key_name.key'
+#   KEY_PASS: 'password'
 
 # Stacks
 STACKS:
