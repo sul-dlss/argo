@@ -107,9 +107,9 @@ describe ApoController, :type => :controller do
       it 'should handle no use license' do
         @md_info[:use_license] = ' '
         subject.set_apo_metadata(@apo, @md_info)
-        expect(@apo.use_license).to          eq('')
+        expect(@apo.use_license).to          be_blank
         expect(@apo.use_license_uri).to      be_nil
-        expect(@apo.use_license_human).to    eq('')
+        expect(@apo.use_license_human).to    be_blank
       end
       it 'should handle no copyright statement' do
         @md_info[:copyright] = ' '
