@@ -20,7 +20,7 @@ class PermittedQueries
   # Also queries Solr based on groups
   # @return [Array[String]] list of DRUIDs from APOs that this User can view
   def permitted_apos
-    query = groups.map { |g| g.gsub(':', '\:') }.join(' OR ')
+    query = groups.map { |g| RSolr.solr_escape(g) }.join(' OR ')
 
     q = ''
     if is_admin
