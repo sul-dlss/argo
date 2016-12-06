@@ -50,8 +50,7 @@ class ItemsController < ApplicationController
   ]
 
   def purl_preview
-    @object.add_collection_reference @object.descMetadata.ng_xml
-    @mods_display = ModsDisplayObject.new(@object.descMetadata.ng_xml.to_s)
+    @mods_display = ModsDisplayObject.new(@object.generate_public_desc_md)
   end
 
   # open a new version if needed. 400 if the item is in a state that doesnt allow opening a version.
