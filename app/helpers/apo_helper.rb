@@ -22,12 +22,12 @@ module ApoHelper
 
   def options_for_desc_md
     [
-      ['MODS'], ['TEI']
+      ['MODS']
     ]
   end
 
   def apo_metadata_sources
-    [['Symphony'], ['DOR'], ['MDToolkit']]
+    [['Symphony'], ['DOR']]
   end
 
   def workflow_options

@@ -37,7 +37,7 @@ describe 'apo', :type => :request do
     fill_in 'use',       :with => 'Use statement'
     fill_in 'managers',  :with => 'dlss:developers'
     fill_in 'viewers',   :with => 'sunetid:someone'
-    page.select('TEI', :from => 'desc_md')
+    page.select('MODS', :from => 'desc_md')
     page.select('Attribution Share Alike 3.0 Unported', :from => 'use_license')
     choose('collection_radio', option: 'none')
     click_button 'register'
@@ -48,7 +48,7 @@ describe 'apo', :type => :request do
     expect(find_field('use'        ).value).to eq('Use statement')
     expect(find_field('managers'   ).value).to eq('dlss:developers')
     expect(find_field('viewers'    ).value).to eq('sunetid:someone')
-    expect(find_field('desc_md'    ).value).to eq('TEI')
+    expect(find_field('desc_md'    ).value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-sa')
     expect(page).to have_no_field('collection')
   end
