@@ -60,16 +60,16 @@ class PermittedQueries
       q: q,
       defType: 'lucene',
       rows: 1000,
-      fl: 'id,tag_ssim,dc_title_tesim',
+      fl: 'id,sw_display_title_tesim',
       fq: ['objectType_ssim:collection', '!project_tag_ssim:Hydrus']
     )['response']['docs']
 
     result.sort! do |a, b|
-      a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
+      a['sw_display_title_tesim'].to_s <=> b['sw_display_title_tesim'].to_s
     end
 
     [['None', '']] + result.map do |doc|
-      [Array(doc['dc_title_tesim']).first + ' (' + doc['id'].to_s + ')', doc['id'].to_s]
+      [Array(doc['sw_display_title_tesim']).first.to_s + ' (' + doc['id'].to_s + ')', doc['id'].to_s]
     end
   end
 

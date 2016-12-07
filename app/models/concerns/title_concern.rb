@@ -1,7 +1,7 @@
 module TitleConcern
   extend Blacklight::Solr::Document
 
-  FIELD_TITLE = :dc_title_ssi
+  FIELD_TITLE = :sw_display_title_tesim
 
   ##
   # Access a SolrDocument's title

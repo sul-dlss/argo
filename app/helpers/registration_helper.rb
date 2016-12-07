@@ -11,15 +11,15 @@ module RegistrationHelper
       q,
       :defType => 'lucene',
       :rows => 99999,
-      :fl => 'id,tag_ssim,dc_title_tesim',
+      :fl => 'id,tag_ssim,sw_display_title_tesim',
       :fq => ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
     )['response']['docs']
 
     result.sort! do |a, b|
-      Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['dc_title_tesim'].to_s <=> b['dc_title_tesim'].to_s
+      Array(a['tag_ssim']).include?('AdminPolicy : default') ? -1 : a['sw_display_title_tesim'].to_s <=> b['sw_display_title_tesim'].to_s
     end
     result.map do |doc|
-      [Array(doc['dc_title_tesim']).first, doc['id'].to_s]
+      [Array(doc['sw_display_title_tesim']).first, doc['id'].to_s]
     end
   end
 
