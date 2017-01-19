@@ -55,4 +55,18 @@ RSpec.describe SearchBuilder do
         .count { |x| x == :add_profile_queries }).to eq 1
     end
   end
+
+  describe '#add_facet_paging_to_solr' do
+    let(:facet) { 'nonhydrus_collection_title_ssim' }
+    subject { search_builder.with(user_params).facet(facet) }
+
+    it 'uses the :more_limit configuration to independently change the "more" size' do
+      solr_params = {}
+
+      subject.add_facet_paging_to_solr(solr_params)
+
+      expect(solr_params).to include :"f.#{facet}.facet.limit" => 10000,
+                                     :"f.#{facet}.facet.offset" => 0
+    end
+  end
 end
