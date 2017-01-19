@@ -14,6 +14,7 @@
   </div>
   <div>
     <%= form_tag search_catalog_path, method: :get do %>
+      <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:page, :utf8)) %>
       <%= hidden_field_tag "f[#{facet_field.raw_facet_field}][]", '[* TO *]', data: { range_value: ''} %>
       <%= submit_tag('submit', class: 'btn btn-primary') %>
     <% end %>
