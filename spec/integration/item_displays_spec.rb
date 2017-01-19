@@ -25,7 +25,7 @@ describe 'mods_view', :type => :request do
       expect(page).to have_content('Limit your search')
     end
     it 'should have the expected search facets', js: true do
-      search_facets = ['Object Type', 'Content Type', 'Admin Policy', 'Version']
+      search_facets = ['Object Type', 'Content Type', 'Admin Policy']
       visit root_path
       search_facets.each do |facet|
         expect(page).to have_content(facet)

@@ -7,6 +7,7 @@ class CatalogController < ApplicationController
   before_action :reformat_dates, :set_user_obj_instance_var
   before_action :show_aspect, only: [:dc, :ds]
   before_action :sort_collection_actions_buttons, only: [:index]
+  before_action :limit_facets_on_home_page, only: [:index]
 
   configure_blacklight do |config|
     ## Class for converting Blacklight's url parameters to into request parameters for the search index
@@ -60,34 +61,34 @@ class CatalogController < ApplicationController
     config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         limit: 10
     config.add_facet_field 'content_type_ssim',               label: 'Content Type',        limit: 10
-    config.add_facet_field 'rights_descriptions_ssim',        label: 'Access Rights',       limit: 1000, sort: 'index'
-    config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10
+    config.add_facet_field 'rights_descriptions_ssim',        label: 'Access Rights',       limit: 1000, sort: 'index', home: false
+    config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10, home: false
     config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 9999, sort: 'index', home: false
     config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 9999, sort: 'index'
-    config.add_facet_field 'current_version_isi',             label: 'Version',             limit: 10
-    config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   limit: 10
+    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 9999, sort: 'index', home: false
+    config.add_facet_field 'current_version_isi',             label: 'Version',             limit: 10, home: false
+    config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   limit: 10, home: false
     config.add_facet_field 'released_to_ssim',                label: 'Released To',         limit: 10
     config.add_facet_field 'wf_wps_ssim',                     label: 'Workflows (WPS)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_wsp_ssim',                     label: 'Workflows (WSP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_swp_ssim',                     label: 'Workflows (SWP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'has_model_ssim',                  label: 'Object Model',        limit: 10
+    config.add_facet_field 'wf_wsp_ssim',                     label: 'Workflows (WSP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy', home: false
+    config.add_facet_field 'wf_swp_ssim',                     label: 'Workflows (SWP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy', home: false
+    config.add_facet_field 'has_model_ssim',                  label: 'Object Model',        limit: 10, home: false
 
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
-    config.add_facet_field 'source', :label => 'Object Source', :query => {
+    config.add_facet_field 'source', label: 'Object Source', home: false, query: {
       :other  => { :label => 'DOR',        :fq => '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject" AND -has_model_ssim:"info:fedora/dor:googleScannedBook"' },
       :google => { :label => 'Google',     :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
       :hyrdus => { :label => 'Hydrus/SDR', :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item" OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"' }
     }
 
-    config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source'
+    config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source', :home => false
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
-    config.add_facet_field 'empties', :label => 'Empty Fields', :query => {
+    config.add_facet_field 'empties', :label => 'Empty Fields', :home => false, :query => {
       :no_rights_characteristics   => { :label => 'No Rights Characteristics',  :fq => '-rights_characteristics_ssim:*' },
       :no_content_type             => { :label => 'No Content Type',            :fq => '-content_type_ssim:*' },
       :no_has_model                => { :label => 'No Object Model',            :fq => '-has_model_ssim:*' },
@@ -111,15 +112,15 @@ class CatalogController < ApplicationController
       :no_use_statement            => { :label => 'No Use & Reproduction Statement', :fq => '-use_statement_ssim:*' }
     }
 
-    config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', limit: 10
-    config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',   limit: 10
-    config.add_facet_field 'sw_pub_date_facet_ssi',      label: 'SW Date',            limit: 10
-    config.add_facet_field 'topic_ssim',                 label: 'SW Topic',           limit: 10
-    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region',          limit: 10
-    config.add_facet_field 'sw_subject_temporal_ssim',   label: 'SW Era',             limit: 10
-    config.add_facet_field 'sw_genre_ssim',              label: 'SW Genre',           limit: 10
-    config.add_facet_field 'sw_language_ssim',           label: 'SW Language',        limit: 10
-    config.add_facet_field 'mods_typeOfResource_ssim',   label: 'MODS Resource Type', limit: 10
+    config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', limit: 10, home: false
+    config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',   limit: 10, home: false
+    config.add_facet_field 'sw_pub_date_facet_ssi',      label: 'SW Date',            limit: 10, home: false
+    config.add_facet_field 'topic_ssim',                 label: 'SW Topic',           limit: 10, home: false
+    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region',          limit: 10, home: false
+    config.add_facet_field 'sw_subject_temporal_ssim',   label: 'SW Era',             limit: 10, home: false
+    config.add_facet_field 'sw_genre_ssim',              label: 'SW Genre',           limit: 10, home: false
+    config.add_facet_field 'sw_language_ssim',           label: 'SW Language',        limit: 10, home: false
+    config.add_facet_field 'mods_typeOfResource_ssim',   label: 'MODS Resource Type', limit: 10, home: false
 
     config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
 
@@ -345,6 +346,14 @@ class CatalogController < ApplicationController
     # Use the order of indices in the collection_actions_order array for the Blacklight hash
     blacklight_config.index.collection_actions = blacklight_config.index.collection_actions.to_h.sort do |(key1, _value1), (key2, _value2)|
       collection_actions_order.index(key1) <=> collection_actions_order.index(key2)
+    end
+  end
+
+  def limit_facets_on_home_page
+    return if has_search_parameters? || params[:all]
+
+    blacklight_config.facet_fields.each do |_k, v|
+      v.include_in_request = false if v.home == false
     end
   end
 end

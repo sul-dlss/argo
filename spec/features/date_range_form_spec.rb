@@ -5,7 +5,7 @@ RSpec.feature 'Date range form', js: true do
     @current_user = mock_user(is_admin?: true, can_view_something?: true)
     allow_any_instance_of(ApplicationController).to receive(:current_user).
       and_return(@current_user)
-    visit root_path
+    visit root_path(all: true)
     find('[data-target="#facet-object_modified_date"]').click
   end
   let(:tomorrow) { (Time.current + 1.day).strftime('%m/%d/%Y') }
