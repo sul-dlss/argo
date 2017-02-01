@@ -11,7 +11,7 @@ class Report
 
   attr_reader :response, :document_list, :num_found, :params, :current_user
 
-  @blacklight_config = blacklight_config.deep_copy if @blacklight_config.nil?
+  copy_blacklight_config_from CatalogController
 
   configure_blacklight do |config|
 
@@ -140,14 +140,10 @@ class Report
       }
     ]
 
-    # common method since search results and reports all do the same configuration
-    add_common_date_facet_fields_to_config! config
-
-    # common helper method since search results and reports share most of this config
-    BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 100
     config.default_solr_params[:fl] = config.report_fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
 
+    config.sort_fields.clear
     config.add_sort_field 'id asc', :label => 'Druid'
 
     config.column_model = config.report_fields.collect { |spec|
@@ -167,9 +163,9 @@ class Report
   def initialize(params = {}, fields = nil, current_user: NullUser.new)
     @current_user = current_user
     if fields.nil?
-      @fields = self.class.blacklight_config.report_fields
+      @fields = blacklight_config.report_fields
     else
-      @fields = self.class.blacklight_config.report_fields.select { |f| fields.include?(f[:field].to_s) }
+      @fields = blacklight_config.report_fields.select { |f| fields.include?(f[:field].to_s) }
       @fields.sort! { |a, b| fields.index(a[:field].to_s) <=> fields.index(b[:field].to_s) }
     end
     @params = params
