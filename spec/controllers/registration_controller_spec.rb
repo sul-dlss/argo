@@ -259,7 +259,8 @@ describe RegistrationController, :type => :controller do
       data = JSON.parse(response.body)
       expect(data).to include 'digitizationWF'
       expect(data).to include 'dpgImageWF'
-      expect(data.length).to eq(2)
+      expect(data).to include 'goobiWF'
+      expect(data.length).to eq(3)
       expect(data.sort).to eq(data)
     end
   end

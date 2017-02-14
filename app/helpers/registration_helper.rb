@@ -46,6 +46,12 @@ module RegistrationHelper
     ]
   end
 
+  # the names of the workflows defined in the external system (e.g Goobi)
+  # the selected one will create a tag in the object with the value to be passed (to goobi), the tag prefix is defined in constants.rb
+  def external_workflow_names
+    %w(Test_Workflow Test_Workflow_QA Test_Workflow_OCR Test_Workflow_OCR_METS)
+  end
+
   def metadata_sources
     [
       %w(Auto auto)
