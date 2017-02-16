@@ -14,12 +14,13 @@ describe ArgoHelper, :type => :helper do
       allow(@object).to receive(:can_manage_item?).and_return(true)
       allow(@object).to receive(:pid).and_return(@item_id)
       desc_md = double(Dor::DescMetadataDS)
-      id_md   = double(Dor::DescMetadataDS)
+      @id_md  = double(Dor::IdentityMetadataDS)
       apo     = double()
       allow(desc_md).to receive(:new?).and_return(true)
-      allow(id_md).to receive(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
+      allow(@id_md).to receive(:otherId).with('catkey').and_return([])
+      allow(@id_md).to receive(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
       allow(apo).to receive(:pid).and_return(@apo_id)
-      allow(@object).to receive(:datastreams).and_return({'contentMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => id_md})
+      allow(@object).to receive(:datastreams).and_return({'contentMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => @id_md})
       allow(@object).to receive(:admin_policy_object).and_return(apo)
       allow(Dor).to receive(:find).with(@item_id).and_return(@object)
     end
@@ -89,6 +90,17 @@ describe ArgoHelper, :type => :helper do
         buttons = helper.render_buttons(@doc)
         expect(buttons).not_to be_nil
         expect(buttons.length).to be > 0
+      end
+      it 'should give the refresh descMetadata button for items with catkey' do
+        allow(@id_md).to receive(:otherId).with('catkey').and_return(['1234567'])
+        buttons = helper.render_buttons(@doc)
+        default_buttons.push({
+          label: 'Refresh descMetadata',
+          url: "/items/#{@item_id}/refresh_metadata",
+          new_page: true
+        }).each do |button|
+          expect(buttons).to include(button)
+        end
       end
     end
   end
