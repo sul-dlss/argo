@@ -82,7 +82,7 @@ gem 'about_page'
 gem 'active-fedora', '~> 8.2'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
-gem 'dor-services', '>= 5.21.4', '< 6'
+gem 'dor-services', '>= 5.22.2', '< 6'
 gem 'moab-versioning'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies

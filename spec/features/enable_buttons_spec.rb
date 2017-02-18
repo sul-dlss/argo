@@ -8,6 +8,7 @@ feature 'Enable buttons' do
       admin_policy_object: false,
       datastreams: {},
       can_manage_item?: true,
+      catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
     allow_any_instance_of(ApplicationController).to receive(:current_user).

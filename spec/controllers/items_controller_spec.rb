@@ -157,6 +157,13 @@ describe ItemsController, :type => :controller do
       post 'source_id', params: { :id => @pid, :new_id => 'new:source_id' }
     end
   end
+  describe 'catkey' do
+    it 'should update the catkey' do
+      expect(@item).to receive(:catkey=).with('12345')
+      expect(Dor::SearchService.solr).to receive(:add)
+      post 'catkey', params: { :id => @pid, :new_catkey => '12345' }
+    end
+  end
   describe 'tags' do
     before :each do
       allow(@item).to receive(:tags).and_return(['some:thing'])

@@ -115,6 +115,7 @@ Argo::Application.routes.draw do
       post 'version/open',        :action => :open_version,      :as => 'open_version'
       get 'source_id_ui'
       get 'tags_ui'
+      get 'catkey_ui'
       match 'tags',      :via => [:get, :post]
       match 'tags_bulk', :via => [:get, :post]
       get 'collection_ui'
@@ -140,6 +141,7 @@ Argo::Application.routes.draw do
     post 'version/close',  :action => :close_version, :as => 'close_version'
     post 'version/open',   :action => :open_version,  :as => 'open_version'
     post 'source_id'
+    post 'catkey'
     post 'add_collection'
     post 'set_collection'
   end
