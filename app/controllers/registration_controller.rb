@@ -12,17 +12,20 @@ class RegistrationController < ApplicationController
     render :plain => pdf.render, :content_type => :pdf
   end
 
-  def workflow_list
-    docs = Dor::SearchService.query(%(id:"#{params[:apo_id]}"))['response']['docs']
+  def workflows_for_apo(apo_id)
+    docs = Dor::SearchService.query(%(id:"#{apo_id}"))['response']['docs']
     result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
-    apo_object = Dor.find(params[:apo_id], :lightweight => true)
+    apo_object = Dor.find(apo_id, :lightweight => true)
     adm_xml = apo_object.administrativeMetadata.ng_xml
     adm_xml.search('//registration/workflow').each do |wf|
       result << wf['id']
     end
+    result.flatten.uniq.sort
+  end
 
+  def workflow_list
     respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => result.flatten.uniq.sort }
+      format.any(:json, :xml) { render request.format.to_sym => workflows_for_apo(params[:apo_id]) }
     end
   end
 
