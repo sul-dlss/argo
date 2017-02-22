@@ -104,6 +104,9 @@ module ArgoHelper
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
       end
+      if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
+        buttons << {url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true}
+      end
       buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
     end
     if doc.key?('embargo_status_ssim')
