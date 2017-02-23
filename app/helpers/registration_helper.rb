@@ -32,17 +32,16 @@ module RegistrationHelper
 
   def valid_content_types
     [
-      'Book (flipbook, ltr)',
-      'Book (flipbook, rtl)',
-      'Book (image-only)',
+      'Book (ltr)',
+      'Book (rtl)',
       'File',
       'Image',
-      'Manuscript (flipbook, ltr)',
-      'Manuscript (flipbook, rtl)',
-      'Manuscript (image-only)',
+      'Manuscript (ltr)',
+      'Manuscript (rtl)',
       'Map',
       'Media',
-      'Software'
+      'Software',
+      '3D'
     ]
   end
 
