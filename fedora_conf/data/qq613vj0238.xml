@@ -173,7 +173,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <adminPolicy>druid:fg464dn8891</adminPolicy>
   <otherId name="label"></otherId>
   <otherId name="uuid">4872ca9e-190f-11e4-9f5c-0050569b3c3c</otherId>
-  <tag>Process : Content Type : Book (flipbook, ltr)</tag>
+  <tag>Process : Content Type : Book (ltr)</tag>
   <tag>Project : State Banking Commission Annual Reports</tag>
   <tag>DPG : State Banking Commission Annual Reports</tag>
   <tag>DPG : State Banking Commission Annual Reports : Virginia</tag>
@@ -195,7 +195,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <adminPolicy>druid:fg464dn8891</adminPolicy>
   <otherId name="label"></otherId>
   <otherId name="uuid">4872ca9e-190f-11e4-9f5c-0050569b3c3c</otherId>
-  <tag>Process : Content Type : Book (flipbook, ltr)</tag>
+  <tag>Process : Content Type : Book (ltr)</tag>
   <tag>Project : State Banking Commission Annual Reports</tag>
   <tag>DPG : State Banking Commission Annual Reports</tag>
   <tag>DPG : State Banking Commission Annual Reports : Virginia</tag>
