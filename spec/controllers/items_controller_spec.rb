@@ -190,7 +190,7 @@ describe ItemsController, :type => :controller do
       expect(@item).to receive(:add_tag).twice
       expect(@item).to receive(:remove_tag).with('some:thing').and_return(true)
       expect(@item).to receive(:save)
-      post 'tags_bulk', params: { :id => @pid, :tags => 'Process : Content Type : Book (flipbook, ltr)	 Registered By : labware' }
+      post 'tags_bulk', params: { :id => @pid, :tags => 'Process : Content Type : Book (ltr)	 Registered By : labware' }
     end
   end
   describe 'set_rights' do

@@ -75,8 +75,6 @@ if ['test', 'development'].include? Rails.env
       end
     end
 
-    #fixtures_fileglob = "#{Rails.root}/#{solr_conf_dir}/data/*.json"
-    #live_solrxml_file = 'jetty/solr/solr.xml'
     solr_conf_dir = 'solr_conf'
 
     namespace :solr do

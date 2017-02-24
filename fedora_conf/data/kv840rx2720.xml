@@ -158,7 +158,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <otherId name="catkey">8318218</otherId>
   <otherId name="uuid">88418a1c-d5ea-11e1-8fde-dc2b61fffec6</otherId>
   <tag>Process : Rights : world</tag>
-  <tag>Process : Content Type : Book (flipbook, ltr)</tag>
+  <tag>Process : Content Type : Book (ltr)</tag>
   <tag>Project : Argo Demo</tag>
   <tag>Registered By : labware</tag>
 </identityMetadata>

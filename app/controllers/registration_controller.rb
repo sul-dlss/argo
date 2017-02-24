@@ -15,7 +15,7 @@ class RegistrationController < ApplicationController
   def workflows_for_apo(apo_id)
     docs = Dor::SearchService.query(%(id:"#{apo_id}"))['response']['docs']
     result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
-    apo_object = Dor.find(apo_id, :lightweight => true)
+    apo_object = Dor.find(apo_id)
     adm_xml = apo_object.administrativeMetadata.ng_xml
     adm_xml.search('//registration/workflow').each do |wf|
       result << wf['id']
@@ -63,7 +63,7 @@ class RegistrationController < ApplicationController
   end
 
   def rights_list
-    apo_object = Dor.find(params[:apo_id], :lightweight => true)
+    apo_object = Dor.find(params[:apo_id])
 
     default_opt = apo_object.default_rights
 
