@@ -549,4 +549,74 @@ describe ItemsController, :type => :controller do
                                                                           'has_model_ssim' => 'info:fedora/afmodel:Dor_Item'})
     end
   end
+  describe '#set_governing_apo' do
+    let(:new_apo_id) { 'druid:ab123cd4567' }
+    context 'object modification not allowed, user authorized to manage governing APOs' do
+      before do
+        allow(@item).to receive(:allows_modification?).and_return(false)
+        allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id)
+      end
+      it 'should return a 403' do
+        expect(@item).not_to receive(:admin_policy_object=)
+        expect(@item.identityMetadata).not_to receive(:adminPolicy)
+        expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
+        post :set_governing_apo, params: { id: @pid, new_apo_id: new_apo_id }
+        expect(response).to have_http_status(:forbidden)
+        expect(response.body).to eq 'Object cannot be modified in its current state.'
+      end
+    end
+    context 'object modification not allowed, user not authorized to manage governing APOs' do
+      before do
+        allow(@item).to receive(:allows_modification?).and_return(false)
+        allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id).and_raise(CanCan::AccessDenied)
+      end
+      it 'should return a 403' do
+        expect(@item).not_to receive(:admin_policy_object=)
+        expect(@item.identityMetadata).not_to receive(:adminPolicy)
+        expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
+        post :set_governing_apo, params: { id: @pid, new_apo_id: new_apo_id }
+        expect(response).to have_http_status(:forbidden)
+        expect(response.body).to eq 'forbidden'
+      end
+    end
+    context 'object modification allowed, user not authorized to manage governing APOs' do
+      before do
+        allow(@item).to receive(:allows_modification?).and_return(true)
+        allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id).and_raise(CanCan::AccessDenied)
+      end
+      it 'should return a 403' do
+        expect(@item).not_to receive(:admin_policy_object=)
+        expect(@item.identityMetadata).not_to receive(:adminPolicy)
+        expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
+        post :set_governing_apo, params: { id: @pid, new_apo_id: new_apo_id }
+        expect(response).to have_http_status(:forbidden)
+        expect(response.body).to eq 'forbidden'
+      end
+    end
+    context 'object modification allowed, user authorized to manage governing APOs' do
+      let(:new_apo) { double(Dor::AdminPolicyObject, id: new_apo_id) }
+      before do
+        allow(@item).to receive(:allows_modification?).and_return(true)
+        allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id)
+        allow(Dor).to receive(:find).with(new_apo_id).and_return(new_apo)
+      end
+      it 'should successfully update the governing APO' do
+        expect(@item).to receive(:admin_policy_object=).with(new_apo)
+        expect(@item.identityMetadata).to receive(:adminPolicy).and_return(double(Dor::AdminPolicyObject))
+        expect(@item.datastreams['identityMetadata']).to receive(:adminPolicy=).with(nil)
+        post :set_governing_apo, params: { id: @pid, new_apo_id: new_apo_id }
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to(solr_document_path(@pid))
+        expect(flash[:notice]).to eq 'Governing APO updated!'
+      end
+      it 'should reject requests in the old (deprecated) bulk update mode' do
+        expect(@item).not_to receive(:admin_policy_object=)
+        expect(@item.identityMetadata).not_to receive(:adminPolicy)
+        expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
+        post :set_governing_apo, params: { id: @pid, new_apo_id: new_apo_id, bulk: true }
+        expect(response).to have_http_status(:forbidden)
+        expect(response.body).to eq 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
+      end
+    end
+  end
 end

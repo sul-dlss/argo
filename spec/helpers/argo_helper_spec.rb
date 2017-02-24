@@ -12,6 +12,7 @@ describe ArgoHelper, :type => :helper do
       allow(controller).to receive(:current_user).and_return(@usr)
       allow(helper).to receive(:current_user).and_return(@usr)
       allow(@object).to receive(:can_manage_item?).and_return(true)
+      allow(@object).to receive(:allows_modification?).and_return(true)
       allow(@object).to receive(:pid).and_return(@item_id)
       desc_md = double(Dor::DescMetadataDS)
       @id_md  = double(Dor::IdentityMetadataDS)
@@ -33,6 +34,11 @@ describe ArgoHelper, :type => :helper do
             label: 'Reindex',
             url: "/dor/reindex/#{@item_id}",
             new_page: true
+          },
+          {
+            label: 'Set governing APO',
+            url: "/items/#{@item_id}/set_governing_apo_ui",
+            check_url: false
           },
           {
             label: 'Add workflow',

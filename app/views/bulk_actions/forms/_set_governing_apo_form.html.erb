@@ -1,0 +1,12 @@
+<div>
+  <%= f.fields_for :set_governing_apo do |set_governing_apo_fields| %>
+    <div class='form-group'>
+      <div class='text'>
+        <label for='bulk_action_set_governing_apo_new_apo_id' class='control-label'>
+          New governing APO
+        </label>
+        <%= set_governing_apo_fields.select(:new_apo_id, apo_list(current_user.groups)) %>
+      </div>
+    </div>
+  <% end %>
+</div>

@@ -22,7 +22,7 @@ class Ability
     can :manage, :all if user.is_admin?
     cannot :impersonate, User unless user.is_webauth_admin?
 
-    can [:manage_item, :manage_content, :manage_desc_metadata, :view_content, :view_metadata], ActiveFedora::Base if user.is_manager?
+    can [:manage_item, :manage_content, :manage_desc_metadata, :manage_governing_apo, :view_content, :view_metadata], ActiveFedora::Base if user.is_manager?
     can :create, Dor::AdminPolicyObject if user.is_manager?
 
     can [:view_metadata, :view_content], ActiveFedora::Base if user.is_viewer?
@@ -55,6 +55,11 @@ class Ability
       if dor_item.admin_policy_object
         dor_item.can_manage_desc_metadata? user.roles(dor_item.admin_policy_object.pid)
       end
+    end
+
+    can :manage_governing_apo, ActiveFedora::Base do |dor_item, new_apo_id|
+      # user must have management privileges on both the target APO and the APO currently governing the item
+      dor_item.can_manage_item?(user.roles(new_apo_id)) && can?(:manage_item, dor_item)
     end
 
     can :view_content, Dor::AdminPolicyObject do |dor_item|

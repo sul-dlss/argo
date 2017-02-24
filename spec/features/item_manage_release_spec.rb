@@ -6,6 +6,7 @@ RSpec.feature 'Item manage release' do
     obj = double(
       Dor::Item,
       admin_policy_object: nil,
+      allows_modification?: true,
       datastreams: {},
       can_manage_item?: true,
       catkey: nil,

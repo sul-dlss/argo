@@ -1,0 +1,8 @@
+<%= form_tag set_governing_apo_item_path(id: @object.pid) do %>
+  <div class='form-group'>
+    <%= select_tag(:new_apo_id, options_for_select(apo_list(current_user.groups), @object.admin_policy_object.try(:pid))) %>
+  </div>
+  <button class='btn btn-primary'>
+    Update
+  </button>
+<% end %>
