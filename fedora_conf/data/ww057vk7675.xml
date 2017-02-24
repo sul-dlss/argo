@@ -3282,6 +3282,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3327,6 +3328,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3372,6 +3374,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3418,6 +3421,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3465,6 +3469,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3513,6 +3518,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3562,6 +3568,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3612,6 +3619,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3663,6 +3671,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3715,6 +3724,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3768,6 +3778,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3822,6 +3833,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3877,6 +3889,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3933,6 +3946,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -3990,6 +4004,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4048,6 +4063,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4107,6 +4123,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4167,6 +4184,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4228,6 +4246,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4290,6 +4309,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4353,6 +4373,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4417,6 +4438,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="dpgImageWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4481,6 +4503,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </descMetadata>
   <registration>
     <workflow id="dpgImageWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4547,6 +4570,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4613,6 +4637,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4680,6 +4705,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4748,6 +4774,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4817,6 +4844,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4887,6 +4915,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -4958,6 +4987,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5030,6 +5060,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5103,6 +5134,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5177,6 +5209,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5252,6 +5285,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5328,6 +5362,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5405,6 +5440,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5483,6 +5519,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5562,6 +5599,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5642,6 +5680,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5723,6 +5762,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5805,6 +5845,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5888,6 +5929,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -5972,6 +6014,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6057,6 +6100,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6143,6 +6187,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6230,6 +6275,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6318,6 +6364,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6407,6 +6454,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6497,6 +6545,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6588,6 +6637,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6680,6 +6730,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6773,6 +6824,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6867,6 +6919,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -6962,6 +7015,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7058,6 +7112,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7155,6 +7210,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="digitizationWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7252,6 +7308,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="digitizationWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7324,7 +7381,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <collection id="druid:wn316fx5031"></collection>
     <collection id="druid:cy131kq3062"></collection>
     <collection id="druid:ms016pb9280"></collection>
-    <collection id="druid:ks810ps7555"></collection> 
+    <collection id="druid:ks810ps7555"></collection>
    <collection id="druid:vt225px0749"></collection>
     <collection id="druid:rk213cd8889"></collection>
     <collection id="druid:wc773rb1224"></collection>
@@ -7350,6 +7407,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7448,6 +7506,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="digitizationWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7520,7 +7579,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <collection id="druid:wn316fx5031"></collection>
     <collection id="druid:cy131kq3062"></collection>
     <collection id="druid:ms016pb9280"></collection>
-    <collection id="druid:ks810ps7555"></collection> 
+    <collection id="druid:ks810ps7555"></collection>
    <collection id="druid:vt225px0749"></collection>
     <collection id="druid:rk213cd8889"></collection>
     <collection id="druid:wc773rb1224"></collection>
@@ -7546,6 +7605,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="digitizationWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7618,7 +7678,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <collection id="druid:wn316fx5031"></collection>
     <collection id="druid:cy131kq3062"></collection>
     <collection id="druid:ms016pb9280"></collection>
-    <collection id="druid:ks810ps7555"></collection> 
+    <collection id="druid:ks810ps7555"></collection>
    <collection id="druid:vt225px0749"></collection>
     <collection id="druid:rk213cd8889"></collection>
     <collection id="druid:wc773rb1224"></collection>
@@ -7644,6 +7704,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="digitizationWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7743,6 +7804,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7842,6 +7904,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -7941,6 +8004,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -8041,6 +8105,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -8142,6 +8207,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -8244,6 +8310,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -8347,6 +8414,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -8451,6 +8519,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <registration>
     <workflow id="dpgImageWF"></workflow>
     <workflow id="digitizationWF"></workflow>
+    <workflow id="goobiWF"></workflow>
     <collection id="druid:bp260rs7488"></collection>
     <collection id="druid:bq118br4460"></collection>
     <collection id="druid:dw691pc6656"></collection>
@@ -8664,7 +8733,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="events" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
 <foxml:datastreamVersion ID="events.4" LABEL="" CREATED="2014-01-30T19:52:23.764Z" MIMETYPE="text/xml" SIZE="827">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PGV2ZW50cz4KICA8ZXZlbnQgdHlwZT0icmVtZWRpYXRpb24iIHdobz0iRG9yOjpJZGVudGlmaWFibGUg
               My42LjEiIHdoZW49IjIwMTItMDUtMDdUMTY6NDU6MTMtMDc6MDAiPlJlY29yZCBSZW1lZGlhdGlvbiBW
               ZXJzaW9uPC9ldmVudD4KICA8ZXZlbnQgdHlwZT0icmVtZWRpYXRpb24iIHdobz0iRG9yOjpJZGVudGlm
@@ -8679,7 +8748,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               MDQtMDg6MDAiPlZlcnNpb24gMiBjbG9zZWQ8L2V2ZW50PjxldmVudCB0eXBlPSJyZW1lZGlhdGlvbiIg
               d2hvPSJEb3I6OklkZW50aWZpYWJsZSAzLjYuMSIgd2hlbj0iMjAxNC0wMS0zMFQxMTo1MjoyMy0wODow
               MCI+UmVjb3JkIFJlbWVkaWF0aW9uIFZlcnNpb248L2V2ZW50PjwvZXZlbnRzPgo=
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
