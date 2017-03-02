@@ -2,9 +2,9 @@ require 'spec_helper'
 describe ArgoHelper, :type => :helper do
   describe 'render_buttons' do
     before :each do
-      @item_id = 'druid:zt570tx3016'
+      @item_id = 'druid:kv840rx2720'
       @apo_id = 'druid:hv992ry2431'
-      @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
+      @object = instantiate_fixture(@item_id, Dor::Item)
       @doc = SolrDocument.new({'id' => @item_id, SolrDocument::FIELD_APO_ID => [@apo_id]})
       @usr = mock_user(is_admin?: true)
       allow(Dor::Config.workflow.client).to receive(:get_active_lifecycle).and_return(true)
@@ -26,10 +26,21 @@ describe ArgoHelper, :type => :helper do
       allow(@object).to receive(:datastreams).and_return(datastreams)
       allow(@object).to receive(:admin_policy_object).and_return(apo)
       allow(Dor).to receive(:find).with(@item_id).and_return(@object)
+      allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
     end
     describe 'visibility with new descMetadata' do
       let(:default_buttons) do
         [
+          {
+            label: 'Close Version',
+            url: "/items/#{@item_id}/close_version_ui",
+            check_url: "/workflow_service/#{@item_id}/closeable"
+          },
+          {
+            label: 'Open for modification',
+            url: "/items/#{@item_id}/open_version_ui",
+            check_url: "/workflow_service/#{@item_id}/openable"
+          },
           {
             label: 'Reindex',
             url: "/dor/reindex/#{@item_id}",
@@ -49,6 +60,13 @@ describe ArgoHelper, :type => :helper do
             url: "/dor/republish/#{@item_id}",
             check_url: "/workflow_service/#{@item_id}/published",
             new_page: true
+          },
+          {
+            label: 'Purge',
+            url: "/items/#{@item_id}/purge",
+            new_page: true,
+            confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
+            check_url: true
           },
           {
             label: 'Change source id',
@@ -96,6 +114,7 @@ describe ArgoHelper, :type => :helper do
       end
       it 'should include the embargo update button if the user is an admin and the object is embargoed' do
         @doc = SolrDocument.new(@doc.to_h.merge('embargo_status_ssim' => ['2012-10-19T00:00:00Z']))
+        allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
         buttons = helper.render_buttons(@doc)
         default_buttons.push({
           label: 'Update embargo',
