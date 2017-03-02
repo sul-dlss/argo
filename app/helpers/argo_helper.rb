@@ -67,42 +67,43 @@ module ArgoHelper
 
     # if this is an apo and the user has permission for the apo, let them edit it.
     if object.datastreams.include?('roleMetadata') && can?(:manage_item, object)
-      buttons << {:url => url_for(:controller => :apo, :action => :register, :id => pid), :label => 'Edit APO', :new_page => true}
-      buttons << {:url => url_for(:controller => :apo, :action => :register_collection, :id => pid), :label => 'Create Collection'}
+      buttons << {:url => register_apo_index_path(id: pid), :label => 'Edit APO', :new_page => true}
+      buttons << {:url => register_collection_apo_path(id: pid), :label => 'Create Collection'}
     end
     if can?(:manage_item, object)
       buttons << {
-        url: url_for(controller: :dor, action: :reindex, pid: pid),
+        url: dor_reindex_path(pid: pid),
         label: 'Reindex',
         new_page: true
       }
-      buttons << {:url => url_for(:controller => :items, :action => :add_workflow, :id => pid), :label => 'Add workflow'}
+      buttons << {:url => add_workflow_item_path(id: pid), :label => 'Add workflow'}
 
       buttons << {
-        url: url_for(:controller => :dor, :action => :republish, :pid => pid),
+        url: dor_path(pid: pid),
         label: 'Republish',
         check_url: workflow_service_published_path(pid),
         new_page: true
       }
 
       buttons << {
-        url:  url_for(:controller => :items, :action => :purge_object, :id => pid),
+        url: purge_item_path(id: pid),
         label: 'Purge',
         new_page: true,
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
         check_url: !registered_only?(doc)
       }
 
-      buttons << {:url => '/items/' + pid + '/source_id_ui', :label => 'Change source id'}
-      buttons << {:url => '/items/' + pid + '/tags_ui', :label => 'Edit tags'}
+      buttons << {:url => source_id_ui_item_path(id: pid), :label => 'Change source id'}
+      buttons << {:url => catkey_ui_item_path(id: pid), :label => 'Manage catkey'}
+      buttons << {:url => tags_ui_item_path(id: pid), :label => 'Edit tags'}
       unless object.datastreams.include? 'administrativeMetadata' # apos cant be members of collections
-        buttons << {:url => url_for(:controller => :items, :action => :collection_ui, :id => pid), :label => 'Edit collections'}
+        buttons << {:url => collection_ui_item_path(id: pid), :label => 'Edit collections'}
       end
       if object.datastreams.include? 'contentMetadata'
-        buttons << {:url => url_for(:controller => :items, :action => :content_type, :id => pid), :label => 'Set content type'}
+        buttons << {:url => content_type_item_path(id: pid), :label => 'Set content type'}
       end
       if object.datastreams.include? 'rightsMetadata'
-        buttons << {:url => url_for(:controller => :items, :action => :rights, :id => pid), :label => 'Set rights'}
+        buttons << {:url => rights_item_path(id: pid), :label => 'Set rights'}
       end
       if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
         buttons << {url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true}

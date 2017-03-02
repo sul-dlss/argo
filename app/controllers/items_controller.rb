@@ -13,6 +13,7 @@ class ItemsController < ApplicationController
     :update_resource,
     :set_content_type,
     :source_id,
+    :catkey,
     :tags, :tags_bulk,
     :update_rights,
     :update_attributes
@@ -28,6 +29,7 @@ class ItemsController < ApplicationController
   before_action :enforce_versioning, :only => [
     :add_collection, :set_collection, :remove_collection,
     :source_id, :set_source_id,
+    :catkey,
     :set_content_type,
     :set_rights,
     :tags,
@@ -40,6 +42,7 @@ class ItemsController < ApplicationController
     :open_version, :close_version,
     :tags, :tags_bulk,
     :source_id,
+    :catkey,
     :set_rights,
     :set_content_type
   ]
@@ -420,6 +423,19 @@ class ItemsController < ApplicationController
         format.html { render :status => :ok, :plain => 'Updated source id.' }
       else
         msg = "Source Id for #{params[:id]} has been updated!"
+        format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
+      end
+    end
+  end
+
+  def catkey
+    @object.catkey = params[:new_catkey]
+
+    respond_to do |format|
+      if params[:bulk]
+        format.html { render :status => :ok, :plain => 'Updated catkey' }
+      else
+        msg = "Catkey for #{params[:id]} has been updated!"
         format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
       end
     end

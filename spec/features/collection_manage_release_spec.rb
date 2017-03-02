@@ -8,6 +8,7 @@ RSpec.feature 'Collection manage release' do
       admin_policy_object: false,
       datastreams: {},
       can_manage_item?: true,
+      catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
     allow(current_user).to receive(:is_admin?).and_return true

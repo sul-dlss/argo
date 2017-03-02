@@ -157,6 +157,18 @@ describe ItemsController, :type => :controller do
       post 'source_id', params: { :id => @pid, :new_id => 'new:source_id' }
     end
   end
+  describe 'catkey' do
+    it 'should 403 if the user is not an admin' do
+      allow(@current_user).to receive(:is_admin?).and_return(false)
+      post 'catkey', params: { :id => @pid, :new_catkey => '12345' }
+      expect(response.code).to eq('403')
+    end
+    it 'should update the catkey' do
+      expect(@item).to receive(:catkey=).with('12345')
+      expect(Dor::SearchService.solr).to receive(:add)
+      post 'catkey', params: { :id => @pid, :new_catkey => '12345' }
+    end
+  end
   describe 'tags' do
     before :each do
       allow(@item).to receive(:tags).and_return(['some:thing'])
