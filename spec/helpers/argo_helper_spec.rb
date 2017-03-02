@@ -20,7 +20,9 @@ describe ArgoHelper, :type => :helper do
       allow(@id_md).to receive(:otherId).with('catkey').and_return([])
       allow(@id_md).to receive(:ng_xml).and_return(Nokogiri::XML('<identityMetadata><identityMetadata>'))
       allow(apo).to receive(:pid).and_return(@apo_id)
-      allow(@object).to receive(:datastreams).and_return({'contentMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => @id_md})
+      # nil datastreams don't need content for these tests, they just need to be present
+      datastreams = { 'contentMetadata' => nil, 'rightsMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => @id_md }
+      allow(@object).to receive(:datastreams).and_return(datastreams)
       allow(@object).to receive(:admin_policy_object).and_return(apo)
       allow(Dor).to receive(:find).with(@item_id).and_return(@object)
     end
@@ -33,6 +35,10 @@ describe ArgoHelper, :type => :helper do
             new_page: true
           },
           {
+            label: 'Add workflow',
+            url: "/items/#{@item_id}/add_workflow"
+          },
+          {
             label: 'Republish',
             url: "/dor/republish/#{@item_id}",
             check_url: "/workflow_service/#{@item_id}/published",
@@ -41,6 +47,10 @@ describe ArgoHelper, :type => :helper do
           {
             label: 'Change source id',
             url: "/items/#{@item_id}/source_id_ui"
+          },
+          {
+            label: 'Manage catkey',
+            url: "/items/#{@item_id}/catkey_ui"
           },
           {
             label: 'Edit tags',
@@ -53,6 +63,10 @@ describe ArgoHelper, :type => :helper do
           {
             label: 'Set content type',
             url: "/items/#{@item_id}/content_type"
+          },
+          {
+            label: 'Set rights',
+            url: "/items/#{@item_id}/rights"
           },
           {
             label: 'Manage release',
