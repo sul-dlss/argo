@@ -116,6 +116,23 @@ describe ArgoHelper, :type => :helper do
           expect(buttons).to include(button)
         end
       end
+      it 'should not render the edit collections or manage catkey buttons for an apo' do
+        @object = instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject)
+        allow(Dor).to receive(:find).with(@item_id).and_return(@object)
+        buttons = helper.render_buttons(@doc)
+        [
+          {
+            label: 'Manage catkey',
+            url: "/items/#{@item_id}/catkey_ui"
+          },
+          {
+            label: 'Edit collections',
+            url: "/items/#{@item_id}/collection_ui"
+          }
+        ].each do |removed_button|
+          expect(buttons).to_not include(removed_button)
+        end
+      end
     end
   end
   describe 'render_facet_value' do

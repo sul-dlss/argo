@@ -94,9 +94,9 @@ module ArgoHelper
       }
 
       buttons << {:url => source_id_ui_item_path(id: pid), :label => 'Change source id'}
-      buttons << {:url => catkey_ui_item_path(id: pid), :label => 'Manage catkey'}
       buttons << {:url => tags_ui_item_path(id: pid), :label => 'Edit tags'}
-      unless object.datastreams.include? 'administrativeMetadata' # apos cant be members of collections
+      if [Dor::Item, Dor::Set].any? { |clazz| object.is_a? clazz } # these only apply for items, sets and collections
+        buttons << {:url => catkey_ui_item_path(id: pid), :label => 'Manage catkey'}
         buttons << {:url => collection_ui_item_path(id: pid), :label => 'Edit collections'}
       end
       if object.datastreams.include? 'contentMetadata'
