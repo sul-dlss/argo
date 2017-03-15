@@ -4,15 +4,22 @@ RSpec.describe 'bulk_actions/_form.html.erb' do
   before do
     @bulk_action = assign(:bulk_actions, create(:bulk_action))
     allow(view).to receive(:current_user).and_return(double(sunetid: 'esnowden'))
-  end
-  it 'form by default has action_type selected' do
+
     render
+  end
+
+  it 'form by default has action_type selected' do
     expect(rendered)
       .to have_css 'input[type="radio"][value="DescmetadataDownloadJob"][checked="checked"]'
   end
+  describe 'common form fields' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'textarea[name="bulk_action[pids]"]'
+      expect(rendered).to have_css 'textarea[name="bulk_action[description]"]'
+    end
+  end
   describe 'Release Object Job form' do
     it 'has proper form input values' do
-      render
       expect(rendered).to have_css 'input[type="radio"][value="ReleaseObjectJob"]'
       expect(rendered).to have_css 'input[type="radio"][value="true"][checked="checked"][name="bulk_action[manage_release][tag]"]'
       expect(rendered).to have_css 'input[type="radio"][value="false"][name="bulk_action[manage_release][tag]"]'

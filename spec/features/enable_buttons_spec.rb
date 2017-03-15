@@ -4,8 +4,8 @@ feature 'Enable buttons' do
   before do
     @current_user = mock_user(is_admin?: true)
     @obj = double(
-      'item',
-      admin_policy_object: false,
+      Dor::Item,
+      admin_policy_object: nil,
       datastreams: {},
       can_manage_item?: true,
       catkey: nil,

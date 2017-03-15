@@ -4,8 +4,8 @@ RSpec.feature 'Collection manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   before(:each) do
     obj = double(
-      'collection',
-      admin_policy_object: false,
+      Dor::Collection,
+      admin_policy_object: nil,
       datastreams: {},
       can_manage_item?: true,
       catkey: nil,
