@@ -482,6 +482,33 @@ describe ItemsController, :type => :controller do
       expect(assigns(:available_in_workspace_error)).to match(/Net::SSH::AuthenticationFailed/)
     end
   end
+  describe '#refresh_metadata' do
+    it 'returns a 403 with an error message if there is no catkey' do
+      expect(@item).to receive(:catkey).and_return('')
+      get :refresh_metadata, params: { id: @pid }
+      expect(response).to have_http_status(:forbidden)
+      expect(response.body).to eq 'object must have catkey to refresh descMetadata'
+    end
+    context 'there is a catkey present' do
+      before(:each) do
+        allow(@item).to receive(:catkey).and_return('12345')
+        expect(@item).to receive(:build_datastream).with('descMetadata', true)
+        descmd = double(Dor::DescMetadataDS, ng_xml: double(Nokogiri::XML::Document, to_s: '<somexml>refreshed metadata</somexml>'))
+        allow(@item).to receive(:descMetadata).and_return(descmd)
+        expect(descmd).to receive(:content=).with(descmd.ng_xml.to_s)
+      end
+      it 'redirects with a notice if there is a catkey and the operation is not part of a bulk update' do
+        get :refresh_metadata, params: { id: @pid }
+        expect(response).to redirect_to(solr_document_path(@pid))
+        expect(flash[:notice]).to eq "Metadata for #{@item.pid} successfully refreshed from catkey:12345"
+      end
+      it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
+        get :refresh_metadata, params: { id: @pid, :bulk => true }
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to eq 'Refreshed.'
+      end
+    end
+  end
   describe '#create_obj_and_apo' do
     it 'loads an APO object so that it has the appropriate model type (according to the solr doc)' do
       expect(Dor).to receive(:find).with('druid:zt570tx3016').and_call_original # override the earlier Dor.find expectation

@@ -537,9 +537,21 @@ class ItemsController < ApplicationController
   end
 
   def refresh_metadata
+    if @object.catkey.blank?
+      render status: :forbidden, plain: 'object must have catkey to refresh descMetadata'
+      return
+    end
+
     @object.build_datastream('descMetadata', true)
     @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
-    render :status => :ok, :plain => 'Refreshed.'
+
+    respond_to do |format|
+      if params[:bulk]
+        format.html {render status: :ok, plain: 'Refreshed.'}
+      else
+        format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey:#{@object.catkey}" }
+      end
+    end
   end
 
   def scrubbed_content_ng_utf8(content)
