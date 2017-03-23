@@ -43,6 +43,7 @@ class ItemsController < ApplicationController
     :tags, :tags_bulk,
     :source_id,
     :catkey,
+    :refresh_metadata,
     :set_rights,
     :set_content_type
   ]
@@ -538,7 +539,6 @@ class ItemsController < ApplicationController
   def refresh_metadata
     @object.build_datastream('descMetadata', true)
     @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
-    @object.descMetadata.save
     render :status => :ok, :plain => 'Refreshed.'
   end
 
