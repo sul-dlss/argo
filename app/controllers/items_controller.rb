@@ -26,10 +26,14 @@ class ItemsController < ApplicationController
     :embargo_update,
     :embargo_form
   ]
+  before_action :authorize_manage_desc_metadata!, :only => [
+    :refresh_metadata
+  ]
   before_action :enforce_versioning, :only => [
     :add_collection, :set_collection, :remove_collection,
     :source_id, :set_source_id,
     :catkey,
+    :refresh_metadata,
     :set_content_type,
     :set_rights,
     :tags,
@@ -43,6 +47,7 @@ class ItemsController < ApplicationController
     :tags, :tags_bulk,
     :source_id,
     :catkey,
+    :refresh_metadata,
     :set_rights,
     :set_content_type
   ]
@@ -536,10 +541,21 @@ class ItemsController < ApplicationController
   end
 
   def refresh_metadata
+    if @object.catkey.blank?
+      render status: :forbidden, plain: 'object must have catkey to refresh descMetadata'
+      return
+    end
+
     @object.build_datastream('descMetadata', true)
     @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
-    @object.descMetadata.save
-    render :status => :ok, :plain => 'Refreshed.'
+
+    respond_to do |format|
+      if params[:bulk]
+        format.html {render status: :ok, plain: 'Refreshed.'}
+      else
+        format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey:#{@object.catkey}" }
+      end
+    end
   end
 
   def scrubbed_content_ng_utf8(content)
@@ -697,6 +713,10 @@ class ItemsController < ApplicationController
 
   def authorize_manage_item!
     authorize! :manage_item, @object
+  end
+
+  def authorize_manage_desc_metadata!
+    authorize! :manage_desc_metadata, @object
   end
 
   def enforce_versioning
