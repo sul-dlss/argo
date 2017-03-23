@@ -490,22 +490,46 @@ describe ItemsController, :type => :controller do
       expect(response.body).to eq 'object must have catkey to refresh descMetadata'
     end
     context 'there is a catkey present' do
+      let(:descmd) { double(Dor::DescMetadataDS, ng_xml: double(Nokogiri::XML::Document, to_s: '<somexml>refreshed metadata</somexml>')) }
       before(:each) do
         allow(@item).to receive(:catkey).and_return('12345')
-        expect(@item).to receive(:build_datastream).with('descMetadata', true)
-        descmd = double(Dor::DescMetadataDS, ng_xml: double(Nokogiri::XML::Document, to_s: '<somexml>refreshed metadata</somexml>'))
         allow(@item).to receive(:descMetadata).and_return(descmd)
-        expect(descmd).to receive(:content=).with(descmd.ng_xml.to_s)
       end
-      it 'redirects with a notice if there is a catkey and the operation is not part of a bulk update' do
-        get :refresh_metadata, params: { id: @pid }
-        expect(response).to redirect_to(solr_document_path(@pid))
-        expect(flash[:notice]).to eq "Metadata for #{@item.pid} successfully refreshed from catkey:12345"
+      context 'user has permission and object is editable' do
+        before(:each) do
+          expect(@item).to receive(:build_datastream).with('descMetadata', true)
+          expect(descmd).to receive(:content=).with(descmd.ng_xml.to_s)
+          expect(controller).to receive(:save_and_reindex)
+        end
+        it 'redirects with a notice if there is a catkey and the operation is not part of a bulk update' do
+          get :refresh_metadata, params: { id: @pid }
+          expect(response).to redirect_to(solr_document_path(@pid))
+          expect(flash[:notice]).to eq "Metadata for #{@item.pid} successfully refreshed from catkey:12345"
+        end
+        it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
+          get :refresh_metadata, params: { id: @pid, :bulk => true }
+          expect(response).to have_http_status(:ok)
+          expect(response.body).to eq 'Refreshed.'
+        end
       end
-      it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
-        get :refresh_metadata, params: { id: @pid, :bulk => true }
-        expect(response).to have_http_status(:ok)
-        expect(response.body).to eq 'Refreshed.'
+      context "object doesn't allow modification or user doesn't have permission to edit desc metadata" do
+        before(:each) do
+          expect(@item).not_to receive(:build_datastream)
+          expect(descmd).not_to receive(:content=)
+          expect(controller).not_to receive(:save_and_reindex)
+        end
+        it 'returns a 403 with an error message if the user is not allowed to edit desc metadata' do
+          expect(controller).to receive(:authorize!).with(:manage_desc_metadata, @item).and_raise(CanCan::AccessDenied)
+          get :refresh_metadata, params: { id: @pid }
+          expect(response).to have_http_status(:forbidden)
+          expect(response.body).to eq 'forbidden'
+        end
+        it "returns a 403 with an error message if the object doesn't allow modification" do
+          expect(@item).to receive(:allows_modification?).and_return(false)
+          get :refresh_metadata, params: { id: @pid }
+          expect(response).to have_http_status(:forbidden)
+          expect(response.body).to eq 'Object cannot be modified in its current state.'
+        end
       end
     end
   end

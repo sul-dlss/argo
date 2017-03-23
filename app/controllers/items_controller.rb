@@ -26,10 +26,14 @@ class ItemsController < ApplicationController
     :embargo_update,
     :embargo_form
   ]
+  before_action :authorize_manage_desc_metadata!, :only => [
+    :refresh_metadata
+  ]
   before_action :enforce_versioning, :only => [
     :add_collection, :set_collection, :remove_collection,
     :source_id, :set_source_id,
     :catkey,
+    :refresh_metadata,
     :set_content_type,
     :set_rights,
     :tags,
@@ -709,6 +713,10 @@ class ItemsController < ApplicationController
 
   def authorize_manage_item!
     authorize! :manage_item, @object
+  end
+
+  def authorize_manage_desc_metadata!
+    authorize! :manage_desc_metadata, @object
   end
 
   def enforce_versioning
