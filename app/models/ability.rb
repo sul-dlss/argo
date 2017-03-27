@@ -13,6 +13,11 @@
 #   check to the APO's own ID for Dor::AdminPolicyObject types in addition to the checks for ActiveFedora::Base types (e.g. the
 #   "can :manage_item, Dor::AdminPolicyObject" and "can :manage_item, ActiveFedora::Base" definitions, with the latter being checked
 #   first).  see https://github.com/sul-dlss/argo/issues/76
+#
+# note about confusing dor-services method declarations:
+#  * the can_manage_*? and can_view_*? method calls (e.g. dor_item.can_manage_item? or dor_item.can_view_metadata?) don't
+#  actually do anything with the state of the object that receives the message.  they could all be static methods in Dor::Governable,
+#  since  they just check the intersection of the given roles with the appropriate static list of known roles.
 class Ability
   include CanCan::Ability
 
