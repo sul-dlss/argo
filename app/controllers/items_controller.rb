@@ -29,6 +29,9 @@ class ItemsController < ApplicationController
   before_action :authorize_manage_desc_metadata!, :only => [
     :refresh_metadata
   ]
+  before_action :authorize_set_governing_apo!, :only => [
+    :set_governing_apo
+  ]
   before_action :enforce_versioning, :only => [
     :add_collection, :set_collection, :remove_collection,
     :source_id, :set_source_id,
@@ -36,6 +39,7 @@ class ItemsController < ApplicationController
     :refresh_metadata,
     :set_content_type,
     :set_rights,
+    :set_governing_apo,
     :tags,
     :update_rights
   ]
@@ -49,7 +53,8 @@ class ItemsController < ApplicationController
     :catkey,
     :refresh_metadata,
     :set_rights,
-    :set_content_type
+    :set_content_type,
+    :set_governing_apo
   ]
   # must run after save_and_reindex
   prepend_after_action :flush_index, :only => [
@@ -672,6 +677,18 @@ class ItemsController < ApplicationController
     end
   end
 
+  def set_governing_apo
+    if params[:bulk]
+      render status: :forbidden, plain: 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
+      return
+    end
+
+    @object.admin_policy_object = Dor.find(params[:new_apo_id])
+    @object.identityMetadata.adminPolicy = nil if @object.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
+
+    redirect_to solr_document_path(params[:id]), notice: 'Governing APO updated!'
+  end
+
   private
 
   def reindex(item)
@@ -724,6 +741,10 @@ class ItemsController < ApplicationController
     return true if @object.allows_modification?
     render status: :forbidden, plain: 'Object cannot be modified in its current state.'
     false
+  end
+
+  def authorize_set_governing_apo!
+    authorize! :manage_governing_apo, @object, params[:new_apo_id]
   end
 
   # ---

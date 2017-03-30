@@ -27,6 +27,10 @@
         <%= f.radio_button(:action_type, 'ReleaseObjectJob', autocomplete: 'off') %>
         Manage release
       </label>
+      <label href='#set_governing_apo_custom_options' data-toggle='tab' class='btn btn-default'>
+        <%= f.radio_button(:action_type, 'SetGoverningApoJob', autocomplete: 'off') %>
+        Update governing APO
+      </label>
     </div>
 
     <div class='tab-content'>
@@ -40,6 +44,12 @@
           Adds release tags to individual objects.
         </span>
         <%= render 'bulk_actions/forms/manage_release_form',  f: f %>
+      </div>
+      <div role='tabpanel' class= 'tab-pane' id='set_governing_apo_custom_options'>
+        <span class='help-block'>
+          Moves the object to a new governing APO.
+        </span>
+        <%= render 'bulk_actions/forms/set_governing_apo_form', f: f %>
       </div>
     </div>
   </div>

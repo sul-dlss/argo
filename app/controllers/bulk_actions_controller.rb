@@ -50,7 +50,8 @@ class BulkActionsController < ApplicationController
       :action_type,
       :description,
       :pids,
-      manage_release: [:tag, :what, :who, :to]
+      manage_release: [:tag, :what, :who, :to],
+      set_governing_apo: [:new_apo_id]
     ).merge(webauth: { privgroup: webauth.privgroup, login: webauth.login })
   end
 end

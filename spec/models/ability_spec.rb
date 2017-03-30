@@ -5,6 +5,9 @@ describe Ability do
   let(:subject) { described_class.new(user) }
   let(:item) { Dor::Item.new(pid: 'x') }
 
+  let(:new_apo_id) { 'new_apo_id'}
+  let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_id) }
+
   context 'as an administrator' do
     let(:user) { mock_user(is_admin?: true)}
 
@@ -12,6 +15,7 @@ describe Ability do
     it { should be_able_to(:manage_item, item) }
     it { should be_able_to(:manage_content, item) }
     it { should be_able_to(:manage_desc_metadata, item) }
+    it { should be_able_to(:manage_governing_apo, item, new_apo_id) }
     it { should be_able_to(:create, Dor::AdminPolicyObject) }
     it { should be_able_to(:view_metadata, item) }
     it { should be_able_to(:view_content, item) }
@@ -24,6 +28,7 @@ describe Ability do
     it { should be_able_to(:manage_item, item) }
     it { should be_able_to(:manage_content, item) }
     it { should be_able_to(:manage_desc_metadata, item) }
+    it { should be_able_to(:manage_governing_apo, item, new_apo_id) }
     it { should be_able_to(:create, Dor::AdminPolicyObject) }
     it { should be_able_to(:view_metadata, item) }
     it { should be_able_to(:view_content, item) }
@@ -36,6 +41,7 @@ describe Ability do
     it { should_not be_able_to(:manage_content, item) }
     it { should_not be_able_to(:manage_desc_metadata, item) }
     it { should_not be_able_to(:create, Dor::AdminPolicyObject) }
+    it { should_not be_able_to(:manage_governing_apo, item, new_apo_id) }
     it { should be_able_to(:view_metadata, item) }
     it { should be_able_to(:view_content, item) }
   end
@@ -46,6 +52,7 @@ describe Ability do
     it { should_not be_able_to(:manage_item, item) }
     it { should_not be_able_to(:manage_content, item) }
     it { should_not be_able_to(:manage_desc_metadata, item) }
+    it { should_not be_able_to(:manage_governing_apo, item, new_apo_id) }
     it { should_not be_able_to(:view_content, item) }
     it { should_not be_able_to(:view_metadata, item) }
   end
@@ -81,6 +88,7 @@ describe Ability do
 
     before do
       allow(user).to receive(:roles).with('apo').and_return(['recognized-and-permitted-role'])
+      allow(user).to receive(:roles).with(new_apo_id).and_return(['target-apo-role'])
     end
 
     context 'as a user with a management role for an item' do
@@ -90,6 +98,18 @@ describe Ability do
 
       it { should_not be_able_to(:manage_item, ungoverned_item) }
       it { should be_able_to(:manage_item, item) }
+
+      context 'and as a user with a management role for the target APO' do
+        before { allow(item).to receive(:can_manage_item?).with(['target-apo-role']).and_return(true) }
+
+        it { should be_able_to(:manage_governing_apo, item, new_apo_id) }
+      end
+
+      context 'but as a user without a management role for the target APO' do
+        before { allow(item).to receive(:can_manage_item?).with(['target-apo-role']).and_return(false) }
+
+        it { should_not be_able_to(:manage_governing_apo, item, new_apo_id) }
+      end
     end
 
     context 'as a user with a content management role for an item' do
@@ -136,6 +156,7 @@ describe Ability do
 
     before do
       allow(user).to receive(:roles).with('apo').and_return(['some-other-role'])
+      allow(user).to receive(:roles).with(new_apo_id).and_return(['target-apo-role'])
     end
 
     context 'as a user without a management role for an item' do
@@ -144,6 +165,18 @@ describe Ability do
       end
 
       it { should_not be_able_to(:manage_item, item) }
+
+      context 'even as a user with a management role for the target APO' do
+        before { allow(item).to receive(:can_manage_item?).with(['target-apo-role']).and_return(true) }
+
+        it { should_not be_able_to(:manage_governing_apo, item, new_apo_id) }
+      end
+
+      context 'as a user without a management role for the target APO either' do
+        before { allow(item).to receive(:can_manage_item?).with(['target-apo-role']).and_return(false) }
+
+        it { should_not be_able_to(:manage_governing_apo, item, new_apo_id) }
+      end
     end
 
     context 'as a user without a content management role for an item' do

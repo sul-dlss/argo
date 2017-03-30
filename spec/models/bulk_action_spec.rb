@@ -57,13 +57,13 @@ RSpec.describe BulkAction do
     expect(GenericJob).to receive(:perform_later)
       .with(
         @bulk_action.id,
-        {
+        hash_including(
           pids: %w(a b c),
           output_directory: Settings.BULK_METADATA.DIRECTORY +
             "#{@bulk_action.action_type}_#{@bulk_action.id}",
           manage_release: {},
           webauth: {}
-        }
+        )
       )
     @bulk_action.run_callbacks(:create) { true }
   end

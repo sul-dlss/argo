@@ -4,8 +4,9 @@ RSpec.feature 'Item manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   before(:each) do
     obj = double(
-      'item',
-      admin_policy_object: false,
+      Dor::Item,
+      admin_policy_object: nil,
+      allows_modification?: true,
       datastreams: {},
       can_manage_item?: true,
       catkey: nil,

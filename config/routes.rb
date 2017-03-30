@@ -128,6 +128,8 @@ Argo::Application.routes.draw do
       get  'rights'
       post 'prepare'
       post 'set_rights'
+      get 'set_governing_apo_ui'
+      post 'set_governing_apo'
       get  'preserved_file', :action => :get_preserved_file
       post :release_hold
       match :add_workflow, :action => :add_workflow, :as => 'add_workflow', :via => [:get, :post]
