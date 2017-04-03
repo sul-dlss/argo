@@ -65,12 +65,12 @@ module ArgoHelper
       }
     end
 
-    # if this is an apo and the user has permission for the apo, let them edit it.
-    if object.datastreams.include?('roleMetadata') && can?(:manage_item, object)
-      buttons << {:url => register_apo_index_path(id: pid), :label => 'Edit APO', :new_page => true}
-      buttons << {:url => register_collection_apo_path(id: pid), :label => 'Create Collection'}
-    end
     if can?(:manage_item, object)
+      if object.is_a? Dor::AdminPolicyObject
+        buttons << {:url => register_apo_index_path(id: pid), :label => 'Edit APO', :new_page => true}
+        buttons << {:url => register_collection_apo_path(id: pid), :label => 'Create Collection'}
+      end
+
       buttons << {
         url: dor_reindex_path(pid: pid),
         label: 'Reindex',
