@@ -128,7 +128,7 @@ module ArgoHelper
         buttons << {:url => rights_item_path(id: pid), :label => 'Set rights'}
       end
       if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
-        buttons << {url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true}
+        buttons << {url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !object.allows_modification?}
       end
       buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
     end

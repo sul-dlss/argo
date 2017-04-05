@@ -140,7 +140,8 @@ describe ArgoHelper, :type => :helper do
         default_buttons.push({
           label: 'Refresh descMetadata',
           url: "/items/#{@item_id}/refresh_metadata",
-          new_page: true
+          new_page: true,
+          disabled: false
         }).each do |button|
           expect(buttons).to include(button)
         end
