@@ -42,6 +42,17 @@ module ArgoHelper
   # Ideally this method should not make calls to external services to determine
   # what buttons should be rendered. These external requests are blocking and
   # will not allow the page to load until all requests are finished.
+  #
+  # Instead, use the `check_url` field to specify an endpoint for what'd be a blocking request
+  # to determine whether the button should be enabled.  The button will start out disabled,
+  # and will be enabled (or not) depending on the response from the call out to `check_url`.
+  #
+  # If you can determine whether the button should be disabled based on information that's
+  # already available, without making a blocking request, you can use the `disabled` field
+  # to just permanantly disable the button without calling out to a `check_url`.  Note that
+  # you should not need to use both fields, since use of `check_url` disables the button at
+  # first anyway.
+  #
   # @param [SolrDocument] doc
   # @return [Array]
   def render_buttons(doc, object = nil)
@@ -84,7 +95,7 @@ module ArgoHelper
       buttons << {
         url: set_governing_apo_ui_item_path(id: pid),
         label: 'Set governing APO',
-        check_url: !object.allows_modification?
+        disabled: !object.allows_modification?
       }
 
       buttons << {:url => add_workflow_item_path(id: pid), :label => 'Add workflow'}
@@ -101,7 +112,7 @@ module ArgoHelper
         label: 'Purge',
         new_page: true,
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-        check_url: !registered_only?(doc)
+        disabled: !registered_only?(doc)
       }
 
       buttons << {:url => source_id_ui_item_path(id: pid), :label => 'Change source id'}

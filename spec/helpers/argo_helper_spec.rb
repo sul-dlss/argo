@@ -48,7 +48,7 @@ describe ArgoHelper, :type => :helper do
           {
             label: 'Set governing APO',
             url: "/items/#{@item_id}/set_governing_apo_ui",
-            check_url: false
+            disabled: false
           },
           {
             label: 'Add workflow',
@@ -65,7 +65,7 @@ describe ArgoHelper, :type => :helper do
             url: "/items/#{@item_id}/purge",
             new_page: true,
             confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-            check_url: true
+            disabled: true
           },
           {
             label: 'Change source id',
@@ -178,7 +178,7 @@ describe ArgoHelper, :type => :helper do
           {
             label: 'Set governing APO',
             url: "/items/#{view_apo_id}/set_governing_apo_ui",
-            check_url: false
+            disabled: false
           },
           {
             label: 'Add workflow',
@@ -195,7 +195,7 @@ describe ArgoHelper, :type => :helper do
             url: "/items/#{view_apo_id}/purge",
             new_page: true,
             confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-            check_url: true
+            disabled: true
           },
           {
             label: 'Change source id',

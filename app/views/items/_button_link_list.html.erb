@@ -12,6 +12,6 @@
         button_data[:check_url] = button[:check_url]
       end
     %>
-    <%= link_to button[:label], button[:url], class: "btn button btn-primary #{'disabled' if button[:check_url]}", data: button_data %>
+    <%= link_to button[:label], button[:url], class: "btn button btn-primary #{'disabled' if button[:check_url] || button[:disabled]}", data: button_data %>
   <%end%>
 </div>
