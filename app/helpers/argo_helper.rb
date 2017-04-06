@@ -62,7 +62,7 @@ module ArgoHelper
     apo_pid = doc.apo_pid
 
     buttons = []
-    if pid
+    if can?(:manage_content, object)
       buttons << {
         url: close_version_ui_item_path(pid),
         label: 'Close Version',

@@ -107,6 +107,7 @@ describe ArgoHelper, :type => :helper do
       it 'should generate the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
         allow(@usr).to receive(:is_admin?).and_return(false)
         allow(@object).to receive(:can_manage_item?).and_return(true)
+        allow(@object).to receive(:can_manage_content?).and_return(true)
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|
           expect(buttons).to include(button)
@@ -125,14 +126,14 @@ describe ArgoHelper, :type => :helper do
         end
         expect(buttons.length).to eq default_buttons.length
       end
-      it 'should not generate errors given an object that has no associated APO' do
+      it "should not generate errors given an object that has no associated APO and a user that can't manage the object" do
         allow(@usr).to receive(:is_admin?).and_return(false)
         allow(@doc).to receive(:apo_pid).and_return(nil)
         allow(@object).to receive(:admin_policy_object).and_return(nil)
         allow(@usr).to receive(:roles).with(nil).and_return([])
         buttons = helper.render_buttons(@doc)
         expect(buttons).not_to be_nil
-        expect(buttons.length).to be > 0
+        expect(buttons.length).to eq 0
       end
       it 'should include the refresh descMetadata button for items with catkey' do
         allow(@id_md).to receive(:otherId).with('catkey').and_return(['1234567'])
