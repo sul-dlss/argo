@@ -131,16 +131,18 @@ module ArgoHelper
         buttons << {url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !object.allows_modification?}
       end
       buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
-    end
-    if doc.key?('embargo_status_ssim')
-      embargo_data = doc['embargo_status_ssim']
-      text = embargo_data.split.first
-      # date=embargo_data.split.last
-      if text != 'released'
-        # TODO: add a date picker and button to change the embargo date for those who should be able to.
-        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if can?(:manage_item, object)
+
+      if doc.key?('embargo_status_ssim')
+        embargo_data = doc['embargo_status_ssim']
+        text = embargo_data.split.first
+        # date=embargo_data.split.last
+        if text != 'released'
+          # TODO: add a date picker and button to change the embargo date for those who should be able to.
+          buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)}
+        end
       end
     end
+
     buttons
   end
 
