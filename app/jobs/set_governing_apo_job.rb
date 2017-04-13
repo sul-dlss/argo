@@ -10,7 +10,7 @@ class SetGoverningApoJob < GenericJob
     @webauth = OpenStruct.new params[:webauth]
     @pids = params[:pids]
 
-    File.open(bulk_action.log_name, 'w') do |log|
+    with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting SetGoverningApoJob for BulkAction #{bulk_action_id}")
       update_druid_count
 

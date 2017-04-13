@@ -40,7 +40,7 @@ describe ReleaseObjectJob do
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
         buffer = StringIO.new
-        expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'w').and_yield(buffer)
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
         pids.each do |pid|
@@ -74,7 +74,7 @@ describe ReleaseObjectJob do
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
         buffer = StringIO.new
-        expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'w').and_yield(buffer)
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
@@ -106,7 +106,7 @@ describe ReleaseObjectJob do
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
         buffer = StringIO.new
-        expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'w').and_yield(buffer)
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
@@ -128,7 +128,7 @@ describe ReleaseObjectJob do
       end
       it 'logs druid info to logfile' do
         buffer = StringIO.new
-        expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'w').and_yield(buffer)
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
         pids.each do |pid|

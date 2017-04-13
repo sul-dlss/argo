@@ -12,7 +12,7 @@ class DescmetadataDownloadJob < GenericJob
   def perform(bulk_action_id, params)
     zip_filename = generate_zip_filename(params[:output_directory])
     initialize_counters(bulk_action)
-    File.open(bulk_action.log_name, 'w') do |log|
+    with_bulk_action_log do |log|
       #  Fail with an error message if the calling BulkAction doesn't exist
       if bulk_action.nil?
         log.puts("argo.bulk_metadata.bulk_log_bulk_action_not_found (looking for #{bulk_action_id})")
