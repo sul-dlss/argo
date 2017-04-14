@@ -13,6 +13,10 @@ class GenericJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'.freeze
 
+  before_perform do |_job|
+    bulk_action.reset_druid_counts
+  end
+
   around_perform do |_job, block|
     bulk_action.update_attribute(:status, 'Processing')
     block.call
