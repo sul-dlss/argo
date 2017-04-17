@@ -1,7 +1,9 @@
 ##
-# Base IndexingJob class
-class IndexingJob < ActiveJob::Base
-  queue_as :indexing
+# this job will reindex a list of DOR objects, locally performing the computation to
+# generate the solr document (talking directly to Fedora to retrieve the object, and
+# directly to Solr to update the index).
+class LocalIndexingJob < ActiveJob::Base
+  queue_as :indexing_local
 
   ##
   # Perform indexing job on a list of pids
