@@ -15,6 +15,12 @@ class BulkAction < ActiveRecord::Base
     File.join(output_directory, filename)
   end
 
+  def reset_druid_counts
+    update_attribute(:druid_count_success, 0)
+    update_attribute(:druid_count_fail, 0)
+    update_attribute(:druid_count_total, 0)
+  end
+
   private
 
   def prefix

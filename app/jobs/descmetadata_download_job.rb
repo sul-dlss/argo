@@ -11,8 +11,7 @@ class DescmetadataDownloadJob < GenericJob
   # requires `:pids` (an Array of pids) and output_directory
   def perform(bulk_action_id, params)
     zip_filename = generate_zip_filename(params[:output_directory])
-    initialize_counters(bulk_action)
-    File.open(bulk_action.log_name, 'w') do |log|
+    with_bulk_action_log do |log|
       #  Fail with an error message if the calling BulkAction doesn't exist
       if bulk_action.nil?
         log.puts("argo.bulk_metadata.bulk_log_bulk_action_not_found (looking for #{bulk_action_id})")
@@ -75,14 +74,6 @@ class DescmetadataDownloadJob < GenericJob
       return nil
     end
     return dor_object
-  end
-
-  # Initialize the counters for the originating bulk action. This is necessary to avoid invalid counters
-  # in case of the job is restarted.
-  def initialize_counters(bulk_action)
-    bulk_action.update(druid_count_fail: 0)
-    bulk_action.update(druid_count_success: 0)
-    bulk_action.update(druid_count_total: 0)
   end
 
   def write_to_zip(value, entry_name, zip_file)

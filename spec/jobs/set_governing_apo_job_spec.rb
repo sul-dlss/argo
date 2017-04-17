@@ -43,7 +43,7 @@ describe SetGoverningApoJob do
         allow(Dor::SearchService.solr).to receive(:commit)
 
         buffer = StringIO.new
-        expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'w').and_yield(buffer)
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
 
         subject.perform(bulk_action_no_process_callback.id, params)
 
@@ -61,7 +61,7 @@ describe SetGoverningApoJob do
       # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
       it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
         buffer = StringIO.new
-        expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'w').and_yield(buffer)
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
 
         item1 = double(Dor::Item)
         item3 = double(Dor::Item)
