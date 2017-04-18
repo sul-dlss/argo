@@ -42,4 +42,10 @@ RSpec.describe 'bulk_actions/_form.html.erb' do
       expect(rendered).to have_css 'select[name="bulk_action[set_governing_apo][new_apo_id]"] option[value="druid:234"]'
     end
   end
+
+  describe 'Reindex Job form' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'input[type="radio"][value="RemoteIndexingJob"]'
+    end
+  end
 end

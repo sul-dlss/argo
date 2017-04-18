@@ -1,6 +1,6 @@
 class BulkAction < ActiveRecord::Base
   belongs_to :user
-  validates :action_type, inclusion: { in: %w(GenericJob DescmetadataDownloadJob ReleaseObjectJob SetGoverningApoJob) }
+  validates :action_type, inclusion: { in: %w(GenericJob DescmetadataDownloadJob ReleaseObjectJob RemoteIndexingJob SetGoverningApoJob) }
   after_create do
     create_output_directory
     create_log_file
