@@ -82,6 +82,15 @@ You may then update values in `jetty/etc/logging.properties` to change logging s
 
 ## Run the servers
 
+Note that Argo expects [Dor Indexing App](https://github.com/sul-dlss/dor_indexing_app) to be running on port 4000, which Argo uses to perform
+indexing as part of loading and updating Dor objects. Check out the code and run it using
+
+```bash
+rails s -p 4000
+```
+
+Then start Argo:
+
 ```bash
 rake jetty:start       # This may take a few minutes to boot Fedora and Solr
 bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
