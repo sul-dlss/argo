@@ -37,14 +37,18 @@ rescue LoadError
   end
 end
 
+begin
+  require 'rspec/core/rake_task'
+rescue LoadError
+  puts 'RSpec gem missing'
+end
+
 if ['test', 'development'].include? Rails.env
   require 'jettywrapper'
   Jettywrapper.hydra_jetty_version = 'v7.3.0' # this keeps us on fedora 3, hydra-jetty v8.x moves to fedora 4.
   def jettywrapper_load_config
     Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'), :startup_wait => 200})
   end
-
-  require 'rspec/core/rake_task'
 
   desc 'Larger integration/acceptance style tests (take several minutes to complete)'
   RSpec::Core::RakeTask.new(:integration_tests) do |spec|
