@@ -42,6 +42,17 @@ module ArgoHelper
   # Ideally this method should not make calls to external services to determine
   # what buttons should be rendered. These external requests are blocking and
   # will not allow the page to load until all requests are finished.
+  #
+  # Instead, use the `check_url` field to specify an endpoint for what'd be a blocking request
+  # to determine whether the button should be enabled.  The button will start out disabled,
+  # and will be enabled (or not) depending on the response from the call out to `check_url`.
+  #
+  # If you can determine whether the button should be disabled based on information that's
+  # already available, without making a blocking request, you can use the `disabled` field
+  # to just permanantly disable the button without calling out to a `check_url`.  Note that
+  # you should not need to use both fields, since use of `check_url` disables the button at
+  # first anyway.
+  #
   # @param [SolrDocument] doc
   # @return [Array]
   def render_buttons(doc, object = nil)
@@ -51,7 +62,7 @@ module ArgoHelper
     apo_pid = doc.apo_pid
 
     buttons = []
-    if pid
+    if can?(:manage_content, object)
       buttons << {
         url: close_version_ui_item_path(pid),
         label: 'Close Version',
@@ -65,12 +76,12 @@ module ArgoHelper
       }
     end
 
-    # if this is an apo and the user has permission for the apo, let them edit it.
-    if object.datastreams.include?('roleMetadata') && can?(:manage_item, object)
-      buttons << {:url => register_apo_index_path(id: pid), :label => 'Edit APO', :new_page => true}
-      buttons << {:url => register_collection_apo_path(id: pid), :label => 'Create Collection'}
-    end
     if can?(:manage_item, object)
+      if object.is_a? Dor::AdminPolicyObject
+        buttons << {:url => register_apo_index_path(id: pid), :label => 'Edit APO', :new_page => true}
+        buttons << {:url => register_collection_apo_path(id: pid), :label => 'Create Collection'}
+      end
+
       buttons << {
         url: dor_reindex_path(pid: pid),
         label: 'Reindex',
@@ -84,7 +95,7 @@ module ArgoHelper
       buttons << {
         url: set_governing_apo_ui_item_path(id: pid),
         label: 'Set governing APO',
-        check_url: !object.allows_modification?
+        disabled: !object.allows_modification?
       }
 
       buttons << {:url => add_workflow_item_path(id: pid), :label => 'Add workflow'}
@@ -101,7 +112,7 @@ module ArgoHelper
         label: 'Purge',
         new_page: true,
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-        check_url: !registered_only?(doc)
+        disabled: !registered_only?(doc)
       }
 
       buttons << {:url => source_id_ui_item_path(id: pid), :label => 'Change source id'}
@@ -117,19 +128,21 @@ module ArgoHelper
         buttons << {:url => rights_item_path(id: pid), :label => 'Set rights'}
       end
       if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
-        buttons << {url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true}
+        buttons << {url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !object.allows_modification?}
       end
       buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
-    end
-    if doc.key?('embargo_status_ssim')
-      embargo_data = doc['embargo_status_ssim']
-      text = embargo_data.split.first
-      # date=embargo_data.split.last
-      if text != 'released'
-        # TODO: add a date picker and button to change the embargo date for those who should be able to.
-        buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)} if can?(:manage_item, object)
+
+      if doc.key?('embargo_status_ssim')
+        embargo_data = doc['embargo_status_ssim']
+        text = embargo_data.split.first
+        # date=embargo_data.split.last
+        if text != 'released'
+          # TODO: add a date picker and button to change the embargo date for those who should be able to.
+          buttons << {:label => 'Update embargo', :url => embargo_form_item_path(pid)}
+        end
       end
     end
+
     buttons
   end
 
