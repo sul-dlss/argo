@@ -28,7 +28,6 @@ feature 'Bulk actions view', js: true do
     expect(page).to have_button('Apply APO defaults', disabled: false)
     expect(page).to have_button('Add a workflow', disabled: false)
     expect(page).to have_button('Close versions', disabled: false)
-    expect(page).to have_button('Reindex', disabled: false)
     expect(page).to have_button('Republish', disabled: false)
     expect(page).to have_button('Tags', disabled: false)
     expect(page).to have_button('Purge', disabled: false)

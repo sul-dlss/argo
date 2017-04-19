@@ -24,20 +24,12 @@ describe DorController, :type => :controller do
         expect(response).to redirect_to(solr_document_path(druid))
       end
     end
-    context 'from bulk action' do
-      it 'returns success code and message on success' do
-        expect(Dor::IndexingService).to receive(:reindex_pid_remotely).with(druid)
+    context 'from bulk update' do
+      it 'returns a 403 for requests from the old bulk update mechanism' do
+        expect(Dor::IndexingService).not_to receive(:reindex_pid_remotely)
         get :reindex, params: { pid: druid, bulk: 'true' }
-        expect(response.body).to eq "Successfully updated index for #{druid}"
-        expect(response).to have_http_status(:ok)
-      end
-
-      it 'returns error code and message on failure' do
-        expect(Dor::IndexingService).to receive(:reindex_pid_remotely).with(druid).and_raise(Dor::IndexingService::ReindexError)
-        expect(Rails.logger).to receive(:error).with(/Failed to update index for #{druid}/)
-        get :reindex, params: { pid: druid, bulk: 'true' }
-        expect(response.body).to eq "Failed to update index for #{druid}"
-        expect(response).to have_http_status(:internal_server_error)
+        expect(response.body).to eq 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
