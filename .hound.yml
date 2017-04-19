@@ -4,7 +4,7 @@ scss:
 ruby:
   config_file: .rubocop.yml
 
-javascript:
+jshint:
   config_file: .jshintrc
   ignore_file: .jshintignore
 

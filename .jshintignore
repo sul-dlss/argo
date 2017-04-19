@@ -1,2 +1,2 @@
-vendor/*
-app/assets/javascripts/vendor/*
+vendor/**
+app/assets/javascripts/vendor/**
