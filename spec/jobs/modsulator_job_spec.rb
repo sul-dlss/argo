@@ -209,7 +209,7 @@ describe ModsulatorJob, type: :job do
     end
 
     it 'opens the log in append mode' do
-      FileUtils.copy_file(xlsx_path, test_spreadsheet_path)  # perform deletes upload file, so we copy fixture
+      FileUtils.copy_file(xlsx_path, test_spreadsheet_path)
       expect(File).to receive(:open).with("#{@output_directory}/#{Settings.BULK_METADATA.LOG}", 'a')
       @mj.perform(nil,
                   test_spreadsheet_path,

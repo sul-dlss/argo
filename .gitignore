@@ -20,4 +20,4 @@ vendor/ruby/
 /spec/fixtures/bulk_upload/workspace
 .ruby-version
 .ruby-gemset
-
+.byebug_history
