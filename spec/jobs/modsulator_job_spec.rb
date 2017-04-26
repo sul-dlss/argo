@@ -207,6 +207,18 @@ describe ModsulatorJob, type: :job do
       expect(File.exist?(File.join(@output_directory, Settings.BULK_METADATA.LOG))).to be_truthy
       expect(File.exist? test_spreadsheet_path).to be_falsey
     end
+
+    it 'opens the log in append mode' do
+      FileUtils.copy_file(xlsx_path, test_spreadsheet_path)
+      expect(File).to receive(:open).with("#{@output_directory}/#{Settings.BULK_METADATA.LOG}", 'a')
+      @mj.perform(nil,
+                  test_spreadsheet_path,
+                  @output_directory,
+                  'random_user',
+                  'xlsx',
+                  'true',
+                  'anote')
+    end
   end
 
   describe 'generate_xml' do

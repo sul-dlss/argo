@@ -30,7 +30,7 @@ class ModsulatorJob < ActiveJob::Base
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
 
-    File.open(log_filename, 'w') { |log|
+    File.open(log_filename, 'a') { |log|
 
       start_log(log, user_login, original_filename, note)
       response_xml = generate_xml(filetype, uploaded_filename, original_filename, log)
