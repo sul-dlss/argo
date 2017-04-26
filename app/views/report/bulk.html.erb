@@ -17,7 +17,6 @@ open_version_url='<%=url_for :controller => :items,:action => :prepare, :id => '
 close_version_url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 set_content_type_url='<%=url_for :controller => :items,:action => :set_content_type, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-reindex_url='<%=url_for :controller => :dor,:action => :reindex, :pid => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
 release_hold_url='<%=url_for :controller => :items,:action => :release_hold, :id => 'druid:xxxxxxxxx', :bulk => true%>'
 set_rights_url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
@@ -94,9 +93,6 @@ ul li{
     </div>
     <strong>Options that do not require versioning</strong>
     <div class="row bulk-buttons-row">
-      <div class="col-sm-2">
-	<button class="bulk_button btn-block" id="reindex_show" name="reindex_show" onclick="$('#reindex').show(400)">Reindex</button>
-      </div>
       <div class="col-sm-2">
         <button class="bulk_button btn-block" id="republish_show" name="republish_show" onclick="$('#republish').show(400)">Republish</button>
       </div>
@@ -235,10 +231,6 @@ ul li{
 <div class="bulk_operation" id="release_hold" name="release_hold">
   <h1>Release to SDR-Ingest</h1>
   <span class="bulk_button" id="release_hold" name="release_hold" onclick="fetch_druids(release_hold);$('#release_hold').hide(400);">Release object</span>
-</div>
-<div class="bulk_operation" id="reindex" name="reindex">
-  <h1>Reindex items</h1>
-  <span class="bulk_button" id="reindex_button" name="reindex_button" onclick="fetch_druids(reindex);$('#reindex').hide(400);">Update DOR/Argo index for object</span>
 </div>
 <div class="bulk_operation" id="republish" name="republish">
   <h1>Republish items</h1>

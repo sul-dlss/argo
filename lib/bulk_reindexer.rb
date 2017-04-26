@@ -14,13 +14,13 @@ module Argo
     end
 
     ##
-    # Batch up and enqueue IndexingJobs.  pid_list is broken into batches of BATCH_SIZE, and
+    # Batch up and enqueue LocalIndexingJobs.  pid_list is broken into batches of BATCH_SIZE, and
     #  an indexing job of the given priority is submitted for each batch.
     # @param [Array<String>] pid_list
     # @param [Integer] priority
     def queue_pid_reindexing_jobs(pid_list, priority = 1)
       pid_list.each_slice(Settings.BULK_REINDEXER.BATCH_SIZE) do |sublist|
-        IndexingJob.delay(priority: priority).perform_later(sublist)
+        LocalIndexingJob.delay(priority: priority).perform_later(sublist)
       end
     end
 

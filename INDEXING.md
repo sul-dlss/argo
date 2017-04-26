@@ -47,15 +47,15 @@ The simplest usage is to instantiate `PidGatherer` and just call either `pid_lis
 
 However, there are setters for each list that the query methods memoize to.  As such, you can provide values of your own for each of those lists (or some subset of them).  Then you can take that `PidGatherer` instance and call `pid_lists_for_full_reindex` or `pid_lists_for_unindexed`.  It will use whatever overridden values you've already provided, and for any that weren't manually specified, it'll run the query methods for the first time (which will retrieve and memoize results).
 
-#### Argo::IndexingJob
-`Argo::IndexingJob` is a subclass of `ActiveJob::Base`.  Its `perform` method just calls `Argo::Indexer.reindex_pid_list` (or its profiled counterpart, based on `Settings.INDEXING_JOB.SHOULD_PROFILE`).  Batches are committed immediately if `Settings.INDEXING_JOB.SHOULD_COMMIT_BATCHES`, and not otherwise.  So, you can create a job to reindex a batch of PIDs by doing something like `IndexingJob.delay(priority: priority).perform_later(pid_list)`.
+#### Argo::LocalIndexingJob
+`Argo::LocalIndexingJob` is a subclass of `ActiveJob::Base`.  Its `perform` method just calls `Argo::Indexer.reindex_pid_list` (or its profiled counterpart, based on `Settings.INDEXING_JOB.SHOULD_PROFILE`).  Batches are committed immediately if `Settings.INDEXING_JOB.SHOULD_COMMIT_BATCHES`, and not otherwise.  So, you can create a job to reindex a batch of PIDs by doing something like `LocalIndexingJob.delay(priority: priority).perform_later(pid_list)`.
 
 #### Argo::BulkReindexer
 `Argo::BulkReindexer.new` expects a list of lists in the format returned by `PidGatherer.pid_lists_for_full_reindex` (described above).  Indeed, the static method `Argo::BulkReindexer.reindex_all` just creates an instance of its parent class using `pid_lists_for_full_reindex` from a new instance of `PidGatherer`.
 
 Once you've created a `BulkReindexer` instance with the desired `pid_lists`, you can have it index them by calling `queue_prioritized_pid_lists_for_reindexing`.  This method will:
 * iterate over `pid_lists` in order.
- * for each object type sub-list, it will break the list into chunks of `Settings.BULK_REINDEXER.BATCH_SIZE`, and create an `IndexingJob` for each chunk of PIDs.  It will also set the priority on each job, such that each batch has a priority corresponding to the object type contained in that batch (since the lists are already in priority order, it just uses the index of the parent list from `pid_lists`).  The delayed_job workers will then pick up the queued jobs in order of priority, and execute them.  Everything will get logged properly since the jobs are ultimately executing calls to `reindex_pid` (via a few intermediate layers).  Additionally, the delayed_job workers will log higher level info about their success/failure to execute.
+ * for each object type sub-list, it will break the list into chunks of `Settings.BULK_REINDEXER.BATCH_SIZE`, and create an `LocalIndexingJob` for each chunk of PIDs.  It will also set the priority on each job, such that each batch has a priority corresponding to the object type contained in that batch (since the lists are already in priority order, it just uses the index of the parent list from `pid_lists`).  The delayed_job workers will then pick up the queued jobs in order of priority, and execute them.  Everything will get logged properly since the jobs are ultimately executing calls to `reindex_pid` (via a few intermediate layers).  Additionally, the delayed_job workers will log higher level info about their success/failure to execute.
 
 ### An example of some custom reindexing code (to tie it all together)
 

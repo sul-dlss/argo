@@ -104,9 +104,6 @@ function fetch_druids(fun) {
 	}
 }
 
-function reindex(druids){
-	process_get(druids, reindex_url, 'Reindexed.');
-}
 function republish(druids){
 	process_get(druids, republish_url, "Republished.");
 }

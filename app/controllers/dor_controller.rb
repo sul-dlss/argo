@@ -1,6 +1,11 @@
 class DorController < ApplicationController
   # dispatches the reindexing request to the remote reindexing service
   def reindex
+    if params[:bulk]
+      render status: :forbidden, plain: 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
+      return
+    end
+
     begin
       Dor::IndexingService.reindex_pid_remotely params[:pid]
       flash[:notice] = "Successfully updated index for #{params[:pid]}"
@@ -9,18 +14,9 @@ class DorController < ApplicationController
       Rails.logger.error "#{flash[:error]}: #{e.inspect}"
     end
 
-    # it needs to support both bulk actions and the blue button
-    if params[:bulk] == 'true'
-      if flash[:notice]
-        render status: 200, plain: flash[:notice]
-      else
-        render status: 500, plain: flash[:error]
-      end
-    else
-      redirect_back(
-        fallback_location: proc { solr_document_path(params[:pid])}
-      )
-    end
+    redirect_back(
+      fallback_location: proc { solr_document_path(params[:pid]) }
+    )
   end
 
   # dispatches to the dor-services-app to republish
