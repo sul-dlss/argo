@@ -78,7 +78,6 @@ gem 'ruby-prof'
 gem 'whenever', require: false
 
 # Stanford/Hydra related gems
-gem 'about_page'
 gem 'active-fedora', '~> 8.2'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
