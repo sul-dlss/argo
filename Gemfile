@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 #Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0', '>= 5.0.0.1'
+gem 'rails', '~> 5.1.0'
 # Use Puma as the app server
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
@@ -35,7 +35,7 @@ end
 group :development do
  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
  gem 'web-console'
- gem 'listen', '~> 3.0.5'
+ gem 'listen', '>= 3.0.5', '< 3.2'
  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
  gem 'spring'
  gem 'spring-watcher-listen', '~> 2.0.0'
@@ -54,7 +54,7 @@ gem 'delayed_job_active_record'
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
 gem 'faraday'
 gem 'eye'  # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
-gem 'honeybadger', '~> 2.0'
+gem 'honeybadger', '~> 3.0'
 gem 'jqgrid-jquery-rails'
 gem 'jquery-ui-rails', '~> 5.0'
 gem 'jquery-validation-rails'
@@ -72,6 +72,7 @@ gem 'ebnf', '1.0.0' # 1.0 requires rdf 2.x; bundler bug stops it from resolving 
 gem 'rdf-reasoner', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'rdf-tabular', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from resolving correctly
+gem 'erubis' # implicit dependency required by rdf-rdfa/haml, no longer provided by default in Rails 5.1
 gem 'retries'
 gem 'ruby-graphviz'
 gem 'ruby-prof'
