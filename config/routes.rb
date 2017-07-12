@@ -43,7 +43,6 @@ Argo::Application.routes.draw do
   match 'catalog',      :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'search_catalog_redirect'
   match 'catalog/*all', :via => [:get, :post], :to => redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'catalog_redirect'
 
-  mount AboutPage::Engine => '/about(.:format)'
   match 'report',          :to => 'report#index',    :via => [:get, :post], :as => 'report'
   match 'report/data',     :to => 'report#data',     :via => [:get, :post], :as => 'report_data'
   match 'report/download', :to => 'report#download', :via => [:get, :post], :as => 'report_download'
