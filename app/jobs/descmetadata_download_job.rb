@@ -42,7 +42,7 @@ class DescmetadataDownloadJob < GenericJob
               log.puts(e.backtrace)
               bulk_action.increment(:druid_count_fail).save
               next
-            rescue Dor::Exception, StandardError => e
+            rescue StandardError => e
               log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
               log.puts(e.message)
               log.puts(e.backtrace)

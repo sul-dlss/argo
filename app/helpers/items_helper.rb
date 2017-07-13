@@ -32,7 +32,10 @@ module ItemsHelper
     end
     messages << 'Missing dateIssued or dateCreated.' unless vals && vals.length > 0
     # should have a typeOfResource
-    good_formats = ['still image', 'mixed material', 'moving image', 'three dimensional object', 'cartographic', 'sound recording-musical', 'sound recording-nonmusical', 'software, multimedia']
+    good_formats = [
+      'still image', 'mixed material', 'moving image', 'three dimensional object', 'cartographic',
+      'sound recording-musical', 'sound recording-nonmusical', 'software, multimedia'
+    ]
     format = mods_rec.term_values(:typeOfResource)
     messages << 'Missing or invalid typeOfResource' unless format && format.length > 0 && good_formats.include?(format.first)
     messages

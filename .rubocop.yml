@@ -18,7 +18,7 @@ Style/FileName:
   Exclude:
     - 'config/deploy/*.rb'
 
-Style/EmptyLineBetweenDefs:
+Layout/EmptyLineBetweenDefs:
   AllowAdjacentOneLineDefs: true
 
 Style/StringLiterals:
