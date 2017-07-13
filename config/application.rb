@@ -2,6 +2,11 @@ require_relative 'boot'
 
 require 'rails/all'
 
+# this is intended to silence deprecation warnings when running rake tasks via
+# cron, to prevent cron jobs from flooding us with emails about deprecation warnings.
+# you probably should not use this flag for anything else.
+ActiveSupport::Deprecation.behavior = [:silence] if ENV['SILENCE_DEPRECATION_WARNINGS']
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
