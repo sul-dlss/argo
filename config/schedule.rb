@@ -19,6 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
+env 'SILENCE_DEPRECATION_WARNINGS', 'true'
 every 5.minutes do
   rake 'argo:htaccess'
 end
