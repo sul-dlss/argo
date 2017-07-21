@@ -102,7 +102,7 @@ describe 'mods_view', :type => :request do
     end
     context 'register' do
       it 'should load the registration form' do
-        skip "appears to pass even if blacklight JS isn't included in application.js or register.js, which you'd expect to break things.  skipping since it might be useless anyway."
+        skip "appears to pass even if blacklight JS isn't included in application.js or register.js, which you'd expect to break things. skipping since it might be useless anyway."
         visit '/items/register'
         expect(page).to have_content('Admin Policy')
         expect(page).to have_content('Register')

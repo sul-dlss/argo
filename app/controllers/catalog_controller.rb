@@ -79,9 +79,22 @@ class CatalogController < ApplicationController
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
     config.add_facet_field 'source', label: 'Object Source', home: false, query: {
-      :other  => { :label => 'DOR',        :fq => '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject" AND -has_model_ssim:"info:fedora/dor:googleScannedBook"' },
-      :google => { :label => 'Google',     :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
-      :hyrdus => { :label => 'Hydrus/SDR', :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item" OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection" OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"' }
+      :other => {
+        :label => 'DOR',
+        :fq => '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+          ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
+          ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'\
+          ' AND -has_model_ssim:"info:fedora/dor:googleScannedBook"'
+      },
+
+      :google => { :label => 'Google', :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
+
+      :hyrdus => {
+        :label => 'Hydrus/SDR',
+        :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+          ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
+          ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'
+      }
     }
 
     config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source', :home => false
