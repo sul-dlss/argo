@@ -237,6 +237,24 @@ describe RegistrationController, :type => :controller do
       expect(data.length).to eq(1)
     end
 
+    it 'should alpha-sort the collection list by title, except for the "None" entry, which should come first' do
+      get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
+      data = JSON.parse(response.body)
+      expect(data).to eq({
+        '' => 'None',
+        'druid:pb873ty1662' => 'Annual report of the State Corporation Commission showing... (pb873ty1662)',
+        'druid:fb337wh0818' => 'Unknown Collection (fb337wh0818)',
+        'druid:fz658ss5788' => 'Unknown Collection (fz658ss5788)',
+        'druid:gg191kg3953' => 'Unknown Collection (gg191kg3953)',
+        'druid:jm980xw3297' => 'Unknown Collection (jm980xw3297)',
+        'druid:kd973gk0505' => 'Unknown Collection (kd973gk0505)',
+        'druid:kk203bw3276' => 'Unknown Collection (kk203bw3276)',
+        'druid:nq832zg5474' => 'Unknown Collection (nq832zg5474)',
+        'druid:vh782pm7216' => 'Unknown Collection (vh782pm7216)',
+        'druid:zx663qq1749' => 'Unknown Collection (zx663qq1749)'
+      })
+    end
+
     it 'should handle an APO with some collections both found and not found in Solr/Fedora' do
       get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
       data = JSON.parse(response.body)
