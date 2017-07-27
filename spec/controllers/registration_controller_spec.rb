@@ -238,29 +238,44 @@ describe RegistrationController, :type => :controller do
     end
 
     it 'should alpha-sort the collection list by title, except for the "None" entry, which should come first' do
-      get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
+      apo_id = 'druid:fg464dn8891'
+
+      # 'pb873ty1662' is a real object in our fixture data.  for the other two druids, we mock the
+      # results of the calls to fedora.  the 'z' druid has a title that should cause it to sort first
+      # after "None", and the 'a' druid has a title that should cause it to sort last.
+      col_ids_for_apo = ['druid:pb873ty1662', 'druid:ab098cd7654', 'druid:zy123xw4567']
+      allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return(col_ids_for_apo)
+      mock_collection_z = double(Dor::Collection, label: 'A collection that sorts to the top')
+      mock_collection_a = double(Dor::Collection, label: 'Ze last collection in ze list')
+      allow(Dor).to receive(:find).with('druid:zy123xw4567').and_return(mock_collection_z)
+      allow(Dor).to receive(:find).with('druid:pb873ty1662').and_call_original
+      allow(Dor).to receive(:find).with('druid:ab098cd7654').and_return(mock_collection_a)
+
+      get 'collection_list', params: { apo_id: apo_id, format: :json }
       data = JSON.parse(response.body)
       expect(data).to eq({
         '' => 'None',
+        'druid:zy123xw4567' => 'A collection that sorts to the top (zy123xw4567)',
         'druid:pb873ty1662' => 'Annual report of the State Corporation Commission showing... (pb873ty1662)',
-        'druid:fb337wh0818' => 'Unknown Collection (fb337wh0818)',
-        'druid:fz658ss5788' => 'Unknown Collection (fz658ss5788)',
-        'druid:gg191kg3953' => 'Unknown Collection (gg191kg3953)',
-        'druid:jm980xw3297' => 'Unknown Collection (jm980xw3297)',
-        'druid:kd973gk0505' => 'Unknown Collection (kd973gk0505)',
-        'druid:kk203bw3276' => 'Unknown Collection (kk203bw3276)',
-        'druid:nq832zg5474' => 'Unknown Collection (nq832zg5474)',
-        'druid:vh782pm7216' => 'Unknown Collection (vh782pm7216)',
-        'druid:zx663qq1749' => 'Unknown Collection (zx663qq1749)'
+        'druid:ab098cd7654' => 'Ze last collection in ze list (ab098cd7654)'
       })
     end
 
-    it 'should handle an APO with some collections both found and not found in Solr/Fedora' do
+    it 'should not include collections that are not found in Solr/Fedora' do
+      missing_registration_collections = [
+        'druid:kk203bw3276', 'druid:zx663qq1749', 'druid:nq832zg5474', 'druid:fb337wh0818', 'druid:kd973gk0505',
+        'druid:jm980xw3297', 'druid:fz658ss5788', 'druid:vh782pm7216', 'druid:gg191kg3953'
+      ]
+      missing_registration_collections.each do |col_id|
+        col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
+        expect(Rails.logger).to receive(:warning).with(col_not_found_warning)
+      end
+
       get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
       data = JSON.parse(response.body)
       expect(data['druid:pb873ty1662']).to start_with 'Annual report of the State Corporation Commission'
-      expect(data['druid:gg191kg3953']).to eq 'Unknown Collection (gg191kg3953)'
-      expect(data.length).to eq(11)
+      expect(data['druid:gg191kg3953']).to be nil
+      expect(data.length).to eq(2)
     end
   end
 

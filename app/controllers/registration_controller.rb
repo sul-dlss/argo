@@ -33,12 +33,11 @@ class RegistrationController < ApplicationController
   # Data route to return all the registration collections listed for the given APO
   # @option params [String] `:apo_id` the druid for the APO
   # @option params [String] `:truncate` word boundary truncation limit
+  # @return [Hash<String, String>] key represents collection druid, value represents collection title. entries sorted by title, except leading "None" option.
   def collection_list
     truncate_limit = (params[:truncate] || 60).to_i
     collections = { }
-    apo_object = Dor.find(params[:apo_id])
-    apo_object.administrativeMetadata.ng_xml.search('//registration/collection/@id').each do |node|
-      col_id = node.to_s
+    registration_collection_ids_for_apo(params[:apo_id]).each do |col_id|
       col_druid = col_id.gsub(/^druid:/, '')
       col_title_field = SolrDocument::FIELD_TITLE
 
@@ -55,7 +54,8 @@ class RegistrationController < ApplicationController
           collection = Dor.find(col_id)
           collections[col_id] = "#{short_label(collection.label, truncate_limit)} (#{col_druid})"
         rescue ActiveFedora::ObjectNotFoundError
-          collections[col_id] = "Unknown Collection (#{col_druid})"
+          col_not_found_warning = "#{params[:apo_id]} lists collection #{col_id} for registration, but it wasn't found in Fedora."
+          Rails.logger.warning col_not_found_warning
         end
       end
     end
@@ -116,5 +116,10 @@ class RegistrationController < ApplicationController
   # @param [Integer] truncate_limit character limit for truncation target
   def short_label(s, truncate_limit = 60)
     s.truncate(truncate_limit, separator: /\s/)
+  end
+
+  def registration_collection_ids_for_apo(apo_id)
+    apo_object = Dor.find(apo_id)
+    apo_object.administrativeMetadata.ng_xml.search('//registration/collection/@id').map(&:to_s)
   end
 end
