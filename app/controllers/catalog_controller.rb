@@ -89,7 +89,7 @@ class CatalogController < ApplicationController
 
       :google => { :label => 'Google', :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
 
-      :hyrdus => {
+      :hydrus => {
         :label => 'Hydrus/SDR',
         :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
           ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
