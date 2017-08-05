@@ -439,7 +439,7 @@ class ItemsController < ApplicationController
   end
 
   def catkey
-    @object.catkey = params[:new_catkey]
+    @object.catkey = params[:new_catkey].strip
 
     respond_to do |format|
       if params[:bulk]
