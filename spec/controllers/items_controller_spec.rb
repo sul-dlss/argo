@@ -163,10 +163,10 @@ describe ItemsController, :type => :controller do
       post 'catkey', params: { :id => @pid, :new_catkey => '12345' }
       expect(response.code).to eq('403')
     end
-    it 'should update the catkey' do
+    it 'should update the catkey, trimming whitespace' do
       expect(@item).to receive(:catkey=).with('12345')
       expect(Dor::SearchService.solr).to receive(:add)
-      post 'catkey', params: { :id => @pid, :new_catkey => '12345' }
+      post 'catkey', params: { :id => @pid, :new_catkey => '   12345 ' }
     end
   end
   describe 'tags' do
