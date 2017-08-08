@@ -1,4 +1,4 @@
-class CreateBulkActions < ActiveRecord::Migration
+class CreateBulkActions < ActiveRecord::Migration[4.2]
   def change
     create_table :bulk_actions do |t|
       t.string :action_type

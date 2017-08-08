@@ -1,4 +1,4 @@
-class IncreaseDelayedJobColumn < ActiveRecord::Migration
+class IncreaseDelayedJobColumn < ActiveRecord::Migration[4.2]
   def change
     # Ensure that the handler column in the delayed_job table is MySQL longtext
     # so that we can pass in lots of druids in the params when a new Delayed
