@@ -1,4 +1,4 @@
-class CreateIndexingExceptions < ActiveRecord::Migration
+class CreateIndexingExceptions < ActiveRecord::Migration[4.2]
   def change
     create_table :indexing_exceptions do |t|
       t.string :pid
