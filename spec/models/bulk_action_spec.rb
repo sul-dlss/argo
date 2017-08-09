@@ -54,13 +54,36 @@ RSpec.describe BulkAction do
     @bulk_action = BulkAction.create(
       action_type: 'GenericJob', pids: 'a b c', webauth: {}, manage_release: {}
     )
+    # TODO: offset is for the bulk action's spawned by the parent bulk action explicitly created above.  but why's the offset start at 4 instead of 1?
     expect(GenericJob).to receive(:perform_later)
       .with(
-        @bulk_action.id,
+        @bulk_action.id + 4,
         hash_including(
-          pids: %w(a b c),
+          pids: %w(a),
           output_directory: Settings.BULK_METADATA.DIRECTORY +
-            "#{@bulk_action.action_type}_#{@bulk_action.id}",
+            "#{@bulk_action.action_type}_#{@bulk_action.id + 4}",
+          manage_release: {},
+          webauth: {}
+        )
+      )
+    expect(GenericJob).to receive(:perform_later)
+      .with(
+        @bulk_action.id + 5,
+        hash_including(
+          pids: %w(b),
+          output_directory: Settings.BULK_METADATA.DIRECTORY +
+            "#{@bulk_action.action_type}_#{@bulk_action.id + 5}",
+          manage_release: {},
+          webauth: {}
+        )
+      )
+    expect(GenericJob).to receive(:perform_later)
+      .with(
+        @bulk_action.id + 6,
+        hash_including(
+          pids: %w(c),
+          output_directory: Settings.BULK_METADATA.DIRECTORY +
+            "#{@bulk_action.action_type}_#{@bulk_action.id + 6}",
           manage_release: {},
           webauth: {}
         )

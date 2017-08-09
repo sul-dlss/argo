@@ -2,10 +2,8 @@ require 'spec_helper'
 
 class GenericTestJob < GenericJob
   def perform(_bulk_action_id, _params)
-    bulk_action.increment(:druid_count_success)
-    bulk_action.increment(:druid_count_fail)
-    bulk_action.increment(:druid_count_total)
-    bulk_action.save
+    bulk_action.increment(:druid_count_success).save!
+    bulk_action.increment(:druid_count_fail).save!
   end
 end
 
@@ -13,10 +11,11 @@ describe GenericJob do
   let(:bulk_action_no_process_callback) do
     bulk_action = build(
       :bulk_action,
-      action_type: 'GenericJob'
+      action_type: 'GenericJob',
+      druid_count_total: 2
     )
     expect(bulk_action).to receive(:process_bulk_action_type)
-    bulk_action.save
+    bulk_action.save!
     bulk_action
   end
 
@@ -37,17 +36,19 @@ describe GenericJob do
 
   describe 'before_perform' do
     it 'resets the druid counts before the job gets (re-)run' do
-      allow(BulkAction).to receive(:find).with(bulk_action_no_process_callback.id).and_return(bulk_action_no_process_callback)
+      lock_obj = double('lock')
+      allow(BulkAction).to receive(:lock).and_return(lock_obj)
+      allow(lock_obj).to receive(:find).with(bulk_action_no_process_callback.id).and_return(bulk_action_no_process_callback)
 
       GenericTestJob.perform_now(bulk_action_no_process_callback.id, {})
       expect(bulk_action_no_process_callback.druid_count_success).to eq 1
       expect(bulk_action_no_process_callback.druid_count_fail).to eq 1
-      expect(bulk_action_no_process_callback.druid_count_total).to eq 1
+      expect(bulk_action_no_process_callback.druid_count_total).to eq 2
 
       GenericTestJob.perform_now(bulk_action_no_process_callback.id, {})
       expect(bulk_action_no_process_callback.druid_count_success).to eq 1
       expect(bulk_action_no_process_callback.druid_count_fail).to eq 1
-      expect(bulk_action_no_process_callback.druid_count_total).to eq 1
+      expect(bulk_action_no_process_callback.druid_count_total).to eq 2
     end
   end
 end

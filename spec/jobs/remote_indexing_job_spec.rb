@@ -28,7 +28,6 @@ describe RemoteIndexingJob do
           expect(subject).to receive(:reindex_druid_safely).with(pid, log_buffer)
         end
         subject.perform(bulk_action_no_process_callback.id, params)
-        expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
       end
 
       it 'logs info about progress' do

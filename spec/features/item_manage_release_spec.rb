@@ -29,7 +29,7 @@ RSpec.feature 'Item manage release' do
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     within 'table.table' do
       expect(page).to have_css 'td', text: 'ReleaseObjectJob'
-      expect(page).to have_css 'td', text: 'Scheduled Action'
+      expect(page).to have_css 'td', text: BulkAction::FINISHED
     end
   end
 end

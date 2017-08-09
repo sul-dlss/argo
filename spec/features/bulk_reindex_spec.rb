@@ -16,7 +16,7 @@ RSpec.feature 'Bulk Reindex of DOR Objects' do
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     within 'table.table' do
       expect(page).to have_css 'td', text: 'RemoteIndexingJob'
-      expect(page).to have_css 'td', text: 'Scheduled Action'
+      expect(page).to have_css 'td', text: BulkAction::FINISHED
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160318203331) do
+ActiveRecord::Schema.define(version: 20170807151326) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -34,6 +34,9 @@ ActiveRecord::Schema.define(version: 20160318203331) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
+    t.integer "parent_id"
+    t.integer "lft", null: false
+    t.integer "rgt", null: false
     t.index ["user_id"], name: "index_bulk_actions_on_user_id"
   end
 

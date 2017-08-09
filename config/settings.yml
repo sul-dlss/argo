@@ -4,6 +4,9 @@
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
 REINDEX_ON_FLY: false
 
+BULK_ACTIONS:
+  BATCH_SIZE: 1
+
 # BulkReindexer
 BULK_REINDEXER:
   # the batch size that reindexing lists are broken into for consumption by delayed_job workers
