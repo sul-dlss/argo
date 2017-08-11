@@ -30,7 +30,13 @@ class SetGoverningApoJob < GenericJob
   def set_governing_apo_and_index_safely(current_druid, log)
     current_obj = Dor.find(current_druid)
 
-    check_can_set_governing_apo!(current_obj)
+    unless can_set_governing_apo?(current_obj)
+      log.puts("#{Time.current} SetGoverningApoJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): user not allowed to move to target apo")
+      bulk_action.increment(:druid_count_fail).save
+      return
+    end
+
+    open_new_version(current_obj, log) unless current_obj.allows_modification?
 
     current_obj.admin_policy_object = Dor.find(new_apo_id)
     current_obj.identityMetadata.adminPolicy = nil if current_obj.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
@@ -44,9 +50,8 @@ class SetGoverningApoJob < GenericJob
     bulk_action.increment(:druid_count_fail).save
   end
 
-  def check_can_set_governing_apo!(obj)
-    raise "#{obj.pid} is not open for modification" unless obj.allows_modification?
-    raise "user not authorized to move #{obj.pid} to #{new_apo_id}" unless ability.can?(:manage_governing_apo, obj, new_apo_id)
+  def can_set_governing_apo?(obj)
+    ability.can?(:manage_governing_apo, obj, new_apo_id)
   end
 
   def ability
@@ -56,5 +61,23 @@ class SetGoverningApoJob < GenericJob
   def update_druid_count
     bulk_action.update(druid_count_total: pids.length)
     bulk_action.save
+  end
+
+  def open_new_version(object, log)
+    if DorObjectWorkflowStatus.new(object.pid).can_open_version?
+      begin
+        vers_md_upd_info = {
+          :significance => 'minor',
+          :description => 'Set new governing APO',
+          :opening_user_name => current_user.to_s
+        }
+        object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+      rescue Dor::Exception => e
+        log.puts("#{Time.current} Failed to open new version for #{object.pid} (bulk_action.id=#{bulk_action.id}): #{e}")
+        return
+      end
+    else
+      log.puts("#{Time.current} Unable to open new version for #{object.pid} (bulk_action.id=#{bulk_action.id})")
+    end
   end
 end
