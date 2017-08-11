@@ -68,10 +68,10 @@ RSpec.describe SetGoverningApoJob do
         apo = double(Dor::AdminPolicyObject)
 
         expect(Dor).to receive(:find).with(pids[0]).and_return(item1)
-        expect(subject).to receive(:check_can_set_governing_apo!).with(item1)
+        expect(subject).to receive(:can_set_governing_apo?).with(item1).and_return true
         expect(Dor).to receive(:find).with(pids[1]).and_raise(ActiveFedora::ObjectNotFoundError)
         expect(Dor).to receive(:find).with(pids[2]).and_return(item3)
-        expect(subject).to receive(:check_can_set_governing_apo!).with(item3).and_raise('user not allowed to move to target apo')
+        expect(subject).to receive(:can_set_governing_apo?).with(item3).and_return false
 
         expect(Dor).to receive(:find).with(new_apo_id).and_return(apo)
         idmd = double(Dor::IdentityMetadataDS, adminPolicy: double(Dor::AdminPolicyObject))
@@ -80,6 +80,7 @@ RSpec.describe SetGoverningApoJob do
         expect(idmd).to receive(:adminPolicy=).with(nil)
         expect(item1).to receive(:save)
         expect(item1).to receive(:to_solr).and_return(field: 'value')
+        expect(item1).to receive(:allows_modification?).and_return true
         expect(Dor::SearchService.solr).to receive(:add).with(field: 'value').exactly(:once)
 
         expect(item3).not_to receive(:admin_policy_object=)
@@ -100,7 +101,7 @@ RSpec.describe SetGoverningApoJob do
     end
   end
 
-  describe '#check_can_set_governing_apo!' do
+  describe '#can_set_governing_apo?' do
     let(:pid) { '123' }
     let(:obj) { double(Dor::Collection, pid: pid) }
     let(:ability) { double(Ability) }
@@ -110,25 +111,61 @@ RSpec.describe SetGoverningApoJob do
       subject.instance_variable_set(:@ability, ability)
     end
 
-    it "gets an object that allows modification, that the user can't manage" do
-      allow(obj).to receive(:allows_modification?).and_return(true)
+    it 'returns false for an object that the user cannot manage' do
       allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(false)
-      expect { subject.send(:check_can_set_governing_apo!, obj) }.to raise_error("user not authorized to move #{pid} to #{new_apo_id}")
+      expect(subject.send(:can_set_governing_apo?, obj)).to be_falsy
     end
-    it "gets an object that doesn't allow modification, that the user can manage" do
-      allow(obj).to receive(:allows_modification?).and_return(false)
+
+    it 'does nothing for an object that the user can manage' do
       allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(true)
-      expect { subject.send(:check_can_set_governing_apo!, obj) }.to raise_error("#{pid} is not open for modification")
+      expect(subject.send(:can_set_governing_apo?, obj)).to be_truthy
     end
-    it "gets an object that doesn't allow modification, that the user can't manage" do
-      allow(obj).to receive(:allows_modification?).and_return(false)
-      allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(false)
-      expect { subject.send(:check_can_set_governing_apo!, obj) }.to raise_error("#{pid} is not open for modification")
+  end
+
+  describe '#open_new_version' do
+    before :each do
+      @dor_object = double(pid: 'druid:123abc')
+      @workflow = double('workflow')
+      @log = double('log')
+      @current_user = mock_user(is_admin?: true)
     end
-    it 'gets an object that allows modification, that the user can manage' do
-      allow(obj).to receive(:allows_modification?).and_return(true)
-      allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(true)
-      expect { subject.send(:check_can_set_governing_apo!, obj) }.not_to raise_error
+
+    it 'opens a new version if the workflow status allows' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(true)
+      expect(@dor_object).to receive(:open_new_version).with({
+        vers_md_upd_info: {
+          significance: 'minor',
+          description: 'Set new governing APO',
+          opening_user_name: @current_user.to_s
+        }
+      })
+      allow(subject).to receive(:current_user).and_return(@current_user)
+
+      subject.send(:open_new_version, @dor_object, @log)
+    end
+
+    it 'does not open a new version if rejected by the workflow status' do
+      expect(@log).to receive(:puts).with(/Unable to open new version for/)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(false)
+      expect(@dor_object).not_to receive(:open_new_version)
+      subject.send(:open_new_version, @dor_object, @log)
+    end
+
+    it 'fails with an error message if something goes wrong updating the version' do
+      expect(@log).to receive(:puts).with(/Failed to open new version for/)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(true)
+      expect(@dor_object).to receive(:open_new_version).with({
+        vers_md_upd_info: {
+          significance: 'minor',
+          description: 'Set new governing APO',
+          opening_user_name: @current_user.to_s
+        }
+      }).and_raise Dor::Exception
+      allow(subject).to receive(:current_user).and_return(@current_user)
+      subject.send(:open_new_version, @dor_object, @log)
     end
   end
 
