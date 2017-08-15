@@ -8,6 +8,7 @@ class SetGoverningApoJob < GenericJob
   def perform(bulk_action_id, params)
     @new_apo_id = params[:set_governing_apo]['new_apo_id']
     @webauth = OpenStruct.new params[:webauth]
+
     @pids = params[:pids]
 
     with_bulk_action_log do |log|
@@ -36,7 +37,7 @@ class SetGoverningApoJob < GenericJob
       return
     end
 
-    open_new_version(current_obj, log) unless current_obj.allows_modification?
+    open_new_version(current_obj, log, @webauth) unless current_obj.allows_modification?
 
     current_obj.admin_policy_object = Dor.find(new_apo_id)
     current_obj.identityMetadata.adminPolicy = nil if current_obj.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
@@ -63,13 +64,13 @@ class SetGoverningApoJob < GenericJob
     bulk_action.save
   end
 
-  def open_new_version(object, log)
+  def open_new_version(object, log, webauth)
     if DorObjectWorkflowStatus.new(object.pid).can_open_version?
       begin
         vers_md_upd_info = {
           :significance => 'minor',
           :description => 'Set new governing APO',
-          :opening_user_name => current_user.to_s
+          :opening_user_name => webauth[:login].to_s
         }
         object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
       rescue Dor::Exception => e

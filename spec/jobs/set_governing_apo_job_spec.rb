@@ -128,6 +128,7 @@ describe SetGoverningApoJob do
       @workflow = double('workflow')
       @log = double('log')
       @current_user = mock_user(is_admin?: true)
+      @webauth = OpenStruct.new({ 'privgroup' => 'dorstuff', 'login' => 'someuser' })
     end
 
     it 'opens a new version if the workflow status allows' do
@@ -137,12 +138,11 @@ describe SetGoverningApoJob do
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Set new governing APO',
-          opening_user_name: @current_user.to_s
+          opening_user_name: @webauth[:login]
         }
       })
-      allow(subject).to receive(:current_user).and_return(@current_user)
 
-      subject.send(:open_new_version, @dor_object, @log)
+      subject.send(:open_new_version, @dor_object, @log, @webauth)
     end
 
     it 'does not open a new version if rejected by the workflow status' do
@@ -150,7 +150,7 @@ describe SetGoverningApoJob do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(false)
       expect(@dor_object).not_to receive(:open_new_version)
-      subject.send(:open_new_version, @dor_object, @log)
+      subject.send(:open_new_version, @dor_object, @log, @webauth)
     end
 
     it 'fails with an error message if something goes wrong updating the version' do
@@ -161,11 +161,11 @@ describe SetGoverningApoJob do
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Set new governing APO',
-          opening_user_name: @current_user.to_s
+          opening_user_name: @webauth['login']
         }
       }).and_raise Dor::Exception
       allow(subject).to receive(:current_user).and_return(@current_user)
-      subject.send(:open_new_version, @dor_object, @log)
+      subject.send(:open_new_version, @dor_object, @log, @webauth)
     end
   end
 
