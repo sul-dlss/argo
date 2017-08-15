@@ -12,6 +12,7 @@ class SetGoverningApoJob < GenericJob
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
     @new_apo_id = params[:set_governing_apo]['new_apo_id']
+
     @pids = params[:pids]
     @groups = params[:groups]
 
@@ -79,7 +80,7 @@ class SetGoverningApoJob < GenericJob
         vers_md_upd_info = {
           :significance => 'minor',
           :description => 'Set new governing APO',
-          :opening_user_name => current_user.to_s
+          :opening_user_name => bulk_action.user.to_s
         }
         object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
       rescue Dor::Exception => e
