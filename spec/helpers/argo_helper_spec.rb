@@ -245,4 +245,19 @@ describe ArgoHelper, :type => :helper do
       expect(helper.registered_only?({ 'processing_status_text_ssi' => 'In accessioning' })).to eq false
     end
   end
+
+  describe 'open_new_version' do
+    before :each do
+      @dor_object = double('dor_object')
+    end
+
+    # rubocop:disable Layout/MultilineOperationIndentation
+    it 'sets version information correctly' do
+      expect(@dor_object).to receive(:open_new_version).
+                             with(hash_including(:vers_md_upd_info => {:significance => 'major',
+                                                                       :description => 'test',
+                                                                       :opening_user_name => 'apanopte'}))
+      open_new_version(@dor_object, 'major', 'test', 'apanopte')
+    end
+  end
 end
