@@ -171,6 +171,17 @@ module ArgoHelper
     link_to 'MODS bulk loads', bulk_jobs_index_path(@document), :id => 'bulk-button', :class => 'button btn btn-primary'
   end
 
+  # Open a new version for the given DOR object. You are advised to check DorObjectWorkflowStatus:can_open_version?
+  # *before* calling this method. This method will throw Dor::Exception if something bad happens.
+  def open_new_version(dor_object, significance, description, login)
+    vers_md_upd_info = {
+      :significance => significance,
+      :description => description,
+      :opening_user_name => login
+    }
+    dor_object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+  end
+
   protected
 
   def registered_only?(document)
