@@ -13,6 +13,7 @@ class GenericJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'.freeze
 
+  # TODO: should the tests be augmented to make sure the status update methods get called by the before/after hooks?
   before_perform do |_job|
     bulk_action.processing!
   end

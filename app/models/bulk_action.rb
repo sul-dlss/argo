@@ -26,7 +26,7 @@ class BulkAction < ActiveRecord::Base
 
   # A virtual attribute used for job creation but not persisted
   attr_accessor :manage_release, :set_governing_apo, :webauth
-  attr_reader :pids
+  # attr_reader :pids
 
   def pids=(pids)
     if pids.is_a? String
@@ -36,6 +36,10 @@ class BulkAction < ActiveRecord::Base
     else
       raise ArgumentError, 'pids must be set to a String that can be split on whitespace, or an Enumerable to be used as-is.'
     end
+  end
+
+  def pids
+    @pids
   end
 
   def file(filename)
@@ -98,7 +102,20 @@ class BulkAction < ActiveRecord::Base
   end
 
   def prefix
-    "#{action_type}_#{id}"
+    p "JM_LOG----"
+    p "JM_LOG prefix id=#{id} pids=#{pids}"
+    p "JM_LOG----"
+    p " id=#{id};"
+    p " self=#{self};"
+    p " parent=#{parent};"
+    p " root=#{root};"
+    p " root.id=#{root.id};" if root
+    p " !! root.id is nil;" if root.nil?
+    p " pids=#{pids};"
+    p " ancestors=#{ancestors};"
+    p "----JM_LOG"
+    # use root.id, because all of the logging should fall under the parent bulk action
+    @prefix = "#{action_type}_#{id}"
   end
 
   def output_directory
@@ -108,7 +125,7 @@ class BulkAction < ActiveRecord::Base
   def create_log_file
     log_filename = file(Settings.BULK_METADATA.LOG)
     FileUtils.touch(log_filename)
-    update_attribute(:log_name, log_filename)
+    update(log_name: log_filename)
   end
 
   def create_output_directory
@@ -159,13 +176,17 @@ class BulkAction < ActiveRecord::Base
   end
 
   def process_bulk_action_type
+    p "JM_LOG----"
+    p "JM_LOG process_bulk_action_type id=#{id} pids=#{pids}"
     # this should essentially result in one level of recursion in the bulk_action spawning:
     #  * if the pid list has more than batch size elements, break it into child BulkAction objects, each with batch_size or fewer pids.
     #  * otherwise, just spawn a job for each pid.
     update(status: UNSTARTED, druid_count_total: pids.length)
     if pids.length > batch_size
+      p "JM_LOG id=#{id} bulk_action_params_list=#{bulk_action_params_list}"
       bulk_action_params_list.each { |bulk_action_params| BulkAction.create!(bulk_action_params) }
     else
+      p "JM_LOG id=#{id} batched_job_params_list=#{batched_job_params_list}"
       batched_job_params_list.each { |batch_params| action_type.constantize.perform_later(id, batch_params) }
     end
   end
