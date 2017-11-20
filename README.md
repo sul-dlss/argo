@@ -51,9 +51,9 @@ This will setup the database, Fedora, and Solr:
 rake argo:install
 ```
 
-### Optional - Increase Jetty heap size and Solr logging verbosity
+### Optional - Increase Jetty heap size
 
-Fedora and Solr are hosted inside a local Jetty instance in the `./jetty/` folder.
+Fedora is hosted inside a local Jetty instance in the `./jetty/` folder.
 Delving into this is only recommended if you run into more trouble than usual starting jetty or getting it to run stably (or if you know you have some other reason to make these sorts of changes).
 
 In the created `./jetty` directory add the following to the `start.ini` to increase the heap size, allow the debugger to attach, and to explicitly specify logging properties. In the section that starts with the heading `If the arguments in this file include JVM arguments` (at LN19 as of this README update):
@@ -69,12 +69,11 @@ In the created `./jetty` directory add the following to the `start.ini` to incre
 -XX:+CMSClassUnloadingEnabled
 -XX:PermSize=64M
 -XX:MaxPermSize=256M
-
-# Solr logging
--Djava.util.logging.config.file=etc/logging.properties
 ```
 
-You may then update values in `jetty/etc/logging.properties` to change logging settings (e.g., set `.level = FINEST`).
+## Solr
+
+For development and test we start solr using the solr\_wrapper gem. You can run `bundle exec solr_wrapper` on the command line. It's started automatically by the `ci` rake task.
 
 ## Run the servers
 
@@ -88,7 +87,8 @@ rails s -p 4000
 Then start Argo:
 
 ```bash
-rake jetty:start       # This may take a few minutes to boot Fedora and Solr
+rake jetty:start       # This may take a few minutes to boot Fedora
+solr_wrapper           # Run this in a new shell to start Solr
 bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
 rails server
 ```
@@ -103,14 +103,15 @@ docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
 
 ## Load and index records
 
-1. Make sure Jetty has successfully started by going to [Fedora](http://localhost:8983/fedora) and [Solr](http://localhost:8983/solr).
+1. Make sure Jetty has successfully started by going to [Fedora](http://localhost:8983/fedora)
+2. Make sure Solr has started by visiting [Solr](http://localhost:8984/solr/).
 
-2. Load fixture data to the `development` Fedora repository and index it to the `development` Solr collection:
+3. Load fixture data to the `development` Fedora repository and index it to the `development` Solr collection:
 ```bash
 rake argo:repo:load
 ```
 
-3. Load fixture data to the `test` Fedora repository and index it to the `test` Solr collection. This is needed for testing (i.e., running specs):
+4. Load fixture data to the `test` Fedora repository and index it to the `test` Solr collection. This is needed for testing (i.e., running specs):
 ```bash
 RAILS_ENV=test rake argo:repo:load
 ```
