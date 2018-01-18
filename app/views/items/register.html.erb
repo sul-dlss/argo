@@ -15,7 +15,6 @@
         <div class="property-item"><label for="id_source">Metadata Source</label><%= select_tag :id_source, options_for_select(metadata_sources), :'data-rcparam' => 'metadataSource' %></div>
         <div class="property-item spacer"></div>
         <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
-        <div id="external_workflow_dropdown" class="property-item"><label for='external_workflow_id'>Goobi Workflow</label><%= select_tag :external_workflow_id, options_for_select(external_workflow_names), :'data-rcparam' => 'externalWorkflowId' %></div>
         <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), :class => 'tag-field', :'data-tagname' => 'Process : Content Type' %></div>
         <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, :class => 'tag-field', :'data-tagname' => 'Project', :'data-rcparam' => 'projectName' %></div>
         <div class="property-item wide"><label for='tag_1'>Tags</label>
