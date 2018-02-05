@@ -1,3 +1,5 @@
+require 'capistrano/honeybadger'
+
 set :application, 'argo'
 set :repo_url, 'https://github.com/sul-dlss/argo.git'
 
@@ -6,9 +8,6 @@ set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-# TODO:  ask for user, should know what the name of the app is, should be able to build deploy_to from those
-# TODO:  prompt for server name and use that to build hostname (based on app name)
-# Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/home/lyberadmin/argo'
 
 # Default value for :scm is :git
