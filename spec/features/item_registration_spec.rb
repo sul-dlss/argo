@@ -22,21 +22,6 @@ RSpec.describe 'Item registration page', js: true do
     expect(page).to have_css '#gbox_data'
   end
 
-  it 'shows the external_workflow_id select when the goobiWF is selected as the Initial Workflow' do
-    visit register_items_path
-
-    select '[Internal System Objects]', from: 'apo_id' # "uber APO", druid:hv992ry2431
-
-    # check that the page initially renders as expected.  also forces capybara to wait for
-    # the workflow_id elt to render properly (since it's populated based on an ajax call).
-    expect(page).to have_css('select#workflow_id', visible: true)
-    expect(page).to have_css('select#external_workflow_id', visible: false)
-    find("option[value='goobiWF']")
-
-    select 'goobiWF', from: 'workflow_id'
-    expect(page).to have_css('select#external_workflow_id option', text: 'Test_Workflow')
-  end
-
   it 'invokes item registration method with the expected values and relays errors properly' do
     visit register_items_path
 
@@ -44,8 +29,6 @@ RSpec.describe 'Item registration page', js: true do
 
     find("option[value='goobiWF']")
     select 'goobiWF', from: 'workflow_id'
-    find("select#external_workflow_id option[value='Test_Workflow_QA']")
-    select 'Test_Workflow_QA', from: 'external_workflow_id'
 
     fill_in 'tags_0', with: 'tag : test'
 
@@ -92,7 +75,7 @@ RSpec.describe 'Item registration page', js: true do
       'workflow_id' => 'goobiWF',
       'metadata_source' => 'label',
       'label' => 'object title',
-      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', 'Registered By : sunetid', 'DPG : Workflow : Test_Workflow_QA'],
+      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', 'Registered By : sunetid'],
       'rights' => 'default',
       'collection' => '',
       'source_id' => 'source:id1'

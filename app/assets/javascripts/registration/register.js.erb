@@ -47,11 +47,6 @@ function DorRegistration(initOpts) {
       var data = $t.getData(rowid);
       data.id = rowid
 
-      // add the special external workflow tag if the specified external workflow is selected
-      if ($('#workflow_id').val()=='<%=Constants::DOR_EXTERNAL_WORKFLOW_NAME%>') {
-        tags.push('<%=Constants::DOR_EXTERNAL_WORKFLOW_TAG_PREFIX%> : ' + $('#external_workflow_id').val());
-      }
-
       var params = {
         'object_type' : $t.objectType,
         'admin_policy' : apo,
