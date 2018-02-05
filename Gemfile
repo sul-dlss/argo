@@ -101,7 +101,6 @@ group :test, :development do
   gem 'jettywrapper'
   gem 'http_logger'
   gem 'rspec-rails', '~> 3.5'
-  gem 'pry-doc'
   gem 'pry-remote'  # allows you to attach remote session to pry
   gem 'wfs_rails', '~> 0.1'
   gem 'database_cleaner'
