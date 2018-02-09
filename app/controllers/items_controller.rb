@@ -173,8 +173,7 @@ class ItemsController < ApplicationController
                   @object.workflows.get_workflow(@workflow_id, params[:repo])
                 end
     respond_to do |format|
-      format.js { render 'workflow_view', layout: false }
-      format.html { render 'workflow_view' }
+      format.html { render 'workflow_view', layout: !request.xhr? }
       format.xml  { render :xml => @workflow.ng_xml.to_xml }
       format.any(:png, :svg, :jpeg) do
         graph = @workflow.graph
