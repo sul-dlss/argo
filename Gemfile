@@ -104,7 +104,7 @@ group :test, :development do
   gem 'pry-remote'  # allows you to attach remote session to pry
   gem 'wfs_rails', '~> 0.1'
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'rubocop', require: false
   gem 'sqlite3'
   gem 'rails-controller-testing'
