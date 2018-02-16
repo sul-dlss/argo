@@ -682,7 +682,11 @@ class ItemsController < ApplicationController
 
   # add a workflow to an object if the workflow is not present in the active table
   def add_workflow
-    return unless params[:wf]
+    unless params[:wf]
+      return respond_to do |format|
+        format.html { render layout: !request.xhr? }
+      end
+    end
     wf_name = params[:wf]
     wf = @object.workflows[wf_name]
     # check the workflow is present and active (not archived)
