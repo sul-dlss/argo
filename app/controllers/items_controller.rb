@@ -756,12 +756,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def content_type
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
   private
 
   def reindex(item)
