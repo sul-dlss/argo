@@ -90,6 +90,7 @@ Argo::Application.routes.draw do
 
   resources :items do
     get :register, :on => :collection
+    resource :content_type, only: [:show, :update]
     member do
       get 'purl_preview'
       get 'discoverable'
@@ -122,8 +123,6 @@ Argo::Application.routes.draw do
       post 'collection/add',     :action => :add_collection,    :as => 'add_collection'
       post 'collection/set',     :action => :set_collection,    :as => 'set_collection'
       get 'purge',               :action => :purge_object
-      post 'set_content_type'
-      get  'content_type'
       get  'rights'
       post 'prepare'
       post 'set_rights'

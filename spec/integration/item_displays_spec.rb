@@ -1,24 +1,20 @@
 require 'spec_helper'
 
-describe 'mods_view', :type => :request do
-  before :each do
-    @object = instantiate_fixture('druid_zt570tx3016', Dor::Item)
-    allow(Dor).to receive(:find).and_return(@object)
-    @current_user = mock_user(
+RSpec.describe 'mods_view', type: :request do
+  let(:current_user) do
+    mock_user(
       privgroup: User::ADMIN_GROUPS.first,
       can_view_something?: true,
       is_admin?: true
     )
-
-    ##
-    # Stubbing of both ItemsController and CatalogController which are the
-    # controllers used in this spec, needing a valid return from current_user. A
-    # higher level up the inheritance chain stub of `ApplicationController` is
-    # insufficient here, due to a possible bug in rspec-mocks or our overuse of
-    # `allow_any_instance_of`.
-    allow_any_instance_of(ItemsController).to receive(:current_user).and_return(@current_user)
-    allow_any_instance_of(CatalogController).to receive(:current_user).and_return(@current_user)
   end
+  let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::Item) }
+
+  before do
+    allow(Dor).to receive(:find).and_return(object)
+    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(current_user)
+  end
+
   context 'main page tests' do
     it 'should have the expected heading for search facets' do
       visit root_path
@@ -59,17 +55,19 @@ describe 'mods_view', :type => :request do
     end
     context 'open version ui' do
       it 'should render the add collection ui' do
-        allow(@current_user).to receive(:permitted_collections).and_return(['druid:ab123cd4567'])
+        allow(current_user).to receive(:permitted_collections).and_return(['druid:ab123cd4567'])
         visit '/items/druid:zt570tx3016/collection_ui'
         expect(page).to have_content('Add Collection')
       end
     end
+
     context 'content type' do
-      it 'should render the edit content type ui' do
+      it 'renders the edit content type ui' do
         visit '/items/druid:zt570tx3016/content_type'
         expect(page).to have_content('Set content type')
       end
     end
+
     context 'embargo form' do
       it 'should render the embargo update ui' do
         visit '/items/druid:zt570tx3016/embargo_form'
@@ -85,7 +83,7 @@ describe 'mods_view', :type => :request do
     context 'source id ui' do
       it 'should render the source id update ui' do
         idmd = double(Dor::IdentityMetadataDS)
-        allow(@object).to receive(:identityMetadata).and_return(idmd)
+        allow(object).to receive(:identityMetadata).and_return(idmd)
         allow(idmd).to receive(:sourceId).and_return('something123')
         visit '/items/druid:zt570tx3016/source_id_ui'
         expect(page).to have_content('Update')

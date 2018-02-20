@@ -1,15 +1,15 @@
-<p><%=I18n.t('argo.content_type.update_explanation_single')%></p>
-<p><%=I18n.t('argo.content_type.suggeted_mappings').html_safe%></p>
+<p><%= I18n.t('argo.content_type.update_explanation_single') %></p>
+<p><%= I18n.t('argo.content_type.suggeted_mappings').html_safe %></p>
 <p>More complex updates should be executed by hand on the datastream XML.</p>
 
-<%= form_tag url_for(:controller => :items, :action => :set_content_type, :id => @object.pid), id: "content_type_form" do %>
+<%= form_tag item_content_type_url(item_id: @object.pid), id: "content_type_form" do %>
   <% old_content_type = begin @object.contentMetadata.contentType[0] rescue '' end  %>
   <% old_resource_type = begin @object.contentMetadata.ng_xml.xpath('/contentMetadata/resource')[0]['type'] rescue '' end %>
   <% display_content_types = [['none', '']] + Constants::CONTENT_TYPES %>
   <% display_resource_types = [['none', '']] + Constants::RESOURCE_TYPES %>
   <div class='form-group'>
     <label>Old content type</label>
-    <%=old_content_type%><%=hidden_field_tag :old_content_type, old_content_type %>
+    <%=old_content_type%><%= hidden_field_tag :old_content_type, old_content_type %>
   </div>
   <div class='form-group'>
     <label>Old resource type</label>
@@ -21,7 +21,7 @@
   </div>
   <div class='form-group'>
     <label>New resource type</label>
-    <%=select_tag :new_resource_type, options_for_select(display_resource_types, old_resource_type), class: 'form-control' %>
+    <%= select_tag :new_resource_type, options_for_select(display_resource_types, old_resource_type), class: 'form-control' %>
   </div>
   <button class='btn btn-primary'>Update</button>
 <% end %>

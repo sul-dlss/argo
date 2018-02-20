@@ -1,6 +1,7 @@
 require 'spec_helper'
-describe ItemsController, :type => :controller do
-  before :each do
+
+RSpec.describe ItemsController, :type => :controller do
+  before do
     @pid  = 'druid:oo201oo0001'
     @item = Dor::Item.new pid: @pid
     @current_user = User.find_or_create_by_webauth(

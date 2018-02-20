@@ -122,7 +122,7 @@ module ArgoHelper
         buttons << {:url => collection_ui_item_path(id: pid), :label => 'Edit collections'}
       end
       if object.datastreams.include? 'contentMetadata'
-        buttons << {:url => content_type_item_path(id: pid), :label => 'Set content type'}
+        buttons << {:url => item_content_type_path(item_id: pid), :label => 'Set content type'}
       end
       if object.datastreams.include? 'rightsMetadata'
         buttons << {:url => rights_item_path(id: pid), :label => 'Set rights'}
