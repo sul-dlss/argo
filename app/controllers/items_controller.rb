@@ -64,6 +64,10 @@ class ItemsController < ApplicationController
 
   def purl_preview
     @mods_display = ModsDisplayObject.new(@object.generate_public_desc_md)
+
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   # open a new version if needed. 400 if the item is in a state that doesnt allow opening a version.
@@ -84,6 +88,18 @@ class ItemsController < ApplicationController
     render :status => :ok, :plain => 'All good'
   end
 
+  def embargo_form
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
+  def open_version_ui
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
   def close_version_ui
     @description = @object.datastreams['versionMetadata'].current_description
     @tag = @object.datastreams['versionMetadata'].current_tag
@@ -94,6 +110,10 @@ class ItemsController < ApplicationController
     @severity_selected = {}
     [:major, :minor, :admin].each do |severity|
       @severity_selected[severity] = (@changed_severity == severity)
+    end
+
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
     end
   end
 
@@ -146,6 +166,10 @@ class ItemsController < ApplicationController
 
   def workflow_history_view
     @history_xml = Dor::Config.workflow.client.get_workflow_xml 'dor', params[:id], nil
+
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   def mods
@@ -255,6 +279,10 @@ class ItemsController < ApplicationController
     fail ArgumentError, 'Missing file parameter' unless params[:file].present?
     @available_in_workspace_error = nil
     @available_in_workspace = @object.list_files.include?(params[:file]) # NOTE: ideally this should be async
+
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   rescue Net::SSH::Exception => e
     @available_in_workspace_error = "#{e.class}: #{e}"
   end
@@ -654,7 +682,11 @@ class ItemsController < ApplicationController
 
   # add a workflow to an object if the workflow is not present in the active table
   def add_workflow
-    return unless params[:wf]
+    unless params[:wf]
+      return respond_to do |format|
+        format.html { render layout: !request.xhr? }
+      end
+    end
     wf_name = params[:wf]
     wf = @object.workflows[wf_name]
     # check the workflow is present and active (not archived)
@@ -686,6 +718,42 @@ class ItemsController < ApplicationController
     @object.identityMetadata.adminPolicy = nil if @object.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
 
     redirect_to solr_document_path(params[:id]), notice: 'Governing APO updated!'
+  end
+
+  def collection_ui
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
+  def rights
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
+  def tags_ui
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
+  def catkey_ui
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
+  def set_governing_apo_ui
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
+  def source_id_ui
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   private

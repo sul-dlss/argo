@@ -182,9 +182,15 @@ class CatalogController < ApplicationController
   end
 
   def dc
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   def ds
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   def bulk_upload_form
@@ -265,6 +271,10 @@ class CatalogController < ApplicationController
     authorize! :manage_item, Dor.find(params[:id])
     @response, @document = fetch params[:id]
     @bulk_action = BulkAction.new
+
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   private
