@@ -62,6 +62,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         limit: 10
     config.add_facet_field 'content_type_ssim',               label: 'Content Type',        limit: 10
     config.add_facet_field 'content_file_mimetypes_ssim',     label: 'MIME Types',          limit: 10, home: false
+    config.add_facet_field 'content_file_roles_ssim',         label: 'File Role',           limit: 10, home: false
     config.add_facet_field 'rights_descriptions_ssim',        label: 'Access Rights',       limit: 1000, sort: 'index', home: false
     config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10, home: false
     config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 10, more_limit: 9999, sort: 'index'
