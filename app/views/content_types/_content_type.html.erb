@@ -2,7 +2,7 @@
 <p><%= I18n.t('argo.content_type.suggeted_mappings').html_safe %></p>
 <p>More complex updates should be executed by hand on the datastream XML.</p>
 
-<%= form_tag item_content_type_url(item_id: @object.pid), id: "content_type_form" do %>
+<%= form_tag item_content_type_path(item_id: @object.pid), id: "content_type_form", method: :patch do %>
   <% old_content_type = begin @object.contentMetadata.contentType[0] rescue '' end  %>
   <% old_resource_type = begin @object.contentMetadata.ng_xml.xpath('/contentMetadata/resource')[0]['type'] rescue '' end %>
   <% display_content_types = [['none', '']] + Constants::CONTENT_TYPES %>
