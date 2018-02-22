@@ -11,7 +11,6 @@ class ItemsController < ApplicationController
     :open_version, :close_version,
     :purge_object,
     :update_resource,
-    :set_content_type,
     :source_id,
     :catkey,
     :tags, :tags_bulk,
@@ -37,7 +36,6 @@ class ItemsController < ApplicationController
     :source_id, :set_source_id,
     :catkey,
     :refresh_metadata,
-    :set_content_type,
     :set_rights,
     :set_governing_apo,
     :tags,
@@ -53,7 +51,6 @@ class ItemsController < ApplicationController
     :catkey,
     :refresh_metadata,
     :set_rights,
-    :set_content_type,
     :set_governing_apo
   ]
   # must run after save_and_reindex
@@ -634,31 +631,6 @@ class ItemsController < ApplicationController
     end
   rescue ArgumentError
     render :status => :forbidden, :plain => 'Invalid new rights setting.'
-  end
-
-  # set the content type in the content metadata
-  def set_content_type
-    unless Constants::CONTENT_TYPES.include? params[:new_content_type]
-      render :status => :forbidden, :plain => 'Invalid new content type.'
-      return
-    end
-    unless @object.datastreams.include? 'contentMetadata'
-      render :status => :forbidden, :plain => 'Object doesnt have a content metadata datastream to update.'
-      return
-    end
-    @object.contentMetadata.set_content_type(
-      params[:old_content_type],
-      params[:old_resource_type],
-      params[:new_content_type],
-      params[:new_resource_type]
-    )
-    respond_to do |format|
-      if params[:bulk]
-        format.html {render :status => :ok, :plain => 'Content type updated.'}
-      else
-        format.any { redirect_to solr_document_path(params[:id]), :notice => 'Content type updated!' }
-      end
-    end
   end
 
   # if an item errored in sdr-ingest-transfer due to missing provenance

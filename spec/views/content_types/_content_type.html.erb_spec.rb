@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'items/_content_type.html.erb' do
+RSpec.describe 'content_types/_content_type.html.erb' do
   let(:content_metadata) do
     double('cm', contentType: [''], ng_xml: Nokogiri::XML('<xml></xml>'))
   end

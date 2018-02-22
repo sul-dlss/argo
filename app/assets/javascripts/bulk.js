@@ -7,7 +7,7 @@ function process_request(druids, action_url, req_type, req_params, success_strin
 		if(req_params != null) req_obj['data'] = req_params;
 		var xhr = $.ajax(req_obj);
 		cons.push(xhr);
-		xhr.success(function(response, status, xhr) { 
+		xhr.success(function(response, status, xhr) {
 			success_handler(object_link, success_string, success_handler_callback);
 		});
 		xhr.error(function(xhr, status, err) {
@@ -22,6 +22,10 @@ function process_get(druids, action_url, success_string) {
 
 function process_post(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'POST', req_params, success_string, show_buttons, show_buttons);
+}
+
+function process_patch(druids, action_url, req_params, success_string) {
+	process_request(druids, action_url, 'PATCH', req_params, success_string, show_buttons, show_buttons);
 }
 
 function open_version(druids){
@@ -41,7 +45,7 @@ function set_content_type(druids){
 		'old_content_type': $('#old_content_type').val(),
 		'old_resource_type': $('#old_resource_type').val()
 	}
-	process_post(druids,set_content_type_url, params, "Updated");
+	process_patch(druids, set_content_type_url, params, "Updated");
 }
 
 
@@ -167,7 +171,7 @@ function get_druids() {
 }
 
 // create a callback function that will request a list of druids based on the current search, but which
-// will also filter the list of druids on the list the user entered in the pids list text area, so that 
+// will also filter the list of druids on the list the user entered in the pids list text area, so that
 // unwanted druids can get filtered out of search results.  useful for, e.g., get_source_ids and get_tags.
 function get_filtered_druid_each_callback(log) {
 	var pids_txt = fetch_pids_txt();
@@ -205,7 +209,7 @@ function show_buttons() {
 
 function stop_all() {
 	log = document.getElementById('log');
-	
+
 	while(cons.length > 0) {
 		con = cons.pop();
 		con.abort();
@@ -238,7 +242,7 @@ function error_handler(xhr, status, err, object_link, index, after) {
 		log.innerHTML = "Done!<br/>\n" + log.innerHTML;
 		$(".stop_button").hide();
 	}
-	
+
 }
 
 function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, custom_wait_msg, is_invalid_row_fn, invalid_row_err_msg, get_upd_req_params_from_row_fn) {
@@ -268,7 +272,7 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 			return;
 		}
 		var object_link = catalog_url(upd_info['druid']);
-		
+
 		//skip bad rows
 		if(is_invalid_row_fn(upd_info)) {
 			log.innerHTML = "<span class=\"text-danger\"> "+job_count.pop()+" "+object_link+" : "+invalid_row_err_msg+" '"+upd_info['upd_data']+"'</span><br/>\n"+log.innerHTML;
@@ -278,7 +282,7 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 		var url = upd_req_url.replace('xxxxxxxxx', upd_info['druid']);
 		var xhr = $.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
-		xhr.success(function(response, status, xhr) { 
+		xhr.success(function(response, status, xhr) {
 			success_handler(object_link, 'Updated	');
 		});
 		xhr.error(function(xhr, status, err) {
