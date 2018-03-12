@@ -27,7 +27,7 @@ module ArgoHelper
     return nil unless fname
     fname = File.basename(fname, File.extname(fname))
     druid = doc['id'].to_s.split(/:/).last
-    url = "#{Settings.STACKS_URL}/iiif/#{druid}%2F#{fname}/full/!400,400/0/default.jpg"
+    url = "#{Settings.STACKS_URL}/iiif/#{druid}%2F#{ERB::Util.url_encode(fname)}/full/!400,400/0/default.jpg"
     {:fname => fname, :druid => druid, :url => url}
   end
 
