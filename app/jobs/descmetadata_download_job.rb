@@ -1,13 +1,13 @@
+require 'zip'
+
 class DescmetadataDownloadJob < GenericJob
   queue_as :default
 
   MAX_TRIES = 3
   SLEEP_SECONDS = 3
 
-  ##
-  # @param [Integer] bulk_action_id   ActiveRecord identifier of the BulkAction
-  # object that originated this job.
-  # @param [Hash] params Custom params for this job. DescmetadataDownloadJob
+  # @param [Integer] bulk_action_id ActiveRecord identifier of the BulkAction object that originated this job.
+  # @param [Hash] params Custom params for this job
   # requires `:pids` (an Array of pids) and output_directory
   def perform(bulk_action_id, params)
     zip_filename = generate_zip_filename(params[:output_directory])
@@ -21,11 +21,10 @@ class DescmetadataDownloadJob < GenericJob
 
         bulk_action.update(druid_count_total: params[:pids].length)
         bulk_action.save
-        Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
+        ::Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
           params[:pids].each do |current_druid|
             begin
               dor_object = query_dor(current_druid, log)
-
               if dor_object.nil?
                 bulk_action.increment(:druid_count_fail).save
                 next

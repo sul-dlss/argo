@@ -76,6 +76,7 @@ gem 'erubis' # implicit dependency required by rdf-rdfa/haml, no longer provided
 gem 'retries'
 gem 'ruby-graphviz'
 gem 'ruby-prof'
+gem 'rubyzip'
 gem 'whenever', require: false
 
 # Stanford/Hydra related gems
