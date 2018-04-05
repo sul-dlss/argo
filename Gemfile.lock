@@ -768,6 +768,7 @@ DEPENDENCIES
   rubocop
   ruby-graphviz
   ruby-prof
+  rubyzip
   sass-rails (~> 5.0)
   simplecov
   spring
