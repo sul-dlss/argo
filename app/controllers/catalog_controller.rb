@@ -181,7 +181,6 @@ class CatalogController < ApplicationController
   def show
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
-
     authorize! :view_metadata, @obj
     super() # with or without an APO, if we get here, user is authorized to view
   end

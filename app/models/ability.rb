@@ -23,7 +23,6 @@ class Ability
 
   def initialize(user)
     user ||= User.new
-
     can :manage, :all if user.is_admin?
     cannot :impersonate, User unless user.is_webauth_admin?
 

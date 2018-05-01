@@ -29,7 +29,7 @@ RSpec.describe CatalogController, type: :controller do
     context 'without logging in' do
       it 'redirects to login' do
         get 'show', params: { id: @druid }
-        expect(response.code).to eq('401') # Unauthorized without webauth, no place to redirect
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
