@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
-  # Please be sure to impelement current_user and user_session. Blacklight depends on
-  # these methods in order to perform user specific actions.
+  # Please be sure to impelement current_user. Blacklight depends on
+  # this method in order to perform user specific actions.
 
   before_action :authenticate_user!
   before_action :fedora_setup
@@ -33,10 +33,6 @@ class ApplicationController < ActionController::Base
 
   def current_or_guest_user
     current_user
-  end
-
-  def user_session
-    session
   end
 
   def default_html_head
