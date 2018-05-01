@@ -2,7 +2,8 @@ def apo_field_default
   'apo_register_permissions_ssim'
 end
 
-def get_workgroups_facet(apo_field = nil)
+# @return [#keys]
+def workgroups_facet(apo_field = nil)
   apo_field = apo_field_default() if apo_field.nil?
   resp = Dor::SearchService.query('objectType_ssim:adminPolicy', rows: 0,
                                                                  'facet.field': apo_field,
@@ -10,7 +11,7 @@ def get_workgroups_facet(apo_field = nil)
                                                                  'facet.mincount': 1,
                                                                  'facet.limit': -1,
                                                                  'json.nl': 'map')
-  resp['facet_counts']['facet_fields'][apo_field]
+  resp['facet_counts']['facet_fields'][apo_field] || {}
 end
 
 desc 'Get application version'
@@ -41,40 +42,19 @@ namespace :argo do
     $stderr.puts "Version bumped to #{version}"
   end
 
-  # the .htaccess file lists the workgroups that we recognize as relevant to argo.
+  # The .htaccess file lists the workgroups that we recognize as relevant to argo.
   # if a user is in a workgroup, and that workgroup is listed in the .htaccess file,
   # the name of the workgroup will be in a list of workgroups for the user, passed along
-  # with other webauth info in the request headers.  we use the list of workgroups a user is
+  # with other shibboleth info in the request headers. We use the list of workgroups a user is
   # in (as well as the user's sunetid) to determine what they can see and do in argo.
-  # NOTE: at present (2015-11-06), this rake task is run regularly by a cron job, so that
-  # the .htaccess file keeps up with workgroup names as listed on APOs in use in argo.
+  #
+  # This rake task is run regularly by a cron job, so that the .htaccess file
+  # keeps up with workgroup names as listed on APOs in use in argo.
   desc 'Update the .htaccess file from indexed APOs'
   task htaccess: :environment do
-    directives = ['AuthType WebAuth',
-                  'Require privgroup dlss:argo-access',
-                  'WebAuthLdapAttribute suAffiliation',
-                  'WebAuthLdapAttribute displayName',
-                  'WebAuthLdapAttribute mail']
-
-    directives += (File.readlines(File.join(Rails.root, 'config/default_htaccess_directives')) || [])
-    facet = get_workgroups_facet()
-    unless facet.nil?
-      facets = facet.keys
-      priv_groups = facets.select { |v| v =~ /^workgroup:/ }
-      # we always want these built-in groups to be part of .htaccess
-      priv_groups += User::ADMIN_GROUPS
-      priv_groups += User::MANAGER_GROUPS
-      priv_groups += User::VIEWER_GROUPS
-      directives += priv_groups.uniq.map { |v|
-        ["Require privgroup #{v.split(/:/, 2).last}", "WebAuthLdapPrivgroup #{v.split(/:/, 2).last}"]
-      }.flatten
-
-      File.open(File.join(Rails.root, 'public/.htaccess'), 'w') do |htaccess|
-        htaccess.puts directives.sort.join("\n")
-      end
-      File.unlink('public/auth/.htaccess') if File.exist?('public/auth/.htaccess')
-    end
-  end # :htaccess
+    require 'argo/htaccess_writer'
+    Argo::HtaccessWriter.write(workgroups_facet.keys)
+  end
 
   desc 'Update completed/archived workflow counts'
   task update_archive_counts: :environment do |t|
@@ -88,7 +68,7 @@ namespace :argo do
 
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task workgroups: :environment do
-    facet = get_workgroups_facet()
+    facet = workgroups_facet()
     puts "#{facet.length} Workgroups:\n#{facet.keys.join(%(\n))}"
   end
 end # :argo
