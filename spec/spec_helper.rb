@@ -87,6 +87,7 @@ RSpec.configure do |config|
 
   config.include TestViewHelpers, type: :view
   config.include SigninHelper
+  config.include Devise::Test::ControllerHelpers, type: :controller
 end
 
 # Highly similar to https://github.com/sul-dlss/dor-services/blob/master/spec/foxml_helper.rb

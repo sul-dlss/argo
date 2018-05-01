@@ -12,20 +12,13 @@ class ApplicationController < ActionController::Base
 
   layout 'application'
 
-  # def current_user
-  #   cur_user = nil
-  #   if webauth && webauth.logged_in?
-  #     cur_user = User.find_or_create_by_webauth(webauth)
-  #   elsif request.env['REMOTE_USER']
-  #     cur_user = User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
-  #   end
-  #
-  #   if cur_user && session[:groups]
-  #     cur_user.set_groups_to_impersonate session[:groups]
-  #   end
-  #
-  #   cur_user
-  # end
+  def current_user
+    super.tap do |cur_user|
+      if cur_user && session[:groups]
+        cur_user.set_groups_to_impersonate session[:groups]
+      end
+    end
+  end
 
   def default_html_head
     stylesheet_links << ['argo']
