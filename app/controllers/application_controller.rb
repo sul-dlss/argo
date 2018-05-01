@@ -12,8 +12,6 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_or_guest_user
 
-  include Rack::Webauth::Helpers
-
   layout 'application'
 
   def current_user

@@ -67,7 +67,6 @@ gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
 gem 'prawn', '~> 1'
 gem 'prawn-table'
-gem 'rack-webauth', git: 'https://github.com/nilclass/rack-webauth.git'
 gem 'rake'
 gem 'rdf', '~> 1.99' # pinned for faster dependency resolution
 gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from resolving correctly

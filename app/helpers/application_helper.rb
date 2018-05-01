@@ -1,6 +1,4 @@
 module ApplicationHelper
-  include Rack::Webauth::Helpers
-
   def application_name
     'Argo'
   end

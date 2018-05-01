@@ -1,10 +1,3 @@
-GIT
-  remote: https://github.com/nilclass/rack-webauth.git
-  revision: 353eb1d893dc54fd02ae5097df6e1219391cf3ae
-  specs:
-    rack-webauth (0.1.3)
-      rack
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -758,7 +751,6 @@ DEPENDENCIES
   pry-remote
   puma (~> 3.7)
   rack-mini-profiler
-  rack-webauth!
   rails (~> 5.1.0)
   rails-controller-testing
   rake
