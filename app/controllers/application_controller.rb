@@ -44,10 +44,4 @@ class ApplicationController < ActionController::Base
       render plain: 'Not Found', status: :not_found
     end
   end
-
-  def authenticate_user!
-    return true if current_user
-    head :unauthorized
-    false
-  end
 end
