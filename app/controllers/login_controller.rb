@@ -3,8 +3,6 @@
 ###
 class LoginController < ApplicationController
   def login
-    session['suAffiliation'] = request.env['suAffiliation'] || ENV['suAffiliation']
-
     if params[:referrer].present?
       redirect_to params[:referrer]
     else

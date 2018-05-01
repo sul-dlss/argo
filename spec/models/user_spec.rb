@@ -269,13 +269,21 @@ RSpec.describe User, type: :model do
   end
 
   describe '#webauth_groups' do
-    before :each do
-      @webauth_privgroup_str = 'dlss:testgroup1|dlss:testgroup2|dlss:testgroup3'
-      @user = User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: @webauth_privgroup_str))
-    end
-    it 'should return the groups by webauth' do
-      expected_groups = ['sunetid:asdf'] + @webauth_privgroup_str.split(/\|/).map { |g| "workgroup:#{g}" }
-      expect(@user.webauth_groups).to eq(expected_groups)
+    let(:user) { build(:user, sunetid: 'asdf') }
+
+    subject { user.webauth_groups }
+    it { is_expected.to eq ['sunetid:asdf'] }
+
+    context 'when webauth groups have been set' do
+      before do
+        user.webauth_groups = webauth_groups
+      end
+      let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
+
+      it 'returns the groups by webauth' do
+        expected_groups = ['sunetid:asdf'] + webauth_groups.map { |g| "workgroup:#{g}" }
+        expect(subject).to eq(expected_groups)
+      end
     end
   end
 

@@ -14,8 +14,13 @@ class ApplicationController < ActionController::Base
 
   def current_user
     super.tap do |cur_user|
-      if cur_user && session[:groups]
+      break unless cur_user
+      if session[:groups]
         cur_user.set_groups_to_impersonate session[:groups]
+      else
+        # TODO: Move these to the the LoginController and cache on the user model
+        cur_user.display_name = request.env['displayName']
+        cur_user.webauth_groups = Array(request.env['eduPersonEntitlement']).split(';')
       end
     end
   end
