@@ -7,10 +7,12 @@ describe CatalogController, :type => :controller do
     @druid = 'rn653dy9317'  # a fixture Dor::Item record
     @item = instantiate_fixture(@druid, Dor::Item)
     @user = User.find_or_create_by_webauth double('WebAuth', :login => 'sunetid', :logged_in? => true, :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => '')
-    allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
   end
 
   shared_examples 'APO-independent auth' do
+    before do
+      allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
+    end
     describe 'no user' do
       it 'basic get redirects to login' do
         expect(subject).to receive(:webauth).and_return(nil)
@@ -56,6 +58,9 @@ describe CatalogController, :type => :controller do
   end
 
   describe '#show enforces permissions' do
+    before do
+      allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
+    end
     describe 'without APO' do
       before :each do
         allow(@item).to receive(:admin_policy_object).and_return(nil)
@@ -171,17 +176,26 @@ describe CatalogController, :type => :controller do
   end
   describe '#manage_release' do
     before do
+      allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
       expect(subject).to receive(:current_user).and_return(@user).at_least(:twice)
     end
-    it 'authorizes the view for content managers' do
-      expect(@user).to receive(:is_admin?).and_return(true)
-      get :show, params: { id: @druid }
-      expect(response).to have_http_status(:success)
+    context 'for content managers' do
+      before do
+        expect(@user).to receive(:is_admin?).and_return(true)
+        allow(controller).to receive(:fetch).with("druid:#{@druid}").and_return(double)
+      end
+
+      it 'authorizes the view' do
+        get :manage_release, params: { id: "druid:#{@druid}" }
+        expect(response).to have_http_status(:success)
+      end
     end
-    it 'responds accordingly for unauthorized_user' do
-      expect(@user).to receive(:is_admin?).and_return(false)
-      get :show, params: { id: @druid }
-      expect(response).to have_http_status(:forbidden)
+
+    context 'for unauthorized_user' do
+      it 'returns forbidden' do
+        get :manage_release, params: { id: "druid:#{@druid}" }
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 end
