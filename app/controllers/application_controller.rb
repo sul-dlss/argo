@@ -10,28 +10,22 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render plain: 'Object Not Found', status: :not_found }
   rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, plain: 'forbidden' }
 
-  helper_method :current_or_guest_user
-
   layout 'application'
 
-  def current_user
-    cur_user = nil
-    if webauth && webauth.logged_in?
-      cur_user = User.find_or_create_by_webauth(webauth)
-    elsif request.env['REMOTE_USER']
-      cur_user = User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
-    end
-
-    if cur_user && session[:groups]
-      cur_user.set_groups_to_impersonate session[:groups]
-    end
-
-    cur_user
-  end
-
-  def current_or_guest_user
-    current_user
-  end
+  # def current_user
+  #   cur_user = nil
+  #   if webauth && webauth.logged_in?
+  #     cur_user = User.find_or_create_by_webauth(webauth)
+  #   elsif request.env['REMOTE_USER']
+  #     cur_user = User.find_or_create_by_remoteuser(request.env['REMOTE_USER'])
+  #   end
+  #
+  #   if cur_user && session[:groups]
+  #     cur_user.set_groups_to_impersonate session[:groups]
+  #   end
+  #
+  #   cur_user
+  # end
 
   def default_html_head
     stylesheet_links << ['argo']

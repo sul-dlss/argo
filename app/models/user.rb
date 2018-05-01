@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
     sdr-viewer
   ).freeze
 
-  attr_accessor :webauth
+  devise :remote_user_authenticatable
 
   delegate :permitted_apos, :permitted_collections, to: :permitted_queries
 
@@ -35,20 +35,10 @@ class User < ActiveRecord::Base
     @permitted_queries ||= PermittedQueries.new(groups, KNOWN_ROLES, is_admin?)
   end
 
-  def self.find_or_create_by_webauth(webauth)
-    result = find_or_create_by(sunetid: webauth.login)
-    result.webauth = webauth
-    result
-  end
-
-  def self.find_or_create_by_remoteuser(username)
-    find_or_create_by(sunetid: username)
-  end
-
-  def to_s
-    return sunetid unless webauth
-    webauth.attributes['DISPLAYNAME'] || webauth.login
-  end
+  # def to_s
+  #   return sunetid unless webauth
+  #   webauth.attributes['DISPLAYNAME'] || webauth.login
+  # end
 
   # Queries Solr for a given record, returning synthesized role strings that are defined. Searches:
   # (1) for User by sunet id
@@ -105,11 +95,12 @@ class User < ActiveRecord::Base
 
   # @return [Array<String>] list of groups the user is a member of
   def webauth_groups
-    @webauth_groups ||= begin
-      perm_keys = ["sunetid:#{login}"]
-      return perm_keys unless webauth && webauth.privgroup.present?
-      perm_keys + webauth.privgroup.split(/\|/).map { |g| "workgroup:#{g}" }
-    end
+    return ["sunetid:#{login}"]
+    # @webauth_groups ||= begin
+    #   perm_keys = ["sunetid:#{login}"]
+    #   return perm_keys unless webauth && webauth.privgroup.present?
+    #   perm_keys + webauth.privgroup.split(/\|/).map {|g| "workgroup:#{g}"}
+    # end
   end
 
   # @return [Boolean] is the user a repository wide administrator
@@ -134,6 +125,7 @@ class User < ActiveRecord::Base
   end
 
   def login
-    webauth ? webauth.login : sunetid
+    sunetid
+    # webauth ? webauth.login : sunetid
   end
 end

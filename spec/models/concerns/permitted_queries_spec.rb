@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe PermittedQueries do
+  let(:user) { User.new(sunetid: 'test_user') }
+
   describe '#permitted_apos' do
-    let(:user) { User.find_or_create_by_remoteuser 'test_user' }
     let(:many_groups) { (0..30).map { |num| "workgroup:workgroup_#{num}" } }
     context 'with large Solr query' do
       it 'does not raise an RSolr::Error::Http-413 Request Entity Too Large' do
@@ -21,7 +22,6 @@ RSpec.describe PermittedQueries do
     end
   end
   describe '#permitted_collections' do
-    let(:user) { User.find_or_create_by_remoteuser 'test_user' }
     let(:many_groups) { (0..30).map { |num| "workgroup:workgroup_#{num}" } }
     context 'with large Solr query' do
       it 'does not raise an RSolr::Error::Http-413 Request Entity Too Large' do

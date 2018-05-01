@@ -92,6 +92,9 @@ gem 'rsolr'
 gem 'stanford-mods'
 gem 'sul_styles', '~> 0.3'
 
+gem 'devise'
+gem 'devise-remote-user', '~> 1.0'
+
 # useful for debugging, even in prod
 gem 'pry-byebug' # Adds step-by-step debugging and stack navigation capabilities to pry using byebug
 gem 'pry-rails' # use pry as the rails console shell instead of IRB
