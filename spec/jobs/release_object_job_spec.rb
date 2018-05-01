@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReleaseObjectJob do
+RSpec.describe ReleaseObjectJob do
   describe '#perform' do
     let(:bulk_action_no_process_callback) do
       bulk_action = build(
@@ -117,6 +117,7 @@ describe ReleaseObjectJob do
         expect(buffer.string).to include 'Trying to start release workflow'
       end
     end
+
     context 'when not authorized' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback).at_least(:once)
@@ -139,34 +140,24 @@ describe ReleaseObjectJob do
         expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
       end
     end
-    describe 'receives and sets params' do
-      before do
-        expect(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback).at_least(:once)
-        expect(subject).to receive(:can_manage?).and_return(true).exactly(pids.length).times
-        pids.each do |pid|
-          stub_release_tags(pid)
-          stub_release_wf(pid)
-        end
-      end
-      it 'webauth converted to OpenStruct' do
-        subject.perform(bulk_action_no_process_callback.id, params)
-        expect(subject.webauth).to be_an OpenStruct
-        expect(subject.webauth.privgroup).to eq 'dorstuff'
-        expect(subject.webauth.login).to eq 'esnowden'
-      end
-    end
   end
+
   describe '#can_manage?' do
     let(:ability_instance) { instance_double(Ability) }
-    let(:dor_double) { double('Dor') }
+    let(:item) { instance_double(Dor::Item) }
+    let(:job) { described_class.new }
+    let(:bulk_action) { instance_double(BulkAction, user: user) }
+    let(:user) { instance_double(User) }
+
     before do
       expect(Ability).to receive(:new).and_return(ability_instance)
-      expect(Dor).to receive(:find).with('druid:abc123').and_return(dor_double)
-      expect(subject).to receive(:webauth).and_return(double(privgroup: 'dorstuff', login: 'esnowden'))
+      expect(Dor).to receive(:find).with('druid:abc123').and_return(item)
+      expect(job).to receive(:bulk_action).and_return(bulk_action)
     end
+
     it 'calls parent ability manage' do
-      expect(ability_instance).to receive(:can?).with(:manage_item, dor_double).and_return false
-      expect(subject.can_manage?('druid:abc123')).to be false
+      expect(ability_instance).to receive(:can?).with(:manage_item, item).and_return false
+      expect(job.can_manage?('druid:abc123')).to be false
     end
   end
 end
