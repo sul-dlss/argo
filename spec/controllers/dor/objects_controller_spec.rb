@@ -1,9 +1,10 @@
 require 'spec_helper'
 
-describe Dor::ObjectsController, :type => :controller do
+RSpec.describe Dor::ObjectsController, type: :controller do
   before do
-    log_in_as_mock_user(subject)
+    log_in_as_mock_user
   end
+
   let(:dor_registration) { { pid: 'abc' } }
   describe '#create' do
     it 'does something' do

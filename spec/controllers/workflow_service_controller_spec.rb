@@ -1,9 +1,10 @@
 require 'spec_helper'
 
-describe WorkflowServiceController do
+RSpec.describe WorkflowServiceController do
   before do
-    log_in_as_mock_user(subject)
+    log_in_as_mock_user
   end
+
   let(:druid) { 'druid:abc:123' }
   describe 'GET closeable' do
     context 'when closeable' do

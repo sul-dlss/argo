@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe ContentTypesController, type: :controller do
   before do
     allow(Dor).to receive(:find).with(pid).and_return(item)
-    log_in_as_mock_user(subject)
+    log_in_as_mock_user
   end
 
   let(:pid) { 'druid:oo201oo0001' }

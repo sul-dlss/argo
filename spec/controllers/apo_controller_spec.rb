@@ -17,7 +17,7 @@ describe ApoController, :type => :controller do
 
     allow(controller).to receive(:update_index)
 
-    log_in_as_mock_user(subject, is_admin?: true)
+    log_in_as_mock_user(is_admin?: true)
   end
 
   describe 'create' do

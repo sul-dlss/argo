@@ -1,11 +1,10 @@
 require 'spec_helper'
 
-describe ReportController, :type => :controller do
-  before :each do
-    @current_user = mock_user(is_admin?: true, can_view_something?: true)
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-      and_return(@current_user)
+RSpec.describe ReportController, type: :controller do
+  before do
+    log_in_as_mock_user(is_admin?: true, can_view_something?: true)
   end
+
   describe ':workflow_grid' do
     it 'should work' do
       get :workflow_grid

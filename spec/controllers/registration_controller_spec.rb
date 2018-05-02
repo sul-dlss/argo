@@ -1,10 +1,9 @@
 require 'spec_helper'
 
-describe RegistrationController, :type => :controller do
-  before :each do
+RSpec.describe RegistrationController, type: :controller do
+  before do
     @item = double(Dor::Item)
-    @current_user = mock_user(is_admin?: true)
-    allow(controller).to receive(:current_user).and_return(@current_user)
+    log_in_as_mock_user(is_admin?: true)
   end
 
   describe 'rights_list' do

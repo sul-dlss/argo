@@ -1,28 +1,29 @@
 require 'spec_helper'
 
-describe CatalogController, :type => :controller do
+RSpec.describe CatalogController, type: :controller do
 
   before :each do
-#   log_in_as_mock_user(subject)
     @druid = 'rn653dy9317'  # a fixture Dor::Item record
     @item = instantiate_fixture(@druid, Dor::Item)
-    @user = User.find_or_create_by_webauth double('WebAuth', :login => 'sunetid', :logged_in? => true, :attributes => {'DISPLAYNAME' => 'Example User'}, :privgroup => '')
   end
+
+  let(:user) { create(:user) }
 
   shared_examples 'APO-independent auth' do
     before do
       allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
     end
     describe 'no user' do
+      let(:user) { nil }
       it 'basic get redirects to login' do
-        expect(subject).to receive(:webauth).and_return(nil)
         get 'show', params: { :id => @druid }
-        expect(response.code).to eq('401')  # Unauthorized without webauth, no place to redirect
+        expect(response.code).to eq('401') # Unauthorized without webauth, no place to redirect
       end
     end
+
     describe 'with user' do
-      before :each do
-        allow(subject).to receive(:current_user).and_return(@user)
+      before do
+        sign_in user
       end
       it 'unauthorized_user' do
         get 'show', params: { :id => @druid }
@@ -30,27 +31,27 @@ describe CatalogController, :type => :controller do
         # expect(response.body).to include 'No APO'
       end
       it 'is_admin?' do
-        allow(@user).to receive(:is_admin?).and_return(true)
+        allow(user).to receive(:is_admin?).and_return(true)
         get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
       it 'is_viewer?' do
-        allow(@user).to receive(:is_viewer?).and_return(true)
+        allow(user).to receive(:is_viewer?).and_return(true)
         get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
       it 'impersonating nobody' do
-        @user.set_groups_to_impersonate(['some:irrelevance'])
+        user.set_groups_to_impersonate(['some:irrelevance'])
         get 'show', params: { :id => @druid }
         expect(response.code).to eq('403')
       end
       it 'impersonating viewer' do
-        @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:viewer-role'])
+        user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:viewer-role'])
         get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
       it 'impersonating admin' do
-        @user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:administrator-role'])
+        user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:administrator-role'])
         get 'show', params: { :id => @druid }
         expect(response.code).to eq('200')
       end
@@ -60,14 +61,15 @@ describe CatalogController, :type => :controller do
   describe '#show enforces permissions' do
     before do
       allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
+      sign_in user
     end
     describe 'without APO' do
-      before :each do
+      before do
         allow(@item).to receive(:admin_policy_object).and_return(nil)
       end
+
       describe 'impersonating user with no extra powers' do
         it 'is forbidden since there is no APO' do
-          allow(subject).to receive(:current_user).and_return(@user)
           get 'show', params: { :id => @druid }
           expect(response.code).to eq('403')  # Forbidden
         end
@@ -76,22 +78,20 @@ describe CatalogController, :type => :controller do
     end
 
     describe 'with APO' do
-      before :each do
+      before do
         @apo_druid = 'druid:hv992ry2431'
         @apo = instantiate_fixture('hv992ry2431', Dor::AdminPolicyObject)
         allow(@item).to receive(:admin_policy_object).and_return(@apo)
-        allow(@user).to receive(:roles).with(@apo_druid).and_return([])
+        allow(user).to receive(:roles).with(@apo_druid).and_return([]) if user
       end
       describe 'impersonating_user with no extra powers' do
         it 'is forbidden if roles do not match' do
-          allow(subject).to receive(:current_user).and_return(@user)
           get 'show', params: { :id => @druid }
           expect(response.code).to eq('403')  # Forbidden
           expect(response.body).to include 'forbidden'
         end
         it 'succeeds if roles match' do
-          allow(@user).to receive(:roles).with(@apo_druid).and_return(['dor-viewer'])
-          allow(subject).to receive(:current_user).and_return(@user)
+          allow(user).to receive(:roles).with(@apo_druid).and_return(['dor-viewer'])
           get 'show', params: { :id => @druid }
           expect(response.code).to eq('200')
         end
@@ -99,6 +99,7 @@ describe CatalogController, :type => :controller do
       it_behaves_like 'APO-independent auth'
     end
   end
+
   describe 'blacklight config' do
     let(:config) { controller.blacklight_config }
     it 'should have the date facets' do
@@ -131,6 +132,7 @@ describe CatalogController, :type => :controller do
       expect(config.http_method).to eq :post
     end
   end
+
   describe 'error handling' do
     let(:druid) { 'druid:zz999zz9999' }
     it 'should 404 on missing item' do
@@ -140,6 +142,7 @@ describe CatalogController, :type => :controller do
       expect(response).to have_http_status(:not_found)
     end
   end
+
   describe '#load_bulk_jobs' do
     let(:sorted_bulk_job_info) { controller.send(:load_bulk_jobs, 'druid:bc682xk5613') }
     it 'should load the expected number of records' do
@@ -174,14 +177,16 @@ describe CatalogController, :type => :controller do
         'argo.bulk_metadata.bulk_log_druids_loaded' => 0})
     end
   end
+
   describe '#manage_release' do
     before do
       allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
-      expect(subject).to receive(:current_user).and_return(@user).at_least(:twice)
+      sign_in user
     end
+
     context 'for content managers' do
       before do
-        expect(@user).to receive(:is_admin?).and_return(true)
+        expect(user).to receive(:is_admin?).and_return(true)
         allow(controller).to receive(:fetch).with("druid:#{@druid}").and_return(double)
       end
 
