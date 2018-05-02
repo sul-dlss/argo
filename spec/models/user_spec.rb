@@ -81,7 +81,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#is_webauth_admin?' do
-    subject { user.is_admin? }
+    subject { user.is_webauth_admin? }
     let(:user) { described_class.new }
     before do
       allow(user).to receive(:webauth_groups).and_return(groups)
