@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe ReportController, type: :controller do
   before do
-    log_in_as_mock_user(is_admin?: true, can_view_something?: true)
+    log_in_as_mock_user(is_admin?: true)
   end
 
   describe ':workflow_grid' do

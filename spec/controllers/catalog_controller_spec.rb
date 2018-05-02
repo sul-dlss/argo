@@ -2,12 +2,25 @@ require 'spec_helper'
 
 RSpec.describe CatalogController, type: :controller do
 
-  before :each do
+  before do
     @druid = 'rn653dy9317'  # a fixture Dor::Item record
     @item = instantiate_fixture(@druid, Dor::Item)
   end
 
   let(:user) { create(:user) }
+
+  describe '#index' do
+    before do
+      allow(user).to receive(:permitted_apos).and_return([])
+      sign_in user
+    end
+
+    it 'is succesful' do
+      get :index
+      expect(response).to be_successful
+      expect(assigns[:presenter]).to be_a HomeTextPresenter
+    end
+  end
 
   shared_examples 'APO-independent auth' do
     before do

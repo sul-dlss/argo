@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature 'Full width' do
   before :each do
-    @current_user = mock_user(is_admin?: true, can_view_something?: true)
+    @current_user = mock_user(is_admin?: true)
     allow_any_instance_of(ApplicationController).to receive(:current_user).
       and_return(@current_user)
   end

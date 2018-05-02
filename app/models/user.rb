@@ -136,10 +136,4 @@ class User < ActiveRecord::Base
   def login
     webauth ? webauth.login : sunetid
   end
-
-  ##
-  # @return [Boolean]
-  def can_view_something?
-    is_admin? || is_manager? || is_viewer? || permitted_apos.any?
-  end
 end
