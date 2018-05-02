@@ -42,7 +42,7 @@ namespace :deploy do
   # will get written with each deployment.  the .htaccess file with the correct
   # list of workgroups is required for argo's permissions checking mechanism to function.
   desc 're-generate .htaccess from the current APOs (so workgroup-based perm checks function)'
-  after :restart, :initialize_htaccess do
+  before :restart, :initialize_htaccess do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
       within release_path do
