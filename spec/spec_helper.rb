@@ -29,7 +29,6 @@ Capybara.default_max_wait_time = 10
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 #
-# Note: no such files, currently.
 Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
 
 def druid_to_path(druid, flavor = 'xml')
@@ -85,6 +84,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include TestViewHelpers, type: :view
+  config.include SigninHelper, type: :controller
 end
 
 def log_in_as_mock_user(subject, attributes = {})
