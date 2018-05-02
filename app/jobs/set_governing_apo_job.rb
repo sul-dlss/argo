@@ -3,11 +3,10 @@
 class SetGoverningApoJob < GenericJob
   queue_as :set_governing_apo
 
-  attr_reader :pids, :new_apo_id, :webauth
+  attr_reader :pids, :new_apo_id
 
   def perform(bulk_action_id, params)
     @new_apo_id = params[:set_governing_apo]['new_apo_id']
-    @webauth = OpenStruct.new params[:webauth]
     @pids = params[:pids]
 
     with_bulk_action_log do |log|
@@ -50,7 +49,7 @@ class SetGoverningApoJob < GenericJob
   end
 
   def ability
-    @ability ||= Ability.new(User.find_or_create_by_webauth(webauth))
+    @ability ||= Ability.new(bulk_action.user)
   end
 
   def update_druid_count

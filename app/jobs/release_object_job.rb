@@ -3,7 +3,7 @@
 class ReleaseObjectJob < GenericJob
   queue_as :release_object
 
-  attr_reader :manage_release, :pids, :webauth
+  attr_reader :manage_release, :pids
   ##
   # This is a shameless green approach to a job that calls release from dor
   # services app and then kicks off release WF.
@@ -15,10 +15,8 @@ class ReleaseObjectJob < GenericJob
   # @option manage_release [String] :who required username of releaser
   # @option manage_release [String] :what required type of release (self, collection)
   # @option manage_release [String] :tag required (true, false)
-  # @option webauth [Hash] required for permissions check
   def perform(bulk_action_id, params)
     @manage_release = params[:manage_release]
-    @webauth = OpenStruct.new params[:webauth]
     @pids = params[:pids]
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting ReleaseObjectJob for BulkAction #{bulk_action_id}")
@@ -71,7 +69,7 @@ class ReleaseObjectJob < GenericJob
   private
 
   def ability
-    @ability ||= Ability.new(User.find_or_create_by_webauth(webauth))
+    @ability ||= Ability.new(bulk_action.user)
   end
 
   def params_to_body(params)
