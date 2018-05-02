@@ -96,11 +96,14 @@ class User < ActiveRecord::Base
                              end
   end
 
+  # @return [Array<String>] list of groups the user is a member of including those
+  #   they are impersonating
   def groups
     return @groups_to_impersonate unless @groups_to_impersonate.blank?
     webauth_groups
   end
 
+  # @return [Array<String>] list of groups the user is a member of
   def webauth_groups
     @webauth_groups ||= begin
       perm_keys = ["sunetid:#{login}"]
@@ -111,23 +114,23 @@ class User < ActiveRecord::Base
 
   # @return [Boolean] is the user a repository wide administrator
   def is_admin?
-    !(groups & ADMIN_GROUPS).blank?
+    !(groups & ADMIN_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide administrator without
   #     taking into account impersonation.
   def is_webauth_admin?
-    !(webauth_groups & ADMIN_GROUPS).blank?
+    !(webauth_groups & ADMIN_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide manager
   def is_manager?
-    !(groups & MANAGER_GROUPS).blank?
+    !(groups & MANAGER_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide viewer
   def is_viewer?
-    !(groups & VIEWER_GROUPS).blank?
+    !(groups & VIEWER_GROUPS).empty?
   end
 
   def login

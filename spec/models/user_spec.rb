@@ -3,7 +3,7 @@ require 'spec_helper'
 # General documentation about roles and permissions is on SUL Consul at
 # https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
 
-describe User, :type => :model do
+RSpec.describe User, type: :model do
   describe '.find_or_create_by_webauth' do
     it 'should work' do
       mock_webauth = double('webauth', :login => 'asdf')
@@ -42,116 +42,130 @@ describe User, :type => :model do
     end
   end
 
-  describe 'is_admin?' do
-    it 'should be true if the group is an admin group' do
-      allow(subject).to receive(:groups).and_return(['workgroup:sdr:administrator-role'])
-      expect(subject.is_admin?).to be true
+  describe '#is_admin?' do
+    subject { user.is_admin? }
+    let(:user) { described_class.new }
+    before do
+      allow(user).to receive(:groups).and_return(groups)
     end
-    it 'should be false if the group is a deprecated admin group' do
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-admin'])
-      expect(subject.is_admin?).to be false
+
+    context 'when the group is a deprecated admin group' do
+      let(:groups) { ['workgroup:dlss:dor-admin'] }
+      it { is_expected.to be false }
     end
-    it 'should be false for a blank group' do
-      allow(subject).to receive(:groups).and_return([])
-      expect(subject.is_admin?).to be false
-      allow(subject).to receive(:groups).and_return(nil)
-      expect(subject.is_admin?).to be false
+
+    context 'when there are no groups' do
+      let(:groups) { [] }
+      it { is_expected.to be false }
     end
-    it 'should be false with an inadequate group membership' do
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-admin'])
-      expect(subject.is_admin?).to be false
+
+    context 'with an inadequate group membership' do
+      let(:groups) { ['workgroup:dlss:not-admin'] }
+      it { is_expected.to be false }
     end
-    it 'should be true for ADMIN_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::ADMIN_GROUPS)
-      expect(subject.is_admin?).to be true
+
+    context 'with ADMIN_GROUPS' do
+      let(:groups) { User::ADMIN_GROUPS }
+      it { is_expected.to be true }
     end
-    it 'should be false for MANAGER_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::MANAGER_GROUPS)
-      expect(subject.is_admin?).to be false
+
+    context 'with MANAGER_GROUPS' do
+      let(:groups) { User::MANAGER_GROUPS }
+      it { is_expected.to be false }
     end
-    it 'should be false for VIEWER_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::VIEWER_GROUPS)
-      expect(subject.is_admin?).to be false
+
+    context 'with VIEWER_GROUPS' do
+      let(:groups) { User::VIEWER_GROUPS }
+      it { is_expected.to be false }
     end
   end
 
-  describe 'is_webauth_admin?' do
-    it 'should be true for ADMIN_GROUPS' do
-      allow(subject).to receive(:webauth_groups).and_return(User::ADMIN_GROUPS)
-      expect(subject.is_webauth_admin?).to be true
+  describe '#is_webauth_admin?' do
+    subject { user.is_admin? }
+    let(:user) { described_class.new }
+    before do
+      allow(user).to receive(:webauth_groups).and_return(groups)
     end
 
-    it 'should be true when impersonating other group membership' do
-      allow(subject).to receive(:webauth_groups).and_return(User::ADMIN_GROUPS)
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-admin'])
-
-      expect(subject.is_webauth_admin?).to be true
+    context 'with ADMIN_GROUPS' do
+      let(:groups) { User::ADMIN_GROUPS }
+      it { is_expected.to be true }
     end
   end
 
-  describe 'is_manager?' do
-    it 'should be true if the group is a manager group' do
-      allow(subject).to receive(:groups).and_return(['workgroup:sdr:manager-role'])
-      expect(subject.is_manager?).to be true
+  describe '#is_manager?' do
+    subject { user.is_manager? }
+    let(:user) { described_class.new }
+    before do
+      allow(user).to receive(:groups).and_return(groups)
     end
-    it 'should be false if the group is a deprecated manager group' do
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-manager'])
-      expect(subject.is_manager?).to be false
+
+    context 'when the group is a deprecated manager group' do
+      let(:groups) { ['workgroup:dlss:dor-manager'] }
+      it { is_expected.to be false }
     end
-    it 'should be false for a blank group' do
-      allow(subject).to receive(:groups).and_return([])
-      expect(subject.is_manager?).to be false
-      allow(subject).to receive(:groups).and_return(nil)
-      expect(subject.is_manager?).to be false
+
+    context 'when there are no groups' do
+      let(:groups) { [] }
+      it { is_expected.to be false }
     end
-    it 'should be false with an inadequate group membership' do
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-manager'])
-      expect(subject.is_manager?).to be false
+
+    context 'with an inadequate group membership' do
+      let(:groups) { ['workgroup:dlss:not-manager'] }
+      it { is_expected.to be false }
     end
-    it 'should be false for ADMIN_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::ADMIN_GROUPS)
-      expect(subject.is_manager?).to be false
+
+    context 'with ADMIN_GROUPS' do
+      let(:groups) { User::ADMIN_GROUPS }
+      it { is_expected.to be false }
     end
-    it 'should be true for MANAGER_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::MANAGER_GROUPS)
-      expect(subject.is_manager?).to be true
+
+    context 'with MANAGER_GROUPS' do
+      let(:groups) { User::MANAGER_GROUPS }
+      it { is_expected.to be true }
     end
-    it 'should be false for VIEWER_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::VIEWER_GROUPS)
-      expect(subject.is_manager?).to be false
+
+    context 'with VIEWER_GROUPS' do
+      let(:groups) { User::VIEWER_GROUPS }
+      it { is_expected.to be false }
     end
   end
 
-  describe 'is_viewer?' do
-    it 'should be true if the group is a viewer group' do
-      allow(subject).to receive(:groups).and_return(['workgroup:sdr:viewer-role'])
-      expect(subject.is_viewer?).to be true
+  describe '#is_viewer?' do
+    subject { user.is_viewer? }
+    let(:user) { described_class.new }
+    before do
+      allow(user).to receive(:groups).and_return(groups)
     end
-    it 'should be false if the group is a deprecated viewer group' do
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:dor-viewer'])
-      expect(subject.is_viewer?).to be false
+
+    context 'when the group is a deprecated viewer group' do
+      let(:groups) { ['workgroup:dlss:dor-viewer'] }
+      it { is_expected.to be false }
     end
-    it 'should be false for a blank group' do
-      allow(subject).to receive(:groups).and_return([])
-      expect(subject.is_viewer?).to be false
-      allow(subject).to receive(:groups).and_return(nil)
-      expect(subject.is_viewer?).to be false
+
+    context 'when there are no groups' do
+      let(:groups) { [] }
+      it { is_expected.to be false }
     end
-    it 'should be false with an inadequate group membership' do
-      allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-viewer'])
-      expect(subject.is_viewer?).to be false
+
+    context 'with an inadequate group membership' do
+      let(:groups) { ['workgroup:dlss:not-viewer'] }
+      it { is_expected.to be false }
     end
-    it 'should be false for ADMIN_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::ADMIN_GROUPS)
-      expect(subject.is_viewer?).to be false
+
+    context 'with ADMIN_GROUPS' do
+      let(:groups) { User::ADMIN_GROUPS }
+      it { is_expected.to be false }
     end
-    it 'should be false for MANAGER_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::MANAGER_GROUPS)
-      expect(subject.is_viewer?).to be false
+
+    context 'with MANAGER_GROUPS' do
+      let(:groups) { User::MANAGER_GROUPS }
+      it { is_expected.to be false }
     end
-    it 'should be true for VIEWER_GROUPS' do
-      allow(subject).to receive(:groups).and_return(User::VIEWER_GROUPS)
-      expect(subject.is_viewer?).to be true
+
+    context 'with VIEWER_GROUPS' do
+      let(:groups) { User::VIEWER_GROUPS }
+      it { is_expected.to be true }
     end
   end
 
@@ -249,33 +263,46 @@ describe User, :type => :model do
     end
   end
 
-  describe 'groups' do
+  describe '#groups' do
+    subject { user.groups }
+    let(:user) { User.find_or_create_by_webauth(double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => webauth_groups.join('|'))) }
+
     context 'specified' do
-      before :each do
-        @webauth_privgroup_str = 'dlss:testgroup1|dlss:testgroup2|dlss:testgroup3'
-        @user = User.find_or_create_by_webauth(double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => @webauth_privgroup_str))
-      end
-      it 'should return the groups by webauth' do
-        expected_groups = ['sunetid:asdf'] + @webauth_privgroup_str.split(/\|/).map { |g| "workgroup:#{g}" }
-        expect(@user.groups).to eq(expected_groups)
-      end
-      it 'should return the groups by impersonation' do
-        impersonated_groups = %w(workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2)
-        @user.set_groups_to_impersonate(impersonated_groups)
-        expect(@user.groups).to eq(impersonated_groups)
+      let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
+
+      it 'returns the groups by webauth' do
+        expected_groups = ['sunetid:asdf'] + webauth_groups.map { |g| "workgroup:#{g}" }
+        expect(subject).to eq(expected_groups)
       end
     end
-    it "should return false for is_admin/is_manager/is_viewer if such groups aren't specified for impersonation, even if the user is part of the admin/manager/viewer groups" do
-      webauth_privgroup_str = 'sdr:administrator-role|sdr:manager-role|sdr:viewer-role'
-      mock_webauth = double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => webauth_privgroup_str)
-      user = User.find_or_create_by_webauth(mock_webauth)
-      expect(user.is_admin?).to be true
-      expect(user.is_manager?).to be true
-      expect(user.is_viewer?).to be true
-      user.set_groups_to_impersonate(%w(workgroup:sdr:not-an-administrator-role workgroup:sdr:not-a-manager-role workgroup:sdr:not-a-viewer-role))
-      expect(user.is_admin?).to be false
-      expect(user.is_manager?).to be false
-      expect(user.is_viewer?).to be false
+
+    context 'when impersonating' do
+      before do
+        user.set_groups_to_impersonate(%w(workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2))
+      end
+      context 'and the impersonating user is an admin' do
+        let(:webauth_groups) { User::ADMIN_GROUPS }
+
+        it 'returns only the impersonated groups' do
+          expect(subject).not_to include User::ADMIN_GROUPS
+        end
+      end
+
+      context 'and the impersonating user is an manager' do
+        let(:webauth_groups) { User::MANAGER_GROUPS }
+
+        it 'returns only the impersonated groups' do
+          expect(subject).not_to include User::MANAGER_GROUPS
+        end
+      end
+
+      context 'and the impersonating user is a viewer' do
+        let(:webauth_groups) { User::VIEWER_GROUPS }
+
+        it 'returns only the impersonated groups' do
+          expect(subject).not_to include User::VIEWER_GROUPS
+        end
+      end
     end
   end
 
