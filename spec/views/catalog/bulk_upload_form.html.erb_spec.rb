@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'catalog/bulk_upload_form.html.erb', :type => :view do
+RSpec.describe 'catalog/bulk_upload_form.html.erb', type: :view do
   before :each do
     @obj = double('dor_object', id: 'druid:hv992ry2431')
   end
@@ -8,7 +8,7 @@ RSpec.describe 'catalog/bulk_upload_form.html.erb', :type => :view do
   it 'has the correct title' do
     assign(:object, @obj)
     render
-    expect(rendered).to have_css('strong', :text => 'Submit MODS descriptive metadata for bulk processing')
+    expect(rendered).to have_css('strong', text: 'Submit MODS descriptive metadata for bulk processing')
   end
 
   it 'has the correct overall structure' do

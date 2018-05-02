@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
     if Rails.env.development? || ENV['DOR_SERVICES_DEBUG_MODE']
       yield
     else
-      render :plain => 'Not Found', :status => :not_found
+      render plain: 'Not Found', status: :not_found
     end
   end
 

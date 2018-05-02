@@ -1,10 +1,10 @@
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
-  before_action :create_obj, :except => [
+  before_action :create_obj, except: [
     :open_bulk,
     :register
   ]
-  before_action :authorize_manage_obj_content!, :only => [
+  before_action :authorize_manage_obj_content!, only: [
     :add_collection, :set_collection, :remove_collection,
     :datastream_update,
     :mods,
@@ -17,21 +17,21 @@ class ItemsController < ApplicationController
     :update_rights,
     :update_attributes
   ]
-  before_action :authorize_view_obj!, :only => [
+  before_action :authorize_view_obj!, only: [
     :get_file,
     :get_preserved_file
   ]
-  before_action :authorize_manage_item!, :only => [
+  before_action :authorize_manage_item!, only: [
     :embargo_update,
     :embargo_form
   ]
-  before_action :authorize_manage_desc_metadata!, :only => [
+  before_action :authorize_manage_desc_metadata!, only: [
     :refresh_metadata
   ]
-  before_action :authorize_set_governing_apo!, :only => [
+  before_action :authorize_set_governing_apo!, only: [
     :set_governing_apo
   ]
-  before_action :enforce_versioning, :only => [
+  before_action :enforce_versioning, only: [
     :add_collection, :set_collection, :remove_collection,
     :source_id, :set_source_id,
     :catkey,
@@ -41,7 +41,7 @@ class ItemsController < ApplicationController
     :tags,
     :update_rights
   ]
-  after_action :save_and_reindex, :only => [
+  after_action :save_and_reindex, only: [
     :add_collection, :set_collection, :remove_collection,
     :apply_apo_defaults,
     :embargo_update,
@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
     :set_governing_apo
   ]
   # must run after save_and_reindex
-  prepend_after_action :flush_index, :only => [
+  prepend_after_action :flush_index, only: [
     :add_workflow,
     :embargo_update
   ]
@@ -72,17 +72,17 @@ class ItemsController < ApplicationController
     if DorObjectWorkflowStatus.new(@object.pid).can_open_version?
       begin
         vers_md_upd_info = {
-          :significance => params[:severity],
-          :description => params[:description],
-          :opening_user_name => current_user.to_s
+          significance: params[:severity],
+          description: params[:description],
+          opening_user_name: current_user.to_s
         }
-        @object.open_new_version(:vers_md_upd_info => vers_md_upd_info)
+        @object.open_new_version(vers_md_upd_info: vers_md_upd_info)
       rescue Dor::Exception => e
-        render :status => :precondition_failed, :plain => e
+        render status: :precondition_failed, plain: e
         return
       end
     end
-    render :status => :ok, :plain => 'All good'
+    render status: :ok, plain: 'All good'
   end
 
   def embargo_form
@@ -120,9 +120,9 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if params[:bulk]
         if can_set_collection
-          format.html { render :status => :ok, :plain => 'Collection set!' }
+          format.html { render status: :ok, plain: 'Collection set!' }
         else
-          format.html { render :status => 500, :plain => 'Collection not set, already has collection(s)' }
+          format.html { render status: 500, plain: 'Collection not set, already has collection(s)' }
         end
       else
         msg = if can_set_collection
@@ -130,7 +130,7 @@ class ItemsController < ApplicationController
               else
                 'Collection not set, already has collection(s)'
               end
-        format.html { redirect_to solr_document_path(params[:id]), :notice => msg }
+        format.html { redirect_to solr_document_path(params[:id]), notice: msg }
       end
     end
   end
@@ -139,9 +139,9 @@ class ItemsController < ApplicationController
     @object.add_collection(params[:collection])
     respond_to do |format|
       if params[:bulk]
-        format.html { render :status => :ok, :plain => 'Collection added!' }
+        format.html { render status: :ok, plain: 'Collection added!' }
       else
-        format.html { redirect_to solr_document_path(params[:id]), :notice => 'Collection successfully added' }
+        format.html { redirect_to solr_document_path(params[:id]), notice: 'Collection successfully added' }
       end
     end
   end
@@ -150,9 +150,9 @@ class ItemsController < ApplicationController
     @object.remove_collection(params[:collection])
     respond_to do |format|
       if params[:bulk]
-        format.html { render :status => :ok, :plain => 'Collection removed!' }
+        format.html { render status: :ok, plain: 'Collection removed!' }
       else
-        format.any { redirect_to solr_document_path(params[:id]), :notice => 'Collection successfully removed' }
+        format.any { redirect_to solr_document_path(params[:id]), notice: 'Collection successfully removed' }
       end
     end
   end
@@ -171,7 +171,7 @@ class ItemsController < ApplicationController
 
   def mods
     respond_to do |format|
-      format.xml  { render :xml => @object.descMetadata.content }
+      format.xml  { render xml: @object.descMetadata.content }
     end
   end
 
@@ -195,14 +195,14 @@ class ItemsController < ApplicationController
                 end
     respond_to do |format|
       format.html { render 'workflow_view', layout: !request.xhr? }
-      format.xml  { render :xml => @workflow.ng_xml.to_xml }
+      format.xml  { render xml: @workflow.ng_xml.to_xml }
       format.any(:png, :svg, :jpeg) do
         graph = @workflow.graph
         fail ActionController::RoutingError.new('Not Found') if graph.nil?
         send_data(
           graph.output(request.format.to_sym => String),
-          :type => request.format.to_s,
-          :disposition => 'inline'
+          type: request.format.to_s,
+          disposition: 'inline'
         )
       end
     end
@@ -243,20 +243,20 @@ class ItemsController < ApplicationController
   def release_hold
     # this will raise and exception if the item doesnt have that workflow step
     unless dor_accession_status(@object, 'sdr-ingest-transfer') == 'hold'
-      render :status => :bad_request, :plain => 'Item isnt on hold!'
+      render status: :bad_request, plain: 'Item isnt on hold!'
       return
     end
     unless dor_lifecycle(@object.admin_policy_object, 'accessioned')
-      render :status => :bad_request, :plain => "Item's APO #{@object.admin_policy_object.pid} hasnt been ingested!"
+      render status: :bad_request, plain: "Item's APO #{@object.admin_policy_object.pid} hasnt been ingested!"
       return
     end
     set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
     if params[:bulk]
-      render :status => 200, :plain => 'Updated!'
+      render status: 200, plain: 'Updated!'
       return
     end
     respond_to do |format|
-      format.any { redirect_to solr_document_path(@object.pid), :notice => 'Workflow was successfully updated' }
+      format.any { redirect_to solr_document_path(@object.pid), notice: 'Workflow was successfully updated' }
     end
   end
 
@@ -265,7 +265,7 @@ class ItemsController < ApplicationController
     @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
     @object.datastreams['events'].add_event('Embargo', current_user.to_s, 'Embargo date modified')
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), :notice => 'Embargo was successfully updated' }
+      format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
     end
   end
 
@@ -308,7 +308,7 @@ class ItemsController < ApplicationController
     end
 
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), :notice => 'Datastream was successfully updated' }
+      format.any { redirect_to solr_document_path(params[:id]), notice: 'Datastream was successfully updated' }
     end
   end
 
@@ -368,25 +368,25 @@ class ItemsController < ApplicationController
       set_dor_accession_status(@object, 'publish', 'waiting')
     end
     respond_to do |format|
-      format.any { render :plain => 'Set metadata' }
+      format.any { render plain: 'Set metadata' }
     end
   end
 
   def open_version
     # puts params[:description]
     vers_md_upd_info = {
-      :significance => params[:severity],
-      :description => params[:description],
-      :opening_user_name => current_user.to_s
+      significance: params[:severity],
+      description: params[:description],
+      opening_user_name: current_user.to_s
     }
-    @object.open_new_version(:vers_md_upd_info => vers_md_upd_info)
+    @object.open_new_version(vers_md_upd_info: vers_md_upd_info)
     respond_to do |format|
       msg = params[:id] + ' is open for modification!'
-      format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
+      format.any { redirect_to solr_document_path(params[:id]), notice: msg }
     end
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
-    render :status => 500, :plain => 'Object net yet accessioned'
+    render status: 500, plain: 'Object net yet accessioned'
     return
   end
 
@@ -426,8 +426,8 @@ class ItemsController < ApplicationController
       desc = params[:description]
       ds = @object.versionMetadata
       ds.update_current_version(
-        :description => desc,
-        :significance => severity.to_sym
+        description: desc,
+        significance: severity.to_sym
       )
       @object.save
     end
@@ -438,14 +438,14 @@ class ItemsController < ApplicationController
       @object.datastreams['events'].add_event('close', current_user.to_s, msg)
       respond_to do |format|
         if params[:bulk]
-          format.html { render :status => :ok, :plain => 'Version Closed.' }
+          format.html { render status: :ok, plain: 'Version Closed.' }
         else
           msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
-          format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
+          format.any { redirect_to solr_document_path(params[:id]), notice: msg }
         end
       end
     rescue Dor::Exception # => e
-      render :status => 500, :plain => 'No version to close.'
+      render status: 500, plain: 'No version to close.'
     end
   end
 
@@ -454,10 +454,10 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if params[:bulk]
-        format.html { render :status => :ok, :plain => 'Updated source id.' }
+        format.html { render status: :ok, plain: 'Updated source id.' }
       else
         msg = "Source Id for #{params[:id]} has been updated!"
-        format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
+        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
       end
     end
   end
@@ -467,10 +467,10 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if params[:bulk]
-        format.html { render :status => :ok, :plain => 'Updated catkey' }
+        format.html { render status: :ok, plain: 'Updated catkey' }
       else
         msg = "Catkey for #{params[:id]} has been updated!"
-        format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
+        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
       end
     end
   end
@@ -486,10 +486,10 @@ class ItemsController < ApplicationController
     @object.identityMetadata.save
     respond_to do |format|
       if params[:bulk]
-        format.html { render :status => :ok, :plain => "#{tags.size} Tags updated." }
+        format.html { render status: :ok, plain: "#{tags.size} Tags updated." }
       else
         msg = "#{tags.size} tags for #{params[:id]} have been updated!"
-        format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
+        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
       end
     end
   end
@@ -516,13 +516,13 @@ class ItemsController < ApplicationController
     @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
     respond_to do |format|
       msg = "Tags for #{params[:id]} have been updated!"
-      format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
+      format.any { redirect_to solr_document_path(params[:id]), notice: msg }
     end
   end
 
   def purge_object
     if dor_lifecycle(@object, 'submitted')
-      render :status => :forbidden, :plain => 'Cannot purge an object after it is submitted.'
+      render status: :forbidden, plain: 'Cannot purge an object after it is submitted.'
       return
     end
 
@@ -531,7 +531,7 @@ class ItemsController < ApplicationController
     Dor::SearchService.solr.commit
 
     respond_to do |format|
-      format.any { redirect_to '/', :notice => params[:id] + ' has been purged!' }
+      format.any { redirect_to '/', notice: params[:id] + ' has been purged!' }
     end
   end
 
@@ -543,29 +543,29 @@ class ItemsController < ApplicationController
     @object.save if acted
     notice = (acted ? 'updated' : 'no action received for') + " resource #{params[:resource]}!"
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), :notice => notice }
+      format.any { redirect_to solr_document_path(params[:id]), notice: notice }
     end
   end
 
   def discoverable
     messages = mods_discoverable @object.descMetadata.ng_xml
     if messages.length == 0
-      render :status => :ok, :plain => 'Discoverable.'
+      render status: :ok, plain: 'Discoverable.'
     else
-      render :status => 500, :plain => messages.join(' ')
+      render status: 500, plain: messages.join(' ')
     end
   end
 
   def remediate_mods
-    render :status => :ok, :plain => 'method disabled'
+    render status: :ok, plain: 'method disabled'
   end
 
   def schema_validation
     errors = schema_validate @object.descMetadata.ng_xml
     if errors.length == 0
-      render :status => :ok, :plain => 'Valid.'
+      render status: :ok, plain: 'Valid.'
     else
-      render :status => 500, :plain => errors.join('<br>')[0...490]
+      render status: 500, plain: errors.join('<br>')[0...490]
     end
   end
 
@@ -600,9 +600,9 @@ class ItemsController < ApplicationController
     ds = @object.descMetadata
     ng = scrubbed_content_ng_utf8(ds.content)
     if EquivalentXml.equivalent?(ng, ds.ng_xml)
-      render :status => :ok, :plain => 'No change'
+      render status: :ok, plain: 'No change'
     else
-      render :status => 500, :plain => 'Has duplicates'
+      render status: 500, plain: 'Has duplicates'
     end
   end
 
@@ -610,12 +610,12 @@ class ItemsController < ApplicationController
     ds = @object.descMetadata
     ng = scrubbed_content_ng_utf8(ds.content)
     if EquivalentXml.equivalent?(ng, ds.ng_xml)
-      render :status => 500, :plain => 'No duplicate encoding'
+      render status: 500, plain: 'No duplicate encoding'
     else
       ds.ng_xml = ng
       ds.content = ng.to_s
       @object.save
-      render :status => :ok, :plain => 'Has duplicates'
+      render status: :ok, plain: 'Has duplicates'
     end
   end
 
@@ -624,13 +624,13 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if params[:bulk]
-        format.html { render :status => :ok, :plain => 'Rights updated.' }
+        format.html { render status: :ok, plain: 'Rights updated.' }
       else
-        format.any { redirect_to solr_document_path(params[:id]), :notice => 'Rights updated!' }
+        format.any { redirect_to solr_document_path(params[:id]), notice: 'Rights updated!' }
       end
     end
   rescue ArgumentError
-    render :status => :forbidden, :plain => 'Invalid new rights setting.'
+    render status: :forbidden, plain: 'Invalid new rights setting.'
   end
 
   # if an item errored in sdr-ingest-transfer due to missing provenance
@@ -639,17 +639,17 @@ class ItemsController < ApplicationController
     if dor_accession_error?(@object, 'sdr-ingest-transfer') && @object.provenanceMetadata.new?
       @object.build_provenanceMetadata_datastream('accessionWF', 'DOR Common Accessioning completed')
       set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
-      render :plain => 'ok.'
+      render plain: 'ok.'
     else
       msg = 'Item not in error for sdr-ingest-transfer or provenance metadata already exists!'
-      render :status => 500, :plain => msg
+      render status: 500, plain: msg
     end
   end
 
   # set the rightsMetadata to the APO's defaultObjectRights
   def apply_apo_defaults
     @object.reapplyAdminPolicyObjectDefaults
-    render :status => 200, :plain => 'Defaults applied.'
+    render status: 200, plain: 'Defaults applied.'
   end
 
   # add a workflow to an object if the workflow is not present in the active table
@@ -663,7 +663,7 @@ class ItemsController < ApplicationController
     wf = @object.workflows[wf_name]
     # check the workflow is present and active (not archived)
     if wf && wf.active?
-      render :status => 500, :plain => "#{wf_name} already exists!"
+      render status: 500, plain: "#{wf_name} already exists!"
       return
     end
     @object.create_workflow(wf_name)
@@ -674,7 +674,7 @@ class ItemsController < ApplicationController
     msg = "Added #{wf_name}"
 
     if params[:bulk]
-      render :plain => msg
+      render plain: msg
     else
       redirect_to solr_document_path(params[:id]), notice: msg
     end

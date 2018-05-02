@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SolrDocument, :type => :model do
+describe SolrDocument, type: :model do
   describe 'get_milestones' do
     it 'should build an empty listing if passed an empty doc' do
       milestones = SolrDocument.new({}).get_milestones
@@ -15,7 +15,7 @@ describe SolrDocument, :type => :model do
       expect(versions.keys).to eq [1]
       expect(versions).to match a_hash_including(
         1 => a_hash_including(
-          'registered' => { :time => be_a_kind_of(DateTime) }
+          'registered' => { time: be_a_kind_of(DateTime) }
         )
       )
       versions[1].each do |key, value|
@@ -37,12 +37,12 @@ describe SolrDocument, :type => :model do
       expect(versions).to match a_hash_including(
         '1' => a_hash_including(
           'registered' => {
-            :time => be_a_kind_of(DateTime)
+            time: be_a_kind_of(DateTime)
           }
         ),
         '2' => a_hash_including(
           'opened' => {
-            :time => be_a_kind_of(DateTime)
+            time: be_a_kind_of(DateTime)
           }
         )
       )
@@ -70,8 +70,8 @@ describe SolrDocument, :type => :model do
       data << '1;1.0.0;Initial version'
       data << '2;1.1.0;Minor change'
       versions = SolrDocument.new('versions_ssm' => data).get_versions
-      expect(versions['1']).to match a_hash_including(:tag => '1.0.0', :desc => 'Initial version')
-      expect(versions['2']).to match a_hash_including(:tag => '1.1.0', :desc => 'Minor change')
+      expect(versions['1']).to match a_hash_including(tag: '1.0.0', desc: 'Initial version')
+      expect(versions['2']).to match a_hash_including(tag: '1.1.0', desc: 'Minor change')
     end
   end
 end

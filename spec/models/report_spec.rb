@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Report, :type => :model do
+describe Report, type: :model do
   context 'csv' do
     before :each do
       @csv = described_class.new(

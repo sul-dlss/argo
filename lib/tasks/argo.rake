@@ -4,12 +4,12 @@ end
 
 def get_workgroups_facet(apo_field = nil)
   apo_field = apo_field_default() if apo_field.nil?
-  resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
-                                                                 :'facet.field' => apo_field,
-                                                                 :'facet.prefix'   => 'workgroup:',
-                                                                 :'facet.mincount' => 1,
-                                                                 :'facet.limit'    => -1,
-                                                                 :'json.nl' => 'map')
+  resp = Dor::SearchService.query('objectType_ssim:adminPolicy', rows: 0,
+                                                                 'facet.field': apo_field,
+                                                                 'facet.prefix': 'workgroup:',
+                                                                 'facet.mincount': 1,
+                                                                 'facet.limit': -1,
+                                                                 'json.nl': 'map')
   resp['facet_counts']['facet_fields'][apo_field]
 end
 
@@ -49,7 +49,7 @@ namespace :argo do
   # NOTE: at present (2015-11-06), this rake task is run regularly by a cron job, so that
   # the .htaccess file keeps up with workgroup names as listed on APOs in use in argo.
   desc 'Update the .htaccess file from indexed APOs'
-  task :htaccess => :environment do
+  task htaccess: :environment do
     directives = ['AuthType WebAuth',
                   'Require privgroup dlss:argo-access',
                   'WebAuthLdapAttribute suAffiliation',
@@ -77,17 +77,17 @@ namespace :argo do
   end # :htaccess
 
   desc 'Update completed/archived workflow counts'
-  task :update_archive_counts => :environment do |t|
+  task update_archive_counts: :environment do |t|
     Dor.find_all('objectType_ssim:workflow').each(&:update_index)
   end
 
   desc 'Reindex all DOR objects to Solr'
-  task :reindex_all => [:environment] do |t, args|
+  task reindex_all: [:environment] do |t, args|
     Argo::BulkReindexer.reindex_all
   end
 
   desc "List APO workgroups from Solr (#{apo_field_default()})"
-  task :workgroups => :environment do
+  task workgroups: :environment do
     facet = get_workgroups_facet()
     puts "#{facet.length} Workgroups:\n#{facet.keys.join(%(\n))}"
   end

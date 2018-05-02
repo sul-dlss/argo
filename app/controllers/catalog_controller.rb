@@ -80,51 +80,51 @@ class CatalogController < ApplicationController
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
     config.add_facet_field 'source', label: 'Object Source', home: false, query: {
-      :other => {
-        :label => 'DOR',
-        :fq => '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+      other: {
+        label: 'DOR',
+        fq: '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'\
           ' AND -has_model_ssim:"info:fedora/dor:googleScannedBook"'
       },
 
-      :google => { :label => 'Google', :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
+      google: { label: 'Google', fq: 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
 
-      :hydrus => {
-        :label => 'Hydrus/SDR',
-        :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+      hydrus: {
+        label: 'Hydrus/SDR',
+        fq: 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
           ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
           ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'
       }
     }
 
-    config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source', :home => false
+    config.add_facet_field 'metadata_source_ssi', label: 'Metadata Source', home: false
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
-    config.add_facet_field 'empties', :label => 'Empty Fields', :home => false, :query => {
-      :no_rights_characteristics   => { :label => 'No Rights Characteristics',  :fq => '-rights_characteristics_ssim:*' },
-      :no_content_type             => { :label => 'No Content Type',            :fq => '-content_type_ssim:*' },
-      :no_has_model                => { :label => 'No Object Model',            :fq => '-has_model_ssim:*' },
-      :no_objectType               => { :label => 'No Object Type',             :fq => '-objectType_ssim:*' },
-      :no_object_title             => { :label => 'No Object Title',            :fq => '-dc_title_ssi:*' },
-      :no_is_governed_by           => { :label => 'No APO',                     :fq => "-#{SolrDocument::FIELD_APO_ID}:*" },
-      :no_collection_title         => { :label => 'No Collection Title',        :fq => "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
-      :no_copyright                => { :label => 'No Copyright',               :fq => '-copyright_ssim:*' },
-      :no_license                  => { :label => 'No License',                 :fq => '-use_license_machine_ssi:*' },
-      :no_sw_author_ssim           => { :label => 'No SW Author',               :fq => '-sw_author_ssim:*' },
+    config.add_facet_field 'empties', label: 'Empty Fields', home: false, query: {
+      no_rights_characteristics: { label: 'No Rights Characteristics', fq: '-rights_characteristics_ssim:*' },
+      no_content_type: { label: 'No Content Type', fq: '-content_type_ssim:*' },
+      no_has_model: { label: 'No Object Model', fq: '-has_model_ssim:*' },
+      no_objectType: { label: 'No Object Type', fq: '-objectType_ssim:*' },
+      no_object_title: { label: 'No Object Title', fq: '-dc_title_ssi:*' },
+      no_is_governed_by: { label: 'No APO', fq: "-#{SolrDocument::FIELD_APO_ID}:*" },
+      no_collection_title: { label: 'No Collection Title', fq: "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
+      no_copyright: { label: 'No Copyright', fq: '-copyright_ssim:*' },
+      no_license: { label: 'No License', fq: '-use_license_machine_ssi:*' },
+      no_sw_author_ssim: { label: 'No SW Author', fq: '-sw_author_ssim:*' },
       # TODO: mods extent (?)
       # TODO: mods form (?)
-      :no_sw_genre                 => { :label => 'No SW Genre',                :fq => '-sw_genre_ssim:*' }, # spec said "mods genre"
-      :no_sw_language_ssim         => { :label => 'No SW Language',             :fq => '-sw_language_ssim:*' },
-      :no_mods_typeOfResource_ssim => { :label => 'No MODS typeOfResource',     :fq => '-mods_typeOfResource_ssim:*' },
-      :no_sw_pub_date_sort         => { :label => 'No SW Date',                 :fq => '-sw_pub_date_sort_ssi:*' },
-      :no_sw_topic_ssim            => { :label => 'No SW Topic',                :fq => '-sw_topic_ssim:*' },
-      :no_sw_subject_temporal      => { :label => 'No SW Era',                  :fq => '-sw_subject_temporal_ssim:*' },
-      :no_sw_subject_geographic    => { :label => 'No SW Region',               :fq => '-sw_subject_geographic_ssim:*' },
-      :no_sw_format                => { :label => 'No SW Resource Type',        :fq => '-sw_format_ssim:*' },
-      :no_use_statement            => { :label => 'No Use & Reproduction Statement', :fq => '-use_statement_ssim:*' }
+      no_sw_genre: { label: 'No SW Genre', fq: '-sw_genre_ssim:*' }, # spec said "mods genre"
+      no_sw_language_ssim: { label: 'No SW Language', fq: '-sw_language_ssim:*' },
+      no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource', fq: '-mods_typeOfResource_ssim:*' },
+      no_sw_pub_date_sort: { label: 'No SW Date', fq: '-sw_pub_date_sort_ssi:*' },
+      no_sw_topic_ssim: { label: 'No SW Topic', fq: '-sw_topic_ssim:*' },
+      no_sw_subject_temporal: { label: 'No SW Era', fq: '-sw_subject_temporal_ssim:*' },
+      no_sw_subject_geographic: { label: 'No SW Region', fq: '-sw_subject_geographic_ssim:*' },
+      no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' },
+      no_use_statement: { label: 'No Use & Reproduction Statement', fq: '-use_statement_ssim:*' }
     }
 
     config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', limit: 10, home: false
@@ -139,15 +139,15 @@ class CatalogController < ApplicationController
 
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
-    config.add_search_field 'text', :label => 'All Fields'
-    config.add_sort_field 'id asc', :label => 'Druid'
-    config.add_sort_field 'score desc', :label => 'Relevance'
-    config.add_sort_field 'creator_title_ssi asc', :label => 'Creator and Title'
+    config.add_search_field 'text', label: 'All Fields'
+    config.add_sort_field 'id asc', label: 'Druid'
+    config.add_sort_field 'score desc', label: 'Relevance'
+    config.add_sort_field 'creator_title_ssi asc', label: 'Creator and Title'
 
     config.spell_max = 5
 
     config.facet_display = {
-      :hierarchy => {
+      hierarchy: {
         'wf_wps' => [['ssim'], ':'],
         'wf_wsp' => [['ssim'], ':'],
         'wf_swp' => [['ssim'], ':'],
@@ -169,7 +169,7 @@ class CatalogController < ApplicationController
   def default_solr_doc_params(id = nil)
     id ||= params[:id]
     {
-      :q => %(id:"#{id}")
+      q: %(id:"#{id}")
     }
   end
 
@@ -233,7 +233,7 @@ class CatalogController < ApplicationController
   def bulk_jobs_xml
     desc_metadata_xml_file = find_desc_metadata_file(File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time]))
     if File.exist?(desc_metadata_xml_file)
-      send_file(desc_metadata_xml_file, :type => 'application/xml')
+      send_file(desc_metadata_xml_file, type: 'application/xml')
     else
       # Display error message and log the error
     end
@@ -242,7 +242,7 @@ class CatalogController < ApplicationController
   def bulk_jobs_csv
     csv_file = File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time], 'log.csv')
     if File.exist?(csv_file)
-      send_file(csv_file, :type => 'text/csv')
+      send_file(csv_file, type: 'text/csv')
     else
       # Display error message and log the error
     end

@@ -41,7 +41,7 @@ if ['test', 'development'].include? Rails.env
   require 'jettywrapper'
   Jettywrapper.hydra_jetty_version = 'v7.3.0' # this keeps us on fedora 3, hydra-jetty v8.x moves to fedora 4.
   def jettywrapper_load_config
-    Jettywrapper.load_config.merge(:jetty_home => File.expand_path(File.dirname(__FILE__) + '../../../jetty'), :startup_wait => 200)
+    Jettywrapper.load_config.merge(jetty_home: File.expand_path(File.dirname(__FILE__) + '../../../jetty'), startup_wait: 200)
   end
 
   require 'rspec/core/rake_task'
@@ -55,7 +55,7 @@ if ['test', 'development'].include? Rails.env
 
   namespace :argo do
     desc 'Install db, jetty (fedora/solr) and configs fresh'
-    task :install => ['argo:jetty:clean', 'argo:jetty:config', 'db:migrate'] do
+    task install: ['argo:jetty:clean', 'argo:jetty:config', 'db:migrate'] do
       puts 'Installed Argo'
     end
 
@@ -64,14 +64,14 @@ if ['test', 'development'].include? Rails.env
 
       desc "Get fresh hydra-jetty [target tag, default: #{WRAPPER_VERSION}] -- DELETES/REPLACES SOLR AND FEDORA"
       task :clean, [:target] do |t, args|
-        args.with_defaults(:target => WRAPPER_VERSION)
+        args.with_defaults(target: WRAPPER_VERSION)
         jettywrapper_load_config()
         Jettywrapper.hydra_jetty_version = args[:target]
         Rake::Task['jetty:clean'].invoke
       end
 
       desc 'Overwrite Solr configs and JARs'
-      task :config => %w(argo:solr:config) do # TODO: argo:fedora:config
+      task config: %w(argo:solr:config) do # TODO: argo:fedora:config
       end
     end
 
@@ -84,7 +84,7 @@ if ['test', 'development'].include? Rails.env
 
       desc "Configure Solr root from source dir, default: #{solr_conf_dir}"
       task :config_root, [:dir] do |task, args|
-        args.with_defaults(:dir => solr_conf_dir)
+        args.with_defaults(dir: solr_conf_dir)
         cp("#{args[:dir]}/solr.xml", 'jetty/solr/', verbose: true)
       end
 
@@ -92,7 +92,7 @@ if ['test', 'development'].include? Rails.env
 
       desc "Copies configs to matching local Solr instanceDir(s), default: #{solr_conf_dir} ==> #{testcores.keys.sort}"
       task :config_cores, [:dir, :cores] do |task, args|
-        args.with_defaults(:dir => solr_conf_dir, :cores => testcores.keys.sort)
+        args.with_defaults(dir: solr_conf_dir, cores: testcores.keys.sort)
         args[:cores].each do |core|
           instancedir = testcores[core] || core
           puts "travis_fold:start:argo-config_cores-#{core}\r" if ENV['TRAVIS'] == 'true'
@@ -138,7 +138,7 @@ if ['test', 'development'].include? Rails.env
             puts STDERR.puts "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
             errors << file
           end
-          with_retries(:max_tries => 3, :handler => handler, :rescue => [StandardError]) { |attempt|
+          with_retries(max_tries: 3, handler: handler, rescue: [StandardError]) { |attempt|
             puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
             # Invoke the ActiveFedora gem's rake task
             Rake::Task['repo:load'].reenable

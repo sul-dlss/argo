@@ -14,13 +14,13 @@ RSpec.describe ReportController, type: :controller do
   end
   describe ':data' do
     it 'should return json' do
-      get :data, params: { :format => :json, :rows => 5 }
+      get :data, params: { format: :json, rows: 5 }
       expect(response).to have_http_status(:ok)
       data = JSON.parse(response.body)
       expect(data['rows'].length).to eq(5)
     end
     it 'should default to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in' do
-      get :data, params: { :format => :json }
+      get :data, params: { format: :json }
       expect(response).to have_http_status(:ok)
       data = JSON.parse(response.body)
       expect(data['rows'].length).to eq(10)
@@ -28,7 +28,7 @@ RSpec.describe ReportController, type: :controller do
   end
   describe ':pids' do
     it 'should return json' do
-      get :pids, params: { :format => :json }
+      get :pids, params: { format: :json }
       expect(response).to have_http_status(:ok)
       pids = JSON.parse(response.body)['druids']
       expect(pids.is_a?(Array)).to be_truthy

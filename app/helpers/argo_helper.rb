@@ -28,14 +28,14 @@ module ArgoHelper
     fname = File.basename(fname, File.extname(fname))
     druid = doc['id'].to_s.split(/:/).last
     url = "#{Settings.STACKS_URL}/iiif/#{druid}%2F#{ERB::Util.url_encode(fname)}/full/!400,400/0/default.jpg"
-    { :fname => fname, :druid => druid, :url => url }
+    { fname: fname, druid: druid, url: url }
   end
 
   def render_thumbnail_helper(doc, thumb_class = '', thumb_alt = '', thumb_style = 'max-width:240px;max-height:240px;')
     thumbnail_info = get_thumbnail_info(doc)
     return nil unless thumbnail_info
     thumbnail_url = thumbnail_info[:url]
-    image_tag thumbnail_url, :class => thumb_class, :alt => thumb_alt, :style => thumb_style
+    image_tag thumbnail_url, class: thumb_class, alt: thumb_alt, style: thumb_style
   end
 
   ##
@@ -78,8 +78,8 @@ module ArgoHelper
 
     if can?(:manage_item, object)
       if object.is_a? Dor::AdminPolicyObject
-        buttons << { :url => register_apo_index_path(id: pid), :label => 'Edit APO', :new_page => true }
-        buttons << { :url => register_collection_apo_path(id: pid), :label => 'Create Collection' }
+        buttons << { url: register_apo_index_path(id: pid), label: 'Edit APO', new_page: true }
+        buttons << { url: register_collection_apo_path(id: pid), label: 'Create Collection' }
       end
 
       buttons << {
@@ -98,7 +98,7 @@ module ArgoHelper
         disabled: !object.allows_modification?
       }
 
-      buttons << { :url => add_workflow_item_path(id: pid), :label => 'Add workflow' }
+      buttons << { url: add_workflow_item_path(id: pid), label: 'Add workflow' }
 
       buttons << {
         url: dor_path(pid: pid),
@@ -115,17 +115,17 @@ module ArgoHelper
         disabled: !registered_only?(doc)
       }
 
-      buttons << { :url => source_id_ui_item_path(id: pid), :label => 'Change source id' }
-      buttons << { :url => tags_ui_item_path(id: pid), :label => 'Edit tags' }
+      buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
+      buttons << { url: tags_ui_item_path(id: pid), label: 'Edit tags' }
       if [Dor::Item, Dor::Set].any? { |clazz| object.is_a? clazz } # these only apply for items, sets and collections
-        buttons << { :url => catkey_ui_item_path(id: pid), :label => 'Manage catkey' }
-        buttons << { :url => collection_ui_item_path(id: pid), :label => 'Edit collections' }
+        buttons << { url: catkey_ui_item_path(id: pid), label: 'Manage catkey' }
+        buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
       end
       if object.datastreams.include? 'contentMetadata'
-        buttons << { :url => item_content_type_path(item_id: pid), :label => 'Set content type' }
+        buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' }
       end
       if object.datastreams.include? 'rightsMetadata'
-        buttons << { :url => rights_item_path(id: pid), :label => 'Set rights' }
+        buttons << { url: rights_item_path(id: pid), label: 'Set rights' }
       end
       if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
         buttons << { url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !object.allows_modification? }
@@ -138,7 +138,7 @@ module ArgoHelper
         # date=embargo_data.split.last
         if text != 'released'
           # TODO: add a date picker and button to change the embargo date for those who should be able to.
-          buttons << { :label => 'Update embargo', :url => embargo_form_item_path(pid) }
+          buttons << { label: 'Update embargo', url: embargo_form_item_path(pid) }
         end
       end
     end
@@ -146,15 +146,15 @@ module ArgoHelper
     buttons
   end
 
-  def render_purl_link(document, link_text = 'PURL', opts = { :target => '_blank' })
+  def render_purl_link(document, link_text = 'PURL', opts = { target: '_blank' })
     link_to link_text, File.join(Settings.PURL_URL, document.druid), opts
   end
 
-  def render_dor_link(document, link_text = 'Fedora UI', opts = { :target => '_blank' })
+  def render_dor_link(document, link_text = 'Fedora UI', opts = { target: '_blank' })
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}"), opts
   end
 
-  def render_foxml_link(document, link_text = 'FoXML', opts = { :target => '_blank' })
+  def render_foxml_link(document, link_text = 'FoXML', opts = { target: '_blank' })
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/objectXML"), opts
   end
 
@@ -162,13 +162,13 @@ module ArgoHelper
     "indexed by DOR Services v#{@document.first(Dor::INDEX_VERSION_FIELD)}"
   end
 
-  def render_searchworks_link(document, link_text = 'Searchworks', opts = { :target => '_blank' })
+  def render_searchworks_link(document, link_text = 'Searchworks', opts = { target: '_blank' })
     link_to link_text, "http://searchworks.stanford.edu/view/#{document.catkey}", opts
   end
 
   def render_datastream_link(document)
     return unless @document.admin_policy?
-    link_to 'MODS bulk loads', bulk_jobs_index_path(@document), :id => 'bulk-button', :class => 'button btn btn-primary'
+    link_to 'MODS bulk loads', bulk_jobs_index_path(@document), id: 'bulk-button', class: 'button btn btn-primary'
   end
 
   protected

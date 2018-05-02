@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe 'catalog/show.html.erb' do
-  let(:document) { SolrDocument.new :id => 'xyz', :format => 'a' }
+  let(:document) { SolrDocument.new id: 'xyz', format: 'a' }
   let(:title) { 'Long title that should be truncated at 50 characters' }
   let(:blacklight_config) { Blacklight::Configuration.new }
   let(:query_params) { { controller: 'catalog', action: 'show' } }

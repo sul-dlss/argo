@@ -76,7 +76,7 @@ describe DescmetadataDownloadJob, type: :job do
     end
 
     it 'retries DOR connections upon failure' do
-      dor_double = class_double('Dor').as_stubbed_const(:transfer_nested_constants => false)
+      dor_double = class_double('Dor').as_stubbed_const(transfer_nested_constants: false)
       expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
       bulk_action = create(:bulk_action, action_type: 'DescmetadataDownloadJob', pids: @pid_list_short)
       allow(bulk_action).to receive_message_chain(:increment, :save)
@@ -104,7 +104,7 @@ describe DescmetadataDownloadJob, type: :job do
     end
 
     it 'attempts three connections and logs failures' do
-      dor_double = class_double('Dor').as_stubbed_const(:transfer_nested_constants => false)
+      dor_double = class_double('Dor').as_stubbed_const(transfer_nested_constants: false)
       expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
       expect(@log).to receive(:puts).exactly(2).times.with('argo.bulk_metadata.bulk_log_retry druid:123')
       expect(@log).to receive(:puts).once.with('argo.bulk_metadata.bulk_log_timeout druid:123')

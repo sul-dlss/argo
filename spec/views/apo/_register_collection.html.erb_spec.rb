@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'apo/_register_collection.html.erb', :type => :view do
+RSpec.describe 'apo/_register_collection.html.erb', type: :view do
   it 'renders the HTML template form' do
     assign(:object, double('pid' => 'druid:zt570tx3016', 'label' => 'My label'))
     render

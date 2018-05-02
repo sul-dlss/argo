@@ -13,7 +13,7 @@ class TrackSheet
     # FIXME: why not search for all druids in one query?
     # FIXME: how about a MAX number of druids? And/Or a chunky use of enumeration?
     druids.each { |druid| find_or_create_in_solr_by_id(druid) }
-    pdf = Prawn::Document.new(:page_size => [5.5.in, 8.5.in])
+    pdf = Prawn::Document.new(page_size: [5.5.in, 8.5.in])
     pdf.font('Courier')
     druids.each_with_index do |druid, i|
       generate_tracking_sheet(druid, pdf)
@@ -38,25 +38,25 @@ class TrackSheet
     begin
       doc = find_or_create_in_solr_by_id(druid)
     rescue
-      pdf.text "DRUID #{druid} not found in index", :size => 15, :style => :bold, :align => :center
+      pdf.text "DRUID #{druid} not found in index", size: 15, style: :bold, align: :center
       return pdf
     end
 
     barcode = Barby::Code128B.new(druid)
     barcode.annotate_pdf(
       pdf,
-      :width  => bc_width,
-      :height => bc_height,
-      :x      => (pdf.bounds.width / 2) - (bc_width / 2),
-      :y      => (pdf.bounds.height - bc_height)
+      width: bc_width,
+      height: bc_height,
+      x: (pdf.bounds.width / 2) - (bc_width / 2),
+      y: (pdf.bounds.height - bc_height)
     )
 
     pdf.y -= (bc_height + 0.25.in)
-    pdf.text druid, :size => 15, :style => :bold, :align => :center
+    pdf.text druid, size: 15, style: :bold, align: :center
     pdf.y -= 0.5.in
 
-    pdf.font('Courier', :size => 10)
-    pdf.table(doc_to_table(doc), :column_widths => [100, 224], :cell_style => { :borders => [], :padding => 0.pt })
+    pdf.font('Courier', size: 10)
+    pdf.table(doc_to_table(doc), column_widths: [100, 224], cell_style: { borders: [], padding: 0.pt })
 
     pdf.y -= 0.5.in
 
@@ -110,7 +110,7 @@ class TrackSheet
   # @note To the extent we use Solr input filters or copyField(s), the Solr version will differ from the to_solr hash.
   # @note That difference shouldn't be important for the few known fields we use here.
   def find_or_create_in_solr_by_id(druid)
-    doc = Dor::SearchService.query(%(id:"druid:#{druid}"), :rows => 1)['response']['docs'].first
+    doc = Dor::SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
     return doc unless doc.nil?
     obj = Dor.load_instance "druid:#{druid}"
     solr_doc = obj.to_solr

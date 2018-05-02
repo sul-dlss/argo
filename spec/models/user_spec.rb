@@ -6,14 +6,14 @@ require 'spec_helper'
 RSpec.describe User, type: :model do
   describe '.find_or_create_by_webauth' do
     it 'should work' do
-      mock_webauth = double('webauth', :login => 'asdf')
+      mock_webauth = double('webauth', login: 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       expect(user.webauth).to eq(mock_webauth)
     end
   end
 
   context 'with webauth' do
-    subject { User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Møds Ässet' })) }
+    subject { User.find_or_create_by_webauth(double('webauth', login: 'mods', attributes: { 'DISPLAYNAME' => 'Møds Ässet' })) }
 
     describe '#login' do
       it 'should get the sunetid from Webauth' do
@@ -265,7 +265,7 @@ RSpec.describe User, type: :model do
 
   describe '#groups' do
     subject { user.groups }
-    let(:user) { User.find_or_create_by_webauth(double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => webauth_groups.join('|'))) }
+    let(:user) { User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: webauth_groups.join('|'))) }
 
     context 'specified' do
       let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
@@ -309,7 +309,7 @@ RSpec.describe User, type: :model do
   describe '#webauth_groups' do
     before :each do
       @webauth_privgroup_str = 'dlss:testgroup1|dlss:testgroup2|dlss:testgroup3'
-      @user = User.find_or_create_by_webauth(double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => @webauth_privgroup_str))
+      @user = User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: @webauth_privgroup_str))
     end
     it 'should return the groups by webauth' do
       expected_groups = ['sunetid:asdf'] + @webauth_privgroup_str.split(/\|/).map { |g| "workgroup:#{g}" }

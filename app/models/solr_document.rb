@@ -25,10 +25,10 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
   field_semantics.merge!(
-    :title    => FIELD_TITLE,
-    :author   => 'dc_creator_ssi',
-    :language => 'sw_language_ssim',
-    :format   => 'sw_format_ssim'
+    title: FIELD_TITLE,
+    author: 'dc_creator_ssi',
+    language: 'sw_language_ssim',
+    format: 'sw_format_ssim'
   )
 
   def get_versions
@@ -38,8 +38,8 @@ class SolrDocument
       recs.each do |rec|
         (version, tag, desc) = rec.split(';')
         versions[version] = {
-          :tag  => tag,
-          :desc => desc
+          tag: tag,
+          desc: desc
         }
       end
     end
@@ -66,7 +66,7 @@ class SolrDocument
       ]
       milestones[version].delete(version == '1' ? 'opened' : 'registered') # only version 1 has 'registered'
       milestones[version][name] = {
-        :time => DateTime.parse(time)
+        time: DateTime.parse(time)
       }
     end
     milestones

@@ -54,7 +54,7 @@ class ModsulatorJob < ActiveJob::Base
     }
     # Remove the (temporary) uploaded file only if everything worked. Removing upon catching an exception causes
     # subsequent job attempts to fail.
-    FileUtils.rm(uploaded_filename, :force => true)
+    FileUtils.rm(uploaded_filename, force: true)
   end
 
   # Upload metadata into DOR.
@@ -139,11 +139,11 @@ class ModsulatorJob < ActiveJob::Base
   # @param   [String]     user_login          The current user_login
   def commit_new_version(dor_object, original_filename, user_login)
     vers_md_upd_info = {
-      :significance => 'minor',
-      :description => "Descriptive metadata upload from #{original_filename}",
-      :opening_user_name => user_login
+      significance: 'minor',
+      description: "Descriptive metadata upload from #{original_filename}",
+      opening_user_name: user_login
     }
-    dor_object.open_new_version(:vers_md_upd_info => vers_md_upd_info)
+    dor_object.open_new_version(vers_md_upd_info: vers_md_upd_info)
   end
 
   # Returns true if the given object is accessioned, false otherwise.
@@ -160,9 +160,9 @@ class ModsulatorJob < ActiveJob::Base
   def equivalent_nodes(node_1, node_2)
     EquivalentXml.equivalent?(node_1,
                               node_2,
-                              :element_order => false,
-                              :normalize_whitespace => true,
-                              :ignore_attr_values => ['version', 'xmlns', 'xmlns:xsi', 'schemaLocation'])
+                              element_order: false,
+                              normalize_whitespace: true,
+                              ignore_attr_values: ['version', 'xmlns', 'xmlns:xsi', 'schemaLocation'])
   end
 
   # Generate a filename for the job's log file.
@@ -233,7 +233,7 @@ class ModsulatorJob < ActiveJob::Base
       req.url url
       req.options.timeout = TIMEOUT
       req.options.open_timeout = TIMEOUT
-      req.body = { :file => payload, :filename => original_filename }
+      req.body = { file: payload, filename: original_filename }
     end
     response_xml.body
   rescue Faraday::ResourceNotFound => e

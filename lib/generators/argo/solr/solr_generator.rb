@@ -7,7 +7,7 @@ module Argo
       attr_accessor :target_file
 
       desc "Creates configuration at #{@target_path}"
-      argument :prod_solr, :type => :string, :default => 'http://your.production.solr-server.com/solr'
+      argument :prod_solr, type: :string, default: 'http://your.production.solr-server.com/solr'
 
       def initialize(*args)
         super(*args)

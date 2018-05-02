@@ -28,7 +28,7 @@ module Argo
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 
-    initializer :after_append_asset_paths, :group => :all, :after => :append_assets_path do
+    initializer :after_append_asset_paths, group: :all, after: :append_assets_path do
       config.assets.paths.unshift Rails.root.join('app', 'assets', 'stylesheets', 'jquery-ui', 'custom-theme').to_s
     end
   end

@@ -8,10 +8,10 @@ module RegistrationHelper
 
     result = Dor::SearchService.query(
       q,
-      :defType => 'lucene',
-      :rows => 99999,
-      :fl => 'id,tag_ssim,sw_display_title_tesim',
-      :fq => ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
+      defType: 'lucene',
+      rows: 99999,
+      fl: 'id,tag_ssim,sw_display_title_tesim',
+      fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
     )['response']['docs']
 
     result.sort! do |a, b|

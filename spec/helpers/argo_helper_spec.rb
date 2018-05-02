@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe ArgoHelper, :type => :helper do
+describe ArgoHelper, type: :helper do
   describe '#render_buttons' do
     before :each do
       @item_id = 'druid:kv840rx2720'

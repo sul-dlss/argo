@@ -36,13 +36,13 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_by_webauth(webauth)
-    result = find_or_create_by(:sunetid => webauth.login)
+    result = find_or_create_by(sunetid: webauth.login)
     result.webauth = webauth
     result
   end
 
   def self.find_or_create_by_remoteuser(username)
-    find_or_create_by(:sunetid => username)
+    find_or_create_by(sunetid: username)
   end
 
   def to_s

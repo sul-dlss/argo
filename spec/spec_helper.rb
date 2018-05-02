@@ -93,7 +93,7 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
   properties = Hash[foxml.xpath('//foxml:objectProperties/foxml:property').collect { |node|
     [node['NAME'].split(/#/).last, node['VALUE']]
   }]
-  result = item_class.new(:pid => foxml.root['PID'])
+  result = item_class.new(pid: foxml.root['PID'])
   result.label    = properties['label']
   result.owner_id = properties['ownerId']
   xml_streams.each do |stream|
