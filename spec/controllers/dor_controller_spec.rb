@@ -1,10 +1,11 @@
 require 'spec_helper'
 
-describe DorController, :type => :controller do
+RSpec.describe DorController, type: :controller do
   let(:druid) { 'druid:aa111bb2222' }
-  before :each do
-    log_in_as_mock_user(subject)
+  before do
+    log_in_as_mock_user
   end
+
   describe 'reindex' do
     context 'from a show page' do
       it 'redirects to show page and set flash notice on success' do

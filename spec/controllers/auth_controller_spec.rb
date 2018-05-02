@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe AuthController, :type => :controller do
+RSpec.describe AuthController, type: :controller do
 
   describe 'test impersonation' do
     context 'as an admin' do
-      before :each do
-        log_in_as_mock_user(subject, is_admin?: true)
+      before do
+        log_in_as_mock_user(is_admin?: true)
       end
 
       it 'should be able to remember and forget impersonated groups' do
@@ -19,8 +19,8 @@ describe AuthController, :type => :controller do
     end
 
     context 'as an ordinary user' do
-      before :each do
-        log_in_as_mock_user(subject, is_admin?: false)
+      before do
+        log_in_as_mock_user
       end
 
       it 'should be able to forget but not remember impersonated groups' do
