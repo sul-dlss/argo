@@ -54,8 +54,6 @@ describe User, :type => :model do
     it 'should be false for a blank group' do
       allow(subject).to receive(:groups).and_return([])
       expect(subject.is_admin?).to be false
-      allow(subject).to receive(:groups).and_return(nil)
-      expect(subject.is_admin?).to be false
     end
     it 'should be false with an inadequate group membership' do
       allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-admin'])
@@ -101,8 +99,6 @@ describe User, :type => :model do
     it 'should be false for a blank group' do
       allow(subject).to receive(:groups).and_return([])
       expect(subject.is_manager?).to be false
-      allow(subject).to receive(:groups).and_return(nil)
-      expect(subject.is_manager?).to be false
     end
     it 'should be false with an inadequate group membership' do
       allow(subject).to receive(:groups).and_return(['workgroup:dlss:not-manager'])
@@ -133,8 +129,6 @@ describe User, :type => :model do
     end
     it 'should be false for a blank group' do
       allow(subject).to receive(:groups).and_return([])
-      expect(subject.is_viewer?).to be false
-      allow(subject).to receive(:groups).and_return(nil)
       expect(subject.is_viewer?).to be false
     end
     it 'should be false with an inadequate group membership' do
