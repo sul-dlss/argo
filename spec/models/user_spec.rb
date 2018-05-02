@@ -131,10 +131,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'KNOWN_ROLES' do
-    it 'contains roles defined in Dor::Governable'
-  end
-
   describe 'solr_role_allowed' do
     let(:solr_doc) do
       {
@@ -227,7 +223,7 @@ RSpec.describe User, type: :model do
 
   describe '#groups' do
     subject { user.groups }
-    let(:user) { User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: webauth_groups.join('|'))) }
+    let(:user) { build(:user, sunetid: 'asdf', webauth_groups: webauth_groups) }
 
     context 'specified' do
       let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }

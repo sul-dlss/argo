@@ -92,7 +92,7 @@ class User < ActiveRecord::Base
   #   they are impersonating
   def groups
     return @groups_to_impersonate unless @groups_to_impersonate.blank?
-    webauth_groups
+    Array(webauth_groups)
   end
 
   # @return [Array<String>] the list of webauth groups that were set and the users sunetid
