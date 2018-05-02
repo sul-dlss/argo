@@ -34,8 +34,8 @@ end
 
 group :development do
  # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
- gem 'web-console'
  gem 'listen', '>= 3.0.5', '< 3.2'
+ gem 'web-console'
  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
  gem 'spring'
  gem 'spring-watcher-listen', '~> 2.0.0'
@@ -51,9 +51,11 @@ gem 'coderay'
 gem 'config'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
+gem 'ebnf', '1.0.0' # 1.0 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
-gem 'faraday'
+gem 'erubis' # implicit dependency required by rdf-rdfa/haml, no longer provided by default in Rails 5.1
 gem 'eye'  # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
+gem 'faraday'
 gem 'honeybadger', '~> 3.0'
 gem 'jqgrid-jquery-rails'
 gem 'jquery-ui-rails', '~> 5.0'
@@ -68,11 +70,9 @@ gem 'prawn-table'
 gem 'rack-webauth', git: 'https://github.com/nilclass/rack-webauth.git'
 gem 'rake'
 gem 'rdf', '~> 1.99' # pinned for faster dependency resolution
-gem 'ebnf', '1.0.0' # 1.0 requires rdf 2.x; bundler bug stops it from resolving correctly
+gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'rdf-reasoner', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'rdf-tabular', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
-gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from resolving correctly
-gem 'erubis' # implicit dependency required by rdf-rdfa/haml, no longer provided by default in Rails 5.1
 gem 'retries'
 gem 'ruby-graphviz'
 gem 'ruby-prof'
@@ -99,16 +99,16 @@ gem 'pry-rails' # use pry as the rails console shell instead of IRB
 group :test, :development do
   gem 'capybara' # used by wfs_rails in development
   gem 'capybara_discoball' # use external server just for capybara; relied on by 'wfs_rails'
-  gem 'jettywrapper'
-  gem 'http_logger'
-  gem 'rspec-rails', '~> 3.5'
-  gem 'pry-remote'  # allows you to attach remote session to pry
-  gem 'wfs_rails', '~> 0.1'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
+  gem 'http_logger'
+  gem 'jettywrapper'
+  gem 'pry-remote'  # allows you to attach remote session to pry
+  gem 'rails-controller-testing'
+  gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', require: false
   gem 'sqlite3'
-  gem 'rails-controller-testing'
+  gem 'wfs_rails', '~> 0.1'
 end
 
 group :development do
@@ -116,18 +116,18 @@ group :development do
 end
 
 group :test do
-  gem 'poltergeist' # for js testing
-  gem 'webmock', require: false
-  gem 'simplecov', require: false
-  gem 'coveralls', require: false
   gem 'codeclimate-test-reporter', require: false
+  gem 'coveralls', require: false
+  gem 'poltergeist' # for js testing
+  gem 'simplecov', require: false
+  gem 'webmock', require: false
 end
 
 group :deployment do
   gem 'capistrano', '~> 3.6'
-  gem 'capistrano-rails'
   gem 'capistrano-passenger'
+  gem 'capistrano-rails'
   gem 'capistrano-shared_configs'
-  gem 'dlss-capistrano', '~> 3.1'
   gem 'capistrano3-delayed-job', '~> 1.0'
+  gem 'dlss-capistrano', '~> 3.1'
 end
