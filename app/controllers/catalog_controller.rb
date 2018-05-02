@@ -174,6 +174,11 @@ class CatalogController < ApplicationController
     }
   end
 
+  def index
+    @presenter = HomeTextPresenter.new(current_user)
+    super
+  end
+
   def show
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]

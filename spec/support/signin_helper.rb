@@ -14,7 +14,6 @@ module SigninHelper
       logged_in?: true,
       privgroup: [],
       groups: [],
-      can_view_something?: false,
       is_admin?: false,
       is_webauth_admin?: attributes[:is_admin?],
       is_manager?: false,

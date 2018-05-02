@@ -4,7 +4,6 @@ RSpec.describe 'mods_view', type: :request do
   let(:current_user) do
     mock_user(
       privgroup: User::ADMIN_GROUPS.first,
-      can_view_something?: true,
       is_admin?: true
     )
   end

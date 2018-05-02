@@ -354,48 +354,4 @@ RSpec.describe User, type: :model do
       expect(groups_to_impersonate).to eq ['groupA']
     end
   end
-
-  describe '#can_view_something?' do
-    it 'returns false' do
-      expect(subject.can_view_something?).to be false
-    end
-    context 'when admin' do
-      it 'returns true' do
-        expect(subject).to receive(:is_admin?).and_return(true)
-        expect(subject.can_view_something?).to be true
-      end
-    end
-    context 'when manager' do
-      it 'returns true' do
-        expect(subject).to receive(:is_admin?).and_return(false)
-        expect(subject).to receive(:is_manager?).and_return(true)
-        expect(subject.can_view_something?).to be true
-      end
-    end
-    context 'when viewer' do
-      it 'returns true' do
-        expect(subject).to receive(:is_admin?).and_return(false)
-        expect(subject).to receive(:is_manager?).and_return(false)
-        expect(subject).to receive(:is_viewer?).and_return(true)
-        expect(subject.can_view_something?).to be true
-      end
-    end
-    context 'with permitted_apos' do
-      it 'returns true' do
-        expect(subject).to receive(:is_admin?).and_return(false)
-        expect(subject).to receive(:is_manager?).and_return(false)
-        expect(subject).to receive(:is_viewer?).and_return(false)
-        expect(subject).to receive(:permitted_apos).and_return([1])
-        expect(subject.can_view_something?).to be true
-      end
-    end
-  end
-
-  # TODO
-  describe 'permitted_apos' do
-    it 'not implemented'
-  end
-  describe 'permitted_collections' do
-    it 'not implemented'
-  end
 end
