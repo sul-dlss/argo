@@ -1,8 +1,4 @@
 module SigninHelper
-  def log_in_as_mock_user(attributes = {})
-    sign_in(mock_user(attributes))
-  end
-
   def mock_user(attributes = {})
     double(:webauth_user, {
       login: 'sunetid',

@@ -3,8 +3,11 @@ require 'spec_helper'
 RSpec.describe RegistrationController, type: :controller do
   before do
     @item = double(Dor::Item)
-    log_in_as_mock_user(is_admin?: true)
+    sign_in user
+    allow(user).to receive(:is_admin?).and_return(true)
   end
+
+  let(:user) { create(:user) }
 
   describe 'rights_list' do
     it 'should show Stanford as the default if Stanford is the read group and discover is world' do
