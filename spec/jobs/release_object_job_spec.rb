@@ -35,7 +35,7 @@ describe ReleaseObjectJob do
       it 'increments the bulk_actions druid count success' do
         expect do
           subject.perform(bulk_action_no_process_callback.id, params)
-        end.to change{bulk_action_no_process_callback.druid_count_success}.from(0).to(pids.length)
+        end.to change { bulk_action_no_process_callback.druid_count_success }.from(0).to(pids.length)
       end
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
@@ -69,7 +69,7 @@ describe ReleaseObjectJob do
       it 'increments the bulk_actions druid count fail' do
         expect do
           subject.perform(bulk_action_no_process_callback.id, params)
-        end.to change{bulk_action_no_process_callback.druid_count_fail}.from(0).to(pids.length)
+        end.to change { bulk_action_no_process_callback.druid_count_fail }.from(0).to(pids.length)
       end
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
@@ -101,7 +101,7 @@ describe ReleaseObjectJob do
       it 'increments the bulk_actions druid count fail' do
         expect do
           subject.perform(bulk_action_no_process_callback.id, params)
-        end.to change{bulk_action_no_process_callback.druid_count_fail}.from(0).to(pids.length)
+        end.to change { bulk_action_no_process_callback.druid_count_fail }.from(0).to(pids.length)
       end
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead

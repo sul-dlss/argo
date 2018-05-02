@@ -5,8 +5,8 @@ RSpec.feature 'Date range form', js: true do
 
   before do
     @current_user = mock_user(is_admin?: true)
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-      and_return(@current_user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user)
+      .and_return(@current_user)
     visit root_path(query_params.merge(all: true))
     find('[data-target="#facet-object_modified_date"]').click
   end

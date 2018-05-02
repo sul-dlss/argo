@@ -1,6 +1,7 @@
 # encoding: utf-8
+
 require 'spec_helper'
-describe ItemsHelper, :type => :helper do
+describe ItemsHelper, type: :helper do
   let(:mods_xml) do
     '<mods:mods
         xmlns:mods="http://www.loc.gov/mods/v3">

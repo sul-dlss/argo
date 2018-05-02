@@ -15,7 +15,7 @@ module Argo
       min_percent = Settings.PROFILER.CALLTREE_PRINTER_MIN_PERCENT
       pct_str_for_fname = min_percent.to_s.rjust(2, '0')
       File.open "#{Settings.PROFILER.OUTPUT_DIR}/callgrind.#{Settings.PROFILER.MEASURE_MODE}.p#{pct_str_for_fname}.#{out_file_id}", 'w' do |file|
-        RubyProf::CallTreePrinter.new(@results).print(file, :min_percent => min_percent)
+        RubyProf::CallTreePrinter.new(@results).print(file, min_percent: min_percent)
       end
     end
 

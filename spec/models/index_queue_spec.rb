@@ -30,8 +30,8 @@ describe IndexQueue do
     end
     describe 'when response is not expected JSON' do
       it 'cannot be parsed' do
-        expect(subject).to receive(:response).
-          and_return({ test: 'test' }.to_json)
+        expect(subject).to receive(:response)
+          .and_return({ test: 'test' }.to_json)
         expect(subject.depth).to be_nil
       end
     end

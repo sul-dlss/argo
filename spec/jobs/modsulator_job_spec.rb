@@ -82,7 +82,7 @@ describe ModsulatorJob, type: :job do
     (0..9).each do |i|
       it "correctly queries the status of DOR objects (:status_code #{i})" do
         m = double
-        allow(m).to receive(:status_info).and_return({ :status_code => i })
+        allow(m).to receive(:status_info).and_return(status_code: i)
         if i == 1 || i == 6 || i == 7 || i == 8 || i == 9
           expect(@mj.status_ok(m)).to be_truthy
         else
@@ -96,7 +96,7 @@ describe ModsulatorJob, type: :job do
     (0..9).each do |i|
       it "returns true for DOR objects that are currently in acccessioning, false otherwise (:status_code #{i})" do
         m = double
-        allow(m).to receive(:status_info).and_return({ :status_code => i })
+        allow(m).to receive(:status_info).and_return(status_code: i)
         if i == 2 || i == 3 || i == 4 || i == 5
           expect(@mj.in_accessioning(m)).to be_truthy
         else
@@ -110,7 +110,7 @@ describe ModsulatorJob, type: :job do
     (0..9).each do |i|
       it "returns true for DOR objects that are acccessioned, false otherwise (:status_code #{i})" do
         m = double
-        allow(m).to receive(:status_info).and_return({ :status_code => i })
+        allow(m).to receive(:status_info).and_return(status_code: i)
         if i == 6 || i == 7 || i == 8
           expect(@mj.accessioned(m)).to be_truthy
         else
@@ -127,16 +127,16 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'commit_new_version' do
-    let(:dor_test_object) { double('dor_item')}
+    let(:dor_test_object) { double('dor_item') }
 
     it 'opens a new minor version with filename and username' do
-      expect(dor_test_object).to receive(:open_new_version).with({
+      expect(dor_test_object).to receive(:open_new_version).with(
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Descriptive metadata upload from testfile.xlsx',
           opening_user_name: 'username'
         }
-      }).and_return(true)
+      ).and_return(true)
       @mj.commit_new_version(dor_test_object, 'testfile.xlsx', 'username')
     end
   end
@@ -149,7 +149,7 @@ describe ModsulatorJob, type: :job do
     end
 
     it 'writes a log error message if a version cannot be opened' do
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 6})
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 6)
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(false)
       expect(@log).to receive(:puts).with("argo.bulk_metadata.bulk_log_unable_to_version #{@dor_object.pid}")
@@ -158,14 +158,14 @@ describe ModsulatorJob, type: :job do
     end
 
     it 'does not update the version if the object is in the registered state' do
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 1})
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 1)
       expect(@mj).not_to receive(:commit_new_version)
 
       @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
     end
 
     it 'does not update the version if the object is in the opened state' do
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 9})
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 9)
       expect(@mj).not_to receive(:commit_new_version)
 
       @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
@@ -174,7 +174,7 @@ describe ModsulatorJob, type: :job do
     it 'updates the version if the object is past the registered state' do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(true)
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return({status_code: 6})
+      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 6)
       expect(@mj).to receive(:commit_new_version)
 
       @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
@@ -184,8 +184,8 @@ describe ModsulatorJob, type: :job do
   describe 'perform' do
     let(:test_spreadsheet_path) { File.join(@output_directory, 'crowdsourcing_bridget_1.xlsx.20150101') }
     let(:xlsx_path) { File.join(fixtures_dir, 'crowdsourcing_bridget_1.xlsx') }
-    let(:xml_path ) { File.join(fixtures_dir, 'crowdsourcing_bridget_1.xml') }
-    let(:xml_data ) { File.read(xml_path) }
+    let(:xml_path) { File.join(fixtures_dir, 'crowdsourcing_bridget_1.xml') }
+    let(:xml_data) { File.read(xml_path) }
 
     it 'delivers remotely-converted data' do
       FileUtils.copy_file(xlsx_path, test_spreadsheet_path)  # perform deletes upload file, so we copy fixture
@@ -255,5 +255,4 @@ describe ModsulatorJob, type: :job do
       end
     end
   end
-
 end

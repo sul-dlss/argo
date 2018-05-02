@@ -12,7 +12,7 @@ RSpec.describe ObjectTypeConcern do
       end
     end
     context 'when field not present' do
-      let(:document_attributes) { { } }
+      let(:document_attributes) { {} }
       it 'returns nil' do
         expect(document.object_type).to be_nil
       end
@@ -36,7 +36,7 @@ RSpec.describe ObjectTypeConcern do
       end
     end
     context 'when object type is missing' do
-      let(:document_attributes) { { } }
+      let(:document_attributes) { {} }
       it 'checks and returns false' do
         expect(document.admin_policy?).to be false
       end

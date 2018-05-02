@@ -15,7 +15,7 @@ describe CollectionConcern do
     end
 
     context 'without data' do
-      let(:document_attributes) { {  } }
+      let(:document_attributes) { {} }
       it 'should handle no Collections' do
         expect(document.collection_id).to be_nil
         expect(document.collection_ids).to be_nil

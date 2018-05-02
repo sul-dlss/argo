@@ -6,14 +6,14 @@ require 'spec_helper'
 RSpec.describe User, type: :model do
   describe '.find_or_create_by_webauth' do
     it 'should work' do
-      mock_webauth = double('webauth', :login => 'asdf')
+      mock_webauth = double('webauth', login: 'asdf')
       user = User.find_or_create_by_webauth(mock_webauth)
       expect(user.webauth).to eq(mock_webauth)
     end
   end
 
   context 'with webauth' do
-    subject { User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Møds Ässet'})) }
+    subject { User.find_or_create_by_webauth(double('webauth', login: 'mods', attributes: { 'DISPLAYNAME' => 'Møds Ässet' })) }
 
     describe '#login' do
       it 'should get the sunetid from Webauth' do
@@ -224,12 +224,12 @@ RSpec.describe User, type: :model do
       allow(Dor::SearchService).to receive(:query).and_return(answer)
     end
     it 'should accept any object identifier' do
-      expect{subject.roles(druid)}.not_to raise_error
-      expect{subject.roles('anyStringOK')}.not_to raise_error
+      expect { subject.roles(druid) }.not_to raise_error
+      expect { subject.roles('anyStringOK') }.not_to raise_error
     end
     it 'should return an empty array for any blank object identifer' do
       ['', nil].each do |pid|
-        expect{subject.roles(pid)}.not_to raise_error
+        expect { subject.roles(pid) }.not_to raise_error
         expect(subject.roles(pid)).to be_empty
       end
     end
@@ -265,7 +265,7 @@ RSpec.describe User, type: :model do
 
   describe '#groups' do
     subject { user.groups }
-    let(:user) { User.find_or_create_by_webauth(double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => webauth_groups.join('|'))) }
+    let(:user) { User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: webauth_groups.join('|'))) }
 
     context 'specified' do
       let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
@@ -309,7 +309,7 @@ RSpec.describe User, type: :model do
   describe '#webauth_groups' do
     before :each do
       @webauth_privgroup_str = 'dlss:testgroup1|dlss:testgroup2|dlss:testgroup3'
-      @user = User.find_or_create_by_webauth(double('webauth', :login => 'asdf', :logged_in? => true, :privgroup => @webauth_privgroup_str))
+      @user = User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: @webauth_privgroup_str))
     end
     it 'should return the groups by webauth' do
       expected_groups = ['sunetid:asdf'] + @webauth_privgroup_str.split(/\|/).map { |g| "workgroup:#{g}" }
@@ -325,7 +325,7 @@ RSpec.describe User, type: :model do
       subject.instance_variable_set(:@groups_to_impersonate, %w(a b))
     end
     it 'resets the role_cache' do
-      subject.instance_variable_set(:@role_cache, {a: 1})
+      subject.instance_variable_set(:@role_cache, a: 1)
       subject.set_groups_to_impersonate []
       expect(subject.instance_variable_get(:@role_cache)).to be_empty
     end

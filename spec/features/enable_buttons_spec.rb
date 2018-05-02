@@ -12,8 +12,8 @@ feature 'Enable buttons' do
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-      and_return(@current_user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user)
+      .and_return(@current_user)
     allow(Dor).to receive(:find).and_return(@obj)
   end
   scenario 'buttons are disabled by default that have check_url' do

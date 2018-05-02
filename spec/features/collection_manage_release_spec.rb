@@ -13,8 +13,8 @@ RSpec.feature 'Collection manage release' do
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
     allow(current_user).to receive(:is_admin?).and_return true
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-      and_return(current_user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user)
+      .and_return(current_user)
     allow(Dor).to receive(:find).and_return(obj)
   end
   let(:druid) { 'druid:pb873ty1662' }

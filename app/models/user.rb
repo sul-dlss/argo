@@ -36,13 +36,13 @@ class User < ActiveRecord::Base
   end
 
   def self.find_or_create_by_webauth(webauth)
-    result = find_or_create_by(:sunetid => webauth.login)
+    result = find_or_create_by(sunetid: webauth.login)
     result.webauth = webauth
     result
   end
 
   def self.find_or_create_by_remoteuser(username)
-    find_or_create_by(:sunetid => username)
+    find_or_create_by(sunetid: username)
   end
 
   def to_s
@@ -66,11 +66,11 @@ class User < ActiveRecord::Base
     pid_roles = Set.new
     # Determine whether user has 'dor-apo-manager' role
     solr_apo_roles = %w(apo_role_group_manager_ssim apo_role_person_manager_ssim)
-    pid_roles << 'dor-apo-manager' if solr_apo_roles.any? {|r| solr_role_allowed?(obj_doc, r)}
+    pid_roles << 'dor-apo-manager' if solr_apo_roles.any? { |r| solr_role_allowed?(obj_doc, r) }
     # Check additional known roles
     KNOWN_ROLES.each do |role|
       solr_apo_roles = ["apo_role_#{role}_ssim", "apo_role_person_#{role}_ssim"]
-      pid_roles << role if solr_apo_roles.any? {|r| solr_role_allowed?(obj_doc, r)}
+      pid_roles << role if solr_apo_roles.any? { |r| solr_role_allowed?(obj_doc, r) }
     end
     # store and return an array of roles (Set.sort is an Array)
     @role_cache[pid] = pid_roles.sort
@@ -108,7 +108,7 @@ class User < ActiveRecord::Base
     @webauth_groups ||= begin
       perm_keys = ["sunetid:#{login}"]
       return perm_keys unless webauth && webauth.privgroup.present?
-      perm_keys + webauth.privgroup.split(/\|/).map {|g| "workgroup:#{g}"}
+      perm_keys + webauth.privgroup.split(/\|/).map { |g| "workgroup:#{g}" }
     end
   end
 

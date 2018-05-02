@@ -1,11 +1,11 @@
 require 'spec_helper'
-describe ArgoHelper, :type => :helper do
+describe ArgoHelper, type: :helper do
   describe '#render_buttons' do
     before :each do
       @item_id = 'druid:kv840rx2720'
       @governing_apo_id = 'druid:hv992ry2431'
       @object = instantiate_fixture(@item_id, Dor::Item)
-      @doc = SolrDocument.new({'id' => @item_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id]})
+      @doc = SolrDocument.new('id' => @item_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id])
       @usr = mock_user(is_admin?: true)
       allow(Dor::Config.workflow.client).to receive(:get_active_lifecycle).and_return(true)
       allow(Dor::Config.workflow.client).to receive(:get_lifecycle).and_return(true)
@@ -118,10 +118,10 @@ describe ArgoHelper, :type => :helper do
         @doc = SolrDocument.new(@doc.to_h.merge('embargo_status_ssim' => ['2012-10-19T00:00:00Z']))
         allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
         buttons = helper.render_buttons(@doc)
-        default_buttons.push({
+        default_buttons.push(
           label: 'Update embargo',
           url: "/items/#{@item_id}/embargo_form"
-        }).each do |button|
+        ).each do |button|
           expect(buttons).to include(button)
         end
         expect(buttons.length).to eq default_buttons.length
@@ -138,12 +138,12 @@ describe ArgoHelper, :type => :helper do
       it 'should include the refresh descMetadata button for items with catkey' do
         allow(@id_md).to receive(:otherId).with('catkey').and_return(['1234567'])
         buttons = helper.render_buttons(@doc)
-        default_buttons.push({
+        default_buttons.push(
           label: 'Refresh descMetadata',
           url: "/items/#{@item_id}/refresh_metadata",
           new_page: true,
           disabled: false
-        }).each do |button|
+        ).each do |button|
           expect(buttons).to include(button)
         end
         expect(buttons.length).to eq default_buttons.length
@@ -219,7 +219,7 @@ describe ArgoHelper, :type => :helper do
       end
       it 'renders the appropriate default buttons for an apo' do
         @object = instantiate_fixture(view_apo_id, Dor::AdminPolicyObject)
-        @doc = SolrDocument.new({'id' => view_apo_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id]})
+        @doc = SolrDocument.new('id' => view_apo_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id])
         allow(Dor).to receive(:find).with(view_apo_id).and_return(@object)
         allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
         buttons = helper.render_buttons(@doc)
@@ -238,11 +238,11 @@ describe ArgoHelper, :type => :helper do
   end
   describe '#registered_only?' do
     it 'returns true for registered only item' do
-      expect(helper.registered_only?({ 'processing_status_text_ssi' => 'Registered' })).to eq true
-      expect(helper.registered_only?({ 'processing_status_text_ssi' => 'Unknown Status' })).to eq true
+      expect(helper.registered_only?('processing_status_text_ssi' => 'Registered')).to eq true
+      expect(helper.registered_only?('processing_status_text_ssi' => 'Unknown Status')).to eq true
     end
     it 'returns false for items beyond registered only' do
-      expect(helper.registered_only?({ 'processing_status_text_ssi' => 'In accessioning' })).to eq false
+      expect(helper.registered_only?('processing_status_text_ssi' => 'In accessioning')).to eq false
     end
   end
 end

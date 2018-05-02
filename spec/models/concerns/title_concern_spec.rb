@@ -12,7 +12,7 @@ describe TitleConcern do
     end
 
     context 'without data' do
-      let(:document_attributes) { { } }
+      let(:document_attributes) { {} }
       it 'should handle missing title' do
         expect(document.title).to be_nil
       end

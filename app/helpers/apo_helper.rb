@@ -16,8 +16,8 @@ module ApoHelper
   def license_options(apo_obj)
     cur_use_license = apo_obj ? apo_obj.use_license : nil
     [['-- none --', '']] +
-    options_for_use_license_type(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES, cur_use_license) +
-    options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
+      options_for_use_license_type(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES, cur_use_license) +
+      options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
   end
 
   def options_for_desc_md
@@ -32,7 +32,7 @@ module ApoHelper
 
   def workflow_options
     q = 'objectType_ssim:workflow '
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,sw_display_title_tesim')['response']['docs']
+    result = Dor::SearchService.query(q, rows: 99999, fl: 'id,tag_ssim,sw_display_title_tesim')['response']['docs']
     result.sort! do |a, b|
       a['sw_display_title_tesim'].to_s <=> b['sw_display_title_tesim'].to_s
     end
@@ -47,7 +47,7 @@ module ApoHelper
 
   def agreement_options
     q = 'objectType_ssim:agreement '
-    result = Dor::SearchService.query(q, :rows => 99999, :fl => 'id,tag_ssim,sw_display_title_tesim')['response']['docs']
+    result = Dor::SearchService.query(q, rows: 99999, fl: 'id,tag_ssim,sw_display_title_tesim')['response']['docs']
     result.sort! do |a, b|
       a['sw_display_title_tesim'].to_s <=> b['sw_display_title_tesim'].to_s
     end

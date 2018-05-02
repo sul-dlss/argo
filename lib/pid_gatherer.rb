@@ -48,11 +48,11 @@ module Argo
 
         start = 0
         solr_pids = []
-        resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
+        resp = Dor::SearchService.query(q, sort: 'id asc', rows: 1000, start: start, fl: ['id'])
         while resp['response']['docs'].length > 0
           solr_pids += resp['response']['docs'].map { |doc| doc['id'] }
           start += 1000
-          resp = Dor::SearchService.query(q, :sort => 'id asc', :rows => 1000, :start => start, :fl => ['id'])
+          resp = Dor::SearchService.query(q, sort: 'id asc', rows: 1000, start: start, fl: ['id'])
         end
         solr_pids
       end
@@ -148,9 +148,9 @@ module Argo
     # @return [Array<String>]
     def remaining_pids
       @remaining_pids ||= all_pids -
-        (uber_apo_pids + workflow_pids + agreement_pids + hydrus_uber_apo_pids +
-        apo_pids + hydrus_apo_pids + collection_pids + hydrus_collection_pids +
-        set_pids)
+                          (uber_apo_pids + workflow_pids + agreement_pids + hydrus_uber_apo_pids +
+                          apo_pids + hydrus_apo_pids + collection_pids + hydrus_collection_pids +
+                          set_pids)
     end
 
     private
@@ -161,7 +161,7 @@ module Argo
       @logger.info "querying fedora for pids for model_type=#{model_type}..."
 
       pid_list = Dor::SearchService.risearch 'select $object from <#ri> where $object ' \
-        "<fedora-model:hasModel> #{model_type}", { :limit => nil }
+        "<fedora-model:hasModel> #{model_type}", limit: nil
       @logger.info "found #{pid_list.length} pids for #{model_type} (unfiltered)"
 
       filter_invalid_druids_if_needed pid_list

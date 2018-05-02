@@ -2,11 +2,11 @@ module DorObjectHelper
   # Metadata helpers
   def retrieve_terms(doc)
     terms = {
-      :creator   => { :selector => %w(sw_author_tesim) },
-      :title     => { :selector => %w(sw_display_title_tesim obj_label_tesim), :combiner => lambda { |s| s.join(' -- ') } },
-      :place     => { :selector => ['originInfo_place_placeTerm_tesim'] },
-      :publisher => { :selector => %w(originInfo_publisher_tesim) },
-      :date      => { :selector => %w(originInfo_date_created_tesim) }
+      creator: { selector: %w(sw_author_tesim) },
+      title: { selector: %w(sw_display_title_tesim obj_label_tesim), combiner: lambda { |s| s.join(' -- ') } },
+      place: { selector: ['originInfo_place_placeTerm_tesim'] },
+      publisher: { selector: %w(originInfo_publisher_tesim) },
+      date: { selector: %w(originInfo_date_created_tesim) }
     }
     result = {}
     terms.each_pair do |term, finder|
@@ -51,16 +51,16 @@ module DorObjectHelper
         next if event.nil?
         event.who = event.who.first if event.who.is_a? Array
         event.message = event.message.first if event.message.is_a? Array
-        { :when => render_datetime(event.when), :who => event.who, :what => event.message }
+        { when: render_datetime(event.when), who: event.who, what: event.message }
       end
     end
-    render :partial => 'catalog/show_events', :locals => { :document => doc, :object => obj, :events => events.compact }
+    render partial: 'catalog/show_events', locals: { document: doc, object: obj, events: events.compact }
   end
 
   def render_milestones(doc, obj)
     milestones = doc.get_milestones
     version_hash = doc.get_versions
-    render :partial => 'catalog/show_milestones', :locals => { :document => doc, :object => obj, :milestones => milestones, :version_hash => version_hash}
+    render partial: 'catalog/show_milestones', locals: { document: doc, object: obj, milestones: milestones, version_hash: version_hash }
   end
 
   def render_status(doc, object = nil)
@@ -89,8 +89,8 @@ module DorObjectHelper
 
   def render_qfacet_value(facet_solr_field, item, options = {})
     params = add_facet_params(facet_solr_field, item.qvalue)
-    Rails.cache.fetch('route_for' + params.to_s, :expires_in => 1.hour) do
-      (link_to_unless(options[:suppress_link], item.value, params , :class => 'facet_select') + ' ' + render_facet_count(item.hits)).html_safe
+    Rails.cache.fetch('route_for' + params.to_s, expires_in: 1.hour) do
+      (link_to_unless(options[:suppress_link], item.value, params, class: 'facet_select') + ' ' + render_facet_count(item.hits)).html_safe
     end
   end
 
@@ -98,9 +98,9 @@ module DorObjectHelper
     workflows = {}
     Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :symbol)]).each do |line|
       (wf, status, errors, repo) = line.split(/\|/)
-      workflows[wf] = { :status => status, :errors => errors.to_i, :repo => repo }
+      workflows[wf] = { status: status, errors: errors.to_i, repo: repo }
     end
-    render :partial => 'catalog/show_workflows', :locals => { :document => doc, :object => obj, :workflows => workflows }
+    render partial: 'catalog/show_workflows', locals: { document: doc, object: obj, workflows: workflows }
   end
 
   # Datastream helpers
@@ -115,7 +115,7 @@ module DorObjectHelper
   end
 
   def render_ds_id(doc, specs)
-    link_to specs[:dsid], ds_solr_document_path(doc['id'], specs[:dsid]), :title => specs[:dsid], :data => { behavior: 'persistent-modal' }
+    link_to specs[:dsid], ds_solr_document_path(doc['id'], specs[:dsid]), title: specs[:dsid], data: { behavior: 'persistent-modal' }
   end
 
   def render_ds_mime_type(doc, specs)
@@ -141,5 +141,4 @@ module DorObjectHelper
     %(<foxml:datastream ID="#{ds.dsid}" STATE="#{ds.state}" CONTROL_GROUP="#{ds.controlGroup}" VERSIONABLE="#{ds.versionable}">\n  <foxml:datastreamVersion ID="#{ds.dsVersionID}" LABEL="#{ds.label}" CREATED="#{dscd}" MIMETYPE="#{ds.mimeType}">)
   end
   # rubocop:enable Metrics/LineLength
-
 end

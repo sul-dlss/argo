@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe CatalogController, type: :controller do
-
   before do
-    @druid = 'rn653dy9317'  # a fixture Dor::Item record
+    @druid = 'rn653dy9317' # a fixture Dor::Item record
     @item = instantiate_fixture(@druid, Dor::Item)
   end
 
@@ -29,7 +28,7 @@ RSpec.describe CatalogController, type: :controller do
     describe 'no user' do
       let(:user) { nil }
       it 'basic get redirects to login' do
-        get 'show', params: { :id => @druid }
+        get 'show', params: { id: @druid }
         expect(response.code).to eq('401') # Unauthorized without webauth, no place to redirect
       end
     end
@@ -39,33 +38,33 @@ RSpec.describe CatalogController, type: :controller do
         sign_in user
       end
       it 'unauthorized_user' do
-        get 'show', params: { :id => @druid }
-        expect(response.code).to eq('403')  # two different flavors
+        get 'show', params: { id: @druid }
+        expect(response.code).to eq('403') # two different flavors
         # expect(response.body).to include 'No APO'
       end
       it 'is_admin?' do
         allow(user).to receive(:is_admin?).and_return(true)
-        get 'show', params: { :id => @druid }
+        get 'show', params: { id: @druid }
         expect(response.code).to eq('200')
       end
       it 'is_viewer?' do
         allow(user).to receive(:is_viewer?).and_return(true)
-        get 'show', params: { :id => @druid }
+        get 'show', params: { id: @druid }
         expect(response.code).to eq('200')
       end
       it 'impersonating nobody' do
         user.set_groups_to_impersonate(['some:irrelevance'])
-        get 'show', params: { :id => @druid }
+        get 'show', params: { id: @druid }
         expect(response.code).to eq('403')
       end
       it 'impersonating viewer' do
         user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:viewer-role'])
-        get 'show', params: { :id => @druid }
+        get 'show', params: { id: @druid }
         expect(response.code).to eq('200')
       end
       it 'impersonating admin' do
         user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:administrator-role'])
-        get 'show', params: { :id => @druid }
+        get 'show', params: { id: @druid }
         expect(response.code).to eq('200')
       end
     end
@@ -83,7 +82,7 @@ RSpec.describe CatalogController, type: :controller do
 
       describe 'impersonating user with no extra powers' do
         it 'is forbidden since there is no APO' do
-          get 'show', params: { :id => @druid }
+          get 'show', params: { id: @druid }
           expect(response.code).to eq('403')  # Forbidden
         end
       end
@@ -99,13 +98,13 @@ RSpec.describe CatalogController, type: :controller do
       end
       describe 'impersonating_user with no extra powers' do
         it 'is forbidden if roles do not match' do
-          get 'show', params: { :id => @druid }
+          get 'show', params: { id: @druid }
           expect(response.code).to eq('403')  # Forbidden
           expect(response.body).to include 'forbidden'
         end
         it 'succeeds if roles match' do
           allow(user).to receive(:roles).with(@apo_druid).and_return(['dor-viewer'])
-          get 'show', params: { :id => @druid }
+          get 'show', params: { id: @druid }
           expect(response.code).to eq('200')
         end
       end
@@ -151,7 +150,7 @@ RSpec.describe CatalogController, type: :controller do
     it 'should 404 on missing item' do
       allow(subject).to receive(:current_user).and_return(double('WebAuth', is_admin?: true))
       expect(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get 'show', params: { :id => druid }
+      get 'show', params: { id: druid }
       expect(response).to have_http_status(:not_found)
     end
   end
@@ -166,7 +165,7 @@ RSpec.describe CatalogController, type: :controller do
     end
     it 'should load the expected information when a log file is present' do
       # spot check a couple known records
-      expect(sorted_bulk_job_info[3]).to include({
+      expect(sorted_bulk_job_info[3]).to include(
         'argo.bulk_metadata.bulk_log_job_start' => '2016-04-21 09:57am',
         'argo.bulk_metadata.bulk_log_user' => 'tommyi',
         'argo.bulk_metadata.bulk_log_input_file' => 'crowdsourcing_bridget_1.xlsx',
@@ -175,8 +174,9 @@ RSpec.describe CatalogController, type: :controller do
         'argo.bulk_metadata.bulk_log_record_count' => '20',
         'argo.bulk_metadata.bulk_log_job_complete' => '2016-04-21 09:57am',
         'dir' => 'druid:bc682xk5613/2016_04_21_16_56_40_824',
-        'argo.bulk_metadata.bulk_log_druids_loaded' => 0})
-      expect(sorted_bulk_job_info[0]).to include({
+        'argo.bulk_metadata.bulk_log_druids_loaded' => 0
+      )
+      expect(sorted_bulk_job_info[0]).to include(
         'argo.bulk_metadata.bulk_log_job_start' => '2016-04-21 10:34am',
         'argo.bulk_metadata.bulk_log_user' => 'tommyi',
         'argo.bulk_metadata.bulk_log_input_file' => 'crowdsourcing_bridget_1.xlsx',
@@ -187,7 +187,8 @@ RSpec.describe CatalogController, type: :controller do
         'argo.bulk_metadata.bulk_log_error_exception' => 'Got no response from server',
         'argo.bulk_metadata.bulk_log_job_complete' => '2016-04-21 10:34am',
         'dir' => 'druid:bc682xk5613/2016_04_21_17_34_02_445',
-        'argo.bulk_metadata.bulk_log_druids_loaded' => 0})
+        'argo.bulk_metadata.bulk_log_druids_loaded' => 0
+      )
     end
   end
 

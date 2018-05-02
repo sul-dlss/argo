@@ -16,7 +16,7 @@ feature 'Bulk actions view', js: true do
     expect(find(:xpath, "//span[@class='bulk_button'][text()='Paste a druid list'][not(@disabled)]")).to be_truthy
 
     find(:xpath, "//span[@class='bulk_button'][text()='Get druids from search'][not(@disabled)]").click
-    
+
     expect(find_button('Prepare objects')).to be_truthy
     expect(page).to have_button('Prepare objects', disabled: false)
     expect(page).to have_button('Refresh MODS', disabled: false)

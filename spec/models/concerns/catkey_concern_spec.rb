@@ -4,7 +4,7 @@ describe CatkeyConcern do
   let(:document) { SolrDocument.new(document_attributes) }
   describe '#catkey' do
     describe 'without one present' do
-      let(:document_attributes) { { } }
+      let(:document_attributes) { {} }
       it 'should return nil' do
         expect(document.catkey).to be_nil
         expect(document.catkey_id).to be_nil

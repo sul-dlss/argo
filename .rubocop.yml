@@ -14,7 +14,7 @@ Metrics/LineLength:
   Max: 180
 
 # False positive in cap DSL
-Style/FileName:
+Naming/FileName:
   Exclude:
     - 'config/deploy/*.rb'
 

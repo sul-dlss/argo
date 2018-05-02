@@ -1,7 +1,6 @@
 require 'blacklight/catalog'
 
 class ReportController < CatalogController
-
   include Blacklight::Catalog
   helper ArgoHelper
   copy_blacklight_config_from CatalogController
@@ -22,14 +21,14 @@ class ReportController < CatalogController
 
     respond_to do |format|
       format.json do
-        render :json => {
-          :page    => params[:page].to_i,
-          :records => @report.num_found,
-          :total   => (@report.num_found / rows_per_page.to_f).ceil,
-          :rows    => @report.report_data
+        render json: {
+          page: params[:page].to_i,
+          records: @report.num_found,
+          total: (@report.num_found / rows_per_page.to_f).ceil,
+          rows: @report.report_data
         }
       end
-      format.xml { render :xml => @report.report_data }
+      format.xml { render xml: @report.report_data }
     end
   end
 
@@ -39,8 +38,8 @@ class ReportController < CatalogController
   def pids
     respond_to do |format|
       format.json do
-        render :json => {
-          :druids => Report.new(params, current_user: current_user).pids(
+        render json: {
+          druids: Report.new(params, current_user: current_user).pids(
             source_id: params[:source_id].present?,
             tags: params[:tags].present?
           )
@@ -85,7 +84,7 @@ class ReportController < CatalogController
     (@response, @document_list) = search_results(params)
 
     if request.xhr?
-      render :partial => 'workflow_grid'
+      render partial: 'workflow_grid'
       return
     end
 

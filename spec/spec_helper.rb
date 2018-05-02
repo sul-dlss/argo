@@ -15,21 +15,20 @@ SimpleCov.profiles.define 'argo' do
   add_filter 'vendor'
 end
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-])
+                                                                 SimpleCov::Formatter::HTMLFormatter,
+                                                                 Coveralls::SimpleCov::Formatter
+                                                               ])
 SimpleCov.start 'argo'
 
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, {timeout: 60})
+  Capybara::Poltergeist::Driver.new(app, timeout: 60)
 end
 Capybara.javascript_driver = :poltergeist
 Capybara.default_max_wait_time = 10
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-#
-Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 def druid_to_path(druid, flavor = 'xml')
   fixture_mask = File.join(File.dirname(__FILE__), 'fixtures', "*_#{druid.sub(/:/, '_')}.#{flavor}")
@@ -94,7 +93,7 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
   properties = Hash[foxml.xpath('//foxml:objectProperties/foxml:property').collect { |node|
     [node['NAME'].split(/#/).last, node['VALUE']]
   }]
-  result = item_class.new(:pid => foxml.root['PID'])
+  result = item_class.new(pid: foxml.root['PID'])
   result.label    = properties['label']
   result.owner_id = properties['ownerId']
   xml_streams.each do |stream|
@@ -128,11 +127,11 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
     #   end
     # end
     ds.instance_eval do
-      def save ; true ; end
+      def save; true; end
     end
   end
   result.instance_eval do
-    def save ; true ; end
+    def save; true; end
   end
   result
 end

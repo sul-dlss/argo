@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe AuthController, type: :controller do
-
   describe 'test impersonation' do
     context 'as an admin' do
       before do

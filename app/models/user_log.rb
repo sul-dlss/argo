@@ -1,24 +1,24 @@
 class UserLog
   # List the messages that we're going to display to the end user
-  USER_MESSAGES = Set.new [ 'argo.bulk_metadata.bulk_log_job_start',
-                            'argo.bulk_metadata.bulk_log_job_complete',
-                            'argo.bulk_metadata.bulk_log_job_save_success',
-                            'argo.bulk_metadata.bulk_log_apo_fail',
-                            'argo.bulk_metadata.bulk_log_not_exist',
-                            'argo.bulk_metadata.bulk_log_note',
-                            'argo.bulk_metadata.bulk_log_record_count',
-                            'argo.bulk_metadata.bulk_log_error_exception',
-                            'argo.bulk_metadata.bulk_log_invalid_column',
-                            'argo.bulk_metadata.bulk_log_skipped_mods',
-                            'argo.bulk_metadata.bulk_log_skipped_accession',
-                            'argo.bulk_metadata.bulk_log_skipped_not_accessioned',
-                            'argo.bulk_metadata.bulk_log_no_connection',
-                            'argo.bulk_metadata.bulk_log_invalid_url',
-                            'argo.bulk_metadata.bulk_log_nonexistent_file',
-                            'argo.bulk_metadata.bulk_log_invalid_permission',
-                            'argo.bulk_metadata.bulk_log_druids_loaded',
-                            'argo.bulk_metadata.bulk_log_internal_error',
-                            'argo.bulk_metadata.bulk_log_unable_to_version']
+  USER_MESSAGES = Set.new ['argo.bulk_metadata.bulk_log_job_start',
+                           'argo.bulk_metadata.bulk_log_job_complete',
+                           'argo.bulk_metadata.bulk_log_job_save_success',
+                           'argo.bulk_metadata.bulk_log_apo_fail',
+                           'argo.bulk_metadata.bulk_log_not_exist',
+                           'argo.bulk_metadata.bulk_log_note',
+                           'argo.bulk_metadata.bulk_log_record_count',
+                           'argo.bulk_metadata.bulk_log_error_exception',
+                           'argo.bulk_metadata.bulk_log_invalid_column',
+                           'argo.bulk_metadata.bulk_log_skipped_mods',
+                           'argo.bulk_metadata.bulk_log_skipped_accession',
+                           'argo.bulk_metadata.bulk_log_skipped_not_accessioned',
+                           'argo.bulk_metadata.bulk_log_no_connection',
+                           'argo.bulk_metadata.bulk_log_invalid_url',
+                           'argo.bulk_metadata.bulk_log_nonexistent_file',
+                           'argo.bulk_metadata.bulk_log_invalid_permission',
+                           'argo.bulk_metadata.bulk_log_druids_loaded',
+                           'argo.bulk_metadata.bulk_log_internal_error',
+                           'argo.bulk_metadata.bulk_log_unable_to_version']
 
   # List the subset of messages that indicate an error with the job
   ERROR_MESSAGES = Set.new ['argo.bulk_metadata.bulk_log_apo_fail',
@@ -69,7 +69,7 @@ class UserLog
           end
         end
       end
-      log_items.push({ 'argo.bulk_metadata.bulk_log_druids_loaded' => druids_loaded})
+      log_items.push('argo.bulk_metadata.bulk_log_druids_loaded' => druids_loaded)
       log_items
     end
   end

@@ -1,10 +1,9 @@
 require 'spec_helper'
 
-describe ApplicationController, :type => :controller do
-
+describe ApplicationController, type: :controller do
   describe '#current_user' do
     it 'should be the webauth-ed user, if they exist' do
-      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, login: 'sunetid', logged_in?: true))
       expect(subject.current_user).to be_a_kind_of(User)
     end
 
@@ -13,15 +12,15 @@ describe ApplicationController, :type => :controller do
       expect(subject.current_user).to be_a_kind_of(User)
     end
     it 'should be nil if there is no user' do
-      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :logged_in? => false))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, logged_in?: false))
       expect(subject.current_user).to be_nil
     end
     it "should return the user's groups if impersonation info wasn't specified" do
       webauth_privgroup_str = 'dlss:testgroup1|dlss:testgroup2|dlss:testgroup3'
-      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, login: 'sunetid', logged_in?: true, privgroup: webauth_privgroup_str))
 
       # note the check for sunetid:sunetid.  user's sunetid should be prepended to the group list returned by webauth.
-      # note also that workgroup: should be prepended to each workgroup name, and sunetid: should be prepended to the user's 
+      # note also that workgroup: should be prepended to each workgroup name, and sunetid: should be prepended to the user's
       # sunetid.
       expected_groups = ['sunetid:sunetid'] + webauth_privgroup_str.split(/\|/).collect { |g| "workgroup:#{g}" }
       expect(subject.current_user.groups).to eq(expected_groups)
@@ -31,7 +30,7 @@ describe ApplicationController, :type => :controller do
       impersonated_groups = ['workgroup:dlss:impersonatedgroup1', 'workgroup:dlss:impersonatedgroup2']
       session[:groups] = impersonated_groups
 
-      allow(subject).to receive(:webauth).and_return(double(:webauth_user, :login => 'sunetid', :logged_in? => true, :privgroup => webauth_privgroup_str))
+      allow(subject).to receive(:webauth).and_return(double(:webauth_user, login: 'sunetid', logged_in?: true, privgroup: webauth_privgroup_str))
 
       expect(subject.current_user.groups).to eq(impersonated_groups)
     end
@@ -63,6 +62,5 @@ describe ApplicationController, :type => :controller do
       subject.send(:development_only!, &block)
       expect(called).to be false
     end
-
   end
 end

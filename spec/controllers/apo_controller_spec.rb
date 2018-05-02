@@ -45,13 +45,13 @@ RSpec.describe ApoController, type: :controller do
       expect(apo).to receive(:add_roleplayer).exactly(4).times
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params).to match a_hash_including(
-          :label        => 'New APO Title',
-          :object_type  => 'adminPolicy',
-          :admin_policy => 'druid:hv992ry2431', # Uber-APO
-          :workflow_priority => '70'
+          label: 'New APO Title',
+          object_type: 'adminPolicy',
+          admin_policy: 'druid:hv992ry2431', # Uber-APO
+          workflow_priority: '70'
         )
         expect(params[:metadata_source]).to be_nil # descMD is created via the form
-        { :pid => apo.pid }
+        { pid: apo.pid }
       end
       expect(apo).to receive(:"use_license=").with(example['use_license'])
 
@@ -59,12 +59,12 @@ RSpec.describe ApoController, type: :controller do
       expect(apo).to receive(:add_default_collection).with(collection.pid)
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params).to match a_hash_including(
-          :label        => 'col title',
-          :object_type  => 'collection',
-          :admin_policy => apo.pid,
-          :workflow_priority => '65'
+          label: 'col title',
+          object_type: 'collection',
+          admin_policy: apo.pid,
+          workflow_priority: '65'
         )
-        { :pid => collection.pid }
+        { pid: collection.pid }
       end
 
       post 'register', params: example
@@ -145,14 +145,14 @@ RSpec.describe ApoController, type: :controller do
       catkey = '1234567'
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params).to match a_hash_including(
-          :label           => ':auto',
-          :object_type     => 'collection',
-          :admin_policy    => apo.pid,
-          :other_id        => 'symphony:' + catkey,
-          :metadata_source => 'symphony',
-          :rights          => 'dark'
+          label: ':auto',
+          object_type: 'collection',
+          admin_policy: apo.pid,
+          other_id: 'symphony:' + catkey,
+          metadata_source: 'symphony',
+          rights: 'dark'
         )
-        { :pid => collection.pid }
+        { pid: collection.pid }
       end
 
       post :register_collection, params: { 'label' => ':auto', 'collection_catkey' => catkey, 'collection_rights_catkey' => 'dark', 'id' => apo.pid }
@@ -170,13 +170,13 @@ RSpec.describe ApoController, type: :controller do
 
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params).to match a_hash_including(
-          :label           => title,
-          :object_type     => 'collection',
-          :admin_policy    => apo.pid,
-          :metadata_source => 'label',
-          :rights          => 'dark'
+          label: title,
+          object_type: 'collection',
+          admin_policy: apo.pid,
+          metadata_source: 'label',
+          rights: 'dark'
         )
-        { :pid => collection.pid }
+        { pid: collection.pid }
       end
       expect(collection).to receive(:descMetadata).and_return(mock_desc_md_ds).exactly(4).times
 
@@ -189,13 +189,13 @@ RSpec.describe ApoController, type: :controller do
       abstract = 'this is the abstract'
       expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
         expect(params).to match a_hash_including(
-          :label           => title,
-          :object_type     => 'collection',
-          :admin_policy    => apo.pid,
-          :metadata_source => 'label',
-          :rights          => 'dark'
+          label: title,
+          object_type: 'collection',
+          admin_policy: apo.pid,
+          metadata_source: 'label',
+          rights: 'dark'
         )
-        { :pid => collection.pid }
+        { pid: collection.pid }
       end
       expect(controller).to receive(:set_abstract)
       expect(apo).to receive(:add_default_collection).with(collection.pid)
@@ -212,62 +212,62 @@ RSpec.describe ApoController, type: :controller do
     describe 'add_roleplayer' do
       it 'adds a roleplayer' do
         expect(apo).to receive(:add_roleplayer)
-        post 'add_roleplayer', params: { :id => apo.pid, :role => 'dor-apo-viewer', :roleplayer => 'Jon' }
+        post 'add_roleplayer', params: { id: apo.pid, role: 'dor-apo-viewer', roleplayer: 'Jon' }
       end
     end
     describe 'delete_role' do
       it 'calls delete_role' do
         expect(apo).to receive(:delete_role)
-        post 'delete_role', params: { :id => apo.pid, :role => 'dor-apo-viewer', :entity => 'Jon' }
+        post 'delete_role', params: { id: apo.pid, role: 'dor-apo-viewer', entity: 'Jon' }
       end
     end
     describe 'delete_collection' do
       it 'calls remove_default_collection' do
         expect(apo).to receive(:remove_default_collection)
-        post 'delete_collection', params: { :id => apo.pid, :collection => collection.pid }
+        post 'delete_collection', params: { id: apo.pid, collection: collection.pid }
       end
     end
     describe 'add_collection' do
       it 'calls add_default_collection' do
         expect(apo).to receive(:add_default_collection)
-        post 'add_collection', params: { :id => apo.pid, :collection => collection.pid }
+        post 'add_collection', params: { id: apo.pid, collection: collection.pid }
       end
     end
     describe 'update_title' do
       it 'calls set_title' do
         expect(apo).to receive(:mods_title=)
-        post 'update_title', params: { :id => apo.pid, :title => 'awesome new title' }
+        post 'update_title', params: { id: apo.pid, title: 'awesome new title' }
       end
     end
     describe 'update_creative_commons' do
       it 'sets creative_commons' do
         expect(apo).to receive(:creative_commons_license=)
         expect(apo).to receive(:creative_commons_license_human=)
-        post 'update_creative_commons', params: { :id => apo.pid, :cc_license => 'by-nc' }
+        post 'update_creative_commons', params: { id: apo.pid, cc_license: 'by-nc' }
       end
     end
     describe 'update_use' do
       it 'calls set_use_statement' do
         expect(apo).to receive(:use_statement=)
-        post 'update_use', params: { :id => apo.pid, :use => 'new use statement' }
+        post 'update_use', params: { id: apo.pid, use: 'new use statement' }
       end
     end
     describe 'update_copyight' do
       it 'calls set_copyright_statement' do
         expect(apo).to receive(:copyright_statement=)
-        post 'update_copyright', params: { :id => apo.pid, :copyright => 'new copyright statement' }
+        post 'update_copyright', params: { id: apo.pid, copyright: 'new copyright statement' }
       end
     end
     describe 'update_default_object_rights' do
       it 'calls set_default_rights' do
         expect(apo).to receive(:default_rights=)
-        post 'update_default_object_rights', params: { :id => apo.pid, :rights => 'stanford' }
+        post 'update_default_object_rights', params: { id: apo.pid, rights: 'stanford' }
       end
     end
     describe 'update_desc_metadata' do
       it 'calls set_desc_metadata_format' do
         expect(apo).to receive(:desc_metadata_format=)
-        post 'update_desc_metadata', params: { :id => apo.pid, :desc_md => 'TEI' }
+        post 'update_desc_metadata', params: { id: apo.pid, desc_md: 'TEI' }
       end
     end
   end

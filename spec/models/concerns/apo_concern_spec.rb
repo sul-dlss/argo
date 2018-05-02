@@ -31,7 +31,7 @@ describe ApoConcern do
     end
 
     context 'without data' do
-      let(:document_attributes) { { } }
+      let(:document_attributes) { {} }
       it 'should handle missing APO' do
         expect(document.apo_id).to be_nil
         expect(document.apo_pid).to be_nil

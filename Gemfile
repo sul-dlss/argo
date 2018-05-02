@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-#Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
@@ -52,9 +52,9 @@ gem 'config'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'ebnf', '1.0.0' # 1.0 requires rdf 2.x; bundler bug stops it from resolving correctly
-gem 'equivalent-xml', '>= 0.6.0'   # For ignoring_attr_values() with arguments
+gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'erubis' # implicit dependency required by rdf-rdfa/haml, no longer provided by default in Rails 5.1
-gem 'eye'  # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
+gem 'eye' # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'faraday'
 gem 'honeybadger', '~> 3.0'
 gem 'jqgrid-jquery-rails'
@@ -103,7 +103,7 @@ group :test, :development do
   gem 'factory_bot_rails'
   gem 'http_logger'
   gem 'jettywrapper'
-  gem 'pry-remote'  # allows you to attach remote session to pry
+  gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', require: false

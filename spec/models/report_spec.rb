@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Report, :type => :model do
+describe Report, type: :model do
   context 'csv' do
     before :each do
       @csv = described_class.new(
@@ -56,7 +56,7 @@ describe Report, :type => :model do
         :resource_count,
         :preserved_size
       ].each do |k|
-        expect(config.report_fields.any? { |f| f[:field] == k}).to be_truthy
+        expect(config.report_fields.any? { |f| f[:field] == k }).to be_truthy
       end
     end
     it 'should have all the mandatory, non-default report fields' do
@@ -76,7 +76,7 @@ describe Report, :type => :model do
         :accessioned_dttsim,
         :workflow_status_ssim
       ].each do |k|
-        expect(config.report_fields.any? { |f| f[:field] == k}).to be_truthy
+        expect(config.report_fields.any? { |f| f[:field] == k }).to be_truthy
       end
     end
   end

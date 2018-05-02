@@ -1,11 +1,10 @@
 class ApoController < ApplicationController
-
-  before_action :create_obj, :except => [
+  before_action :create_obj, except: [
     :is_valid_role_list_endpoint,
     :register,
     :spreadsheet_template
   ]
-  after_action :save_and_index, :only => [
+  after_action :save_and_index, only: [
     :add_roleplayer,
     :add_collection, :delete_collection,
     :update_copyright, :update_creative_commons,
@@ -15,7 +14,7 @@ class ApoController < ApplicationController
     :register_collection
   ]
 
-  before_action :authorize, :except => [
+  before_action :authorize, except: [
     :is_valid_role_list_endpoint,
     :register,
     :spreadsheet_template
@@ -46,7 +45,7 @@ class ApoController < ApplicationController
 
     respond_to do |format|
       format.json do
-        render :json => ret_val
+        render json: ret_val
       end
     end
   end
@@ -75,13 +74,13 @@ class ApoController < ApplicationController
     if params[:title]
       input_params_errors = get_input_params_errors params
       if input_params_errors.length > 0
-        render :status => :bad_request, :json => { :errors => input_params_errors }
+        render status: :bad_request, json: { errors: input_params_errors }
         return
       end
 
       apo_info = register_new_apo
       respond_to do |format|
-        format.any { redirect_to solr_document_path(apo_info[:apo_pid]), :notice => apo_info[:notice] }
+        format.any { redirect_to solr_document_path(apo_info[:apo_pid]), notice: apo_info[:notice] }
       end
     elsif params[:id]
       create_obj
@@ -90,25 +89,25 @@ class ApoController < ApplicationController
       populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
       populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
       @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
-      render :layout => 'blacklight'
+      render layout: 'blacklight'
     else
-      render :layout => 'blacklight'
+      render layout: 'blacklight'
     end
   end
 
   # TODO: spec testing requires this method to be public
   def set_apo_metadata(apo, md_info)
-    apo.mods_title           = md_info[:title    ]
-    apo.desc_metadata_format = md_info[:desc_md  ]
+    apo.mods_title           = md_info[:title]
+    apo.desc_metadata_format = md_info[:desc_md]
     apo.metadata_source      = md_info[:metadata_source]
     apo.agreement            = md_info[:agreement]
-    apo.default_workflow     = md_info[:workflow ]
+    apo.default_workflow     = md_info[:workflow]
     apo.default_rights       = md_info[:default_object_rights]
     # Set the Use License given a machine-readable code for a creative commons
     # or open data commons license
     apo.use_license          = md_info[:use_license]
     apo.copyright_statement  = md_info[:copyright]
-    apo.use_statement        = md_info[:use      ]
+    apo.use_statement        = md_info[:use]
   end
 
   ##
@@ -116,11 +115,11 @@ class ApoController < ApplicationController
   # Uses `params` and `Dor::RegistrationService`
   #
   def register_new_apo
-    reg_params = {:workflow_priority => '70'}
+    reg_params = { workflow_priority: '70' }
     reg_params[:label] = params[:title]
-    reg_params[:object_type ] = 'adminPolicy'
+    reg_params[:object_type] = 'adminPolicy'
     reg_params[:admin_policy] = SolrDocument::UBER_APO_ID
-    reg_params[:workflow_id ] = 'accessionWF'
+    reg_params[:workflow_id] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     apo_pid = response[:pid]
     notice = "APO #{apo_pid} created."
@@ -152,7 +151,7 @@ class ApoController < ApplicationController
       notice += ' Cannot select a default collection when registering an APO. Use Edit APO instead.'
     end
 
-    { :notice => notice, :apo_pid => apo_pid, :collection_pid => collection_pid }
+    { notice: notice, apo_pid: apo_pid, collection_pid: collection_pid }
   end
 
   def param_cleanup(params)
@@ -172,7 +171,7 @@ class ApoController < ApplicationController
     param_cleanup params
     input_params_errors = get_input_params_errors params
     if input_params_errors.length > 0
-      render :status => :bad_request, :json => { :errors => input_params_errors }
+      render status: :bad_request, json: { errors: input_params_errors }
       return
     end
 
@@ -198,7 +197,7 @@ class ApoController < ApplicationController
   end
 
   def create_collection(apo_pid)
-    reg_params = {:workflow_priority => '65'}
+    reg_params = { workflow_priority: '65' }
     reg_params[:label] = if !params[:collection_title].blank?
                            params[:collection_title]
                          else
@@ -211,11 +210,11 @@ class ApoController < ApplicationController
                           end
     reg_params[:rights] &&= reg_params[:rights].downcase
     col_catkey = params[:collection_catkey] || ''
-    reg_params[:object_type    ] = 'collection'
-    reg_params[:admin_policy   ] = apo_pid
+    reg_params[:object_type] = 'collection'
+    reg_params[:admin_policy] = apo_pid
     reg_params[:metadata_source] = col_catkey.blank? ? 'label' : 'symphony'
-    reg_params[:other_id       ] = "symphony:#{col_catkey}" unless col_catkey.blank?
-    reg_params[:workflow_id    ] = 'accessionWF'
+    reg_params[:other_id] = "symphony:#{col_catkey}" unless col_catkey.blank?
+    reg_params[:workflow_id] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     collection = Dor.find(response[:pid])
     if params[:collection_abstract] && params[:collection_abstract].length > 0
@@ -230,7 +229,7 @@ class ApoController < ApplicationController
     return unless params[:collection_title].present? || params[:collection_catkey].present?
     collection_pid = create_collection params[:id]
     @object.add_default_collection collection_pid
-    redirect_to solr_document_path(params[:id]), :notice => "Created collection #{collection_pid}"
+    redirect_to solr_document_path(params[:id]), notice: "Created collection #{collection_pid}"
   end
 
   def add_roleplayer
@@ -288,8 +287,8 @@ class ApoController < ApplicationController
     binary_string = Faraday.get(Settings.SPREADSHEET_URL)
     send_data(
       binary_string.body,
-      :filename => 'spreadsheet_template.xlsx',
-      :type => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      filename: 'spreadsheet_template.xlsx',
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
   end
 
@@ -329,7 +328,7 @@ class ApoController < ApplicationController
 
   def redirect
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), :notice => 'APO updated.' }
+      format.any { redirect_to solr_document_path(params[:id]), notice: 'APO updated.' }
     end
   end
 

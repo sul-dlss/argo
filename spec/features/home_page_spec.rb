@@ -5,8 +5,8 @@ RSpec.describe 'Home page' do
     mock_user(is_admin?: true)
   end
   before :each do
-    allow_any_instance_of(CatalogController).to receive(:current_user).
-      and_return(current_user)
+    allow_any_instance_of(CatalogController).to receive(:current_user)
+      .and_return(current_user)
   end
 
   describe 'facets' do

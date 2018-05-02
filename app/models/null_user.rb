@@ -1,5 +1,5 @@
 class NullUser
-  # rubocop:disable Style/PredicateName
+  # rubocop:disable Naming/PredicateName
   def is_admin?
     false
   end
@@ -11,7 +11,7 @@ class NullUser
   def is_viewer?
     false
   end
-  # rubocop:enable Style/PredicateName
+  # rubocop:enable Naming/PredicateName
 
   def permitted_apos
     []

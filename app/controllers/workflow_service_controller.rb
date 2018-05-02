@@ -73,7 +73,7 @@ class WorkflowServiceController < ApplicationController
   # @return [Boolean]
   def check_if_can_close_version
     return true if get_active_lifecycle('opened') &&
-                  !get_active_lifecycle('submitted')
+                   !get_active_lifecycle('submitted')
     false
   end
 

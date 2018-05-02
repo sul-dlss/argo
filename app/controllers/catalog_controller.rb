@@ -35,10 +35,10 @@ class CatalogController < ApplicationController
     config.add_index_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
     config.add_index_field 'project_tag_ssim',                label: 'Project',           link_to_search: true
     config.add_index_field 'source_id_ssim',                  label: 'Source'
-    config.add_index_field 'identifier_tesim',                label: 'IDs',               helper_method: :value_for_identifier_tesim
+    config.add_index_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field 'released_to_ssim',                label: 'Released to'
     config.add_index_field 'status_ssi',                      label: 'Status'
-    config.add_index_field 'wf_error_ssim',                   label: 'Error',             helper_method: :value_for_wf_error
+    config.add_index_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
 
     config.add_show_field 'id',                              label: 'DRUID'
     config.add_show_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
@@ -47,13 +47,13 @@ class CatalogController < ApplicationController
     config.add_show_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
     config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_search: true
     config.add_show_field 'source_id_ssim',                  label: 'Source'
-    config.add_show_field 'identifier_tesim',                label: 'IDs',               helper_method: :value_for_identifier_tesim
+    config.add_show_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_show_field 'originInfo_date_created_tesim',   label: 'Created'
     config.add_show_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :preserved_size_human
     config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_search: true
     config.add_show_field 'released_to_ssim',                label: 'Released to'
     config.add_show_field 'status_ssi',                      label: 'Status'
-    config.add_show_field 'wf_error_ssim',                   label: 'Error',             helper_method: :value_for_wf_error
+    config.add_show_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
@@ -80,51 +80,51 @@ class CatalogController < ApplicationController
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
     config.add_facet_field 'source', label: 'Object Source', home: false, query: {
-      :other => {
-        :label => 'DOR',
-        :fq => '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+      other: {
+        label: 'DOR',
+        fq: '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'\
           ' AND -has_model_ssim:"info:fedora/dor:googleScannedBook"'
       },
 
-      :google => { :label => 'Google', :fq => 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
+      google: { label: 'Google', fq: 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
 
-      :hydrus => {
-        :label => 'Hydrus/SDR',
-        :fq => 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+      hydrus: {
+        label: 'Hydrus/SDR',
+        fq: 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
           ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
           ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'
       }
     }
 
-    config.add_facet_field 'metadata_source_ssi', :label => 'Metadata Source', :home => false
+    config.add_facet_field 'metadata_source_ssi', label: 'Metadata Source', home: false
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
-    config.add_facet_field 'empties', :label => 'Empty Fields', :home => false, :query => {
-      :no_rights_characteristics   => { :label => 'No Rights Characteristics',  :fq => '-rights_characteristics_ssim:*' },
-      :no_content_type             => { :label => 'No Content Type',            :fq => '-content_type_ssim:*' },
-      :no_has_model                => { :label => 'No Object Model',            :fq => '-has_model_ssim:*' },
-      :no_objectType               => { :label => 'No Object Type',             :fq => '-objectType_ssim:*' },
-      :no_object_title             => { :label => 'No Object Title',            :fq => '-dc_title_ssi:*' },
-      :no_is_governed_by           => { :label => 'No APO',                     :fq => "-#{SolrDocument::FIELD_APO_ID}:*" },
-      :no_collection_title         => { :label => 'No Collection Title',        :fq => "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
-      :no_copyright                => { :label => 'No Copyright',               :fq => '-copyright_ssim:*' },
-      :no_license                  => { :label => 'No License',                 :fq => '-use_license_machine_ssi:*' },
-      :no_sw_author_ssim           => { :label => 'No SW Author',               :fq => '-sw_author_ssim:*' },
+    config.add_facet_field 'empties', label: 'Empty Fields', home: false, query: {
+      no_rights_characteristics: { label: 'No Rights Characteristics', fq: '-rights_characteristics_ssim:*' },
+      no_content_type: { label: 'No Content Type', fq: '-content_type_ssim:*' },
+      no_has_model: { label: 'No Object Model', fq: '-has_model_ssim:*' },
+      no_objectType: { label: 'No Object Type', fq: '-objectType_ssim:*' },
+      no_object_title: { label: 'No Object Title', fq: '-dc_title_ssi:*' },
+      no_is_governed_by: { label: 'No APO', fq: "-#{SolrDocument::FIELD_APO_ID}:*" },
+      no_collection_title: { label: 'No Collection Title', fq: "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
+      no_copyright: { label: 'No Copyright', fq: '-copyright_ssim:*' },
+      no_license: { label: 'No License', fq: '-use_license_machine_ssi:*' },
+      no_sw_author_ssim: { label: 'No SW Author', fq: '-sw_author_ssim:*' },
       # TODO: mods extent (?)
       # TODO: mods form (?)
-      :no_sw_genre                 => { :label => 'No SW Genre',                :fq => '-sw_genre_ssim:*' },   # spec said "mods genre"
-      :no_sw_language_ssim         => { :label => 'No SW Language',             :fq => '-sw_language_ssim:*' },
-      :no_mods_typeOfResource_ssim => { :label => 'No MODS typeOfResource',     :fq => '-mods_typeOfResource_ssim:*' },
-      :no_sw_pub_date_sort         => { :label => 'No SW Date',                 :fq => '-sw_pub_date_sort_ssi:*' },
-      :no_sw_topic_ssim            => { :label => 'No SW Topic',                :fq => '-sw_topic_ssim:*' },
-      :no_sw_subject_temporal      => { :label => 'No SW Era',                  :fq => '-sw_subject_temporal_ssim:*' },
-      :no_sw_subject_geographic    => { :label => 'No SW Region',               :fq => '-sw_subject_geographic_ssim:*' },
-      :no_sw_format                => { :label => 'No SW Resource Type',        :fq => '-sw_format_ssim:*' },
-      :no_use_statement            => { :label => 'No Use & Reproduction Statement', :fq => '-use_statement_ssim:*' }
+      no_sw_genre: { label: 'No SW Genre', fq: '-sw_genre_ssim:*' }, # spec said "mods genre"
+      no_sw_language_ssim: { label: 'No SW Language', fq: '-sw_language_ssim:*' },
+      no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource', fq: '-mods_typeOfResource_ssim:*' },
+      no_sw_pub_date_sort: { label: 'No SW Date', fq: '-sw_pub_date_sort_ssi:*' },
+      no_sw_topic_ssim: { label: 'No SW Topic', fq: '-sw_topic_ssim:*' },
+      no_sw_subject_temporal: { label: 'No SW Era', fq: '-sw_subject_temporal_ssim:*' },
+      no_sw_subject_geographic: { label: 'No SW Region', fq: '-sw_subject_geographic_ssim:*' },
+      no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' },
+      no_use_statement: { label: 'No Use & Reproduction Statement', fq: '-use_statement_ssim:*' }
     }
 
     config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', limit: 10, home: false
@@ -137,17 +137,17 @@ class CatalogController < ApplicationController
     config.add_facet_field 'sw_language_ssim',           label: 'SW Language',        limit: 10, home: false
     config.add_facet_field 'mods_typeOfResource_ssim',   label: 'MODS Resource Type', limit: 10, home: false
 
-    config.add_facet_fields_to_solr_request!        # deprecated in newer Blacklights
+    config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
-    config.add_search_field 'text', :label => 'All Fields'
-    config.add_sort_field 'id asc', :label => 'Druid'
-    config.add_sort_field 'score desc', :label => 'Relevance'
-    config.add_sort_field 'creator_title_ssi asc', :label => 'Creator and Title'
+    config.add_search_field 'text', label: 'All Fields'
+    config.add_sort_field 'id asc', label: 'Druid'
+    config.add_sort_field 'score desc', label: 'Relevance'
+    config.add_sort_field 'creator_title_ssi asc', label: 'Creator and Title'
 
     config.spell_max = 5
 
     config.facet_display = {
-      :hierarchy => {
+      hierarchy: {
         'wf_wps' => [['ssim'], ':'],
         'wf_wsp' => [['ssim'], ':'],
         'wf_swp' => [['ssim'], ':'],
@@ -164,13 +164,12 @@ class CatalogController < ApplicationController
     config.index.document_actions.delete(:bookmark)
 
     config.show.partials = %w(show_header full_view_links thumbnail show datastreams history contents)
-
   end
 
   def default_solr_doc_params(id = nil)
     id ||= params[:id]
     {
-      :q => %(id:"#{id}")
+      q: %(id:"#{id}")
     }
   end
 
@@ -184,7 +183,7 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id]
 
     authorize! :view_metadata, @obj
-    super()  # with or without an APO, if we get here, user is authorized to view
+    super() # with or without an APO, if we get here, user is authorized to view
   end
 
   def dc
@@ -234,7 +233,7 @@ class CatalogController < ApplicationController
   def bulk_jobs_xml
     desc_metadata_xml_file = find_desc_metadata_file(File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time]))
     if File.exist?(desc_metadata_xml_file)
-      send_file(desc_metadata_xml_file, :type => 'application/xml')
+      send_file(desc_metadata_xml_file, type: 'application/xml')
     else
       # Display error message and log the error
     end
@@ -243,7 +242,7 @@ class CatalogController < ApplicationController
   def bulk_jobs_csv
     csv_file = File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time], 'log.csv')
     if File.exist?(csv_file)
-      send_file(csv_file, :type => 'text/csv')
+      send_file(csv_file, type: 'text/csv')
     else
       # Display error message and log the error
     end
@@ -300,7 +299,7 @@ class CatalogController < ApplicationController
       begin
         next unless key =~ /_datepicker/ && val =~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/
         val = DateTime.parse(val).beginning_of_day.utc.xmlschema
-        field = key.split( '_after_datepicker').first.split('_before_datepicker').first
+        field = key.split('_after_datepicker').first.split('_before_datepicker').first
         params[:f][field] = '[' + val.to_s + 'Z TO *]'
       rescue
       end
@@ -315,7 +314,6 @@ class CatalogController < ApplicationController
     if File.directory?(dir) && File.readable?(dir) && File.exist?(log_filename) && File.readable?(log_filename)
       File.open(log_filename, 'r') do |log_file|
         log_file.each_line do |line|
-
           # The log file is a very simple flat file (whitespace separated) format where the first token denotes the
           # field/type of information and the rest is the actual value.
           matched_strings = line.match(/^([^\s]+)\s+(.*)/)

@@ -1,5 +1,4 @@
 module RegistrationHelper
-
   # permission_keys will likely be a list of workgroups to which a user belongs plus
   # the user's sunetid, to determine which APOs grant the user registration permissions.
   def apo_list(permission_keys)
@@ -9,10 +8,10 @@ module RegistrationHelper
 
     result = Dor::SearchService.query(
       q,
-      :defType => 'lucene',
-      :rows => 99999,
-      :fl => 'id,tag_ssim,sw_display_title_tesim',
-      :fq => ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
+      defType: 'lucene',
+      rows: 99999,
+      fl: 'id,tag_ssim,sw_display_title_tesim',
+      fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
     )['response']['docs']
 
     result.sort! do |a, b|
