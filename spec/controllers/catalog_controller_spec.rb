@@ -21,13 +21,13 @@ RSpec.describe CatalogController, type: :controller do
     end
   end
 
-  shared_examples 'APO-independent auth' do
+  describe '#show' do
     before do
       allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
     end
-    describe 'no user' do
-      let(:user) { nil }
-      it 'basic get redirects to login' do
+
+    context 'without logging in' do
+      it 'redirects to login' do
         get 'show', params: { id: @druid }
         expect(response.code).to eq('401') # Unauthorized without webauth, no place to redirect
       end
@@ -37,78 +37,37 @@ RSpec.describe CatalogController, type: :controller do
       before do
         sign_in user
       end
-      it 'unauthorized_user' do
-        get 'show', params: { id: @druid }
-        expect(response.code).to eq('403') # two different flavors
-        # expect(response.body).to include 'No APO'
-      end
-      it 'is_admin?' do
-        allow(user).to receive(:is_admin?).and_return(true)
-        get 'show', params: { id: @druid }
-        expect(response.code).to eq('200')
-      end
-      it 'is_viewer?' do
-        allow(user).to receive(:is_viewer?).and_return(true)
-        get 'show', params: { id: @druid }
-        expect(response.code).to eq('200')
-      end
-      it 'impersonating nobody' do
-        user.set_groups_to_impersonate(['some:irrelevance'])
-        get 'show', params: { id: @druid }
-        expect(response.code).to eq('403')
-      end
-      it 'impersonating viewer' do
-        user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:viewer-role'])
-        get 'show', params: { id: @druid }
-        expect(response.code).to eq('200')
-      end
-      it 'impersonating admin' do
-        user.set_groups_to_impersonate(['some:irrelevance', 'workgroup:sdr:administrator-role'])
-        get 'show', params: { id: @druid }
-        expect(response.code).to eq('200')
-      end
-    end
-  end
-
-  describe '#show enforces permissions' do
-    before do
-      allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
-      sign_in user
-    end
-    describe 'without APO' do
-      before do
-        allow(@item).to receive(:admin_policy_object).and_return(nil)
-      end
-
-      describe 'impersonating user with no extra powers' do
-        it 'is forbidden since there is no APO' do
+      context 'when unauthorized' do
+        before do
+          allow(controller).to receive(:authorize!).with(:view_metadata, Dor::Item).and_raise(CanCan::AccessDenied)
+        end
+        it 'is forbidden' do
           get 'show', params: { id: @druid }
-          expect(response.code).to eq('403')  # Forbidden
+          expect(response).to be_forbidden
         end
       end
-      it_behaves_like 'APO-independent auth'
-    end
 
-    describe 'with APO' do
-      before do
-        @apo_druid = 'druid:hv992ry2431'
-        @apo = instantiate_fixture('hv992ry2431', Dor::AdminPolicyObject)
-        allow(@item).to receive(:admin_policy_object).and_return(@apo)
-        allow(user).to receive(:roles).with(@apo_druid).and_return([]) if user
-      end
-      describe 'impersonating_user with no extra powers' do
-        it 'is forbidden if roles do not match' do
-          get 'show', params: { id: @druid }
-          expect(response.code).to eq('403')  # Forbidden
-          expect(response.body).to include 'forbidden'
+      context 'when authorized' do
+        before do
+          allow(controller).to receive(:authorize!).with(:view_metadata, Dor::Item)
         end
-        it 'succeeds if roles match' do
-          allow(user).to receive(:roles).with(@apo_druid).and_return(['dor-viewer'])
+        it 'is successful' do
           get 'show', params: { id: @druid }
-          expect(response.code).to eq('200')
+          expect(response).to be_successful
         end
       end
-      it_behaves_like 'APO-independent auth'
+
+      context 'when not found' do
+        before do
+          allow(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
+        end
+        let(:druid) { 'druid:zz999zz9999' }
+
+        it 'returns not found' do
+          get 'show', params: { id: druid }
+          expect(response).to be_not_found
+        end
+      end
     end
   end
 
@@ -142,16 +101,6 @@ RSpec.describe CatalogController, type: :controller do
     end
     it 'should use POST as the http method' do
       expect(config.http_method).to eq :post
-    end
-  end
-
-  describe 'error handling' do
-    let(:druid) { 'druid:zz999zz9999' }
-    it 'should 404 on missing item' do
-      allow(subject).to receive(:current_user).and_return(double('WebAuth', is_admin?: true))
-      expect(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get 'show', params: { id: druid }
-      expect(response).to have_http_status(:not_found)
     end
   end
 
@@ -200,7 +149,7 @@ RSpec.describe CatalogController, type: :controller do
 
     context 'for content managers' do
       before do
-        expect(user).to receive(:is_admin?).and_return(true)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_return(true)
         allow(controller).to receive(:fetch).with("druid:#{@druid}").and_return(double)
       end
 
