@@ -4,7 +4,7 @@ def user_stub
   webauth = double(
     'WebAuth',
     :login => 'sunetid',
-    :attributes => {'DISPLAYNAME' => 'Example User'},
+    :attributes => { 'DISPLAYNAME' => 'Example User' },
     :privgroup => User::ADMIN_GROUPS.first
   )
   @current_user = User.find_or_create_by_webauth(webauth)
@@ -43,12 +43,12 @@ describe 'apo', :type => :request do
     click_button 'register'
     # button redirects to catalog view, but return to edit form to check registered values
     visit url_for(:controller => :apo, :action => :register, :id => @new_druid)
-    expect(find_field('title'      ).value).to eq('APO Title')
-    expect(find_field('copyright'  ).value).to eq('Copyright statement')
-    expect(find_field('use'        ).value).to eq('Use statement')
-    expect(find_field('managers'   ).value).to eq('dlss:developers')
-    expect(find_field('viewers'    ).value).to eq('sunetid:someone')
-    expect(find_field('desc_md'    ).value).to eq('MODS')
+    expect(find_field('title').value).to eq('APO Title')
+    expect(find_field('copyright').value).to eq('Copyright statement')
+    expect(find_field('use').value).to eq('Use statement')
+    expect(find_field('managers').value).to eq('dlss:developers')
+    expect(find_field('viewers').value).to eq('sunetid:someone')
+    expect(find_field('desc_md').value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-sa')
     expect(page).to have_no_field('collection')
   end
@@ -66,12 +66,12 @@ describe 'apo', :type => :request do
     page.select('MODS', :from => 'desc_md')
     click_button 'register'
     visit url_for(:controller => :apo, :action => :register, :id => @new_druid)
-    expect(find_field('title'      ).value).to eq('New APO Title')
-    expect(find_field('copyright'  ).value).to eq('New copyright statement')
-    expect(find_field('use'        ).value).to eq('New use statement')
-    expect(find_field('managers'   ).value).to eq('dlss:dpg-staff')
-    expect(find_field('viewers'    ).value).to eq('sunetid:anyone')
-    expect(find_field('desc_md'    ).value).to eq('MODS')
+    expect(find_field('title').value).to eq('New APO Title')
+    expect(find_field('copyright').value).to eq('New copyright statement')
+    expect(find_field('use').value).to eq('New use statement')
+    expect(find_field('managers').value).to eq('dlss:dpg-staff')
+    expect(find_field('viewers').value).to eq('sunetid:anyone')
+    expect(find_field('desc_md').value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-nd')
     expect(page).to have_no_field('collection')
   end

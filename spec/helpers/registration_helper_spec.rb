@@ -20,11 +20,11 @@ describe RegistrationHelper do
 
     it 'sorts the results and formats them correctly' do
       result_rows = [
-        {'id' => 1, 'tag_ssim' => 'prefix : suffix', 'sw_display_title_tesim' => 'z'},
-        {'id' => 2, 'tag_ssim' => 'AdminPolicy : default', 'sw_display_title_tesim' => 'y'},
-        {'id' => 3, 'tag_ssim' => 'prefix : suffix2', 'sw_display_title_tesim' => 'x'}
+        { 'id' => 1, 'tag_ssim' => 'prefix : suffix', 'sw_display_title_tesim' => 'z' },
+        { 'id' => 2, 'tag_ssim' => 'AdminPolicy : default', 'sw_display_title_tesim' => 'y' },
+        { 'id' => 3, 'tag_ssim' => 'prefix : suffix2', 'sw_display_title_tesim' => 'x' }
       ]
-      expect(Dor::SearchService).to receive(:query).and_return({ 'response' => { 'docs' => result_rows }})
+      expect(Dor::SearchService).to receive(:query).and_return({ 'response' => { 'docs' => result_rows } })
 
       apos = apo_list(perm_keys)
       expect(apos).to eq [['y', '2'], ['x', '3'], ['z', '1']]

@@ -5,11 +5,11 @@ describe Ability do
   let(:subject) { described_class.new(user) }
   let(:item) { Dor::Item.new(pid: 'x') }
 
-  let(:new_apo_id) { 'new_apo_id'}
+  let(:new_apo_id) { 'new_apo_id' }
   let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_id) }
 
   context 'as an administrator' do
-    let(:user) { mock_user(is_admin?: true)}
+    let(:user) { mock_user(is_admin?: true) }
 
     it { should be_able_to(:manage, :everything) }
     it { should be_able_to(:manage_item, item) }
@@ -22,7 +22,7 @@ describe Ability do
   end
 
   context 'as a manager' do
-    let(:user) { mock_user(is_manager?: true)}
+    let(:user) { mock_user(is_manager?: true) }
 
     it { should_not be_able_to(:manage, :everything) }
     it { should be_able_to(:manage_item, item) }
@@ -35,7 +35,7 @@ describe Ability do
   end
 
   context 'as a viewer' do
-    let(:user) { mock_user(is_viewer?: true)}
+    let(:user) { mock_user(is_viewer?: true) }
 
     it { should_not be_able_to(:manage_item, item) }
     it { should_not be_able_to(:manage_content, item) }
@@ -81,7 +81,7 @@ describe Ability do
   end
 
   context 'with a role assigned by an APO' do
-    let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo)}
+    let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo) }
     let(:apo) { Dor::AdminPolicyObject.new(pid: 'apo') }
     let(:ungoverned_item) { Dor::Item.new(pid: 'y') }
     let(:user) { mock_user }
@@ -150,7 +150,7 @@ describe Ability do
   end
 
   context 'without a role assigned by an APO' do
-    let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo)}
+    let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo) }
     let(:apo) { Dor::AdminPolicyObject.new(pid: 'apo') }
     let(:user) { mock_user }
 

@@ -1,4 +1,5 @@
 # coding: utf-8
+
 require 'spec_helper'
 
 feature 'Search results' do
@@ -6,8 +7,8 @@ feature 'Search results' do
     mock_user(is_admin?: true)
   end
   before :each do
-    allow_any_instance_of(CatalogController).to receive(:current_user).
-      and_return(current_user)
+    allow_any_instance_of(CatalogController).to receive(:current_user)
+      .and_return(current_user)
   end
   scenario 'contains Blacklight default index page tools' do
     visit search_catalog_path f: { empties: ['no_rights_characteristics'] }

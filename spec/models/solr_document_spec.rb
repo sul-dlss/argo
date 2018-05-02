@@ -49,16 +49,16 @@ describe SolrDocument, :type => :model do
       versions.each do |version, milestones|
         milestones.each do |key, value|
           case key
-            when 'registered'
-              expect(value[:time]).to be_a_kind_of DateTime
-              expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
-              expect(version).to eq('1')       # registration is always only on v1
-            when 'opened'
-              expect(value[:time]).to be_a_kind_of DateTime
-              expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:39:57+00:00')
-              expect(version).to eq('2')
-            else
-              expect(value[:time]).to be_nil
+          when 'registered'
+            expect(value[:time]).to be_a_kind_of DateTime
+            expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
+            expect(version).to eq('1') # registration is always only on v1
+          when 'opened'
+            expect(value[:time]).to be_a_kind_of DateTime
+            expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:39:57+00:00')
+            expect(version).to eq('2')
+          else
+            expect(value[:time]).to be_nil
           end
         end
       end
@@ -69,7 +69,7 @@ describe SolrDocument, :type => :model do
       data = []
       data << '1;1.0.0;Initial version'
       data << '2;1.1.0;Minor change'
-      versions = SolrDocument.new({'versions_ssm' => data}).get_versions
+      versions = SolrDocument.new({ 'versions_ssm' => data }).get_versions
       expect(versions['1']).to match a_hash_including(:tag => '1.0.0', :desc => 'Initial version')
       expect(versions['2']).to match a_hash_including(:tag => '1.1.0', :desc => 'Minor change')
     end

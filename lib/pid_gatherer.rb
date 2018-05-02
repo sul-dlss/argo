@@ -148,9 +148,9 @@ module Argo
     # @return [Array<String>]
     def remaining_pids
       @remaining_pids ||= all_pids -
-        (uber_apo_pids + workflow_pids + agreement_pids + hydrus_uber_apo_pids +
-        apo_pids + hydrus_apo_pids + collection_pids + hydrus_collection_pids +
-        set_pids)
+                          (uber_apo_pids + workflow_pids + agreement_pids + hydrus_uber_apo_pids +
+                          apo_pids + hydrus_apo_pids + collection_pids + hydrus_collection_pids +
+                          set_pids)
     end
 
     private

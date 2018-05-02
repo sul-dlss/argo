@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'spec_helper'
 describe ItemsHelper, :type => :helper do
   let(:mods_xml) do

@@ -10,7 +10,7 @@ describe 'report/workflow_grid', :type => :view do
     allow(view).to receive(:has_search_parameters?).and_return(false)
     stub_template '_did_you_mean.html.erb' => ''
     stub_template '_constraints.html.erb'  => ''
-    stub_template '_search_sidebar.html.erb'       => ''
+    stub_template '_search_sidebar.html.erb' => ''
   end
   it 'should display all the workflow states' do
     @solr_response = {

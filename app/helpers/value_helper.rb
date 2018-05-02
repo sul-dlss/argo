@@ -1,5 +1,4 @@
 module ValueHelper
-
   # Renderers
   def label_for_druid(druid)
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"

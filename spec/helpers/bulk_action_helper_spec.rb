@@ -8,7 +8,7 @@ RSpec.describe BulkActionHelper do
         expect(helper).to receive(:render)
           .with(
             partial: 'descmetadata_download_job',
-            locals: {bulk_action: bulk_action}
+            locals: { bulk_action: bulk_action }
           )
         helper.render_bulk_action_type(bulk_action)
       end

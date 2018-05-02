@@ -36,16 +36,16 @@ class RegistrationController < ApplicationController
   # @return [Hash<String, String>] key represents collection druid, value represents collection title. entries sorted by title, except leading "None" option.
   def collection_list
     truncate_limit = (params[:truncate] || 60).to_i
-    collections = { }
+    collections = {}
     registration_collection_ids_for_apo(params[:apo_id]).each do |col_id|
       col_druid = col_id.gsub(/^druid:/, '')
       col_title_field = SolrDocument::FIELD_TITLE
 
       # grab the collection title from Solr, or fall back to DOR
       solr_doc = Dor::SearchService.query("id:\"#{col_id}\"", {
-        rows: 1,
-        fl: col_title_field
-      })['response']['docs'].first
+                                            rows: 1,
+                                            fl: col_title_field
+                                          })['response']['docs'].first
 
       if solr_doc.present? && solr_doc[col_title_field].present?
         collections[col_id] = "#{short_label(solr_doc[col_title_field], truncate_limit)} (#{col_druid})"
@@ -61,7 +61,7 @@ class RegistrationController < ApplicationController
     end
 
     # before returning the list, sort by collection name, and add a "None" option at the top
-    collections = { '' => 'None' }.merge((collections.sort_by {|_k, col_title| col_title}).to_h)
+    collections = { '' => 'None' }.merge((collections.sort_by { |_k, col_title| col_title }).to_h)
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => collections }
     end

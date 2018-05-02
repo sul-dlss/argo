@@ -32,8 +32,8 @@ module WorkflowHelper
     # workflow update requires id, workflow, process, and status parameters
     form_tag workflow_update_item_url(pid, process.workflow) do
       hidden_field_tag('process', process.name) +
-      hidden_field_tag('status', new_status) +
-      button_tag('set to ' + new_status, :type => 'submit')
+        hidden_field_tag('status', new_status) +
+        button_tag('set to ' + new_status, :type => 'submit')
     end
   end
 
@@ -41,11 +41,12 @@ module WorkflowHelper
     return unless wf_hash[process] && wf_hash[process][status] && wf_hash[process][status][:_]
     new_params = search_state.add_facet_params(
       'wf_wps_ssim',
-      [name, process, status].compact.join(':'))
-        .merge(
-          reset_workflow: name,
-          reset_step: process
-        )
+      [name, process, status].compact.join(':')
+    )
+                             .merge(
+                               reset_workflow: name,
+                               reset_step: process
+                             )
     raw ' | ' + link_to('reset', report_reset_path(new_params), remote: true, method: :post)
   end
 
@@ -72,5 +73,4 @@ module WorkflowHelper
     end
     proc_names
   end
-
 end

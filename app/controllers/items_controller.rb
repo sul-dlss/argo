@@ -76,7 +76,7 @@ class ItemsController < ApplicationController
           :description => params[:description],
           :opening_user_name => current_user.to_s
         }
-        @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+        @object.open_new_version({ :vers_md_upd_info => vers_md_upd_info })
       rescue Dor::Exception => e
         render :status => :precondition_failed, :plain => e
         return
@@ -139,7 +139,7 @@ class ItemsController < ApplicationController
     @object.add_collection(params[:collection])
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :plain => 'Collection added!'}
+        format.html { render :status => :ok, :plain => 'Collection added!' }
       else
         format.html { redirect_to solr_document_path(params[:id]), :notice => 'Collection successfully added' }
       end
@@ -150,7 +150,7 @@ class ItemsController < ApplicationController
     @object.remove_collection(params[:collection])
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :plain => 'Collection removed!'}
+        format.html { render :status => :ok, :plain => 'Collection removed!' }
       else
         format.any { redirect_to solr_document_path(params[:id]), :notice => 'Collection successfully removed' }
       end
@@ -263,7 +263,7 @@ class ItemsController < ApplicationController
   def embargo_update
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
     @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
-    @object.datastreams['events'].add_event('Embargo', current_user.to_s , 'Embargo date modified')
+    @object.datastreams['events'].add_event('Embargo', current_user.to_s, 'Embargo date modified')
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), :notice => 'Embargo was successfully updated' }
     end
@@ -350,7 +350,7 @@ class ItemsController < ApplicationController
   #  ~ plus an object save (more WFS requests, Fedora write, Solr reindex)
   def create_minimal_mods
     unless dor_accession_error?(@object, 'descriptive-metadata') ||
-       dor_accession_error?(@object, 'publish')
+           dor_accession_error?(@object, 'publish')
       render status: 500, plain: 'Object is not in error for descMD or publish!'
       return
     end
@@ -379,7 +379,7 @@ class ItemsController < ApplicationController
       :description => params[:description],
       :opening_user_name => current_user.to_s
     }
-    @object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+    @object.open_new_version({ :vers_md_upd_info => vers_md_upd_info })
     respond_to do |format|
       msg = params[:id] + ' is open for modification!'
       format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
@@ -426,19 +426,19 @@ class ItemsController < ApplicationController
       desc = params[:description]
       ds = @object.versionMetadata
       ds.update_current_version({
-        :description => desc,
-        :significance => severity.to_sym
-      })
+                                  :description => desc,
+                                  :significance => severity.to_sym
+                                })
       @object.save
     end
 
     begin
       @object.close_version
       msg = "Version #{@object.versionMetadata.current_version_id} closed"
-      @object.datastreams['events'].add_event('close', current_user.to_s , msg)
+      @object.datastreams['events'].add_event('close', current_user.to_s, msg)
       respond_to do |format|
         if params[:bulk]
-          format.html {render :status => :ok, :plain => 'Version Closed.'}
+          format.html { render :status => :ok, :plain => 'Version Closed.' }
         else
           msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
           format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
@@ -482,11 +482,11 @@ class ItemsController < ApplicationController
     # add all of the recieved tags as new tags
     tags = params[:tags].split(/\t/)
     tags.each { |tag| @object.add_tag tag }
-    @object.identityMetadata.content_will_change!  # mark as dirty
+    @object.identityMetadata.content_will_change! # mark as dirty
     @object.identityMetadata.save
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :plain => "#{tags.size} Tags updated."}
+        format.html { render :status => :ok, :plain => "#{tags.size} Tags updated." }
       else
         msg = "#{tags.size} tags for #{params[:id]} have been updated!"
         format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
@@ -536,9 +536,9 @@ class ItemsController < ApplicationController
   end
 
   def update_resource
-    @object.move_resource(        params[:resource], params[:position]) if params[:position]
-    @object.update_resource_label(params[:resource], params[:label   ]) if params[:label]
-    @object.update_resource_type( params[:resource], params[:type    ]) if params[:type]
+    @object.move_resource(params[:resource], params[:position]) if params[:position]
+    @object.update_resource_label(params[:resource], params[:label]) if params[:label]
+    @object.update_resource_type(params[:resource], params[:type]) if params[:type]
     acted = params[:position] || params[:label] || params[:type]
     @object.save if acted
     notice = (acted ? 'updated' : 'no action received for') + " resource #{params[:resource]}!"
@@ -580,7 +580,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if params[:bulk]
-        format.html {render status: :ok, plain: 'Refreshed.'}
+        format.html { render status: :ok, plain: 'Refreshed.' }
       else
         format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey:#{@object.catkey}" }
       end
@@ -624,7 +624,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if params[:bulk]
-        format.html {render :status => :ok, :plain => 'Rights updated.'}
+        format.html { render :status => :ok, :plain => 'Rights updated.' }
       else
         format.any { redirect_to solr_document_path(params[:id]), :notice => 'Rights updated!' }
       end
@@ -747,7 +747,7 @@ class ItemsController < ApplicationController
   def create_obj_and_apo(obj_pid)
     @object = Dor.find obj_pid
     @apo = @object.admin_policy_object
-    @apo = ( @apo ? @apo.pid : '' )
+    @apo = (@apo ? @apo.pid : '')
   end
 
   def save_and_reindex

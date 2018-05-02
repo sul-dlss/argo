@@ -31,7 +31,6 @@ class ModsulatorJob < ActiveJob::Base
     log_filename = generate_log_filename(output_directory)
 
     File.open(log_filename, 'a') { |log|
-
       start_log(log, user_login, original_filename, note)
       response_xml = generate_xml(filetype, uploaded_filename, original_filename, log)
 
@@ -127,7 +126,7 @@ class ModsulatorJob < ActiveJob::Base
   def version_object(dor_object, original_filename, user_login, log)
     if accessioned(dor_object)
       if !DorObjectWorkflowStatus.new(dor_object.pid).can_open_version?
-        log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{dor_object.pid}")  # totally unexpected
+        log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{dor_object.pid}") # totally unexpected
         return
       end
       commit_new_version(dor_object, original_filename, user_login)
@@ -144,7 +143,7 @@ class ModsulatorJob < ActiveJob::Base
       :description => "Descriptive metadata upload from #{original_filename}",
       :opening_user_name => user_login
     }
-    dor_object.open_new_version({:vers_md_upd_info => vers_md_upd_info})
+    dor_object.open_new_version({ :vers_md_upd_info => vers_md_upd_info })
   end
 
   # Returns true if the given object is accessioned, false otherwise.
@@ -227,7 +226,7 @@ class ModsulatorJob < ActiveJob::Base
       faraday.use Faraday::Response::RaiseError
       faraday.request :multipart
       faraday.request :url_encoded
-      faraday.adapter :net_http     # A MUST for file upload to work with UploadIO
+      faraday.adapter :net_http # A MUST for file upload to work with UploadIO
     end
 
     response_xml = connection.post do |req|
@@ -237,24 +236,23 @@ class ModsulatorJob < ActiveJob::Base
       req.body = { :file => payload, :filename => original_filename }
     end
     response_xml.body
-
-    rescue Faraday::ResourceNotFound => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
-    rescue Errno::ENOENT => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
-    rescue Errno::EACCES => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
-    rescue Faraday::ClientError => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
-    rescue Exception => e
-      delayed_log_url(e, url)
-      log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
-    ensure
-      log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
+  rescue Faraday::ResourceNotFound => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
+  rescue Errno::ENOENT => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
+  rescue Errno::EACCES => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
+  rescue Faraday::ClientError => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
+  rescue Exception => e
+    delayed_log_url(e, url)
+    log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
+  ensure
+    log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
   end
 
   # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.

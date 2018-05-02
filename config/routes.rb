@@ -9,7 +9,6 @@ Argo::Application.routes.draw do
 
   mount Blacklight::Engine => '/'
 
-
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :exportable, Blacklight::Routes::Exportable.new
 
@@ -95,7 +94,7 @@ Argo::Application.routes.draw do
       get 'purl_preview'
       get 'discoverable'
       get 'refresh_metadata'
-      get 'schema_validate',  :action => :schema_validation, :as => 'schema_validation'
+      get 'schema_validate', :action => :schema_validation, :as => 'schema_validation'
       get 'remediate_mods'
       get 'mods'
       get 'remove_duplicate_encoding'
@@ -112,7 +111,7 @@ Argo::Application.routes.draw do
       post 'file/attributes',    :action => :update_attributes, :as => 'update_attributes'
       match 'close_version_ui',  :action => :close_version_ui,  :as => 'close_version_ui', :via => [:get, :post]
       match 'open_version_ui',   :action => :open_version_ui,   :as => 'open_version_ui',  :via => [:get, :post]
-      post 'version/open',        :action => :open_version,      :as => 'open_version'
+      post 'version/open', :action => :open_version, :as => 'open_version'
       get 'source_id_ui'
       get 'tags_ui'
       get 'catkey_ui'
@@ -191,5 +190,4 @@ Argo::Application.routes.draw do
         as: 'accessioned',
         defaults: { format: :json }
   end
-
 end

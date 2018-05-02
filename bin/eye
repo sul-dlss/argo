@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby_executable_hooks
 
-#NOTE: this script is a copy of the script included in a system-wide installation of eye v0.8.
+# NOTE: this script is a copy of the script included in a system-wide installation of eye v0.8.
 # it is reproduced here so that eye can be run on deployment of argo to machines that lack a system-wide
 # installation of eye (which is the setup as of this comment's writing).  if you upgrade the version of eye
 # that argo uses, check to see whether this needs to be upgraded.
@@ -27,4 +27,3 @@ end
 
 gem 'eye', version
 load Gem.bin_path('eye', 'eye', version)
-

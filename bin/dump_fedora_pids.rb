@@ -43,11 +43,11 @@ raise "script file already exists (#{script_file_name})" if File.exist? script_f
 raise "out file already exists (#{out_file_name}" if File.exist? out_file_name
 
 # write the temp script file
-File.open(script_file_name, 'w')  { |file| file.write mysql_script }
+File.open(script_file_name, 'w') { |file| file.write mysql_script }
 
 # execute the sql script by feeding the temp script file to the msql command with the login info as CL params
 mysql_cmd = "mysql --user=#{db_user_name} --password=#{db_password} < #{script_file_name}"
-puts %x( #{mysql_cmd} )
+puts %x(#{mysql_cmd})
 
 # delete the temp sql script
 File.delete(script_file_name)

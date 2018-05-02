@@ -5,7 +5,7 @@ describe ArgoHelper, :type => :helper do
       @item_id = 'druid:kv840rx2720'
       @governing_apo_id = 'druid:hv992ry2431'
       @object = instantiate_fixture(@item_id, Dor::Item)
-      @doc = SolrDocument.new({'id' => @item_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id]})
+      @doc = SolrDocument.new({ 'id' => @item_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id] })
       @usr = mock_user(is_admin?: true)
       allow(Dor::Config.workflow.client).to receive(:get_active_lifecycle).and_return(true)
       allow(Dor::Config.workflow.client).to receive(:get_lifecycle).and_return(true)
@@ -119,9 +119,9 @@ describe ArgoHelper, :type => :helper do
         allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
         buttons = helper.render_buttons(@doc)
         default_buttons.push({
-          label: 'Update embargo',
-          url: "/items/#{@item_id}/embargo_form"
-        }).each do |button|
+                               label: 'Update embargo',
+                               url: "/items/#{@item_id}/embargo_form"
+                             }).each do |button|
           expect(buttons).to include(button)
         end
         expect(buttons.length).to eq default_buttons.length
@@ -139,11 +139,11 @@ describe ArgoHelper, :type => :helper do
         allow(@id_md).to receive(:otherId).with('catkey').and_return(['1234567'])
         buttons = helper.render_buttons(@doc)
         default_buttons.push({
-          label: 'Refresh descMetadata',
-          url: "/items/#{@item_id}/refresh_metadata",
-          new_page: true,
-          disabled: false
-        }).each do |button|
+                               label: 'Refresh descMetadata',
+                               url: "/items/#{@item_id}/refresh_metadata",
+                               new_page: true,
+                               disabled: false
+                             }).each do |button|
           expect(buttons).to include(button)
         end
         expect(buttons.length).to eq default_buttons.length
@@ -219,7 +219,7 @@ describe ArgoHelper, :type => :helper do
       end
       it 'renders the appropriate default buttons for an apo' do
         @object = instantiate_fixture(view_apo_id, Dor::AdminPolicyObject)
-        @doc = SolrDocument.new({'id' => view_apo_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id]})
+        @doc = SolrDocument.new({ 'id' => view_apo_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id] })
         allow(Dor).to receive(:find).with(view_apo_id).and_return(@object)
         allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
         buttons = helper.render_buttons(@doc)

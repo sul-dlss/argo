@@ -61,29 +61,29 @@ RSpec.describe BulkActionsController do
           .at_least(:once).and_return(webauth)
       end
       it 'assigns @bulk_action to current_user' do
-        post :create, params: { bulk_action: {action_type: 'GenericJob', pids: ''} }
+        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         expect(assigns(:bulk_action)).to be_an BulkAction
         expect(assigns(:bulk_action).user).to eq current_user
       end
       it 'creates a new BulkAction' do
         expect do
-          post :create, params: { bulk_action: {action_type: 'GenericJob', pids: ''} }
+          post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         end.to change(BulkAction, :count).by(1)
       end
       it 'has a 302 status code' do
-        post :create, params: { bulk_action: {action_type: 'GenericJob', pids: ''} }
+        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         expect(response.status).to eq 302
       end
       it 'when not saveable render new' do
         fake_bulk_action = double('fake', save: false, 'user=' => nil)
         expect(BulkAction).to receive(:new).and_return fake_bulk_action
-        post :create, params: { bulk_action: {action_type: 'GenericJob'} }
+        post :create, params: { bulk_action: { action_type: 'GenericJob' } }
         expect(response).to render_template('new')
       end
     end
     context 'without current parameters' do
       it 'requires bulk_action parameter' do
-        expect{ post :create }.to raise_error ActionController::ParameterMissing
+        expect { post :create }.to raise_error ActionController::ParameterMissing
       end
     end
   end

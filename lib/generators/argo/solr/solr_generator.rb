@@ -26,7 +26,6 @@ module Argo
         uri = URI.parse('http://' + prod_solr) if uri.scheme.nil?
         uri
       end
-
     end
   end
 end

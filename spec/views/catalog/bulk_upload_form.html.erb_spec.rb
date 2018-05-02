@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 RSpec.describe 'catalog/bulk_upload_form.html.erb', :type => :view do
-
   before :each do
     @obj = double('dor_object', id: 'druid:hv992ry2431')
   end

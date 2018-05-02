@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe 'items/_source_id_ui.html.erb' do
-  let(:identity_metadata) { double('idmd', sourceId: 'source id')}
+  let(:identity_metadata) { double('idmd', sourceId: 'source id') }
   let(:object) do
     double('object', pid: 'druid:abc123', identityMetadata: identity_metadata)
   end

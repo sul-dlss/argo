@@ -13,7 +13,7 @@ RSpec.describe User, type: :model do
   end
 
   context 'with webauth' do
-    subject { User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Møds Ässet'})) }
+    subject { User.find_or_create_by_webauth(double('webauth', :login => 'mods', :attributes => { 'DISPLAYNAME' => 'Møds Ässet' })) }
 
     describe '#login' do
       it 'should get the sunetid from Webauth' do
@@ -224,12 +224,12 @@ RSpec.describe User, type: :model do
       allow(Dor::SearchService).to receive(:query).and_return(answer)
     end
     it 'should accept any object identifier' do
-      expect{subject.roles(druid)}.not_to raise_error
-      expect{subject.roles('anyStringOK')}.not_to raise_error
+      expect { subject.roles(druid) }.not_to raise_error
+      expect { subject.roles('anyStringOK') }.not_to raise_error
     end
     it 'should return an empty array for any blank object identifer' do
       ['', nil].each do |pid|
-        expect{subject.roles(pid)}.not_to raise_error
+        expect { subject.roles(pid) }.not_to raise_error
         expect(subject.roles(pid)).to be_empty
       end
     end
@@ -325,7 +325,7 @@ RSpec.describe User, type: :model do
       subject.instance_variable_set(:@groups_to_impersonate, %w(a b))
     end
     it 'resets the role_cache' do
-      subject.instance_variable_set(:@role_cache, {a: 1})
+      subject.instance_variable_set(:@role_cache, { a: 1 })
       subject.set_groups_to_impersonate []
       expect(subject.instance_variable_get(:@role_cache)).to be_empty
     end

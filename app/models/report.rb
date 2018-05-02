@@ -14,7 +14,6 @@ class Report
   copy_blacklight_config_from CatalogController
 
   configure_blacklight do |config|
-
     config.report_fields = [
       {
         :field => :druid, :label => 'Druid',
@@ -54,7 +53,7 @@ class Report
       },
       {
         :field => SolrDocument::FIELD_COLLECTION_ID, :label => 'Collection ID',
-        :proc => lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_ID].map{|id| id.split(/:/).last } },
+        :proc => lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| id.split(/:/).last } },
         :sort => false, :default => false, :width => 100
       },
       {
@@ -72,7 +71,7 @@ class Report
       },
       {
         :field => :registered_earliest_dttsi, :label => 'Registered',
-        :proc => lambda { |doc| render_datetime(doc[:registered_earliest_dttsi])},
+        :proc => lambda { |doc| render_datetime(doc[:registered_earliest_dttsi]) },
         :sort => true, :default => false, :width => 100
       },
       {
@@ -101,12 +100,12 @@ class Report
       },
       {
         :field => :accessioned_dttsim, :label => 'Accession. Datetime',
-        :proc => lambda { |doc| render_datetime(doc[:accessioned_dttsim])},
+        :proc => lambda { |doc| render_datetime(doc[:accessioned_dttsim]) },
         :sort => true, :default => false, :width => 100
       },
       {
         :field => :published_dttsim, :label => 'Pub. Date',
-        :proc => lambda { |doc| render_datetime(doc[:published_dttsim])},
+        :proc => lambda { |doc| render_datetime(doc[:published_dttsim]) },
         :sort => true, :default => true, :width => 100
       },
       {
@@ -122,13 +121,13 @@ class Report
       },
       {
         :field => :shelved_file_count, :label => 'Shelved Files',
-        :proc => lambda {|doc| doc[:shelved_content_file_count_itsi] },
+        :proc => lambda { |doc| doc[:shelved_content_file_count_itsi] },
         :solr_fields => %w(shelved_content_file_count_itsi),
         :sort => false, :default => true, :width => 50
       },
       {
         :field => :resource_count, :label => 'Resources',
-        :proc => lambda {|doc| doc[:resource_count_itsi] },
+        :proc => lambda { |doc| doc[:resource_count_itsi] },
         :solr_fields => %w(resource_count_itsi),
         :sort => false, :default => true, :width => 50
       },

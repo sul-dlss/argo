@@ -19,25 +19,25 @@ describe WorkflowHelper, :type => :helper do
           .render_workflow_reset_link(wf_hash, name, process, status)).to be_nil
       end
       it 'without status' do
-        wf_hash = { process => {}}
+        wf_hash = { process => {} }
         expect(helper
           .render_workflow_reset_link(wf_hash, name, process, status)).to be_nil
       end
       it 'without trailing _' do
-        wf_hash = { process => { status => { }}}
+        wf_hash = { process => { status => {} } }
         expect(helper
           .render_workflow_reset_link(wf_hash, name, process, status)).to be_nil
       end
       it 'with all' do
-        wf_hash = { process => { status => { _: '' } }}
+        wf_hash = { process => { status => { _: '' } } }
         expect(helper
           .render_workflow_reset_link(wf_hash, name, process, status))
-            .to_not be_nil
+          .to_not be_nil
       end
     end
     describe 'reset link' do
       it '' do
-        wf_hash = { process => { status => { _: '' } }}
+        wf_hash = { process => { status => { _: '' } } }
         link = helper.render_workflow_reset_link(wf_hash, name, process, status)
         expect(link).to have_css 'a[data-remote="true"][rel="nofollow"]' \
           '[data-method="post"]', text: 'reset'

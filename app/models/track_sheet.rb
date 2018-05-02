@@ -99,8 +99,8 @@ class TrackSheet
     tags = Array(doc['tag_ssim']).collect { |tag| tag =~ /^Project\s*:/ ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP) }.compact
     table_data.push(['Tags:', tags.join("\n")]) if tags.length > 0
     table_data.push(['Catkey:',    Array(doc['catkey_id_ssim']).join(', ')]) if doc['catkey_id_ssim'].present?
-    table_data.push(['Source ID:', Array(doc['source_id_ssim']).first     ]) if doc['source_id_ssim'].present?
-    table_data.push(['Barcode:',   Array(doc['barcode_id_ssim']).first    ]) if doc['barcode_id_ssim'].present?
+    table_data.push(['Source ID:', Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
+    table_data.push(['Barcode:',   Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
     table_data.push(['Date Printed:', Time.now.strftime('%c')])
     table_data
   end

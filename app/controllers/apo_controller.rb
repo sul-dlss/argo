@@ -1,5 +1,4 @@
 class ApoController < ApplicationController
-
   before_action :create_obj, :except => [
     :is_valid_role_list_endpoint,
     :register,
@@ -98,17 +97,17 @@ class ApoController < ApplicationController
 
   # TODO: spec testing requires this method to be public
   def set_apo_metadata(apo, md_info)
-    apo.mods_title           = md_info[:title    ]
-    apo.desc_metadata_format = md_info[:desc_md  ]
+    apo.mods_title           = md_info[:title]
+    apo.desc_metadata_format = md_info[:desc_md]
     apo.metadata_source      = md_info[:metadata_source]
     apo.agreement            = md_info[:agreement]
-    apo.default_workflow     = md_info[:workflow ]
+    apo.default_workflow     = md_info[:workflow]
     apo.default_rights       = md_info[:default_object_rights]
     # Set the Use License given a machine-readable code for a creative commons
     # or open data commons license
     apo.use_license          = md_info[:use_license]
     apo.copyright_statement  = md_info[:copyright]
-    apo.use_statement        = md_info[:use      ]
+    apo.use_statement        = md_info[:use]
   end
 
   ##
@@ -116,11 +115,11 @@ class ApoController < ApplicationController
   # Uses `params` and `Dor::RegistrationService`
   #
   def register_new_apo
-    reg_params = {:workflow_priority => '70'}
+    reg_params = { :workflow_priority => '70' }
     reg_params[:label] = params[:title]
-    reg_params[:object_type ] = 'adminPolicy'
+    reg_params[:object_type] = 'adminPolicy'
     reg_params[:admin_policy] = SolrDocument::UBER_APO_ID
-    reg_params[:workflow_id ] = 'accessionWF'
+    reg_params[:workflow_id] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     apo_pid = response[:pid]
     notice = "APO #{apo_pid} created."
@@ -198,7 +197,7 @@ class ApoController < ApplicationController
   end
 
   def create_collection(apo_pid)
-    reg_params = {:workflow_priority => '65'}
+    reg_params = { :workflow_priority => '65' }
     reg_params[:label] = if !params[:collection_title].blank?
                            params[:collection_title]
                          else
@@ -211,11 +210,11 @@ class ApoController < ApplicationController
                           end
     reg_params[:rights] &&= reg_params[:rights].downcase
     col_catkey = params[:collection_catkey] || ''
-    reg_params[:object_type    ] = 'collection'
-    reg_params[:admin_policy   ] = apo_pid
+    reg_params[:object_type] = 'collection'
+    reg_params[:admin_policy] = apo_pid
     reg_params[:metadata_source] = col_catkey.blank? ? 'label' : 'symphony'
-    reg_params[:other_id       ] = "symphony:#{col_catkey}" unless col_catkey.blank?
-    reg_params[:workflow_id    ] = 'accessionWF'
+    reg_params[:other_id] = "symphony:#{col_catkey}" unless col_catkey.blank?
+    reg_params[:workflow_id] = 'accessionWF'
     response = Dor::RegistrationService.create_from_request(reg_params)
     collection = Dor.find(response[:pid])
     if params[:collection_abstract] && params[:collection_abstract].length > 0

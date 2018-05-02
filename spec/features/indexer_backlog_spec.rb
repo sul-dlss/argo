@@ -3,8 +3,8 @@ require 'spec_helper'
 feature 'Indexer Backlog status', js: true do
   before :each do
     @current_user = mock_user(is_admin?: true)
-    allow_any_instance_of(ApplicationController).to receive(:current_user).
-      and_return(@current_user)
+    allow_any_instance_of(ApplicationController).to receive(:current_user)
+      .and_return(@current_user)
   end
   scenario 'displays hyphen when not reachable' do
     visit root_path

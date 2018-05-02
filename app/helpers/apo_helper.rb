@@ -16,8 +16,8 @@ module ApoHelper
   def license_options(apo_obj)
     cur_use_license = apo_obj ? apo_obj.use_license : nil
     [['-- none --', '']] +
-    options_for_use_license_type(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES, cur_use_license) +
-    options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
+      options_for_use_license_type(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES, cur_use_license) +
+      options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
   end
 
   def options_for_desc_md

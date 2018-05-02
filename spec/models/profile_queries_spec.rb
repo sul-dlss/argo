@@ -15,7 +15,7 @@ describe Argo::ProfileQueries do
     it 'adds in required facet fields' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
-      facet_fields = solr_parameters.facet_fields.map{ |f| f[0] } + solr_parameters['facet.field']
+      facet_fields = solr_parameters.facet_fields.map { |f| f[0] } + solr_parameters['facet.field']
       required_fields = [
         SolrDocument::FIELD_APO_TITLE.to_s,
         SolrDocument::FIELD_COLLECTION_TITLE.to_s,

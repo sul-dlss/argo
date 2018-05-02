@@ -5,11 +5,11 @@ end
 def get_workgroups_facet(apo_field = nil)
   apo_field = apo_field_default() if apo_field.nil?
   resp = Dor::SearchService.query('objectType_ssim:adminPolicy', :rows => 0,
-    :'facet.field' => apo_field,
-    :'facet.prefix'   => 'workgroup:',
-    :'facet.mincount' => 1,
-    :'facet.limit'    => -1,
-    :'json.nl' => 'map' )
+                                                                 :'facet.field' => apo_field,
+                                                                 :'facet.prefix'   => 'workgroup:',
+                                                                 :'facet.mincount' => 1,
+                                                                 :'facet.limit'    => -1,
+                                                                 :'json.nl' => 'map')
   resp['facet_counts']['facet_fields'][apo_field]
 end
 
@@ -74,7 +74,7 @@ namespace :argo do
       end
       File.unlink('public/auth/.htaccess') if File.exist?('public/auth/.htaccess')
     end
-  end  # :htaccess
+  end # :htaccess
 
   desc 'Update completed/archived workflow counts'
   task :update_archive_counts => :environment do |t|
@@ -91,6 +91,4 @@ namespace :argo do
     facet = get_workgroups_facet()
     puts "#{facet.length} Workgroups:\n#{facet.keys.join(%(\n))}"
   end
-
-
 end # :argo
