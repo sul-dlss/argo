@@ -69,7 +69,7 @@ class UserLog
           end
         end
       end
-      log_items.push({ 'argo.bulk_metadata.bulk_log_druids_loaded' => druids_loaded })
+      log_items.push('argo.bulk_metadata.bulk_log_druids_loaded' => druids_loaded)
       log_items
     end
   end

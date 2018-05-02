@@ -161,7 +161,7 @@ module Argo
       @logger.info "querying fedora for pids for model_type=#{model_type}..."
 
       pid_list = Dor::SearchService.risearch 'select $object from <#ri> where $object ' \
-        "<fedora-model:hasModel> #{model_type}", { :limit => nil }
+        "<fedora-model:hasModel> #{model_type}", :limit => nil
       @logger.info "found #{pid_list.length} pids for #{model_type} (unfiltered)"
 
       filter_invalid_druids_if_needed pid_list

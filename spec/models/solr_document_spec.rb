@@ -9,7 +9,7 @@ describe SolrDocument, :type => :model do
       end
     end
     it 'should generate a correct lifecycle with the old format that lacks version info' do
-      doc = SolrDocument.new({ 'lifecycle_ssim' => ['registered:2012-02-25T01:40:57Z'] })
+      doc = SolrDocument.new('lifecycle_ssim' => ['registered:2012-02-25T01:40:57Z'])
 
       versions = doc.get_milestones
       expect(versions.keys).to eq [1]
@@ -28,7 +28,7 @@ describe SolrDocument, :type => :model do
     end
     it 'should recognize versions and bundle versions together' do
       lifecycle_data = ['registered:2012-02-25T01:40:57Z;1', 'opened:2012-02-25T01:39:57Z;2']
-      versions = SolrDocument.new({ 'lifecycle_ssim' => lifecycle_data }).get_milestones
+      versions = SolrDocument.new('lifecycle_ssim' => lifecycle_data).get_milestones
       expect(versions['1'].size).to eq(8)
       expect(versions['2'].size).to eq(8)
       expect(versions['1']['registered']).not_to be_nil
@@ -69,7 +69,7 @@ describe SolrDocument, :type => :model do
       data = []
       data << '1;1.0.0;Initial version'
       data << '2;1.1.0;Minor change'
-      versions = SolrDocument.new({ 'versions_ssm' => data }).get_versions
+      versions = SolrDocument.new('versions_ssm' => data).get_versions
       expect(versions['1']).to match a_hash_including(:tag => '1.0.0', :desc => 'Initial version')
       expect(versions['2']).to match a_hash_including(:tag => '1.1.0', :desc => 'Minor change')
     end

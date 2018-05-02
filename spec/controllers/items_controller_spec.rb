@@ -22,7 +22,7 @@ RSpec.describe ItemsController, :type => :controller do
     allow(@item).to receive(:save)
     allow(@item).to receive(:delete)
     allow(@item).to receive(:identityMetadata).and_return(idmd)
-    allow(@item).to receive(:datastreams).and_return({ 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new })
+    allow(@item).to receive(:datastreams).and_return('identityMetadata' => idmd, 'events' => Dor::EventsDS.new)
     allow(@item).to receive(:allows_modification?).and_return(true)
     allow(@item).to receive(:can_manage_item?).and_return(false)
     allow(@item).to receive(:can_manage_content?).and_return(false)
@@ -393,9 +393,9 @@ RSpec.describe ItemsController, :type => :controller do
       end
 
       it 'updates the datastream' do
-        expect(@item).to receive(:datastreams).and_return({
-                                                            'contentMetadata' => double(Dor::ContentMetadataDS, :'content=' => xml)
-                                                          })
+        expect(@item).to receive(:datastreams).and_return(
+          'contentMetadata' => double(Dor::ContentMetadataDS, :'content=' => xml)
+        )
         expect(@item).to receive(:save)
         expect(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_return(true)
         post 'datastream_update', params: { :dsid => 'contentMetadata', :id => @pid, :content => xml }
@@ -416,7 +416,7 @@ RSpec.describe ItemsController, :type => :controller do
         @mock_ds = double(Dor::ContentMetadataDS)
         allow(@mock_ds).to receive(:content=).and_return(true)
         allow(@item).to receive(:to_solr).and_raise(ActiveFedora::ObjectNotFoundError)
-        allow(@item).to receive(:datastreams).and_return({ 'contentMetadata' => @mock_ds })
+        allow(@item).to receive(:datastreams).and_return('contentMetadata' => @mock_ds)
         post 'datastream_update', params: { :dsid => 'contentMetadata', :id => @pid, :content => invalid_apo_xml }
         expect(response.code).to eq('404')
         expect(response.body).to include('The object was not found in Fedora. Please recheck the RELS-EXT XML.')
@@ -429,7 +429,7 @@ RSpec.describe ItemsController, :type => :controller do
       @mock_ds = double(Dor::ContentMetadataDS)
       allow(@mock_ds).to receive(:dirty?).and_return(false)
       allow(@mock_ds).to receive(:save)
-      allow(@item).to receive(:datastreams).and_return({ 'contentMetadata' => @mock_ds })
+      allow(@item).to receive(:datastreams).and_return('contentMetadata' => @mock_ds)
     end
 
     context 'without manage content access' do
@@ -692,15 +692,15 @@ RSpec.describe ItemsController, :type => :controller do
       expect(Dor).to receive(:find).with('druid:zt570tx3016').and_call_original # override the earlier Dor.find expectation
       allow(Dor).to receive(:find).with('druid:hv992ry2431') # create_obj_and_apo will try to lookup the APO's APO
       subject.send(:create_obj_and_apo, 'druid:zt570tx3016')
-      expect(subject.instance_variable_get(:@object).to_solr).to include({ 'active_fedora_model_ssi' => 'Dor::AdminPolicyObject',
-                                                                           'has_model_ssim' => 'info:fedora/afmodel:Dor_AdminPolicyObject' })
+      expect(subject.instance_variable_get(:@object).to_solr).to include('active_fedora_model_ssi' => 'Dor::AdminPolicyObject',
+                                                                         'has_model_ssim' => 'info:fedora/afmodel:Dor_AdminPolicyObject')
     end
     it 'loads an Item object so that it has the appropriate model type (according to the solr doc)' do
       expect(Dor).to receive(:find).with('druid:hj185vb7593').and_call_original # override the earlier Dor.find expectation
       allow(Dor).to receive(:find).with('druid:ww057vk7675') # create_obj_and_apo will try to lookup the Item's APO
       subject.send(:create_obj_and_apo, 'druid:hj185vb7593')
-      expect(subject.instance_variable_get(:@object).to_solr).to include({ 'active_fedora_model_ssi' => 'Dor::Item',
-                                                                           'has_model_ssim' => 'info:fedora/afmodel:Dor_Item' })
+      expect(subject.instance_variable_get(:@object).to_solr).to include('active_fedora_model_ssi' => 'Dor::Item',
+                                                                         'has_model_ssim' => 'info:fedora/afmodel:Dor_Item')
     end
   end
 

@@ -42,10 +42,9 @@ class RegistrationController < ApplicationController
       col_title_field = SolrDocument::FIELD_TITLE
 
       # grab the collection title from Solr, or fall back to DOR
-      solr_doc = Dor::SearchService.query("id:\"#{col_id}\"", {
-                                            rows: 1,
-                                            fl: col_title_field
-                                          })['response']['docs'].first
+      solr_doc = Dor::SearchService.query("id:\"#{col_id}\"",
+                                          rows: 1,
+                                          fl: col_title_field)['response']['docs'].first
 
       if solr_doc.present? && solr_doc[col_title_field].present?
         collections[col_id] = "#{short_label(solr_doc[col_title_field], truncate_limit)} (#{col_druid})"
@@ -95,14 +94,12 @@ class RegistrationController < ApplicationController
     facet_fields = { fields: [facet_field] }
     response = Dor::SearchService.query(
       '*:*',
-      {
-        rows: 0,
-        :'facet.field' => facet_fields,
-        :'facet.prefix' => params[:term].titlecase,
-        :'facet.mincount' => 1,
-        :'facet.limit' => 15,
-        :'json.nl' => 'map'
-      }
+      rows: 0,
+      :'facet.field' => facet_fields,
+      :'facet.prefix' => params[:term].titlecase,
+      :'facet.mincount' => 1,
+      :'facet.limit' => 15,
+      :'json.nl' => 'map'
     )
     result = response['facet_counts']['facet_fields'][facet_field].keys.sort
     respond_to do |format|

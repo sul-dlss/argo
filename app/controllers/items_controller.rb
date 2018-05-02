@@ -76,7 +76,7 @@ class ItemsController < ApplicationController
           :description => params[:description],
           :opening_user_name => current_user.to_s
         }
-        @object.open_new_version({ :vers_md_upd_info => vers_md_upd_info })
+        @object.open_new_version(:vers_md_upd_info => vers_md_upd_info)
       rescue Dor::Exception => e
         render :status => :precondition_failed, :plain => e
         return
@@ -379,7 +379,7 @@ class ItemsController < ApplicationController
       :description => params[:description],
       :opening_user_name => current_user.to_s
     }
-    @object.open_new_version({ :vers_md_upd_info => vers_md_upd_info })
+    @object.open_new_version(:vers_md_upd_info => vers_md_upd_info)
     respond_to do |format|
       msg = params[:id] + ' is open for modification!'
       format.any { redirect_to solr_document_path(params[:id]), :notice => msg }
@@ -425,10 +425,10 @@ class ItemsController < ApplicationController
       severity = params[:severity]
       desc = params[:description]
       ds = @object.versionMetadata
-      ds.update_current_version({
-                                  :description => desc,
-                                  :significance => severity.to_sym
-                                })
+      ds.update_current_version(
+        :description => desc,
+        :significance => severity.to_sym
+      )
       @object.save
     end
 

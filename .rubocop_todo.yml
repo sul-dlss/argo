@@ -340,12 +340,6 @@ Style/BlockDelimiters:
     - 'lib/tasks/argo_testing.rake'
     - 'spec/spec_helper.rb'
 
-# Offense count: 46
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: braces, no_braces, context_dependent
-Style/BracesAroundHashParameters:
-  Enabled: false
 
 # Offense count: 1
 # Cop supports --auto-correct.

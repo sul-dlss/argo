@@ -143,7 +143,7 @@ class ModsulatorJob < ActiveJob::Base
       :description => "Descriptive metadata upload from #{original_filename}",
       :opening_user_name => user_login
     }
-    dor_object.open_new_version({ :vers_md_upd_info => vers_md_upd_info })
+    dor_object.open_new_version(:vers_md_upd_info => vers_md_upd_info)
   end
 
   # Returns true if the given object is accessioned, false otherwise.

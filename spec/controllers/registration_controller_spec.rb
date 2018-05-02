@@ -252,12 +252,12 @@ RSpec.describe RegistrationController, type: :controller do
 
       get 'collection_list', params: { apo_id: apo_id, format: :json }
       data = JSON.parse(response.body)
-      expect(data).to eq({
-                           '' => 'None',
-                           'druid:zy123xw4567' => 'A collection that sorts to the top (zy123xw4567)',
-                           'druid:pb873ty1662' => 'Annual report of the State Corporation Commission showing... (pb873ty1662)',
-                           'druid:ab098cd7654' => 'Ze last collection in ze list (ab098cd7654)'
-                         })
+      expect(data).to eq(
+        '' => 'None',
+        'druid:zy123xw4567' => 'A collection that sorts to the top (zy123xw4567)',
+        'druid:pb873ty1662' => 'Annual report of the State Corporation Commission showing... (pb873ty1662)',
+        'druid:ab098cd7654' => 'Ze last collection in ze list (ab098cd7654)'
+      )
     end
 
     it 'should not include collections that are not found in Solr/Fedora' do

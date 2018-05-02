@@ -325,7 +325,7 @@ RSpec.describe User, type: :model do
       subject.instance_variable_set(:@groups_to_impersonate, %w(a b))
     end
     it 'resets the role_cache' do
-      subject.instance_variable_set(:@role_cache, { a: 1 })
+      subject.instance_variable_set(:@role_cache, a: 1)
       subject.set_groups_to_impersonate []
       expect(subject.instance_variable_get(:@role_cache)).to be_empty
     end
