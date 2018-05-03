@@ -1,24 +1,20 @@
 require 'spec_helper'
 
 RSpec.describe 'mods_view', type: :request do
-  let(:current_user) do
-    mock_user(
-      privgroup: User::ADMIN_GROUPS.first,
-      is_admin?: true
-    )
-  end
   let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::Item) }
+  let(:current_user) { create(:user) }
 
   before do
+    sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).and_return(object)
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(current_user)
   end
 
   context 'main page tests' do
-    it 'should have the expected heading for search facets' do
+    it 'has the expected heading for search facets' do
       visit root_path
       expect(page).to have_content('Limit your search')
     end
+
     it 'should have the expected search facets', js: true do
       search_facets = ['Object Type', 'Content Type', 'Admin Policy']
       visit root_path

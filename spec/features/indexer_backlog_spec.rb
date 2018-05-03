@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 feature 'Indexer Backlog status', js: true do
-  before :each do
-    @current_user = mock_user(is_admin?: true)
-    allow_any_instance_of(ApplicationController).to receive(:current_user)
-      .and_return(@current_user)
+  before do
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
+
   scenario 'displays hyphen when not reachable' do
     visit root_path
     expect(page).to have_css 'li p.navbar-text', text: 'Indexer Backlog: -'

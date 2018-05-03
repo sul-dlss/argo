@@ -48,4 +48,7 @@ Rails.application.configure do
   # got logged is quite nice.
   # (declared after Argo.configure since it uses one of those params)
   config.log_tags = [:uuid, proc { Time.zone.now.strftime(Settings.DATE_FORMAT_STR) }]
+
+  require 'test_shibboleth_headers'
+  config.middleware.use TestShibbolethHeaders
 end

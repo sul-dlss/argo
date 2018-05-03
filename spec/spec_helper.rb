@@ -86,7 +86,7 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include TestViewHelpers, type: :view
-  config.include SigninHelper
+  config.include SigninHelper, type: :view
   config.include Devise::Test::ControllerHelpers, type: :controller
 end
 

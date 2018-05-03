@@ -1,12 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe 'Home page' do
-  let(:current_user) do
-    mock_user(is_admin?: true)
-  end
-  before :each do
-    allow_any_instance_of(CatalogController).to receive(:current_user)
-      .and_return(current_user)
+  before do
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
   describe 'facets' do

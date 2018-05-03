@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 RSpec.feature 'Set governing APO' do
-  let(:groups) { ['workgroup:dlss:dor-admin', 'workgroup:dlss:developers'] }
-  let(:current_user) { mock_user(is_admin?: true, groups: groups) }
+  let(:groups) { ['sdr:administrator-role', 'dlss:dor-admin', 'dlss:developers'] }
   let(:new_apo) { double(Dor::AdminPolicyObject, pid: 'druid:ww057vk7675') }
   let(:obj) do
     double(
@@ -18,7 +17,7 @@ RSpec.feature 'Set governing APO' do
   before do
     allow(Dor).to receive(:find).with(obj.pid).and_return(obj)
     allow(Dor).to receive(:find).with(new_apo.pid).and_return(new_apo)
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(current_user)
+    sign_in create(:user), groups: groups
   end
 
   scenario 'modification not currently allowed' do

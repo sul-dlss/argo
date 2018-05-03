@@ -1,12 +1,9 @@
 require 'spec_helper'
 
 # Feature tests for the spreadsheet bulk uploads view.
-feature 'Bulk jobs view', js: true do
-  before :each do
-    @current_user = mock_user(is_admin?: true)
-
-    allow_any_instance_of(ApplicationController).to receive(:current_user)
-      .and_return(@current_user)
+RSpec.feature 'Bulk jobs view', js: true do
+  before do
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
   scenario 'the submit button exists' do

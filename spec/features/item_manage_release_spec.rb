@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.feature 'Item manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
-  before(:each) do
+  before do
     obj = double(
       Dor::Item,
       admin_policy_object: nil,
@@ -12,9 +12,7 @@ RSpec.feature 'Item manage release' do
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
-    allow(current_user).to receive(:is_admin?).and_return true
-    allow_any_instance_of(ApplicationController).to receive(:current_user)
-      .and_return(current_user)
+    sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).and_return(obj)
   end
   let(:druid) { 'druid:qq613vj0238' }

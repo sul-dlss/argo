@@ -1,16 +1,24 @@
 require 'spec_helper'
 describe ArgoHelper, type: :helper do
   describe '#render_buttons' do
-    before :each do
+    let(:user) do
+      instance_double(User,
+                      is_admin?: true,
+                      is_webauth_admin?: false,
+                      is_manager?: false,
+                      is_viewer?: false,
+                      roles: false)
+    end
+
+    before do
       @item_id = 'druid:kv840rx2720'
       @governing_apo_id = 'druid:hv992ry2431'
       @object = instantiate_fixture(@item_id, Dor::Item)
       @doc = SolrDocument.new('id' => @item_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id])
-      @usr = mock_user(is_admin?: true)
       allow(Dor::Config.workflow.client).to receive(:get_active_lifecycle).and_return(true)
       allow(Dor::Config.workflow.client).to receive(:get_lifecycle).and_return(true)
-      allow(controller).to receive(:current_user).and_return(@usr)
-      allow(helper).to receive(:current_user).and_return(@usr)
+      allow(controller).to receive(:current_user).and_return(user)
+      allow(helper).to receive(:current_user).and_return(user)
       allow(@object).to receive(:allows_modification?).and_return(true)
       allow(@object).to receive(:pid).and_return(@item_id)
       desc_md = double(Dor::DescMetadataDS)
@@ -105,7 +113,7 @@ describe ArgoHelper, type: :helper do
         expect(buttons.length).to eq default_buttons.length
       end
       it 'should generate the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
-        allow(@usr).to receive(:is_admin?).and_return(false)
+        allow(user).to receive(:is_admin?).and_return(false)
         allow(@object).to receive(:can_manage_item?).and_return(true)
         allow(@object).to receive(:can_manage_content?).and_return(true)
         buttons = helper.render_buttons(@doc)
@@ -127,10 +135,10 @@ describe ArgoHelper, type: :helper do
         expect(buttons.length).to eq default_buttons.length
       end
       it "should not generate errors given an object that has no associated APO and a user that can't manage the object" do
-        allow(@usr).to receive(:is_admin?).and_return(false)
+        allow(user).to receive(:is_admin?).and_return(false)
         allow(@doc).to receive(:apo_pid).and_return(nil)
         allow(@object).to receive(:admin_policy_object).and_return(nil)
-        allow(@usr).to receive(:roles).with(nil).and_return([])
+        allow(user).to receive(:roles).with(nil).and_return([])
         buttons = helper.render_buttons(@doc)
         expect(buttons).not_to be_nil
         expect(buttons.length).to eq 0

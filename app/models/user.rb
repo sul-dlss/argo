@@ -112,7 +112,9 @@ class User < ActiveRecord::Base
   # @return [Boolean] is the user a repository wide administrator without
   #     taking into account impersonation.
   def is_webauth_admin?
-    !(webauth_groups & ADMIN_GROUPS).empty?
+    # we're casting to an array, because this may be called in a background job,
+    # where webauth_groups has not been set.
+    !(Array(webauth_groups) & ADMIN_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide manager
