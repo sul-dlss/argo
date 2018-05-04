@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe SearchBuilder do
-  let(:user_params) { Hash.new }
-  let(:solr_params) { Hash.new }
+  let(:user_params) { {} }
+  let(:solr_params) { {} }
   let(:context) { CatalogController.new }
 
   let(:search_builder) { described_class.new(context) }

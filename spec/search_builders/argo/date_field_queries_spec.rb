@@ -6,7 +6,7 @@ class TestClass
   include Argo::DateFieldQueries
 end
 
-describe 'Argo::DateFieldQueries' do
+describe Argo::DateFieldQueries do
   let(:user) do
     double('user', is_manager?: false, is_admin?: false, is_viewer?: false)
   end

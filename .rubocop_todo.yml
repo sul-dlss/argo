@@ -395,12 +395,6 @@ Style/EmptyElse:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Style/EmptyLiteral:
-  Exclude:
-    - 'spec/models/search_builder_spec.rb'
-
 # Offense count: 5
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
