@@ -682,12 +682,6 @@ Style/TernaryParentheses:
     - 'app/controllers/items_controller.rb'
     - 'app/models/track_sheet.rb'
 
-# Offense count: 4
-# Cop supports --auto-correct.
-Style/UnneededInterpolation:
-  Exclude:
-    - 'app/jobs/modsulator_job.rb'
-
 # Offense count: 8
 # Cop supports --auto-correct.
 # Configuration parameters: WordRegex.

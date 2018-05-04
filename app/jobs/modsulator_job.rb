@@ -106,13 +106,13 @@ class ModsulatorJob < ActiveJob::Base
         log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
       rescue ActiveFedora::ObjectNotFoundError => e
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
-        log.puts("#{e.message}")
-        log.puts("#{e.backtrace}")
+        log.puts(e.message.to_s)
+        log.puts(e.backtrace.to_s)
         next
       rescue Dor::Exception, Exception => e
         log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
-        log.puts("#{e.message}")
-        log.puts("#{e.backtrace}")
+        log.puts(e.message.to_s)
+        log.puts(e.backtrace.to_s)
         next
       end
     end
