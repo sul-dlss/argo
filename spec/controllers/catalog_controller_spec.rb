@@ -10,7 +10,7 @@ RSpec.describe CatalogController, type: :controller do
 
   describe '#index' do
     before do
-      allow(user).to receive(:permitted_apos).and_return([])
+      expect(controller).to receive(:search_results).and_return([])
       sign_in user
     end
 
