@@ -17,9 +17,6 @@ http://java.com/en/download/
 
 2. Install Ruby 2.2.2 (e.g., via rvm or rbenv).
 
-3. Install PhantomJS. The Argo tests use [Poltergeist](https://github.com/teampoltergeist/poltergeist), which depends on [PhantomJS](http://phantomjs.org/download.html).  The Poltergeist project maintains installation instructions for PhantomJS, see:
-https://github.com/teampoltergeist/poltergeist#installing-phantomjs
-
 
 ### Check Out the Code
 
@@ -186,7 +183,7 @@ and in development or testing mode:
 - Jetty
 - RSpec
 - Capybara
-- Poltergeist / PhantomJS
+- Chrome
 
 ## Further reading
 

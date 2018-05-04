@@ -15,7 +15,7 @@ RSpec.feature 'Date range form', js: true do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
-      find('input[type="submit"]').trigger(:click)
+      find('input[type="submit"]').click
     end
     using_wait_time 45 do
       find('#appliedParams')
@@ -33,7 +33,7 @@ RSpec.feature 'Date range form', js: true do
   scenario 'with no after date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
-      find('input[type="submit"]').trigger(:click)
+      find('input[type="submit"]').click
     end
     using_wait_time 45 do
       find('#appliedParams')
@@ -48,7 +48,7 @@ RSpec.feature 'Date range form', js: true do
   scenario 'with no before date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
-      find('input[type="submit"]').trigger(:click)
+      find('input[type="submit"]').click
     end
     using_wait_time 45 do
       find('#appliedParams')
@@ -66,7 +66,7 @@ RSpec.feature 'Date range form', js: true do
     it 'includes existing parameters in the new query' do
       within '#facet-object_modified_date' do
         fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
-        find('input[type="submit"]').trigger(:click)
+        find('input[type="submit"]').click
       end
 
       find('#appliedParams')
