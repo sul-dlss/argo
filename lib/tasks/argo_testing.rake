@@ -116,7 +116,7 @@ if ['test', 'development'].include? Rails.env
 
     namespace :repo do
       desc "Load XML file(s) into repo (fedora and solr), default: contents of 'load_order' file. With a glob: rake argo:repo:load[fedora_conf/data/*.xml]"
-      task :load, [:glob] do |task, args|
+      task :load, [:glob] => :environment do |task, args|
         puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
 
         file_list = []
@@ -133,20 +133,16 @@ if ['test', 'development'].include? Rails.env
         file_list.each do |file|
           i += 1
 
-          ENV['foxml'] = file
           handler = proc do |e, attempt_number, total_delay|
             puts STDERR.puts "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
             errors << file
           end
           with_retries(max_tries: 3, handler: handler, rescue: [StandardError]) { |attempt|
-            puts "** File #{i}, Try #{attempt} ** repo:load foxml=#{file}"
-            # Invoke the ActiveFedora gem's rake task
-            Rake::Task['repo:load'].reenable
-            Rake::Task['repo:load'].invoke
+            puts "** File #{i}, Try #{attempt} ** file: #{file}"
+            pid = ActiveFedora::FixtureLoader.import_to_fedora(file)
+            ActiveFedora::FixtureLoader.index(pid)
           }
         end
-        Rake::Task['repo:load'].reenable      # other things might want to load, too
-        ENV.delete('foxml') if ENV['foxml']   # avoid ENV contamination
         puts 'Done loading repo files'
         puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0
         #     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
