@@ -1,7 +1,6 @@
 language: ruby
 rvm:
-  - 2.3.1 # deployed
-  - 2.3.4
+  - 2.3.4 # deployed
 
 jdk:
   - oraclejdk8
