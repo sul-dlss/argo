@@ -12,14 +12,21 @@ RSpec.describe ApoController, type: :controller do
 
     allow(controller).to receive(:update_index)
 
-    log_in_as_mock_user(is_admin?: true)
+    sign_in user
+    allow(controller).to receive(:authorize!).with(:manage_item, Dor::AdminPolicyObject).and_return(true)
   end
+
+  let(:user) { create(:user) }
 
   let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Item) }
   let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
   let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
 
-  describe 'create' do
+  describe '#create' do
+    before do
+      allow(controller).to receive(:authorize!).with(:create, Dor::AdminPolicyObject).and_return(true)
+    end
+
     let(:example) do
       { # These data mimic the APO registration form
         'title' => 'New APO Title',
@@ -133,7 +140,7 @@ RSpec.describe ApoController, type: :controller do
     end
   end
 
-  describe 'register_collection' do
+  describe '#register_collection' do
     it 'shows the create collection form' do
       get :register_collection, params: { 'id' => apo.pid }
       expect(response).to have_http_status(:ok)
@@ -205,70 +212,74 @@ RSpec.describe ApoController, type: :controller do
     end
   end
 
-  describe 'overly literal tests' do
-    before :each do
-      expect(Dor).to receive(:find).with(apo.pid).and_return apo
+  describe '#add_roleplayer' do
+    it 'adds a roleplayer' do
+      expect(apo).to receive(:add_roleplayer)
+      post 'add_roleplayer', params: { id: apo.pid, role: 'dor-apo-viewer', roleplayer: 'Jon' }
     end
-    describe 'add_roleplayer' do
-      it 'adds a roleplayer' do
-        expect(apo).to receive(:add_roleplayer)
-        post 'add_roleplayer', params: { id: apo.pid, role: 'dor-apo-viewer', roleplayer: 'Jon' }
-      end
+  end
+
+  describe '#delete_role' do
+    it 'calls delete_role' do
+      expect(apo).to receive(:delete_role)
+      post 'delete_role', params: { id: apo.pid, role: 'dor-apo-viewer', entity: 'Jon' }
     end
-    describe 'delete_role' do
-      it 'calls delete_role' do
-        expect(apo).to receive(:delete_role)
-        post 'delete_role', params: { id: apo.pid, role: 'dor-apo-viewer', entity: 'Jon' }
-      end
+  end
+
+  describe '#delete_collection' do
+    it 'calls remove_default_collection' do
+      expect(apo).to receive(:remove_default_collection)
+      post 'delete_collection', params: { id: apo.pid, collection: collection.pid }
     end
-    describe 'delete_collection' do
-      it 'calls remove_default_collection' do
-        expect(apo).to receive(:remove_default_collection)
-        post 'delete_collection', params: { id: apo.pid, collection: collection.pid }
-      end
+  end
+
+  describe '#add_collection' do
+    it 'calls add_default_collection' do
+      expect(apo).to receive(:add_default_collection)
+      post 'add_collection', params: { id: apo.pid, collection: collection.pid }
     end
-    describe 'add_collection' do
-      it 'calls add_default_collection' do
-        expect(apo).to receive(:add_default_collection)
-        post 'add_collection', params: { id: apo.pid, collection: collection.pid }
-      end
+  end
+
+  describe '#update_title' do
+    it 'calls set_title' do
+      expect(apo).to receive(:mods_title=)
+      post 'update_title', params: { id: apo.pid, title: 'awesome new title' }
     end
-    describe 'update_title' do
-      it 'calls set_title' do
-        expect(apo).to receive(:mods_title=)
-        post 'update_title', params: { id: apo.pid, title: 'awesome new title' }
-      end
+  end
+
+  describe '#update_creative_commons' do
+    it 'sets creative_commons' do
+      expect(apo).to receive(:creative_commons_license=)
+      expect(apo).to receive(:creative_commons_license_human=)
+      post 'update_creative_commons', params: { id: apo.pid, cc_license: 'by-nc' }
     end
-    describe 'update_creative_commons' do
-      it 'sets creative_commons' do
-        expect(apo).to receive(:creative_commons_license=)
-        expect(apo).to receive(:creative_commons_license_human=)
-        post 'update_creative_commons', params: { id: apo.pid, cc_license: 'by-nc' }
-      end
+  end
+
+  describe '#update_use' do
+    it 'calls set_use_statement' do
+      expect(apo).to receive(:use_statement=)
+      post 'update_use', params: { id: apo.pid, use: 'new use statement' }
     end
-    describe 'update_use' do
-      it 'calls set_use_statement' do
-        expect(apo).to receive(:use_statement=)
-        post 'update_use', params: { id: apo.pid, use: 'new use statement' }
-      end
+  end
+
+  describe '#update_copyight' do
+    it 'calls set_copyright_statement' do
+      expect(apo).to receive(:copyright_statement=)
+      post 'update_copyright', params: { id: apo.pid, copyright: 'new copyright statement' }
     end
-    describe 'update_copyight' do
-      it 'calls set_copyright_statement' do
-        expect(apo).to receive(:copyright_statement=)
-        post 'update_copyright', params: { id: apo.pid, copyright: 'new copyright statement' }
-      end
+  end
+
+  describe '#update_default_object_rights' do
+    it 'calls set_default_rights' do
+      expect(apo).to receive(:default_rights=)
+      post 'update_default_object_rights', params: { id: apo.pid, rights: 'stanford' }
     end
-    describe 'update_default_object_rights' do
-      it 'calls set_default_rights' do
-        expect(apo).to receive(:default_rights=)
-        post 'update_default_object_rights', params: { id: apo.pid, rights: 'stanford' }
-      end
-    end
-    describe 'update_desc_metadata' do
-      it 'calls set_desc_metadata_format' do
-        expect(apo).to receive(:desc_metadata_format=)
-        post 'update_desc_metadata', params: { id: apo.pid, desc_md: 'TEI' }
-      end
+  end
+
+  describe '#update_desc_metadata' do
+    it 'calls set_desc_metadata_format' do
+      expect(apo).to receive(:desc_metadata_format=)
+      post 'update_desc_metadata', params: { id: apo.pid, desc_md: 'TEI' }
     end
   end
 end
