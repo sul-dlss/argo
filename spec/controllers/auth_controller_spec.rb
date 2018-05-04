@@ -2,12 +2,18 @@ require 'spec_helper'
 
 RSpec.describe AuthController, type: :controller do
   describe 'test impersonation' do
+    before do
+      sign_in user
+    end
+
+    let(:user) { create(:user) }
+
     context 'as an admin' do
       before do
-        log_in_as_mock_user(is_admin?: true)
+        allow(controller).to receive(:authorize!).and_return(true)
       end
 
-      it 'should be able to remember and forget impersonated groups' do
+      it 'is able to remember and forget impersonated groups' do
         impersonated_groups_str = 'workgroup:dlss:impersonatedgroup1,workgroup:dlss:impersonatedgroup2'
         post :remember_impersonated_groups, params: { groups: impersonated_groups_str }
         expect(session[:groups]).to eq(impersonated_groups_str.split(','))
@@ -18,11 +24,7 @@ RSpec.describe AuthController, type: :controller do
     end
 
     context 'as an ordinary user' do
-      before do
-        log_in_as_mock_user
-      end
-
-      it 'should be able to forget but not remember impersonated groups' do
+      it 'is able to forget but not remember impersonated groups' do
         impersonated_groups_str = 'workgroup:dlss:impersonatedgroup1,workgroup:dlss:impersonatedgroup2'
         post :remember_impersonated_groups, params: { groups: impersonated_groups_str }
         expect(session[:groups]).to be_blank
