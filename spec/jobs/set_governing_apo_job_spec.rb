@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SetGoverningApoJob do
+RSpec.describe SetGoverningApoJob do
   let(:bulk_action_no_process_callback) do
     bulk_action = build(
       :bulk_action,
@@ -133,13 +133,9 @@ describe SetGoverningApoJob do
   end
 
   describe '#ability' do
-    before { subject.instance_variable_set(:@webauth, webauth) }
-
     it 'caches the result' do
-      user = double(User)
-      expect(User).to receive(:find_or_create_by_webauth).with(webauth).and_return(user).exactly(:once)
       ability = double(Ability)
-      expect(Ability).to receive(:new).with(user).and_return(ability).exactly(:once)
+      expect(Ability).to receive(:new).with(bulk_action_no_process_callback.user).and_return(ability).exactly(:once)
 
       expect(subject.send(:ability)).to be(ability)
       expect(subject.send(:ability)).to be(ability)

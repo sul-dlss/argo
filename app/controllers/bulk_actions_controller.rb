@@ -16,8 +16,7 @@ class BulkActionsController < ApplicationController
 
   # POST /bulk_actions
   def create
-    @bulk_action = BulkAction.new(bulk_action_params)
-    @bulk_action.user = current_user
+    @bulk_action = BulkAction.new(bulk_action_params.merge(user: current_user))
 
     if @bulk_action.save
       redirect_to action: :index, notice: 'Bulk action was successfully created.'
@@ -52,6 +51,6 @@ class BulkActionsController < ApplicationController
       :pids,
       manage_release: [:tag, :what, :who, :to],
       set_governing_apo: [:new_apo_id]
-    ).merge(webauth: { privgroup: webauth.privgroup, login: webauth.login })
+    )
   end
 end

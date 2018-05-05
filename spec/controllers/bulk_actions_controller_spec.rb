@@ -4,10 +4,8 @@ RSpec.describe BulkActionsController do
   let(:current_user) do
     create(:user)
   end
-  let(:webauth) do
-    double('webauth', privgroup: '', login: '')
-  end
-  before(:each) do
+
+  before do
     expect_any_instance_of(BulkActionsController).to receive(:current_user)
       .at_least(:once).and_return(current_user)
   end
@@ -56,10 +54,6 @@ RSpec.describe BulkActionsController do
   end
   describe 'POST create' do
     context 'with correct parameters' do
-      before(:each) do
-        expect_any_instance_of(BulkActionsController).to receive(:webauth)
-          .at_least(:once).and_return(webauth)
-      end
       it 'assigns @bulk_action to current_user' do
         post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         expect(assigns(:bulk_action)).to be_an BulkAction

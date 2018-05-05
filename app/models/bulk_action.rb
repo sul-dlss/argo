@@ -9,7 +9,7 @@ class BulkAction < ActiveRecord::Base
   before_destroy :remove_output_directory
 
   # A virtual attribute used for job creation but not persisted
-  attr_accessor :pids, :manage_release, :set_governing_apo, :webauth
+  attr_accessor :pids, :manage_release, :set_governing_apo
 
   def file(filename)
     File.join(output_directory, filename)
@@ -55,7 +55,6 @@ class BulkAction < ActiveRecord::Base
       output_directory: output_directory,
       manage_release: manage_release,
       set_governing_apo: set_governing_apo,
-      webauth: webauth
     }
   end
 
