@@ -97,8 +97,6 @@ gem 'pry-byebug' # Adds step-by-step debugging and stack navigation capabilities
 gem 'pry-rails' # use pry as the rails console shell instead of IRB
 
 group :test, :development do
-  gem 'capybara' # used by wfs_rails in development
-  gem 'capybara_discoball' # use external server just for capybara; relied on by 'wfs_rails'
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'http_logger'
@@ -108,7 +106,6 @@ group :test, :development do
   gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', require: false
   gem 'sqlite3'
-  gem 'wfs_rails', '~> 0.1'
 end
 
 group :development do
@@ -116,6 +113,7 @@ group :development do
 end
 
 group :test do
+  gem 'capybara'
   gem 'codeclimate-test-reporter', require: false
   gem 'coveralls', require: false
   gem 'poltergeist' # for js testing

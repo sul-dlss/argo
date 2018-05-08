@@ -98,7 +98,12 @@ rails server
 ```
 
 ### Important note about Workflow Services integration
-In development and test environments, Argo includes the [wfs_rails](https://github.com/sul-dlss/wfs_rails) gem, a Rails Engine, which mocks and stubs several of the Workflow Services routes within the Argo application. This engine is booted using [Capybara::Discoball](https://github.com/thoughtbot/capybara_discoball) and uses the local database as storage for Workflow Service data. This integration can be turned off by not setting `Settings.WORKFLOW_URL` to an instance of `Capybara::Discoball` and by configuring `Settings.WFS_RAILS.ENABLE` to `false`.
+Argo depends on the workflow service for both development and test environments. In order to run a stub implementation of this, install Docker and run:
+
+```
+docker pull suldlss/workflow-server:latest
+docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
+```
 
 ## Load and index records
 

@@ -109,7 +109,7 @@ SPREADSHEET_URL: 'https://services.example.com/v1/spreadsheet'
 STACKS_FILE_URL: 'https://stacks.example.com/file'
 STACKS_URL: 'https://stacks.example.com/image'
 STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
-WORKFLOW_URL: 'http://localhost:3000'
+WORKFLOW_URL: 'http://localhost:3001'
 
 # Webauth is null by default.
 # To specify it to fake webauth credentials for dev instances,
@@ -122,9 +122,6 @@ WEBAUTH: ~
 #   SUAFFILIATION: 'org:group'
 #   DISPLAYNAME: 'Jane Doe'
 #   LDAPAUTHRULE: 'auth-rule'
-
-WFS_RAILS:
-  ENABLE: <%= (Rails.env.development? || Rails.env.test?) %>
 
 # Workflow
 WORKFLOW:
