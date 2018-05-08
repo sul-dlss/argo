@@ -1,3 +1,7 @@
+sudo: required
+services:
+  - docker
+
 language: ruby
 rvm:
   - 2.3.4 # deployed
@@ -7,6 +11,10 @@ jdk:
 
 email: false
 
+before_install:
+  - docker pull suldlss/workflow-server:latest
+  - docker run -d -p 127.0.0.1:3000:3000 suldlss/workflow-server:latest
+  - docker ps -a
 before_script:
   - bin/rails db:test:prepare
 script: bundle exec rake ci
