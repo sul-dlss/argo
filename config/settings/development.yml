@@ -1,2 +1,15 @@
 PROFILER:
   RACKMINI_ENABLED: true
+
+# URLs
+FEDORA_URL:   'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
+SOLRIZER_URL: 'http://localhost:8983/solr'
+
+# Webauth
+WEBAUTH:
+  USER: 'apanopte'
+  MAIL: 'apanopte@stanford.edu'
+  LDAPPRIVGROUP: 'sdr:administrator-role|dlss:lyberteam|dlss:developers'
+  SUAFFILIATION: 'stanford:test'
+  DISPLAYNAME: 'Argus Panoptes'
+  LDAPAUTHRULE: 'valid-user'
