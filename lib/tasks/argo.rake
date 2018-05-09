@@ -42,20 +42,6 @@ namespace :argo do
     $stderr.puts "Version bumped to #{version}"
   end
 
-  # The .htaccess file lists the workgroups that we recognize as relevant to argo.
-  # if a user is in a workgroup, and that workgroup is listed in the .htaccess file,
-  # the name of the workgroup will be in a list of workgroups for the user, passed along
-  # with other shibboleth info in the request headers. We use the list of workgroups a user is
-  # in (as well as the user's sunetid) to determine what they can see and do in argo.
-  #
-  # This rake task is run regularly by a cron job, so that the .htaccess file
-  # keeps up with workgroup names as listed on APOs in use in argo.
-  desc 'Update the .htaccess file from indexed APOs'
-  task htaccess: :environment do
-    require 'argo/htaccess_writer'
-    Argo::HtaccessWriter.write(workgroups_facet.keys)
-  end
-
   desc 'Update completed/archived workflow counts'
   task update_archive_counts: :environment do |t|
     Dor.find_all('objectType_ssim:workflow').each(&:update_index)

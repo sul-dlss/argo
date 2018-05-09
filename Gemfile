@@ -77,7 +77,6 @@ gem 'ruby-graphviz'
 gem 'ruby-prof'
 gem 'rubyzip'
 gem 'sprockets-es6'
-gem 'whenever', require: false
 
 # Stanford/Hydra related gems
 gem 'active-fedora', '~> 8.2'
