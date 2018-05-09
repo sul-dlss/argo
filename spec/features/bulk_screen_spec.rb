@@ -4,8 +4,8 @@ require 'spec_helper'
 feature 'Bulk actions view', js: true do
   before :each do
     @current_user = mock_user(is_admin?: true, permitted_collections: [['string']])
-
-    expect_any_instance_of(ApplicationController).to receive(:current_user).at_least(:once).and_return(@current_user)
+    allow_any_instance_of(IndexQueueController).to receive(:current_user).and_return(@current_user)
+    allow_any_instance_of(ReportController).to receive(:current_user).and_return(@current_user)
   end
 
   scenario 'basic page renders ok' do

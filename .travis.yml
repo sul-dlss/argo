@@ -3,6 +3,8 @@ services:
   - docker
 
 language: ruby
+addons:
+  chrome: stable
 rvm:
   - 2.3.4 # deployed
 
@@ -15,8 +17,11 @@ before_install:
   - docker pull suldlss/workflow-server:latest
   - docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
   - docker ps -a
+  - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
+
 before_script:
   - bin/rails db:test:prepare
+
 script: bundle exec rake ci
 after_script:
 - bundle exec codeclimate-test-reporter

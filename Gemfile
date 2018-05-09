@@ -1,3 +1,4 @@
+
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -114,9 +115,10 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'chromedriver-helper' # installs the chromedriver for selenium tests
   gem 'codeclimate-test-reporter', require: false
   gem 'coveralls', require: false
-  gem 'poltergeist' # for js testing
+  gem 'selenium-webdriver' # for js testing
   gem 'simplecov', require: false
   gem 'webmock', require: false
 end

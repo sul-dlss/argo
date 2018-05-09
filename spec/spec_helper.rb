@@ -3,7 +3,6 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/rspec'
-require 'capybara/poltergeist'
 require 'equivalent-xml/rspec_matchers'
 require 'webmock/rspec'
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
@@ -20,11 +19,15 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                ])
 SimpleCov.start 'argo'
 
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, timeout: 60)
+Capybara.register_driver :chrome do |app|
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  browser_options.args << '--headless'
+  browser_options.args << '--disable-gpu'
+  browser_options.args << '--no-sandbox'
+  browser_options.args << '--window-size=1280,1696'
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
 end
-Capybara.javascript_driver = :poltergeist
-Capybara.default_max_wait_time = 10
+Capybara.javascript_driver = :chrome
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
