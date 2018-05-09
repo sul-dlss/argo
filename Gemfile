@@ -99,7 +99,7 @@ gem 'pry-rails' # use pry as the rails console shell instead of IRB
 group :test, :development do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
-  gem 'http_logger'
+  gem 'http_logger', require: false # Change this to `true` to see all http requests logged
   gem 'jettywrapper'
   gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rails-controller-testing'
