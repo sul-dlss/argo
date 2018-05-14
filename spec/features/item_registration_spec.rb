@@ -14,6 +14,7 @@ RSpec.describe 'Item registration page', js: true do
     allow_any_instance_of(RegistrationController).to receive(:current_user).and_return(current_user)
     allow_any_instance_of(Dor::ObjectsController).to receive(:current_user).and_return(current_user)
 
+    allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).and_return([])
     allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).with('druid:hv992ry2431').and_return(['dpgImageWF', 'goobiWF'])
   end
 

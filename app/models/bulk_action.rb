@@ -10,6 +10,7 @@ class BulkAction < ActiveRecord::Base
 
   # A virtual attribute used for job creation but not persisted
   attr_accessor :pids, :manage_release, :set_governing_apo
+  attr_accessor :groups # the groups the user was a member of when they launched the job
 
   def file(filename)
     File.join(output_directory, filename)
@@ -55,6 +56,7 @@ class BulkAction < ActiveRecord::Base
       output_directory: output_directory,
       manage_release: manage_release,
       set_governing_apo: set_governing_apo,
+      groups: groups
     }
   end
 

@@ -3,7 +3,7 @@
 class ReleaseObjectJob < GenericJob
   queue_as :release_object
 
-  attr_reader :manage_release, :pids
+  attr_reader :manage_release, :pids, :groups
   ##
   # This is a shameless green approach to a job that calls release from dor
   # services app and then kicks off release WF.
@@ -15,8 +15,10 @@ class ReleaseObjectJob < GenericJob
   # @option manage_release [String] :who required username of releaser
   # @option manage_release [String] :what required type of release (self, collection)
   # @option manage_release [String] :tag required (true, false)
+  # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
     @manage_release = params[:manage_release]
+    @groups = params[:groups]
     @pids = params[:pids]
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting ReleaseObjectJob for BulkAction #{bulk_action_id}")
@@ -69,7 +71,12 @@ class ReleaseObjectJob < GenericJob
   private
 
   def ability
-    @ability ||= Ability.new(bulk_action.user)
+    @ability ||= begin
+      user = bulk_action.user
+      # Since a user doesn't persist its groups, we need to pass the groups in here.
+      user.set_groups_to_impersonate(groups)
+      Ability.new(user)
+    end
   end
 
   def params_to_body(params)

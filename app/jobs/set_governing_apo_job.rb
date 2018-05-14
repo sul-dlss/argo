@@ -3,11 +3,17 @@
 class SetGoverningApoJob < GenericJob
   queue_as :set_governing_apo
 
-  attr_reader :pids, :new_apo_id
+  attr_reader :pids, :new_apo_id, :groups
 
+  # @param [Integer] bulk_action_id GlobalID for a BulkAction object
+  # @param [Hash] params additional parameters that an Argo job may need
+  # @option params [Array] :pids required list of pids
+  # @option params [Hash] :set_governing_apo
+  # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
     @new_apo_id = params[:set_governing_apo]['new_apo_id']
     @pids = params[:pids]
+    @groups = params[:groups]
 
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting SetGoverningApoJob for BulkAction #{bulk_action_id}")
@@ -49,7 +55,12 @@ class SetGoverningApoJob < GenericJob
   end
 
   def ability
-    @ability ||= Ability.new(bulk_action.user)
+    @ability ||= begin
+      user = bulk_action.user
+      # Since a user doesn't persist its groups, we need to pass the groups in here.
+      user.set_groups_to_impersonate(groups)
+      Ability.new(user)
+    end
   end
 
   def update_druid_count
