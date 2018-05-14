@@ -16,7 +16,10 @@ class BulkActionsController < ApplicationController
 
   # POST /bulk_actions
   def create
-    @bulk_action = BulkAction.new(bulk_action_params.merge(user: current_user))
+    # Since the groups aren't persisted, we need to pass them here.
+    @bulk_action = BulkAction.new(
+      bulk_action_params.merge(user: current_user, groups: current_user.groups)
+    )
 
     if @bulk_action.save
       redirect_to action: :index, notice: 'Bulk action was successfully created.'

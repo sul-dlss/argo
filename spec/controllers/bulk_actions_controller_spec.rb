@@ -6,8 +6,7 @@ RSpec.describe BulkActionsController do
   end
 
   before do
-    expect_any_instance_of(BulkActionsController).to receive(:current_user)
-      .at_least(:once).and_return(current_user)
+    sign_in current_user
   end
 
   describe 'GET index' do
@@ -54,11 +53,19 @@ RSpec.describe BulkActionsController do
   end
   describe 'POST create' do
     context 'with correct parameters' do
-      it 'assigns @bulk_action to current_user' do
+      let(:groups) { [User::ADMIN_GROUPS.first, 'sunetid:person9'] }
+
+      before do
+        allow(current_user).to receive(:groups).and_return(groups)
+      end
+
+      it 'assigns @bulk_action to current_user and passes current groups' do
         post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         expect(assigns(:bulk_action)).to be_an BulkAction
         expect(assigns(:bulk_action).user).to eq current_user
+        expect(assigns(:bulk_action).groups).to eq groups
       end
+
       it 'creates a new BulkAction' do
         expect do
           post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
