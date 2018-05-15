@@ -12,6 +12,8 @@ Rails:
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
   Max: 180
+  IgnoredPatterns:
+    - '\A\s*#' # allow long comments
 
 # False positive in cap DSL
 Naming/FileName:
