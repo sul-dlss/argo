@@ -45,6 +45,7 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
+gem 'almond-rails'
 gem 'barby'
 gem 'bootstrap-sass'
 gem 'cancancan'
@@ -78,6 +79,7 @@ gem 'retries'
 gem 'ruby-graphviz'
 gem 'ruby-prof'
 gem 'rubyzip'
+gem 'sprockets-es6'
 gem 'whenever', require: false
 
 # Stanford/Hydra related gems
