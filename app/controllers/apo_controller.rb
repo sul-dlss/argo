@@ -22,25 +22,15 @@ class ApoController < ApplicationController
 
   DEFAULT_MANAGER_WORKGROUPS = %w(sdr:developer sdr:service-manager sdr:metadata-staff).freeze
 
-  # @param [String] role_name
-  # @return [Boolean] true if name is valid
-  def is_valid_role_name(role_name)
-    !/^[\w-]+:[\w-]+$/.match(role_name).nil?
-  end
-
-  # @param [Array[String]] role_list
-  # @return [Boolean] true if we don't find an invalid role name
-  def is_valid_role_list(role_list)
-    role_list.find { |role_name| !is_valid_role_name(role_name) }.nil?
-  end
-
+  # This action is used by the javascript that sends results as the user enters
+  # them on the form to determine if the user supplied input is valid.
   def is_valid_role_list_endpoint
     # Only checks the first found relevant param
     role_list_str = params[:managers] || params[:viewers] || params[:role_list] || nil
     ret_val = if !role_list_str
                 false
               else
-                is_valid_role_list(split_roleplayer_input_field(role_list_str))
+                valid_role_list?(split_roleplayer_input_field(role_list_str))
               end
 
     respond_to do |format|
@@ -48,22 +38,6 @@ class ApoController < ApplicationController
         render json: ret_val
       end
     end
-  end
-
-  def get_input_params_errors(input_params)
-    err_list = [] # assume no errors yet
-
-    # error if title is empty
-    err_list.push(:title) if input_params[:title].strip.length == 0
-
-    # error if managers or viewers role list is invalid
-    [:managers, :viewers].each do |roleplayer_list|
-      unless is_valid_role_list(split_roleplayer_input_field(input_params[roleplayer_list]))
-        err_list.push(roleplayer_list)
-      end
-    end
-
-    err_list
   end
 
   def register
@@ -293,6 +267,34 @@ class ApoController < ApplicationController
   end
 
   private
+
+  def get_input_params_errors(input_params)
+    err_list = [] # assume no errors yet
+
+    # error if title is empty
+    err_list.push(:title) if input_params[:title].strip.length == 0
+
+    # error if managers or viewers role list is invalid
+    [:managers, :viewers].each do |roleplayer_list|
+      unless valid_role_list?(split_roleplayer_input_field(input_params[roleplayer_list]))
+        err_list.push(roleplayer_list)
+      end
+    end
+
+    err_list
+  end
+
+  # @param [String] role_name
+  # @return [Boolean] true if name is valid
+  def valid_role_name?(role_name)
+    !/^[\w-]+:[\w-]+$/.match(role_name).nil?
+  end
+
+  # @param [Array[String]] role_list
+  # @return [Boolean] true if we don't find an invalid role name
+  def valid_role_list?(role_list)
+    role_list.all? { |role_name| valid_role_name?(role_name) }
+  end
 
   def create_obj
     raise 'missing druid' unless params[:id]
