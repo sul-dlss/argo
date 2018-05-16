@@ -24,11 +24,12 @@
 //= require blacklight/hierarchy/hierarchy
 //
 // Required by Argo
-//= require argo
 //= require spreadsheet
 //= require jquery-ui
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require jqgrid-jquery-rails
 //= require jquery.persistentModal
+//= require almond
 //= require_directory ./modules
+//= require argo
