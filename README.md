@@ -98,8 +98,7 @@ rails server
 Argo depends on the workflow service for both development and test environments. In order to run a stub implementation of this, install Docker and run:
 
 ```
-docker pull suldlss/workflow-server:latest
-docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
+docker-compose up
 ```
 
 ## Load and index records

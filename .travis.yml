@@ -14,9 +14,10 @@ jdk:
 email: false
 
 before_install:
-  - docker pull suldlss/workflow-server:latest
-  - docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
-  - docker ps -a
+  - docker-compose --version
+  - docker-compose pull
+  - docker-compose build
+  - docker-compose start
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
 
 before_script:
