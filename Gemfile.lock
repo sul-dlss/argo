@@ -344,7 +344,6 @@ GEM
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
     kostya-sigar (2.0.1)
-    libv8 (3.16.14.19)
     link_header (0.0.8)
     linkeddata (1.99.0)
       equivalent-xml (~> 0.6)
@@ -535,7 +534,6 @@ GEM
       rdf (~> 1.1, >= 1.1.10)
     rdf-xsd (1.99.0)
       rdf (~> 1.99)
-    ref (2.0.0)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
@@ -659,9 +657,6 @@ GEM
     systemu (2.6.5)
     term-ansicolor (1.6.0)
       tins (~> 1.0)
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thor (0.19.4)
     thread_safe (0.3.6)
     tilt (2.0.8)
@@ -788,7 +783,6 @@ DEPENDENCIES
   sqlite3
   stanford-mods
   sul_styles (~> 0.3)
-  therubyracer
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)
