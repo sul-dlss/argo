@@ -165,7 +165,7 @@ describe ArgoHelper, type: :helper do
           },
           {
             label: 'Edit APO',
-            url: "/apo/register?id=#{URI.encode_www_form_component(view_apo_id)}",
+            url: edit_apo_path(view_apo_id),
             new_page: true
           },
           {

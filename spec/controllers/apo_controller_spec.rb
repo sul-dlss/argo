@@ -74,7 +74,7 @@ RSpec.describe ApoController, type: :controller do
         { pid: collection.pid }
       end
 
-      post 'register', params: example
+      post :create, params: example
     end
 
     context 'APO Metadata' do

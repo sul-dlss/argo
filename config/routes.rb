@@ -57,17 +57,16 @@ Argo::Application.routes.draw do
     concerns :searchable
   end
 
-  match 'apo/is_valid_role_list', to: 'apo#is_valid_role_list_endpoint', via: [:get, :post], as: 'is_valid_role_list'
-
   root to: 'catalog#index'
 
   namespace :report do
     get 'workflow_grid'
   end
 
+  match 'apo/is_valid_role_list', to: 'apo#is_valid_role_list_endpoint', via: [:get, :post], as: 'is_valid_role_list'
+
   resources :apo do
     collection do
-      match :register, via: [:get, :post]
       get :spreadsheet_template
     end
     member do
@@ -82,7 +81,6 @@ Argo::Application.routes.draw do
       post 'update_default_object_rights'
       post 'add_roleplayer'
       post 'update_desc_metadata'
-      post :update
       match :register_collection, via: [:get, :post]
     end
   end
