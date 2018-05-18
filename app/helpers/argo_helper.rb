@@ -168,7 +168,7 @@ module ArgoHelper
 
   def render_datastream_link(document)
     return unless document.admin_policy?
-    link_to 'MODS bulk loads', bulk_jobs_index_path(document), id: 'bulk-button', class: 'button btn btn-primary'
+    link_to 'MODS bulk loads', apo_bulk_jobs_path(document), id: 'bulk-button', class: 'button btn btn-primary'
   end
 
   protected

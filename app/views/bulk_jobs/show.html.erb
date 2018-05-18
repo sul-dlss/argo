@@ -2,7 +2,7 @@
     <div id="spreadsheet-log-container">
 	<div class="row">
 	    <div class="col-md-12 text-right">
-		<%= link_to('CSV', bulk_jobs_csv_path(@apo, @time)) %>
+		      <%= link_to('CSV', show_apo_bulk_jobs_path(@apo, @time, format: :csv)) %>
 	    </div>
 	</div>
 	<div class="row">

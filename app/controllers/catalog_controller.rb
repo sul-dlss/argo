@@ -198,60 +198,6 @@ class CatalogController < ApplicationController
     end
   end
 
-  # Generates the index page for a given DRUID's past bulk metadata upload jobs.
-  def bulk_jobs_index
-    params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-
-    authorize! :view_metadata, @obj
-    @response, @document = fetch params[:id]
-    @bulk_jobs = load_bulk_jobs(params[:id])
-  end
-
-  # Lets the user download the generated/cleaned XML metadata file that corresponds to a bulk metadata upload job.
-  # This functionality is defined by the bulk_jobs_index method above.
-  def bulk_jobs_xml
-    desc_metadata_xml_file = find_desc_metadata_file(File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time]))
-    if File.exist?(desc_metadata_xml_file)
-      send_file(desc_metadata_xml_file, type: 'application/xml')
-    else
-      # Display error message and log the error
-    end
-  end
-
-  def bulk_jobs_csv
-    csv_file = File.join(Settings.BULK_METADATA.DIRECTORY, params[:id], params[:time], 'log.csv')
-    if File.exist?(csv_file)
-      send_file(csv_file, type: 'text/csv')
-    else
-      # Display error message and log the error
-    end
-  end
-
-  def bulk_jobs_log
-    @apo  = params[:id]
-    @time = params[:time]
-    job_directory = File.join(Settings.BULK_METADATA.DIRECTORY, @apo, @time)
-
-    # Generate both the actual log messages that go in the HTML and the CSV, since both need to be ready when the table is displayed to the user
-    user_log = UserLog.new(@apo, job_directory)
-    @druid_log = user_log.user_messages
-    user_log.user_log_csv
-  end
-
-  def bulk_status_help
-  end
-
-  def bulk_jobs_help
-  end
-
-  def bulk_jobs_delete
-    @apo = params[:id]
-    directory_to_delete = File.join(Settings.BULK_METADATA.DIRECTORY, params[:dir])
-    FileUtils.remove_dir(directory_to_delete, true)
-    redirect_to bulk_jobs_index_path(@apo)
-  end
-
   def manage_release
     authorize! :manage_item, Dor.find(params[:id])
     @response, @document = fetch params[:id]
@@ -284,57 +230,6 @@ class CatalogController < ApplicationController
       rescue
       end
     end
-  end
-
-  # Given a directory with bulk metadata upload information (written by ModsulatorJob), loads the job data into a hash.
-  def bulk_job_metadata(dir)
-    success = 0
-    job_info = {}
-    log_filename = File.join(dir, Settings.BULK_METADATA.LOG)
-    if File.directory?(dir) && File.readable?(dir) && File.exist?(log_filename) && File.readable?(log_filename)
-      File.open(log_filename, 'r') do |log_file|
-        log_file.each_line do |line|
-          # The log file is a very simple flat file (whitespace separated) format where the first token denotes the
-          # field/type of information and the rest is the actual value.
-          matched_strings = line.match(/^([^\s]+)\s+(.*)/)
-          next unless matched_strings && matched_strings.length == 3
-          job_info[matched_strings[1]] = matched_strings[2]
-          success += 1 if matched_strings[1] == 'argo.bulk_metadata.bulk_log_job_save_success'
-          job_info['error'] = 1 if UserLog::ERROR_MESSAGES.include?(matched_strings[1])
-        end
-        job_info['dir'] = get_leafdir(dir)
-        job_info['argo.bulk_metadata.bulk_log_druids_loaded'] = success
-      end
-    end
-    job_info
-  end
-
-  # Given a DRUID, loads any metadata bulk upload information associated with that DRUID into a hash.
-  def load_bulk_jobs(druid)
-    directory_list = []
-    bulk_info = []
-    bulk_load_dir = File.join(Settings.BULK_METADATA.DIRECTORY, druid)
-
-    # The metadata bulk upload processing stores its logs and other information in a very simple directory structure
-    if File.directory?(bulk_load_dir)
-      directory_list = Dir.glob("#{bulk_load_dir}/*")
-    end
-
-    directory_list.each do |d|
-      bulk_info.push(bulk_job_metadata(d))
-    end
-
-    # Sort by start time (newest first)
-    sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'].to_s }
-    sorted_info.reverse!
-  end
-
-  def get_leafdir(directory)
-    directory[Settings.BULK_METADATA.DIRECTORY.length, directory.length].sub(/^\/+(.*)/, '\1')
-  end
-
-  def find_desc_metadata_file(job_output_directory)
-    File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
   end
 
   # Sorts the Blacklight collection actions buttons so that the "Bulk Action" and "Bulk Update View" buttons appear

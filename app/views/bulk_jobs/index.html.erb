@@ -4,14 +4,6 @@
   <%= render_document_sidebar_partial %>
 </div>
 <div id="content" class="col-md-9 col-sm-8 show-document">
-  <%= render 'constraints', :localized_params=>session[:search] %>
-
-  <div class="pageEntriesInfo">
-    <%= item_page_entry_info %>
-  </div>
-
-  <%= render 'previous_next_doc' %>
-
   <%= render 'bulk_start' %>
   <%= render 'bulk_index_table' %>
 
