@@ -30,14 +30,12 @@ Argo::Application.routes.draw do
     end
   end
 
-  get 'catalog/:id/bulk_upload_form',    to: 'catalog#bulk_upload_form',  as: 'bulk_upload_form'
   get 'catalog/:id/bulk_jobs_index',     to: 'catalog#bulk_jobs_index',   as: 'bulk_jobs_index'
   get 'catalog/:id/bulk_status_help',    to: 'catalog#bulk_status_help',  as: 'bulk_status_help'
   get 'catalog/:id/:time/bulk_jobs_xml', to: 'catalog#bulk_jobs_xml',     as: 'bulk_jobs_xml'
   get 'catalog/:id/:time/bulk_jobs_log', to: 'catalog#bulk_jobs_log',     as: 'bulk_jobs_log'
   get 'catalog/:id/bulk_jobs_help',      to: 'catalog#bulk_jobs_help',    as: 'bulk_jobs_help'
   get 'catalog/:id/:time/bulk_jobs_csv', to: 'catalog#bulk_jobs_csv',     as: 'bulk_jobs_csv'
-  post 'catalog/:id/upload',             to: 'catalog#upload',            as: 'upload'
   delete 'catalog/:id/bulk_jobs_delete', to: 'catalog#bulk_jobs_delete',  as: 'bulk_jobs_delete'
   match 'catalog',      via: [:get, :post], to: redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'search_catalog_redirect'
   match 'catalog/*all', via: [:get, :post], to: redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'catalog_redirect'
@@ -84,6 +82,8 @@ Argo::Application.routes.draw do
   end
 
   resources :items do
+    resources 'uploads', only: [:new, :create]
+
     get :register, on: :collection
     resource :content_type, only: [:show, :update]
     member do
