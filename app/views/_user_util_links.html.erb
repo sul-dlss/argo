@@ -35,13 +35,13 @@
         Register
         <span class='caret'></span>
       </a>
-      <ul class='dropdown-menu'> 
+      <ul class='dropdown-menu'>
         <li>
           <%= link_to 'Register Items', register_items_path %>
         </li>
         <% if can? :create, Dor::AdminPolicyObject %>
           <li>
-            <%= link_to 'Register APO'.html_safe, register_apo_index_path %>
+            <%= link_to 'Register APO', new_apo_path %>
           </li>
         <% end %>
       </ul>

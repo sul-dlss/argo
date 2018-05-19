@@ -1,7 +1,8 @@
 class ApoController < ApplicationController
   before_action :create_obj, except: [
     :is_valid_role_list_endpoint,
-    :register,
+    :new,
+    :create,
     :spreadsheet_template
   ]
   after_action :save_and_index, only: [
@@ -16,7 +17,9 @@ class ApoController < ApplicationController
 
   before_action :authorize, except: [
     :is_valid_role_list_endpoint,
-    :register,
+    :edit,
+    :new,
+    :create,
     :spreadsheet_template
   ]
 
@@ -40,33 +43,34 @@ class ApoController < ApplicationController
     end
   end
 
-  def register
+  def edit
+    authorize! :create, Dor::AdminPolicyObject
+    @managers = []
+    @viewers  = []
+    populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
+    populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
+    @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
+    render layout: 'blacklight'
+  end
+
+  def new
+    authorize! :create, Dor::AdminPolicyObject
+    render layout: 'blacklight'
+  end
+
+  def create
     authorize! :create, Dor::AdminPolicyObject
 
     param_cleanup params
 
-    if params[:title]
-      input_params_errors = get_input_params_errors params
-      if input_params_errors.length > 0
-        render status: :bad_request, json: { errors: input_params_errors }
-        return
-      end
-
-      apo_info = register_new_apo
-      respond_to do |format|
-        format.any { redirect_to solr_document_path(apo_info[:apo_pid]), notice: apo_info[:notice] }
-      end
-    elsif params[:id]
-      create_obj
-      @managers = []
-      @viewers  = []
-      populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
-      populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
-      @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
-      render layout: 'blacklight'
-    else
-      render layout: 'blacklight'
+    input_params_errors = get_input_params_errors params
+    if input_params_errors.length > 0
+      render status: :bad_request, json: { errors: input_params_errors }
+      return
     end
+
+    apo_info = register_new_apo
+    redirect_to solr_document_path(apo_info[:apo_pid]), notice: apo_info[:notice]
   end
 
   # TODO: spec testing requires this method to be public
