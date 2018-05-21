@@ -18,7 +18,8 @@ class CatalogController < ApplicationController
     config.default_solr_params[:rows] = 10
 
     config.document_solr_request_handler = '/document'
-
+    # When we test with solr 6 we can have:
+    #config.document_solr_path = 'get'
     config.index.document_presenter_class = ArgoIndexPresenter
     config.show.document_presenter_class = ArgoShowPresenter
 

@@ -76,68 +76,6 @@ RSpec.describe ApoController, type: :controller do
 
       post :create, params: example
     end
-
-    context 'APO Metadata' do
-      let(:md_info) do
-        {
-          copyright:    'My copyright statement',
-          use:          'My use and reproduction statement',
-          title:        'My title',
-          desc_md:      'MODS',
-          metadata_source: 'DOR',
-          agreement:    agreement.pid,
-          workflow:     'registrationWF',
-          default_object_rights: 'world',
-          use_license:  'by-nc'
-        }
-      end
-
-      it 'sets clean APO metadata for defaultObjectRights' do
-        expect(subject.respond_to?(:set_apo_metadata)).to be_truthy
-        subject.set_apo_metadata(apo, md_info)
-
-        expect(apo.mods_title).to           eq(md_info[:title])
-        expect(apo.desc_metadata_format).to eq(md_info[:desc_md])
-        expect(apo.metadata_source).to      eq(md_info[:metadata_source])
-        expect(apo.agreement).to            eq(md_info[:agreement])
-        expect(apo.default_workflows).to    eq([md_info[:workflow]])
-        expect(apo.default_rights).to       eq(md_info[:default_object_rights])
-        expect(apo.use_license).to          eq(md_info[:use_license])
-        expect(apo.use_license_uri).to      eq(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES[md_info[:use_license]][:uri])
-        expect(apo.use_license_human).to    eq(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES[md_info[:use_license]][:human_readable])
-        expect(apo.copyright_statement).to  eq(md_info[:copyright])
-        expect(apo.use_statement).to        eq(md_info[:use])
-        doc = Nokogiri::XML(File.read('spec/fixtures/apo_defaultObjectRights_clean.xml'))
-        expect(apo.defaultObjectRights.content).to be_equivalent_to(doc)
-      end
-
-      it 'handles no use license' do
-        md_info[:use_license] = ' '
-        subject.set_apo_metadata(apo, md_info)
-        expect(apo.use_license).to          be_blank
-        expect(apo.use_license_uri).to      be_nil
-        expect(apo.use_license_human).to    be_blank
-      end
-      it 'handles no copyright statement' do
-        md_info[:copyright] = ' '
-        subject.set_apo_metadata(apo, md_info)
-        expect(apo.copyright_statement).to be_nil
-      end
-      it 'handles UTF8 copyright statement' do
-        md_info[:copyright] = 'Copyright © All Rights Reserved.'
-        subject.set_apo_metadata(apo, md_info)
-        expect(apo.copyright_statement).to eq(md_info[:copyright])
-      end
-      it 'handles no use statement' do
-        md_info[:use] = ' '
-        subject.set_apo_metadata(apo, md_info)
-        expect(apo.use_statement).to be_nil
-      end
-      it 'errors out if no workflow' do
-        md_info[:workflow] = ' '
-        expect { subject.set_apo_metadata(apo, md_info) }.to raise_error(ArgumentError)
-      end
-    end
   end
 
   describe '#register_collection' do
@@ -185,6 +123,7 @@ RSpec.describe ApoController, type: :controller do
         )
         { pid: collection.pid }
       end
+      expect(collection).to receive(:update_index)
       expect(collection).to receive(:descMetadata).and_return(mock_desc_md_ds).exactly(4).times
 
       post :register_collection, params: { 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => apo.pid }
@@ -204,7 +143,7 @@ RSpec.describe ApoController, type: :controller do
         )
         { pid: collection.pid }
       end
-      expect(controller).to receive(:set_abstract)
+      expect_any_instance_of(CollectionForm).to receive(:sync)
       expect(apo).to receive(:add_default_collection).with(collection.pid)
 
       post :register_collection, params: { 'collection_title' => title, 'collection_abstract' => abstract, 'collection_rights' => 'dark', 'id' => apo.pid }

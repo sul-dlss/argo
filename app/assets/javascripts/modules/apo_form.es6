@@ -15,18 +15,9 @@ export default class {
     validate() {
         this.element.validate({
             rules: {
-                title: "required",
-                // is_valid_role_list is a REST endpoint in ApoController (i.e. /apo/is_valid_role_list)
-                managers: {
-                    remote: "is_valid_role_list"
-                },
-                viewers: {
-                    remote: "is_valid_role_list"
-                }
+                title: "required"
             },
             messages: {
-                managers: 'Error:  Enter manager workgroup names as "stem:value", e.g., dlss:project-x.  Enter individuals as "sunetid:value".<br/><br/>',
-                viewers: 'Error:  Enter viewer workgroup names as "stem:value", e.g., dlss:project-x.  Enter individuals as "sunetid:value".<br/><br/>',
                 title: ' &nbsp;&nbsp;Error:  A non-empty title is required.'
             },
             errorClass: 'apo-register-error',

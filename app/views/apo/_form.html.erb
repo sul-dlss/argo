@@ -20,11 +20,9 @@
   <div class="form-group">
     <label>Roles</label><br/>
     <p>These roles govern access to all objects registered under this APO.<br/>
-      <ul><li>
-            Provide one or more workgroups as <span style="font-style:italic">stem</span>:<span style="font-style:italic">groupname</span> (e.g., "dlss:dpg-staff") or sunetids as sunetid:<span style="font-style:italic">value</span> (e.g., "sunetid:jsmith").</li>
-            <li>The default groups shown should be included unless they are to be explicitly excluded.</li>
-            <li>Values may be separate by commas, spaces or new lines.</li>
-      <li>Common workgroups:  dlss:dpg-staff  dlss:dpg-hourlies  dlss:forensics-staff  dlss:smpl-staff  sulair:map-staff  sulair:map-hourlies</li>
+      <ul>
+        <li>The default groups shown should be included unless they are to be explicitly excluded.</li>
+        <li>Values may be separate by commas, spaces or new lines.</li>
     </ul>
     <div class="register-label-div">Manager</div><input id="managers" name="managers" type="text" style="width:90%" value="<%= @object ? @managers.join(', ') : ApoController::DEFAULT_MANAGER_WORKGROUPS.join(', ') %>"/><br/>
     <p class="help" style="margin-left:90px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
@@ -33,6 +31,8 @@
     <p class="help" style="margin-left:90px;font-size:.8em">View only access to the objects</p>
     <p id="viewers-err-msg-elt" class="apo-register-error"></p>
   </div>
+
+
   <div class="form-group">
     <%
     if @object and @object.default_collections

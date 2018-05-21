@@ -63,8 +63,6 @@ Argo::Application.routes.draw do
     get 'workflow_grid'
   end
 
-  match 'apo/is_valid_role_list', to: 'apo#is_valid_role_list_endpoint', via: [:get, :post], as: 'is_valid_role_list'
-
   resources :apo do
     collection do
       get :spreadsheet_template
