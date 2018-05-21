@@ -58,6 +58,8 @@ end
 ActiveRecord::Migration.maintain_test_schema! unless ENV['TRAVIS']
 
 RSpec.configure do |config|
+  config.order = :random
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
