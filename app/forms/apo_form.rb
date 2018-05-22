@@ -114,6 +114,11 @@ class ApoForm < BaseForm
     end
   end
 
+  def to_param
+    return nil if new_record?
+    model.pid
+  end
+
   private
 
   def manage_permissions

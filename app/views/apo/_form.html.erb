@@ -39,7 +39,7 @@
     <% if @form.default_collection_objects.present? %>
       <label>Default Collections</label><br/>
       <% @form.default_collection_objects.each do |col| %>
-        <%= link_to col.label, solr_document_path(id: col.pid)%> <%= link_to('(remove)', delete_collection_apo_path(collection: col.pid, id: @object.pid), confirm: 'You are about to leave the page, are you sure?') %><br/>
+        <%= link_to col.label, solr_document_path(id: col.pid)%> <%= link_to('(remove)', delete_collection_apo_path(collection: col.pid, id: @form), confirm: 'You are about to leave the page, are you sure?') %><br/>
       <% end %>
     <% end %>
     <br/>
@@ -103,7 +103,7 @@
       <%= link_to 'Cancel', '/', class: 'btn btn-default' %>
     <% else %>
       <%= submit_tag 'Update APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', solr_document_path(@object.pid), class: 'btn btn-default' %>
+      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-default' %>
     <% end %>
   </div>
 <% end %>

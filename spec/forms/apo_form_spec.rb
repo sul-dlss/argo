@@ -135,6 +135,11 @@ RSpec.describe ApoForm do
       subject { instance.default_collection_objects }
       it { is_expected.to eq [] }
     end
+
+    describe '#to_param' do
+      subject { instance.to_param }
+      it { is_expected.to eq 'druid:zt570tx3016' }
+    end
   end
 
   context 'no model (new)' do
@@ -192,6 +197,11 @@ RSpec.describe ApoForm do
     describe '#default_collection_objects' do
       subject { instance.default_collection_objects }
       it { is_expected.to eq [] }
+    end
+
+    describe '#to_param' do
+      subject { instance.to_param }
+      it { is_expected.to be_nil }
     end
   end
 end
