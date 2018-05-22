@@ -125,6 +125,11 @@ RSpec.describe ApoForm do
       subject { instance.copyright_statement }
       it { is_expected.to eq 'Additional copyright info' }
     end
+
+    describe '#mods_title' do
+      subject { instance.mods_title }
+      it { is_expected.to eq 'Ampex' }
+    end
   end
 
   context 'no model (new)' do
@@ -172,6 +177,11 @@ RSpec.describe ApoForm do
     describe '#copyright_statement' do
       subject { instance.copyright_statement }
       it { is_expected.to be_nil }
+    end
+
+    describe '#mods_title' do
+      subject { instance.mods_title }
+      it { is_expected.to eq '' }
     end
   end
 end

@@ -102,6 +102,11 @@ class ApoForm < BaseForm
     model.copyright_statement
   end
 
+  def mods_title
+    return '' if new_record?
+    model.mods_title
+  end
+
   private
 
   def manage_permissions
