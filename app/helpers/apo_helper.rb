@@ -41,10 +41,6 @@ module ApoHelper
     end
   end
 
-  def default_workflow_option
-    'registrationWF'
-  end
-
   def agreement_options
     q = 'objectType_ssim:agreement '
     result = Dor::SearchService.query(q, rows: 99999, fl: 'id,tag_ssim,sw_display_title_tesim')['response']['docs']

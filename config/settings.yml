@@ -118,3 +118,6 @@ SU_AFFILIATIONS:
 WORKFLOW:
   LOGFILE: 'log/workflow_service.log'
   SHIFT_AGE: 'weekly'
+
+apo:
+  default_workflow_option: 'registrationWF'

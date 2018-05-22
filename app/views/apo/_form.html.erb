@@ -97,7 +97,7 @@
 
   <div class="form-group">
     <label>Default workflow</label><br/>
-    <%=select_tag :workflow, options_for_select(workflow_options, (@object ? @cur_default_workflow : default_workflow_option))%>
+    <%=select_tag :workflow, options_for_select(workflow_options, @form.default_workflow)%>
   </div>
   <div class="form-group">
     <%= submit_tag @object ? 'Update APO' : 'Register APO', class: 'btn btn-primary' %>

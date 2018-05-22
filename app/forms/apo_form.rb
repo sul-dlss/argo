@@ -67,6 +67,11 @@ class ApoForm < BaseForm
     permissions.select { |p| p[:access] == 'view' }.map { |p| p[:name] }.join(', ')
   end
 
+  def default_workflow
+    return Settings.apo.default_workflow_option if new_record?
+    model.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
+  end
+
   private
 
   def manage_permissions

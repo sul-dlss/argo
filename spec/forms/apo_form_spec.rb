@@ -90,6 +90,11 @@ RSpec.describe ApoForm do
         ]
       end
     end
+
+    describe '#default_workflow' do
+      subject { instance.default_workflow }
+      it { is_expected.to eq 'digitizationWF' }
+    end
   end
 
   context 'no model (new)' do
@@ -102,6 +107,11 @@ RSpec.describe ApoForm do
           { name: 'metadata-staff', type: 'group', access: 'manage' }
         ]
       end
+    end
+
+    describe '#default_workflow' do
+      subject { instance.default_workflow }
+      it { is_expected.to eq 'registrationWF' }
     end
   end
 end

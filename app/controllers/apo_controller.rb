@@ -24,7 +24,6 @@ class ApoController < ApplicationController
   def edit
     authorize! :create, Dor::AdminPolicyObject
     @form = ApoForm.new(@object)
-    @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
     render layout: 'blacklight'
   end
 
