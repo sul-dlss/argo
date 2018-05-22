@@ -140,6 +140,15 @@ RSpec.describe ApoForm do
       subject { instance.to_param }
       it { is_expected.to eq 'druid:zt570tx3016' }
     end
+
+    describe '#license_options' do
+      subject { instance.license_options }
+      it 'is an array of the options' do
+        expect(subject).to be_a Array
+        expect(subject[0]).to be_a Array
+        expect(subject.size).to eq 11
+      end
+    end
   end
 
   context 'no model (new)' do
@@ -202,6 +211,15 @@ RSpec.describe ApoForm do
     describe '#to_param' do
       subject { instance.to_param }
       it { is_expected.to be_nil }
+    end
+
+    describe '#license_options' do
+      subject { instance.license_options }
+      it 'is an array of the options' do
+        expect(subject).to be_a Array
+        expect(subject[0]).to be_a Array
+        expect(subject.size).to eq 11
+      end
     end
   end
 end
