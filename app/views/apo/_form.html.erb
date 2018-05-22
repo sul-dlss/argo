@@ -36,14 +36,12 @@
 
 
   <div class="form-group">
-    <%
-    if @object and @object.default_collections
-      %><label>Default Collections</label><br/><%
-      @collections.each do |col|
-        %><%=link_to col.label, solr_document_path(:id =>col.pid)%> <%=link_to('(remove)',delete_collection_apo_path(:collection => col.pid, :id => @object.pid),:confirm => 'You are about to leave the page, are you sure?')%><br/><%
-      end
-    end
-    %>
+    <% if @form.default_collection_objects.present? %>
+      <label>Default Collections</label><br/>
+      <% @form.default_collection_objects.each do |col| %>
+        <%= link_to col.label, solr_document_path(id: col.pid)%> <%= link_to('(remove)', delete_collection_apo_path(collection: col.pid, id: @object.pid), confirm: 'You are about to leave the page, are you sure?') %><br/>
+      <% end %>
+    <% end %>
     <br/>
     <input checked type="radio" name="collection_radio" value="none" onclick="$('.collection_div').hide();"/>
     <label>Don't add a Collection</label>

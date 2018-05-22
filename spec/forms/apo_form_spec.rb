@@ -130,6 +130,11 @@ RSpec.describe ApoForm do
       subject { instance.mods_title }
       it { is_expected.to eq 'Ampex' }
     end
+
+    describe '#default_collection_objects' do
+      subject { instance.default_collection_objects }
+      it { is_expected.to eq [] }
+    end
   end
 
   context 'no model (new)' do
@@ -182,6 +187,11 @@ RSpec.describe ApoForm do
     describe '#mods_title' do
       subject { instance.mods_title }
       it { is_expected.to eq '' }
+    end
+
+    describe '#default_collection_objects' do
+      subject { instance.default_collection_objects }
+      it { is_expected.to eq [] }
     end
   end
 end

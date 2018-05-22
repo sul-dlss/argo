@@ -146,8 +146,6 @@ class ApoController < ApplicationController
   def create_obj
     raise 'missing druid' unless params[:id]
     @object = Dor.find params[:id]
-    pids = @object.default_collections || []
-    @collections = pids.map { |pid| Dor.find(pid) }
   end
 
   def save_and_index

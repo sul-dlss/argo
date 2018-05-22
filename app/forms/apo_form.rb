@@ -107,6 +107,13 @@ class ApoForm < BaseForm
     model.mods_title
   end
 
+  def default_collection_objects
+    return [] if new_record?
+    @default_collection_objects ||= begin
+      Array(model.default_collections).map { |pid| Dor.find(pid) }
+    end
+  end
+
   private
 
   def manage_permissions
