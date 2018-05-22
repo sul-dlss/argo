@@ -12,12 +12,6 @@ RSpec.feature 'Search results' do
     within '.constraints-container' do
       expect(page).to have_css '#startOverLink', text: 'Start Over'
     end
-    within '#sortAndPerPage' do
-      within '.page_links' do
-        expect(page).to have_css '.page_entries', text: '1 - 10 of 38'
-        expect(page).to have_css 'a', text: 'Next »'
-      end
-    end
     within '.search-widgets' do
       within '#bulk-update-button' do
         expect(page).to have_css 'a.btn.btn-default', text: 'Bulk Update'
