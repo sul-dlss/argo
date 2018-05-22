@@ -72,6 +72,11 @@ class ApoForm < BaseForm
     model.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
   end
 
+  def use_license
+    return '' if new_record?
+    model.use_license
+  end
+
   private
 
   def manage_permissions

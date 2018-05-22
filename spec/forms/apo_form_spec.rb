@@ -95,6 +95,11 @@ RSpec.describe ApoForm do
       subject { instance.default_workflow }
       it { is_expected.to eq 'digitizationWF' }
     end
+
+    describe '#use_license' do
+      subject { instance.use_license }
+      it { is_expected.to eq 'by-nc-sa' }
+    end
   end
 
   context 'no model (new)' do
@@ -112,6 +117,11 @@ RSpec.describe ApoForm do
     describe '#default_workflow' do
       subject { instance.default_workflow }
       it { is_expected.to eq 'registrationWF' }
+    end
+
+    describe '#use_license' do
+      subject { instance.use_license }
+      it { is_expected.to eq '' }
     end
   end
 end
