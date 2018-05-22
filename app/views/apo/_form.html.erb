@@ -88,7 +88,7 @@
   <div class="form-group">
     <label>Default Copyright statement</label><br/>
     <p>See <%=link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', :target => "_blank"%> for sample Copyright statements.</p>
-    <textarea style="width:95%;height:40px" id='copyright' name="copyright"><%= if @object then @object.copyright_statement end%></textarea>
+    <textarea style="width:95%;height:40px" id='copyright' name="copyright"><%= @form.copyright_statement %></textarea>
   </div>
   <div class="form-group">
     <label>Default use license</label><br/>

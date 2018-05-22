@@ -120,6 +120,11 @@ RSpec.describe ApoForm do
       subject { instance.use_statement }
       it { is_expected.to start_with 'Rights are owned by Stanford University Libraries' }
     end
+
+    describe '#copyright_statement' do
+      subject { instance.copyright_statement }
+      it { is_expected.to eq 'Additional copyright info' }
+    end
   end
 
   context 'no model (new)' do
@@ -161,6 +166,11 @@ RSpec.describe ApoForm do
 
     describe '#use_statement' do
       subject { instance.use_statement }
+      it { is_expected.to be_nil }
+    end
+
+    describe '#copyright_statement' do
+      subject { instance.copyright_statement }
       it { is_expected.to be_nil }
     end
   end

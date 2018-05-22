@@ -97,6 +97,11 @@ class ApoForm < BaseForm
     model.use_statement
   end
 
+  def copyright_statement
+    return if new_record?
+    model.copyright_statement
+  end
+
   private
 
   def manage_permissions
