@@ -3,9 +3,8 @@ require 'spec_helper'
 RSpec.feature 'Bulk Reindex of DOR Objects' do
   let(:current_user) { create(:user) }
 
-  before(:each) do
-    expect(current_user).to receive(:to_s).at_least(:once).and_return('name')
-    allow_any_instance_of(BulkActionsController).to receive(:current_user).and_return(current_user)
+  before do
+    sign_in current_user
   end
 
   scenario 'Creates a new job' do

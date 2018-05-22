@@ -1,12 +1,8 @@
 require 'spec_helper'
 
-feature 'Item view metadata' do
-  let(:current_user) do
-    mock_user(is_admin?: true)
-  end
+RSpec.feature 'Item view metadata' do
   before do
-    expect_any_instance_of(CatalogController).to receive(:current_user)
-      .at_least(1).times.and_return(current_user)
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
   scenario 'MD Source is "DOR"' do

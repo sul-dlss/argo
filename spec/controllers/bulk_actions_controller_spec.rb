@@ -56,7 +56,7 @@ RSpec.describe BulkActionsController do
       let(:groups) { [User::ADMIN_GROUPS.first, 'sunetid:person9'] }
 
       before do
-        allow(current_user).to receive(:groups).and_return(groups)
+        allow_any_instance_of(User).to receive(:groups).and_return(groups)
       end
 
       it 'assigns @bulk_action to current_user and passes current groups' do

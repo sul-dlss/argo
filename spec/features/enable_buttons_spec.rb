@@ -1,8 +1,9 @@
 require 'spec_helper'
 
-feature 'Enable buttons' do
+RSpec.feature 'Enable buttons' do
   before do
-    @current_user = mock_user(is_admin?: true)
+    sign_in create(:user), groups: ['sdr:administrator-role']
+
     @obj = double(
       Dor::Item,
       admin_policy_object: nil,
@@ -12,10 +13,9 @@ feature 'Enable buttons' do
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
-    allow_any_instance_of(ApplicationController).to receive(:current_user)
-      .and_return(@current_user)
     allow(Dor).to receive(:find).and_return(@obj)
   end
+
   scenario 'buttons are disabled by default that have check_url' do
     visit solr_document_path 'druid:hj185vb7593'
     expect(page).to have_css 'a.disabled', text: 'Close Version'

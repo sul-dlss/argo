@@ -1,13 +1,10 @@
 require 'spec_helper'
 
-describe 'Profile' do
-  let(:current_user) do
-    mock_user(is_admin?: true)
-  end
+RSpec.describe 'Profile' do
   before do
-    expect_any_instance_of(ProfileController).to receive(:current_user)
-      .at_least(1).times.and_return(current_user)
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
+
   describe 'Admin Policies' do
     it 'lists admin policies and counts' do
       visit search_profile_path f: { objectType_ssim: ['item'] }

@@ -1,19 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe 'Item registration page', js: true do
-  let(:current_user) do
-    mock_user(is_admin?: true, is_manager?: true, groups: ['workgroup:dlss:developers'])
-  end
-
+  let(:user) { create(:user) }
   before do
-    # you might (rightfully) be tempted to do something like
-    #  allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(current_user)
-    # but this has caused unexpected behavior in the past, so we're sticking with the safer approach of doing each
-    # controller individually.
-    allow_any_instance_of(ItemsController).to receive(:current_user).and_return(current_user)
-    allow_any_instance_of(RegistrationController).to receive(:current_user).and_return(current_user)
-    allow_any_instance_of(Dor::ObjectsController).to receive(:current_user).and_return(current_user)
-
+    sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
     allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).and_return([])
     allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).with('druid:hv992ry2431').and_return(['dpgImageWF', 'goobiWF'])
   end
@@ -76,7 +66,7 @@ RSpec.describe 'Item registration page', js: true do
       'workflow_id' => 'goobiWF',
       'metadata_source' => 'label',
       'label' => 'object title',
-      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', 'Registered By : sunetid'],
+      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
       'rights' => 'default',
       'collection' => '',
       'source_id' => 'source:id1'

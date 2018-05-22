@@ -1,11 +1,10 @@
 require 'spec_helper'
 
 describe 'Release history', js: true do
-  let(:current_user) { mock_user(is_admin?: true) }
   before do
-    expect_any_instance_of(CatalogController).to receive(:current_user)
-      .at_least(1).times.and_return(current_user)
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
+
   it 'items show a release history' do
     visit solr_document_path 'druid:qq613vj0238'
     expect(page).to have_css 'dt', text: 'Releases'

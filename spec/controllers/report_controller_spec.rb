@@ -2,32 +2,37 @@ require 'spec_helper'
 
 RSpec.describe ReportController, type: :controller do
   before do
-    log_in_as_mock_user(is_admin?: true)
+    # have to stub any instance, as the user is not the same instance as created here
+    # TODO: we should be stubbing the SearchBuilder instead
+    allow_any_instance_of(User).to receive(:is_admin?).and_return(true)
+    sign_in user
   end
+  let(:user) { create(:user) }
 
-  describe ':workflow_grid' do
-    it 'should work' do
+  describe '#workflow_grid' do
+    it 'works' do
       get :workflow_grid
       expect(response).to have_http_status(:ok)
       expect(response).to render_template('workflow_grid')
     end
   end
-  describe ':data' do
-    it 'should return json' do
+
+  describe '#data' do
+    it 'returns json' do
       get :data, params: { format: :json, rows: 5 }
       expect(response).to have_http_status(:ok)
       data = JSON.parse(response.body)
       expect(data['rows'].length).to eq(5)
     end
-    it 'should default to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in' do
+    it 'defaults to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in' do
       get :data, params: { format: :json }
       expect(response).to have_http_status(:ok)
       data = JSON.parse(response.body)
       expect(data['rows'].length).to eq(10)
     end
   end
-  describe ':pids' do
-    it 'should return json' do
+  describe '#pids' do
+    it 'returns json' do
       get :pids, params: { format: :json }
       expect(response).to have_http_status(:ok)
       pids = JSON.parse(response.body)['druids']
@@ -36,13 +41,15 @@ RSpec.describe ReportController, type: :controller do
       expect(pids.first).to eq('br481xz7820')
     end
   end
-  describe 'bulk' do
-    it 'should render the correct template' do
+
+  describe '#bulk' do
+    it 'renders the correct template' do
       get :bulk
       expect(response).to have_http_status(:ok)
       expect(response).to render_template('bulk')
     end
   end
+
   describe 'POST reset' do
     let(:repo) { 'dor' }
     let(:workflow) { 'accessionWF' }
@@ -72,8 +79,9 @@ RSpec.describe ReportController, type: :controller do
       expect(response).to have_http_status(:ok)
     end
   end
+
   describe 'download' do
-    it 'should download valid CSV data' do
+    it 'downloads valid CSV data' do
       get :download, params: { fields: ' ' }
       expect(response).to have_http_status(:ok)
       expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
@@ -82,7 +90,7 @@ RSpec.describe ReportController, type: :controller do
       expect(data.length > 1).to be_truthy
       expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
     end
-    it 'should download valid CSV data for specific fields' do
+    it 'downloads valid CSV data for specific fields' do
       get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
       expect(response).to have_http_status(:ok)
       data = CSV.parse(response.body)
@@ -91,9 +99,10 @@ RSpec.describe ReportController, type: :controller do
       expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
     end
   end
-  describe 'config' do
+
+  describe '#config' do
     let(:config) { controller.blacklight_config }
-    it 'should use POST as the http method' do
+    it 'uses POST as the http method' do
       expect(config.http_method).to eq :post
     end
   end

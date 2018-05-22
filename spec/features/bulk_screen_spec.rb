@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 # Feature/view tests for the (old) bulk actions view.
-feature 'Bulk actions view', js: true do
-  before :each do
-    @current_user = mock_user(is_admin?: true, permitted_collections: [['string']])
-    allow_any_instance_of(IndexQueueController).to receive(:current_user).and_return(@current_user)
-    allow_any_instance_of(ReportController).to receive(:current_user).and_return(@current_user)
+RSpec.feature 'Bulk actions view', js: true do
+  before do
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
   scenario 'basic page renders ok' do

@@ -52,20 +52,6 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
-  require 'rack-webauth/test'
-  if Settings.WEBAUTH
-    config.middleware.use(
-      Rack::Webauth::Test,
-      user: Settings.WEBAUTH.USER,
-      mail: Settings.WEBAUTH.MAIL,
-      ldapprivgroup: Settings.WEBAUTH.LDAPPRIVGROUP,
-      suaffiliation: Settings.WEBAUTH.SUAFFILIATION,
-      displayname: Settings.WEBAUTH.DISPLAYNAME,
-      ldapauthrule: Settings.WEBAUTH.LDAPAUTHRULE
-    )
-  end
-  config.middleware.use(Rack::Webauth)
-
   # the following config statement gets us two important things on each log line:
   # 1) unique IDs per request, so that it's easier to correlate
   # logging statements associated with a given request when multiple

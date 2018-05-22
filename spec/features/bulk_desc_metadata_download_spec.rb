@@ -2,15 +2,11 @@ require 'spec_helper'
 
 RSpec.feature 'Bulk Descriptive Metadata Download' do
   let(:current_user) { create(:user) }
-  before(:each) do
-    expect(current_user).to receive(:to_s).at_least(:once).and_return('name')
-    # Needed because we are accessing multiple instances of BulkActionsController
-    allow_any_instance_of(BulkActionsController).to receive(:current_user)
-      .and_return(current_user)
+  before do
+    sign_in current_user
   end
+
   scenario 'New page has a populate druids div with last search' do
-    expect_any_instance_of(CatalogController).to receive(:current_user)
-      .at_least(:once).and_return(current_user)
     visit search_catalog_path q: 'stanford'
     click_link 'Bulk Actions'
     expect(page).to have_css 'h1', text: 'Bulk Actions'

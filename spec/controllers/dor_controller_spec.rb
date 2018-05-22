@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe DorController, type: :controller do
   let(:druid) { 'druid:aa111bb2222' }
   before do
-    log_in_as_mock_user
+    sign_in(create(:user))
   end
 
   describe 'reindex' do

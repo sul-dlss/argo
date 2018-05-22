@@ -4,12 +4,24 @@ require 'cancan/matchers'
 describe Ability do
   let(:subject) { described_class.new(user) }
   let(:item) { Dor::Item.new(pid: 'x') }
+  let(:user) do
+    instance_double(User,
+                    is_admin?: admin,
+                    is_webauth_admin?: webauth_admin,
+                    is_manager?: manager,
+                    is_viewer?: viewer,
+                    roles: [])
+  end
+  let(:admin) { false }
+  let(:webauth_admin) { false }
+  let(:manager) { false }
+  let(:viewer) { false }
 
   let(:new_apo_id) { 'new_apo_id' }
   let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_id) }
 
   context 'as an administrator' do
-    let(:user) { mock_user(is_admin?: true) }
+    let(:admin) { true }
 
     it { should be_able_to(:manage, :everything) }
     it { should be_able_to(:manage_item, item) }
@@ -22,7 +34,7 @@ describe Ability do
   end
 
   context 'as a manager' do
-    let(:user) { mock_user(is_manager?: true) }
+    let(:manager) { true }
 
     it { should_not be_able_to(:manage, :everything) }
     it { should be_able_to(:manage_item, item) }
@@ -35,7 +47,7 @@ describe Ability do
   end
 
   context 'as a viewer' do
-    let(:user) { mock_user(is_viewer?: true) }
+    let(:viewer) { true }
 
     it { should_not be_able_to(:manage_item, item) }
     it { should_not be_able_to(:manage_content, item) }
@@ -47,8 +59,6 @@ describe Ability do
   end
 
   context 'for items without an APO' do
-    let(:user) { mock_user }
-
     it { should_not be_able_to(:manage_item, item) }
     it { should_not be_able_to(:manage_content, item) }
     it { should_not be_able_to(:manage_desc_metadata, item) }
@@ -59,7 +69,6 @@ describe Ability do
 
   context 'from an APO' do
     let(:item) { Dor::AdminPolicyObject.new(pid: 'apo') }
-    let(:user) { mock_user }
 
     context 'for a user with a privileged role' do
       before do
@@ -84,7 +93,6 @@ describe Ability do
     let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo) }
     let(:apo) { Dor::AdminPolicyObject.new(pid: 'apo') }
     let(:ungoverned_item) { Dor::Item.new(pid: 'y') }
-    let(:user) { mock_user }
 
     before do
       allow(user).to receive(:roles).with('apo').and_return(['recognized-and-permitted-role'])
@@ -152,7 +160,6 @@ describe Ability do
   context 'without a role assigned by an APO' do
     let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo) }
     let(:apo) { Dor::AdminPolicyObject.new(pid: 'apo') }
-    let(:user) { mock_user }
 
     before do
       allow(user).to receive(:roles).with('apo').and_return(['some-other-role'])

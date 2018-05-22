@@ -27,27 +27,19 @@ class User < ActiveRecord::Base
     sdr-viewer
   ).freeze
 
-  attr_accessor :webauth
+  devise :remote_user_authenticatable
 
   delegate :permitted_apos, :permitted_collections, to: :permitted_queries
+
+  # Set by ApplicationController from the request env
+  attr_accessor :display_name
 
   def permitted_queries
     @permitted_queries ||= PermittedQueries.new(groups, KNOWN_ROLES, is_admin?)
   end
 
-  def self.find_or_create_by_webauth(webauth)
-    result = find_or_create_by(sunetid: webauth.login)
-    result.webauth = webauth
-    result
-  end
-
-  def self.find_or_create_by_remoteuser(username)
-    find_or_create_by(sunetid: username)
-  end
-
   def to_s
-    return sunetid unless webauth
-    webauth.attributes['DISPLAYNAME'] || webauth.login
+    display_name || sunetid
   end
 
   # Queries Solr for a given record, returning synthesized role strings that are defined. Searches:
@@ -100,16 +92,16 @@ class User < ActiveRecord::Base
   #   they are impersonating
   def groups
     return @groups_to_impersonate unless @groups_to_impersonate.blank?
-    webauth_groups
+    Array(webauth_groups)
   end
 
-  # @return [Array<String>] list of groups the user is a member of
+  # @return [Array<String>] the list of webauth groups that were set and the users sunetid
   def webauth_groups
-    @webauth_groups ||= begin
-      perm_keys = ["sunetid:#{login}"]
-      return perm_keys unless webauth && webauth.privgroup.present?
-      perm_keys + webauth.privgroup.split(/\|/).map { |g| "workgroup:#{g}" }
-    end
+    ["sunetid:#{login}"] + Array(@webauth_groups)
+  end
+
+  def webauth_groups=(groups)
+    @webauth_groups = groups.map { |g| "workgroup:#{g}" }
   end
 
   # @return [Boolean] is the user a repository wide administrator
@@ -120,7 +112,9 @@ class User < ActiveRecord::Base
   # @return [Boolean] is the user a repository wide administrator without
   #     taking into account impersonation.
   def is_webauth_admin?
-    !(webauth_groups & ADMIN_GROUPS).empty?
+    # we're casting to an array, because this may be called in a background job,
+    # where webauth_groups has not been set.
+    !(Array(webauth_groups) & ADMIN_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide manager
@@ -134,6 +128,6 @@ class User < ActiveRecord::Base
   end
 
   def login
-    webauth ? webauth.login : sunetid
+    sunetid
   end
 end

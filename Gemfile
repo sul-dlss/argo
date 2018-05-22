@@ -67,7 +67,6 @@ gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
 gem 'prawn', '~> 1'
 gem 'prawn-table'
-gem 'rack-webauth', git: 'https://github.com/nilclass/rack-webauth.git'
 gem 'rake'
 gem 'rdf', '~> 1.99' # pinned for faster dependency resolution
 gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from resolving correctly
@@ -78,7 +77,6 @@ gem 'ruby-graphviz'
 gem 'ruby-prof'
 gem 'rubyzip'
 gem 'sprockets-es6'
-gem 'whenever', require: false
 
 # Stanford/Hydra related gems
 gem 'active-fedora', '~> 8.2'
@@ -92,6 +90,9 @@ gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'stanford-mods'
 gem 'sul_styles', '~> 0.3'
+
+gem 'devise'
+gem 'devise-remote-user', '~> 1.0'
 
 # useful for debugging, even in prod
 gem 'pry-byebug' # Adds step-by-step debugging and stack navigation capabilities to pry using byebug

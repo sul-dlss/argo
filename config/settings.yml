@@ -111,17 +111,8 @@ STACKS_URL: 'https://stacks.example.com/image'
 STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
 WORKFLOW_URL: 'http://localhost:3001'
 
-# Webauth is null by default.
-# To specify it to fake webauth credentials for dev instances,
-# use a structure like the one below.
-WEBAUTH: ~
-# WEBAUTH:
-#   USER: 'user'
-#   MAIL: 'user@example.com'
-#   LDAPPRIVGROUP: 'group:role|anothergroup:otherrole'
-#   SUAFFILIATION: 'org:group'
-#   DISPLAYNAME: 'Jane Doe'
-#   LDAPAUTHRULE: 'auth-rule'
+SU_AFFILIATIONS:
+- test-stanford:test
 
 # Workflow
 WORKFLOW:

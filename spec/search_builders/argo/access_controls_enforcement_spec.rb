@@ -5,14 +5,22 @@ class TestClass
 end
 
 RSpec.describe Argo::AccessControlsEnforcement, type: :model do
-  let(:user) { mock_user }
+  let(:user) do
+    instance_double(User,
+                    is_admin?: false,
+                    is_manager?: false,
+                    is_viewer?: false,
+                    permitted_apos: [])
+  end
+
   let(:scope) { double('scope', current_user: user) }
   before do
     @obj = TestClass.new
     expect(@obj).to receive(:scope).at_least(:once).and_return(scope)
   end
+
   describe 'add_access_controls_to_solr_params' do
-    it 'should add a fq that requires the apo' do
+    it 'adds a fq that requires the apo' do
       allow(user).to receive(:permitted_apos).and_return(['druid:cb081vd1895'])
       solr_params = {}
       @obj.add_access_controls_to_solr_params(solr_params)

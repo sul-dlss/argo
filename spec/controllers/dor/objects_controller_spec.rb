@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Dor::ObjectsController, type: :controller do
   before do
-    log_in_as_mock_user
+    sign_in(create(:user))
   end
 
   let(:dor_registration) { { pid: 'abc' } }

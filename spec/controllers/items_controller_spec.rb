@@ -5,7 +5,7 @@ RSpec.describe ItemsController, type: :controller do
     @pid  = 'druid:oo201oo0001'
     @item = Dor::Item.new pid: @pid
     allow_any_instance_of(User).to receive(:roles).and_return([])
-    allow(controller).to receive(:current_user).and_return(user)
+    sign_in user
     allow(Dor).to receive(:find).with(@pid).and_return(@item)
     idmd = double()
     apo  = double()

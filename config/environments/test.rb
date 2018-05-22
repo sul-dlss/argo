@@ -40,8 +40,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.middleware.use(Rack::Webauth)
-
   # the following config statement gets us two important things on each log line:
   # 1) unique IDs per request, so that it's easier to correlate
   # logging statements associated with a given request when multiple
@@ -50,4 +48,7 @@ Rails.application.configure do
   # got logged is quite nice.
   # (declared after Argo.configure since it uses one of those params)
   config.log_tags = [:uuid, proc { Time.zone.now.strftime(Settings.DATE_FORMAT_STR) }]
+
+  require 'test_shibboleth_headers'
+  config.middleware.use TestShibbolethHeaders
 end

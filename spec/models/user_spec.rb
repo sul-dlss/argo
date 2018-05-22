@@ -4,44 +4,6 @@ require 'spec_helper'
 # https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
 
 RSpec.describe User, type: :model do
-  describe '.find_or_create_by_webauth' do
-    it 'should work' do
-      mock_webauth = double('webauth', login: 'asdf')
-      user = User.find_or_create_by_webauth(mock_webauth)
-      expect(user.webauth).to eq(mock_webauth)
-    end
-  end
-
-  context 'with webauth' do
-    subject { User.find_or_create_by_webauth(double('webauth', login: 'mods', attributes: { 'DISPLAYNAME' => 'Møds Ässet' })) }
-
-    describe '#login' do
-      it 'should get the sunetid from Webauth' do
-        expect(subject.login).to eq('mods')
-      end
-    end
-    describe '#to_s' do
-      it 'should be the name from Webauth' do
-        expect(subject.to_s).to eq('Møds Ässet')
-      end
-    end
-  end
-
-  context 'with REMOTE_USER' do
-    subject { User.find_or_create_by_remoteuser('mods') }
-
-    describe '#login' do
-      it 'should get the username for remoteuser' do
-        expect(subject.login).to eq('mods')
-      end
-    end
-    describe '#to_s' do
-      it 'should be the name from remoteuser' do
-        expect(subject.to_s).to eq('mods')
-      end
-    end
-  end
-
   describe '#is_admin?' do
     subject { user.is_admin? }
     let(:user) { described_class.new }
@@ -169,10 +131,6 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'KNOWN_ROLES' do
-    it 'contains roles defined in Dor::Governable'
-  end
-
   describe 'solr_role_allowed' do
     let(:solr_doc) do
       {
@@ -265,7 +223,7 @@ RSpec.describe User, type: :model do
 
   describe '#groups' do
     subject { user.groups }
-    let(:user) { User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: webauth_groups.join('|'))) }
+    let(:user) { build(:user, sunetid: 'asdf', webauth_groups: webauth_groups) }
 
     context 'specified' do
       let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
@@ -307,13 +265,21 @@ RSpec.describe User, type: :model do
   end
 
   describe '#webauth_groups' do
-    before :each do
-      @webauth_privgroup_str = 'dlss:testgroup1|dlss:testgroup2|dlss:testgroup3'
-      @user = User.find_or_create_by_webauth(double('webauth', login: 'asdf', logged_in?: true, privgroup: @webauth_privgroup_str))
-    end
-    it 'should return the groups by webauth' do
-      expected_groups = ['sunetid:asdf'] + @webauth_privgroup_str.split(/\|/).map { |g| "workgroup:#{g}" }
-      expect(@user.webauth_groups).to eq(expected_groups)
+    let(:user) { build(:user, sunetid: 'asdf') }
+
+    subject { user.webauth_groups }
+    it { is_expected.to eq ['sunetid:asdf'] }
+
+    context 'when webauth groups have been set' do
+      before do
+        user.webauth_groups = webauth_groups
+      end
+      let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
+
+      it 'returns the groups by webauth' do
+        expected_groups = ['sunetid:asdf'] + webauth_groups.map { |g| "workgroup:#{g}" }
+        expect(subject).to eq(expected_groups)
+      end
     end
   end
 

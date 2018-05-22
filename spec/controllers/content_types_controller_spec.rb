@@ -3,12 +3,12 @@ require 'spec_helper'
 RSpec.describe ContentTypesController, type: :controller do
   before do
     allow(Dor).to receive(:find).with(pid).and_return(item)
-    log_in_as_mock_user
+    sign_in(user)
   end
 
   let(:pid) { 'druid:oo201oo0001' }
   let(:item) { Dor::Item.new pid: pid }
-  let(:user) { FactoryBot.create :user }
+  let(:user) { create :user }
 
   describe 'show' do
     it 'is successful' do

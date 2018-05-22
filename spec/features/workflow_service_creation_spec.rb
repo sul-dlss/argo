@@ -1,15 +1,10 @@
 require 'spec_helper'
 
 RSpec.feature 'Workflow Service Creation' do
-  let(:current_user) do
-    mock_user(is_admin?: true)
-  end
   before do
-    allow_any_instance_of(ItemsController).to receive(:current_user)
-      .and_return(current_user)
-    allow_any_instance_of(CatalogController).to receive(:current_user)
-      .and_return(current_user)
+    sign_in create(:user), groups: ['sdr:administrator-role']
   end
+
   scenario 'redirect and display on show page' do
     visit add_workflow_item_path 'druid:qq613vj0238'
     click_button 'Add'

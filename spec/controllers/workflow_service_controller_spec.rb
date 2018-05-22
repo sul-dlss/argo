@@ -1,11 +1,12 @@
 require 'spec_helper'
 
-RSpec.describe WorkflowServiceController do
+RSpec.describe WorkflowServiceController, type: :controller do
   before do
-    log_in_as_mock_user
+    sign_in(create(:user))
   end
 
   let(:druid) { 'druid:abc:123' }
+
   describe 'GET closeable' do
     context 'when closeable' do
       it 'returns true' do

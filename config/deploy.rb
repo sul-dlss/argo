@@ -1,8 +1,6 @@
 set :application, 'argo'
 set :repo_url, 'https://github.com/sul-dlss/argo.git'
 
-set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
-
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
@@ -24,7 +22,7 @@ set :deploy_to, '/home/lyberadmin/argo'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w(config/database.yml config/secrets.yml config/blacklight.yml config/honeybadger.yml config/default_htaccess_directives)
+set :linked_files, %w(config/database.yml config/secrets.yml config/blacklight.yml config/honeybadger.yml)
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w(log config/certs config/settings tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
@@ -36,23 +34,6 @@ set :linked_dirs, %w(log config/certs config/settings tmp/pids tmp/cache tmp/soc
 # set :keep_releases, 5
 
 namespace :deploy do
-  # it's necessary to run the 'argo:htaccess' rake task after restarting, because
-  # the public folder (which contains the generated .htaccess file) is committed
-  # in argo's git repo, and so a fresh copy (without the generated .htaccess file)
-  # will get written with each deployment.  the .htaccess file with the correct
-  # list of workgroups is required for argo's permissions checking mechanism to function.
-  desc 're-generate .htaccess from the current APOs (so workgroup-based perm checks function)'
-  before :restart, :initialize_htaccess do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :rake, 'argo:htaccess'
-        end
-      end
-    end
-  end
-
   # execute the eye script located in the deployed argo's bin directory, since
   # eye may not be installed system-wide.  load the delayed_job_workers.eye config,
   # which should monitor workers for memory consumption (restarting them individually
