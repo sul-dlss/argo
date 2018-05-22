@@ -77,6 +77,11 @@ class ApoForm < BaseForm
     model.use_license
   end
 
+  def default_rights
+    return 'world' if new_record?
+    model.default_rights
+  end
+
   private
 
   def manage_permissions

@@ -100,6 +100,11 @@ RSpec.describe ApoForm do
       subject { instance.use_license }
       it { is_expected.to eq 'by-nc-sa' }
     end
+
+    describe '#default_rights' do
+      subject { instance.default_rights }
+      it { is_expected.to eq 'world' }
+    end
   end
 
   context 'no model (new)' do
@@ -122,6 +127,11 @@ RSpec.describe ApoForm do
     describe '#use_license' do
       subject { instance.use_license }
       it { is_expected.to eq '' }
+    end
+
+    describe '#default_rights' do
+      subject { instance.default_rights }
+      it { is_expected.to eq 'world' }
     end
   end
 end

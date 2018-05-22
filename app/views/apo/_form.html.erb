@@ -77,7 +77,7 @@
 
   <div class="form-group">
     <label>Default Object Rights</label><br/>
-      <%=select_tag :default_object_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, @object ? @object.default_rights : 'world' )%>
+      <%=select_tag :default_object_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, @form.default_rights )%>
   </div>
   <div class="form-group">
     <label>Default Use and Reproduction statement</label><br/>
