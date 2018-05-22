@@ -33,8 +33,12 @@ RSpec.describe ApoController, type: :controller do
         'agreement' => agreement.pid,
         'desc_md' => 'MODS',
         'metadata_source' => 'DOR',
-        'managers' => 'developers dpg-staff',
-        'viewers' => 'viewer-role , forensics-staff',
+        permissions: {
+          '0' => { access: 'manage', name: 'developers', type: 'group' },
+          '1' => { access: 'manage', name: 'dpg-staff', type: 'group' },
+          '2' => { access: 'view', name: 'viewer-role', type: 'group' },
+          '3' => { access: 'view', name: 'forensics-staff', type: 'group' }
+        },
         'collection_radio' => 'create',
         'collection_title' => 'col title',
         'collection_abstract' => '',

@@ -13,13 +13,6 @@ class ApoForm < BaseForm
     # error if title is empty
     errors.push(:title) if @params[:title].blank?
 
-    # error if managers or viewers role list is invalid
-    [:managers, :viewers].each do |roleplayer_list|
-      next unless @params[roleplayer_list]
-      next if valid_role_list?(split_roleplayer_input_field(@params[roleplayer_list]))
-      @errors.push(roleplayer_list)
-    end
-
     @errors.push(:collection_radio) if @params[:collection_radio] == 'select' && new_record?
 
     @errors.empty?
@@ -57,14 +50,6 @@ class ApoForm < BaseForm
   def permissions
     return default_permissions if new_record?
     manage_permissions + view_permissions
-  end
-
-  def managers
-    permissions.select { |p| p[:access] == 'manage' }.map { |p| p[:name] }.join(', ')
-  end
-
-  def viewers
-    permissions.select { |p| p[:access] == 'view' }.map { |p| p[:name] }.join(', ')
   end
 
   def default_workflow
@@ -168,15 +153,16 @@ class ApoForm < BaseForm
 
   def sync_roles
     model.purge_roles
+    return unless params[:permissions]
     # and populate it with the correct roleMetadata
-    if params[:managers]
-      managers = split_roleplayer_input_field(params[:managers])
-      add_roleplayers(managers, 'dor-apo-manager')
+    attributes = params[:permissions].values
+    attributes.each do |perm|
+      if perm[:access] == 'manage'
+        model.add_roleplayer('dor-apo-manager', "sdr:#{perm[:name]}")
+      elsif perm[:access] == 'view'
+        model.add_roleplayer('dor-apo-viewer', "sdr:#{perm[:name]}")
+      end
     end
-
-    return unless params[:viewers]
-    viewers = split_roleplayer_input_field(params[:viewers])
-    add_roleplayers(viewers, 'dor-apo-viewer')
   end
 
   def add_default_collection
@@ -218,28 +204,6 @@ class ApoForm < BaseForm
       params[role_param_sym] = params[role_param_sym].tr("\n,", ' ') if params[role_param_sym]
     end
     params
-  end
-
-  # @param [String] role_name
-  # @return [Boolean] true if name is valid
-  def valid_role_name?(role_name)
-    !/^[\w-]+$/.match(role_name).nil?
-  end
-
-  # @param [Array[String]] role_list
-  # @return [Boolean] true if we don't find an invalid role name
-  def valid_role_list?(role_list)
-    role_list.all? { |role_name| valid_role_name?(role_name) }
-  end
-
-  def split_roleplayer_input_field(roleplayer_list_str)
-    roleplayer_list_str.split(/[,\s]/).reject(&:empty?)
-  end
-
-  def add_roleplayers(roleplayer_list, role)
-    roleplayer_list.each do |roleplayer|
-      model.add_roleplayer role, roleplayer
-    end
   end
 
   # Create a collection

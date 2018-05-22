@@ -1,3 +1,5 @@
+import Sharing from 'modules/sharing'
+
 export default class {
     /**
      * initialize the editor behaviors
@@ -9,6 +11,17 @@ export default class {
 
     init() {
         this.validate()
+        this.sharing()
+    }
+
+    sharing() {
+      var sharing = new Sharing(this.element.find('Sharing')[0])
+      sharing.start()
+      var form = this.element.closest('form')
+
+      form.on('submit', () => {
+          sharing.serialize(form[0])
+      })
     }
 
     // Initializes the validate script for the form that shows errors dynamically

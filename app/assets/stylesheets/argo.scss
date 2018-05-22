@@ -8,3 +8,13 @@
 .argo-obj-status-highlight {
   color: $argo-status-highlight-color;
 }
+
+.sharing {
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  fieldset,
+  legend {
+    margin-bottom: 5px;
+  }
+}

@@ -17,23 +17,7 @@
       <%= select_tag :metadata_source, options_for_select(apo_metadata_sources, @form.metadata_source) %>
   </div>
 
-  <div class="form-group">
-    <label>Roles</label><br/>
-    <% @form.permissions.each do |perm| %>
-    <% end %>
-    <p>These roles govern access to all objects registered under this APO.<br/>
-      <ul>
-        <li>The default groups shown should be included unless they are to be explicitly excluded.</li>
-        <li>Values may be separate by commas, spaces or new lines.</li>
-    </ul>
-    <div class="register-label-div">Manager</div>
-    <input id="managers" name="managers" type="text" style="width:90%" value="<%= @form.managers %>"/><br/>
-    <p class="help" style="margin-left:90px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
-    <div class="register-label-div">Viewer</div>
-    <input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @form.viewers %>"/>
-    <p class="help" style="margin-left:90px;font-size:.8em">View only access to the objects</p>
-  </div>
-
+  <Sharing data-permissions="<%= @form.permissions.to_json %>"></Sharing>
 
   <div class="form-group">
     <% if @form.default_collection_objects.present? %>
