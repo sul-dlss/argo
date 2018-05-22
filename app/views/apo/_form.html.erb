@@ -47,12 +47,12 @@
     <label>Don't add a Collection</label>
     <input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
     <label>Choose a Default Collection</label>
-    <%if !@object%>
-    <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
-    <label>Create a Collection</label>
-    <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection-catkey').show();"/>
-    <label>Create a Collection from Symphony</label><br/>
-    <%end%>
+    <% if @form.new_record? %>
+      <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
+      <label>Create a Collection</label>
+      <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection-catkey').show();"/>
+      <label>Create a Collection from Symphony</label><br/>
+    <% end %>
     <div id="select-collection" class="collection_div" style="display:none">
       <%= select_tag :collection, options_for_select(current_user.permitted_collections)%><br/>
     </div>
@@ -98,7 +98,12 @@
     <%=select_tag :workflow, options_for_select(workflow_options, @form.default_workflow)%>
   </div>
   <div class="form-group">
-    <%= submit_tag @object ? 'Update APO' : 'Register APO', class: 'btn btn-primary' %>
-    <%= link_to 'Cancel', @object ? solr_document_path(@object.pid) : '/', class: 'btn btn-default' %>
+    <% if @form.new_record? %>
+      <%= submit_tag 'Register APO', class: 'btn btn-primary' %>
+      <%= link_to 'Cancel', '/', class: 'btn btn-default' %>
+    <% else %>
+      <%= submit_tag 'Update APO', class: 'btn btn-primary' %>
+      <%= link_to 'Cancel', solr_document_path(@object.pid), class: 'btn btn-default' %>
+    <% end %>
   </div>
 <% end %>
