@@ -76,5 +76,32 @@ RSpec.describe ApoForm do
 
       expect { instance.sync }.to raise_error(ArgumentError)
     end
+
+    describe '#permissions' do
+      subject { instance.permissions }
+      it 'has the defaults' do
+        expect(subject).to match_array [
+          { name: 'developers', type: 'group', access: 'manage' },
+          { name: 'pmag-staff', type: 'group', access: 'manage' },
+          { name: 'smpl-staff', type: 'group', access: 'manage' },
+          { name: 'dpg-staff', type: 'group', access: 'manage' },
+          { name: 'argo-access-spec', type: 'group', access: 'manage' },
+          { name: 'lmcrae', type: 'person', access: 'manage' }
+        ]
+      end
+    end
+  end
+
+  context 'no model (new)' do
+    describe '#permissions' do
+      subject { instance.permissions }
+      it 'has the defaults' do
+        expect(subject).to match_array [
+          { name: 'developer', type: 'group', access: 'manage' },
+          { name: 'service-manager', type: 'group', access: 'manage' },
+          { name: 'metadata-staff', type: 'group', access: 'manage' }
+        ]
+      end
+    end
   end
 end

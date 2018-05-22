@@ -1,4 +1,4 @@
-<%= form_tag url, method: method, data: { behavior: 'apo-form' } do%>
+<%= form_tag url, method: method, data: { behavior: 'apo-form' } do %>
 
   <div class="form-group">
     <label>Title</label><br/>
@@ -19,17 +19,19 @@
 
   <div class="form-group">
     <label>Roles</label><br/>
+    <% @form.permissions.each do |perm| %>
+    <% end %>
     <p>These roles govern access to all objects registered under this APO.<br/>
       <ul>
         <li>The default groups shown should be included unless they are to be explicitly excluded.</li>
         <li>Values may be separate by commas, spaces or new lines.</li>
     </ul>
-    <div class="register-label-div">Manager</div><input id="managers" name="managers" type="text" style="width:90%" value="<%= @object ? @managers.join(', ') : ApoController::DEFAULT_MANAGER_WORKGROUPS.join(', ') %>"/><br/>
+    <div class="register-label-div">Manager</div>
+    <input id="managers" name="managers" type="text" style="width:90%" value="<%= @form.managers %>"/><br/>
     <p class="help" style="margin-left:90px;font-size:.8em">Able to make changes to objects, including metadata and content</p>
-    <p id="managers-err-msg-elt" class="apo-register-error"></p>
-    <div class="register-label-div">Viewer</div><input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @object and @viewers.length>0 ? @viewers.join(', ') : ''%>"/>
+    <div class="register-label-div">Viewer</div>
+    <input type="text" id="viewers" name="viewers" style="width:90%" value="<%= @form.viewers %>"/>
     <p class="help" style="margin-left:90px;font-size:.8em">View only access to the objects</p>
-    <p id="viewers-err-msg-elt" class="apo-register-error"></p>
   </div>
 
 

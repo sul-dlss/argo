@@ -21,20 +21,16 @@ class ApoController < ApplicationController
     :spreadsheet_template
   ]
 
-  DEFAULT_MANAGER_WORKGROUPS = %w(sdr:developer sdr:service-manager sdr:metadata-staff).freeze
-
   def edit
     authorize! :create, Dor::AdminPolicyObject
-    @managers = []
-    @viewers  = []
-    populate_role_form_field_var(@object.roles['dor-apo-manager'], @managers)
-    populate_role_form_field_var(@object.roles['dor-apo-viewer'], @viewers)
+    @form = ApoForm.new(@object)
     @cur_default_workflow = @object.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
     render layout: 'blacklight'
   end
 
   def new
     authorize! :create, Dor::AdminPolicyObject
+    @form = ApoForm.new
     render layout: 'blacklight'
   end
 
@@ -153,13 +149,6 @@ class ApoController < ApplicationController
     @object = Dor.find params[:id]
     pids = @object.default_collections || []
     @collections = pids.map { |pid| Dor.find(pid) }
-  end
-
-  def populate_role_form_field_var(role_list, form_field_var)
-    return unless role_list
-    role_list.each do |entity|
-      form_field_var << entity.gsub('workgroup:', '').gsub('person:', '')
-    end
   end
 
   def save_and_index

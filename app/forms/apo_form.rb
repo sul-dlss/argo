@@ -2,6 +2,8 @@
 # in dor-services:
 #  https://github.com/sul-dlss/dor-services/pull/360
 class ApoForm < BaseForm
+  DEFAULT_MANAGER_WORKGROUPS = %w(developer service-manager metadata-staff).freeze
+
   attr_reader :default_collection_pid
   # @param [HashWithIndifferentAccess] params the parameters from the form
   # @return [Boolean] true if the parameters are valid
@@ -51,7 +53,45 @@ class ApoForm < BaseForm
     sync_roles
   end
 
+  # @return [Array<Hash>] the list of permissions (grants for users/groups) on this object
+  def permissions
+    return default_permissions if new_record?
+    manage_permissions + view_permissions
+  end
+
+  def managers
+    permissions.select { |p| p[:access] == 'manage' }.map { |p| p[:name] }.join(', ')
+  end
+
+  def viewers
+    permissions.select { |p| p[:access] == 'view' }.map { |p| p[:name] }.join(', ')
+  end
+
   private
+
+  def manage_permissions
+    build_permissions(Array(model.roles['dor-apo-manager']), 'manage')
+  end
+
+  def view_permissions
+    build_permissions(Array(model.roles['dor-apo-viewer']), 'view')
+  end
+
+  def build_permissions(role_list, access)
+    role_list.map do |name|
+      if name.starts_with? 'workgroup:'
+        { name: name.sub(/^workgroup:[^:]*:/, ''), type: 'group', access: access }
+      else
+        { name: name.sub(/^sunetid:/, ''), type: 'person', access: access }
+      end
+    end
+  end
+
+  def default_permissions
+    DEFAULT_MANAGER_WORKGROUPS.map do |name|
+      { name: name, type: 'group', access: 'manage' }
+    end
+  end
 
   def sync_roles
     model.purge_roles
@@ -69,7 +109,7 @@ class ApoForm < BaseForm
   def add_default_collection
     @default_collection_pid = if params[:collection_radio] == 'create'
                                 create_collection model.pid
-                              elsif params[:collection]
+                              elsif params[:collection].present? # Guards against empty string
                                 params[:collection]
                               end
 
@@ -110,7 +150,7 @@ class ApoForm < BaseForm
   # @param [String] role_name
   # @return [Boolean] true if name is valid
   def valid_role_name?(role_name)
-    !/^[\w-]+:[\w-]+$/.match(role_name).nil?
+    !/^[\w-]+$/.match(role_name).nil?
   end
 
   # @param [Array[String]] role_list
