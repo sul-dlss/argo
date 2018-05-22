@@ -13,8 +13,8 @@
 
   <div class="form-group">
     <label>Descriptive Metadata format</label><br/>
-      <%=select_tag :desc_md, options_for_select(options_for_desc_md, @object ? @object.desc_metadata_format : 'MODS')%>
-      <%=select_tag :metadata_source, options_for_select(apo_metadata_sources,@object ? @object.metadata_source : 'DOR')%>
+      <%=select_tag :desc_md, options_for_select(options_for_desc_md, @form.desc_metadata_format)%>
+      <%=select_tag :metadata_source, options_for_select(apo_metadata_sources, @object ? @object.metadata_source : 'DOR')%>
   </div>
 
   <div class="form-group">

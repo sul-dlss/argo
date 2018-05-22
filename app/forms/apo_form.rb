@@ -82,6 +82,11 @@ class ApoForm < BaseForm
     model.default_rights
   end
 
+  def desc_metadata_format
+    return 'MODS' if new_record?
+    model.desc_metadata_format
+  end
+
   private
 
   def manage_permissions

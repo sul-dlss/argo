@@ -105,6 +105,11 @@ RSpec.describe ApoForm do
       subject { instance.default_rights }
       it { is_expected.to eq 'world' }
     end
+
+    describe '#desc_metadata_format' do
+      subject { instance.desc_metadata_format }
+      it { is_expected.to eq 'MODS' }
+    end
   end
 
   context 'no model (new)' do
@@ -132,6 +137,11 @@ RSpec.describe ApoForm do
     describe '#default_rights' do
       subject { instance.default_rights }
       it { is_expected.to eq 'world' }
+    end
+
+    describe '#desc_metadata_format' do
+      subject { instance.desc_metadata_format }
+      it { is_expected.to eq 'MODS' }
     end
   end
 end
