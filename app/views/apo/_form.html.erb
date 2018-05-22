@@ -82,7 +82,7 @@
   <div class="form-group">
     <label>Default Use and Reproduction statement</label><br/>
     <p>See <%=link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', :target => "_blank"%> for sample Use and Reproduction statements.</p>
-    <textarea style="width:95%;height:40px" rows="2" name="use" id="use"><%= if @object then @object.use_statement end%></textarea>
+    <textarea style="width:95%;height:40px" rows="2" name="use" id="use"><%= @form.use_statement %></textarea>
   </div>
 
   <div class="form-group">

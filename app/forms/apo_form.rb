@@ -92,6 +92,11 @@ class ApoForm < BaseForm
     model.metadata_source
   end
 
+  def use_statement
+    return if new_record?
+    model.use_statement
+  end
+
   private
 
   def manage_permissions

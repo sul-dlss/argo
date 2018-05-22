@@ -115,6 +115,11 @@ RSpec.describe ApoForm do
       subject { instance.metadata_source }
       it { is_expected.to be_nil }
     end
+
+    describe '#use_statement' do
+      subject { instance.use_statement }
+      it { is_expected.to start_with 'Rights are owned by Stanford University Libraries' }
+    end
   end
 
   context 'no model (new)' do
@@ -152,6 +157,11 @@ RSpec.describe ApoForm do
     describe '#metadata_source' do
       subject { instance.metadata_source }
       it { is_expected.to eq 'DOR' }
+    end
+
+    describe '#use_statement' do
+      subject { instance.use_statement }
+      it { is_expected.to be_nil }
     end
   end
 end
