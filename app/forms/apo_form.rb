@@ -87,6 +87,11 @@ class ApoForm < BaseForm
     model.desc_metadata_format
   end
 
+  def metadata_source
+    return 'DOR' if new_record?
+    model.metadata_source
+  end
+
   private
 
   def manage_permissions

@@ -110,6 +110,11 @@ RSpec.describe ApoForm do
       subject { instance.desc_metadata_format }
       it { is_expected.to eq 'MODS' }
     end
+
+    describe '#metadata_source' do
+      subject { instance.metadata_source }
+      it { is_expected.to be_nil }
+    end
   end
 
   context 'no model (new)' do
@@ -142,6 +147,11 @@ RSpec.describe ApoForm do
     describe '#desc_metadata_format' do
       subject { instance.desc_metadata_format }
       it { is_expected.to eq 'MODS' }
+    end
+
+    describe '#metadata_source' do
+      subject { instance.metadata_source }
+      it { is_expected.to eq 'DOR' }
     end
   end
 end
