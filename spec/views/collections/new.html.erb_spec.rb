@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-RSpec.describe 'apo/_register_collection.html.erb', type: :view do
+RSpec.describe 'collections/new.html.erb', type: :view do
   it 'renders the HTML template form' do
-    assign(:object, double('pid' => 'druid:zt570tx3016', 'label' => 'My label'))
+    assign(:apo, double('pid' => 'druid:zt570tx3016', 'label' => 'My label'))
     render
     expect(rendered).to have_css 'form#collection_form'
     expect(rendered).to have_css 'div#create-collection'

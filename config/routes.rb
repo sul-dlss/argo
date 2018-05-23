@@ -62,6 +62,7 @@ Argo::Application.routes.draw do
   end
 
   resources :apo do
+    resources :collections, only: [:new, :create]
     collection do
       get :spreadsheet_template
     end
@@ -77,7 +78,6 @@ Argo::Application.routes.draw do
       post 'update_default_object_rights'
       post 'add_roleplayer'
       post 'update_desc_metadata'
-      match :register_collection, via: [:get, :post]
     end
   end
 
