@@ -1,25 +1,4 @@
 module ApoHelper
-  # return a list of lists, where the sublists are pairs, with the first element being the text to display
-  # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated
-  # entries, unless the current value is a deprecated entry, in which case, include that entry with the
-  # deprecation warning in a parenthetical.
-  def options_for_use_license_type(use_license_map, cur_use_license)
-    use_license_map.map do |key, val|
-      if val[:deprecation_warning].nil?
-        [val[:human_readable], key]
-      elsif key == cur_use_license
-        ["#{val[:human_readable]} (#{val[:deprecation_warning]})", key]
-      end
-    end.compact # the map block will produce nils for unused deprecated entries, compact will get rid of them
-  end
-
-  def license_options(apo_obj)
-    cur_use_license = apo_obj ? apo_obj.use_license : nil
-    [['-- none --', '']] +
-      options_for_use_license_type(Dor::Editable::CREATIVE_COMMONS_USE_LICENSES, cur_use_license) +
-      options_for_use_license_type(Dor::Editable::OPEN_DATA_COMMONS_USE_LICENSES, cur_use_license)
-  end
-
   def options_for_desc_md
     [
       ['MODS']
@@ -39,10 +18,6 @@ module ApoHelper
     result.collect do |doc|
       [Array(doc['sw_display_title_tesim']).first.to_s, Array(doc['sw_display_title_tesim']).first.to_s]
     end
-  end
-
-  def default_workflow_option
-    'registrationWF'
   end
 
   def agreement_options

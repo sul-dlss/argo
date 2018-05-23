@@ -1,3 +1,5 @@
+import Sharing from 'modules/sharing'
+
 export default class {
     /**
      * initialize the editor behaviors
@@ -9,24 +11,26 @@ export default class {
 
     init() {
         this.validate()
+        this.sharing()
+    }
+
+    sharing() {
+      var sharing = new Sharing(this.element.find('Sharing')[0])
+      sharing.start()
+      var form = this.element.closest('form')
+
+      form.on('submit', () => {
+          sharing.serialize(form[0])
+      })
     }
 
     // Initializes the validate script for the form that shows errors dynamically
     validate() {
         this.element.validate({
             rules: {
-                title: "required",
-                // is_valid_role_list is a REST endpoint in ApoController (i.e. /apo/is_valid_role_list)
-                managers: {
-                    remote: "is_valid_role_list"
-                },
-                viewers: {
-                    remote: "is_valid_role_list"
-                }
+                title: "required"
             },
             messages: {
-                managers: 'Error:  Enter manager workgroup names as "stem:value", e.g., dlss:project-x.  Enter individuals as "sunetid:value".<br/><br/>',
-                viewers: 'Error:  Enter viewer workgroup names as "stem:value", e.g., dlss:project-x.  Enter individuals as "sunetid:value".<br/><br/>',
                 title: ' &nbsp;&nbsp;Error:  A non-empty title is required.'
             },
             errorClass: 'apo-register-error',

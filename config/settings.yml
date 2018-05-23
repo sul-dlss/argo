@@ -91,7 +91,7 @@ STOMP_CLIENT_ID: 'fedora_stomper'
 SURI:
   MINT_IDS: true
   ID_NAMESPACE: 'druid'
-  URL: 'https://suri.example.com'
+  URL: 'http://localhost:3002'
   USER: 'user'
   PASS: 'pass'
 
@@ -118,3 +118,6 @@ SU_AFFILIATIONS:
 WORKFLOW:
   LOGFILE: 'log/workflow_service.log'
   SHIFT_AGE: 'weekly'
+
+apo:
+  default_workflow_option: 'registrationWF'
