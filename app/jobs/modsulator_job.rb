@@ -1,7 +1,3 @@
-require 'nokogiri'
-require 'equivalent-xml'
-include DorObjectHelper
-
 # This class defines a Delayed Job task that is started when the user uploads a bulk metadata file for
 # an APO. For configuration details, see app/config/initializers/delayed_job.rb.
 class ModsulatorJob < ActiveJob::Base
