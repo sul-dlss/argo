@@ -36,21 +36,24 @@ class ApoController < ApplicationController
   def create
     authorize! :create, Dor::AdminPolicyObject
 
-    form = ApoForm.new
-    unless form.validate(params.merge(tag: "Registered By : #{current_user.login}"))
-      render status: :bad_request, json: { errors: form.errors }
+    @form = ApoForm.new
+    unless @form.validate(params.merge(tag: "Registered By : #{current_user.login}"))
+      respond_to do |format|
+        format.json { render status: :bad_request, json: { errors: form.errors } }
+        format.html { render 'new' }
+      end
       return
     end
 
-    form.save
-    notice = "APO #{form.model.pid} created."
+    @form.save
+    notice = "APO #{@form.model.pid} created."
 
     # register a collection and make it the default if requested
-    if form.default_collection_pid
-      notice += " Collection #{form.default_collection_pid} created."
+    if @form.default_collection_pid
+      notice += " Collection #{@form.default_collection_pid} created."
     end
 
-    redirect_to solr_document_path(form.model.pid), notice: notice
+    redirect_to solr_document_path(@form.model.pid), notice: notice
   end
 
   # wrapper around call to update_index for various objects (APO, collection, item)
@@ -60,14 +63,17 @@ class ApoController < ApplicationController
   end
 
   def update
-    form = ApoForm.new(@object)
-    unless form.validate(params)
-      render status: :bad_request, json: { errors: form.errors }
+    @form = ApoForm.new(@object)
+    unless @form.validate(params)
+      respond_to do |format|
+        format.json { render status: :bad_request, json: { errors: @form.errors } }
+        format.html { render 'edit' }
+      end
       return
     end
-    form.save
 
-    redirect_to solr_document_path(form.model)
+    @form.save
+    redirect_to solr_document_path(@form.model.pid)
   end
 
   # This handles both the show and save of the form
