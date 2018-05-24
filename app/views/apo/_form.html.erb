@@ -29,14 +29,17 @@
     <br/>
     <input checked type="radio" name="collection_radio" value="none" onclick="$('.collection_div').hide();"/>
     <label>Don't add a Collection</label>
-    <input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
-    <label>Choose a Default Collection</label>
+
     <% if @form.new_record? %>
       <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
       <label>Create a Collection</label>
       <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection-catkey').show();"/>
       <label>Create a Collection from Symphony</label><br/>
+    <% else %>
+      <input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
+      <label>Choose a Default Collection</label>
     <% end %>
+
     <div id="select-collection" class="collection_div" style="display:none">
       <%= select_tag :collection, options_for_select(current_user.permitted_collections)%><br/>
     </div>
