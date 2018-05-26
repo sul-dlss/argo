@@ -19,40 +19,87 @@
 
   <Sharing data-permissions="<%= @form.permissions.to_json %>"></Sharing>
 
-  <div class="form-group">
-    <% if @form.default_collection_objects.present? %>
-      <label>Default Collections</label><br/>
-      <% @form.default_collection_objects.each do |col| %>
-        <%= link_to col.label, solr_document_path(id: col.pid)%> <%= link_to('(remove)', delete_collection_apo_path(collection: col.pid, id: @form), confirm: 'You are about to leave the page, are you sure?') %><br/>
-      <% end %>
+  <% if @form.default_collection_objects.present? %>
+    <label>Default Collections</label><br/>
+    <% @form.default_collection_objects.each do |col| %>
+      <%= link_to col.label, solr_document_path(id: col.pid)%> <%= link_to('(remove)', delete_collection_apo_path(collection: col.pid, id: @form), confirm: 'You are about to leave the page, are you sure?') %><br/>
     <% end %>
-    <br/>
-    <input checked type="radio" name="collection_radio" value="none" onclick="$('.collection_div').hide();"/>
-    <label>Don't add a Collection</label>
-    <input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
-    <label>Choose a Default Collection</label>
-    <% if @form.new_record? %>
-      <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
-      <label>Create a Collection</label>
-      <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection-catkey').show();"/>
-      <label>Create a Collection from Symphony</label><br/>
-    <% end %>
-    <div id="select-collection" class="collection_div" style="display:none">
-      <%= select_tag :collection, options_for_select(current_user.permitted_collections)%><br/>
+  <% end %>
+  <br/>
+
+  <div class="radio">
+    <label>
+      <input checked type="radio" name="collection_radio" value="none" onclick="$('.collection_div').hide();"/>
+      Don't add a Collection
+    </label>
+  </div>
+
+  <% if @form.new_record? %>
+    <div class="radio">
+      <label>
+        <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
+        Create a Collection
+      </label>
     </div>
-    <div id="create-collection" class="collection_div" style="display:none">
-      <div class="register-label-div">Collection Title</div><input type="text" id="collection_title" name="collection_title" style="width:90%" value=""/>
-      <div class="register-label-div">Collection Abstract</div><textarea id="collection_abstract" name="collection_abstract" style="width:90%" ></textarea>
-      <div class="register-label-div">Collection Rights</div>
-        <%=select_tag :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' )%><br/>
+
+    <div class="radio">
+      <label>
+        <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection-catkey').show();"/>
+        Create a Collection from Symphony
+      </label>
     </div>
-    <div id="create-collection-catkey" class=" collection_div" style="display:none">
-      <div class="register-label-div">Collection Catkey</div><input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value=""/>
-      <div class="register-label-div">Collection Rights</div>
-        <%=select_tag :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' )%><br/>
+  <% else %>
+    <div class="radio">
+      <label>
+        <input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
+        Choose a Default Collection
+      </label>
+    </div>
+  <% end %>
+
+  <div id="select-collection" class="collection_div form-group" style="display:none">
+    <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: "form-control" %>
+  </div>
+  <div id="create-collection" class="collection_div" style="display:none">
+    <div class="form-group">
+      <label for="collection_title" class="col-sm-2 control-label">Collection Title</label>
+      <div class="col-sm-10">
+        <input type="text" id="collection_title" class="form-control" name="collection_title" style="width:90%" value=""/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="collection_abstract" class="col-sm-2 control-label">Collection Abstract</label>
+      <div class="col-sm-10">
+        <textarea id="collection_abstract" class="form-control" name="collection_abstract" style="width:90%" ></textarea>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="collection_rights" class="col-sm-2 control-label">Collection Rights</label>
+      <div class="col-sm-10">
+        <%= select_tag :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' ), class: "form-control" %>
+      </div>
     </div>
   </div>
-  <div style="border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
+
+  <div id="create-collection-catkey" class="collection_div" style="display:none">
+    <div class="form-group">
+      <label for="collection_catkey" class="col-sm-2 control-label">Collection Catkey</label>
+      <div class="col-sm-10">
+        <input type="text" id="collection_catkey" name="collection_catkey" style="width:90%" value="" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="collection_rights_catkey" class="col-sm-2 control-label">Collection Rights</label>
+      <div class="col-sm-10">
+        <%= select_tag :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world'), class: "form-control"%>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="form-group" style="clear: both; border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
     <label style="font-size:1.2em">Object defaults</label>
     <p>The following defaults will apply to all newly registered objects.</p>
   </div>

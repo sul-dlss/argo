@@ -7,9 +7,6 @@ RSpec.describe ApoController, type: :controller do
 
     allow(Dor).to receive(:find).with(collection.pid).and_return(collection)
     allow(collection).to receive(:save)
-
-    allow(Dor).to receive(:find).with(agreement.pid).and_return(agreement)
-
     allow(controller).to receive(:update_index)
 
     sign_in user
@@ -18,67 +15,77 @@ RSpec.describe ApoController, type: :controller do
 
   let(:user) { create(:user) }
 
-  let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Item) }
   let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
   let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
 
   describe '#create' do
+    let(:form) do
+      instance_double(ApoForm, validate: valid,
+                               save: true,
+                               model: apo,
+                               default_collection_pid: nil)
+    end
+
     before do
+      allow(ApoForm).to receive(:new).and_return(form)
       allow(controller).to receive(:authorize!).with(:create, Dor::AdminPolicyObject).and_return(true)
     end
 
-    let(:example) do
-      { # These data mimic the APO registration form
-        'title' => 'New APO Title',
-        'agreement' => agreement.pid,
-        'desc_md' => 'MODS',
-        'metadata_source' => 'DOR',
-        permissions: {
-          '0' => { access: 'manage', name: 'developers', type: 'group' },
-          '1' => { access: 'manage', name: 'dpg-staff', type: 'group' },
-          '2' => { access: 'view', name: 'viewer-role', type: 'group' },
-          '3' => { access: 'view', name: 'forensics-staff', type: 'group' }
-        },
-        'collection_radio' => 'create',
-        'collection_title' => 'col title',
-        'collection_abstract' => '',
-        'default_object_rights' => 'world',
-        'use' => '',
-        'copyright' => '',
-        'use_license' => 'by-nc',
-        'workflow' => 'accessionWF',
-        'register' => ''
-      }
+    context 'when the form is valid' do
+      let(:valid) { true }
+
+      it 'is successful' do
+        post :create, params: {}
+        expect(form).to have_received(:validate).with(ActionController::Parameters)
+        expect(response).to be_redirect
+        expect(flash[:notice]).to eq 'APO druid:zt570tx3016 created.'
+      end
     end
 
-    it 'hits the registration service to register both an APO and a collection' do
-      # verify that an APO is registered
-      expect(apo).to receive(:add_roleplayer).exactly(4).times
-      expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
-        expect(params).to match a_hash_including(
-          label: 'New APO Title',
-          object_type: 'adminPolicy',
-          admin_policy: 'druid:hv992ry2431', # Uber-APO
-          workflow_priority: '70'
-        )
-        expect(params[:metadata_source]).to be_nil # descMD is created via the form
-        { pid: apo.pid }
-      end
-      expect(apo).to receive(:"use_license=").with(example['use_license'])
+    context 'when the form is invalid' do
+      let(:valid) { false }
 
-      # verify that the collection is also created
-      expect(apo).to receive(:add_default_collection).with(collection.pid)
-      expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
-        expect(params).to match a_hash_including(
-          label: 'col title',
-          object_type: 'collection',
-          admin_policy: apo.pid,
-          workflow_priority: '65'
-        )
-        { pid: collection.pid }
+      it 'redraws the form' do
+        post :create, params: {}
+        expect(form).to have_received(:validate).with(ActionController::Parameters)
+        expect(response).to render_template 'new'
+        expect(assigns[:form]).to eq form
       end
+    end
+  end
 
-      post :create, params: example
+  describe '#update' do
+    let(:form) do
+      instance_double(ApoForm, validate: valid,
+                               save: true,
+                               model: apo,
+                               default_collection_pid: nil)
+    end
+
+    before do
+      allow(ApoForm).to receive(:new).and_return(form)
+      allow(controller).to receive(:authorize!).with(:create, Dor::AdminPolicyObject).and_return(true)
+    end
+
+    context 'when the form is valid' do
+      let(:valid) { true }
+
+      it 'is successful' do
+        patch :update, params: { id: apo.pid }
+        expect(form).to have_received(:validate).with(ActionController::Parameters)
+        expect(response).to be_redirect
+      end
+    end
+
+    context 'when the form is invalid' do
+      let(:valid) { false }
+
+      it 'redraws the form' do
+        patch :update, params: { id: apo.pid }
+        expect(form).to have_received(:validate).with(ActionController::Parameters)
+        expect(response).to render_template 'edit'
+        expect(assigns[:form]).to eq form
+      end
     end
   end
 
