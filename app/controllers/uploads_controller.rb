@@ -21,4 +21,11 @@ class UploadsController < ApplicationController
 
     redirect_to bulk_jobs_index_path(apo.id)
   end
+
+  private
+
+  def make_tmp_filename(temp_spreadsheet_filename)
+    FileUtils.mkdir_p(Settings.BULK_METADATA.TEMPORARY_DIRECTORY) unless File.exist?(Settings.BULK_METADATA.TEMPORARY_DIRECTORY)
+    File.join(Settings.BULK_METADATA.TEMPORARY_DIRECTORY, temp_spreadsheet_filename)
+  end
 end
