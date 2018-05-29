@@ -53,7 +53,7 @@ If you introduce performance problems or instability with profiling, which can h
 ## Other profiling options
 
 ### New Relic
-Argo has the New Relic gem installed, and is currently configured to collect profiling info for deployed canonical instances (prod, dev, stage).  At this time, DLSS is using the free account, and so the info exposed is limited, but may be of some use, especially for keeping tabs on day to day performance in the absence of specific known issues.
+Argo has the New Relic gem installed, and is currently configured to collect profiling info for deployed canonical instances (prod & stage).  At this time, DLSS is using the free account, and so the info exposed is limited, but may be of some use, especially for keeping tabs on day to day performance in the absence of specific known issues.
 
 ### MemoryProfiler
 The `MemoryProfiler` gem (https://github.com/SamSaffron/memory_profiler) can be used to wrap and profile blocks of code in a similar manner to the `RubyProf` gem.  It does not appear to output in an easily-to-analyze format like callgrind, but it does collect quite a bit of useful info, and gave us some help as noted here: https://github.com/sul-dlss/argo/issues/250#issuecomment-161386755
