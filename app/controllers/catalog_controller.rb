@@ -337,11 +337,6 @@ class CatalogController < ApplicationController
     File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
   end
 
-  def make_tmp_filename(temp_spreadsheet_filename)
-    FileUtils.mkdir_p(Settings.BULK_METADATA.TEMPORARY_DIRECTORY) if !File.exist?(Settings.BULK_METADATA.TEMPORARY_DIRECTORY)
-    File.join(Settings.BULK_METADATA.TEMPORARY_DIRECTORY, temp_spreadsheet_filename)
-  end
-
   # Sorts the Blacklight collection actions buttons so that the "Bulk Action" and "Bulk Update View" buttons appear
   # at the front of the list.
   def sort_collection_actions_buttons
