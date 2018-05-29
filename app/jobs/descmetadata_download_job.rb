@@ -22,38 +22,36 @@ class DescmetadataDownloadJob < GenericJob
         bulk_action.update(druid_count_total: params[:pids].length)
         bulk_action.save
         ::Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
-          params[:pids].each do |current_druid|
-            begin
-              dor_object = query_dor(current_druid, log)
-              if dor_object.nil?
-                bulk_action.increment(:druid_count_fail).save
-                next
-              end
-
-              desc_metadata = dor_object.descMetadata.content
-
-              write_to_zip(desc_metadata, current_druid, zip_file)
-              log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
-              bulk_action.increment(:druid_count_success).save
-            rescue ActiveFedora::ObjectNotFoundError => e
-              log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
-              log.puts(e.message)
-              log.puts(e.backtrace)
-              bulk_action.increment(:druid_count_fail).save
-              next
-            rescue StandardError => e
-              log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
-              log.puts(e.message)
-              log.puts(e.backtrace)
-              bulk_action.increment(:druid_count_fail).save
-              next
-            end
-          end
+          params[:pids].each { |current_druid| process_druid(current_druid, log, zip_file) }
           zip_file.close
         end
       end
       log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
     end
+  end
+
+  def process_druid(current_druid, log, zip_file)
+    dor_object = query_dor(current_druid, log)
+    if dor_object.nil?
+      bulk_action.increment(:druid_count_fail).save
+      return
+    end
+
+    desc_metadata = dor_object.descMetadata.content
+
+    write_to_zip(desc_metadata, current_druid, zip_file)
+    log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
+    bulk_action.increment(:druid_count_success).save
+  rescue ActiveFedora::ObjectNotFoundError => e
+    log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
+    log.puts(e.message)
+    log.puts(e.backtrace)
+    bulk_action.increment(:druid_count_fail).save
+  rescue StandardError => e
+    log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
+    log.puts(e.message)
+    log.puts(e.backtrace)
+    bulk_action.increment(:druid_count_fail).save
   end
 
   # Queries DOR for a given druid, attempting up to MAX_TRIES times in case of failure.

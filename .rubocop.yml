@@ -15,6 +15,18 @@ Metrics/LineLength:
   IgnoredPatterns:
     - '\A\s*#' # allow long comments
 
+# Offense count: 166
+# Configuration parameters: CountComments, ExcludedMethods.
+Metrics/BlockLength:
+  Max: 25
+  ExcludedMethods:
+    - 'configure_blacklight'
+    - 'Dor.configure'
+  Exclude:
+    - 'config/routes.rb'
+    - 'spec/**/*'
+    - 'lib/tasks/*.rake'
+
 # False positive in cap DSL
 Naming/FileName:
   Exclude:

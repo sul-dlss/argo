@@ -70,48 +70,47 @@ class ModsulatorJob < ActiveJob::Base
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
     mods_list.each do |xmldoc_node|
-      current_druid = 'druid:' + xmldoc_node.attr('objectId')
-      begin
-        dor_object = Dor.find current_druid
-        next unless dor_object
-
-        # Only update objects that are governed by the correct APO
-        unless dor_object.admin_policy_object_id == druid
-          log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
-          next
-        end
-        if in_accessioning(dor_object)
-          log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{current_druid}")
-          next
-        end
-
-        next unless status_ok(dor_object)
-
-        # We only update objects if the descMetadata XML is different
-        current_metadata = dor_object.descMetadata.content
-        mods_node = xmldoc_node.first_element_child
-        if equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node)
-          log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
-          next
-        end
-
-        version_object(dor_object, original_filename, user_login, log)
-
-        dor_object.descMetadata.content = mods_node.to_s
-        dor_object.save
-        log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
-      rescue ActiveFedora::ObjectNotFoundError => e
-        log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
-        log.puts(e.message.to_s)
-        log.puts(e.backtrace.to_s)
-        next
-      rescue Dor::Exception, Exception => e
-        log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
-        log.puts(e.message.to_s)
-        log.puts(e.backtrace.to_s)
-        next
-      end
+      apply_document(druid, xmldoc_node, "druid:#{xmldoc_node.attr('objectId')}", original_filename, user_login, log)
     end
+  end
+
+  def apply_document(druid, xmldoc_node, current_druid, original_filename, user_login, log)
+    dor_object = Dor.find current_druid
+    return unless dor_object
+
+    # Only update objects that are governed by the correct APO
+    unless dor_object.admin_policy_object_id == druid
+      log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
+      return
+    end
+    if in_accessioning(dor_object)
+      log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{current_druid}")
+      return
+    end
+
+    return unless status_ok(dor_object)
+
+    # We only update objects if the descMetadata XML is different
+    current_metadata = dor_object.descMetadata.content
+    mods_node = xmldoc_node.first_element_child
+    if equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node)
+      log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
+      return
+    end
+
+    version_object(dor_object, original_filename, user_login, log)
+
+    dor_object.descMetadata.content = mods_node.to_s
+    dor_object.save
+    log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
+  rescue ActiveFedora::ObjectNotFoundError => e
+    log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
+    log.puts(e.message.to_s)
+    log.puts(e.backtrace.to_s)
+  rescue Dor::Exception, Exception => e
+    log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
+    log.puts(e.message.to_s)
+    log.puts(e.backtrace.to_s)
   end
 
   # Open a new version for the given object if it is in the accessioned state.
