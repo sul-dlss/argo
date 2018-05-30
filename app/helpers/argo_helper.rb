@@ -159,7 +159,7 @@ module ArgoHelper
   end
 
   def render_index_info(document)
-    "indexed by DOR Services v#{@document.first(Dor::INDEX_VERSION_FIELD)}"
+    "indexed by DOR Services v#{document.first(Dor::INDEX_VERSION_FIELD)}"
   end
 
   def render_searchworks_link(document, link_text = 'Searchworks', opts = { target: '_blank' })
@@ -167,8 +167,8 @@ module ArgoHelper
   end
 
   def render_datastream_link(document)
-    return unless @document.admin_policy?
-    link_to 'MODS bulk loads', bulk_jobs_index_path(@document), id: 'bulk-button', class: 'button btn btn-primary'
+    return unless document.admin_policy?
+    link_to 'MODS bulk loads', bulk_jobs_index_path(document), id: 'bulk-button', class: 'button btn btn-primary'
   end
 
   protected
