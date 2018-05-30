@@ -14,14 +14,9 @@ class BulkJobsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @apo  = params[:apo_id]
-        @time = params[:time]
-        job_directory = File.join(Settings.BULK_METADATA.DIRECTORY, @apo, @time)
-
         # Generate both the actual log messages that go in the HTML and the CSV, since both need to be ready when the table is displayed to the user
-        user_log = UserLog.new(@apo, job_directory)
-        @druid_log = user_log.user_messages
-        user_log.user_log_csv
+        @user_log = UserLog.new(params[:apo_id], params[:time])
+        @user_log.user_log_csv
       end
       format.csv do
         csv_file = File.join(Settings.BULK_METADATA.DIRECTORY, params[:apo_id], params[:time], 'log.csv')

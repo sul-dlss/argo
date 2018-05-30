@@ -16,9 +16,7 @@ RSpec.describe BulkJobsController do
       it 'is successful' do
         get :show, params: { apo_id: apo_id, time: time }
         expect(response).to be_successful
-        expect(assigns[:apo]).to eq apo_id
-        expect(assigns[:time]).to eq '2016_04_21_16_56_40_824'
-        expect(assigns[:druid_log]).to be_kind_of Array
+        expect(assigns[:user_log]).to be_kind_of UserLog
       end
     end
 
