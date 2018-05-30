@@ -73,20 +73,20 @@ Lint/UselessAssignment:
   Exclude:
     - 'app/helpers/argo_helper.rb'
 
-# Offense count: 85
+# Offense count: 86
 Metrics/AbcSize:
   Max: 83
 
-# Offense count: 6
+# Offense count: 7
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
   Max: 653
 
-# Offense count: 9
+# Offense count: 8
 Metrics/CyclomaticComplexity:
   Max: 12
 
-# Offense count: 64
+# Offense count: 65
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
   Max: 70
@@ -101,7 +101,7 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Max: 7
 
-# Offense count: 8
+# Offense count: 7
 Metrics/PerceivedComplexity:
   Max: 12
 

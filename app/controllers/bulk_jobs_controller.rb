@@ -12,24 +12,24 @@ class BulkJobsController < ApplicationController
 
   # GET /apos/:apo_id/bulk_jobs/:time/log(.:format)
   def show
+    @user_log = UserLog.new(params[:apo_id], params[:time])
+
     respond_to do |format|
       format.html do
         # Generate both the actual log messages that go in the HTML and the CSV, since both need to be ready when the table is displayed to the user
-        @user_log = UserLog.new(params[:apo_id], params[:time]).tap(&:create_csv_log)
+        @user_log.create_csv_log
       end
       format.csv do
-        csv_file = File.join(Settings.BULK_METADATA.DIRECTORY, params[:apo_id], params[:time], 'log.csv')
-        if File.exist?(csv_file)
-          send_file(csv_file, type: 'text/csv')
+        if File.exist?(@user_log.csv_file)
+          send_file(@user_log.csv_file, type: 'text/csv')
         else
           render :nothing, status: :not_found
           # Display error message and log the error
         end
       end
       format.xml do
-        desc_metadata_xml_file = find_desc_metadata_file(File.join(Settings.BULK_METADATA.DIRECTORY, params[:apo_id], params[:time]))
-        if File.exist?(desc_metadata_xml_file)
-          send_file(desc_metadata_xml_file, type: 'application/xml')
+        if File.exist?(@user_log.desc_metadata_xml_file)
+          send_file(@user_log.desc_metadata_xml_file, type: 'application/xml')
         else
           render :nothing, status: :not_found
           # Display error message and log the error
@@ -69,45 +69,14 @@ class BulkJobsController < ApplicationController
     # The metadata bulk upload processing stores its logs and other information in a very simple directory structure
     directory_list = Dir.glob("#{bulk_load_dir}/*") if File.directory?(bulk_load_dir)
 
-    directory_list.each do |d|
-      bulk_info.push(bulk_job_metadata(d))
+    directory_list.each do |directory|
+      time = directory.sub("#{bulk_load_dir}/", '')
+      log = UserLog.new(druid, time)
+      bulk_info.push(log.bulk_job_metadata)
     end
 
     # Sort by start time (newest first)
     sorted_info = bulk_info.sort_by { |b| b['argo.bulk_metadata.bulk_log_job_start'].to_s }
     sorted_info.reverse!
-  end
-
-  # Given a directory with bulk metadata upload information (written by ModsulatorJob), loads the job data into a hash.
-  def bulk_job_metadata(dir)
-    success = 0
-    job_info = {}
-    log_filename = File.join(dir, Settings.BULK_METADATA.LOG)
-    if File.directory?(dir) && File.readable?(dir) && File.exist?(log_filename) && File.readable?(log_filename)
-      File.open(log_filename, 'r') do |log_file|
-        log_file.each_line do |line|
-          # The log file is a very simple flat file (whitespace separated) format where the first token denotes the
-          # field/type of information and the rest is the actual value.
-          matched_strings = line.match(/^([^\s]+)\s+(.*)/)
-          next unless matched_strings && matched_strings.length == 3
-          job_info[matched_strings[1]] = matched_strings[2]
-          success += 1 if matched_strings[1] == 'argo.bulk_metadata.bulk_log_job_save_success'
-          job_info['error'] = 1 if UserLog::ERROR_MESSAGES.include?(matched_strings[1])
-        end
-        job_info['dir'] = get_leafdir(dir)
-        job_info['argo.bulk_metadata.bulk_log_druids_loaded'] = success
-      end
-    end
-    job_info
-  end
-
-  def find_desc_metadata_file(job_output_directory)
-    metadata = bulk_job_metadata(job_output_directory)
-    filename = metadata.fetch('argo.bulk_metadata.bulk_log_xml_filename')
-    File.join(job_output_directory, filename)
-  end
-
-  def get_leafdir(directory)
-    directory[Settings.BULK_METADATA.DIRECTORY.length, directory.length].sub(%r{^/+(.*)}, '\1')
   end
 end
