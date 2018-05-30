@@ -24,42 +24,7 @@ class ReleaseObjectJob < GenericJob
       log.puts("#{Time.current} Starting ReleaseObjectJob for BulkAction #{bulk_action_id}")
       update_druid_count
 
-      pids.each do |current_druid|
-        log.puts("#{Time.current} Beginning ReleaseObjectJob for #{current_druid}")
-        unless can_manage?(current_druid)
-          log.puts("#{Time.current} Not authorized for #{current_druid}")
-          next
-        end
-        log.puts("#{Time.current} Adding release tag for #{manage_release['to']}")
-        begin
-          response = post_to_release(current_druid, params_to_body(manage_release))
-          if response.status == 201
-            log.puts("#{Time.current} Release tag added successfully")
-          else
-            log.puts("#{Time.current} Release tag failed POST #{response.env.url}, status: #{response.status}")
-            bulk_action.increment(:druid_count_fail).save
-            next
-          end
-        rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
-          log.puts("#{Time.current} Release tag failed POST #{e.class} #{e.message}")
-          bulk_action.increment(:druid_count_fail).save
-          next
-        end
-        log.puts("#{Time.current} Trying to start release workflow")
-        begin
-          response = post_to_release_wf(current_druid)
-          if response.status == 201
-            log.puts("#{Time.current} Workflow creation successful")
-            bulk_action.increment(:druid_count_success).save
-          else
-            log.puts("#{Time.current} Workflow creation failed POST #{response.env.url}, status: #{response.status}")
-            bulk_action.increment(:druid_count_fail).save
-          end
-        rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
-          log.puts("#{Time.current} Workflow creation failed POST #{e.class} #{e.message}")
-          bulk_action.increment(:druid_count_fail).save
-        end
-      end
+      pids.each { |current_druid| release_object(current_druid, log) }
       log.puts("#{Time.current} Finished ReleaseObjectJob for BulkAction #{bulk_action_id}")
     end
   end
@@ -69,6 +34,43 @@ class ReleaseObjectJob < GenericJob
   end
 
   private
+
+  def release_object(current_druid, log)
+    log.puts("#{Time.current} Beginning ReleaseObjectJob for #{current_druid}")
+    unless can_manage?(current_druid)
+      log.puts("#{Time.current} Not authorized for #{current_druid}")
+      return
+    end
+    log.puts("#{Time.current} Adding release tag for #{manage_release['to']}")
+    begin
+      response = post_to_release(current_druid, params_to_body(manage_release))
+      if response.status == 201
+        log.puts("#{Time.current} Release tag added successfully")
+      else
+        log.puts("#{Time.current} Release tag failed POST #{response.env.url}, status: #{response.status}")
+        bulk_action.increment(:druid_count_fail).save
+        return
+      end
+    rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
+      log.puts("#{Time.current} Release tag failed POST #{e.class} #{e.message}")
+      bulk_action.increment(:druid_count_fail).save
+      return
+    end
+    log.puts("#{Time.current} Trying to start release workflow")
+    begin
+      response = post_to_release_wf(current_druid)
+      if response.status == 201
+        log.puts("#{Time.current} Workflow creation successful")
+        bulk_action.increment(:druid_count_success).save
+      else
+        log.puts("#{Time.current} Workflow creation failed POST #{response.env.url}, status: #{response.status}")
+        bulk_action.increment(:druid_count_fail).save
+      end
+    rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
+      log.puts("#{Time.current} Workflow creation failed POST #{e.class} #{e.message}")
+      bulk_action.increment(:druid_count_fail).save
+    end
+  end
 
   def ability
     @ability ||= begin
