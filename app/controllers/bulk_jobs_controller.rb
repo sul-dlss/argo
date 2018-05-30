@@ -10,6 +10,7 @@ class BulkJobsController < ApplicationController
     @bulk_jobs = load_bulk_jobs(params[:apo_id])
   end
 
+  # GET /apos/:apo_id/bulk_jobs/:time/log(.:format)
   def show
     respond_to do |format|
       format.html do

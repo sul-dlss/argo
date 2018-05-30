@@ -8,7 +8,7 @@
 	<div class="row">
 	    <div id="spreadsheet-log-table-container" class="col-md-12">
 		<table id="spreadsheet-log-table" class="table">
-		    <% start_time =  @druid_log.select { |log_entry| log_entry.keys.first == 'argo.bulk_metadata.bulk_log_job_start' } %>
+		    <% start_time = @druid_log.select { |log_entry| log_entry.keys.first == 'argo.bulk_metadata.bulk_log_job_start' } %>
 		    <% if(start_time.length == 1) %>
 		        <caption>Job started at <%= start_time[0]['argo.bulk_metadata.bulk_log_job_start'] %></caption>
 		    <% end %>

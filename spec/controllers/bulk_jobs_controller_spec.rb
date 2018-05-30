@@ -1,6 +1,42 @@
 require 'spec_helper'
 
 RSpec.describe BulkJobsController do
+  describe '#show' do
+    # These parameters correspond to the directory:
+    #   spec/fixtures/bulk_upload/workspace/druid:bc682xk5613/2016_04_21_16_56_40_824/
+    let(:apo_id) { 'druid:bc682xk5613' }
+    let(:time) { '2016_04_21_16_56_40_824' }
+    let(:user) { create(:user) }
+
+    before do
+      sign_in user
+    end
+
+    context 'when the format is html' do
+      it 'is successful' do
+        get :show, params: { apo_id: apo_id, time: time }
+        expect(response).to be_successful
+        expect(assigns[:apo]).to eq apo_id
+        expect(assigns[:time]).to eq '2016_04_21_16_56_40_824'
+        expect(assigns[:druid_log]).to be_kind_of Array
+      end
+    end
+
+    context 'when the format is xml' do
+      it 'is successful' do
+        get :show, params: { apo_id: apo_id, time: time, format: 'xml' }
+        expect(response).to be_successful
+      end
+    end
+
+    context 'when the format is csv' do
+      it 'is successful' do
+        get :show, params: { apo_id: apo_id, time: time, format: 'csv' }
+        expect(response).to be_successful
+      end
+    end
+  end
+
   describe '#load_bulk_jobs' do
     let(:sorted_bulk_job_info) { controller.send(:load_bulk_jobs, 'druid:bc682xk5613') }
     it 'loads the expected number of records' do
