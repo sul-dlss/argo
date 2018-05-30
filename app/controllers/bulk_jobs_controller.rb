@@ -108,7 +108,9 @@ class BulkJobsController < ApplicationController
   end
 
   def find_desc_metadata_file(job_output_directory)
-    File.join(job_output_directory, bulk_job_metadata(job_output_directory)['argo.bulk_metadata.bulk_log_xml_filename'])
+    metadata = bulk_job_metadata(job_output_directory)
+    filename = metadata.fetch('argo.bulk_metadata.bulk_log_xml_filename')
+    File.join(job_output_directory, filename)
   end
 
   def get_leafdir(directory)
