@@ -33,6 +33,8 @@ Dor.configure do
 
   metadata do
     catalog.url Settings.METADATA.CATALOG_URL
+    catalog.user Settings.METADATA.CATALOG_USER
+    catalog.pass Settings.METADATA.CATALOG_PASS
   end
 
   content do
