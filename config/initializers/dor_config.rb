@@ -64,4 +64,8 @@ Dor.configure do
   dor_indexing_app do
     url Settings.DOR_INDEXING_URL
   end
+
+  purl_services do
+    url Settings.purl_services_url
+  end
 end

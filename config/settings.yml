@@ -111,6 +111,7 @@ STACKS_FILE_URL: 'https://stacks.example.com/file'
 STACKS_URL: 'https://stacks.example.com/image'
 STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
 WORKFLOW_URL: 'http://localhost:3001'
+purl_services_url: ~
 
 SU_AFFILIATIONS:
 - test-stanford:test
