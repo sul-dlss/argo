@@ -43,7 +43,6 @@ INDEXING_JOB:
 
 # Metadata
 METADATA:
-  EXIST_URL: 'https://user:password@metadata.example.com/exist/rest'
   CATALOG_URL: 'https://catalog.example.com/catalog/mods'
   CATALOG_USER: 'user'
   CATALOG_PASS: 'pass'
