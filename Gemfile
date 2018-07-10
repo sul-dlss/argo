@@ -1,4 +1,3 @@
-
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -106,7 +105,7 @@ group :test, :development do
   gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 3.5'
-  gem 'rubocop', require: false
+  gem 'rubocop', '~> 0.58.1', require: false
   gem 'sqlite3'
 end
 
