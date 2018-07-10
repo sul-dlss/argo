@@ -1,4 +1,3 @@
-
 module Argo
   module AccessControlsEnforcement
     extend ActiveSupport::Concern

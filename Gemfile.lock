@@ -774,7 +774,7 @@ DEPENDENCIES
   retries
   rsolr
   rspec-rails (~> 3.5)
-  rubocop
+  rubocop (~> 0.58.1)
   ruby-graphviz
   ruby-prof
   rubyzip
