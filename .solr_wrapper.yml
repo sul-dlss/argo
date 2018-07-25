@@ -1,5 +1,5 @@
 port: 8984
-version: 6.6.0
+version: 6.6.5
 mirror_url: http://lib-solr-mirror.princeton.edu/dist/
 collection:
   dir: solr_conf/conf/
