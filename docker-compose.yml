@@ -1,0 +1,6 @@
+version: '3'
+services:
+  workflow:
+    image: suldlss/workflow-server:latest
+    ports:
+      - "3001:3000"
