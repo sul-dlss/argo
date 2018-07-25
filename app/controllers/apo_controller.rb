@@ -10,8 +10,7 @@ class ApoController < ApplicationController
     :update_copyright, :update_creative_commons,
     :update_default_object_rights, :update_desc_metadata,
     :update_title, :update_use,
-    :delete_role,
-    :register_collection
+    :delete_role
   ]
 
   before_action :authorize, except: [
@@ -74,17 +73,6 @@ class ApoController < ApplicationController
 
     @form.save
     redirect_to solr_document_path(@form.model.pid)
-  end
-
-  # This handles both the show and save of the form
-  def register_collection
-    return unless params[:collection_title].present? || params[:collection_catkey].present?
-    form = CollectionForm.new
-    return unless form.validate(params.merge(apo_pid: params[:id]))
-    form.save
-    collection_pid = form.model.id
-    @object.add_default_collection collection_pid
-    redirect_to solr_document_path(params[:id]), notice: "Created collection #{collection_pid}"
   end
 
   def add_roleplayer

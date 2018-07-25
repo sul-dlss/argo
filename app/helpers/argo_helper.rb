@@ -79,7 +79,7 @@ module ArgoHelper
     if can?(:manage_item, object)
       if object.is_a? Dor::AdminPolicyObject
         buttons << { url: edit_apo_path(pid), label: 'Edit APO', new_page: true }
-        buttons << { url: register_collection_apo_path(id: pid), label: 'Create Collection' }
+        buttons << { url: new_apo_collection_path(apo_id: pid), label: 'Create Collection' }
       end
 
       buttons << {

@@ -178,7 +178,7 @@ describe ArgoHelper, type: :helper do
           },
           {
             label: 'Create Collection',
-            url: "/apo/#{view_apo_id}/register_collection"
+            url: new_apo_collection_path(view_apo_id)
           },
           {
             label: 'Reindex',
