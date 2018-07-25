@@ -29,7 +29,7 @@ RSpec.describe UploadsController do
                               filetypes: 'spreadsheet',
                               xml_only: 'true',
                               note: 'test note' }
-      expect(response).to redirect_to new_item_upload_path(apo_id)
+      expect(response).to redirect_to apo_bulk_jobs_path(apo_id)
     end
   end
 end
