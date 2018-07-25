@@ -19,7 +19,7 @@ class UploadsController < ApplicationController
     FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
     ModsulatorJob.perform_later(apo.id, temp_filename.to_s, output_directory, current_user.login, params[:filetypes], params[:xml_only], params[:note])
 
-    redirect_to new_item_upload_path(apo.id)
+    redirect_to apo_bulk_jobs_path(apo.id)
   end
 
   private
