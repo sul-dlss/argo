@@ -73,20 +73,20 @@ Lint/UselessAssignment:
   Exclude:
     - 'app/helpers/argo_helper.rb'
 
-# Offense count: 84
+# Offense count: 86
 Metrics/AbcSize:
   Max: 83
 
-# Offense count: 6
+# Offense count: 7
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
   Max: 653
 
-# Offense count: 9
+# Offense count: 8
 Metrics/CyclomaticComplexity:
   Max: 12
 
-# Offense count: 64
+# Offense count: 65
 # Configuration parameters: CountComments.
 Metrics/MethodLength:
   Max: 70
@@ -101,7 +101,7 @@ Metrics/ModuleLength:
 Metrics/ParameterLists:
   Max: 7
 
-# Offense count: 8
+# Offense count: 7
 Metrics/PerceivedComplexity:
   Max: 12
 
@@ -340,21 +340,12 @@ Style/DateTime:
 Style/Documentation:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'app/controllers/catalog_controller.rb'
-
-# Offense count: 5
+# Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: compact, expanded
 Style/EmptyMethod:
   Exclude:
-    - 'app/controllers/catalog_controller.rb'
     - 'app/controllers/report_controller.rb'
     - 'app/jobs/generic_job.rb'
     - 'app/models/index_queue.rb'
@@ -390,13 +381,12 @@ Style/GuardClause:
     - 'app/jobs/modsulator_job.rb'
     - 'app/search_builders/search_builder.rb'
 
-# Offense count: 17
+# Offense count: 16
 # Cop supports --auto-correct.
 Style/IfUnlessModifier:
   Exclude:
     - 'app/controllers/apo_controller.rb'
     - 'app/controllers/application_controller.rb'
-    - 'app/controllers/catalog_controller.rb'
     - 'app/controllers/dor/objects_controller.rb'
     - 'app/controllers/items_controller.rb'
     - 'app/helpers/argo_helper.rb'
@@ -536,7 +526,7 @@ Style/RedundantReturn:
     - 'app/jobs/descmetadata_download_job.rb'
     - 'bin/dump_fedora_pids.rb'
 
-# Offense count: 4
+# Offense count: 3
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, AllowInnerSlashes.
 # SupportedStyles: slashes, percent_r, mixed

@@ -14,7 +14,7 @@ RSpec.describe 'uploads/new.html.erb', type: :view do
     expect(rendered).to have_css('div#bulk-upload-form')
     expect(rendered).to have_css('div#spreadsheet-upload-container form div#bulk-upload-form')
     expect(rendered).to have_css('div.row.spreadsheet-row', count: 5)
-    expect(rendered).to have_link('Help', href: '/catalog/druid:hv992ry2431/bulk_jobs_help')
+    expect(rendered).to have_link('Help', href: help_apo_bulk_jobs_path('druid:hv992ry2431'))
   end
 
   it 'has Browse, Submit and Cancel buttons' do

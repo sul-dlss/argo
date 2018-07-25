@@ -7,8 +7,8 @@ RSpec.feature 'Bulk jobs view', js: true do
   end
 
   scenario 'the submit button exists' do
-    visit bulk_jobs_index_path('druid:hv992ry2431')
-    expect(page).to have_link('Submit new file ...', href: new_item_upload_path(item_id: 'druid:hv992ry2431'))
+    visit apo_bulk_jobs_path('druid:hv992ry2431')
+    expect(page).to have_link 'Submit new file ...', href: new_item_upload_path(item_id: 'druid:hv992ry2431')
   end
 
   scenario 'click submit button opens bulk upload form' do

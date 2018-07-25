@@ -2,13 +2,13 @@
     <div id="spreadsheet-log-container">
 	<div class="row">
 	    <div class="col-md-12 text-right">
-		<%= link_to('CSV', bulk_jobs_csv_path(@apo, @time)) %>
+		      <%= link_to('CSV', show_apo_bulk_jobs_path(@user_log.apo_id, @user_log.time, format: :csv)) %>
 	    </div>
 	</div>
 	<div class="row">
 	    <div id="spreadsheet-log-table-container" class="col-md-12">
 		<table id="spreadsheet-log-table" class="table">
-		    <% start_time =  @druid_log.select { |log_entry| log_entry.keys.first == 'argo.bulk_metadata.bulk_log_job_start' } %>
+		    <% start_time = @user_log.user_messages.select { |log_entry| log_entry.keys.first == 'argo.bulk_metadata.bulk_log_job_start' } %>
 		    <% if(start_time.length == 1) %>
 		        <caption>Job started at <%= start_time[0]['argo.bulk_metadata.bulk_log_job_start'] %></caption>
 		    <% end %>
@@ -19,7 +19,7 @@
 			</tr>
 		    </thead>
 		    <tbody>
-			<% @druid_log.each do |log_entry| %>
+			<% @user_log.user_messages.each do |log_entry| %>
 			    <% current_key = log_entry.keys.first %>
 			    <% if((current_key != 'argo.bulk_metadata.bulk_log_job_start') &&
 			          (current_key != 'argo.bulk_metadata.bulk_log_user') &&

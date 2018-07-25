@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe 'catalog/_bulk_index_table.html.erb' do
+RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
   let(:bulk_jobs) do
     [
       {},
@@ -31,9 +31,10 @@ RSpec.describe 'catalog/_bulk_index_table.html.erb' do
     ]
   end
 
-  before(:each) do
+  before do
+    @document = double(id: '5')
     assign(:bulk_jobs, bulk_jobs)
-    allow(view).to receive(:bulk_status_help_path).and_return '/' # we get a missing id param error if we don't mock this
+    allow(view).to receive(:status_help_apo_bulk_jobs_path).and_return '/' # we get a missing id param error if we don't mock this
   end
 
   it 'has a delete button for each row with log info' do
@@ -49,8 +50,8 @@ RSpec.describe 'catalog/_bulk_index_table.html.erb' do
     render
     bulk_jobs[1..2].each do |job|
       druid_and_time = job['dir'].split %r(\/)
-      expect(rendered).to have_link 'Log', href: bulk_jobs_log_path(druid_and_time[0], druid_and_time[1])
-      expect(rendered).to have_link 'XML', href: bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])
+      expect(rendered).to have_link 'Log', href: show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1])
+      expect(rendered).to have_link 'XML', href: show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)
     end
   end
 

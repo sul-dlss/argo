@@ -1,7 +1,11 @@
 <div id="bulk-upload-table">
   <table class="table table-hover">
     <tr>
-      <th>When</th><th>Who</th><th>File Name</th><th>Note</th><th>Status <%= link_to bulk_status_help_path, :data => { ajax_modal: 'trigger', ajax_modal_title: 'Status Information' } do %><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span><% end %></th><th>Druids</th><th>Success</th><th/><th/>
+      <th>When</th><th>Who</th><th>File Name</th><th>Note</th>
+      <th>Status <%= link_to status_help_apo_bulk_jobs_path, data: { ajax_modal: 'trigger', ajax_modal_title: 'Status Information' } do %>
+        <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+      <% end %></th>
+      <th>Druids</th><th>Success</th><th/><th/>
     </tr>
     <% @bulk_jobs.each do |job| %>
       <tr>
@@ -23,15 +27,15 @@
 
         <% if(job.has_key?('dir')) %>
           <% druid_and_time = job['dir'].split(/\//) %>
-          <td><%= link_to('Log', bulk_jobs_log_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
-          <td><%= link_to('XML', bulk_jobs_xml_path(druid_and_time[0], druid_and_time[1])) %></td>
+          <td><%= link_to('Log', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
+          <td><%= link_to('XML', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)) %></td>
         <% else %>
           <td>error:  job log dir not found</td>
           <td>error:  job log dir not found</td>
         <% end %>
         <td>
           <% if(job.has_key?('dir')) %>
-            <%= form_tag('bulk_jobs_delete', method: :delete, :id => "form-" + job['dir']) do %>
+            <%= form_tag(apo_bulk_jobs_path(@document.id), method: :delete, id: "form-#{job['dir']}") do %>
               <%= hidden_field_tag('dir', job['dir']) %>
               <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-toggle="modal" data-target="#confirm-delete-modal">Delete</button>
             <% end %>
