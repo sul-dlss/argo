@@ -78,7 +78,7 @@ RSpec.describe ReleaseObjectJob do
         subject.perform(bulk_action_no_process_callback.id, params)
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
-          expect(buffer.string).to include "Release tag failed POST https://dor-services.example.com/dor/v1/objects/#{pid}/release_tags, status: 500"
+          expect(buffer.string).to include "Release tag failed POST https://dor-services.example.com/v1/objects/#{pid}/release_tags, status: 500"
         end
         expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
         expect(buffer.string).to_not include 'Release tag added successfully'
@@ -110,7 +110,7 @@ RSpec.describe ReleaseObjectJob do
         subject.perform(bulk_action_no_process_callback.id, params)
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
-          expect(buffer.string).to include "Workflow creation failed POST https://dor-services.example.com/dor/v1/objects/#{pid}/apo_workflows/releaseWF, status: 500"
+          expect(buffer.string).to include "Workflow creation failed POST https://dor-services.example.com/v1/objects/#{pid}/apo_workflows/releaseWF, status: 500"
         end
         expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
         expect(buffer.string).to include 'Release tag added successfully'
@@ -166,11 +166,11 @@ RSpec.describe ReleaseObjectJob do
 end
 
 def stub_release_tags(druid, status = 201)
-  stub_request(:post, "https://dor-services.example.com/dor/v1/objects/#{druid}/release_tags")
+  stub_request(:post, "https://dor-services.example.com/v1/objects/#{druid}/release_tags")
     .to_return(status: status)
 end
 
 def stub_release_wf(druid, status = 201)
-  stub_request(:post, "https://dor-services.example.com/dor/v1/objects/#{druid}/apo_workflows/releaseWF")
+  stub_request(:post, "https://dor-services.example.com/v1/objects/#{druid}/apo_workflows/releaseWF")
     .to_return(status: status)
 end

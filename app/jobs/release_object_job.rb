@@ -105,7 +105,7 @@ class ReleaseObjectJob < GenericJob
 
   def post_to_release(druid, body)
     connection.post do |req|
-      req.url "/dor/v1/objects/#{druid}/release_tags"
+      req.url "v1/objects/#{druid}/release_tags"
       req.headers['Content-Type'] = 'application/json'
       req.body = body
     end
@@ -113,7 +113,7 @@ class ReleaseObjectJob < GenericJob
 
   def post_to_release_wf(druid)
     connection.post do |req|
-      req.url "/dor/v1/objects/#{druid}/apo_workflows/releaseWF"
+      req.url "v1/objects/#{druid}/apo_workflows/releaseWF"
     end
   end
 
