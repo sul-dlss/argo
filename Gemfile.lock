@@ -63,7 +63,7 @@ GEM
       io-like (~> 0.3.0)
     arel (8.0.0)
     ast (2.4.0)
-    autoprefixer-rails (9.1.2)
+    autoprefixer-rails (9.1.4)
       execjs
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -119,7 +119,7 @@ GEM
     capistrano3-delayed-job (1.7.5)
       capistrano (~> 3.0, >= 3.0.0)
       daemons (~> 1.2.4)
-    capybara (3.6.0)
+    capybara (3.7.0)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -259,7 +259,7 @@ GEM
       dry-equalizer (~> 0.2)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 0.4, >= 0.4.2)
-    dry-validation (0.12.1)
+    dry-validation (0.12.2)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.1, >= 0.1.3)
       dry-core (~> 0.2, >= 0.2.1)
@@ -412,7 +412,7 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
-    nokogiri-happymapper (0.6.0)
+    nokogiri-happymapper (0.8.0)
       nokogiri (~> 1.5)
     nom-xml (1.0.0)
       activesupport (>= 3.2.18)
@@ -587,7 +587,7 @@ GEM
       mime-types
       nokogiri
       rest-client
-    rubyzip (1.2.1)
+    rubyzip (1.2.2)
     safe_yaml (1.0.4)
     sass (3.5.7)
       sass-listen (~> 4.0.0)
@@ -692,7 +692,7 @@ GEM
     uuidtools (2.1.5)
     warden (1.2.7)
       rack (>= 1.0)
-    web-console (3.6.2)
+    web-console (3.7.0)
       actionview (>= 5.0)
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
