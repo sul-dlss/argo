@@ -46,7 +46,7 @@ OkComputer::Registry.register 'active_fedora_conn', RubydoraCheck.new(client: Ac
 # FEDORA_URL is covered by checking ActiveFedora::Base.connection_for_pid(0)
 
 # remove trailing slashes to avoid constructing bad solr ping URLs
-OkComputer::Registry.register 'dor_search_service_solr', OkComputer::SolrCheck.new(Dor::SearchService.solr.uri.to_s.sub(%r{/$}, ''))
+OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new(Dor::SearchService.solr.uri.to_s.sub(%r{/$}, '') + '/admin/ping')
 # SOLRIZER_URL is coverd by checking Dor::SearchService.solr.uri
 
 # ------------------------------------------------------------------------------

@@ -185,8 +185,6 @@
   </fields>
 
 <!-- START argo customization artifacts -->
-  <defaultSearchField>text</defaultSearchField>
-  <solrQueryParser defaultOperator="AND" />
   <copyField source="*_dt"    dest="date" />
   <copyField source="*_t"     dest="text" />
   <copyField source="*_t"     dest="text_search" />
