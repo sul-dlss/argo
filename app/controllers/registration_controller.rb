@@ -91,11 +91,10 @@ class RegistrationController < ApplicationController
 
   def autocomplete
     facet_field = params[:field]
-    facet_fields = { fields: [facet_field] }
     response = Dor::SearchService.query(
       '*:*',
       rows: 0,
-      'facet.field': facet_fields,
+      'facet.field': facet_field,
       'facet.prefix': params[:term].titlecase,
       'facet.mincount': 1,
       'facet.limit': 15,
