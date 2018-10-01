@@ -1,6 +1,5 @@
 port: 8984
-version: 7.4.0
-mirror_url: http://lib-solr-mirror.princeton.edu/dist/
+version: 7.5.0
 collection:
   dir: solr_conf/conf/
   name: argo-test
