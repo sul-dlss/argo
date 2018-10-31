@@ -37,6 +37,8 @@ class SetGoverningApoJob < GenericJob
 
     check_can_set_governing_apo!(current_obj)
 
+    open_new_version(current_obj) unless current_obj.allows_modification?
+
     current_obj.admin_policy_object = Dor.find(new_apo_id)
     current_obj.identityMetadata.adminPolicy = nil if current_obj.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
     current_obj.save
@@ -45,7 +47,7 @@ class SetGoverningApoJob < GenericJob
     log.puts("#{Time.current} SetGoverningApoJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
   rescue => e
-    log.puts("#{Time.current} SetGoverningApoJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e}")
+    log.puts("#{Time.current} SetGoverningApoJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e} #{e.backtrace}")
     bulk_action.increment(:druid_count_fail).save
   end
 
@@ -66,5 +68,15 @@ class SetGoverningApoJob < GenericJob
   def update_druid_count
     bulk_action.update(druid_count_total: pids.length)
     bulk_action.save
+  end
+
+  def open_new_version(object)
+    raise "#{Time.current} Unable to open new version for #{object.pid} (bulk_action.id=#{bulk_action.id})" unless DorObjectWorkflowStatus.new(object.pid).can_open_version?
+    vers_md_upd_info = {
+      significance: 'minor',
+      description: 'Set new governing APO',
+      opening_user_name: bulk_action.user.to_s
+    }
+    object.open_new_version(vers_md_upd_info: vers_md_upd_info)
   end
 end
