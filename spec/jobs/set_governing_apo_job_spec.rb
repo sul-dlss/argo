@@ -68,7 +68,7 @@ RSpec.describe SetGoverningApoJob do
         apo = double(Dor::AdminPolicyObject)
 
         expect(Dor).to receive(:find).with(pids[0]).and_return(item1)
-        expect(subject).to receive(:check_can_set_governing_apo!).with(item1)
+        expect(subject).to receive(:check_can_set_governing_apo!).with(item1).and_return true
         expect(Dor).to receive(:find).with(pids[1]).and_raise(ActiveFedora::ObjectNotFoundError)
         expect(Dor).to receive(:find).with(pids[2]).and_return(item3)
         expect(subject).to receive(:check_can_set_governing_apo!).with(item3).and_raise('user not allowed to move to target apo')
@@ -80,6 +80,7 @@ RSpec.describe SetGoverningApoJob do
         expect(idmd).to receive(:adminPolicy=).with(nil)
         expect(item1).to receive(:save)
         expect(item1).to receive(:to_solr).and_return(field: 'value')
+        expect(item1).to receive(:allows_modification?).and_return true
         expect(Dor::SearchService.solr).to receive(:add).with(field: 'value').exactly(:once)
 
         expect(item3).not_to receive(:admin_policy_object=)
@@ -129,6 +130,50 @@ RSpec.describe SetGoverningApoJob do
       allow(obj).to receive(:allows_modification?).and_return(true)
       allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(true)
       expect { subject.send(:check_can_set_governing_apo!, obj) }.not_to raise_error
+    end
+  end
+
+  describe '#open_new_version' do
+    let(:current_user) do
+      instance_double(User,
+                      is_admin?: true)
+    end
+    before :each do
+      @dor_object = double(pid: 'druid:123abc')
+      @workflow = double('workflow')
+      @log = double('log')
+      @webauth = OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser')
+    end
+    it 'opens a new version if the workflow status allows' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(true)
+      expect(@dor_object).to receive(:open_new_version).with(
+        vers_md_upd_info: {
+          significance: 'minor',
+          description: 'Set new governing APO',
+          opening_user_name: subject.bulk_action.user.to_s
+        }
+      )
+      subject.send(:open_new_version, @dor_object)
+    end
+    it 'does not open a new version if rejected by the workflow status' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(false)
+      expect(@dor_object).not_to receive(:open_new_version)
+      expect { subject.send(:open_new_version, @dor_object) }.to raise_error(/Unable to open new version/)
+    end
+    it 'fails with an exception if something goes wrong updating the version' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
+      expect(@workflow).to receive(:can_open_version?).and_return(true)
+      expect(@dor_object).to receive(:open_new_version).with(
+        vers_md_upd_info: {
+          significance: 'minor',
+          description: 'Set new governing APO',
+          opening_user_name: subject.bulk_action.user.to_s
+        }
+      ).and_raise Dor::Exception
+      allow(subject).to receive(:current_user).and_return(current_user)
+      expect { subject.send(:open_new_version, @dor_object) }.to raise_error(Dor::Exception)
     end
   end
 
