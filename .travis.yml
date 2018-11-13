@@ -6,8 +6,7 @@ language: ruby
 addons:
   chrome: stable
 rvm:
-  - 2.3.4 # deployed
-  - 2.5.3
+  - 2.5.3 # deployed
 
 jdk:
   - oraclejdk8
