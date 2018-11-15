@@ -3,7 +3,6 @@
 <% else %>
   <span class="section-head-link">
     View:
-    <%= link_to 'Diagram', workflow_view_item_path(@object.pid, @workflow_id, :format => 'svg', :repo => params[:repo]), :title => @workflow_id, :data => { ajax_modal: 'trigger' } %> |
     <%= link_to 'XML', workflow_view_item_path(@object.pid, @workflow_id, :raw => 'true', :repo => params[:repo]), :title => @workflow_id, :data => { ajax_modal: 'trigger' } %>
   </span>
   <%= @object.pid %>
