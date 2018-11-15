@@ -196,15 +196,6 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html { render 'workflow_view', layout: !request.xhr? }
       format.xml  { render xml: @workflow.ng_xml.to_xml }
-      format.any(:png, :svg, :jpeg) do
-        graph = @workflow.graph
-        fail ActionController::RoutingError.new('Not Found') if graph.nil?
-        send_data(
-          graph.output(request.format.to_sym => String),
-          type: request.format.to_s,
-          disposition: 'inline'
-        )
-      end
     end
   end
 
