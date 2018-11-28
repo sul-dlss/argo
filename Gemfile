@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.0'
@@ -81,7 +82,7 @@ gem 'sprockets-es6'
 gem 'active-fedora', '~> 8.2'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
-gem 'dor-services', '>= 5.22.2', '< 6'
+gem 'dor-services', '~> 6.0', '>= 6.0.1'
 gem 'moab-versioning'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
