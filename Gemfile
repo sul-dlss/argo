@@ -101,12 +101,10 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'factory_bot_rails'
   gem 'http_logger', require: false # Change this to `true` to see all http requests logged
-  gem 'jettywrapper'
   gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', '~> 0.58.1', require: false
-  gem 'solr_wrapper'
   gem 'sqlite3'
 end
 
