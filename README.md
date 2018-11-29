@@ -14,8 +14,7 @@ Argo is the administrative interface to the Stanford Digital Repository.
 1. Install Java 1.8 JRE (and also the JDK on Mac OSX).  >= Java 1.8 is required for the version of Solr in use, <= 1.8 is requred for the version of Fedora in use.
 http://java.com/en/download/
 
-2. Install Ruby 2.2.2 (e.g., via rvm or rbenv).
-
+2. Install Ruby 2.5.3
 
 ### Check Out the Code
 
@@ -168,8 +167,8 @@ Dor.find("druid:pv820dk6668").destroy
 
 Argo uses Blacklight and ActiveFedora to expose the repository contents, and `dor-services` to enable editing and updating. Its key components include:
 
-- Rails 4
-- Blacklight 5
+- Rails 5.1
+- Blacklight 6
 - dor-services
   - ActiveFedora
   - dor-workflow-service
