@@ -92,12 +92,17 @@ bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
 REMOTE_USER=blalbrit@stanford.edu rails server
 ```
 
-### Important note about Workflow Services integration
-Argo depends on the workflow service for both development and test environments. In order to run a stub implementation of this, install Docker and run:
+### Workflow Services
+Argo depends on the workflow service for both development and test environments. In order to run a stub implementation of this run:
 
 ```
-docker pull suldlss/workflow-server:latest
 docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
+```
+
+### SURI
+Argo depends on SURI to mint DRUIDs in the development environment. In order to run a stub implementation of this run:
+```
+docker run -d -p 127.0.0.1:3002:3000 suldlss/suri-rails:latest
 ```
 
 ## Load and index records
