@@ -14,8 +14,7 @@ Argo is the administrative interface to the Stanford Digital Repository.
 1. Install Java 1.8 JRE (and also the JDK on Mac OSX).  >= Java 1.8 is required for the version of Solr in use, <= 1.8 is requred for the version of Fedora in use.
 http://java.com/en/download/
 
-2. Install Ruby 2.2.2 (e.g., via rvm or rbenv).
-
+2. Install Ruby 2.5.3
 
 ### Check Out the Code
 
