@@ -89,7 +89,7 @@ Then start Argo:
 rake jetty:start       # This may take a few minutes to boot Fedora
 solr_wrapper           # Run this in a new shell to start Solr
 bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
-REMOTE_USER=blalbrit@stanford.edu rails server
+ROLES=sdr:manager-role REMOTE_USER=blalbrit@stanford.edu rails server
 ```
 
 ### Important note about Workflow Services integration
