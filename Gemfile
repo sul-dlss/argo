@@ -55,7 +55,7 @@ gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'erubis' # implicit dependency required by rdf-rdfa/haml, no longer provided by default in Rails 5.1
 gem 'eye' # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'faraday'
-gem 'honeybadger', '~> 3.0'
+gem 'honeybadger', '~> 4.1'
 gem 'jqgrid-jquery-rails'
 gem 'jquery-ui-rails', '~> 5.0'
 gem 'jquery-validation-rails'

@@ -296,7 +296,7 @@ GEM
     haml (4.0.7)
       tilt
     hashdiff (0.3.7)
-    honeybadger (3.3.1)
+    honeybadger (4.1.0)
     hooks (0.4.1)
       uber (~> 0.0.14)
     htmlentities (4.3.4)
@@ -743,7 +743,7 @@ DEPENDENCIES
   eye
   factory_bot_rails
   faraday
-  honeybadger (~> 3.0)
+  honeybadger (~> 4.1)
   http_logger
   jbuilder (~> 2.5)
   jettywrapper
@@ -799,4 +799,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.3
+   1.17.1
