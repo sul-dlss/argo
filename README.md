@@ -80,7 +80,7 @@ Note that Argo expects [Dor Indexing App](https://github.com/sul-dlss/dor_indexi
 indexing as part of loading and updating Dor objects. Check out the code and run it using
 
 ```bash
-rails s -p 4000
+rails server -p 4000
 ```
 
 Then start Argo:
@@ -89,7 +89,7 @@ Then start Argo:
 rake jetty:start       # This may take a few minutes to boot Fedora
 solr_wrapper           # Run this in a new shell to start Solr
 bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
-rails server
+REMOTE_USER=blalbrit@stanford.edu rails server
 ```
 
 ### Important note about Workflow Services integration
