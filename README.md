@@ -85,7 +85,7 @@ Then start Argo:
 docker run -d -p 8983:8080 suldlss/fcrepo:no-messaging-latest
 docker run -d -p 8984:8983 -v $PWD/solr_conf/conf/:/myconfig solr:7 solr-create -c argo-test -d /myconfig
 bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
-REMOTE_USER=blalbrit@stanford.edu rails server
+ROLES=sdr:manager-role REMOTE_USER=blalbrit@stanford.edu rails server
 ```
 
 ### Important note about Workflow Services integration

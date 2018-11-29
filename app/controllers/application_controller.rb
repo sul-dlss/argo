@@ -20,6 +20,8 @@ class ApplicationController < ActionController::Base
       cur_user.display_name = request.env['displayName']
       if request.env['eduPersonEntitlement']
         cur_user.webauth_groups = request.env['eduPersonEntitlement'].split(';')
+      elsif Rails.env.development? && ENV['ROLES']
+        cur_user.webauth_groups = ENV['ROLES'].split(';')
       end
     end
   end
