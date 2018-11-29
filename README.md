@@ -70,10 +70,6 @@ In the created `./jetty` directory add the following to the `start.ini` to incre
 -XX:MaxPermSize=256M
 ```
 
-## Solr
-
-For development and test we start solr using the solr\_wrapper gem. You can run `bundle exec solr_wrapper` on the command line. It's started automatically by the `ci` rake task.
-
 ## Run the servers
 
 Note that Argo expects [Dor Indexing App](https://github.com/sul-dlss/dor_indexing_app) to be running on port 4000, which Argo uses to perform
@@ -86,8 +82,8 @@ rails server -p 4000
 Then start Argo:
 
 ```bash
-rake jetty:start       # This may take a few minutes to boot Fedora
-solr_wrapper           # Run this in a new shell to start Solr
+docker run -d -p 8983:8080 suldlss/fcrepo:no-messaging-latest
+docker run -d -p 8984:8983 -v $PWD/solr_conf/conf/:/myconfig solr:7 solr-create -c argo-test -d /myconfig
 bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
 REMOTE_USER=blalbrit@stanford.edu rails server
 ```
