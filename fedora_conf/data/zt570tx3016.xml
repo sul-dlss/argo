@@ -83,6 +83,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <rdf:Description rdf:about="info:fedora/druid:zt570tx3016">
     <hydra:isGovernedBy rdf:resource="info:fedora/druid:hv992ry2431"></hydra:isGovernedBy>
     <hydra:referencesAgreement rdf:resource="info:fedora/druid:dd327qr3670"></hydra:referencesAgreement>
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_AdminPolicyObject"></fedora-model:hasModel>
   </rdf:Description>
 </rdf:RDF>
 </foxml:xmlContent>
