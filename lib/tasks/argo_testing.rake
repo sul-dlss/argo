@@ -97,9 +97,10 @@ if ['test', 'development'].include? Rails.env
             puts STDERR.puts "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
             errors << file
           end
+          pid = "druid:#{File.basename(file, '.xml')}"
           with_retries(max_tries: 3, handler: handler, rescue: [StandardError]) { |attempt|
             puts "** File #{i}, Try #{attempt} ** file: #{file}"
-            pid = ActiveFedora::FixtureLoader.import_to_fedora(file)
+            ActiveFedora::FixtureLoader.import_to_fedora(file, pid)
             ActiveFedora::FixtureLoader.index(pid)
           }
         end
