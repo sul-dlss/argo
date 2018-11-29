@@ -22,9 +22,9 @@ class ApoForm < BaseForm
   def save
     find_or_register_model
     sync
+    add_default_collection
     model.save
     model.update_index
-    add_default_collection
   end
 
   # Copies the values to the model
@@ -165,6 +165,7 @@ class ApoForm < BaseForm
     end
   end
 
+  # Adds a new or existing collection as the default collection for the APO
   def add_default_collection
     @default_collection_pid = if params[:collection_radio] == 'create'
                                 create_collection model.pid
