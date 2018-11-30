@@ -25,6 +25,7 @@ module ArgoHelper
   def get_thumbnail_info(doc)
     fname = doc['first_shelved_image_ss']
     return nil unless fname
+
     fname = File.basename(fname, File.extname(fname))
     druid = doc['id'].to_s.split(/:/).last
     url = "#{Settings.STACKS_URL}/iiif/#{druid}%2F#{ERB::Util.url_encode(fname)}/full/!400,400/0/default.jpg"
@@ -34,6 +35,7 @@ module ArgoHelper
   def render_thumbnail_helper(doc, thumb_class = '', thumb_alt = '', thumb_style = 'max-width:240px;max-height:240px;')
     thumbnail_info = get_thumbnail_info(doc)
     return nil unless thumbnail_info
+
     thumbnail_url = thumbnail_info[:url]
     image_tag thumbnail_url, class: thumb_class, alt: thumb_alt, style: thumb_style
   end
@@ -168,6 +170,7 @@ module ArgoHelper
 
   def render_datastream_link(document)
     return unless document.admin_policy?
+
     link_to 'MODS bulk loads', apo_bulk_jobs_path(document), id: 'bulk-button', class: 'button btn btn-primary'
   end
 

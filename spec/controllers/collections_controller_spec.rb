@@ -44,7 +44,7 @@ RSpec.describe CollectionsController do
       post :create, params: { 'label' => ':auto',
                               'collection_catkey' => catkey,
                               'collection_rights_catkey' => 'dark',
-                              apo_id:  apo.pid }
+                              apo_id: apo.pid }
       expect(response).to be_redirect # redirects to catalog page
     end
 

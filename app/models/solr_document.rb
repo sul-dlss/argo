@@ -51,18 +51,19 @@ class SolrDocument
     Array(self['lifecycle_ssim']).each do |m|
       (name, time) = m.split(/:/, 2)
       next unless time # skip basic values like: "registered"
+
       (time, version) = time.split(/;/, 2)
       version = 1 unless version && version.length > 0
       milestones[version] ||= ActiveSupport::OrderedHash[
-        'registered'  => {}, # each of these *could* have :display and :time elements
-        'opened'      => {},
-        'submitted'   => {},
-        'described'   => {},
-        'published'   => {},
-        'deposited'   => {},
+        'registered' => {}, # each of these *could* have :display and :time elements
+        'opened' => {},
+        'submitted' => {},
+        'described' => {},
+        'published' => {},
+        'deposited' => {},
         'accessioned' => {},
-        'indexed'     => {},
-        'ingested'    => {}
+        'indexed' => {},
+        'ingested' => {}
       ]
       milestones[version].delete(version == '1' ? 'opened' : 'registered') # only version 1 has 'registered'
       milestones[version][name] = {

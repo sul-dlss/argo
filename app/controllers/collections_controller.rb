@@ -11,6 +11,7 @@ class CollectionsController < ApplicationController
 
     form = CollectionForm.new
     return render 'new' unless form.validate(params.merge(apo_pid: params[:apo_id]))
+
     form.save
     collection_pid = form.model.id
     @apo.add_default_collection collection_pid

@@ -5,6 +5,7 @@ module ProfileHelper
   # Don't show pagination for ProfileController requests
   def show_pagination?(*)
     return false if params['controller'] == 'profile'
+
     super
   end
 end

@@ -185,6 +185,7 @@ class ItemsController < ApplicationController
     unless params[:wf_name].present? && params[:repo].present?
       fail ArgumentError, "Missing parameters: #{params.inspect}"
     end
+
     # Set variables for views; determine which workflow we're supposed to
     # render and honor a special value of 'workflow'
     @workflow_id = params[:wf_name]
@@ -253,6 +254,7 @@ class ItemsController < ApplicationController
 
   def embargo_update
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
+
     @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
     @object.datastreams['events'].add_event('Embargo', current_user.to_s, 'Embargo date modified')
     respond_to do |format|
@@ -265,6 +267,7 @@ class ItemsController < ApplicationController
   # @option params [String] `:file` the filename for which to locate
   def file
     fail ArgumentError, 'Missing file parameter' unless params[:file].present?
+
     @available_in_workspace_error = nil
     @available_in_workspace = @object.list_files.include?(params[:file]) # NOTE: ideally this should be async
 
@@ -282,6 +285,7 @@ class ItemsController < ApplicationController
   def datastream_update
     fail ArgumentError, 'Missing content' unless params[:content].present?
     fail ArgumentError, 'Missing datastream identifier' unless params[:dsid].present?
+
     begin
       # check that the content is well-formed xml
       Nokogiri::XML(params[:content]) { |config| config.strict }
@@ -377,6 +381,7 @@ class ItemsController < ApplicationController
     end
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
+
     render status: 500, plain: 'Object net yet accessioned'
     return
   end
@@ -406,6 +411,7 @@ class ItemsController < ApplicationController
     return :major if cur_version_tag.major != prior_version_tag.major
     return :minor if cur_version_tag.minor != prior_version_tag.minor
     return :admin if cur_version_tag.admin != prior_version_tag.admin
+
     nil
   end
 
@@ -490,6 +496,7 @@ class ItemsController < ApplicationController
     if params[:add]
       [:new_tag1, :new_tag2, :new_tag3].each do |k|
         next unless params[k] && params[k].length > 0
+
         @object.add_tag(params[k])
       end
     end
@@ -732,6 +739,7 @@ class ItemsController < ApplicationController
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
+
     create_obj_and_apo params[:id]
   end
 
@@ -769,6 +777,7 @@ class ItemsController < ApplicationController
   def enforce_versioning
     # if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
     return true if @object.allows_modification?
+
     render status: :forbidden, plain: 'Object cannot be modified in its current state.'
     false
   end

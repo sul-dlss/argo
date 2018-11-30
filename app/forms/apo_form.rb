@@ -49,51 +49,61 @@ class ApoForm < BaseForm
   # @return [Array<Hash>] the list of permissions (grants for users/groups) on this object
   def permissions
     return default_permissions if new_record?
+
     manage_permissions + view_permissions
   end
 
   def default_workflow
     return Settings.apo.default_workflow_option if new_record?
+
     model.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
   end
 
   def use_license
     return '' if new_record?
+
     model.use_license
   end
 
   def default_rights
     return 'world' if new_record?
+
     model.default_rights
   end
 
   def desc_metadata_format
     return 'MODS' if new_record?
+
     model.desc_metadata_format
   end
 
   def metadata_source
     return 'DOR' if new_record?
+
     model.metadata_source
   end
 
   def use_statement
     return if new_record?
+
     model.use_statement
   end
 
   def copyright_statement
     return if new_record?
+
     model.copyright_statement
   end
 
   def mods_title
     return '' if new_record?
+
     model.mods_title
   end
 
   def default_collection_objects
     return [] if new_record?
+
     @default_collection_objects ||= begin
       Array(model.default_collections).map { |pid| Dor.find(pid) }
     end
@@ -101,6 +111,7 @@ class ApoForm < BaseForm
 
   def to_param
     return nil if new_record?
+
     model.pid
   end
 
@@ -154,6 +165,7 @@ class ApoForm < BaseForm
   def sync_roles
     model.purge_roles
     return unless params[:permissions]
+
     # and populate it with the correct roleMetadata
     attributes = params[:permissions].values
     attributes.each do |perm|
@@ -178,6 +190,7 @@ class ApoForm < BaseForm
 
   def find_or_register_model
     return model if model
+
     @model = register_model
   end
 

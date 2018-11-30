@@ -9,15 +9,15 @@ RSpec.describe ApoForm do
     let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
     let(:md_info) do
       {
-        copyright:    'My copyright statement',
-        use:          'My use and reproduction statement',
-        title:        'My title',
-        desc_md:      'MODS',
+        copyright: 'My copyright statement',
+        use: 'My use and reproduction statement',
+        title: 'My title',
+        desc_md: 'MODS',
         metadata_source: 'DOR',
-        agreement:    agreement.pid,
-        workflow:     'registrationWF',
+        agreement: agreement.pid,
+        workflow: 'registrationWF',
         default_object_rights: 'world',
-        use_license:  'by-nc'
+        use_license: 'by-nc'
       }
     end
 

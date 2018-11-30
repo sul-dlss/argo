@@ -139,6 +139,7 @@ class ApoController < ApplicationController
 
   def create_obj
     raise 'missing druid' unless params[:id]
+
     @object = Dor.find params[:id]
   end
 

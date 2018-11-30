@@ -13,6 +13,7 @@ class DorObjectWorkflowStatus
     return false unless workflow.get_lifecycle('dor', pid, 'accessioned')
     return false if workflow.get_active_lifecycle('dor', pid, 'submitted')
     return false if workflow.get_active_lifecycle('dor', pid, 'opened')
+
     true
   end
 

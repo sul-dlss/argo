@@ -50,11 +50,14 @@ class User < ActiveRecord::Base
   # @return [Array<String>] set of roles permitted for PID
   def roles(pid)
     return [] if pid.blank?
+
     @role_cache ||= {}
     return @role_cache[pid] if @role_cache[pid]
+
     # Try to retrieve a Solr doc
     obj_doc = Dor::SearchService.query('id:"' + pid + '"')['response']['docs'].first || {}
     return [] if obj_doc.empty?
+
     pid_roles = Set.new
     # Determine whether user has 'dor-apo-manager' role
     solr_apo_roles = %w(apo_role_group_manager_ssim apo_role_person_manager_ssim)
@@ -92,6 +95,7 @@ class User < ActiveRecord::Base
   #   they are impersonating
   def groups
     return @groups_to_impersonate unless @groups_to_impersonate.blank?
+
     Array(webauth_groups)
   end
 
