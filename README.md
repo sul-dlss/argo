@@ -11,8 +11,7 @@ Argo is the administrative interface to the Stanford Digital Repository.
 
 ### System Requirements
 
-1. Install Java 1.8 JRE (and also the JDK on Mac OSX).  >= Java 1.8 is required for the version of Solr in use, <= 1.8 is requred for the version of Fedora in use.
-http://java.com/en/download/
+1. Install Docker
 
 2. Install Ruby 2.5.3
 
@@ -44,96 +43,37 @@ Note that `bundle install` may complain if MySQL isn't installed.  You can eithe
 
 ### Install components
 
-This will setup the database, Fedora, and Solr:
+This will setup the database:
 
 ```bash
 rake argo:install
 ```
 
-### Optional - Increase Jetty heap size
-
-Fedora is hosted inside a local Jetty instance in the `./jetty/` folder.
-Delving into this is only recommended if you run into more trouble than usual starting jetty or getting it to run stably (or if you know you have some other reason to make these sorts of changes).
-
-In the created `./jetty` directory add the following to the `start.ini` to increase the heap size, allow the debugger to attach, and to explicitly specify logging properties. In the section that starts with the heading `If the arguments in this file include JVM arguments` (at LN19 as of this README update):
-
-```
---exec
-# increase VM memory usage to 2GB
--Xmx2000m
--Djava.awt.headless=true
--Dcom.sun.management.jmxremote
--XX:+PrintCommandLineFlags
--XX:+UseConcMarkSweepGC
--XX:+CMSClassUnloadingEnabled
--XX:PermSize=64M
--XX:MaxPermSize=256M
-```
-
 ## Run the servers
 
-Note that Argo expects [Dor Indexing App](https://github.com/sul-dlss/dor_indexing_app) to be running on port 4000, which Argo uses to perform
-indexing as part of loading and updating Dor objects. Check out the code and run it using
-
-```bash
-rails server -p 4000
+```
+docker-compose up
 ```
 
-Then start Argo:
-
-```bash
-docker run -d -p 8983:8080 suldlss/fcrepo:no-messaging-latest
-docker run -d -p 8984:8983 -v $PWD/solr_conf/conf/:/myconfig solr:7 solr-create -c argo-test -d /myconfig
-bin/delayed_job start  # Necessary for spreadsheet bulk uploads and indexing
-ROLES=sdr:manager-role REMOTE_USER=blalbrit@stanford.edu rails server
-```
-
-### Workflow Services
-Argo depends on the workflow service for both development and test environments. In order to run a stub implementation of this run:
+If you want to use the rails console use:
 
 ```
-docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
+docker-compose run --rm web rails console
 ```
 
-### SURI
-Argo depends on SURI to mint DRUIDs in the development environment. In order to run a stub implementation of this run:
+If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing run:
+
 ```
-docker run -d -p 127.0.0.1:3002:3000 suldlss/suri-rails:latest
+docker-compose run web bin/delayed_job start
 ```
 
 ## Load and index records
 
-1. Make sure Jetty has successfully started by going to [Fedora](http://localhost:8983/fedora)
-2. Make sure Solr has started by visiting [Solr](http://localhost:8984/solr/).
-
-3. Load fixture data to the `development` Fedora repository and index it to the `development` Solr collection:
-```bash
-rake argo:repo:load
 ```
-
-4. Load fixture data to the `test` Fedora repository and index it to the `test` Solr collection. This is needed for testing (i.e., running specs):
-```bash
-RAILS_ENV=test rake argo:repo:load
+docker-compose run --rm web rake argo:repo:load
 ```
 
 ## Common tasks
-
-### Rebuilding Jetty instance without re-install
-
-If you'd like to do a clean re-installation of jetty without running the `argo:install` task:
-```bash
-# Commands to install a fresh instance of Jetty, configure it, and start it
-rake jetty:stop
-rake argo:jetty:clean
-rake argo:jetty:config
-rake jetty:start
-
-# Load and index development fixtures
-rake argo:repo:load
-
-# Load and index test fixtures
-RAILS_ENV=test rake argo:repo:load
-```
 
 ### Run the tests
 
@@ -144,14 +84,13 @@ rspec
 
 ### Run the continuous integration build
 
-_Important Note: Running `rake ci` will reinstall your jetty instance and **delete any custom test data** you may have setup in both the `development` and `test` environments, and reload fixtures from scratch for the `test` environment only._
+_Important Note: Running `rake ci` will reload fixtures for the `test` environment only._
 
-The continuous integration build can also be run by:
+The continuous integration build can be run by:
 ```bash
 RAILS_ENV=test bundle exec rake ci
 ```
 
-If, after running the CI build, you want to reload fixtures into the `development` environment, you can use `rake argo:repo:load`.  The default environment is `development`, so it should not be necessary to specify `RAILS_ENV` for that task.
 
 ### Delete records
 
@@ -180,7 +119,6 @@ Argo uses Blacklight and ActiveFedora to expose the repository contents, and `do
 
 and in development or testing mode:
 
-- Jetty
 - RSpec
 - Capybara
 - Chrome

@@ -1,0 +1,42 @@
+version: '3.6'
+
+services:
+  web:
+    build: .
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: puma
+    ports:
+      - 3000:3000
+    environment:
+      ROLES: sdr:manager-role
+      REMOTE_USER: blalbrit@stanford.edu
+      SOLR_URL: http://solr:8983/solr/argo
+      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+      SETTINGS__SURI__URL: http://suri:3000
+      SETTINGS__WORKFLOW_URL: http://workflow:3000
+
+  solr:
+    image: solr:7
+    volumes:
+      - ./solr_conf/conf/:/myconfig
+    command: solr-create -c argo -d /myconfig
+    ports:
+      - 8984:8983
+
+  fcrepo:
+    image: suldlss/fcrepo:no-messaging-latest
+    ports:
+      - 8983:8080
+
+  suri:
+    image: suldlss/suri-rails:latest
+    ports:
+      - 3002:3000
+
+  workflow:
+    image: suldlss/workflow-server:latest
+    ports:
+      - 3001:3000
