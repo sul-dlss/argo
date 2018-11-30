@@ -2,24 +2,27 @@ require 'spec_helper'
 
 RSpec.describe 'apo', type: :request, js: true do
   let(:user) { create(:user) }
-  let(:new_druid) { 'druid:zy987wv6543' }
+  let(:new_apo_druid) { 'druid:zy987wv6543' }
+  let(:new_collection_druid) { 'druid:zy333wv6543' }
+
   after do
-    Dor::AdminPolicyObject.find(new_druid).destroy # clean up after ourselves
+    Dor::AdminPolicyObject.find(new_apo_druid).destroy # clean up after ourselves
+    Dor::Collection.find(new_collection_druid).destroy # clean up after ourselves
   end
 
   before do
-    expect(Dor::SuriService).to receive(:mint_id).and_return(new_druid)
+    allow(Dor::SuriService).to receive(:mint_id).and_return(new_apo_druid, new_collection_druid)
     allow(ApoController).to receive(:update_index).with(any_args)
     sign_in user, groups: ['sdr:administrator-role']
   end
 
   it 'creates and edits an apo' do
-    expect(Dor::Config.workflow.client).to receive(:create_workflow)
+    expect(Dor::Config.workflow.client).to receive(:create_workflow).twice
     # go to the registration form and fill it in
     visit new_apo_path
-    fill_in 'title',     with: 'APO Title'
-    fill_in 'copyright', with: 'Copyright statement'
-    fill_in 'use',       with: 'Use statement'
+    fill_in 'Title', with: 'APO Title'
+    fill_in 'Default Copyright statement', with: 'Copyright statement'
+    fill_in 'Default Use and Reproduction statement', with: 'Use statement'
 
     fill_in 'Group name', with: 'developers'
     click_button 'Add'
@@ -30,10 +33,12 @@ RSpec.describe 'apo', type: :request, js: true do
 
     page.select('MODS', from: 'desc_md')
     page.select('Attribution Share Alike 3.0 Unported', from: 'use_license')
-    choose('collection_radio', option: 'none')
+    choose 'Create a Collection'
+    fill_in 'Collection Title', with: 'New Testing Collection'
     click_button 'Register APO'
-    # button redirects to catalog view, but return to edit form to check registered values
-    visit edit_apo_path(new_druid)
+    expect(page).to have_text 'created'
+
+    click_on 'Edit APO'
     expect(find_field('title').value).to eq('APO Title')
     expect(find_field('copyright').value).to eq('Copyright statement')
     expect(find_field('use').value).to eq('Use statement')
@@ -41,7 +46,7 @@ RSpec.describe 'apo', type: :request, js: true do
     expect(page).to have_selector('.permissionName', text: 'someone')
     expect(find_field('desc_md').value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-sa')
-    expect(page).to have_no_field('collection')
+    expect(page).to have_link('New Testing Collection')
 
     # Now change them
     fill_in 'Group name', with: 'dpg-staff'
@@ -51,14 +56,14 @@ RSpec.describe 'apo', type: :request, js: true do
     select 'View', from: 'permissionRole'
     click_button 'Add'
 
-    fill_in 'title',      with: 'New APO Title'
-    fill_in 'copyright',  with: 'New copyright statement'
-    fill_in 'use',        with: 'New use statement'
+    fill_in 'Title', with: 'New APO Title'
+    fill_in 'Default Copyright statement', with: 'New copyright statement'
+    fill_in 'Default Use and Reproduction statement', with: 'New use statement'
     page.select('Attribution No Derivatives 3.0 Unported', from: 'use_license')
     page.select('MODS', from: 'desc_md')
     click_button 'Update APO'
-    # button redirects to catalog view, but return to edit form to check registered values
-    visit edit_apo_path(new_druid)
+
+    click_on 'Edit APO'
     expect(find_field('title').value).to eq('New APO Title')
     expect(find_field('copyright').value).to eq('New copyright statement')
     expect(find_field('use').value).to eq('New use statement')
@@ -68,6 +73,5 @@ RSpec.describe 'apo', type: :request, js: true do
 
     expect(find_field('desc_md').value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-nd')
-    expect(page).to have_no_field('collection')
   end
 end
