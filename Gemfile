@@ -73,7 +73,6 @@ gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from
 gem 'rdf-reasoner', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'rdf-tabular', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'retries'
-gem 'ruby-graphviz'
 gem 'ruby-prof'
 gem 'rubyzip'
 gem 'sprockets-es6'
