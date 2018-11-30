@@ -1,7 +1,7 @@
 <%= form_tag url, method: method, data: { behavior: 'apo-form' } do %>
 
   <div class="form-group">
-    <label>Title</label><br/>
+    <label for="title">Title</label><br/>
     <input type="text" style="width:auto" size="40" id="title" name="title" value="<%= @form.mods_title %>"></input>
     <span id="title-err-msg-elt" class="apo-register-error"></span>
   </div>
@@ -109,13 +109,13 @@
       <%=select_tag :default_object_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, @form.default_rights )%>
   </div>
   <div class="form-group">
-    <label>Default Use and Reproduction statement</label><br/>
+    <label for="use">Default Use and Reproduction statement</label><br/>
     <p>See <%=link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', :target => "_blank"%> for sample Use and Reproduction statements.</p>
     <textarea style="width:95%;height:40px" rows="2" name="use" id="use"><%= @form.use_statement %></textarea>
   </div>
 
   <div class="form-group">
-    <label>Default Copyright statement</label><br/>
+    <label for="copyright">Default Copyright statement</label><br/>
     <p>See <%=link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', :target => "_blank"%> for sample Copyright statements.</p>
     <textarea style="width:95%;height:40px" id='copyright' name="copyright"><%= @form.copyright_statement %></textarea>
   </div>
