@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :fedora_setup
 
+  # Avoids a deprecation. Can be removed with Blacklight 7
+  skip_after_action :discard_flash_if_xhr
+
   rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render plain: 'Object Not Found', status: :not_found }
   rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, plain: 'forbidden' }
 
