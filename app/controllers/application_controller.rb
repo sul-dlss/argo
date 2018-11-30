@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   def current_user
     super.tap do |cur_user|
       break unless cur_user
+
       if session[:groups]
         cur_user.set_groups_to_impersonate session[:groups]
       end

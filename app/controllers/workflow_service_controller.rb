@@ -49,6 +49,7 @@ class WorkflowServiceController < ApplicationController
   # @return [Boolean]
   def check_if_published
     return true if get_lifecycle('published')
+
     false
   end
 
@@ -57,6 +58,7 @@ class WorkflowServiceController < ApplicationController
   # @return [Boolean]
   def check_if_submitted
     return true if get_lifecycle('submitted')
+
     false
   end
 
@@ -65,6 +67,7 @@ class WorkflowServiceController < ApplicationController
   # @return [Boolean]
   def check_if_accessioned
     return true if get_lifecycle('accessioned')
+
     false
   end
 
@@ -74,6 +77,7 @@ class WorkflowServiceController < ApplicationController
   def check_if_can_close_version
     return true if get_active_lifecycle('opened') &&
                    !get_active_lifecycle('submitted')
+
     false
   end
 
@@ -84,6 +88,7 @@ class WorkflowServiceController < ApplicationController
     return false unless check_if_accessioned
     return false if get_active_lifecycle('submitted')
     return false if get_active_lifecycle('opened')
+
     true
   end
 end

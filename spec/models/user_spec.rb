@@ -172,10 +172,10 @@ RSpec.describe User, type: :model do
     let(:solr_doc) do
       {
         'apo_role_sdr-administrator_ssim' => %w(workgroup:dlss:groupA workgroup:dlss:groupB),
-        'apo_role_sdr-viewer_ssim'        => %w(workgroup:dlss:groupE workgroup:dlss:groupF),
-        'apo_role_dor-apo-manager_ssim'   => %w(workgroup:dlss:groupC workgroup:dlss:groupD),
+        'apo_role_sdr-viewer_ssim' => %w(workgroup:dlss:groupE workgroup:dlss:groupF),
+        'apo_role_dor-apo-manager_ssim' => %w(workgroup:dlss:groupC workgroup:dlss:groupD),
         'apo_role_person_sdr-viewer_ssim' => %w(sunetid:tcramer),
-        'apo_role_group_manager_ssim'     => %w(workgroup:dlss:groupR)
+        'apo_role_group_manager_ssim' => %w(workgroup:dlss:groupR)
       }
     end
     before(:each) do

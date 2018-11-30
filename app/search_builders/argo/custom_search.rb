@@ -7,6 +7,7 @@ module Argo
     # `:pids_only` = true is provided in user_params
     def pids_only(solr_parameters)
       return unless blacklight_params[:pids_only]
+
       solr_parameters[:fl] ||= []
       solr_parameters[:fl] << 'id'
       solr_parameters[:rows] = 99_999_999

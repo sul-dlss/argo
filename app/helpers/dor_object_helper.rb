@@ -12,6 +12,7 @@ module DorObjectHelper
     terms.each_pair do |term, finder|
       finder[:selector].each do |key|
         next unless doc[key].present?
+
         val = doc[key]
         com = finder[:combiner]
         result[term] = com ? com.call(val) : val.first
@@ -33,6 +34,7 @@ module DorObjectHelper
 
   def render_datetime(datetime)
     return '' if datetime.nil? || datetime == ''
+
     # this needs to use the timezone set in config.time_zone
     begin
       zone = ActiveSupport::TimeZone.new('Pacific Time (US & Canada)')
@@ -49,6 +51,7 @@ module DorObjectHelper
     unless events.empty?
       events = events.event.collect do |event|
         next if event.nil?
+
         event.who = event.who.first if event.who.is_a? Array
         event.message = event.message.first if event.message.is_a? Array
         { when: render_datetime(event.when), who: event.who, what: event.message }

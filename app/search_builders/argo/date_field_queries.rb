@@ -8,6 +8,7 @@ module Argo
     # Removes raw Solr query in favor standard Solr filter query
     def add_date_field_queries(solr_parameters)
       return unless blacklight_params['f']
+
       solr_parameters[:fq] ||= []
       blacklight_params['f'].select { |k, _v| k =~ /.+_dt/ }.each do |key, values|
         values.each do |v|

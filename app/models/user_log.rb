@@ -56,6 +56,7 @@ class UserLog
 
         # A few of the log messages are considered 'too technical' and will not be displayed
         next unless split_line.length > 0 && USER_MESSAGES.include?(split_line[0])
+
         # Ignore lines that don't conform to the format
         current_hash = {}
         if split_line.length == 2
@@ -81,6 +82,7 @@ class UserLog
       # field/type of information and the rest is the actual value.
       matched_strings = line.match(/^([^\s]+)\s+(.*)/)
       next unless matched_strings && matched_strings.length == 3
+
       job_info[matched_strings[1]] = matched_strings[2]
       success += 1 if matched_strings[1] == 'argo.bulk_metadata.bulk_log_job_save_success'
       job_info['error'] = 1 if UserLog::ERROR_MESSAGES.include?(matched_strings[1])
@@ -122,6 +124,7 @@ class UserLog
 
   def each_line
     return unless File.exist?(log_file) && File.readable?(log_file)
+
     File.open(log_file, 'r') do |file|
       file.each_line do |line|
         yield line

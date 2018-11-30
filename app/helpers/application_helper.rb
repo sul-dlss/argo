@@ -60,6 +60,7 @@ module ApplicationHelper
   # @return [Hash]
   def search_of_pids(search)
     return '' unless search.present?
+
     search.query_params.merge('pids_only' => true)
   end
 end

@@ -112,6 +112,7 @@ class TrackSheet
   def find_or_create_in_solr_by_id(druid)
     doc = Dor::SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
     return doc unless doc.nil?
+
     obj = Dor.load_instance "druid:#{druid}"
     solr_doc = obj.to_solr
     Dor::SearchService.solr.add(solr_doc)

@@ -54,6 +54,7 @@ class ContentTypesController < ApplicationController
   def load_resource
     obj_pid = params[:item_id]
     raise 'missing druid' unless obj_pid
+
     @object = Dor.find(obj_pid)
   end
 end

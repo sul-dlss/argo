@@ -6,6 +6,7 @@ module WorkflowHelper
   def render_workflow_grid
     workflow_data = facet_tree('wf_wps')['wf_wps_ssim']
     return '' if workflow_data.nil?
+
     workflow_data.keys.sort.collect do |wf_name|
       render partial: 'workflow_table', locals: { wf_name: wf_name, wf_data: workflow_data[wf_name] }
     end.join("\n").html_safe
@@ -23,12 +24,13 @@ module WorkflowHelper
 
   def render_workflow_process_reset(pid, process)
     allowable_changes = {
-      'hold'    => 'waiting',
+      'hold' => 'waiting',
       'waiting' => 'completed',
-      'error'   => 'waiting'
+      'error' => 'waiting'
     }
     new_status = allowable_changes[process.status]
     return '' unless new_status.present?
+
     # workflow update requires id, workflow, process, and status parameters
     form_tag workflow_update_item_url(pid, process.workflow) do
       hidden_field_tag('process', process.name) +
@@ -39,6 +41,7 @@ module WorkflowHelper
 
   def render_workflow_reset_link(wf_hash, name, process, status)
     return unless wf_hash[process] && wf_hash[process][status] && wf_hash[process][status][:_]
+
     new_params = search_state.add_facet_params(
       'wf_wps_ssim',
       [name, process, status].compact.join(':')

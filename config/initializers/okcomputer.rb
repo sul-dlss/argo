@@ -10,6 +10,7 @@ class RubydoraCheck < OkComputer::PingCheck
   def initialize(options = {})
     @client = options[:client]
     raise ArgumentError.new(':client not specified') unless @client
+
     self.host = options[:host] || URI(@client.client.url).host
     self.port = options[:port] || URI(@client.client.url).port
     self.request_timeout = options[:timeout].to_i || 5

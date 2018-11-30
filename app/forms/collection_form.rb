@@ -23,6 +23,7 @@ class CollectionForm < BaseForm
   # Copies the values to the model
   def sync
     return if params[:collection_abstract].blank?
+
     model.descMetadata.abstract = params[:collection_abstract]
     model.descMetadata.content = model.descMetadata.ng_xml.to_s
 
