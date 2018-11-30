@@ -51,7 +51,6 @@ gem 'coderay'
 gem 'config'
 gem 'delayed_job'
 gem 'delayed_job_active_record'
-gem 'ebnf', '1.0.0' # 1.0 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'erubis' # implicit dependency required by rdf-rdfa/haml, no longer provided by default in Rails 5.1
 gem 'eye' # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
@@ -69,9 +68,6 @@ gem 'prawn', '~> 1'
 gem 'prawn-table'
 gem 'rake'
 gem 'rdf', '~> 1.99' # pinned for faster dependency resolution
-gem 'rdf-microdata', '2.0.2' # 2.0.3 requires rdf 2.x; bundler bug stops it from resolving correctly
-gem 'rdf-reasoner', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
-gem 'rdf-tabular', '~> 0.3.0' # 0.4 requires rdf 2.x; bundler bug stops it from resolving correctly
 gem 'retries'
 gem 'ruby-prof'
 gem 'rubyzip'
