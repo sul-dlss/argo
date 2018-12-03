@@ -7,6 +7,23 @@ end
 describe Argo::ProfileQueries do
   subject { TestClass.new }
   let(:blacklight_params) { { controller: 'profile' } }
+  let(:required_facet_fields) do
+    [
+      SolrDocument::FIELD_APO_TITLE.to_s,
+      SolrDocument::FIELD_COLLECTION_TITLE.to_s,
+      'rights_descriptions_ssim',
+      'content_type_ssim',
+      'use_statement_ssim',
+      'copyright_ssim',
+      'use_license_machine_ssi',
+      'sw_format_ssim',
+      'sw_language_ssim',
+      'topic_ssim',
+      'sw_subject_geographic_ssim',
+      'sw_subject_temporal_ssim',
+      'sw_genre_ssim'
+    ]
+  end
   before do
     allow(subject).to receive(:blacklight_params).and_return(blacklight_params)
   end
@@ -16,24 +33,17 @@ describe Argo::ProfileQueries do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
       facet_fields = solr_parameters.facet_fields.map { |f| f[0] } + solr_parameters['facet.field']
-      required_fields = [
-        SolrDocument::FIELD_APO_TITLE.to_s,
-        SolrDocument::FIELD_COLLECTION_TITLE.to_s,
-        'rights_descriptions_ssim',
-        'content_type_ssim',
-        'use_statement_ssim',
-        'copyright_ssim',
-        'use_license_machine_ssi',
-        'sw_format_ssim',
-        'sw_language_ssim',
-        'topic_ssim',
-        'sw_subject_geographic_ssim',
-        'sw_subject_temporal_ssim',
-        'sw_genre_ssim'
-      ]
-      expect(facet_fields).to include(*required_fields)
+      expect(facet_fields).to include(*required_facet_fields)
     end
-    it 'adds in requred stats fields' do
+    it 'handles an existing string facet field' do
+      catalog_config = CatalogController.blacklight_config.deep_copy
+      catalog_config['facet.field'] = 'nonhydrus_apo_title_ssim'
+      solr_parameters = subject.add_profile_queries(catalog_config)
+      facet_fields = solr_parameters.facet_fields.map { |f| f[0] } + solr_parameters['facet.field']
+      expect(facet_fields).to include(*required_facet_fields)
+      expect(facet_fields).to include('nonhydrus_apo_title_ssim')
+    end
+    it 'adds in required stats fields' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
       stats_fields = solr_parameters['stats.field']
