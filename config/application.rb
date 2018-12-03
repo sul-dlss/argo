@@ -7,6 +7,8 @@ require 'rails/all'
 # you probably should not use this flag for anything else.
 ActiveSupport::Deprecation.behavior = [:silence] if ENV['SILENCE_DEPRECATION_WARNINGS']
 
+require_relative 'initializers/monkey_patch_haml4'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
