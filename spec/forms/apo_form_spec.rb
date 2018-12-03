@@ -22,7 +22,7 @@ RSpec.describe ApoForm do
     end
 
     before do
-      allow(Dor).to receive(:find).with(agreement.pid).and_return(agreement)
+      allow(Dor).to receive(:find).with(agreement.pid, cast: true).and_return(agreement)
     end
 
     describe '#sync' do
@@ -260,7 +260,7 @@ RSpec.describe ApoForm do
       end
 
       before do
-        expect(Dor).to receive(:find).with(agreement.pid).and_return(agreement)
+        expect(Dor).to receive(:find).with(agreement.pid, cast: true).and_return(agreement)
         expect(Dor).to receive(:find).with(collection.pid).and_return(collection)
         expect(collection).to receive(:save)
         expect(Dor).to receive(:find).with(apo.pid).and_return(apo)
