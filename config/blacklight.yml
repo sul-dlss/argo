@@ -1,6 +1,6 @@
 development:
   adapter: solr
-  url: <%= ENV['SOLR_URL'] || "http://127.0.0.1:8984/solr/argo-test" %>
+  url: <%= Settings.SOLRIZER_URL %>
 test: &test
   adapter: solr
-  url: <%= ENV['TEST_SOLR_URL'] || "http://127.0.0.1:8984/solr/argo-test" %>
+  url: <%= Settings.SOLRIZER_URL %>
