@@ -1,5 +1,0 @@
-port: 8984
-version: 7.5.0
-collection:
-  dir: solr_conf/conf/
-  name: argo-test
