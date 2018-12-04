@@ -1,0 +1,23 @@
+<li class="resource">
+  <span class="label">Resource (<%= child_counter + 1 %>)</span>
+  <%= child['type']%>
+  <ul>
+    <% if child.at('label') %>
+      <li> <span class="label">Label</span> <%= child.at('label').text %></li>
+    <% end %>
+    <% child.xpath('file').each do |file| %>
+      <li class="file">
+        <span class="label">File</span>
+        <% if can? :manage_content, object %>
+          <%= link_to file['id'], file_item_path(object, file: file['id']), data: { ajax_modal: 'trigger' } %>
+        <% else %>
+          <%=file['id']%>
+        <% end %>
+        (<%= file['mimetype'] %>,
+         <%= number_to_human_size(file['size']) %>,
+         <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
+      </li>
+    <% end %>
+    <%= render partial: 'catalog/_show_sections/default_contents_external_file', locals: { resource: child } -%>
+  </ul>
+</li>

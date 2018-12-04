@@ -1,0 +1,10 @@
+<li class="file">
+  <span class="label">File</span>
+  <% if can? :view_content, object %>
+    <%= link_to file['id'], file_item_path(object, file: file['id']), data: { ajax_modal: 'trigger' } %>
+  <% else %>
+    <%= file['id'] %>
+  <% end %>
+  (<%= file['mimetype'] %>, <%= number_to_human_size(file['size']) %>,
+   <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
+</li>

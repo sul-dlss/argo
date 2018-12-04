@@ -1,0 +1,16 @@
+<li class="resource">
+  <span class="label">Resource (<%= resource_counter + 1 %>)</span> <%= resource['type']%>
+  <% if resource.at('label') %>
+    <li><span class="label">Label</span> <%= resource.at('label').text %></li>
+  <% end %>
+  <ul>
+    <%= render partial: 'catalog/_show_sections/child_resource',
+               collection: resource.children.select { |c| c.node_name == 'resource' },
+               as: :child,
+               locals: { object: object } %>
+    <%= render partial: 'catalog/_show_sections/file', collection: resource.xpath('file'),
+               as: :file,
+               locals: { object: object } %>
+    <%= render partial: 'catalog/_show_sections/default_contents_external_file', locals: { resource: resource } -%>
+  </ul>
+</li>
