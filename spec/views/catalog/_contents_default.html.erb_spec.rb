@@ -42,8 +42,8 @@ RSpec.describe 'catalog/_contents_default.html.erb', type: :view do
 
     it 'shows multiple external files' do
       render 'catalog/contents_default', object: object, document: solr_doc
-      expect(rendered).to have_link('PC0062_2008-194_Q03_02_007.jpg', href: '/items/druid:bb000zn0114/file_list?file=PC0062_2008-194_Q03_02_007.jpg')
-      expect(rendered).to have_link('PC0062_2008-194_Q03_02_007.jp2', href: '/items/druid:bb000zn0114/file_list?file=PC0062_2008-194_Q03_02_007.jp2')
+      expect(rendered).to have_link('PC0062_2008-194_Q03_02_007.jpg', href: '/items/druid:bb000zn0114/files?id=PC0062_2008-194_Q03_02_007.jpg')
+      expect(rendered).to have_link('PC0062_2008-194_Q03_02_007.jp2', href: '/items/druid:bb000zn0114/files?id=PC0062_2008-194_Q03_02_007.jp2')
     end
   end
 end

@@ -89,6 +89,11 @@ Argo::Application.routes.draw do
 
   resources :items do
     resources 'uploads', only: [:new, :create]
+    resources 'files', only: [:index, :show] do
+      member do
+        get 'preserved'
+      end
+    end
 
     get :register, on: :collection
     resource :content_type, only: [:show, :update]
@@ -109,8 +114,7 @@ Argo::Application.routes.draw do
       post 'embargo',            action: :embargo_update,        as: 'embargo_update'
       get 'embargo_form'
       post 'datastream',         action: :datastream_update,     as: 'datastream_update'
-      get 'file',                action: :get_file,          as: 'get_file'
-      get 'file_list',           action: :file,              as: 'file'
+
       post 'file/attributes',    action: :update_attributes, as: 'update_attributes'
       match 'close_version_ui',  action: :close_version_ui,  as: 'close_version_ui', via: [:get, :post]
       match 'open_version_ui',   action: :open_version_ui,   as: 'open_version_ui',  via: [:get, :post]
@@ -130,7 +134,6 @@ Argo::Application.routes.draw do
       post 'set_rights'
       get 'set_governing_apo_ui'
       post 'set_governing_apo'
-      get  'preserved_file', action: :get_preserved_file
       post :release_hold
       match :add_workflow, action: :add_workflow, as: 'add_workflow', via: [:get, :post]
       get :apply_apo_defaults

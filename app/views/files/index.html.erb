@@ -2,7 +2,7 @@
   <div class="row">
     Workspace:
   <% if @available_in_workspace %>
-    <%= link_to params[:file], "/items/#{params[:id]}/file/?file=#{params[:file]}" -%>
+    <%= link_to params[:file], item_file_path(item_id: @object, id: params[:file]) %>
   <% else %>
     not available <span class="text-danger"><%= @available_in_workspace_error -%></span>
   <% end %>
@@ -20,7 +20,7 @@
 <%   if file['preserve'] == 'yes' && has_been_accessioned?(@object.pid) %>
       <div class="row">
         Preservation:
-        <%= link_to params[:file], url_for(:controller => :items, :action => :get_preserved_file, :id => params[:id], :file => params[:file], :version => last_accessioned_version(@object)) -%>
+        <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:file], version: last_accessioned_version(@object)) %>
       </div>
 <%   end %>
 <% end %>

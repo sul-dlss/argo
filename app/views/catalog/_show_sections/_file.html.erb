@@ -1,7 +1,7 @@
 <li class="file">
   <span class="label">File</span>
   <% if can? :view_content, object %>
-    <%= link_to file['id'], file_item_path(object, file: file['id']), data: { ajax_modal: 'trigger' } %>
+    <%= link_to file['id'], item_files_path(item_id: object, id: file['id']), data: { ajax_modal: 'trigger' } %>
   <% else %>
     <%= file['id'] %>
   <% end %>

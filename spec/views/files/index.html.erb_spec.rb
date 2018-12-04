@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'items/_file.html.erb' do
+RSpec.describe 'files/index.html.erb' do
   let(:contentMetadata) do
     cm = Dor::ContentMetadataDS.new
     cm.content = '<contentMetadata type="image" objectId="rn653dy9317">
@@ -24,7 +24,7 @@ RSpec.describe 'items/_file.html.erb' do
 </contentMetadata>'
     cm
   end
-  let(:obj) { double(pid: 'druid:rn653dy9317', contentMetadata: contentMetadata) }
+  let(:obj) { double(pid: 'druid:rn653dy9317', to_param: 'druid:rn653dy9317', contentMetadata: contentMetadata) }
   it 'renders the partial content' do
     assign(:object, obj)
     assign(:available_in_workspace, true)
