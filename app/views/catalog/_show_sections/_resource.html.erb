@@ -3,7 +3,7 @@
   <% if resource.at('label') %>
     <li><span class="label">Label</span> <%= resource.at('label').text %></li>
   <% end %>
-  <ul>
+  <ul class="child-list">
     <%= render partial: 'catalog/_show_sections/child_resource',
                collection: resource.children.select { |c| c.node_name == 'resource' },
                as: :child,
