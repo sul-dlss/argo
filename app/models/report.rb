@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Report
   include Blacklight::Configurable
   include Blacklight::SearchHelper
@@ -185,10 +187,8 @@ class Report
           pids << rec[:druid] + "\t" + rec[:source_id_ssim]
         elsif opts[:tags].present?
           tags = ''
-          unless rec[:tag_ssim].nil?
-            rec[:tag_ssim].split(';').each do |tag|
-              tags += "\t" + tag
-            end
+          rec[:tag_ssim]&.split(';')&.each do |tag|
+            tags += "\t" + tag
           end
           pids << rec[:druid] + tags
         else

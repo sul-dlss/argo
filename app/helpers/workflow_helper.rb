@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module WorkflowHelper
   def show_workflow_grid?
     controller_name == 'report' && action_name == 'workflow_grid'

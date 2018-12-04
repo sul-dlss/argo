@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApoHelper
   def options_for_desc_md
     [

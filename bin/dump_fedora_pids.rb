@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # a simple script for dumping the full list of druids from a fedora instance.
 #
 ## assumptions:

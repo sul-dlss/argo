@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DocumentDateConcern
   extend Blacklight::Solr::Document
 

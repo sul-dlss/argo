@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ValueHelper
   # Renderers
   def label_for_druid(druid)

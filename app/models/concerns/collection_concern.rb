@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CollectionConcern
   extend Blacklight::Solr::Document
 
@@ -8,7 +10,7 @@ module CollectionConcern
   # Access a SolrDocument's *first* Collection druid
   # @return [String, nil]
   def collection_id
-    collection_ids.first if collection_ids
+    collection_ids&.first
   end
 
   ##

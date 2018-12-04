@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Requests and parses index queues for Argo
 class IndexQueue
   def initialize

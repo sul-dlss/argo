@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Argo
   ##
   # Part of the Blacklight SearchBuilder

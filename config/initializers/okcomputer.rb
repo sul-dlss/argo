@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'okcomputer'
 
 # /status for 'upness', e.g. for load balancer

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # job to move an object to a new governing APO
 class SetGoverningApoJob < GenericJob

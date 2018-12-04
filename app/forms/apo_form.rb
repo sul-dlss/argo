@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Inspired by Reform, but not exactly reform, because of existing deficiencies
 # in dor-services:
 #  https://github.com/sul-dlss/dor-services/pull/360
@@ -213,7 +215,7 @@ class ApoForm < BaseForm
   end
 
   def param_cleanup(params)
-    params[:title].strip! if params[:title]
+    params[:title]&.strip!
     [:managers, :viewers].each do |role_param_sym|
       params[role_param_sym] = params[role_param_sym].tr("\n,", ' ') if params[role_param_sym]
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module SigninHelper
   def mock_user(attributes = {})
     double(:webauth_user, {

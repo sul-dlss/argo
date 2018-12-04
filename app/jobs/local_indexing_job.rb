@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # this job will reindex a list of DOR objects, locally performing the computation to
 # generate the solr document (talking directly to Fedora to retrieve the object, and

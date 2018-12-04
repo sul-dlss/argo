@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Cannot just do:
 #   ::ENABLE_SOLR_UPDATES = false
 # Because "warning: already initialized constant ENABLE_SOLR_UPDATES".

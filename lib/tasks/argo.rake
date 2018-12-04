@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def apo_field_default
   'apo_register_permissions_ssim'
 end

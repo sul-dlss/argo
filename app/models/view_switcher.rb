@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # Holds structure needed to switch views between controllers
 class ViewSwitcher

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handles HTTP interaction that allows management of bulk jobs
 class BulkJobsController < ApplicationController
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.

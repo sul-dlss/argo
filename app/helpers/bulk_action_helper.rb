@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Helper methods for BulkAction views.
 module BulkActionHelper
   # Renders the partial for a BulkAction based on its action type (descriptive metadata download etc.)

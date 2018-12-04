@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby_executable_hooks
+# frozen_string_literal: true
 
 # NOTE: this script is a copy of the script included in a system-wide installation of eye v0.8.
 # it is reproduced here so that eye can be run on deployment of argo to machines that lack a system-wide

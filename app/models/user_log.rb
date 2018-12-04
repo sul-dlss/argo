@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserLog
   # List the messages that we're going to display to the end user
   USER_MESSAGES = Set.new ['argo.bulk_metadata.bulk_log_job_start',

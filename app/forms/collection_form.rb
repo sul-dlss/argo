@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Inspired by Reform, but not exactly reform, because of existing deficiencies
 # in dor-services:
 #  https://github.com/sul-dlss/dor-services/pull/360

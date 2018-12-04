@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightConfigHelper
   def self.add_common_default_solr_params_to_config!(config)
     config.default_solr_params = {

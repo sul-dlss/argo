@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # job to reindex a DOR object to Solr using the dor_indexing_app endpoint
 class RemoteIndexingJob < GenericJob

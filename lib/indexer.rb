@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Argo
   class Indexer < Dor::IndexingService
     # same as reindex_pid_list, but collect stats using argo's ruby-prof utility, and

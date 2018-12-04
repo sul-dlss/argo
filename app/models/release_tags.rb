@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # Really at this point, just a way to call and get back an Array of ReleaseTag
 class ReleaseTags

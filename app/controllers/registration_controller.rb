@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RegistrationController < ApplicationController
   def form
     redirect_to register_items_url

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Overrides for Blacklight helpers
 
 module ArgoHelper

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This is a Rack middleware that we use in testing. It injects headers
 # that simulate mod_shib so we can test.
 # This is certainly not thread safe as it uses class level variables

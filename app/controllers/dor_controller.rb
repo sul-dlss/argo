@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DorController < ApplicationController
   # dispatches the reindexing request to the remote reindexing service
   def reindex

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Dor::ObjectsController < ApplicationController
   include ApplicationHelper # for fedora_base
   before_action :munge_parameters

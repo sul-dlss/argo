@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe ArgoHelper, type: :helper do
   describe '#render_buttons' do

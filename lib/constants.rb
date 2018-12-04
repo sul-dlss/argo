@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # A module for including constants throughout the Argo application
 module Constants

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
@@ -103,25 +105,23 @@ def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::O
   result.label    = properties['label']
   result.owner_id = properties['ownerId']
   xml_streams.each do |stream|
-    begin
-      content = stream.xpath('.//foxml:xmlContent/*').first.to_xml
-      dsid = stream['ID']
-      ds = result.datastreams[dsid]
-      if ds.nil?
-        ds = other_class.new(result, dsid)
-        result.add_datastream(ds)
-      end
-
-      if ds.is_a?(other_class)
-        result.datastreams[dsid] = ds.class.from_xml(Nokogiri::XML(content), ds)
-      elsif ds.is_a?(ActiveFedora::RelsExtDatastream)
-        result.datastreams[dsid] = ds.class.from_xml(content, ds)
-      else
-        result.datastreams[dsid] = ds.class.from_xml(ds, stream)
-      end
-    rescue
-      # TODO: (?) rescue if 1 datastream failed
+    content = stream.xpath('.//foxml:xmlContent/*').first.to_xml
+    dsid = stream['ID']
+    ds = result.datastreams[dsid]
+    if ds.nil?
+      ds = other_class.new(result, dsid)
+      result.add_datastream(ds)
     end
+
+    if ds.is_a?(other_class)
+      result.datastreams[dsid] = ds.class.from_xml(Nokogiri::XML(content), ds)
+    elsif ds.is_a?(ActiveFedora::RelsExtDatastream)
+      result.datastreams[dsid] = ds.class.from_xml(content, ds)
+    else
+      result.datastreams[dsid] = ds.class.from_xml(ds, stream)
+    end
+  rescue
+    # TODO: (?) rescue if 1 datastream failed
   end
 
   # stub item and datastream repo access methods

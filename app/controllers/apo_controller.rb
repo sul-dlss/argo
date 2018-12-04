@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApoController < ApplicationController
   before_action :create_obj, except: [
     :new,

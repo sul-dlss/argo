@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # Used in the Profile view to provide convenience to the
 # Blacklight::Solr::Response for easy view magic

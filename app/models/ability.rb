@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # notes for those who are new to CanCan:
 #  * basic intro to permission checking w/ CanCan:  https://github.com/CanCanCommunity/cancancan/wiki/Checking-Abilities
 #  * rules which are defined later have higher precedence, i.e. the last rule defined is the first rule applied.

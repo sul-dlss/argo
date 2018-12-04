@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Logic for presenting the home page text
 class HomeTextPresenter
   def initialize(current_user)

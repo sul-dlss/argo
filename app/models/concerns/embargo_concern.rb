@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EmbargoConcern
   extend Blacklight::Solr::Document
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DorObjectHelper
   # Metadata helpers
   def retrieve_terms(doc)

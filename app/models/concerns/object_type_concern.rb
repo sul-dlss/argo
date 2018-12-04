@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ObjectTypeConcern
   extend Blacklight::Solr::Document
 
