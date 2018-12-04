@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # Determine user authorization based on index
 class PermittedQueries

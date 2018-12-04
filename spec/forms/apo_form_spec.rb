@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe ApoForm do
@@ -11,7 +13,7 @@ RSpec.describe ApoForm do
       {
         copyright: 'My copyright statement',
         use: 'My use and reproduction statement',
-        title: 'My title',
+        title: +'My title',
         desc_md: 'MODS',
         metadata_source: 'DOR',
         agreement: agreement.pid,
@@ -237,7 +239,7 @@ RSpec.describe ApoForm do
 
       let(:params) do
         { # These data mimic the APO registration form
-          'title' => 'New APO Title',
+          'title' => +'New APO Title',
           'agreement' => agreement.pid,
           'desc_md' => 'MODS',
           'metadata_source' => 'DOR',

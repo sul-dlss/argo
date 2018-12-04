@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # A GenericJob used as a super class for Argo Bulk Jobs
 #
@@ -11,7 +13,7 @@
 # objects in the batch might undergo the same action more than once.
 class GenericJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
-  TIME_FORMAT = '%Y-%m-%d %H:%M%P'.freeze
+  TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
   before_perform do |_job|
     bulk_action.reset_druid_counts

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 describe DorObjectHelper, type: :helper do
   describe 'render_status_style' do

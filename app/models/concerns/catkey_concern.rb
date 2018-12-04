@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CatkeyConcern
   extend Blacklight::Solr::Document
 
@@ -14,6 +16,6 @@ module CatkeyConcern
   # Access a SolrDocument's catkey identifier
   # @return [String, nil]
   def catkey_id
-    catkey.gsub(/^catkey:/, '') if catkey
+    catkey&.gsub(/^catkey:/, '')
   end
 end

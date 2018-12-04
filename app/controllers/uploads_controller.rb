@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Handles the HTTP interaction for creating bulk metadata uploads
 class UploadsController < ApplicationController
   # GET /items/:item_id/uploads/new

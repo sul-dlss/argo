@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WorkflowServiceController < ApplicationController
   ##
   # Is a document closeable?

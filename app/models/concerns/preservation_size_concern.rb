@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PreservationSizeConcern
   include ActionView::Helpers::NumberHelper
   extend Blacklight::Solr::Document

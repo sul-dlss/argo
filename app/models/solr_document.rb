@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SolrDocument
   include Blacklight::Solr::Document
   include ApoConcern
@@ -34,14 +36,12 @@ class SolrDocument
   def get_versions
     versions = {}
     recs = self['versions_ssm']
-    if recs
-      recs.each do |rec|
-        (version, tag, desc) = rec.split(';')
-        versions[version] = {
-          tag: tag,
-          desc: desc
-        }
-      end
+    recs&.each do |rec|
+      (version, tag, desc) = rec.split(';')
+      versions[version] = {
+        tag: tag,
+        desc: desc
+      }
     end
     versions
   end

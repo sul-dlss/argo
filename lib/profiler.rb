@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Argo
   class Profiler
     # takes a block of code, starts the profiler, runs the code, stops the profiler and returns the results of the profiling.

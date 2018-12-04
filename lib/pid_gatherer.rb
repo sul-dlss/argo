@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Argo
   ##
   # Gatherer of the PIDS, used for Argo indexing

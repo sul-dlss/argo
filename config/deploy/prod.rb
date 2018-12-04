@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 server 'argo-prod-a.stanford.edu', user: 'lyberadmin', roles: %w(web db app)
 server 'argo-prod-b.stanford.edu', user: 'lyberadmin', roles: %w(web db app)
 

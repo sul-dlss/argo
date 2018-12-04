@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BulkActionsController < ApplicationController
   before_action :set_bulk_action, only: [:destroy, :file]
 

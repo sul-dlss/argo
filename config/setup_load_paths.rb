@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Select the correct item for which you use below.
 # If you're not using bundler, remove it completely.
 #

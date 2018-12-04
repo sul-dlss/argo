@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Dor.configure do
   ssl do
     cert_file Settings.SSL.CERT_FILE

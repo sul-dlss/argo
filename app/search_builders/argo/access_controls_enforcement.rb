@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Argo
   module AccessControlsEnforcement
     extend ActiveSupport::Concern

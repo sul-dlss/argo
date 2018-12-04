@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 # General documentation about roles and permissions is on SUL Consul at

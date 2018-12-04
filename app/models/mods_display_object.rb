@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ModsDisplayObject
   include ModsDisplay::ModelExtension
 

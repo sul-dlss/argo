@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DateFacetConfigurations
   extend ActiveSupport::Concern
 

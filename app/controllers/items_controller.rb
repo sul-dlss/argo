@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :create_obj, except: [
@@ -660,7 +662,7 @@ class ItemsController < ApplicationController
     wf_name = params[:wf]
     wf = @object.workflows[wf_name]
     # check the workflow is present and active (not archived)
-    if wf && wf.active?
+    if wf&.active?
       render status: 500, plain: "#{wf_name} already exists!"
       return
     end

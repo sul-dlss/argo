@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RegistrationHelper
   # permission_keys will likely be a list of workgroups to which a user belongs plus
   # the user's sunetid, to determine which APOs grant the user registration permissions.

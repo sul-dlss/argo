@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Argo
   ##
   # Handles Bulk reindexing jobs, by queueing up batches of pids for

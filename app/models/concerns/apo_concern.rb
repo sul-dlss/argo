@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApoConcern
   extend Blacklight::Solr::Document
 
@@ -23,7 +25,7 @@ module ApoConcern
   # Access a SolrDocument's APO druid without the `info:fedora/` prefix
   # @return [String, nil]
   def apo_pid
-    apo_id.gsub('info:fedora/', '') if apo_id
+    apo_id&.gsub('info:fedora/', '')
   end
 
   ##

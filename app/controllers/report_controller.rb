@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'blacklight/catalog'
 
 class ReportController < CatalogController

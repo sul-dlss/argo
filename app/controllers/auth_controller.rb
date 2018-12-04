@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthController < ApplicationController
   before_action(except: [:forget_impersonated_groups]) do
     authorize! :impersonate, User

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Manages HTTP interactions for creating collections
 class CollectionsController < ApplicationController
   def new

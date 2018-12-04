@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ##
 # Job to add release and then release a Dor Object
 class ReleaseObjectJob < GenericJob

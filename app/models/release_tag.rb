@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReleaseTag
   attr_reader :to, :what, :when, :who, :release
 

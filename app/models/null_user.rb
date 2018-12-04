@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NullUser
   # rubocop:disable Naming/PredicateName
   def is_admin?

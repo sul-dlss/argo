@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'stanford-mods'
 module ItemsHelper
   def stacks_url_full_size(obj, file_name)

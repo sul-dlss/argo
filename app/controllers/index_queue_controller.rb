@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class IndexQueueController < ApplicationController
   ##
   # Client side access to the index queue depth

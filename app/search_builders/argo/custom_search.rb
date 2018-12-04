@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Argo
   module CustomSearch
     extend ActiveSupport::Concern
