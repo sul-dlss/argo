@@ -34,12 +34,12 @@ div.column
     width: 35em
     dd
       width: 25em
-  
+
 h1,h2,h3,h4,h5,h6
   &.inline
     display: inline
     width: 2em
-  
+
 h3.section-head
   display: block
   clear: both
@@ -66,7 +66,7 @@ h3.section-head
 #bulk-button
   margin-top: -4px
   font-size: 11px
-  
+
 .errortext
   color: red
 .notetext
@@ -74,17 +74,14 @@ h3.section-head
 .clear
   clear: both
 
-ul.resource-tree
-  margin: 0
-  li
+.contents-section
+  .resource-list
     padding-left: 8px
     list-style-type: none
-    span.label
-      color: gray
-      &:after
-        content: ':'
-    ul
-      margin: 0
+  .label
+    color: gray
+    &:after
+      content: ':'
 
 table.detail
   thead
@@ -92,5 +89,5 @@ table.detail
   th,td
     font-weight: normal
     text-align: left
-    padding: 0em 2em .25em 0em 
+    padding: 0em 2em .25em 0em
     border: none
