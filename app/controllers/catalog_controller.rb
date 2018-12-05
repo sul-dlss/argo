@@ -46,8 +46,8 @@ class CatalogController < ApplicationController
     config.add_show_field 'id',                              label: 'DRUID'
     config.add_show_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
     config.add_show_field 'content_type_ssim',               label: 'Content Type'
-    config.add_show_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy
-    config.add_show_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
+    config.add_show_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy_with_objs
+    config.add_show_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections_with_objs
     config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_search: true
     config.add_show_field 'source_id_ssim',                  label: 'Source'
     config.add_show_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
