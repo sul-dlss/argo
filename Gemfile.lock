@@ -281,7 +281,6 @@ GEM
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
     erubi (1.7.1)
-    erubis (2.7.0)
     execjs (2.7.0)
     eye (0.10.0)
       celluloid (~> 0.17.3)
@@ -738,7 +737,6 @@ DEPENDENCIES
   dlss-capistrano (~> 3.1)
   dor-services (~> 6.0, >= 6.0.1)
   equivalent-xml (>= 0.6.0)
-  erubis
   eye
   factory_bot_rails
   faraday
