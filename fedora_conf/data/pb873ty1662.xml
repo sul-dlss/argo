@@ -4,7 +4,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
 <foxml:objectProperties>
 <foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
-<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Annual report of the State Corporation Commission showing the condition of the incorporated state banks and other institutions operating in Virginia at the close of business"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE="Fedora Object Label for this collection"/>
 <foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="argo.stanford.edu"/>
 <foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2014-07-31T22:56:35.559Z"/>
 <foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2014-07-31T23:01:45.441Z"/>
