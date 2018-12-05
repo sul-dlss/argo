@@ -324,56 +324,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#get_file' do
-    context 'when they have manage_content access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-      it 'should have dor-services fetch a file from the workspace' do
-        allow(@item).to receive(:get_file).and_return('abc')
-        expect(@item).to receive(:get_file)
-        allow(Time).to receive(:now).and_return(Time.parse 'Mon, 30 Nov 2015 20:19:43 UTC')
-        get 'get_file', params: { file: 'somefile.txt', id: @pid }
-        expect(response.headers['Last-Modified']).to eq 'Mon, 30 Nov 2015 20:19:43 -0000'
-      end
-    end
-
-    context 'when the user can not view_content' do
-      before do
-        allow(controller).to receive(:authorize!).with(:view_content, Dor::Item).and_raise(CanCan::AccessDenied)
-      end
-
-      it 'returns a 403' do
-        get 'get_file', params: { file: 'somefile.txt', id: @pid }
-        expect(response.code).to eq('403')
-      end
-    end
-  end
-
-  describe '#get_preserved_file' do
-    context 'when they have manage_content access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'returns a response with the preserved file content as the body and the right headers' do
-        mock_file_name = 'preserved_file'
-        mock_version = 2
-        mock_content = 'preserved file content'
-        allow(@item).to receive(:get_preserved_file).with(mock_file_name, mock_version).and_return(mock_content)
-
-        last_modified_lower_bound = Time.now.utc.rfc2822
-        get 'get_preserved_file', params: { file: mock_file_name, version: mock_version, id: @pid }
-        expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
-        expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
-        expect(response.headers['Content-Type']).to eq('application/octet-stream')
-        expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{mock_file_name}")
-        expect(response.code).to eq('200')
-        expect(response.body).to eq(mock_content)
-      end
-    end
-  end
-
   describe '#datastream_update' do
     let(:xml) { '<contentMetadata/>' }
     let(:invalid_apo_xml) { '<hydra:isGovernedBy rdf:resource="info:fedora/druid:not_exist"/>' }
@@ -600,33 +550,6 @@ RSpec.describe ItemsController, type: :controller do
       expect(Dor::Config.workflow.client).to receive(:update_workflow_status).with('dor', @pid, 'accessionWF', 'publish', 'ready').and_return(nil)
       post :workflow_update, params: { id: @pid, wf_name: 'accessionWF', process: 'publish', status: 'ready' }
       expect(subject).to redirect_to(solr_document_path(@pid))
-    end
-  end
-
-  describe '#file' do
-    it 'requires a file parameter' do
-      expect { get :file, params: { id: @pid } }.to raise_error(ArgumentError)
-    end
-    it 'checks for a file in the workspace' do
-      expect(@item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
-      get :file, params: { id: @pid, file: 'foo.jp2' }
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:available_in_workspace)).to be_truthy
-      expect(assigns(:available_in_workspace_error)).to be_nil
-    end
-    it 'handles missing files in the workspace' do
-      expect(@item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
-      get :file, params: { id: @pid, file: 'bar.tif' }
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:available_in_workspace)).to be_falsey
-      expect(assigns(:available_in_workspace_error)).to be_nil
-    end
-    it 'handles SFTP errors' do
-      expect(@item).to receive(:list_files).and_raise(Net::SSH::AuthenticationFailed)
-      get :file, params: { id: @pid, file: 'foo.jp2' }
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:available_in_workspace)).to be_falsey
-      expect(assigns(:available_in_workspace_error)).to match(/Net::SSH::AuthenticationFailed/)
     end
   end
 
