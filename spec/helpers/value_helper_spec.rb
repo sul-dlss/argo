@@ -8,11 +8,28 @@ RSpec.describe ValueHelper do
   let(:blacklight_config) { Blacklight::Configuration.new }
   let(:search_state) { Blacklight::SearchState.new({}, blacklight_config) }
   let(:search_action_path) { '/search_action_path' }
+  let(:collection) do
+    double('collection', label: 'Boring Fedora Object Label', pid: 'druid:abc123')
+  end
+  let(:honeybadger) { double(Honeybadger) }
 
   before(:each) do
     allow(helper).to receive(:blacklight_config).and_return blacklight_config
     allow(helper).to receive(:search_state).and_return search_state
     allow(helper).to receive(:search_action_path).and_return search_action_path
+  end
+
+  describe '#object_title' do
+    it 'should fetch the object title from descMetadata and not fedora label' do
+      expect(Honeybadger).not_to receive(:notify)
+      allow(collection).to receive_message_chain(:descMetadata, :title_info).and_return(['But catz are nice too', 'A different node that will not show'])
+      expect(helper.object_title(collection)).to eq 'But catz are nice too'
+    end
+    it 'should notify HoneyBadger and return Fedora label if there is no title in descMetadata' do
+      allow(collection).to receive_message_chain(:descMetadata, :title_info).and_return([''])
+      expect(Honeybadger).to receive(:notify).with('No title found in descMetadata for collection druid:abc123')
+      expect(helper.object_title(collection)).to eq 'Boring Fedora Object Label'
+    end
   end
 
   describe '#link_to_admin_policy' do

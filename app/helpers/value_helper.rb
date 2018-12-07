@@ -2,6 +2,15 @@
 
 module ValueHelper
   # Renderers
+
+  # Given a fedora object, fetch the preferred object title from MODs, if not found, notify Honeybadger and return Fedora label
+  # @return [String] object title, as pulled from descMetadata
+  def object_title(obj)
+    return obj.descMetadata.title_info.first.strip if obj.descMetadata.title_info.first.present?
+    Honeybadger.notify("No title found in descMetadata for collection #{obj.pid}")
+    obj.label
+  end
+
   def label_for_druid(druid)
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
     Rails.cache.fetch("label_for_#{druid}", expires_in: 1.hour) do
