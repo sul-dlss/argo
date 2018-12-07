@@ -1,0 +1,2 @@
+$('#collection_message').html('Collection successfully added');
+$('#collection_list').append("<%= escape_javascript(render partial: 'items/collection_ui_line_item', locals: { col: @col }) %>");

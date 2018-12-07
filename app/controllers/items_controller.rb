@@ -140,6 +140,7 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html { render status: :ok, plain: 'Collection added!' }
       else
+        format.js   { @col = Dor.find(params[:collection]) }
         format.html { redirect_to solr_document_path(params[:id]), notice: 'Collection successfully added' }
       end
     end
@@ -151,6 +152,7 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html { render status: :ok, plain: 'Collection removed!' }
       else
+        format.js  { render }
         format.any { redirect_to solr_document_path(params[:id]), notice: 'Collection successfully removed' }
       end
     end
