@@ -136,24 +136,29 @@ class ItemsController < ApplicationController
 
   def add_collection
     @object.add_collection(params[:collection])
+    response_message = 'Collection added successfully'
     respond_to do |format|
       if params[:bulk]
-        format.html { render status: :ok, plain: 'Collection added!' }
+        format.html { render status: :ok, plain: response_message }
       else
-        format.js   { @col = Dor.find(params[:collection]) }
-        format.html { redirect_to solr_document_path(params[:id]), notice: 'Collection successfully added' }
+        format.json do
+          new_collection_html = render_to_string('items/_collection_ui_line_item', formats: [:html], layout: false, locals: { col: Dor.find(params[:collection]) })
+          render status: :ok, plain: { 'message': response_message, 'new_collection_html': new_collection_html }.to_json
+        end
+        format.html { redirect_to solr_document_path(params[:id]), notice: response_message }
       end
     end
   end
 
   def remove_collection
     @object.remove_collection(params[:collection])
+    response_message = 'Collection successfully removed'
     respond_to do |format|
       if params[:bulk]
-        format.html { render status: :ok, plain: 'Collection removed!' }
+        format.html { render status: :ok, plain: response_message }
       else
-        format.js  { render }
-        format.any { redirect_to solr_document_path(params[:id]), notice: 'Collection successfully removed' }
+        format.json { render status: :ok, plain: { 'message': response_message, 'druid': params[:collection].gsub('druid:', '') }.to_json }
+        format.any  { redirect_to solr_document_path(params[:id]), notice: response_message }
       end
     end
   end

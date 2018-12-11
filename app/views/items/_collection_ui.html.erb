@@ -17,11 +17,11 @@
     <h3 class="panel-title">Add a collection</h3>
   </div>
   <div class='panel-body'>
-    <%= form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid), remote: true do %>
+    <%= form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid), id: 'add_collection_form' do %>
       <div class='form-group'>
         <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-control' %>
       </div>
-      <button class='btn btn-primary'>Add Collection</button>
+      <button id='add_collection' class='btn btn-primary'>Add Collection</button>
     <% end %>
   </div>
 </div>
