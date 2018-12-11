@@ -16,7 +16,7 @@ email: false
 before_install:
   - docker pull suldlss/workflow-server:latest
   - docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
-  - docker run -d -p 8984:8983 -v $PWD/solr_conf/conf/:/myconfig solr:7 solr-create -c argo -d /myconfig
+  # - docker run -d -p 8984:8983 -v $PWD/solr_conf/conf/:/myconfig solr:7 solr-create -c argo -d /myconfig
   - docker run -d -p 8983:8080 suldlss/fcrepo:no-messaging-latest
   - docker ps -a
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
