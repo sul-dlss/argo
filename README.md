@@ -55,6 +55,9 @@ rake argo:install
 docker-compose up
 ```
 
+Need to emulate an administrator role in your browser?  Edit `docker-compose.yml`, and under services:web:environment
+change the value of `ROLES` to `sdr:administrator-role`
+
 If you want to use the rails console use:
 
 ```
