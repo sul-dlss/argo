@@ -445,11 +445,15 @@ RSpec.describe ItemsController, type: :controller do
         expect(response.code).to eq('200')
       end
 
-      it 'does not add a collection if there is already one' do
-        allow(@item).to receive(:collections).and_return(['collection'])
-        expect(@item).not_to receive(:add_collection)
+      it 'removes existing collections first if there are already one or more, then adds new collection' do
+        removed_collection_pid1 = 'druid:oo00ooo0001'
+        removed_collection_pid2 = 'druid:oo00ooo0002'
+        allow(@item).to receive(:collections).and_return([Dor::Collection.new(pid: removed_collection_pid1), Dor::Collection.new(pid: removed_collection_pid2)])
+        expect(@item).to receive(:remove_collection).with(removed_collection_pid1)
+        expect(@item).to receive(:remove_collection).with(removed_collection_pid2)
+        expect(@item).to receive(:add_collection).with(@collection_druid)
         post 'set_collection', params: { id: @pid, collection: @collection_druid, bulk: true }
-        expect(response.code).to eq('500')
+        expect(response.code).to eq('200')
       end
     end
   end

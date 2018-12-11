@@ -114,22 +114,14 @@ class ItemsController < ApplicationController
   end
 
   def set_collection
-    can_set_collection = (@object.collections.size == 0)
-    @object.add_collection(params[:collection]) if can_set_collection
+    @object.collections.each { |collection| @object.remove_collection(collection.pid) } # first remove any existing collections
+    @object.add_collection(params[:collection]) # now add the collection
+    response_message = 'Collection successfully set.'
     respond_to do |format|
       if params[:bulk]
-        if can_set_collection
-          format.html { render status: :ok, plain: 'Collection set!' }
-        else
-          format.html { render status: 500, plain: 'Collection not set, already has collection(s)' }
-        end
+        format.html { render status: :ok, plain: response_message }
       else
-        msg = if can_set_collection
-                'Collection successfully set'
-              else
-                'Collection not set, already has collection(s)'
-              end
-        format.html { redirect_to solr_document_path(params[:id]), notice: msg }
+        format.html { redirect_to solr_document_path(params[:id]), notice: response_message }
       end
     end
   end
