@@ -492,6 +492,7 @@ class ItemsController < ApplicationController
     end
 
     @object.delete
+    Dor::CleanupService.remove_active_workflows(@object.pid)
     Dor::SearchService.solr.delete_by_id(params[:id])
     Dor::SearchService.solr.commit
 
