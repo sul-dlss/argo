@@ -3,4 +3,4 @@ BULK_METADATA:
 
 # URLs
 FEDORA_URL:   'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
-SOLRIZER_URL: 'http://localhost:8984/solr/argo-test'
+SOLRIZER_URL: 'http://localhost:8984/solr/argo'
