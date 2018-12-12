@@ -29,7 +29,6 @@ RSpec.describe ItemsController, type: :controller do
     allow(@item).to receive(:can_manage_item?).and_return(false)
     allow(@item).to receive(:can_manage_content?).and_return(false)
     allow(@item).to receive(:can_view_content?).and_return(false)
-    allow(@item).to receive(:pid).and_return('object:pid')
     allow(@item).to receive(:admin_policy_object).and_return(apo)
     allow(@item).to receive(:workflows).and_return(wf)
     allow(Dor::SearchService.solr).to receive(:add)
@@ -39,18 +38,18 @@ RSpec.describe ItemsController, type: :controller do
 
   describe 'release_hold' do
     it 'should release an item that is on hold if its apo has been ingested' do
-      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
+      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
       expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
       expect(Dor::Config.workflow.client).to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
     end
     it 'should refuse to release an item that isnt on hold' do
-      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
+      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
       expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
     end
     it 'should refuse to release an item whose apo hasnt been ingested' do
-      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', 'object:pid', 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
+      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
       expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
       expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
@@ -82,6 +81,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item).to receive(:delete)
         expect(Dor::SearchService.solr).to receive(:delete_by_id).with(@pid)
         expect(Dor::SearchService.solr).to receive(:commit)
+        expect(Dor::CleanupService).to receive(:remove_active_workflows).with(@pid).once
         post 'purge_object', params: { id: @pid }
       end
 
