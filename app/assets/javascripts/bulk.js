@@ -123,11 +123,7 @@ function create_desc_md(druids){
 }
 function set_collection(druids){
 	var collection_id = document.getElementById('set_collection_select').value;
-	process_post(druids, set_collection_url, {collection: collection_id}, "Collection added");
-}
-function add_collection(druids){
-	var collection_id = document.getElementById('add_collection_select').value;
-	process_post(druids, add_collection_url, {collection: collection_id}, "Collection added");
+	process_post(druids, set_collection_url, {collection: collection_id}, "Collection set");
 }
 function detect_duplicate_encoding(druids){
 	process_get(druids, detect_duplicate_encoding_url, 'No Duplicates.');

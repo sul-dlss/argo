@@ -24,7 +24,6 @@ RSpec.feature 'Bulk actions view', js: true do
     expect(page).to have_button('Set object rights', disabled: false)
     expect(page).to have_button('Set content type', disabled: false)
     expect(page).to have_button('Set collection', disabled: false)
-    expect(page).to have_button('Add collection', disabled: false)
     expect(page).to have_button('Apply APO defaults', disabled: false)
     expect(page).to have_button('Add a workflow', disabled: false)
     expect(page).to have_button('Close versions', disabled: false)
