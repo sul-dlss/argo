@@ -10,8 +10,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
   let(:dor_registration) { { pid: 'abc' } }
   describe '#create' do
     it 'does something' do
-      expect(Dor::RegistrationService)
-        .to receive(:create_from_request)
+      expect(DorServices::Client)
+        .to receive(:register)
         .and_return(dor_registration)
       expect(Dor::IndexingService)
         .to receive(:reindex_pid_list)
