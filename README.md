@@ -12,7 +12,6 @@ Argo is the administrative interface to the Stanford Digital Repository.
 ### System Requirements
 
 1. Install Docker
-
 2. Install Ruby 2.5.3
 
 ### Check Out the Code
@@ -21,17 +20,6 @@ Argo is the administrative interface to the Stanford Digital Repository.
 git clone https://github.com/sul-dlss/argo.git
 cd argo
 ```
-
-### Configure the local environment and settings
-
-Settings configuration is managed using the [config](https://github.com/railsconfig/config) gem. Developers should create (or obtain in one of the argo branches in the `shared_configs` repo) the `config/settings/development.local.yml` file to set local development variables correctly.
-
-You will also need to create or acquire the following certificate files (per environment):
-
- - `config/certs/argo-client.crt`  # should match the value specified by `Settings.SSL.CERT_FILE`
- - `config/certs/argo-client.key`  # should match the value specified by `Settings.SSL.KEY_FILE`
-
-For vanilla Stanford laptop installations, the cert files and the local settings file should be available from a private DLSS repository.  You can clone this and create symlinks to the checked out config files (instead of having copies of those files in place).  That way, you can easily pull changes to the vanilla configs as defaults are changed, and you can submit such changes back upstream, in place on your instance.  An Argo developer or DevOps person should be able to point you to the private config repo and explain how to use it.
 
 ### Run bundler to install the Gem dependencies
 
@@ -52,7 +40,7 @@ rake argo:install
 ## Run the servers
 
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 If you want to use the rails console use:
@@ -77,7 +65,7 @@ docker-compose run --rm web rake argo:repo:load
 
 ### Run the tests
 
-To run the test suite (which runs against the `test` Fedora repo/Solr collection), invoke `rspec` from the Argo app root
+To run the test suite, invoke `rspec` from the Argo app root
 ```bash
 rspec
 ```
@@ -90,7 +78,6 @@ The continuous integration build can be run by:
 ```bash
 RAILS_ENV=test bundle exec rake ci
 ```
-
 
 ### Delete records
 
