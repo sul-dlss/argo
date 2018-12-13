@@ -9,6 +9,8 @@ coverage/
 db/*.sqlite3
 dpg_pool
 gem_graph.png
+
+/public/assets
 public/images/.dpg_pool
 config/settings.local.yml
 config/settings/*.local.yml
