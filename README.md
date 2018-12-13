@@ -55,6 +55,13 @@ If you want to run background jobs, which are necessary for spreadsheet bulk upl
 docker-compose run web bin/delayed_job start
 ```
 
+Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container and reload the data:
+
+```
+docker-compose build web
+docker-compose run --rm web rake argo:repo:load
+```
+
 ## Load and index records
 
 ```
@@ -65,8 +72,9 @@ docker-compose run --rm web rake argo:repo:load
 
 ### Run the tests
 
-To run the test suite, invoke `rspec` from the Argo app root
+To run the test suite, invoke `rspec` from the Argo app root.  Note that the docker containers need to be running already for this work.
 ```bash
+# docker-compose up -d # (if not already running)
 rspec
 ```
 

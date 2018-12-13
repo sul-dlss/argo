@@ -10,7 +10,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      ROLES: sdr:manager-role
+      ROLES: sdr:administrator-role
       REMOTE_USER: blalbrit@stanford.edu
       SOLR_URL: http://solr:8983/solr/argo
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
