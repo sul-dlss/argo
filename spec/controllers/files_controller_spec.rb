@@ -65,26 +65,26 @@ RSpec.describe FilesController, type: :controller do
   end
 
   describe '#index' do
-    it 'requires a file parameter' do
+    it 'requires an id parameter' do
       expect { get :index, params: { item_id: pid } }.to raise_error(ArgumentError)
     end
     it 'checks for a file in the workspace' do
       expect(item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
-      get :index, params: { item_id: pid, file: 'foo.jp2' }
+      get :index, params: { item_id: pid, id: 'foo.jp2' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_truthy
       expect(assigns(:available_in_workspace_error)).to be_nil
     end
     it 'handles missing files in the workspace' do
       expect(item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
-      get :index, params: { item_id: pid, file: 'bar.tif' }
+      get :index, params: { item_id: pid, id: 'bar.tif' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_falsey
       expect(assigns(:available_in_workspace_error)).to be_nil
     end
     it 'handles SFTP errors' do
       expect(item).to receive(:list_files).and_raise(Net::SSH::AuthenticationFailed)
-      get :index, params: { item_id: pid, file: 'foo.jp2' }
+      get :index, params: { item_id: pid, id: 'foo.jp2' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_falsey
       expect(assigns(:available_in_workspace_error)).to match(/Net::SSH::AuthenticationFailed/)

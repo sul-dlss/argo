@@ -6,10 +6,10 @@ class FilesController < ApplicationController
   ##
   # Brings up a modal dialog that lists all locations of the file
   def index
-    raise ArgumentError, 'Missing file parameter' if params[:file].blank?
+    raise ArgumentError, 'Missing file parameter' if params[:id].blank?
 
     @available_in_workspace_error = nil
-    @available_in_workspace = @object.list_files.include?(params[:file])
+    @available_in_workspace = @object.list_files.include?(params[:id])
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
