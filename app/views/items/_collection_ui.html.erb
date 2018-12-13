@@ -1,16 +1,13 @@
+<div id='collection_message' class='alert-info' />
+
 <div class='panel panel-default'>
   <div class='panel-heading'>
     <h3 class="panel-title">Remove existing collections</h3>
   </div>
   <div class='panel-body'>
-    <ul class='list-group'>
+    <ul id='collection_list' class='list-group'>
       <% @object.collections.each do |col| %>
-        <li class='list-group-item'>
-          <%= object_title(col) %>
-          <%= link_to url_for(:controller => :items, :action => :remove_collection, :id => @object.pid, :collection => col.pid) do %>
-            <span class='glyphicon glyphicon-remove text-danger'></span>
-          <% end %>
-        </li>
+        <%= render partial: 'collection_ui_line_item', locals: { col: col } %>
       <% end %>
   </div>
 </div>
@@ -20,11 +17,11 @@
     <h3 class="panel-title">Add a collection</h3>
   </div>
   <div class='panel-body'>
-    <%= form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid) do %>
+    <%= form_tag url_for(:controller => :items, :action => :add_collection, :id => @object.pid), id: 'add_collection_form' do %>
       <div class='form-group'>
         <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-control' %>
       </div>
-      <button class='btn btn-primary'>Add Collection</button>
+      <button id='add_collection' class='btn btn-primary'>Add Collection</button>
     <% end %>
   </div>
 </div>
