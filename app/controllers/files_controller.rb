@@ -9,34 +9,40 @@ class FilesController < ApplicationController
     raise ArgumentError, 'Missing file parameter' if params[:id].blank?
 
     @available_in_workspace_error = nil
-    @available_in_workspace = @object.list_files.include?(params[:id])
+    begin
+      @available_in_workspace = @object.list_files.include?(params[:id])
+    rescue SocketError, Net::SSH::Exception => e
+      @available_in_workspace_error = "#{e.class}: #{e}"
+    end
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
-  rescue Net::SSH::Exception => e
-    @available_in_workspace_error = "#{e.class}: #{e}"
   end
 
   def show
     authorize! :view_content, @object
-    data = @object.get_file(params[:id])
+    data = @object.get_file(filename)
     response.headers['Content-Type'] = 'application/octet-stream'
-    response.headers['Content-Disposition'] = 'attachment; filename=' + params[:id]
+    response.headers['Content-Disposition'] = 'attachment; filename=' + filename
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
     self.response_body = data
   end
 
   def preserved
     authorize! :view_content, @object
-    file_content = @object.get_preserved_file params[:id], params[:version].to_i
+    file_content = @object.get_preserved_file filename, params[:version].to_i
     response.headers['Content-Type'] = 'application/octet-stream'
-    response.headers['Content-Disposition'] = "attachment; filename=#{params[:id]}"
+    response.headers['Content-Disposition'] = "attachment; filename=#{filename}"
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
     self.response_body = file_content
   end
 
   private
+
+  def filename
+    [params[:id], params[:format]].join('.')
+  end
 
   def load_resource
     @object = Dor.find params[:item_id]
