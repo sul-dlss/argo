@@ -14,8 +14,6 @@ function pathTo(path) {
 Argo = {
     initialize: function() {
       this.apoEditor()
-      this.modalDialog()
-
     },
     apoEditor: function () {
         var element = $("[data-behavior='apo-form']")
@@ -23,18 +21,6 @@ Argo = {
             var Form = require('modules/apo_form');
             new Form(element).init();
         }
-    },
-    modalDialog: function() {
-        // make the default modal resizable and draggable.  resize from top and side borders (things got
-        // wonky with corner and bottom resizing, in what little testing i did).
-        $(".modal-dialog").resizable({handles: "n, e, w"});
-        $(".modal-dialog").draggable({});
-
-        // when the modal is closed, reset its size and position.
-        $(".modal-dialog .close").on("click", function() {
-            // draggable and resizable do their respective things via a local style attr, so just clear that.
-            $(".modal-dialog").attr("style", "");
-        });
     }
 }
 

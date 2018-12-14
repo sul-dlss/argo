@@ -25,18 +25,20 @@ RSpec.describe 'files/index.html.erb' do
     cm
   end
   let(:obj) { double(pid: 'druid:rn653dy9317', to_param: 'druid:rn653dy9317', contentMetadata: contentMetadata) }
-  it 'renders the partial content' do
+
+  before do
     assign(:object, obj)
     assign(:available_in_workspace, true)
     assign(:available_in_workspace_error, nil)
     expect(view).to receive(:params).and_return(id: 'M1090_S15_B01_F07_0106.jp2', item_id: 'druid:rn653dy9317').at_least(1)
     expect(view).to receive(:has_been_accessioned?).with(obj.pid).and_return(true)
     expect(view).to receive(:last_accessioned_version).with(obj).and_return('1.0.0')
-
     render
+  end
 
-    expect(rendered).to have_css 'div.row[1]', text: 'Workspace'
-    expect(rendered).to have_css 'div.row[2]', text: 'Stacks'
-    expect(rendered).to have_css 'div.row[3]', text: 'Preservation'
+  it 'renders the partial content' do
+    expect(rendered).to have_content 'Workspace'
+    expect(rendered).to have_content 'Stacks'
+    expect(rendered).to have_content 'Preservation'
   end
 end
