@@ -8,13 +8,8 @@ RSpec.feature 'Item view', js: true do
   end
 
   context 'when the file is not on the workspace' do
-    let(:sftp_dir) { double('sftp dir') }
-    let(:conn) { double('SFTP conn', dir: sftp_dir) }
-    let(:file) { double('sftp file', name: 'this_is_not_the_file_you_are_looking_for.txt') }
-
     before do
-      allow(Net::SFTP).to receive(:start).and_return(conn)
-      allow(sftp_dir).to receive(:entries).and_yield(file)
+      allow(DorServices::Client).to receive(:list_files).and_return(['this_is_not_the_file_you_are_looking_for.txt'])
     end
 
     scenario 'shows the file info' do
@@ -51,14 +46,11 @@ RSpec.feature 'Item view', js: true do
   end
 
   context 'when the file is on the workspace' do
-    let(:sftp_dir) { double('sftp dir') }
-    let(:conn) { double('SFTP conn', dir: sftp_dir) }
-    let(:file) { double('sftp file', name: filename) }
     let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
     before do
-      allow(Net::SFTP).to receive(:start).and_return(conn)
-      allow(sftp_dir).to receive(:entries).and_yield(file)
-      allow(conn).to receive(:download!).and_return('the file contents')
+      allow(DorServices::Client).to receive(:list_files).and_return([filename])
+      allow(DorServices::Client).to receive(:retrieve_file).and_return('the file contents')
+
       page.driver.browser.download_path = '.'
     end
 

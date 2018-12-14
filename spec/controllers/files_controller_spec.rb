@@ -20,7 +20,9 @@ RSpec.describe FilesController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
       end
       it 'has dor-services-app fetch a file from the workspace' do
-        expect(item).to receive(:get_file).with('somefile.txt').and_return('abc')
+        expect(DorServices::Client).to receive(:retrieve_file)
+          .with(object: pid, filename: 'somefile.txt')
+          .and_return('abc')
         allow(Time).to receive(:now).and_return(Time.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
         get :show, params: { id: 'somefile.txt', item_id: pid }
         expect(response.headers['Last-Modified']).to eq 'Mon, 30 Nov 2015 20:19:43 -0000'
@@ -67,26 +69,21 @@ RSpec.describe FilesController, type: :controller do
     it 'requires an id parameter' do
       expect { get :index, params: { item_id: pid } }.to raise_error(ArgumentError)
     end
+
     it 'checks for a file in the workspace' do
-      expect(item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      expect(DorServices::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
       get :index, params: { item_id: pid, id: 'foo.jp2' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_truthy
-      expect(assigns(:available_in_workspace_error)).to be_nil
+      expect(assigns(:object)).to respond_to(:contentMetadata)
     end
+
     it 'handles missing files in the workspace' do
-      expect(item).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      expect(DorServices::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
       get :index, params: { item_id: pid, id: 'bar.tif' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_falsey
-      expect(assigns(:available_in_workspace_error)).to be_nil
-    end
-    it 'handles SFTP errors' do
-      expect(item).to receive(:list_files).and_raise(Net::SSH::AuthenticationFailed)
-      get :index, params: { item_id: pid, id: 'foo.jp2' }
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:available_in_workspace)).to be_falsey
-      expect(assigns(:available_in_workspace_error)).to match(/Net::SSH::AuthenticationFailed/)
+      expect(assigns(:object)).to respond_to(:contentMetadata)
     end
   end
 end
