@@ -18,6 +18,7 @@ module DorServices
         req.headers['Content-Type'] = 'application/json'
         req.body = params.to_json
       end
+      raise "#{resp.reason_phrase}: #{resp.status}  (#{resp.body})" unless resp.success?
       JSON.parse(resp.body).with_indifferent_access
     end
 
