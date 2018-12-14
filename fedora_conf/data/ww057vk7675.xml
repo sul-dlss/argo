@@ -8783,6 +8783,9 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
       <identifier type="workgroup">dlss:pmag-staff</identifier>
     </group>
     <group>
+      <identifier type="workgroup">sdr:administrator-role</identifier>
+    </group>
+    <group>
       <identifier type="workgroup">dlss:developers</identifier>
     </group>
     <group>

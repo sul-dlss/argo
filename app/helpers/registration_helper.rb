@@ -42,7 +42,8 @@ module RegistrationHelper
       'Map',
       'Media',
       'Software',
-      '3D'
+      '3D',
+      'Document'
     ]
   end
 
