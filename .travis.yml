@@ -23,14 +23,19 @@ before_install:
 
 before_script:
   - bin/rails db:test:prepare
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script: bundle exec rake ci
+
 after_script:
-- bundle exec codeclimate-test-reporter
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # speeds up bundle install
     - RAILS_ENV=test # needed to load data
+    - CC_TEST_REPORTER_ID=266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a 
 
 cache: bundler
