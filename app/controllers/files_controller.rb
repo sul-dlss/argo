@@ -6,11 +6,11 @@ class FilesController < ApplicationController
   ##
   # Brings up a modal dialog that lists all locations of the file
   def index
-    raise ArgumentError, 'Missing file parameter' if params[:id].blank?
+    raise ArgumentError, 'Missing file parameter' if filename.blank?
 
     @available_in_workspace_error = nil
     begin
-      @available_in_workspace = @object.list_files.include?(params[:id])
+      @available_in_workspace = @object.list_files.include?(filename)
     rescue SocketError, Net::SSH::Exception => e
       @available_in_workspace_error = "#{e.class}: #{e}"
     end
@@ -41,7 +41,7 @@ class FilesController < ApplicationController
   private
 
   def filename
-    [params[:id], params[:format]].join('.')
+    params[:id]
   end
 
   def load_resource
