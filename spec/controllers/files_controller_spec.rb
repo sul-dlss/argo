@@ -22,7 +22,7 @@ RSpec.describe FilesController, type: :controller do
       it 'has dor-services-app fetch a file from the workspace' do
         expect(item).to receive(:get_file).with('somefile.txt').and_return('abc')
         allow(Time).to receive(:now).and_return(Time.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
-        get :show, params: { id: 'somefile', format: 'txt', item_id: pid }
+        get :show, params: { id: 'somefile.txt', item_id: pid }
         expect(response.headers['Last-Modified']).to eq 'Mon, 30 Nov 2015 20:19:43 -0000'
       end
     end
@@ -33,7 +33,7 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'returns a 403' do
-        get :show, params: { id: 'somefile', format: 'txt', item_id: pid }
+        get :show, params: { id: 'somefile.txt', item_id: pid }
         expect(response.code).to eq('403')
       end
     end
@@ -46,17 +46,17 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'returns a response with the preserved file content as the body and the right headers' do
-        mock_file_name = 'preserved_file'
+        mock_file_name = 'preserved_file.txt'
         mock_version = 2
         mock_content = 'preserved file content'
-        allow(item).to receive(:get_preserved_file).with("#{mock_file_name}.txt", mock_version).and_return(mock_content)
+        allow(item).to receive(:get_preserved_file).with(mock_file_name, mock_version).and_return(mock_content)
 
         last_modified_lower_bound = Time.now.utc.rfc2822
-        get :preserved, params: { id: mock_file_name, format: 'txt', version: mock_version, item_id: pid }
+        get :preserved, params: { id: mock_file_name, version: mock_version, item_id: pid }
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
         expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
         expect(response.headers['Content-Type']).to eq('application/octet-stream')
-        expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{mock_file_name}.txt")
+        expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{mock_file_name}")
         expect(response.code).to eq('200')
         expect(response.body).to eq(mock_content)
       end

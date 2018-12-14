@@ -89,7 +89,7 @@ Argo::Application.routes.draw do
 
   resources :items do
     resources 'uploads', only: [:new, :create]
-    resources 'files', only: [:index, :show] do
+    resources 'files', only: [:index, :show], constraints: { id: /.*/ } do
       member do
         get 'preserved'
       end
