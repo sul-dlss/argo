@@ -2,25 +2,25 @@
   <div class="row">
     Workspace:
   <% if @available_in_workspace %>
-    <%= link_to params[:file], item_file_path(item_id: @object, id: params[:file]) %>
+    <%= link_to params[:id], item_file_path(item_id: @object, id: params[:id]) %>
   <% else %>
     not available <span class="text-danger"><%= @available_in_workspace_error -%></span>
   <% end %>
   </div>
 
 <%# TODO: Use the contentMetadata OM for parsing metadata record %>
-<% @object.contentMetadata.ng_xml.search("//file[@id='#{params[:file]}']").each do |file| %>
+<% @object.contentMetadata.ng_xml.search("//file[@id='#{params[:id]}']").each do |file| %>
 <%   if file['shelve'] == 'yes' %>
       <div class="row">
         Stacks:
-        <%= link_to params[:file], stacks_url_full_size(@object, params[:file]) -%>
+        <%= link_to params[:file], stacks_url_full_size(@object, params[:id]) -%>
       </div>
 <%   end %>
 <%# TODO: has_been_accessioned? is deprecated, migrate to async call %>
 <%   if file['preserve'] == 'yes' && has_been_accessioned?(@object.pid) %>
       <div class="row">
         Preservation:
-        <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:file], version: last_accessioned_version(@object)) %>
+        <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:id], version: last_accessioned_version(@object)) %>
       </div>
 <%   end %>
 <% end %>
