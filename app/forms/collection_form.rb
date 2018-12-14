@@ -16,7 +16,7 @@ class CollectionForm < BaseForm
 
   # Copies the values to the model and saves and indexes
   def save
-    register_model
+    @model ||= register_model
     sync
     model.save
     model.update_index
@@ -37,9 +37,9 @@ class CollectionForm < BaseForm
 
   # @return [Dor::Collection] registers the Collection
   def register_model
-    response = Dor::RegistrationService.create_from_request(register_params)
+    response = DorServices::Client.register(params: register_params)
     # Once it's been created we populate it with its metadata
-    @model = Dor.find(response[:pid])
+    Dor.find(response[:pid])
   end
 
   # @return [Hash] the parameters used to register an apo. Must be called after `validate`

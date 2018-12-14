@@ -272,8 +272,8 @@ RSpec.describe ApoForm do
       it 'hits the registration service to register both an APO and a collection' do
         # verify that an APO is registered
         expect(apo).to receive(:add_roleplayer).exactly(4).times
-        expect(Dor::RegistrationService).to receive(:create_from_request) do |args|
-          expect(args).to match a_hash_including(
+        expect(DorServices::Client).to receive(:register) do |args|
+          expect(args[:params]).to match a_hash_including(
             label: 'New APO Title',
             object_type: 'adminPolicy',
             admin_policy: 'druid:hv992ry2431', # Uber-APO
@@ -286,8 +286,8 @@ RSpec.describe ApoForm do
 
         # verify that the collection is also created
         expect(apo).to receive(:add_default_collection).with(collection.pid)
-        expect(Dor::RegistrationService).to receive(:create_from_request) do |params|
-          expect(params).to match a_hash_including(
+        expect(DorServices::Client).to receive(:register) do |args|
+          expect(args[:params]).to match a_hash_including(
             label: 'col title',
             object_type: 'collection',
             admin_policy: apo.pid,

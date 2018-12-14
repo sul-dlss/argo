@@ -29,8 +29,8 @@ RSpec.describe CollectionForm do
     expect(mock_desc_md_ds).to receive(:content=)
     expect(mock_desc_md_ds).to receive(:save)
 
-    expect(Dor::RegistrationService).to receive(:create_from_request) do |p|
-      expect(p).to match a_hash_including(
+    expect(DorServices::Client).to receive(:register) do |p|
+      expect(p[:params]).to match a_hash_including(
         label: title,
         object_type: 'collection',
         admin_policy: apo.pid,

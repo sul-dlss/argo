@@ -7,6 +7,7 @@ class ApoForm < BaseForm
   DEFAULT_MANAGER_WORKGROUPS = %w(developer service-manager metadata-staff).freeze
 
   attr_reader :default_collection_pid
+
   # @param [HashWithIndifferentAccess] params the parameters from the form
   # @return [Boolean] true if the parameters are valid
   def validate(params)
@@ -198,7 +199,7 @@ class ApoForm < BaseForm
 
   # @return [Dor::AdminPolicyObject] registers the APO
   def register_model
-    response = Dor::RegistrationService.create_from_request(register_params)
+    response = DorServices::Client.register(params: register_params)
     # Once it's been created we populate it with its metadata
     Dor.find(response[:pid])
   end
