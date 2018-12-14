@@ -10,16 +10,10 @@ require 'webmock/rspec'
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
 require 'simplecov'
-require 'coveralls'
-SimpleCov.profiles.define 'argo' do
-  add_filter 'spec'
-  add_filter 'vendor'
+SimpleCov.start do
+  add_filter '/spec/'
+  add_filter '/vendor/'
 end
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-                                                                 SimpleCov::Formatter::HTMLFormatter,
-                                                                 Coveralls::SimpleCov::Formatter
-                                                               ])
-SimpleCov.start 'argo'
 
 Capybara.register_driver :chrome do |app|
   browser_options = ::Selenium::WebDriver::Chrome::Options.new
