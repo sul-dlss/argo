@@ -35,9 +35,9 @@ db_password = get_fedora_password(fedora_conf_file_name)
 db_name = 'fedora'
 
 # a simple script that uses the db, selects everything from the table with the pids, and dumps the list to a file
-mysql_script = <<-SQL
-use #{db_name}
-select doPID from doRegistry into OUTFILE "#{out_file_name}";
+mysql_script = <<~SQL
+  use #{db_name}
+  select doPID from doRegistry into OUTFILE "#{out_file_name}";
 SQL
 
 # make sure we can write the files we need to use without stepping on existing files
