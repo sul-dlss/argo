@@ -1,5 +1,9 @@
-<div class="container"><%# Need additional container here %>
-  <div class="row">
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <h4>File Availability</h4>
+</div>
+<div class="modal-body">
+  <div class="">
     Workspace:
   <% if @available_in_workspace %>
     <%= link_to params[:id], item_file_path(item_id: @object, id: params[:id]) %>
@@ -10,18 +14,21 @@
 
 <%# TODO: Use the contentMetadata OM for parsing metadata record %>
 <% @object.contentMetadata.ng_xml.search("//file[@id='#{params[:id]}']").each do |file| %>
-<%   if file['shelve'] == 'yes' %>
-      <div class="row">
-        Stacks:
-        <%= link_to params[:file], stacks_url_full_size(@object, params[:id]) -%>
-      </div>
-<%   end %>
-<%# TODO: has_been_accessioned? is deprecated, migrate to async call %>
-<%   if file['preserve'] == 'yes' && has_been_accessioned?(@object.pid) %>
-      <div class="row">
-        Preservation:
-        <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:id], version: last_accessioned_version(@object)) %>
-      </div>
-<%   end %>
+  <% if file['shelve'] == 'yes' %>
+    <p>
+      Stacks: <%= link_to params[:file], stacks_url_full_size(@object, params[:id]) %>
+    </p>
+  <% end %>
+
+  <%# TODO: has_been_accessioned? is deprecated, migrate to async call %>
+  <% if file['preserve'] == 'yes' && has_been_accessioned?(@object.pid) %>
+        <p>
+          Preservation:
+          <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:id], version: last_accessioned_version(@object)) %>
+        </p>
+  <% end %>
 <% end %>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 </div>
