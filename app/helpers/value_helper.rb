@@ -60,7 +60,7 @@ module ValueHelper
   # @return [String]
   def link_to_admin_policy_with_objs(args)
     policy_link = link_to_admin_policy(args)
-    objs_link = link_to('All objects with this APO', path_for_facet('nonhydrus_apo_title_ssim', args[:document].apo_pid))
+    objs_link = link_to('All objects with this APO', path_for_facet('is_governed_by_ssim', "info:fedora/#{args[:document].apo_pid}"))
     "#{policy_link} (#{objs_link})".html_safe
   end
 
@@ -80,12 +80,11 @@ module ValueHelper
   # @return [String]
   def links_to_collections_with_objs(args, with_objs: true)
     args[:value].map.with_index do |val, i|
-      collection_pid = val.gsub('info:fedora/', '')
       collection_link = link_to(
         args[:document].collection_titles[i],
-        solr_document_path(collection_pid)
+        solr_document_path(val.gsub('info:fedora/', ''))
       )
-      objs_link = link_to('All objects in this collection', path_for_facet('nonhydrus_collection_title_ssim', collection_pid))
+      objs_link = link_to('All objects in this collection', path_for_facet('is_member_of_collection_ssim', val))
       with_objs ? "#{collection_link} (#{objs_link})" : collection_link
     end.join('<br>').html_safe
   end
