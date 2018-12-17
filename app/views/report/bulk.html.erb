@@ -140,7 +140,7 @@ ul li{
 </div>
 <div class="bulk_operation" id="set_collection" name="set_collection">
   <h1>Add/Set a collection for these objects</h1>
-  <p>This will add the selected collection if the object doesn't already have one, or replace any existing collection(s) for an object with the single selected collection.</p>
+  <p>This will add the selected collection if the object doesn't already have one, or replace any existing collection(s) for an object with the single selected collection.  If you select "None" for the collection, all collection associations will be removed, and no new associations will be added.</p>
   <%=select_tag :set_collection_select, options_for_select(current_user.permitted_collections)%>
   <span class="bulk_button" onclick="fetch_druids(set_collection);$('#set_collection').hide(400);">Set Collection</span><br/>
 </div>

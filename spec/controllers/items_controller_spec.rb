@@ -419,6 +419,10 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item).to receive(:add_collection).with('druid:1234')
         post 'add_collection', params: { id: @pid, collection: 'druid:1234' }
       end
+      it 'does not add a collection if no param supplied' do
+        expect(@item).not_to receive(:add_collection).with('druid:1234')
+        post 'add_collection', params: { id: @pid, collection: '' }
+      end
     end
 
     context "when they don't have manage_content access" do
@@ -442,6 +446,15 @@ RSpec.describe ItemsController, type: :controller do
         allow(@item).to receive(:collections).and_return([])
         expect(@item).to receive(:add_collection).with(@collection_druid)
         post 'set_collection', params: { id: @pid, collection: @collection_druid, bulk: true }
+        expect(response.code).to eq('200')
+      end
+
+      it 'remove a collection if a new one is not selected' do
+        removed_collection_pid1 = 'druid:oo00ooo0001'
+        allow(@item).to receive(:collections).and_return([Dor::Collection.new(pid: removed_collection_pid1)])
+        expect(@item).to receive(:remove_collection).with(removed_collection_pid1)
+        expect(@item).not_to receive(:add_collection)
+        post 'set_collection', params: { id: @pid, collection: '', bulk: true }
         expect(response.code).to eq('200')
       end
 
