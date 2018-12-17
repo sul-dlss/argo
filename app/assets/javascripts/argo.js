@@ -55,3 +55,24 @@ function validate_spreadsheet_filetype()
     if((filename.lastIndexOf(".xlsx") == -1) && (filename.lastIndexOf(".xls") == -1) &&  (filename.lastIndexOf(".xml") == -1) && (filename.lastIndexOf(".csv") == -1))
         $('span#bulk-spreadsheet-warning').text("Note: Only spreadsheets or XML files are allowed. Please check your selected file.");
 }
+
+// Allows filtering a list of facets.
+function filterList() {
+    const input = document.getElementById('filterInput');
+    const filter = input.value.toUpperCase();
+    const ul = document.getElementsByClassName('facet-values')[0];
+    const li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (let i = 0; i < li.length; i++) {
+        const a = li[i].getElementsByTagName("a")[0];
+        const txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+
+$(document).on('keyup', '#filterInput', function(e) { filterList() });
