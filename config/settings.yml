@@ -97,7 +97,7 @@ SURI:
   PASS: 'pass'
 
 # URLs
-DOR_SERVICES_URL: 'https://user:password@dor-services.example.com'
+DOR_SERVICES_URL: 'http://user:password@localhost:3003'
 DOR_INDEXING_URL: 'https://dor-indexing-app.example.com/dor'
 DPG_URL: 'https://dpg.example.com'
 FEDORA_URL: 'https://user:password@fedora.example.com:1000/fedora'

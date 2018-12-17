@@ -35,7 +35,7 @@ RSpec.describe DorServices::Client do
 
     context 'when API request succeeds' do
       before do
-        stub_request(:post, 'https://dor-services.example.com/v1/objects')
+        stub_request(:post, 'http://localhost:3003/v1/objects')
           .with(
             body: '{"foo":"bar"}',
             headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
@@ -50,7 +50,7 @@ RSpec.describe DorServices::Client do
 
     context 'when API request fails' do
       before do
-        stub_request(:post, 'https://dor-services.example.com/v1/objects')
+        stub_request(:post, 'http://localhost:3003/v1/objects')
           .with(
             body: '{"foo":"bar"}',
             headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
@@ -77,7 +77,7 @@ RSpec.describe DorServices::Client do
       end
 
       before do
-        stub_request(:get, 'https://dor-services.example.com/v1/objects/druid:ck546xs5106/contents')
+        stub_request(:get, 'http://localhost:3003/v1/objects/druid:ck546xs5106/contents')
           .to_return(status: 200, body: body)
       end
 
@@ -86,7 +86,7 @@ RSpec.describe DorServices::Client do
 
     context 'when the response is 404' do
       before do
-        stub_request(:get, 'https://dor-services.example.com/v1/objects/druid:ck546xs5106/contents')
+        stub_request(:get, 'http://localhost:3003/v1/objects/druid:ck546xs5106/contents')
           .to_return(status: 404, body: '')
       end
 
@@ -104,7 +104,7 @@ RSpec.describe DorServices::Client do
       end
 
       before do
-        stub_request(:get, 'https://dor-services.example.com/v1/objects/druid:ck546xs5106/contents/olemiss1v.jp2')
+        stub_request(:get, 'http://localhost:3003/v1/objects/druid:ck546xs5106/contents/olemiss1v.jp2')
           .to_return(status: 200, body: body)
       end
 
@@ -113,7 +113,7 @@ RSpec.describe DorServices::Client do
 
     context 'when the response is 404' do
       before do
-        stub_request(:get, 'https://dor-services.example.com/v1/objects/druid:ck546xs5106/contents/olemiss1v.jp2')
+        stub_request(:get, 'http://localhost:3003/v1/objects/druid:ck546xs5106/contents/olemiss1v.jp2')
           .to_return(status: 404, body: '')
       end
 
