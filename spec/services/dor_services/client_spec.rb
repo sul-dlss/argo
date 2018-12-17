@@ -38,7 +38,7 @@ RSpec.describe DorServices::Client do
         stub_request(:post, 'https://dor-services.example.com/v1/objects')
           .with(
             body: '{"foo":"bar"}',
-            headers: { 'Content-Type' => 'application/json' }
+            headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
           )
           .to_return(status: 200, body: '{"pid":"druid:123"}', headers: {})
       end
@@ -53,7 +53,7 @@ RSpec.describe DorServices::Client do
         stub_request(:post, 'https://dor-services.example.com/v1/objects')
           .with(
             body: '{"foo":"bar"}',
-            headers: { 'Content-Type' => 'application/json' }
+            headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json' }
           )
           .to_return(status: [409, 'object already exists'])
       end
