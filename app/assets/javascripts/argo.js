@@ -58,15 +58,15 @@ function validate_spreadsheet_filetype()
 
 // Allows filtering a list of facets.
 function filterList() {
-    const input = document.getElementById('filterInput');
-    const filter = input.value.toUpperCase();
-    const ul = document.getElementsByClassName('facet-values')[0];
-    const li = ul.getElementsByTagName('li');
+    var input = document.getElementById('filterInput');
+    var filter = input.value.toUpperCase();
+    var ul = document.getElementsByClassName('facet-values')[0];
+    var li = ul.getElementsByTagName('li');
 
     // Loop through all list items, and hide those who don't match the search query
-    for (let i = 0; i < li.length; i++) {
-        const a = li[i].getElementsByTagName("a")[0];
-        const txtValue = a.textContent || a.innerText;
+    for (var i = 0; i < li.length; i++) {
+        var a = li[i].getElementsByTagName("a")[0];
+        var txtValue = a.textContent || a.innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
         } else {
