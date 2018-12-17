@@ -6,9 +6,9 @@
   <div class="">
     Workspace:
   <% if @available_in_workspace %>
-    <%= link_to params[:id], item_file_path(item_id: @object, id: params[:id]) %>
+    <%= link_to params[:id], item_file_path(item_id: params[:item_id], id: params[:id]) %>
   <% else %>
-    not available <span class="text-danger"><%= @available_in_workspace_error -%></span>
+    not available
   <% end %>
   </div>
 
@@ -16,7 +16,7 @@
 <% @object.contentMetadata.ng_xml.search("//file[@id='#{params[:id]}']").each do |file| %>
   <% if file['shelve'] == 'yes' %>
     <p>
-      Stacks: <%= link_to params[:file], stacks_url_full_size(@object, params[:id]) %>
+      Stacks: <%= link_to params[:file], stacks_url_full_size(@object.pid, params[:id]) %>
     </p>
   <% end %>
 
@@ -24,7 +24,7 @@
   <% if file['preserve'] == 'yes' && has_been_accessioned?(@object.pid) %>
         <p>
           Preservation:
-          <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:id], version: last_accessioned_version(@object)) %>
+          <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:id], version: last_accessioned_version(@object.pid)) %>
         </p>
   <% end %>
 <% end %>

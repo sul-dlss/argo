@@ -8,12 +8,7 @@ class FilesController < ApplicationController
   def index
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
-    @available_in_workspace_error = nil
-    begin
-      @available_in_workspace = @object.list_files.include?(filename)
-    rescue SocketError, Net::SSH::Exception => e
-      @available_in_workspace_error = "#{e.class}: #{e}"
-    end
+    @available_in_workspace = DorServices::Client.list_files(object: params[:item_id]).include?(filename)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -22,11 +17,10 @@ class FilesController < ApplicationController
 
   def show
     authorize! :view_content, @object
-    data = @object.get_file(filename)
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=' + filename
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    self.response_body = data
+    self.response_body = DorServices::Client.retrieve_file(object: params[:item_id], filename: filename)
   end
 
   def preserved

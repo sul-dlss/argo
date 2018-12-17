@@ -88,8 +88,8 @@ module DorObjectHelper
     Dor::Config.workflow.client.get_lifecycle('dor', pid, 'accessioned')
   end
 
-  def last_accessioned_version(object)
-    Sdr::Client.current_version(object.pid)
+  def last_accessioned_version(pid)
+    Sdr::Client.current_version(pid)
   end
 
   def render_qfacet_value(facet_solr_field, item, options = {})
