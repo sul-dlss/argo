@@ -27,6 +27,7 @@ module DorServices
       resp = connection.post do |req|
         req.url 'v1/objects'
         req.headers['Content-Type'] = 'application/json'
+        req.headers['Accept'] = 'application/json' # asking the service to return JSON (else it'll be plain text)
         req.body = params.to_json
       end
       raise "#{resp.reason_phrase}: #{resp.status} (#{resp.body})" unless resp.success?
