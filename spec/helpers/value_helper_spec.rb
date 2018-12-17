@@ -56,6 +56,7 @@ RSpec.describe ValueHelper do
     it 'creates a link to the admin policies catalog path with objects' do
       expect(helper.link_to_admin_policy_with_objs(args))
         .to eq('<a href="/view/druid:yolo">Y.O.L.O.</a> (<a href="/search_action_path">All objects with this APO</a>)')
+      expect(helper).to have_received(:search_action_path).with('f' => { 'is_governed_by_ssim' => ['info:fedora/druid:yolo'] })
     end
   end
   describe '#links_to_collections' do
@@ -83,6 +84,7 @@ RSpec.describe ValueHelper do
     it 'creates link with objs' do
       expect(helper.links_to_collections_with_objs(args))
         .to eq('<a href="/view/druid:supercool">Super Cool</a> (<a href="/search_action_path">All objects in this collection</a>)')
+      expect(helper).to have_received(:search_action_path).with('f' => { 'is_member_of_collection_ssim' => ['info:fedora/druid:supercool'] })
     end
   end
   describe '#value_for_wf_error' do
