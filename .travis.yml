@@ -8,17 +8,17 @@ addons:
 rvm:
   - 2.5.3 # deployed
 
-jdk:
-  - oraclejdk8
-
 email: false
 
 before_install:
-  - docker pull suldlss/workflow-server:latest
-  - docker run -d -p 127.0.0.1:3001:3000 suldlss/workflow-server:latest
-  - docker run -d -p 8984:8983 -v $PWD/solr_conf/conf/:/myconfig solr:7 solr-create -c argo -d /myconfig
-  - docker run -d -p 8983:8080 suldlss/fcrepo:no-messaging-latest
-  - docker ps -a
+  # Travis's docker-compose is too old to handle v3.6 docker-compose templates.
+  # This code is from Travis's documentation: https://docs.travis-ci.com/user/docker/#using-docker-compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose up -d solr fcrepo dor-services-app suri workflow
+  - docker-compose ps
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
 
 before_script:
@@ -36,6 +36,7 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # speeds up bundle install
     - RAILS_ENV=test # needed to load data
-    - CC_TEST_REPORTER_ID=266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a 
+    - DOCKER_COMPOSE_VERSION=1.23.1
+    - CC_TEST_REPORTER_ID=266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a
 
 cache: bundler

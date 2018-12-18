@@ -6,8 +6,6 @@ RSpec.describe 'apo', type: :request, js: true do
   let(:user) { create(:user) }
   let(:new_apo_druid) { 'druid:zy987wv6543' }
   let(:new_collection_druid) { 'druid:zy333wv6543' }
-  let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
-  let(:new_collection) { Dor::Collection.new(pid: new_collection_druid) }
 
   after do
     Dor::AdminPolicyObject.find(new_apo_druid).destroy # clean up after ourselves
@@ -15,9 +13,15 @@ RSpec.describe 'apo', type: :request, js: true do
   end
 
   before do
-    allow_any_instance_of(ApoForm).to receive(:register_model).and_return(new_apo)
-    allow_any_instance_of(CollectionForm).to receive(:register_model).and_return(new_collection)
-    allow(ApoController).to receive(:update_index).with(any_args)
+    # Use `#and_wrap_original to inject pre-determined PIDs into the
+    # dor-services client params. We do this so the destroys above in the
+    # `after` block can effectively clean up after the APO integration tests.
+    allow_any_instance_of(ApoForm).to receive(:register_params).and_wrap_original do |method, *args|
+      method.call(*args).merge(pid: new_apo_druid)
+    end
+    allow_any_instance_of(CollectionForm).to receive(:register_params).and_wrap_original do |method, *args|
+      method.call(*args).merge(pid: new_collection_druid)
+    end
     sign_in user, groups: ['sdr:administrator-role']
   end
 
@@ -51,12 +55,7 @@ RSpec.describe 'apo', type: :request, js: true do
     expect(page).to have_selector('.permissionName', text: 'someone')
     expect(find_field('desc_md').value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-sa')
-    # TODO: This was removed when we switched from using
-    #       Dor::RegistrationService to dor-services-application. It tests a
-    #       side-effect of the registration service that is no longer
-    #       straightforward to test from within Argo.
-    #
-    # expect(page).to have_link('New Testing Collection')
+    expect(page).to have_link('New Testing Collection')
 
     # Now change them
     fill_in 'Group name', with: 'dpg-staff'

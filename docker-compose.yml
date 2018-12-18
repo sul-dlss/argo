@@ -17,6 +17,20 @@ services:
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
+      SETTINGS__DOR_SERVICES_URL: http://user:password@dor-services-app:3000
+      SETTINGS__CONTENT__SDR_SERVER_URL: http://user:password@dor-services-app:3000/v1/sdr
+      SETTINGS__METADATA__CATALOG_URL: http://user:password@dor-services-app:3000/v1/catalog/mods
+
+  dor-services-app:
+    image: suldlss/dor-services-app:latest
+    ports:
+      - 3003:3000
+    environment:
+      SOLR_URL: http://solr:8983/solr/argo
+      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+      SETTINGS__SURI__URL: http://suri:3000
+      SETTINGS__WORKFLOW_URL: http://workflow:3000
 
   solr:
     image: solr:7
