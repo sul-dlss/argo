@@ -115,8 +115,12 @@ class ItemsController < ApplicationController
 
   def set_collection
     @object.collections.each { |collection| @object.remove_collection(collection.pid) } # first remove any existing collections
-    @object.add_collection(params[:collection]) # now add the collection
-    response_message = 'Collection successfully set.'
+    if params[:collection].present?
+      @object.add_collection(params[:collection]) # collection provided, so add it
+      response_message = 'Collection successfully set.'
+    else
+      response_message = 'Collection(s) successfully removed.' # no collection selected from drop-down, so don't bother adding a new one
+    end
     respond_to do |format|
       if params[:bulk]
         format.html { render status: :ok, plain: response_message }
@@ -127,8 +131,12 @@ class ItemsController < ApplicationController
   end
 
   def add_collection
-    @object.add_collection(params[:collection])
-    response_message = 'Collection added successfully'
+    if params[:collection].present?
+      @object.add_collection(params[:collection])
+      response_message = 'Collection added successfully'
+    else
+      response_message = 'No collection selected'
+    end
     respond_to do |format|
       if params[:bulk]
         format.html { render status: :ok, plain: response_message }
