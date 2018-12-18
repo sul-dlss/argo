@@ -20,7 +20,7 @@ RSpec.describe FilesController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
       end
       it 'has dor-services-app fetch a file from the workspace' do
-        expect(DorServices::Client).to receive(:retrieve_file)
+        expect(Dor::Services::Client).to receive(:retrieve_file)
           .with(object: pid, filename: 'somefile.txt')
           .and_return('abc')
         allow(Time).to receive(:now).and_return(Time.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
@@ -71,7 +71,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'checks for a file in the workspace' do
-      expect(DorServices::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      expect(Dor::Services::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
       get :index, params: { item_id: pid, id: 'foo.jp2' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_truthy
@@ -79,7 +79,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'handles missing files in the workspace' do
-      expect(DorServices::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      expect(Dor::Services::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
       get :index, params: { item_id: pid, id: 'bar.tif' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_falsey

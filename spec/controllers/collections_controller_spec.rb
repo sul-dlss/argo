@@ -31,7 +31,7 @@ RSpec.describe CollectionsController do
     end
     it 'creates a collection via catkey' do
       catkey = '1234567'
-      expect(DorServices::Client).to receive(:register) do |params|
+      expect(Dor::Services::Client).to receive(:register) do |params|
         expect(params[:params]).to match a_hash_including(
           label: ':auto',
           object_type: 'collection',
@@ -59,7 +59,7 @@ RSpec.describe CollectionsController do
       expect(mock_desc_md_ds).to receive(:content=)
       expect(mock_desc_md_ds).to receive(:save)
 
-      expect(DorServices::Client).to receive(:register) do |params|
+      expect(Dor::Services::Client).to receive(:register) do |params|
         expect(params[:params]).to match a_hash_including(
           label: title,
           object_type: 'collection',
@@ -81,7 +81,7 @@ RSpec.describe CollectionsController do
     it 'adds the collection to the apo default collection list' do
       title = 'collection title'
       abstract = 'this is the abstract'
-      expect(DorServices::Client).to receive(:register) do |params|
+      expect(Dor::Services::Client).to receive(:register) do |params|
         expect(params[:params]).to match a_hash_including(
           label: title,
           object_type: 'collection',

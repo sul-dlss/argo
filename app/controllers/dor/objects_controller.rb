@@ -8,7 +8,7 @@ class Dor::ObjectsController < ApplicationController
     if params[:collection] && params[:collection].length == 0
       params.delete :collection
     end
-    response = DorServices::Client.register(params: params)
+    response = Dor::Services::Client.register(params: params)
     pid = response[:pid]
 
     #
