@@ -199,7 +199,7 @@ class ApoForm < BaseForm
 
   # @return [Dor::AdminPolicyObject] registers the APO
   def register_model
-    response = DorServices::Client.register(params: register_params)
+    response = Dor::Services::Client.register(params: register_params)
     # Once it's been created we populate it with its metadata
     Dor.find(response[:pid])
   end
