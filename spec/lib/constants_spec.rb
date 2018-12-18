@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe Constants do
   it 'has correct CONTENT_TYPES defined' do
     expect(Constants::CONTENT_TYPES).to include(
-      'image', 'book', 'file', 'manuscript', 'map', 'media'
+      'image', 'book', 'file', 'map', 'media'
     )
   end
   it 'has correct RESOURCE_TYPES defined' do

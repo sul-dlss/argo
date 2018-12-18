@@ -37,8 +37,6 @@ module RegistrationHelper
       'Book (rtl)',
       'File',
       'Image',
-      'Manuscript (ltr)',
-      'Manuscript (rtl)',
       'Map',
       'Media',
       'Software',
