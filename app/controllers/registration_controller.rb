@@ -22,7 +22,8 @@ class RegistrationController < ApplicationController
     adm_xml.search('//registration/workflow').each do |wf|
       result << wf['id']
     end
-    result.flatten.uniq.sort
+    # always put default workflow option first, then alpha sort the rest
+    result.flatten.sort.unshift(Settings.apo.default_workflow_option).uniq
   end
 
   def workflow_list

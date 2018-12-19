@@ -284,21 +284,11 @@ RSpec.describe RegistrationController, type: :controller do
   end
 
   describe '#workflow_list' do
-    it 'should handle an APO with a single default workflow' do
-      get 'workflow_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
-      data = JSON.parse(response.body)
-      expect(data).to include 'dpgImageWF'
-      expect(data.length).to eq(1)
-    end
-
-    it 'should handle an APO with multiple workfllows' do
+    it 'should handle an APO with multiple workflows, putting the default workflow first always' do
       get 'workflow_list', params: { apo_id: 'druid:ww057vk7675', format: :json }
       data = JSON.parse(response.body)
-      expect(data).to include 'digitizationWF'
-      expect(data).to include 'dpgImageWF'
-      expect(data).to include 'goobiWF'
-      expect(data.length).to eq(3)
-      expect(data.sort).to eq(data)
+      expect(data.length).to eq(4)
+      expect(data).to eq [Settings.apo.default_workflow_option, 'digitizationWF', 'dpgImageWF', 'goobiWF']
     end
   end
 
