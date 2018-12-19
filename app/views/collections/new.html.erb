@@ -59,8 +59,10 @@
       <%= button_tag 'register', id: 'register', class: 'btn btn-default' do 'Register Collection' end %>
     </div>
     <% end %>
-    <div class="form-group">
-      <%= button_to 'Cancel', solr_document_path(@apo.pid), method: :get, class: 'btn btn-default' %>
-    </div>
+    <% if !request.xhr? %>
+      <div class="form-group">
+        <%= button_to 'Cancel', solr_document_path(@apo.pid), method: :get, class: 'btn btn-default' %>
+      </div>
+    <% end %>
   </div>
 </div>
