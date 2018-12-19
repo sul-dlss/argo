@@ -74,7 +74,6 @@ var gridContext = function() {
     },
 
     resizeGrid: function() {
-      $('.spacer').html($('#id_source').position().top == $('#rights').position().top ? '&nbsp;' : '')
       var tabDivHeight = $(window).attr('innerHeight') - ($('#header').height() + 30);
       $('#tabs').height(tabDivHeight);
       var tabHeadHeight = $('#tabs .ui-tabs-nav').height();
@@ -442,7 +441,6 @@ var gridContext = function() {
           }
         })
         $t.setTags();
-        $('#id_source').change();
         return true
       })
 

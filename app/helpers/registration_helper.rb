@@ -45,9 +45,9 @@ module RegistrationHelper
     ]
   end
 
-  def metadata_sources
+  def default_metadata_source
     [
-      %w(Auto auto)
+      'Auto'
     ]
   end
 end

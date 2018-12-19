@@ -12,8 +12,7 @@
         <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', :'data-rcparam' => 'collection' %></div>
 
         <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS), :'data-tagname' => 'Process : Rights' %></div>
-        <div class="property-item"><label for="id_source">Metadata Source</label><%= select_tag :id_source, options_for_select(metadata_sources), :'data-rcparam' => 'metadataSource' %></div>
-        <div class="property-item spacer"></div>
+        <%= hidden_field_tag :id_source, default_metadata_source, :'data-rcparam' => 'metadataSource' %>
         <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
         <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), :class => 'tag-field', :'data-tagname' => 'Process : Content Type' %></div>
         <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, :class => 'tag-field', :'data-tagname' => 'Project', :'data-rcparam' => 'projectName' %></div>
