@@ -79,7 +79,7 @@ gem 'active-fedora', '~> 8.2'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '~> 6.0', '>= 6.0.1'
-gem 'dor-services-client', '~> 0.1'
+gem 'dor-services-client', '~> 0.2'
 gem 'moab-versioning'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies

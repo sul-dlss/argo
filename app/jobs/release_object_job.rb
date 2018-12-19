@@ -45,30 +45,25 @@ class ReleaseObjectJob < GenericJob
     end
     log.puts("#{Time.current} Adding release tag for #{manage_release['to']}")
     begin
-      response = post_to_release(current_druid, params_to_body(manage_release))
-      if response.status == 201
-        log.puts("#{Time.current} Release tag added successfully")
-      else
-        log.puts("#{Time.current} Release tag failed POST #{response.env.url}, status: #{response.status}")
-        bulk_action.increment(:druid_count_fail).save
-        return
-      end
-    rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
+      Dor::Services::Client.create_release_tag(
+        object: current_druid,
+        to: manage_release['to'],
+        who: manage_release['who'],
+        what: manage_release['what'],
+        release: string_to_boolean(manage_release['tag'])
+      )
+      log.puts("#{Time.current} Release tag added successfully")
+    rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
       log.puts("#{Time.current} Release tag failed POST #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save
       return
     end
     log.puts("#{Time.current} Trying to start release workflow")
     begin
-      response = post_to_release_wf(current_druid)
-      if response.status == 201
-        log.puts("#{Time.current} Workflow creation successful")
-        bulk_action.increment(:druid_count_success).save
-      else
-        log.puts("#{Time.current} Workflow creation failed POST #{response.env.url}, status: #{response.status}")
-        bulk_action.increment(:druid_count_fail).save
-      end
-    rescue Faraday::TimeoutError, Faraday::ConnectionFailed => e
+      Dor::Services::Client.initialize_workflow(object: current_druid, wf_name: 'releaseWF')
+      log.puts("#{Time.current} Workflow creation successful")
+      bulk_action.increment(:druid_count_success).save
+    rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
       log.puts("#{Time.current} Workflow creation failed POST #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save
     end
@@ -83,39 +78,12 @@ class ReleaseObjectJob < GenericJob
     end
   end
 
-  def params_to_body(params)
-    {
-      to: params['to'],
-      who: params['who'],
-      what: params['what'],
-      release: string_to_boolean(params['tag'])
-    }.to_json
-  end
-
   def string_to_boolean(string)
     case string
     when 'true'
       true
     when 'false'
       false
-    end
-  end
-
-  def connection
-    Faraday.new(Settings.DOR_SERVICES_URL)
-  end
-
-  def post_to_release(druid, body)
-    connection.post do |req|
-      req.url "v1/objects/#{druid}/release_tags"
-      req.headers['Content-Type'] = 'application/json'
-      req.body = body
-    end
-  end
-
-  def post_to_release_wf(druid)
-    connection.post do |req|
-      req.url "v1/objects/#{druid}/apo_workflows/releaseWF"
     end
   end
 
