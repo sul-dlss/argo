@@ -5,6 +5,9 @@ class CollectionsController < ApplicationController
   def new
     @apo = Dor.find params[:apo_id]
     authorize! :manage_item, @apo
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   def create
