@@ -57,7 +57,7 @@ OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.n
 # NON-CRUCIAL (Optional) checks, avail at /status/<name-of-check>
 #   - at individual endpoint, HTTP response code reflects the actual result
 #   - in /status/all, these checks will display their result text, but will not affect HTTP response code
-OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(Settings.DOR_SERVICES_URL)
+OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(Settings.DOR_SERVICES.URL)
 OkComputer::Registry.register 'robot_status_url', OkComputer::HttpCheck.new(Settings.ROBOT_STATUS_URL)
 OkComputer::Registry.register 'workflow_url', OkComputer::HttpCheck.new(Settings.WORKFLOW_URL)
 
