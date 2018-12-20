@@ -25,7 +25,7 @@ class FilesController < ApplicationController
 
   def preserved
     authorize! :view_content, @object
-    file_content = @object.get_preserved_file filename, params[:version].to_i
+    file_content = Sdr::Client.get_preserved_file_content(@object.pid, filename, params[:version].to_i)
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = "attachment; filename=#{filename}"
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time

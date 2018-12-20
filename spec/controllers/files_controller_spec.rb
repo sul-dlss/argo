@@ -44,16 +44,16 @@ RSpec.describe FilesController, type: :controller do
 
   describe '#preserved' do
     context 'when they have manage_content access' do
+      let(:mock_file_name) { 'preserved_file.txt' }
+      let(:mock_version) { 2 }
+      let(:mock_content) { 'preserved file content' }
+
       before do
         allow(controller).to receive(:authorize!).and_return(true)
+        allow(Sdr::Client).to receive(:get_preserved_file_content).with(pid, mock_file_name, mock_version).and_return(mock_content)
       end
 
       it 'returns a response with the preserved file content as the body and the right headers' do
-        mock_file_name = 'preserved_file.txt'
-        mock_version = 2
-        mock_content = 'preserved file content'
-        allow(item).to receive(:get_preserved_file).with(mock_file_name, mock_version).and_return(mock_content)
-
         last_modified_lower_bound = Time.now.utc.rfc2822
         get :preserved, params: { id: mock_file_name, version: mock_version, item_id: pid }
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
