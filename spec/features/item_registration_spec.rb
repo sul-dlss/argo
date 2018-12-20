@@ -4,6 +4,7 @@ require 'spec_helper'
 
 RSpec.describe 'Item registration page', js: true do
   let(:user) { create(:user) }
+
   before do
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
     allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).and_return([])

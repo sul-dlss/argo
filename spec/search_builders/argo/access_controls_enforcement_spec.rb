@@ -16,6 +16,7 @@ RSpec.describe Argo::AccessControlsEnforcement, type: :model do
   end
 
   let(:scope) { double('scope', current_user: user) }
+
   before do
     @obj = TestClass.new
     expect(@obj).to receive(:scope).at_least(:once).and_return(scope)

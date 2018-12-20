@@ -6,6 +6,7 @@ RSpec.describe 'items/_tags_ui.html.erb' do
   let(:object) do
     double('object', pid: 'druid:abc123', tags: ['Catz are awesome', 'Nice!'])
   end
+
   it 'renders the partial content' do
     assign(:object, object)
     render

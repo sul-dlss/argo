@@ -3,12 +3,12 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Search results' do
+RSpec.describe 'Search results' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
-  scenario 'contains Blacklight default index page tools' do
+  it 'contains Blacklight default index page tools' do
     visit search_catalog_path f: { empties: ['no_rights_characteristics'] }
     within '.constraints-container' do
       expect(page).to have_css '#startOverLink', text: 'Start Over'
@@ -32,7 +32,7 @@ RSpec.feature 'Search results' do
       end
     end
   end
-  scenario 'contains appropriate metadata fields' do
+  it 'contains appropriate metadata fields' do
     visit search_catalog_path f: { objectType_ssim: ['item'] }
     within('.document', match: :first) do
       within '.document-metadata' do
@@ -58,7 +58,7 @@ RSpec.feature 'Search results' do
     expect(page).to have_css 'dd a', text: 'druid:pb873ty1662'
     expect(page).to have_css 'dd a', text: 'State Banking Commission Annual Reports'
   end
-  scenario 'contains document image thumbnail' do
+  it 'contains document image thumbnail' do
     visit search_catalog_path f: { objectType_ssim: ['item'] }
     expect(page).to have_css '.document-thumbnail a img'
   end

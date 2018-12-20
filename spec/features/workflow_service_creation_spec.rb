@@ -2,12 +2,12 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Workflow Service Creation' do
+RSpec.describe 'Workflow Service Creation' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
-  scenario 'redirect and display on show page' do
+  it 'redirect and display on show page' do
     visit add_workflow_item_path 'druid:qq613vj0238'
     click_button 'Add'
     within '.flash_messages' do

@@ -2,12 +2,12 @@
 
 require 'spec_helper'
 
-RSpec.feature 'More facet view', js: true do
+RSpec.describe 'More facet view', js: true do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
-  scenario 'filter works correctly' do
+  it 'filter works correctly' do
     visit '/catalog/facet/nonhydrus_collection_title_ssim'
 
     filter_field = find_field(id: 'filterInput')

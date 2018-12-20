@@ -2,13 +2,13 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Item source id change' do
+RSpec.describe 'Item source id change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
-  feature 'when modification is not allowed' do
-    scenario 'cannot change the source id' do
+  describe 'when modification is not allowed' do
+    it 'cannot change the source id' do
       expect_any_instance_of(Dor::Item)
         .to receive(:allows_modification?).and_return(false)
       visit source_id_ui_item_path 'druid:kv840rx2720'
@@ -18,8 +18,9 @@ RSpec.feature 'Item source id change' do
         'its current state.'
     end
   end
-  feature 'when modification is allowed' do
-    scenario 'changes the source id' do
+
+  describe 'when modification is allowed' do
+    it 'changes the source id' do
       # things get squirrely when you have an expect_any_instance_of for a
       # method that gets called repeatedly on different instantiations of the
       # class.  but allow_any_instance_of works fine, so use that with a block

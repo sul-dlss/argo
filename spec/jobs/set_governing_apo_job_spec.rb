@@ -140,12 +140,14 @@ RSpec.describe SetGoverningApoJob do
       instance_double(User,
                       is_admin?: true)
     end
-    before :each do
+
+    before do
       @dor_object = double(pid: 'druid:123abc')
       @workflow = double('workflow')
       @log = double('log')
       @webauth = OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser')
     end
+
     it 'opens a new version if the workflow status allows' do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(true)

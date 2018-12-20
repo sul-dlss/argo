@@ -8,7 +8,8 @@ describe CollectionConcern do
   describe '#collection' do
     context 'with data' do
       let(:document_attributes) { { SolrDocument::FIELD_COLLECTION_ID => ['druid:abc', 'druid:def'], SolrDocument::FIELD_COLLECTION_TITLE => ['Abc', 'Def'] } }
-      it 'should have a Collections' do
+
+      it 'has a Collections' do
         expect(document.collection_id).to eq('druid:abc')
         expect(document.collection_ids).to eq(['druid:abc', 'druid:def'])
         expect(document.collection_title).to eq('Abc')
@@ -18,7 +19,8 @@ describe CollectionConcern do
 
     context 'without data' do
       let(:document_attributes) { {} }
-      it 'should handle no Collections' do
+
+      it 'handles no Collections' do
         expect(document.collection_id).to be_nil
         expect(document.collection_ids).to be_nil
         expect(document.collection_title).to be_nil

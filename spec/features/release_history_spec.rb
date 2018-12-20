@@ -16,6 +16,6 @@ describe 'Release history', js: true do
   end
   it 'adminPolicy objects do not show release history' do
     visit solr_document_path 'druid:fg464dn8891'
-    expect(page).to_not have_css 'dt', text: 'Releases'
+    expect(page).not_to have_css 'dt', text: 'Releases'
   end
 end

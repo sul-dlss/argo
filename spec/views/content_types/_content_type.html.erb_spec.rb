@@ -9,6 +9,7 @@ RSpec.describe 'content_types/_content_type.html.erb' do
   let(:object) do
     double('object', pid: 'druid:abc123', contentMetadata: content_metadata)
   end
+
   it 'renders the partial content' do
     assign(:object, object)
     render

@@ -8,6 +8,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
   end
 
   let(:dor_registration) { { pid: 'abc' } }
+
   describe '#create' do
     it 'does something' do
       expect(Dor::Services::Client)

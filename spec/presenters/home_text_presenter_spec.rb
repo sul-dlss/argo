@@ -22,6 +22,7 @@ RSpec.describe HomeTextPresenter do
       before do
         allow(user).to receive(:is_admin?).and_return(true)
       end
+
       it { is_expected.to be true }
     end
 
@@ -29,6 +30,7 @@ RSpec.describe HomeTextPresenter do
       before do
         allow(user).to receive(:is_manager?).and_return(true)
       end
+
       it { is_expected.to be true }
     end
 
@@ -36,6 +38,7 @@ RSpec.describe HomeTextPresenter do
       before do
         allow(user).to receive(:is_viewer?).and_return(true)
       end
+
       it { is_expected.to be true }
     end
 
@@ -43,6 +46,7 @@ RSpec.describe HomeTextPresenter do
       before do
         allow(user).to receive(:permitted_apos).and_return([1])
       end
+
       it { is_expected.to be true }
     end
   end

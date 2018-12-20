@@ -29,6 +29,7 @@ RSpec.describe CollectionsController do
       allow(collection).to receive(:save)
       allow(collection).to receive(:update_index)
     end
+
     it 'creates a collection via catkey' do
       catkey = '1234567'
       expect(Dor::Services::Client).to receive(:register) do |params|

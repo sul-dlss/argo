@@ -22,6 +22,7 @@ RSpec.describe UploadsController do
 
   describe '#create' do
     let(:file) { fixture_file_upload('crowdsourcing_bridget_1.xlsx') }
+
     it 'is successful' do
       expect(ModsulatorJob).to receive(:perform_later)
         .with('abc123', String, String, user.login, 'spreadsheet', 'true', 'test note')

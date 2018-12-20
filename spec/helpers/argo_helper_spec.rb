@@ -37,6 +37,7 @@ describe ArgoHelper, type: :helper do
       allow(Dor).to receive(:find).with(@item_id).and_return(@object)
       allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
     end
+
     context 'a Dor::Item the user can manage, with the usual data streams, and no catkey or embargo info' do
       let(:default_buttons) do
         [
@@ -107,14 +108,15 @@ describe ArgoHelper, type: :helper do
           }
         ]
       end
-      it 'should create a hash with the needed button info for an admin' do
+
+      it 'creates a hash with the needed button info for an admin' do
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|
           expect(buttons).to include(button)
         end
         expect(buttons.length).to eq default_buttons.length
       end
-      it 'should generate the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
+      it 'generates the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
         allow(user).to receive(:is_admin?).and_return(false)
         allow(@object).to receive(:can_manage_item?).and_return(true)
         allow(@object).to receive(:can_manage_content?).and_return(true)
@@ -124,7 +126,7 @@ describe ArgoHelper, type: :helper do
         end
         expect(buttons.length).to eq default_buttons.length
       end
-      it 'should include the embargo update button if the user is an admin and the object is embargoed' do
+      it 'includes the embargo update button if the user is an admin and the object is embargoed' do
         @doc = SolrDocument.new(@doc.to_h.merge('embargo_status_ssim' => ['2012-10-19T00:00:00Z']))
         allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
         buttons = helper.render_buttons(@doc)
@@ -136,7 +138,7 @@ describe ArgoHelper, type: :helper do
         end
         expect(buttons.length).to eq default_buttons.length
       end
-      it "should not generate errors given an object that has no associated APO and a user that can't manage the object" do
+      it "does not generate errors given an object that has no associated APO and a user that can't manage the object" do
         allow(user).to receive(:is_admin?).and_return(false)
         allow(@doc).to receive(:apo_pid).and_return(nil)
         allow(@object).to receive(:admin_policy_object).and_return(nil)
@@ -145,7 +147,7 @@ describe ArgoHelper, type: :helper do
         expect(buttons).not_to be_nil
         expect(buttons.length).to eq 0
       end
-      it 'should include the refresh descMetadata button for items with catkey' do
+      it 'includes the refresh descMetadata button for items with catkey' do
         allow(@id_md).to receive(:otherId).with('catkey').and_return(['1234567'])
         buttons = helper.render_buttons(@doc)
         default_buttons.push(
@@ -159,6 +161,7 @@ describe ArgoHelper, type: :helper do
         expect(buttons.length).to eq default_buttons.length
       end
     end
+
     context 'a Dor::AdminPolicyObject the user can manage' do
       let(:view_apo_id) { 'druid:zt570tx3016' }
       let(:default_buttons) do
@@ -227,6 +230,7 @@ describe ArgoHelper, type: :helper do
           }
         ]
       end
+
       it 'renders the appropriate default buttons for an apo' do
         @object = instantiate_fixture(view_apo_id, Dor::AdminPolicyObject)
         @doc = SolrDocument.new('id' => view_apo_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id])
@@ -240,12 +244,14 @@ describe ArgoHelper, type: :helper do
       end
     end
   end
+
   describe 'render_facet_value' do
-    it 'should not override Blacklight version' do
-      expect(helper.respond_to?(:render_facet_value)).to be_truthy
+    it 'does not override Blacklight version' do
+      expect(helper).to respond_to(:render_facet_value)
       expect(helper.method(:render_facet_value).owner).to eq(Blacklight::FacetsHelperBehavior)
     end
   end
+
   describe '#registered_only?' do
     it 'returns true for registered only item' do
       expect(helper.registered_only?('processing_status_text_ssi' => 'Registered')).to eq true

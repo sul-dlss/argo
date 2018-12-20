@@ -18,7 +18,7 @@ RSpec.describe Report, type: :model do
 
     it 'generates many rows of data' do
       rows = CSV.parse(@csv)
-      expect(rows.is_a?(Array)).to be_truthy
+      expect(rows).to be_a(Array)
       expect(rows.length).to be > 1    # at least headers + data
       expect(rows[0].length).to eq(25) # default headers
     end
@@ -40,12 +40,13 @@ RSpec.describe Report, type: :model do
 
   describe 'blacklight config' do
     let(:config) { subject.instance_variable_get(:@blacklight_config) }
+
     it 'has all the facets available in the catalog controller' do
       expect(config.facet_fields.keys).to eq CatalogController.blacklight_config.facet_fields.keys
     end
     it 'has report fields' do
       expect(config.report_fields.length).to eq(25)
-      expect(config.report_fields.all? { |f| f[:field].is_a? Symbol }).to be_truthy # all :field keys are symbols
+      expect(config.report_fields).to be_all { |f| f[:field].is_a? Symbol } # all :field keys are symbols
     end
     it 'has all the mandatory, default report fields' do
       [
@@ -61,7 +62,7 @@ RSpec.describe Report, type: :model do
         :resource_count,
         :preserved_size
       ].each do |k|
-        expect(config.report_fields.any? { |f| f[:field] == k }).to be_truthy
+        expect(config.report_fields).to be_any { |f| f[:field] == k }
       end
     end
     it 'has all the mandatory, non-default report fields' do
@@ -81,10 +82,11 @@ RSpec.describe Report, type: :model do
         :accessioned_dttsim,
         :workflow_status_ssim
       ].each do |k|
-        expect(config.report_fields.any? { |f| f[:field] == k }).to be_truthy
+        expect(config.report_fields).to be_any { |f| f[:field] == k }
       end
     end
   end
+
   describe '#pids' do
     it 'returns unqualified druids by default' do
       expect(described_class.new(

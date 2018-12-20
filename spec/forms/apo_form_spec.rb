@@ -89,6 +89,7 @@ RSpec.describe ApoForm do
 
     describe '#permissions' do
       subject { instance.permissions }
+
       it 'has the defaults' do
         expect(subject).to match_array [
           { name: 'developers', type: 'group', access: 'manage' },
@@ -103,56 +104,67 @@ RSpec.describe ApoForm do
 
     describe '#default_workflow' do
       subject { instance.default_workflow }
+
       it { is_expected.to eq 'digitizationWF' }
     end
 
     describe '#use_license' do
       subject { instance.use_license }
+
       it { is_expected.to eq 'by-nc-sa' }
     end
 
     describe '#default_rights' do
       subject { instance.default_rights }
+
       it { is_expected.to eq 'world' }
     end
 
     describe '#desc_metadata_format' do
       subject { instance.desc_metadata_format }
+
       it { is_expected.to eq 'MODS' }
     end
 
     describe '#metadata_source' do
       subject { instance.metadata_source }
+
       it { is_expected.to be_nil }
     end
 
     describe '#use_statement' do
       subject { instance.use_statement }
+
       it { is_expected.to start_with 'Rights are owned by Stanford University Libraries' }
     end
 
     describe '#copyright_statement' do
       subject { instance.copyright_statement }
+
       it { is_expected.to eq 'Additional copyright info' }
     end
 
     describe '#mods_title' do
       subject { instance.mods_title }
+
       it { is_expected.to eq 'Ampex' }
     end
 
     describe '#default_collection_objects' do
       subject { instance.default_collection_objects }
+
       it { is_expected.to eq [] }
     end
 
     describe '#to_param' do
       subject { instance.to_param }
+
       it { is_expected.to eq 'druid:zt570tx3016' }
     end
 
     describe '#license_options' do
       subject { instance.license_options }
+
       it 'is an array of the options' do
         expect(subject).to be_a Array
         expect(subject[0]).to be_a Array
@@ -164,6 +176,7 @@ RSpec.describe ApoForm do
   context 'no model (new)' do
     describe '#permissions' do
       subject { instance.permissions }
+
       it 'has the defaults' do
         expect(subject).to match_array [
           { name: 'developer', type: 'group', access: 'manage' },
@@ -175,56 +188,67 @@ RSpec.describe ApoForm do
 
     describe '#default_workflow' do
       subject { instance.default_workflow }
+
       it { is_expected.to eq 'registrationWF' }
     end
 
     describe '#use_license' do
       subject { instance.use_license }
+
       it { is_expected.to eq '' }
     end
 
     describe '#default_rights' do
       subject { instance.default_rights }
+
       it { is_expected.to eq 'world' }
     end
 
     describe '#desc_metadata_format' do
       subject { instance.desc_metadata_format }
+
       it { is_expected.to eq 'MODS' }
     end
 
     describe '#metadata_source' do
       subject { instance.metadata_source }
+
       it { is_expected.to eq 'DOR' }
     end
 
     describe '#use_statement' do
       subject { instance.use_statement }
+
       it { is_expected.to be_nil }
     end
 
     describe '#copyright_statement' do
       subject { instance.copyright_statement }
+
       it { is_expected.to be_nil }
     end
 
     describe '#mods_title' do
       subject { instance.mods_title }
+
       it { is_expected.to eq '' }
     end
 
     describe '#default_collection_objects' do
       subject { instance.default_collection_objects }
+
       it { is_expected.to eq [] }
     end
 
     describe '#to_param' do
       subject { instance.to_param }
+
       it { is_expected.to be_nil }
     end
 
     describe '#license_options' do
       subject { instance.license_options }
+
       it 'is an array of the options' do
         expect(subject).to be_a Array
         expect(subject[0]).to be_a Array

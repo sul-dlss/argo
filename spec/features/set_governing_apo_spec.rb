@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Set governing APO' do
+RSpec.describe 'Set governing APO' do
   let(:groups) { ['sdr:administrator-role', 'dlss:dor-admin', 'dlss:developers'] }
   let(:new_apo) { double(Dor::AdminPolicyObject, pid: 'druid:ww057vk7675') }
   let(:obj) do
@@ -22,7 +22,7 @@ RSpec.feature 'Set governing APO' do
     sign_in create(:user), groups: groups
   end
 
-  scenario 'modification not currently allowed' do
+  it 'modification not currently allowed' do
     allow(obj).to receive(:allows_modification?).and_return(false)
     visit set_governing_apo_ui_item_path 'druid:kv840rx2720'
     select 'Stanford University Libraries - Special Collections', from: 'new_apo_id', match: :first
@@ -31,7 +31,7 @@ RSpec.feature 'Set governing APO' do
     expect(page).to have_css 'body', text: 'Object cannot be modified in its current state.'
   end
 
-  scenario 'modification not currently allowed, user not allowed to move object to new APO' do
+  it 'modification not currently allowed, user not allowed to move object to new APO' do
     allow(obj).to receive(:allows_modification?).and_return(false)
     allow_any_instance_of(ItemsController).to receive(:authorize!).with(:manage_governing_apo, obj, new_apo.pid).and_raise(CanCan::AccessDenied)
     visit set_governing_apo_ui_item_path 'druid:kv840rx2720'
@@ -41,7 +41,7 @@ RSpec.feature 'Set governing APO' do
     expect(page).to have_css 'body', text: 'forbidden'
   end
 
-  scenario 'modification allowed, user not allowed to move object to new APO' do
+  it 'modification allowed, user not allowed to move object to new APO' do
     allow(obj).to receive(:allows_modification?).and_return(true)
 
     visit solr_document_path 'druid:kv840rx2720'
@@ -59,7 +59,7 @@ RSpec.feature 'Set governing APO' do
     expect(page).to have_css 'body', text: 'forbidden'
   end
 
-  scenario 'modification allowed, user allowed to move object to new APO' do
+  it 'modification allowed, user allowed to move object to new APO' do
     allow(obj).to receive(:allows_modification?).and_return(true)
 
     visit solr_document_path 'druid:kv840rx2720'

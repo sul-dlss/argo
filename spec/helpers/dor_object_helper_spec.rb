@@ -3,7 +3,7 @@
 require 'spec_helper'
 describe DorObjectHelper, type: :helper do
   describe 'render_status_style' do
-    it 'should return the highlighting style for the right status codes' do
+    it 'returns the highlighting style for the right status codes' do
       steps = Dor::Processable::STEPS
       highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
 
@@ -13,7 +13,7 @@ describe DorObjectHelper, type: :helper do
       end
     end
 
-    it 'should not return the highlighting style for other status codes' do
+    it 'does not return the highlighting style for other status codes' do
       steps = Dor::Processable::STEPS
       # note that we omit steps['opened'] because it has the same status code as steps['registered'] and will result in an erroneous test failure
       non_highlighted_statuses = [steps['accessioned'], steps['indexed'], steps['shelved']]
@@ -24,7 +24,7 @@ describe DorObjectHelper, type: :helper do
       end
     end
 
-    it 'should not return the highlighting style for nil objects' do
+    it 'does not return the highlighting style for nil objects' do
       expect(render_status_style(nil, nil)).to eq('')
     end
   end

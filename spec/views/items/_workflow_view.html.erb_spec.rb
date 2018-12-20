@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'items/_workflow_view.html.erb' do
-  it 'should render' do
+  it 'renders' do
     assign(:object, double('object', pid: 'druid:aa111bb2222'))
     assign(:workflow_id, 'accessionWF')
     render

@@ -5,9 +5,11 @@ require 'spec_helper'
 describe 'catalog/_show_releases.html.erb' do
   describe 'creates a table of release information' do
     let(:object) { instantiate_fixture('druid:qq613vj0238') }
+
     before do
       allow(view).to receive(:object).and_return(object)
     end
+
     it 'displays a table of release tags' do
       render
       expect(rendered).to have_css 'table.table'

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Item view', js: true do
+RSpec.describe 'Item view', js: true do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
@@ -12,7 +12,7 @@ RSpec.feature 'Item view', js: true do
       allow(Dor::Services::Client).to receive(:list_files).and_return(['this_is_not_the_file_you_are_looking_for.txt'])
     end
 
-    scenario 'shows the file info' do
+    it 'shows the file info' do
       visit solr_document_path 'druid:hj185vb7593'
       within '.dl-horizontal' do
         expect(page).to have_css 'dt', text: 'DRUID:'
@@ -47,6 +47,7 @@ RSpec.feature 'Item view', js: true do
 
   context 'when the file is on the workspace' do
     let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
+
     before do
       allow(Dor::Services::Client).to receive(:list_files).and_return([filename])
       allow(Dor::Services::Client).to receive(:retrieve_file).and_return('the file contents')
@@ -58,7 +59,7 @@ RSpec.feature 'Item view', js: true do
       File.delete(filename) if File.exist?(filename)
     end
 
-    scenario 'it can be downloaded' do
+    it 'can be downloaded' do
       visit solr_document_path 'druid:hj185vb7593'
 
       within '.resource-list' do

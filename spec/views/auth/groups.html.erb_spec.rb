@@ -7,8 +7,10 @@ RSpec.describe 'auth/groups.html.erb' do
     allow(view).to receive(:current_user).and_return(user)
     allow(controller).to receive(:current_user).and_return(user)
   end
+
   context 'as admin' do
     let(:user) { mock_user(is_admin?: true, groups: %w(dlss dpg)) }
+
     it 'shows groups and impersonate form' do
       render
       expect(rendered).to have_css 'h3', text: 'Your Current Groups'
@@ -20,12 +22,14 @@ RSpec.describe 'auth/groups.html.erb' do
       expect(rendered).to have_css 'a.btn.btn-default[href="javascript:history.back()"]', text: 'Cancel'
     end
   end
+
   context 'not admin' do
     let(:user) { mock_user(is_admin?: false) }
+
     it 'does not show groups or form' do
       render
-      expect(rendered).to_not have_css 'h3', text: 'Your Current Groups'
-      expect(rendered).to_not have_css 'form'
+      expect(rendered).not_to have_css 'h3', text: 'Your Current Groups'
+      expect(rendered).not_to have_css 'form'
     end
   end
 end

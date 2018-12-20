@@ -23,6 +23,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
         expect(response.body).to eq 'true'
       end
     end
+
     context 'when !closeable' do
       context 'not opened' do
         it 'returns false' do
@@ -34,6 +35,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
           expect(response.body).to eq 'false'
         end
       end
+
       context 'when opened && is submitted' do
         it 'returns false' do
           expect(Dor::Config.workflow.client)
@@ -49,6 +51,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
       end
     end
   end
+
   describe 'GET openable' do
     context 'when not accessioned' do
       it 'returns false' do
@@ -60,6 +63,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
         expect(response.body).to eq 'false'
       end
     end
+
     context 'when accessioned && submitted' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
@@ -73,6 +77,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
         expect(response.body).to eq 'false'
       end
     end
+
     context 'when accessioned && !submitted && opened' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
@@ -89,6 +94,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
         expect(response.body).to eq 'false'
       end
     end
+
     context 'when accessioned && !submitted && !opened' do
       it 'returns true' do
         expect(Dor::Config.workflow.client)
@@ -106,6 +112,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
       end
     end
   end
+
   describe 'GET published' do
     context 'when published' do
       it 'returns true' do
@@ -117,6 +124,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
         expect(response.body).to eq 'true'
       end
     end
+
     context 'when not published' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
@@ -128,6 +136,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
       end
     end
   end
+
   describe 'GET submitted' do
     context 'when submitted' do
       it 'returns true' do
@@ -139,6 +148,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
         expect(response.body).to eq 'true'
       end
     end
+
     context 'when not submitted' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
@@ -150,6 +160,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
       end
     end
   end
+
   describe 'GET accessioned' do
     context 'when accessioned' do
       it 'returns true' do
@@ -161,6 +172,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
         expect(response.body).to eq 'true'
       end
     end
+
     context 'when not accessioned' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)

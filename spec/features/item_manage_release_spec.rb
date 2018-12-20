@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Item manage release' do
+RSpec.describe 'Item manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   before do
     obj = double(
@@ -17,12 +17,14 @@ RSpec.feature 'Item manage release' do
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).and_return(obj)
   end
+
   let(:druid) { 'druid:qq613vj0238' }
-  scenario 'Has a manage release button' do
+
+  it 'Has a manage release button' do
     visit solr_document_path(druid)
     expect(page).to have_css 'a', text: 'Manage release'
   end
-  scenario 'Creates a new bulk action' do
+  it 'Creates a new bulk action' do
     visit manage_release_solr_document_path(druid)
     expect(page).to have_css 'label', text: "Manage release to discovery applications for item #{druid}"
     click_button 'Submit'

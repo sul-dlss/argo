@@ -4,6 +4,7 @@ require 'spec_helper'
 
 RSpec.describe DorController, type: :controller do
   let(:druid) { 'druid:aa111bb2222' }
+
   before do
     sign_in(create(:user))
   end
@@ -27,6 +28,7 @@ RSpec.describe DorController, type: :controller do
         expect(response).to redirect_to(solr_document_path(druid))
       end
     end
+
     context 'from bulk update' do
       it 'returns a 403 for requests from the old bulk update mechanism' do
         expect(Dor::IndexingService).not_to receive(:reindex_pid_remotely)
@@ -38,7 +40,7 @@ RSpec.describe DorController, type: :controller do
   end
 
   describe 'republish' do
-    it 'should republish' do
+    it 'republishes' do
       mock_item = double()
       expect(mock_item).to receive(:publish_metadata_remotely)
       expect(Dor).to receive(:find).and_return(mock_item)

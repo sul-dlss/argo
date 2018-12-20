@@ -12,7 +12,7 @@ RSpec.describe RegistrationController, type: :controller do
   let(:user) { create(:user) }
 
   describe 'rights_list' do
-    it 'should show Stanford as the default if Stanford is the read group and discover is world' do
+    it 'shows Stanford as the default if Stanford is the read group and discover is world' do
       content = <<-XML
       <?xml version="1.0"?>
       <rightsMetadata>
@@ -48,7 +48,7 @@ RSpec.describe RegistrationController, type: :controller do
       expect(response.body.include?('Stanford (APO default)')).to eq(true)
     end
 
-    it 'should not show Stanford as the default if the read group is not Stanford' do
+    it 'does not show Stanford as the default if the read group is not Stanford' do
       content = <<-XML
       <?xml version="1.0"?>
       <rightsMetadata>
@@ -84,7 +84,7 @@ RSpec.describe RegistrationController, type: :controller do
       expect(response.body.include?('Stanford (APO default)')).to eq(false)
     end
 
-    it 'should show World as the default if discover and read are both world' do
+    it 'shows World as the default if discover and read are both world' do
       content = <<-XML
       <?xml version="1.0"?>
       <rightsMetadata>
@@ -120,7 +120,7 @@ RSpec.describe RegistrationController, type: :controller do
       expect(response.body.include?('World (APO default)')).to eq(true)
     end
 
-    it 'should show Dark as the default if discover and read are both none' do
+    it 'shows Dark as the default if discover and read are both none' do
       content = <<-XML
       <?xml version="1.0"?>
       <rightsMetadata>
@@ -156,7 +156,7 @@ RSpec.describe RegistrationController, type: :controller do
       expect(response.body.include?('Dark (Preserve Only) (APO default)')).to eq(true)
     end
 
-    it 'should show Citation Only as the default if discover is world and read is none' do
+    it 'shows Citation Only as the default if discover is world and read is none' do
       content = <<-XML
       <?xml version="1.0"?>
       <rightsMetadata>
@@ -192,7 +192,7 @@ RSpec.describe RegistrationController, type: :controller do
       expect(response.body.include?('Citation Only (APO default)')).to eq(true)
     end
 
-    it 'should show no default if there is no xml' do
+    it 'shows no default if there is no xml' do
       content = ''
       @item = double(Dor::Item)
       xml = Nokogiri::XML(content)
@@ -211,12 +211,12 @@ RSpec.describe RegistrationController, type: :controller do
   end
 
   describe 'tracksheet' do
-    it 'should generate a tracking sheet with the right default name' do
+    it 'generates a tracking sheet with the right default name' do
       get 'tracksheet', params: { druid: 'xb482bw3979' }
       expect(response.headers['Content-Type']).to eq('pdf; charset=utf-8')
       expect(response.headers['content-disposition']).to eq('attachment; filename=tracksheet-1.pdf')
     end
-    it 'should generate a tracking sheet with the specified name (and sequence number)' do
+    it 'generates a tracking sheet with the specified name (and sequence number)' do
       test_name = 'test_name'
       test_seq_no = 7
       get 'tracksheet', params: { druid: 'xb482bw3979', name: test_name, sequence: test_seq_no }
@@ -225,23 +225,23 @@ RSpec.describe RegistrationController, type: :controller do
   end
 
   describe '#collection_list' do
-    it 'should handle invalid parameters' do
+    it 'handles invalid parameters' do
       expect { get 'collection_list' }.to raise_error(ArgumentError)
     end
 
-    it 'should handle a bogus APO' do
+    it 'handles a bogus APO' do
       get 'collection_list', params: { apo_id: 'druid:aa111bb2222' }
       expect(response).to have_http_status(:not_found)
     end
 
-    it 'should handle an APO with no collections' do
+    it 'handles an APO with no collections' do
       get 'collection_list', params: { apo_id: 'druid:zt570tx3016', format: :json }
       data = JSON.parse(response.body)
       expect(data).to include('' => 'None')
       expect(data.length).to eq(1)
     end
 
-    it 'should alpha-sort the collection list by title, except for the "None" entry, which should come first' do
+    it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
       apo_id = 'druid:fg464dn8891'
 
       # 'pb873ty1662' is a real object in our fixture data.  for the other two druids, we mock the
@@ -265,7 +265,7 @@ RSpec.describe RegistrationController, type: :controller do
       )
     end
 
-    it 'should not include collections that are not found in Solr/Fedora' do
+    it 'does not include collections that are not found in Solr/Fedora' do
       missing_registration_collections = [
         'druid:kk203bw3276', 'druid:zx663qq1749', 'druid:nq832zg5474', 'druid:fb337wh0818', 'druid:kd973gk0505',
         'druid:jm980xw3297', 'druid:fz658ss5788', 'druid:vh782pm7216', 'druid:gg191kg3953'
@@ -284,7 +284,7 @@ RSpec.describe RegistrationController, type: :controller do
   end
 
   describe '#workflow_list' do
-    it 'should handle an APO with multiple workflows, putting the default workflow first always' do
+    it 'handles an APO with multiple workflows, putting the default workflow first always' do
       get 'workflow_list', params: { apo_id: 'druid:ww057vk7675', format: :json }
       data = JSON.parse(response.body)
       expect(data.length).to eq(4)

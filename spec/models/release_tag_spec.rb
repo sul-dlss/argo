@@ -13,6 +13,7 @@ describe ReleaseTag do
         release: 'true'
       )
     end
+
     it 'casts a Boolean string to a Boolean' do
       expect(subject.release).to eq true
     end
@@ -25,10 +26,13 @@ describe ReleaseTag do
       end
     end
   end
+
   describe '.from_tag' do
+    subject { described_class.from_tag(element) }
+
     let(:tag) { '<release to="SearchWorks" what="self" when="2016-09-13T20:00:00.000Z" who="esnowden">true</release>' }
     let(:element) { Nokogiri::XML(tag).xpath('//release').first }
-    subject { described_class.from_tag(element) }
+
     it 'creates a ReleaseTag putting the attributes in the correct places' do
       expect(subject).to be_an described_class
       expect(subject.to).to eq 'SearchWorks'

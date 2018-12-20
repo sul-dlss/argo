@@ -2,14 +2,15 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Bulk Update of Governing APO' do
+RSpec.describe 'Bulk Update of Governing APO' do
   let(:current_user) { create(:user) }
+
   before do
     sign_in current_user
     allow_any_instance_of(RegistrationHelper).to receive(:apo_list).and_return(['APO 1', 'APO 2', 'APO 3'])
   end
 
-  scenario 'Creates a new job' do
+  it 'Creates a new job' do
     visit new_bulk_action_path
     choose 'bulk_action_action_type_setgoverningapojob'
     select 'APO 2'

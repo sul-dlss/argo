@@ -8,6 +8,7 @@ end
 
 describe Argo::ProfileQueries do
   subject { TestClass.new }
+
   let(:blacklight_params) { { controller: 'profile' } }
   let(:required_facet_fields) do
     [
@@ -26,11 +27,14 @@ describe Argo::ProfileQueries do
       'sw_genre_ssim'
     ]
   end
+
   before do
     allow(subject).to receive(:blacklight_params).and_return(blacklight_params)
   end
+
   context 'in ProfileController' do
     let(:blacklight_params) { { 'controller' => 'profile' } }
+
     it 'adds in required facet fields' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
@@ -74,8 +78,10 @@ describe Argo::ProfileQueries do
       expect(facet_query).to include(*required_fields)
     end
   end
+
   context 'in another Controller' do
     let(:blacklight_params) { { 'controller' => 'catalog' } }
+
     it 'does not modify solr_params' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
