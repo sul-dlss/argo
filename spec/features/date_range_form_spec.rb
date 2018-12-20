@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Date range form', js: true do
+RSpec.describe 'Date range form', js: true do
   let(:query_params) { {} }
   let(:tomorrow) { (Time.current + 1.day).strftime('%m/%d/%Y') }
 
@@ -12,7 +12,7 @@ RSpec.feature 'Date range form', js: true do
     find('[data-target="#facet-object_modified_date"]').click
   end
 
-  scenario 'navigates to date range search' do
+  it 'navigates to date range search' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
@@ -31,7 +31,7 @@ RSpec.feature 'Date range form', js: true do
       expect(page).to have_css '.page_entries', text: /1 - \d+ of \d+/
     end
   end
-  scenario 'with no after date' do
+  it 'with no after date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_before_datepicker', with: tomorrow
       find('input[type="submit"]').click
@@ -46,7 +46,7 @@ RSpec.feature 'Date range form', js: true do
       end
     end
   end
-  scenario 'with no before date' do
+  it 'with no before date' do
     within '#facet-object_modified_date' do
       fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'
       find('input[type="submit"]').click
@@ -64,6 +64,7 @@ RSpec.feature 'Date range form', js: true do
 
   describe 'with selected facets and search queries' do
     let(:query_params) { { q: 'Reports', f: { objectType_ssim: ['item'] } } }
+
     it 'includes existing parameters in the new query' do
       within '#facet-object_modified_date' do
         fill_in 'object_modified_date_after_datepicker', with: '01/01/1990'

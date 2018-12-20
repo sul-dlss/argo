@@ -39,10 +39,12 @@ RSpec.describe CatalogController, type: :controller do
       before do
         sign_in user
       end
+
       context 'when unauthorized' do
         before do
           allow(controller).to receive(:authorize!).with(:view_metadata, Dor::Item).and_raise(CanCan::AccessDenied)
         end
+
         it 'is forbidden' do
           get 'show', params: { id: @druid }
           expect(response).to be_forbidden
@@ -53,6 +55,7 @@ RSpec.describe CatalogController, type: :controller do
         before do
           allow(controller).to receive(:authorize!).with(:view_metadata, Dor::Item)
         end
+
         it 'is successful' do
           get 'show', params: { id: @druid }
           expect(response).to be_successful
@@ -63,6 +66,7 @@ RSpec.describe CatalogController, type: :controller do
         before do
           allow(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
         end
+
         let(:druid) { 'druid:zz999zz9999' }
 
         it 'returns not found' do
@@ -75,7 +79,8 @@ RSpec.describe CatalogController, type: :controller do
 
   describe 'blacklight config' do
     let(:config) { controller.blacklight_config }
-    it 'should have the date facets' do
+
+    it 'has the date facets' do
       keys = config.facet_fields.keys
       expect(keys).to include 'registered_date', SolrDocument::FIELD_REGISTERED_DATE.to_s
       expect(keys).to include 'accessioned_latest_date', SolrDocument::FIELD_LAST_ACCESSIONED_DATE.to_s
@@ -86,7 +91,7 @@ RSpec.describe CatalogController, type: :controller do
       expect(keys).to include 'version_opened_date', SolrDocument::FIELD_LAST_OPENED_DATE.to_s
       expect(keys).to include 'embargo_release_date', SolrDocument::FIELD_EMBARGO_RELEASE_DATE.to_s
     end
-    it 'should not show raw date field facets' do
+    it 'does not show raw date field facets' do
       raw_fields = [
         SolrDocument::FIELD_REGISTERED_DATE,
         SolrDocument::FIELD_LAST_ACCESSIONED_DATE,
@@ -101,7 +106,7 @@ RSpec.describe CatalogController, type: :controller do
         expect(field[1].show).to be_falsey if raw_fields.include?(field[0])
       end
     end
-    it 'should use POST as the http method' do
+    it 'uses POST as the http method' do
       expect(config.http_method).to eq :post
     end
   end

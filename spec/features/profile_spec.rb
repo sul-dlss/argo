@@ -19,6 +19,7 @@ RSpec.describe 'Profile' do
       end
     end
   end
+
   describe 'Collection' do
     it 'lists collections and counts' do
       visit search_profile_path f: { objectType_ssim: ['item'] }
@@ -29,6 +30,7 @@ RSpec.describe 'Profile' do
       end
     end
   end
+
   describe 'Discovery' do
     it 'lists discovery and counts' do
       visit search_profile_path f: { objectType_ssim: ['item'] }
@@ -45,6 +47,7 @@ RSpec.describe 'Profile' do
       end
     end
   end
+
   describe 'Rights' do
     it 'lists rights and counts' do
       visit search_profile_path f: { objectType_ssim: ['item'] }
@@ -55,6 +58,7 @@ RSpec.describe 'Profile' do
       end
     end
   end
+
   describe 'Contents' do
     it 'lists content type and counts' do
       visit search_profile_path f: { objectType_ssim: ['item'] }
@@ -67,6 +71,7 @@ RSpec.describe 'Profile' do
       end
     end
   end
+
   describe 'Rights information' do
     it 'lists rights information and counts' do
       visit search_profile_path f: { objectType_ssim: ['item'] }
@@ -82,6 +87,7 @@ RSpec.describe 'Profile' do
       end
     end
   end
+
   describe 'SearchWorks facet values' do
     it 'lists content type and counts' do
       visit search_profile_path f: { objectType_ssim: ['item'] }
@@ -107,6 +113,7 @@ RSpec.describe 'Profile' do
       end
     end
   end
+
   describe 'Number of items' do
     it 'lists object type and pivot facets' do
       visit search_profile_path f: { exploded_tag_ssim: ['Project'] }

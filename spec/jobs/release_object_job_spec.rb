@@ -21,6 +21,7 @@ RSpec.describe ReleaseObjectJob do
         webauth: { 'privgroup' => 'dorstuff', 'login' => 'esnowden' }
       }
     end
+
     context 'in a happy world' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback).at_least(:once)
@@ -30,6 +31,7 @@ RSpec.describe ReleaseObjectJob do
           stub_release_wf(pid)
         end
       end
+
       it 'updates the total druid count' do
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
@@ -37,7 +39,7 @@ RSpec.describe ReleaseObjectJob do
       it 'increments the bulk_actions druid count success' do
         expect do
           subject.perform(bulk_action_no_process_callback.id, params)
-        end.to change { bulk_action_no_process_callback.druid_count_success }.from(0).to(pids.length)
+        end.to change(bulk_action_no_process_callback, :druid_count_success).from(0).to(pids.length)
       end
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
@@ -55,6 +57,7 @@ RSpec.describe ReleaseObjectJob do
         expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
       end
     end
+
     context 'when a release tag fails' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback).at_least(:once)
@@ -64,6 +67,7 @@ RSpec.describe ReleaseObjectJob do
           stub_release_tags(pid, 500)
         end
       end
+
       it 'updates the total druid count' do
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
@@ -71,7 +75,7 @@ RSpec.describe ReleaseObjectJob do
       it 'increments the bulk_actions druid count fail' do
         expect do
           subject.perform(bulk_action_no_process_callback.id, params)
-        end.to change { bulk_action_no_process_callback.druid_count_fail }.from(0).to(pids.length)
+        end.to change(bulk_action_no_process_callback, :druid_count_fail).from(0).to(pids.length)
       end
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
@@ -83,10 +87,11 @@ RSpec.describe ReleaseObjectJob do
           expect(buffer.string).to include 'Release tag failed POST Dor::Services::Client::Error : 500 ()'
         end
         expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
-        expect(buffer.string).to_not include 'Release tag added successfully'
-        expect(buffer.string).to_not include 'Trying to start release workflow'
+        expect(buffer.string).not_to include 'Release tag added successfully'
+        expect(buffer.string).not_to include 'Trying to start release workflow'
       end
     end
+
     context 'when a release wf fails' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback).at_least(:once)
@@ -96,6 +101,7 @@ RSpec.describe ReleaseObjectJob do
           stub_release_wf(pid, 500)
         end
       end
+
       it 'updates the total druid count' do
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
@@ -103,7 +109,7 @@ RSpec.describe ReleaseObjectJob do
       it 'increments the bulk_actions druid count fail' do
         expect do
           subject.perform(bulk_action_no_process_callback.id, params)
-        end.to change { bulk_action_no_process_callback.druid_count_fail }.from(0).to(pids.length)
+        end.to change(bulk_action_no_process_callback, :druid_count_fail).from(0).to(pids.length)
       end
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
@@ -125,6 +131,7 @@ RSpec.describe ReleaseObjectJob do
         expect(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback).at_least(:once)
         expect(subject).to receive(:can_manage?).and_return(false).exactly(pids.length).times
       end
+
       it 'updates the total druid count' do
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
@@ -137,7 +144,7 @@ RSpec.describe ReleaseObjectJob do
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
           expect(buffer.string).to include "Not authorized for #{pid}"
-          expect(buffer.string).to_not include 'Adding release tag for'
+          expect(buffer.string).not_to include 'Adding release tag for'
         end
         expect(buffer.string).to include 'Finished ReleaseObjectJob for BulkAction'
       end

@@ -32,7 +32,7 @@ RSpec.describe AuthController, type: :controller do
         expect(session[:groups]).to be_blank
 
         post :forget_impersonated_groups
-        expect(response.status).to_not eq 403
+        expect(response.status).not_to eq 403
         expect(session[:groups]).to be_blank
       end
     end

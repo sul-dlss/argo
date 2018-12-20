@@ -39,6 +39,7 @@ RSpec.describe BulkJobsController do
 
   describe '#load_bulk_jobs' do
     let(:sorted_bulk_job_info) { controller.send(:load_bulk_jobs, 'druid:bc682xk5613') }
+
     it 'loads the expected number of records' do
       expect(sorted_bulk_job_info.length).to eq 5
     end

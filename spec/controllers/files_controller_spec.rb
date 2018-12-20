@@ -19,6 +19,7 @@ RSpec.describe FilesController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'has dor-services-app fetch a file from the workspace' do
         expect(Dor::Services::Client).to receive(:retrieve_file)
           .with(object: pid, filename: 'somefile.txt')

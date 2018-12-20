@@ -4,13 +4,13 @@ require 'spec_helper'
 
 describe SolrDocument, type: :model do
   describe 'get_milestones' do
-    it 'should build an empty listing if passed an empty doc' do
+    it 'builds an empty listing if passed an empty doc' do
       milestones = SolrDocument.new({}).get_milestones
       milestones.each do |key, value|
         expect(value).to match a_hash_excluding(:time)
       end
     end
-    it 'should generate a correct lifecycle with the old format that lacks version info' do
+    it 'generates a correct lifecycle with the old format that lacks version info' do
       doc = SolrDocument.new('lifecycle_ssim' => ['registered:2012-02-25T01:40:57Z'])
 
       versions = doc.get_milestones
@@ -28,7 +28,7 @@ describe SolrDocument, type: :model do
         end
       end
     end
-    it 'should recognize versions and bundle versions together' do
+    it 'recognizes versions and bundle versions together' do
       lifecycle_data = ['registered:2012-02-25T01:40:57Z;1', 'opened:2012-02-25T01:39:57Z;2']
       versions = SolrDocument.new('lifecycle_ssim' => lifecycle_data).get_milestones
       expect(versions['1'].size).to eq(8)
@@ -66,8 +66,9 @@ describe SolrDocument, type: :model do
       end
     end
   end
+
   describe 'get_versions' do
-    it 'should build a version hash' do
+    it 'builds a version hash' do
       data = []
       data << '1;1.0.0;Initial version'
       data << '2;1.1.0;Minor change'

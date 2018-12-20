@@ -10,10 +10,12 @@ describe WorkflowHelper, type: :helper do
     let(:blacklight_config) { Blacklight::Configuration.new }
     let(:query_params) { { controller: 'report', action: 'workflow_grid' } }
     let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }
-    before(:each) do
+
+    before do
       allow(helper).to receive(:blacklight_config).and_return blacklight_config
       allow(helper).to receive(:search_state).and_return search_state
     end
+
     describe 'wf_hash structure' do
       it 'without process' do
         wf_hash = {}
@@ -34,9 +36,10 @@ describe WorkflowHelper, type: :helper do
         wf_hash = { process => { status => { _: '' } } }
         expect(helper
           .render_workflow_reset_link(wf_hash, name, process, status))
-          .to_not be_nil
+          .not_to be_nil
       end
     end
+
     describe 'reset link' do
       it '' do
         wf_hash = { process => { status => { _: '' } } }

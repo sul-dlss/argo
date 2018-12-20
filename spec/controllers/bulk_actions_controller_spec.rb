@@ -23,10 +23,11 @@ RSpec.describe BulkActionsController do
       expect(response.status).to eq 200
     end
   end
+
   describe 'GET new' do
     it 'assigns @bulk_action' do
       get :new
-      expect(assigns(:bulk_action)).to_not be_nil
+      expect(assigns(:bulk_action)).not_to be_nil
     end
     describe 'assigns @last_search' do
       it 'with no session[:search]' do
@@ -48,11 +49,13 @@ RSpec.describe BulkActionsController do
         get :new
       end
     end
+
     it 'has a 200 status code' do
       get :new
       expect(response.status).to eq 200
     end
   end
+
   describe 'POST create' do
     context 'with correct parameters' do
       let(:groups) { [User::ADMIN_GROUPS.first, 'sunetid:person9'] }
@@ -84,12 +87,14 @@ RSpec.describe BulkActionsController do
         expect(response).to render_template('new')
       end
     end
+
     context 'without current parameters' do
       it 'requires bulk_action parameter' do
         expect { post :create }.to raise_error ActionController::ParameterMissing
       end
     end
   end
+
   describe 'DELETE destroy' do
     it 'assigns and deletes current_users BulkAction by id param' do
       b_action = create(:bulk_action, user: current_user)
@@ -101,10 +106,11 @@ RSpec.describe BulkActionsController do
       b_action = create(:bulk_action, user_id: current_user.id + 1)
       expect do
         delete :destroy, params: { id: b_action.id }
-      end.to_not change(BulkAction, :count)
+      end.not_to change(BulkAction, :count)
       expect(response.status).to eq 404
     end
   end
+
   describe 'GET file' do
     let(:bulk_action) { create(:bulk_action, user_id: user_id) }
     let(:user_id) { current_user.id }
@@ -125,8 +131,9 @@ RSpec.describe BulkActionsController do
 
     context 'for other users files' do
       let(:user_id) { current_user.id + 1 }
+
       it 'does not send file for other users files' do
-        expect(controller).to_not receive(:send_file)
+        expect(controller).not_to receive(:send_file)
         get :file, params: { id: bulk_action.id, filename: 'not_my_log.log' }
         expect(response.status).to eq 404
       end

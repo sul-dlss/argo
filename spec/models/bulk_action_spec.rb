@@ -5,20 +5,23 @@ require 'spec_helper'
 RSpec.describe BulkAction do
   describe 'valid action_types' do
     it 'does not allow nonspecified action_types' do
-      expect(BulkAction.create(action_type: 'YoloJob').save).to be false
+      expect(described_class.create(action_type: 'YoloJob').save).to be false
     end
   end
+
   describe '#file' do
     it 'returns the filename with path' do
-      @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
+      @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
       expect(@bulk_action.file('hello_world.txt'))
         .to eq "#{Settings.BULK_METADATA.DIRECTORY}GenericJob_#{@bulk_action.id}/hello_world.txt"
     end
   end
+
   describe 'triggers after_create callbacks' do
-    before(:each) do
-      @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
+    before do
+      @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
     end
+
     it '#create_output_directory' do
       expect(@bulk_action).to receive(:create_output_directory)
       @bulk_action.run_callbacks(:create) { true }
@@ -34,17 +37,20 @@ RSpec.describe BulkAction do
   end
   ##
   # This is testing the completion of private methods
+
   describe 'directory and file creation' do
-    before(:each) do
-      @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
+    before do
+      @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
       @bulk_action.run_callbacks(:create) { true }
     end
+
     let(:directory) do
       File.join(
         Settings.BULK_METADATA.DIRECTORY,
         "#{@bulk_action.action_type}_#{@bulk_action.id}"
       )
     end
+
     it 'output_directory exists' do
       expect(Dir.exist?(directory)).to be true
     end
@@ -52,8 +58,9 @@ RSpec.describe BulkAction do
       expect(File.exist?(File.join(Settings.BULK_METADATA.LOG)))
     end
   end
+
   it 'makes sure BulkAction job was kicked off' do
-    @bulk_action = BulkAction.create(
+    @bulk_action = described_class.create(
       action_type: 'GenericJob', pids: 'a b c', manage_release: {}
     )
     expect(GenericJob).to receive(:perform_later)
@@ -70,11 +77,12 @@ RSpec.describe BulkAction do
   end
   describe 'before_destroy callbacks' do
     it 'calls #remove_output_directory' do
-      @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
+      @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
       expect(@bulk_action).to receive(:remove_output_directory)
       @bulk_action.run_callbacks(:destroy) { true }
     end
   end
+
   describe '#remove_output_directory' do
     let(:directory) do
       File.join(
@@ -82,8 +90,9 @@ RSpec.describe BulkAction do
         "#{@bulk_action.action_type}_#{@bulk_action.id}"
       )
     end
+
     it 'cleans up output directory' do
-      @bulk_action = BulkAction.create(action_type: 'GenericJob', pids: '')
+      @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
       @bulk_action.run_callbacks(:create) { true }
       expect(Dir.exist?(directory)).to be true
       @bulk_action.destroy

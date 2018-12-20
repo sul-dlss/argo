@@ -31,7 +31,8 @@ describe 'items/_button_link_list.html.erb' do
       }
     ]
   end
-  it 'should contain button group, with specific buttons' do
+
+  it 'contains button group, with specific buttons' do
     render 'items/button_link_list', buttons: buttons
     expect(rendered).to have_css '.btn-group-vertical.argo-show-btn-group'
     expect(rendered).to have_css 'a', count: buttons.length

@@ -10,50 +10,56 @@ RSpec.describe ApplicationHelper do
       end
     end
   end
+
   describe '#bulk_update_view?' do
     it 'checks params' do
       params = {}
-      expect(helper.bulk_update_view?(params)).to be_falsey
+      expect(helper).not_to be_bulk_update_view(params)
       params['controller'] = 'report'
-      expect(helper.bulk_update_view?(params)).to be_falsey
+      expect(helper).not_to be_bulk_update_view(params)
       params['action'] = 'bulk'
-      expect(helper.bulk_update_view?(params)).to be_truthy
+      expect(helper).to be_bulk_update_view(params)
     end
   end
+
   describe '#catalog_view?' do
     it 'checks params' do
       params = {}
-      expect(helper.catalog_view?(params)).to be_falsey
+      expect(helper).not_to be_catalog_view(params)
       params['controller'] = 'catalog'
-      expect(helper.catalog_view?(params)).to be_truthy
+      expect(helper).to be_catalog_view(params)
     end
   end
+
   describe '#report_view' do
     it 'checks params' do
       params = {}
-      expect(helper.report_view?(params)).to be_falsey
+      expect(helper).not_to be_report_view(params)
       params['controller'] = 'report'
-      expect(helper.report_view?(params)).to be_falsey
+      expect(helper).not_to be_report_view(params)
       params['action'] = 'index'
-      expect(helper.report_view?(params)).to be_truthy
+      expect(helper).to be_report_view(params)
     end
   end
+
   describe '#workflow_grid_view?' do
     it 'checks params' do
       params = {}
-      expect(helper.workflow_grid_view?(params)).to be_falsey
+      expect(helper).not_to be_workflow_grid_view(params)
       params['controller'] = 'report'
-      expect(helper.workflow_grid_view?(params)).to be_falsey
+      expect(helper).not_to be_workflow_grid_view(params)
       params['action'] = 'workflow_grid'
-      expect(helper.workflow_grid_view?(params)).to be_truthy
+      expect(helper).to be_workflow_grid_view(params)
     end
   end
+
   describe '#search_of_pids' do
     context 'when nil' do
       it 'returns an empty string' do
         expect(helper.search_of_pids(nil)).to eq ''
       end
     end
+
     context 'when a Blacklight::Search' do
       it 'adds a pids_only param' do
         search = Search.new

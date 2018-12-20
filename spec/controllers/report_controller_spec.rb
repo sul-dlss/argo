@@ -9,6 +9,7 @@ RSpec.describe ReportController, type: :controller do
     allow_any_instance_of(User).to receive(:is_admin?).and_return(true)
     sign_in user
   end
+
   let(:user) { create(:user) }
 
   describe '#workflow_grid' do
@@ -33,12 +34,13 @@ RSpec.describe ReportController, type: :controller do
       expect(data['rows'].length).to eq(10)
     end
   end
+
   describe '#pids' do
     it 'returns json' do
       get :pids, params: { format: :json }
       expect(response).to have_http_status(:ok)
       pids = JSON.parse(response.body)['druids']
-      expect(pids.is_a?(Array)).to be_truthy
+      expect(pids).to be_a(Array)
       expect(pids.length > 1).to be_truthy
       expect(pids.first).to eq('br481xz7820')
     end
@@ -56,6 +58,7 @@ RSpec.describe ReportController, type: :controller do
     let(:repo) { 'dor' }
     let(:workflow) { 'accessionWF' }
     let(:step) { 'descriptive-metadata' }
+
     it 'requires parameters' do
       expect { post :reset, xhr: true }.to raise_error(ArgumentError)
       expect { post :reset, xhr: true, params: { reset_workflow: workflow } }.to raise_error(ArgumentError)
@@ -104,6 +107,7 @@ RSpec.describe ReportController, type: :controller do
 
   describe '#config' do
     let(:config) { controller.blacklight_config }
+
     it 'uses POST as the http method' do
       expect(config.http_method).to eq :post
     end

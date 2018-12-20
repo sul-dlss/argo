@@ -34,7 +34,7 @@ describe RegistrationHelper do
   end
 
   it 'returns nothing when permission_keys is empty' do
-    expect(Dor::SearchService).to_not receive(:query)
+    expect(Dor::SearchService).not_to receive(:query)
     expect(apo_list([])).to eq []
   end
 end

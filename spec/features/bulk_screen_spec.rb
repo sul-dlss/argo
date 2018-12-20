@@ -3,12 +3,12 @@
 require 'spec_helper'
 
 # Feature/view tests for the (old) bulk actions view.
-RSpec.feature 'Bulk actions view', js: true do
+RSpec.describe 'Bulk actions view', js: true do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
-  scenario 'basic page renders ok' do
+  it 'basic page renders ok' do
     visit report_bulk_path
 
     expect(page).to have_css('h1', text: 'Bulk update operations')

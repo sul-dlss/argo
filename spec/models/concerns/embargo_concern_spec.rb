@@ -12,21 +12,25 @@ RSpec.describe EmbargoConcern do
         SolrDocument::FIELD_EMBARGO_RELEASE_DATE => ['24/02/2259']
       }
     end
+
     it 'returns embargo status' do
-      expect(document.embargoed?).to be_truthy
+      expect(document).to be_embargoed
       expect(document.embargo_status).to eq 'embargoed'
       expect(document.embargo_release_date).to eq '24/02/2259'
     end
   end
+
   describe 'when it is not embargoed' do
     let(:document_attributes) { {} }
+
     context 'with no field' do
       it 'returns nil' do
-        expect(document.embargoed?).to be_falsey
+        expect(document).not_to be_embargoed
         expect(document.embargo_status).to be_nil
         expect(document.embargo_release_date).to be_nil
       end
     end
+
     context 'with empty field' do
       let(:document_attributes) do
         {
@@ -34,8 +38,9 @@ RSpec.describe EmbargoConcern do
           SolrDocument::FIELD_EMBARGO_RELEASE_DATE => nil
         }
       end
+
       it 'returns nil' do
-        expect(document.embargoed?).to be_falsey
+        expect(document).not_to be_embargoed
         expect(document.embargo_status).to be_nil
         expect(document.embargo_release_date).to be_nil
       end

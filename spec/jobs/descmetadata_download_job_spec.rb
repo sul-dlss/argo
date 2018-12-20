@@ -22,7 +22,7 @@ describe DescmetadataDownloadJob, type: :job do
     }
   end
 
-  after :each do
+  after do
     FileUtils.rm_rf(@output_directory) if Dir.exist?(@output_directory)
   end
 
@@ -33,10 +33,11 @@ describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'start_log' do
-    before :each do
+    before do
       @log = double('log')
       allow(@log).to receive(:flush)
     end
+
     it 'writes the correct information to the log' do
       expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_job_start .*/)
       expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_user .*/)
@@ -71,7 +72,7 @@ describe DescmetadataDownloadJob, type: :job do
 
       @download_job.perform(bulk_action.id, @zip_params_long)
 
-      expect(File.exist?(@output_zip_filename)).to be_truthy
+      expect(File).to be_exist(@output_zip_filename)
       Zip::File.open(@output_zip_filename) do |open_file|
         expect(open_file.glob('*').length).to eq 2
       end
@@ -87,7 +88,7 @@ describe DescmetadataDownloadJob, type: :job do
 
       @download_job.perform(bulk_action.id, @zip_params_short)
 
-      expect(File.exist?(@output_zip_filename)).to be_truthy
+      expect(File).to be_exist(@output_zip_filename)
       Zip::File.open(@output_zip_filename) do |open_file|
         expect(open_file.glob('*').length).to eq 0
       end
@@ -95,7 +96,7 @@ describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'query_dor' do
-    before :each do
+    before do
       @log = double('log')
     end
 
@@ -108,7 +109,7 @@ describe DescmetadataDownloadJob, type: :job do
     it 'attempts three connections and logs failures' do
       dor_double = class_double('Dor').as_stubbed_const(transfer_nested_constants: false)
       expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
-      expect(@log).to receive(:puts).exactly(2).times.with('argo.bulk_metadata.bulk_log_retry druid:123')
+      expect(@log).to receive(:puts).twice.with('argo.bulk_metadata.bulk_log_retry druid:123')
       expect(@log).to receive(:puts).once.with('argo.bulk_metadata.bulk_log_timeout druid:123')
       result = @download_job.query_dor('druid:123', @log)
       expect(result).to eq(nil)

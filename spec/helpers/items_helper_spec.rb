@@ -36,8 +36,9 @@ describe ItemsHelper, type: :helper do
         <mods:genre>Digital Maps</mods:genre>
     </mods:mods>'
   end
+
   context 'schema_validate' do
-    it 'should validate a document' do
+    it 'validates a document' do
       doc = Nokogiri.XML(mods_xml) do |config|
         config.default_xml.noblanks
       end

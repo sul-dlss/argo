@@ -27,7 +27,7 @@ describe GenericJob do
   end
 
   describe '#with_bulk_action_log' do
-    it 'should open a log buffer in append mode, and pass it to the block' do
+    it 'opens a log buffer in append mode, and pass it to the block' do
       buffer = StringIO.new
       expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'a').and_yield(buffer)
 

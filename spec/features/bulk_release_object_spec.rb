@@ -2,12 +2,14 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Bulk Object Release' do
+RSpec.describe 'Bulk Object Release' do
   let(:current_user) { create(:user) }
+
   before do
     sign_in current_user
   end
-  scenario 'Creates a new jobs' do
+
+  it 'Creates a new jobs' do
     visit new_bulk_action_path
     choose 'bulk_action_action_type_releaseobjectjob'
     fill_in 'pids', with: 'druid:br481xz7820'

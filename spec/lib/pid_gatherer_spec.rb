@@ -5,16 +5,19 @@ require 'spec_helper'
 RSpec.describe Argo::PidGatherer do
   let(:pid_gatherer) { described_class.new }
   let(:pid_gatherer_unfiltered) { described_class.new true, false }
+
   describe '#pid_lists_for_full_reindex' do
     it 'queries fedora and returns list' do
       expect(pid_gatherer.pid_lists_for_full_reindex.count).to eq 10
     end
   end
+
   describe '#uber_apo_pids' do
     it 'returns uber apo pid' do
       expect(pid_gatherer.uber_apo_pids).to eq [SolrDocument::UBER_APO_ID]
     end
   end
+
   describe '#workflow_pids' do
     it 'memoizes response' do
       expect(pid_gatherer).to receive(:pids_for_model_type).once
@@ -24,6 +27,7 @@ RSpec.describe Argo::PidGatherer do
       end
     end
   end
+
   describe '#agreement_pids' do
     it 'memoizes response' do
       expect(pid_gatherer).to receive(:pids_for_model_type).once
@@ -33,11 +37,13 @@ RSpec.describe Argo::PidGatherer do
       end
     end
   end
+
   describe '#hydrus_uber_apo_pids' do
     it 'returns uber apo pid' do
       expect(pid_gatherer.hydrus_uber_apo_pids).to eq [SolrDocument::HYDRUS_UBER_APO_ID]
     end
   end
+
   describe '#apo_pids' do
     it 'memoizes response' do
       expect(pid_gatherer).to receive(:pids_for_model_type).once
@@ -47,6 +53,7 @@ RSpec.describe Argo::PidGatherer do
       end
     end
   end
+
   describe '#hydrus_apo_pids' do
     it 'memoizes response' do
       expect(pid_gatherer).to receive(:pids_for_model_type).once
@@ -56,6 +63,7 @@ RSpec.describe Argo::PidGatherer do
       end
     end
   end
+
   describe '#collection_pids' do
     it 'memoizes response' do
       expect(pid_gatherer).to receive(:pids_for_model_type).once
@@ -65,6 +73,7 @@ RSpec.describe Argo::PidGatherer do
       end
     end
   end
+
   describe '#hydrus_collection_pids' do
     it 'memoizes response' do
       expect(pid_gatherer).to receive(:pids_for_model_type).once
@@ -74,6 +83,7 @@ RSpec.describe Argo::PidGatherer do
       end
     end
   end
+
   describe '#set_pids' do
     it 'memoizes response' do
       expect(pid_gatherer).to receive(:pids_for_model_type).once
@@ -83,6 +93,7 @@ RSpec.describe Argo::PidGatherer do
       end
     end
   end
+
   describe '#all_pids' do
     it 'memoizes response' do
       expect(Dor::SearchService).to receive(:iterate_over_pids).once
@@ -98,6 +109,7 @@ RSpec.describe Argo::PidGatherer do
       expect(pid_gatherer_unfiltered.all_pids.count).to eq 57
     end
   end
+
   describe '#remaining_pids' do
     let(:all_pids) { [1, 2, 3, 4, 5] }
     let(:uber_apo_pids) { [1, 2] }
@@ -109,6 +121,7 @@ RSpec.describe Argo::PidGatherer do
     let(:collection_pids) { [] }
     let(:hydrus_collection_pids) { [] }
     let(:set_pids) { [] }
+
     it 'subtracts other pids from all_pids' do
       expect(pid_gatherer).to receive(:all_pids).and_return(all_pids)
       expect(pid_gatherer).to receive(:uber_apo_pids).and_return(uber_apo_pids)

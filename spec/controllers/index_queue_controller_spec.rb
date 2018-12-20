@@ -9,6 +9,7 @@ RSpec.describe IndexQueueController do
     end
 
     let(:index_queue) { double('index_queue', depth: 100) }
+
     it 'returns a depth from the IndexQueue class' do
       expect(IndexQueue).to receive(:new).and_return(index_queue)
       get :depth, params: { format: :json }

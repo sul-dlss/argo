@@ -4,6 +4,7 @@ require 'spec_helper'
 
 RSpec.describe 'items/_open_version_ui.html.erb' do
   let(:object) { double('object', pid: 'druid:abc123') }
+
   it 'renders the partial content' do
     assign(:object, object)
     render

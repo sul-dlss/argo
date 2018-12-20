@@ -2,13 +2,14 @@
 
 require 'spec_helper'
 
-RSpec.feature 'Bulk Descriptive Metadata Download' do
+RSpec.describe 'Bulk Descriptive Metadata Download' do
   let(:current_user) { create(:user) }
+
   before do
     sign_in current_user
   end
 
-  scenario 'New page has a populate druids div with last search' do
+  it 'New page has a populate druids div with last search' do
     visit search_catalog_path q: 'stanford'
     click_link 'Bulk Actions'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
@@ -17,11 +18,11 @@ RSpec.feature 'Bulk Descriptive Metadata Download' do
     expect(page).to have_css 'a[data-populate-druids="/catalog?action=index&' \
       'controller=catalog&pids_only=true&q=stanford"]'
   end
-  scenario 'Populate druids from last search' do
+  it 'Populate druids from last search' do
     pending 'not implemented spec due to js testing restrictions'
     fail
   end
-  scenario 'Creates a new jobs' do
+  it 'Creates a new jobs' do
     visit new_bulk_action_path
     choose 'bulk_action_action_type_descmetadatadownloadjob'
     fill_in 'pids', with: 'druid:br481xz7820'

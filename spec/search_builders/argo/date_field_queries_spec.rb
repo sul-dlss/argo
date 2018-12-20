@@ -9,10 +9,11 @@ class TestClass
 end
 
 describe Argo::DateFieldQueries do
+  subject { TestClass.new }
+
   let(:user) do
     double('user', is_manager?: false, is_admin?: false, is_viewer?: false)
   end
-  subject { TestClass.new }
 
   describe 'add_date_field_queries' do
     describe 'when a date field is faceted' do

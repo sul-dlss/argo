@@ -37,18 +37,18 @@ RSpec.describe ItemsController, type: :controller do
   let(:user) { create(:user) }
 
   describe 'release_hold' do
-    it 'should release an item that is on hold if its apo has been ingested' do
+    it 'releases an item that is on hold if its apo has been ingested' do
       expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
       expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
       expect(Dor::Config.workflow.client).to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
     end
-    it 'should refuse to release an item that isnt on hold' do
+    it 'refuses to release an item that isnt on hold' do
       expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
       expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
     end
-    it 'should refuse to release an item whose apo hasnt been ingested' do
+    it 'refuses to release an item whose apo hasnt been ingested' do
       expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
       expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
       expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
@@ -282,10 +282,12 @@ RSpec.describe ItemsController, type: :controller do
       @content_md = double(Dor::ContentMetadataDS)
       allow(@item).to receive(:contentMetadata).and_return(@content_md)
     end
+
     context 'when they have manage_content access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'updates the shelve, publish and preserve to yes (used to be true)' do
         allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
           expect(shelve).to eq('yes')
@@ -332,6 +334,7 @@ RSpec.describe ItemsController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
       end
+
       it 'prevents access' do
         expect(@item).not_to receive(:save)
         post 'datastream_update', params: { dsid: 'contentMetadata', id: @pid, content: xml }
@@ -391,10 +394,12 @@ RSpec.describe ItemsController, type: :controller do
         expect(response.code).to eq('403')
       end
     end
+
     context 'when they have manage_content access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'calls dor-services to reorder the resources' do
         expect(@item).to receive(:move_resource)
         post 'update_resource', params: { resource: '0001', position: '3', id: @pid }
@@ -415,6 +420,7 @@ RSpec.describe ItemsController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'adds a collection' do
         expect(@item).to receive(:add_collection).with('druid:1234')
         post 'add_collection', params: { id: @pid, collection: 'druid:1234' }
@@ -440,10 +446,12 @@ RSpec.describe ItemsController, type: :controller do
     before do
       @collection_druid = 'druid:1234'
     end
+
     context 'when they have manage_content access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'adds a collection if there is none yet' do
         allow(@item).to receive(:collections).and_return([])
         expect(@item).to receive(:add_collection).with(@collection_druid)
@@ -480,6 +488,7 @@ RSpec.describe ItemsController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'removes a collection' do
         expect(@item).to receive(:remove_collection).with('druid:1234')
         post 'remove_collection', params: { id: @pid, collection: 'druid:1234' }
@@ -501,6 +510,7 @@ RSpec.describe ItemsController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'returns the mods xml for a GET' do
         @request.env['HTTP_ACCEPT'] = 'application/xml'
         xml = '<somexml>stuff</somexml>'
@@ -528,6 +538,7 @@ RSpec.describe ItemsController, type: :controller do
         @wf = double()
         expect(@item).to receive(:workflows).and_return @wf
       end
+
       it 'initializes the new workflow' do
         expect(@item).to receive(:create_workflow)
         expect(@wf).to receive(:[]).with('accessionWF').and_return(nil)
@@ -535,7 +546,7 @@ RSpec.describe ItemsController, type: :controller do
         post 'add_workflow', params: { id: @pid, wf: 'accessionWF' }
       end
 
-      it "shouldn't initialize the workflow if one is already active" do
+      it 'does not initialize the workflow if one is already active' do
         expect(@item).not_to receive(:create_workflow)
         mock_wf = double()
         expect(mock_wf).to receive(:active?).and_return(true)
@@ -579,6 +590,7 @@ RSpec.describe ItemsController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
+
       it 'returns a 403 with an error message if there is no catkey' do
         expect(@item).to receive(:catkey).and_return('')
         get :refresh_metadata, params: { id: @pid }
@@ -588,16 +600,19 @@ RSpec.describe ItemsController, type: :controller do
 
       context 'there is a catkey present' do
         let(:descmd) { double(Dor::DescMetadataDS, ng_xml: double(Nokogiri::XML::Document, to_s: '<somexml>refreshed metadata</somexml>')) }
-        before(:each) do
+
+        before do
           allow(@item).to receive(:catkey).and_return('12345')
           allow(@item).to receive(:descMetadata).and_return(descmd)
         end
+
         context 'user has permission and object is editable' do
-          before(:each) do
+          before do
             expect(@item).to receive(:build_datastream).with('descMetadata', true)
             expect(descmd).to receive(:content=).with(descmd.ng_xml.to_s)
             expect(controller).to receive(:save_and_reindex)
           end
+
           it 'redirects with a notice if there is a catkey and the operation is not part of a bulk update' do
             get :refresh_metadata, params: { id: @pid }
             expect(response).to redirect_to(solr_document_path(@pid))
@@ -611,11 +626,12 @@ RSpec.describe ItemsController, type: :controller do
         end
 
         context "object doesn't allow modification or user doesn't have permission to edit desc metadata" do
-          before(:each) do
+          before do
             expect(@item).not_to receive(:build_datastream)
             expect(descmd).not_to receive(:content=)
             expect(controller).not_to receive(:save_and_reindex)
           end
+
           it 'returns a 403 with an error message if the user is not allowed to edit desc metadata' do
             expect(controller).to receive(:authorize!).with(:manage_desc_metadata, @item).and_raise(CanCan::AccessDenied)
             get :refresh_metadata, params: { id: @pid }
@@ -652,12 +668,14 @@ RSpec.describe ItemsController, type: :controller do
 
   describe '#set_governing_apo' do
     let(:new_apo_id) { 'druid:ab123cd4567' }
+
     context 'object modification not allowed, user authorized to manage governing APOs' do
       before do
         allow(@item).to receive(:allows_modification?).and_return(false)
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id)
       end
-      it 'should return a 403' do
+
+      it 'returns a 403' do
         expect(@item).not_to receive(:admin_policy_object=)
         expect(@item.identityMetadata).not_to receive(:adminPolicy)
         expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
@@ -666,12 +684,14 @@ RSpec.describe ItemsController, type: :controller do
         expect(response.body).to eq 'Object cannot be modified in its current state.'
       end
     end
+
     context 'object modification not allowed, user not authorized to manage governing APOs' do
       before do
         allow(@item).to receive(:allows_modification?).and_return(false)
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id).and_raise(CanCan::AccessDenied)
       end
-      it 'should return a 403' do
+
+      it 'returns a 403' do
         expect(@item).not_to receive(:admin_policy_object=)
         expect(@item.identityMetadata).not_to receive(:adminPolicy)
         expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
@@ -680,12 +700,14 @@ RSpec.describe ItemsController, type: :controller do
         expect(response.body).to eq 'forbidden'
       end
     end
+
     context 'object modification allowed, user not authorized to manage governing APOs' do
       before do
         allow(@item).to receive(:allows_modification?).and_return(true)
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id).and_raise(CanCan::AccessDenied)
       end
-      it 'should return a 403' do
+
+      it 'returns a 403' do
         expect(@item).not_to receive(:admin_policy_object=)
         expect(@item.identityMetadata).not_to receive(:adminPolicy)
         expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
@@ -694,14 +716,17 @@ RSpec.describe ItemsController, type: :controller do
         expect(response.body).to eq 'forbidden'
       end
     end
+
     context 'object modification allowed, user authorized to manage governing APOs' do
       let(:new_apo) { double(Dor::AdminPolicyObject, id: new_apo_id) }
+
       before do
         allow(@item).to receive(:allows_modification?).and_return(true)
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id)
         allow(Dor).to receive(:find).with(new_apo_id).and_return(new_apo)
       end
-      it 'should successfully update the governing APO' do
+
+      it 'updates the governing APO' do
         expect(@item).to receive(:admin_policy_object=).with(new_apo)
         expect(@item.identityMetadata).to receive(:adminPolicy).and_return(double(Dor::AdminPolicyObject))
         expect(@item.datastreams['identityMetadata']).to receive(:adminPolicy=).with(nil)
@@ -710,7 +735,8 @@ RSpec.describe ItemsController, type: :controller do
         expect(response).to redirect_to(solr_document_path(@pid))
         expect(flash[:notice]).to eq 'Governing APO updated!'
       end
-      it 'should reject requests in the old (deprecated) bulk update mode' do
+
+      it 'rejects requests in the old (deprecated) bulk update mode' do
         expect(@item).not_to receive(:admin_policy_object=)
         expect(@item.identityMetadata).not_to receive(:adminPolicy)
         expect(@item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)

@@ -62,7 +62,7 @@ RSpec.configure do |config|
   # Run each example in an ActiveRecord transaction
   config.use_transactional_fixtures = false
 
-  config.before :each do
+  config.before do
     if Capybara.current_driver == :rack_test
       DatabaseCleaner.strategy = :transaction
     else

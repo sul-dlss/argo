@@ -7,6 +7,7 @@ RSpec.describe 'items/_source_id_ui.html.erb' do
   let(:object) do
     double('object', pid: 'druid:abc123', identityMetadata: identity_metadata)
   end
+
   it 'renders the partial content' do
     assign(:object, object)
     render

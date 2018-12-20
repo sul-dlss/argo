@@ -33,7 +33,7 @@ describe ModsulatorJob, type: :job do
     it 'creates a directory if it does not exist' do
       dir = File.join(@output_directory, 'dirdir')
       @mj.generate_log_filename(dir)
-      expect(File.directory?(dir)).to be_truthy
+      expect(File).to be_directory(dir)
     end
   end
 
@@ -44,10 +44,11 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'start_log' do
-    before :each do
+    before do
       @log = double('log')
       allow(@log).to receive(:flush)
     end
+
     it 'writes the correct information to the log' do
       expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_job_start .*/)
       expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_user .*/)
@@ -64,10 +65,11 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'save_metadata_xml' do
-    before :each do
+    before do
       @xml_path = File.join(fixtures_dir, 'crowdsourcing_bridget_1.xml')
       @smx_path = File.join(@output_directory, 'smx.xml')
     end
+
     it 'writes an xml file correctly' do
       log = double('log')
       expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_xml_timestamp .*/)
@@ -76,7 +78,7 @@ describe ModsulatorJob, type: :job do
       @mj.save_metadata_xml(File.read(@xml_path), @smx_path, log)
       expect(File.read @smx_path).to eq(File.read @xml_path)
       File.delete(@smx_path) # cleanup
-      expect(File.exist? @smx_path).to be_falsey
+      expect(File).not_to be_exist @smx_path
     end
   end
 
@@ -144,7 +146,7 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'version_object' do
-    before :each do
+    before do
       @dor_object = double(pid: 'druid:123abc')
       @workflow = double('workflow')
       @log = double('log')
@@ -190,8 +192,8 @@ describe ModsulatorJob, type: :job do
     let(:xml_data) { File.read(xml_path) }
 
     it 'delivers remotely-converted data' do
-      FileUtils.copy_file(xlsx_path, test_spreadsheet_path)  # perform deletes upload file, so we copy fixture
-      expect(File.exist? test_spreadsheet_path).to be_truthy # confirm copy
+      FileUtils.copy_file(xlsx_path, test_spreadsheet_path) # perform deletes upload file, so we copy fixture
+      expect(File).to be_exist test_spreadsheet_path # confirm copy
       expect(@mj).to receive(:generate_xml).and_return(xml_data)
       @mj.perform(nil,
                   test_spreadsheet_path,
@@ -204,10 +206,10 @@ describe ModsulatorJob, type: :job do
       # Filename is calculated based on a millisecond timestamp, so we need to look for the generated file
       output_filename = Dir.glob("#{@output_directory}/crowdsourcing_bridget*.xml")[0]
       expect(output_filename).not_to be_nil
-      expect(File.exist? output_filename).to be_truthy
+      expect(File).to be_exist output_filename
       expect(File.read output_filename).to be_equivalent_to(xml_data).ignoring_attr_values('datetime', 'sourceFile')
-      expect(File.exist?(File.join(@output_directory, Settings.BULK_METADATA.LOG))).to be_truthy
-      expect(File.exist? test_spreadsheet_path).to be_falsey
+      expect(File).to be_exist(File.join(@output_directory, Settings.BULK_METADATA.LOG))
+      expect(File).not_to be_exist test_spreadsheet_path
     end
 
     it 'opens the log in append mode' do
