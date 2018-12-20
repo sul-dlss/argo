@@ -22,7 +22,9 @@ Dor.configure do
   end
 
   dor_services do
-    url Settings.DOR_SERVICES_URL
+    url Settings.DOR_SERVICES.URL
+    user Settings.DOR_SERVICES.USER
+    pass Settings.DOR_SERVICES.PASS
   end
 
   suri do

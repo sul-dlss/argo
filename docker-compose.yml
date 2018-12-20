@@ -17,9 +17,9 @@ services:
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
-      SETTINGS__DOR_SERVICES_URL: http://user:password@dor-services-app:3000
-      SETTINGS__CONTENT__SDR_SERVER_URL: http://user:password@dor-services-app:3000/v1/sdr
-      SETTINGS__METADATA__CATALOG_URL: http://user:password@dor-services-app:3000/v1/catalog/mods
+      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
+      SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
+      SETTINGS__METADATA__CATALOG_URL: http://dor-services-app:3000/v1/catalog/mods
 
   dor-services-app:
     image: suldlss/dor-services-app:latest
