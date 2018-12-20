@@ -50,7 +50,9 @@ RSpec.describe FilesController, type: :controller do
 
       before do
         allow(controller).to receive(:authorize!).and_return(true)
-        allow(Sdr::Client).to receive(:get_preserved_file_content).with(pid, mock_file_name, mock_version).and_return(mock_content)
+        allow(Dor::Services::Client).to receive(:preserved_content)
+          .with(object: pid, filename: mock_file_name, version: mock_version)
+          .and_return(mock_content)
       end
 
       it 'returns a response with the preserved file content as the body and the right headers' do
