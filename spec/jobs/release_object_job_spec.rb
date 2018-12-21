@@ -84,7 +84,7 @@ RSpec.describe ReleaseObjectJob do
         subject.perform(bulk_action_no_process_callback.id, params)
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
-          expect(buffer.string).to include 'Release tag failed POST Dor::Services::Client::Error : 500 ()'
+          expect(buffer.string).to include 'Release tag failed POST Dor::Services::Client::UnexpectedResponse : 500 ()'
         end
         expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
         expect(buffer.string).not_to include 'Release tag added successfully'
@@ -118,7 +118,7 @@ RSpec.describe ReleaseObjectJob do
         subject.perform(bulk_action_no_process_callback.id, params)
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
-          expect(buffer.string).to include 'Workflow creation failed POST Dor::Services::Client::Error : 500 ()'
+          expect(buffer.string).to include 'Workflow creation failed POST Dor::Services::Client::UnexpectedResponse : 500 ()'
         end
         expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
         expect(buffer.string).to include 'Release tag added successfully'

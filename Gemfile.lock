@@ -231,9 +231,10 @@ GEM
       stanford-mods-normalizer (~> 0.1)
       systemu (~> 2.6)
       uuidtools (~> 2.1.4)
-    dor-services-client (0.4.0)
+    dor-services-client (0.5.0)
       activesupport (>= 4.2, < 6)
       faraday (~> 0.15)
+      nokogiri (~> 1.8)
     dor-workflow-service (2.3.0)
       activesupport (>= 3.2.1, < 6)
       confstruct (>= 0.2.7, < 2)
@@ -729,7 +730,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 6.0, >= 6.0.1)
-  dor-services-client (~> 0.4)
+  dor-services-client (~> 0.5)
   equivalent-xml (>= 0.6.0)
   eye
   factory_bot_rails
