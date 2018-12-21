@@ -608,8 +608,7 @@ RSpec.describe ItemsController, type: :controller do
 
         context 'user has permission and object is editable' do
           before do
-            expect(@item).to receive(:build_datastream).with('descMetadata', true)
-            expect(descmd).to receive(:content=).with(descmd.ng_xml.to_s)
+            expect(@item).to receive(:build_descMetadata_datastream).with(descmd)
             expect(controller).to receive(:save_and_reindex)
           end
 
@@ -627,8 +626,7 @@ RSpec.describe ItemsController, type: :controller do
 
         context "object doesn't allow modification or user doesn't have permission to edit desc metadata" do
           before do
-            expect(@item).not_to receive(:build_datastream)
-            expect(descmd).not_to receive(:content=)
+            expect(@item).not_to receive(:build_descMetadata_datastream)
             expect(controller).not_to receive(:save_and_reindex)
           end
 

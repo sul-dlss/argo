@@ -548,8 +548,7 @@ class ItemsController < ApplicationController
       return
     end
 
-    @object.build_datastream('descMetadata', true)
-    @object.descMetadata.content = @object.descMetadata.ng_xml.to_s
+    @object.build_descMetadata_datastream(@object.descMetadata)
 
     respond_to do |format|
       if params[:bulk]
