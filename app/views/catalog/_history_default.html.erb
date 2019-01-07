@@ -34,12 +34,13 @@
     </dl>
   </div>
 
-  <% if object.respond_to? :release_tags %>
+  <% release_tags = ReleaseTags.from_dor_object(object) %>
+  <% if release_tags.any? %>
     <div>
       <dl>
         <dt>Releases</dt>
         <dd>
-          <%= render partial: 'show_releases', locals: { object: object } %>
+          <%= render 'show_releases', release_tags: release_tags %>
         </dd>
       </dl>
     </div>

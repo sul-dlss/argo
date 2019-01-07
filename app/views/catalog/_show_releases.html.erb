@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    <% ReleaseTags.from_dor_object(object).each do |release_tag| %>
+    <% release_tags.each do |release_tag| %>
       <tr>
         <td><%= release_tag.release %></td>
         <td><%= release_tag.what %></td>
