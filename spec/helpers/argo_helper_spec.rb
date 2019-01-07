@@ -118,8 +118,8 @@ describe ArgoHelper, type: :helper do
       end
       it 'generates the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
         allow(user).to receive(:is_admin?).and_return(false)
-        allow(@object).to receive(:can_manage_item?).and_return(true)
-        allow(@object).to receive(:can_manage_content?).and_return(true)
+        allow(Dor::Ability).to receive(:can_manage_item?).and_return(true)
+        allow(Dor::Ability).to receive(:can_manage_content?).and_return(true)
         buttons = helper.render_buttons(@doc)
         default_buttons.each do |button|
           expect(buttons).to include(button)
