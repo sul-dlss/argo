@@ -56,6 +56,10 @@ Argo::Application.routes.draw do
     get 'workflow_grid'
   end
 
+  namespace :collections do
+    get :exists
+  end
+
   resources :apo do
     resources :collections, only: [:new, :create]
     collection do

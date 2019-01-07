@@ -27,6 +27,7 @@
           Collection Title
         </label>
         <%= text_field_tag 'collection_title', nil, class: 'form-control' %>
+        <span id="collection_title_warning" class="alert alert-warning" style="display: none">Collection with this title already exists.</span>
       </div>
       <div class="form-group">
         <label for="collection_abstract">
@@ -47,6 +48,7 @@
           Collection Catkey
         </label>
         <%= text_field_tag 'collection_catkey', nil, class: 'form-control' %>
+        <span id="collection_catkey_warning" class="alert alert-warning" style="display: none">Collection with this catkey already exists.</span>
       </div>
       <div class="form-group">
         <label for="collection_rights_catkey">

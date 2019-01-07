@@ -23,4 +23,12 @@ class CollectionsController < ApplicationController
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_pid}"
     @apo.save # indexing happens automatically
   end
+
+  def exists
+    where_params = {}
+    where_params[:title_ssi] = params[:title] if params[:title].present?
+    where_params[:identifier_ssim] = "catkey:#{params[:catkey]}" if params[:catkey].present?
+    resp = where_params.empty? ? false : Dor::Collection.where(where_params).any?
+    render json: resp.to_json, layout: false
+  end
 end
