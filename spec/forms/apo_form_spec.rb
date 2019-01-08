@@ -28,6 +28,8 @@ RSpec.describe ApoForm do
     end
 
     describe '#sync' do
+      let(:license_info) { Dor::CreativeCommonsLicenseService.property(md_info[:use_license]) }
+
       it 'sets clean APO metadata for defaultObjectRights' do
         instance.validate(md_info)
         instance.sync
@@ -39,8 +41,8 @@ RSpec.describe ApoForm do
         expect(apo.default_workflows).to    eq([md_info[:workflow]])
         expect(apo.default_rights).to       eq(md_info[:default_object_rights])
         expect(apo.use_license).to          eq(md_info[:use_license])
-        expect(apo.use_license_uri).to      eq(Dor::CreativeCommonsLicenseService[md_info[:use_license]][:uri])
-        expect(apo.use_license_human).to    eq(Dor::CreativeCommonsLicenseService[md_info[:use_license]][:human_readable])
+        expect(apo.use_license_uri).to      eq(license_info.uri)
+        expect(apo.use_license_human).to    eq(license_info.label)
         expect(apo.copyright_statement).to  eq(md_info[:copyright])
         expect(apo.use_statement).to        eq(md_info[:use])
         doc = Nokogiri::XML(File.read('spec/fixtures/apo_defaultObjectRights_clean.xml'))
