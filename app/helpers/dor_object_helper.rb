@@ -74,7 +74,7 @@ module DorObjectHelper
 
   def render_status_style(doc, object = nil)
     unless object.nil?
-      steps = Dor::Processable::STEPS
+      steps = Dor::StatusService::STEPS
       highlighted_statuses = [steps['registered'], steps['submitted'], steps['described'], steps['published'], steps['deposited']]
       return 'argo-obj-status-highlight' if highlighted_statuses.include? object.status_info[:status_code]
     end
