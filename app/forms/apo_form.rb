@@ -131,14 +131,14 @@ class ApoForm < BaseForm
   # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated
   # entries, unless the current value is a deprecated entry, in which case, include that entry with the
   # deprecation warning in a parenthetical.
-  def options_for_use_license_type(use_license_map, cur_use_license)
-    use_license_map.map do |key, val|
-      if val[:deprecation_warning].nil?
-        [val[:human_readable], key]
-      elsif key == cur_use_license
-        ["#{val[:human_readable]} (#{val[:deprecation_warning]})", key]
+  def options_for_use_license_type(license_service, current_value)
+    license_service.options do |term|
+      if term.key == current_value && term.deprecation_warning
+        ["#{term.label} (#{term.deprecation_warning})", term.key]
+      elsif term.deprecation_warning.nil?
+        [term.label, term.key]
       end
-    end.compact # the map block will produce nils for unused deprecated entries, compact will get rid of them
+    end.compact # the options block will produce nils for unused deprecated entries, compact will get rid of them
   end
 
   def manage_permissions
