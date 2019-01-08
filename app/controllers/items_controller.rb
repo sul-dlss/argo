@@ -449,10 +449,10 @@ class ItemsController < ApplicationController
   def tags_bulk
     current_tags = @object.tags
     # delete all tags
-    current_tags.each { |tag| @object.remove_tag tag }
+    current_tags.each { |tag| Dor::TagService.remove(@object, tag) }
     # add all of the recieved tags as new tags
     tags = params[:tags].split(/\t/)
-    tags.each { |tag| @object.add_tag tag }
+    tags.each { |tag| Dor::TagService.add(@object, tag) }
     @object.identityMetadata.content_will_change! # mark as dirty
     @object.identityMetadata.save
     respond_to do |format|
@@ -469,18 +469,18 @@ class ItemsController < ApplicationController
     current_tags = @object.tags
     if params[:add]
       [:new_tag1, :new_tag2, :new_tag3].each do |k|
-        next unless params[k] && params[k].length > 0
-
-        @object.add_tag(params[k])
+        Dor::TagService.add(@object, params[k]) if params[k].present?
       end
     end
+
     if params[:del]
-      raise 'failed to delete' unless @object.remove_tag(current_tags[params[:tag].to_i - 1])
+      raise 'failed to delete' unless Dor::TagService.remove(@object, current_tags[params[:tag].to_i - 1])
     end
+
     if params[:update]
       count = 1
       current_tags.each do |tag|
-        @object.update_tag(tag, params[('tag' + count.to_s).to_sym])
+        Dor::TagService.update(@object, tag, params[('tag' + count.to_s).to_sym])
         count += 1
       end
     end
