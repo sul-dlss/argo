@@ -44,7 +44,7 @@ class ApoForm < BaseForm
     model.copyright_statement  = params[:copyright]
     model.use_statement        = params[:use]
 
-    model.add_tag(params[:tag]) if params[:tag]
+    Dor::TagService.add(model, params[:tag]) if params[:tag]
 
     sync_roles
   end

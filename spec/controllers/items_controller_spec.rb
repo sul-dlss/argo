@@ -233,15 +233,17 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'updates tags' do
-        expect(@item).to receive(:update_tag).with('some:thing', 'some:thingelse')
+        expect(Dor::TagService).to receive(:update).with(@item, 'some:thing', 'some:thingelse')
         post 'tags', params: { id: @pid, update: 'true', tag1: 'some:thingelse' }
       end
+
       it 'deletes tag' do
-        expect(@item).to receive(:remove_tag).with('some:thing').and_return(true)
+        expect(Dor::TagService).to receive(:remove).with(@item, 'some:thing').and_return(true)
         post 'tags', params: { id: @pid, tag: '1', del: 'true' }
       end
+
       it 'adds a tag' do
-        expect(@item).to receive(:add_tag).with('new:thing')
+        expect(Dor::TagService).to receive(:add).with(@item, 'new:thing')
         post 'tags', params: { id: @pid, new_tag1: 'new:thing', add: 'true' }
       end
     end
@@ -257,13 +259,14 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'removes an old tag an add a new one' do
-        expect(@item).to receive(:remove_tag).with('some:thing').and_return(true)
-        expect(@item).to receive(:add_tag).with('new:thing').and_return(true)
+        expect(Dor::TagService).to receive(:remove).with(@item, 'some:thing')
+        expect(Dor::TagService).to receive(:add).with(@item, 'new:thing')
         post 'tags_bulk', params: { id: @pid, tags: 'new:thing' }
       end
+
       it 'adds multiple tags' do
-        expect(@item).to receive(:add_tag).twice
-        expect(@item).to receive(:remove_tag).with('some:thing').and_return(true)
+        expect(Dor::TagService).to receive(:add).twice
+        expect(Dor::TagService).to receive(:remove).with(@item, 'some:thing')
         expect(@item).to receive(:save)
         post 'tags_bulk', params: { id: @pid, tags: 'Process : Content Type : Book (ltr)	 Registered By : labware' }
       end
