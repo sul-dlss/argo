@@ -11,7 +11,7 @@ RSpec.describe ItemsController, type: :controller do
     allow(Dor).to receive(:find).with(@pid).and_return(@item)
     idmd = double()
     apo  = double()
-    wf   = double()
+    wf   = instance_double(Dor::WorkflowDs)
     idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = double(Nokogiri::XML::Document)
     allow(idmd).to receive(:"content_will_change!")
@@ -543,7 +543,7 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'initializes the new workflow' do
-        expect(@item).to receive(:create_workflow)
+        expect(Dor::CreateWorkflowService).to receive(:create_workflow).with(@item, name: 'accessionWF')
         expect(@wf).to receive(:[]).with('accessionWF').and_return(nil)
         expect(controller).to receive(:flush_index)
         post 'add_workflow', params: { id: @pid, wf: 'accessionWF' }

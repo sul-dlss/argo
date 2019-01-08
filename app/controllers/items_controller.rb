@@ -638,7 +638,7 @@ class ItemsController < ApplicationController
       render status: 500, plain: "#{wf_name} already exists!"
       return
     end
-    @object.create_workflow(wf_name)
+    Dor::CreateWorkflowService.create_workflow(@object, name: wf_name)
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
