@@ -142,12 +142,12 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'calls dor-services to open a new version' do
-        allow(@item).to receive(:open_new_version)
+        allow(Dor::Services::Client).to receive(:open_new_version)
         vers_md_upd_info = { significance: 'major', description: 'something', opening_user_name: user.to_s }
-        expect(@item).to receive(:open_new_version).with(vers_md_upd_info: vers_md_upd_info)
         expect(@item).to receive(:save)
         expect(Dor::SearchService.solr).to receive(:add)
         get 'open_version', params: { id: @pid, severity: vers_md_upd_info[:significance], description: vers_md_upd_info[:description] }
+        expect(Dor::Services::Client).to have_received(:open_new_version).with(object: @item, vers_md_upd_info: vers_md_upd_info)
       end
     end
 
