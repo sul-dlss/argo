@@ -30,6 +30,22 @@
     <% end %>
 
     <li><%= link_to "All&nbsp;Workflows".html_safe, report_workflow_grid_path %></li>
+
+    <li class='dropdown'>
+      <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+        Bulk Edits
+        <span class='caret'></span>
+      </a>
+      <ul class='dropdown-menu'>
+        <li>
+          <%= link_to 'Bulk Update (synchronous)', report_bulk_path %>
+        </li>
+        <li>
+          <%= link_to 'Bulk Actions (asynchronous)', bulk_actions_path %>
+        </li>
+      </ul>
+    </li>
+
     <li class='dropdown'>
       <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
         Register
