@@ -131,11 +131,11 @@ describe ModsulatorJob, type: :job do
   end
 
   describe 'commit_new_version' do
-    let(:dor_test_object) { double('dor_item') }
+    let(:dor_test_object) { double('dor_item', pid: 'druid:123abc') }
 
     it 'opens a new minor version with filename and username' do
       expect(Dor::Services::Client).to receive(:open_new_version).with(
-        object: dor_test_object,
+        object: dor_test_object.pid,
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Descriptive metadata upload from testfile.xlsx',
