@@ -11,48 +11,6 @@ RSpec.describe ApplicationHelper do
     end
   end
 
-  describe '#bulk_update_view?' do
-    it 'checks params' do
-      params = {}
-      expect(helper).not_to be_bulk_update_view(params)
-      params['controller'] = 'report'
-      expect(helper).not_to be_bulk_update_view(params)
-      params['action'] = 'bulk'
-      expect(helper).to be_bulk_update_view(params)
-    end
-  end
-
-  describe '#catalog_view?' do
-    it 'checks params' do
-      params = {}
-      expect(helper).not_to be_catalog_view(params)
-      params['controller'] = 'catalog'
-      expect(helper).to be_catalog_view(params)
-    end
-  end
-
-  describe '#report_view' do
-    it 'checks params' do
-      params = {}
-      expect(helper).not_to be_report_view(params)
-      params['controller'] = 'report'
-      expect(helper).not_to be_report_view(params)
-      params['action'] = 'index'
-      expect(helper).to be_report_view(params)
-    end
-  end
-
-  describe '#workflow_grid_view?' do
-    it 'checks params' do
-      params = {}
-      expect(helper).not_to be_workflow_grid_view(params)
-      params['controller'] = 'report'
-      expect(helper).not_to be_workflow_grid_view(params)
-      params['action'] = 'workflow_grid'
-      expect(helper).to be_workflow_grid_view(params)
-    end
-  end
-
   describe '#search_of_pids' do
     context 'when nil' do
       it 'returns an empty string' do
