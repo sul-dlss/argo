@@ -59,7 +59,8 @@ class ItemsController < ApplicationController
   ]
 
   def purl_preview
-    @mods_display = ModsDisplayObject.new(@object.generate_public_desc_md)
+    md_service = Dor::PublicDescMetadataService.new(@object)
+    @mods_display = ModsDisplayObject.new(md_service.to_xml)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
