@@ -80,6 +80,6 @@ class SetGoverningApoJob < GenericJob
       description: 'Set new governing APO',
       opening_user_name: bulk_action.user.to_s
     }
-    object.open_new_version(vers_md_upd_info: vers_md_upd_info)
+    Dor::Services::Client.open_new_version(object: object, vers_md_upd_info: vers_md_upd_info)
   end
 end

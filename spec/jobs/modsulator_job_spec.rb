@@ -134,7 +134,8 @@ describe ModsulatorJob, type: :job do
     let(:dor_test_object) { double('dor_item') }
 
     it 'opens a new minor version with filename and username' do
-      expect(dor_test_object).to receive(:open_new_version).with(
+      expect(Dor::Services::Client).to receive(:open_new_version).with(
+        object: dor_test_object,
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Descriptive metadata upload from testfile.xlsx',

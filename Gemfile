@@ -42,9 +42,6 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
 gem 'almond-rails'
 gem 'barby'
 gem 'bootstrap-sass'
@@ -79,7 +76,7 @@ gem 'active-fedora', '~> 8.2'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '~> 6.1'
-gem 'dor-services-client', '~> 0.5'
+gem 'dor-services-client', '~> 0.10'
 gem 'moab-versioning'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
