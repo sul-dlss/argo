@@ -15,9 +15,11 @@ describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 7
+      expect(rendered).to have_css 'li', count: 10
       expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register Items'
       expect(rendered).not_to have_css 'li.dropdown ul li a', text: 'Register APO'
+      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Bulk Update (synchronous)'
+      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Bulk Actions (asynchronous)'
     end
   end
 
@@ -28,7 +30,7 @@ describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 9
+      expect(rendered).to have_css 'li', count: 12
       expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register Items'
       expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register APO'
       expect(rendered).to have_css 'li', text: 'Impersonate'
@@ -54,7 +56,7 @@ describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 8
+      expect(rendered).to have_css 'li', count: 11
     end
   end
 end
