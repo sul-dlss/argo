@@ -152,7 +152,7 @@ RSpec.describe SetGoverningApoJob do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(true)
       expect(Dor::Services::Client).to receive(:open_new_version).with(
-        object: @dor_object,
+        object: @dor_object.pid,
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Set new governing APO',
@@ -171,7 +171,7 @@ RSpec.describe SetGoverningApoJob do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(true)
       expect(Dor::Services::Client).to receive(:open_new_version).with(
-        object: @dor_object,
+        object: @dor_object.pid,
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Set new governing APO',

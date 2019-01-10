@@ -147,7 +147,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item).to receive(:save)
         expect(Dor::SearchService.solr).to receive(:add)
         get 'open_version', params: { id: @pid, severity: vers_md_upd_info[:significance], description: vers_md_upd_info[:description] }
-        expect(Dor::Services::Client).to have_received(:open_new_version).with(object: @item, vers_md_upd_info: vers_md_upd_info)
+        expect(Dor::Services::Client).to have_received(:open_new_version).with(object: @item.pid, vers_md_upd_info: vers_md_upd_info)
       end
     end
 
