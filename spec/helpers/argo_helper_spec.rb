@@ -36,6 +36,7 @@ describe ArgoHelper, type: :helper do
       allow(@object).to receive(:admin_policy_object).and_return(governing_apo)
       allow(Dor).to receive(:find).with(@item_id).and_return(@object)
       allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
+      allow(@object).to receive(:embargoed?).and_return(false)
     end
 
     context 'a Dor::Item the user can manage, with the usual data streams, and no catkey or embargo info' do
@@ -126,9 +127,8 @@ describe ArgoHelper, type: :helper do
         end
         expect(buttons.length).to eq default_buttons.length
       end
-      it 'includes the embargo update button if the user is an admin and the object is embargoed' do
-        @doc = SolrDocument.new(@doc.to_h.merge('embargo_status_ssim' => ['2012-10-19T00:00:00Z']))
-        allow(helper).to receive(:registered_only?).with(@doc).and_return(false)
+      it 'only includes the embargo update button if the user is an admin and the object is embargoed' do
+        allow(@object).to receive(:embargoed?).and_return(true)
         buttons = helper.render_buttons(@doc)
         default_buttons.push(
           label: 'Update embargo',
