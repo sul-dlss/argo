@@ -59,7 +59,7 @@ RSpec.describe BulkAction do
     end
   end
 
-  it 'makes sure BulkAction job was kicked off' do
+  it 'makes sure BulkAction job was kicked off, and prepends druid: to all pids' do
     @bulk_action = described_class.create(
       action_type: 'GenericJob', pids: 'a b c', manage_release: {}
     )
@@ -67,7 +67,7 @@ RSpec.describe BulkAction do
       .with(
         @bulk_action.id,
         hash_including(
-          pids: %w(a b c),
+          pids: %w(druid:a druid:b druid:c),
           output_directory: Settings.BULK_METADATA.DIRECTORY +
             "#{@bulk_action.action_type}_#{@bulk_action.id}",
           manage_release: {}
@@ -75,6 +75,16 @@ RSpec.describe BulkAction do
       )
     @bulk_action.run_callbacks(:create) { true }
   end
+
+  it 'makes sure BulkAction job was kicked off, and does not prepend druid if it exists' do
+    @bulk_action = described_class.create(
+      action_type: 'GenericJob', pids: 'druid:abcdef druid:q124567 druid:wz34566', manage_release: {}
+    )
+    expect(GenericJob).to receive(:perform_later)
+      .with(@bulk_action.id, hash_including(pids: %w(druid:abcdef druid:q124567 druid:wz34566)))
+    @bulk_action.run_callbacks(:create) { true }
+  end
+
   describe 'before_destroy callbacks' do
     it 'calls #remove_output_directory' do
       @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')

@@ -54,7 +54,7 @@ class BulkAction < ActiveRecord::Base
   # @return [Hash]
   def job_params
     {
-      pids: pids.split,
+      pids: pids_with_prefix(pids),
       output_directory: output_directory,
       manage_release: manage_release,
       set_governing_apo: set_governing_apo,
@@ -65,5 +65,10 @@ class BulkAction < ActiveRecord::Base
   def process_bulk_action_type
     action_type.constantize.perform_later(id, job_params)
     update_attribute(:status, 'Scheduled Action')
+  end
+
+  # add druid: prefix to list of pids if it doesn't have it yet
+  def pids_with_prefix(pids)
+    pids.split.flatten.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" }
   end
 end
