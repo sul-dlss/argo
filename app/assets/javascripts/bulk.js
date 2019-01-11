@@ -230,7 +230,7 @@ function error_handler(xhr, status, err, object_link, index, after) {
 	if (job_count.length == 1 && after != null) {
 		after();
 	}
-  err = (xhr.responseText) ? xhr.responseText.substr(0, 500) : err; // truncate message if too long
+  err = (status + " : " + err).substr(0, 500); // include both status and error message returned from response; truncate message if too long
   err = jQuery('<div>' + err + '</div>').text(); // strip any HTML from error message, adding <div> ensures there's HTML
 	var log = document.getElementById('log');
 	log.innerHTML = '&nbsp;' + index + ' ' + object_link + ' : <span class="text-danger">' + err + "</span><br/>\n" + log.innerHTML;
