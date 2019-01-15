@@ -152,9 +152,12 @@ RSpec/AnyInstance:
     - 'spec/features/item_catkey_change_spec.rb'
     - 'spec/features/item_registration_spec.rb'
     - 'spec/features/item_source_id_change_spec.rb'
+    - 'spec/features/item_view_metadata_spec.rb'
     - 'spec/features/set_governing_apo_spec.rb'
     - 'spec/integration/apo_spec.rb'
+    - 'spec/jobs/modsulator_job_spec.rb'
     - 'spec/jobs/release_object_job_spec.rb'
+    - 'spec/jobs/set_governing_apo_job_spec.rb'
 
 # Offense count: 3
 RSpec/BeforeAfterAll:

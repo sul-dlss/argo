@@ -37,7 +37,7 @@ class CollectionForm < BaseForm
 
   # @return [Dor::Collection] registers the Collection
   def register_model
-    response = Dor::Services::Client.register(params: register_params)
+    response = Dor::Services::Client.objects.register(params: register_params)
     # Once it's been created we populate it with its metadata
     Dor.find(response[:pid])
   end

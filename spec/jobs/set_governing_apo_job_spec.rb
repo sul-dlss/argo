@@ -151,8 +151,7 @@ RSpec.describe SetGoverningApoJob do
     it 'opens a new version if the workflow status allows' do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(true)
-      expect(Dor::Services::Client).to receive(:open_new_version).with(
-        object: @dor_object.pid,
+      expect_any_instance_of(Dor::Services::Client::Object).to receive(:open_new_version).with(
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Set new governing APO',
@@ -164,14 +163,13 @@ RSpec.describe SetGoverningApoJob do
     it 'does not open a new version if rejected by the workflow status' do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(false)
-      expect(Dor::Services::Client).not_to receive(:open_new_version)
+      expect_any_instance_of(Dor::Services::Client::Object).not_to receive(:open_new_version)
       expect { subject.send(:open_new_version, @dor_object) }.to raise_error(/Unable to open new version/)
     end
     it 'fails with an exception if something goes wrong updating the version' do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(true)
-      expect(Dor::Services::Client).to receive(:open_new_version).with(
-        object: @dor_object.pid,
+      expect_any_instance_of(Dor::Services::Client::Object).to receive(:open_new_version).with(
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Set new governing APO',
