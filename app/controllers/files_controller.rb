@@ -8,7 +8,7 @@ class FilesController < ApplicationController
   def index
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
-    @available_in_workspace = Dor::Services::Client.list_files(object: params[:item_id]).include?(filename)
+    @available_in_workspace = Dor::Services::Client.object(params[:item_id]).files.list.include?(filename)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -20,12 +20,12 @@ class FilesController < ApplicationController
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=' + filename
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    self.response_body = Dor::Services::Client.retrieve_file(object: params[:item_id], filename: filename)
+    self.response_body = Dor::Services::Client.object(params[:item_id]).files.retrieve(filename: filename)
   end
 
   def preserved
     authorize! :view_content, @object
-    file_content = Dor::Services::Client.preserved_content(object: @object.pid, filename: filename, version: params[:version].to_i)
+    file_content = Dor::Services::Client.object(@object.pid).files.preserved_content(filename: filename, version: params[:version].to_i)
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = "attachment; filename=#{filename}"
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time

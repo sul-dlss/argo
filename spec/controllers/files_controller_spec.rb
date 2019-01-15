@@ -21,8 +21,8 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'has dor-services-app fetch a file from the workspace' do
-        expect(Dor::Services::Client).to receive(:retrieve_file)
-          .with(object: pid, filename: 'somefile.txt')
+        expect_any_instance_of(Dor::Services::Client::Files).to receive(:retrieve)
+          .with(filename: 'somefile.txt')
           .and_return('abc')
         allow(Time).to receive(:now).and_return(Time.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
         get :show, params: { id: 'somefile.txt', item_id: pid }
@@ -50,8 +50,8 @@ RSpec.describe FilesController, type: :controller do
 
       before do
         allow(controller).to receive(:authorize!).and_return(true)
-        allow(Dor::Services::Client).to receive(:preserved_content)
-          .with(object: pid, filename: mock_file_name, version: mock_version)
+        allow_any_instance_of(Dor::Services::Client::Files).to receive(:preserved_content)
+          .with(filename: mock_file_name, version: mock_version)
           .and_return(mock_content)
       end
 
@@ -74,7 +74,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'checks for a file in the workspace' do
-      expect(Dor::Services::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
       get :index, params: { item_id: pid, id: 'foo.jp2' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_truthy
@@ -82,7 +82,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'handles missing files in the workspace' do
-      expect(Dor::Services::Client).to receive(:list_files).and_return(['foo.jp2', 'bar.jp2'])
+      expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
       get :index, params: { item_id: pid, id: 'bar.tif' }
       expect(response).to have_http_status(:ok)
       expect(assigns(:available_in_workspace)).to be_falsey

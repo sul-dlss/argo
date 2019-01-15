@@ -45,8 +45,7 @@ class ReleaseObjectJob < GenericJob
     end
     log.puts("#{Time.current} Adding release tag for #{manage_release['to']}")
     begin
-      Dor::Services::Client.create_release_tag(
-        object: current_druid,
+      Dor::Services::Client.object(current_druid).release_tags.create(
         to: manage_release['to'],
         who: manage_release['who'],
         what: manage_release['what'],
@@ -60,7 +59,7 @@ class ReleaseObjectJob < GenericJob
     end
     log.puts("#{Time.current} Trying to start release workflow")
     begin
-      Dor::Services::Client.initialize_workflow(object: current_druid, wf_name: 'releaseWF')
+      Dor::Services::Client.object(current_druid).workflow.create(wf_name: 'releaseWF')
       log.puts("#{Time.current} Workflow creation successful")
       bulk_action.increment(:druid_count_success).save
     rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e

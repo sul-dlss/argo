@@ -9,7 +9,7 @@ RSpec.describe 'Item view', js: true do
 
   context 'when the file is not on the workspace' do
     before do
-      allow(Dor::Services::Client).to receive(:list_files).and_return(['this_is_not_the_file_you_are_looking_for.txt'])
+      allow_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['this_is_not_the_file_you_are_looking_for.txt'])
     end
 
     it 'shows the file info' do
@@ -49,8 +49,8 @@ RSpec.describe 'Item view', js: true do
     let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
 
     before do
-      allow(Dor::Services::Client).to receive(:list_files).and_return([filename])
-      allow(Dor::Services::Client).to receive(:retrieve_file).and_return('the file contents')
+      allow_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return([filename])
+      allow_any_instance_of(Dor::Services::Client::Files).to receive(:retrieve).and_return('the file contents')
 
       page.driver.browser.download_path = '.'
     end
