@@ -23,6 +23,14 @@ module DateFacetConfigurations
       }, partial: 'catalog/show_date_choice', raw_facet_field: SolrDocument::FIELD_LAST_ACCESSIONED_DATE
       config.add_facet_field SolrDocument::FIELD_LAST_ACCESSIONED_DATE, label: 'Last Accessioned', show: false, home: false
 
+      config.add_facet_field 'accessioned_earliest_date', home: false, label: 'Earliest Accessioned', query: {
+        days_1: { label: 'within the last day', fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:[NOW/DAY-1DAYS TO *]" },
+        days_7: { label: 'within 7 days', fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:[NOW/DAY-7DAYS TO *]" },
+        days_30: { label: 'within 30 days', fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:[NOW/DAY-30DAYS TO *]" },
+        days_365: { label: 'within the last year', fq: "#{SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE}:[NOW/DAY-365DAYS TO *]" }
+      }, partial: 'catalog/show_date_choice', raw_facet_field: SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE
+      config.add_facet_field SolrDocument::FIELD_EARLIEST_ACCESSIONED_DATE, label: 'Earliest Accessioned', show: false, home: false
+
       config.add_facet_field 'published_latest_date', home: false, label: 'Last Published', query: {
         days_7: { label: 'within 7 days', fq: "#{SolrDocument::FIELD_LAST_PUBLISHED_DATE}:[NOW/DAY-7DAYS TO *]" },
         days_30: { label: 'within 30 days', fq: "#{SolrDocument::FIELD_LAST_PUBLISHED_DATE}:[NOW/DAY-30DAYS TO *]" }
