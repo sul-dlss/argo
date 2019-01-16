@@ -64,11 +64,20 @@ RSpec.describe BulkActionsController do
         allow_any_instance_of(User).to receive(:groups).and_return(groups)
       end
 
-      it 'assigns @bulk_action to current_user and passes current groups' do
-        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
+      it 'assigns @bulk_action to current_user and passes current groups, prepending druid: to all pids if missing' do
+        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: "a\nb\nc" } }
         expect(assigns(:bulk_action)).to be_an BulkAction
         expect(assigns(:bulk_action).user).to eq current_user
         expect(assigns(:bulk_action).groups).to eq groups
+        expect(assigns(:bulk_action).pids).to eq "druid:a\ndruid:b\ndruid:c"
+      end
+
+      it 'assigns @bulk_action to current_user and passes current groups, leaving pids alone if druid: prefix exists' do
+        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: "druid:a\nb\ndruid:c" } }
+        expect(assigns(:bulk_action)).to be_an BulkAction
+        expect(assigns(:bulk_action).user).to eq current_user
+        expect(assigns(:bulk_action).groups).to eq groups
+        expect(assigns(:bulk_action).pids).to eq "druid:a\ndruid:b\ndruid:c"
       end
 
       it 'creates a new BulkAction' do
