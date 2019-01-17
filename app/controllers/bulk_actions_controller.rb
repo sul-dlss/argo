@@ -56,7 +56,7 @@ class BulkActionsController < ApplicationController
       :pids,
       manage_release: [:tag, :what, :who, :to],
       set_governing_apo: [:new_apo_id],
-      manage_catkeys: [:catkeys],
+      manage_catkeys: [:catkeys]
     )
   end
 end

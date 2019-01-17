@@ -17,6 +17,7 @@ class ManageCatkeyJob < GenericJob
     @catkeys = params[:manage_catkeys]['catkeys'].split.map(&:strip)
     @groups = params[:groups]
     @pids = params[:pids]
+    @current_user = params[:user]
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting ManageCatkeyJob for BulkAction #{bulk_action_id}")
       update_druid_count
@@ -26,24 +27,28 @@ class ManageCatkeyJob < GenericJob
     end
   end
 
-  def can_manage?(pid)
-    ability.can?(:manage_item, Dor.find(pid))
+  def can_manage?(obj)
+    ability.can?(:manage_item, obj)
   end
 
   private
 
   def update_catkey(current_druid, new_catkey, log)
     log.puts("#{Time.current} Beginning ManageCatkeyJob for #{current_druid}")
-    unless can_manage?(current_druid)
+    obj = Dor.find(current_druid)
+    unless can_manage?(obj)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end
     log.puts("#{Time.current} Adding catkey of #{new_catkey}")
     begin
-      #TODO : catkey logic here
-      log.puts("#{Time.current} Catkey added successfully")
-    rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
-      #TODO: Rescue catkey failure here
+      open_new_version(current_obj, "Catkey updated to #{new_catkey}") unless current_obj.allows_modification?
+      current_obj.catkey = new_catkey
+      current_obj.save
+      close_version(current_obj) if current_obj.new_version_open?
+      bulk_action.increment(:druid_count_success).save
+      log.puts("#{Time.current} Catkey added/updated/removed successfully")
+    rescue StandardError => e
       log.puts("#{Time.current} Catkey failed #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save
       return
