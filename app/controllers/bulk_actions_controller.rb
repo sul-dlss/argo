@@ -20,7 +20,7 @@ class BulkActionsController < ApplicationController
   def create
     # Since the groups aren't persisted, we need to pass them here.
     @bulk_action = BulkAction.new(
-      bulk_action_params.merge(user: current_user, groups: current_user.groups)
+      bulk_action_params.merge(user: current_user, groups: current_user.groups, pids: pids_with_prefix(bulk_action_params[:pids]))
     )
 
     if @bulk_action.save
@@ -57,5 +57,12 @@ class BulkActionsController < ApplicationController
       manage_release: [:tag, :what, :who, :to],
       set_governing_apo: [:new_apo_id]
     )
+  end
+
+  # add druid: prefix to list of pids if it doesn't have it yet
+  def pids_with_prefix(pids)
+    return pids if pids.blank?
+
+    pids.split.flatten.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" }.join("\n")
   end
 end
