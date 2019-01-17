@@ -2,7 +2,7 @@
 
 class BulkAction < ActiveRecord::Base
   belongs_to :user
-  validates :action_type, inclusion: { in: %w(GenericJob DescmetadataDownloadJob ReleaseObjectJob RemoteIndexingJob SetGoverningApoJob) }
+  validates :action_type, inclusion: { in: %w(GenericJob DescmetadataDownloadJob ReleaseObjectJob RemoteIndexingJob SetGoverningApoJob ManageCatkeyJob) }
   after_create do
     create_output_directory
     create_log_file
@@ -11,7 +11,7 @@ class BulkAction < ActiveRecord::Base
   before_destroy :remove_output_directory
 
   # A virtual attribute used for job creation but not persisted
-  attr_accessor :pids, :manage_release, :set_governing_apo
+  attr_accessor :pids, :manage_release, :set_governing_apo, :manage_catkeys
   attr_accessor :groups # the groups the user was a member of when they launched the job
 
   def file(filename)
@@ -58,6 +58,7 @@ class BulkAction < ActiveRecord::Base
       output_directory: output_directory,
       manage_release: manage_release,
       set_governing_apo: set_governing_apo,
+      manage_catkeys: manage_catkeys,
       groups: groups
     }
   end

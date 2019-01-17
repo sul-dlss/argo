@@ -11,17 +11,17 @@ class ManageCatkeyJob < GenericJob
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [Array] :pids required list of pids
-  # @option params [Array] :catkeys required list of catkeys to be associated 1:1 with pids in order
+  # @option params [Hash] :manage_catkeys (required) list of catkeys to be associated 1:1 with pids in order
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
-    @catkeys = params[:catkeys]
+    @catkeys = params[:manage_catkeys]['catkeys'].split.map(&:strip)
     @groups = params[:groups]
     @pids = params[:pids]
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting ManageCatkeyJob for BulkAction #{bulk_action_id}")
       update_druid_count
 
-      pids.each_with_index { |current_druid, i| update_catkey(current_druid, catkeys[i], log) }
+      pids.each_with_index { |current_druid, i| update_catkey(current_druid, @catkeys[i], log) }
       log.puts("#{Time.current} Finished ManageCatkeyJob for BulkAction #{bulk_action_id}")
     end
   end
@@ -40,9 +40,11 @@ class ManageCatkeyJob < GenericJob
     end
     log.puts("#{Time.current} Adding catkey of #{new_catkey}")
     begin
+      #TODO : catkey logic here
       log.puts("#{Time.current} Catkey added successfully")
     rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
-      log.puts("#{Time.current} Catkey failed POST #{e.class} #{e.message}")
+      #TODO: Rescue catkey failure here
+      log.puts("#{Time.current} Catkey failed #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save
       return
     end
