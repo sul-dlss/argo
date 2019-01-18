@@ -5,7 +5,7 @@
 class SetGoverningApoJob < GenericJob
   queue_as :set_governing_apo
 
-  attr_reader :pids, :new_apo_id, :groups
+  attr_reader :new_apo_id, :groups
 
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
@@ -39,7 +39,7 @@ class SetGoverningApoJob < GenericJob
 
     check_can_set_governing_apo!(current_obj)
 
-    open_new_version(current_obj) unless current_obj.allows_modification?
+    open_new_version(current_obj, 'Set new governing APO') unless current_obj.allows_modification?
 
     current_obj.admin_policy_object = Dor.find(new_apo_id)
     current_obj.identityMetadata.adminPolicy = nil if current_obj.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
@@ -56,30 +56,5 @@ class SetGoverningApoJob < GenericJob
   def check_can_set_governing_apo!(obj)
     raise "#{obj.pid} is not open for modification" unless obj.allows_modification?
     raise "user not authorized to move #{obj.pid} to #{new_apo_id}" unless ability.can?(:manage_governing_apo, obj, new_apo_id)
-  end
-
-  def ability
-    @ability ||= begin
-      user = bulk_action.user
-      # Since a user doesn't persist its groups, we need to pass the groups in here.
-      user.set_groups_to_impersonate(groups)
-      Ability.new(user)
-    end
-  end
-
-  def update_druid_count
-    bulk_action.update(druid_count_total: pids.length)
-    bulk_action.save
-  end
-
-  def open_new_version(object)
-    raise "#{Time.current} Unable to open new version for #{object.pid} (bulk_action.id=#{bulk_action.id})" unless DorObjectWorkflowStatus.new(object.pid).can_open_version?
-
-    vers_md_upd_info = {
-      significance: 'minor',
-      description: 'Set new governing APO',
-      opening_user_name: bulk_action.user.to_s
-    }
-    Dor::Services::Client.object(object.pid).open_new_version(vers_md_upd_info: vers_md_upd_info)
   end
 end

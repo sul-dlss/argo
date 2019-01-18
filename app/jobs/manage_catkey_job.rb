@@ -5,7 +5,7 @@
 class ManageCatkeyJob < GenericJob
   queue_as :manage_catkey
 
-  attr_reader :pids, :catkeys, :groups
+  attr_reader :catkeys, :groups
   ##
   # A job that allows a user to specify a list of pids and a list of catkeys to be associated with these pids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
@@ -27,16 +27,12 @@ class ManageCatkeyJob < GenericJob
     end
   end
 
-  def can_manage?(obj)
-    ability.can?(:manage_item, obj)
-  end
-
   private
 
   def update_catkey(current_druid, new_catkey, log)
     log.puts("#{Time.current} Beginning ManageCatkeyJob for #{current_druid}")
-    obj = Dor.find(current_druid)
-    unless can_manage?(obj)
+    current_obj = Dor.find(current_druid)
+    unless can_manage?(current_druid)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end
@@ -53,19 +49,5 @@ class ManageCatkeyJob < GenericJob
       bulk_action.increment(:druid_count_fail).save
       return
     end
-  end
-
-  def ability
-    @ability ||= begin
-      user = bulk_action.user
-      # Since a user doesn't persist its groups, we need to pass the groups in here.
-      user.set_groups_to_impersonate(groups)
-      Ability.new(user)
-    end
-  end
-
-  def update_druid_count
-    bulk_action.update(druid_count_total: pids.length)
-    bulk_action.save
   end
 end

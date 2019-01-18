@@ -150,28 +150,6 @@ RSpec.describe ReleaseObjectJob do
       end
     end
   end
-
-  describe '#can_manage?' do
-    let(:ability_instance) { instance_double(Ability) }
-    let(:item) { instance_double(Dor::Item) }
-    let(:job) { described_class.new }
-    let(:bulk_action) { create(:bulk_action) }
-
-    before do
-      expect(Ability).to receive(:new).and_return(ability_instance)
-      expect(Dor).to receive(:find).with('druid:abc123').and_return(item)
-
-      # In this test, perform() is not being called. This is what sets these attributes
-      allow(job).to receive(:bulk_action).and_return(bulk_action)
-      allow(job).to receive(:groups).and_return(['admin'])
-    end
-
-    it 'calls parent ability manage' do
-      expect_any_instance_of(User).to receive(:set_groups_to_impersonate).with(['admin'])
-      expect(ability_instance).to receive(:can?).with(:manage_item, item).and_return false
-      expect(job.can_manage?('druid:abc123')).to be false
-    end
-  end
 end
 
 def stub_release_tags(druid, status = 201)

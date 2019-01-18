@@ -5,8 +5,6 @@
 class RemoteIndexingJob < GenericJob
   queue_as :indexing_remote
 
-  attr_reader :pids
-
   def perform(bulk_action_id, params)
     @pids = params[:pids]
 
@@ -32,10 +30,5 @@ class RemoteIndexingJob < GenericJob
   rescue => e
     log_buffer.puts("#{Time.current} RemoteIndexingJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e}")
     bulk_action.increment(:druid_count_fail).save
-  end
-
-  def update_druid_count
-    bulk_action.update(druid_count_total: pids.length)
-    bulk_action.save
   end
 end

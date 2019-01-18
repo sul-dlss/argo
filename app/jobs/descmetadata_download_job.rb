@@ -12,6 +12,7 @@ class DescmetadataDownloadJob < GenericJob
   # @param [Hash] params Custom params for this job
   # requires `:pids` (an Array of pids) and output_directory
   def perform(bulk_action_id, params)
+    @pids = params[:pids]
     zip_filename = generate_zip_filename(params[:output_directory])
     with_bulk_action_log do |log|
       #  Fail with an error message if the calling BulkAction doesn't exist
@@ -20,11 +21,9 @@ class DescmetadataDownloadJob < GenericJob
         log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
       else
         start_log(log, bulk_action.user_id, '', bulk_action.description)
-
-        bulk_action.update(druid_count_total: params[:pids].length)
-        bulk_action.save
+        update_druid_count
         ::Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
-          params[:pids].each { |current_druid| process_druid(current_druid, log, zip_file) }
+          pids.each { |current_druid| process_druid(current_druid, log, zip_file) }
           zip_file.close
         end
       end
