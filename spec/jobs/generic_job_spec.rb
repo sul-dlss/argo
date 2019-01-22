@@ -58,17 +58,14 @@ describe GenericJob do
       instance_double(User,
                       is_admin?: true)
     end
-
-    before do
-      @dor_object = double(pid: 'druid:123abc')
-      @workflow = double('workflow')
-      @log = double('log')
-      @webauth = OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser')
-    end
+    let(:dor_object) { double(pid: 'druid:123abc') }
+    let(:workflow) { double('workflow') }
+    let(:log) { double('log') }
+    let(:webauth) { OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser') }
 
     it 'opens a new version if the workflow status allows' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
-      expect(@workflow).to receive(:can_open_version?).and_return(true)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(dor_object.pid).and_return(workflow)
+      expect(workflow).to receive(:can_open_version?).and_return(true)
       expect_any_instance_of(Dor::Services::Client::Object).to receive(:open_new_version).with(
         vers_md_upd_info: {
           significance: 'minor',
@@ -76,17 +73,17 @@ describe GenericJob do
           opening_user_name: subject.bulk_action.user.to_s
         }
       )
-      subject.send(:open_new_version, @dor_object, 'Set new governing APO')
+      subject.send(:open_new_version, dor_object, 'Set new governing APO')
     end
     it 'does not open a new version if rejected by the workflow status' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
-      expect(@workflow).to receive(:can_open_version?).and_return(false)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(dor_object.pid).and_return(workflow)
+      expect(workflow).to receive(:can_open_version?).and_return(false)
       expect_any_instance_of(Dor::Services::Client::Object).not_to receive(:open_new_version)
-      expect { subject.send(:open_new_version, @dor_object, 'Message') }.to raise_error(/Unable to open new version/)
+      expect { subject.send(:open_new_version, dor_object, 'Message') }.to raise_error(/Unable to open new version/)
     end
     it 'fails with an exception if something goes wrong updating the version' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
-      expect(@workflow).to receive(:can_open_version?).and_return(true)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(dor_object.pid).and_return(workflow)
+      expect(workflow).to receive(:can_open_version?).and_return(true)
       expect_any_instance_of(Dor::Services::Client::Object).to receive(:open_new_version).with(
         vers_md_upd_info: {
           significance: 'minor',
@@ -95,7 +92,7 @@ describe GenericJob do
         }
       ).and_raise Dor::Exception
       allow(subject).to receive(:current_user).and_return(current_user)
-      expect { subject.send(:open_new_version, @dor_object, 'Set new governing APO') }.to raise_error(Dor::Exception)
+      expect { subject.send(:open_new_version, dor_object, 'Set new governing APO') }.to raise_error(Dor::Exception)
     end
   end
 

@@ -168,7 +168,6 @@ RSpec/BeforeAfterAll:
     - 'spec/support/**/*.rb'
     - 'spec/jobs/descmetadata_download_job_spec.rb'
     - 'spec/jobs/modsulator_job_spec.rb'
-    - 'spec/jobs/generic_job_spec.rb'
 
 # Offense count: 80
 # Configuration parameters: Prefixes.
