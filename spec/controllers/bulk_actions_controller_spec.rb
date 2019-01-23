@@ -80,6 +80,13 @@ RSpec.describe BulkActionsController do
         expect(assigns(:bulk_action).pids).to eq "druid:a\ndruid:b\ndruid:c"
       end
 
+      it 'assigns @bulk_action with catkeys passed in from form' do
+        post :create, params: { bulk_action: { action_type: 'ManageCatkeyJob', pids: '', 'manage_catkeys[catkeys]' => "1234\n5678" } }
+        expect(assigns(:bulk_action)).to be_an BulkAction
+        expect(assigns(:bulk_action).send(:job_params)).to be_an Hash
+        expect(assigns(:bulk_action).send(:job_params)).to include(manage_catkeys: { 'catkeys' => "1234\n5678" })
+      end
+
       it 'creates a new BulkAction' do
         expect do
           post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }

@@ -52,4 +52,80 @@ describe GenericJob do
       expect(bulk_action_no_process_callback.druid_count_total).to eq 1
     end
   end
+
+  describe '#open_new_version' do
+    let(:current_user) do
+      instance_double(User,
+                      is_admin?: true)
+    end
+    let(:dor_object) { double(pid: 'druid:123abc') }
+    let(:workflow) { double('workflow') }
+    let(:log) { double('log') }
+    let(:webauth) { OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser') }
+
+    it 'opens a new version if the workflow status allows' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(dor_object.pid).and_return(workflow)
+      expect(workflow).to receive(:can_open_version?).and_return(true)
+      expect_any_instance_of(Dor::Services::Client::Object).to receive(:open_new_version).with(
+        vers_md_upd_info: {
+          significance: 'minor',
+          description: 'Set new governing APO',
+          opening_user_name: subject.bulk_action.user.to_s
+        }
+      )
+      subject.send(:open_new_version, dor_object, 'Set new governing APO')
+    end
+    it 'does not open a new version if rejected by the workflow status' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(dor_object.pid).and_return(workflow)
+      expect(workflow).to receive(:can_open_version?).and_return(false)
+      expect_any_instance_of(Dor::Services::Client::Object).not_to receive(:open_new_version)
+      expect { subject.send(:open_new_version, dor_object, 'Message') }.to raise_error(/Unable to open new version/)
+    end
+    it 'fails with an exception if something goes wrong updating the version' do
+      expect(DorObjectWorkflowStatus).to receive(:new).with(dor_object.pid).and_return(workflow)
+      expect(workflow).to receive(:can_open_version?).and_return(true)
+      expect_any_instance_of(Dor::Services::Client::Object).to receive(:open_new_version).with(
+        vers_md_upd_info: {
+          significance: 'minor',
+          description: 'Set new governing APO',
+          opening_user_name: subject.bulk_action.user.to_s
+        }
+      ).and_raise Dor::Exception
+      allow(subject).to receive(:current_user).and_return(current_user)
+      expect { subject.send(:open_new_version, dor_object, 'Set new governing APO') }.to raise_error(Dor::Exception)
+    end
+  end
+
+  describe '#can_manage?' do
+    let(:ability_instance) { instance_double(Ability) }
+    let(:item) { instance_double(Dor::Item) }
+    let(:job) { described_class.new }
+    let(:bulk_action) { create(:bulk_action) }
+
+    before do
+      expect(Ability).to receive(:new).and_return(ability_instance)
+      expect(Dor).to receive(:find).with('druid:abc123').and_return(item)
+
+      # In this test, perform() is not being called. This is what sets these attributes
+      allow(job).to receive(:bulk_action).and_return(bulk_action)
+      allow(job).to receive(:groups).and_return(['admin'])
+    end
+
+    it 'calls parent ability manage' do
+      expect_any_instance_of(User).to receive(:set_groups_to_impersonate).with(['admin'])
+      expect(ability_instance).to receive(:can?).with(:manage_item, item).and_return false
+      expect(job.can_manage?('druid:abc123')).to be false
+    end
+  end
+
+  describe '#ability' do
+    it 'caches the result' do
+      ability = double(Ability)
+      allow(subject).to receive(:groups).and_return('privgroup' => 'dorstuff', 'login' => 'someuser')
+      expect(Ability).to receive(:new).with(bulk_action_no_process_callback.user).and_return(ability).exactly(:once)
+
+      expect(subject.send(:ability)).to be(ability)
+      expect(subject.send(:ability)).to be(ability)
+    end
+  end
 end

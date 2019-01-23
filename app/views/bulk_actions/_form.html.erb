@@ -12,11 +12,12 @@
   <% end %>
 
   <% if false #multiline comment %>
-    This button/radio form element is used to define Bulk Action Job types that 
+    This button/radio form element is used to define Bulk Action Job types that
     a user can select from. The `.tab-content` area below it can define a
     description and additional form input used for each type of custom job.
   <% end %>
 
+  <!-- TODO: this should probably be a different UI element, like a drop down list, since its getting a bit long-->
   <div class='form-group'>
     <div class='btn-group' data-toggle='buttons'>
       <label href='#desc_metadata_download_custom_options' class='btn btn-default active' data-toggle='tab'>
@@ -34,6 +35,10 @@
       <label href='#reindex_object_options' data-toggle='tab' class='btn btn-default'>
         <%= f.radio_button(:action_type, 'RemoteIndexingJob', autocomplete: 'off') %>
         Reindex
+      </label>
+      <label href='#manage_catkey_options' data-toggle='tab' class='btn btn-default'>
+        <%= f.radio_button(:action_type, 'ManageCatkeyJob', autocomplete: 'off') %>
+        Manage Catkeys
       </label>
     </div>
 
@@ -59,6 +64,12 @@
         <span class='help-block'>
           Reindexes the DOR object to Solr
         </span>
+      </div>
+      <div role='tabpanel' class= 'tab-pane' id='manage_catkey_options'>
+        <span class='help-block'>
+          Adds or updates catkeys associated with objects.  You need two lists: druids and catkeys, and they need to correspond 1:1 in the correct order.
+        </span>
+        <%= render 'bulk_actions/forms/manage_catkey_form' %>
       </div>
     </div>
   </div>

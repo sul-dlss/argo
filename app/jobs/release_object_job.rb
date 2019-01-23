@@ -5,7 +5,7 @@
 class ReleaseObjectJob < GenericJob
   queue_as :release_object
 
-  attr_reader :manage_release, :pids, :groups
+  attr_reader :manage_release, :groups
   ##
   # This is a shameless green approach to a job that calls release from dor
   # services app and then kicks off release WF.
@@ -29,10 +29,6 @@ class ReleaseObjectJob < GenericJob
       pids.each { |current_druid| release_object(current_druid, log) }
       log.puts("#{Time.current} Finished ReleaseObjectJob for BulkAction #{bulk_action_id}")
     end
-  end
-
-  def can_manage?(pid)
-    ability.can?(:manage_item, Dor.find(pid))
   end
 
   private
@@ -66,28 +62,5 @@ class ReleaseObjectJob < GenericJob
       log.puts("#{Time.current} Workflow creation failed POST #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save
     end
-  end
-
-  def ability
-    @ability ||= begin
-      user = bulk_action.user
-      # Since a user doesn't persist its groups, we need to pass the groups in here.
-      user.set_groups_to_impersonate(groups)
-      Ability.new(user)
-    end
-  end
-
-  def string_to_boolean(string)
-    case string
-    when 'true'
-      true
-    when 'false'
-      false
-    end
-  end
-
-  def update_druid_count
-    bulk_action.update(druid_count_total: pids.length)
-    bulk_action.save
   end
 end
