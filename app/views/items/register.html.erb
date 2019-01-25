@@ -23,6 +23,14 @@
             <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %>
             <%= text_field_tag :'tags[]', nil, :id => 'tags_2', :class => 'free tag-field' %>
             <%= text_field_tag :'tags[]', nil, :id => 'tags_3', :class => 'free tag-field' %>
+          </span>
+          <div class="break"></div>
+          <label for='tag_4'>&nbsp;</label>
+          <span id="tags" style="width: auto">
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_4', :class => 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_5', :class => 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_6', :class => 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, :id => 'tags_7', :class => 'free tag-field' %>
             <%= hidden_field_tag :registered_by, current_user.login, :class => 'tag-field ', :'data-tagname' => 'Registered By' %>
           </span>
         </div>
