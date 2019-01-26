@@ -10,7 +10,7 @@ Rails.application.config.assets.version = '1.0'
 
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
-Rails.application.config.assets.precompile += ['registration.css', 'report.css', '*.js', '*.coffee']
+Rails.application.config.assets.precompile += ['registration.css', 'report.css', '*.js']
 
 Rails.application.config.assets.compress = true
 
