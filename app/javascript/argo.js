@@ -1,27 +1,9 @@
-// Put your application scripts here
+import Form from 'modules/apo_form'
 
 $.fn.preload = function() {
     this.each(function(){
         $('<img/>')[0].src = this;
     });
-}
-
-function pathTo(path) {
-  var root = $('body').attr('data-application-root') || '';
-  return(root + path);
-}
-
-Argo = {
-    initialize: function() {
-      this.apoEditor()
-    },
-    apoEditor: function () {
-        var element = $("[data-behavior='apo-form']")
-        if (element.length > 0) {
-            var Form = require('modules/apo_form');
-            new Form(element).init();
-        }
-    }
 }
 
 $(document).ready(function() {
@@ -40,7 +22,6 @@ $(document).ready(function() {
 });
 
 
-Blacklight.onLoad(function() { Argo.initialize() });
 
 
 // When a user selects a spreadsheet file for uploading via the bulk metadata upload function,
@@ -99,3 +80,17 @@ $(document).on('keyup', '#collection_title', function(e) {
 $(document).on('keyup', '#collection_catkey', function(e) {
     collectionExistsWarning(document.getElementById('collection_catkey_warning'), 'catkey', e.target.value);
 });
+
+
+export default class Argo {
+    initialize() {
+      this.apoEditor()
+    }
+
+    apoEditor() {
+        var element = $("[data-behavior='apo-form']")
+        if (element.length > 0) {
+            new Form(element).init();
+        }
+    }
+}

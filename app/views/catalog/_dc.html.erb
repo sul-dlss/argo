@@ -1,7 +1,7 @@
 <% dc_xml = @obj.generate_dublin_core %>
 <div class="lightbox-head">
   <span class="section-head-link">
-    <%= link_to "View XML", ds_solr_document_path(@obj.pid, 'full_dc'), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' } %>
+    <%= link_to "View XML", ds_solr_document_path(@obj.pid, 'full_dc'), :title => 'Dublin Core (derived from MODS)', :data => { blacklight_modal: 'trigger' } %>
   </span>
   <%= @obj.pid %>
 </div>

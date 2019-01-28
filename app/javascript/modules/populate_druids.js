@@ -30,7 +30,3 @@
   };
 
 })(jQuery);
-
-Blacklight.onLoad(function() {
-  $('[data-populate-druids]').populateDruids();
-});

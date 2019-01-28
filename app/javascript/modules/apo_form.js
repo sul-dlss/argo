@@ -10,6 +10,7 @@ export default class {
     }
 
     init() {
+        this.collection()
         this.validate()
         this.sharing()
     }
@@ -21,6 +22,16 @@ export default class {
 
       form.on('submit', () => {
           sharing.serialize(form[0])
+      })
+    }
+
+    collection() {
+      $('[name="collection_radio"]').on('change', (event) => {
+        $('.collection_div').hide()
+        var reveal
+        if (reveal = $(event.target).data('reveal')) {
+          $(`#${reveal}`).show();
+        }
       })
     }
 

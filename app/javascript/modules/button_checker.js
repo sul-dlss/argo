@@ -20,7 +20,3 @@
   };
 
 })(jQuery);
-
-Blacklight.onLoad(function() {
-  $('a.disabled[data-check-url]').buttonChecker();
-});

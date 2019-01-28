@@ -29,7 +29,7 @@
 
   <div class="radio">
     <label>
-      <input checked type="radio" name="collection_radio" value="none" onclick="$('.collection_div').hide();"/>
+      <input checked type="radio" name="collection_radio" value="none">
       Don't add a Collection
     </label>
   </div>
@@ -37,21 +37,21 @@
   <% if @form.new_record? %>
     <div class="radio">
       <label>
-        <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection').show();"/>
+        <input type="radio" name="collection_radio" value="create" data-reveal='create-collection'>
         Create a Collection
       </label>
     </div>
 
     <div class="radio">
       <label>
-        <input type="radio" name="collection_radio" value="create" onclick="$('.collection_div').hide();$('#create-collection-catkey').show();"/>
+        <input type="radio" name="collection_radio" value="create" data-reveal='create-collection-catkey'>
         Create a Collection from Symphony
       </label>
     </div>
   <% else %>
     <div class="radio">
       <label>
-        <input type="radio" name="collection_radio" value="select" onclick="$('.collection_div').hide();$('#select-collection').show();"/>
+        <input type="radio" name="collection_radio" value="select" data-reveal="select-collection">
         Choose a Default Collection
       </label>
     </div>

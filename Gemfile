@@ -12,8 +12,6 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -41,9 +39,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-gem 'almond-rails'
 gem 'barby'
-gem 'bootstrap-sass'
 gem 'cancancan'
 gem 'coderay'
 gem 'config'
@@ -53,9 +49,6 @@ gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'eye' # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'faraday'
 gem 'honeybadger', '~> 4.1'
-gem 'jqgrid-jquery-rails'
-gem 'jquery-ui-rails', '~> 5.0'
-gem 'jquery-validation-rails'
 gem 'mysql2', '~> 0.4.5'
 gem 'net-sftp'
 gem 'newrelic_rpm'
@@ -66,7 +59,6 @@ gem 'rake'
 gem 'retries'
 gem 'ruby-prof'
 gem 'rubyzip'
-gem 'sprockets-es6'
 
 # Stanford/Hydra related gems
 gem 'active-fedora', '~> 8.2'

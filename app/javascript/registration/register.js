@@ -1,6 +1,7 @@
 $.ajaxQ('register', { maxRequests: 10 });
+import pathTo from './pathTo'
 
-function DorRegistration(initOpts) {
+export default function DorRegistration(initOpts) {
   var $t = {
     defaultValues: {
       objectType: 'item',

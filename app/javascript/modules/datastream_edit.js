@@ -11,8 +11,8 @@
       $.validator.addMethod('xmlWellFormedness', function (value) {
         try {
           return $.parseXML(value) != null;
-        } catch(err) { 
-          return false; 
+        } catch(err) {
+          return false;
         }
       }, 'XML must be well-formed.');
       $('#xmlEditForm').validate({
@@ -26,13 +26,3 @@
     });
   };
 })(jQuery);
-
-/*
-   Because we are in a modal dialog we need to use the 'loaded' event
-   to trigger the form validation setup.
- */
-Blacklight.onLoad(function() {
-  $('body').on('loaded.persistent-modal', function() {
-    $('#xmlEditForm').datastreamXmlEdit();
-  });
-});

@@ -1,4 +1,4 @@
-<div data-ajax-modal="container">
+<div data-blacklight-modal="container">
     <div class="container-fluid">
     	<div class="row spreadsheet-header">
     	    <div class="col-md-8 header-column"><strong>Datastream spreadsheet bulk upload for APO <%= @object.id %></strong></div>
@@ -15,7 +15,7 @@
 	</div>
 	<div class="row spreadsheet-row">
 	    <div class="col-md-12">
-		<%= link_to("Submit new file ...", bulk_upload_form_apo_path(@object.id), :class => "button btn btn-primary", data: { ajax_modal: 'trigger' }) %>
+		<%= link_to("Submit new file ...", bulk_upload_form_apo_path(@object.id), :class => "button btn btn-primary", data: { blacklight_modal: 'trigger' }) %>
 	    </div>
 	</div>
 </div>

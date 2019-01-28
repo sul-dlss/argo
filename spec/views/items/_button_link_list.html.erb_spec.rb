@@ -38,7 +38,7 @@ describe 'items/_button_link_list.html.erb' do
     expect(rendered).to have_css 'a', count: buttons.length
     expect(rendered).to have_css 'a[href="http://www.example.com/click"]', text: 'Click me'
     expect(rendered).to have_css 'a[href="http://www.example.com/confirm"][data-confirm="true"]', text: 'Confirm me'
-    expect(rendered).to have_css 'a[href="http://www.example.com/ajax"][data-ajax-modal="trigger"]', text: 'Ajax me'
+    expect(rendered).to have_css 'a[href="http://www.example.com/ajax"][data-blacklight-modal="trigger"]', text: 'Ajax me'
     expect(rendered).to have_css 'a.disabled[href="http://www.example.com/check"][data-check-url="/workflow_service/abc:123/closeable"]', text: 'Check me'
     expect(rendered).to have_css 'a.disabled[href="http://www.example.com/check"]', text: 'Disable me'
   end

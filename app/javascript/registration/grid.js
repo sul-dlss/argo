@@ -1,3 +1,9 @@
+import DorRegistration from './register'
+import pathTo from './pathTo'
+import 'jquery-ui/ui/widgets/autocomplete'
+import 'jquery-ui/ui/widgets/dialog'
+import 'jquery-ui/ui/widgets/progressbar'
+
 var gridContext = function() {
   var druidFormatter = function(val, opts, rowObj) {
     if (val.trim() != '') {
