@@ -9,15 +9,14 @@ def load_order_files(fedora_files)
   fedora_files.map { |f| File.join(data_path, f.strip) }
 end
 
-task default: :ci_w_rubocop
 
-desc 'run specs and rubocop (like we want ci to do)'
-task ci_w_rubocop: [:ci, :rubocop]
+task(:default).clear
+desc 'run specs and rubocop (for CI)'
+task default: [:rubocop, :ci]
 
 desc 'run specs after loading up solr, fedora, etc.'
 task :ci do
   if Rails.env.test?
-    Rake::Task['argo:install'].invoke
     Rake::Task['argo:repo:load'].invoke # load 'em all!
     Rake::Task['spec'].invoke
   else
@@ -46,11 +45,6 @@ if ['test', 'development'].include? Rails.env
   fedora_files = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
 
   namespace :argo do
-    desc 'Install db'
-    task install: ['db:migrate'] do
-      puts 'Installed Argo'
-    end
-
     namespace :repo do
       desc "Load XML file(s) into repo (fedora and solr), default: contents of 'load_order' file. With a glob: rake argo:repo:load[fedora_conf/data/*.xml]"
       task :load, [:glob] => :environment do |task, args|
