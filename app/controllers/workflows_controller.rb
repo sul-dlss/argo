@@ -11,16 +11,11 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:repo` The workflow's repository. e.g., dor.
   def show
     params.require(:repo)
-    # fail ArgumentError, "Missing parameters: #{params.inspect}" unless params[:repo].present?
 
-    # Set variables for views; determine which workflow we're supposed to
-    # render and honor a special value of 'workflow'
+    # Set variables for views; determine which workflow we're supposed to render
     @workflow_id = params[:wf_name]
-    @workflow = if @workflow_id == 'workflow'
-                  @object.workflows
-                else
-                  fetch_workflow(@object, @workflow_id, params[:repo])
-                end
+    @workflow = fetch_workflow(@object, @workflow_id, params[:repo])
+
     respond_to do |format|
       format.html { render 'show', layout: !request.xhr? }
       format.xml  { render xml: @workflow.ng_xml.to_xml }
