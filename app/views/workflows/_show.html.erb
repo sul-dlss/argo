@@ -1,9 +1,10 @@
 <span class="section-head-link">
   View:
-  <%= link_to 'XML', item_workflow_path(@object.pid, @workflow_id, raw: 'true', repo: params[:repo]),
-              title: @workflow_id, data: { ajax_modal: 'trigger' } %>
+  <%= link_to 'XML', item_workflow_path(@presenter.pid, @presenter.workflow_name, raw: 'true', repo: params[:repo]),
+              title: @presenter.workflow_name,
+              data: { ajax_modal: 'trigger' } %>
 </span>
-<%= @object.pid %>
+<%= @presenter.pid %>
 
 <table class="detail table">
   <thead>
@@ -19,30 +20,30 @@
     </tr>
   </thead>
   <tbody>
-    <% if @workflow.nil? %>
+    <% if @presenter.processes.any? %>
       <tr><td colspan="8">No processes defined for this workflow.</td></tr>
     <% else %>
-      <% @workflow.processes.each_with_index do |process,index| %>
+      <% @presenter.processes.each_with_index do |process,index| %>
         <tr>
-          <td><%=index+1%>.</td>
-          <td><%=process.name%></td>
-          <td><%=process.status%></td>
-          <td><%=render_workflow_process_reset(@object.pid, process)%></td>
-          <td><%=render_datetime(process.datetime)%></td>
-          <td><%=process.elapsed ? '%.3f' % process.elapsed : ''%></td>
-          <td><%=process.attempts%></td>
-          <td><%=process.lifecycle%></td>
+          <td><% index + 1 %>.</td>
+          <td><% process.name %></td>
+          <td><% process.status %></td>
+          <td><% render_workflow_process_reset(@presenter.pid, process) %></td>
+          <td><% render_datetime(process.datetime) %></td>
+          <td><% process.elapsed ? '%.3f' % process.elapsed : '' %></td>
+          <td><% process.attempts %></td>
+          <td><% process.lifecycle %></td>
         </tr>
         <% if process.status == 'error' %>
           <tr>
             <td>&nbsp;</td>
-            <td colspan="7" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
+            <td colspan="8" style="padding-left: 1em" class="errortext"><%= process.error_message %></td>
           </tr>
         <% end %>
         <% if process.note %>
           <tr>
             <td>&nbsp;</td>
-            <td colspan="7" style="padding-left: 1em" class="notetext">Note: <%=process.note%></td>
+            <td colspan="8" style="padding-left: 1em" class="notetext">Note: <%= process.note %></td>
           </tr>
         <% end %>
       <% end %>

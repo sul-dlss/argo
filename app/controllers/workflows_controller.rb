@@ -11,14 +11,16 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:repo` The workflow's repository. e.g., dor.
   def show
     params.require(:repo)
-
-    # Set variables for views; determine which workflow we're supposed to render
-    @workflow_id = params[:wf_name]
-    @workflow = fetch_workflow(@object, @workflow_id, params[:repo])
+    xml = Dor::Config.workflow.client.get_workflow_xml(params[:repo], params[:item_id], params[:wf_name])
 
     respond_to do |format|
-      format.html { render 'show', layout: !request.xhr? }
-      format.xml  { render xml: @workflow.ng_xml.to_xml }
+      format.html do
+        @presenter = WorkflowPresenter.new(object: @object,
+                                           workflow_name: params[:wf_name],
+                                           xml: xml)
+        render 'show', layout: !request.xhr?
+      end
+      format.xml { render xml: xml }
     end
   end
 
@@ -90,14 +92,6 @@ class WorkflowsController < ApplicationController
   end
 
   private
-
-  def fetch_workflow(pid, wf_name, repo)
-    xml = Dor::Config.workflow.client.get_workflow_xml(repo, pid, wf_name)
-    ng_xml = Nokogiri::XML(xml)
-    return nil if ng_xml.xpath('workflow').empty?
-
-    Dor::Workflow::Document.new(ng_xml.to_s)
-  end
 
   def flush_index
     Dor::SearchService.solr.commit
