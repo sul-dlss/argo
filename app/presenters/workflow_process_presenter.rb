@@ -22,7 +22,7 @@ class WorkflowProcessPresenter
   def elapsed
     return unless @attributes[:elapsed]
 
-    format('%.3f', @attributes[:elapsed])
+    format('%.3f', @attributes[:elapsed].to_f)
   end
 
   def attempts
