@@ -4,12 +4,12 @@
   </thead>
   <tbody>
   <%- if workflows.length > 0 -%>
-    <%- 
+    <%-
       workflows.keys.sort.each do |wf|
         status = workflows[wf]
     -%>
       <tr>
-        <td><%= link_to wf, workflow_view_item_path(document.id, wf, :repo => status[:repo]), :title => wf, :data => { ajax_modal: 'trigger' } %></td>
+        <td><%= link_to wf, item_workflow_path(document.id, wf, repo: status[:repo]), title: wf, data: { ajax_modal: 'trigger' } %></td>
         <td>
           <%=status[:status] %>
           <% if status[:errors] > 0 -%>

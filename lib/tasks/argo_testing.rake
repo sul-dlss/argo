@@ -9,7 +9,6 @@ def load_order_files(fedora_files)
   fedora_files.map { |f| File.join(data_path, f.strip) }
 end
 
-
 task(:default).clear
 desc 'run specs and rubocop (for CI)'
 task default: [:rubocop, :ci]

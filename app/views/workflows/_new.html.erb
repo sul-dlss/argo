@@ -1,4 +1,4 @@
-<%= form_tag add_workflow_item_url do %>
+<%= form_tag item_workflows_path do %>
   <div class='form-group'>
     <%= select_tag :wf, options_for_select(workflow_options, Settings.apo.default_workflow_option), class: 'form-control' %>
   </div>

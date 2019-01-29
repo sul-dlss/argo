@@ -102,6 +102,16 @@ Argo::Application.routes.draw do
     get :register, on: :collection
     resource :content_type, only: [:show, :update]
 
+    #     workflow_view_item GET      /items/:id/workflows/:wf_name(.:format)    items#workflow_view
+    # workflow_update_item POST     /items/:id/workflows/:wf_name(.:format)      items#workflow_update
+    # workflow_history_view_item GET      /items/:id/workflow/history(.:format)  items#workflow_history_view
+    #  add_workflow_item GET|POST /items/:id/add_workflow(.:format)   items#add_workflow
+    resources :workflows, only: [:new, :create, :show, :update] do
+      member do
+        get 'history'
+      end
+    end
+
     member do
       get 'purl_preview'
       get 'discoverable'
@@ -112,10 +122,7 @@ Argo::Application.routes.draw do
       get 'remove_duplicate_encoding'
       get 'detect_duplicate_encoding'
       get 'create_minimal_mods'
-      get  'workflows/:wf_name', action: :workflow_view,         as: 'workflow_view'
-      post 'workflows/:wf_name', action: :workflow_update,       as: 'workflow_update'
-      get  'workflow/history',   action: :workflow_history_view, as: 'workflow_history_view'
-      post 'embargo',            action: :embargo_update,        as: 'embargo_update'
+      post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'
       post 'datastream',         action: :datastream_update,     as: 'datastream_update'
 
@@ -139,7 +146,6 @@ Argo::Application.routes.draw do
       get 'set_governing_apo_ui'
       post 'set_governing_apo'
       post :release_hold
-      match :add_workflow, action: :add_workflow, as: 'add_workflow', via: [:get, :post]
       get :apply_apo_defaults
       get :fix_missing_provenance
       match :update_resource, action: :update_resource, as: 'update_resource', via: [:get, :post]
