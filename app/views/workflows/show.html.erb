@@ -4,5 +4,9 @@
 </div>
 
 <div class='modal-body'>
-  <%= render 'show' %>
+  <% if params[:raw] %>
+    <%= CodeRay::Duo[:xml, :div].highlight(@workflow.ng_xml.prettify).html_safe %>
+  <% else %>
+    <%= render 'show' %>
+  <% end %>
 </div>
