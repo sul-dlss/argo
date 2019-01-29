@@ -1,6 +1,6 @@
 <span class="section-head-link">
   View:
-  <%= link_to 'XML', item_workflow_path(@presenter.pid, @presenter.workflow_name, raw: 'true', repo: params[:repo]),
+  <%= link_to 'XML', item_workflow_path(item_id: @presenter.pid, id: @presenter.workflow_name, raw: 'true', repo: params[:repo]),
               title: @presenter.workflow_name,
               data: { ajax_modal: 'trigger' } %>
 </span>
