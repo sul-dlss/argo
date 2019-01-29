@@ -50,7 +50,7 @@ RSpec.describe 'mods_view', type: :request do
 
     context 'add workflow' do
       it 'renders the add workflow ui' do
-        visit '/items/druid:zt570tx3016/add_workflow'
+        visit new_item_workflow_path('druid:zt570tx3016')
         expect(page).to have_content('Add workflow')
       end
     end

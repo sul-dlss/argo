@@ -102,7 +102,7 @@ module ArgoHelper
         disabled: !object.allows_modification?
       }
 
-      buttons << { url: add_workflow_item_path(id: pid), label: 'Add workflow' }
+      buttons << { url: new_item_workflow_path(item_id: pid), label: 'Add workflow' }
 
       buttons << {
         url: dor_path(pid: pid),

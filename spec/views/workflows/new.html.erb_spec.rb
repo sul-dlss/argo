@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-RSpec.describe 'items/add_workflow.html.erb' do
+RSpec.describe 'workflows/new.html.erb' do
   it 'renders the JS template' do
-    stub_template 'items/_add_workflow.html.erb' => 'stubbed_add_workflow'
+    stub_template 'workflows/_new.html.erb' => 'stubbed_add_workflow'
     controller.request.path_parameters[:id] = 'test'
     render
     expect(rendered)

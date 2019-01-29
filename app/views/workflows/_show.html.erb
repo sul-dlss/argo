@@ -3,7 +3,8 @@
 <% else %>
   <span class="section-head-link">
     View:
-    <%= link_to 'XML', workflow_view_item_path(@object.pid, @workflow_id, :raw => 'true', :repo => params[:repo]), :title => @workflow_id, :data => { ajax_modal: 'trigger' } %>
+    <%= link_to 'XML', item_workflow_path(@object.pid, @workflow_id, raw: 'true', repo: params[:repo]),
+                title: @workflow_id, data: { ajax_modal: 'trigger' } %>
   </span>
   <%= @object.pid %>
   <table class="detail">
@@ -37,13 +38,13 @@
           <% if process.status == 'error' %>
             <tr>
               <td>&nbsp;</td>
-              <td colspan="6" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
+              <td colspan="7" style="padding-left: 1em" class="errortext"><%=process.error_message%></td>
             </tr>
           <% end %>
           <% if process.note %>
             <tr>
               <td>&nbsp;</td>
-              <td colspan="6" style="padding-left: 1em" class="notetext">Note: <%=process.note%></td>
+              <td colspan="7" style="padding-left: 1em" class="notetext">Note: <%=process.note%></td>
             </tr>
           <% end %>
         <% end %>

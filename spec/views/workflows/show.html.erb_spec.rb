@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-describe 'items/workflow_view.html.erb' do
+RSpec.describe 'workflows/show.html.erb' do
   it 'renders the JS template' do
-    stub_template 'items/_workflow_view.html.erb' => 'stubbed_workflow_view'
+    stub_template 'workflows/_show.html.erb' => 'stubbed_workflow_view'
     render
     expect(rendered)
       .to have_css '.modal-header h3.modal-title', text: 'Workflow view'

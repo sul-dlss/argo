@@ -17,6 +17,7 @@ module ApplicationHelper
     return report_path if report_view?
     return report_workflow_grid_path if workflow_grid_view?
     return search_profile_path if profile_view?
+
     search_catalog_path
   end
 

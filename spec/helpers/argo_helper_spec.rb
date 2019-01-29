@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-describe ArgoHelper, type: :helper do
+
+RSpec.describe ArgoHelper, type: :helper do
   describe '#render_buttons' do
     let(:user) do
       instance_double(User,
@@ -64,7 +65,7 @@ describe ArgoHelper, type: :helper do
           },
           {
             label: 'Add workflow',
-            url: "/items/#{@item_id}/add_workflow"
+            url: new_item_workflow_path(@item_id)
           },
           {
             label: 'Republish',
@@ -197,7 +198,7 @@ describe ArgoHelper, type: :helper do
           },
           {
             label: 'Add workflow',
-            url: "/items/#{view_apo_id}/add_workflow"
+            url: new_item_workflow_path(view_apo_id)
           },
           {
             label: 'Republish',

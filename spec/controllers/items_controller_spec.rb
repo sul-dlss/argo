@@ -533,60 +533,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#add_workflow' do
-    context 'when they have manage_content access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-        @wf = double()
-        expect(@item).to receive(:workflows).and_return @wf
-      end
-
-      it 'initializes the new workflow' do
-        expect(Dor::CreateWorkflowService).to receive(:create_workflow).with(@item, name: 'accessionWF')
-        expect(@wf).to receive(:[]).with('accessionWF').and_return(nil)
-        expect(controller).to receive(:flush_index)
-        post 'add_workflow', params: { id: @pid, wf: 'accessionWF' }
-      end
-
-      it 'does not initialize the workflow if one is already active' do
-        expect(@item).not_to receive(:create_workflow)
-        mock_wf = double()
-        expect(mock_wf).to receive(:active?).and_return(true)
-        expect(@wf).to receive(:[]).and_return(mock_wf)
-        post 'add_workflow', params: { id: @pid, wf: 'accessionWF' }
-      end
-    end
-  end
-
-  describe '#workflow_view' do
-    it 'requires workflow and repo parameters' do
-      expect { get :workflow_view, params: { id: @pid, wf_name: 'accessionWF' } }.to raise_error(ArgumentError)
-    end
-    it 'fetches the workflow on valid parameters' do
-      expect(@item.workflows).to receive(:get_workflow)
-      get :workflow_view, params: { id: @pid, wf_name: 'accessionWF', repo: 'dor', format: :html }
-      expect(response).to have_http_status(:ok)
-    end
-    it 'returns 404 on missing item' do
-      expect(Dor).to receive(:find).with(@pid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get :workflow_view, params: { id: @pid, wf_name: 'accessionWF', repo: 'dor', format: :html }
-      expect(response).to have_http_status(:not_found)
-    end
-  end
-
-  describe '#workflow_update' do
-    it 'requires various workflow parameters' do
-      expect { post :workflow_update, params: { id: @pid, wf_name: 'accessionWF' } }.to raise_error(ArgumentError)
-    end
-    it 'changes the status' do
-      expect(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(double(definition: double(repo: 'dor')))
-      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'publish').and_return(nil)
-      expect(Dor::Config.workflow.client).to receive(:update_workflow_status).with('dor', @pid, 'accessionWF', 'publish', 'ready').and_return(nil)
-      post :workflow_update, params: { id: @pid, wf_name: 'accessionWF', process: 'publish', status: 'ready' }
-      expect(subject).to redirect_to(solr_document_path(@pid))
-    end
-  end
-
   describe '#refresh_metadata' do
     context 'when they have manage_content access' do
       before do

@@ -28,7 +28,7 @@ schema_validate_url='<%=url_for :controller => :items,:action => :schema_validat
 discoverable_url='<%=url_for :controller => :items,:action => :discoverable, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 remediate_mods_url='<%=url_for :controller => :items,:action => :remediate_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-add_workflow_url='<%=url_for :controller => :items,:action => :add_workflow, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 tags_url='<%=url_for :controller => :items,:action => :tags_bulk, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'

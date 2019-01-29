@@ -53,10 +53,7 @@ class ItemsController < ApplicationController
     :set_governing_apo
   ]
   # must run after save_and_reindex
-  prepend_after_action :flush_index, only: [
-    :add_workflow,
-    :embargo_update
-  ]
+  prepend_after_action :flush_index, only: [:embargo_update]
 
   def purl_preview
     md_service = Dor::PublicDescMetadataService.new(@object)
@@ -179,63 +176,6 @@ class ItemsController < ApplicationController
   def mods
     respond_to do |format|
       format.xml  { render xml: @object.descMetadata.content }
-    end
-  end
-
-  ##
-  # Renders a view with process-level state information for a given object's workflow.
-  #
-  # @option params [String] `:id` The druid for the object.
-  # @option params [String] `:wf_name` The workflow name. e.g., accessionWF.
-  # @option params [String] `:repo` The workflow's repository. e.g., dor.
-  def workflow_view
-    unless params[:wf_name].present? && params[:repo].present?
-      fail ArgumentError, "Missing parameters: #{params.inspect}"
-    end
-
-    # Set variables for views; determine which workflow we're supposed to
-    # render and honor a special value of 'workflow'
-    @workflow_id = params[:wf_name]
-    @workflow = if @workflow_id == 'workflow'
-                  @object.workflows
-                else
-                  @object.workflows.get_workflow(@workflow_id, params[:repo])
-                end
-    respond_to do |format|
-      format.html { render 'workflow_view', layout: !request.xhr? }
-      format.xml  { render xml: @workflow.ng_xml.to_xml }
-    end
-  end
-
-  ##
-  # Updates the status of a specific workflow process step to a given status.
-  #
-  # @option params [String] `:id` The druid for the object.
-  # @option params [String] `:wf_name` The workflow name. e.g., accessionWF.
-  # @option params [String] `:process` The workflow step. e.g., publish.
-  # @option params [String] `:status` The status to which we want to reset the workflow.
-  # @option params [String] `:repo` The repo to which the workflow applies (optional).
-  def workflow_update
-    args = params.values_at(:id, :wf_name, :process, :status)
-    if args.all?(&:present?)
-      # the :repo parameter is optional, so fetch it based on the workflow name if blank
-      params[:repo] ||= Dor::WorkflowObject.find_by_name(params[:wf_name]).definition.repo
-      # this will raise an exception if the item doesn't have that workflow step
-      Dor::Config.workflow.client.get_workflow_status params[:repo], *args.take(3)
-      # update the status for the step and redirect to the workflow view page
-      Dor::Config.workflow.client.update_workflow_status params[:repo], *args
-      respond_to do |format|
-        if params[:bulk].present?
-          render status: 200, plain: 'Updated!'
-        else
-          msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:wf_name]}"
-          format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-        end
-      end
-    elsif params[:bulk].present?
-      render status: :bad_request, plain: 'Bad request!'
-    else
-      fail ArgumentError, "Missing arguments: #{args.inspect}"
     end
   end
 
@@ -623,34 +563,6 @@ class ItemsController < ApplicationController
   def apply_apo_defaults
     @object.reapplyAdminPolicyObjectDefaults
     render status: 200, plain: 'Defaults applied.'
-  end
-
-  # add a workflow to an object if the workflow is not present in the active table
-  def add_workflow
-    unless params[:wf]
-      return respond_to do |format|
-        format.html { render layout: !request.xhr? }
-      end
-    end
-    wf_name = params[:wf]
-    wf = @object.workflows[wf_name]
-    # check the workflow is present and active (not archived)
-    if wf&.active?
-      render status: 500, plain: "#{wf_name} already exists!"
-      return
-    end
-    Dor::CreateWorkflowService.create_workflow(@object, name: wf_name)
-
-    # We need to sync up the workflows datastream with workflow service (using #find)
-    # and then force a committed Solr update before redirection.
-    reindex Dor.find(params[:id])
-    msg = "Added #{wf_name}"
-
-    if params[:bulk]
-      render plain: msg
-    else
-      redirect_to solr_document_path(params[:id]), notice: msg
-    end
   end
 
   def set_governing_apo
