@@ -19,7 +19,7 @@ class WorkflowsController < ApplicationController
     @workflow = if @workflow_id == 'workflow'
                   @object.workflows
                 else
-                  @object.workflows.get_workflow(@workflow_id, params[:repo])
+                  fetch_workflow(@object, @workflow_id, params[:repo])
                 end
     respond_to do |format|
       format.html { render 'show', layout: !request.xhr? }
@@ -87,6 +87,14 @@ class WorkflowsController < ApplicationController
   end
 
   private
+
+  def fetch_workflow(pid, wf_name, repo)
+    xml = Dor::Config.workflow.client.get_workflow_xml(repo, pid, wf_name)
+    ng_xml = Nokogiri::XML(xml)
+    return nil if ng_xml.xpath('workflow').empty?
+
+    Dor::Workflow::Document.new(ng_xml.to_s)
+  end
 
   def flush_index
     Dor::SearchService.solr.commit
