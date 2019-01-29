@@ -8,6 +8,18 @@ RSpec.describe WorkflowPresenter do
   let(:pid) { 'druid:oo201oo0001' }
   let(:item) { Dor::Item.new pid: pid }
 
+  describe '#pretty_xml' do
+    subject { presenter.pretty_xml }
+
+    let(:xml) do
+      '<?xml version="1.0" encoding="UTF-8"?>
+        <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+        </workflow>'
+    end
+
+    it { is_expected.to be_html_safe }
+  end
+
   describe '#processes' do
     subject { presenter.processes }
 

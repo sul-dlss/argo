@@ -20,6 +20,12 @@ class WorkflowPresenter
     workflow_document.processes
   end
 
+  def pretty_xml
+    # rubocop:disable Rails/OutputSafety
+    CodeRay::Duo[:xml, :div].highlight(Nokogiri::XML(xml).prettify).html_safe
+    # rubocop:enable Rails/OutputSafety
+  end
+
   private
 
   attr_reader :object, :xml
