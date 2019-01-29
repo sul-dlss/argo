@@ -7,8 +7,7 @@
     <dl class="defList">
       <dt>Lifecycle</dt>
       <dt>
-        <% history_link='/items/'+params[:id]+'/workflow/history' %>
-        <%= link_to "(xml)", history_link, :data => {ajax_modal: 'trigger'} %>
+        <%= link_to "(xml)", history_item_workflows_path(object), data: { ajax_modal: 'trigger' } %>
       </dt>
       <dd style="width:30em;">
         <%= render_milestones document, object %>
