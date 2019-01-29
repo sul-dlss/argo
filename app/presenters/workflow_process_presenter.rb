@@ -34,6 +34,6 @@ class WorkflowProcessPresenter
   end
 
   def note
-    @attributes[:note]
+    @attributes[:note].presence
   end
 end

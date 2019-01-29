@@ -26,4 +26,24 @@ RSpec.describe WorkflowProcessPresenter do
       it { is_expected.to eq '2.257' }
     end
   end
+
+  describe '#note' do
+    subject { instance.note }
+
+    context 'for nil' do
+      it { is_expected.to be_nil }
+    end
+
+    context 'for empty string' do
+      let(:attributes) { { note: '' } }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'for a value' do
+      let(:attributes) { { note: 'hi' } }
+
+      it { is_expected.to eq 'hi' }
+    end
+  end
 end
