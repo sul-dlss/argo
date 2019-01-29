@@ -15,9 +15,13 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.html do
+        # rubocop:disable Rails/DynamicFindBy
+        wf_def = Dor::WorkflowObject.find_by_name(params[:wf_name]).definition.processes
+        # rubocop:enable Rails/DynamicFindBy
         @presenter = WorkflowPresenter.new(object: @object,
                                            workflow_name: params[:wf_name],
-                                           xml: xml)
+                                           xml: xml,
+                                           workflow_steps: wf_def)
         render 'show', layout: !request.xhr?
       end
       format.xml { render xml: xml }

@@ -1,23 +1,31 @@
 # frozen_string_literal: true
 
 class WorkflowPresenter
-  def initialize(object:, workflow_name:, xml:)
+  # @param [Dor::Item] object
+  # @param [String] workflow_name
+  # @param [String] xml the workflow xml steps that this object has completed
+  # @param [Array<Dor::Workflow::Process>] workflow_steps the xml that describes the definition of this workflow
+  def initialize(object:, workflow_name:, xml:, workflow_steps:)
     @object = object
     @workflow_name = workflow_name
     @xml = xml
+    @workflow_steps = workflow_steps
   end
 
   delegate :pid, to: :object
   attr_reader :workflow_name
 
-  # This is going to find the workflow definition:
-  #   Dor::WorkflowObject.find_by_name(workflowId.first) and get the steps from there.
-  #   then it will fill in process status with that found in the xml.
+  # This iterates over all the steps in the workflow definition and creates a presenter
+  # for each of the most recent version.
   # @return [Array<Dor::Workflow::Process>]
   def processes
-    return [] if workflow_document.nil?
+    return [] if empty?
 
-    workflow_document.processes
+    workflow_steps.collect do |process|
+      nodes = ng_xml.xpath("/workflow/process[@name = '#{process.name}']")
+      node = nodes.max { |a, b| a.attr('version') <=> b.attr('version') }
+      process.update!(node, self)
+    end
   end
 
   def pretty_xml
@@ -28,14 +36,13 @@ class WorkflowPresenter
 
   private
 
-  attr_reader :object, :xml
+  attr_reader :object, :xml, :workflow_steps
 
-  def workflow_document
-    @workflow_document ||= begin
-      ng_xml = Nokogiri::XML(xml)
-      return if ng_xml.xpath('workflow').empty?
+  def ng_xml
+    @ng_xml ||= Nokogiri::XML(xml)
+  end
 
-      Dor::Workflow::Document.new(ng_xml.to_s)
-    end
+  def empty?
+    ng_xml.xpath('/workflow/process').empty?
   end
 end
