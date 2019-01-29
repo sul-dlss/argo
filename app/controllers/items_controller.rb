@@ -165,14 +165,6 @@ class ItemsController < ApplicationController
     @perm_keys = current_user.groups
   end
 
-  def workflow_history_view
-    @history_xml = Dor::Config.workflow.client.get_workflow_xml 'dor', params[:id], nil
-
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
   def mods
     respond_to do |format|
       format.xml  { render xml: @object.descMetadata.content }

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WorkflowsController < ApplicationController
-  before_action :load_resource
+  before_action :load_resource, except: [:history]
 
   ##
   # Renders a view with process-level state information for a given object's workflow.
@@ -84,6 +84,14 @@ class WorkflowsController < ApplicationController
       redirect_to solr_document_path(@object.pid), notice: msg
     end
     flush_index
+  end
+
+  def history
+    @history_xml = Dor::Config.workflow.client.get_workflow_xml 'dor', params[:item_id], nil
+
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
   end
 
   private
