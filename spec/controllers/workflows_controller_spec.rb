@@ -61,6 +61,23 @@ RSpec.describe WorkflowsController, type: :controller do
     end
   end
 
+  describe '#history' do
+    let(:xml) { instance_double(String) }
+
+    it 'fetches the workflow history' do
+      allow(Dor::Config.workflow.client).to receive(:get_workflow_xml).and_return(xml)
+      get :history, params: { item_id: pid, format: :html }
+      expect(response).to have_http_status(:ok)
+      expect(assigns[:history_xml]).to eq xml
+    end
+
+    it 'returns 404 on missing item' do
+      expect(Dor).to receive(:find).with(pid).and_raise(ActiveFedora::ObjectNotFoundError)
+      get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe '#update' do
     it 'requires various workflow parameters' do
       expect { post :update, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)

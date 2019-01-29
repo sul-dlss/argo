@@ -102,12 +102,8 @@ Argo::Application.routes.draw do
     get :register, on: :collection
     resource :content_type, only: [:show, :update]
 
-    #     workflow_view_item GET      /items/:id/workflows/:wf_name(.:format)    items#workflow_view
-    # workflow_update_item POST     /items/:id/workflows/:wf_name(.:format)      items#workflow_update
-    # workflow_history_view_item GET      /items/:id/workflow/history(.:format)  items#workflow_history_view
-    #  add_workflow_item GET|POST /items/:id/add_workflow(.:format)   items#add_workflow
     resources :workflows, only: [:new, :create, :show, :update] do
-      member do
+      collection do
         get 'history'
       end
     end
