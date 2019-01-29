@@ -21,18 +21,16 @@
   </thead>
   <tbody>
     <% if @presenter.processes.any? %>
-      <tr><td colspan="8">No processes defined for this workflow.</td></tr>
-    <% else %>
       <% @presenter.processes.each_with_index do |process,index| %>
         <tr>
-          <td><% index + 1 %>.</td>
-          <td><% process.name %></td>
-          <td><% process.status %></td>
-          <td><% render_workflow_process_reset(@presenter.pid, process) %></td>
-          <td><% render_datetime(process.datetime) %></td>
-          <td><% process.elapsed ? '%.3f' % process.elapsed : '' %></td>
-          <td><% process.attempts %></td>
-          <td><% process.lifecycle %></td>
+          <td><%= index + 1 %>.</td>
+          <td><%= process.name %></td>
+          <td><%= process.status %></td>
+          <td><%= render_workflow_process_reset(@presenter.pid, process) %></td>
+          <td><%= render_datetime(process.datetime) %></td>
+          <td><%= process.elapsed %></td>
+          <td><%= process.attempts %></td>
+          <td><%= process.lifecycle %></td>
         </tr>
         <% if process.status == 'error' %>
           <tr>
@@ -47,6 +45,8 @@
           </tr>
         <% end %>
       <% end %>
+    <% else %>
+      <tr><td colspan="8">No processes defined for this workflow.</td></tr>
     <% end %>
   </tbody>
 </table>

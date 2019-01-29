@@ -17,14 +17,15 @@ class WorkflowPresenter
 
   # This iterates over all the steps in the workflow definition and creates a presenter
   # for each of the most recent version.
-  # @return [Array<Dor::Workflow::Process>]
+  # @return [Array<WorkflowProcessPresenter>]
   def processes
     return [] if empty?
 
-    workflow_steps.collect do |process|
+    workflow_steps.map do |process|
       nodes = ng_xml.xpath("/workflow/process[@name = '#{process.name}']")
       node = nodes.max { |a, b| a.attr('version') <=> b.attr('version') }
-      process.update!(node, self)
+      attributes = node ? Hash[node.attributes.collect { |k, v| [k.to_sym, v.value] }] : {}
+      WorkflowProcessPresenter.new(name: process.name, **attributes)
     end
   end
 
