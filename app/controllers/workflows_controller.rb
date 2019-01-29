@@ -6,19 +6,25 @@ class WorkflowsController < ApplicationController
   ##
   # Renders a view with process-level state information for a given object's workflow.
   #
-  # @option params [String] `:id` The druid for the object.
-  # @option params [String] `:wf_name` The workflow name. e.g., accessionWF.
+  # @option params [String] `:item_id` The druid for the object.
+  # @option params [String] `:id` The workflow name. e.g., accessionWF.
   # @option params [String] `:repo` The workflow's repository. e.g., dor.
   def show
     params.require(:repo)
-
-    # Set variables for views; determine which workflow we're supposed to render
-    @workflow_id = params[:wf_name]
-    @workflow = fetch_workflow(@object, @workflow_id, params[:repo])
+    xml = Dor::Config.workflow.client.get_workflow_xml(params[:repo], params[:item_id], params[:id])
 
     respond_to do |format|
-      format.html { render 'show', layout: !request.xhr? }
-      format.xml  { render xml: @workflow.ng_xml.to_xml }
+      format.html do
+        # rubocop:disable Rails/DynamicFindBy
+        wf_def = Dor::WorkflowObject.find_by_name(params[:id]).definition.processes
+        # rubocop:enable Rails/DynamicFindBy
+        @presenter = WorkflowPresenter.new(object: @object,
+                                           workflow_name: params[:id],
+                                           xml: xml,
+                                           workflow_steps: wf_def)
+        render 'show', layout: !request.xhr?
+      end
+      format.xml { render xml: xml }
     end
   end
 
@@ -90,14 +96,6 @@ class WorkflowsController < ApplicationController
   end
 
   private
-
-  def fetch_workflow(pid, wf_name, repo)
-    xml = Dor::Config.workflow.client.get_workflow_xml(repo, pid, wf_name)
-    ng_xml = Nokogiri::XML(xml)
-    return nil if ng_xml.xpath('workflow').empty?
-
-    Dor::Workflow::Document.new(ng_xml.to_s)
-  end
 
   def flush_index
     Dor::SearchService.solr.commit

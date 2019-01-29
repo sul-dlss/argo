@@ -4,5 +4,9 @@
 </div>
 
 <div class='modal-body'>
-  <%= render 'show' %>
+  <% if params[:raw] %>
+    <%= @presenter.pretty_xml %>
+  <% else %>
+    <%= render 'show' %>
+  <% end %>
 </div>
