@@ -42,6 +42,7 @@ RSpec.describe WorkflowsController, type: :controller do
 
   describe '#show' do
     let(:workflow) { instance_double(Dor::Workflow::Document) }
+    let(:presenter) { instance_double(WorkflowPresenter) }
 
     it 'requires workflow and repo parameters' do
       expect { get :show, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
@@ -49,9 +50,11 @@ RSpec.describe WorkflowsController, type: :controller do
 
     it 'fetches the workflow on valid parameters' do
       allow(Dor::Config.workflow.client).to receive(:get_workflow_xml).and_return('xml')
+      allow(WorkflowPresenter).to receive(:new).and_return(presenter)
       get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
       expect(response).to have_http_status(:ok)
-      expect(assigns[:presenter]).to be_instance_of WorkflowPresenter
+      expect(WorkflowPresenter).to have_received(:new).with(object: item, workflow_name: 'accessionWF', workflow_steps: Array, xml: 'xml')
+      expect(assigns[:presenter]).to eq presenter
     end
 
     it 'returns 404 on missing item' do

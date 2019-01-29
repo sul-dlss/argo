@@ -6,20 +6,20 @@ class WorkflowsController < ApplicationController
   ##
   # Renders a view with process-level state information for a given object's workflow.
   #
-  # @option params [String] `:id` The druid for the object.
-  # @option params [String] `:wf_name` The workflow name. e.g., accessionWF.
+  # @option params [String] `:item_id` The druid for the object.
+  # @option params [String] `:id` The workflow name. e.g., accessionWF.
   # @option params [String] `:repo` The workflow's repository. e.g., dor.
   def show
     params.require(:repo)
-    xml = Dor::Config.workflow.client.get_workflow_xml(params[:repo], params[:item_id], params[:wf_name])
+    xml = Dor::Config.workflow.client.get_workflow_xml(params[:repo], params[:item_id], params[:id])
 
     respond_to do |format|
       format.html do
         # rubocop:disable Rails/DynamicFindBy
-        wf_def = Dor::WorkflowObject.find_by_name(params[:wf_name]).definition.processes
+        wf_def = Dor::WorkflowObject.find_by_name(params[:id]).definition.processes
         # rubocop:enable Rails/DynamicFindBy
         @presenter = WorkflowPresenter.new(object: @object,
-                                           workflow_name: params[:wf_name],
+                                           workflow_name: params[:id],
                                            xml: xml,
                                            workflow_steps: wf_def)
         render 'show', layout: !request.xhr?
