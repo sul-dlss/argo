@@ -2,7 +2,7 @@ scss:
   enabled: true
 
 ruby:
-  config_file: .rubocop.yml
+  enabled: false
 
 jshint:
   config_file: .jshintrc
