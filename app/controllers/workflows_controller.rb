@@ -15,15 +15,7 @@ class WorkflowsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        # rubocop:disable Rails/DynamicFindBy
-        wf_def = Dor::WorkflowObject.find_by_name(params[:id]).definition.processes
-
-        # rubocop:enable Rails/DynamicFindBy
-        @presenter = WorkflowPresenter.new(view: view_context,
-                                           object: @object,
-                                           workflow_name: params[:id],
-                                           xml: xml,
-                                           workflow_steps: wf_def)
+        @presenter = build_show_presenter(xml)
         render 'show', layout: !request.xhr?
       end
       format.xml { render xml: xml }
@@ -98,6 +90,20 @@ class WorkflowsController < ApplicationController
   end
 
   private
+
+  def build_show_presenter(xml)
+    return WorkflowXmlPresenter.new(xml) if params[:raw]
+
+    # rubocop:disable Rails/DynamicFindBy
+    wf_def = Dor::WorkflowObject.find_by_name(params[:id])
+    # rubocop:enable Rails/DynamicFindBy
+
+    status = WorkflowStatus.new(pid: @object.pid,
+                                workflow_name: params[:id],
+                                status_xml: xml,
+                                workflow_definition: wf_def)
+    WorkflowPresenter.new(view: view_context, workflow_status: status)
+  end
 
   def flush_index
     Dor::SearchService.solr.commit
