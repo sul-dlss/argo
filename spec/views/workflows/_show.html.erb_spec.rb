@@ -7,10 +7,20 @@ RSpec.describe 'workflows/_show.html.erb' do
   let(:workflow_name) { 'accessionWF' }
   let(:workflow_process_presenter) do
     WorkflowProcessPresenter.new(view: view,
-                                 pid: druid,
-                                 workflow_name: workflow_name,
-                                 name: 'descriptive-metadata',
-                                 status: 'waiting')
+                                 process_status: process_status)
+  end
+
+  let(:process_status) do
+    instance_double(WorkflowProcessStatus,
+                    name: 'descriptive-metadata',
+                    status: 'waiting',
+                    pid: druid,
+                    workflow_name: workflow_name,
+                    datetime: nil,
+                    elapsed: nil,
+                    attempts: nil,
+                    lifecycle: nil,
+                    note: nil)
   end
 
   let(:presenter) do

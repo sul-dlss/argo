@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Shows a single step in a workflow for a single object/version
+# Displays a single step in a workflow for a single object/version
 class WorkflowProcessPresenter
   ALLOWABLE_CHANGES = {
     'hold' => 'waiting',
@@ -8,42 +8,17 @@ class WorkflowProcessPresenter
     'error' => 'waiting'
   }.freeze
 
-  def initialize(view:, name:, pid:, workflow_name:, **attributes)
-    @attributes = attributes
+  def initialize(view:, process_status:)
     @view = view
-    @attributes[:name] = name
-    @attributes[:pid] = pid
-    @attributes[:workflow_name] = workflow_name
+    @process_status = process_status
   end
 
-  def name
-    @attributes[:name]
-  end
-
-  def status
-    @attributes[:status]
-  end
-
-  def datetime
-    @attributes[:datetime]
-  end
+  delegate :name, :status, :datetime, :attempts, :lifecycle, :note, to: :process_status
 
   def elapsed
-    return unless @attributes[:elapsed]
+    return unless process_status.elapsed
 
-    format('%.3f', @attributes[:elapsed].to_f)
-  end
-
-  def attempts
-    @attributes[:attempts]
-  end
-
-  def lifecycle
-    @attributes[:lifecycle]
-  end
-
-  def note
-    @attributes[:note].presence
+    format('%.3f', process_status.elapsed.to_f)
   end
 
   def reset_button
@@ -57,17 +32,10 @@ class WorkflowProcessPresenter
 
   private
 
-  attr_reader :view
+  attr_reader :view, :process_status
 
   delegate :form_tag, :item_workflow_path, :hidden_field_tag, :button_tag, to: :view
-
-  def pid
-    @attributes[:pid]
-  end
-
-  def workflow_name
-    @attributes[:workflow_name]
-  end
+  delegate :pid, :workflow_name, to: :process_status
 
   def new_status
     @new_status ||= ALLOWABLE_CHANGES.fetch(status, '')
