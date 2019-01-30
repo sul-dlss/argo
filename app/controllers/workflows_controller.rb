@@ -17,8 +17,10 @@ class WorkflowsController < ApplicationController
       format.html do
         # rubocop:disable Rails/DynamicFindBy
         wf_def = Dor::WorkflowObject.find_by_name(params[:id]).definition.processes
+
         # rubocop:enable Rails/DynamicFindBy
-        @presenter = WorkflowPresenter.new(object: @object,
+        @presenter = WorkflowPresenter.new(view: view_context,
+                                           object: @object,
                                            workflow_name: params[:id],
                                            xml: xml,
                                            workflow_steps: wf_def)
