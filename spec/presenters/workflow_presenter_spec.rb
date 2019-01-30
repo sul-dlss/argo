@@ -4,12 +4,14 @@ require 'spec_helper'
 
 RSpec.describe WorkflowPresenter do
   subject(:presenter) do
-    described_class.new(object: item,
+    described_class.new(view: stub_view,
+                        object: item,
                         workflow_name: workflow_name,
                         xml: xml,
                         workflow_steps: workflow_steps)
   end
 
+  let(:stub_view) { double('view') }
   let(:workflow_name) { 'accessionWF' }
   let(:workflow_steps) do
     [

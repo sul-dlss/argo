@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class WorkflowPresenter
+  # @param [Object] view the rails view context
   # @param [Dor::Item] object
   # @param [String] workflow_name
   # @param [String] xml the workflow xml steps that this object has completed
   # @param [Array<Dor::Workflow::Process>] workflow_steps the xml that describes the definition of this workflow
-  def initialize(object:, workflow_name:, xml:, workflow_steps:)
+  def initialize(view:, object:, workflow_name:, xml:, workflow_steps:)
+    @view = view
     @object = object
     @workflow_name = workflow_name
     @xml = xml
@@ -25,7 +27,11 @@ class WorkflowPresenter
       nodes = ng_xml.xpath("/workflow/process[@name = '#{process.name}']")
       node = nodes.max { |a, b| a.attr('version') <=> b.attr('version') }
       attributes = node ? Hash[node.attributes.collect { |k, v| [k.to_sym, v.value] }] : {}
-      WorkflowProcessPresenter.new(name: process.name, **attributes)
+      WorkflowProcessPresenter.new(view: view,
+                                   name: process.name,
+                                   pid: pid,
+                                   workflow_name: workflow_name,
+                                   **attributes)
     end
   end
 
@@ -37,7 +43,7 @@ class WorkflowPresenter
 
   private
 
-  attr_reader :object, :xml, :workflow_steps
+  attr_reader :object, :xml, :workflow_steps, :view
 
   def ng_xml
     @ng_xml ||= Nokogiri::XML(xml)

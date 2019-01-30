@@ -3,7 +3,15 @@
 require 'spec_helper'
 
 RSpec.describe WorkflowProcessPresenter do
-  subject(:instance) { described_class.new(name: 'accessionWF', **attributes) }
+  subject(:instance) do
+    described_class.new(view: stub_view,
+                        pid: 'druid:123',
+                        workflow_name: 'start-accession',
+                        name: 'accessionWF',
+                        **attributes)
+  end
+
+  let(:stub_view) { double('view') }
 
   let(:attributes) { {} }
 

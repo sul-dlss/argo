@@ -21,12 +21,12 @@
   </thead>
   <tbody>
     <% if @presenter.processes.any? %>
-      <% @presenter.processes.each_with_index do |process,index| %>
+      <% @presenter.processes.each_with_index do |process, index| %>
         <tr>
           <td><%= index + 1 %>.</td>
           <td><%= process.name %></td>
           <td><%= process.status %></td>
-          <td><%= render_workflow_process_reset(@presenter.pid, process) %></td>
+          <td><%= process.reset_button %></td>
           <td><%= render_datetime(process.datetime) %></td>
           <td><%= process.elapsed %></td>
           <td><%= process.attempts %></td>

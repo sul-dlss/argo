@@ -3,17 +3,32 @@
 require 'spec_helper'
 
 RSpec.describe 'workflows/_show.html.erb' do
-  let(:presenter) do
-    instance_double(WorkflowPresenter,
-                    pid: 'druid:aa111bb2222',
-                    workflow_name: 'accessionWF',
-                    processes: [WorkflowProcessPresenter.new(name: 'descriptive-metadata')])
+  let(:druid) { 'druid:aa111bb2222' }
+  let(:workflow_name) { 'accessionWF' }
+  let(:workflow_process_presenter) do
+    WorkflowProcessPresenter.new(view: view,
+                                 pid: druid,
+                                 workflow_name: workflow_name,
+                                 name: 'descriptive-metadata',
+                                 status: 'waiting')
   end
 
-  it 'renders' do
+  let(:presenter) do
+    instance_double(WorkflowPresenter,
+                    pid: druid,
+                    workflow_name: workflow_name,
+                    processes: [workflow_process_presenter])
+  end
+
+  before do
     assign(:presenter, presenter)
     render
+  end
+
+  it 'draws a table of all the workflow steps' do
     expect(rendered).to have_css 'table.detail'
     expect(rendered).to have_text 'descriptive-metadata'
+    expect(rendered).to have_css 'form[action="/items/druid:aa111bb2222/workflows/accessionWF"]'
+    expect(rendered).to have_button 'Set to completed'
   end
 end
