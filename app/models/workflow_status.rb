@@ -24,7 +24,7 @@ class WorkflowStatus
 
     workflow_steps.map do |process|
       nodes = ng_xml.xpath("/workflow/process[@name = '#{process.name}']")
-      node = nodes.max { |a, b| a.attr('version') <=> b.attr('version') }
+      node = nodes.max { |a, b| a.attr('version').to_i <=> b.attr('version').to_i }
       attributes = node ? Hash[node.attributes.collect { |k, v| [k.to_sym, v.value] }] : {}
       WorkflowProcessStatus.new(parent: self, name: process.name, **attributes)
     end

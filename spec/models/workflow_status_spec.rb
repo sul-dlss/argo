@@ -91,6 +91,8 @@ RSpec.describe WorkflowStatus do
             <process version="1" elapsed="0.0" attempts="1"
               datetime="2012-11-06T16:18:58-0800" status="completed" name="technical-metadata"/>
             <process version="2" lifecycle="submitted" elapsed="0.0" attempts="1"
+                datetime="2012-11-06T16:18:24-0800" status="error" name="technical-metadata"/>
+            <process version="10" lifecycle="submitted" elapsed="0.0" attempts="1"
               datetime="2012-11-06T16:18:24-0800" status="queued" name="technical-metadata"/>
           </workflow>'
       end
