@@ -13,7 +13,7 @@ class WorkflowStatus
     @workflow_definition = workflow_definition
   end
 
-  attr_reader :workflow_name
+  attr_reader :workflow_name, :pid
 
   def empty?
     ng_xml.xpath('/workflow/process').empty?
