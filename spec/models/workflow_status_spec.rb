@@ -34,6 +34,14 @@ RSpec.describe WorkflowStatus do
   let(:pid) { 'druid:oo201oo0001' }
   let(:item) { Dor::Item.new pid: pid }
 
+  describe '#pid' do
+    subject { workflow_status.pid }
+
+    let(:xml) { '' }
+
+    it { is_expected.to eq pid }
+  end
+
   describe '#process_statuses' do
     subject { workflow_status.process_statuses }
 
