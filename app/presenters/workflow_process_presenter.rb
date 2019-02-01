@@ -22,6 +22,8 @@ class WorkflowProcessPresenter
   end
 
   def reset_button
+    return unless new_status
+
     # workflow update requires id, workflow, process, and status parameters
     form_tag item_workflow_path(pid, workflow_name) do
       hidden_field_tag('process', name) +
@@ -38,6 +40,6 @@ class WorkflowProcessPresenter
   delegate :pid, :workflow_name, to: :process_status
 
   def new_status
-    @new_status ||= ALLOWABLE_CHANGES.fetch(status, '')
+    @new_status ||= ALLOWABLE_CHANGES[status]
   end
 end
