@@ -107,9 +107,7 @@ function fetch_druids(fun) {
 function republish(druids){
 	process_get(druids, republish_url, "Republished.");
 }
-function release_hold(druids){
-	process_post(druids,'',release_hold_url, "Hold released.")
-}
+
 function set_rights(druids){
 	var params = {rights: $('#rights_select').val()}
 	process_post(druids, set_rights_url, params, "Updated");

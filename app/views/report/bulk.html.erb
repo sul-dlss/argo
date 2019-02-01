@@ -18,7 +18,6 @@ close_version_url='<%=url_for :controller => :items,:action => :close_version, :
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
-release_hold_url='<%=url_for :controller => :items,:action => :release_hold, :id => 'druid:xxxxxxxxx', :bulk => true%>'
 set_rights_url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 set_collection_url='<%=url_for :controller => :items,:action => :set_collection, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
@@ -185,10 +184,6 @@ ul li{
   <span class="bulk_button" onclick="fetch_druids(refresh_metadata);$('#refresh_metadata').hide(400);">Refresh metadata</span><br/>
 </div>
 
-<div class="bulk_operation" id="release_hold" name="release_hold">
-  <h1>Release to SDR-Ingest</h1>
-  <span class="bulk_button" id="release_hold" name="release_hold" onclick="fetch_druids(release_hold);$('#release_hold').hide(400);">Release object</span>
-</div>
 <div class="bulk_operation" id="republish" name="republish">
   <h1>Republish items</h1>
   <span class="bulk_button" id="republish_button" name="republish_button" onclick="fetch_druids(republish);$('#republish').hide(400);">Refresh metadata on PURL</span>
