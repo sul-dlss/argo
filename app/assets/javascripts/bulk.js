@@ -121,9 +121,6 @@ function set_collection(druids){
 function detect_duplicate_encoding(druids){
 	process_get(druids, detect_duplicate_encoding_url, 'No Duplicates.');
 }
-function schema_validate(druids){
-	process_get(druids, schema_validate_url, "Valid");
-}
 
 function apply_apo_defaults(druids){
 	process_get(druids, apo_apply_defaults_url, 'Defaults_applied.')

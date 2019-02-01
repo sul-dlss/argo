@@ -22,7 +22,6 @@ release_hold_url='<%=url_for :controller => :items,:action => :release_hold, :id
 set_rights_url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 set_collection_url='<%=url_for :controller => :items,:action => :set_collection, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 detect_duplicate_encoding_url='<%=url_for :controller => :items,:action => :detect_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-schema_validate_url='<%=url_for :controller => :items,:action => :schema_validation, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
@@ -182,10 +181,6 @@ ul li{
   <span class="bulk_button" onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add workflow</span><br/>
 </div>
 
-<div class="bulk_operation" id="schema_validate" name="schema_validate">
-  <h1>Run mods schema validation.</h1>
-  <span class="bulk_button" onclick="fetch_druids(schema_validate);$('#schema_validate').hide(400);">Validate</span><br/>
-</div>
 <div class="bulk_operation" id="refresh_metadata" name="refresh_metadata">
   <h1>Refresh metadata from the external source.</h1>
   <span class="bulk_button" onclick="fetch_druids(refresh_metadata);$('#refresh_metadata').hide(400);">Refresh metadata</span><br/>
