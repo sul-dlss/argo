@@ -24,7 +24,6 @@ set_collection_url='<%=url_for :controller => :items,:action => :set_collection,
 detect_duplicate_encoding_url='<%=url_for :controller => :items,:action => :detect_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 schema_validate_url='<%=url_for :controller => :items,:action => :schema_validation, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 discoverable_url='<%=url_for :controller => :items,:action => :discoverable, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-remediate_mods_url='<%=url_for :controller => :items,:action => :remediate_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
@@ -184,10 +183,6 @@ ul li{
   <span class="bulk_button" onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add workflow</span><br/>
 </div>
 
-<div class="bulk_operation" id="remediate_mods" name="remediate_mods">
-  <h1>Run the Mclaughlin Maps remediation suite.</h1>
-  <span class="bulk_button" onclick="fetch_druids(remediate_mods);$('#remediate_mods').hide(400);">Remediate</span><br/>
-</div>
 <div class="bulk_operation" id="discoverable" name="discoverable">
   <h1>Check for the presence of the mods basic required fields for Searchworks.</h1>
   <span class="bulk_button" onclick="fetch_druids(discoverable);$('#discoverable').hide(400);">Check discoverability</span><br/>

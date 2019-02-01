@@ -127,10 +127,6 @@ function schema_validate(druids){
 function discoverable(druids){
 	process_get(druids, discoverable_url, "Dicoverable");
 }
-function remediate_mods(druids){
-	return; //disabled for now
-	process_get(druids, remediate_mods_url, 'Fixed');
-}
 
 function apply_apo_defaults(druids){
 	process_get(druids, apo_apply_defaults_url, 'Defaults_applied.')
