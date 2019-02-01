@@ -118,9 +118,6 @@ function set_rights(druids){
 	var params = {rights: $('#rights_select').val()}
 	process_post(druids, set_rights_url, params, "Updated");
 }
-function create_desc_md(druids){
-	process_get(druids, create_desc_md_url ,"Updated");
-}
 function set_collection(druids){
 	var collection_id = document.getElementById('set_collection_select').value;
 	process_post(druids, set_collection_url, {collection: collection_id}, "Collection set");
