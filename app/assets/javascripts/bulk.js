@@ -124,9 +124,6 @@ function detect_duplicate_encoding(druids){
 function schema_validate(druids){
 	process_get(druids, schema_validate_url, "Valid");
 }
-function discoverable(druids){
-	process_get(druids, discoverable_url, "Dicoverable");
-}
 
 function apply_apo_defaults(druids){
 	process_get(druids, apo_apply_defaults_url, 'Defaults_applied.')
