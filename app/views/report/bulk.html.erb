@@ -18,21 +18,13 @@ close_version_url='<%=url_for :controller => :items,:action => :close_version, :
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
-release_hold_url='<%=url_for :controller => :items,:action => :release_hold, :id => 'druid:xxxxxxxxx', :bulk => true%>'
 set_rights_url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-create_desc_md_url='<%=url_for :controller => :items,:action => :create_minimal_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 set_collection_url='<%=url_for :controller => :items,:action => :set_collection, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-detect_duplicate_encoding_url='<%=url_for :controller => :items,:action => :detect_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-remove_duplicate_encoding_url='<%=url_for :controller => :items,:action => :remove_duplicate_encoding, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-schema_validate_url='<%=url_for :controller => :items,:action => :schema_validation, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-discoverable_url='<%=url_for :controller => :items,:action => :discoverable, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-remediate_mods_url='<%=url_for :controller => :items,:action => :remediate_mods, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 tags_url='<%=url_for :controller => :items,:action => :tags_bulk, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_provenance, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 </script>
 
 <style>
@@ -133,11 +125,6 @@ ul li{
   <span class="bulk_button" onclick="fetch_druids(apply_apo_defaults);$('#apply_apo_defaults').hide(400);">Apply defaults.</span><br/>
 </div>
 
-<div class="bulk_operation" id="create_desc_md" name="create_desc_md">
-  <h1>Create minimal descriptive metadata from the title.</h1>
-  <p>This can only be performed on items which are stopped in the accessioning pipeline due to errors.</p>
-  <span class="bulk_button" onclick="fetch_druids(create_desc_md);$('#create_desc_md').hide(400);">Create Mods</span><br/>
-</div>
 <div class="bulk_operation" id="set_collection" name="set_collection">
   <h1>Add/Set a collection for these objects</h1>
   <p>This will add the selected collection if the object doesn't already have one, or replace any existing collection(s) for an object with the single selected collection.  If you select "None" for the collection, all collection associations will be removed, and no new associations will be added.</p>
@@ -185,10 +172,6 @@ ul li{
   <h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
   <span class="bulk_button" onclick="fetch_druids(purge);$('#purge').hide(400);">Purge objects from fedora</span><br/>
 </div>
-<div class="bulk_operation" id="fix_provenance" name="fix_provenance">
-  <h1>Add provenance metadata to items that have errored out in sdr-ingest-transfer due to missing provenance and reset the workflow step.</h1>
-  <span class="bulk_button" onclick="fetch_druids(fix_provenance);$('#fix_provenance').hide(400);">Add Provenance</span><br/>
-</div>
 
 <div class="bulk_operation" id="add_workflow" name="add_workflow">
   <h1>Add a workflow to the items.</h1>
@@ -196,34 +179,11 @@ ul li{
   <span class="bulk_button" onclick="fetch_druids(add_workflow);$('#add_workflow').hide(400);">Add workflow</span><br/>
 </div>
 
-<div class="bulk_operation" id="remove_duplicate_encoding" name="remove_duplicate_encoding">
-  <h1>Check whether items have duplicate xml encoding</h1>
-  <span class="bulk_button" onclick="fetch_druids(remove_duplicate_encoding);$('#remove_duplicate_encoding').hide(400);">Remove duplicate encoding</span><br/>
-</div>
-<div class="bulk_operation" id="remediate_mods" name="remediate_mods">
-  <h1>Run the Mclaughlin Maps remediation suite.</h1>
-  <span class="bulk_button" onclick="fetch_druids(remediate_mods);$('#remediate_mods').hide(400);">Remediate</span><br/>
-</div>
-<div class="bulk_operation" id="discoverable" name="discoverable">
-  <h1>Check for the presence of the mods basic required fields for Searchworks.</h1>
-  <span class="bulk_button" onclick="fetch_druids(discoverable);$('#discoverable').hide(400);">Check discoverability</span><br/>
-</div>
-<div class="bulk_operation" id="schema_validate" name="schema_validate">
-  <h1>Run mods schema validation.</h1>
-  <span class="bulk_button" onclick="fetch_druids(schema_validate);$('#schema_validate').hide(400);">Validate</span><br/>
-</div>
 <div class="bulk_operation" id="refresh_metadata" name="refresh_metadata">
   <h1>Refresh metadata from the external source.</h1>
   <span class="bulk_button" onclick="fetch_druids(refresh_metadata);$('#refresh_metadata').hide(400);">Refresh metadata</span><br/>
 </div>
-<div class="bulk_operation" id="detect_duplicate_encoding" name="detect_duplicate_encoding">
-  <h1>Check whether items have duplicate xml encoding</h1>
-  <span class="bulk_button" onclick="fetch_druids(detect_duplicate_encoding);$('#detect_duplicate_encoding').hide(400);">Check for duplicate encoding</span><br/>
-</div>
-<div class="bulk_operation" id="release_hold" name="release_hold">
-  <h1>Release to SDR-Ingest</h1>
-  <span class="bulk_button" id="release_hold" name="release_hold" onclick="fetch_druids(release_hold);$('#release_hold').hide(400);">Release object</span>
-</div>
+
 <div class="bulk_operation" id="republish" name="republish">
   <h1>Republish items</h1>
   <span class="bulk_button" id="republish_button" name="republish_button" onclick="fetch_druids(republish);$('#republish').hide(400);">Refresh metadata on PURL</span>

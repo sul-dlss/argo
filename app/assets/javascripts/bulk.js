@@ -48,10 +48,6 @@ function set_content_type(druids){
 	process_patch(druids, set_content_type_url, params, "Updated");
 }
 
-
-function fix_provenance(druids){
-	process_get(druids, fix_provenance_url, "Provenance added.");
-}
 function purge(druids){
 	process_get(druids, purge_url, "Purged");
 }
@@ -111,35 +107,14 @@ function fetch_druids(fun) {
 function republish(druids){
 	process_get(druids, republish_url, "Republished.");
 }
-function release_hold(druids){
-	process_post(druids,'',release_hold_url, "Hold released.")
-}
+
 function set_rights(druids){
 	var params = {rights: $('#rights_select').val()}
 	process_post(druids, set_rights_url, params, "Updated");
 }
-function create_desc_md(druids){
-	process_get(druids, create_desc_md_url ,"Updated");
-}
 function set_collection(druids){
 	var collection_id = document.getElementById('set_collection_select').value;
 	process_post(druids, set_collection_url, {collection: collection_id}, "Collection set");
-}
-function detect_duplicate_encoding(druids){
-	process_get(druids, detect_duplicate_encoding_url, 'No Duplicates.');
-}
-function remove_duplicate_encoding(druids){
-	process_get(druids, remove_duplicate_encoding_url, "fixed");
-}
-function schema_validate(druids){
-	process_get(druids, schema_validate_url, "Valid");
-}
-function discoverable(druids){
-	process_get(druids, discoverable_url, "Dicoverable");
-}
-function remediate_mods(druids){
-	return; //disabled for now
-	process_get(druids, remediate_mods_url, 'Fixed');
 }
 
 function apply_apo_defaults(druids){
