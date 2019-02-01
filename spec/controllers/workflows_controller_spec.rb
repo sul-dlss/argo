@@ -21,21 +21,32 @@ RSpec.describe WorkflowsController, type: :controller do
         allow(Dor::SearchService.solr).to receive(:add)
         allow(controller).to receive(:authorize!).and_return(true)
         allow(item).to receive(:workflows).and_return wf_datastream
+        allow(Dor::Config.workflow.client).to receive(:get_workflow_xml).and_return(xml)
+
+        allow(Dor::CreateWorkflowService).to receive(:create_workflow)
       end
 
-      it 'initializes the new workflow' do
-        expect(Dor::CreateWorkflowService).to receive(:create_workflow).with(item, name: 'accessionWF')
-        expect(wf_datastream).to receive(:[]).with('accessionWF').and_return(nil)
-        expect(controller).to receive(:flush_index)
-        post :create, params: { item_id: pid, wf: 'accessionWF' }
+      context 'when the workflow is not active' do
+        let(:xml) { nil }
+
+        it 'initializes the new workflow' do
+          expect(controller).to receive(:flush_index)
+          post :create, params: { item_id: pid, wf: 'accessionWF' }
+          expect(Dor::CreateWorkflowService).to have_received(:create_workflow).with(item, name: 'accessionWF')
+        end
       end
 
-      it 'does not initialize the workflow if one is already active' do
-        expect(item).not_to receive(:create_workflow)
-        mock_wf = double
-        expect(mock_wf).to receive(:active?).and_return(true)
-        expect(wf_datastream).to receive(:[]).and_return(mock_wf)
-        post :create, params: { item_id: pid, wf: 'accessionWF' }
+      context 'when the workflow is already active' do
+        let(:xml) do
+          <<~XML
+            <workflow><process version="1"></workflow>
+          XML
+        end
+
+        it 'does not initialize the workflow' do
+          post :create, params: { item_id: pid, wf: 'accessionWF' }
+          expect(Dor::CreateWorkflowService).not_to have_received(:create_workflow)
+        end
       end
     end
   end
