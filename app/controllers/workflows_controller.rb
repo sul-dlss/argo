@@ -60,12 +60,13 @@ class WorkflowsController < ApplicationController
       end
     end
     wf_name = params[:wf]
-    wf = @object.workflows[wf_name]
+
     # check the workflow is present and active (not archived)
-    if wf&.active?
-      render status: 500, plain: "#{wf_name} already exists!"
+    if workflow_active?(wf_name)
+      render status: 403, plain: "#{wf_name} already exists!"
       return
     end
+
     Dor::CreateWorkflowService.create_workflow(@object, name: wf_name)
 
     # We need to sync up the workflows datastream with workflow service (using #find)
@@ -90,6 +91,12 @@ class WorkflowsController < ApplicationController
   end
 
   private
+
+  # Fetches the workflow from the workflow service and checks to see if it's active
+  def workflow_active?(wf_name)
+    workflow = Dor::Config.workflow.client.workflow(pid: @object.pid, workflow_name: wf_name)
+    workflow.active_for?(version: @object.current_version)
+  end
 
   def build_show_presenter(xml)
     return WorkflowXmlPresenter.new(xml) if params[:raw]
