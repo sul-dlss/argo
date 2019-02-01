@@ -48,10 +48,6 @@ function set_content_type(druids){
 	process_patch(druids, set_content_type_url, params, "Updated");
 }
 
-
-function fix_provenance(druids){
-	process_get(druids, fix_provenance_url, "Provenance added.");
-}
 function purge(druids){
 	process_get(druids, purge_url, "Purged");
 }

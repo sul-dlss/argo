@@ -31,7 +31,6 @@ add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
 refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 tags_url='<%=url_for :controller => :items,:action => :tags_bulk, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-fix_provenance_url='<%=url_for :controller => :items, :action => :fix_missing_provenance, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 </script>
 
 <style>
@@ -178,10 +177,6 @@ ul li{
 <div class="bulk_operation" id="purge" name="purge">
   <h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
   <span class="bulk_button" onclick="fetch_druids(purge);$('#purge').hide(400);">Purge objects from fedora</span><br/>
-</div>
-<div class="bulk_operation" id="fix_provenance" name="fix_provenance">
-  <h1>Add provenance metadata to items that have errored out in sdr-ingest-transfer due to missing provenance and reset the workflow step.</h1>
-  <span class="bulk_button" onclick="fetch_druids(fix_provenance);$('#fix_provenance').hide(400);">Add Provenance</span><br/>
 </div>
 
 <div class="bulk_operation" id="add_workflow" name="add_workflow">
