@@ -9,19 +9,19 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
     subject { instance.elapsed }
 
     context 'for nil' do
-      let(:process_status) { instance_double(WorkflowProcessStatus, elapsed: nil) }
+      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: nil) }
 
       it { is_expected.to be_nil }
     end
 
     context 'for empty string' do
-      let(:process_status) { instance_double(WorkflowProcessStatus, elapsed: '') }
+      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: '') }
 
       it { is_expected.to eq '0.000' }
     end
 
     context 'for a float' do
-      let(:process_status) { instance_double(WorkflowProcessStatus, elapsed: '2.25743') }
+      let(:process_status) { instance_double(Dor::Workflow::Response::Process, elapsed: '2.25743') }
 
       it { is_expected.to eq '2.257' }
     end
@@ -30,7 +30,7 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
   describe '#note' do
     subject { instance.note }
 
-    let(:process_status) { instance_double(WorkflowProcessStatus, note: 'hi') }
+    let(:process_status) { instance_double(Dor::Workflow::Response::Process, note: 'hi') }
 
     it { is_expected.to eq 'hi' }
   end
@@ -43,7 +43,7 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
     end
 
     let(:process_status) do
-      instance_double(WorkflowProcessStatus,
+      instance_double(Dor::Workflow::Response::Process,
                       status: status,
                       pid: 'druid:132',
                       workflow_name: 'accessionWF',

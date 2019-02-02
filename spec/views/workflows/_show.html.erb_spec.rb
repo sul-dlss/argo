@@ -11,7 +11,7 @@ RSpec.describe 'workflows/_show.html.erb' do
   end
 
   let(:process_status) do
-    instance_double(WorkflowProcessStatus,
+    instance_double(Dor::Workflow::Response::Process,
                     name: 'descriptive-metadata',
                     status: 'waiting',
                     pid: druid,

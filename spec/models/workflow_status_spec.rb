@@ -6,10 +6,11 @@ RSpec.describe WorkflowStatus do
   subject(:workflow_status) do
     described_class.new(pid: pid,
                         workflow_name: workflow_name,
-                        status_xml: xml,
+                        workflow: workflow,
                         workflow_definition: definition)
   end
 
+  let(:workflow) { Dor::Workflow::Response::Workflow.new(xml: xml) }
   let(:workflow_name) { 'accessionWF' }
   let(:definition) { instance_double(Dor::WorkflowObject, definition: workflow_ds) }
   let(:workflow_ds) { instance_double(Dor::WorkflowDefinitionDs, processes: workflow_steps) }
@@ -88,7 +89,7 @@ RSpec.describe WorkflowStatus do
 
       it 'has one for each xml process' do
         expect(subject.size).to eq 13
-        expect(subject).to all(be_kind_of WorkflowProcessStatus)
+        expect(subject).to all(be_kind_of Dor::Workflow::Response::Process)
       end
     end
 
