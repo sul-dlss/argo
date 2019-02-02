@@ -11,11 +11,10 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:repo` The workflow's repository. e.g., dor.
   def show
     params.require(:repo)
-    xml = Dor::Config.workflow.client.get_workflow_xml(params[:repo], params[:item_id], params[:id])
-
+    workflow = Dor::Config.workflow.client.workflow(repo: params[:repo], pid: params[:item_id], workflow_name: params[:id])
     respond_to do |format|
       format.html do
-        @presenter = build_show_presenter(xml)
+        @presenter = build_show_presenter(workflow)
         render 'show', layout: !request.xhr?
       end
       format.xml { render xml: xml }
@@ -98,8 +97,8 @@ class WorkflowsController < ApplicationController
     workflow.active_for?(version: @object.current_version)
   end
 
-  def build_show_presenter(xml)
-    return WorkflowXmlPresenter.new(xml) if params[:raw]
+  def build_show_presenter(workflow)
+    return WorkflowXmlPresenter.new(workflow.xml) if params[:raw]
 
     # rubocop:disable Rails/DynamicFindBy
     wf_def = Dor::WorkflowObject.find_by_name(params[:id])
@@ -107,7 +106,7 @@ class WorkflowsController < ApplicationController
 
     status = WorkflowStatus.new(pid: @object.pid,
                                 workflow_name: params[:id],
-                                status_xml: xml,
+                                workflow: workflow,
                                 workflow_definition: wf_def)
     WorkflowPresenter.new(view: view_context, workflow_status: status)
   end

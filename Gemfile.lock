@@ -228,7 +228,7 @@ GEM
       deprecation
       faraday (~> 0.15)
       nokogiri (~> 1.8)
-    dor-workflow-service (2.5.0)
+    dor-workflow-service (2.6.0)
       activesupport (>= 3.2.1, < 6)
       confstruct (>= 0.2.7, < 2)
       deprecation
@@ -657,7 +657,7 @@ DEPENDENCIES
   dlss-capistrano (~> 3.1)
   dor-services (~> 6.3)
   dor-services-client (~> 1.0)
-  dor-workflow-service (~> 2.5)
+  dor-workflow-service (~> 2.6)
   equivalent-xml (>= 0.6.0)
   eye
   factory_bot_rails

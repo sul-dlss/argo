@@ -30,9 +30,9 @@ RSpec.describe WorkflowPresenter do
     context 'when the data has processes' do
       let(:process_statuses) do
         [
-          instance_double(WorkflowProcessStatus, name: 'start-accession'),
-          instance_double(WorkflowProcessStatus, name: 'descriptive-metadata'),
-          instance_double(WorkflowProcessStatus, name: 'rights-metadata')
+          instance_double(Dor::Workflow::Response::Process, name: 'start-accession'),
+          instance_double(Dor::Workflow::Response::Process, name: 'descriptive-metadata'),
+          instance_double(Dor::Workflow::Response::Process, name: 'rights-metadata')
         ]
       end
 

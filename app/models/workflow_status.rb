@@ -4,39 +4,30 @@
 class WorkflowStatus
   # @param [String] pid
   # @param [String] workflow_name
-  # @param [String] status_xml the xml from the workflow service for this object/workflow_name
+  # @param [Dor::Workflow::Response::Workflow] workflow the response from the workflow service for this object/workflow_name
   # @param [Dor::WorkflowObject] workflow_definition the definition of the workflow
-  def initialize(pid:, workflow_name:, status_xml:, workflow_definition:)
+  def initialize(pid:, workflow_name:, workflow:, workflow_definition:)
     @pid = pid
     @workflow_name = workflow_name
-    @status_xml = status_xml
+    @workflow = workflow
     @workflow_definition = workflow_definition
   end
 
   attr_reader :workflow_name, :pid
 
-  def empty?
-    ng_xml.xpath('/workflow/process').empty?
-  end
+  delegate :empty?, to: :workflow
 
   def process_statuses
     return [] if empty?
 
     workflow_steps.map do |process|
-      nodes = ng_xml.xpath("/workflow/process[@name = '#{process.name}']")
-      node = nodes.max { |a, b| a.attr('version').to_i <=> b.attr('version').to_i }
-      attributes = node ? Hash[node.attributes.collect { |k, v| [k.to_sym, v.value] }] : {}
-      WorkflowProcessStatus.new(parent: self, name: process.name, **attributes)
+      workflow.process_for_recent_version(name: process.name)
     end
   end
 
   private
 
-  attr_reader :workflow_definition, :status_xml
-
-  def ng_xml
-    @ng_xml ||= Nokogiri::XML(status_xml)
-  end
+  attr_reader :workflow_definition, :workflow
 
   def workflow_steps
     workflow_definition.definition.processes

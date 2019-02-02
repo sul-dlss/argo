@@ -70,7 +70,7 @@ RSpec.describe WorkflowsController, type: :controller do
       get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
       expect(response).to have_http_status(:ok)
       expect(WorkflowStatus).to have_received(:new)
-        .with(pid: pid, workflow_name: 'accessionWF', workflow_definition: workflow_object, status_xml: 'xml')
+        .with(pid: pid, workflow_name: 'accessionWF', workflow_definition: workflow_object, workflow: Dor::Workflow::Response::Workflow)
       expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
       expect(assigns[:presenter]).to eq presenter
     end
