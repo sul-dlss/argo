@@ -13,7 +13,7 @@ class WorkflowProcessPresenter
     @process_status = process_status
   end
 
-  delegate :name, :status, :datetime, :attempts, :lifecycle, :note, to: :process_status
+  delegate :name, :status, :datetime, :attempts, :lifecycle, :note, :error_message, to: :process_status
 
   def elapsed
     return unless process_status.elapsed
