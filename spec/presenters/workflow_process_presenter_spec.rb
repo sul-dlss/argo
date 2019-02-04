@@ -35,6 +35,14 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
     it { is_expected.to eq 'hi' }
   end
 
+  describe '#error_message' do
+    subject { instance.error_message }
+
+    let(:process_status) { instance_double(Dor::Workflow::Response::Process, error_message: "it's a bad day") }
+
+    it { is_expected.to eq "it's a bad day" }
+  end
+
   describe '#reset_button' do
     subject { instance.reset_button }
 
