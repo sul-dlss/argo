@@ -229,7 +229,7 @@ GEM
       faraday (~> 0.15)
       moab-versioning (~> 4.0)
       nokogiri (~> 1.8)
-    dor-workflow-service (2.7.0)
+    dor-workflow-service (2.8.0)
       activesupport (>= 3.2.1, < 6)
       confstruct (>= 0.2.7, < 2)
       deprecation
