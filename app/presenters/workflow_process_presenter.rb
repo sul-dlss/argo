@@ -8,6 +8,8 @@ class WorkflowProcessPresenter
     'error' => 'waiting'
   }.freeze
 
+  # @param [Object] view the view context
+  # @param [Dor::Workflow::Response::Workflow] process_status the model for the WorkflowProcess
   def initialize(view:, process_status:)
     @view = view
     @process_status = process_status
