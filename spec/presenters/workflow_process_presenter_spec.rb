@@ -46,10 +46,6 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
   describe '#reset_button' do
     subject { instance.reset_button }
 
-    before do
-      # allow(view).to receive(:item_workflow_path).and_return '/workflows/'
-    end
-
     let(:process_status) do
       instance_double(Dor::Workflow::Response::Process,
                       status: status,
@@ -68,6 +64,7 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
       let(:status) { 'waiting' }
 
       it { is_expected.to have_button 'Set to completed' }
+      it { is_expected.to have_css 'input[name="_method"][value="put"]', visible: false }
     end
   end
 end
