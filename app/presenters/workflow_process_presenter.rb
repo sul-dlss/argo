@@ -27,7 +27,7 @@ class WorkflowProcessPresenter
     return unless new_status
 
     # workflow update requires id, workflow, process, and status parameters
-    form_tag item_workflow_path(pid, workflow_name) do
+    form_tag item_workflow_path(pid, workflow_name), method: 'put' do
       hidden_field_tag('process', name) +
         hidden_field_tag('status', new_status) +
         button_tag('Set to ' + new_status, type: 'submit')

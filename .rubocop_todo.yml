@@ -191,9 +191,7 @@ RSpec/FilePath:
   Exclude:
     - 'spec/lib/indexer_spec.rb'
     - 'spec/lib/pid_gatherer_spec.rb'
-    - 'spec/routing/catalog_spec.rb'
-    - 'spec/routing/profile_spec.rb'
-    - 'spec/routing/report_routing_spec.rb'
+    - 'spec/routing/*'
 
 # Offense count: 408
 # Configuration parameters: AssignmentOnly.
