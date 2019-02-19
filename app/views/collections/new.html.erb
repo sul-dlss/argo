@@ -10,14 +10,14 @@
     <%= @apo.label %>
   </h4>
   <div class="col-md-6">
-  <%= form_tag apo_collections_path(@apo.pid), id: 'collection_form', role: 'form', class: 'form-horizontal' do %>
+  <%= form_tag apo_collections_path(@apo.pid), id: 'collection_form', role: 'form', class: 'form-horizontal', data: { behavior: 'collection-form' } do %>
     <div class="form-group" style="padding-left:20px">
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', true, onclick: "$('.collection_div').hide();$('#create-collection').show();" %>
+        <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-collection' } %>
         Create a Collection from Title/Abstract
       </label>
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', false, onclick: "$('.collection_div').hide();$('#create-collection-catkey').show();" %>
+        <%= radio_button_tag 'collection_radio', 'create', false,  data: { reveal: 'create-collection-catkey' } %>
         Create a Collection from Symphony
       </label>
     </div>

@@ -1,4 +1,5 @@
-import Form from 'modules/apo_form'
+import ApoForm from 'modules/apo_form'
+import CollectionForm from 'modules/collection_form'
 
 $.fn.preload = function() {
     this.each(function(){
@@ -85,12 +86,20 @@ $(document).on('keyup', '#collection_catkey', function(e) {
 export default class Argo {
     initialize() {
       this.apoEditor()
+      this.collectionEditor()
     }
 
     apoEditor() {
         var element = $("[data-behavior='apo-form']")
         if (element.length > 0) {
-            new Form(element).init();
+            new ApoForm(element).init();
+        }
+    }
+
+    collectionEditor() {
+        var element = $("[data-behavior='collection-form']")
+        if (element.length > 0) {
+            new CollectionForm(element).init();
         }
     }
 }
