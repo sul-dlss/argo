@@ -7,9 +7,9 @@ module Constants
     [human_readable, type_code]
   end
 
-  CONTENT_TYPES = %w(image book file map media document).freeze
+  CONTENT_TYPES = %w(image book file map media document 3d).freeze
 
-  RESOURCE_TYPES = %w(image page file audio video document).freeze
+  RESOURCE_TYPES = %w(image page file audio video document 3d).freeze
 
   RELEASE_TARGETS = [
     %w(Searchworks Searchworks)
