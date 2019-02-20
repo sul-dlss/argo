@@ -36,6 +36,7 @@ RSpec.describe 'Bulk jobs view', js: true do
 
     attach_file('spreadsheet_file', File.expand_path('../../fixtures/crowdsourcing_bridget_1.xlsx', __FILE__))
 
+    skip "we don't have jQuery in this context"
     # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
     page.execute_script("$('#spreadsheet_file').trigger('change')")
 
@@ -52,6 +53,7 @@ RSpec.describe 'Bulk jobs view', js: true do
     expect(page).to have_css('#spreadsheet_file')
     attach_file('spreadsheet_file', File.absolute_path(__FILE__))
 
+    skip "we don't have jQuery in this context"
     # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
     page.execute_script("$('#spreadsheet_file').trigger('change')")
     expect(page).to have_css('span#bulk-spreadsheet-warning', text: 'Note: Only spreadsheets or XML files are allowed. Please check your selected file.')
