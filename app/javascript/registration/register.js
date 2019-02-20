@@ -74,7 +74,7 @@ export default function DorRegistration(initOpts) {
         params['pid'] = "druid:" + data.metadata_id;
       }
 
-      for (x in params) { if (params[x] == null) { delete params[x] } }
+      for (var x in params) { if (params[x] == null) { delete params[x] } }
 
       var ajaxParams = {
         type: 'POST',
@@ -149,7 +149,7 @@ export default function DorRegistration(initOpts) {
             }
         }
         //check for mixed md sources, that isnt allowed
-        for(mdId in mdIds)
+        for(var mdId in mdIds)
         {
             var trimmed=mdIds[mdId].trim();
             var intRegex = /^\d+$/;
