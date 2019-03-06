@@ -53,32 +53,52 @@ RSpec.describe WorkflowsController, type: :controller do
 
   describe '#show' do
     let(:workflow) { instance_double(Dor::Workflow::Document) }
-    let(:presenter) { instance_double(WorkflowPresenter) }
     let(:workflow_status) { instance_double(WorkflowStatus) }
     let(:workflow_object) { instance_double(Dor::WorkflowObject) }
 
-    it 'requires workflow and repo parameters' do
-      expect { get :show, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
+    context 'when the user wants a table view' do
+      let(:presenter) { instance_double(WorkflowPresenter) }
+
+      it 'requires workflow and repo parameters' do
+        expect { get :show, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
+      end
+
+      it 'fetches the workflow on valid parameters' do
+        allow(Dor::Config.workflow.client).to receive(:get_workflow_xml).and_return('xml')
+        allow(WorkflowPresenter).to receive(:new).and_return(presenter)
+        allow(WorkflowStatus).to receive(:new).and_return(workflow_status)
+        allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
+
+        get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
+        expect(response).to have_http_status(:ok)
+        expect(WorkflowStatus).to have_received(:new)
+          .with(pid: pid, workflow_name: 'accessionWF', workflow_definition: workflow_object, workflow: Dor::Workflow::Response::Workflow)
+        expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
+        expect(assigns[:presenter]).to eq presenter
+      end
+
+      it 'returns 404 on missing item' do
+        expect(Dor).to receive(:find).with(pid).and_raise(ActiveFedora::ObjectNotFoundError)
+        get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
-    it 'fetches the workflow on valid parameters' do
-      allow(Dor::Config.workflow.client).to receive(:get_workflow_xml).and_return('xml')
-      allow(WorkflowPresenter).to receive(:new).and_return(presenter)
-      allow(WorkflowStatus).to receive(:new).and_return(workflow_status)
-      allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
+    context 'when the user wants to see the xml' do
+      let(:presenter) { instance_double(WorkflowXmlPresenter) }
 
-      get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
-      expect(response).to have_http_status(:ok)
-      expect(WorkflowStatus).to have_received(:new)
-        .with(pid: pid, workflow_name: 'accessionWF', workflow_definition: workflow_object, workflow: Dor::Workflow::Response::Workflow)
-      expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
-      expect(assigns[:presenter]).to eq presenter
-    end
+      before do
+        allow(Dor::Config.workflow.client).to receive(:get_workflow_xml).and_return('xml')
+        allow(WorkflowXmlPresenter).to receive(:new).and_return(presenter)
+        allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
+      end
 
-    it 'returns 404 on missing item' do
-      expect(Dor).to receive(:find).with(pid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
-      expect(response).to have_http_status(:not_found)
+      it 'fetches the workflow on valid parameters' do
+        get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', raw: true, format: :html }
+        expect(response).to have_http_status(:ok)
+        expect(WorkflowXmlPresenter).to have_received(:new).with(xml: 'xml')
+        expect(assigns[:presenter]).to eq presenter
+      end
     end
   end
 
