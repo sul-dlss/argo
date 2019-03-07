@@ -98,7 +98,7 @@ class WorkflowsController < ApplicationController
   end
 
   def build_show_presenter(workflow)
-    return WorkflowXmlPresenter.new(workflow.xml) if params[:raw]
+    return WorkflowXmlPresenter.new(xml: workflow.xml) if params[:raw]
 
     # rubocop:disable Rails/DynamicFindBy
     wf_def = Dor::WorkflowObject.find_by_name(params[:id])
