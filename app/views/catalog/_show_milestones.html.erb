@@ -6,7 +6,8 @@
   <%
   ## TODO: Pick a real date format for the date to_s calls.
   ## Do it here and NOT in the model!!
-
+  version_hash = document.get_versions
+  milestones = document.get_milestones
   milestones.keys.sort.each do |version|
     steps=milestones[version]
     first=true

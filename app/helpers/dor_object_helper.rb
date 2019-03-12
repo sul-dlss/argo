@@ -62,12 +62,6 @@ module DorObjectHelper
     render partial: 'catalog/show_events', locals: { document: doc, object: obj, events: events.compact }
   end
 
-  def render_milestones(doc, obj)
-    milestones = doc.get_milestones
-    version_hash = doc.get_versions
-    render partial: 'catalog/show_milestones', locals: { document: doc, object: obj, milestones: milestones, version_hash: version_hash }
-  end
-
   def render_status(doc, object = nil)
     object.nil? ? doc['status_ssi'] : object.status.html_safe
   end

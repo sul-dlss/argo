@@ -10,7 +10,7 @@
         <%= link_to "(xml)", history_item_workflows_path(object), data: { ajax_modal: 'trigger' } %>
       </dt>
       <dd style="width:30em;">
-        <%= render_milestones document, object %>
+        <%= render 'catalog/show_milestones', document: document, object: object %>
       </dd>
     </dl>
   </div>
