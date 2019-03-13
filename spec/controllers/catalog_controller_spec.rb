@@ -59,6 +59,7 @@ RSpec.describe CatalogController, type: :controller do
         it 'is successful' do
           get 'show', params: { id: @druid }
           expect(response).to be_successful
+          expect(assigns[:history_presenter]).to be_kind_of HistoryPresenter
         end
       end
 
