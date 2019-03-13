@@ -12,6 +12,7 @@ services:
     environment:
       ROLES: sdr:administrator-role
       REMOTE_USER: blalbrit@stanford.edu
+      RAILS_LOG_TO_STDOUT: 'true'
       SOLR_URL: http://solr:8983/solr/argo
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
