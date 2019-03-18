@@ -67,7 +67,7 @@ GEM
       io-like (~> 0.3.0)
     arel (9.0.0)
     ast (2.4.0)
-    autoprefixer-rails (9.4.10.2)
+    autoprefixer-rails (9.5.0)
       execjs
     babel-source (5.8.35)
     babel-transpiler (0.7.0)
@@ -99,7 +99,7 @@ GEM
     bundler-audit (0.6.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 0.18)
-    byebug (11.0.0)
+    byebug (11.0.1)
     cancancan (2.3.0)
     capistrano (3.11.0)
       airbrussh (>= 1.0.0)
@@ -223,7 +223,7 @@ GEM
       stanford-mods-normalizer (~> 0.1)
       systemu (~> 2.6)
       uuidtools (~> 2.1.4)
-    dor-services-client (1.6.0)
+    dor-services-client (1.7.0)
       activesupport (>= 4.2, < 6)
       deprecation
       faraday (~> 0.15)
