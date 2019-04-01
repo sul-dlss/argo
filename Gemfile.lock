@@ -642,10 +642,8 @@ DEPENDENCIES
   bootstrap-sass
   byebug
   cancancan
-  capistrano (~> 3.6)
   capistrano-passenger
   capistrano-rails
-  capistrano-shared_configs
   capistrano3-delayed-job (~> 1.0)
   capybara
   chromedriver-helper
