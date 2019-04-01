@@ -31,7 +31,6 @@ require 'capistrano/delayed_job'
 require 'capistrano/honeybadger'
 require 'capistrano/passenger'
 require 'capistrano/rails'
-require 'capistrano/shared_configs'
 require 'dlss/capistrano'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.

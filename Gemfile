@@ -114,10 +114,8 @@ group :test do
 end
 
 group :deployment do
-  gem 'capistrano', '~> 3.6'
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'capistrano-shared_configs'
   gem 'capistrano3-delayed-job', '~> 1.0'
   gem 'dlss-capistrano', '~> 3.1'
 end
