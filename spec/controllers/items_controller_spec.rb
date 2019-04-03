@@ -38,19 +38,19 @@ RSpec.describe ItemsController, type: :controller do
 
   describe 'release_hold' do
     it 'releases an item that is on hold if its apo has been ingested' do
-      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
-      expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
+      expect(Dor::Config.workflow.client).to receive(:workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
+      expect(Dor::Config.workflow.client).to receive(:lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(true)
       expect(Dor::Config.workflow.client).to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
     end
     it 'refuses to release an item that isnt on hold' do
-      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
+      expect(Dor::Config.workflow.client).to receive(:workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('waiting')
       expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
     end
     it 'refuses to release an item whose apo hasnt been ingested' do
-      expect(Dor::Config.workflow.client).to receive(:get_workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
-      expect(Dor::Config.workflow.client).to receive(:get_lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
+      expect(Dor::Config.workflow.client).to receive(:workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')
+      expect(Dor::Config.workflow.client).to receive(:lifecycle).with('dor', 'druid:apo', 'accessioned').and_return(false)
       expect(Dor::Config.workflow.client).not_to receive(:update_workflow_status)
       post :release_hold, params: { id: @pid }
     end

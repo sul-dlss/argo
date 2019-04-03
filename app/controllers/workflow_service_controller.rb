@@ -39,11 +39,11 @@ class WorkflowServiceController < ApplicationController
   private
 
   def get_lifecycle(task)
-    Dor::Config.workflow.client.get_lifecycle('dor', params[:pid], task)
+    Dor::Config.workflow.client.lifecycle('dor', params[:pid], task)
   end
 
   def get_active_lifecycle(task)
-    Dor::Config.workflow.client.get_active_lifecycle('dor', params[:pid], task)
+    Dor::Config.workflow.client.active_lifecycle('dor', params[:pid], task)
   end
 
   ##

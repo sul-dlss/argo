@@ -73,7 +73,7 @@ gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '~> 6.3'
 gem 'dor-services-client', '~> 1.0'
-gem 'dor-workflow-service', '~> 2.7'
+gem 'dor-workflow-service', '~> 2.11'
 gem 'moab-versioning'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies

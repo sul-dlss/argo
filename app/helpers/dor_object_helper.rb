@@ -79,7 +79,7 @@ module DorObjectHelper
   # @deprecated Please use non-blocking requests rather than blocking helpers.
   # See WorkflowServiceController#accesssioned for JSON API to this logic
   def has_been_accessioned?(pid)
-    Dor::Config.workflow.client.get_lifecycle('dor', pid, 'accessioned')
+    Dor::Config.workflow.client.lifecycle('dor', pid, 'accessioned')
   end
 
   def last_accessioned_version(pid)
