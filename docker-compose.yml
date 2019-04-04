@@ -50,8 +50,30 @@ services:
     image: suldlss/suri-rails:latest
     ports:
       - 3002:3000
+  db:
+    image: postgres
+     # No ports shared externally, so that this doesn't conflict with the postgres
+     # server that TravisCI starts up.
+     # ports:
+     #   - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=sekret
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
 
   workflow:
     image: suldlss/workflow-server:latest
+    environment:
+      - RAILS_LOG_TO_STDOUT=true
+      - DATABASE_NAME=workflow-server
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=sekret
+      - DATABASE_HOSTNAME=db
+      - DATABASE_PORT=5432
+      - SECRET_KEY_BASE="${SECRET_KEY_BASE}"
+      - SETTINGS__DOR_SERVICES__URL=http://dor-services-app:3000
+      - SETTINGS__ENABLE_STOMP=false
+    depends_on:
+      - db
     ports:
       - 3001:3000
