@@ -12,9 +12,9 @@ class DorObjectWorkflowStatus
   ##
   # @return [Boolean]
   def can_open_version?
-    return false unless workflow.get_lifecycle('dor', pid, 'accessioned')
-    return false if workflow.get_active_lifecycle('dor', pid, 'submitted')
-    return false if workflow.get_active_lifecycle('dor', pid, 'opened')
+    return false unless workflow.lifecycle('dor', pid, 'accessioned')
+    return false if workflow.active_lifecycle('dor', pid, 'submitted')
+    return false if workflow.active_lifecycle('dor', pid, 'opened')
 
     true
   end
