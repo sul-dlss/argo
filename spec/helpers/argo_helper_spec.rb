@@ -18,8 +18,8 @@ RSpec.describe ArgoHelper, type: :helper do
       @governing_apo_id = 'druid:hv992ry2431'
       @object = instantiate_fixture(@item_id, Dor::Item)
       @doc = SolrDocument.new('id' => @item_id, SolrDocument::FIELD_APO_ID => [@governing_apo_id])
-      allow(Dor::Config.workflow.client).to receive(:get_active_lifecycle).and_return(true)
-      allow(Dor::Config.workflow.client).to receive(:get_lifecycle).and_return(true)
+      allow(Dor::Config.workflow.client).to receive(:active_lifecycle).and_return(true)
+      allow(Dor::Config.workflow.client).to receive(:lifecycle).and_return(true)
       allow(controller).to receive(:current_user).and_return(user)
       allow(helper).to receive(:current_user).and_return(user)
       allow(@object).to receive(:allows_modification?).and_return(true)

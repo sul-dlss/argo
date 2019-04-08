@@ -13,11 +13,11 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when closeable' do
       it 'returns true' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
-                                            .and_return(true)
+          .to receive(:active_lifecycle).with('dor', druid, 'opened')
+                                        .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
-                                            .and_return(false)
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+                                        .and_return(false)
         get :closeable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
@@ -28,8 +28,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
       context 'not opened' do
         it 'returns false' do
           expect(Dor::Config.workflow.client)
-            .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
-                                              .and_return(false)
+            .to receive(:active_lifecycle).with('dor', druid, 'opened')
+                                          .and_return(false)
           get :closeable, params: { pid: druid, format: :json }
           expect(assigns(:status)).to eq false
           expect(response.body).to eq 'false'
@@ -39,11 +39,11 @@ RSpec.describe WorkflowServiceController, type: :controller do
       context 'when opened && is submitted' do
         it 'returns false' do
           expect(Dor::Config.workflow.client)
-            .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
-                                              .and_return(true)
+            .to receive(:active_lifecycle).with('dor', druid, 'opened')
+                                          .and_return(true)
           expect(Dor::Config.workflow.client)
-            .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
-                                              .and_return(true)
+            .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+                                          .and_return(true)
           get :closeable, params: { pid: druid, format: :json }
           expect(assigns(:status)).to eq false
           expect(response.body).to eq 'false'
@@ -56,8 +56,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when not accessioned' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
-                                     .and_return(false)
+          .to receive(:lifecycle).with('dor', druid, 'accessioned')
+                                 .and_return(false)
         get :openable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
@@ -67,11 +67,11 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when accessioned && submitted' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
-                                     .and_return(true)
+          .to receive(:lifecycle).with('dor', druid, 'accessioned')
+                                 .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
-                                            .and_return(true)
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+                                        .and_return(true)
         get :openable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
@@ -81,14 +81,14 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when accessioned && !submitted && opened' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
-                                     .and_return(true)
+          .to receive(:lifecycle).with('dor', druid, 'accessioned')
+                                 .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
-                                            .and_return(false)
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+                                        .and_return(false)
         expect(Dor::Config.workflow.client)
-          .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
-                                            .and_return(true)
+          .to receive(:active_lifecycle).with('dor', druid, 'opened')
+                                        .and_return(true)
         get :openable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
@@ -98,14 +98,14 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when accessioned && !submitted && !opened' do
       it 'returns true' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
-                                     .and_return(true)
+          .to receive(:lifecycle).with('dor', druid, 'accessioned')
+                                 .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:get_active_lifecycle).with('dor', druid, 'submitted')
-                                            .and_return(false)
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+                                        .and_return(false)
         expect(Dor::Config.workflow.client)
-          .to receive(:get_active_lifecycle).with('dor', druid, 'opened')
-                                            .and_return(false)
+          .to receive(:active_lifecycle).with('dor', druid, 'opened')
+                                        .and_return(false)
         get :openable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
@@ -117,8 +117,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when published' do
       it 'returns true' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'published')
-                                     .and_return(true)
+          .to receive(:lifecycle).with('dor', druid, 'published')
+                                 .and_return(true)
         get :published, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
@@ -128,8 +128,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when not published' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'published')
-                                     .and_return(false)
+          .to receive(:lifecycle).with('dor', druid, 'published')
+                                 .and_return(false)
         get :published, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
@@ -141,8 +141,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when submitted' do
       it 'returns true' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'submitted')
-                                     .and_return(true)
+          .to receive(:lifecycle).with('dor', druid, 'submitted')
+                                 .and_return(true)
         get :submitted, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
@@ -152,8 +152,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when not submitted' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'submitted')
-                                     .and_return(false)
+          .to receive(:lifecycle).with('dor', druid, 'submitted')
+                                 .and_return(false)
         get :submitted, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'
@@ -165,8 +165,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when accessioned' do
       it 'returns true' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
-                                     .and_return(true)
+          .to receive(:lifecycle).with('dor', druid, 'accessioned')
+                                 .and_return(true)
         get :accessioned, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq true
         expect(response.body).to eq 'true'
@@ -176,8 +176,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
     context 'when not accessioned' do
       it 'returns false' do
         expect(Dor::Config.workflow.client)
-          .to receive(:get_lifecycle).with('dor', druid, 'accessioned')
-                                     .and_return(false)
+          .to receive(:lifecycle).with('dor', druid, 'accessioned')
+                                 .and_return(false)
         get :accessioned, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
         expect(response.body).to eq 'false'

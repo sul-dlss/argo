@@ -669,11 +669,11 @@ class ItemsController < ApplicationController
   end
 
   def dor_accession_status(object, task)
-    Dor::Config.workflow.client.get_workflow_status('dor', object.pid, 'accessionWF', task)
+    Dor::Config.workflow.client.workflow_status('dor', object.pid, 'accessionWF', task)
   end
 
   def dor_lifecycle(object, stage)
-    Dor::Config.workflow.client.get_lifecycle('dor', object.pid, stage)
+    Dor::Config.workflow.client.lifecycle('dor', object.pid, stage)
   end
 
   def set_dor_accession_status(object, task, status)

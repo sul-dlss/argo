@@ -38,7 +38,7 @@ class WorkflowsController < ApplicationController
     # rubocop:enable Rails/DynamicFindBy
 
     # this will raise an exception if the item doesn't have that workflow step
-    Dor::Config.workflow.client.get_workflow_status params[:repo], *args.take(3)
+    Dor::Config.workflow.client.workflow_status params[:repo], *args.take(3)
     # update the status for the step and redirect to the workflow view page
     Dor::Config.workflow.client.update_workflow_status params[:repo], *args
     respond_to do |format|
@@ -82,7 +82,7 @@ class WorkflowsController < ApplicationController
   end
 
   def history
-    @history_xml = Dor::Config.workflow.client.get_workflow_xml 'dor', params[:item_id], nil
+    @history_xml = Dor::Config.workflow.client.all_workflows_xml params[:item_id]
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
