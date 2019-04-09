@@ -59,12 +59,6 @@ Dor.configure do
     user                        Settings.STACKS.USER
   end
 
-  indexing_svc do
-    log Settings.INDEXER.LOG
-    log_date_format_str Settings.DATE_FORMAT_STR
-    log_rotation_interval Settings.INDEXER.LOG_ROTATION_INTERVAL
-  end
-
   dor_indexing_app do
     url Settings.DOR_INDEXING_URL
   end
