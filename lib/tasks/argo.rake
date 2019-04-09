@@ -49,11 +49,6 @@ namespace :argo do
     Dor.find_all('objectType_ssim:workflow').each(&:update_index)
   end
 
-  desc 'Reindex all DOR objects to Solr'
-  task reindex_all: [:environment] do |t, args|
-    Argo::BulkReindexer.reindex_all
-  end
-
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task workgroups: :environment do
     facet = workgroups_facet()

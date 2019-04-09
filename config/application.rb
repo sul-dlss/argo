@@ -19,9 +19,6 @@ module Argo
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     require 'indexer'
-    require 'pid_gatherer'
-    require 'bulk_reindexer'
-    require 'profiler'
     require 'constants'
     require 'fileutils'
 
