@@ -19,7 +19,7 @@ class Dor::ObjectsController < ApplicationController
     # sends registration requests concurrently -- ideally this registration should be
     # a serialized process
     #
-    Dor::IndexingService.reindex_pid_list([pid], true)
+    Dor.find(pid).update_index
 
     respond_to do |format|
       format.json { render json: response, location: object_location(pid) }
