@@ -5,8 +5,11 @@ require 'spec_helper'
 RSpec.describe Dor::ObjectsController, type: :controller do
   before do
     sign_in(create(:user))
+
+    allow(Dor).to receive(:find).with(dor_registration[:pid]).and_return(mock_object)
   end
 
+  let(:mock_object) { instance_double(Dor::Item, update_index: true) }
   let(:dor_registration) { { pid: 'abc' } }
 
   describe '#create' do
@@ -14,10 +17,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       expect(Dor::Services::Client.objects)
         .to receive(:register)
         .and_return(dor_registration)
-      expect(Dor::IndexingService)
-        .to receive(:reindex_pid_list)
-        .with([dor_registration[:pid]], true) # commits reindex
       post :create
+      expect(mock_object).to have_received(:update_index)
     end
   end
 end
