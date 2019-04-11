@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
-# Requests and parses index queues for Argo
+# Requests the depth of the index queue in dor_indexing_app
 class IndexQueue
-  def initialize
-  end
-
   ##
   # Gets the depth of the index queue
   # @return [Integer, nil]
@@ -18,9 +15,9 @@ class IndexQueue
   private
 
   ##
-  # @return [String]
+  # @return [String] the path to the queue depth endpoint on dor_indexing_app
   def url
-    Dor::Config.status.indexer_url
+    Settings.STATUS_INDEXER_URL
   end
 
   def parsed_response
