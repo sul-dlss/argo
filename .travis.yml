@@ -26,6 +26,8 @@ before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
+  - echo "Waiting for Fcrepo to start"
+  - until curl --silent -XGET --fail -o /dev/null http://localhost:8983; do printf '.'; sleep 1; done
 
 script: RAILS_ENV=test bundle exec rake ci
 

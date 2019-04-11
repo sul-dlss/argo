@@ -69,8 +69,8 @@ SURI:
 
 DOR_SERVICES:
   URL: 'http://localhost:3003'
-  USER: 'user'
-  PASS: 'password'
+  USER: dor-service-user
+  PASS: dor-service-password
 
 # URLs
 DOR_INDEXING_URL: 'https://dor-indexing-app.example.com/dor'
