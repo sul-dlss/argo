@@ -6,5 +6,8 @@ module Argo
     end
     class IndexQueueInvalidResponse < StandardError
     end
+
+    # Raised if there is a problem communicating with dor_indexing_app
+    class ReindexError < RuntimeError; end
   end
 end

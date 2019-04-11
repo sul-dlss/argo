@@ -9,9 +9,9 @@ class DorController < ApplicationController
     end
 
     begin
-      Dor::IndexingService.reindex_pid_remotely params[:pid]
+      Argo::Indexer.reindex_pid_remotely params[:pid]
       flash[:notice] = "Successfully updated index for #{params[:pid]}"
-    rescue Dor::IndexingService::ReindexError => e
+    rescue Argo::Exceptions::ReindexError => e
       flash[:error] = "Failed to update index for #{params[:pid]}"
       Rails.logger.error "#{flash[:error]}: #{e.inspect}"
     end
