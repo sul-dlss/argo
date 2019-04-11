@@ -13,10 +13,6 @@ To support indexing, dor-services will:
 * create a Solr document representing the object (using its `to_solr` method).
 * save the document to the Solr instance specified in the configuration, possibly committing immediately.
 
-## Argo::Indexer
-
-This is deprecated for `Dor::IndexingService` in `dor-services`.
-
 ### Reusable methods
 
 The `Argo::Indexer` class provides re-usable methods for indexing:

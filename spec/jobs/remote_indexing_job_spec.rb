@@ -45,7 +45,7 @@ describe RemoteIndexingJob do
       end
 
       it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
-        timeout_err = Dor::IndexingService::ReindexError.new('Timed out connecting to server')
+        timeout_err = Argo::Exceptions::ReindexError.new('Timed out connecting to server')
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[0])
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[1]).and_raise(ActiveFedora::ObjectNotFoundError)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[2]).and_raise(timeout_err)

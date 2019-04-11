@@ -12,7 +12,7 @@ RSpec.describe DorController, type: :controller do
   describe 'reindex' do
     context 'from a show page' do
       it 'redirects to show page and set flash notice on success' do
-        expect(Dor::IndexingService).to receive(:reindex_pid_remotely).with(druid)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(druid)
         get :reindex, params: { pid: druid }
         expect(flash[:notice]).to eq "Successfully updated index for #{druid}"
         expect(response).to have_http_status(:found)
@@ -20,7 +20,7 @@ RSpec.describe DorController, type: :controller do
       end
 
       it 'redirects to show page and sets flash error on failure' do
-        expect(Dor::IndexingService).to receive(:reindex_pid_remotely).with(druid).and_raise(Dor::IndexingService::ReindexError)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(druid).and_raise(Argo::Exceptions::ReindexError)
         expect(Rails.logger).to receive(:error).with(/Failed to update index for #{druid}/)
         get :reindex, params: { pid: druid }
         expect(flash[:error]).to eq "Failed to update index for #{druid}"
@@ -31,7 +31,7 @@ RSpec.describe DorController, type: :controller do
 
     context 'from bulk update' do
       it 'returns a 403 for requests from the old bulk update mechanism' do
-        expect(Dor::IndexingService).not_to receive(:reindex_pid_remotely)
+        expect(Argo::Indexer).not_to receive(:reindex_pid_remotely)
         get :reindex, params: { pid: druid, bulk: 'true' }
         expect(response.body).to eq 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
         expect(response).to have_http_status(:forbidden)
