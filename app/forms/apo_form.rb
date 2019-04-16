@@ -121,8 +121,8 @@ class ApoForm < BaseForm
   def license_options
     cur_use_license = model ? model.use_license : nil
     [['-- none --', '']] +
-      options_for_use_license_type(Dor::CreativeCommonsLicenseService, cur_use_license) +
-      options_for_use_license_type(Dor::OpenDataLicenseService, cur_use_license)
+      options_for_use_license_type(CreativeCommonsLicenseService, cur_use_license) +
+      options_for_use_license_type(OpenDataLicenseService, cur_use_license)
   end
 
   private

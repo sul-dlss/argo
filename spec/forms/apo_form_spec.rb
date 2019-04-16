@@ -28,7 +28,7 @@ RSpec.describe ApoForm do
     end
 
     describe '#sync' do
-      let(:license_info) { Dor::CreativeCommonsLicenseService.property(md_info[:use_license]) }
+      let(:license_info) { CreativeCommonsLicenseService.property(md_info[:use_license]) }
 
       it 'sets clean APO metadata for defaultObjectRights' do
         instance.validate(md_info)

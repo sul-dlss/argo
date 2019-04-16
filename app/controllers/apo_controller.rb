@@ -104,7 +104,7 @@ class ApoController < ApplicationController
 
   def update_creative_commons
     @object.creative_commons_license = params[:cc_license]
-    @object.creative_commons_license_human = Dor::CreativeCommonsLicenseService.property(params[:cc_license]).label
+    @object.creative_commons_license_human = CreativeCommonsLicenseService.property(params[:cc_license]).label
     redirect
   end
 
