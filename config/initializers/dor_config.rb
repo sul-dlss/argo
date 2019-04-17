@@ -47,10 +47,6 @@ Dor.configure do
     content_server   Settings.CONTENT.SERVER_HOST
   end
 
-  status do
-    indexer_url Settings.STATUS_INDEXER_URL
-  end
-
   stacks do
     document_cache_host         Settings.STACKS.DOCUMENT_CACHE_HOST
     document_cache_user         Settings.STACKS.DOCUMENT_CACHE_USER
