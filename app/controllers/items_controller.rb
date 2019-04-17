@@ -538,19 +538,6 @@ class ItemsController < ApplicationController
     render status: :forbidden, plain: 'Invalid new rights setting.'
   end
 
-  # if an item errored in sdr-ingest-transfer due to missing provenance
-  # metadata, create the datastream and reset the error
-  def fix_missing_provenance
-    if dor_accession_error?(@object, 'sdr-ingest-transfer') && @object.provenanceMetadata.new?
-      @object.build_provenanceMetadata_datastream('accessionWF', 'DOR Common Accessioning completed')
-      set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
-      render plain: 'ok.'
-    else
-      msg = 'Item not in error for sdr-ingest-transfer or provenance metadata already exists!'
-      render status: 500, plain: msg
-    end
-  end
-
   # set the rightsMetadata to the APO's defaultObjectRights
   def apply_apo_defaults
     @object.reapplyAdminPolicyObjectDefaults
