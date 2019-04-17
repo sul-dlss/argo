@@ -143,7 +143,6 @@ Argo::Application.routes.draw do
       post 'set_governing_apo'
       post :release_hold
       get :apply_apo_defaults
-      get :fix_missing_provenance
       match :update_resource, action: :update_resource, as: 'update_resource', via: [:get, :post]
     end
   end
