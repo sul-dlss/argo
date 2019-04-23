@@ -260,8 +260,7 @@ class ItemsController < ApplicationController
       render status: 500, plain: 'This service cannot overwrite existing data!'
       return
     end
-    @object.descMetadata.content = ''
-    @object.set_desc_metadata_using_label
+    @object.descMetadata.content = build_mods(@object.label)
     @object.save
     if dor_accession_error?(@object, 'descriptive-metadata')
       set_dor_accession_status(@object, 'descriptive-metadata', 'waiting')
@@ -593,6 +592,17 @@ class ItemsController < ApplicationController
   end
 
   private
+
+  def build_mods(label)
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.mods(Dor::DescMetadataDS::MODS_HEADER_CONFIG) do
+        xml.titleInfo do
+          xml.title label
+        end
+      end
+    end
+    builder.to_xml
+  end
 
   def reindex(item)
     Dor::SearchService.solr.add item.to_solr
