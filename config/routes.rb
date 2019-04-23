@@ -117,7 +117,6 @@ Argo::Application.routes.draw do
       get 'mods'
       get 'remove_duplicate_encoding'
       get 'detect_duplicate_encoding'
-      get 'create_minimal_mods'
       post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'
       post 'datastream',         action: :datastream_update,     as: 'datastream_update'

@@ -246,34 +246,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  # HELL. This makes:
-  #  ~ 3-4 remote GET requests to WFS,
-  #  ~ possibly 2 writes to WFS (each one triggers async object reindex),
-  #  ~ plus an object save (more WFS requests, Fedora write, Solr reindex)
-  def create_minimal_mods
-    unless dor_accession_error?(@object, 'descriptive-metadata') ||
-           dor_accession_error?(@object, 'publish')
-      render status: 500, plain: 'Object is not in error for descMD or publish!'
-      return
-    end
-    unless @object.descMetadata.new?
-      render status: 500, plain: 'This service cannot overwrite existing data!'
-      return
-    end
-    @object.descMetadata.content = ''
-    @object.set_desc_metadata_using_label
-    @object.save
-    if dor_accession_error?(@object, 'descriptive-metadata')
-      set_dor_accession_status(@object, 'descriptive-metadata', 'waiting')
-    end
-    if dor_accession_error?(@object, 'publish')
-      set_dor_accession_status(@object, 'publish', 'waiting')
-    end
-    respond_to do |format|
-      format.any { render plain: 'Set metadata' }
-    end
-  end
-
   def open_version
     # puts params[:description]
     vers_md_upd_info = {
