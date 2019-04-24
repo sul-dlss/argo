@@ -162,11 +162,13 @@ RSpec.describe ItemsController, type: :controller do
   describe '#close_version' do
     context 'when they have manage_content access' do
       before do
+        allow(Dor::Services::Client).to receive(:object).and_return(object_service)
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
+      let(:object_service) { instance_double(Dor::Services::Client::Object, close_version: true) }
+
       it 'calls dor-services to close the version' do
-        expect(@item).to receive(:close_version)
         version_metadata = double(Dor::VersionMetadataDS)
         allow(version_metadata).to receive(:current_version_id).and_return(2)
         allow(@item).to receive(:versionMetadata).and_return(version_metadata)
@@ -175,6 +177,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item).to receive(:save)
         expect(Dor::SearchService.solr).to receive(:add)
         get 'close_version', params: { id: @pid, severity: 'major', description: 'something' }
+        expect(object_service).to have_received(:close_version)
       end
     end
 

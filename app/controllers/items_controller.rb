@@ -309,7 +309,7 @@ class ItemsController < ApplicationController
     end
 
     begin
-      @object.close_version
+      Dor::Services::Client.object(@object.pid).close_version
       msg = "Version #{@object.versionMetadata.current_version_id} closed"
       @object.datastreams['events'].add_event('close', current_user.to_s, msg)
       respond_to do |format|
