@@ -23,8 +23,9 @@ class DorController < ApplicationController
 
   # dispatches to the dor-services-app to republish
   def republish
-    obj = Dor.find(params[:pid])
-    obj.publish_metadata_remotely
-    redirect_to solr_document_path(params[:pid]), notice: 'Republished! You still need to use the normal versioning process to make sure your changes are preserved.'
+    Dor::Services::Client.object(params[:pid]).publish
+    redirect_to solr_document_path(params[:pid]),
+                notice: 'Republished! You still need to use the normal versioning ' \
+                        'process to make sure your changes are preserved.'
   end
 end

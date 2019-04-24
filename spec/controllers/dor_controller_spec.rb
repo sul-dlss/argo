@@ -40,11 +40,15 @@ RSpec.describe DorController, type: :controller do
   end
 
   describe 'republish' do
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
+    end
+
+    let(:object_service) { instance_double(Dor::Services::Client::Object, publish: true) }
+
     it 'republishes' do
-      mock_item = double()
-      expect(mock_item).to receive(:publish_metadata_remotely)
-      expect(Dor).to receive(:find).and_return(mock_item)
       get :republish, params: { pid: druid }
+      expect(object_service).to have_received(:publish)
       expect(response).to have_http_status(:found)
     end
   end
