@@ -157,7 +157,7 @@ module ArgoHelper
   end
 
   def render_index_info(document)
-    "indexed by DOR Services v#{document.first(Dor::INDEX_VERSION_FIELD)}"
+    "indexed by DOR Services v#{document.first(Dor::IdentifiableIndexer::INDEX_VERSION_FIELD)}"
   end
 
   def render_searchworks_link(document, link_text = 'Searchworks', opts = { target: '_blank' })

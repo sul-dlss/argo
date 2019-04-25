@@ -68,18 +68,14 @@ gem 'rubyzip'
 gem 'sprockets-es6'
 
 # Stanford/Hydra related gems
-gem 'active-fedora', '~> 8.2'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
-gem 'dor-services', '~> 6.3'
-gem 'dor-services-client', '~> 1.0'
-gem 'dor-workflow-service', '~> 2.11'
+gem 'dor-services', '~> 7.0'
 gem 'moab-versioning'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'responders', '~> 2.0'
 gem 'rsolr'
-gem 'stanford-mods'
 gem 'sul_styles', '~> 0.3'
 
 gem 'devise'
