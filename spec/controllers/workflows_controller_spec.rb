@@ -21,13 +21,13 @@ RSpec.describe WorkflowsController, type: :controller do
         allow(Dor::SearchService.solr).to receive(:add)
         allow(controller).to receive(:authorize!).and_return(true)
         allow(item).to receive(:workflows).and_return wf_datastream
-        allow(Dor::Config.workflow.client).to receive(:workflow_xml).and_return(xml)
+        allow(Dor::Config.workflow.client).to receive(:workflow).and_return(wf_response)
 
         allow(Dor::CreateWorkflowService).to receive(:create_workflow)
       end
 
       context 'when the workflow is not active' do
-        let(:xml) { nil }
+        let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
 
         it 'initializes the new workflow' do
           expect(controller).to receive(:flush_index)
@@ -37,11 +37,7 @@ RSpec.describe WorkflowsController, type: :controller do
       end
 
       context 'when the workflow is already active' do
-        let(:xml) do
-          <<~XML
-            <workflow><process version="1"></workflow>
-          XML
-        end
+        let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: true) }
 
         it 'does not initialize the workflow' do
           post :create, params: { item_id: pid, wf: 'accessionWF' }
@@ -58,13 +54,15 @@ RSpec.describe WorkflowsController, type: :controller do
 
     context 'when the user wants a table view' do
       let(:presenter) { instance_double(WorkflowPresenter) }
+      let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow) }
 
       it 'requires workflow and repo parameters' do
         expect { get :show, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
       end
 
       it 'fetches the workflow on valid parameters' do
-        allow(Dor::Config.workflow.client).to receive(:workflow_xml).and_return('xml')
+        allow(Dor::Config.workflow.client).to receive(:workflow).and_return(wf_response)
+
         allow(WorkflowPresenter).to receive(:new).and_return(presenter)
         allow(WorkflowStatus).to receive(:new).and_return(workflow_status)
         allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
@@ -72,7 +70,7 @@ RSpec.describe WorkflowsController, type: :controller do
         get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
         expect(response).to have_http_status(:ok)
         expect(WorkflowStatus).to have_received(:new)
-          .with(pid: pid, workflow_name: 'accessionWF', workflow_definition: workflow_object, workflow: Dor::Workflow::Response::Workflow)
+          .with(pid: pid, workflow_name: 'accessionWF', workflow_definition: workflow_object, workflow: wf_response)
         expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
         expect(assigns[:presenter]).to eq presenter
       end
@@ -86,9 +84,10 @@ RSpec.describe WorkflowsController, type: :controller do
 
     context 'when the user wants to see the xml' do
       let(:presenter) { instance_double(WorkflowXmlPresenter) }
+      let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, xml: 'xml') }
 
       before do
-        allow(Dor::Config.workflow.client).to receive(:workflow_xml).and_return('xml')
+        allow(Dor::Config.workflow.client).to receive(:workflow).and_return(wf_response)
         allow(WorkflowXmlPresenter).to receive(:new).and_return(presenter)
         allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
       end

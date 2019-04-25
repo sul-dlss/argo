@@ -93,7 +93,8 @@ class WorkflowsController < ApplicationController
 
   # Fetches the workflow from the workflow service and checks to see if it's active
   def workflow_active?(wf_name)
-    workflow = Dor::Config.workflow.client.workflow(pid: @object.pid, workflow_name: wf_name)
+    client = Dor::Config.workflow.client
+    workflow = client.workflow(pid: @object.pid, workflow_name: wf_name)
     workflow.active_for?(version: @object.current_version)
   end
 
