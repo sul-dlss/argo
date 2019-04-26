@@ -550,26 +550,33 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       context 'there is a catkey present' do
-        let(:descmd) { double(Dor::DescMetadataDS, ng_xml: double(Nokogiri::XML::Document, to_s: '<somexml>refreshed metadata</somexml>')) }
-
         before do
           allow(@item).to receive(:catkey).and_return('12345')
-          allow(@item).to receive(:descMetadata).and_return(descmd)
         end
 
         context 'user has permission and object is editable' do
           before do
-            expect(@item).to receive(:build_descMetadata_datastream).with(descmd)
-            expect(controller).to receive(:save_and_reindex)
+            allow(RefreshMetadataAction).to receive(:run)
+            allow(@item).to receive(:save)
+            allow(controller).to receive(:reindex)
           end
 
           it 'redirects with a notice if there is a catkey and the operation is not part of a bulk update' do
             get :refresh_metadata, params: { id: @pid }
+            expect(RefreshMetadataAction).to have_received(:run).with(@item)
+            expect(@item).to have_received(:save)
+            expect(controller).to have_received(:reindex)
+
             expect(response).to redirect_to(solr_document_path(@pid))
             expect(flash[:notice]).to eq "Metadata for #{@item.pid} successfully refreshed from catkey:12345"
           end
+
           it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
             get :refresh_metadata, params: { id: @pid, bulk: true }
+            expect(RefreshMetadataAction).to have_received(:run).with(@item)
+            expect(@item).to have_received(:save)
+            expect(controller).to have_received(:reindex)
+
             expect(response).to have_http_status(:ok)
             expect(response.body).to eq 'Refreshed.'
           end
