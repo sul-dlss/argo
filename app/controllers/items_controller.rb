@@ -48,7 +48,6 @@ class ItemsController < ApplicationController
     :tags, :tags_bulk,
     :source_id,
     :catkey,
-    :refresh_metadata,
     :set_rights,
     :set_governing_apo
   ]
@@ -452,8 +451,7 @@ class ItemsController < ApplicationController
       render status: :forbidden, plain: 'object must have catkey to refresh descMetadata'
       return
     end
-
-    @object.build_descMetadata_datastream(@object.descMetadata)
+    RefreshMetadataAction.run(@object)
 
     respond_to do |format|
       if params[:bulk]
@@ -462,6 +460,9 @@ class ItemsController < ApplicationController
         format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey:#{@object.catkey}" }
       end
     end
+
+    @object.save
+    reindex @object
   end
 
   def scrubbed_content_ng_utf8(content)
