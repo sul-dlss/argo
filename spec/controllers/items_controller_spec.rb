@@ -36,6 +36,21 @@ RSpec.describe ItemsController, type: :controller do
 
   let(:user) { create(:user) }
 
+  describe '#purl_preview' do
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(@pid).and_return(object_service)
+    end
+
+    let(:object_service) { instance_double(Dor::Services::Client::Object, metadata: metadata_service) }
+    let(:metadata_service) { instance_double(Dor::Services::Client::Metadata, descriptive: '<xml />') }
+
+    it 'is successful' do
+      get :purl_preview, params: { id: @pid }
+      expect(response).to be_successful
+      expect(assigns(:mods_display)).to be_kind_of ModsDisplayObject
+    end
+  end
+
   describe 'release_hold' do
     it 'releases an item that is on hold if its apo has been ingested' do
       expect(Dor::Config.workflow.client).to receive(:workflow_status).with('dor', @pid, 'accessionWF', 'sdr-ingest-transfer').and_return('hold')

@@ -3,6 +3,7 @@
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :create_obj, except: [
+    :purl_preview,
     :open_bulk,
     :register
   ]
@@ -55,8 +56,8 @@ class ItemsController < ApplicationController
   prepend_after_action :flush_index, only: [:embargo_update]
 
   def purl_preview
-    md_service = Dor::PublicDescMetadataService.new(@object)
-    @mods_display = ModsDisplayObject.new(md_service.to_xml)
+    xml = Dor::Services::Client.object(params[:id]).metadata.descriptive
+    @mods_display = ModsDisplayObject.new(xml)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
