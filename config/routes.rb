@@ -163,6 +163,7 @@ Argo::Application.routes.draw do
   end
 
   namespace :auth do
+    get 'groups'
     post 'remember_impersonated_groups'
     get 'forget_impersonated_groups'
   end

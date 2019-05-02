@@ -5,6 +5,10 @@ class AuthController < ApplicationController
     authorize! :impersonate, User
   end
 
+  def groups
+    # does default render
+  end
+
   def remember_impersonated_groups
     groups = params[:groups].split(',')
     session[:groups] = groups
