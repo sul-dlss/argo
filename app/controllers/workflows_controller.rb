@@ -3,6 +3,10 @@
 class WorkflowsController < ApplicationController
   before_action :load_resource, except: [:history]
 
+  def new
+    # does default render
+  end
+
   ##
   # Renders a view with process-level state information for a given object's workflow.
   #
