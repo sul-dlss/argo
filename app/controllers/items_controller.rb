@@ -451,7 +451,8 @@ class ItemsController < ApplicationController
       render status: :forbidden, plain: 'object must have catkey to refresh descMetadata'
       return
     end
-    RefreshMetadataAction.run(@object)
+
+    Dor::Services::Client.object(@object.pid).refresh_metadata
 
     respond_to do |format|
       if params[:bulk]
@@ -460,9 +461,6 @@ class ItemsController < ApplicationController
         format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey:#{@object.catkey}" }
       end
     end
-
-    @object.save
-    reindex @object
   end
 
   def scrubbed_content_ng_utf8(content)

@@ -542,6 +542,8 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
+      let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true) }
+
       it 'returns a 403 with an error message if there is no catkey' do
         expect(@item).to receive(:catkey).and_return('')
         get :refresh_metadata, params: { id: @pid }
@@ -556,16 +558,12 @@ RSpec.describe ItemsController, type: :controller do
 
         context 'user has permission and object is editable' do
           before do
-            allow(RefreshMetadataAction).to receive(:run)
-            allow(@item).to receive(:save)
-            allow(controller).to receive(:reindex)
+            allow(Dor::Services::Client).to receive(:object).and_return(object_service)
           end
 
           it 'redirects with a notice if there is a catkey and the operation is not part of a bulk update' do
             get :refresh_metadata, params: { id: @pid }
-            expect(RefreshMetadataAction).to have_received(:run).with(@item)
-            expect(@item).to have_received(:save)
-            expect(controller).to have_received(:reindex)
+            expect(object_service).to have_received(:refresh_metadata)
 
             expect(response).to redirect_to(solr_document_path(@pid))
             expect(flash[:notice]).to eq "Metadata for #{@item.pid} successfully refreshed from catkey:12345"
@@ -573,9 +571,7 @@ RSpec.describe ItemsController, type: :controller do
 
           it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
             get :refresh_metadata, params: { id: @pid, bulk: true }
-            expect(RefreshMetadataAction).to have_received(:run).with(@item)
-            expect(@item).to have_received(:save)
-            expect(controller).to have_received(:reindex)
+            expect(object_service).to have_received(:refresh_metadata)
 
             expect(response).to have_http_status(:ok)
             expect(response.body).to eq 'Refreshed.'
