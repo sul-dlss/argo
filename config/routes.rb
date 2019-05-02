@@ -22,7 +22,7 @@ Argo::Application.routes.draw do
     concerns :searchable
   end
 
-  resources :solr_documents, only: [:show, :update], controller: 'catalog', path: '/view' do
+  resources :solr_documents, only: [:show], controller: 'catalog', path: '/view' do
     concerns :exportable
 
     member do
@@ -60,13 +60,12 @@ Argo::Application.routes.draw do
     get :exists
   end
 
-  resources :apo do
+  resources :apo, only: [:new, :update, :create, :edit] do
     resources :collections, only: [:new, :create]
     collection do
       get :spreadsheet_template
     end
     member do
-      get 'apo_ui'
       get 'delete_role'
       post 'add_collection'
       get  'delete_collection'
@@ -86,12 +85,11 @@ Argo::Application.routes.draw do
         get 'status_help'
         get 'help'
         get ':time/log', action: :show, as: 'show'
-        delete '', action: :destroy
       end
     end
   end
 
-  resources :items do
+  resources :items, only: [] do
     resources 'uploads', only: [:new, :create]
     resources 'files', only: [:index, :show], constraints: { id: /.*/ } do
       member do
@@ -165,10 +163,10 @@ Argo::Application.routes.draw do
   end
 
   namespace :auth do
-    get 'groups'
     post 'remember_impersonated_groups'
     get 'forget_impersonated_groups'
   end
+
   devise_for :users, skip: [:registrations, :passwords, :sessions]
   devise_scope :user do
     get 'webauth/login' => 'login#login', as: :new_user_session
