@@ -194,6 +194,7 @@ jobs:
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
+      TT: 1 # track templates
     executor: ruby_with_all_deps
     steps:
       - browser-tools/install-browser-tools
