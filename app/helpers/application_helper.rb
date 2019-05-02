@@ -62,15 +62,4 @@ module ApplicationHelper
   def profile_view?
     current_page?(search_profile_path)
   end
-
-  ##
-  # Add a pids_only=true parameter to create a "search of pids" to an existing
-  # Blacklight::Search
-  # @param [Blacklight::Search, nil]
-  # @return [Hash]
-  def search_of_pids(search)
-    return '' unless search.present?
-
-    search.query_params.merge('pids_only' => true)
-  end
 end
