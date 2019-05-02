@@ -8,18 +8,16 @@ class Dor::ObjectsController < ApplicationController
     if params[:collection] && params[:collection].length == 0
       params.delete :collection
     end
-    response = Dor::Services::Client.objects.register(params: params)
-    pid = response[:pid]
 
-    #
-    # we need to reindex and *commit* this new object so that source id checks
-    # (which read from the index) work in future registrations.
-    #
-    # TODO: thus note that this create endpoint will have race conditions if the client
-    # sends registration requests concurrently -- ideally this registration should be
-    # a serialized process
-    #
-    Dor.find(pid).update_index
+    begin
+      response = Dor::Services::Client.objects.register(params: params)
+    rescue Dor::Services::Client::UnexpectedResponse => e
+      return render plain: e.message, status: 409 if e.message.start_with?('Conflict')
+
+      return render plain: e.message, status: 400
+    end
+
+    pid = response[:pid]
 
     respond_to do |format|
       format.json { render json: response, location: object_location(pid) }
@@ -27,13 +25,6 @@ class Dor::ObjectsController < ApplicationController
       format.text { render plain: pid, location: object_location(pid) }
       format.html { redirect_to object_location(pid) }
     end
-  rescue Dor::ParameterError => e
-    render plain: e.message, status: 400
-  rescue Dor::DuplicateIdError => e
-    render plain: e.message, status: 409, location: object_location(e.pid)
-  rescue StandardError => e
-    logger.info e.inspect.to_s
-    raise
   end
 
   private
