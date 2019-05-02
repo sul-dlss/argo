@@ -220,7 +220,7 @@ GEM
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
       systemu (~> 2.6)
-    dor-services-client (1.7.0)
+    dor-services-client (1.8.0)
       activesupport (>= 4.2, < 6)
       deprecation
       faraday (~> 0.15)
