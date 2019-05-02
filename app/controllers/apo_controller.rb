@@ -57,12 +57,6 @@ class ApoController < ApplicationController
     redirect_to solr_document_path(@form.model.pid), notice: notice
   end
 
-  # wrapper around call to update_index for various objects (APO, collection, item)
-  # provides easily-stubbed method for testing (instead of all object types)
-  def update_index(obj)
-    obj.update_index
-  end
-
   def update
     @form = ApoForm.new(@object)
     unless @form.validate(params)
