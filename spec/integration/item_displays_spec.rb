@@ -27,6 +27,20 @@ RSpec.describe 'mods_view', type: :request do
   end
 
   context 'mods view' do
+    before do
+      allow(Dor::Services::Client).to receive(:object).with('druid:zt570tx3016').and_return(object_service)
+    end
+
+    let(:object_service) { instance_double(Dor::Services::Client::Object, metadata: metadata_service) }
+    let(:metadata_service) { instance_double(Dor::Services::Client::Metadata, descriptive: xml) }
+    let(:xml) do
+      <<~XML
+        <mods version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+          <titleInfo lang="eng" script="Latn"><title>Ampex</title></titleInfo>
+        </mods>
+      XML
+    end
+
     it 'renders the mods view including a title' do
       visit '/items/druid:zt570tx3016/purl_preview'
       expect(page).to have_content('Ampex')
