@@ -4,5 +4,30 @@
 </div>
 
 <div class='modal-body'>
-  <%= render partial: 'dc' %>
+  <% dc_xml = Nokogiri::XML(Dor::Services::Client.object(@obj.pid).metadata.dublin_core) %>
+  <div class="lightbox-head">
+    <span class="section-head-link">
+      <%= link_to "View XML", ds_solr_document_path(@obj.pid, 'full_dc'), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' } %>
+    </span>
+    <%= @obj.pid %>
+  </div>
+  <h3>
+    <%= @obj.label %>
+  </h3>
+  <div class="metadata-display">
+  <dl>
+    <%
+      dc_xml.xpath('/oai_dc:dc/*', oai_dc: 'http://www.openarchives.org/OAI/2.0/oai_dc/').each do |node|
+        field_name = node.name.humanize
+        field_value = node.text
+        unless field_value.nil? or field_value.empty?
+    -%>
+          <dt class="blacklight-<%= field_name.parameterize %>"><%= field_name %></dt>
+          <dd class="blacklight-<%= field_name.parameterize %>"><%= field_value %></dd>
+    <%
+        end
+      end
+    -%>
+  </dl>
+  </div>
 </div>
