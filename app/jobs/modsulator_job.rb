@@ -289,7 +289,7 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [Dor::Item]   dor_object    DOR object to check
   # @return [Boolean]     true if the object is currently being accessioned, false otherwise
   def in_accessioning(dor_object)
-    status = dor_object.status_info[:status_code]
+    status = get_status(dor_object) # dor_object.status_info[:status_code]
     (2..5).cover?(status)
   end
 
@@ -299,7 +299,15 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [Dor::Item]   dor_object    DOR object to check
   # @return [Boolean]     true if the object's status allows us to update the descMetadata datastream, false otherwise
   def status_ok(dor_object)
-    status = dor_object.status_info[:status_code]
+    status = get_status(dor_object) # dor_object.status_info[:status_code]
     [1, 6, 7, 8, 9].include?(status)
+  end
+
+  # Returns the status_info for a DOR object from the StatusService
+  #
+  # @param  [Dor::Item]   dor_object    DOR object to check
+  # @return [Integer]     value cooresponding to the status info list
+  def get_status(dor_object)
+    Dor::StatusService.new(dor_object).status_info
   end
 end
