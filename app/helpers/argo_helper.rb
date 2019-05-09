@@ -152,10 +152,6 @@ module ArgoHelper
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}"), opts
   end
 
-  def render_foxml_link(document, link_text = 'FoXML', opts = { target: '_blank' })
-    link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/objectXML"), opts
-  end
-
   def render_index_info(document)
     "indexed by DOR Services v#{document.first(Dor::IdentifiableIndexer::INDEX_VERSION_FIELD)}"
   end
