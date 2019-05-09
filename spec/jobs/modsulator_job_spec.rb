@@ -85,7 +85,7 @@ describe ModsulatorJob, type: :job do
   describe 'status_ok' do
     (0..9).each do |i|
       it "correctly queries the status of DOR objects (:status_code #{i})" do
-        m = double
+        m = instance_double(Dor::Item)
         allow(@mj).to receive(:status).and_return(i)
         if i == 1 || i == 6 || i == 7 || i == 8 || i == 9
           expect(@mj.status_ok(m)).to be_truthy
@@ -99,7 +99,7 @@ describe ModsulatorJob, type: :job do
   describe 'in_accessioning' do
     (0..9).each do |i|
       it "returns true for DOR objects that are currently in acccessioning, false otherwise (:status_code #{i})" do
-        m = double
+        m = instance_double(Dor::Item)
         allow(@mj).to receive(:status).and_return(i)
         if i == 2 || i == 3 || i == 4 || i == 5
           expect(@mj.in_accessioning(m)).to be_truthy
@@ -113,8 +113,8 @@ describe ModsulatorJob, type: :job do
   describe 'accessioned' do
     (0..9).each do |i|
       it "returns true for DOR objects that are acccessioned, false otherwise (:status_code #{i})" do
-        m = double
-        allow(m).to receive(:status_info).and_return(status_code: i)
+        m = instance_double(Dor::Item)
+        allow(@mj).to receive(:status).and_return(i)
         if i == 6 || i == 7 || i == 8
           expect(@mj.accessioned(m)).to be_truthy
         else
@@ -147,13 +147,16 @@ describe ModsulatorJob, type: :job do
 
   describe 'version_object' do
     before do
-      @dor_object = double(pid: 'druid:123abc')
+      @dor_object = instance_double(Dor::Item, pid: 'druid:123abc')
       @workflow = double('workflow')
       @log = double('log')
+      allow(Dor::StatusService).to receive(:new).and_return(stub_service)
     end
 
+    let(:stub_service) { instance_double(Dor::StatusService, status_info: { status_code: status_code }) }
+    let(:status_code) { 6 }
+
     it 'writes a log error message if a version cannot be opened' do
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 6)
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(false)
       expect(@log).to receive(:puts).with("argo.bulk_metadata.bulk_log_unable_to_version #{@dor_object.pid}")
@@ -161,24 +164,29 @@ describe ModsulatorJob, type: :job do
       @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
     end
 
-    it 'does not update the version if the object is in the registered state' do
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 1)
-      expect(@mj).not_to receive(:commit_new_version)
+    context 'the object is in the registered state' do
+      let(:status_code) { 1 }
 
-      @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
+      it 'does not update the version' do
+        expect(@mj).not_to receive(:commit_new_version)
+
+        @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
+      end
     end
 
-    it 'does not update the version if the object is in the opened state' do
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 9)
-      expect(@mj).not_to receive(:commit_new_version)
+    context 'the object is in the opened state' do
+      let(:status_code) { 9 }
 
-      @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
+      it 'does not update the version ' do
+        expect(@mj).not_to receive(:commit_new_version)
+
+        @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
+      end
     end
 
     it 'updates the version if the object is past the registered state' do
       expect(DorObjectWorkflowStatus).to receive(:new).with(@dor_object.pid).and_return(@workflow)
       expect(@workflow).to receive(:can_open_version?).and_return(true)
-      expect(@dor_object).to receive(:status_info).at_least(:once).and_return(status_code: 6)
       expect(@mj).to receive(:commit_new_version)
 
       @mj.version_object(@dor_object, 'any_filename', 'any_user', @log)
