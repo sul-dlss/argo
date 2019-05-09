@@ -146,7 +146,7 @@ class ModsulatorJob < ActiveJob::Base
   # Returns true if the given object is accessioned, false otherwise.
   # @param   [Dor::Item]  dor_object  A DOR object
   def accessioned(dor_object)
-    (6..8).cover?(dor_object.status_info[:status_code])
+    (6..8).cover?(status(dor_object))
   end
 
   # Check if two MODS XML nodes are equivalent.
@@ -306,6 +306,6 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [Dor::Item]   dor_object    DOR object to check
   # @return [Integer]     value cooresponding to the status info list
   def status(dor_object)
-    Dor::StatusService.new(dor_object).status_info
+    Dor::StatusService.new(dor_object).status_info[:status_code]
   end
 end
