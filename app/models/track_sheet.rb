@@ -3,6 +3,7 @@
 class TrackSheet
   attr_reader :druids
 
+  # @param [Array<String>] druids a list of non-namespaced druids
   def initialize(druids)
     @druids = druids
   end
@@ -115,10 +116,9 @@ class TrackSheet
     doc = Dor::SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
     return doc unless doc.nil?
 
-    obj = Dor.load_instance "druid:#{druid}"
+    obj = Dor.find "druid:#{druid}"
     solr_doc = obj.to_solr
     Dor::SearchService.solr.add(solr_doc)
-    # Dor::SearchService.solr.add(solr_doc, :add_attributes => {:commitWithin => 1000})
     solr_doc
   end
 end
