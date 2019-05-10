@@ -21,12 +21,6 @@ Dor.configure do
     shift_age Settings.WORKFLOW.SHIFT_AGE
   end
 
-  dor_services do
-    url Settings.DOR_SERVICES.URL
-    user Settings.DOR_SERVICES.USER
-    pass Settings.DOR_SERVICES.PASS
-  end
-
   suri do
     mint_ids     Settings.SURI.MINT_IDS
     id_namespace Settings.SURI.ID_NAMESPACE
