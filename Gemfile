@@ -71,7 +71,6 @@ gem 'sprockets-es6'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '~> 7.0'
-gem 'moab-versioning'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'responders', '~> 2.0'
