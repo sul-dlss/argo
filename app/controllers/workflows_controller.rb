@@ -70,7 +70,7 @@ class WorkflowsController < ApplicationController
       return
     end
 
-    Dor::CreateWorkflowService.create_workflow(@object, name: wf_name)
+    Dor::Config.workflow.client.create_workflow_by_name(@object.pid, wf_name)
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.

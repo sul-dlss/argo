@@ -6,24 +6,28 @@ RSpec.describe WorkflowsController, type: :controller do
   let(:pid) { 'druid:oo201oo0001' }
   let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
   before do
     sign_in user
     allow(Dor).to receive(:find).with(pid).and_return(item)
+    allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)
   end
 
   describe '#create' do
     context 'when they have manage_content access' do
       let(:wf_datastream) { instance_double(Dor::WorkflowDs) }
+      let(:workflow_client) do
+        instance_double(Dor::Workflow::Client,
+                        create_workflow_by_name: true,
+                        workflow: wf_response)
+      end
 
       before do
         allow(item).to receive(:to_solr)
         allow(Dor::SearchService.solr).to receive(:add)
         allow(controller).to receive(:authorize!).and_return(true)
         allow(item).to receive(:workflows).and_return wf_datastream
-        allow(Dor::Config.workflow.client).to receive(:workflow).and_return(wf_response)
-
-        allow(Dor::CreateWorkflowService).to receive(:create_workflow)
       end
 
       context 'when the workflow is not active' do
@@ -32,7 +36,7 @@ RSpec.describe WorkflowsController, type: :controller do
         it 'initializes the new workflow' do
           expect(controller).to receive(:flush_index)
           post :create, params: { item_id: pid, wf: 'accessionWF' }
-          expect(Dor::CreateWorkflowService).to have_received(:create_workflow).with(item, name: 'accessionWF')
+          expect(workflow_client).to have_received(:create_workflow_by_name).with(pid, 'accessionWF')
         end
       end
 
@@ -41,7 +45,7 @@ RSpec.describe WorkflowsController, type: :controller do
 
         it 'does not initialize the workflow' do
           post :create, params: { item_id: pid, wf: 'accessionWF' }
-          expect(Dor::CreateWorkflowService).not_to have_received(:create_workflow)
+          expect(workflow_client).not_to have_received(:create_workflow_by_name)
         end
       end
     end
@@ -51,6 +55,10 @@ RSpec.describe WorkflowsController, type: :controller do
     let(:workflow) { instance_double(Dor::Workflow::Document) }
     let(:workflow_status) { instance_double(WorkflowStatus) }
     let(:workflow_object) { instance_double(Dor::WorkflowObject) }
+    let(:workflow_client) do
+      instance_double(Dor::Workflow::Client,
+                      workflow: wf_response)
+    end
 
     context 'when the user wants a table view' do
       let(:presenter) { instance_double(WorkflowPresenter) }
@@ -61,8 +69,6 @@ RSpec.describe WorkflowsController, type: :controller do
       end
 
       it 'fetches the workflow on valid parameters' do
-        allow(Dor::Config.workflow.client).to receive(:workflow).and_return(wf_response)
-
         allow(WorkflowPresenter).to receive(:new).and_return(presenter)
         allow(WorkflowStatus).to receive(:new).and_return(workflow_status)
         allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
@@ -87,7 +93,6 @@ RSpec.describe WorkflowsController, type: :controller do
       let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, xml: 'xml') }
 
       before do
-        allow(Dor::Config.workflow.client).to receive(:workflow).and_return(wf_response)
         allow(WorkflowXmlPresenter).to receive(:new).and_return(presenter)
         allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
       end
@@ -103,9 +108,12 @@ RSpec.describe WorkflowsController, type: :controller do
 
   describe '#history' do
     let(:xml) { instance_double(String) }
+    let(:workflow_client) do
+      instance_double(Dor::Workflow::Client,
+                      all_workflows_xml: xml)
+    end
 
     it 'fetches the workflow history' do
-      allow(Dor::Config.workflow.client).to receive(:all_workflows_xml).and_return(xml)
       get :history, params: { item_id: pid, format: :html }
       expect(response).to have_http_status(:ok)
       expect(assigns[:history_xml]).to eq xml
@@ -119,16 +127,22 @@ RSpec.describe WorkflowsController, type: :controller do
   end
 
   describe '#update' do
+    let(:workflow_client) do
+      instance_double(Dor::Workflow::Client,
+                      workflow_status: nil,
+                      update_workflow_status: nil)
+    end
+
     it 'requires various workflow parameters' do
       expect { post :update, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
     end
 
     it 'changes the status' do
       expect(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(double(definition: double(repo: 'dor')))
-      expect(Dor::Config.workflow.client).to receive(:workflow_status).with('dor', pid, 'accessionWF', 'publish').and_return(nil)
-      expect(Dor::Config.workflow.client).to receive(:update_workflow_status).with('dor', pid, 'accessionWF', 'publish', 'ready').and_return(nil)
       post :update, params: { item_id: pid, id: 'accessionWF', process: 'publish', status: 'ready' }
       expect(subject).to redirect_to(solr_document_path(pid))
+      expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
+      expect(workflow_client).to have_received(:update_workflow_status).with('dor', pid, 'accessionWF', 'publish', 'ready')
     end
   end
 end
