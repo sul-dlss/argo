@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'instantiate_fixture' do
   it 'can find fedora_conf documents by druid' do

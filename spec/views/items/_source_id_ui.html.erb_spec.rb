@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'items/_source_id_ui.html.erb' do
   let(:identity_metadata) { double('idmd', sourceId: 'source id') }

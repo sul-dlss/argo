@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'workflows/_history.html.erb' do
   it 'renders the partial content' do

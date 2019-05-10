@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'mods_view', type: :request do
   let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::Item) }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'items/_set_governing_apo_ui.html.erb' do
   let(:object) { double(Dor::Item, pid: 'druid:987', admin_policy_object: cur_apo) }

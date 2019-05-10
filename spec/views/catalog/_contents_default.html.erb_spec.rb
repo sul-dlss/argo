@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'catalog/_contents_default.html.erb', type: :view do
   context 'with files' do

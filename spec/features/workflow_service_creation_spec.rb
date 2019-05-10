@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'Workflow Service Creation' do
   let(:stub_workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'Collection manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }

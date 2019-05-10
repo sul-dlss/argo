@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Report, type: :model do
   let(:user) { instance_double(User, is_admin?: true) }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 # Feature/view tests for the (old) bulk actions view.
 RSpec.describe 'Bulk actions view', js: true do

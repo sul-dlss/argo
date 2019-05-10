@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'catalog/dc.html.erb' do
   let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: metadata) }

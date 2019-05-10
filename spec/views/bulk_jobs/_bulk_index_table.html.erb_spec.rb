@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
   let(:bulk_jobs) do

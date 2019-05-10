@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe ViewSwitcher do
   let(:view_switcher) { described_class.new(:cool_view, :cool_view_path) }

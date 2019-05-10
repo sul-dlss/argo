@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ReleaseTags do
   let(:dor_object) { instantiate_fixture('druid:qq613vj0238') }
