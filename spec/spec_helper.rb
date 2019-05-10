@@ -60,20 +60,7 @@ RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # Run each example in an ActiveRecord transaction
-  config.use_transactional_fixtures = false
-
-  config.before do
-    if Capybara.current_driver == :rack_test
-      DatabaseCleaner.strategy = :transaction
-    else
-      DatabaseCleaner.strategy = :truncation
-    end
-    DatabaseCleaner.start
-  end
-
-  config.after do
-    DatabaseCleaner.clean
-  end
+  config.use_transactional_fixtures = true
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
