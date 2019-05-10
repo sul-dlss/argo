@@ -4,16 +4,19 @@ require 'spec_helper'
 
 RSpec.describe 'Workflow Service Creation' do
   let(:stub_workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
+  let(:workflow_client) do
+    instance_double(Dor::Workflow::Client,
+                    workflow: stub_workflow,
+                    create_workflow_by_name: true,
+                    all_workflows_xml: '',
+                    milestones: [],
+                    lifecycle: [],
+                    active_lifecycle: [])
+  end
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor::Config.workflow.client).to receive(:workflow).and_return(stub_workflow)
-    allow(Dor::Config.workflow.client).to receive(:create_workflow).and_return(true)
-    allow(Dor::Config.workflow.client).to receive(:milestones).and_return([])
-    allow(Dor::Config.workflow.client).to receive(:lifecycle).and_return([])
-    allow(Dor::Config.workflow.client).to receive(:active_lifecycle).and_return([])
-    # TODO: When we have dor-services 6.7.0 we can do this to simulate the change create_workflow would have made on the indexed doc
-    # allow_any_instance_of(Dor::WorkflowSolrDocument).to receive(:to_h).and_return('workflow_status_ssim' => ['accessionWF'])
+    allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)
   end
 
   it 'redirect and display on show page' do
@@ -22,8 +25,6 @@ RSpec.describe 'Workflow Service Creation' do
     within '.flash_messages' do
       expect(page).to have_css '.alert.alert-info', text: 'Added accessionWF'
     end
-    expect(Dor::Config.workflow.client).to have_received(:create_workflow)
-    # The workflow would create a workflow and index it into workflow_status_ssim
-    # expect(page).to have_css 'tr td a', text: 'accessionWF'
+    expect(workflow_client).to have_received(:create_workflow_by_name)
   end
 end
