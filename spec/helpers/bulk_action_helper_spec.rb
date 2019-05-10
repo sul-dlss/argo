@@ -16,7 +16,7 @@ RSpec.describe BulkActionHelper do
       end
     end
   end
-  
+
   describe '#search_of_pids' do
     context 'when nil' do
       it 'returns an empty string' do
