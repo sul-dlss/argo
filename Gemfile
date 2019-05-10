@@ -101,9 +101,9 @@ end
 
 group :test do
   gem 'capybara'
-  gem 'chromedriver-helper' # installs the chromedriver for selenium tests
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov', require: false
+  gem 'webdrivers' # installs the chrome for selenium tests
   gem 'webmock', require: false
 end
 

@@ -15,15 +15,14 @@ SimpleCov.start do
   add_filter '/vendor/'
 end
 
-Capybara.register_driver :chrome do |app|
-  browser_options = ::Selenium::WebDriver::Chrome::Options.new
-  browser_options.args << '--headless'
-  browser_options.args << '--disable-gpu'
-  browser_options.args << '--no-sandbox'
-  browser_options.args << '--window-size=1280,1696'
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+Capybara.register_driver :selenium_chrome_headless do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: { args: %w(headless disable-gpu no-sandbox window-size=1280,1696) }
+  )
+  Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
 end
-Capybara.javascript_driver = :chrome
+
+Capybara.javascript_driver = :selenium_chrome_headless
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
