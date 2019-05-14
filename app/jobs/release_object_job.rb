@@ -55,10 +55,10 @@ class ReleaseObjectJob < GenericJob
     end
     log.puts("#{Time.current} Trying to start release workflow")
     begin
-      Dor::Services::Client.object(current_druid).workflow.create(wf_name: 'releaseWF')
+      Dor::Config.workflow.client.create_workflow_by_name(current_druid, 'releaseWF')
       log.puts("#{Time.current} Workflow creation successful")
       bulk_action.increment(:druid_count_success).save
-    rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
+    rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::WorkflowException => e
       log.puts("#{Time.current} Workflow creation failed POST #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save
     end
