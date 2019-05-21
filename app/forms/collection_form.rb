@@ -38,6 +38,7 @@ class CollectionForm < BaseForm
   # @return [Dor::Collection] registers the Collection
   def register_model
     response = Dor::Services::Client.objects.register(params: register_params)
+    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], 'accessionWF')
     # Once it's been created we populate it with its metadata
     Dor.find(response[:pid])
   end
@@ -47,7 +48,6 @@ class CollectionForm < BaseForm
     reg_params = {
       workflow_priority: '65',
       object_type: 'collection',
-      workflow_id: 'accessionWF',
       admin_policy: params[:apo_pid]
     }
     reg_params[:label] = params[:collection_title].presence || ':auto'
