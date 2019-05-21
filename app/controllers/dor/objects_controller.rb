@@ -10,7 +10,8 @@ class Dor::ObjectsController < ApplicationController
     end
 
     begin
-      response = Dor::Services::Client.objects.register(params: params)
+      registration_params = params.permit(:object_type, :admin_policy, :workflow_id, :metadata_source, :label, :rights, :collection, tag:[])
+      response = Dor::Services::Client.objects.register(params: registration_params.to_h)
     rescue Dor::Services::Client::UnexpectedResponse => e
       return render plain: e.message, status: 409 if e.message.start_with?('Conflict')
 

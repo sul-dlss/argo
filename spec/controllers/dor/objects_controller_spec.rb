@@ -14,12 +14,37 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
   describe '#create' do
     context 'when register is successful' do
+      let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: dor_registration)}
+      before do
+        allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
+      end
+
       it 'registers the object' do
-        expect(Dor::Services::Client.objects)
-          .to receive(:register)
-          .and_return(dor_registration)
-        post :create
+        post :create, params: {
+          object_type:	'item',
+          admin_policy:	'druid:hv992ry2431',
+          collection:	'druid:hv992ry7777',
+          workflow_id: 'registrationWF',
+          metadata_source: 'label',
+          label:	'test parameters for registration',
+          tag:	['Process : Content Type : Book (ltr)',
+                 'Registered By : jcoyne85'],
+          rights:	'default'
+        }
         expect(response).to be_redirect
+        expect(objects_client).to have_received(:register).with(
+          params: {
+            object_type:	'item',
+            admin_policy:	'druid:hv992ry2431',
+            collection:	'druid:hv992ry7777',
+            workflow_id: 'registrationWF',
+            metadata_source: 'label',
+            label:	'test parameters for registration',
+            tag:	['Process : Content Type : Book (ltr)',
+                   'Registered By : jcoyne85'],
+            rights:	'default'
+          }
+        )
       end
     end
 
