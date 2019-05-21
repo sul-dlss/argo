@@ -200,6 +200,7 @@ class ApoForm < BaseForm
   # @return [Dor::AdminPolicyObject] registers the APO
   def register_model
     response = Dor::Services::Client.objects.register(params: register_params)
+    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], 'accessionWF')
     # Once it's been created we populate it with its metadata
     Dor.find(response[:pid])
   end
@@ -210,8 +211,7 @@ class ApoForm < BaseForm
       workflow_priority: '70',
       label: params[:title],
       object_type: 'adminPolicy',
-      admin_policy: SolrDocument::UBER_APO_ID,
-      workflow_id: 'accessionWF'
+      admin_policy: SolrDocument::UBER_APO_ID
     }
   end
 

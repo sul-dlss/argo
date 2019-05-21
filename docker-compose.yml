@@ -30,7 +30,7 @@ services:
       - 3003:3000
     environment:
       SOLR_URL: http://solr:8983/solr/argo
-      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+      SETTINGS__solr__url: http://solr:8983/solr/argo
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
