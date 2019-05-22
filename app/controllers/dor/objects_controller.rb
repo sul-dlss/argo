@@ -31,9 +31,13 @@ class Dor::ObjectsController < ApplicationController
 
   private
 
+  # source_id and label are required parameters
   def registration_params
-    params.permit(:object_type, :admin_policy, :metadata_source, :label, :rights,
-                  :collection, :source_id, :other_id, tag: [])
+    hash = params.permit(:object_type, :admin_policy, :metadata_source, :rights,
+                              :collection, :other_id, tag: [])
+    hash[:source_id] = params.require(:source_id)
+    hash[:label] = params.require(:label)
+    hash
   end
 
   def munge_parameters

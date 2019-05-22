@@ -11,19 +11,43 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
   let(:mock_object) { instance_double(Dor::Item, update_index: true) }
   let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
+  let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: dor_registration) }
   let(:dor_registration) { { pid: 'druid:abc' } }
 
   describe '#create' do
-    context 'when register is successful' do
-      let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: dor_registration) }
+    before do
+      allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
+      allow(Dor::Config.workflow).to receive(:client).and_return(workflow_service)
+    end
 
-      before do
-        allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
-        allow(Dor::Config.workflow).to receive(:client).and_return(workflow_service)
+    context 'when source_id is not provided' do
+      let(:submitted) do
+        {
+          object_type: 'item',
+          admin_policy: 'druid:hv992ry2431',
+          collection: 'druid:hv992ry7777',
+          workflow_id: 'registrationWF',
+          metadata_source: 'label',
+          label: 'test parameters for registration',
+          tag: ['Process : Content Type : Book (ltr)',
+                'Registered By : jcoyne85'],
+          rights: 'default',
+          other_id: 'label:'
+        }
       end
 
-      it 'registers the object' do
-        post :create, params: {
+      it 'raises an error' do
+        # this exception is handled by the Rails exception wrapper middleware in production
+        expect { post :create, params: submitted }.to raise_error ActionController::ParameterMissing
+
+        expect(objects_client).not_to have_received(:register)
+        expect(workflow_service).not_to have_received(:create_workflow_by_name)
+      end
+    end
+
+    context 'when register is successful' do
+      let(:submitted) do
+        {
           object_type: 'item',
           admin_policy: 'druid:hv992ry2431',
           collection: 'druid:hv992ry7777',
@@ -36,6 +60,10 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           source_id: 'foo:bar',
           other_id: 'label:'
         }
+      end
+
+      it 'registers the object' do
+        post :create, params: submitted
         expect(response).to be_redirect
         expect(objects_client).to have_received(:register).with(
           params: {
@@ -65,7 +93,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
 
       it 'shows an error' do
-        post :create
+        post :create, params: { source_id: 'foo:bar', label: 'This things' }
         expect(response.status).to eq 409
         expect(response.body).to eq message
       end
