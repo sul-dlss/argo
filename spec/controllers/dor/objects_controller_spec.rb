@@ -32,7 +32,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Book (ltr)',
                 'Registered By : jcoyne85'],
-          rights: 'default'
+          rights: 'default',
+          source_id: 'foo:bar',
+          other_id: 'label:'
         }
         expect(response).to be_redirect
         expect(objects_client).to have_received(:register).with(
@@ -44,7 +46,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             label: 'test parameters for registration',
             tag: ['Process : Content Type : Book (ltr)',
                   'Registered By : jcoyne85'],
-            rights: 'default'
+            rights: 'default',
+            source_id: 'foo:bar',
+            other_id: 'label:'
           }
         )
         expect(workflow_service).to have_received(:create_workflow_by_name).with('druid:abc', 'registrationWF')

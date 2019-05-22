@@ -10,7 +10,6 @@ class Dor::ObjectsController < ApplicationController
     end
 
     begin
-      registration_params = params.permit(:object_type, :admin_policy, :metadata_source, :label, :rights, :collection, tag: [])
       response = Dor::Services::Client.objects.register(params: registration_params.to_h)
     rescue Dor::Services::Client::UnexpectedResponse => e
       return render plain: e.message, status: 409 if e.message.start_with?('Conflict')
@@ -31,6 +30,11 @@ class Dor::ObjectsController < ApplicationController
   end
 
   private
+
+  def registration_params
+    params.permit(:object_type, :admin_policy, :metadata_source, :label, :rights,
+                  :collection, :source_id, :other_id, tag: [])
+  end
 
   def munge_parameters
     case request.content_type
