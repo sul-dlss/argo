@@ -81,7 +81,14 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context 'when they have manage_content access' do
+      let(:client) do
+        instance_double(Dor::Workflow::Client,
+                        delete_all_workflows: nil,
+                        lifecycle: false)
+      end
+
       before do
+        allow(Dor::Config.workflow).to receive(:client).and_return(client)
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
@@ -96,8 +103,8 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item).to receive(:delete)
         expect(Dor::SearchService.solr).to receive(:delete_by_id).with(@pid)
         expect(Dor::SearchService.solr).to receive(:commit)
-        expect(Dor::CleanupService).to receive(:remove_active_workflows).with(@pid).once
         post 'purge_object', params: { id: @pid }
+        expect(client).to have_received(:delete_all_workflows).with(pid: @pid)
       end
 
       it 'blocks purge on submitted objects' do
