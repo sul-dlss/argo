@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'items/_rights.html.erb' do
   let(:object) { double('object', pid: 'druid:abc123') }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'items/set_governing_apo_ui.html.erb' do
   it 'renders the JS template' do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe DorController, type: :controller do
   let(:druid) { 'druid:aa111bb2222' }

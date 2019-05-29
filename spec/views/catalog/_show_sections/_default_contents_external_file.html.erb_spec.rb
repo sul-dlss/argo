@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'catalog/_show_sections/default_contents_external_file.html.erb', type: :view do
   it 'is silent if no resources' do

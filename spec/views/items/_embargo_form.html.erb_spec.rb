@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'items/_embargo_form.html.erb' do
   let(:current_user) { mock_user(is_admin?: true) }

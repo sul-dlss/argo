@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'Set governing APO' do
   let(:groups) { ['sdr:administrator-role', 'dlss:dor-admin', 'dlss:developers'] }

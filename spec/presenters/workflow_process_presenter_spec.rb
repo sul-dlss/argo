@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe WorkflowProcessPresenter, type: :view do
   subject(:instance) { described_class.new(view: view, process_status: process_status) }

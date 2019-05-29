@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe WorkflowsController, type: :controller do
   let(:pid) { 'druid:oo201oo0001' }

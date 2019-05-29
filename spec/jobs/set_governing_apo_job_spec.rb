@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe SetGoverningApoJob do
   let(:bulk_action_no_process_callback) do

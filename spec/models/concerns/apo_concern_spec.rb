@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ApoConcern do
   let(:document) { SolrDocument.new(document_attributes) }

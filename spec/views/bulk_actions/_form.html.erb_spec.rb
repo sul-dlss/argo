@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'bulk_actions/_form.html.erb' do
   let(:user_groups) { ['dlss-developers', 'top-secret-clearance'] }

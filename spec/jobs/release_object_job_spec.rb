@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe ReleaseObjectJob do
   let(:client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }

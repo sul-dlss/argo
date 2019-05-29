@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'items/purl_preview.html.erb' do
   let(:mods_display) { double('mods', title: ['Cool Catz']) }

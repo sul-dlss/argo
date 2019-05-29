@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'application and dependency monitoring' do
   it '/status checks if Rails app is running' do

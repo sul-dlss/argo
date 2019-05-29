@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'collections/new.html.erb', type: :view do
   it 'renders the HTML template form' do

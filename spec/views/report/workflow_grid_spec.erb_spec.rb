@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'report/workflow_grid', type: :view do
   let(:blacklight_config) { ReportController.blacklight_config }

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require 'rails_helper'
 
 # General documentation about roles and permissions is on SUL Consul at
 # https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
