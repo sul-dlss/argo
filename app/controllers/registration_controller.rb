@@ -118,7 +118,6 @@ class RegistrationController < ApplicationController
   end
 
   def registration_collection_ids_for_apo(apo_id)
-    apo_object = Dor.find(apo_id)
-    apo_object.administrativeMetadata.ng_xml.search('//registration/collection/@id').map(&:to_s)
+    Dor.find(apo_id).default_collections
   end
 end
