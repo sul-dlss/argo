@@ -208,7 +208,6 @@ class ApoForm < BaseForm
   # @return [Hash] the parameters used to register an apo. Must be called after `validate`
   def register_params
     {
-      workflow_priority: '70',
       label: params[:title],
       object_type: 'adminPolicy',
       admin_policy: SolrDocument::UBER_APO_ID

@@ -46,7 +46,6 @@ class CollectionForm < BaseForm
   # @return [Hash] the parameters used to register an apo. Must be called after `validate`
   def register_params
     reg_params = {
-      workflow_priority: '65',
       object_type: 'collection',
       admin_policy: params[:apo_pid]
     }

@@ -302,8 +302,7 @@ RSpec.describe ApoForm do
           expect(args[:params]).to match a_hash_including(
             label: 'New APO Title',
             object_type: 'adminPolicy',
-            admin_policy: 'druid:hv992ry2431', # Uber-APO
-            workflow_priority: '70'
+            admin_policy: 'druid:hv992ry2431' # Uber-APO
           )
           expect(args[:metadata_source]).to be_nil # descMD is created via the form
           { pid: apo.pid }
@@ -316,8 +315,7 @@ RSpec.describe ApoForm do
           expect(args[:params]).to match a_hash_including(
             label: 'col title',
             object_type: 'collection',
-            admin_policy: apo.pid,
-            workflow_priority: '65'
+            admin_policy: apo.pid
           )
           { pid: collection.pid }
         end
