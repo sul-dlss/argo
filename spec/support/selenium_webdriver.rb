@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'capybara/rails'
 
 Capybara.javascript_driver = :headless_chrome
