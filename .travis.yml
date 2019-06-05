@@ -11,6 +11,7 @@ rvm:
 email: false
 
 before_install:
+  - which google-chrome
   # Update rubygems to work around a malformed version error with webdrivers
   - gem update --system
   # Travis's docker-compose is too old to handle v3.6 docker-compose templates.
@@ -25,6 +26,7 @@ before_install:
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
 
 before_script:
+  - bundle exec rake webdrivers:chromedriver:update[75.0.3770.8]
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build

@@ -95,6 +95,7 @@ group :test, :development do
   gem 'rubocop-rspec', '~> 1.31.0', require: false
   gem 'sqlite3', '~> 1.3.13'
 end
+gem 'webdrivers' # installs the chrome for selenium tests
 
 group :development do
   gem 'rack-mini-profiler', require: false # used for performance profiling
@@ -104,7 +105,6 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov', require: false
-  gem 'webdrivers' # installs the chrome for selenium tests
   gem 'webmock', require: false
 end
 

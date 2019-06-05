@@ -18,6 +18,7 @@ SimpleCov.start do
   add_filter '/vendor/'
 end
 
+Webdrivers::Chromedriver.required_version = '75.0.3770.8'
 Capybara.register_driver :selenium_chrome_headless do |app|
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     chromeOptions: { args: %w(headless disable-gpu no-sandbox window-size=1280,1696) }
