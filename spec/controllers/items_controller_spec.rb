@@ -161,14 +161,22 @@ RSpec.describe ItemsController, type: :controller do
     context 'when they have manage_content access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
+        allow(Dor::Services::Client).to receive(:object).and_return(client)
       end
 
+      let(:client) { instance_double(Dor::Services::Client::Object, open_new_version: true) }
+      let(:vers_md_upd_info) { { significance: 'major', description: 'something', opening_user_name: user.to_s } }
+
       it 'calls dor-services to open a new version' do
-        vers_md_upd_info = { significance: 'major', description: 'something', opening_user_name: user.to_s }
-        allow_any_instance_of(Dor::Services::Client::Object).to receive(:open_new_version).with(vers_md_upd_info: vers_md_upd_info)
         expect(@item).to receive(:save)
         expect(Dor::SearchService.solr).to receive(:add)
-        get 'open_version', params: { id: @pid, severity: vers_md_upd_info[:significance], description: vers_md_upd_info[:description] }
+        get 'open_version', params: {
+          id: @pid,
+          severity: vers_md_upd_info[:significance],
+          description: vers_md_upd_info[:description]
+        }
+
+        expect(client).to have_received(:open_new_version).with(vers_md_upd_info: vers_md_upd_info)
       end
     end
 
