@@ -241,45 +241,78 @@ RSpec.describe RegistrationController, type: :controller do
       expect(data.length).to eq(1)
     end
 
-    it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
-      apo_id = 'druid:fg464dn8891'
-
-      # 'pb873ty1662' is a real object in our fixture data.  for the other two druids, we mock the
-      # results of the calls to fedora.  the 'z' druid has a title that should cause it to sort first
-      # after "None", and the 'a' druid has a title that should cause it to sort last.
-      col_ids_for_apo = ['druid:pb873ty1662', 'druid:ab098cd7654', 'druid:zy123xw4567']
-      allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return(col_ids_for_apo)
-      mock_collection_z = double(Dor::Collection, label: 'A collection that sorts to the top')
-      mock_collection_a = double(Dor::Collection, label: 'Ze last collection in ze list')
-      allow(Dor).to receive(:find).with('druid:zy123xw4567').and_return(mock_collection_z)
-      allow(Dor).to receive(:find).with('druid:pb873ty1662').and_call_original
-      allow(Dor).to receive(:find).with('druid:ab098cd7654').and_return(mock_collection_a)
-
-      get 'collection_list', params: { apo_id: apo_id, format: :json }
-      data = JSON.parse(response.body)
-      expect(data).to eq(
-        '' => 'None',
-        'druid:zy123xw4567' => 'A collection that sorts to the top (zy123xw4567)',
-        'druid:pb873ty1662' => 'Fedora Object Label for this collection (pb873ty1662)',
-        'druid:ab098cd7654' => 'Ze last collection in ze list (ab098cd7654)'
-      )
-    end
-
-    it 'does not include collections that are not found in Solr/Fedora' do
-      missing_registration_collections = [
-        'druid:kk203bw3276', 'druid:zx663qq1749', 'druid:nq832zg5474', 'druid:fb337wh0818', 'druid:kd973gk0505',
-        'druid:jm980xw3297', 'druid:fz658ss5788', 'druid:vh782pm7216', 'druid:gg191kg3953'
-      ]
-      missing_registration_collections.each do |col_id|
-        col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
-        expect(Rails.logger).to receive(:warning).with(col_not_found_warning)
+    context 'when the collections are in solr' do
+      before do
+        allow(Dor::SearchService).to receive(:query).and_return(solr_response)
+        allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return(col_ids_for_apo)
       end
 
-      get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
-      data = JSON.parse(response.body)
-      expect(data['druid:pb873ty1662']).to eq 'Fedora Object Label for this collection (pb873ty1662)'
-      expect(data['druid:gg191kg3953']).to be nil
-      expect(data.length).to eq(2)
+      let(:col_ids_for_apo) { ['druid:pb873ty1662'] }
+      let(:apo_id) { 'druid:fg464dn8891' }
+      let(:solr_response) do
+        { 'response' => { 'docs' => [solr_doc] } }
+      end
+      let(:solr_doc) do
+        {
+          'sw_display_title_tesim' => [
+            'Annual report of the State Corporation Commission showing the condition ' \
+            'of the incorporated state banks and other institutions operating in ' \
+            'Virginia at the close of business'
+          ]
+        }
+      end
+
+      it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
+        get 'collection_list', params: { apo_id: apo_id, format: :json }
+        data = JSON.parse(response.body)
+        expect(data).to eq(
+          '' => 'None',
+          'druid:pb873ty1662' => 'Annual report of the State Corporation Commission showing... (pb873ty1662)'
+        )
+      end
+    end
+
+    context 'when the collections are not in solr' do
+      it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
+        apo_id = 'druid:fg464dn8891'
+
+        # 'pb873ty1662' is a real object in our fixture data.  for the other two druids, we mock the
+        # results of the calls to fedora.  the 'z' druid has a title that should cause it to sort first
+        # after "None", and the 'a' druid has a title that should cause it to sort last.
+        col_ids_for_apo = ['druid:pb873ty1662', 'druid:ab098cd7654', 'druid:zy123xw4567']
+        allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return(col_ids_for_apo)
+        mock_collection_z = double(Dor::Collection, label: 'A collection that sorts to the top')
+        mock_collection_a = double(Dor::Collection, label: 'Ze last collection in ze list')
+        allow(Dor).to receive(:find).with('druid:zy123xw4567').and_return(mock_collection_z)
+        allow(Dor).to receive(:find).with('druid:pb873ty1662').and_call_original
+        allow(Dor).to receive(:find).with('druid:ab098cd7654').and_return(mock_collection_a)
+
+        get 'collection_list', params: { apo_id: apo_id, format: :json }
+        data = JSON.parse(response.body)
+        expect(data).to eq(
+          '' => 'None',
+          'druid:zy123xw4567' => 'A collection that sorts to the top (zy123xw4567)',
+          'druid:pb873ty1662' => 'Fedora Object Label for this collection (pb873ty1662)',
+          'druid:ab098cd7654' => 'Ze last collection in ze list (ab098cd7654)'
+        )
+      end
+
+      it 'does not include collections that are not found in Solr/Fedora' do
+        missing_registration_collections = [
+          'druid:kk203bw3276', 'druid:zx663qq1749', 'druid:nq832zg5474', 'druid:fb337wh0818', 'druid:kd973gk0505',
+          'druid:jm980xw3297', 'druid:fz658ss5788', 'druid:vh782pm7216', 'druid:gg191kg3953'
+        ]
+        missing_registration_collections.each do |col_id|
+          col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
+          expect(Rails.logger).to receive(:warning).with(col_not_found_warning)
+        end
+
+        get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
+        data = JSON.parse(response.body)
+        expect(data['druid:pb873ty1662']).to eq 'Fedora Object Label for this collection (pb873ty1662)'
+        expect(data['druid:gg191kg3953']).to be nil
+        expect(data.length).to eq(2)
+      end
     end
   end
 

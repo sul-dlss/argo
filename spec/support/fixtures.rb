@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FixtureHelpers
   def druid_to_path(druid, flavor = 'xml')
     fixture_mask = File.join(File.dirname(__FILE__), '..', 'fixtures', "*_#{druid.sub(/:/, '_')}.#{flavor}")
@@ -23,9 +25,9 @@ module FixtureHelpers
   def item_from_foxml(foxml, item_class = Dor::Base, other_class = ActiveFedora::OmDatastream)
     foxml = Nokogiri::XML(foxml) unless foxml.is_a?(Nokogiri::XML::Node)
     xml_streams = foxml.xpath('//foxml:datastream')
-    properties = Hash[foxml.xpath('//foxml:objectProperties/foxml:property').collect { |node|
+    properties = Hash[foxml.xpath('//foxml:objectProperties/foxml:property').collect do |node|
       [node['NAME'].split(/#/).last, node['VALUE']]
-    }]
+    end]
     result = item_class.new(pid: foxml.root['PID'])
     result.label    = properties['label']
     result.owner_id = properties['ownerId']
@@ -38,19 +40,19 @@ module FixtureHelpers
         result.add_datastream(ds)
       end
 
-      if ds.is_a?(other_class)
-        result.datastreams[dsid] = ds.class.from_xml(Nokogiri::XML(content), ds)
-      elsif ds.is_a?(ActiveFedora::RelsExtDatastream)
-        result.datastreams[dsid] = ds.class.from_xml(content, ds)
-      else
-        result.datastreams[dsid] = ds.class.from_xml(ds, stream)
-      end
-    rescue
+      result.datastreams[dsid] = if ds.is_a?(other_class)
+                                   ds.class.from_xml(Nokogiri::XML(content), ds)
+                                 elsif ds.is_a?(ActiveFedora::RelsExtDatastream)
+                                   ds.class.from_xml(content, ds)
+                                 else
+                                   ds.class.from_xml(ds, stream)
+                                 end
+    rescue StandardError
       # TODO: (?) rescue if 1 datastream failed
     end
 
     # stub item and datastream repo access methods
-    result.datastreams.each_pair do |dsid, ds|
+    result.datastreams.each_pair do |_dsid, ds|
       # if ds.is_a?(ActiveFedora::OmDatastream) && !ds.is_a?(Dor::WorkflowDs)
       #   ds.instance_eval do
       #     def content       ; self.ng_xml.to_s                 ; end
@@ -58,11 +60,15 @@ module FixtureHelpers
       #   end
       # end
       ds.instance_eval do
-        def save; true; end
+        def save
+          true
+        end
       end
     end
     result.instance_eval do
-      def save; true; end
+      def save
+        true
+      end
     end
     result
   end

@@ -48,9 +48,8 @@ class RegistrationController < ApplicationController
       solr_doc = Dor::SearchService.query("id:\"#{col_id}\"",
                                           rows: 1,
                                           fl: col_title_field)['response']['docs'].first
-
       if solr_doc.present? && solr_doc[col_title_field].present?
-        collections[col_id] = "#{short_label(solr_doc[col_title_field], truncate_limit)} (#{col_druid})"
+        collections[col_id] = "#{short_label(solr_doc[col_title_field].first, truncate_limit)} (#{col_druid})"
       else
         Honeybadger.notify("Unable to find title of the collection #{col_id} in Solr. Checking Fedora, but this is slow.")
         begin # Title not found in Solr, so check DOR
