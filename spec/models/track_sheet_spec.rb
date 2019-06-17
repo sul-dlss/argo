@@ -29,7 +29,7 @@ RSpec.describe TrackSheet do
     context 'when the doc is not in foo' do
       before do
         allow(Dor).to receive(:find).and_return(obj)
-        allow(Dor::SearchService.solr).to receive(:add)
+        allow(ActiveFedora.solr.conn).to receive(:add)
       end
 
       let(:docs) { [] }
@@ -37,7 +37,7 @@ RSpec.describe TrackSheet do
 
       it 'loads the document from Fedora and adds it to the index' do
         expect(call).to eq solr_doc
-        expect(Dor::SearchService.solr).to have_received(:add).with(solr_doc)
+        expect(ActiveFedora.solr.conn).to have_received(:add).with(solr_doc)
       end
     end
   end

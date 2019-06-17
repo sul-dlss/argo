@@ -25,7 +25,7 @@ RSpec.describe WorkflowsController, type: :controller do
 
       before do
         allow(item).to receive(:to_solr)
-        allow(Dor::SearchService.solr).to receive(:add)
+        allow(ActiveFedora.solr.conn).to receive(:add)
         allow(controller).to receive(:authorize!).and_return(true)
         allow(item).to receive(:workflows).and_return wf_datastream
       end

@@ -405,8 +405,8 @@ class ItemsController < ApplicationController
 
     @object.delete
     Dor::Config.workflow.client.delete_all_workflows(pid: @object.pid)
-    Dor::SearchService.solr.delete_by_id(params[:id])
-    Dor::SearchService.solr.commit
+    ActiveFedora.solr.conn.delete_by_id(params[:id])
+    ActiveFedora.solr.conn.commit
 
     respond_to do |format|
       format.any { redirect_to '/', notice: params[:id] + ' has been purged!' }
@@ -567,11 +567,11 @@ class ItemsController < ApplicationController
   private
 
   def reindex(item)
-    Dor::SearchService.solr.add item.to_solr
+    ActiveFedora.solr.conn.add item.to_solr
   end
 
   def flush_index
-    Dor::SearchService.solr.commit
+    ActiveFedora.solr.conn.commit
   end
 
   # Filters
