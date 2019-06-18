@@ -35,14 +35,14 @@ RSpec.describe SetGoverningApoJob do
         pids.each do |pid|
           expect(subject).to receive(:set_governing_apo_and_index_safely).with(pid, instance_of(File))
         end
-        expect(Dor::SearchService.solr).to receive(:commit)
+        expect(ActiveFedora.solr.conn).to receive(:commit)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
       end
 
       it 'logs info about progress' do
         allow(subject).to receive(:set_governing_apo_and_index_safely)
-        allow(Dor::SearchService.solr).to receive(:commit)
+        allow(ActiveFedora.solr.conn).to receive(:commit)
 
         buffer = StringIO.new
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
@@ -83,13 +83,13 @@ RSpec.describe SetGoverningApoJob do
         expect(item1).to receive(:save)
         expect(item1).to receive(:to_solr).and_return(field: 'value')
         expect(item1).to receive(:allows_modification?).and_return true
-        expect(Dor::SearchService.solr).to receive(:add).with(field: 'value').exactly(:once)
+        expect(ActiveFedora.solr.conn).to receive(:add).with(field: 'value').exactly(:once)
 
         expect(item3).not_to receive(:admin_policy_object=)
         expect(item3).not_to receive(:identityMetadata)
         expect(item3).not_to receive(:save)
 
-        expect(Dor::SearchService.solr).to receive(:commit)
+        expect(ActiveFedora.solr.conn).to receive(:commit)
 
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_success).to eq 1

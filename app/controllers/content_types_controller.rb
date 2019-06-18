@@ -33,7 +33,7 @@ class ContentTypesController < ApplicationController
       end
     end
     @object.save
-    Dor::SearchService.solr.add(@object.to_solr) unless params[:bulk]
+    ActiveFedora.solr.conn.add(@object.to_solr) unless params[:bulk]
   end
 
   private

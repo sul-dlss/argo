@@ -31,7 +31,7 @@ RSpec.describe ItemsController, type: :controller do
     allow(@item).to receive(:can_view_content?).and_return(false)
     allow(@item).to receive(:admin_policy_object).and_return(apo)
     allow(@item).to receive(:workflows).and_return(wf)
-    allow(Dor::SearchService.solr).to receive(:add)
+    allow(ActiveFedora.solr.conn).to receive(:add)
   end
 
   let(:user) { create(:user) }
@@ -101,8 +101,8 @@ RSpec.describe ItemsController, type: :controller do
 
       it 'deletes the object from fedora and solr' do
         expect(@item).to receive(:delete)
-        expect(Dor::SearchService.solr).to receive(:delete_by_id).with(@pid)
-        expect(Dor::SearchService.solr).to receive(:commit)
+        expect(ActiveFedora.solr.conn).to receive(:delete_by_id).with(@pid)
+        expect(ActiveFedora.solr.conn).to receive(:commit)
         post 'purge_object', params: { id: @pid }
         expect(client).to have_received(:delete_all_workflows).with(pid: @pid)
       end
@@ -137,7 +137,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item.datastreams['events']).to receive(:add_event).and_call_original
         expect(controller).to receive(:save_and_reindex)
         expect(controller).to receive(:flush_index).and_call_original
-        expect(Dor::SearchService.solr).to receive(:commit) # from flush_index internals
+        expect(ActiveFedora.solr.conn).to receive(:commit) # from flush_index internals
         post :embargo_update, params: { id: @pid, embargo_date: '2100-01-01' }
         expect(response).to have_http_status(:found) # redirect to catalog page
       end
@@ -169,7 +169,7 @@ RSpec.describe ItemsController, type: :controller do
 
       it 'calls dor-services to open a new version' do
         expect(@item).to receive(:save)
-        expect(Dor::SearchService.solr).to receive(:add)
+        expect(ActiveFedora.solr.conn).to receive(:add)
         get 'open_version', params: {
           id: @pid,
           severity: vers_md_upd_info[:significance],
@@ -205,7 +205,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(version_metadata).to receive(:update_current_version)
         allow(@item).to receive(:current_version).and_return('2')
         expect(@item).to receive(:save)
-        expect(Dor::SearchService.solr).to receive(:add)
+        expect(ActiveFedora.solr.conn).to receive(:add)
         get 'close_version', params: { id: @pid, severity: 'major', description: 'something' }
         expect(object_service).to have_received(:close_version)
       end
@@ -228,7 +228,7 @@ RSpec.describe ItemsController, type: :controller do
 
       it 'updates the source id' do
         expect(@item).to receive(:source_id=).with('new:source_id')
-        expect(Dor::SearchService.solr).to receive(:add)
+        expect(ActiveFedora.solr.conn).to receive(:add)
         post 'source_id', params: { id: @pid, new_id: 'new:source_id' }
       end
     end
@@ -250,7 +250,7 @@ RSpec.describe ItemsController, type: :controller do
 
       it 'updates the catkey, trimming whitespace' do
         expect(@item).to receive(:catkey=).with('12345')
-        expect(Dor::SearchService.solr).to receive(:add)
+        expect(ActiveFedora.solr.conn).to receive(:add)
         post 'catkey', params: { id: @pid, new_catkey: '   12345 ' }
       end
     end
@@ -261,7 +261,7 @@ RSpec.describe ItemsController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(@item).to receive(:tags).and_return(['some:thing'])
-        expect(Dor::SearchService.solr).to receive(:add)
+        expect(ActiveFedora.solr.conn).to receive(:add)
       end
 
       it 'updates tags' do
@@ -287,7 +287,7 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(@item).to receive(:tags).and_return(['some:thing'])
         expect(@item.datastreams['identityMetadata']).to receive(:save)
-        expect(Dor::SearchService.solr).to receive(:add)
+        expect(ActiveFedora.solr.conn).to receive(:add)
       end
 
       it 'removes an old tag an add a new one' do

@@ -118,7 +118,7 @@ class TrackSheet
 
     obj = Dor.find "druid:#{druid}"
     solr_doc = obj.to_solr
-    Dor::SearchService.solr.add(solr_doc)
+    ActiveFedora.solr.conn.add(solr_doc)
     solr_doc
   end
 end

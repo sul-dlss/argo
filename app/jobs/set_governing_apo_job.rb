@@ -27,7 +27,7 @@ class SetGoverningApoJob < GenericJob
         log.puts("#{Time.current} SetGoverningApoJob: Finished update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
       end
 
-      Dor::SearchService.solr.commit
+      ActiveFedora.solr.conn.commit
       log.puts("#{Time.current} Finished SetGoverningApoJob for BulkAction #{bulk_action_id}")
     end
   end
@@ -44,7 +44,7 @@ class SetGoverningApoJob < GenericJob
     current_obj.admin_policy_object = Dor.find(new_apo_id)
     current_obj.identityMetadata.adminPolicy = nil if current_obj.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
     current_obj.save
-    Dor::SearchService.solr.add current_obj.to_solr
+    ActiveFedora.solr.conn.add current_obj.to_solr
 
     log.puts("#{Time.current} SetGoverningApoJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save

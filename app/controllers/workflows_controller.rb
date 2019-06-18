@@ -117,11 +117,11 @@ class WorkflowsController < ApplicationController
   end
 
   def flush_index
-    Dor::SearchService.solr.commit
+    ActiveFedora.solr.conn.commit
   end
 
   def reindex(item)
-    Dor::SearchService.solr.add item.to_solr
+    ActiveFedora.solr.conn.add item.to_solr
   end
 
   def load_resource
