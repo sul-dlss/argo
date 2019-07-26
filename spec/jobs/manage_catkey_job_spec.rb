@@ -43,11 +43,19 @@ RSpec.describe ManageCatkeyJob do
     let(:pid) { pids[0] }
     let(:catkey) { catkeys[0] }
     let(:current_object) { double(Dor::Item) }
+    let(:client) { double(Dor::Services::Client) }
+    let(:object) { instance_double(Dor::Services::Client::Object) }
+    let(:object_version) { double(Dor::Services::Client::ObjectVersion) }
+
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object)
+      allow(object).to receive(:version).and_return(object_version)
+    end
 
     it 'updates catkey and versions objects' do
       allow(subject).to receive(:can_manage?).and_return(true)
       allow(current_object).to receive(:allows_modification?).and_return(false)
-      allow(current_object).to receive(:new_version_open?).and_return(true)
+      allow(object_version).to receive(:openeable?).and_return(false)
       allow(current_object).to receive(:pid).and_return(pid)
       expect(Dor).to receive(:find).with(pid).and_return(current_object)
       expect(subject).to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
@@ -60,7 +68,7 @@ RSpec.describe ManageCatkeyJob do
     it 'updates catkey and does not version objects if not needed' do
       allow(subject).to receive(:can_manage?).and_return(true)
       allow(current_object).to receive(:allows_modification?).and_return(true)
-      allow(current_object).to receive(:new_version_open?).and_return(false)
+      allow(object_version).to receive(:openeable?).and_return(true)
       allow(current_object).to receive(:pid).and_return(pid)
       expect(Dor).to receive(:find).with(pid).and_return(current_object)
       expect(subject).not_to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
