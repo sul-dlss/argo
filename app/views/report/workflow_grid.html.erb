@@ -22,6 +22,6 @@
     <%= render 'constraints', :localized_params=>params %>
   <% end %>
   <%= render 'catalog/report_view_toggle' %>
-  <a href="<%= robot_status_url -%>" target="_blank">Robots queue/job status</a>
+  <a href="<%= Settings.ROBOT_STATUS_URL %>" target="_blank">Robots queue/job status</a>
   <%= render :partial => 'workflow_grid' %>
 </div>

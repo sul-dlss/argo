@@ -9,10 +9,6 @@ module ApplicationHelper
     URI.parse(Dor::Config.fedora.safeurl.sub(/\/*$/, '/'))
   end
 
-  def robot_status_url
-    Settings.ROBOT_STATUS_URL
-  end
-
   def location_to_send_search_form
     return report_path if report_view?
     return report_workflow_grid_path if workflow_grid_view?
