@@ -185,7 +185,17 @@ class CatalogController < ApplicationController
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
     authorize! :view_metadata, @obj
-    super() # with or without an APO, if we get here, user is authorized to view
+    @response, @document = fetch params[:id]
+    @buttons_presenter = ButtonsPresenter.new(
+      ability: current_ability,
+      solr_document: @document,
+      object: @obj
+    )
+    respond_to do |format|
+      format.html { setup_next_and_previous_documents }
+      format.json { render json: { response: { document: @document } } }
+      additional_export_formats(@document, format)
+    end
   end
 
   def dc

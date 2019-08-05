@@ -42,107 +42,6 @@ module ArgoHelper
     image_tag thumbnail_url, class: thumb_class, alt: thumb_alt, style: thumb_style
   end
 
-  ##
-  # Ideally this method should not make calls to external services to determine
-  # what buttons should be rendered. These external requests are blocking and
-  # will not allow the page to load until all requests are finished.
-  #
-  # Instead, use the `check_url` field to specify an endpoint for what'd be a blocking request
-  # to determine whether the button should be enabled.  The button will start out disabled,
-  # and will be enabled (or not) depending on the response from the call out to `check_url`.
-  #
-  # If you can determine whether the button should be disabled based on information that's
-  # already available, without making a blocking request, you can use the `disabled` field
-  # to just permanantly disable the button without calling out to a `check_url`.  Note that
-  # you should not need to use both fields, since use of `check_url` disables the button at
-  # first anyway.
-  #
-  # @param [SolrDocument] doc
-  # @param [Dor::Item] object
-  # @return [Array]
-  def render_buttons(doc, object)
-    pid = doc['id']
-    apo_pid = doc.apo_pid
-
-    buttons = []
-    if can?(:manage_content, object)
-      buttons << {
-        url: close_version_ui_item_path(pid),
-        label: 'Close Version',
-        check_url: workflow_service_closeable_path(pid)
-      }
-
-      buttons << {
-        url: open_version_ui_item_path(pid),
-        label: 'Open for modification',
-        check_url: workflow_service_openable_path(pid)
-      }
-    end
-
-    if can?(:manage_item, object)
-      if object.is_a? Dor::AdminPolicyObject
-        buttons << { url: edit_apo_path(pid), label: 'Edit APO', new_page: true }
-        buttons << { url: new_apo_collection_path(apo_id: pid), label: 'Create Collection' }
-      end
-
-      buttons << {
-        url: dor_reindex_path(pid: pid),
-        label: 'Reindex',
-        new_page: true
-      }
-
-      # note that the backend will also check can?(:manage_governing_apo, object, new_apo_id), but
-      # we can't do that here, since we don't yet know what APO the user might move the object to.
-      # so it's possible that the user will get this button even if there are no other APOs they're
-      # allowed to move the object to.
-      buttons << {
-        url: set_governing_apo_ui_item_path(id: pid),
-        label: 'Set governing APO',
-        disabled: !object.allows_modification?
-      }
-
-      buttons << { url: new_item_workflow_path(item_id: pid), label: 'Add workflow' }
-
-      buttons << {
-        url: dor_path(pid: pid),
-        label: 'Republish',
-        check_url: workflow_service_published_path(pid),
-        new_page: true
-      }
-
-      buttons << {
-        url: purge_item_path(id: pid),
-        label: 'Purge',
-        new_page: true,
-        confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-        disabled: !registered_only?(doc)
-      }
-
-      buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
-      buttons << { url: tags_ui_item_path(id: pid), label: 'Edit tags' }
-      if [Dor::Item, Dor::Set].any? { |clazz| object.is_a? clazz } # these only apply for items, sets and collections
-        buttons << { url: catkey_ui_item_path(id: pid), label: 'Manage catkey' }
-        buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
-      end
-      if object.datastreams.include? 'contentMetadata'
-        buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' }
-      end
-      if object.datastreams.include? 'rightsMetadata'
-        buttons << { url: rights_item_path(id: pid), label: 'Set rights' }
-      end
-      if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
-        buttons << { url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !object.allows_modification? }
-      end
-      buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
-
-      # TODO: add a date picker and button to change the embargo date for those who should be able to.
-      buttons << { label: 'Update embargo', url: embargo_form_item_path(pid) } if object.is_a?(Dor::Item) && object.embargoed?
-
-    end
-
-    buttons
-  end
-
   def render_purl_link(document, link_text = 'PURL', opts = { target: '_blank' })
     link_to link_text, File.join(Settings.PURL_URL, document.druid), opts
   end
@@ -163,11 +62,5 @@ module ArgoHelper
     return unless document.admin_policy?
 
     link_to 'MODS bulk loads', apo_bulk_jobs_path(document), id: 'bulk-button', class: 'button btn btn-primary'
-  end
-
-  protected
-
-  def registered_only?(document)
-    ['Registered', 'Unknown Status'].include?(document['processing_status_text_ssi'])
   end
 end
