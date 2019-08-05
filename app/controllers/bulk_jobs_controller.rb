@@ -5,9 +5,9 @@ class BulkJobsController < ApplicationController
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def index
     params[:apo_id] = 'druid:' + params[:apo_id] unless params[:apo_id].include? 'druid'
-    @obj = Dor.find params[:apo_id]
+    @object = Dor.find params[:apo_id]
 
-    authorize! :view_metadata, @obj
+    authorize! :view_metadata, @object
     @document = find(params[:apo_id])
     @bulk_jobs = load_bulk_jobs(params[:apo_id])
   end

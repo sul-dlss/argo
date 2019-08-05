@@ -58,11 +58,10 @@ module ArgoHelper
   # first anyway.
   #
   # @param [SolrDocument] doc
+  # @param [Dor::Item] object
   # @return [Array]
-  def render_buttons(doc, object = nil)
-    pid = doc['id']
-    object ||= Dor.find(pid)
-
+  def render_buttons(doc, object)
+    pid = doc.id
     apo_pid = doc.apo_pid
 
     buttons = []

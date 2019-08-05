@@ -16,7 +16,7 @@
   <div id="document" class="<%= render_document_class %>">
     <div id="doc_<%= @document.id.to_s.parameterize %>">
       <div class="document">
-        <%= render_document_partials @document, blacklight_config.view_config(:show).partials, object: @obj, document_counter: 0 %>
+        <%= render_document_partials @document, blacklight_config.view_config(:show).partials, object: @object, document_counter: 0 %>
       </div>
     </div>
   </div>
