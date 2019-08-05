@@ -1,2 +1,2 @@
-<%= render :partial => 'catalog/show_external_links', :locals => { :document => @document, :object => @obj } %>
-<%= render :partial => 'catalog/show_embargo_sidebar', :locals => { :document => @document } %>
+<%= render 'catalog/show_external_links', document: @document, object: @obj %>
+<%= render 'catalog/show_embargo_sidebar', document: @document %>
