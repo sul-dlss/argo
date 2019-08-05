@@ -1,5 +1,3 @@
-<% document ||= @document %>
-
 <div class="show_sidebar">
   <h3 class="start-open">View in new window</h3>
   <ul class='nav nav-stacked'>
@@ -15,5 +13,5 @@
     <li><small><%= render_index_info document %></small></li>
   </ul>
   <hr>
-  <%= render(:partial => 'items/button_link_list', :locals => {:buttons => (render_buttons document, @obj)})%>
+  <%= render(:partial => 'items/button_link_list', :locals => {:buttons => (render_buttons document, object)})%>
 </div>
