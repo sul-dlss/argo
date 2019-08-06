@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BulkAction < ActiveRecord::Base
+class BulkAction < ApplicationRecord
   belongs_to :user
   validates :action_type, inclusion: { in: %w(GenericJob DescmetadataDownloadJob ReleaseObjectJob RemoteIndexingJob SetGoverningApoJob ManageCatkeyJob) }
   after_create do

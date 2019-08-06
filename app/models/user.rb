@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   # Connects this user object to Blacklights Bookmarks and Folders.
   include Blacklight::User
   has_many :bulk_actions
