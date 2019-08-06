@@ -299,13 +299,6 @@ Rails/ApplicationJob:
     - 'app/jobs/generic_job.rb'
     - 'app/jobs/modsulator_job.rb'
 
-# Offense count: 2
-# Cop supports --auto-correct.
-Rails/ApplicationRecord:
-  Exclude:
-    - 'app/models/bulk_action.rb'
-    - 'app/models/user.rb'
-
 # Offense count: 9
 # Cop supports --auto-correct.
 # Configuration parameters: NilOrEmpty, NotPresent, UnlessPresent.
