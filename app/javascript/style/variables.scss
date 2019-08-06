@@ -1,0 +1,21 @@
+//
+// Overrides of Bootstrap variables can be added here. For more information
+// about available Bootstrap variables, please see:
+// https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
+
+@import 'sul_variables';
+
+// This sets the navbar background to red
+$theme-colors: (
+  "primary": $blue,
+  "dark": $color-cardinal-red,
+);
+
+
+$link-color: $bright-blue;
+$link-hover-color: $blue;
+
+$navbar-dark-color: $white;
+
+// Text on the header
+//$navbar-dark-color: lighten($gray-base, 86%);

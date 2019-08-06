@@ -15,7 +15,7 @@ RSpec.describe Argo::AccessControlsEnforcement, type: :model do
                     permitted_apos: [])
   end
 
-  let(:scope) { double('scope', current_user: user) }
+  let(:scope) { instance_double(SearchService, context: { current_user: user }) }
 
   before do
     @obj = TestClass.new

@@ -61,7 +61,7 @@ RSpec.describe 'Item registration page', js: true do
     # it also forces capybara to wait for the Dor::ObjectsController#create call to finish, meaning the
     # block we fed to expect_any_instance_of (to mock #create) can set registration_params, allowing us
     # to check the params below.
-    expect(page).to have_css('span.glyphicon-exclamation-sign', visible: true)
+    expect(page).to have_css('span.icon-exclamation-sign', visible: true)
     expect(registration_params).to include(
       'object_type' => 'item',
       'admin_policy' => 'druid:hv992ry2431',

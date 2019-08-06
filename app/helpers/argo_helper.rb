@@ -5,6 +5,11 @@ module ArgoHelper
   include BlacklightHelper
   include ValueHelper
 
+  # This overrides a blacklight helper so that the page is full-width
+  def container_classes
+    'container-fluid'
+  end
+
   def get_thumbnail_info(doc)
     fname = doc['first_shelved_image_ss']
     return nil unless fname
@@ -23,11 +28,11 @@ module ArgoHelper
     image_tag thumbnail_url, class: thumb_class, alt: thumb_alt, style: thumb_style
   end
 
-  def render_purl_link(document, link_text = 'PURL', opts = { target: '_blank' })
+  def render_purl_link(document, link_text = 'PURL', opts = { target: '_blank', class: 'nav-link' })
     link_to link_text, File.join(Settings.purl_url, document.druid), opts
   end
 
-  def render_dor_link(document, link_text = 'Fedora UI', opts = { target: '_blank' })
+  def render_dor_link(document, link_text = 'Fedora UI', opts = { target: '_blank', class: 'nav-link' })
     link_to link_text, File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}"), opts
   end
 
@@ -35,7 +40,7 @@ module ArgoHelper
     "indexed by DOR Services v#{document.first('dor_services_version_ssi')}"
   end
 
-  def render_searchworks_link(document, link_text = 'Searchworks', opts = { target: '_blank' })
+  def render_searchworks_link(document, link_text = 'Searchworks', opts = { target: '_blank', class: 'nav-link' })
     link_to link_text, "http://searchworks.stanford.edu/view/#{document.catkey}", opts
   end
 

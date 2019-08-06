@@ -218,12 +218,11 @@ var gridContext = function() {
 
     initializeContext: function() {
       $t.statusIcons = {
-        queued:  'registration-status glyphicon glyphicon-forward',
-        pending: 'registration-status glyphicon glyphicon-refresh ' +
-          'glyphicon-spin',
-        success: 'registration-status glyphicon glyphicon-ok-sign',
-        error:   'registration-status glyphicon glyphicon-exclamation-sign',
-        abort: 'registration-status glyphicon glyphicon-remove-sign'
+        queued:  'registration-status icon-forward',
+        pending: 'registration-status icon-refresh',
+        success: 'registration-status icon-ok-sign',
+        error:   'registration-status icon-exclamation-sign',
+        abort: 'registration-status icon-remove-sign'
       };
       $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
@@ -535,7 +534,7 @@ var gridContext = function() {
         autoOpen: false,
         buttons: { "Ok": function() { $(this).dialog("close"); } },
         modal: true,
-        height: 140,
+        height: 300,
         title: 'Error',
         resizable: false
       });

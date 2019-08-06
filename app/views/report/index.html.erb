@@ -10,28 +10,27 @@
   </script>
 <% end %>
 
-<div id="sidebar" class="col-md-3 col-sm-4">
+<% content_for(:sidebar) do %>
   <%= render 'search_sidebar' %>
-</div>
-<div id="content" class="col-md-9 col-sm-8">
-  <% unless has_search_parameters? %>
-    <%# if there are no input/search related params, display the "home" partial -%>
-    <%= render 'home' %>
-  <% else %>
-    <% @page_title = "#{application_name} Search Results" %>
-    <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
-    <% if has_search_parameters? %>
-      <%= render partial: 'did_you_mean' %>
-      <%= render 'constraints', localized_params: params %>
-    <% end %>
+<% end %>
 
-    <%= render 'catalog/report_view_toggle' %>
-
-    <div id="report_container">
-      <table id="report_grid"></table>
-      <div id="preport_grid"></div>
-    </div>
-    <%= render partial: 'report/column_selector' %>
-
+<% unless has_search_parameters? %>
+  <%# if there are no input/search related params, display the "home" partial -%>
+  <%= render 'home' %>
+<% else %>
+  <% @page_title = "#{application_name} Search Results" %>
+  <% content_for(:head) { render 'catalog/opensearch_response_metadata', response: @response } %>
+  <% if has_search_parameters? %>
+    <%= render 'did_you_mean' %>
+    <%= render 'constraints', localized_params: params %>
   <% end %>
-</div>
+
+  <%= render 'catalog/report_view_toggle' %>
+
+  <div id="report_container">
+    <table id="report_grid"></table>
+    <div id="preport_grid"></div>
+  </div>
+  <%= render 'report/column_selector' %>
+
+<% end %>

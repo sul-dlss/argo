@@ -19,9 +19,9 @@ export default class extends Controller {
     const commonFields = this.element.querySelector('#common_fields')
 
     if (selectedTab == 'CreateVirtualObjectsJob') {
-      commonFields.classList.add('hidden')
+      commonFields.hidden = true
     } else {
-      commonFields.classList.remove('hidden')
+      commonFields.hidden = false
     }
   }
 }
