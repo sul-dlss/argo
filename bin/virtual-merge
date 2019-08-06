@@ -1,0 +1,106 @@
+#!/usr/bin/env ruby
+#
+# virtual-merge - A tool to merge multiple objects into a parent object via virtual object structure,
+#                 namely the externalFile element in contentMetadata.
+#
+# The tool interface takes a parent druid on the command line, and then an input file (or command line arguments)
+# with all the child druids to merge into the parent.
+#
+# For specifications, see
+#   https://consul.stanford.edu/pages/viewpage.action?title=Support+for+virtual+resources&spaceKey=chimera
+#
+require 'logger'
+require 'optparse'
+require 'dor-services'
+
+#
+class VirtualMergeTool
+  def initialize(logger, parent_druid, child_druids)
+    @logger = logger
+    @parent = Dor::Item.find(parent_druid)
+    fail "Parent item #{@parent.pid} is not open for modification" unless @parent.allows_modification?
+    @child_druids = child_druids
+    self
+  end
+
+  # merge all the child resources into the parent as virtual links
+  def merge(child)
+    fail "Child item #{child.pid} is not open for modification" unless child.allows_modification?
+    @logger.info "merging child #{child.pid} into parent #{@parent.pid}"
+    child.datastreams['contentMetadata'].ng_xml.search('//resource').each do |resource|
+      @logger.info "adding virtual resource #{resource['id']} of type #{resource['type']} to parent #{@parent.pid}"
+      @parent.datastreams['contentMetadata'].add_virtual_resource(child.pid, resource)
+    end
+    child.add_relationship :is_constituent_of, @parent
+    child.save
+  end
+
+  def run(purge = false)
+    @parent.contentMetadata.content = "<contentMetadata objectId='#{@parent.pid}' type='image'/>" if purge
+    @child_druids.each do |child|
+      begin
+        merge(Dor::Item.find(child))
+      rescue => e
+        @logger.error "#{e}: #{e.backtrace.join("\n")}"
+        Honeybadger.notify(e)
+      end
+    end
+    @parent.save
+  end
+end
+
+# __MAIN__
+
+# setup CLI options
+options = {
+  log: 'log/virtual-merge.log',
+  debug: false,
+  purge: false
+}
+
+# define CLI interface
+parser = OptionParser.new do |opts|
+  opts.banner = 'Usage: virtual-merge [options] parent [child1 ... childN]'
+  opts.on('-i', '--input=FILE', 'Input file with each child druid to merge into parent') do |fn|
+    if fn == '-'
+      options[:input] = STDIN
+    else
+      fail "No such file or empty file: #{fn}" unless File.size?(fn)
+      options[:input] = File.open(fn, 'r')
+    end
+  end
+
+  opts.on('-l', '--log=LOGFILE', 'Log output file') do |fn|
+    options[:log] = fn == '-' ? nil : fn
+  end
+
+  opts.on('--debug', 'Turn on debugging') do
+    options[:debug] = true
+  end
+
+  opts.on('--purge', 'Purge the parent\'s contentMetadata first') do
+    options[:purge] = true
+  end
+
+  opts.on('-h', '--help', 'Help') do
+    puts opts
+    exit(-1)
+  end
+end
+parser.parse!
+
+# ensure we have parent druid as first argument and an input file with the child druids or on command-line
+if ARGV.size < 1 || (options[:input].nil? && ARGV.size < 2)
+  puts parser
+  exit(-1)
+end
+
+# setup logging
+logger = Logger.new(options[:log].nil? ? STDOUT : File.open(options[:log], 'a'))
+logger.level = options[:debug].nil? ? Logger::INFO : Logger::DEBUG
+
+# run the tool
+require_relative '../config/environment'
+VirtualMergeTool.new(logger, ARGV.delete_at(0),
+                     options[:input].nil? ? ARGV : File.readlines(options[:input]).map(&:strip)).run(options[:purge])
+exit(0)

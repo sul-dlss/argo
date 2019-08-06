@@ -101,6 +101,17 @@ Dor.find("druid:pv820dk6668").destroy
 %w[pv820dk6668 rn653dy9317 xb482bw3979 hj185vb7593 hv992ry2431].each{ |pid| Dor.find("druid:#{pid}").destroy }
 ```
 
+### DOR virtual-merge
+
+```
+	RAILS_ENV=production bundle exec ./bin/virtual-merge [options] parent [child1 ... childN]
+	    -i, --input=FILE                 Input file with each child druid to merge into parent
+	    -l, --log=LOGFILE                Log output file
+	        --debug                      Turn on debugging
+	        --purge                      Purge the parent's contentMetadata first
+	    -h, --help                       Help
+```
+
 ## Internals
 
 Argo uses Blacklight and ActiveFedora to expose the repository contents, and `dor-services` to enable editing and updating. Its key components include:
