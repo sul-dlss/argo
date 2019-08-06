@@ -1,4 +1,4 @@
-<div class="hidden" id="column_selector">
+<div class="d-none" id="column_selector">
   <p>Select columns to download:</p>
   <% Report::REPORT_FIELDS.each do |field| %>
     <%= check_box_tag 'selected_columns', field[:field], field[:download_default] %> <%= field[:label] %> <br>

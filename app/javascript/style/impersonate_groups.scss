@@ -4,9 +4,9 @@
 }
 
 .navbar-nav > li > a.impersonating {
-  color: $brand-warning;
+  color: $warning;
 
   &:hover {
-    color: darken($brand-warning, 0.75);
+    color: darken($warning, 0.75);
   }
 }

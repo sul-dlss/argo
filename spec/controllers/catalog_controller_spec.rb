@@ -11,8 +11,10 @@ RSpec.describe CatalogController, type: :controller do
   let(:user) { create(:user) }
 
   describe '#index' do
+    let(:search_service) { instance_double(Blacklight::SearchService, search_results: []) }
+
     before do
-      expect(controller).to receive(:search_results).and_return([])
+      expect(controller).to receive(:search_service).and_return(search_service)
       sign_in user
     end
 

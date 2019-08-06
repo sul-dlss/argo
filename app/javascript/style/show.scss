@@ -1,5 +1,11 @@
 .argo-show-btn-group {
-  width: 100%;
+  width: 80%;
+
+  .btn {
+    text-align: left;
+    padding: 0.3rem 1.3rem;
+    margin-bottom: 3px;
+  }
 }
 
 .full-view-links {

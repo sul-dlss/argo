@@ -1,18 +1,13 @@
-// This is a hack because we're using bootstrap 4 code and bootstrap 3 styles.
-// I think we can remove this when we upgrade to blackight 7
-.modal.show {
-  opacity: 1;
-  // This prevents a very tall modal from being in a position where we can't see the top of the modal.
-  .modal-dialog {
-    transform: translate(0,0);
-  }
-}
+.report-toggle {
+  .dropdown-item.active {
+    background-color: inherit;
 
-#header-navbar {
-  a.navbar-brand {
-    background: transparent url($logo-image) no-repeat top left;
-    background-size: 152px 52px;
-    margin-bottom: 2px;
+    &::before {
+      color: $text-muted;
+      content: '• ';
+      left: 10px;
+      position: fixed;
+    }
   }
 }
 
@@ -232,7 +227,7 @@ button.close {
 }
 
 .bulk-btn-danger {
-  background-color: $brand-danger;
+  background-color: $danger;
 }
 
 #import-csv {

@@ -1,16 +1,14 @@
 <div class='report-toggle'>
   <% cleaned_params = params.except(:controller, :action).permit! %>
-  <div class='btn-group'>
-    <button class='btn btn-default dropdown-toggle' type='button' id='argo-view-dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
-      Select View
-      <span class='caret'></span>
-    </button>
-    <ul class='dropdown-menu <%= 'dropdown-menu-right' if catalog_view? %>' aria-labelledby='argo-view-dropdown'>
-      <% views_to_switch.each do |view| %>
-        <li class="<%= 'active' if send("#{view.name}_view?") %>">
-          <%= link_to t("argo.search.#{view.name}_view"), send(view.path, cleaned_params) %>
-        </li>
-      <% end %>
-    </ul>
+  <button class='btn btn-outline-secondary dropdown-toggle' type='button' id='argo-view-dropdown' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>
+    Select View
+    <span class='caret'></span>
+  </button>
+  <div class='dropdown-menu <%= 'dropdown-menu-right' if catalog_view? %>' aria-labelledby='argo-view-dropdown'>
+    <% views_to_switch.each do |view| %>
+      <div class="dropdown-item <%= 'active' if send("#{view.name}_view?") %>">
+        <%= link_to t("argo.search.#{view.name}_view"), send(view.path, cleaned_params) %>
+      </div>
+    <% end %>
   </div>
 </div>

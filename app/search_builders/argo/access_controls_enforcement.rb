@@ -5,7 +5,7 @@ module Argo
     extend ActiveSupport::Concern
 
     def add_access_controls_to_solr_params(solr_parameters)
-      apply_gated_discovery(solr_parameters, scope.current_user)
+      apply_gated_discovery(solr_parameters, scope.context.fetch(:current_user))
     end
 
     private

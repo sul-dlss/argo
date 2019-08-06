@@ -1393,10 +1393,10 @@ blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.7.0:
     jquery "^3.4.1"
     typeahead.js "^0.11.1"
 
-blacklight-hierarchy@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-3.0.0.tgz#61eb5a7d078ee42db988b0093a6ea4d8b0101ab4"
-  integrity sha512-huL7yU9xc/swvC0tvhs+QcWXcz+cV6ebDP2ICzRptaZBnLF/HuzzhADHJKi5LSNjPT0eCF6EORE/0mK7dcSNZw==
+blacklight-hierarchy@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-4.0.0.tgz#17527b6b30629afece51dfc7173c49cacdc3f422"
+  integrity sha512-d3dKSgWjj+FWk33wJL0QWc2fA3F3Z0dzOOKRKMg+2nkOtkuSJwrPib/CRf6I2dXXp5RFTrgAkDQXFjMXuiiPZA==
   dependencies:
     blacklight-frontend ">=7.1.0-alpha"
     jquery ">=3.0"
@@ -1465,11 +1465,6 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
-
-bootstrap-sass@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.4.1.tgz#6843c73b1c258a0ac5cb2cc6f6f5285b664a8e9a"
-  integrity sha512-p5rxsK/IyEDQm2CwiHxxUi0MZZtvVFbhWmyMOt4lLkA4bujDA1TGoKT0i1FKIWiugAdP+kK8T5KMDFIKQCLYIA==
 
 bootstrap@^4.3.1:
   version "4.4.1"

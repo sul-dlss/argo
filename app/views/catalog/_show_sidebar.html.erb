@@ -1,7 +1,7 @@
-<div class="show_sidebar">
+<nav class="show_sidebar">
   <%= render ExternalLinksComponent.new(document: @document) %>
   <hr>
   <%= render 'items/button_link_list', buttons: @buttons_presenter.buttons %>
-</div>
+</nav>
 
 <%= render 'catalog/show_embargo_sidebar', document: @document %>

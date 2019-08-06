@@ -21,14 +21,14 @@ RSpec.describe 'Date range form', js: true do
     using_wait_time 45 do
       find('#appliedParams')
       within '.constraints-container' do
-        expect(page).to have_css '.filterName', text: 'Last Modified'
+        expect(page).to have_css '.filter-name', text: 'Last Modified'
         expect(page).to have_css(
-          '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO 20.*59:59.000Z\]/
+          '.filter-value', text: /^\[1990-01-01T\d{2}:00:00.000Z TO 20.*59:59.000Z\]/
         )
       end
     end
-    within '.page_links' do
-      expect(page).to have_css '.page_entries', text: /1 - \d+ of \d+/
+    within '.page-links' do
+      expect(page).to have_css '.page-entries', text: /1 - \d+ of \d+/
     end
   end
   it 'with no after date' do
@@ -39,9 +39,9 @@ RSpec.describe 'Date range form', js: true do
     using_wait_time 45 do
       find('#appliedParams')
       within '.constraints-container' do
-        expect(page).to have_css '.filterName', text: 'Last Modified'
+        expect(page).to have_css '.filter-name', text: 'Last Modified'
         expect(page).to have_css(
-          '.filterValue', text: /^\[\* TO 20.*59:59.000Z\]/
+          '.filter-value', text: /^\[\* TO 20.*59:59.000Z\]/
         )
       end
     end
@@ -54,9 +54,9 @@ RSpec.describe 'Date range form', js: true do
     using_wait_time 45 do
       find('#appliedParams')
       within '.constraints-container' do
-        expect(page).to have_css '.filterName', text: 'Last Modified'
+        expect(page).to have_css '.filter-name', text: 'Last Modified'
         expect(page).to have_css(
-          '.filterValue', text: /^\[1990-01-01T\d{2}:00:00.000Z TO \*\]/
+          '.filter-value', text: /^\[1990-01-01T\d{2}:00:00.000Z TO \*\]/
         )
       end
     end
@@ -74,9 +74,9 @@ RSpec.describe 'Date range form', js: true do
       find('#appliedParams')
       expect(page).to have_content '1 - 5 of 5'
       within '.constraints-container' do
-        expect(page).to have_css '.filterValue', text: 'Reports'
-        expect(page).to have_css '.filterName', text: 'Last Modified'
-        expect(page).to have_css '.filterName', text: 'Object Type'
+        expect(page).to have_css '.filter-value', text: 'Reports'
+        expect(page).to have_css '.filter-name', text: 'Last Modified'
+        expect(page).to have_css '.filter-name', text: 'Object Type'
       end
     end
   end

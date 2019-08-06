@@ -1,15 +1,26 @@
 // Start moving registration styles to this pattern
 
 .registration-status {
-  &.glyphicon-exclamation-sign {
-    color: $brand-danger;
+  &.icon-exclamation-sign {
+    color: $danger;
+
+    &::before {
+      content: '⚠';
+    }
   }
 
-  &.glyphicon-remove-sign {
-    color: $brand-danger;
-  }
-}
+  &.icon-remove-sign {
+    color: $danger;
 
-#external_workflow_dropdown {
-  display: none;
+    &::before {
+      content: '×';
+    }
+  }
+
+  &.icon-ok-sign {
+    &::before {
+      content: '✔️';
+    }
+  }
+
 }

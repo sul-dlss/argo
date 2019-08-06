@@ -1,18 +1,16 @@
 <% @page_title = "#{application_name} Queue Status" %>
-<% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
+<% content_for(:head) { render 'catalog/opensearch_response_metadata', response: @response } %>
 
-<div id="sidebar" class="col-md-3 col-sm-4">
+<% content_for(:sidebar) do %>
   <%= render 'search_sidebar' %>
-</div>
+<% end %>
 
-<div id="content" class="col-md-9 col-sm-8">
-  <% if has_search_parameters? %>
-    <%= render partial: 'did_you_mean' %>
-    <%= render 'constraints', localized_params: params %>
-  <% end %>
-  <%= render 'catalog/report_view_toggle' %>
-  <a href="<%= Settings.robot_status_url %>" target="_blank">Robots queue/job status</a>
-  <div data-controller="workflow-grid" data-workflow-grid-url="<%= url_for(search_state.to_h) %>" data-workflow-grid-refresh-interval="10000">
-    <%= render Throbber.new %>
-  </div>
+<% if has_search_parameters? %>
+  <%= render 'did_you_mean' %>
+  <%= render 'constraints', localized_params: params %>
+<% end %>
+<%= render 'catalog/report_view_toggle' %>
+<a href="<%= Settings.robot_status_url %>" target="_blank">Robots queue/job status</a>
+<div data-controller="workflow-grid" data-workflow-grid-url="<%= url_for(search_state.to_h) %>" data-workflow-grid-refresh-interval="10000">
+  <%= render Throbber.new %>
 </div>
