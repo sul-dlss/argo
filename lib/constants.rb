@@ -12,6 +12,7 @@ module Constants
   RESOURCE_TYPES = %w(image page file audio video document 3d).freeze
 
   RELEASE_TARGETS = [
-    %w(Searchworks Searchworks)
+    %w(Searchworks Searchworks),
+    %w(Earthworks Earthworks)
   ].freeze
 end
