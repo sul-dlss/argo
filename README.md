@@ -30,13 +30,6 @@ bundle install
 Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the `mysql2` inclusion in `Gemfile` and come back to it later (you can develop using `sqlite3`), or you can install MySQL.
 
 ### Install components
-
-This will setup the database:
-
-```bash
-rake argo:install
-```
-
 ## Run the servers
 
 ```
