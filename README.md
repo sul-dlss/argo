@@ -101,15 +101,24 @@ Dor.find("druid:pv820dk6668").destroy
 %w[pv820dk6668 rn653dy9317 xb482bw3979 hj185vb7593 hv992ry2431].each{ |pid| Dor.find("druid:#{pid}").destroy }
 ```
 
-### DOR virtual-merge
+### virtual-merge script
 
+NOTE: temporary until bulk async action implemented in UI
+
+Merges multiple image objects into a parent object via virtual object structure (e.g. an atlas in which each map has been individually cataloged).  Creates a virtual composite object with contentMD pointing to binaries held in other objects; the child objects have an isConstituentOf element in RELS-EXT allowing traversal to a parent object in discovery interfaces.
+
+virtual merge can be run from the Argo application root directory:
+
+```bash
+RAILS_ENV=production bundle exec ./bin/virtual-merge --purge druid:pp000pp0000 druid:cc111cc1111 druid:cc222cc2222
 ```
-	RAILS_ENV=production bundle exec ./bin/virtual-merge [options] parent [child1 ... childN]
-	    -i, --input=FILE                 Input file with each child druid to merge into parent
-	    -l, --log=LOGFILE                Log output file
-	        --debug                      Turn on debugging
-	        --purge                      Purge the parent's contentMetadata first
-	    -h, --help                       Help
+
+where `pp000pp0000` is the druid for the virtual composite object and the child objects are `cc111cc1111` and `cc222cc2222`.  More info, including object requirements: <https://consul.stanford.edu/display/chimera/Virtual+Object+Combinator+I>
+
+For help:
+
+```bash
+bundle exec ./bin/virtual-merge -h
 ```
 
 ## Internals
