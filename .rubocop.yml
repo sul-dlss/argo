@@ -6,6 +6,7 @@ AllCops:
   Exclude:
     - db/migrate/**
     - db/schema.rb
+    - vendor/bundle/**/*
 
 Rails:
   Enabled: true
