@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # virtual-merge - A tool to merge multiple objects into a parent object via virtual object structure,
 #                 namely the externalFile element in contentMetadata.
@@ -13,19 +15,19 @@ require 'logger'
 require 'optparse'
 require 'dor-services'
 
-#
 class VirtualMergeTool
   def initialize(logger, parent_druid, child_druids)
     @logger = logger
     @parent = Dor::Item.find(parent_druid)
-    fail "Parent item #{@parent.pid} is not open for modification" unless @parent.allows_modification?
+    raise "Parent item #{@parent.pid} is not open for modification" unless @parent.allows_modification?
+
     @child_druids = child_druids
-    self
   end
 
   # merge all the child resources into the parent as virtual links
   def merge(child)
-    fail "Child item #{child.pid} is not open for modification" unless child.allows_modification?
+    raise "Child item #{child.pid} is not open for modification" unless child.allows_modification?
+
     @logger.info "merging child #{child.pid} into parent #{@parent.pid}"
     child.datastreams['contentMetadata'].ng_xml.search('//resource').each do |resource|
       @logger.info "adding virtual resource #{resource['id']} of type #{resource['type']} to parent #{@parent.pid}"
@@ -38,12 +40,10 @@ class VirtualMergeTool
   def run(purge = false)
     @parent.contentMetadata.content = "<contentMetadata objectId='#{@parent.pid}' type='image'/>" if purge
     @child_druids.each do |child|
-      begin
-        merge(Dor::Item.find(child))
-      rescue => e
-        @logger.error "#{e}: #{e.backtrace.join("\n")}"
-        Honeybadger.notify(e)
-      end
+      merge(Dor::Item.find(child))
+    rescue StandardError => e
+      @logger.error "#{e}: #{e.backtrace.join("\n")}"
+      Honeybadger.notify(e)
     end
     @parent.save
   end
@@ -65,7 +65,8 @@ parser = OptionParser.new do |opts|
     if fn == '-'
       options[:input] = STDIN
     else
-      fail "No such file or empty file: #{fn}" unless File.size?(fn)
+      raise "No such file or empty file: #{fn}" unless File.size?(fn)
+
       options[:input] = File.open(fn, 'r')
     end
   end
@@ -90,7 +91,7 @@ end
 parser.parse!
 
 # ensure we have parent druid as first argument and an input file with the child druids or on command-line
-if ARGV.size < 1 || (options[:input].nil? && ARGV.size < 2)
+if ARGV.empty? || (options[:input].nil? && ARGV.size < 2)
   puts parser
   exit(-1)
 end

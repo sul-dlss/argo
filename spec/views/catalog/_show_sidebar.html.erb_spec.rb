@@ -7,7 +7,7 @@ describe 'catalog/_show_sidebar.html.erb' do
     SolrDocument.new(id: 'druid:abc123', catkey_id_ssim: 'catz')
   end
   let(:current_user) { mock_user }
-  let(:button_presenter) {  }
+  let(:button_presenter) {}
 
   before do
     config = Blacklight::Configuration.new
