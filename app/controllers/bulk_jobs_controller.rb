@@ -10,6 +10,11 @@ class BulkJobsController < ApplicationController
     authorize! :view_metadata, @obj
     @document = find(params[:apo_id])
     @bulk_jobs = load_bulk_jobs(params[:apo_id])
+    @buttons_presenter = ButtonsPresenter.new(
+      ability: current_ability,
+      solr_document: @document,
+      object: @obj
+    )
   end
 
   # GET /apos/:apo_id/bulk_jobs/:time/log(.:format)
