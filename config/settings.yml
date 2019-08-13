@@ -69,8 +69,6 @@ SURI:
 
 DOR_SERVICES:
   URL: 'http://localhost:3003'
-  USER: dor-service-user
-  PASS: dor-service-password
   TOKEN: 'secret-token'
   TOKEN_HEADER: 'X-Auth' # This has to match dor-services-app ApplicationController::TOKEN_HEADER
 
