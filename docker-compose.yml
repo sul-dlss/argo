@@ -19,8 +19,8 @@ services:
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
-      SETTINGS__DOR_SERVICES__USER: dor-service-user
-      SETTINGS__DOR_SERVICES__PASS: dor-service-password
+      SETTINGS__DOR_SERVICES__TOKEN: secret-token
+      SETTINGS__DOR_SERVICES__TOKEN_HEADER: X-Auth
       SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
       SETTINGS__METADATA__CATALOG_URL: http://dor-services-app:3000/v1/catalog/mods
 
@@ -68,18 +68,18 @@ services:
   workflow:
     image: suldlss/workflow-server:latest
     environment:
-      - RAILS_LOG_TO_STDOUT=true
-      - DATABASE_NAME=workflow-server
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=sekret
-      - DATABASE_HOSTNAME=db
-      - DATABASE_PORT=5432
-      - SECRET_KEY_BASE="${SECRET_KEY_BASE}"
-      - SETTINGS__DOR_SERVICES__URL=http://dor-services-app:3000
-      - SETTINGS__DOR_SERVICES__USERNAME=dor-service-user
-      - SETTINGS__DOR_SERVICES__PASSWORD=dor-service-password
-      - SETTINGS__ENABLE_STOMP=false
-      - SETTINGS__REDIS__HOSTNAME=redis
+      RAILS_LOG_TO_STDOUT: 'true'
+      DATABASE_NAME: workflow-server
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
+      SECRET_KEY_BASE: "${SECRET_KEY_BASE}"
+      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
+      SETTINGS__DOR_SERVICES__TOKEN: secret-token
+      SETTINGS__DOR_SERVICES__TOKEN_HEADER: X-Auth
+      SETTINGS__ENABLE_STOMP: 'false'
+      SETTINGS__REDIS__HOSTNAME: redis
     depends_on:
       - db
       - redis
