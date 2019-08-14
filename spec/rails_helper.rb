@@ -74,5 +74,6 @@ RSpec.configure do |config|
   config.include Capybara::DSL
   config.include TestViewHelpers, type: :view
   config.include SigninHelper, type: :view
+  config.include JwtHelper, type: :request
   config.include Devise::Test::ControllerHelpers, type: :controller
 end

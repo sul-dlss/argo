@@ -102,6 +102,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'jwt'
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov', require: false
   gem 'webdrivers' # installs the chrome for selenium tests

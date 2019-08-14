@@ -308,6 +308,7 @@ GEM
       railties (>= 3.2.16)
     jquery-validation-rails (1.19.0)
     json (2.2.0)
+    jwt (2.2.1)
     kaminari (1.1.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.1.1)
@@ -653,6 +654,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails (~> 5.0)
   jquery-validation-rails
+  jwt
   listen (>= 3.0.5, < 3.2)
   mods_display
   mysql2 (~> 0.4.5)
