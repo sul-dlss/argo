@@ -41,7 +41,7 @@ class ManageCatkeyJob < GenericJob
       open_new_version(current_obj, "Catkey updated to #{new_catkey}") unless current_obj.allows_modification?
       current_obj.catkey = new_catkey
       current_obj.save
-      close_version(current_obj) unless Dor::Services::Client.object(current_obj.pid).version.openeable?
+      close_version(current_obj) unless Dor::Services::Client.object(current_obj.pid).version.openable?
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} Catkey added/updated/removed successfully")
     rescue StandardError => e
