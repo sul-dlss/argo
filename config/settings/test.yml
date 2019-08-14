@@ -1,7 +1,3 @@
-# This value must match what is in dor-services-app
-dor:
-  hmac_secret: 'my$ecretK3y'
-
 BULK_METADATA:
   DIRECTORY: 'spec/fixtures/bulk_upload/workspace/'
 
