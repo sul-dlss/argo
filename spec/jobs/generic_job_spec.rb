@@ -62,7 +62,8 @@ RSpec.describe GenericJob do
     let(:workflow) { double('workflow') }
     let(:log) { double('log') }
     let(:webauth) { OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser') }
-    let(:client) { instance_double(Dor::Services::Client::Object, open_new_version: true) }
+    let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(client)
@@ -74,7 +75,7 @@ RSpec.describe GenericJob do
 
       subject.send(:open_new_version, dor_object, 'Set new governing APO')
 
-      expect(client).to have_received(:open_new_version).with(
+      expect(version_client).to have_received(:open).with(
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Set new governing APO',
@@ -88,12 +89,12 @@ RSpec.describe GenericJob do
       expect(workflow).to receive(:can_open_version?).and_return(false)
       expect { subject.send(:open_new_version, dor_object, 'Message') }.to raise_error(/Unable to open new version/)
 
-      expect(client).not_to have_received(:open_new_version)
+      expect(version_client).not_to have_received(:open)
     end
 
     context 'when something goes wrong updating the version' do
       before do
-        allow(client).to receive(:open_new_version).and_raise Dor::Exception
+        allow(version_client).to receive(:open).and_raise Dor::Exception
       end
 
       it 'fails with an exception' do

@@ -132,7 +132,8 @@ RSpec.describe ModsulatorJob, type: :job do
 
   describe 'commit_new_version' do
     let(:dor_test_object) { double('dor_item', pid: 'druid:123abc') }
-    let(:client) { instance_double(Dor::Services::Client::Object, open_new_version: true) }
+    let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(client)
@@ -141,7 +142,7 @@ RSpec.describe ModsulatorJob, type: :job do
     it 'opens a new minor version with filename and username' do
       @mj.commit_new_version(dor_test_object, 'testfile.xlsx', 'username')
 
-      expect(client).to have_received(:open_new_version).with(
+      expect(version_client).to have_received(:open).with(
         vers_md_upd_info: {
           significance: 'minor',
           description: 'Descriptive metadata upload from testfile.xlsx',
