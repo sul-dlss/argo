@@ -164,7 +164,8 @@ RSpec.describe ItemsController, type: :controller do
         allow(Dor::Services::Client).to receive(:object).and_return(client)
       end
 
-      let(:client) { instance_double(Dor::Services::Client::Object, open_new_version: true) }
+      let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+      let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
       let(:vers_md_upd_info) { { significance: 'major', description: 'something', opening_user_name: user.to_s } }
 
       it 'calls dor-services to open a new version' do
@@ -176,7 +177,7 @@ RSpec.describe ItemsController, type: :controller do
           description: vers_md_upd_info[:description]
         }
 
-        expect(client).to have_received(:open_new_version).with(vers_md_upd_info: vers_md_upd_info)
+        expect(version_client).to have_received(:open).with(vers_md_upd_info: vers_md_upd_info)
       end
     end
 
@@ -196,7 +197,8 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
-      let(:object_service) { instance_double(Dor::Services::Client::Object, close_version: true) }
+      let(:object_service) { instance_double(Dor::Services::Client::Object, version: version_service) }
+      let(:version_service) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
 
       it 'calls dor-services to close the version' do
         version_metadata = double(Dor::VersionMetadataDS)
@@ -207,7 +209,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item).to receive(:save)
         expect(ActiveFedora.solr.conn).to receive(:add)
         get 'close_version', params: { id: @pid, severity: 'major', description: 'something' }
-        expect(object_service).to have_received(:close_version)
+        expect(version_service).to have_received(:close)
       end
     end
 

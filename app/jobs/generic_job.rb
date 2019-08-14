@@ -84,10 +84,10 @@ class GenericJob < ActiveJob::Base
       description: description,
       opening_user_name: bulk_action.user.to_s
     }
-    Dor::Services::Client.object(object.pid).open_new_version(vers_md_upd_info: vers_md_upd_info)
+    Dor::Services::Client.object(object.pid).version.open(vers_md_upd_info: vers_md_upd_info)
   end
 
   def close_version(object)
-    Dor::Services::Client.object(object.pid).close_version
+    Dor::Services::Client.object(object.pid).version.close
   end
 end

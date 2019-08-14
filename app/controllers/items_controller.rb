@@ -73,7 +73,7 @@ class ItemsController < ApplicationController
           description: params[:description],
           opening_user_name: current_user.to_s
         }
-        Dor::Services::Client.object(@object.pid).open_new_version(vers_md_upd_info: vers_md_upd_info)
+        Dor::Services::Client.object(@object.pid).version.open(vers_md_upd_info: vers_md_upd_info)
       rescue Dor::Exception => e
         render status: :precondition_failed, plain: e
         return
@@ -253,7 +253,7 @@ class ItemsController < ApplicationController
       description: params[:description],
       opening_user_name: current_user.to_s
     }
-    Dor::Services::Client.object(@object.pid).open_new_version(vers_md_upd_info: vers_md_upd_info)
+    Dor::Services::Client.object(@object.pid).version.open(vers_md_upd_info: vers_md_upd_info)
     respond_to do |format|
       msg = params[:id] + ' is open for modification!'
       format.any { redirect_to solr_document_path(params[:id]), notice: msg }
@@ -309,7 +309,7 @@ class ItemsController < ApplicationController
     end
 
     begin
-      Dor::Services::Client.object(@object.pid).close_version
+      Dor::Services::Client.object(@object.pid).version.close
       msg = "Version #{@object.versionMetadata.current_version_id} closed"
       @object.datastreams['events'].add_event('close', current_user.to_s, msg)
       respond_to do |format|
