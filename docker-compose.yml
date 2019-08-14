@@ -19,6 +19,7 @@ services:
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
+      # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__DOR_SERVICES__TOKEN_HEADER: X-Auth
       SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
