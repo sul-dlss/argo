@@ -13,11 +13,6 @@ RSpec.describe 'apo', type: :request, js: true do
   end
 
   before do
-    # Generate token using same secret as dor-services-app to re-configure client
-    Dor::Services::Client.configure(url: Settings.DOR_SERVICES.URL,
-                                    token: generate_test_token,
-                                    token_header: 'X-Auth')
-
     # Use `#and_wrap_original to inject pre-determined PIDs into the
     # dor-services client params. We do this so the destroys above in the
     # `after` block can effectively clean up after the APO integration tests.
