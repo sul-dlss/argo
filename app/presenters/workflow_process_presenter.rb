@@ -2,11 +2,6 @@
 
 # Displays a single step in a workflow for a single object/version
 class WorkflowProcessPresenter
-  ALLOWABLE_CHANGES = {
-    'waiting' => 'completed',
-    'error' => 'waiting'
-  }.freeze
-
   # @param [Object] view the view context
   # @param [Dor::Workflow::Response::Workflow] process_status the model for the WorkflowProcess
   def initialize(view:, process_status:)
@@ -22,14 +17,12 @@ class WorkflowProcessPresenter
     format('%.3f', process_status.elapsed.to_f)
   end
 
-  def reset_button
-    return unless new_status
-
-    # workflow update requires id, workflow, process, and status parameters
-    form_tag item_workflow_path(pid, workflow_name), method: 'put' do
-      hidden_field_tag('process', name) +
-        hidden_field_tag('status', new_status) +
-        button_tag('Set to ' + new_status, type: 'submit')
+  def status_action
+    case status
+    when 'error'
+      error_choices
+    when 'waiting'
+      completed_button('completed')
     end
   end
 
@@ -37,10 +30,24 @@ class WorkflowProcessPresenter
 
   attr_reader :view, :process_status
 
-  delegate :form_tag, :item_workflow_path, :hidden_field_tag, :button_tag, to: :view
+  delegate :form_tag, :item_workflow_path, :hidden_field_tag, :button_tag, :options_for_select, :select_tag, to: :view
   delegate :pid, :workflow_name, to: :process_status
 
-  def new_status
-    @new_status ||= ALLOWABLE_CHANGES[status]
+  def error_choices
+    # workflow update requires id, workflow, process, and status parameters
+    form_tag item_workflow_path(pid, workflow_name), method: 'put' do
+      hidden_field_tag('process', name) +
+        select_tag('status', options_for_select([['Rerun', 'waiting'], ['Skip', 'skipped'], ['Complete', 'completed']]), prompt: 'Select') +
+        button_tag('Assign', type: 'submit', class: 'btn btn-default')
+    end
+  end
+
+  def completed_button(new_status)
+    # workflow update requires id, workflow, process, and status parameters
+    form_tag item_workflow_path(pid, workflow_name), method: 'put' do
+      hidden_field_tag('process', name) +
+        hidden_field_tag('status', new_status) +
+        button_tag('Set to ' + new_status, type: 'submit', class: 'btn btn-default')
+    end
   end
 end
