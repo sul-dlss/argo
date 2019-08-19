@@ -10,7 +10,7 @@ class ManageCatkeyJob < GenericJob
   # A job that allows a user to specify a list of pids and a list of catkeys to be associated with these pids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array] :pids required list of pids
+  # @option params [Array] :pids required list of
   # @option params [Hash] :manage_catkeys (required) list of catkeys to be associated 1:1 with pids in order
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)

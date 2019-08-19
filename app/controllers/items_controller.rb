@@ -64,24 +64,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  # open a new version if needed. 400 if the item is in a state that doesnt allow opening a version.
-  def prepare
-    if DorObjectWorkflowStatus.new(@object.pid).can_open_version?
-      begin
-        vers_md_upd_info = {
-          significance: params[:severity],
-          description: params[:description],
-          opening_user_name: current_user.to_s
-        }
-        Dor::Services::Client.object(@object.pid).version.open(vers_md_upd_info: vers_md_upd_info)
-      rescue Dor::Exception => e
-        render status: :precondition_failed, plain: e
-        return
-      end
-    end
-    render status: :ok, plain: 'All good'
-  end
-
   def embargo_form
     respond_to do |format|
       format.html { render layout: !request.xhr? }

@@ -66,4 +66,20 @@ RSpec.describe BulkActionPersister do
       expect(File).to exist(bulk_action.file(Settings.BULK_METADATA.LOG))
     end
   end
+
+  describe '#job_params' do
+    subject { described_class.new(bulk_action).send(:job_params) }
+
+    context 'for a prepare job' do
+      let(:bulk_action) do
+        BulkAction.create(
+          action_type: 'PrepareJob',
+          pids: 'a b c',
+          prepare: { 'severity' => 'minor', 'description' => 'change the data' }
+        )
+      end
+
+      it { is_expected.to include(prepare: { 'description' => 'change the data', 'severity' => 'minor' }) }
+    end
+  end
 end

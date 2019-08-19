@@ -134,7 +134,6 @@ Argo::Application.routes.draw do
       post 'collection/set',     action: :set_collection,    as: 'set_collection'
       get 'purge',               action: :purge_object
       get  'rights'
-      post 'prepare'
       post 'set_rights'
       get 'set_governing_apo_ui'
       post 'set_governing_apo'

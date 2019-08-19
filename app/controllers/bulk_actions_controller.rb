@@ -20,7 +20,9 @@ class BulkActionsController < ApplicationController
   def create
     # Since the groups aren't persisted, we need to pass them here.
     @bulk_action = BulkAction.new(
-      bulk_action_params.merge(user: current_user, groups: current_user.groups, pids: pids_with_prefix(bulk_action_params[:pids]))
+      bulk_action_params.merge(user: current_user,
+                               groups: current_user.groups,
+                               pids: pids_with_prefix(bulk_action_params[:pids]))
     )
 
     if BulkActionPersister.persist(@bulk_action)
@@ -57,7 +59,8 @@ class BulkActionsController < ApplicationController
       :pids,
       manage_release: [:tag, :what, :who, :to],
       set_governing_apo: [:new_apo_id],
-      manage_catkeys: [:catkeys]
+      manage_catkeys: [:catkeys],
+      prepare: [:severity, :description]
     )
   end
 
