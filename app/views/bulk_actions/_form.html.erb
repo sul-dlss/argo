@@ -21,23 +21,23 @@
   <div class='form-group'>
     <div class='btn-group' data-toggle='buttons'>
       <label href='#desc_metadata_download_custom_options' class='btn btn-default active' data-toggle='tab'>
-        <%= f.radio_button(:action_type, 'DescmetadataDownloadJob', checked: true, autocomplete: 'off') %>
+        <%= f.radio_button(:action_type, 'DescmetadataDownloadJob', checked: true) %>
         Download Descriptive Metadata
       </label>
       <label href='#manage_release_custom_options' data-toggle='tab' class='btn btn-default'>
-        <%= f.radio_button(:action_type, 'ReleaseObjectJob', autocomplete: 'off') %>
+        <%= f.radio_button(:action_type, 'ReleaseObjectJob') %>
         Manage release
       </label>
       <label href='#set_governing_apo_custom_options' data-toggle='tab' class='btn btn-default'>
-        <%= f.radio_button(:action_type, 'SetGoverningApoJob', autocomplete: 'off') %>
+        <%= f.radio_button(:action_type, 'SetGoverningApoJob') %>
         Update governing APO
       </label>
       <label href='#reindex_object_options' data-toggle='tab' class='btn btn-default'>
-        <%= f.radio_button(:action_type, 'RemoteIndexingJob', autocomplete: 'off') %>
+        <%= f.radio_button(:action_type, 'RemoteIndexingJob') %>
         Reindex
       </label>
       <label href='#manage_catkey_options' data-toggle='tab' class='btn btn-default'>
-        <%= f.radio_button(:action_type, 'ManageCatkeyJob', autocomplete: 'off') %>
+        <%= f.radio_button(:action_type, 'ManageCatkeyJob') %>
         Manage Catkeys
       </label>
     </div>
