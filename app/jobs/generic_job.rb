@@ -43,10 +43,8 @@ class GenericJob < ActiveJob::Base
   #   # do some stuff
   #   log_buf.puts 'another thing about the state of this bulk action'
   # end
-  def with_bulk_action_log
-    File.open(bulk_action.log_name, 'a') do |log_buffer|
-      yield(log_buffer)
-    end
+  def with_bulk_action_log(&block)
+    File.open(bulk_action.log_name, 'a', &block)
   end
 
   def ability
