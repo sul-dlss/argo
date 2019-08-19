@@ -6,7 +6,7 @@ class RemoteIndexingJob < GenericJob
   queue_as :indexing_remote
 
   def perform(bulk_action_id, params)
-    @pids = params[:pids]
+    super
 
     with_bulk_action_log do |log_buffer|
       log_buffer.puts("#{Time.current} Starting RemoteIndexingJob for BulkAction #{bulk_action_id}")

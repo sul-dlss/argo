@@ -5,7 +5,7 @@
 class SetGoverningApoJob < GenericJob
   queue_as :set_governing_apo
 
-  attr_reader :new_apo_id, :groups
+  attr_reader :new_apo_id
 
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
@@ -13,9 +13,8 @@ class SetGoverningApoJob < GenericJob
   # @option params [Hash] :set_governing_apo
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
+    super
     @new_apo_id = params[:set_governing_apo]['new_apo_id']
-    @pids = params[:pids]
-    @groups = params[:groups]
 
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting SetGoverningApoJob for BulkAction #{bulk_action_id}")
