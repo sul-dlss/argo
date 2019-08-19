@@ -68,6 +68,7 @@ RSpec.describe 'Item view', js: true do
 
       within '.modal-content' do
         expect(page).to have_link 'https://stacks.example.com/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
+        # NOTE: This expectation is apparently flappy as of 08/19/2019.
         # rubocop:disable Style/BlockDelimiters
         expect {
           click_link 'M1090_S15_B02_F01_0126.jp2'
