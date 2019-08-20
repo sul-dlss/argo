@@ -3,21 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe SetGoverningApoJob do
-  let(:bulk_action_no_process_callback) do
-    bulk_action = build(
+  let(:bulk_action) do
+    create(
       :bulk_action,
       action_type: 'SetGoverningApoJob'
     )
-    expect(bulk_action).to receive(:process_bulk_action_type)
-    bulk_action.save
-    bulk_action
   end
 
   let(:new_apo_id) { 'druid:aa111bb2222' }
   let(:webauth) { { 'privgroup' => 'dorstuff', 'login' => 'someuser' } }
 
   before do
-    allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
+    allow(subject).to receive(:bulk_action).and_return(bulk_action)
   end
 
   describe '#perform' do
@@ -30,26 +27,29 @@ RSpec.describe SetGoverningApoJob do
       }
     end
 
+    let(:buffer) { StringIO.new }
+
+    before do
+      allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+    end
+
     context 'in a happy world' do
       it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
         pids.each do |pid|
-          expect(subject).to receive(:set_governing_apo_and_index_safely).with(pid, instance_of(File))
+          expect(subject).to receive(:set_governing_apo_and_index_safely).with(pid, buffer)
         end
         expect(ActiveFedora.solr.conn).to receive(:commit)
-        subject.perform(bulk_action_no_process_callback.id, params)
-        expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+        subject.perform(bulk_action.id, params)
+        expect(bulk_action.druid_count_total).to eq pids.length
       end
 
       it 'logs info about progress' do
         allow(subject).to receive(:set_governing_apo_and_index_safely)
         allow(ActiveFedora.solr.conn).to receive(:commit)
 
-        buffer = StringIO.new
-        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+        subject.perform(bulk_action.id, params)
 
-        subject.perform(bulk_action_no_process_callback.id, params)
-
-        bulk_action_id = bulk_action_no_process_callback.id
+        bulk_action_id = bulk_action.id
         expect(buffer.string).to include "Starting SetGoverningApoJob for BulkAction #{bulk_action_id}"
         pids.each do |pid|
           expect(buffer.string).to include "SetGoverningApoJob: Starting update for #{pid} (bulk_action.id=#{bulk_action_id})"
@@ -62,9 +62,6 @@ RSpec.describe SetGoverningApoJob do
       # assuming one is inclined to test private methods, but it also seemed reasonable to do a slightly more end-to-end
       # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
       it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
-        buffer = StringIO.new
-        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-
         item1 = double(Dor::Item)
         item3 = double(Dor::Item)
         apo = double(Dor::AdminPolicyObject)
@@ -91,11 +88,11 @@ RSpec.describe SetGoverningApoJob do
 
         expect(ActiveFedora.solr.conn).to receive(:commit)
 
-        subject.perform(bulk_action_no_process_callback.id, params)
-        expect(bulk_action_no_process_callback.druid_count_success).to eq 1
-        expect(bulk_action_no_process_callback.druid_count_fail).to eq 2
+        subject.perform(bulk_action.id, params)
+        expect(bulk_action.druid_count_success).to eq 1
+        expect(bulk_action.druid_count_fail).to eq 2
 
-        bulk_action_id = bulk_action_no_process_callback.id
+        bulk_action_id = bulk_action.id
         expect(buffer.string).to include "SetGoverningApoJob: Successfully updated #{pids[0]} (bulk_action.id=#{bulk_action_id})"
         expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action_id}): ActiveFedora::ObjectNotFoundError"
         expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[2]} (bulk_action.id=#{bulk_action_id}): user not allowed to move to target apo"

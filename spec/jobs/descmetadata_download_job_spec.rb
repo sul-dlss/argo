@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'fileutils'
 
-describe DescmetadataDownloadJob, type: :job do
+RSpec.describe DescmetadataDownloadJob, type: :job do
   include ActiveJob::TestHelper
 
   before :all do
@@ -66,8 +66,15 @@ describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'perform' do
+    after do
+      FileUtils.rm('foo.txt')
+    end
+
     it 'creates a valid zip file' do
-      bulk_action = create(:bulk_action, action_type: 'DescmetadataDownloadJob', pids: @pid_list_long)
+      bulk_action = create(:bulk_action,
+                           action_type: 'DescmetadataDownloadJob',
+                           pids: @pid_list_long,
+                           log_name: 'foo.txt')
       expect(@download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
       @download_job.perform(bulk_action.id, @zip_params_long)
@@ -81,7 +88,10 @@ describe DescmetadataDownloadJob, type: :job do
     it 'retries DOR connections upon failure' do
       dor_double = class_double('Dor').as_stubbed_const(transfer_nested_constants: false)
       expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
-      bulk_action = create(:bulk_action, action_type: 'DescmetadataDownloadJob', pids: @pid_list_short)
+      bulk_action = create(:bulk_action,
+                           action_type: 'DescmetadataDownloadJob',
+                           pids: @pid_list_short,
+                           log_name: 'foo.txt')
       allow(bulk_action).to receive_message_chain(:increment, :save)
       expect(bulk_action).to receive(:increment).with(:druid_count_fail)
       expect(@download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)

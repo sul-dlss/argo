@@ -83,8 +83,7 @@ RSpec.describe BulkActionsController do
       it 'assigns @bulk_action with catkeys passed in from form' do
         post :create, params: { bulk_action: { action_type: 'ManageCatkeyJob', pids: '', 'manage_catkeys[catkeys]' => "1234\n5678" } }
         expect(assigns(:bulk_action)).to be_an BulkAction
-        expect(assigns(:bulk_action).send(:job_params)).to be_an Hash
-        expect(assigns(:bulk_action).send(:job_params)).to include(manage_catkeys: { 'catkeys' => "1234\n5678" })
+        expect(assigns(:bulk_action).manage_catkeys).to eq('catkeys' => "1234\n5678")
       end
 
       it 'creates a new BulkAction' do
@@ -133,7 +132,8 @@ RSpec.describe BulkActionsController do
     let(:file) { bulk_action.file('test.log') }
 
     before do
-      File.new(file, 'w')
+      FileUtils.mkdir_p(bulk_action.output_directory)
+      File.open(file, 'w')
     end
 
     after do

@@ -2,21 +2,18 @@
 
 require 'rails_helper'
 
-describe RemoteIndexingJob do
-  let(:bulk_action_no_process_callback) do
-    bulk_action = build(
+RSpec.describe RemoteIndexingJob do
+  let(:bulk_action) do
+    create(
       :bulk_action,
       action_type: 'RemoteIndexingJob'
     )
-    expect(bulk_action).to receive(:process_bulk_action_type)
-    bulk_action.save
-    bulk_action
   end
 
   let(:log_buffer) { StringIO.new }
 
   before do
-    allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
+    allow(subject).to receive(:bulk_action).and_return(bulk_action)
     allow(subject).to receive(:with_bulk_action_log).and_yield(log_buffer)
   end
 
@@ -29,14 +26,14 @@ describe RemoteIndexingJob do
         pids.each do |pid|
           expect(subject).to receive(:reindex_druid_safely).with(pid, log_buffer)
         end
-        subject.perform(bulk_action_no_process_callback.id, params)
-        expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+        subject.perform(bulk_action.id, params)
+        expect(bulk_action.druid_count_total).to eq pids.length
       end
 
       it 'logs info about progress' do
         allow(subject).to receive(:reindex_druid_safely)
-        subject.perform(bulk_action_no_process_callback.id, params)
-        bulk_action_id = bulk_action_no_process_callback.id
+        subject.perform(bulk_action.id, params)
+        bulk_action_id = bulk_action.id
         expect(log_buffer.string).to include "Starting RemoteIndexingJob for BulkAction #{bulk_action_id}"
         pids.each do |pid|
           expect(log_buffer.string).to include "RemoteIndexingJob: Attempting to index #{pid} (bulk_action.id=#{bulk_action_id})"
@@ -50,11 +47,11 @@ describe RemoteIndexingJob do
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[1]).and_raise(ActiveFedora::ObjectNotFoundError)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[2]).and_raise(timeout_err)
 
-        subject.perform(bulk_action_no_process_callback.id, params)
-        expect(bulk_action_no_process_callback.druid_count_success).to eq 1
-        expect(bulk_action_no_process_callback.druid_count_fail).to eq 2
+        subject.perform(bulk_action.id, params)
+        expect(bulk_action.druid_count_success).to eq 1
+        expect(bulk_action.druid_count_fail).to eq 2
 
-        bulk_action_id = bulk_action_no_process_callback.id
+        bulk_action_id = bulk_action.id
         expect(log_buffer.string).to include "RemoteIndexingJob: Successfully reindexed #{pids[0]} (bulk_action.id=#{bulk_action_id})"
         expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action_id}): ActiveFedora::ObjectNotFoundError"
         expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{pids[2]} (bulk_action.id=#{bulk_action_id}): #{timeout_err}"
@@ -69,18 +66,18 @@ describe RemoteIndexingJob do
       expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pid)
 
       subject.send(:reindex_druid_safely, pid, log_buffer)
-      expect(log_buffer.string).to include "RemoteIndexingJob: Successfully reindexed #{pid} (bulk_action.id=#{bulk_action_no_process_callback.id})"
-      expect(bulk_action_no_process_callback.druid_count_success).to eq 1
-      expect(bulk_action_no_process_callback.druid_count_fail).to eq 0
+      expect(log_buffer.string).to include "RemoteIndexingJob: Successfully reindexed #{pid} (bulk_action.id=#{bulk_action.id})"
+      expect(bulk_action.druid_count_success).to eq 1
+      expect(bulk_action.druid_count_fail).to eq 0
     end
 
     it 'logs an error and increments the error count if reindexing works, but does not raise an error itself' do
       expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pid).and_raise("didn't see that one coming")
 
       expect { subject.send(:reindex_druid_safely, pid, log_buffer) }.not_to raise_error
-      expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{pid} (bulk_action.id=#{bulk_action_no_process_callback.id}): didn't see that one coming"
-      expect(bulk_action_no_process_callback.druid_count_success).to eq 0
-      expect(bulk_action_no_process_callback.druid_count_fail).to eq 1
+      expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{pid} (bulk_action.id=#{bulk_action.id}): didn't see that one coming"
+      expect(bulk_action.druid_count_success).to eq 0
+      expect(bulk_action.druid_count_fail).to eq 1
     end
   end
 end

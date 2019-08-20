@@ -23,7 +23,8 @@ class BulkActionsController < ApplicationController
       bulk_action_params.merge(user: current_user, groups: current_user.groups, pids: pids_with_prefix(bulk_action_params[:pids]))
     )
 
-    if @bulk_action.save
+    if BulkActionPersister.persist(@bulk_action)
+
       redirect_to action: :index, notice: 'Bulk action was successfully created.'
     else
       render :new

@@ -13,13 +13,10 @@ end
 
 RSpec.describe GenericJob do
   let(:bulk_action_no_process_callback) do
-    bulk_action = build(
+    create(
       :bulk_action,
       action_type: 'GenericJob'
     )
-    expect(bulk_action).to receive(:process_bulk_action_type)
-    bulk_action.save
-    bulk_action
   end
 
   before do
