@@ -13,7 +13,6 @@ function catalog_url(element)
   url=url.replace(/xxxxxxxxx/g,element);
   return url;
 }
-open_version_url='<%=url_for :controller => :items,:action => :prepare, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 close_version_url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
@@ -60,10 +59,6 @@ ul li{
     <strong>Options that require versioning</strong>
     <div class="row bulk-buttons-row">
       <div class="col-sm-2">
-        <button class="bulk_button btn-block" id="prepare" name="prepare" onclick="$('#open').show(400);">Prepare objects</button>
-        Open items not yet open for versioning
-      </div>
-      <div class="col-sm-2">
         <button class="bulk_button btn-block" onclick="$('#refresh_metadata').show(400)">Refresh MODS</button>
         <button class="bulk_button btn-block" class="update_buttons" id="show_source_id" name="show_source_id" onclick="$('#source_id').show(400);get_source_ids();">Set source Id</button>
         <button class="bulk_button btn-block" class="update_buttons" onclick="$('#rights').show(400)">Set object rights</button>
@@ -96,21 +91,6 @@ ul li{
     </div>
   </div>
 </div>
-<div class="bulk_operation" id="open" name="open">
-  <h1>Open new versions if needed</h1>
-  <label for="severity">Change type</label>
-  <select id="severity" name="severity">
-    <option value="major">Major</option>
-    <option value="minor">Minor</option>
-    <option value="admin">Admin</option>
-  </select>
-  <br/>
-  <label for="description">Change description</label><br/>
-  <input type="text" id="description" name="description" />
-  <br/>
-  <span class="bulk_button" id="prepare_button" name="prepare_button" onclick="fetch_druids(open_version);$('#open').hide(400);">Prepare objects for modification</span><br/>
-</div>
-<br/>
 
 <div class="bulk_operation" id="close" name="close">
   <h1>Close a version of the items so the changes can be accessioned</h1>

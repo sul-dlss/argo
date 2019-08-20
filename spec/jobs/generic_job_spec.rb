@@ -12,7 +12,7 @@ class GenericTestJob < GenericJob
 end
 
 RSpec.describe GenericJob do
-  let(:bulk_action_no_process_callback) do
+  let(:bulk_action) do
     create(
       :bulk_action,
       action_type: 'GenericJob'
@@ -20,13 +20,13 @@ RSpec.describe GenericJob do
   end
 
   before do
-    allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
+    allow(subject).to receive(:bulk_action).and_return(bulk_action)
   end
 
   describe '#with_bulk_action_log' do
     it 'opens a log buffer in append mode, and pass it to the block' do
       buffer = StringIO.new
-      expect(File).to receive(:open).with(bulk_action_no_process_callback.log_name, 'a').and_yield(buffer)
+      expect(File).to receive(:open).with(bulk_action.log_name, 'a').and_yield(buffer)
 
       subject.with_bulk_action_log do |my_log_buf|
         expect(my_log_buf).to eq buffer
@@ -36,17 +36,17 @@ RSpec.describe GenericJob do
 
   describe 'before_perform' do
     it 'resets the druid counts before the job gets (re-)run' do
-      allow(BulkAction).to receive(:find).with(bulk_action_no_process_callback.id).and_return(bulk_action_no_process_callback)
+      allow(BulkAction).to receive(:find).with(bulk_action.id).and_return(bulk_action)
 
-      GenericTestJob.perform_now(bulk_action_no_process_callback.id, {})
-      expect(bulk_action_no_process_callback.druid_count_success).to eq 1
-      expect(bulk_action_no_process_callback.druid_count_fail).to eq 1
-      expect(bulk_action_no_process_callback.druid_count_total).to eq 1
+      GenericTestJob.perform_now(bulk_action.id, {})
+      expect(bulk_action.druid_count_success).to eq 1
+      expect(bulk_action.druid_count_fail).to eq 1
+      expect(bulk_action.druid_count_total).to eq 1
 
-      GenericTestJob.perform_now(bulk_action_no_process_callback.id, {})
-      expect(bulk_action_no_process_callback.druid_count_success).to eq 1
-      expect(bulk_action_no_process_callback.druid_count_fail).to eq 1
-      expect(bulk_action_no_process_callback.druid_count_total).to eq 1
+      GenericTestJob.perform_now(bulk_action.id, {})
+      expect(bulk_action.druid_count_success).to eq 1
+      expect(bulk_action.druid_count_fail).to eq 1
+      expect(bulk_action.druid_count_total).to eq 1
     end
   end
 
@@ -129,7 +129,7 @@ RSpec.describe GenericJob do
     it 'caches the result' do
       ability = double(Ability)
       allow(subject).to receive(:groups).and_return('privgroup' => 'dorstuff', 'login' => 'someuser')
-      expect(Ability).to receive(:new).with(bulk_action_no_process_callback.user).and_return(ability).exactly(:once)
+      expect(Ability).to receive(:new).with(bulk_action.user).and_return(ability).exactly(:once)
 
       expect(subject.send(:ability)).to be(ability)
       expect(subject.send(:ability)).to be(ability)

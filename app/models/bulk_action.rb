@@ -2,11 +2,21 @@
 
 class BulkAction < ApplicationRecord
   belongs_to :user
-  validates :action_type, inclusion: { in: %w(GenericJob DescmetadataDownloadJob ReleaseObjectJob RemoteIndexingJob SetGoverningApoJob ManageCatkeyJob) }
+  validates :action_type,
+            inclusion: {
+              in: %w(GenericJob
+                     DescmetadataDownloadJob
+                     ReleaseObjectJob
+                     RemoteIndexingJob
+                     SetGoverningApoJob
+                     ManageCatkeyJob
+                     PrepareJob)
+            }
+
   before_destroy :remove_output_directory
 
   # A virtual attribute used for job creation but not persisted
-  attr_accessor :pids, :manage_release, :set_governing_apo, :manage_catkeys
+  attr_accessor :pids, :manage_release, :set_governing_apo, :manage_catkeys, :prepare
   attr_accessor :groups # the groups the user was a member of when they launched the job
 
   def file(filename)

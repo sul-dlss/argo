@@ -40,6 +40,10 @@
         <%= f.radio_button(:action_type, 'ManageCatkeyJob') %>
         Manage Catkeys
       </label>
+      <label href='#prepare_options' data-toggle='tab' class='btn btn-default'>
+        <%= f.radio_button(:action_type, 'PrepareJob', autocomplete: 'off') %>
+        Prepare objects
+      </label>
     </div>
 
     <div class='tab-content'>
@@ -52,7 +56,7 @@
         <span class='help-block'>
           Adds release tags to individual objects.
         </span>
-        <%= render 'bulk_actions/forms/manage_release_form',  f: f %>
+        <%= render 'bulk_actions/forms/manage_release_form', f: f %>
       </div>
       <div role='tabpanel' class= 'tab-pane' id='set_governing_apo_custom_options'>
         <span class='help-block'>
@@ -70,6 +74,12 @@
           Adds or updates catkeys associated with objects.  You need two lists: druids and catkeys, and they need to correspond 1:1 in the correct order.
         </span>
         <%= render 'bulk_actions/forms/manage_catkey_form' %>
+      </div>
+      <div role='tabpanel' class= 'tab-pane' id='prepare_options'>
+        <span class='help-block'>
+          Open items not yet open for versioning.
+        </span>
+        <%= render 'bulk_actions/forms/prepare_form', f: f %>
       </div>
     </div>
   </div>

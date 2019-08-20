@@ -17,8 +17,6 @@ RSpec.describe 'Bulk actions view', js: true do
 
     find(:xpath, "//span[@class='bulk_button'][text()='Get druids from search'][not(@disabled)]").click
 
-    expect(find_button('Prepare objects')).to be_truthy
-    expect(page).to have_button('Prepare objects', disabled: false)
     expect(page).to have_button('Refresh MODS', disabled: false)
     expect(page).to have_button('Set source Id', disabled: false)
     expect(page).to have_button('Set object rights', disabled: false)
