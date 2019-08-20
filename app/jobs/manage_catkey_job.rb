@@ -5,7 +5,7 @@
 class ManageCatkeyJob < GenericJob
   queue_as :manage_catkey
 
-  attr_reader :catkeys, :groups
+  attr_reader :catkeys
   ##
   # A job that allows a user to specify a list of pids and a list of catkeys to be associated with these pids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
@@ -14,10 +14,8 @@ class ManageCatkeyJob < GenericJob
   # @option params [Hash] :manage_catkeys (required) list of catkeys to be associated 1:1 with pids in order
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
+    super
     @catkeys = params[:manage_catkeys]['catkeys'].split.map(&:strip)
-    @groups = params[:groups]
-    @pids = params[:pids]
-    @current_user = params[:user]
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting ManageCatkeyJob for BulkAction #{bulk_action_id}")
       update_druid_count

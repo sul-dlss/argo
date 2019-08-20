@@ -15,7 +15,7 @@ class GenericJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
-  attr_reader :pids
+  attr_reader :pids, :groups
 
   before_perform do |_job|
     bulk_action.reset_druid_counts
@@ -28,9 +28,12 @@ class GenericJob < ActiveJob::Base
   end
 
   ##
-  # @param [Integer] _a GlobalID for a BulkAction object
-  # @param [Hash] _b additional parameters that an Argo job may need
-  def perform(_a, _b)
+  # @param [Integer] _bulk_action_id GlobalID for a BulkAction object
+  # @param [Hash] params additional parameters that an Argo job may need
+  def perform(_bulk_action_id, params)
+    @groups = params[:groups]
+    @pids = params[:pids]
+    @current_user = params[:user]
   end
 
   def bulk_action

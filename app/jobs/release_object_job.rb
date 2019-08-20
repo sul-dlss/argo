@@ -5,7 +5,7 @@
 class ReleaseObjectJob < GenericJob
   queue_as :release_object
 
-  attr_reader :manage_release, :groups
+  attr_reader :manage_release
   ##
   # This is a shameless green approach to a job that calls release from dor
   # services app and then kicks off release WF.
@@ -19,9 +19,8 @@ class ReleaseObjectJob < GenericJob
   # @option manage_release [String] :tag required (true, false)
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
+    super
     @manage_release = params[:manage_release]
-    @groups = params[:groups]
-    @pids = params[:pids]
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting ReleaseObjectJob for BulkAction #{bulk_action_id}")
       update_druid_count
