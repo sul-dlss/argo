@@ -4,8 +4,6 @@ require 'rails_helper'
 require 'fileutils'
 
 RSpec.describe ModsulatorJob, type: :job do
-  include ActiveJob::TestHelper
-
   before :all do
     @output_directory = File.join(File.expand_path('../../../tmp/', __FILE__), 'job_tests')
     @mj = ModsulatorJob.new()
