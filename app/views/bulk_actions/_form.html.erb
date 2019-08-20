@@ -41,8 +41,12 @@
         Manage Catkeys
       </label>
       <label href='#prepare_options' data-toggle='tab' class='btn btn-default'>
-        <%= f.radio_button(:action_type, 'PrepareJob', autocomplete: 'off') %>
+        <%= f.radio_button(:action_type, 'PrepareJob') %>
         Prepare objects
+      </label>
+      <label href='#close_version_options' data-toggle='tab' class='btn btn-default'>
+        <%= f.radio_button(:action_type, 'CloseVersionJob') %>
+        Close versions
       </label>
     </div>
 
@@ -80,6 +84,13 @@
           Open items not yet open for versioning.
         </span>
         <%= render 'bulk_actions/forms/prepare_form', f: f %>
+      </div>
+
+
+      <div role='tabpanel' class= 'tab-pane' id='close_version_options'>
+        <span class='help-block'>
+          Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
+        </span>
       </div>
     </div>
   </div>
