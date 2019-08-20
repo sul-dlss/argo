@@ -1,10 +1,10 @@
-<form action=<%=url_for :controller => :items,:action => :close_version, :id => @object.pid%> method="POST">
+<form action=<%= close_version_item_path(@object.pid) %> method="POST">
   <div class='form-group'>
     <label for="severity">Type</label>
     <select id="severity" name="severity" class='form-control'>
       <%- # loop through the severity levels and pre-select the one that was chosen when opening the version -%>
       <% @severity_selected.keys.each do |severity| %>
-        <option value="<%=severity.to_s-%>"<%=@severity_selected[severity] ? ' selected' : ''-%>><%=severity.to_s.capitalize-%></option>
+        <option value="<%= severity.to_s %>"<%= @severity_selected[severity] ? ' selected' : ''-%>><%=severity.to_s.capitalize-%></option>
       <% end %>
     </select>
   </div>

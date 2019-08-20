@@ -13,7 +13,7 @@ function catalog_url(element)
   url=url.replace(/xxxxxxxxx/g,element);
   return url;
 }
-close_version_url='<%=url_for :controller => :items,:action => :close_version, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+close_version_url='<%= close_version_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'

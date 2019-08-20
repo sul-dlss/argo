@@ -123,6 +123,7 @@ Argo::Application.routes.draw do
       match 'close_version_ui',  action: :close_version_ui,  as: 'close_version_ui', via: [:get, :post]
       match 'open_version_ui',   action: :open_version_ui,   as: 'open_version_ui',  via: [:get, :post]
       post 'version/open', action: :open_version, as: 'open_version'
+      post 'version/close', action: :close_version, as: 'close_version'
       get 'source_id_ui'
       get 'tags_ui'
       get 'catkey_ui'
@@ -144,8 +145,6 @@ Argo::Application.routes.draw do
   end
 
   namespace :items do
-    post 'version/close',  action: :close_version, as: 'close_version'
-    post 'version/open',   action: :open_version,  as: 'open_version'
     post 'source_id'
     post 'catkey'
     post 'add_collection'
