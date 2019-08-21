@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# DEPRECATED - This script is being replaced by Dor::Services::Client::Object#add_constituent
+#            - See https://github.com/sul-dlss/dor-services-client/pull/76
 #
 # virtual-merge - A tool to merge multiple objects into a parent object via virtual object structure,
 #                 namely the externalFile element in contentMetadata.
