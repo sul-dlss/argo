@@ -50,14 +50,14 @@ RSpec.describe 'mods_view', type: :request do
   context 'item dialogs' do
     context 'open version ui' do
       it 'renders the open version ui' do
-        visit '/items/druid:zt570tx3016/open_version_ui'
+        visit '/items/druid:zt570tx3016/versions/open_ui'
         expect(page).to have_content('description')
       end
     end
 
     context 'close version ui' do
       it 'renders the close version ui' do
-        visit '/items/druid:zt570tx3016/close_version_ui'
+        visit '/items/druid:zt570tx3016/versions/close_ui'
         expect(page).to have_content('description')
       end
     end

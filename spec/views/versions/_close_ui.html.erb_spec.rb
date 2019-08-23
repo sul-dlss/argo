@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/_close_version_ui.html.erb' do
+RSpec.describe 'versions/_close_ui.html.erb' do
   let(:object) { double('object', pid: 'druid:abc123') }
 
   it 'renders the partial content' do

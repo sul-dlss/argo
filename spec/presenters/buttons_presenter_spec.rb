@@ -50,12 +50,12 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         [
           {
             label: 'Close Version',
-            url: "/items/#{item_id}/close_version_ui",
+            url: "/items/#{item_id}/versions/close_ui",
             check_url: "/workflow_service/#{item_id}/closeable"
           },
           {
             label: 'Open for modification',
-            url: "/items/#{item_id}/open_version_ui",
+            url: "/items/#{item_id}/versions/open_ui",
             check_url: "/workflow_service/#{item_id}/openable"
           },
           {
@@ -193,12 +193,12 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         [
           {
             label: 'Close Version',
-            url: "/items/#{view_apo_id}/close_version_ui",
+            url: "/items/#{view_apo_id}/versions/close_ui",
             check_url: "/workflow_service/#{view_apo_id}/closeable"
           },
           {
             label: 'Open for modification',
-            url: "/items/#{view_apo_id}/open_version_ui",
+            url: "/items/#{view_apo_id}/versions/open_ui",
             check_url: "/workflow_service/#{view_apo_id}/openable"
           },
           {

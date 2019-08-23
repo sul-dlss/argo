@@ -11,7 +11,6 @@ class ItemsController < ApplicationController
     :add_collection, :set_collection, :remove_collection,
     :datastream_update,
     :mods,
-    :open_version, :close_version,
     :purge_object,
     :update_resource,
     :source_id,
@@ -43,7 +42,6 @@ class ItemsController < ApplicationController
     :add_collection, :set_collection, :remove_collection,
     :apply_apo_defaults,
     :embargo_update,
-    :open_version, :close_version,
     :tags, :tags_bulk,
     :source_id,
     :catkey,
@@ -63,29 +61,6 @@ class ItemsController < ApplicationController
   end
 
   def embargo_form
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
-  def open_version_ui
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
-  def close_version_ui
-    @description = @object.datastreams['versionMetadata'].current_description
-    @tag = @object.datastreams['versionMetadata'].current_tag
-
-    # do some stuff to figure out which part of the version number changed when opening
-    # the item for versioning, so that the form can pre-select the correct severity level
-    @changed_severity = which_severity_changed(get_current_version_tag(@object), get_prior_version_tag(@object))
-    @severity_selected = {}
-    [:major, :minor, :admin].each do |severity|
-      @severity_selected[severity] = (@changed_severity == severity)
-    end
-
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -226,39 +201,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def open_version
-    vers_md_upd_info = {
-      significance: params[:severity],
-      description: params[:description],
-      opening_user_name: current_user.to_s
-    }
-    Dor::Services::Client.object(@object.pid).version.open(vers_md_upd_info: vers_md_upd_info)
-    respond_to do |format|
-      msg = params[:id] + ' is open for modification!'
-      format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-    end
-  rescue StandardError => e
-    raise e unless e.to_s == 'Object net yet accessioned'
-
-    render status: 500, plain: 'Object net yet accessioned'
-    return
-  end
-
-  # create an instance of VersionTag for the current version of item
-  # @return [String] current tag
-  def get_current_version_tag(item)
-    ds = item.datastreams['versionMetadata']
-    Dor::VersionTag.parse(ds.tag_for_version(ds.current_version_id))
-  end
-
-  # create an instance of VersionTag for the second most recent version of item
-  # @return [String] prior tag
-  def get_prior_version_tag(item)
-    ds = item.datastreams['versionMetadata']
-    prior_version_id = (Integer(ds.current_version_id) - 1).to_s
-    Dor::VersionTag.parse(ds.tag_for_version(prior_version_id))
-  end
-
   # Given two instances of VersionTag, find the most significant difference
   # between the two (return nil if either one is nil or if they're the same)
   # @param [String] cur_version_tag   current version tag
@@ -271,31 +213,6 @@ class ItemsController < ApplicationController
     return :admin if cur_version_tag.admin != prior_version_tag.admin
 
     nil
-  end
-
-  # if we get non-nil severity and description values, update those fields in
-  # the version metadata datastream
-  def close_version
-    unless !params[:severity] || !params[:description]
-      severity = params[:severity]
-      desc = params[:description]
-      ds = @object.versionMetadata
-      ds.update_current_version(
-        description: desc,
-        significance: severity.to_sym
-      )
-      @object.save
-    end
-
-    begin
-      Dor::Services::Client.object(@object.pid).version.close
-      msg = "Version #{@object.current_version} closed"
-      @object.datastreams['events'].add_event('close', current_user.to_s, msg)
-      msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
-      redirect_to solr_document_path(params[:id]), notice: msg
-    rescue Dor::Exception
-      render status: 500, plain: 'No version to close.'
-    end
   end
 
   def source_id
