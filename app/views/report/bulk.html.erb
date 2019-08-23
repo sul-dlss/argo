@@ -13,7 +13,6 @@ function catalog_url(element)
   url=url.replace(/xxxxxxxxx/g,element);
   return url;
 }
-close_version_url='<%= close_version_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
 republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
@@ -71,10 +70,6 @@ ul li{
         <button class="bulk_button btn-block bulk-btn-danger" onclick="$('#apply_apo_defaults').show(400)">Apply APO defaults</button>
         <button class="bulk_button bulk-btn-danger btn-block" onclick="$('#add_workflow').show(400)">Add a workflow</button>
       </div>
-      <div class="col-sm-2">
-        <button class="bulk_button btn-block" onclick="$('#close').show(400)">Close versions</button>
-	Submit & accession changed objects
-      </div>
     </div>
     <strong>Options that do not require versioning</strong>
     <div class="row bulk-buttons-row">
@@ -90,13 +85,6 @@ ul li{
 
     </div>
   </div>
-</div>
-
-<div class="bulk_operation" id="close" name="close">
-  <h1>Close a version of the items so the changes can be accessioned</h1>
-  The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
-  <br/>
-  <span class="bulk_button" onclick="fetch_druids(close_version);$('#close').hide(400);">Close objects</span><br/>
 </div>
 
 <div class="bulk_operation" id="apply_apo_defaults" name="apply_apo_defaults">

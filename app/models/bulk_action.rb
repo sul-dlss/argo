@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Stores data about an asynchonous background job
 class BulkAction < ApplicationRecord
   belongs_to :user
   validates :action_type,
@@ -10,7 +11,8 @@ class BulkAction < ApplicationRecord
                      RemoteIndexingJob
                      SetGoverningApoJob
                      ManageCatkeyJob
-                     PrepareJob)
+                     PrepareJob
+                     CloseVersionJob)
             }
 
   before_destroy :remove_output_directory

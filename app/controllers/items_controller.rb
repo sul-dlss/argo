@@ -229,7 +229,6 @@ class ItemsController < ApplicationController
   end
 
   def open_version
-    # puts params[:description]
     vers_md_upd_info = {
       significance: params[:severity],
       description: params[:description],
@@ -276,10 +275,10 @@ class ItemsController < ApplicationController
     nil
   end
 
-  # as long as this isn't a bulk operation, and we get non-nil severity and description
-  # values, update those fields on the version metadata datastream
+  # if we get non-nil severity and description values, update those fields in
+  # the version metadata datastream
   def close_version
-    unless params[:bulk] || !params[:severity] || !params[:description]
+    unless !params[:severity] || !params[:description]
       severity = params[:severity]
       desc = params[:description]
       ds = @object.versionMetadata
@@ -292,17 +291,11 @@ class ItemsController < ApplicationController
 
     begin
       Dor::Services::Client.object(@object.pid).version.close
-      msg = "Version #{@object.versionMetadata.current_version_id} closed"
+      msg = "Version #{@object.current_version} closed"
       @object.datastreams['events'].add_event('close', current_user.to_s, msg)
-      respond_to do |format|
-        if params[:bulk]
-          format.html { render status: :ok, plain: 'Version Closed.' }
-        else
-          msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
-          format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-        end
-      end
-    rescue Dor::Exception # => e
+      msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
+      redirect_to solr_document_path(params[:id]), notice: msg
+    rescue Dor::Exception
       render status: 500, plain: 'No version to close.'
     end
   end

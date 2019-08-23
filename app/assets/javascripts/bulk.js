@@ -28,9 +28,6 @@ function process_patch(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'PATCH', req_params, success_string, show_buttons, show_buttons);
 }
 
-function close_version(druids){
-	process_post(druids, close_version_url, null, "Closed");
-}
 function set_content_type(druids){
 	var params={
 		'new_content_type': $('#new_content_type').val(),
