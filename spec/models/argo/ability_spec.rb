@@ -6,38 +6,50 @@ RSpec.describe Argo::Ability do
   subject(:ability) { described_class }
 
   describe 'can_manage_items?' do
-    it 'matches a group that has rights' do
-      expect(ability).to be_can_manage_items(['dor-administrator'])
+    subject { ability.can_manage_items?(groups) }
+
+    context 'when the group has rights' do
+      let(:groups) { %w[sdr-administrator] }
+
+      it { is_expected.to be true }
     end
-    it 'matches a group that has rights' do
-      expect(ability).to be_can_manage_items(['sdr-administrator'])
-    end
-    it 'shouldnt match a group that doesnt have rights' do
-      expect(ability).not_to be_can_manage_items(['dor-apo-metadata'])
+
+    context "when the group doesn't have rights" do
+      let(:groups) { %w[sdr-apo-metadata] }
+
+      it { is_expected.to be false }
     end
   end
 
   describe 'can_edit_desc_metadata?' do
-    it 'matches a group that has rights' do
-      expect(ability).to be_can_edit_desc_metadata(['dor-apo-metadata'])
+    subject { ability.can_edit_desc_metadata?(groups) }
+
+    context 'when the group has rights' do
+      let(:groups) { %w[dor-apo-metadata] }
+
+      it { is_expected.to be true }
     end
-    it 'shouldnt match a group that doesnt have rights' do
-      expect(ability).not_to be_can_edit_desc_metadata(['dor-viewer'])
-    end
-    it 'shouldnt match a group that doesnt have rights' do
-      expect(ability).not_to be_can_edit_desc_metadata(['sdr-viewer'])
+
+    context "when the group doesn't have rights" do
+      let(:groups) { %w[dor-viewer] }
+
+      it { is_expected.to be false }
     end
   end
 
   describe 'can_view?' do
-    it 'matches a group that has rights' do
-      expect(ability).to be_can_view(['dor-viewer'])
+    subject { ability.can_view?(groups) }
+
+    context 'when the group has rights' do
+      let(:groups) { %w[dor-viewer] }
+
+      it { is_expected.to be true }
     end
-    it 'matches a group that has rights' do
-      expect(ability).to be_can_view(['sdr-viewer'])
-    end
-    it 'shouldnt match a group that doesnt have rights' do
-      expect(ability).not_to be_can_view(['dor-people'])
+
+    context "when the group doesn't have rights" do
+      let(:groups) { %w[dor-people] }
+
+      it { is_expected.to be false }
     end
   end
 end
