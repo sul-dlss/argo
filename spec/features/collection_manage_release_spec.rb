@@ -5,12 +5,11 @@ require 'rails_helper'
 RSpec.describe 'Collection manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   before do
-    obj = double(
+    obj = instance_double(
       Dor::Collection,
       admin_policy_object: nil,
       datastreams: {},
       allows_modification?: true,
-      can_manage_item?: true,
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )

@@ -134,8 +134,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
 
       it 'generates the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
         allow(user).to receive(:is_admin?).and_return(false)
-        allow(Argo::Ability).to receive(:can_manage_item?).and_return(true)
-        allow(Argo::Ability).to receive(:can_manage_content?).and_return(true)
+        allow(Argo::Ability).to receive(:can_manage_items?).and_return(true)
         buttons = presenter.buttons
         default_buttons.each do |button|
           expect(buttons).to include(button)

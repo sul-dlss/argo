@@ -7,13 +7,12 @@ RSpec.describe 'Set governing APO' do
   let(:new_apo) { double(Dor::AdminPolicyObject, pid: 'druid:ww057vk7675') }
   let(:identity_md) { instance_double(Nokogiri::XML::Document, xpath: []) }
   let(:obj) do
-    double(
+    instance_double(
       Dor::Item,
       pid: 'druid:kv840rx2720',
       admin_policy_object: new_apo,
       datastreams: {},
-      identityMetadata: double(Dor::IdentityMetadataDS, adminPolicy: nil, ng_xml: identity_md),
-      can_manage_item?: true
+      identityMetadata: double(Dor::IdentityMetadataDS, adminPolicy: nil, ng_xml: identity_md)
     )
   end
 
