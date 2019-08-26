@@ -6,12 +6,11 @@ RSpec.describe 'Enable buttons' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
 
-    @obj = double(
+    @obj = instance_double(
       Dor::Item,
       admin_policy_object: nil,
       allows_modification?: true,
       datastreams: {},
-      can_manage_item?: true,
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )

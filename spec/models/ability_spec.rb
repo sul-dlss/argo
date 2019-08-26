@@ -75,7 +75,7 @@ describe Ability do
     context 'for a user with a privileged role' do
       before do
         allow(user).to receive(:roles).with('apo').and_return(['recognized-and-permitted-role'])
-        allow(Argo::Ability).to receive(:can_manage_item?).with(['recognized-and-permitted-role']).and_return(true)
+        allow(Argo::Ability).to receive(:can_manage_items?).with(['recognized-and-permitted-role']).and_return(true)
       end
 
       it { is_expected.to be_able_to(:manage_item, item) }
@@ -84,7 +84,7 @@ describe Ability do
     context 'for a user without a role' do
       before do
         allow(user).to receive(:roles).with('apo').and_return(['some-other-role'])
-        allow(Argo::Ability).to receive(:can_manage_item?).with(['some-other-role']).and_return(false)
+        allow(Argo::Ability).to receive(:can_manage_items?).with(['some-other-role']).and_return(false)
       end
 
       it { is_expected.not_to be_able_to(:manage_item, item) }
@@ -103,20 +103,20 @@ describe Ability do
 
     context 'as a user with a management role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_manage_item?).with(['recognized-and-permitted-role']).and_return(true)
+        allow(Argo::Ability).to receive(:can_manage_items?).with(['recognized-and-permitted-role']).and_return(true)
       end
 
       it { is_expected.not_to be_able_to(:manage_item, ungoverned_item) }
       it { is_expected.to be_able_to(:manage_item, item) }
 
       context 'and as a user with a management role for the target APO' do
-        before { allow(Argo::Ability).to receive(:can_manage_item?).with(['target-apo-role']).and_return(true) }
+        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(true) }
 
         it { is_expected.to be_able_to(:manage_governing_apo, item, new_apo_id) }
       end
 
       context 'but as a user without a management role for the target APO' do
-        before { allow(Argo::Ability).to receive(:can_manage_item?).with(['target-apo-role']).and_return(false) }
+        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(false) }
 
         it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
       end
@@ -124,7 +124,7 @@ describe Ability do
 
     context 'as a user with a content management role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_manage_content?).with(['recognized-and-permitted-role']).and_return(true)
+        allow(Argo::Ability).to receive(:can_manage_items?).with(['recognized-and-permitted-role']).and_return(true)
       end
 
       it { is_expected.not_to be_able_to(:manage_content, ungoverned_item) }
@@ -133,7 +133,7 @@ describe Ability do
 
     context 'as a user with a metadata management role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_manage_desc_metadata?).with(['recognized-and-permitted-role']).and_return(true)
+        allow(Argo::Ability).to receive(:can_edit_desc_metadata?).with(['recognized-and-permitted-role']).and_return(true)
       end
 
       it { is_expected.not_to be_able_to(:manage_desc_metadata, ungoverned_item) }
@@ -142,7 +142,7 @@ describe Ability do
 
     context 'as a user with a content viewer role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_view_content?).with(['recognized-and-permitted-role']).and_return(true)
+        allow(Argo::Ability).to receive(:can_view?).with(['recognized-and-permitted-role']).and_return(true)
       end
 
       it { is_expected.not_to be_able_to(:view_content, ungoverned_item) }
@@ -151,7 +151,7 @@ describe Ability do
 
     context 'as a user with a metadata viewer role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_view_metadata?).with(['recognized-and-permitted-role']).and_return(true)
+        allow(Argo::Ability).to receive(:can_view?).with(['recognized-and-permitted-role']).and_return(true)
       end
 
       it { is_expected.not_to be_able_to(:view_metadata, ungoverned_item) }
@@ -170,19 +170,19 @@ describe Ability do
 
     context 'as a user without a management role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_manage_item?).with(['some-other-role']).and_return(false)
+        allow(Argo::Ability).to receive(:can_manage_items?).with(['some-other-role']).and_return(false)
       end
 
       it { is_expected.not_to be_able_to(:manage_item, item) }
 
       context 'even as a user with a management role for the target APO' do
-        before { allow(Argo::Ability).to receive(:can_manage_item?).with(['target-apo-role']).and_return(true) }
+        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(true) }
 
         it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
       end
 
       context 'as a user without a management role for the target APO either' do
-        before { allow(Argo::Ability).to receive(:can_manage_item?).with(['target-apo-role']).and_return(false) }
+        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(false) }
 
         it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
       end
@@ -190,7 +190,7 @@ describe Ability do
 
     context 'as a user without a content management role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_manage_content?).with(['some-other-role']).and_return(false)
+        allow(Argo::Ability).to receive(:can_manage_items?).with(['some-other-role']).and_return(false)
       end
 
       it { is_expected.not_to be_able_to(:manage_content, item) }
@@ -198,7 +198,7 @@ describe Ability do
 
     context 'as a user without a metadata management role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_manage_desc_metadata?).with(['some-other-role']).and_return(false)
+        allow(Argo::Ability).to receive(:can_edit_desc_metadata?).with(['some-other-role']).and_return(false)
       end
 
       it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
@@ -206,7 +206,7 @@ describe Ability do
 
     context 'as a user without a content viewer role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_view_content?).with(['some-other-role']).and_return(false)
+        allow(Argo::Ability).to receive(:can_view?).with(['some-other-role']).and_return(false)
       end
 
       it { is_expected.not_to be_able_to(:view_content, item) }
@@ -214,7 +214,7 @@ describe Ability do
 
     context 'as a user without a metadata viewer role for an item' do
       before do
-        allow(Argo::Ability).to receive(:can_view_metadata?).with(['some-other-role']).and_return(false)
+        allow(Argo::Ability).to receive(:can_view?).with(['some-other-role']).and_return(false)
       end
 
       it { is_expected.not_to be_able_to(:view_metadata, item) }
