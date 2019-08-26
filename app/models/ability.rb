@@ -5,7 +5,7 @@
 #  * rules which are defined later have higher precedence, i.e. the last rule defined is the first rule applied.
 #    * e.g.:
 #      * if "user.is_admin?" were true, but "user.is_webauth_admin?" were false, "can? :impersonate, User" would be false
-#      * the :manage_content rule would be checked using the logic for ActiveFedora::Base before falling through
+#      * the :manage_item rule would be checked using the logic for ActiveFedora::Base before falling through
 #      to the Dor::AdminPolicyObject logic.
 #    * more info at https://github.com/CanCanCommunity/cancancan/wiki/Ability-Precedence
 #  * Argo uses this pattern for checking permissions via CanCan:  https://github.com/CanCanCommunity/cancancan/wiki/Non-RESTful-Controllers
@@ -28,21 +28,13 @@ class Ability
     can :manage, :all if user.is_admin?
     cannot :impersonate, User unless user.is_webauth_admin?
 
-    can [:manage_item, :manage_content, :manage_desc_metadata, :manage_governing_apo, :view_content, :view_metadata], ActiveFedora::Base if user.is_manager?
+    can [:manage_item, :manage_desc_metadata, :manage_governing_apo, :view_content, :view_metadata], ActiveFedora::Base if user.is_manager?
     can :create, Dor::AdminPolicyObject if user.is_manager?
 
     can [:view_metadata, :view_content], ActiveFedora::Base if user.is_viewer?
 
     can :manage_item, Dor::AdminPolicyObject do |dor_item|
-      Argo::Ability.can_manage_items?(user.roles(dor_item.pid))
-    end
-
-    can :manage_content, Dor::AdminPolicyObject do |dor_item|
       Argo::Ability.can_manage_items? user.roles(dor_item.pid)
-    end
-
-    can :manage_desc_metadata, Dor::AdminPolicyObject do |dor_item|
-      Argo::Ability.can_edit_desc_metadata? user.roles(dor_item.pid)
     end
 
     can :manage_item, ActiveFedora::Base do |dor_item|
@@ -51,10 +43,8 @@ class Ability
       end
     end
 
-    can :manage_content, ActiveFedora::Base do |dor_item|
-      if dor_item.admin_policy_object
-        Argo::Ability.can_manage_items? user.roles(dor_item.admin_policy_object.pid)
-      end
+    can :manage_desc_metadata, Dor::AdminPolicyObject do |dor_item|
+      Argo::Ability.can_edit_desc_metadata? user.roles(dor_item.pid)
     end
 
     can :manage_desc_metadata, ActiveFedora::Base do |dor_item|

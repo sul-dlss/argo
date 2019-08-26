@@ -15,7 +15,7 @@ RSpec.describe FilesController, type: :controller do
   let(:user) { create(:user) }
 
   describe '#show' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -43,7 +43,7 @@ RSpec.describe FilesController, type: :controller do
   end
 
   describe '#preserved' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       let(:mock_file_name) { 'preserved_file.txt' }
       let(:mock_version) { 2 }
       let(:mock_content) { 'preserved file content' }

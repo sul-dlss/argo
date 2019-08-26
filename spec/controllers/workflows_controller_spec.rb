@@ -15,7 +15,7 @@ RSpec.describe WorkflowsController, type: :controller do
   end
 
   describe '#create' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       let(:wf_datastream) { instance_double(Dor::WorkflowDs) }
       let(:workflow_client) do
         instance_double(Dor::Workflow::Client,

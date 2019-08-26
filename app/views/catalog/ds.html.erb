@@ -6,8 +6,7 @@
 <div class='modal-body'>
   <%
     if(params[:edit])
-      if can?(:manage_content, @obj) && can?(:manage_desc_metadata, @obj)
-  %>
+      if can?(:manage_item, @obj) %>
         <%= form_tag url_for(:controller => :items, :action => :datastream_update), :id => 'xmlEditForm', :method => :POST do%>
           <input type="hidden" name="id" value="<%=@obj.pid %>" />
           <input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
@@ -25,7 +24,7 @@
       # rights, display raw xml editing
   %>
     <%=
-      if can?(:manage_content, @obj) &&
+      if can?(:manage_item, @obj) &&
         (
           @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||
           params[:dsid] == 'RELS-EXT'
