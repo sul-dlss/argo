@@ -4,9 +4,9 @@
  * Author: Weixi Yen
  *
  * Email: [Firstname][Lastname]@gmail.com
- * 
+ *
  * Copyright (c) 2010 Resopollution
- * 
+ *
  * Licensed under the MIT license:
  *   http://www.opensource.org/licenses/mit-license.php
  *
@@ -20,9 +20,9 @@
  *      Allows context definition for better performance (uses event delegation)
  *      Allow user to set events to auto-clear fields.
  *          - defaultText automatically resets after event is run.  No need to manually re-populate default text.
- *      
+ *
  * Usage (MUST READ):
- *      
+ *
  *      <input type="text" title="enter your username" />   // the title field is mandatory for this to work
  *
  *      $.defaultText()                                     // input will show "enter your username" by default
@@ -46,7 +46,7 @@
             css = opts && opts.css ? opts.css : 'default',
             form_clear = [{selector: 'form', type:'submit'}];
             clear_events = opts && opts.clearEvents ? form_clear.concat(opts.clearEvents) : form_clear;
-        
+
         $(ctx).delegate(selector, 'focusin', function(e){
             e.stopPropagation();
             onFocus($(this));
@@ -55,18 +55,18 @@
             var ele = $(this),
                 title = ele.attr('title'),
                 val = ele.val();
-            if ($.trim(val) === '' || val === title) ele.val(title).addClass(css); 
+            if ($.trim(val) === '' || val === title) ele.val(title).addClass(css);
         });
-        
+
         $(selector).trigger('focusout');
-        
+
         $.each(clear_events, function(i, event){
-            
+
             var type = event.type,
                 ele = $(event.selector),
                 len = ele.length;
-            
-            if (ele.size()) {
+
+            if (ele.length) {
                 var ev_queue = $.data( ele.get(0), "events" );
 
                 if (ev_queue) {
@@ -86,24 +86,24 @@
                         blink();
                     });
                 }
-                
-            } 
-            
+
+            }
+
         });
-        
+
         function onFocus(ele) {
             var title = ele.attr('title'),
                 val = ele.val();
             ele.removeClass(css);
             if (title === val) ele.val('');
         }
-        
+
         function blink(){
             $(selector).each(function(){
                 onFocus($(this));
             });
             setTimeout(function(){
-                $(selector).trigger('focusout'); 
+                $(selector).trigger('focusout');
             }, 1);
         }
     }
