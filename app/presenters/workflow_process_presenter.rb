@@ -3,7 +3,6 @@
 # Displays a single step in a workflow for a single object/version
 class WorkflowProcessPresenter
   ALLOWABLE_CHANGES = {
-    'hold' => 'waiting',
     'waiting' => 'completed',
     'error' => 'waiting'
   }.freeze
