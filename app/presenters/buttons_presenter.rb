@@ -59,7 +59,7 @@ class ButtonsPresenter
     pid = doc['id']
 
     buttons = []
-    if ability.can?(:manage_content, object)
+    if ability.can?(:manage_item, object)
       buttons << {
         url: close_version_ui_item_path(pid),
         label: 'Close Version',
@@ -71,9 +71,7 @@ class ButtonsPresenter
         label: 'Open for modification',
         check_url: workflow_service_openable_path(pid)
       }
-    end
 
-    if ability.can?(:manage_item, object)
       if object.is_a? Dor::AdminPolicyObject
         buttons << { url: edit_apo_path(pid), label: 'Edit APO', new_page: true }
         buttons << { url: new_apo_collection_path(apo_id: pid), label: 'Create Collection' }

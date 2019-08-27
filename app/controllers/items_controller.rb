@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
     :open_bulk,
     :register
   ]
-  before_action :authorize_manage_obj_content!, only: [
+  before_action :authorize_manage!, only: [
     :add_collection, :set_collection, :remove_collection,
     :datastream_update,
     :mods,
@@ -18,13 +18,11 @@ class ItemsController < ApplicationController
     :catkey,
     :tags, :tags_bulk,
     :update_rights,
-    :update_attributes
-  ]
-
-  before_action :authorize_manage_item!, only: [
+    :update_attributes,
     :embargo_update,
     :embargo_form
   ]
+
   before_action :authorize_manage_desc_metadata!, only: [
     :refresh_metadata
   ]
@@ -570,12 +568,7 @@ class ItemsController < ApplicationController
   # ---
   # Permissions
 
-  # check that the user can carry out this item modification
-  def authorize_manage_obj_content!
-    authorize! :manage_content, @object
-  end
-
-  def authorize_manage_item!
+  def authorize_manage!
     authorize! :manage_item, @object
   end
 

@@ -69,15 +69,15 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#purge_object' do
-    context "when they don't have manage_content access" do
+    context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         post 'purge_object', params: { id: @pid }
         expect(response.code).to eq('403')
       end
     end
 
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       let(:client) do
         instance_double(Dor::Workflow::Client,
                         delete_all_workflows: nil,
@@ -114,7 +114,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#embargo_update' do
-    context "when they don't have manage_item access" do
+    context "when they don't have manage access" do
       it 'returns 403' do
         allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         expect(subject).not_to receive(:save_and_reindex)
@@ -124,7 +124,7 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
 
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -155,7 +155,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#open_version' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(Dor::Services::Client).to receive(:object).and_return(client)
@@ -180,7 +180,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'without manage content access' do
       it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         get 'open_version', params: { id: @pid, severity: 'major', description: 'something' }
         expect(response.code).to eq('403')
       end
@@ -188,7 +188,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#close_version' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(Dor::Services::Client).to receive(:object).and_return(object_service)
         allow(controller).to receive(:authorize!).and_return(true)
@@ -212,7 +212,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'without manage content access' do
       it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         get 'close_version', params: { id: @pid }
         expect(response.code).to eq('403')
       end
@@ -220,7 +220,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#source_id' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -236,13 +236,13 @@ RSpec.describe ItemsController, type: :controller do
   describe '#catkey' do
     context 'without manage content access' do
       it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         post 'catkey', params: { id: @pid, new_catkey: '12345' }
         expect(response.code).to eq('403')
       end
     end
 
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -256,7 +256,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#tags' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(@item).to receive(:tags).and_return(['some:thing'])
@@ -281,7 +281,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#tags_bulk' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(@item).to receive(:tags).and_return(['some:thing'])
@@ -317,7 +317,7 @@ RSpec.describe ItemsController, type: :controller do
       allow(@item).to receive(:contentMetadata).and_return(@content_md)
     end
 
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -353,7 +353,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'without manage content access' do
       it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         post 'update_attributes', params: { shelve: 'no', publish: 'no', preserve: 'no', id: @pid, file_name: 'something.txt' }
         expect(response.code).to eq('403')
       end
@@ -366,7 +366,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'without management access' do
       before do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
       end
 
       it 'prevents access' do
@@ -376,7 +376,7 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
 
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -386,7 +386,7 @@ RSpec.describe ItemsController, type: :controller do
           'contentMetadata' => double(Dor::ContentMetadataDS, 'content=': xml)
         )
         expect(@item).to receive(:save)
-        expect(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_return(true)
+        expect(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_return(true)
         post 'datastream_update', params: { dsid: 'contentMetadata', id: @pid, content: xml }
         expect(response).to have_http_status(:found)
       end
@@ -423,13 +423,13 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'without manage content access' do
       it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         post 'update_resource', params: { resource: '0001', position: '3', id: @pid }
         expect(response.code).to eq('403')
       end
     end
 
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -450,7 +450,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#add_collection' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -467,9 +467,9 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
 
-    context "when they don't have manage_content access" do
+    context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         post 'add_collection', params: { id: @pid, collection: 'druid:1234' }
         expect(response.code).to eq('403')
       end
@@ -481,7 +481,7 @@ RSpec.describe ItemsController, type: :controller do
       @collection_druid = 'druid:1234'
     end
 
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -518,7 +518,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#remove_collection' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -529,9 +529,9 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
 
-    context "when they don't have manage_content access" do
+    context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         expect(@item).not_to receive(:remove_collection)
         post 'remove_collection', params: { id: @pid, collection: 'druid:1234' }
         expect(response.code).to eq('403')
@@ -540,7 +540,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#mods' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
@@ -556,9 +556,9 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
 
-    context "when they don't have manage_content access" do
+    context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_content, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
         get 'mods', params: { id: @pid }
         expect(response.code).to eq('403')
       end
@@ -566,7 +566,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#refresh_metadata' do
-    context 'when they have manage_content access' do
+    context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end

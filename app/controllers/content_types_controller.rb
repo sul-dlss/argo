@@ -11,7 +11,7 @@ class ContentTypesController < ApplicationController
 
   # set the content type in the content metadata
   def update
-    authorize! :manage_content, @object
+    authorize! :manage_item, @object
 
     # if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
     return render_error('Object cannot be modified in its current state.') unless @object.allows_modification?
