@@ -1,5 +1,3 @@
-$.ajaxQ('register', { maxRequests: 10 });
-
 function DorRegistration(initOpts) {
   var $t = {
     defaultValues: {
@@ -12,9 +10,6 @@ function DorRegistration(initOpts) {
       tagList: "",
       collection: 'None'
     },
-
-    registrationQueue: [],
-    maxConcurrentRequests: 5,
 
     setDefault : function(param) {
       if (param == null) {
@@ -79,10 +74,9 @@ function DorRegistration(initOpts) {
         type: 'POST',
         url: pathTo('/dor/objects'),
         data: params,
-        dequeued: function(xhr) {
+        beforeSend: function(xhr) {
           $t.setStatus(data, 'pending')
         },
-        ajaxQ: 'register',
         dataType: 'json'
       }
       $t.setStatus(data, 'queued');
