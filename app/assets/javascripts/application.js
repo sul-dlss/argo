@@ -28,7 +28,12 @@
 //= require jquery-ui
 //= require jquery.validate
 //= require jquery.validate.additional-methods
-//= require jqgrid-jquery-rails
+
+// These two files come from the jqgrid-jquery-rails gem:
+// https://github.com/jhx/gem-jqgrid-jquery-rails/blob/master/vendor/assets/javascripts/jqgrid-jquery-rails.js
+//= require i18n/grid.locale-en
+//= require jquery.jqGrid.js
+
 //= require jquery.persistentModal
 //= require almond
 //= require_directory ./modules
