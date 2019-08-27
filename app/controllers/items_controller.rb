@@ -126,26 +126,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def release_hold
-    # this will raise and exception if the item doesnt have that workflow step
-    unless dor_accession_status(@object, 'sdr-ingest-transfer') == 'hold'
-      render status: :bad_request, plain: 'Item isnt on hold!'
-      return
-    end
-    unless dor_lifecycle(@object.admin_policy_object, 'accessioned')
-      render status: :bad_request, plain: "Item's APO #{@object.admin_policy_object.pid} hasnt been ingested!"
-      return
-    end
-    set_dor_accession_status(@object, 'sdr-ingest-transfer', 'waiting')
-    if params[:bulk]
-      render status: 200, plain: 'Updated!'
-      return
-    end
-    respond_to do |format|
-      format.any { redirect_to solr_document_path(@object.pid), notice: 'Workflow was successfully updated' }
-    end
-  end
-
   def embargo_update
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
 
@@ -494,7 +474,7 @@ class ItemsController < ApplicationController
   end
 
   def enforce_versioning
-    # if this object has been submitted, doesnt have an open version, and isnt sitting at sdr-ingest with a hold, they cannot change it.
+    # if this object has been submitted and doesnt have an open version, they cannot change it.
     return true if @object.allows_modification?
 
     render status: :forbidden, plain: 'Object cannot be modified in its current state.'
