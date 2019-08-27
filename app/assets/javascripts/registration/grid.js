@@ -353,9 +353,9 @@ var gridContext = function() {
       $('#icons').append('<span class="button-group" id="view-toggle"/>');
       $('#view-toggle').append('<input type="radio" id="grid-view" name="view" checked="checked"/><label for="grid-view">Grid</label></span>');
       $('#view-toggle').append('<input type="radio" id="text-view" name="view" /><label for="text-view">Text</label></span>');
-      $('#view-toggle').buttonset();
+      $('#view-toggle').controlgroup();
 
-      $('#view-toggle input').change(function(e) {
+      $('#view-toggle input').checkboxradio({ icon: false }).change(function(e) {
         $t.toggleText(e.target.id == 'text-view');
       });
 
