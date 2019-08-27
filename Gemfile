@@ -53,7 +53,7 @@ gem 'eye' # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about
 gem 'faraday'
 gem 'honeybadger', '~> 4.1'
 gem 'jqgrid-jquery-rails'
-gem 'jquery-ui-rails', '~> 5.0'
+gem 'jquery-ui-rails', '~> 6.0'
 gem 'jquery-validation-rails'
 gem 'mysql2', '~> 0.4.5'
 gem 'net-sftp'
