@@ -53,7 +53,6 @@ RSpec.describe 'Item registration page', js: true do
       arg.render json: { error: 'errror' }.to_json, status: 500 # test error presentation
     end
 
-    find('#tags_0').click
     find('#jqg_data_0').set(true)
     find('button.action-lock').click
     find('button.action-register').click
