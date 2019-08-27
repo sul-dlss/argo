@@ -68,21 +68,18 @@ RSpec.describe VersionsController, type: :controller do
       before do
         allow(Dor::Services::Client).to receive(:object).and_return(object_service)
         allow(controller).to receive(:authorize!).and_return(true)
+        allow(item).to receive(:current_version).and_return('2')
       end
 
       let(:object_service) { instance_double(Dor::Services::Client::Object, version: version_service) }
       let(:version_service) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
 
       it 'calls dor-services to close the version' do
-        version_metadata = double(Dor::VersionMetadataDS)
-        allow(version_metadata).to receive(:current_version_id).and_return(2)
-        allow(item).to receive(:versionMetadata).and_return(version_metadata)
-        expect(version_metadata).to receive(:update_current_version)
-        allow(item).to receive(:current_version).and_return('2')
         expect(item).to receive(:save)
         expect(ActiveFedora.solr.conn).to receive(:add)
         get :close, params: { item_id: pid, severity: 'major', description: 'something' }
-        expect(version_service).to have_received(:close)
+        expect(flash[:notice]).to eq "Version 2 of #{pid} has been closed!"
+        expect(version_service).to have_received(:close).with(description: 'something', significance: 'major')
       end
     end
 
