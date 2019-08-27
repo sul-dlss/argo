@@ -10,10 +10,10 @@ class ButtonsPresenter
 
   attr_reader :ability, :doc, :object
 
-  delegate :close_version_ui_item_path,
+  delegate :close_ui_item_versions_path,
            :workflow_service_closeable_path,
            :workflow_service_openable_path,
-           :open_version_ui_item_path,
+           :open_ui_item_versions_path,
            :edit_apo_path,
            :new_apo_collection_path,
            :dor_reindex_path,
@@ -61,13 +61,13 @@ class ButtonsPresenter
     buttons = []
     if ability.can?(:manage_item, object)
       buttons << {
-        url: close_version_ui_item_path(pid),
+        url: close_ui_item_versions_path(item_id: pid),
         label: 'Close Version',
         check_url: workflow_service_closeable_path(pid)
       }
 
       buttons << {
-        url: open_version_ui_item_path(pid),
+        url: open_ui_item_versions_path(item_id: pid),
         label: 'Open for modification',
         check_url: workflow_service_openable_path(pid)
       }

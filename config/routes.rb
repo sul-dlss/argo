@@ -106,6 +106,15 @@ Argo::Application.routes.draw do
       end
     end
 
+    resources :versions, only: [] do
+      collection do
+        get 'close_ui'
+        get 'open_ui'
+        post 'open'
+        post 'close'
+      end
+    end
+
     member do
       get 'purl_preview'
       get 'discoverable'
@@ -120,10 +129,6 @@ Argo::Application.routes.draw do
       post 'datastream',         action: :datastream_update,     as: 'datastream_update'
 
       post 'file/attributes',    action: :update_attributes, as: 'update_attributes'
-      match 'close_version_ui',  action: :close_version_ui,  as: 'close_version_ui', via: [:get, :post]
-      match 'open_version_ui',   action: :open_version_ui,   as: 'open_version_ui',  via: [:get, :post]
-      post 'version/open', action: :open_version, as: 'open_version'
-      post 'version/close', action: :close_version, as: 'close_version'
       get 'source_id_ui'
       get 'tags_ui'
       get 'catkey_ui'
