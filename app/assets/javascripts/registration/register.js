@@ -77,28 +77,28 @@ function DorRegistration(initOpts) {
         beforeSend: function(xhr) {
           $t.setStatus(data, 'pending')
         },
-        dataType: 'json'
+        dataType: 'json',
+        success: function(response,status,xhr) {
+          if (response) {
+            data.druid = response['pid'].split(':')[1];
+            data.label = response['label'];
+            progressFunction(xhr);
+          }
+        },
+        error: function(xhr,status,errorThrown) {
+          if (xhr.status < 500) {
+            data.error = xhr.responseText;
+          } else {
+            data.error = xhr.statusText;
+          }
+          progressFunction(xhr);
+        },
+        complete: function(xhr,status) {
+            $t.setStatus(data, status);
+        },
       }
       $t.setStatus(data, 'queued');
       var xhr = $.ajax(ajaxParams);
-      xhr.success(function(response,status,xhr) {
-        if (response) {
-          data.druid = response['pid'].split(':')[1];
-          data.label = response['label'];
-          progressFunction(xhr);
-        }
-      });
-      xhr.error(function(xhr,status,errorThrown) {
-        if (xhr.status < 500) {
-          data.error = xhr.responseText;
-        } else {
-          data.error = xhr.statusText;
-        }
-        progressFunction(xhr);
-      });
-      xhr.complete(function(xhr,status) {
-          $t.setStatus(data, status);
-      });
     },
 
     validate : function() {
