@@ -50,20 +50,11 @@ class VersionsController < ApplicationController
   def close
     authorize! :manage_item, @object
 
-    unless !params[:severity] || !params[:description]
-      severity = params[:severity]
-      desc = params[:description]
-      ds = @object.versionMetadata
-      ds.update_current_version(
-        description: desc,
-        significance: severity.to_sym
-      )
-      @object.save
-    end
-
     begin
-      Dor::Services::Client.object(@object.pid).version.close
-      msg = "Version #{@object.versionMetadata.current_version_id} closed"
+      Dor::Services::Client.object(@object.pid)
+                           .version.close(description: params[:description],
+                                          significance: params[:severity])
+      msg = "Version #{@object.current_version} closed"
       @object.events.add_event('close', current_user.to_s, msg)
       msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
       redirect_to solr_document_path(params[:item_id]), notice: msg
