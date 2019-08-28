@@ -8,9 +8,6 @@ class ModsulatorJob < ActiveJob::Base
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
-  # Wait 30 minutes for remote requests to complete
-  TIMEOUT = 1800
-
   # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
   # Later, this log file will be used to generate a nicer looking log for the user to view and to generate the list of
@@ -20,16 +17,25 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]  uploaded_filename  Full path to the temporary uploaded file. Deleted upon completion.
   # @param  [String]  output_directory   Where to store output (log, generated XML etc.).
   # @param  [String]  user_login         Acting user's username.
-  # @param  [String]  filetype           If not 'xml', the input is assumed to be an Excel spreadsheet.
+  # @param  [String]  filetype           One of 'xml, 'spreadsheet', or 'xml_only'. If not 'xml', the input is to be loaded into the datastream.
   # @param  [String]  note               An optional note that the user entered to go with the job.
   # @return [Void]
-  def perform(apo_id, uploaded_filename, output_directory, user_login, filetype = 'xlsx', note = '')
+  def perform(apo_id, uploaded_filename, output_directory, user_login, filetype = 'spreadsheet', note = '')
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
+    persist_metadata = load_to_dor?(filetype)
+    method = operation(filetype)
 
     File.open(log_filename, 'a') { |log|
       start_log(log, user_login, original_filename, note)
-      response_xml = generate_xml(filetype, uploaded_filename, original_filename, log)
+
+      # If a modsulator request fails, the job will fail and automatically be
+      # retried (see config/initializers/delayed_job.rb)
+      response_xml = if method == 'normalize'
+                       ModsulatorClient.normalize_mods(uploaded_filename: uploaded_filename, pretty_filename: original_filename, log: log)
+                     else
+                       ModsulatorClient.convert_spreadsheet_to_mods(uploaded_filename: uploaded_filename, pretty_filename: original_filename, log: log)
+                     end
 
       if response_xml.nil?
         log.puts('argo.bulk_metadata.bulk_log_error_exception Got no response from server')
@@ -40,7 +46,7 @@ class ModsulatorJob < ActiveJob::Base
       metadata_path = File.join(output_directory, generate_xml_filename(original_filename))
       save_metadata_xml(response_xml, metadata_path, log)
 
-      if filetype != 'xml' # If the submitted file is XML, we never want to load anything into DOR
+      if persist_metadata
         log.puts('argo.bulk_metadata.bulk_log_xml_only false')
         update_metadata(apo_id, response_xml, original_filename, user_login, log) # Load into DOR
       end
@@ -50,6 +56,15 @@ class ModsulatorJob < ActiveJob::Base
     # Remove the (temporary) uploaded file only if everything worked. Removing upon catching an exception causes
     # subsequent job attempts to fail.
     FileUtils.rm(uploaded_filename, force: true)
+  end
+
+  # When filetype = 'xml' the user just wants to convert submitted spreadsheet to MODS. No need to load into DOR
+  def load_to_dor?(filetype)
+    filetype != 'xml'
+  end
+
+  def operation(filetype)
+    filetype != 'xml_only' ? 'convert' : 'normalize'
   end
 
   # Upload metadata into DOR.
@@ -194,61 +209,6 @@ class ModsulatorJob < ActiveJob::Base
     log_file.flush # record start in case of crash
   end
 
-  # Calls the MODSulator web service (modsulator-app) to process the uploaded file. If a request fails, the job will fail
-  # and automatically be retried (see config/initializers/delayed_job.rb), so we do not separately retry the HTTP request.
-  #
-  # @param    [String]   filetype            The value 'xml' means that the given file is an XML file, and so should be submitted to the normalizer for cleanup.
-  #                                          Any other values indicates a spreadsheet input (.xlsx).
-  # @param    [String]   uploaded_filename   The full path to the XML/spreadsheet file.
-  # @param    [String]   original_filename   A prettified filename, which looks better in the UI.
-  # @param    [File]     log_file            The log file to write to
-  # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
-  def generate_xml(filetype, uploaded_filename, original_filename, log_file)
-    response_xml = nil
-    url = nil
-    payload = nil
-
-    if filetype == 'xml_only'            # Just clean up the given XML file
-      url = Settings.NORMALIZER_URL
-      payload = Faraday::UploadIO.new(uploaded_filename, 'application/xml')
-    else                                 # The given file is a spreadsheet
-      url = Settings.MODSULATOR_URL
-      payload = Faraday::UploadIO.new(uploaded_filename, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    end
-
-    connection = Faraday.new(url: url) do |faraday|
-      faraday.use Faraday::Response::RaiseError
-      faraday.request :multipart
-      faraday.request :url_encoded
-      faraday.adapter :net_http # A MUST for file upload to work with UploadIO
-    end
-
-    response_xml = connection.post do |req|
-      req.url url
-      req.options.timeout = TIMEOUT
-      req.options.open_timeout = TIMEOUT
-      req.body = { file: payload, filename: original_filename }
-    end
-    response_xml.body
-  rescue Faraday::ResourceNotFound => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
-  rescue Errno::ENOENT => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
-  rescue Errno::EACCES => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
-  rescue Faraday::ClientError => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
-  rescue Exception => e
-    delayed_log_url(e, url)
-    log_file.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
-  ensure
-    log_file.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
-  end
-
   # Writes the generated XML to a file named "metadata.xml" to disk and updates the log.
   #
   # @param  [String]  xml                An XML string, which will be written to output_filename.
@@ -270,15 +230,6 @@ class ModsulatorJob < ActiveJob::Base
   # @return [String]
   def generate_xml_filename(original_filename)
     File.basename(original_filename, '.*') + '-' + Settings.BULK_METADATA.XML + '.xml'
-  end
-
-  # Logs a remote request-related exception to the standard Delayed Job log file.
-  #
-  # @param  [Exception] e   The exception
-  # @param  [String]    url The URL that we attempted to access
-  # @return [Void]
-  def delayed_log_url(e, url)
-    Delayed::Worker.logger.error("#{__FILE__} tried to access #{url} got: #{e.message} #{e.backtrace}")
   end
 
   # Checks whether or not a DOR object is in accessioning or not.
