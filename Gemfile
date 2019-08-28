@@ -93,6 +93,7 @@ group :test, :development do
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', '~> 0.74.0', require: false
+  gem 'rubocop-rails'
   gem 'rubocop-rspec', '~> 1.31.0', require: false
   gem 'sqlite3', '~> 1.3.13'
 end

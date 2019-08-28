@@ -499,6 +499,9 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-rails (2.3.1)
+      rack (>= 1.1)
+      rubocop (>= 0.72.0)
     rubocop-rspec (1.31.0)
       rubocop (>= 0.60.0)
     ruby-cache (0.3.0)
@@ -676,6 +679,7 @@ DEPENDENCIES
   rsolr
   rspec-rails (~> 3.5)
   rubocop (~> 0.74.0)
+  rubocop-rails
   rubocop-rspec (~> 1.31.0)
   ruby-prof
   rubyzip
