@@ -12,9 +12,9 @@ class Dor::ObjectsController < ApplicationController
     begin
       response = Dor::Services::Client.objects.register(params: registration_params.to_h)
     rescue Dor::Services::Client::UnexpectedResponse => e
-      return render plain: e.message, status: 409 if e.message.start_with?('Conflict')
+      return render plain: e.message, status: :conflict if e.message.start_with?('Conflict')
 
-      return render plain: e.message, status: 400
+      return render plain: e.message, status: :bad_request
     end
 
     pid = response[:pid]

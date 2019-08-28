@@ -13,7 +13,7 @@ ARGF.each_line do |druid|
   add_xml = Nokogiri::XML ActiveFedora.solr.conn.xml.add dor_item.to_solr
   puts add_xml.xpath('//doc').to_s
 rescue ActiveFedora::ObjectNotFoundError
-  STDERR.puts "#{druid} not found"
+  warn "#{druid} not found"
   puts "<!-- #{druid} not found -->"
 end
 

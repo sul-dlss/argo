@@ -41,7 +41,7 @@ class VersionsController < ApplicationController
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
 
-    render status: 500, plain: 'Object net yet accessioned'
+    render status: :internal_server_error, plain: 'Object net yet accessioned'
     nil
   end
 
@@ -60,7 +60,7 @@ class VersionsController < ApplicationController
       redirect_to solr_document_path(params[:item_id]), notice: msg
       save_and_reindex
     rescue Dor::Exception # => e
-      render status: 500, plain: 'No version to close.'
+      render status: :internal_server_error, plain: 'No version to close.'
     end
   end
 

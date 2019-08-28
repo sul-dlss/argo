@@ -47,7 +47,7 @@ class WorkflowsController < ApplicationController
     Dor::Config.workflow.client.update_workflow_status params[:repo], *args
     respond_to do |format|
       if params[:bulk].present?
-        render status: 200, plain: 'Updated!'
+        render status: :ok, plain: 'Updated!'
       else
         msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:item_id]}"
         format.any { redirect_to solr_document_path(params[:item_id]), notice: msg }
@@ -66,7 +66,7 @@ class WorkflowsController < ApplicationController
 
     # check the workflow is present and active (not archived)
     if workflow_active?(wf_name)
-      render status: 403, plain: "#{wf_name} already exists!"
+      render status: :forbidden, plain: "#{wf_name} already exists!"
       return
     end
 

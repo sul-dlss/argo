@@ -300,7 +300,7 @@ class ItemsController < ApplicationController
     if messages.length == 0
       render status: :ok, plain: 'Discoverable.'
     else
-      render status: 500, plain: messages.join(' ')
+      render status: :internal_server_error, plain: messages.join(' ')
     end
   end
 
@@ -313,7 +313,7 @@ class ItemsController < ApplicationController
     if errors.length == 0
       render status: :ok, plain: 'Valid.'
     else
-      render status: 500, plain: errors.join('<br>')[0...490]
+      render status: :internal_server_error, plain: errors.join('<br>')[0...490]
     end
   end
 
@@ -349,7 +349,7 @@ class ItemsController < ApplicationController
     if EquivalentXml.equivalent?(ng, ds.ng_xml)
       render status: :ok, plain: 'No change'
     else
-      render status: 500, plain: 'Has duplicates'
+      render status: :internal_server_error, plain: 'Has duplicates'
     end
   end
 
@@ -357,7 +357,7 @@ class ItemsController < ApplicationController
     ds = @object.descMetadata
     ng = scrubbed_content_ng_utf8(ds.content)
     if EquivalentXml.equivalent?(ng, ds.ng_xml)
-      render status: 500, plain: 'No duplicate encoding'
+      render status: :internal_server_error, plain: 'No duplicate encoding'
     else
       ds.ng_xml = ng
       ds.content = ng.to_s
@@ -383,7 +383,7 @@ class ItemsController < ApplicationController
   # set the rightsMetadata to the APO's defaultObjectRights
   def apply_apo_defaults
     @object.reapplyAdminPolicyObjectDefaults
-    render status: 200, plain: 'Defaults applied.'
+    render status: :ok, plain: 'Defaults applied.'
   end
 
   def set_governing_apo
