@@ -64,7 +64,7 @@ if ['test', 'development'].include? Rails.env
           i += 1
 
           handler = proc do |e, attempt_number, total_delay|
-            puts STDERR.puts "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
+            puts warn "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
             errors << file
           end
           pid = "druid:#{File.basename(file, '.xml')}"

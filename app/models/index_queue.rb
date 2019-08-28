@@ -7,8 +7,8 @@ class IndexQueue
   # @return [Integer, nil]
   def depth
     parsed_response
-  rescue Argo::Exceptions::IndexQueueInvalidResponse, Argo::Exceptions::IndexQueueRequestFailed => exception
-    Honeybadger.notify(exception)
+  rescue Argo::Exceptions::IndexQueueInvalidResponse, Argo::Exceptions::IndexQueueRequestFailed => e
+    Honeybadger.notify(e)
     nil
   end
 
