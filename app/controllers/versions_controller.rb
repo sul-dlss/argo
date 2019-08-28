@@ -35,7 +35,7 @@ class VersionsController < ApplicationController
       description: params[:description],
       opening_user_name: current_user.to_s
     }
-    Dor::Services::Client.object(@object.pid).version.open(vers_md_upd_info: vers_md_upd_info)
+    VersionService.open(identifier: @object.pid, vers_md_upd_info: vers_md_upd_info)
     msg = "#{@object.pid} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
   rescue StandardError => e
@@ -51,9 +51,11 @@ class VersionsController < ApplicationController
     authorize! :manage_item, @object
 
     begin
-      Dor::Services::Client.object(@object.pid)
-                           .version.close(description: params[:description],
-                                          significance: params[:severity])
+      VersionService.close(
+        identifier: @object.pid,
+        description: params[:description],
+        significance: params[:severity]
+      )
       msg = "Version #{@object.current_version} closed"
       @object.events.add_event('close', current_user.to_s, msg)
       msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"

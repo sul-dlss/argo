@@ -29,7 +29,7 @@ class CloseVersionJob < GenericJob
   private
 
   def close_object(pid, user_name, log)
-    Dor::Services::Client.object(pid).version.close
+    VersionService.close(identifier: pid)
     object = Dor.find(pid)
     msg = "Version #{object.current_version} closed"
     object.events.add_event('close', user_name, msg)

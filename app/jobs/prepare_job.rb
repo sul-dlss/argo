@@ -40,7 +40,7 @@ class PrepareJob < GenericJob
       description: description,
       opening_user_name: user_name
     }
-    Dor::Services::Client.object(pid).version.open(vers_md_upd_info: info)
+    VersionService.open(identifier: pid, vers_md_upd_info: info)
     bulk_action.increment(:druid_count_success).save
     log.puts("#{Time.current} Object successfully opened #{pid}")
   rescue StandardError => e

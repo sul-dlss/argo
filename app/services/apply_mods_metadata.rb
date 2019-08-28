@@ -68,7 +68,7 @@ class ApplyModsMetadata
       description: "Descriptive metadata upload from #{original_filename}",
       opening_user_name: user_login
     }
-    Dor::Services::Client.object(item.pid).version.open(vers_md_upd_info: vers_md_upd_info)
+    VersionService.open(identifier: item.pid, vers_md_upd_info: vers_md_upd_info)
   end
 
   # Check if two MODS XML nodes are equivalent.

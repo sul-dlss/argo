@@ -247,6 +247,7 @@ RSpec/SubjectStub:
     - 'spec/models/index_queue_spec.rb'
     - 'spec/search_builders/argo/date_field_queries_spec.rb'
     - 'spec/search_builders/argo/profile_queries_spec.rb'
+    - 'spec/services/version_service_spec.rb'
 
 # Offense count: 85
 # Configuration parameters: IgnoreNameless, IgnoreSymbolicNames.
