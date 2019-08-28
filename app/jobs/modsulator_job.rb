@@ -84,94 +84,21 @@ class ModsulatorJob < ActiveJob::Base
     # Loop through each <xmlDoc> node and add the MODS XML that it contains to the object's descMetadata
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
     mods_list.each do |xmldoc_node|
-      apply_document(druid, xmldoc_node, "druid:#{xmldoc_node.attr('objectId')}", original_filename, user_login, log)
-    end
-  end
-
-  def apply_document(druid, xmldoc_node, current_druid, original_filename, user_login, log)
-    dor_object = Dor.find current_druid
-    return unless dor_object
-
-    # Only update objects that are governed by the correct APO
-    unless dor_object.admin_policy_object_id == druid
-      log.puts("argo.bulk_metadata.bulk_log_apo_fail #{current_druid}")
-      return
-    end
-    if in_accessioning(dor_object)
-      log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{current_druid}")
-      return
-    end
-
-    return unless status_ok(dor_object)
-
-    # We only update objects if the descMetadata XML is different
-    current_metadata = dor_object.descMetadata.content
-    mods_node = xmldoc_node.first_element_child
-    if equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node)
-      log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{current_druid}")
-      return
-    end
-
-    version_object(dor_object, original_filename, user_login, log)
-
-    dor_object.descMetadata.content = mods_node.to_s
-    dor_object.save
-    log.puts("argo.bulk_metadata.bulk_log_job_save_success #{current_druid}")
-  rescue ActiveFedora::ObjectNotFoundError => e
-    log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
-    log.puts(e.message.to_s)
-    log.puts(e.backtrace.to_s)
-  rescue Dor::Exception, Exception => e
-    log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
-    log.puts(e.message.to_s)
-    log.puts(e.backtrace.to_s)
-  end
-
-  # Open a new version for the given object if it is in the accessioned state.
-  # @param   [Dor::Item]  dor_object          The object to version
-  # @param   [String]     original_filename   The name of the uploaded file
-  # @param   [String]     user_login          The current user_login
-  # @param   [File]       log                 Log file handle
-  def version_object(dor_object, original_filename, user_login, log)
-    if accessioned(dor_object)
-      if !DorObjectWorkflowStatus.new(dor_object.pid).can_open_version?
-        log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{dor_object.pid}") # totally unexpected
-        return
+      item_druid = "druid:#{xmldoc_node.attr('objectId')}"
+      begin
+        item = Dor::Item.find(item_druid)
+        ApplyModsMetadata.new(apo_druid: druid,
+                              mods_node: xmldoc_node.first_element_child,
+                              item: item,
+                              original_filename: original_filename,
+                              user_login: user_login,
+                              log: log).apply
+      rescue ActiveFedora::ObjectNotFoundError => e
+        log.puts("argo.bulk_metadata.bulk_log_not_exist #{item_druid}")
+        log.puts(e.message.to_s)
+        log.puts(e.backtrace.to_s)
       end
-      commit_new_version(dor_object, original_filename, user_login)
     end
-  end
-
-  # Open a new version for the given object.
-  # @param   [Dor::Item]  dor_object          The object to version
-  # @param   [String]     original_filename   The name of the uploaded file
-  # @param   [String]     user_login          The current user_login
-  def commit_new_version(dor_object, original_filename, user_login)
-    vers_md_upd_info = {
-      significance: 'minor',
-      description: "Descriptive metadata upload from #{original_filename}",
-      opening_user_name: user_login
-    }
-    Dor::Services::Client.object(dor_object.pid).version.open(vers_md_upd_info: vers_md_upd_info)
-  end
-
-  # Returns true if the given object is accessioned, false otherwise.
-  # @param   [Dor::Item]  dor_object  A DOR object
-  def accessioned(dor_object)
-    (6..8).cover?(status(dor_object))
-  end
-
-  # Check if two MODS XML nodes are equivalent.
-  #
-  # @param [Nokogiri::XML::Element]  node_1  A MODS XML node.
-  # @param [Nokogiri::XML::Element]  node_2  A MODS XML node.
-  # @return [Boolean] true if the given nodes are equivalent, false otherwise.
-  def equivalent_nodes(node_1, node_2)
-    EquivalentXml.equivalent?(node_1,
-                              node_2,
-                              element_order: false,
-                              normalize_whitespace: true,
-                              ignore_attr_values: ['version', 'xmlns', 'xmlns:xsi', 'schemaLocation'])
   end
 
   # Generate a filename for the job's log file.
@@ -230,30 +157,5 @@ class ModsulatorJob < ActiveJob::Base
   # @return [String]
   def generate_xml_filename(original_filename)
     File.basename(original_filename, '.*') + '-' + Settings.BULK_METADATA.XML + '.xml'
-  end
-
-  # Checks whether or not a DOR object is in accessioning or not.
-  #
-  # @param  [Dor::Item]   dor_object    DOR object to check
-  # @return [Boolean]     true if the object is currently being accessioned, false otherwise
-  def in_accessioning(dor_object)
-    (2..5).cover?(status(dor_object))
-  end
-
-  # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only times we are
-  # not OK to update is if the object is currently being accessioned and if the object has status unknown.
-  #
-  # @param  [Dor::Item]   dor_object    DOR object to check
-  # @return [Boolean]     true if the object's status allows us to update the descMetadata datastream, false otherwise
-  def status_ok(dor_object)
-    [1, 6, 7, 8, 9].include?(status(dor_object))
-  end
-
-  # Returns the status_info for a DOR object from the StatusService
-  #
-  # @param  [Dor::Item]   dor_object    DOR object to check
-  # @return [Integer]     value cooresponding to the status info list
-  def status(dor_object)
-    Dor::StatusService.new(dor_object).status_info[:status_code]
   end
 end
