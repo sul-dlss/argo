@@ -25,12 +25,11 @@ RSpec.describe UploadsController do
 
     it 'is successful' do
       expect(ModsulatorJob).to receive(:perform_later)
-        .with('abc123', String, String, user.login, 'spreadsheet', 'true', 'test note')
+        .with('abc123', String, String, user.login, 'spreadsheet', 'test note')
       post :create, params: { item_id: apo_id,
                               druid: 'foo',
                               spreadsheet_file: file,
                               filetypes: 'spreadsheet',
-                              xml_only: 'true',
                               note: 'test note' }
       expect(response).to redirect_to apo_bulk_jobs_path(apo_id)
     end

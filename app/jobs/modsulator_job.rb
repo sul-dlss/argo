@@ -21,10 +21,9 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]  output_directory   Where to store output (log, generated XML etc.).
   # @param  [String]  user_login         Acting user's username.
   # @param  [String]  filetype           If not 'xml', the input is assumed to be an Excel spreadsheet.
-  # @param  [Boolean]  xml_only          If true, then only generate XML - do not upload into DOR.
   # @param  [String]  note               An optional note that the user entered to go with the job.
   # @return [Void]
-  def perform(apo_id, uploaded_filename, output_directory, user_login, filetype = 'xlsx', xml_only = false, note = '')
+  def perform(apo_id, uploaded_filename, output_directory, user_login, filetype = 'xlsx', note = '')
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
 
@@ -41,9 +40,7 @@ class ModsulatorJob < ActiveJob::Base
       metadata_path = File.join(output_directory, generate_xml_filename(original_filename))
       save_metadata_xml(response_xml, metadata_path, log)
 
-      if xml_only
-        log.puts('argo.bulk_metadata.bulk_log_xml_only true')
-      elsif filetype != 'xml' # If the submitted file is XML, we never want to load anything into DOR
+      if filetype != 'xml' # If the submitted file is XML, we never want to load anything into DOR
         log.puts('argo.bulk_metadata.bulk_log_xml_only false')
         update_metadata(apo_id, response_xml, original_filename, user_login, log) # Load into DOR
       end

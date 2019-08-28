@@ -213,7 +213,6 @@ RSpec.describe ModsulatorJob, type: :job do
                   @output_directory,
                   'random_user',
                   'xlsx',
-                  'true',
                   'anote')
 
       # Filename is calculated based on a millisecond timestamp, so we need to look for the generated file
@@ -233,7 +232,6 @@ RSpec.describe ModsulatorJob, type: :job do
                   @output_directory,
                   'random_user',
                   'xlsx',
-                  'true',
                   'anote')
     end
   end
