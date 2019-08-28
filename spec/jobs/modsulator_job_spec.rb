@@ -14,6 +14,7 @@ RSpec.describe ModsulatorJob, type: :job do
   let(:output_directory) { File.join(File.expand_path('../../tmp', __dir__), 'job_tests') }
   let(:job) { ModsulatorJob.new }
   let(:fixtures_dir) { File.expand_path('../fixtures', __dir__) }
+  let(:user) { build(:user, sunetid: 'foo') }
 
   describe 'update_metadata' do
     it 'raises an error given an invalid xml argument' do
@@ -44,7 +45,7 @@ RSpec.describe ModsulatorJob, type: :job do
     let(:log) { instance_double(File, flush: true, puts: true) }
 
     it 'writes the correct information to the log' do
-      job.start_log(log, 'fakeuser', 'fakefile', 'fakenote')
+      job.start_log(log, user, 'fakefile', 'fakenote')
       expect(log).to have_received(:puts).with(/^argo.bulk_metadata.bulk_log_job_start .*/)
       expect(log).to have_received(:puts).with(/^argo.bulk_metadata.bulk_log_user .*/)
       expect(log).to have_received(:puts).with(/^argo.bulk_metadata.bulk_log_input_file .*/)
@@ -52,8 +53,8 @@ RSpec.describe ModsulatorJob, type: :job do
     end
 
     it 'completes without erring given a nil argument for note, or no arg' do
-      expect { job.start_log(log, 'fakeuser', 'fakefile', nil) }.not_to raise_error
-      expect { job.start_log(log, 'fakeuser', 'fakefile')      }.not_to raise_error
+      expect { job.start_log(log, user, 'fakefile', nil) }.not_to raise_error
+      expect { job.start_log(log, user, 'fakefile')      }.not_to raise_error
     end
   end
 
@@ -94,7 +95,8 @@ RSpec.describe ModsulatorJob, type: :job do
       job.perform(nil,
                   test_spreadsheet_path,
                   output_directory,
-                  'random_user',
+                  user,
+                  [],
                   'xlsx',
                   'anote')
 
@@ -113,7 +115,8 @@ RSpec.describe ModsulatorJob, type: :job do
       job.perform(nil,
                   test_spreadsheet_path,
                   output_directory,
-                  'random_user',
+                  user,
+                  [],
                   'xlsx',
                   'anote')
     end

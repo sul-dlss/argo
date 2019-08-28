@@ -3,39 +3,59 @@
 require 'rails_helper'
 
 RSpec.describe ApplyModsMetadata do
-  let(:apo_druid) {}
   let(:mods_node) {}
+  let(:apo_druid) { 'druid:999apo' }
+  let(:desc_metadata) { instance_double(Dor::DescMetadataDS, content: '<xml/>', 'content=': true) }
   let(:item) do
     instance_double(Dor::Item,
+                    descMetadata: desc_metadata,
                     pid: 'druid:123abc',
                     admin_policy_object_id: apo_druid,
-                    descMetadata: desc_metadata,
                     save!: true)
   end
-  let(:desc_metadata) { instance_double(Dor::DescMetadataDS, content: '', 'content=' => nil) }
   let(:log) { instance_double(File, puts: true) }
+  let(:ability) { Ability.new(user) }
+  let(:user) { build(:user) }
   let(:action) do
     described_class.new(apo_druid: apo_druid,
                         mods_node: mods_node,
                         item: item,
                         original_filename: 'testfile.xlsx',
-                        user_login: 'username',
+                        ability: ability,
                         log: log)
   end
 
   describe '#apply' do
+    subject(:apply) { action.apply }
+
+    let(:status_service) { instance_double(Dor::StatusService, status_info: { status_code: 9 }) }
+
     before do
-      allow(Dor::StatusService).to receive(:new).and_return(stub_service)
+      allow(Dor::StatusService).to receive(:new).and_return(status_service)
     end
 
-    let(:stub_service) { instance_double(Dor::StatusService, status_info: { status_code: status_code }) }
-    let(:status_code) { 6 }
-    let(:workflow) { instance_double(DorObjectWorkflowStatus) }
+    context 'with permission' do
+      before do
+        allow(ability).to receive(:can?).and_return(true)
+        allow(action).to receive(:log_error!)
+      end
 
-    it 'does not rescue and log an error' do
-      allow(action).to receive(:log_error!)
-      action.apply
-      expect(action).not_to have_received(:log_error!)
+      it 'saves the metadata' do
+        apply
+        expect(item).to have_received(:save!)
+        expect(action).not_to have_received(:log_error!)
+      end
+    end
+
+    context 'without permission' do
+      before do
+        allow(ability).to receive(:can?).and_return(false)
+      end
+
+      it 'saves the metadata' do
+        apply
+        expect(item).not_to have_received(:save!)
+      end
     end
   end
 
@@ -97,7 +117,7 @@ RSpec.describe ApplyModsMetadata do
         identifier: item.pid,
         significance: 'minor',
         description: 'Descriptive metadata upload from testfile.xlsx',
-        opening_user_name: 'username'
+        opening_user_name: user.sunetid
       )
     end
   end

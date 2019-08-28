@@ -2,14 +2,18 @@
 
 # Updates the metadata of an object with the given MODS
 class ApplyModsMetadata
+  # @param [String] apo_druid
   # @param [Nokogiri::XML::Element] mods_node A MODS XML node.
   # @param [Dor::Item] item the item to be updated
-  def initialize(apo_druid:, mods_node:, item:, original_filename:, user_login:, log:)
+  # @param [String] original_filename the filename these updates came from
+  # @param [Ability] ability the abilities of the acting user
+  # @param [#puts] log
+  def initialize(apo_druid:, mods_node:, item:, original_filename:, ability:, log:)
     @apo_druid = apo_druid
     @mods_node = mods_node
     @item = item
     @original_filename = original_filename
-    @user_login = user_login
+    @ability = ability
     @log = log
   end
 
@@ -21,12 +25,15 @@ class ApplyModsMetadata
       log.puts("argo.bulk_metadata.bulk_log_apo_fail #{item.pid}")
       return
     end
+
     if in_accessioning?
       log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{item.pid}")
       return
     end
 
     return unless status_ok?
+
+    return unless ability.can? :manage_item, item
 
     # We only update objects if the descMetadata XML is different
     current_metadata = item.descMetadata.content
@@ -46,7 +53,11 @@ class ApplyModsMetadata
 
   private
 
-  attr_reader :apo_druid, :mods_node, :item, :original_filename, :user_login, :log
+  attr_reader :apo_druid, :mods_node, :item, :original_filename, :ability, :log
+
+  def item_druid
+    item.pid
+  end
 
   # Log the error
   def log_error!(exception)
@@ -71,7 +82,7 @@ class ApplyModsMetadata
     VersionService.open(identifier: item.pid,
                         significance: 'minor',
                         description: "Descriptive metadata upload from #{original_filename}",
-                        opening_user_name: user_login)
+                        opening_user_name: ability.current_user.sunetid)
   end
 
   # Check if two MODS XML nodes are equivalent.

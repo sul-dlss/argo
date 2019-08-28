@@ -10,7 +10,7 @@ class PrepareJob < GenericJob
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [Array] :pids required list of pids
-  # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check (can_manage?)
+  # @option params [Array] :groups the groups the user belonged to when the started the job. Required because groups are not persisted with the user.
   # @option params [Array] :user the user
   # @option params [Hash] :prepare parameters for the prepare job (:significance and :description)
   def perform(bulk_action_id, params)
@@ -34,6 +34,9 @@ class PrepareJob < GenericJob
 
   def open_object(pid, significance, description, user_name, log)
     return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid)
+
+    object = Dor.find(pid)
+    return log.puts("#{Time.current} Not authorized for #{pid}") unless ability.can?(:manage_item, object)
 
     VersionService.open(identifier: pid,
                         significance: significance,

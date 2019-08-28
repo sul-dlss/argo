@@ -16,18 +16,21 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]  apo_id             DRUID of the DOR APO that governs all of the objects we're trying to upload metadata for.
   # @param  [String]  uploaded_filename  Full path to the temporary uploaded file. Deleted upon completion.
   # @param  [String]  output_directory   Where to store output (log, generated XML etc.).
-  # @param  [String]  user_login         Acting user's username.
+  # @param  [User]    user               Acting user
   # @param  [String]  filetype           One of 'xml, 'spreadsheet', or 'xml_only'. If not 'xml', the input is to be loaded into the datastream.
   # @param  [String]  note               An optional note that the user entered to go with the job.
   # @return [Void]
-  def perform(apo_id, uploaded_filename, output_directory, user_login, filetype = 'spreadsheet', note = '')
+  def perform(apo_id, uploaded_filename, output_directory, user, groups, filetype = 'spreadsheet', note = '')
     original_filename = generate_original_filename(uploaded_filename)
     log_filename = generate_log_filename(output_directory)
     persist_metadata = load_to_dor?(filetype)
     method = operation(filetype)
 
+    user.set_groups_to_impersonate(groups)
+    ability = Ability.new(user)
+
     File.open(log_filename, 'a') { |log|
-      start_log(log, user_login, original_filename, note)
+      start_log(log, user, original_filename, note)
 
       # If a modsulator request fails, the job will fail and automatically be
       # retried (see config/initializers/delayed_job.rb)
@@ -48,7 +51,7 @@ class ModsulatorJob < ActiveJob::Base
 
       if persist_metadata
         log.puts('argo.bulk_metadata.bulk_log_xml_only false')
-        update_metadata(apo_id, response_xml, original_filename, user_login, log) # Load into DOR
+        update_metadata(apo_id, response_xml, original_filename, ability, log) # Load into DOR
       end
 
       log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
@@ -71,11 +74,11 @@ class ModsulatorJob < ActiveJob::Base
   #
   # @param  [String] druid               The governing APO's druid.
   # @param  [String] xml_string          A MODS XML string.
-  # @param  [File]   log                 Log file handle.
-  # @param  [String] user_login          The login name of the current user_login
+  # @param  [File] log                   Log file handle.
+  # @param  [Ability] ability            The abilities of the current user
   # @param  [String] original_filename   The name of the uploaded file
   # @return [Void]
-  def update_metadata(druid, xml_string, original_filename, user_login, log)
+  def update_metadata(druid, xml_string, original_filename, ability, log)
     return if xml_string.nil?
 
     root = Nokogiri::XML(xml_string).root
@@ -91,7 +94,7 @@ class ModsulatorJob < ActiveJob::Base
                               mods_node: xmldoc_node.first_element_child,
                               item: item,
                               original_filename: original_filename,
-                              user_login: user_login,
+                              ability: ability,
                               log: log).apply
       rescue ActiveFedora::ObjectNotFoundError => e
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{item_druid}")
@@ -124,13 +127,13 @@ class ModsulatorJob < ActiveJob::Base
 
   # Write initial job information to the log file.
   #
-  # @param [File]    log_file  The log file to write to.
-  # @param [String]  username  The login name of the current user.
-  # @param [String]  filename  The name of this job's input file.
-  # @param [String]  note      An optional comment that describes this job.
-  def start_log(log_file, username, filename, note = '')
+  # @param [File] log_file The log file to write to.
+  # @param [user] username The login name of the current user.
+  # @param [String] filename The name of this job's input file.
+  # @param [String] note An optional comment that describes this job.
+  def start_log(log_file, user, filename, note = '')
     log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.now.strftime(TIME_FORMAT)}")
-    log_file.puts("argo.bulk_metadata.bulk_log_user #{username}")
+    log_file.puts("argo.bulk_metadata.bulk_log_user #{user.sunetid}")
     log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}")
     log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if note && note.length > 0
     log_file.flush # record start in case of crash

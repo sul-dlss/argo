@@ -23,54 +23,60 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(user)
-    user ||= User.new
-    can :manage, :all if user.is_admin?
-    cannot :impersonate, User unless user.is_webauth_admin?
+  def initialize(current_user)
+    @current_user = current_user || guest_user
+    grant_permissions
+  end
 
-    can [:manage_item, :manage_desc_metadata, :manage_governing_apo, :view_content, :view_metadata], ActiveFedora::Base if user.is_manager?
-    can :create, Dor::AdminPolicyObject if user.is_manager?
+  attr_reader :current_user, :options, :cache
 
-    can [:view_metadata, :view_content], ActiveFedora::Base if user.is_viewer?
+  def grant_permissions
+    can :manage, :all if current_user.is_admin?
+    cannot :impersonate, User unless current_user.is_webauth_admin?
+
+    can [:manage_item, :manage_desc_metadata, :manage_governing_apo, :view_content, :view_metadata], ActiveFedora::Base if current_user.is_manager?
+    can :create, Dor::AdminPolicyObject if current_user.is_manager?
+
+    can [:view_metadata, :view_content], ActiveFedora::Base if current_user.is_viewer?
 
     can :manage_item, Dor::AdminPolicyObject do |dor_item|
-      can_manage_items? user.roles(dor_item.pid)
+      can_manage_items? current_user.roles(dor_item.pid)
     end
 
     can :manage_item, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        can_manage_items? user.roles(dor_item.admin_policy_object.pid)
+        can_manage_items? current_user.roles(dor_item.admin_policy_object.pid)
       end
     end
 
     can :manage_desc_metadata, Dor::AdminPolicyObject do |dor_item|
-      can_edit_desc_metadata? user.roles(dor_item.pid)
+      can_edit_desc_metadata? current_user.roles(dor_item.pid)
     end
 
     can :manage_desc_metadata, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        can_edit_desc_metadata? user.roles(dor_item.admin_policy_object.pid)
+        can_edit_desc_metadata? current_user.roles(dor_item.admin_policy_object.pid)
       end
     end
 
     can :manage_governing_apo, ActiveFedora::Base do |dor_item, new_apo_id|
       # user must have management privileges on both the target APO and the APO currently governing the item
-      can_manage_items?(user.roles(new_apo_id)) && can?(:manage_item, dor_item)
+      can_manage_items?(current_user.roles(new_apo_id)) && can?(:manage_item, dor_item)
     end
 
     can [:view_content, :view_metadata], Dor::AdminPolicyObject do |dor_item|
-      can_view? user.roles(dor_item.pid)
+      can_view? current_user.roles(dor_item.pid)
     end
 
     can :view_content, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        can_view? user.roles(dor_item.admin_policy_object.pid)
+        can_view? current_user.roles(dor_item.admin_policy_object.pid)
       end
     end
 
     can :view_metadata, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        can_view? user.roles(dor_item.admin_policy_object.pid)
+        can_view? current_user.roles(dor_item.admin_policy_object.pid)
       end
     end
   end
@@ -95,5 +101,10 @@ class Ability
 
   def intersect(arr1, arr2)
     !(arr1 & arr2).empty?
+  end
+
+  # A current_user who isn't logged in
+  def guest_user
+    User.new
   end
 end

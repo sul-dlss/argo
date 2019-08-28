@@ -28,11 +28,18 @@ RSpec.describe ReleaseObjectJob do
         webauth: { 'privgroup' => 'dorstuff', 'login' => 'esnowden' }
       }
     end
+    let(:item1) { instance_double(Dor::Item) }
+    let(:item2) { instance_double(Dor::Item) }
+
+    before do
+      allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
+      allow(Dor).to receive(:find).with(pids[1]).and_return(item2)
+    end
 
     context 'in a happy world' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-        expect(subject).to receive(:can_manage?).and_return(true).exactly(pids.length).times
+        expect(subject.ability).to receive(:can?).and_return(true).exactly(pids.length).times
         pids.each do |pid|
           stub_release_tags(pid)
         end
@@ -68,7 +75,7 @@ RSpec.describe ReleaseObjectJob do
     context 'when a release tag fails' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-        expect(subject).to receive(:can_manage?).and_return(true).exactly(pids.length).times
+        expect(subject.ability).to receive(:can?).and_return(true).exactly(pids.length).times
         # no stubbed release wf calls (they should never get called)
         pids.each do |pid|
           stub_release_tags(pid, 500)
@@ -104,7 +111,7 @@ RSpec.describe ReleaseObjectJob do
     context 'when a release wf fails' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-        expect(subject).to receive(:can_manage?).and_return(true).exactly(pids.length).times
+        expect(subject.ability).to receive(:can?).and_return(true).exactly(pids.length).times
         allow(client).to receive(:create_workflow_by_name).and_raise(Dor::WorkflowException)
         pids.each do |pid|
           stub_release_tags(pid)
@@ -138,7 +145,7 @@ RSpec.describe ReleaseObjectJob do
     context 'when not authorized' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-        expect(subject).to receive(:can_manage?).and_return(false).exactly(pids.length).times
+        expect(subject.ability).to receive(:can?).and_return(false).exactly(pids.length).times
       end
 
       it 'updates the total druid count' do

@@ -19,12 +19,28 @@ RSpec.describe VirtualMergeJob, type: :job do
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(client)
+      allow(Dor).to receive(:find).and_return(instance_double(Dor::Item))
+      allow(Ability).to receive(:new).and_return(ability)
     end
 
-    it 'calls the dor-services-app API' do
-      perform
-      expect(client).to have_received(:add_constituents).with(child_druids: ['one', 'two'])
-      expect(version_client).to have_received(:close).exactly(3).times
+    context 'with authorization' do
+      let(:ability) { instance_double(Ability, can?: true) }
+
+      it 'calls the dor-services-app API' do
+        perform
+        expect(client).to have_received(:add_constituents).with(child_druids: ['one', 'two'])
+        expect(version_client).to have_received(:close).exactly(3).times
+      end
+    end
+
+    context 'without authorization' do
+      let(:ability) { instance_double(Ability, can?: false) }
+
+      it 'does not call the dor-services-app API' do
+        perform
+        expect(client).not_to have_received(:add_constituents)
+        expect(version_client).not_to have_received(:close)
+      end
     end
   end
 end
