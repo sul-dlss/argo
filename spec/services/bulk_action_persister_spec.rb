@@ -75,11 +75,11 @@ RSpec.describe BulkActionPersister do
         BulkAction.create(
           action_type: 'PrepareJob',
           pids: 'a b c',
-          prepare: { 'severity' => 'minor', 'description' => 'change the data' }
+          prepare: { 'significance' => 'minor', 'description' => 'change the data' }
         )
       end
 
-      it { is_expected.to include(prepare: { 'description' => 'change the data', 'severity' => 'minor' }) }
+      it { is_expected.to include(prepare: { 'description' => 'change the data', 'significance' => 'minor' }) }
     end
   end
 end

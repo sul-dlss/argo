@@ -60,7 +60,7 @@ class BulkActionsController < ApplicationController
       manage_release: [:tag, :what, :who, :to],
       set_governing_apo: [:new_apo_id],
       manage_catkeys: [:catkeys],
-      prepare: [:severity, :description]
+      prepare: [:significance, :description]
     )
   end
 

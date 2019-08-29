@@ -1,10 +1,10 @@
 <form action=<%= close_item_versions_path(@object.pid) %> method="POST">
   <div class='form-group'>
-    <label for="severity">Type</label>
-    <select id="severity" name="severity" class='form-control'>
-      <%- # loop through the severity levels and pre-select the one that was chosen when opening the version -%>
-      <% @severity_selected.keys.each do |severity| %>
-        <option value="<%= severity.to_s %>"<%= @severity_selected[severity] ? ' selected' : ''-%>><%=severity.to_s.capitalize-%></option>
+    <label for="significance">Type</label>
+    <select id="significance" name="significance" class='form-control'>
+      <%- # loop through the significance levels and pre-select the one that was chosen when opening the version -%>
+      <% @significance_selected.keys.each do |significance| %>
+        <option value="<%= significance.to_s %>"<%= @significance_selected[significance] ? ' selected' : ''-%>><%=significance.to_s.capitalize-%></option>
       <% end %>
     </select>
   </div>

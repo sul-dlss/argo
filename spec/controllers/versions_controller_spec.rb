@@ -46,7 +46,7 @@ RSpec.describe VersionsController, type: :controller do
         expect(ActiveFedora.solr.conn).to receive(:add)
         get :open, params: {
           item_id: pid,
-          severity: vers_md_upd_info[:significance],
+          significance: vers_md_upd_info[:significance],
           description: vers_md_upd_info[:description]
         }
 
@@ -57,7 +57,7 @@ RSpec.describe VersionsController, type: :controller do
     context 'without manage item access' do
       it 'returns a 403' do
         allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
-        get :open, params: { item_id: pid, severity: 'major', description: 'something' }
+        get :open, params: { item_id: pid, significance: 'major', description: 'something' }
         expect(response.code).to eq('403')
       end
     end
@@ -77,7 +77,7 @@ RSpec.describe VersionsController, type: :controller do
       it 'calls dor-services to close the version' do
         expect(item).to receive(:save)
         expect(ActiveFedora.solr.conn).to receive(:add)
-        get :close, params: { item_id: pid, severity: 'major', description: 'something' }
+        get :close, params: { item_id: pid, significance: 'major', description: 'something' }
         expect(flash[:notice]).to eq "Version 2 of #{pid} has been closed!"
         expect(version_service).to have_received(:close).with(description: 'something', significance: 'major')
       end
