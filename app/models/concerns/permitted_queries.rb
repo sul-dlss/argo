@@ -7,6 +7,8 @@ class PermittedQueries
 
   attr_reader :groups, :known_roles, :is_admin
 
+  PERMITTED_COLLECTIONS_LIMIT = 5000
+
   ##
   # @params groups
   # @params [Boolean] is_admin
@@ -58,10 +60,12 @@ class PermittedQueries
           permitted_apos.map { |pid| "#{SolrDocument::FIELD_APO_ID}:\"info:fedora/#{pid}\"" }.join(' OR ')
         end
 
+    # Note that if there are more than PERMITTED_COLLECTIONS_LIMIT collections, not all collections may be returned,
+    # especially for admins.
     result = repository.search(
       q: q,
       defType: 'lucene',
-      rows: 1000,
+      rows: PERMITTED_COLLECTIONS_LIMIT,
       fl: 'id,sw_display_title_tesim',
       fq: ['objectType_ssim:collection', '!project_tag_ssim:Hydrus']
     )['response']['docs']
