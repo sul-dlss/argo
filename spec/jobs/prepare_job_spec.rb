@@ -29,10 +29,8 @@ RSpec.describe PrepareJob, type: :job do
                                 })
 
     expect(VersionService).to have_received(:open).with(identifier: anything,
-                                                        vers_md_upd_info: {
-                                                          description: 'Changed dates',
-                                                          opening_user_name: 'jcoyne85',
-                                                          significance: 'major'
-                                                        }).twice
+                                                        description: 'Changed dates',
+                                                        opening_user_name: 'jcoyne85',
+                                                        significance: 'major').twice
   end
 end

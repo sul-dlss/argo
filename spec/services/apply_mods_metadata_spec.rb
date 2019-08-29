@@ -72,11 +72,9 @@ RSpec.describe ApplyModsMetadata do
 
       expect(VersionService).to have_received(:open).with(
         identifier: item.pid,
-        vers_md_upd_info: {
-          significance: 'minor',
-          description: 'Descriptive metadata upload from testfile.xlsx',
-          opening_user_name: 'username'
-        }
+        significance: 'minor',
+        description: 'Descriptive metadata upload from testfile.xlsx',
+        opening_user_name: 'username'
       )
     end
   end
