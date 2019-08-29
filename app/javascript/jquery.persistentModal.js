@@ -60,7 +60,6 @@
       }
 
       function receiveAjax(data) {
-
         //default to error text, replace if we got something back
         var contents = "Error retrieving content";
         if (data.readyState !== 0) {
@@ -119,7 +118,3 @@
   };
 
 })(jQuery);
-
-Blacklight.onLoad(function() {
-  $('[data-behavior="persistent-modal"]').persistentModal();
-});

@@ -1,4 +1,7 @@
-function DorRegistration(initOpts) {
+
+import pathTo from './pathTo'
+
+export default function DorRegistration(initOpts) {
   var $t = {
     defaultValues: {
       objectType: 'item',
@@ -68,7 +71,7 @@ function DorRegistration(initOpts) {
         params['pid'] = "druid:" + data.metadata_id;
       }
 
-      for (x in params) { if (params[x] == null) { delete params[x] } }
+      for (let x in params) { if (params[x] == null) { delete params[x] } }
 
       var ajaxParams = {
         type: 'POST',
@@ -142,7 +145,7 @@ function DorRegistration(initOpts) {
             }
         }
         //check for mixed md sources, that isnt allowed
-        for(mdId in mdIds)
+        for(var mdId in mdIds)
         {
             var trimmed=mdIds[mdId].trim();
             var intRegex = /^\d+$/;

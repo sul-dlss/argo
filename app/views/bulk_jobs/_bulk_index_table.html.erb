@@ -2,7 +2,7 @@
   <table class="table table-hover">
     <tr>
       <th>When</th><th>Who</th><th>File Name</th><th>Note</th>
-      <th>Status <%= link_to status_help_apo_bulk_jobs_path, data: { ajax_modal: 'trigger', ajax_modal_title: 'Status Information' } do %>
+      <th>Status <%= link_to status_help_apo_bulk_jobs_path, data: { blacklight_modal: 'trigger', ajax_modal_title: 'Status Information' } do %>
         <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
       <% end %></th>
       <th>Druids</th><th>Success</th><th/><th/>
@@ -27,7 +27,7 @@
 
         <% if(job.has_key?('dir')) %>
           <% druid_and_time = job['dir'].split(/\//) %>
-          <td><%= link_to('Log', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1]), data: { ajax_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
+          <td><%= link_to('Log', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1]), data: { blacklight_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
           <td><%= link_to('XML', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)) %></td>
         <% else %>
           <td>error:  job log dir not found</td>

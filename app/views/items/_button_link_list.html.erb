@@ -3,10 +3,10 @@
     <%
       button_data = {}
       if button[:confirm]
-        # :confirm trumps :ajax_modal, because :ajax_modal would negate :confirm by firing the ajax request regardless of the user's decision
+        # :confirm trumps :blacklight_modal, because :blacklight_modal would negate :confirm by firing the ajax request regardless of the user's decision
         button_data[:confirm] = button[:confirm]
       elsif !button[:new_page]
-        button_data[:ajax_modal] = 'trigger'
+        button_data[:blacklight_modal] = 'trigger'
       end
       if button[:check_url]
         button_data[:check_url] = button[:check_url]

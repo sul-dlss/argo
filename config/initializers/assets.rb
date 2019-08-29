@@ -13,8 +13,3 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += ['registration.css', 'report.css', '*.js']
 
 Rails.application.config.assets.compress = true
-
-Sprockets::ES6.configuration = { 'modules' => 'amd', 'moduleIds' => true }
-# When we upgrade to Sprockets 4, we can ditch sprockets-es6 and config AMD
-# in this way:
-# https://github.com/rails/sprockets/issues/73#issuecomment-139113466

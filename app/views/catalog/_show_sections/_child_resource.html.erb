@@ -9,7 +9,7 @@
       <li class="file">
         <span class="label">File</span>
         <% if can? :manage_item, object %>
-          <%= link_to file['id'], item_files_path(item_id: object, id: file['id']), data: { ajax_modal: 'trigger' } %>
+          <%= link_to file['id'], item_files_path(item_id: object, id: file['id']), data: { blacklight_modal: 'trigger' } %>
         <% else %>
           <%=file['id']%>
         <% end %>

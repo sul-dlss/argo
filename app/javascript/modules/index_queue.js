@@ -26,7 +26,3 @@
     });
   };
 })(jQuery);
-
-Blacklight.onLoad(function() {
-  $('[data-index-queue-depth-url]').indexQueueDepth();
-});

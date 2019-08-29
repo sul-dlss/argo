@@ -1,41 +1,13 @@
+import Form from 'modules/apo_form'
+import CollectionForm from 'modules/collection_form'
+import BulkActions from 'controllers/bulk_actions'
+import WorkflowGrid =  from 'controllers/workflow_grid_controller'
+import { Application } from 'stimulus'
+
 function pathTo(path) {
   var root = $('body').attr('data-application-root') || '';
   return(root + path);
 }
-
-Argo = {
-    initialize: function() {
-      this.apoEditor()
-      this.collapsableSections()
-
-      const application = Stimulus.Application.start()
-      const BulkActions = require('controllers/bulk_actions')
-      const WorkflowGrid = require('controllers/workflow_grid_controller')
-      application.register("bulk_actions", BulkActions)
-      application.register("workflow-grid", WorkflowGrid)
-
-    },
-    apoEditor: function () {
-        const element = $("[data-behavior='apo-form']")
-        if (element.length > 0) {
-            const Form = require('modules/apo_form');
-            new Form(element).init();
-        }
-    },
-    // Collapse sections on the item show pages when the cheverons are clicked
-    collapsableSections: function() {
-      $('.collapsible-section').click(function(e) {
-          // Do not want a click on the "MODS bulk loads" button on the APO show page to cause collapse
-          if(e.target.id !== 'bulk-button') {
-              $(this).next('div').slideToggle()
-              $(this).toggleClass('collapsed')
-          }
-      })
-    },
-}
-
-Blacklight.onLoad(function() { Argo.initialize() });
-
 
 // When a user selects a spreadsheet file for uploading via the bulk metadata upload function,
 // this function is called to verify the filename extension.
@@ -93,3 +65,39 @@ $(document).on('keyup', '#collection_title', function(e) {
 $(document).on('keyup', '#collection_catkey', function(e) {
     collectionExistsWarning(document.getElementById('collection_catkey_warning'), 'catkey', e.target.value);
 });
+
+export default class Argo {
+    initialize() {
+        this.apoEditor()
+        this.collectionEditor()
+        this.collapsableSections()
+        const application = Application.start()
+        application.register("bulk_actions", BulkActions)
+        application.register("workflow-grid", WorkflowGrid)
+    }
+
+    apoEditor() {
+        var element = $("[data-behavior='apo-form']")
+        if (element.length > 0) {
+            new Form(element).init();
+        }
+    }
+
+    // Collapse sections on the item show pages when the cheverons are clicked
+    collapsableSections() {
+      $('.collapsible-section').click(function(e) {
+          // Do not want a click on the "MODS bulk loads" button on the APO show page to cause collapse
+          if(e.target.id !== 'bulk-button') {
+              $(this).next('div').slideToggle()
+              $(this).toggleClass('collapsed')
+          }
+      })
+    }
+
+    collectionEditor() {
+        var element = $("[data-behavior='collection-form']")
+        if (element.length > 0) {
+            new CollectionForm(element).init();
+        }
+    }
+}

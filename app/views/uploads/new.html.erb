@@ -1,4 +1,4 @@
-<div data-ajax-modal="container">
+<div data-blacklight-modal="container">
     <div id="spreadsheet-upload-container">
 	<%= form_tag(apo_uploads_path(@obj.id), multipart: true) do %>
         <div id="bulk-upload-form" class="container-fluid">
@@ -7,7 +7,7 @@
 		    <strong>Submit MODS descriptive metadata for bulk processing</strong>
 		</div>
 		<div class="col-md-2 spreadsheet-right">
-		    <%= link_to('Help', help_apo_bulk_jobs_path(@obj.id), data: { ajax_modal: 'trigger' }) %>
+		    <%= link_to('Help', help_apo_bulk_jobs_path(@obj.id), data: { blacklight_modal: 'trigger' }) %>
 		</div>
 	    </div>
 	    <div class="row spreadsheet-row">

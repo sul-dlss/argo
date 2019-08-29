@@ -1,5 +1,6 @@
 <div class='modal-header'>
-  <button type='button' class='ajax-modal-close close' data-dismiss='modal' aria-hidden='true'>×</button>
+  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
+  
   <h3 class='modal-title'>Dublin Core (derived from MODS)</h3>
 </div>
 
@@ -7,7 +8,7 @@
   <% dc_xml = Nokogiri::XML(Dor::Services::Client.object(@obj.pid).metadata.dublin_core) %>
   <div class="lightbox-head">
     <span class="section-head-link">
-      <%= link_to "View XML", ds_solr_document_path(@obj.pid, 'full_dc'), :title => 'Dublin Core (derived from MODS)', :data => { ajax_modal: 'trigger' } %>
+      <%= link_to "View XML", ds_solr_document_path(@obj.pid, 'full_dc'), title: 'Dublin Core (derived from MODS)', data: { blacklight_modal: 'trigger' } %>
     </span>
     <%= @obj.pid %>
   </div>
