@@ -12,11 +12,11 @@ class PrepareJob < GenericJob
   # @option params [Array] :pids required list of pids
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check (can_manage?)
   # @option params [Array] :user the user
-  # @option params [Hash] :prepare parameters for the prepare job (:severity and :description)
+  # @option params [Hash] :prepare parameters for the prepare job (:significance and :description)
   def perform(bulk_action_id, params)
     super
 
-    severity = params[:prepare]['severity']
+    significance = params[:prepare]['significance']
     description = params[:prepare]['description']
 
     with_bulk_action_log do |log|
@@ -24,7 +24,7 @@ class PrepareJob < GenericJob
       update_druid_count
 
       pids.each do |current_druid|
-        open_object(current_druid, severity, description, @current_user.to_s, log)
+        open_object(current_druid, significance, description, @current_user.to_s, log)
       end
       log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
@@ -32,11 +32,11 @@ class PrepareJob < GenericJob
 
   private
 
-  def open_object(pid, severity, description, user_name, log)
+  def open_object(pid, significance, description, user_name, log)
     return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid)
 
     info = {
-      significance: severity,
+      significance: significance,
       description: description,
       opening_user_name: user_name
     }

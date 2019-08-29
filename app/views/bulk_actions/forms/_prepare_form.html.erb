@@ -1,7 +1,7 @@
 <%= f.fields_for :prepare do |prepare_fields| %>
   <div class='form-group'>
-    <%= prepare_fields.label :severity, 'Change type' %>
-    <%= prepare_fields.select :severity,
+    <%= prepare_fields.label :significance, 'Change type' %>
+    <%= prepare_fields.select :significance,
                               [['Major', 'major'], ['Minor', 'minor'], ['Admin', 'admin']],
                               class: 'form-control' %>
   </div>

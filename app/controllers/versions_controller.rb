@@ -15,11 +15,11 @@ class VersionsController < ApplicationController
     @tag = @object.datastreams['versionMetadata'].current_tag
 
     # do some stuff to figure out which part of the version number changed when opening
-    # the item for versioning, so that the form can pre-select the correct severity level
-    @changed_severity = which_severity_changed(get_current_version_tag(@object), get_prior_version_tag(@object))
-    @severity_selected = {}
-    [:major, :minor, :admin].each do |severity|
-      @severity_selected[severity] = (@changed_severity == severity)
+    # the item for versioning, so that the form can pre-select the correct significance level
+    @changed_significance = which_significance_changed(get_current_version_tag(@object), get_prior_version_tag(@object))
+    @significance_selected = {}
+    [:major, :minor, :admin].each do |significance|
+      @significance_selected[significance] = (@changed_significance == significance)
     end
 
     respond_to do |format|
@@ -31,7 +31,7 @@ class VersionsController < ApplicationController
     authorize! :manage_item, @object
 
     vers_md_upd_info = {
-      significance: params[:severity],
+      significance: params[:significance],
       description: params[:description],
       opening_user_name: current_user.to_s
     }
@@ -45,7 +45,7 @@ class VersionsController < ApplicationController
     nil
   end
 
-  # as long as this isn't a bulk operation, and we get non-nil severity and description
+  # as long as this isn't a bulk operation, and we get non-nil significance and description
   # values, update those fields on the version metadata datastream
   def close
     authorize! :manage_item, @object
@@ -54,7 +54,7 @@ class VersionsController < ApplicationController
       VersionService.close(
         identifier: @object.pid,
         description: params[:description],
-        significance: params[:severity]
+        significance: params[:significance]
       )
       msg = "Version #{@object.current_version} closed"
       @object.events.add_event('close', current_user.to_s, msg)
@@ -88,7 +88,7 @@ class VersionsController < ApplicationController
   # @param [String] cur_version_tag   current version tag
   # @param [String] prior_version_tag prior version tag
   # @return [Symbol] :major, :minor, :admin or nil
-  def which_severity_changed(cur_version_tag, prior_version_tag)
+  def which_significance_changed(cur_version_tag, prior_version_tag)
     return nil if cur_version_tag.nil? || prior_version_tag.nil?
     return :major if cur_version_tag.major != prior_version_tag.major
     return :minor if cur_version_tag.minor != prior_version_tag.minor

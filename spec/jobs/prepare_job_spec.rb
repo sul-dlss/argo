@@ -25,7 +25,7 @@ RSpec.describe PrepareJob, type: :job do
                                 user: user,
                                 prepare: {
                                   'description' => 'Changed dates',
-                                  'severity' => 'major'
+                                  'significance' => 'major'
                                 })
 
     expect(VersionService).to have_received(:open).with(identifier: anything,

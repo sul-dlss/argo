@@ -7,7 +7,7 @@ RSpec.describe 'versions/_close_ui.html.erb' do
 
   it 'renders the partial content' do
     assign(:object, object)
-    assign(:severity_selected, major: false, minor: true, admin: nil)
+    assign(:significance_selected, major: false, minor: true, admin: nil)
     render
     expect(rendered).to have_css 'form'
     expect(rendered).to have_css '.form-group label', text: 'Type'
