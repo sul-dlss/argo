@@ -9,14 +9,7 @@ class VirtualMergeJob < GenericJob
     client = Dor::Services::Client.object(parent_druid)
     client.add_constituents(child_druids: child_druids)
     ([parent_druid] + child_druids).each do |druid|
-      close(druid)
+      VersionService.close(identifier: druid)
     end
-  end
-
-  private
-
-  def close(druid)
-    object_client = Dor::Services::Client.object(druid)
-    object_client.version.close
   end
 end

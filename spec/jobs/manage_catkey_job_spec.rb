@@ -61,7 +61,7 @@ RSpec.describe ManageCatkeyJob do
       expect(subject).to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
       expect(current_object).to receive(:catkey=).with(catkey)
       expect(current_object).to receive(:save)
-      expect(subject).to receive(:close_version).with(current_object)
+      expect(VersionService).to receive(:close).with(identifier: current_object.pid)
       subject.send(:update_catkey, pid, catkey, buffer)
     end
 
@@ -74,7 +74,7 @@ RSpec.describe ManageCatkeyJob do
       expect(subject).not_to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
       expect(current_object).to receive(:catkey=).with(catkey)
       expect(current_object).to receive(:save)
-      expect(subject).not_to receive(:close_version).with(current_object)
+      expect(VersionService).not_to receive(:close).with(identifier: current_object.pid)
       subject.send(:update_catkey, pid, catkey, buffer)
     end
   end
