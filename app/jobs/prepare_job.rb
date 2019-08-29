@@ -35,12 +35,10 @@ class PrepareJob < GenericJob
   def open_object(pid, significance, description, user_name, log)
     return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid)
 
-    info = {
-      significance: significance,
-      description: description,
-      opening_user_name: user_name
-    }
-    VersionService.open(identifier: pid, vers_md_upd_info: info)
+    VersionService.open(identifier: pid,
+                        significance: significance,
+                        description: description,
+                        opening_user_name: user_name)
     bulk_action.increment(:druid_count_success).save
     log.puts("#{Time.current} Object successfully opened #{pid}")
   rescue StandardError => e

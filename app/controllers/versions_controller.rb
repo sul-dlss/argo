@@ -30,12 +30,10 @@ class VersionsController < ApplicationController
   def open
     authorize! :manage_item, @object
 
-    vers_md_upd_info = {
-      significance: params[:significance],
-      description: params[:description],
-      opening_user_name: current_user.to_s
-    }
-    VersionService.open(identifier: @object.pid, vers_md_upd_info: vers_md_upd_info)
+    VersionService.open(identifier: @object.pid,
+                        significance: params[:significance],
+                        description: params[:description],
+                        opening_user_name: current_user.to_s)
     msg = "#{@object.pid} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
   rescue StandardError => e

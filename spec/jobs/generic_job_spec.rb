@@ -73,11 +73,9 @@ RSpec.describe GenericJob do
       subject.send(:open_new_version, dor_object, 'Set new governing APO')
 
       expect(version_client).to have_received(:open).with(
-        vers_md_upd_info: {
-          significance: 'minor',
-          description: 'Set new governing APO',
-          opening_user_name: subject.bulk_action.user.to_s
-        }
+        significance: 'minor',
+        description: 'Set new governing APO',
+        opening_user_name: subject.bulk_action.user.to_s
       )
     end
 

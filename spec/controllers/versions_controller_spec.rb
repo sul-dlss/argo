@@ -39,18 +39,18 @@ RSpec.describe VersionsController, type: :controller do
 
       let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
       let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
-      let(:vers_md_upd_info) { { significance: 'major', description: 'something', opening_user_name: user.to_s } }
+      let(:options) { { significance: 'major', description: 'something', opening_user_name: user.to_s } }
 
       it 'calls dor-services to open a new version' do
         expect(item).to receive(:save)
         expect(ActiveFedora.solr.conn).to receive(:add)
         get :open, params: {
           item_id: pid,
-          significance: vers_md_upd_info[:significance],
-          description: vers_md_upd_info[:description]
+          significance: options[:significance],
+          description: options[:description]
         }
 
-        expect(version_client).to have_received(:open).with(vers_md_upd_info: vers_md_upd_info)
+        expect(version_client).to have_received(:open).with(**options)
       end
     end
 

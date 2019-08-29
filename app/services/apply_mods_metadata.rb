@@ -63,12 +63,10 @@ class ApplyModsMetadata
 
   # Open a new version for the given object.
   def commit_new_version
-    vers_md_upd_info = {
-      significance: 'minor',
-      description: "Descriptive metadata upload from #{original_filename}",
-      opening_user_name: user_login
-    }
-    VersionService.open(identifier: item.pid, vers_md_upd_info: vers_md_upd_info)
+    VersionService.open(identifier: item.pid,
+                        significance: 'minor',
+                        description: "Descriptive metadata upload from #{original_filename}",
+                        opening_user_name: user_login)
   end
 
   # Check if two MODS XML nodes are equivalent.
