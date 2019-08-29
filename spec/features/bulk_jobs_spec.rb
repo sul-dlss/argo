@@ -40,7 +40,7 @@ RSpec.describe 'Bulk jobs view', js: true do
     page.execute_script("$('#spreadsheet_file').trigger('change')")
 
     expect(find('input#filetypes_1')).not_to be_disabled
-    expect(page).to have_css('span#bulk-spreadsheet-warning', text: '', visible: false)
+    expect(page).to have_css('span#bulk-spreadsheet-warning', text: '')
     expect(find('button#spreadsheet_submit')).to be_disabled
     expect(find('input#filetypes_1')).not_to be_disabled
     choose('filetypes_1')
