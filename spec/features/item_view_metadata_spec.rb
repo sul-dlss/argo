@@ -72,7 +72,7 @@ RSpec.describe 'Item view', js: true do
         # rubocop:disable Style/BlockDelimiters
         expect {
           click_link 'M1090_S15_B02_F01_0126.jp2'
-          sleep(3)
+          sleep(5)
         }.to change { File.exist?('M1090_S15_B02_F01_0126.jp2') }.from(false).to(true)
         # rubocop:enable Style/BlockDelimiters
       end
