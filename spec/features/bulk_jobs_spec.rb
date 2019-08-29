@@ -10,17 +10,17 @@ RSpec.describe 'Bulk jobs view', js: true do
 
   it 'the submit button exists' do
     visit apo_bulk_jobs_path('druid:hv992ry2431')
-    expect(page).to have_link 'Submit new file ...', href: new_item_upload_path(item_id: 'druid:hv992ry2431')
+    expect(page).to have_link 'Submit new file ...', href: new_apo_upload_path(apo_id: 'druid:hv992ry2431')
   end
 
   it 'click submit button opens bulk upload form' do
-    visit new_item_upload_path(item_id: 'druid:hv992ry2431')
+    visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
     expect(page).to have_css('div#spreadsheet-upload-container form div#bulk-upload-form')
     expect(page).to have_css('input#spreadsheet_file')
   end
 
   it 'bulk upload form buttons are disabled upon first page visit' do
-    visit new_item_upload_path(item_id: 'druid:hv992ry2431')
+    visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
     expect(find('input#filetypes_1')).to be_disabled
     expect(find('input#filetypes_2')).to be_disabled
     expect(find('input#convert_only')).to be_disabled
@@ -30,7 +30,7 @@ RSpec.describe 'Bulk jobs view', js: true do
   end
 
   it 'selecting a file to upload and selecting one of the radio buttons enables the submit button' do
-    visit new_item_upload_path(item_id: 'druid:hv992ry2431')
+    visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
     expect(page).to have_css('#spreadsheet_file')
     expect(find('input#filetypes_1')).to be_disabled
 
@@ -48,7 +48,7 @@ RSpec.describe 'Bulk jobs view', js: true do
   end
 
   it 'uploading a file with an invalid extension displays a warning' do
-    visit new_item_upload_path(item_id: 'druid:hv992ry2431')
+    visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
     expect(page).to have_css('#spreadsheet_file')
     attach_file('spreadsheet_file', File.absolute_path(__FILE__))
 

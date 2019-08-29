@@ -87,10 +87,10 @@ Argo::Application.routes.draw do
         get ':time/log', action: :show, as: 'show'
       end
     end
+    resources :uploads, only: [:new, :create]
   end
 
   resources :items, only: [] do
-    resources 'uploads', only: [:new, :create]
     resources 'files', only: [:index, :show], constraints: { id: /.*/ } do
       member do
         get 'preserved'

@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
-# Handles the HTTP interaction for creating bulk metadata uploads
+# Handles the HTTP interaction for creating bulk metadata uploads for an APO
 class UploadsController < ApplicationController
-  # GET /items/:item_id/uploads/new
+  # GET /apos/:apo_id/uploads/new
   def new
-    @obj = Dor.find params[:item_id]
+    @obj = Dor.find params[:apo_id]
   end
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
-  # POST /items/:item_id/uploads
+  # POST /apos/:apo_id/uploads
   def create
-    apo = Dor.find params[:item_id]
+    apo = Dor.find params[:apo_id]
 
     directory_name = Time.zone.now.strftime('%Y_%m_%d_%H_%M_%S_%L')
     output_directory = File.join(Settings.BULK_METADATA.DIRECTORY, params[:druid], directory_name)

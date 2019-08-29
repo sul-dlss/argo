@@ -14,7 +14,7 @@ RSpec.describe UploadsController do
 
   describe '#new' do
     it 'is successful' do
-      get :new, params: { item_id: apo_id }
+      get :new, params: { apo_id: apo_id }
       expect(response).to be_successful
       expect(assigns[:obj]).to eq item
     end
@@ -26,7 +26,7 @@ RSpec.describe UploadsController do
     it 'is successful' do
       expect(ModsulatorJob).to receive(:perform_later)
         .with('abc123', String, String, user.login, 'spreadsheet', 'test note')
-      post :create, params: { item_id: apo_id,
+      post :create, params: { apo_id: apo_id,
                               druid: 'foo',
                               spreadsheet_file: file,
                               filetypes: 'spreadsheet',
