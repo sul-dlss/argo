@@ -11,8 +11,6 @@ rvm:
 email: false
 
 before_install:
-  # Update rubygems to work around a malformed version error with webdrivers
-  - gem update --system
   # Travis's docker-compose is too old to handle v3.6 docker-compose templates.
   # This code is from Travis's documentation: https://docs.travis-ci.com/user/docker/#using-docker-compose
   - sudo rm /usr/local/bin/docker-compose
