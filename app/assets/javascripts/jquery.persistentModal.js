@@ -50,20 +50,21 @@
 
         // show the current modal
         modalForTarget().modal('show');
-
         // Fire an event when the modal is loaded
         var e = $.Event('loaded.persistent-modal');
         $('body').trigger(e);
+
         if (e.isDefaultPrevented()) {
           return;
         }
       }
 
       function receiveAjax(data) {
+
         //default to error text, replace if we got something back
         var contents = "Error retrieving content";
         if (data.readyState !== 0) {
-          contents = data.responseText;
+          contents = data;
         }
 
         // does it have a data- selector for container?  if so, just use the contents of that container
@@ -73,7 +74,6 @@
         if (container.length !== 0) {
           contents = container.html();
         }
-
         $('body').append(persistentModalHtml(contents));
         modalForTarget().find('.modal-title').text(linkText);
         modalForTarget().find('[data-behavior="persistent-modal"]').persistentModal();
@@ -82,8 +82,7 @@
 
       function createModal() {
         var jqxhr = $.ajax({
-          url: linkTarget,
-          dataType: 'script'
+          url: linkTarget
         });
 
         jqxhr.always( receiveAjax );
