@@ -18,11 +18,11 @@ class ApplyModsMetadata
 
     # Only update objects that are governed by the correct APO
     unless item.admin_policy_object_id == apo_druid
-      log.puts("argo.bulk_metadata.bulk_log_apo_fail #{item_druid}")
+      log.puts("argo.bulk_metadata.bulk_log_apo_fail #{item.pid}")
       return
     end
     if in_accessioning?
-      log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{item_druid}")
+      log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{item.pid}")
       return
     end
 
@@ -31,7 +31,7 @@ class ApplyModsMetadata
     # We only update objects if the descMetadata XML is different
     current_metadata = item.descMetadata.content
     if equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node)
-      log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{item_druid}")
+      log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{item.pid}")
       return
     end
 
@@ -39,9 +39,9 @@ class ApplyModsMetadata
 
     item.descMetadata.content = mods_node.to_s
     item.save!
-    log.puts("argo.bulk_metadata.bulk_log_job_save_success #{item_druid}")
+    log.puts("argo.bulk_metadata.bulk_log_job_save_success #{item.pid}")
   rescue StandardError => e
-    log.puts("argo.bulk_metadata.bulk_log_error_exception #{item_druid}")
+    log.puts("argo.bulk_metadata.bulk_log_error_exception #{item.pid}")
     log.puts(e.message.to_s)
     log.puts(e.backtrace.to_s)
   end
