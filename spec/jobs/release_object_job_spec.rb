@@ -93,7 +93,7 @@ RSpec.describe ReleaseObjectJob do
         subject.perform(bulk_action.id, params)
         pids.each do |pid|
           expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
-          expect(buffer.string).to include 'Release tag failed POST Dor::Services::Client::UnexpectedResponse : 500 ()'
+          expect(buffer.string).to include 'Release tag failed POST Dor::Services::Client::UnexpectedResponse : 500 (Response from dor-services-app did not contain a body.'
         end
         expect(buffer.string).to include 'Adding release tag for SEARCHWORKS'
         expect(buffer.string).not_to include 'Release tag added successfully'
