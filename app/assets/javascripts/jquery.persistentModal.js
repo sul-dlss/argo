@@ -1,18 +1,18 @@
 /*global Blacklight */
 /*
-  usage:  
+  usage:
     if you want to have a link load the contents of the link target in a persistent modal, add the attribute 'data-behavior="persistent-modal"'.
     e.g.:
       <a title="DC" data-behavior="persistent-modal" href="/view/druid:dy196vh8233/ds/DC">DC</a>
     or, if you're building a link from ruby, something like:
       link_to specs[:dsid], ds_solr_document_path(doc['id'], specs[:dsid]), :title => specs[:dsid], :data => { behavior: 'persistent-modal' }
 
-  the modal is persistent in that subsequent invocations of the modal on the same overall page load will load the same retained 
+  the modal is persistent in that subsequent invocations of the modal on the same overall page load will load the same retained
   contents of the modal from the initial load, unless the modal was specifically closed using the "cancel" button.  useful if for
   things like forms or datastream editing text areas, where a user might want to close the modal without losing their partial input.
 
   like the argo's customization of the regular blacklight modal (itself a customization of the bootstrap modal), this modal will not close
-  when the user hits escape or clicks outside the modal.  it will only close if the user hits the close "x" in the title bar or the "cancel" 
+  when the user hits escape or clicks outside the modal.  it will only close if the user hits the close "x" in the title bar or the "cancel"
   button (which will also remove it from the DOM and force a reload if that same modal is hit again).
 
   the modal title is pulled from the link text.
@@ -50,30 +50,30 @@
 
         // show the current modal
         modalForTarget().modal('show');
-
         // Fire an event when the modal is loaded
         var e = $.Event('loaded.persistent-modal');
         $('body').trigger(e);
+
         if (e.isDefaultPrevented()) {
           return;
         }
       }
 
-      function receiveAjax(data) {      
+      function receiveAjax(data) {
+
         //default to error text, replace if we got something back
         var contents = "Error retrieving content";
         if (data.readyState !== 0) {
-          contents = data.responseText;
+          contents = data;
         }
 
         // does it have a data- selector for container?  if so, just use the contents of that container
         // code modelled off of JQuery ajax.load. https://github.com/jquery/jquery/blob/master/src/ajax/load.js?source=c#L62
         var container =  $("<div>").
           append( contents ).find( Blacklight.ajaxModal.containerSelector ).first();
-        if (container.size() !== 0) {
+        if (container.length !== 0) {
           contents = container.html();
         }
-
         $('body').append(persistentModalHtml(contents));
         modalForTarget().find('.modal-title').text(linkText);
         modalForTarget().find('[data-behavior="persistent-modal"]').persistentModal();
@@ -82,8 +82,7 @@
 
       function createModal() {
         var jqxhr = $.ajax({
-          url: linkTarget,
-          dataType: 'script'
+          url: linkTarget
         });
 
         jqxhr.always( receiveAjax );
