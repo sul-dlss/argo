@@ -35,20 +35,25 @@ class ApplyModsMetadata
       return
     end
 
-    version_object(original_filename, user_login, log)
+    version_object
 
     item.descMetadata.content = mods_node.to_s
     item.save!
     log.puts("argo.bulk_metadata.bulk_log_job_save_success #{item.pid}")
   rescue StandardError => e
-    log.puts("argo.bulk_metadata.bulk_log_error_exception #{item.pid}")
-    log.puts(e.message.to_s)
-    log.puts(e.backtrace.to_s)
+    log_error!(e)
   end
 
   private
 
   attr_reader :apo_druid, :mods_node, :item, :original_filename, :user_login, :log
+
+  # Log the error
+  def log_error!(exception)
+    log.puts("argo.bulk_metadata.bulk_log_error_exception #{item.pid}")
+    log.puts(exception.message.to_s)
+    log.puts(exception.backtrace.to_s)
+  end
 
   # Open a new version for the given object if it is in the accessioned state.
   def version_object
