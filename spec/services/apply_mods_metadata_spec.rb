@@ -5,7 +5,14 @@ require 'rails_helper'
 RSpec.describe ApplyModsMetadata do
   let(:apo_druid) {}
   let(:mods_node) {}
-  let(:item) { instance_double(Dor::Item, pid: 'druid:123abc') }
+  let(:item) do
+    instance_double(Dor::Item,
+                    pid: 'druid:123abc',
+                    admin_policy_object_id: apo_druid,
+                    descMetadata: desc_metadata,
+                    save!: true)
+  end
+  let(:desc_metadata) { instance_double(Dor::DescMetadataDS, content: '', 'content=' => nil) }
   let(:log) { instance_double(File, puts: true) }
   let(:action) do
     described_class.new(apo_druid: apo_druid,
@@ -14,6 +21,22 @@ RSpec.describe ApplyModsMetadata do
                         original_filename: 'testfile.xlsx',
                         user_login: 'username',
                         log: log)
+  end
+
+  describe '#apply' do
+    before do
+      allow(Dor::StatusService).to receive(:new).and_return(stub_service)
+    end
+
+    let(:stub_service) { instance_double(Dor::StatusService, status_info: { status_code: status_code }) }
+    let(:status_code) { 6 }
+    let(:workflow) { instance_double(DorObjectWorkflowStatus) }
+
+    it 'does not rescue and log an error' do
+      allow(action).to receive(:log_error!)
+      action.apply
+      expect(action).not_to have_received(:log_error!)
+    end
   end
 
   describe 'version_object' do
