@@ -7,10 +7,10 @@ function process_request(druids, action_url, req_type, req_params, success_strin
 		if(req_params != null) req_obj['data'] = req_params;
 		var xhr = $.ajax(req_obj);
 		cons.push(xhr);
-		xhr.success(function(response, status, xhr) {
+		xhr.done(function(response, status, xhr) {
 			success_handler(object_link, success_string, success_handler_callback);
 		});
-		xhr.error(function(xhr, status, err) {
+		xhr.fail(function(xhr, status, err) {
 			error_handler(xhr, status, err, object_link, job_count.pop(), error_handler_callback);
 		});
 	})
@@ -62,7 +62,7 @@ function get_druids_req(log, wait_msg, druid_each_callback, preprocessing_callba
 		if (preprocessing_callback != null) { preprocessing_callback(); }
 		$.each(data.druids, druid_each_callback);
 		if (postprocessing_callback != null) { postprocessing_callback(); }
-	}).error(function(jqXhr, textStatus, error) {
+	}).fail(function(jqXhr, textStatus, error) {
 		alert("ERROR: " + textStatus + ", " + error);
 	});
 }
@@ -243,10 +243,10 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 		var url = upd_req_url.replace('xxxxxxxxx', upd_info['druid']);
 		var xhr = $.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
-		xhr.success(function(response, status, xhr) {
+		xhr.done(function(response, status, xhr) {
 			success_handler(object_link, 'Updated	');
 		});
-		xhr.error(function(xhr, status, err) {
+		xhr.fail(function(xhr, status, err) {
 			error_handler(xhr, status, err, object_link, job_count.pop());
 		});
 	});

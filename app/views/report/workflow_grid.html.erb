@@ -6,7 +6,7 @@
     var updateTimer;
     function updateGrid() {
       $.get('workflow_grid'+$(document).attr('location').search)
-      .success(function(data) { $('#workflow_grid').replaceWith(data) })
+      .done(function(data) { $('#workflow_grid').replaceWith(data) })
     }
     $(document).ready(function() { updateTimer = setInterval(updateGrid, 10000) });
   </script>
