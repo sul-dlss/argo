@@ -329,9 +329,14 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html { render status: :ok, plain: 'Refreshed.' }
       else
-        format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey:#{@object.catkey}" }
+        format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey: #{@object.catkey}" }
       end
     end
+  rescue Dor::Services::Client::UnexpectedResponse => e
+    user_begin = 'An error occurred while attempting to refresh metadata'
+    user_end = 'Please try again or contact the sdr-operations Slack channel for assistance.'
+    Rails.logger.error "#{user_begin}: #{e.message}"
+    redirect_to solr_document_path(params[:id]), flash: { error: "#{user_begin}: #{e.message}. #{user_end}" }
   end
 
   def scrubbed_content_ng_utf8(content)
