@@ -30,15 +30,27 @@ class WorkflowProcessPresenter
 
   attr_reader :view, :process_status
 
-  delegate :form_tag, :item_workflow_path, :hidden_field_tag, :button_tag, :options_for_select, :select_tag, to: :view
+  delegate :form_tag, :item_workflow_path, :hidden_field_tag, :button_tag, :content_tag, :options_for_select, :select_tag, to: :view
   delegate :pid, :workflow_name, to: :process_status
+
+  CONFIRM_MESSAGE = 'You have selected to manually change the status. ' \
+    'This could result in processing errors. Are you sure you want to proceed?'
 
   def error_choices
     # workflow update requires id, workflow, process, and status parameters
     form_tag item_workflow_path(pid, workflow_name), method: 'put' do
       hidden_field_tag('process', name) +
-        select_tag('status', options_for_select([['Rerun', 'waiting'], ['Skip', 'skipped'], ['Complete', 'completed']]), prompt: 'Select') +
-        button_tag('Assign', type: 'submit', class: 'btn btn-default')
+        content_tag(:div, class: 'input-group') do
+          select_tag('status',
+                     options_for_select([['Rerun', 'waiting'], ['Skip', 'skipped'], ['Complete', 'completed']]),
+                     prompt: 'Select',
+                     class: 'form-control') +
+            content_tag(:span, class: 'input-group-btn') do
+              button_tag('Save', type: 'submit',
+                                 class: 'btn btn-default',
+                                 data: { confirm: CONFIRM_MESSAGE })
+            end
+        end
     end
   end
 

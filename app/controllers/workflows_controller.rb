@@ -34,6 +34,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:status` The status to which we want to reset the workflow.
   # @option params [String] `:repo` The repo to which the workflow applies (optional).
   def update
+    authorize! :update, :workflow
     [:process, :status].each { |p| params.require(p) }
     args = params.values_at(:item_id, :id, :process, :status)
     # rubocop:disable Rails/DynamicFindBy

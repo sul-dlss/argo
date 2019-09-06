@@ -39,6 +39,7 @@ describe Ability do
     it { is_expected.to be_able_to(:create, Dor::AdminPolicyObject) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
+    it { is_expected.to be_able_to(:update, :workflow) }
   end
 
   context 'as a manager' do
@@ -51,6 +52,7 @@ describe Ability do
     it { is_expected.to be_able_to(:create, Dor::AdminPolicyObject) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
+    it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
   context 'as a viewer' do
@@ -62,6 +64,7 @@ describe Ability do
     it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
+    it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
   context 'for items without an APO' do
