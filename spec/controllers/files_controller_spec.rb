@@ -16,17 +16,23 @@ RSpec.describe FilesController, type: :controller do
 
   describe '#show' do
     context 'when they have manage access' do
+      let(:object_client) { instance_double(Dor::Services::Client::Object, files: files_client) }
+      let(:files_client) { instance_double(Dor::Services::Client::Files, retrieve: 'abc') }
+
       before do
         allow(controller).to receive(:authorize!).and_return(true)
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+        allow(Time).to receive(:now).and_return(Time.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
       end
 
       it 'has dor-services-app fetch a file from the workspace' do
-        expect_any_instance_of(Dor::Services::Client::Files).to receive(:retrieve)
-          .with(filename: 'somefile.txt')
-          .and_return('abc')
-        allow(Time).to receive(:now).and_return(Time.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
         get :show, params: { id: 'somefile.txt', item_id: pid }
+
+        expect(files_client).to have_received(:retrieve).with(filename: 'somefile.txt')
+
         expect(response.headers['Last-Modified']).to eq 'Mon, 30 Nov 2015 20:19:43 -0000'
+        expect(response.headers['Content-Disposition']).to eq 'attachment; filename=somefile.txt'
+        expect(response.body).to eq 'abc'
       end
     end
 
