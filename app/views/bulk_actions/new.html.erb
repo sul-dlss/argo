@@ -1,7 +1,119 @@
 <div class='container'>
   <h1>New Bulk Action</h1>
 
-  <%= render 'form' %>
+  <%= form_for(@bulk_action) do |f| %>
+    <% if @bulk_action.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@bulk_action.errors.count, "error") %> prohibited this bulk_action from being saved:</h2>
+
+        <ul>
+        <% @bulk_action.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <% if false #multiline comment %>
+      This button/radio form element is used to define Bulk Action Job types that
+      a user can select from. The `.tab-content` area below it can define a
+      description and additional form input used for each type of custom job.
+    <% end %>
+
+    <!-- TODO: this should probably be a different UI element, like a drop down list, since its getting a bit long-->
+    <div class='form-group'>
+      <div class='btn-group' data-toggle='buttons'>
+        <label href='#desc_metadata_download_custom_options' class='btn btn-default active' data-toggle='tab'>
+          <%= f.radio_button(:action_type, 'DescmetadataDownloadJob', checked: true) %>
+          Download Descriptive Metadata
+        </label>
+        <label href='#manage_release_custom_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'ReleaseObjectJob') %>
+          Manage release
+        </label>
+        <label href='#set_governing_apo_custom_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'SetGoverningApoJob') %>
+          Update governing APO
+        </label>
+        <label href='#reindex_object_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'RemoteIndexingJob') %>
+          Reindex
+        </label>
+        <label href='#manage_catkey_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'ManageCatkeyJob') %>
+          Manage Catkeys
+        </label>
+        <label href='#prepare_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'PrepareJob') %>
+          Prepare objects
+        </label>
+        <label href='#close_version_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'CloseVersionJob') %>
+          Close versions
+        </label>
+      </div>
+
+      <div class='tab-content'>
+        <div role='tabpanel' class= 'tab-pane active' id='desc_metadata_download_custom_options'>
+          <span class='help-block'>
+            Download descriptive metadata for objects.
+          </span>
+        </div>
+        <div role='tabpanel' class= 'tab-pane' id='manage_release_custom_options'>
+          <span class='help-block'>
+            Adds release tags to individual objects.
+          </span>
+          <%= render 'bulk_actions/forms/manage_release_form', f: f %>
+        </div>
+        <div role='tabpanel' class= 'tab-pane' id='set_governing_apo_custom_options'>
+          <span class='help-block'>
+            Moves the object to a new governing APO.
+          </span>
+          <%= render 'bulk_actions/forms/set_governing_apo_form', f: f %>
+        </div>
+        <div role='tabpanel' class= 'tab-pane' id='reindex_object_options'>
+          <span class='help-block'>
+            Reindexes the DOR object to Solr
+          </span>
+        </div>
+        <div role='tabpanel' class= 'tab-pane' id='manage_catkey_options'>
+          <span class='help-block'>
+            Adds or updates catkeys associated with objects.  You need two lists: druids and catkeys, and they need to correspond 1:1 in the correct order.
+          </span>
+          <%= render 'bulk_actions/forms/manage_catkey_form' %>
+        </div>
+        <div role='tabpanel' class= 'tab-pane' id='prepare_options'>
+          <span class='help-block'>
+            Open items not yet open for versioning.
+          </span>
+          <%= render 'bulk_actions/forms/prepare_form', f: f %>
+        </div>
+
+
+        <div role='tabpanel' class= 'tab-pane' id='close_version_options'>
+          <span class='help-block'>
+            Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <a class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids(@last_search)) %>" data-target='#pids'>
+      Populate with previous search
+    </a>
+    <div class='form-group'>
+      <label>Druids to perform bulk action on</label>
+      <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'>
+      </textarea>
+    </div>
+    <div class='form-group'>
+      <%= f.label :description, 'Describe this bulk action' %>
+      <%= f.text_area :description, class: 'form-control' %>
+    </div>
+    <div class=''>
+      <button type='submit' class='btn btn-primary'>Submit</button>
+    </div>
+  <% end %>
 
   <%= link_to 'Back', bulk_actions_path %>
 </div>
