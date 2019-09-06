@@ -58,11 +58,7 @@ class Ability
       Argo::Ability.can_manage_items?(user.roles(new_apo_id)) && can?(:manage_item, dor_item)
     end
 
-    can :view_content, Dor::AdminPolicyObject do |dor_item|
-      Argo::Ability.can_view? user.roles(dor_item.pid)
-    end
-
-    can :view_metadata, Dor::AdminPolicyObject do |dor_item|
+    can [:view_content, :view_metadata], Dor::AdminPolicyObject do |dor_item|
       Argo::Ability.can_view? user.roles(dor_item.pid)
     end
 
