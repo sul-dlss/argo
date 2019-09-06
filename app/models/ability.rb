@@ -34,44 +34,66 @@ class Ability
     can [:view_metadata, :view_content], ActiveFedora::Base if user.is_viewer?
 
     can :manage_item, Dor::AdminPolicyObject do |dor_item|
-      Argo::Ability.can_manage_items? user.roles(dor_item.pid)
+      can_manage_items? user.roles(dor_item.pid)
     end
 
     can :manage_item, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        Argo::Ability.can_manage_items? user.roles(dor_item.admin_policy_object.pid)
+        can_manage_items? user.roles(dor_item.admin_policy_object.pid)
       end
     end
 
     can :manage_desc_metadata, Dor::AdminPolicyObject do |dor_item|
-      Argo::Ability.can_edit_desc_metadata? user.roles(dor_item.pid)
+      can_edit_desc_metadata? user.roles(dor_item.pid)
     end
 
     can :manage_desc_metadata, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        Argo::Ability.can_edit_desc_metadata? user.roles(dor_item.admin_policy_object.pid)
+        can_edit_desc_metadata? user.roles(dor_item.admin_policy_object.pid)
       end
     end
 
     can :manage_governing_apo, ActiveFedora::Base do |dor_item, new_apo_id|
       # user must have management privileges on both the target APO and the APO currently governing the item
-      Argo::Ability.can_manage_items?(user.roles(new_apo_id)) && can?(:manage_item, dor_item)
+      can_manage_items?(user.roles(new_apo_id)) && can?(:manage_item, dor_item)
     end
 
     can [:view_content, :view_metadata], Dor::AdminPolicyObject do |dor_item|
-      Argo::Ability.can_view? user.roles(dor_item.pid)
+      can_view? user.roles(dor_item.pid)
     end
 
     can :view_content, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        Argo::Ability.can_view? user.roles(dor_item.admin_policy_object.pid)
+        can_view? user.roles(dor_item.admin_policy_object.pid)
       end
     end
 
     can :view_metadata, ActiveFedora::Base do |dor_item|
       if dor_item.admin_policy_object
-        Argo::Ability.can_view? user.roles(dor_item.admin_policy_object.pid)
+        can_view? user.roles(dor_item.admin_policy_object.pid)
       end
     end
+  end
+
+  private
+
+  GROUPS_WHICH_MANAGE_ITEMS = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
+  GROUPS_WHICH_EDIT_DESC_METADATA = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-apo-metadata]).freeze
+  GROUPS_WHICH_VIEW = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-viewer sdr-viewer]).freeze
+
+  def can_manage_items?(roles)
+    intersect roles, GROUPS_WHICH_MANAGE_ITEMS
+  end
+
+  def can_edit_desc_metadata?(roles)
+    intersect roles, GROUPS_WHICH_EDIT_DESC_METADATA
+  end
+
+  def can_view?(roles)
+    intersect roles, GROUPS_WHICH_VIEW
+  end
+
+  def intersect(arr1, arr2)
+    !(arr1 & arr2).empty?
   end
 end

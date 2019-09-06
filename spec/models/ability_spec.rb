@@ -12,15 +12,22 @@ describe Ability do
                     is_webauth_admin?: webauth_admin,
                     is_manager?: manager,
                     is_viewer?: viewer,
-                    roles: [])
+                    roles: roles)
   end
   let(:admin) { false }
   let(:webauth_admin) { false }
   let(:manager) { false }
   let(:viewer) { false }
+  let(:roles) { [] }
 
   let(:new_apo_id) { 'new_apo_id' }
   let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_id) }
+
+  let(:item_with_apo) { Dor::Item.new(pid: 'y') }
+
+  before do
+    allow(item_with_apo).to receive(:admin_policy_object).and_return(new_apo)
+  end
 
   context 'as an administrator' do
     let(:admin) { true }
@@ -65,155 +72,51 @@ describe Ability do
     it { is_expected.not_to be_able_to(:view_metadata, item) }
   end
 
-  context 'from an APO' do
-    let(:item) { Dor::AdminPolicyObject.new(pid: 'apo') }
+  context 'with the manage role' do
+    let(:roles) { ['dor-administrator'] }
 
-    context 'for a user with a privileged role' do
-      before do
-        allow(user).to receive(:roles).with('apo').and_return(['recognized-and-permitted-role'])
-        allow(Argo::Ability).to receive(:can_manage_items?).with(['recognized-and-permitted-role']).and_return(true)
-      end
-
-      it { is_expected.to be_able_to(:manage_item, item) }
-    end
-
-    context 'for a user without a role' do
-      before do
-        allow(user).to receive(:roles).with('apo').and_return(['some-other-role'])
-        allow(Argo::Ability).to receive(:can_manage_items?).with(['some-other-role']).and_return(false)
-      end
-
-      it { is_expected.not_to be_able_to(:manage_item, item) }
-    end
+    it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:manage_item, item) }
+    it { is_expected.to be_able_to(:manage_item, item_with_apo) }
+    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
+    it { is_expected.to be_able_to(:manage_desc_metadata, item_with_apo) }
+    it { is_expected.not_to be_able_to(:create, Dor::AdminPolicyObject) }
+    it { is_expected.not_to be_able_to(:view_metadata, item) }
+    it { is_expected.to be_able_to(:view_metadata, item_with_apo) }
+    it { is_expected.not_to be_able_to(:view_content, item) }
+    it { is_expected.to be_able_to(:view_content, item_with_apo) }
   end
 
-  context 'with a role assigned by an APO' do
-    let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo) }
-    let(:apo) { Dor::AdminPolicyObject.new(pid: 'apo') }
-    let(:ungoverned_item) { Dor::Item.new(pid: 'y') }
+  context 'with the edit role' do
+    let(:roles) { ['dor-apo-metadata'] }
 
-    before do
-      allow(user).to receive(:roles).with('apo').and_return(['recognized-and-permitted-role'])
-      allow(user).to receive(:roles).with(new_apo_id).and_return(['target-apo-role'])
-    end
-
-    context 'as a user with a management role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_manage_items?).with(['recognized-and-permitted-role']).and_return(true)
-      end
-
-      it { is_expected.not_to be_able_to(:manage_item, ungoverned_item) }
-      it { is_expected.to be_able_to(:manage_item, item) }
-
-      context 'and as a user with a management role for the target APO' do
-        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(true) }
-
-        it { is_expected.to be_able_to(:manage_governing_apo, item, new_apo_id) }
-      end
-
-      context 'but as a user without a management role for the target APO' do
-        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(false) }
-
-        it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
-      end
-    end
-
-    context 'as a user with a content management role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_manage_items?).with(['recognized-and-permitted-role']).and_return(true)
-      end
-
-      it { is_expected.not_to be_able_to(:manage_item, ungoverned_item) }
-      it { is_expected.to be_able_to(:manage_item, item) }
-    end
-
-    context 'as a user with a metadata management role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_edit_desc_metadata?).with(['recognized-and-permitted-role']).and_return(true)
-      end
-
-      it { is_expected.not_to be_able_to(:manage_desc_metadata, ungoverned_item) }
-      it { is_expected.to be_able_to(:manage_desc_metadata, item) }
-    end
-
-    context 'as a user with a content viewer role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_view?).with(['recognized-and-permitted-role']).and_return(true)
-      end
-
-      it { is_expected.not_to be_able_to(:view_content, ungoverned_item) }
-      it { is_expected.to be_able_to(:view_content, item) }
-    end
-
-    context 'as a user with a metadata viewer role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_view?).with(['recognized-and-permitted-role']).and_return(true)
-      end
-
-      it { is_expected.not_to be_able_to(:view_metadata, ungoverned_item) }
-      it { is_expected.to be_able_to(:view_metadata, item) }
-    end
+    it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:manage_item, item) }
+    it { is_expected.not_to be_able_to(:manage_item, item_with_apo) }
+    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
+    it { is_expected.to be_able_to(:manage_desc_metadata, item_with_apo) }
+    it { is_expected.not_to be_able_to(:create, Dor::AdminPolicyObject) }
+    it { is_expected.not_to be_able_to(:view_metadata, item) }
+    it { is_expected.not_to be_able_to(:view_metadata, item_with_apo) }
+    it { is_expected.not_to be_able_to(:view_content, item) }
+    it { is_expected.not_to be_able_to(:view_content, item_with_apo) }
   end
 
-  context 'without a role assigned by an APO' do
-    let(:item) { Dor::Item.new(pid: 'x', admin_policy_object: apo) }
-    let(:apo) { Dor::AdminPolicyObject.new(pid: 'apo') }
+  context 'with the view role' do
+    let(:roles) { ['dor-viewer'] }
 
-    before do
-      allow(user).to receive(:roles).with('apo').and_return(['some-other-role'])
-      allow(user).to receive(:roles).with(new_apo_id).and_return(['target-apo-role'])
-    end
-
-    context 'as a user without a management role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_manage_items?).with(['some-other-role']).and_return(false)
-      end
-
-      it { is_expected.not_to be_able_to(:manage, item) }
-
-      context 'even as a user with a management role for the target APO' do
-        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(true) }
-
-        it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
-      end
-
-      context 'as a user without a management role for the target APO either' do
-        before { allow(Argo::Ability).to receive(:can_manage_items?).with(['target-apo-role']).and_return(false) }
-
-        it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
-      end
-    end
-
-    context 'as a user without a content management role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_manage_items?).with(['some-other-role']).and_return(false)
-      end
-
-      it { is_expected.not_to be_able_to(:manage, item) }
-    end
-
-    context 'as a user without a metadata management role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_edit_desc_metadata?).with(['some-other-role']).and_return(false)
-      end
-
-      it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
-    end
-
-    context 'as a user without a content viewer role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_view?).with(['some-other-role']).and_return(false)
-      end
-
-      it { is_expected.not_to be_able_to(:view_content, item) }
-    end
-
-    context 'as a user without a metadata viewer role for an item' do
-      before do
-        allow(Argo::Ability).to receive(:can_view?).with(['some-other-role']).and_return(false)
-      end
-
-      it { is_expected.not_to be_able_to(:view_metadata, item) }
-    end
+    it { is_expected.not_to be_able_to(:manage, :everything) }
+    it { is_expected.not_to be_able_to(:manage_item, item) }
+    it { is_expected.not_to be_able_to(:manage_item, item_with_apo) }
+    it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
+    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.not_to be_able_to(:manage_desc_metadata, item_with_apo) }
+    it { is_expected.not_to be_able_to(:create, Dor::AdminPolicyObject) }
+    it { is_expected.not_to be_able_to(:view_metadata, item) }
+    it { is_expected.to be_able_to(:view_metadata, item_with_apo) }
+    it { is_expected.not_to be_able_to(:view_content, item) }
+    it { is_expected.to be_able_to(:view_content, item_with_apo) }
   end
 end
