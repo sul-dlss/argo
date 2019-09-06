@@ -11,7 +11,7 @@ RSpec.describe 'Bulk Reindex of DOR Objects' do
 
   it 'Creates a new job' do
     visit new_bulk_action_path
-    choose 'bulk_action_action_type_remoteindexingjob'
+    select 'Reindex'
     fill_in 'pids', with: 'druid:br481xz7820'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'

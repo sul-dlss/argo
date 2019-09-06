@@ -16,7 +16,7 @@ RSpec.describe 'bulk_actions/new.html.erb' do
 
   it 'form by default has action_type selected' do
     expect(rendered)
-      .to have_css 'input[type="radio"][value="DescmetadataDownloadJob"][checked="checked"]'
+      .to have_css 'select option:first-child[value="DescmetadataDownloadJob"]'
   end
 
   describe 'common form fields' do
@@ -28,7 +28,7 @@ RSpec.describe 'bulk_actions/new.html.erb' do
 
   describe 'Release Object Job form' do
     it 'has proper form input values' do
-      expect(rendered).to have_css 'input[type="radio"][value="ReleaseObjectJob"]'
+      expect(rendered).to have_css 'select option[value="ReleaseObjectJob"]'
       expect(rendered).to have_css 'input[type="radio"][value="true"][checked="checked"][name="bulk_action[manage_release][tag]"]'
       expect(rendered).to have_css 'input[type="radio"][value="false"][name="bulk_action[manage_release][tag]"]'
       expect(rendered).to have_css 'select[name="bulk_action[manage_release][to]"]'
@@ -40,14 +40,14 @@ RSpec.describe 'bulk_actions/new.html.erb' do
 
   describe 'Update governing APO Job form' do
     it 'has proper form input values' do
-      expect(rendered).to have_css 'input[type="radio"][value="SetGoverningApoJob"]'
+      expect(rendered).to have_css 'select option[value="SetGoverningApoJob"]'
       expect(rendered).to have_css 'select[name="bulk_action[set_governing_apo][new_apo_id]"] option[value="druid:234"]'
     end
   end
 
   describe 'Reindex Job form' do
     it 'has proper form input values' do
-      expect(rendered).to have_css 'input[type="radio"][value="RemoteIndexingJob"]'
+      expect(rendered).to have_css 'select option[value="RemoteIndexingJob"]'
     end
   end
 end

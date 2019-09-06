@@ -12,7 +12,7 @@ RSpec.describe 'Bulk Update of Governing APO' do
 
   it 'Creates a new job' do
     visit new_bulk_action_path
-    choose 'bulk_action_action_type_setgoverningapojob'
+    select 'Update governing APO'
     select 'APO 2'
     fill_in 'pids', with: 'druid:br481xz7820'
     click_button 'Submit'
