@@ -53,7 +53,7 @@ RSpec.describe ManageCatkeyJob do
     end
 
     it 'updates catkey and versions objects' do
-      allow(subject).to receive(:can_manage?).and_return(true)
+      allow(subject.ability).to receive(:can?).and_return(true)
       allow(current_object).to receive(:allows_modification?).and_return(false)
       allow(object_version).to receive(:openable?).and_return(false)
       allow(current_object).to receive(:pid).and_return(pid)
@@ -66,7 +66,7 @@ RSpec.describe ManageCatkeyJob do
     end
 
     it 'updates catkey and does not version objects if not needed' do
-      allow(subject).to receive(:can_manage?).and_return(true)
+      allow(subject.ability).to receive(:can?).and_return(true)
       allow(current_object).to receive(:allows_modification?).and_return(true)
       allow(object_version).to receive(:openable?).and_return(true)
       allow(current_object).to receive(:pid).and_return(pid)

@@ -12,21 +12,43 @@ RSpec.describe CloseVersionJob, type: :job do
     create(:bulk_action,
            log_name: 'foo.txt')
   end
+  let(:item1) { Dor::Item.new }
+  let(:item2) { Dor::Item.new }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(client)
+    allow(Ability).to receive(:new).and_return(ability)
+    allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
+    allow(Dor).to receive(:find).with(pids[1]).and_return(item2)
   end
 
   after do
     FileUtils.rm('foo.txt')
   end
 
-  it 'closes versions' do
-    described_class.perform_now(bulk_action.id,
-                                pids: pids,
-                                groups: groups,
-                                user: user)
+  context 'with manage ability' do
+    let(:ability) { instance_double(Ability, can?: true) }
 
-    expect(version_client).to have_received(:close).twice
+    it 'closes versions' do
+      described_class.perform_now(bulk_action.id,
+                                  pids: pids,
+                                  groups: groups,
+                                  user: user)
+
+      expect(version_client).to have_received(:close).twice
+    end
+  end
+
+  context 'without manage ability' do
+    let(:ability) { instance_double(Ability, can?: false) }
+
+    it 'does not close versions' do
+      described_class.perform_now(bulk_action.id,
+                                  pids: pids,
+                                  groups: groups,
+                                  user: user)
+
+      expect(version_client).not_to have_received(:close)
+    end
   end
 end

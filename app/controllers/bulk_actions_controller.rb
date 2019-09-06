@@ -25,6 +25,7 @@ class BulkActionsController < ApplicationController
                                pids: pids_with_prefix(bulk_action_params[:pids]))
     )
 
+    # BulkActionPersister is responsible for enqueuing the job
     if BulkActionPersister.persist(@bulk_action)
 
       redirect_to action: :index, notice: 'Bulk action was successfully created.'

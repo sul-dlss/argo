@@ -34,10 +34,13 @@ class ReleaseObjectJob < GenericJob
 
   def release_object(current_druid, log)
     log.puts("#{Time.current} Beginning ReleaseObjectJob for #{current_druid}")
-    unless can_manage?(current_druid)
+
+    object = Dor.find(current_druid)
+    unless ability.can?(:manage_item, object)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end
+
     log.puts("#{Time.current} Adding release tag for #{manage_release['to']}")
     begin
       Dor::Services::Client.object(current_druid).release_tags.create(
