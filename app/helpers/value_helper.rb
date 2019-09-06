@@ -12,6 +12,16 @@ module ValueHelper
     obj.label
   end
 
+  # Convert a string of druids into array, and conditionally add `druid:` prefix to any unprefixed identifiers
+  #
+  # @param [String] pids_string a string containing one or more identifiers
+  # @return [Array] an array of pids, or an empty array
+  def pids_with_prefix(pids_string)
+    return [] if pids_string.blank?
+
+    pids_string.split.flatten.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" }
+  end
+
   def label_for_druid(druid)
     druid = druid.to_s.split(/\//).last # strip "info:fedora/"
     Rails.cache.fetch("label_for_#{druid}", expires_in: 1.hour) do

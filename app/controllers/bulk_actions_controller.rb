@@ -22,12 +22,11 @@ class BulkActionsController < ApplicationController
     @bulk_action = BulkAction.new(
       bulk_action_params.merge(user: current_user,
                                groups: current_user.groups,
-                               pids: pids_with_prefix(bulk_action_params[:pids]))
+                               pids: helpers.pids_with_prefix(bulk_action_params[:pids]))
     )
 
     # BulkActionPersister is responsible for enqueuing the job
     if BulkActionPersister.persist(@bulk_action)
-
       redirect_to action: :index, notice: 'Bulk action was successfully created.'
     else
       render :new
@@ -61,14 +60,8 @@ class BulkActionsController < ApplicationController
       manage_release: [:tag, :what, :who, :to],
       set_governing_apo: [:new_apo_id],
       manage_catkeys: [:catkeys],
-      prepare: [:significance, :description]
+      prepare: [:significance, :description],
+      create_virtual_object: [:parent_druid, :child_druids]
     )
-  end
-
-  # add druid: prefix to list of pids if it doesn't have it yet
-  def pids_with_prefix(pids)
-    return pids if pids.blank?
-
-    pids.split.flatten.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" }.join("\n")
   end
 end

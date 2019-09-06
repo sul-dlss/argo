@@ -1,7 +1,7 @@
 <div class='container'>
   <h1>New Bulk Action</h1>
 
-  <%= form_for(@bulk_action) do |f| %>
+  <%= form_for(@bulk_action, html: { 'data-controller' => 'bulk_actions' }) do |f| %>
     <% if @bulk_action.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@bulk_action.errors.count, "error") %> prohibited this bulk_action from being saved:</h2>
@@ -14,18 +14,19 @@
       </div>
     <% end %>
 
-    <div class='form-group' data-controller="bulk_actions">
-      <%= f.select(:action_type,
-                   [['Download Descriptive Metadata', 'DescmetadataDownloadJob'],
-                    ['Manage release', 'ReleaseObjectJob'],
-                    ['Update governing APO', 'SetGoverningApoJob'],
-                    ['Reindex', 'RemoteIndexingJob'],
-                    ['Manage Catkeys', 'ManageCatkeyJob'],
-                    ['Prepare objects', 'PrepareJob'],
-                    ['Close versions', 'CloseVersionJob']],
-                   {},
-                   class: 'form-control',
-                   data: { action: 'change->bulk_actions#showTab' }) %>
+    <div class='form-group'>
+        <%= f.select(:action_type,
+                     [['Download Descriptive Metadata', 'DescmetadataDownloadJob'],
+                      ['Manage release', 'ReleaseObjectJob'],
+                      ['Update governing APO', 'SetGoverningApoJob'],
+                      ['Reindex', 'RemoteIndexingJob'],
+                      ['Manage Catkeys', 'ManageCatkeyJob'],
+                      ['Prepare objects', 'PrepareJob'],
+                      ['Close versions', 'CloseVersionJob'],
+                      ['Create virtual object', 'CreateVirtualObjectJob']],
+                     {},
+                     class: 'form-control',
+                     data: { action: 'change->bulk_actions#showTab' }) %>
 
       <div class='tab-content'>
         <div role='tabpanel' class='tab-pane active' id='DescmetadataDownloadJob'>
@@ -33,7 +34,7 @@
             Download descriptive metadata for objects.
           </span>
         </div>
-        
+
         <div role='tabpanel' class='tab-pane' id='ReleaseObjectJob'>
           <span class='help-block'>
             Adds release tags to individual objects.
@@ -68,23 +69,32 @@
           <%= render 'bulk_actions/forms/prepare_form', f: f %>
         </div>
 
-
         <div role='tabpanel' class='tab-pane' id='CloseVersionJob'>
           <span class='help-block'>
             Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
           </span>
         </div>
+
+        <div role='tabpanel' class='tab-pane' id='CreateVirtualObjectJob'>
+          <span class='help-block'>
+            Create a virtual object containing one or more child objects.
+          </span>
+          <%= render 'bulk_actions/forms/create_virtual_object_form', f: f %>
+        </div>
       </div>
     </div>
 
-    <a class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids(@last_search)) %>" data-target='#pids'>
-      Populate with previous search
-    </a>
-    <div class='form-group'>
-      <label>Druids to perform bulk action on</label>
-      <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'>
-      </textarea>
+    <div id="common_fields">
+      <a class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids(@last_search)) %>" data-target='#pids'>
+        Populate with previous search
+      </a>
+      <div class='form-group'>
+        <label>Druids to perform bulk action on</label>
+        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'>
+        </textarea>
+      </div>
     </div>
+
     <div class='form-group'>
       <%= f.label :description, 'Describe this bulk action' %>
       <%= f.text_area :description, class: 'form-control' %>

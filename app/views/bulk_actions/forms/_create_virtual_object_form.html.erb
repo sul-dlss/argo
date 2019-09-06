@@ -1,0 +1,12 @@
+<%= f.fields_for :create_virtual_object do |create_virtual_object_fields| %>
+  <div class='form-group'>
+    <%= create_virtual_object_fields.label :parent_druid, 'Enter Parent Druid' %>
+    <%= create_virtual_object_fields.text_field :parent_druid, class: 'form-control' %>
+  </div>
+
+  <div class='form-group'>
+    <%= create_virtual_object_fields.label :child_druids, 'Enter Child Druids' %>
+    <small><em>Please note that child druids must be entered in the order they should appear in the catalog.</em></small>
+    <%= create_virtual_object_fields.text_area :child_druids, class: 'form-control', rows: 10 %>
+  </div>
+<% end %>

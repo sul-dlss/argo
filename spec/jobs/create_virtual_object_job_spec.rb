@@ -2,8 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe VirtualMergeJob, type: :job do
-  let(:tool) { instance_double(VirtualMergeTool, run: true) }
+RSpec.describe CreateVirtualObjectJob, type: :job do
   let(:client) do
     instance_double(Dor::Services::Client::Object, version: version_client, add_constituents: true)
   end
@@ -13,8 +12,8 @@ RSpec.describe VirtualMergeJob, type: :job do
   describe '#perform' do
     subject(:perform) do
       described_class.perform_now(bulk_action.id,
-                                  parent_druid: 'parent',
-                                  child_druids: ['one', 'two'])
+                                  pids: '',
+                                  create_virtual_object: { parent_druid: 'parent', child_druids: ['one', 'two'] })
     end
 
     before do
@@ -28,7 +27,7 @@ RSpec.describe VirtualMergeJob, type: :job do
 
       it 'calls the dor-services-app API' do
         perform
-        expect(client).to have_received(:add_constituents).with(child_druids: ['one', 'two'])
+        expect(client).to have_received(:add_constituents).with(child_druids: ['druid:one', 'druid:two'])
         expect(version_client).to have_received(:close).exactly(3).times
       end
     end

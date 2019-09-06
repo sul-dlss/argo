@@ -22,7 +22,7 @@ class BulkActionPersister
 
   attr_reader :bulk_action
   delegate :id, :file, :pids, :output_directory, :manage_release, :set_governing_apo,
-           :manage_catkeys, :groups, :prepare, to: :bulk_action
+           :manage_catkeys, :groups, :prepare, :create_virtual_object, to: :bulk_action
 
   def create_log_file
     log_filename = file(Settings.BULK_METADATA.LOG)
@@ -49,12 +49,13 @@ class BulkActionPersister
   # @return [Hash]
   def job_params
     {
-      pids: pids.split,
+      pids: pids,
       output_directory: output_directory,
       manage_release: manage_release,
       set_governing_apo: set_governing_apo,
       manage_catkeys: manage_catkeys,
       prepare: prepare,
+      create_virtual_object: create_virtual_object,
       groups: groups
     }
   end

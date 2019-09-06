@@ -69,7 +69,7 @@ RSpec.describe BulkActionsController do
         expect(assigns(:bulk_action)).to be_an BulkAction
         expect(assigns(:bulk_action).user).to eq current_user
         expect(assigns(:bulk_action).groups).to eq groups
-        expect(assigns(:bulk_action).pids).to eq "druid:a\ndruid:b\ndruid:c"
+        expect(assigns(:bulk_action).pids).to eq %w(druid:a druid:b druid:c)
       end
 
       it 'assigns @bulk_action to current_user and passes current groups, leaving pids alone if druid: prefix exists' do
@@ -77,11 +77,11 @@ RSpec.describe BulkActionsController do
         expect(assigns(:bulk_action)).to be_an BulkAction
         expect(assigns(:bulk_action).user).to eq current_user
         expect(assigns(:bulk_action).groups).to eq groups
-        expect(assigns(:bulk_action).pids).to eq "druid:a\ndruid:b\ndruid:c"
+        expect(assigns(:bulk_action).pids).to eq %w(druid:a druid:b druid:c)
       end
 
       it 'assigns @bulk_action with catkeys passed in from form' do
-        post :create, params: { bulk_action: { action_type: 'ManageCatkeyJob', pids: '', 'manage_catkeys[catkeys]' => "1234\n5678" } }
+        post :create, params: { bulk_action: { action_type: 'ManageCatkeyJob', pids: "a\nb", 'manage_catkeys[catkeys]' => "1234\n5678" } }
         expect(assigns(:bulk_action)).to be_an BulkAction
         expect(assigns(:bulk_action).manage_catkeys).to eq('catkeys' => "1234\n5678")
       end

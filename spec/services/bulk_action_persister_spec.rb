@@ -6,7 +6,7 @@ RSpec.describe BulkActionPersister do
   let(:bulk_action) do
     BulkAction.create(
       action_type: 'GenericJob',
-      pids: 'a b c',
+      pids: %w(a b c),
       manage_release: {}
     )
   end
@@ -80,6 +80,18 @@ RSpec.describe BulkActionPersister do
       end
 
       it { is_expected.to include(prepare: { 'description' => 'change the data', 'significance' => 'minor' }) }
+    end
+
+    context 'for a create virtual object job' do
+      let(:bulk_action) do
+        BulkAction.create(
+          action_type: 'CreateVirtualObjectJob',
+          pids: 'a b c',
+          create_virtual_object: { parent_druid: 'd' }
+        )
+      end
+
+      it { is_expected.to include(create_virtual_object: { parent_druid: 'd' }) }
     end
   end
 end
