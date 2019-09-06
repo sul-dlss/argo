@@ -70,7 +70,6 @@ class GenericJob < ActiveJob::Base
 
   def update_druid_count
     bulk_action.update(druid_count_total: pids.length)
-    bulk_action.save
   end
 
   def can_manage?(pid)
