@@ -1,5 +1,3 @@
-// Put your application scripts here
-
 $.fn.preload = function() {
     this.each(function(){
         $('<img/>')[0].src = this;
@@ -14,11 +12,15 @@ function pathTo(path) {
 Argo = {
     initialize: function() {
       this.apoEditor()
+
+      const application = Stimulus.Application.start()
+      const BulkActions = require('controllers/bulk_actions')
+      application.register("bulk_actions", BulkActions)
     },
     apoEditor: function () {
-        var element = $("[data-behavior='apo-form']")
+        const element = $("[data-behavior='apo-form']")
         if (element.length > 0) {
-            var Form = require('modules/apo_form');
+            const Form = require('modules/apo_form');
             new Form(element).init();
         }
     }
