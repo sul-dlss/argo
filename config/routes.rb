@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Argo::Application.routes.draw do
+Rails.application.routes.draw do
   get '/is_it_working' => 'ok_computer/ok_computer#show', defaults: { check: 'default' }
 
   resources :bulk_actions, except: [:edit, :show, :update] do
