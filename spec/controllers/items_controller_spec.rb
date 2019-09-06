@@ -510,7 +510,7 @@ RSpec.describe ItemsController, type: :controller do
             expect(object_service).to have_received(:refresh_metadata)
 
             expect(response).to redirect_to(solr_document_path(@pid))
-            expect(flash[:notice]).to eq "Metadata for #{@item.pid} successfully refreshed from catkey:12345"
+            expect(flash[:notice]).to eq "Metadata for #{@item.pid} successfully refreshed from catkey: 12345"
           end
 
           it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
@@ -539,6 +539,21 @@ RSpec.describe ItemsController, type: :controller do
             get :refresh_metadata, params: { id: @pid }
             expect(response).to have_http_status(:forbidden)
             expect(response.body).to eq 'Object cannot be modified in its current state.'
+          end
+        end
+
+        context 'Dor::Services::Client::UnexpectedResponse' do
+          before do
+            allow(Dor::Services::Client).to receive(:object).and_raise(Dor::Services::Client::UnexpectedResponse, 'foo')
+          end
+
+          it 'redirects with a user friendly flash error message' do
+            get :refresh_metadata, params: { id: @pid }
+
+            expect(response).to redirect_to(solr_document_path(@pid))
+            friendly1 = 'An error occurred while attempting to refresh metadata: foo.'
+            friendly2 = 'Please try again or contact the sdr-operations Slack channel for assistance.'
+            expect(flash[:error]).to eq "#{friendly1} #{friendly2}"
           end
         end
       end

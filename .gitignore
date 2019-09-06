@@ -21,6 +21,7 @@ vendor/ruby/
 .ruby-version
 .ruby-gemset
 .byebug_history
+.pry_history
 
 # The docker volume for the workflow database
 postgres-data
