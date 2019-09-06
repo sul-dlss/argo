@@ -35,9 +35,6 @@
 //= require jquery.jqGrid.js
 
 //= require jquery.persistentModal
-// Stimulus must be loaded before almond because it's a UMD package
-//= require stimulus
 //= require almond
 //= require_directory ./modules
-//= require_directory ./controllers
 //= require argo

@@ -1,7 +1,3 @@
-/**
- * These functions support "Bulk Update (synchronous)"
- */
-
 function process_request(druids, action_url, req_type, req_params, success_string, success_handler_callback, error_handler_callback) {
 	cons = [];
 	$.each(druids, function(i, druid) {

@@ -1,3 +1,2 @@
 vendor/**
 app/assets/javascripts/vendor/**
-app/assets/javascripts/stimulus.js

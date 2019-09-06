@@ -14,54 +14,75 @@
       </div>
     <% end %>
 
-    <div class='form-group' data-controller="bulk_actions">
-      <%= f.select(:action_type,
-                   [['Download Descriptive Metadata', 'DescmetadataDownloadJob'],
-                    ['Manage release', 'ReleaseObjectJob'],
-                    ['Update governing APO', 'SetGoverningApoJob'],
-                    ['Reindex', 'RemoteIndexingJob'],
-                    ['Manage Catkeys', 'ManageCatkeyJob'],
-                    ['Prepare objects', 'PrepareJob'],
-                    ['Close versions', 'CloseVersionJob']],
-                   {},
-                   class: 'form-control',
-                   data: { action: 'change->bulk_actions#showTab' }) %>
+    <% if false #multiline comment %>
+      This button/radio form element is used to define Bulk Action Job types that
+      a user can select from. The `.tab-content` area below it can define a
+      description and additional form input used for each type of custom job.
+    <% end %>
+
+    <!-- TODO: this should probably be a different UI element, like a drop down list, since its getting a bit long-->
+    <div class='form-group'>
+      <div class='btn-group' data-toggle='buttons'>
+        <label href='#desc_metadata_download_custom_options' class='btn btn-default active' data-toggle='tab'>
+          <%= f.radio_button(:action_type, 'DescmetadataDownloadJob', checked: true) %>
+          Download Descriptive Metadata
+        </label>
+        <label href='#manage_release_custom_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'ReleaseObjectJob') %>
+          Manage release
+        </label>
+        <label href='#set_governing_apo_custom_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'SetGoverningApoJob') %>
+          Update governing APO
+        </label>
+        <label href='#reindex_object_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'RemoteIndexingJob') %>
+          Reindex
+        </label>
+        <label href='#manage_catkey_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'ManageCatkeyJob') %>
+          Manage Catkeys
+        </label>
+        <label href='#prepare_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'PrepareJob') %>
+          Prepare objects
+        </label>
+        <label href='#close_version_options' data-toggle='tab' class='btn btn-default'>
+          <%= f.radio_button(:action_type, 'CloseVersionJob') %>
+          Close versions
+        </label>
+      </div>
 
       <div class='tab-content'>
-        <div role='tabpanel' class='tab-pane active' id='DescmetadataDownloadJob'>
+        <div role='tabpanel' class= 'tab-pane active' id='desc_metadata_download_custom_options'>
           <span class='help-block'>
             Download descriptive metadata for objects.
           </span>
         </div>
-        
-        <div role='tabpanel' class='tab-pane' id='ReleaseObjectJob'>
+        <div role='tabpanel' class= 'tab-pane' id='manage_release_custom_options'>
           <span class='help-block'>
             Adds release tags to individual objects.
           </span>
           <%= render 'bulk_actions/forms/manage_release_form', f: f %>
         </div>
-
-        <div role='tabpanel' class='tab-pane' id='SetGoverningApoJob'>
+        <div role='tabpanel' class= 'tab-pane' id='set_governing_apo_custom_options'>
           <span class='help-block'>
             Moves the object to a new governing APO.
           </span>
           <%= render 'bulk_actions/forms/set_governing_apo_form', f: f %>
         </div>
-
-        <div role='tabpanel' class='tab-pane' id='RemoteIndexingJob'>
+        <div role='tabpanel' class= 'tab-pane' id='reindex_object_options'>
           <span class='help-block'>
             Reindexes the DOR object to Solr
           </span>
         </div>
-
-        <div role='tabpanel' class='tab-pane' id='ManageCatkeyJob'>
+        <div role='tabpanel' class= 'tab-pane' id='manage_catkey_options'>
           <span class='help-block'>
             Adds or updates catkeys associated with objects.  You need two lists: druids and catkeys, and they need to correspond 1:1 in the correct order.
           </span>
           <%= render 'bulk_actions/forms/manage_catkey_form' %>
         </div>
-
-        <div role='tabpanel' class='tab-pane' id='PrepareJob'>
+        <div role='tabpanel' class= 'tab-pane' id='prepare_options'>
           <span class='help-block'>
             Open items not yet open for versioning.
           </span>
@@ -69,7 +90,7 @@
         </div>
 
 
-        <div role='tabpanel' class='tab-pane' id='CloseVersionJob'>
+        <div role='tabpanel' class= 'tab-pane' id='close_version_options'>
           <span class='help-block'>
             Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
           </span>
