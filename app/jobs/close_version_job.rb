@@ -20,7 +20,7 @@ class CloseVersionJob < GenericJob
       update_druid_count
 
       pids.each do |current_druid|
-        close_object(current_druid, @current_user.to_s, log)
+        close_object(current_druid, log)
       end
       log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
@@ -28,12 +28,8 @@ class CloseVersionJob < GenericJob
 
   private
 
-  def close_object(pid, user_name, log)
+  def close_object(pid, log)
     VersionService.close(identifier: pid)
-    object = Dor.find(pid)
-    msg = "Version #{object.current_version} closed"
-    object.events.add_event('close', user_name, msg)
-    object.save!
     bulk_action.increment(:druid_count_success).save
     log.puts("#{Time.current} Object successfully closed #{pid}")
   rescue StandardError => e
