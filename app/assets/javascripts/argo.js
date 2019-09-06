@@ -6,6 +6,7 @@ function pathTo(path) {
 Argo = {
     initialize: function() {
       this.apoEditor()
+      this.collapsableSections()
 
       const application = Stimulus.Application.start()
       const BulkActions = require('controllers/bulk_actions')
@@ -17,19 +18,18 @@ Argo = {
             const Form = require('modules/apo_form');
             new Form(element).init();
         }
-    }
+    },
+    // Collapse sections on the item show pages when the cheverons are clicked
+    collapsableSections: function() {
+      $('.collapsible-section').click(function(e) {
+          // Do not want a click on the "MODS bulk loads" button on the APO show page to cause collapse
+          if(e.target.id !== 'bulk-button') {
+              $(this).next('div').slideToggle()
+              $(this).toggleClass('collapsed')
+          }
+      })
+    },
 }
-
-$(document).ready(function() {
-    $('.collapsible-section').click(function(e) {
-        // Do not want a click on the "MODS bulk loads" button to cause collapse
-        if(!(e.target.id === 'bulk-button')) {
-            $(this).next('div').slideToggle();
-            $(this).toggleClass('collapsed');
-        }
-    });
-});
-
 
 Blacklight.onLoad(function() { Argo.initialize() });
 
