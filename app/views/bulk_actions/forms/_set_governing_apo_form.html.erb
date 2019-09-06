@@ -5,7 +5,7 @@
         <label for='bulk_action_set_governing_apo_new_apo_id' class='control-label'>
           New governing APO
         </label>
-        <%= set_governing_apo_fields.select(:new_apo_id, apo_list(current_user.groups)) %>
+        <%= set_governing_apo_fields.select(:new_apo_id, apo_list(current_user.groups), {}, class: 'form-control') %>
       </div>
     </div>
   <% end %>
