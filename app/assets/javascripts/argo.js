@@ -34,9 +34,6 @@ $(document).ready(function() {
             $(this).toggleClass('collapsed');
         }
     });
-
-    // This prevents the glyphicon-remove from blacklight from drawing in the remove facet
-    $('#facets a.remove').map(function() { $(this).html('') })
 });
 
 
