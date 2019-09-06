@@ -4,6 +4,9 @@ scss:
 ruby:
   enabled: false
 
+erblint:
+  enabled: true
+
 jshint:
   config_file: .jshintrc
   ignore_file: .jshintignore
