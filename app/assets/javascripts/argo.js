@@ -25,9 +25,6 @@ Argo = {
 }
 
 $(document).ready(function() {
-    $('#logo h1').remove();
-    $('.start-open').addClass('twiddle-open');
-    $('.start-open').next('ul').show();
     $('.collapsible-section').click(function(e) {
         // Do not want a click on the "MODS bulk loads" button to cause collapse
         if(!(e.target.id === 'bulk-button')) {
@@ -36,6 +33,7 @@ $(document).ready(function() {
         }
     });
 
+    // This prevents the glyphicon-remove from blacklight from drawing in the remove facet
     $('#facets a.remove').map(function() { $(this).html('') })
 });
 
