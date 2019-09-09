@@ -1,7 +1,8 @@
 import Form from 'modules/apo_form'
 import CollectionForm from 'modules/collection_form'
 import BulkActions from 'controllers/bulk_actions'
-import WorkflowGrid =  from 'controllers/workflow_grid_controller'
+import BulkUpload from 'controllers/bulk_upload'
+import WorkflowGrid from 'controllers/workflow_grid_controller'
 import { Application } from 'stimulus'
 
 function pathTo(path) {
@@ -9,18 +10,7 @@ function pathTo(path) {
   return(root + path);
 }
 
-// When a user selects a spreadsheet file for uploading via the bulk metadata upload function,
-// this function is called to verify the filename extension.
-function validate_spreadsheet_filetype()
-{
-    var filename = $('#spreadsheet_file').val().toLowerCase();
-    $('span#bulk-spreadsheet-warning').text("");
 
-    // Use lastIndexOf() since endsWith() is part of the latest ECMAScript 6 standard and not implemented
-    // in Poltergeist/PhantomJS yet.
-    if((filename.lastIndexOf(".xlsx") == -1) && (filename.lastIndexOf(".xls") == -1) &&  (filename.lastIndexOf(".xml") == -1) && (filename.lastIndexOf(".csv") == -1))
-        $('span#bulk-spreadsheet-warning').text("Note: Only spreadsheets or XML files are allowed. Please check your selected file.");
-}
 
 // Allows filtering a list of facets.
 function filterList() {
@@ -73,6 +63,7 @@ export default class Argo {
         this.collapsableSections()
         const application = Application.start()
         application.register("bulk_actions", BulkActions)
+        application.register("bulk_upload", BulkUpload)
         application.register("workflow-grid", WorkflowGrid)
     }
 
