@@ -1,3 +1,5 @@
+import 'jquery'
+
 import 'jquery.defaultText'
 import 'jquery.textarea'
 require('free-jqgrid')
