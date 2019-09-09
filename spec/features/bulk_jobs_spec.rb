@@ -37,7 +37,13 @@ RSpec.describe 'Bulk jobs view', js: true do
     attach_file('spreadsheet_file', File.expand_path('../../fixtures/crowdsourcing_bridget_1.xlsx', __FILE__))
 
     # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
-    page.execute_script("$('#spreadsheet_file').trigger('change')")
+    script = <<~JAVASCRIPT
+      var event = document.createEvent('HTMLEvents');
+      event.initEvent('change', true, false);
+      var el = document.getElementById('spreadsheet_file');
+      el.dispatchEvent(event);
+    JAVASCRIPT
+    page.execute_script(script)
 
     expect(find('input#filetypes_1')).not_to be_disabled
     expect(page).to have_css('span#bulk-spreadsheet-warning', text: '', visible: false)
@@ -53,7 +59,14 @@ RSpec.describe 'Bulk jobs view', js: true do
     attach_file('spreadsheet_file', File.absolute_path(__FILE__))
 
     # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
-    page.execute_script("$('#spreadsheet_file').trigger('change')")
+    script = <<~JAVASCRIPT
+      var event = document.createEvent('HTMLEvents');
+      event.initEvent('change', true, false);
+      var el = document.getElementById('spreadsheet_file');
+      el.dispatchEvent(event);
+    JAVASCRIPT
+    page.execute_script(script)
+
     expect(page).to have_css('span#bulk-spreadsheet-warning', text: 'Note: Only spreadsheets or XML files are allowed. Please check your selected file.')
   end
 end
