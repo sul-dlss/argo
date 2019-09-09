@@ -5,6 +5,7 @@ services:
     build: .
     volumes:
       - ./:/app
+      - node_modules:/usr/src/app/node_modules
     working_dir: /app
     command: puma
     ports:
@@ -91,3 +92,5 @@ services:
     # No external ports enabled.
 #    ports:
 #      - 6379:6379
+volumes:
+  node_modules:
