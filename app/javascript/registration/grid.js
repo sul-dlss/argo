@@ -93,11 +93,12 @@ var gridContext = function() {
     },
 
     resizeIdList: function() {
+      const boxHeight = Math.max($('#gbox_data .ui-jqgrid-bdiv').height(), 150)
       $('#id_list').animate({
         'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3,
         'left': 3,
         'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4,
-        'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + $('#gbox_data .ui-jqgrid-bdiv').height() - 4
+        'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + boxHeight - 4
       }, 0);
     },
 
