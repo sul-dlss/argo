@@ -1,3 +1,18 @@
+<div id="import-csv">
+  <label id="import-csv-button" class="btn btn-primary">
+    <input type="file" accept=".csv" data-action="bulk_actions#importCsvFile" hidden>
+    Import CSV
+  </label>
+  <small>
+    <em>Note: importing a CSV file will populate the fields below, overwriting any values that may already be there.
+        The form must still be submitted to create a virtual object.</em>
+  </small>
+
+  <p>
+    <strong>Or</strong>
+  </p>
+</div>
+
 <%= f.fields_for :create_virtual_object do |create_virtual_object_fields| %>
   <div class='form-group'>
     <%= create_virtual_object_fields.label :parent_druid, 'Enter Parent Druid' %>
