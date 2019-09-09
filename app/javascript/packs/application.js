@@ -7,12 +7,6 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
-//
-// Required by Blacklight Hierarchical Facet Plugin
-// require blacklight/hierarchy/hierarchy
-//
-// Required by Argo
-
 import 'style/application.scss'
 
 import 'jquery'
@@ -40,6 +34,7 @@ import 'modules/sharing'
 import Argo from  'argo'
 
 import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
+import 'blacklight-hierarchy/app/assets/javascripts/blacklight/hierarchy/hierarchy'
 
 // The Blacklight onLoad event works better than the regular onLoad event if
 // turbolinks is enabled.

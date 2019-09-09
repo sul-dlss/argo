@@ -1251,7 +1251,7 @@ binary-extensions@^1.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.13.1.tgz#598afe54755b2868a5330d2aff9d4ebb53209b65"
   integrity sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==
 
-blacklight-frontend@^7.1.0-alpha:
+blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.1.0-alpha:
   version "7.1.0-alpha"
   resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.1.0-alpha.tgz#9bce0ae640d31083649fb017b0e1df772d264d8d"
   integrity sha512-R0GEzrMOO5uIZHUMOlm4DjH4x48UloXVIEpRNFPb0eqJPnlngx2K+WYLIaNSmp4cv7pCUvEjNRaFfZ6sJJ8/NQ==
@@ -1260,6 +1260,14 @@ blacklight-frontend@^7.1.0-alpha:
     bootstrap "^4.3.1"
     jquery "^3.3.1"
     typeahead.js "^0.11.1"
+
+blacklight-hierarchy@^3.0.0-alpha1:
+  version "3.0.0-alpha1"
+  resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-3.0.0-alpha1.tgz#b0fcb68e8151d8a8b207a713d3bac46491a05f9a"
+  integrity sha512-0Fl3qpn1Qxw6e99Nh5O9QGUKDmf+gv1f+Efw2SSPgbiAmePw+3SPQYGP2ZhECiAdGwrS7ey1Hv25oYF6zpvToA==
+  dependencies:
+    blacklight-frontend ">=7.1.0-alpha"
+    jquery ">=3.0"
 
 block-stream@*:
   version "0.0.9"
@@ -3764,7 +3772,7 @@ jquery-validation@^1.19.1:
   resolved "https://registry.yarnpkg.com/jquery-validation/-/jquery-validation-1.19.1.tgz#a85043467dc2b70d9fff05778646d150e747742f"
   integrity sha512-QNnrZBqSltWUEJx+shOY5WtfrIb0gWmDjFfQP8rZKqMMSfpRSwEkSqhfHPvDfkObD8Hnv5KHSYI8yg73sVFdqA==
 
-jquery@>=1.7, jquery@>=1.8.0, jquery@^3.3.1, jquery@^3.4.1:
+jquery@>=1.7, jquery@>=1.8.0, jquery@>=3.0, jquery@^3.3.1, jquery@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
