@@ -74,9 +74,6 @@ OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(
 OkComputer::Registry.register 'content_base_dir', OkComputer::DirectoryCheck.new(Settings.CONTENT.BASE_DIR)
 OkComputer::Registry.register 'content_server_host', OkComputer::HttpCheck.new("https://#{Settings.CONTENT.SERVER_HOST}")
 
-# the catalog service needs an explicit catkey.
-OkComputer::Registry.register 'metadata_catalog_url', OkComputer::HttpCheck.new(Settings.METADATA.CATALOG_URL + '?catkey=1')
-
 # Bulk Metadata - probably for bulk downloads
 OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.BULK_METADATA.DIRECTORY)
 OkComputer::Registry.register 'bulk_metadata_tmp_dir', OkComputer::DirectoryCheck.new(Settings.BULK_METADATA.TEMPORARY_DIRECTORY)
@@ -94,7 +91,6 @@ OkComputer.make_optional %w(
   content_base_dir
   content_server_host
   dor_services_url
-  metadata_catalog_url
   modsulator_url
   normalizer_url
   robot_status_url
