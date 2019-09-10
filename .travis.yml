@@ -7,14 +7,11 @@ language: ruby
 addons:
   chrome: stable
 rvm:
-  - 2.5.3 # deployed
-  - 2.6.4 # latest
+  - 2.6.4 # deployed
 
 email: false
 
 before_install:
-  # Update to latest rubygems -- for ruby 2.5.3
-  - gem update --system
   # Get bundler 2.0 for ruby 2.6.4
   - gem install bundler
   # Travis's docker-compose is too old to handle v3.6 docker-compose templates.
