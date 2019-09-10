@@ -21,12 +21,6 @@ CONTENT:
   SDR_USER: 'user'
   SDR_PASSWORD: 'password'
 
-# Metadata
-METADATA:
-  CATALOG_URL: 'https://catalog.example.com/catalog/mods'
-  CATALOG_USER: 'user'
-  CATALOG_PASS: 'pass'
-
 # Newrelic
 NEWRELIC:
   ENABLED: false

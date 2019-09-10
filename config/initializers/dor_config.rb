@@ -29,12 +29,6 @@ Dor.configure do
     pass         Settings.SURI.PASS
   end
 
-  metadata do
-    catalog.url Settings.METADATA.CATALOG_URL
-    catalog.user Settings.METADATA.CATALOG_USER
-    catalog.pass Settings.METADATA.CATALOG_PASS
-  end
-
   content do
     content_user     Settings.CONTENT.USER
     content_base_dir Settings.CONTENT.BASE_DIR

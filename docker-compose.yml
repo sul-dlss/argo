@@ -23,7 +23,6 @@ services:
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__DOR_SERVICES__TOKEN_HEADER: X-Auth
       SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
-      SETTINGS__METADATA__CATALOG_URL: http://dor-services-app:3000/v1/catalog/mods
 
   dor-services-app:
     image: suldlss/dor-services-app:latest
