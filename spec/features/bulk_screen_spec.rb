@@ -4,8 +4,11 @@ require 'rails_helper'
 
 # Feature/view tests for the (old) bulk actions view.
 RSpec.describe 'Bulk actions view', js: true do
+  let(:object_client) { instance_double(Dor::Services::Client::Object, publish: true) }
+
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   it 'basic page renders ok' do
@@ -17,6 +20,11 @@ RSpec.describe 'Bulk actions view', js: true do
 
     find(:xpath, "//span[@class='bulk_button'][text()='Get druids from search'][not(@disabled)]").click
 
+    within '#pids' do
+      # Test that the textarea was populated from a search
+      expect(page).to have_content 'druid:zt570tx3016'
+    end
+
     expect(page).to have_button('Refresh MODS', disabled: false)
     expect(page).to have_button('Set source Id', disabled: false)
     expect(page).to have_button('Set object rights', disabled: false)
@@ -27,5 +35,11 @@ RSpec.describe 'Bulk actions view', js: true do
     expect(page).to have_button('Republish', disabled: false)
     expect(page).to have_button('Tags', disabled: false)
     expect(page).to have_button('Purge', disabled: false)
+
+    fill_in 'pids', with: 'druid:zt570tx3016' # just one druid
+    click_button 'Republish'
+    find('#republish_button').click
+
+    expect(page).to have_content 'Done!'
   end
 end
