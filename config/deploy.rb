@@ -46,9 +46,10 @@ namespace :deploy do
         # yet be set when this task is defined (though it will be by the time it's
         # executed).
         with rails_env: fetch(:rails_env), argo_delayed_job_worker_count: fetch(:delayed_job_workers) do
+          # Stop jobs before quitting and loading else stale jobs can hang around
+          execute :'./bin/eye', :stop, :delayed_job
           # quit first to make sure the new config is loaded
           execute :'./bin/eye', :quit
-
           # avoid spaces in the command name, see http://capistranorb.com/documentation/getting-started/tasks/
           execute :'./bin/eye', :load, :'config/eye/delayed_job_workers.eye'
         end
