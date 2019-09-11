@@ -302,15 +302,6 @@ Blacklight.onLoad(()=>{
 		get_tags()
 	})
   $('#purge-button').on('click', () => $('#purge').show(400))
-	$('#prepare_button').on('click', () => {
-		fetch_druids(open_version)
-		$('#open').hide(400)
-	})
-
-	$('#close-objects-button').on('click', () => {
-		fetch_druids(close_version)
-		$('#close').hide(400)
-	})
 
   $('#confirm-apo-defaults-button').on('click', () => {
 		fetch_druids(apply_apo_defaults)
