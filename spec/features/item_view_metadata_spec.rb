@@ -36,6 +36,12 @@ RSpec.describe 'Item view', js: true do
         expect(page).to have_css 'dd', text: 'v1 Unknown Status'
       end
 
+      click_link 'descMetadata' # Open the datastream modal
+      within '.code' do
+        expect(page).to have_content '<mods:title type="main">Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953</mods:title>'
+      end
+      click_button '×' # close the modal
+
       within '.resource-list' do
         click_link 'M1090_S15_B02_F01_0126.jp2'
       end
