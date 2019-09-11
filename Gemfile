@@ -41,9 +41,11 @@ group :development do
 end
 
 gem 'almond-rails'
+# Barby creates barcodes. Used in generating tracksheets
 gem 'barby'
 gem 'bootstrap-sass'
 gem 'cancancan'
+# Pretty format for XML
 gem 'coderay'
 gem 'config'
 gem 'delayed_job'
@@ -59,6 +61,7 @@ gem 'mysql2', '~> 0.5.2'
 gem 'net-sftp'
 gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
+# Prawn is used to create "tracksheets"
 gem 'prawn', '~> 1'
 gem 'prawn-table'
 gem 'rake'
