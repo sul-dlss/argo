@@ -66,7 +66,6 @@ Rails.application.routes.draw do
       get :spreadsheet_template
     end
     member do
-      get 'delete_role'
       post 'add_collection'
       get  'delete_collection'
       post 'update_title'

@@ -11,8 +11,7 @@ class ApoController < ApplicationController
     :add_collection, :delete_collection,
     :update_copyright, :update_creative_commons,
     :update_default_object_rights, :update_desc_metadata,
-    :update_title, :update_use,
-    :delete_role
+    :update_title, :update_use
   ]
 
   before_action :authorize, except: [
@@ -73,11 +72,6 @@ class ApoController < ApplicationController
 
   def add_roleplayer
     @object.add_roleplayer(params[:role], params[:roleplayer])
-    redirect
-  end
-
-  def delete_role
-    @object.delete_role(params[:role], params[:roleplayer])
     redirect
   end
 

@@ -98,13 +98,6 @@ RSpec.describe ApoController, type: :controller do
     end
   end
 
-  describe '#delete_role' do
-    it 'calls delete_role' do
-      expect(apo).to receive(:delete_role)
-      post 'delete_role', params: { id: apo.pid, role: 'dor-apo-viewer', entity: 'Jon' }
-    end
-  end
-
   describe '#delete_collection' do
     it 'calls remove_default_collection' do
       expect(apo).to receive(:remove_default_collection)
