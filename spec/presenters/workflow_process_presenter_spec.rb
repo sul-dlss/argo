@@ -43,8 +43,8 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
     it { is_expected.to eq "it's a bad day" }
   end
 
-  describe '#reset_button' do
-    subject { instance.reset_button }
+  describe '#status_action' do
+    subject { instance.status_action }
 
     let(:process_status) do
       instance_double(Dor::Workflow::Response::Process,
@@ -60,10 +60,17 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
       it { is_expected.to be_nil }
     end
 
-    context "when it's an allowable change" do
+    context "when it's in waiting" do
       let(:status) { 'waiting' }
 
       it { is_expected.to have_button 'Set to completed' }
+      it { is_expected.to have_css 'input[name="_method"][value="put"]', visible: false }
+    end
+
+    context "when it's in error" do
+      let(:status) { 'error' }
+
+      it { is_expected.to have_select 'status', options: %w[Select Rerun Skip Complete] }
       it { is_expected.to have_css 'input[name="_method"][value="put"]', visible: false }
     end
   end
