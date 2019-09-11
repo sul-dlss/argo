@@ -370,7 +370,7 @@ GEM
       stanford-mods (~> 2.1)
     msgpack (1.3.1)
     multipart-post (2.1.1)
-    mysql2 (0.4.10)
+    mysql2 (0.5.2)
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
     net-ssh (5.2.0)
@@ -668,7 +668,7 @@ DEPENDENCIES
   jquery-validation-rails
   listen (>= 3.0.5, < 3.2)
   mods_display
-  mysql2 (~> 0.4.5)
+  mysql2 (~> 0.5.2)
   newrelic_rpm
   nokogiri (~> 1.6)
   okcomputer
