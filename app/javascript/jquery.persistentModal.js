@@ -69,7 +69,7 @@
         // does it have a data- selector for container?  if so, just use the contents of that container
         // code modelled off of JQuery ajax.load. https://github.com/jquery/jquery/blob/master/src/ajax/load.js?source=c#L62
         var container =  $("<div>").
-          append( contents ).find( Blacklight.ajaxModal.containerSelector ).first();
+          append( contents ).find( Blacklight.modal.containerSelector ).first();
         if (container.length !== 0) {
           contents = container.html();
         }
