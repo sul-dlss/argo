@@ -373,8 +373,6 @@ GEM
     mysql2 (0.4.10)
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
-    net-sftp (2.1.2)
-      net-ssh (>= 2.6.5)
     net-ssh (5.2.0)
     netrc (0.11.0)
     newrelic_rpm (6.6.0.358)
@@ -671,7 +669,6 @@ DEPENDENCIES
   listen (>= 3.0.5, < 3.2)
   mods_display
   mysql2 (~> 0.4.5)
-  net-sftp
   newrelic_rpm
   nokogiri (~> 1.6)
   okcomputer
@@ -709,4 +706,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.0.1
+   2.0.2
