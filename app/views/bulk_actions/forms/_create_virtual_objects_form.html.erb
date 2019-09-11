@@ -1,0 +1,7 @@
+<%= f.fields_for :create_virtual_objects do |create_virtual_objects_fields| %>
+  <div class='form-group' id="import-csv">
+    <%= create_virtual_objects_fields.label :csv_file, 'Upload a CSV file' %>
+      <small><em>Please note that each row should contain the parent druid as the first field and child druids as all the other fields. Child druids <strong>must</strong> be entered in the order they should appear in the catalog.</em></small>
+    <%= create_virtual_objects_fields.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+  </div>
+<% end %>

@@ -14,6 +14,9 @@ services:
       REMOTE_USER: blalbrit@stanford.edu
       RAILS_LOG_TO_STDOUT: 'true'
       SOLR_URL: http://solr:8983/solr/argo
+      # Allow bulk action logs to be written (can't write to /tmp)
+      SETTINGS__BULK_METADATA__DIRECTORY: '/app/tmp'
+      SETTINGS__BULK_METADATA__TEMPORARY_DIRECTORY: '/app/tmp/tmp'
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
