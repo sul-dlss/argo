@@ -4,9 +4,7 @@ require 'rails_helper'
 
 RSpec.describe WorkflowStatus do
   subject(:workflow_status) do
-    described_class.new(pid: pid,
-                        workflow_name: workflow_name,
-                        workflow: workflow,
+    described_class.new(workflow: workflow,
                         workflow_steps: workflow_steps)
   end
 
@@ -36,9 +34,13 @@ RSpec.describe WorkflowStatus do
   describe '#pid' do
     subject { workflow_status.pid }
 
-    let(:xml) { '' }
+    let(:xml) do
+      '<?xml version="1.0" encoding="UTF-8"?>
+        <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+        </workflow>'
+    end
 
-    it { is_expected.to eq pid }
+    it { is_expected.to eq 'druid:oo201oo0001' }
   end
 
   describe '#process_statuses' do

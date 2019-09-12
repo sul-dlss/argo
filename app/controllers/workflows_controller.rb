@@ -106,9 +106,7 @@ class WorkflowsController < ApplicationController
   def build_show_presenter(workflow)
     return WorkflowXmlPresenter.new(xml: workflow.xml) if params[:raw]
 
-    status = WorkflowStatus.new(pid: @object.pid,
-                                workflow_name: params[:id],
-                                workflow: workflow,
+    status = WorkflowStatus.new(workflow: workflow,
                                 workflow_steps: workflow_processes(params[:id]))
     WorkflowPresenter.new(view: view_context, workflow_status: status)
   end
