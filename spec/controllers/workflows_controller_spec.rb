@@ -54,7 +54,6 @@ RSpec.describe WorkflowsController, type: :controller do
   describe '#show' do
     let(:workflow) { instance_double(Dor::Workflow::Document) }
     let(:workflow_status) { instance_double(WorkflowStatus) }
-    let(:workflow_name) { 'accessionWF' }
     let(:template_response) { { 'processes' => workflow_steps } }
     let(:workflow_steps) do
       [
@@ -95,7 +94,7 @@ RSpec.describe WorkflowsController, type: :controller do
         get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
         expect(response).to have_http_status(:ok)
         expect(WorkflowStatus).to have_received(:new)
-          .with(pid: pid, workflow_name: 'accessionWF', workflow_steps: workflow_steps.map { |item| item['name'] }, workflow: wf_response)
+          .with(workflow_steps: workflow_steps.map { |item| item['name'] }, workflow: wf_response)
         expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
         expect(assigns[:presenter]).to eq presenter
       end
