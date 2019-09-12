@@ -14,7 +14,7 @@
     <%=
       render(
         partial: 'workflow_table_process',
-        collection: proc_names_for_wf(wf_name, wf_data).to_a,
+        collection: workflow_process_names(wf_name),
         as: :process_info,
         locals: { wf_data: wf_data, wf_name: wf_name }
       )
