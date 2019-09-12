@@ -51,10 +51,12 @@ module WorkflowHelper
     link_to(item_count, new_params)
   end
 
-  def workflow_process_names(wf_name)
-    wf = Dor::WorkflowObject.find_by_name(wf_name)
-    return [] unless wf
-
-    wf.definition.processes.collect { |p| [p.name, p.label] }
+  def workflow_process_names(workflow_name)
+    client = Dor::Config.workflow.client
+    workflow_definition = client.workflow_template(workflow_name)
+    workflow_definition['processes'].collect { |process| [process['name'], process['label']] }
+  rescue Dor::WorkflowException
+    Honeybadger.notify("no workflow template found for '#{workflow_name}'")
+    []
   end
 end
