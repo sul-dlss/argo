@@ -51,14 +51,10 @@ module WorkflowHelper
     link_to(item_count, new_params)
   end
 
-  def proc_names_for_wf(wf_name, wf_data)
-    proc_names = wf_data.keys.delete_if { |k, v| !k.is_a?(String) }
+  def workflow_process_names(wf_name)
     wf = Dor::WorkflowObject.find_by_name(wf_name)
-    if wf.nil?
-      proc_names = ActiveSupport::OrderedHash[*(proc_names.sort.collect { |n| [n, nil] }.flatten)]
-    else
-      proc_names = ActiveSupport::OrderedHash[*(wf.definition.processes.collect { |p| [p.name, p.label] }.flatten)]
-    end
-    proc_names
+    return [] unless wf
+
+    wf.definition.processes.collect { |p| [p.name, p.label] }
   end
 end
