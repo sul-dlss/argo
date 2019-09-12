@@ -54,31 +54,30 @@ RSpec.describe WorkflowsController, type: :controller do
   describe '#show' do
     let(:workflow) { instance_double(Dor::Workflow::Document) }
     let(:workflow_status) { instance_double(WorkflowStatus) }
-    let(:workflow_object) { instance_double(Dor::WorkflowObject, definition: workflow_ds) }
-    let(:workflow_ds) { instance_double(Dor::WorkflowDefinitionDs, processes: workflow_steps) }
     let(:workflow_name) { 'accessionWF' }
-
+    let(:template_response) { { 'processes' => workflow_steps } }
     let(:workflow_steps) do
       [
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'start-accession', 'sequence' => 1),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'descriptive-metadata', 'sequence' => 2),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'rights-metadata', 'sequence' => 3),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'content-metadata', 'sequence' => 4),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'technical-metadata', 'sequence' => 5),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'remediate-object', 'sequence' => 6),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'shelve', 'sequence' => 7),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'published', 'sequence' => 8),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'provenance-metadata', 'sequence' => 9),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'sdr-ingest-transfer', 'sequence' => 10),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'sdr-ingest-received', 'sequence' => 11),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'reset-workspace', 'sequence' => 12),
-        Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'end-accession', 'sequence' => 13)
+        { 'name' => 'start-accession' },
+        { 'name' => 'descriptive-metadata' },
+        { 'name' => 'rights-metadata' },
+        { 'name' => 'content-metadata' },
+        { 'name' => 'technical-metadata' },
+        { 'name' => 'remediate-object' },
+        { 'name' => 'shelve' },
+        { 'name' => 'published' },
+        { 'name' => 'provenance-metadata' },
+        { 'name' => 'sdr-ingest-transfer' },
+        { 'name' => 'sdr-ingest-received' },
+        { 'name' => 'reset-workspace' },
+        { 'name' => 'end-accession' }
       ]
     end
 
     let(:workflow_client) do
       instance_double(Dor::Workflow::Client,
-                      workflow: wf_response)
+                      workflow: wf_response,
+                      workflow_template: template_response)
     end
 
     context 'when the user wants a table view' do
@@ -92,12 +91,11 @@ RSpec.describe WorkflowsController, type: :controller do
       it 'fetches the workflow on valid parameters' do
         allow(WorkflowPresenter).to receive(:new).and_return(presenter)
         allow(WorkflowStatus).to receive(:new).and_return(workflow_status)
-        allow(Dor::WorkflowObject).to receive(:find_by_name).with(workflow_name).and_return(workflow_object)
 
         get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
         expect(response).to have_http_status(:ok)
         expect(WorkflowStatus).to have_received(:new)
-          .with(pid: pid, workflow_name: 'accessionWF', workflow_steps: workflow_steps.map(&:name), workflow: wf_response)
+          .with(pid: pid, workflow_name: 'accessionWF', workflow_steps: workflow_steps.map { |item| item['name'] }, workflow: wf_response)
         expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
         expect(assigns[:presenter]).to eq presenter
       end
@@ -115,7 +113,6 @@ RSpec.describe WorkflowsController, type: :controller do
 
       before do
         allow(WorkflowXmlPresenter).to receive(:new).and_return(presenter)
-        allow(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(workflow_object)
       end
 
       it 'fetches the workflow on valid parameters' do
