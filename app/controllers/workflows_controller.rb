@@ -113,7 +113,7 @@ class WorkflowsController < ApplicationController
     status = WorkflowStatus.new(pid: @object.pid,
                                 workflow_name: params[:id],
                                 workflow: workflow,
-                                workflow_definition: wf_def)
+                                workflow_steps: wf_def.definition.processes.map(&:name))
     WorkflowPresenter.new(view: view_context, workflow_status: status)
   end
 
