@@ -23,6 +23,7 @@
                       ['Manage Catkeys', 'ManageCatkeyJob'],
                       ['Prepare objects', 'PrepareJob'],
                       ['Close versions', 'CloseVersionJob'],
+                      ['Checksum report', 'ChecksumReportJob'],
                       ['Create virtual object(s)', 'CreateVirtualObjectsJob']],
                      {},
                      class: 'form-control',
@@ -72,6 +73,12 @@
         <div role='tabpanel' class='tab-pane' id='CloseVersionJob'>
           <span class='help-block'>
             Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='ChecksumReportJob'>
+          <span class='help-block'>
+            Download checksums of files in objects (as csv).
           </span>
         </div>
 

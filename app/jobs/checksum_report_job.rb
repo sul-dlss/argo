@@ -1,0 +1,53 @@
+# frozen_string_literal: true
+
+require 'faraday'
+
+##
+# Job to run checksum report
+class ChecksumReportJob < GenericJob
+  queue_as :default
+
+  ##
+  # A job that, given list of pids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
+  # @param [Integer] bulk_action_id GlobalID for a BulkAction object
+  # @param [Hash] params additional parameters that an Argo job may need
+  # @option params [Array] :pids required list of pids
+  # @option params [Array] :groups the groups the user belonged to when the started the job. Required for because groups are not persisted with the user.
+  # @option params [Array] :user the user
+  def perform(bulk_action_id, params)
+    super
+    pids = params[:pids]
+    report_filename = generate_report_filename(params[:output_directory])
+
+    with_bulk_action_log do |log|
+      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
+      update_druid_count
+      begin
+        raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, ActiveFedora::Base)
+
+        response = conn.get '/objects/checksums', druids: pids, format: 'csv'
+        raise "Call to preservation_catalog_api failed: #{response.status} #{response.reason_phrase}" unless response.success?
+
+        File.open(report_filename, 'w') { |file| file.write(response.body) }
+        bulk_action.update(druid_count_success: pids.length) # this whole job is run in one call, so it either all succeeds or fails
+      rescue StandardError => e
+        bulk_action.update(druid_count_fail: pids.length)
+        log.puts("#{Time.current} ChecksumReportJob creation failed #{e.class} #{e.message}")
+      end
+      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
+    end
+  end
+
+  ##
+  # Generate a filename for the job's csv report output file.
+  # @param  [String] output_dir Where to store the csv file.
+  # @return [String] A filename for the csv file.
+  def generate_report_filename(output_dir)
+    FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
+    File.join(output_dir, Settings.CHECKSUM_REPORT_JOB.CSV_FILENAME)
+  end
+
+  def conn
+    @conn ||= Faraday.new(url: Settings.PRESERVATION_CATALOG.URL)
+  end
+end
