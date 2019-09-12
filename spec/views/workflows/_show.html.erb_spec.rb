@@ -20,6 +20,7 @@ RSpec.describe 'workflows/_show.html.erb' do
                     elapsed: nil,
                     attempts: nil,
                     lifecycle: nil,
+                    repository: 'dor',
                     note: nil)
   end
 

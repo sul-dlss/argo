@@ -9,7 +9,7 @@ class WorkflowStatus
     @workflow_steps = workflow_steps
   end
 
-  delegate :empty?, :workflow_name, :pid, to: :workflow
+  delegate :empty?, :workflow_name, :pid, :repository, to: :workflow
 
   def process_statuses
     return [] if empty?

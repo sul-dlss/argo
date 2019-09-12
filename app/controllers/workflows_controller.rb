@@ -35,12 +35,8 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:repo` The repo to which the workflow applies (optional).
   def update
     authorize! :update, :workflow
-    [:process, :status].each { |p| params.require(p) }
+    params.require [:process, :status, :repo]
     args = params.values_at(:item_id, :id, :process, :status)
-    # rubocop:disable Rails/DynamicFindBy
-    # the :repo parameter is optional, so fetch it based on the workflow name if blank
-    params[:repo] ||= Dor::WorkflowObject.find_by_name(params[:id]).definition.repo
-    # rubocop:enable Rails/DynamicFindBy
 
     # this will raise an exception if the item doesn't have that workflow step
     Dor::Config.workflow.client.workflow_status params[:repo], *args.take(3)
