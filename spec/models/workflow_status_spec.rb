@@ -7,29 +7,27 @@ RSpec.describe WorkflowStatus do
     described_class.new(pid: pid,
                         workflow_name: workflow_name,
                         workflow: workflow,
-                        workflow_definition: definition)
+                        workflow_steps: workflow_steps)
   end
 
   let(:workflow) { Dor::Workflow::Response::Workflow.new(xml: xml) }
   let(:workflow_name) { 'accessionWF' }
-  let(:definition) { instance_double(Dor::WorkflowObject, definition: workflow_ds) }
-  let(:workflow_ds) { instance_double(Dor::WorkflowDefinitionDs, processes: workflow_steps) }
 
   let(:workflow_steps) do
-    [
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'start-accession', 'sequence' => 1),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'descriptive-metadata', 'sequence' => 2),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'rights-metadata', 'sequence' => 3),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'content-metadata', 'sequence' => 4),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'technical-metadata', 'sequence' => 5),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'remediate-object', 'sequence' => 6),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'shelve', 'sequence' => 7),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'published', 'sequence' => 8),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'provenance-metadata', 'sequence' => 9),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'sdr-ingest-transfer', 'sequence' => 10),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'sdr-ingest-received', 'sequence' => 11),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'reset-workspace', 'sequence' => 12),
-      Dor::Workflow::Process.new('dor', workflow_name, 'name' => 'end-accession', 'sequence' => 13)
+    %w[
+      start-accession
+      descriptive-metadata
+      rights-metadata
+      content-metadata
+      technical-metadata
+      remediate-object
+      shelve
+      published
+      provenance-metadata
+      sdr-ingest-transfer
+      sdr-ingest-received
+      reset-workspace
+      end-accession
     ]
   end
   let(:pid) { 'druid:oo201oo0001' }

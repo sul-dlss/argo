@@ -5,12 +5,12 @@ class WorkflowStatus
   # @param [String] pid
   # @param [String] workflow_name
   # @param [Dor::Workflow::Response::Workflow] workflow the response from the workflow service for this object/workflow_name
-  # @param [Dor::WorkflowObject] workflow_definition the definition of the workflow
-  def initialize(pid:, workflow_name:, workflow:, workflow_definition:)
+  # @param [Array<String>] workflow_steps a list of steps in the workflow
+  def initialize(pid:, workflow_name:, workflow:, workflow_steps:)
     @pid = pid
     @workflow_name = workflow_name
     @workflow = workflow
-    @workflow_definition = workflow_definition
+    @workflow_steps = workflow_steps
   end
 
   attr_reader :workflow_name, :pid
@@ -21,15 +21,11 @@ class WorkflowStatus
     return [] if empty?
 
     workflow_steps.map do |process|
-      workflow.process_for_recent_version(name: process.name)
+      workflow.process_for_recent_version(name: process)
     end
   end
 
   private
 
-  attr_reader :workflow_definition, :workflow
-
-  def workflow_steps
-    workflow_definition.definition.processes
-  end
+  attr_reader :workflow_steps, :workflow
 end
