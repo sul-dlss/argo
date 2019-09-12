@@ -51,7 +51,8 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
                       status: status,
                       pid: 'druid:132',
                       workflow_name: 'accessionWF',
-                      name: 'technical-metadata')
+                      name: 'technical-metadata',
+                      repository: 'dor')
     end
 
     context "when it's not an allowable change" do
@@ -65,6 +66,7 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
 
       it { is_expected.to have_button 'Set to completed' }
       it { is_expected.to have_css 'input[name="_method"][value="put"]', visible: false }
+      it { is_expected.to have_css 'input[name="repo"][value="dor"]', visible: false }
     end
 
     context "when it's in error" do
@@ -72,6 +74,7 @@ RSpec.describe WorkflowProcessPresenter, type: :view do
 
       it { is_expected.to have_select 'status', options: %w[Select Rerun Skip Complete] }
       it { is_expected.to have_css 'input[name="_method"][value="put"]', visible: false }
+      it { is_expected.to have_css 'input[name="repo"][value="dor"]', visible: false }
     end
   end
 end

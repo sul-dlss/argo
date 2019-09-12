@@ -155,12 +155,11 @@ RSpec.describe WorkflowsController, type: :controller do
     end
 
     it 'requires various workflow parameters' do
-      expect { post :update, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
+      expect { post :update, params: { item_id: pid, repo: 'dor', id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
     end
 
     it 'changes the status' do
-      expect(Dor::WorkflowObject).to receive(:find_by_name).with('accessionWF').and_return(double(definition: double(repo: 'dor')))
-      post :update, params: { item_id: pid, id: 'accessionWF', process: 'publish', status: 'ready' }
+      post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'ready' }
       expect(controller).to have_received(:authorize!).with(:update, :workflow)
       expect(subject).to redirect_to(solr_document_path(pid))
       expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
