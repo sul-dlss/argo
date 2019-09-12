@@ -106,15 +106,17 @@ class WorkflowsController < ApplicationController
   def build_show_presenter(workflow)
     return WorkflowXmlPresenter.new(xml: workflow.xml) if params[:raw]
 
-    # rubocop:disable Rails/DynamicFindBy
-    wf_def = Dor::WorkflowObject.find_by_name(params[:id])
-    # rubocop:enable Rails/DynamicFindBy
-
     status = WorkflowStatus.new(pid: @object.pid,
                                 workflow_name: params[:id],
                                 workflow: workflow,
-                                workflow_steps: wf_def.definition.processes.map(&:name))
+                                workflow_steps: workflow_processes(params[:id]))
     WorkflowPresenter.new(view: view_context, workflow_status: status)
+  end
+
+  def workflow_processes(workflow_name)
+    client = Dor::Config.workflow.client
+    workflow_definition = client.workflow_template(workflow_name)
+    workflow_definition['processes'].map { |process| process['name'] }
   end
 
   def flush_index
