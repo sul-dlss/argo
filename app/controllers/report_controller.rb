@@ -62,6 +62,7 @@ class ReportController < CatalogController
   # an ajax call to reset workflow states for objects
   def reset
     head 501 unless request.xhr?
+    authorize! :update, :workflow
 
     fail ArgumentError, 'Missing reset_workflow' unless params[:reset_workflow].present?
     fail ArgumentError, 'Missing reset_step' unless params[:reset_step].present?
@@ -79,7 +80,6 @@ class ReportController < CatalogController
         'waiting'
       )
     end
-    ### XXX: Where's the authorization?
   end
 
   def workflow_grid
