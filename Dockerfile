@@ -1,4 +1,4 @@
-FROM ruby:2.5-stretch
+FROM ruby:2.6-stretch
 
 RUN apt-get update -qq && \
     apt-get install -y nano build-essential libsqlite3-dev nodejs
