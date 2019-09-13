@@ -10,7 +10,10 @@ Argo = {
 
       const application = Stimulus.Application.start()
       const BulkActions = require('controllers/bulk_actions')
+      const WorkflowGrid = require('controllers/workflow_grid_controller')
       application.register("bulk_actions", BulkActions)
+      application.register("workflow-grid", WorkflowGrid)
+
     },
     apoEditor: function () {
         const element = $("[data-behavior='apo-form']")
