@@ -63,8 +63,7 @@ class ReportController < CatalogController
   def reset
     head 501 unless request.xhr?
 
-    fail ArgumentError, 'Missing reset_workflow' unless params[:reset_workflow].present?
-    fail ArgumentError, 'Missing reset_step' unless params[:reset_step].present?
+    params.require([:reset_workflow, :reset_step])
 
     @workflow = params[:reset_workflow]
     @step = params[:reset_step]

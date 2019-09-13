@@ -60,9 +60,9 @@ RSpec.describe ReportController, type: :controller do
     let(:step) { 'descriptive-metadata' }
 
     it 'requires parameters' do
-      expect { post :reset, xhr: true }.to raise_error(ArgumentError)
-      expect { post :reset, xhr: true, params: { reset_workflow: workflow } }.to raise_error(ArgumentError)
-      expect { post :reset, xhr: true, params: { reset_step: step } }.to raise_error(ArgumentError)
+      expect { post :reset, xhr: true }.to raise_error(ActionController::ParameterMissing)
+      expect { post :reset, xhr: true, params: { reset_workflow: workflow } }.to raise_error(ActionController::ParameterMissing)
+      expect { post :reset, xhr: true, params: { reset_step: step } }.to raise_error(ActionController::ParameterMissing)
     end
     it 'sets instance variables and calls update workflow service' do
       expect(controller).to receive(:repo_from_workflow)
