@@ -86,6 +86,7 @@ class ReportController < CatalogController
     (@response, @document_list) = search_results(params)
 
     if request.xhr?
+      # This is triggered by javascript that refreshes the data every 10s
       render partial: 'workflow_grid'
       return
     end

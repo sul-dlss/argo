@@ -41,7 +41,7 @@ Rails.application.routes.draw do
   match 'report/bulk',     to: 'report#bulk',     via: [:get, :post], as: 'report_bulk'
   match 'report/pids',     to: 'report#pids',     via: [:get, :post], as: 'report_pids'
   match 'report/reset',    to: 'report#reset',    via: [:post],       as: 'report_reset'
-  match 'report/workflow_grid', to: 'report#workflow_grid', via: [:get, :post], as: 'report_workflow_grid'
+  get 'report/workflow_grid', to: 'report#workflow_grid', as: 'report_workflow_grid'
 
   ##
   # This route provides access to CatalogController#facet so facet links can be
