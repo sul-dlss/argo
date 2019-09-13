@@ -12,7 +12,7 @@ Argo is the administrative interface to the Stanford Digital Repository.
 ### System Requirements
 
 1. Install Docker
-2. Install Ruby 2.5.3
+2. Install Ruby 2.6.4
 
 ### Check Out the Code
 
@@ -57,6 +57,10 @@ Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the we
 docker-compose build web
 docker-compose run --rm web rake argo:repo:load
 ```
+
+### Note
+
+If you run into errors related to the version of bundler when building the `web` container, that likely means you need to pull a newer copy of the base Ruby image specified in `Dockerfile`, e.g., `docker pull ruby:{MAJOR}.{MINOR}-stretch`.
 
 ## Load and index records
 
