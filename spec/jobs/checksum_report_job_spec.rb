@@ -6,13 +6,14 @@ RSpec.describe ChecksumReportJob, type: :job do
   let(:pids) { ['druid:123', 'druid:456'] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
-  let(:output_directory) { 'tmp/success' }
-  let(:output_directory_fail) { 'tmp/fail' }
+  let(:output_directory) { 'tmp/checksum_report_job_success' }
+  let(:output_directory_fail) { 'tmp/checksum_report_job_fail' }
+  # different output_directory so our 'fail' test doesn't inadvertently fail due to the CSV already existing from the 'success' test
   let(:bulk_action) do
     create(
       :bulk_action,
       action_type: 'ChecksumReportJob',
-      log_name: 'tmp/foo.txt'
+      log_name: 'tmp/checksum_report_job_log.txt'
     )
   end
   let(:csv_response) { "druid:123,checksum1,checksum2\ndruid:456,checksum3,checksum4\n" }

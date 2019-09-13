@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'faraday'
-
 ##
 # Job to run checksum report
 class ChecksumReportJob < GenericJob
@@ -11,12 +9,12 @@ class ChecksumReportJob < GenericJob
   # A job that, given list of pids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array] :pids required list of pids
-  # @option params [Array] :groups the groups the user belonged to when the started the job. Required for because groups are not persisted with the user.
-  # @option params [Array] :user the user
+  # @option params [Array]  :pids required list of pids
+  # @option params [Array]  :groups the groups the user belonged to when the started the job. Required for because groups are not persisted with the user.
+  # @option params [Array]  :user the user
+  # @option params [String] :output_directory the output directory to write the CSV checksum report to
   def perform(bulk_action_id, params)
     super
-    pids = params[:pids]
     report_filename = generate_report_filename(params[:output_directory])
 
     with_bulk_action_log do |log|
@@ -26,8 +24,11 @@ class ChecksumReportJob < GenericJob
         raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, ActiveFedora::Base)
 
         response = conn.get '/objects/checksums', druids: pids, format: 'csv'
-        raise "Call to preservation_catalog_api failed: #{response.status} #{response.reason_phrase}" unless response.success?
-
+        unless response.success? # an internal API call failing is significant enough to notify HB specifically over as well as failing the job
+          message = "Call to preservation_catalog_api failed: #{response.status} #{response.reason_phrase}: #{response.body}"
+          Honeybadger.notify message
+          raise message
+        end
         File.open(report_filename, 'w') { |file| file.write(response.body) }
         bulk_action.update(druid_count_success: pids.length) # this whole job is run in one call, so it either all succeeds or fails
       rescue StandardError => e
