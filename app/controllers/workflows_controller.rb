@@ -36,12 +36,14 @@ class WorkflowsController < ApplicationController
   def update
     authorize! :update, :workflow
     params.require [:process, :status, :repo]
-    args = params.values_at(:item_id, :id, :process, :status)
 
     # this will raise an exception if the item doesn't have that workflow step
-    Dor::Config.workflow.client.workflow_status params[:repo], *args.take(3)
+    Dor::Config.workflow.client.workflow_status params[:repo], params[:item_id], params[:id], params[:process]
     # update the status for the step and redirect to the workflow view page
-    Dor::Config.workflow.client.update_workflow_status params[:repo], *args
+    Dor::Config.workflow.client.update_status(druid: params[:item_id],
+                                              workflow: params[:id],
+                                              process: params[:process],
+                                              status: params[:status])
     respond_to do |format|
       if params[:bulk].present?
         render status: :ok, plain: 'Updated!'

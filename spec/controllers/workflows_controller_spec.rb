@@ -147,7 +147,7 @@ RSpec.describe WorkflowsController, type: :controller do
     let(:workflow_client) do
       instance_double(Dor::Workflow::Client,
                       workflow_status: nil,
-                      update_workflow_status: nil)
+                      update_status: nil)
     end
 
     before do
@@ -163,7 +163,7 @@ RSpec.describe WorkflowsController, type: :controller do
       expect(controller).to have_received(:authorize!).with(:update, :workflow)
       expect(subject).to redirect_to(solr_document_path(pid))
       expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
-      expect(workflow_client).to have_received(:update_workflow_status).with('dor', pid, 'accessionWF', 'publish', 'ready')
+      expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'ready')
     end
   end
 end

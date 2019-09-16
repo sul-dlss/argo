@@ -55,7 +55,6 @@ RSpec.describe ReportController, type: :controller do
   end
 
   describe 'POST reset' do
-    let(:repo) { 'dor' }
     let(:workflow) { 'accessionWF' }
     let(:step) { 'descriptive-metadata' }
 
@@ -64,23 +63,14 @@ RSpec.describe ReportController, type: :controller do
       expect { post :reset, xhr: true, params: { reset_workflow: workflow } }.to raise_error(ArgumentError)
       expect { post :reset, xhr: true, params: { reset_step: step } }.to raise_error(ArgumentError)
     end
+
     it 'sets instance variables and calls update workflow service' do
-      expect(controller).to receive(:repo_from_workflow)
-        .and_return(repo)
-      expect(Dor::Config.workflow.client).to receive(:update_workflow_status)
-        .with(repo, 'druid:xb482bw3979', workflow, step, 'waiting')
+      expect(Dor::Config.workflow.client).to receive(:update_status)
+        .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
       post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
       expect(assigns(:workflow)).to eq workflow
       expect(assigns(:step)).to eq step
       expect(assigns(:ids)).to eq(%w(xb482bw3979))
-      expect(assigns(:repo)).to eq(repo)
-      expect(response).to have_http_status(:ok)
-    end
-    it 'gets repo from the WorkflowObject' do
-      expect(Dor::WorkflowObject).to receive(:find_by_name)
-        .and_return double(definition: double(repo: repo)) # mocks dor-services call
-      post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'NoMatchesForThisString' }
-      expect(assigns(:repo)).to eq repo
       expect(response).to have_http_status(:ok)
     end
   end

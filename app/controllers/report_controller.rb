@@ -68,15 +68,13 @@ class ReportController < CatalogController
 
     @workflow = params[:reset_workflow]
     @step = params[:reset_step]
-    @repo = repo_from_workflow(@workflow)
     @ids  = Report.new(params, current_user: current_user).pids
     @ids.each do |pid|
-      Dor::Config.workflow.client.update_workflow_status(
-        @repo,
-        "druid:#{pid}",
-        @workflow,
-        @step,
-        'waiting'
+      Dor::Config.workflow.client.update_status(
+        druid: "druid:#{pid}",
+        workflow: @workflow,
+        process: @step,
+        status: 'waiting'
       )
     end
     ### XXX: Where's the authorization?
@@ -94,13 +92,5 @@ class ReportController < CatalogController
     respond_to do |format|
       format.html
     end
-  end
-
-  private
-
-  ##
-  # @return [String, nil]
-  def repo_from_workflow(workflow)
-    Dor::WorkflowObject.find_by_name(workflow).try(:definition).try(:repo)
   end
 end
