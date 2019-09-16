@@ -22,7 +22,7 @@ class BulkActionPersister
 
   attr_reader :bulk_action
   delegate :id, :file, :pids, :output_directory, :manage_release, :set_governing_apo,
-           :manage_catkeys, :groups, :prepare, to: :bulk_action
+           :manage_catkeys, :groups, :prepare, :create_virtual_objects, to: :bulk_action
 
   def create_log_file
     log_filename = file(Settings.BULK_METADATA.LOG)
@@ -55,7 +55,15 @@ class BulkActionPersister
       set_governing_apo: set_governing_apo,
       manage_catkeys: manage_catkeys,
       prepare: prepare,
+      create_virtual_objects: virtual_objects_csv_from_file(create_virtual_objects),
       groups: groups
     }
+  end
+
+  def virtual_objects_csv_from_file(params)
+    # Short-circuit if request is not related to creating virtual objects
+    return if params.nil? || params[:csv_file].nil?
+
+    File.read(params[:csv_file].path)
   end
 end

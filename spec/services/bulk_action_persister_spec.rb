@@ -68,7 +68,9 @@ RSpec.describe BulkActionPersister do
   end
 
   describe '#job_params' do
-    subject { described_class.new(bulk_action).send(:job_params) }
+    subject { service.send(:job_params) }
+
+    let(:service) { described_class.new(bulk_action) }
 
     context 'for a prepare job' do
       let(:bulk_action) do
@@ -80,6 +82,23 @@ RSpec.describe BulkActionPersister do
       end
 
       it { is_expected.to include(prepare: { 'description' => 'change the data', 'significance' => 'minor' }) }
+    end
+
+    context 'for a create virtual objects job' do
+      let(:bulk_action) do
+        BulkAction.create(
+          action_type: 'CreateVirtualObjectsJob',
+          pids: 'a b c',
+          create_virtual_objects: { csv_file: fake_io }
+        )
+      end
+      let(:fake_io) { double('IO', path: '/path/unused/in/spec') }
+
+      before do
+        allow(File).to receive(:read).and_return("parent1,child1,child2\nparent2,child3,child4,child5")
+      end
+
+      it { is_expected.to include(create_virtual_objects: "parent1,child1,child2\nparent2,child3,child4,child5") }
     end
   end
 end

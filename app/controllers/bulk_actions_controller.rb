@@ -27,7 +27,6 @@ class BulkActionsController < ApplicationController
 
     # BulkActionPersister is responsible for enqueuing the job
     if BulkActionPersister.persist(@bulk_action)
-
       redirect_to action: :index, notice: 'Bulk action was successfully created.'
     else
       render :new
@@ -61,7 +60,8 @@ class BulkActionsController < ApplicationController
       manage_release: [:tag, :what, :who, :to],
       set_governing_apo: [:new_apo_id],
       manage_catkeys: [:catkeys],
-      prepare: [:significance, :description]
+      prepare: [:significance, :description],
+      create_virtual_objects: [:csv_file]
     )
   end
 

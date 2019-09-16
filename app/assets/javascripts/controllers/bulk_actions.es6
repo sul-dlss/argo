@@ -8,5 +8,18 @@ export default class extends Stimulus.Controller {
 
     const newTab = this.element.querySelector(`.tab-content > #${selected}`)
     newTab.classList.add('active')
+
+    this.toggleCommonFieldVisibility(selected)
+  }
+
+  // Toggles visibility of common fields based on selected tab
+  toggleCommonFieldVisibility(selectedTab) {
+    const commonFields = this.element.querySelector('#common_fields')
+
+    if (selectedTab == 'CreateVirtualObjectsJob') {
+      commonFields.classList.add('hidden')
+    } else {
+      commonFields.classList.remove('hidden')
+    }
   }
 }
