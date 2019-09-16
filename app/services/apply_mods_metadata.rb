@@ -105,7 +105,7 @@ class ApplyModsMetadata
 
   # Checks whether or not a DOR object is in accessioning or not.
   #
-  # @return [Boolean]     true if the object is currently being accessioned, false otherwise
+  # @return [Boolean] true if the object is currently being accessioned, false otherwise
   def in_accessioning?
     (2..5).cover?(status)
   end
@@ -113,14 +113,14 @@ class ApplyModsMetadata
   # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only times we are
   # not OK to update is if the object is currently being accessioned and if the object has status unknown.
   #
-  # @return [Boolean]     true if the object's status allows us to update the descMetadata datastream, false otherwise
+  # @return [Boolean] true if the object's status allows us to update the descMetadata datastream, false otherwise
   def status_ok?
     [1, 6, 7, 8, 9].include?(status)
   end
 
   # Returns the status_info for a DOR object from the StatusService
   #
-  # @return [Integer]     value cooresponding to the status info list
+  # @return [Integer] value corresponding to the status info list
   def status
     @status ||= Dor::StatusService.new(item).status_info[:status_code]
   end
