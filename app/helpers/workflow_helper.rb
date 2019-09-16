@@ -10,6 +10,8 @@ module WorkflowHelper
     return '' if workflow_data.nil?
 
     workflow_data.keys.sort.collect do |wf_name|
+      next if Settings.inactive_workflows.include?(wf_name)
+
       render partial: 'workflow_table', locals: { wf_name: wf_name, wf_data: workflow_data[wf_name] }
     end.join("\n").html_safe
   end

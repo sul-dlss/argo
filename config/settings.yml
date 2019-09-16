@@ -92,3 +92,14 @@ WORKFLOW:
 
 apo:
   default_workflow_option: 'registrationWF'
+
+# These workflows are inactive, and the workflow-server doesn't know about them
+# so we don't draw them on the workflow grid
+inactive_workflows:
+  - accession2WF
+  - sdrMigrationWF
+  - dpgImageWF
+  - sdrAuditWF
+  - swIndexWF
+  - googleScannedBookWF
+  - eemsAccessionWF
