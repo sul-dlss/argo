@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'report/workflow_grid', type: :view do
+RSpec.describe 'report/_workflow_grid', type: :view do
   let(:blacklight_config) { ReportController.blacklight_config }
   let(:query_params) { { controller: 'report', action: 'workflow_grid' } }
   let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }

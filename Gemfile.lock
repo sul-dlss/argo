@@ -24,6 +24,7 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    actionview-component (1.2.1)
     active-fedora (8.7.0)
       active-triples (~> 0.4.0)
       activesupport (>= 4.2.10)
@@ -633,6 +634,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionview-component
   almond-rails
   barby
   blacklight (~> 6.0)

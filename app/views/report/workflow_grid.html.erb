@@ -1,17 +1,6 @@
 <% @page_title = "#{application_name} Queue Status" %>
 <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
 
-<% content_for :head do %>
-  <script type="text/javascript">
-    var updateTimer;
-    function updateGrid() {
-      $.get('workflow_grid'+$(document).attr('location').search)
-      .done(function(data) { $('#workflow_grid').replaceWith(data) })
-    }
-    $(document).ready(function() { updateTimer = setInterval(updateGrid, 10000) });
-  </script>
-<% end %>
-
 <div id="sidebar" class="col-md-3 col-sm-4">
   <%= render 'search_sidebar' %>
 </div>
@@ -23,5 +12,7 @@
   <% end %>
   <%= render 'catalog/report_view_toggle' %>
   <a href="<%= Settings.ROBOT_STATUS_URL %>" target="_blank">Robots queue/job status</a>
-  <%= render :partial => 'workflow_grid' %>
+  <div data-controller="workflow-grid" data-workflow-grid-url="<%= report_workflow_grid_path %>" data-workflow-grid-refresh-interval="10000">
+    <%= render Throbber %>
+  </div>
 </div>
