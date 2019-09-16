@@ -24,15 +24,6 @@
     </dl>
   </div>
 
-  <div style="clear: both">
-    <dl class="defList">
-      <dt>Events</dt>
-      <dd>
-        <%= render_events document, object %>
-      </dd>
-    </dl>
-  </div>
-
   <% release_tags = ReleaseTags.from_dor_object(object) %>
   <% if release_tags.any? %>
     <div>

@@ -48,20 +48,6 @@ module DorObjectHelper
     end
   end
 
-  def render_events(doc, obj)
-    events = structure_from_solr(doc, 'event')
-    unless events.empty?
-      events = events.event.collect do |event|
-        next if event.nil?
-
-        event.who = event.who.first if event.who.is_a? Array
-        event.message = event.message.first if event.message.is_a? Array
-        { when: render_datetime(event.when), who: event.who, what: event.message }
-      end
-    end
-    render partial: 'catalog/show_events', locals: { document: doc, object: obj, events: events.compact }
-  end
-
   ##
   # @deprecated Please use non-blocking requests rather than blocking helpers.
   # See WorkflowServiceController#accesssioned for JSON API to this logic
