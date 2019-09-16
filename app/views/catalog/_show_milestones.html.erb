@@ -7,7 +7,7 @@
       ## TODO: Pick a real date format for the date to_s calls.
       ## Do it here and NOT in the model!!
       version_hash = document.get_versions
-      milestones = document.get_milestones
+      milestones = document.milestones
       milestones.keys.sort.each do |version|
         steps=milestones[version]
         first=true
@@ -29,13 +29,11 @@
             </td>
           </tr>
         <% end -%>
-        <% if k != "indexed" && k != "ingested" -%>
-          <tr class="version<%= version%>">
-            <td></td>
-            <td><%= m[:display] || k.titleize %></td>
-            <td><%= m[:time].nil? ? 'pending' : m[:time].in_time_zone.to_s() %></td>
-          </tr>
-        <% end -%>
+        <tr class="version<%= version %>">
+          <td></td>
+          <td><%= m[:display] || k.titleize %></td>
+          <td><%= m[:time].nil? ? 'pending' : m[:time].in_time_zone.to_s() %></td>
+        </tr>
       <% end -%>
     <% end -%>
   </tbody>
