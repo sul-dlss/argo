@@ -493,14 +493,6 @@ class ItemsController < ApplicationController
   # ---
   # Dor::Workflow utils
 
-  def dor_accession_error?(object, task)
-    dor_accession_status(object, task) == 'error'
-  end
-
-  def dor_accession_status(object, task)
-    Dor::Config.workflow.client.workflow_status('dor', object.pid, 'accessionWF', task)
-  end
-
   def dor_lifecycle(object, stage)
     Dor::Config.workflow.client.lifecycle('dor', object.pid, stage)
   end
