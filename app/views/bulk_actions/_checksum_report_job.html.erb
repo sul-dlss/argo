@@ -1,3 +1,3 @@
-<% if bulk_action.present? && bulk_action.status == 'Completed' %>
+<% if bulk_action.present? && bulk_action.status == 'Completed' && File.exists?(File.join(bulk_action.output_directory, Settings.CHECKSUM_REPORT_JOB.CSV_FILENAME)) %>
   <%= link_to('Download Checksum Report', file_bulk_action_path(bulk_action.id, filename: Settings.CHECKSUM_REPORT_JOB.CSV_FILENAME, mime_type: 'text/csv')) %>
 <% end %>
