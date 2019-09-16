@@ -74,7 +74,7 @@ gem 'sprockets-es6'
 # Stanford/Hydra related gems
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
-gem 'dor-services', '~> 7.2'
+gem 'dor-services', '~> 8.0'
 gem 'dor-services-client', '~> 2.2'
 gem 'dor-workflow-client', '~> 3.7'
 gem 'mods_display'

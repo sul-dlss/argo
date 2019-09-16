@@ -29,25 +29,7 @@ Dor.configure do
     pass         Settings.SURI.PASS
   end
 
-  content do
-    content_user     Settings.CONTENT.USER
-    content_base_dir Settings.CONTENT.BASE_DIR
-    content_server   Settings.CONTENT.SERVER_HOST
-  end
-
   stacks do
-    document_cache_host         Settings.STACKS.DOCUMENT_CACHE_HOST
-    document_cache_user         Settings.STACKS.DOCUMENT_CACHE_USER
-    local_workspace_root        Settings.STACKS.LOCAL_WORKSPACE_ROOT
-    host                        Settings.STACKS.HOST
-    user                        Settings.STACKS.USER
-  end
-
-  dor_indexing_app do
-    url Settings.DOR_INDEXING_URL
-  end
-
-  purl_services do
-    url Settings.purl_services_url
+    local_workspace_root Settings.STACKS.LOCAL_WORKSPACE_ROOT
   end
 end

@@ -70,10 +70,6 @@ OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://
 OkComputer::Registry.register 'stacks_file_url', OkComputer::HttpCheck.new(Settings.STACKS_FILE_URL)
 OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(Settings.STACKS_URL)
 
-# Content
-OkComputer::Registry.register 'content_base_dir', OkComputer::DirectoryCheck.new(Settings.CONTENT.BASE_DIR)
-OkComputer::Registry.register 'content_server_host', OkComputer::HttpCheck.new("https://#{Settings.CONTENT.SERVER_HOST}")
-
 # Bulk Metadata - probably for bulk downloads
 OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.BULK_METADATA.DIRECTORY)
 OkComputer::Registry.register 'bulk_metadata_tmp_dir', OkComputer::DirectoryCheck.new(Settings.BULK_METADATA.TEMPORARY_DIRECTORY)
@@ -88,8 +84,6 @@ OkComputer::Registry.register 'spreadsheet_url', OkComputer::HttpCheck.new(Setti
 OkComputer.make_optional %w(
   bulk_metadata_dir
   bulk_metadata_tmp_dir
-  content_base_dir
-  content_server_host
   dor_services_url
   modsulator_url
   normalizer_url

@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
   include Blacklight::Controller
 
   before_action :authenticate_user!
-  before_action :fedora_setup
 
   # Avoids a deprecation. Can be removed with Blacklight 7
   skip_after_action :discard_flash_if_xhr
@@ -37,10 +36,6 @@ class ApplicationController < ActionController::Base
   end
 
   protected
-
-  def fedora_setup
-    Dor::Config.fedora.post_config
-  end
 
   def development_only!
     if Rails.env.development? || ENV['DOR_SERVICES_DEBUG_MODE']
