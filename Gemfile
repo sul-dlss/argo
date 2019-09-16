@@ -76,7 +76,7 @@ gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy'
 gem 'dor-services', '~> 7.2'
 gem 'dor-services-client', '~> 2.2'
-gem 'dor-workflow-client', '~> 3.6'
+gem 'dor-workflow-client', '~> 3.7'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'responders', '~> 2.0'

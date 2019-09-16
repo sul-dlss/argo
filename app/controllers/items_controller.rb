@@ -504,8 +504,4 @@ class ItemsController < ApplicationController
   def dor_lifecycle(object, stage)
     Dor::Config.workflow.client.lifecycle('dor', object.pid, stage)
   end
-
-  def set_dor_accession_status(object, task, status)
-    Dor::Config.workflow.client.update_workflow_status('dor', object.pid, 'accessionWF', task, status)
-  end
 end
