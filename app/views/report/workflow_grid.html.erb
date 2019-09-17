@@ -12,7 +12,7 @@
   <% end %>
   <%= render 'catalog/report_view_toggle' %>
   <a href="<%= Settings.ROBOT_STATUS_URL %>" target="_blank">Robots queue/job status</a>
-  <div data-controller="workflow-grid" data-workflow-grid-url="<%= report_workflow_grid_path %>" data-workflow-grid-refresh-interval="10000">
+  <div data-controller="workflow-grid" data-workflow-grid-url="<%= url_for(only_path: true) %>" data-workflow-grid-refresh-interval="10000">
     <%= render Throbber %>
   </div>
 </div>
