@@ -34,8 +34,8 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:status` The status to which we want to reset the workflow.
   # @option params [String] `:repo` The repo to which the workflow applies (optional).
   def update
-    authorize! :update, :workflow
     params.require [:process, :status, :repo]
+    return render status: :forbidden, plain: 'Unauthorized' if !can?(:update, :workflow) && !(params[:status] == 'waiting' && can?(:manage_item, @object))
 
     # this will raise an exception if the item doesn't have that workflow step
     Dor::Config.workflow.client.workflow_status params[:repo], params[:item_id], params[:id], params[:process]

@@ -1,0 +1,16 @@
+<% # workflow update requires id, workflow, process, and status parameters %>
+<%= form_tag item_workflow_path(pid, workflow_name), method: 'put' do %>
+  <%= hidden_field_tag('process', name) %>
+  <%= hidden_field_tag('repo', repository) %>
+  <div class="input-group">
+    <%= select_tag('status',
+                   options_for_select([['Rerun', 'waiting'], ['Skip', 'skipped'], ['Complete', 'completed']]),
+                   prompt: 'Select',
+                   class: 'form-control') %>
+    <span class="input-group-btn">
+        <%= button_tag('Save', type: 'submit',
+                               class: 'btn btn-default',
+                               data: { confirm: confirm }) %>
+    </span>
+  </div>
+<% end %>

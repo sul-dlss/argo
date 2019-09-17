@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Runs a query against solr and returns the results.
+# Does exactly what blacklight does, paginates the solr requests untill all results
+# have been received
 class Report
   include Blacklight::Configurable
   include Blacklight::SearchHelper

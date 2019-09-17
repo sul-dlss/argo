@@ -10,40 +10,19 @@
   <thead>
     <tr>
       <th></th>
-      <th>process</th>
-      <th>status</th>
-      <th>reset</th>
-      <th>datetime</th>
-      <th>elapsed seconds</th>
-      <th>attempts</th>
-      <th>lifecycle</th>
+      <th>Process</th>
+      <th>Status</th>
+      <th>Reset</th>
+      <th>When</th>
+      <th>Seconds elapsed</th>
+      <th>Attempts</th>
+      <th>Lifecycle</th>
     </tr>
   </thead>
   <tbody>
     <% if @presenter.processes.any? %>
       <% @presenter.processes.each_with_index do |process, index| %>
-        <tr>
-          <td><%= index + 1 %>.</td>
-          <td><%= process.name %></td>
-          <td><%= process.status %></td>
-          <td><%= process.status_action if can? :update, :workflow %></td>
-          <td><%= render_datetime(process.datetime) %></td>
-          <td><%= process.elapsed %></td>
-          <td><%= process.attempts %></td>
-          <td><%= process.lifecycle %></td>
-        </tr>
-        <% if process.status == 'error' %>
-          <tr>
-            <td>&nbsp;</td>
-            <td colspan="8" style="padding-left: 1em" class="errortext"><%= process.error_message %></td>
-          </tr>
-        <% end %>
-        <% if process.note %>
-          <tr>
-            <td>&nbsp;</td>
-            <td colspan="8" style="padding-left: 1em" class="notetext">Note: <%= process.note %></td>
-          </tr>
-        <% end %>
+        <%= render WorkflowProcessRow, index: index, process: process, item: @object %>
       <% end %>
     <% else %>
       <tr><td colspan="8">No processes defined for this workflow.</td></tr>
