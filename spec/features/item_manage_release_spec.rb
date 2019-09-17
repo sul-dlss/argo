@@ -8,21 +8,23 @@ RSpec.describe 'Item manage release' do
     obj = instance_double(
       Dor::Item,
       admin_policy_object: nil,
-      allows_modification?: true,
       datastreams: {},
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).and_return(obj)
+    allow(Dor::StateService).to receive(:new).and_return(state_service)
   end
 
+  let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
   let(:druid) { 'druid:qq613vj0238' }
 
   it 'Has a manage release button' do
     visit solr_document_path(druid)
     expect(page).to have_css 'a', text: 'Manage release'
   end
+
   it 'Creates a new bulk action' do
     visit manage_release_solr_document_path(druid)
     expect(page).to have_css 'label', text: "Manage release to discovery applications for item #{druid}"

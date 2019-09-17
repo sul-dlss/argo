@@ -25,13 +25,14 @@ RSpec.describe ItemsController, type: :controller do
     allow(@item).to receive(:delete)
     allow(@item).to receive(:identityMetadata).and_return(idmd)
     allow(@item).to receive(:datastreams).and_return('identityMetadata' => idmd, 'events' => Dor::EventsDS.new)
-    allow(@item).to receive(:allows_modification?).and_return(true)
     allow(@item).to receive(:admin_policy_object).and_return(apo)
     allow(@item).to receive(:workflows).and_return(wf)
     allow(ActiveFedora.solr.conn).to receive(:add)
+    allow(Dor::StateService).to receive(:new).and_return(state_service)
   end
 
   let(:user) { create(:user) }
+  let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
 
   describe '#purl_preview' do
     before do
@@ -534,11 +535,15 @@ RSpec.describe ItemsController, type: :controller do
             expect(response).to have_http_status(:forbidden)
             expect(response.body).to eq 'forbidden'
           end
-          it "returns a 403 with an error message if the object doesn't allow modification" do
-            expect(@item).to receive(:allows_modification?).and_return(false)
-            get :refresh_metadata, params: { id: @pid }
-            expect(response).to have_http_status(:forbidden)
-            expect(response.body).to eq 'Object cannot be modified in its current state.'
+
+          context "when the object doesn't allow modification" do
+            let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+
+            it 'returns a 403 with an error message' do
+              get :refresh_metadata, params: { id: @pid }
+              expect(response).to have_http_status(:forbidden)
+              expect(response.body).to eq 'Object cannot be modified in its current state.'
+            end
           end
         end
 
@@ -581,8 +586,9 @@ RSpec.describe ItemsController, type: :controller do
     let(:new_apo_id) { 'druid:ab123cd4567' }
 
     context 'object modification not allowed, user authorized to manage governing APOs' do
+      let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+
       before do
-        allow(@item).to receive(:allows_modification?).and_return(false)
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id)
       end
 
@@ -614,7 +620,6 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'object modification allowed, user not authorized to manage governing APOs' do
       before do
-        allow(@item).to receive(:allows_modification?).and_return(true)
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id).and_raise(CanCan::AccessDenied)
       end
 

@@ -30,10 +30,10 @@ RSpec.describe ButtonsPresenter, type: :presenter do
   end
 
   describe '#buttons' do
+    let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+
     before do
-      allow(Dor::Config.workflow.client).to receive(:active_lifecycle).and_return(true)
-      allow(Dor::Config.workflow.client).to receive(:lifecycle).and_return(true)
-      allow(object).to receive(:allows_modification?).and_return(true)
+      allow(Dor::StateService).to receive(:new).and_return(state_service)
       allow(object).to receive(:pid).and_return(item_id)
       governing_apo = instance_double(Dor::AdminPolicyObject, pid: governing_apo_id)
       allow(object).to receive(:admin_policy_object).and_return(governing_apo)

@@ -36,7 +36,8 @@ class ManageCatkeyJob < GenericJob
     end
     log.puts("#{Time.current} Adding catkey of #{new_catkey}")
     begin
-      open_new_version(current_obj, "Catkey updated to #{new_catkey}") unless current_obj.allows_modification?
+      state_service = Dor::StateService.new(current_druid)
+      open_new_version(current_obj, "Catkey updated to #{new_catkey}") unless state_service.allows_modification?
       current_obj.catkey = new_catkey
       current_obj.save
       VersionService.close(identifier: current_obj.pid) unless VersionService.openable?(identifier: current_obj.pid)
