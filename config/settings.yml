@@ -58,7 +58,7 @@ DOR_SERVICES:
   TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
 
 preservation_catalog:
-  url: 'http://PRESCATURL'
+  url: 'https://example.org/prescat'
 
 # URLs
 DOR_INDEXING_URL: 'https://dor-indexing-app.example.com/dor'
