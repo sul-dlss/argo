@@ -14,7 +14,8 @@ class ContentTypesController < ApplicationController
     authorize! :manage_item, @object
 
     # if this object has been submitted and doesnt have an open version, they cannot change it.
-    return render_error('Object cannot be modified in its current state.') unless @object.allows_modification?
+    state_service = Dor::StateService.new(@object.pid)
+    return render_error('Object cannot be modified in its current state.') unless state_service.allows_modification?
     return render_error('Invalid new content type.') unless valid_content_type?
     return render_error('Object doesnt have a content metadata datastream to update.') unless has_content?
 

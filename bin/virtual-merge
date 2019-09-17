@@ -21,14 +21,17 @@ class VirtualMergeTool
   def initialize(logger, parent_druid, child_druids)
     @logger = logger
     @parent = Dor::Item.find(parent_druid)
-    raise "Parent item #{@parent.pid} is not open for modification" unless @parent.allows_modification?
+    state_service = Dor::StateService.new(parent_druid)
+
+    raise "Parent item #{@parent.pid} is not open for modification" unless state_service.allows_modification?
 
     @child_druids = child_druids
   end
 
   # merge all the child resources into the parent as virtual links
   def merge(child)
-    raise "Child item #{child.pid} is not open for modification" unless child.allows_modification?
+    state_service = Dor::StateService.new(child.pid)
+    raise "Child item #{child.pid} is not open for modification" unless state_service.allows_modification?
 
     @logger.info "merging child #{child.pid} into parent #{@parent.pid}"
     child.datastreams['contentMetadata'].ng_xml.search('//resource').each do |resource|

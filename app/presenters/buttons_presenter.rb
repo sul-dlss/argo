@@ -56,59 +56,21 @@ class ButtonsPresenter
   # @param [Dor::Item] object
   # @return [Array]
   def buttons
-    pid = doc['id']
-
     buttons = []
     if ability.can?(:manage_item, object)
-      buttons << {
-        url: close_ui_item_versions_path(item_id: pid),
-        label: 'Close Version',
-        check_url: workflow_service_closeable_path(pid)
-      }
-
-      buttons << {
-        url: open_ui_item_versions_path(item_id: pid),
-        label: 'Open for modification',
-        check_url: workflow_service_openable_path(pid)
-      }
+      buttons << close_button
+      buttons << open_button
 
       if object.is_a? Dor::AdminPolicyObject
         buttons << { url: edit_apo_path(pid), label: 'Edit APO', new_page: true }
         buttons << { url: new_apo_collection_path(apo_id: pid), label: 'Create Collection' }
       end
 
-      buttons << {
-        url: dor_reindex_path(pid: pid),
-        label: 'Reindex',
-        new_page: true
-      }
-
-      # note that the backend will also check can?(:manage_governing_apo, object, new_apo_id), but
-      # we can't do that here, since we don't yet know what APO the user might move the object to.
-      # so it's possible that the user will get this button even if there are no other APOs they're
-      # allowed to move the object to.
-      buttons << {
-        url: set_governing_apo_ui_item_path(id: pid),
-        label: 'Set governing APO',
-        disabled: !object.allows_modification?
-      }
-
-      buttons << { url: new_item_workflow_path(item_id: pid), label: 'Add workflow' }
-
-      buttons << {
-        url: dor_path(pid: pid),
-        label: 'Republish',
-        check_url: workflow_service_published_path(pid),
-        new_page: true
-      }
-
-      buttons << {
-        url: purge_item_path(id: pid),
-        label: 'Purge',
-        new_page: true,
-        confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
-        disabled: !registered_only?
-      }
+      buttons << reindex_button
+      buttons << governing_apo_button
+      buttons << add_workflow_button
+      buttons << republish_button
+      buttons << purge_button
 
       buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
       buttons << { url: tags_ui_item_path(id: pid), label: 'Edit tags' }
@@ -120,7 +82,7 @@ class ButtonsPresenter
       buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if object.datastreams.include? 'contentMetadata'
       buttons << { url: rights_item_path(id: pid), label: 'Set rights' } if object.datastreams.include? 'rightsMetadata'
       if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
-        buttons << { url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !object.allows_modification? }
+        buttons << { url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !state_service.allows_modification? }
       end
       buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
 
@@ -133,6 +95,73 @@ class ButtonsPresenter
   end
 
   private
+
+  def close_button
+    {
+      url: close_ui_item_versions_path(item_id: pid),
+      label: 'Close Version',
+      check_url: workflow_service_closeable_path(pid)
+    }
+  end
+
+  def open_button
+    {
+      url: open_ui_item_versions_path(item_id: pid),
+      label: 'Open for modification',
+      check_url: workflow_service_openable_path(pid)
+    }
+  end
+
+  def reindex_button
+    {
+      url: dor_reindex_path(pid: pid),
+      label: 'Reindex',
+      new_page: true
+    }
+  end
+
+  def add_workflow_button
+    { url: new_item_workflow_path(item_id: pid), label: 'Add workflow' }
+  end
+
+  def republish_button
+    {
+      url: dor_path(pid: pid),
+      label: 'Republish',
+      check_url: workflow_service_published_path(pid),
+      new_page: true
+    }
+  end
+
+  def purge_button
+    {
+      url: purge_item_path(id: pid),
+      label: 'Purge',
+      new_page: true,
+      confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
+      disabled: !registered_only?
+    }
+  end
+
+  # note that the backend will also check can?(:manage_governing_apo, object, new_apo_id), but
+  # we can't do that here, since we don't yet know what APO the user might move the object to.
+  # so it's possible that the user will get this button even if there are no other APOs they're
+  # allowed to move the object to.
+  def governing_apo_button
+    {
+      url: set_governing_apo_ui_item_path(id: pid),
+      label: 'Set governing APO',
+      disabled: !state_service.allows_modification?
+    }
+  end
+
+  def pid
+    @pid ||= doc['id']
+  end
+
+  def state_service
+    @state_service ||= Dor::StateService.new(pid)
+  end
 
   def registered_only?
     ['Registered', 'Unknown Status'].include?(doc['processing_status_text_ssi'])
