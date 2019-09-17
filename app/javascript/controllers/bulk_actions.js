@@ -1,4 +1,6 @@
-export default class extends Stimulus.Controller {
+import { Controller } from 'stimulus'
+
+export default class extends Controller {
   // Shows the correct data tab based on the selected value of the dropdown
   showTab(event) {
     const selected = event.target.selectedOptions[0].value

@@ -56,6 +56,16 @@ namespace :deploy do
       end
     end
   end
+
+  desc 'Run rake yarn:install'
+  task :yarn_install do
+    on roles(:web) do
+      within release_path do
+        execute("cd #{release_path} && yarn install")
+      end
+    end
+  end
+  before 'assets:precompile', 'yarn_install'
 end
 
 # honeybadger_env otherwise defaults to rails_env

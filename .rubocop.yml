@@ -10,6 +10,7 @@ AllCops:
     - db/migrate/**
     - db/schema.rb
     - vendor/bundle/**/*
+    - node_modules/**/*
 
 Rails:
   Enabled: true

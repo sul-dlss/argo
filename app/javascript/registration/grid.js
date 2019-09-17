@@ -1,3 +1,9 @@
+import DorRegistration from './register'
+import pathTo from './pathTo'
+import 'jquery-ui/ui/widgets/autocomplete'
+import 'jquery-ui/ui/widgets/dialog'
+import 'jquery-ui/ui/widgets/progressbar'
+
 var gridContext = function() {
   var druidFormatter = function(val, opts, rowObj) {
     if (val.trim() != '') {
@@ -87,11 +93,12 @@ var gridContext = function() {
     },
 
     resizeIdList: function() {
+      const boxHeight = Math.max($('#gbox_data .ui-jqgrid-bdiv').height(), 150)
       $('#id_list').animate({
         'top': $('#gbox_data .ui-jqgrid-hdiv').position().top + 3,
         'left': 3,
         'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4,
-        'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + $('#gbox_data .ui-jqgrid-bdiv').height() - 4
+        'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + boxHeight - 4
       }, 0);
     },
 

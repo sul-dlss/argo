@@ -2,7 +2,7 @@
   View:
   <%= link_to 'XML', item_workflow_path(item_id: @presenter.pid, id: @presenter.workflow_name, raw: 'true', repo: params[:repo]),
               title: @presenter.workflow_name,
-              data: { ajax_modal: 'trigger' } %>
+              data: { blacklight_modal: 'trigger' } %>
 </span>
 <%= @presenter.pid %>
 

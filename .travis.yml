@@ -26,6 +26,8 @@ before_install:
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
 
 before_script:
+  - yarn install
+  - RAILS_ENV=test bin/rails webpacker:compile
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
@@ -45,4 +47,8 @@ env:
     - DOCKER_COMPOSE_VERSION=1.23.1
     - CC_TEST_REPORTER_ID=266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a
 
-cache: bundler
+cache:
+  bundler: true
+  directories:
+    - node_modules
+  yarn: true

@@ -1,19 +1,19 @@
-<div data-ajax-modal="container">
+<div data-blacklight-modal="container">
     <div id="spreadsheet-upload-container">
-	<%= form_tag(apo_uploads_path(@obj.id), multipart: true) do %>
+	<%= form_tag(apo_uploads_path(@obj.id), multipart: true,  data: { controller: 'bulk_upload' }) do %>
         <div id="bulk-upload-form" class="container-fluid">
 	    <div class="row spreadsheet-row">
 		<div class="col-md-10">
 		    <strong>Submit MODS descriptive metadata for bulk processing</strong>
 		</div>
 		<div class="col-md-2 spreadsheet-right">
-		    <%= link_to('Help', help_apo_bulk_jobs_path(@obj.id), data: { ajax_modal: 'trigger' }) %>
+		    <%= link_to('Help', help_apo_bulk_jobs_path(@obj.id), data: { blacklight_modal: 'trigger' }) %>
 		</div>
 	    </div>
 	    <div class="row spreadsheet-row">
 		<div class="col-md-2 spreadsheet-file-action-column"><strong>1. Select</strong></div>
 		<div class="col-md-4 spreadsheet-file-upload-column">
-		    <%= file_field_tag :spreadsheet_file, onchange: 'validate_spreadsheet_filetype()' %>
+		    <%= file_field_tag :spreadsheet_file, data: { action: 'change->bulk_upload#fileChanged' } %>
 		    <input type="hidden" name="druid" value="<%=@obj.id %>" />
 		</div>
 	    </div>

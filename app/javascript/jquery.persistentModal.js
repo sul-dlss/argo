@@ -60,7 +60,6 @@
       }
 
       function receiveAjax(data) {
-
         //default to error text, replace if we got something back
         var contents = "Error retrieving content";
         if (data.readyState !== 0) {
@@ -70,7 +69,7 @@
         // does it have a data- selector for container?  if so, just use the contents of that container
         // code modelled off of JQuery ajax.load. https://github.com/jquery/jquery/blob/master/src/ajax/load.js?source=c#L62
         var container =  $("<div>").
-          append( contents ).find( Blacklight.ajaxModal.containerSelector ).first();
+          append( contents ).find( Blacklight.modal.containerSelector ).first();
         if (container.length !== 0) {
           contents = container.html();
         }
@@ -119,7 +118,3 @@
   };
 
 })(jQuery);
-
-Blacklight.onLoad(function() {
-  $('[data-behavior="persistent-modal"]').persistentModal();
-});

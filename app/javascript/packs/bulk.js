@@ -279,3 +279,79 @@ function set_tags() {
 	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'tags': row_obj['upd_data'] }; };
 	upd_values_for_druids(tags_url, 'tags', row_processing_fn, "user supplied druids and tags.", is_invalid_row_fn, "invalid tags", get_upd_req_params_from_row_fn);
 }
+
+Blacklight.onLoad(()=>{
+  $('#get_druids').on('click', get_druids)
+	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
+	$('#prepare').on('click', () => $('#open').show(400))
+	$('#refresh-mods-button').on('click', () => $('#refresh_metadata').show(400))
+	$('#show_source_id').on('click', () => {
+		$('#source_id').show(400)
+	  get_source_ids()
+	})
+	$('#set-object-rights-button').on('click', () => $('#rights').show(400))
+	$('#set-content-type-button').on('click', () => $('#content_type').show(400))
+	$('#set-collection-button').on('click', () => $('#set_collection').show(400))
+
+	$('#apply-apo-defaults-button').on('click', () => $('#apply_apo_defaults').show(400))
+	$('#add-workflow-button').on('click', () => $('#add_workflow').show(400))
+	$('#close-versions-button').on('click', () => $('#close').show(400))
+  $('#republish_show').on('click', () => $('#republish').show(400))
+  $('#show_tags').on('click', () => {
+		$('#tag').show(400)
+		get_tags()
+	})
+  $('#purge-button').on('click', () => $('#purge').show(400))
+
+  $('#confirm-apo-defaults-button').on('click', () => {
+		fetch_druids(apply_apo_defaults)
+		$('#apply_apo_defaults').hide(400)
+	})
+
+	$('#confirm-set-collection-button').on('click', () => {
+		fetch_druids(set_collection)
+		$('#set_collection').hide(400)
+	})
+
+	$('#confirm-set-content-type-button').on('click', () => {
+		fetch_druids(set_content_type)
+		$('#content_type').hide(400)
+	})
+
+	$('#confirm-set-content-type-button').on('click', () => {
+		fetch_druids(purge)
+		$('#purge').hide(400)
+	})
+
+	$('#confirm-add-workflow-button').on('click', () => {
+		fetch_druids(add_workflow)
+		$('#add_workflow').hide(400)
+	})
+
+	$('#confirm-refresh-metadata-button').on('click', () => {
+		fetch_druids(refresh_metadata)
+		$('#refresh_metadata').hide(400)
+	})
+
+  $('#republish_button').on('click', () => {
+		fetch_druids(republish)
+		$('#republish').hide(400)
+	})
+
+	$('#set_tags').on('click', () => {
+		set_tags()
+		$('#tag').hide(400)
+	})
+
+	$('#set_source_id').on('click', () => {
+		source_id()
+		$('#source_id').hide(400)
+	})
+
+	$('#rights_button').on('click', () => {
+			fetch_druids(set_rights)
+			$('#rights').hide(400)
+	})
+
+	$('#stop').on('click', () => stop_all())
+})

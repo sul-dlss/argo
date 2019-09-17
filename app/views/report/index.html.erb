@@ -1,5 +1,5 @@
 <% content_for :head do %>
-  <%= javascript_include_tag 'report' %>
+  <%= javascript_pack_tag 'report' %>
   <script type="text/javascript">
     report_model = {
       total_rows: <%= @response['response']['numFound'] %>,

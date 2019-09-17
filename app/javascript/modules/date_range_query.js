@@ -33,11 +33,11 @@
       var $beforeDate = $el.find('[data-range-before]');
       var $afterDate = $el.find('[data-range-after]');
       var $queryField = $el.find('[data-range-value]');
-      
+
       $beforeDate.on('change', function() {
         $queryField.val(craftQuery($beforeDate, $afterDate));
       });
-      
+
       $afterDate.on('change', function() {
         $queryField.val(craftQuery($beforeDate, $afterDate));
       });
@@ -46,8 +46,3 @@
   };
 
 })(jQuery);
-
-Blacklight.onLoad(function() {
-  $('[data-range-query]').dateRangeQuery();
-  $('[data-datepicker]').datepicker();
-});

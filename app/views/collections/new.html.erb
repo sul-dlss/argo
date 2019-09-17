@@ -1,5 +1,5 @@
 <div class='modal-header'>
-  <button type='button' class='ajax-modal-close close' data-dismiss='modal' aria-hidden='true'>×</button>
+  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
   <h3 class='modal-title'>Create Collection</h3>
 </div>
 
@@ -9,15 +9,17 @@
     &mdash;
     <%= @apo.label %>
   </h4>
-  <div class="col-md-6">
-  <%= form_tag apo_collections_path(@apo.pid), id: 'collection_form', role: 'form', class: 'form-horizontal' do %>
+  <%= form_tag apo_collections_path(@apo.pid), id: 'collection_form',
+                                               role: 'form',
+                                               class: 'form-horizontal',
+                                               data: { behavior: 'collection-form' } do %>
     <div class="form-group" style="padding-left:20px">
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', true, onclick: "$('.collection_div').hide();$('#create-collection').show();" %>
+        <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-colletion' } %>
         Create a Collection from Title/Abstract
       </label>
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', false, onclick: "$('.collection_div').hide();$('#create-collection-catkey').show();" %>
+        <%= radio_button_tag 'collection_radio', 'create', false, data: { reveal: 'create-collection-catkey' }  %>
         Create a Collection from Symphony
       </label>
     </div>
@@ -60,11 +62,11 @@
     <div class="form-group">
       <%= button_tag 'register', id: 'register', class: 'btn btn-default' do 'Register Collection' end %>
     </div>
-    <% end %>
+
     <% if !request.xhr? %>
       <div class="form-group">
         <%= button_to 'Cancel', solr_document_path(@apo.pid), method: :get, class: 'btn btn-default' %>
       </div>
     <% end %>
-  </div>
+  <% end %>
 </div>

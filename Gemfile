@@ -9,13 +9,9 @@ gem 'rails', '~> 5.2.1'
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
+gem 'webpacker', '~> 4.0'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -42,10 +38,8 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
-gem 'almond-rails'
 # Barby creates barcodes. Used in generating tracksheets
 gem 'barby'
-gem 'bootstrap-sass'
 gem 'cancancan'
 # Pretty format for XML
 gem 'coderay'
@@ -56,9 +50,6 @@ gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'eye' # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'faraday'
 gem 'honeybadger', '~> 4.1'
-gem 'jqgrid-jquery-rails'
-gem 'jquery-ui-rails', '~> 6.0'
-gem 'jquery-validation-rails'
 gem 'mysql2', '~> 0.5.2'
 gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
@@ -69,7 +60,6 @@ gem 'rake'
 gem 'retries'
 gem 'ruby-prof'
 gem 'rubyzip'
-gem 'sprockets-es6'
 
 # Stanford/Hydra related gems
 gem 'blacklight', '~> 6.0'
