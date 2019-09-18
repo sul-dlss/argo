@@ -1,4 +1,7 @@
 # Example settings for configuration
+# NOTE:  Please use lowercase.
+#   The config gem documents the correct usage as lowercase: https://github.com/railsconfig/config#embedded-ruby-erb
+#   If we use uppercase the config gem ends up creating methods with the ruby convention for constants, which is confusing.
 
 # General
 DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
@@ -12,8 +15,8 @@ BULK_METADATA:
   XML: 'MODS'
   ZIP: 'desc_metadata_download.zip'
 
-CHECKSUM_REPORT_JOB:
-  CSV_FILENAME: 'checksum_report.csv'
+checksum_report_job:
+  csv_filename: 'checksum_report.csv'
 
 # Newrelic
 NEWRELIC:
@@ -54,8 +57,8 @@ DOR_SERVICES:
   # To generate the token: docker-compose run dor-services-app rake generate_token
   TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
 
-PRESERVATION_CATALOG:
-  URL: 'http://PRESCATURL'
+preservation_catalog:
+  url: 'http://PRESCATURL'
 
 # URLs
 DOR_INDEXING_URL: 'https://dor-indexing-app.example.com/dor'

@@ -39,7 +39,7 @@ RSpec.describe ChecksumReportJob, type: :job do
                         groups: groups,
                         user: user)
         expect(my_conn).to have_received(:get).with('/objects/checksums', druids: pids, format: 'csv')
-        expect(File.exist?(File.join(output_directory, Settings.CHECKSUM_REPORT_JOB.CSV_FILENAME))).to be_truthy
+        expect(File.exist?(File.join(output_directory, Settings.checksum_report_job.csv_filename))).to be_truthy
         expect(bulk_action.druid_count_total).to eq(pids.length)
         expect(bulk_action.druid_count_fail).to eq(0)
         expect(bulk_action.druid_count_success).to eq(pids.length)
@@ -57,7 +57,7 @@ RSpec.describe ChecksumReportJob, type: :job do
                         groups: groups,
                         user: user)
         expect(my_conn).not_to have_received(:get).with('/objects/checksums', druids: pids, format: 'csv')
-        expect(File.exist?(File.join(output_directory_fail, Settings.CHECKSUM_REPORT_JOB.CSV_FILENAME))).to be_falsey
+        expect(File.exist?(File.join(output_directory_fail, Settings.checksum_report_job.csv_filename))).to be_falsey
         expect(bulk_action.druid_count_total).to eq(pids.length)
         expect(bulk_action.druid_count_fail).to eq(pids.length)
         expect(bulk_action.druid_count_success).to eq(0)

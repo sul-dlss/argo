@@ -45,10 +45,10 @@ class ChecksumReportJob < GenericJob
   # @return [String] A filename for the csv file.
   def generate_report_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
-    File.join(output_dir, Settings.CHECKSUM_REPORT_JOB.CSV_FILENAME)
+    File.join(output_dir, Settings.checksum_report_job.csv_filename)
   end
 
   def conn
-    @conn ||= Faraday.new(url: Settings.PRESERVATION_CATALOG.URL)
+    @conn ||= Faraday.new(url: Settings.preservation_catalog.url)
   end
 end
