@@ -38,6 +38,11 @@ class DescmetadataDownloadJob < GenericJob
       return
     end
 
+    unless ability.can?(:view_metadata, dor_object)
+      log.puts("#{Time.current} Not authorized for #{current_druid}")
+      return
+    end
+
     desc_metadata = dor_object.descMetadata.content
 
     write_to_zip(desc_metadata, current_druid, zip_file)

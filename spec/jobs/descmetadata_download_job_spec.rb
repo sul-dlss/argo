@@ -64,6 +64,13 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'perform' do
+    let(:ability) { instance_double(Ability) }
+
+    before do
+      allow(Ability).to receive(:new).and_return(ability)
+      allow(ability).to receive(:can?).with(:view_metadata, kind_of(ActiveFedora::Base)).and_return(true)
+    end
+
     after do
       FileUtils.rm('foo.txt')
     end
