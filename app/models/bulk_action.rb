@@ -13,6 +13,7 @@ class BulkAction < ApplicationRecord
                      ManageCatkeyJob
                      PrepareJob
                      CloseVersionJob
+                     ChecksumReportJob
                      CreateVirtualObjectsJob)
             }
 
