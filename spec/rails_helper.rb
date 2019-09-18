@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
@@ -14,7 +13,7 @@ require 'webmock/rspec'
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
 require 'simplecov'
-SimpleCov.start do
+SimpleCov.start :rails do
   add_filter '/spec/'
   add_filter '/vendor/'
 end
