@@ -32,4 +32,40 @@ RSpec.describe BulkActionHelper do
       end
     end
   end
+
+  describe '#show_report_link?' do
+    let(:bulk_action) { create(:bulk_action, action_type: 'ChecksumReportJob') }
+
+    context 'when status completed and file exists' do
+      before do
+        allow(bulk_action).to receive(:status).and_return('Completed')
+        allow(File).to receive(:exist?).and_return(true)
+      end
+
+      it 'returns true' do
+        expect(helper.show_report_link?(bulk_action, Settings.checksum_report_job.csv_filename)).to be_truthy
+      end
+    end
+
+    context 'when status completed but file does not exist' do
+      before do
+        allow(bulk_action).to receive(:status).and_return('Completed')
+        allow(File).to receive(:exist?).and_return(false)
+      end
+
+      it 'returns false' do
+        expect(helper.show_report_link?(bulk_action, Settings.checksum_report_job.csv_filename)).to be_falsey
+      end
+    end
+
+    context 'when status not completed' do
+      before do
+        allow(bulk_action).to receive(:status).and_return('Processing')
+      end
+
+      it 'returns false' do
+        expect(helper.show_report_link?(bulk_action, Settings.checksum_report_job.csv_filename)).to be_falsey
+      end
+    end
+  end
 end
