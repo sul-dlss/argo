@@ -87,7 +87,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
 
       expect(File).to be_exist(@output_zip_filename)
       Zip::File.open(@output_zip_filename) do |open_file|
-        expect(open_file.glob('*').length).to eq 2
+        expect(open_file.glob('*').map(&:name).sort).to eq ["#{@pid_list_long.first}.xml", "#{@pid_list_long.second}.xml"].sort
       end
     end
 
