@@ -5,29 +5,24 @@ require 'fileutils'
 
 RSpec.describe DescmetadataDownloadJob, type: :job do
   let(:download_job) { described_class.new }
-
-  before :all do
-    @output_directory = File.join(File.expand_path('../../../tmp/', __FILE__), 'descmetadata_download_job_spec')
-    @output_zip_filename = File.join(@output_directory, Settings.BULK_METADATA.ZIP)
-    @pid_list_short = ['druid:hj185vb7593']
-    @pid_list_long = ['druid:hj185vb7593', 'druid:kv840rx2720']
-    @zip_params_short = {
-      output_directory: @output_directory,
-      pids: @pid_list_short
-    }
-    @zip_params_long = {
-      output_directory: @output_directory,
-      pids: @pid_list_long
-    }
+  let(:output_directory) { File.join(File.expand_path('../../../tmp/', __FILE__), 'descmetadata_download_job_spec') }
+  let(:output_zip_filename) { File.join(output_directory, Settings.BULK_METADATA.ZIP) }
+  let(:pid_list_short) { ['druid:hj185vb7593'] }
+  let(:pid_list_long) { ['druid:hj185vb7593', 'druid:kv840rx2720'] }
+  let(:zip_params_short) do
+    { output_directory: output_directory, pids: pid_list_short }
+  end
+  let(:zip_params_long) do
+    { output_directory: output_directory, pids: pid_list_long }
   end
 
   after do
-    FileUtils.rm_rf(@output_directory) if Dir.exist?(@output_directory)
+    FileUtils.rm_rf(output_directory) if Dir.exist?(output_directory)
   end
 
   describe 'generate_zip_filename' do
     it 'returns a filename of the correct form' do
-      expect(download_job.generate_zip_filename(@output_directory)).to eq(@output_zip_filename)
+      expect(download_job.generate_zip_filename(output_directory)).to eq(output_zip_filename)
     end
   end
 
@@ -79,15 +74,15 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
     it 'creates a valid zip file' do
       bulk_action = create(:bulk_action,
                            action_type: 'DescmetadataDownloadJob',
-                           pids: @pid_list_long,
+                           pids: pid_list_long,
                            log_name: 'foo.txt')
       expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
-      download_job.perform(bulk_action.id, @zip_params_long)
+      download_job.perform(bulk_action.id, zip_params_long)
 
-      expect(File).to be_exist(@output_zip_filename)
-      Zip::File.open(@output_zip_filename) do |open_file|
-        expect(open_file.glob('*').map(&:name).sort).to eq ["#{@pid_list_long.first}.xml", "#{@pid_list_long.second}.xml"].sort
+      expect(File).to be_exist(output_zip_filename)
+      Zip::File.open(output_zip_filename) do |open_file|
+        expect(open_file.glob('*').map(&:name).sort).to eq ["#{pid_list_long.first}.xml", "#{pid_list_long.second}.xml"].sort
       end
     end
 
@@ -96,16 +91,16 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
       expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
       bulk_action = create(:bulk_action,
                            action_type: 'DescmetadataDownloadJob',
-                           pids: @pid_list_short,
+                           pids: pid_list_short,
                            log_name: 'foo.txt')
       allow(bulk_action).to receive_message_chain(:increment, :save)
       expect(bulk_action).to receive(:increment).with(:druid_count_fail)
       expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
-      download_job.perform(bulk_action.id, @zip_params_short)
+      download_job.perform(bulk_action.id, zip_params_short)
 
-      expect(File).to be_exist(@output_zip_filename)
-      Zip::File.open(@output_zip_filename) do |open_file|
+      expect(File).to be_exist(output_zip_filename)
+      Zip::File.open(output_zip_filename) do |open_file|
         expect(open_file.glob('*').length).to eq 0
       end
     end
@@ -113,23 +108,23 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
     context 'user lacks permission to view metadata on one of the objects' do
       before do
         allow(ability).to receive(:can?).with(:view_metadata, kind_of(ActiveFedora::Base)).and_return(true)
-        allow(ability).to receive(:can?).with(:view_metadata, satisfy { |obj| obj.id == @pid_list_long.second }).and_return(false)
+        allow(ability).to receive(:can?).with(:view_metadata, satisfy { |obj| obj.id == pid_list_long.second }).and_return(false)
       end
 
       it 'creates a valid zip file with only the objects for which the user has view_metadata authorization' do
         bulk_action = create(:bulk_action,
                              action_type: 'DescmetadataDownloadJob',
-                             pids: @pid_list_long,
+                             pids: pid_list_long,
                              log_name: 'foo.txt')
         expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
-        download_job.perform(bulk_action.id, @zip_params_long)
+        download_job.perform(bulk_action.id, zip_params_long)
 
-        expect(File).to be_exist(@output_zip_filename)
-        Zip::File.open(@output_zip_filename) do |open_file|
-          expect(open_file.glob('*').map(&:name)).to eq ["#{@pid_list_long.first}.xml"]
+        expect(File).to be_exist(output_zip_filename)
+        Zip::File.open(output_zip_filename) do |open_file|
+          expect(open_file.glob('*').map(&:name)).to eq ["#{pid_list_long.first}.xml"]
         end
-        expect(File.open(bulk_action.log_name).read).to match(/Not authorized for #{@pid_list_long.second}/)
+        expect(File.open(bulk_action.log_name).read).to match(/Not authorized for #{pid_list_long.second}/)
       end
     end
   end
