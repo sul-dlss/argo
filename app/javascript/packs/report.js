@@ -1,3 +1,6 @@
+import 'jquery'
+require('free-jqgrid')
+
 /*
  * decaffeinate suggestions:
  * DS102: Remove unnecessary code created because of implicit returns
