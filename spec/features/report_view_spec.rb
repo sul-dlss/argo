@@ -7,9 +7,12 @@ RSpec.describe 'Report view' do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
-  it 'shows table without error' do
-    visit report_path f: { objectType_ssim: ['item'] }
-    expect(page).to have_css 'table#report_grid'
+  describe 'the show page', js: true do
+    it 'shows table without error' do
+      visit report_path f: { objectType_ssim: ['item'] }
+      expect(page).to have_css 'table#report_grid'
+      expect(page).to have_content('hj185vb7593')
+    end
   end
 
   context 'bulk' do
