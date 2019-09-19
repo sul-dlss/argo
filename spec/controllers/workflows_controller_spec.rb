@@ -4,7 +4,9 @@ require 'rails_helper'
 
 RSpec.describe WorkflowsController, type: :controller do
   let(:pid) { 'druid:oo201oo0001' }
-  let(:item) { Dor::Item.new pid: pid }
+  let(:item) { Dor::Item.new pid: pid, admin_policy_object: apo }
+  let(:apo) { Dor::AdminPolicyObject.new pid: pid }
+
   let(:user) { create(:user) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
@@ -150,20 +152,60 @@ RSpec.describe WorkflowsController, type: :controller do
                       update_status: nil)
     end
 
-    before do
-      allow(controller).to receive(:authorize!).and_return(true)
-    end
-
     it 'requires various workflow parameters' do
       expect { post :update, params: { item_id: pid, repo: 'dor', id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
     end
 
-    it 'changes the status' do
-      post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'ready' }
-      expect(controller).to have_received(:authorize!).with(:update, :workflow)
-      expect(subject).to redirect_to(solr_document_path(pid))
-      expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
-      expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'ready')
+    context 'when the user is an administrator' do
+      before do
+        allow(controller.current_user).to receive(:is_admin?).and_return(true)
+      end
+
+      it 'changes the status' do
+        post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'completed' }
+        expect(subject).to redirect_to(solr_document_path(pid))
+        expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
+        expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'completed')
+      end
+    end
+
+    context 'when the user is not an administrator' do
+      before do
+        allow(controller.current_user).to receive(:is_admin?).and_return(false)
+      end
+
+      context 'when they are changing an item they do not manage' do
+        it 'is forbidden' do
+          post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'waiting' }
+          expect(response.status).to eq 403
+          expect(workflow_client).not_to have_received(:update_status)
+        end
+      end
+
+      context 'when they are changing an item they manage to waiting' do
+        before do
+          allow(controller.current_ability).to receive(:can_manage_items?).and_return(true)
+        end
+
+        it 'changes the status' do
+          post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'waiting' }
+          expect(subject).to redirect_to(solr_document_path(pid))
+          expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
+          expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'waiting')
+        end
+      end
+
+      context 'when they are changing an item they manage to completed' do
+        before do
+          allow(controller.current_ability).to receive(:can_manage_items?).and_return(true)
+        end
+
+        it 'is forbidden' do
+          post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'completed' }
+          expect(response.status).to eq 403
+          expect(workflow_client).not_to have_received(:update_status)
+        end
+      end
     end
   end
 end

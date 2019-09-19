@@ -10,13 +10,9 @@ class WorkflowPresenter
 
   delegate :pid, :workflow_name, to: :workflow_status
 
-  # This iterates over all the steps in the workflow definition and creates a presenter
-  # for each of the most recent version.
-  # @return [Array<WorkflowProcessPresenter>]
+  # @return [Array] all the steps in the workflow definition
   def processes
-    workflow_status.process_statuses.map do |process|
-      WorkflowProcessPresenter.new(view: view, process_status: process)
-    end
+    workflow_status.process_statuses
   end
 
   private

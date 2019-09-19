@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@github/time-elements": "^3.0.7",
     "@rails/webpacker": "^4.0.7",
     "blacklight-frontend": "^7.1.0-alpha",
     "blacklight-hierarchy": "^3.0.0-alpha1",

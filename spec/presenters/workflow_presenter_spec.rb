@@ -37,8 +37,7 @@ RSpec.describe WorkflowPresenter do
       end
 
       it 'has one for each xml process' do
-        expect(subject.size).to eq 3
-        expect(subject).to all(be_kind_of WorkflowProcessPresenter)
+        expect(subject).to eq process_statuses
       end
     end
   end

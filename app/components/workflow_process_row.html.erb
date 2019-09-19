@@ -1,0 +1,32 @@
+<tr>
+  <td><%= index + 1 %>.</td>
+  <td><%= name %></td>
+  <td><%= status %></td>
+  <td>
+    <% if can?(:update, :workflow) %>
+      <% if error? %>
+        <%= render WorkflowStepStatusSelector, process: process %>
+      <% else %>
+        <%= render WorkflowUpdateButton, process: process %>
+      <% end %>
+    <% elsif error? && can?(:manage_item, item) %>
+      <%= render WorkflowUpdateButton, process: process %>
+    <% end %>
+  </td>
+  <td><time-ago datetime="<%= datetime %>"><%= datetime %></time-ago></td>
+  <td><%= elapsed %></td>
+  <td><%= attempts %></td>
+  <td><%= lifecycle %></td>
+</tr>
+<% if error? %>
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan="8" style="padding-left: 1em" class="errortext"><%= error_message %></td>
+  </tr>
+<% end %>
+<% if note %>
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan="8" style="padding-left: 1em" class="notetext">Note: <%= note %></td>
+  </tr>
+<% end %>

@@ -4,6 +4,7 @@ import BulkActions from 'controllers/bulk_actions'
 import BulkUpload from 'controllers/bulk_upload'
 import WorkflowGrid from 'controllers/workflow_grid_controller'
 import { Application } from 'stimulus'
+require('@github/time-elements')
 
 function pathTo(path) {
   var root = $('body').attr('data-application-root') || '';
