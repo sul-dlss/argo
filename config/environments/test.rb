@@ -51,7 +51,7 @@ Rails.application.configure do
   # 2) time stamps on each log statement, because knowing when something
   # got logged is quite nice.
   # (declared after Argo.configure since it uses one of those params)
-  config.log_tags = [:uuid, proc { Time.zone.now.strftime(Settings.DATE_FORMAT_STR) }]
+  config.log_tags = [:uuid, proc { Time.zone.now.strftime(Settings.date_format_str) }]
 
   require 'test_shibboleth_headers'
   config.middleware.use TestShibbolethHeaders

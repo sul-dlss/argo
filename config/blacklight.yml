@@ -1,6 +1,6 @@
 development:
   adapter: solr
-  url: <%= Settings.SOLRIZER_URL %>
+  url: <%= Settings.solrizer_url %>
 test: &test
   adapter: solr
-  url: <%= Settings.SOLRIZER_URL %>
+  url: <%= Settings.solrizer_url %>

@@ -76,7 +76,7 @@ parser = OptionParser.new do |opts|
     end
   end
 
-  opts.on('-l', '--log=LOGFILE', 'Log output file') do |fn|
+  opts.on('-l', '--log=logfile', 'Log output file') do |fn|
     options[:log] = fn == '-' ? nil : fn
   end
 

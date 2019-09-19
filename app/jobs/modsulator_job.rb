@@ -111,7 +111,7 @@ class ModsulatorJob < ActiveJob::Base
   def generate_log_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
     # This log will be used for generating the table of past jobs later
-    File.join(output_dir, Settings.BULK_METADATA.LOG)
+    File.join(output_dir, Settings.bulk_metadata.log)
   end
 
   # The uploaded filename is of the form <file.xlsx.TIMESTAMP> or <file.xml.TIMESTAMP> in order to prevent
@@ -159,6 +159,6 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]   original_filename    The name of the original file that the user uploaded.
   # @return [String]
   def generate_xml_filename(original_filename)
-    File.basename(original_filename, '.*') + '-' + Settings.BULK_METADATA.XML + '.xml'
+    File.basename(original_filename, '.*') + '-' + Settings.bulk_metadata.xml + '.xml'
   end
 end

@@ -1,86 +1,81 @@
+
 # Example settings for configuration
 # NOTE:  Please use lowercase.
 #   The config gem documents the correct usage as lowercase: https://github.com/railsconfig/config#embedded-ruby-erb
 #   If we use uppercase the config gem ends up creating methods with the ruby convention for constants, which is confusing.
 
 # General
-DATE_FORMAT_STR: '%Y-%m-%d %H:%M:%S.%L'
+date_format_str: '%Y-%m-%d %H:%M:%S.%L'
 
 # Bulk Metadata
-BULK_METADATA:
-  DIRECTORY: '/tmp/bulk_jobs/'
-  TEMPORARY_DIRECTORY: '/tmp/bulk_jobs/tmp/'
-  LOG: 'log.txt'
-  CSV_LOG: 'log.csv'
-  XML: 'MODS'
-  ZIP: 'desc_metadata_download.zip'
+bulk_metadata:
+  directory: '/tmp/bulk_jobs/'
+  temporary_directory: '/tmp/bulk_jobs/tmp/'
+  log: 'log.txt'
+  csv_log: 'log.csv'
+  xml: 'MODS'
+  zip: 'desc_metadata_download.zip'
 
 checksum_report_job:
   csv_filename: 'checksum_report.csv'
 
 # Newrelic
-NEWRELIC:
-  ENABLED: false
-  LICENSE_KEY: 'super secret api key'
-  APP_NAME: 'Argo - name should be specific to server'
+newrelic:
+  enabled: false
+  license_key: 'super secret api key'
+  app_name: 'Argo - name should be specific to server'
 
 # Profiler
-PROFILER:
+profiler:
   ##
   # A bit different but for RackMiniProfiler https://github.com/MiniProfiler/rack-mini-profiler
   # useful for profiling blocking HTTP requests and partial rendering
-  RACKMINI_ENABLED: false
+  rackmini_enabled: false
 
 # # SSL
-# SSL:
-#   CERT_FILE: 'cert_name.crt'
-#   KEY_FILE: 'key_name.key'
-#   KEY_PASS: 'password'
+# ssl:
+#   cert_file: 'cert_name.crt'
+#   key_file: 'key_name.key'
+#   key_pass: 'password'
 
 # Stacks
-STACKS:
-  LOCAL_WORKSPACE_ROOT: '/foo/workspace'
-
-# Stomp
-STOMP_CLIENT_ID: 'fedora_stomper'
+stacks:
+  local_workspace_root: '/foo/workspace'
 
 # Suri
-SURI:
-  MINT_IDS: true
-  ID_NAMESPACE: 'druid'
-  URL: 'http://localhost:3002'
-  USER: 'user'
-  PASS: 'pass'
+suri:
+  mint_ids: true
+  id_namespace: 'druid'
+  url: 'http://localhost:3002'
+  user: 'user'
+  pass: 'pass'
 
-DOR_SERVICES:
-  URL: 'http://localhost:3003'
+dor_services:
+  url: 'http://localhost:3003'
   # To generate the token: docker-compose run dor-services-app rake generate_token
-  TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
 
 preservation_catalog:
   url: 'https://example.org/prescat'
 
 # URLs
-DOR_INDEXING_URL: 'https://dor-indexing-app.example.com/dor'
-FEDORA_URL: 'https://user:password@fedora.example.com:1000/fedora'
-MODSULATOR_URL: 'https://services.example.com/v1/modsulator'
-NORMALIZER_URL: 'https://services.example.com/v1/normalizer'
-PURL_URL: 'https://purl.example.com'
-ROBOT_STATUS_URL: 'https://robot.example.com/robots'
-SOLRIZER_URL: 'https://solr.example.com/solr/collection'
-SPREADSHEET_URL: 'https://services.example.com/v1/spreadsheet'
-STACKS_FILE_URL: 'https://stacks.example.com/file'
-STACKS_URL: 'https://stacks.example.com/image'
-STATUS_INDEXER_URL: 'https://status.example.com/render/?format=json&other=params'
-WORKFLOW_URL: 'http://localhost:3001'
-
-SU_AFFILIATIONS:
-- test-stanford:test
+dor_indexing_url: 'https://dor-indexing-app.example.com/dor'
+fedora_url: 'https://user:password@fedora.example.com:1000/fedora'
+modsulator_url: 'https://services.example.com/v1/modsulator'
+normalizer_url: 'https://services.example.com/v1/normalizer'
+purl_url: 'https://purl.example.com'
+robot_status_url: 'https://robot.example.com/robots'
+solrizer_url: 'https://solr.example.com/solr/collection'
+spreadsheet_url: 'https://services.example.com/v1/spreadsheet'
+stacks_file_url: 'https://stacks.example.com/file'
+stacks_url: 'https://stacks.example.com/image'
+status_indexer_url: 'https://status.example.com/render/?format=json&other=params'
+workflow_url: 'http://localhost:3001'
 
 # Workflow
-WORKFLOW:
-  LOGFILE: 'log/workflow_service.log'
-  SHIFT_AGE: 'weekly'
+workflow:
+  logfile: 'log/workflow_service.log'
+  shift_age: 'weekly'
 
 apo:
   default_workflow_option: 'registrationWF'

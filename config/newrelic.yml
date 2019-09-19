@@ -12,14 +12,14 @@
 
 common: &default_settings
   # Required license key associated with your New Relic account.
-  license_key: <%= Settings.NEWRELIC.LICENSE_KEY %>
+  license_key: <%= Settings.newrelic.license_key %>
 
   # Your application name. Renaming here affects where data displays in New
   # Relic.  For more details, see https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/renaming-applications
-  app_name: <%= Settings.NEWRELIC.APP_NAME %>
+  app_name: <%= Settings.newrelic.app_name %>
 
   # To disable the agent regardless of other settings, set the following to false:
-  agent_enabled: <%= Settings.NEWRELIC.ENABLED %>
+  agent_enabled: <%= Settings.newrelic.enabled %>
 
   # Logging level for log/newrelic_agent.log
   log_level: info
@@ -34,7 +34,7 @@ development:
   # NOTE: There is substantial overhead when running in developer mode.
   # Do not use for production or load testing.
   developer_mode: true
-  monitor_mode: <%= Settings.NEWRELIC.ENABLED %>
+  monitor_mode: <%= Settings.newrelic.enabled %>
 
 test:
   <<: *default_settings

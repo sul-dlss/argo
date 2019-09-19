@@ -113,7 +113,7 @@ class UserLog
 
   # @return [String] the path to the csv file
   def csv_file
-    @csv_file ||= File.join(job_output_directory, Settings.BULK_METADATA.CSV_LOG)
+    @csv_file ||= File.join(job_output_directory, Settings.bulk_metadata.csv_log)
   end
 
   # @return [String] the path to the xml file
@@ -136,11 +136,11 @@ class UserLog
 
   # @return [String] the path to the log file
   def log_file
-    @log_file ||= File.join(job_output_directory, Settings.BULK_METADATA.LOG)
+    @log_file ||= File.join(job_output_directory, Settings.bulk_metadata.log)
   end
 
   # @return [String] The bulk upload job output directory
   def job_output_directory
-    @job_output_directory ||= File.join(Settings.BULK_METADATA.DIRECTORY, apo_id, time)
+    @job_output_directory ||= File.join(Settings.bulk_metadata.directory, apo_id, time)
   end
 end

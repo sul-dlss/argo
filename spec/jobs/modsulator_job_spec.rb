@@ -24,7 +24,7 @@ RSpec.describe ModsulatorJob, type: :job do
 
   describe 'generate_log_filename' do
     it 'returns a filename of the correct form' do
-      expected_filename = File.join(output_directory, Settings.BULK_METADATA.LOG)
+      expected_filename = File.join(output_directory, Settings.bulk_metadata.log)
       expect(job.generate_log_filename(output_directory)).to eq(expected_filename)
     end
 
@@ -78,7 +78,7 @@ RSpec.describe ModsulatorJob, type: :job do
 
   describe 'generate_xml_filename' do
     it 'creates a new filename using the correct convention' do
-      expect(job.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq('generate_xml_filename-' + Settings.BULK_METADATA.XML + '.xml')
+      expect(job.generate_xml_filename('/tmp/generate_xml_filename.xml')).to eq('generate_xml_filename-' + Settings.bulk_metadata.xml + '.xml')
     end
   end
 
@@ -105,13 +105,13 @@ RSpec.describe ModsulatorJob, type: :job do
       expect(output_filename).not_to be_nil
       expect(File).to be_exist output_filename
       expect(File.read(output_filename)).to be_equivalent_to(xml_data).ignoring_attr_values('datetime', 'sourceFile')
-      expect(File).to be_exist(File.join(output_directory, Settings.BULK_METADATA.LOG))
+      expect(File).to be_exist(File.join(output_directory, Settings.bulk_metadata.log))
       expect(File).not_to be_exist test_spreadsheet_path
     end
 
     it 'opens the log in append mode' do
       FileUtils.copy_file(xlsx_path, test_spreadsheet_path)
-      expect(File).to receive(:open).with("#{output_directory}/#{Settings.BULK_METADATA.LOG}", 'a')
+      expect(File).to receive(:open).with("#{output_directory}/#{Settings.bulk_metadata.log}", 'a')
       job.perform(nil,
                   test_spreadsheet_path,
                   output_directory,

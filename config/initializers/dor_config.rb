@@ -2,34 +2,34 @@
 
 Dor.configure do
   ssl do
-    cert_file Settings.SSL.CERT_FILE
-    key_file Settings.SSL.KEY_FILE
-    key_pass Settings.SSL.KEY_PASS
-  end if Settings.SSL
+    cert_file Settings.ssl.cert_file
+    key_file Settings.ssl.key_file
+    key_pass Settings.ssl.key_pass
+  end if Settings.ssl
 
   fedora do
-    url Settings.FEDORA_URL
+    url Settings.fedora_url
   end
 
   solr do
-    url Settings.SOLRIZER_URL
+    url Settings.solrizer_url
   end
 
   workflow do
-    url Settings.WORKFLOW_URL
-    logfile Settings.WORKFLOW.LOGFILE
-    shift_age Settings.WORKFLOW.SHIFT_AGE
+    url Settings.workflow_url
+    logfile Settings.workflow.logfile
+    shift_age Settings.workflow.shift_age
   end
 
   suri do
-    mint_ids     Settings.SURI.MINT_IDS
-    id_namespace Settings.SURI.ID_NAMESPACE
-    url          Settings.SURI.URL
-    user         Settings.SURI.USER
-    pass         Settings.SURI.PASS
+    mint_ids     Settings.suri.mint_ids
+    id_namespace Settings.suri.id_namespace
+    url          Settings.suri.url
+    user         Settings.suri.user
+    pass         Settings.suri.pass
   end
 
   stacks do
-    local_workspace_root Settings.STACKS.LOCAL_WORKSPACE_ROOT
+    local_workspace_root Settings.stacks.local_workspace_root
   end
 end

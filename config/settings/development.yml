@@ -1,16 +1,7 @@
-PROFILER:
-  RACKMINI_ENABLED: true
+profiler:
+  rackmini_enabled: true
 
 # URLs
-DOR_INDEXING_URL: 'http://localhost:4000/dor'
-FEDORA_URL: 'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
-SOLRIZER_URL: 'http://localhost:8984/solr/argo'
-
-# Webauth
-WEBAUTH:
-  USER: 'apanopte'
-  MAIL: 'apanopte@stanford.edu'
-  LDAPPRIVGROUP: 'sdr:administrator-role|dlss:lyberteam|dlss:developers'
-  SUAFFILIATION: 'stanford:test'
-  DISPLAYNAME: 'Argus Panoptes'
-  LDAPAUTHRULE: 'valid-user'
+dor_indexing_url: 'http://localhost:4000/dor'
+fedora_url: 'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
+solrizer_url: 'http://localhost:8984/solr/argo'

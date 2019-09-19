@@ -13,7 +13,7 @@ RSpec.describe BulkAction do
     it 'returns the filename with path' do
       @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
       expect(@bulk_action.file('hello_world.txt'))
-        .to eq "#{Settings.BULK_METADATA.DIRECTORY}GenericJob_#{@bulk_action.id}/hello_world.txt"
+        .to eq "#{Settings.bulk_metadata.directory}GenericJob_#{@bulk_action.id}/hello_world.txt"
     end
   end
 
@@ -31,7 +31,7 @@ RSpec.describe BulkAction do
   describe '#remove_output_directory' do
     let(:directory) do
       File.join(
-        Settings.BULK_METADATA.DIRECTORY,
+        Settings.bulk_metadata.directory,
         "#{bulk_action.action_type}_#{bulk_action.id}"
       )
     end

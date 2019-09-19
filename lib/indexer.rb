@@ -9,7 +9,7 @@ module Argo
       pid = "druid:#{pid}" unless pid =~ /^druid:/
       realtime = Benchmark.realtime do
         with_retries(max_tries: 3, rescue: [RestClient::Exception, Errno::ECONNREFUSED]) do
-          RestClient.post("#{Settings.DOR_INDEXING_URL}/reindex/#{pid}", '')
+          RestClient.post("#{Settings.dor_indexing_url}/reindex/#{pid}", '')
         end
       end
       Rails.logger.info "successfully updated index for #{pid} in #{format('%.3f', realtime)}s"

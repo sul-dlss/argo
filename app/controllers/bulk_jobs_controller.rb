@@ -52,7 +52,7 @@ class BulkJobsController < ApplicationController
   # DELETE /items/:item_id/bulk_jobs
   def delete
     @apo = params[:item_id]
-    directory_to_delete = File.join(Settings.BULK_METADATA.DIRECTORY, params[:dir])
+    directory_to_delete = File.join(Settings.bulk_metadata.directory, params[:dir])
     FileUtils.remove_dir(directory_to_delete, true)
     redirect_to item_bulk_jobs_path(@apo)
   end
@@ -71,7 +71,7 @@ class BulkJobsController < ApplicationController
   def load_bulk_jobs(druid)
     directory_list = []
     bulk_info = []
-    bulk_load_dir = File.join(Settings.BULK_METADATA.DIRECTORY, druid)
+    bulk_load_dir = File.join(Settings.bulk_metadata.directory, druid)
 
     # The metadata bulk upload processing stores its logs and other information in a very simple directory structure
     directory_list = Dir.glob("#{bulk_load_dir}/*") if File.directory?(bulk_load_dir)

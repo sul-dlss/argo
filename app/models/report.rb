@@ -27,7 +27,7 @@ class Report
       },
       {
         field: :purl, label: 'Purl',
-        proc: lambda { |doc| File.join(Settings.PURL_URL, doc['id'].split(/:/).last) },
+        proc: lambda { |doc| File.join(Settings.purl_url, doc['id'].split(/:/).last) },
         solr_fields: %w(id),
         sort: false, default: false, width: 100
       },

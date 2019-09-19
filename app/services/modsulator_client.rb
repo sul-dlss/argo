@@ -33,11 +33,11 @@ class ModsulatorClient
   end
 
   def normalize_mods
-    call_remote_modsulator(Settings.NORMALIZER_URL, 'application/xml')
+    call_remote_modsulator(Settings.normalizer_url, 'application/xml')
   end
 
   def convert_spreadsheet_to_mods
-    call_remote_modsulator(Settings.MODSULATOR_URL, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    call_remote_modsulator(Settings.modsulator_url, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
   end
 
   private

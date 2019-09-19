@@ -46,40 +46,40 @@ OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
 OkComputer::Registry.register 'rails_cache', OkComputer::GenericCacheCheck.new
 
 OkComputer::Registry.register 'active_fedora_conn', RubydoraCheck.new(client: ActiveFedora::Base.connection_for_pid(0))
-# FEDORA_URL is covered by checking ActiveFedora::Base.connection_for_pid(0)
+# fedora_url is covered by checking ActiveFedora::Base.connection_for_pid(0)
 
 # remove trailing slashes to avoid constructing bad solr ping URLs
 OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new(ActiveFedora.solr.conn.uri.to_s.sub(%r{/$}, '') + '/admin/ping')
-# SOLRIZER_URL is coverd by checking ActiveFedora.solr.conn.uri
+# solrizer_url is coverd by checking ActiveFedora.solr.conn.uri
 
 # ------------------------------------------------------------------------------
 
 # NON-CRUCIAL (Optional) checks, avail at /status/<name-of-check>
 #   - at individual endpoint, HTTP response code reflects the actual result
 #   - in /status/all, these checks will display their result text, but will not affect HTTP response code
-OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(Settings.DOR_SERVICES.URL)
-OkComputer::Registry.register 'robot_status_url', OkComputer::HttpCheck.new(Settings.ROBOT_STATUS_URL)
-OkComputer::Registry.register 'workflow_url', OkComputer::HttpCheck.new(Settings.WORKFLOW_URL)
+OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(Settings.dor_services.url)
+OkComputer::Registry.register 'robot_status_url', OkComputer::HttpCheck.new(Settings.robot_status_url)
+OkComputer::Registry.register 'workflow_url', OkComputer::HttpCheck.new(Settings.workflow_url)
 
 # suri is essential for registering objects
-OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(Settings.SURI.URL)
+OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(Settings.suri.url)
 
 # Stacks
-OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.STACKS.LOCAL_WORKSPACE_ROOT)
-OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.STACKS.HOST}")
-OkComputer::Registry.register 'stacks_file_url', OkComputer::HttpCheck.new(Settings.STACKS_FILE_URL)
-OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(Settings.STACKS_URL)
+OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.stacks.local_workspace_root)
+OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.stacks.HOST}")
+OkComputer::Registry.register 'stacks_file_url', OkComputer::HttpCheck.new(Settings.stacks_file_url)
+OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(Settings.stacks_url)
 
 # Bulk Metadata - probably for bulk downloads
-OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.BULK_METADATA.DIRECTORY)
-OkComputer::Registry.register 'bulk_metadata_tmp_dir', OkComputer::DirectoryCheck.new(Settings.BULK_METADATA.TEMPORARY_DIRECTORY)
+OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.directory)
+OkComputer::Registry.register 'bulk_metadata_tmp_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.temporary_directory)
 
 # Modsulator, etc - probably for bulk updates?
-OkComputer::Registry.register 'modsulator_url', OkComputer::HttpCheck.new(Settings.MODSULATOR_URL)
-OkComputer::Registry.register 'normalizer_url', OkComputer::HttpCheck.new(Settings.NORMALIZER_URL)
-OkComputer::Registry.register 'spreadsheet_url', OkComputer::HttpCheck.new(Settings.SPREADSHEET_URL)
+OkComputer::Registry.register 'modsulator_url', OkComputer::HttpCheck.new(Settings.modsulator_url)
+OkComputer::Registry.register 'normalizer_url', OkComputer::HttpCheck.new(Settings.normalizer_url)
+OkComputer::Registry.register 'spreadsheet_url', OkComputer::HttpCheck.new(Settings.spreadsheet_url)
 
-# PURL_URL is only used for links out and we decided not to include it here
+# purl_url is only used for links out and we decided not to include it here
 
 OkComputer.make_optional %w(
   bulk_metadata_dir
