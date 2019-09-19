@@ -23,23 +23,22 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'start_log' do
-    before do
-      @log = double('log')
-      allow(@log).to receive(:flush)
-    end
+    let(:log) { double('log') }
+
+    before { allow(log).to receive(:flush) }
 
     it 'writes the correct information to the log' do
-      expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_job_start .*/)
-      expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_user .*/)
-      expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_input_file .*/)
-      expect(@log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_note .*/)
-      download_job.start_log(@log, 'fakeuser', 'fakefile', 'fakenote')
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_job_start .*/)
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_user .*/)
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_input_file .*/)
+      expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_note .*/)
+      download_job.start_log(log, 'fakeuser', 'fakefile', 'fakenote')
     end
 
     it 'completes without erring given a nil argument for note, or no arg' do
-      allow(@log).to receive(:puts)
-      expect { download_job.start_log(@log, 'fakeuser', 'fakefile', nil) }.not_to raise_error
-      expect { download_job.start_log(@log, 'fakeuser', 'fakefile')      }.not_to raise_error
+      allow(log).to receive(:puts)
+      expect { download_job.start_log(log, 'fakeuser', 'fakefile', nil) }.not_to raise_error
+      expect { download_job.start_log(log, 'fakeuser', 'fakefile')      }.not_to raise_error
     end
   end
 
@@ -117,22 +116,20 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'query_dor' do
-    before do
-      @log = double('log')
-    end
+    let(:log) { double('log') }
 
     it 'does not log anything upon success' do
-      result = download_job.query_dor('druid:hj185vb7593', @log)
+      result = download_job.query_dor('druid:hj185vb7593', log)
       expect(result).not_to be_nil
-      expect(@log).not_to receive(:puts)
+      expect(log).not_to receive(:puts)
     end
 
     it 'attempts three connections and logs failures' do
       dor_double = class_double('Dor').as_stubbed_const(transfer_nested_constants: false)
       expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
-      expect(@log).to receive(:puts).twice.with('argo.bulk_metadata.bulk_log_retry druid:123')
-      expect(@log).to receive(:puts).once.with('argo.bulk_metadata.bulk_log_timeout druid:123')
-      result = download_job.query_dor('druid:123', @log)
+      expect(log).to receive(:puts).twice.with('argo.bulk_metadata.bulk_log_retry druid:123')
+      expect(log).to receive(:puts).once.with('argo.bulk_metadata.bulk_log_timeout druid:123')
+      result = download_job.query_dor('druid:123', log)
       expect(result).to eq(nil)
     end
   end
