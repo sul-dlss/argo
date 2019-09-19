@@ -32,13 +32,13 @@ RSpec.describe ChecksumReportJob, type: :job do
 
       it 'calls the presevation_catalog API, writes a CSV file, and records success counts' do
         response = instance_double(Faraday::Response, success?: true, body: csv_response)
-        allow(my_conn).to receive(:get).and_return(response)
+        allow(my_conn).to receive(:post).and_return(response)
         subject.perform(bulk_action.id,
                         output_directory: output_directory,
                         pids: pids,
                         groups: groups,
                         user: user)
-        expect(my_conn).to have_received(:get).with('/objects/checksums', druids: pids, format: 'csv')
+        expect(my_conn).to have_received(:post).with('/objects/checksums', druids: pids, format: 'csv')
         expect(File).to exist(File.join(output_directory, Settings.checksum_report_job.csv_filename))
         expect(bulk_action.druid_count_total).to eq(pids.length)
         expect(bulk_action.druid_count_fail).to eq(0)
@@ -50,13 +50,13 @@ RSpec.describe ChecksumReportJob, type: :job do
       let(:ability) { instance_double(Ability, can?: false) }
 
       it 'does not call the presevation_catalog API, does not write a CSV file, and records failure counts' do
-        allow(my_conn).to receive(:get)
+        allow(my_conn).to receive(:post)
         subject.perform(bulk_action.id,
                         output_directory: output_directory_fail,
                         pids: pids,
                         groups: groups,
                         user: user)
-        expect(my_conn).not_to have_received(:get).with('/objects/checksums', druids: pids, format: 'csv')
+        expect(my_conn).not_to have_received(:post).with('/objects/checksums', druids: pids, format: 'csv')
         expect(File).not_to exist(File.join(output_directory_fail, Settings.checksum_report_job.csv_filename))
         expect(bulk_action.druid_count_total).to eq(pids.length)
         expect(bulk_action.druid_count_fail).to eq(pids.length)

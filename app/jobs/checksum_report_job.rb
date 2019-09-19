@@ -23,7 +23,7 @@ class ChecksumReportJob < GenericJob
       begin
         raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, ActiveFedora::Base)
 
-        response = conn.get '/objects/checksums', druids: pids, format: 'csv'
+        response = conn.post '/objects/checksums', druids: pids, format: 'csv'
         unless response.success? # an internal API call failing is significant enough to notify HB specifically over as well as failing the job
           message = "Call to preservation_catalog_api failed: #{response.status} #{response.reason_phrase}: #{response.body}"
           Honeybadger.notify message
