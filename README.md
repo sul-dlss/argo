@@ -45,7 +45,7 @@ If you want to use the rails console use:
 docker-compose run --rm web rails console
 ```
 
-If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing run:
+If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing to run:
 
 ```
 docker-compose run web bin/delayed_job start
