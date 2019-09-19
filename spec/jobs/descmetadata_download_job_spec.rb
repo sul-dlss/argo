@@ -108,6 +108,28 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
         expect(open_file.glob('*').length).to eq 0
       end
     end
+
+    context 'user lacks permission to view metadata on one of the objects' do
+      before do
+        allow(ability).to receive(:can?).with(:view_metadata, kind_of(ActiveFedora::Base)).and_return(true)
+        allow(ability).to receive(:can?).with(:view_metadata, satisfy { |obj| obj.id == @pid_list_long.second }).and_return(false)
+      end
+
+      it 'creates a valid zip file with only the objects for which the user has view_metadata authorization' do
+        bulk_action = create(:bulk_action,
+                             action_type: 'DescmetadataDownloadJob',
+                             pids: @pid_list_long,
+                             log_name: 'foo.txt')
+        expect(@download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
+
+        @download_job.perform(bulk_action.id, @zip_params_long)
+
+        expect(File).to be_exist(@output_zip_filename)
+        Zip::File.open(@output_zip_filename) do |open_file|
+          expect(open_file.glob('*').map(&:name)).to eq ["#{@pid_list_long.first}.xml"]
+        end
+      end
+    end
   end
 
   describe 'query_dor' do
