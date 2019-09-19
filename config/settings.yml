@@ -62,7 +62,6 @@ preservation_catalog:
 
 # URLs
 DOR_INDEXING_URL: 'https://dor-indexing-app.example.com/dor'
-DPG_URL: 'https://dpg.example.com'
 FEDORA_URL: 'https://user:password@fedora.example.com:1000/fedora'
 MODSULATOR_URL: 'https://services.example.com/v1/modsulator'
 NORMALIZER_URL: 'https://services.example.com/v1/normalizer'
