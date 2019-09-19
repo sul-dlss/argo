@@ -12,7 +12,7 @@ class DescmetadataDownloadJob < GenericJob
   # @param [Hash] params Custom params for this job
   # requires `:pids` (an Array of pids) and output_directory
   def perform(bulk_action_id, params)
-    @pids = params[:pids]
+    super
     zip_filename = generate_zip_filename(params[:output_directory])
     with_bulk_action_log do |log|
       #  Fail with an error message if the calling BulkAction doesn't exist
