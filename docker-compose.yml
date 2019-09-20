@@ -32,6 +32,11 @@ services:
     ports:
       - 3003:3000
     environment:
+      DATABASE_NAME: dor-services-app
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
       SOLR_URL: http://solr:8983/solr/argo
       SETTINGS__solr__url: http://solr:8983/solr/argo
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
@@ -39,7 +44,8 @@ services:
       SETTINGS__WORKFLOW_URL: http://workflow:3000
       SETTINGS__DOR__SERVICE_USER: dor-service-user
       SETTINGS__DOR__SERVICE_PASSWORD: dor-service-password
-
+    depends_on:
+      - db
   solr:
     image: solr:7
     volumes:
