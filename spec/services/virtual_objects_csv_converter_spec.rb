@@ -31,7 +31,7 @@ RSpec.describe VirtualObjectsCsvConverter do
 
     it 'parses a CSV string' do
       expect(subject.convert).to eq(
-        virtual_objects: [
+        [
           {
             parent_id: 'parent1',
             child_ids: %w(child1 child2)
@@ -49,7 +49,7 @@ RSpec.describe VirtualObjectsCsvConverter do
 
       it 'drops blank values and works as expected' do
         expect(subject.convert).to eq(
-          virtual_objects: [
+          [
             {
               parent_id: 'parent1',
               child_ids: %w(child1 child2)
@@ -68,7 +68,7 @@ RSpec.describe VirtualObjectsCsvConverter do
 
       it 'works as expected' do
         expect(subject.convert).to eq(
-          virtual_objects: [
+          [
             {
               parent_id: 'parent1',
               child_ids: %w(child1 child2)
