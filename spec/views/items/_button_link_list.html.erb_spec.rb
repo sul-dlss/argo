@@ -16,8 +16,7 @@ describe 'items/_button_link_list.html.erb' do
       },
       {
         label: 'Ajax me',
-        url: 'http://www.example.com/ajax',
-        ajax_modal: true
+        url: 'http://www.example.com/ajax'
       },
       {
         label: 'Check me',
