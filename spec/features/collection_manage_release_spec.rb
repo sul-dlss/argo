@@ -7,6 +7,7 @@ RSpec.describe 'Collection manage release' do
   before do
     obj = instance_double(
       Dor::Collection,
+      current_version: '1',
       admin_policy_object: nil,
       datastreams: {},
       catkey: nil,

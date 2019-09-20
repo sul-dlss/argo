@@ -479,7 +479,7 @@ class ItemsController < ApplicationController
   end
 
   def enforce_versioning
-    state_service = Dor::StateService.new(@object.pid)
+    state_service = Dor::StateService.new(@object.pid, version: @object.current_version)
 
     # if this object has been submitted and doesnt have an open version, they cannot change it.
     return true if state_service.allows_modification?

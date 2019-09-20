@@ -38,7 +38,7 @@ class SetGoverningApoJob < GenericJob
 
     check_can_set_governing_apo!(current_obj)
 
-    state_service = Dor::StateService.new(current_druid)
+    state_service = Dor::StateService.new(current_druid, version: current_obj.current_version)
     open_new_version(current_obj, 'Set new governing APO') unless state_service.allows_modification?
 
     current_obj.admin_policy_object = Dor.find(new_apo_id)
@@ -54,7 +54,7 @@ class SetGoverningApoJob < GenericJob
   end
 
   def check_can_set_governing_apo!(obj)
-    state_service = Dor::StateService.new(obj.pid)
+    state_service = Dor::StateService.new(obj.pid, version: obj.current_version)
 
     raise "#{obj.pid} is not open for modification" unless state_service.allows_modification?
     raise "user not authorized to move #{obj.pid} to #{new_apo_id}" unless ability.can?(:manage_governing_apo, obj, new_apo_id)

@@ -42,7 +42,7 @@ RSpec.describe ManageCatkeyJob do
   describe '#update_catkey' do
     let(:pid) { pids[0] }
     let(:catkey) { catkeys[0] }
-    let(:current_object) { instance_double(Dor::Item, pid: pid) }
+    let(:current_object) { instance_double(Dor::Item, pid: pid, current_version: '3') }
     let(:client) { double(Dor::Services::Client) }
     let(:object) { instance_double(Dor::Services::Client::Object, version: object_version) }
 

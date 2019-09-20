@@ -10,6 +10,7 @@ RSpec.describe 'Set governing APO' do
     instance_double(
       Dor::Item,
       pid: 'druid:kv840rx2720',
+      current_version: '1',
       admin_policy_object: new_apo,
       datastreams: {},
       identityMetadata: double(Dor::IdentityMetadataDS, adminPolicy: nil, ng_xml: identity_md)

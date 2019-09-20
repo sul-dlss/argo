@@ -34,7 +34,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
 
     before do
       allow(Dor::StateService).to receive(:new).and_return(state_service)
-      allow(object).to receive(:pid).and_return(item_id)
+      allow(object).to receive_messages(pid: item_id, current_version: '3')
       governing_apo = instance_double(Dor::AdminPolicyObject, pid: governing_apo_id)
       allow(object).to receive(:admin_policy_object).and_return(governing_apo)
       allow(object).to receive(:embargoed?).and_return(false)
