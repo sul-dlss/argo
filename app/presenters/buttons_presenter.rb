@@ -56,40 +56,37 @@ class ButtonsPresenter
   # @param [Dor::Item] object
   # @return [Array]
   def buttons
-    buttons = []
-    if ability.can?(:manage_item, object)
-      buttons << close_button
-      buttons << open_button
+    return [] unless ability.can?(:manage_item, object)
 
-      if object.is_a? Dor::AdminPolicyObject
-        buttons << { url: edit_apo_path(pid), label: 'Edit APO', new_page: true }
-        buttons << { url: new_apo_collection_path(apo_id: pid), label: 'Create Collection' }
-      end
+    buttons = [close_button, open_button]
 
-      buttons << reindex_button
-      buttons << governing_apo_button
-      buttons << add_workflow_button
-      buttons << republish_button
-      buttons << purge_button
-
-      buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
-      buttons << { url: tags_ui_item_path(id: pid), label: 'Edit tags' }
-      if [Dor::Item, Dor::Set].any? { |clazz| object.is_a? clazz } # these only apply for items, sets and collections
-        buttons << { url: catkey_ui_item_path(id: pid), label: 'Manage catkey' }
-        buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
-      end
-
-      buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if object.datastreams.include? 'contentMetadata'
-      buttons << { url: rights_item_path(id: pid), label: 'Set rights' } if object.datastreams.include? 'rightsMetadata'
-      if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
-        buttons << { url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !state_service.allows_modification? }
-      end
-      buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
-
-      # TODO: add a date picker and button to change the embargo date for those who should be able to.
-      buttons << { label: 'Update embargo', url: embargo_form_item_path(pid) } if object.is_a?(Dor::Item) && object.embargoed?
-
+    if object.is_a? Dor::AdminPolicyObject
+      buttons << { url: edit_apo_path(pid), label: 'Edit APO', new_page: true }
+      buttons << { url: new_apo_collection_path(apo_id: pid), label: 'Create Collection' }
     end
+
+    buttons << reindex_button
+    buttons << governing_apo_button
+    buttons << add_workflow_button
+    buttons << republish_button
+    buttons << purge_button
+
+    buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
+    buttons << { url: tags_ui_item_path(id: pid), label: 'Edit tags' }
+    if [Dor::Item, Dor::Set].any? { |clazz| object.is_a? clazz } # these only apply for items, sets and collections
+      buttons << { url: catkey_ui_item_path(id: pid), label: 'Manage catkey' }
+      buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
+    end
+
+    buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if object.datastreams.include? 'contentMetadata'
+    buttons << { url: rights_item_path(id: pid), label: 'Set rights' } if object.datastreams.include? 'rightsMetadata'
+    if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
+      buttons << { url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !state_service.allows_modification? }
+    end
+    buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
+
+    # TODO: add a date picker and button to change the embargo date for those who should be able to.
+    buttons << { label: 'Update embargo', url: embargo_form_item_path(pid) } if object.is_a?(Dor::Item) && object.embargoed?
 
     buttons
   end
