@@ -7,6 +7,7 @@ RSpec.describe 'Item manage release' do
   before do
     obj = instance_double(
       Dor::Item,
+      current_version: '1',
       admin_policy_object: nil,
       datastreams: {},
       catkey: nil,

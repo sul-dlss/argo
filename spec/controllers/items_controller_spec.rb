@@ -13,20 +13,18 @@ RSpec.describe ItemsController, type: :controller do
     apo  = double()
     wf   = instance_double(Dor::WorkflowDs)
     idmd_ds_content = '<test-xml/>'
-    idmd_ng_xml = double(Nokogiri::XML::Document)
+    idmd_ng_xml = instance_double(Nokogiri::XML::Document, to_xml: idmd_ds_content)
     allow(idmd).to receive(:"content_will_change!")
-    allow(idmd_ng_xml).to receive(:to_xml).and_return idmd_ds_content
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
     allow(apo).to receive(:pid).and_return('druid:apo')
     allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
-    allow(@item).to receive(:to_solr)
-    allow(@item).to receive(:save)
-    allow(@item).to receive(:delete)
-    allow(@item).to receive(:identityMetadata).and_return(idmd)
-    allow(@item).to receive(:datastreams).and_return('identityMetadata' => idmd, 'events' => Dor::EventsDS.new)
-    allow(@item).to receive(:admin_policy_object).and_return(apo)
-    allow(@item).to receive(:workflows).and_return(wf)
+    allow(@item).to receive_messages(to_solr: nil, save: nil, delete: nil,
+                                     identityMetadata: idmd,
+                                     datastreams: { 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new },
+                                     admin_policy_object: apo,
+                                     workflows: wf,
+                                     current_version: '3')
     allow(ActiveFedora.solr.conn).to receive(:add)
     allow(Dor::StateService).to receive(:new).and_return(state_service)
   end

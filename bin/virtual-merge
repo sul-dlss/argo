@@ -21,7 +21,7 @@ class VirtualMergeTool
   def initialize(logger, parent_druid, child_druids)
     @logger = logger
     @parent = Dor::Item.find(parent_druid)
-    state_service = Dor::StateService.new(parent_druid)
+    state_service = Dor::StateService.new(parent_druid, version: @parent.current_version)
 
     raise "Parent item #{@parent.pid} is not open for modification" unless state_service.allows_modification?
 
@@ -30,7 +30,7 @@ class VirtualMergeTool
 
   # merge all the child resources into the parent as virtual links
   def merge(child)
-    state_service = Dor::StateService.new(child.pid)
+    state_service = Dor::StateService.new(child.pid, version: child.current_version)
     raise "Child item #{child.pid} is not open for modification" unless state_service.allows_modification?
 
     @logger.info "merging child #{child.pid} into parent #{@parent.pid}"

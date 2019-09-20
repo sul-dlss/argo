@@ -68,8 +68,8 @@ RSpec.describe SetGoverningApoJob do
       # assuming one is inclined to test private methods, but it also seemed reasonable to do a slightly more end-to-end
       # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
       it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
-        item1 = instance_double(Dor::Item, pid: pids[0])
-        item3 = instance_double(Dor::Item, pid: pids[2])
+        item1 = instance_double(Dor::Item, pid: pids[0], current_version: '1')
+        item3 = instance_double(Dor::Item, pid: pids[2], current_version: '1')
         apo = instance_double(Dor::AdminPolicyObject)
 
         expect(Dor).to receive(:find).with(pids[0]).and_return(item1)
@@ -109,7 +109,7 @@ RSpec.describe SetGoverningApoJob do
 
   describe '#check_can_set_governing_apo!' do
     let(:pid) { '123' }
-    let(:obj) { double(Dor::Collection, pid: pid) }
+    let(:obj) { double(Dor::Collection, pid: pid, current_version: '1') }
     let(:ability) { double(Ability) }
 
     before do
