@@ -32,7 +32,7 @@ RSpec.describe 'files/index.html.erb' do
     assign(:available_in_workspace_error, nil)
     expect(view).to receive(:params).and_return(id: 'M1090_S15_B01_F07_0106.jp2', item_id: 'druid:rn653dy9317').at_least(1)
     expect(view).to receive(:has_been_accessioned?).with(obj.pid).and_return(true)
-    expect(view).to receive(:last_accessioned_version).with(obj.pid).and_return('1.0.0')
+    expect(view).to receive(:last_accessioned_version).with(obj.pid)
 
     render
   end
