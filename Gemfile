@@ -69,6 +69,7 @@ gem 'dor-services-client', '~> 2.2'
 gem 'dor-workflow-client', '~> 3.7'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
+gem 'preservation-client'
 gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'sul_styles', '~> 0.3'

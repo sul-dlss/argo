@@ -56,7 +56,7 @@ module DorObjectHelper
   end
 
   def last_accessioned_version(pid)
-    Dor::Services::Client.object(pid).sdr.current_version
+    Preservation::Client.objects.current_version(pid)
   end
 
   def render_qfacet_value(facet_solr_field, item, options = {})
