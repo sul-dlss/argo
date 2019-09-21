@@ -3,7 +3,7 @@
 require 'rails_helper'
 require 'cancan/matchers'
 
-describe Ability do
+RSpec.describe Ability do
   let(:subject) { described_class.new(user) }
   let(:item) { Dor::Item.new(pid: 'x') }
   let(:user) do

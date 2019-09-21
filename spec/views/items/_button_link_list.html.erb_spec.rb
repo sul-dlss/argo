@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'items/_button_link_list.html.erb' do
+RSpec.describe 'items/_button_link_list.html.erb' do
   let(:buttons) do
     [
       {

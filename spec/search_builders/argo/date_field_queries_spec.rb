@@ -8,7 +8,7 @@ class TestClass
   include Argo::DateFieldQueries
 end
 
-describe Argo::DateFieldQueries do
+RSpec.describe Argo::DateFieldQueries do
   subject { TestClass.new }
 
   let(:user) do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe RegistrationHelper do
+RSpec.describe RegistrationHelper do
   describe '#apo_list' do
     let(:perm_keys) { ['sunetid:user', 'workgroup:dlss:mock-group1', 'workgroup:dlss:mock-group2'] }
 

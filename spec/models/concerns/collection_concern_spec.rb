@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe CollectionConcern do
+RSpec.describe CollectionConcern do
   let(:document) { SolrDocument.new(document_attributes) }
 
   describe '#collection' do

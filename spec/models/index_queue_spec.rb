@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe IndexQueue do
+RSpec.describe IndexQueue do
   subject { described_class.new }
 
   let(:good_response) { { value: 100 }.to_json }

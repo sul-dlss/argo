@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'Indexer Backlog status', js: true do
+RSpec.describe 'Indexer Backlog status', js: true do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end

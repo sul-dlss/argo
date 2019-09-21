@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ReleaseTag do
+RSpec.describe ReleaseTag do
   describe '#initialize' do
     subject do
       described_class.new(

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe WorkflowHelper, type: :helper do
+RSpec.describe WorkflowHelper, type: :helper do
   describe '#render_workflow_reset_link' do
     let(:name) { 'accessionWF' }
     let(:process) { 'descriptive-metadata' }

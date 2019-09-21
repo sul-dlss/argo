@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe TitleConcern do
+RSpec.describe TitleConcern do
   let(:document) { SolrDocument.new(document_attributes) }
 
   describe '#title' do

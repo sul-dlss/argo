@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ApoConcern do
+RSpec.describe ApoConcern do
   let(:document) { SolrDocument.new(document_attributes) }
 
   describe '#apo' do

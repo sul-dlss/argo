@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-describe ItemsHelper, type: :helper do
+RSpec.describe ItemsHelper, type: :helper do
   let(:mods_xml) do
     '<mods:mods
         xmlns:mods="http://www.loc.gov/mods/v3">

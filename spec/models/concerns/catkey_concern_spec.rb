@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe CatkeyConcern do
+RSpec.describe CatkeyConcern do
   let(:document) { SolrDocument.new(document_attributes) }
 
   describe '#catkey' do
