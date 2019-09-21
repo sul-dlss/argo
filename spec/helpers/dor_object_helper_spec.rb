@@ -6,7 +6,7 @@ class DummyClass
   include DorObjectHelper
 end
 
-describe DorObjectHelper, type: :helper do
+RSpec.describe DorObjectHelper, type: :helper do
   describe '#last_accessioned_version' do
     let(:druid) { 'oo000oo0000' }
 

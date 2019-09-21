@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ReleaseTags do
+RSpec.describe ReleaseTags do
   let(:dor_object) { instantiate_fixture('druid:qq613vj0238') }
 
   describe '.from_dor_object' do

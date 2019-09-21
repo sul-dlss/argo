@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'catalog/_show_sidebar.html.erb' do
+RSpec.describe 'catalog/_show_sidebar.html.erb' do
   let(:document) do
     SolrDocument.new(id: 'druid:abc123', catkey_id_ssim: 'catz')
   end

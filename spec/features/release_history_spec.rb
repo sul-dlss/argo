@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'Release history', js: true do
+RSpec.describe 'Release history', js: true do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end

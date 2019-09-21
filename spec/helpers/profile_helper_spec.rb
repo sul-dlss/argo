@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe ProfileHelper, type: :helper do
+RSpec.describe ProfileHelper, type: :helper do
   describe '#show_pagination?' do
     context 'when using ProfileController' do
       it 'returns false' do

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe DruidConcern do
+RSpec.describe DruidConcern do
   let(:document) { SolrDocument.new(document_attributes) }
   let(:document_attributes) { { id: 'druid:abc123456' } }
 

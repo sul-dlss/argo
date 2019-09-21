@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'instantiate_fixture' do
+RSpec.describe 'instantiate_fixture' do
   it 'can find fedora_conf documents by druid' do
     @druid = 'rn653dy9317'
     item = instantiate_fixture(@druid, Dor::Item)

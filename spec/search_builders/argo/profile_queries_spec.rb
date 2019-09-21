@@ -6,7 +6,7 @@ class TestClass
   include Argo::ProfileQueries
 end
 
-describe Argo::ProfileQueries do
+RSpec.describe Argo::ProfileQueries do
   subject { TestClass.new }
 
   let(:blacklight_params) { { controller: 'profile' } }
