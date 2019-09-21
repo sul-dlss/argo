@@ -23,7 +23,8 @@ RSpec.describe 'Workflow Service Creation' do
     visit new_item_workflow_path 'druid:qq613vj0238'
     click_button 'Add'
     within '.flash_messages' do
-      expect(page).to have_css '.alert.alert-info', text: 'Added accessionWF'
+      # The selected workflow defaults to Settings.apo.default_workflow_option (registrationWF)
+      expect(page).to have_css '.alert.alert-info', text: 'Added registrationWF'
     end
     expect(workflow_client).to have_received(:create_workflow_by_name)
   end

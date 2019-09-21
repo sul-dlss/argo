@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# Calls the workflow service to determine the state of an object.
+# Used by AJAX requests mainly from the action buttons (check_url)
 class WorkflowServiceController < ApplicationController
   ##
   # Is a document closeable?
