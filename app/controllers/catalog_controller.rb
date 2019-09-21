@@ -186,6 +186,10 @@ class CatalogController < ApplicationController
     @obj = Dor.find params[:id]
     authorize! :view_metadata, @obj
     @response, @document = fetch params[:id]
+
+    # Used for drawing releaseTags in the history section
+    @cocina = Dor::Services::Client.object(params[:id]).find
+
     @buttons_presenter = ButtonsPresenter.new(
       ability: current_ability,
       solr_document: @document,

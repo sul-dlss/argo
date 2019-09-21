@@ -24,15 +24,16 @@
     </dl>
   </div>
 
-  <% release_tags = ReleaseTags.from_dor_object(object) %>
-  <% if release_tags.any? %>
-    <div>
-      <dl>
-        <dt>Releases</dt>
-        <dd>
-          <%= render 'show_releases', release_tags: release_tags %>
-        </dd>
-      </dl>
-    </div>
+  <% if @cocina.administrative.respond_to? :releaseTags %>
+    <% if @cocina.administrative.releaseTags.present? %>
+      <div>
+        <dl>
+          <dt>Releases</dt>
+          <dd>
+            <%= render 'show_releases', release_tags: @cocina.administrative.releaseTags %>
+          </dd>
+        </dl>
+      </div>
+    <% end %>
   <% end %>
 </div>

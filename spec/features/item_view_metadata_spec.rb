@@ -7,11 +7,16 @@ RSpec.describe 'Item view', js: true do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Config.workflow.client).to receive_messages(active_lifecycle: [], lifecycle: [])
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+  let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
+
   context 'when the file is not on the workspace' do
-    before do
-      allow_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['this_is_not_the_file_you_are_looking_for.txt'])
+    let(:files) do
+      instance_double(Dor::Services::Client::Files, list: ['this_is_not_the_file_you_are_looking_for.txt'])
     end
 
     it 'shows the file info' do
@@ -55,11 +60,11 @@ RSpec.describe 'Item view', js: true do
 
   context 'when the file is on the workspace' do
     let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
+    let(:files) do
+      instance_double(Dor::Services::Client::Files, list: [filename], retrieve: 'the file contents')
+    end
 
     before do
-      allow_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return([filename])
-      allow_any_instance_of(Dor::Services::Client::Files).to receive(:retrieve).and_return('the file contents')
-
       page.driver.browser.download_path = '.'
     end
 

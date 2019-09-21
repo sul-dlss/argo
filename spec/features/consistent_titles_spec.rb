@@ -17,7 +17,12 @@ RSpec.describe 'Consistent titles' do
   describe 'catalog show view' do
     before do
       allow(Dor::Config.workflow.client).to receive_messages(lifecycle: [], active_lifecycle: [])
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
+
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+    let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
     it 'displays the title' do
       visit solr_document_path 'druid:hj185vb7593'

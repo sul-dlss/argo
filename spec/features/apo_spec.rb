@@ -8,6 +8,9 @@ RSpec.describe 'apo', js: true do
   let(:new_collection_druid) { 'druid:zy333wv6543' }
   let(:apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
   let(:collection) { Dor::Collection.new(pid: new_collection_druid, label: 'New Testing Collection') }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+  let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
   after do
     Dor::AdminPolicyObject.find(new_apo_druid).destroy # clean up after ourselves
@@ -23,6 +26,8 @@ RSpec.describe 'apo', js: true do
                                                            all_workflows_xml: '')
     allow(Dor::Services::Client.objects).to receive(:register)
       .and_return({ pid: new_apo_druid }, pid: new_collection_druid)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+
     # Stubbing this out, because it's the dor-services-app that would have actually created it.
     allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
     allow(Dor).to receive(:find).with(new_collection_druid).and_return(collection)

@@ -15,7 +15,7 @@
         <td><%= release_tag.what %></td>
         <td><%= release_tag.to %></td>
         <td><%= release_tag.who %></td>
-        <td><%= release_tag.when %></td>
+        <td><time-ago datetime="<%= release_tag.date %>"><%= release_tag.date %></time-ago></td>
       </tr>
     <% end %>
   </tbody>

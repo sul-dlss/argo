@@ -14,10 +14,14 @@ RSpec.describe 'Add a workflow to an item' do
                     workflow_templates: %w[assemblyWF registrationWF],
                     active_lifecycle: [])
   end
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+  let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   it 'redirect and display on show page' do

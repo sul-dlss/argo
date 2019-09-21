@@ -22,10 +22,14 @@ RSpec.describe 'Item catkey change' do
 
   describe 'when modification is allowed' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+    let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
     before do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Config.workflow.client).to receive_messages(milestones: [], all_workflows_xml: '')
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
     it 'changes the catkey' do
