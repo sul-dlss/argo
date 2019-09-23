@@ -55,4 +55,7 @@ Rails.application.configure do
 
   require 'test_shibboleth_headers'
   config.middleware.use TestShibbolethHeaders
+
+  # Turn off custom caching in tests
+  config.cache_store = :null_store
 end
