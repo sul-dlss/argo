@@ -15,8 +15,7 @@ module ApoHelper
   # an array suitable for select_tag options
   def workflow_options
     Rails.cache.fetch 'workflow-templates-select-options' do
-      client = Dor::Config.workflow.client
-      list = Dor::Workflow::Client::WorkflowTemplate.new(requestor: client.requestor).all
+      list = Dor::Config.workflow.client.workflow_templates
       list.map do |name|
         [name, name]
       end
