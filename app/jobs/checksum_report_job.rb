@@ -23,21 +23,34 @@ class ChecksumReportJob < GenericJob
       begin
         raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, ActiveFedora::Base)
 
-        response = conn.post '/objects/checksums', druids: pids, format: 'csv'
-        unless response.success? # an internal API call failing is significant enough to notify HB specifically over as well as failing the job
-          message = "Call to preservation_catalog_api failed: #{response.status} #{response.reason_phrase}: #{response.body}"
-          Honeybadger.notify message
-          raise message
-        end
-        File.open(report_filename, 'w') { |file| file.write(response.body) }
+        csv_report = Preservation::Client.objects.checksums(druids: pids)
+        File.open(report_filename, 'w') { |file| file.write(csv_report) }
         bulk_action.update(druid_count_success: pids.length) # this whole job is run in one call, so it either all succeeds or fails
+      rescue Preservation::Client::NotFoundError, Preservation::Client::UnexpectedResponseError => e
+        bulk_action.update(druid_count_fail: pids.length)
+        message = "#{Time.current} ChecksumReportJob got error from Preservation Catalog API: #{e.class} #{e.message}"
+        log.puts(message)
+        # honeybadger and other notifications should happen at prescat level
+      rescue Preservation::Client::ConnectionFailedError => e
+        bulk_action.update(druid_count_fail: pids.length)
+        message = "#{Time.current} ChecksumReportJob failed on call to Preservation Catalog API: #{e.class} #{e.message}"
+        log.puts(message)
+        # if we couldn't connect to preservation API, we have an issue
+        Honeybadger.notify message
+        raise message
       rescue StandardError => e
         bulk_action.update(druid_count_fail: pids.length)
-        log.puts("#{Time.current} ChecksumReportJob creation failed #{e.class} #{e.message}")
+        message = "#{Time.current} ChecksumReportJob creation failed #{e.class} #{e.message}"
+        log.puts(message)
+        # if we couldn't write out the file, we have an issue
+        Honeybadger.notify message
+        raise message
       end
       log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
+
+  private
 
   ##
   # Generate a filename for the job's csv report output file.
@@ -46,9 +59,5 @@ class ChecksumReportJob < GenericJob
   def generate_report_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
     File.join(output_dir, Settings.checksum_report_job.csv_filename)
-  end
-
-  def conn
-    @conn ||= Faraday.new(url: Settings.preservation_catalog.url)
   end
 end
