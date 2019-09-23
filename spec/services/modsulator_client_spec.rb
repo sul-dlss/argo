@@ -14,7 +14,7 @@ RSpec.describe ModsulatorClient do
 
     context 'when the modsulator returns a response' do
       before do
-        stub_request(:post, Settings.NORMALIZER_URL).to_return(body: 'abc')
+        stub_request(:post, Settings.normalizer_url).to_return(body: 'abc')
       end
 
       it { is_expected.to eq 'abc' }
@@ -22,7 +22,7 @@ RSpec.describe ModsulatorClient do
 
     context 'when the modsulator returns an error' do
       before do
-        stub_request(:post, Settings.NORMALIZER_URL).to_return(status: 500)
+        stub_request(:post, Settings.normalizer_url).to_return(status: 500)
       end
 
       it 'handles HTTP errors' do
@@ -40,7 +40,7 @@ RSpec.describe ModsulatorClient do
     let(:file_path) { "#{::Rails.root}/spec/fixtures/crowdsourcing_bridget_1.xlsx" }
 
     before do
-      stub_request(:post, Settings.MODSULATOR_URL).to_return(body: 'abc')
+      stub_request(:post, Settings.modsulator_url).to_return(body: 'abc')
     end
 
     it { is_expected.to eq 'abc' }

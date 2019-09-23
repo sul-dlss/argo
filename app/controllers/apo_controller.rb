@@ -117,7 +117,7 @@ class ApoController < ApplicationController
   end
 
   def spreadsheet_template
-    binary_string = Faraday.get(Settings.SPREADSHEET_URL)
+    binary_string = Faraday.get(Settings.spreadsheet_url)
     send_data(
       binary_string.body,
       filename: 'spreadsheet_template.xlsx',

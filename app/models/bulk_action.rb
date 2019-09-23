@@ -34,7 +34,7 @@ class BulkAction < ApplicationRecord
   end
 
   def output_directory
-    File.join(Settings.BULK_METADATA.DIRECTORY, prefix)
+    File.join(Settings.bulk_metadata.directory, prefix)
   end
 
   private

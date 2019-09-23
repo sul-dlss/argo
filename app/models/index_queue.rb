@@ -17,7 +17,7 @@ class IndexQueue
   ##
   # @return [String] the path to the queue depth endpoint on dor_indexing_app
   def url
-    Settings.STATUS_INDEXER_URL
+    Settings.status_indexer_url
   end
 
   def parsed_response

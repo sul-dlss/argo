@@ -3,7 +3,7 @@
 require 'stanford-mods'
 module ItemsHelper
   def stacks_url_full_size(druid, file_name)
-    "#{Settings.STACKS_FILE_URL}/#{druid}/#{ERB::Util.url_encode(file_name)}"
+    "#{Settings.stacks_file_url}/#{druid}/#{ERB::Util.url_encode(file_name)}"
   end
 
   def schema_validate(xml)

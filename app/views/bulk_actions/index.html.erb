@@ -29,7 +29,7 @@
             <%= bulk_action.druid_count_success %> /
             <%= bulk_action.druid_count_fail %>
           </td>
-          <td><%= link_to('Log', file_bulk_action_path(bulk_action.id, filename: Settings.BULK_METADATA.LOG, mime_type: 'text/plain')) %></td>
+          <td><%= link_to('Log', file_bulk_action_path(bulk_action.id, filename: Settings.bulk_metadata.log, mime_type: 'text/plain')) %></td>
           <td><%= render_bulk_action_type(bulk_action) %></td>
           <td>
             <%= link_to 'Delete', bulk_action, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>

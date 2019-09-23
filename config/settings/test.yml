@@ -1,6 +1,6 @@
-BULK_METADATA:
-  DIRECTORY: 'spec/fixtures/bulk_upload/workspace/'
+bulk_metadata:
+  directory: 'spec/fixtures/bulk_upload/workspace/'
 
 # URLs
-FEDORA_URL:   'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
-SOLRIZER_URL: 'http://localhost:8984/solr/argo'
+fedora_url:   'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
+solrizer_url: 'http://localhost:8984/solr/argo'

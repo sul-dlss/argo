@@ -25,7 +25,7 @@ class BulkActionPersister
            :manage_catkeys, :groups, :prepare, :create_virtual_objects, to: :bulk_action
 
   def create_log_file
-    log_filename = file(Settings.BULK_METADATA.LOG)
+    log_filename = file(Settings.bulk_metadata.log)
     FileUtils.touch(log_filename)
     bulk_action.update(log_name: log_filename)
   end

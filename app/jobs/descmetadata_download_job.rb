@@ -103,6 +103,6 @@ class DescmetadataDownloadJob < GenericJob
   # @return [String] A filename for the zip file.
   def generate_zip_filename(output_dir)
     FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
-    File.join(output_dir, Settings.BULK_METADATA.ZIP)
+    File.join(output_dir, Settings.bulk_metadata.zip)
   end
 end

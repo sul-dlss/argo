@@ -17,7 +17,7 @@ RSpec.describe BulkActionPersister do
         bulk_action.id,
         hash_including(
           pids: %w(a b c),
-          output_directory: Settings.BULK_METADATA.DIRECTORY +
+          output_directory: Settings.bulk_metadata.directory +
             "#{bulk_action.action_type}_#{bulk_action.id}",
           manage_release: {}
         )
@@ -49,7 +49,7 @@ RSpec.describe BulkActionPersister do
 
     let(:directory) do
       File.join(
-        Settings.BULK_METADATA.DIRECTORY,
+        Settings.bulk_metadata.directory,
         "#{bulk_action.action_type}_#{bulk_action.id}"
       )
     end
@@ -63,7 +63,7 @@ RSpec.describe BulkActionPersister do
     end
 
     it 'output_file exists' do
-      expect(File).to exist(bulk_action.file(Settings.BULK_METADATA.LOG))
+      expect(File).to exist(bulk_action.file(Settings.bulk_metadata.log))
     end
   end
 

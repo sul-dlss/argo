@@ -11,7 +11,7 @@
     <%= render 'constraints', :localized_params=>params %>
   <% end %>
   <%= render 'catalog/report_view_toggle' %>
-  <a href="<%= Settings.ROBOT_STATUS_URL %>" target="_blank">Robots queue/job status</a>
+  <a href="<%= Settings.robot_status_url %>" target="_blank">Robots queue/job status</a>
   <div data-controller="workflow-grid" data-workflow-grid-url="<%= url_for(search_state.to_h) %>" data-workflow-grid-refresh-interval="10000">
     <%= render Throbber %>
   </div>
