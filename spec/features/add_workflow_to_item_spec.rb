@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Workflow Service Creation' do
+RSpec.describe 'Add a workflow to an item' do
   let(:stub_workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
   let(:workflow_client) do
     instance_double(Dor::Workflow::Client,
