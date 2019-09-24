@@ -11,6 +11,13 @@ AllCops:
     - db/schema.rb
     - vendor/bundle/**/*
     - node_modules/**/*
+    - tmp/**/*
+    - log/**/*
+    - fedora_conf/**/*
+    - public/**/*
+    - coverage/**/*
+    - postgres-data/**/*
+    - spec/fixtures/**/*
 
 Rails:
   Enabled: true
