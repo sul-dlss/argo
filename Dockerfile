@@ -23,5 +23,3 @@ RUN bundle install
 
 COPY package.json yarn.lock ./
 RUN yarn install
-
-RUN bundle exec rake webpacker:compile

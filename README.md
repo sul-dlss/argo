@@ -62,11 +62,19 @@ docker-compose run --rm web rake argo:repo:load
 
 If you run into errors related to the version of bundler when building the `web` container, that likely means you need to pull a newer copy of the base Ruby image specified in `Dockerfile`, e.g., `docker pull ruby:{MAJOR}.{MINOR}-stretch`.
 
+Also, if you run into webpacker related issues, you may need to manually install yarn and compile webpacker in your Docker container (or local laptop if you running that way):
+
+```
+docker-compose run --rm web yarn
+docker-compose run --rm web bundle exec rake webpacker:compile
+```
+
 ## Load and index records
 
 ```
 docker-compose run --rm web rake argo:repo:load
 ```
+
 
 ## Common tasks
 
