@@ -24,6 +24,7 @@
                       ['Prepare objects', 'PrepareJob'],
                       ['Close versions', 'CloseVersionJob'],
                       ['Checksum report', 'ChecksumReportJob'],
+                      ['Download search report view', 'DownloadReportJob'],
                       ['Create virtual object(s)', 'CreateVirtualObjectsJob']],
                      {},
                      class: 'form-control',
@@ -80,6 +81,13 @@
           <span class='help-block'>
             Download checksums of files in objects (as csv).
           </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='DownloadReportJob'>
+          <span class='help-block'>
+            Download data from search results (as csv).
+          </span>
+          <%= render 'bulk_actions/forms/download_report_form', f: f %>
         </div>
 
         <div role='tabpanel' class='tab-pane' id='CreateVirtualObjectsJob'>

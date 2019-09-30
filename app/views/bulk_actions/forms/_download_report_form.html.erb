@@ -1,0 +1,9 @@
+<span class='help-block'>
+  Previous search query: <%= @last_search.query_params %>
+</span>
+<div class='form-group' id="column_selector">
+  <p>Select columns to download:</p>
+    <% Report.blacklight_config.report_fields.each do |field| %>
+      <%= check_box_tag 'bulk_action_download_report_form_selected_columns', field[:field], field[:default] %> <%= field[:label] %> <br>
+    <% end %>
+</div>

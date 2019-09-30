@@ -14,6 +14,7 @@ class BulkAction < ApplicationRecord
                      PrepareJob
                      CloseVersionJob
                      ChecksumReportJob
+                     DownloadReportJob
                      CreateVirtualObjectsJob)
             }
 

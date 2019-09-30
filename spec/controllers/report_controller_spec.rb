@@ -79,7 +79,7 @@ RSpec.describe ReportController, type: :controller do
     it 'downloads valid CSV data' do
       get :download, params: { fields: ' ' }
       expect(response).to have_http_status(:ok)
-      expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
+      expect(response.header['Content-Disposition']).to eq("attachment; filename=#{Settings.download_report_job.csv_filename}")
       data = CSV.parse(response.body)
       expect(data.first.length).to eq(25)
       expect(data.length > 1).to be_truthy

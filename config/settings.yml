@@ -19,6 +19,9 @@ bulk_metadata:
 checksum_report_job:
   csv_filename: 'checksum_report.csv'
 
+download_report_job:
+  csv_filename: 'report.csv'
+
 # Newrelic
 newrelic:
   enabled: false

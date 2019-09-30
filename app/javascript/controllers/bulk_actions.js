@@ -17,8 +17,8 @@ export default class extends Controller {
   // Toggles visibility of common fields based on selected tab
   toggleCommonFieldVisibility(selectedTab) {
     const commonFields = this.element.querySelector('#common_fields')
-
-    if (selectedTab == 'CreateVirtualObjectsJob') {
+    var common_fields_hidden_jobs = [ 'CreateVirtualObjectsJob', 'DownloadReportJob' ]
+    if (common_fields_hidden_jobs.includes(selectedTab)) {
       commonFields.classList.add('hidden')
     } else {
       commonFields.classList.remove('hidden')
