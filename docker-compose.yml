@@ -5,7 +5,7 @@ services:
     build: .
     volumes:
       - ./:/app
-      - node_modules:/usr/src/app/node_modules
+      - node_modules:/app/node_modules
     working_dir: /app
     command: puma
     ports:
