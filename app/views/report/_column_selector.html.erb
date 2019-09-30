@@ -1,6 +1,6 @@
 <div class="hidden" id="column_selector">
   <p>Select columns to download:</p>
-  <% Report.blacklight_config.column_model.each do |field| %>
-    <%= check_box_tag 'selected_columns', field['name'], !field['hidden'] %> <%= field['label'] %> <br>
+  <% Report.blacklight_config.report_fields.each do |field| %>
+    <%= check_box_tag 'selected_columns', field[:field], field[:download_default] %> <%= field[:label] %> <br>
   <% end %>
 </div>
