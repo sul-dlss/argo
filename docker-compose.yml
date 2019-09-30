@@ -11,6 +11,7 @@ services:
     ports:
       - 3000:3000
     environment:
+      NODE_ENV: development
       ROLES: sdr:administrator-role
       REMOTE_USER: blalbrit@stanford.edu
       RAILS_LOG_TO_STDOUT: 'true'
