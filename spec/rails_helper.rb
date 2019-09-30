@@ -9,6 +9,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
 require 'equivalent-xml/rspec_matchers'
+require 'action_view/component/test_helpers'
 require 'webmock/rspec'
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
