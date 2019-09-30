@@ -12,12 +12,13 @@ RUN apt-get update \
     nodejs apt-transport-https yarn \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Get bundler 2.0 for ruby 2.6.4
+RUN gem install bundler
+
+
 WORKDIR /app
 
 ADD Gemfile Gemfile.lock /app/
-
-# Get bundler 2.0 for ruby 2.6.4
-RUN gem install bundler
 
 RUN bundle install
 
