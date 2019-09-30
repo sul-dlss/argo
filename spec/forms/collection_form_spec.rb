@@ -39,6 +39,8 @@ RSpec.describe CollectionForm do
       )
       { pid: collection.pid }
     end
+    expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF')
+
     expect(collection).to receive(:update_index)
     expect(collection).to receive(:descMetadata).and_return(mock_desc_md_ds).exactly(4).times
 

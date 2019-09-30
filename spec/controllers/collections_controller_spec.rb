@@ -43,6 +43,7 @@ RSpec.describe CollectionsController do
         )
         { pid: collection.pid }
       end
+      expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF')
 
       post :create, params: { 'label' => ':auto',
                               'collection_catkey' => catkey,
@@ -70,6 +71,7 @@ RSpec.describe CollectionsController do
         )
         { pid: collection.pid }
       end
+      expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF')
       expect(collection).to receive(:descMetadata).and_return(mock_desc_md_ds).exactly(4).times
 
       post :create, params: { 'collection_title' => title,
@@ -92,6 +94,8 @@ RSpec.describe CollectionsController do
         )
         { pid: collection.pid }
       end
+      expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF')
+
       expect_any_instance_of(CollectionForm).to receive(:sync)
       expect(apo).to receive(:add_default_collection).with(collection.pid)
 

@@ -11,20 +11,18 @@ RSpec.describe ItemsController, type: :controller do
     allow(Dor).to receive(:find).with(@pid).and_return(@item)
     idmd = double()
     apo  = double()
-    wf   = instance_double(Dor::WorkflowDs)
     idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = instance_double(Nokogiri::XML::Document, to_xml: idmd_ds_content)
     allow(idmd).to receive(:"content_will_change!")
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
     allow(apo).to receive(:pid).and_return('druid:apo')
-    allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
     allow(@item).to receive_messages(to_solr: nil, save: nil, delete: nil,
                                      identityMetadata: idmd,
                                      datastreams: { 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new },
                                      admin_policy_object: apo,
-                                     workflows: wf,
                                      current_version: '3')
+    expect(@item).not_to receive(:workflows)
     allow(ActiveFedora.solr.conn).to receive(:add)
     allow(Dor::StateService).to receive(:new).and_return(state_service)
   end
@@ -560,23 +558,6 @@ RSpec.describe ItemsController, type: :controller do
           end
         end
       end
-    end
-  end
-
-  describe '#create_obj_and_apo' do
-    it 'loads an APO object so that it has the appropriate model type (according to the solr doc)' do
-      expect(Dor).to receive(:find).with('druid:zt570tx3016').and_call_original # override the earlier Dor.find expectation
-      allow(Dor).to receive(:find).with('druid:hv992ry2431') # create_obj_and_apo will try to lookup the APO's APO
-      subject.send(:create_obj_and_apo, 'druid:zt570tx3016')
-      expect(subject.instance_variable_get(:@object).to_solr).to include('active_fedora_model_ssi' => 'Dor::AdminPolicyObject',
-                                                                         'has_model_ssim' => 'info:fedora/afmodel:Dor_AdminPolicyObject')
-    end
-    it 'loads an Item object so that it has the appropriate model type (according to the solr doc)' do
-      expect(Dor).to receive(:find).with('druid:hj185vb7593').and_call_original # override the earlier Dor.find expectation
-      allow(Dor).to receive(:find).with('druid:ww057vk7675') # create_obj_and_apo will try to lookup the Item's APO
-      subject.send(:create_obj_and_apo, 'druid:hj185vb7593')
-      expect(subject.instance_variable_get(:@object).to_solr).to include('active_fedora_model_ssi' => 'Dor::Item',
-                                                                         'has_model_ssim' => 'info:fedora/afmodel:Dor_Item')
     end
   end
 

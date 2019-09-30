@@ -60,6 +60,11 @@ if ['test', 'development'].include? Rails.env
         errors = []
         i = 0
 
+        require 'webmock'
+        # only allow connections to Fcrepo and Solr
+        WebMock.disable_net_connect!(allow: ['localhost:8983', 'localhost:8984'])
+        include WebMock::API
+        WebMock.enable!
         file_list.each do |file|
           i += 1
 
@@ -68,11 +73,17 @@ if ['test', 'development'].include? Rails.env
             errors << file
           end
           pid = "druid:#{File.basename(file, '.xml')}"
-          with_retries(max_tries: 3, handler: handler, rescue: [StandardError]) { |attempt|
+          stub_request(:get, "http://localhost:3001/dor/objects/#{pid}/lifecycle")
+            .to_return(status: 200, body: '')
+          stub_request(:get, "http://localhost:3001/objects/#{pid}/workflows")
+            .to_return(status: 200, body: '')
+
+          with_retries(max_tries: 3, handler: handler, rescue: [StandardError]) do |attempt|
             puts "** File #{i}, Try #{attempt} ** file: #{file}"
+
             ActiveFedora::FixtureLoader.import_to_fedora(file, pid)
             ActiveFedora::FixtureLoader.index(pid)
-          }
+          end
         end
         puts 'Done loading repo files'
         puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0

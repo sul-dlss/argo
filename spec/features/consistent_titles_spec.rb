@@ -13,8 +13,15 @@ RSpec.describe 'Consistent titles' do
     visit search_catalog_path f: { objectType_ssim: ['item'] }
     expect(page).to have_css '.index_title', text: '1. ' + title
   end
-  it 'catalog show view' do
-    visit solr_document_path 'druid:hj185vb7593'
-    expect(page).to have_css 'h1', text: title
+
+  describe 'catalog show view' do
+    before do
+      allow(Dor::Config.workflow.client).to receive_messages(lifecycle: [], active_lifecycle: [])
+    end
+
+    it 'displays the title' do
+      visit solr_document_path 'druid:hj185vb7593'
+      expect(page).to have_css 'h1', text: title
+    end
   end
 end

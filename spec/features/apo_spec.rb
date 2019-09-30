@@ -2,10 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'apo', type: :request, js: true do
+RSpec.describe 'apo', js: true do
   let(:user) { create(:user) }
   let(:new_apo_druid) { 'druid:zy987wv6543' }
   let(:new_collection_druid) { 'druid:zy333wv6543' }
+  let(:apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
+  let(:collection) { Dor::Collection.new(pid: new_collection_druid, label: 'New Testing Collection') }
 
   after do
     Dor::AdminPolicyObject.find(new_apo_druid).destroy # clean up after ourselves
@@ -13,6 +15,19 @@ RSpec.describe 'apo', type: :request, js: true do
   end
 
   before do
+    allow(Dor::Config.workflow.client).to receive_messages(workflow_templates: ['accessionWF'],
+                                                           create_workflow_by_name: true,
+                                                           lifecycle: [],
+                                                           active_lifecycle: [],
+                                                           milestones: [],
+                                                           all_workflows_xml: '')
+    allow(Dor::Services::Client.objects).to receive(:register)
+      .and_return({ pid: new_apo_druid }, pid: new_collection_druid)
+    # Stubbing this out, because it's the dor-services-app that would have actually created it.
+    allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
+    allow(Dor).to receive(:find).with(new_collection_druid).and_return(collection)
+    allow(Dor).to receive(:find).with('druid:dd327qr3670', cast: true).and_call_original # The agreement
+
     # Use `#and_wrap_original to inject pre-determined PIDs into the
     # dor-services client params. We do this so the destroys above in the
     # `after` block can effectively clean up after the APO integration tests.
@@ -44,6 +59,7 @@ RSpec.describe 'apo', type: :request, js: true do
 
     choose 'Create a Collection'
     fill_in 'Collection Title', with: 'New Testing Collection'
+
     click_button 'Register APO'
     expect(page).to have_text 'created'
 

@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Item view', js: true do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
+    allow(Dor::Config.workflow.client).to receive_messages(active_lifecycle: [], lifecycle: [])
+    allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
   end
 
   context 'when the file is not on the workspace' do
