@@ -32,6 +32,7 @@ RSpec.describe 'Search results' do
       end
     end
   end
+
   it 'contains appropriate metadata fields' do
     visit search_catalog_path f: { objectType_ssim: ['item'] }
     within('.document', match: :first) do
@@ -58,6 +59,7 @@ RSpec.describe 'Search results' do
     expect(page).to have_css 'dd a', text: 'druid:pb873ty1662'
     expect(page).to have_css 'dd a', text: 'State Banking Commission Annual Reports'
   end
+
   it 'contains document image thumbnail' do
     visit search_catalog_path f: { objectType_ssim: ['item'] }
     expect(page).to have_css '.document-thumbnail a img'

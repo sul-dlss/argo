@@ -21,7 +21,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # Start everything except app
-  - docker-compose up -d db solr fcrepo dor-services-app suri workflow
+  - docker-compose up -d db solr fcrepo dor-services-app suri
   - docker-compose ps
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
 

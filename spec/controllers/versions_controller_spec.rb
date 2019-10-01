@@ -91,26 +91,4 @@ RSpec.describe VersionsController, type: :controller do
       end
     end
   end
-
-  describe '#create_obj' do
-    it 'loads an APO object so that it has the appropriate model type (according to the solr doc)' do
-      controller.params[:item_id] = 'druid:zt570tx3016'
-
-      expect(Dor).to receive(:find).with('druid:zt570tx3016').and_call_original # override the earlier Dor.find expectation
-      allow(Dor).to receive(:find).with('druid:hv992ry2431') # create_obj_and_apo will try to lookup the APO's APO
-      subject.send(:create_obj)
-      expect(subject.instance_variable_get(:@object).to_solr).to include('active_fedora_model_ssi' => 'Dor::AdminPolicyObject',
-                                                                         'has_model_ssim' => 'info:fedora/afmodel:Dor_AdminPolicyObject')
-    end
-
-    it 'loads an Item object so that it has the appropriate model type (according to the solr doc)' do
-      controller.params[:item_id] = 'druid:hj185vb7593'
-
-      expect(Dor).to receive(:find).with('druid:hj185vb7593').and_call_original # override the earlier Dor.find expectation
-      allow(Dor).to receive(:find).with('druid:ww057vk7675') # create_obj_and_apo will try to lookup the Item's APO
-      subject.send(:create_obj)
-      expect(subject.instance_variable_get(:@object).to_solr).to include('active_fedora_model_ssi' => 'Dor::Item',
-                                                                         'has_model_ssim' => 'info:fedora/afmodel:Dor_Item')
-    end
-  end
 end

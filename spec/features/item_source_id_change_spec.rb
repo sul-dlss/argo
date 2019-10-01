@@ -23,6 +23,11 @@ RSpec.describe 'Item source id change' do
   describe 'when modification is allowed' do
     let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
 
+    before do
+      # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
+      allow(Dor::Config.workflow.client).to receive_messages(milestones: [], all_workflows_xml: '')
+    end
+
     it 'changes the source id' do
       visit source_id_ui_item_path 'druid:kv840rx2720'
       fill_in 'new_id', with: 'sulair:newSource'

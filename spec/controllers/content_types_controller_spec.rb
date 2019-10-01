@@ -22,14 +22,17 @@ RSpec.describe ContentTypesController, type: :controller do
   describe '#update' do
     before do
       allow(controller).to receive(:current_ability).and_return(ability)
+      allow(Dor::StateService).to receive(:new).and_return(state_service)
     end
+
+    let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
 
     context 'with access' do
       let(:ability) { instance_double(Ability, authorize!: true) }
 
       it 'is successful' do
         expect(item.contentMetadata).to receive(:set_content_type)
-        expect(item).to receive(:save)
+        expect(item).to receive_messages(save: nil, to_solr: {})
         expect(ActiveFedora.solr.conn).to receive(:add)
         patch :update, params: { item_id: pid, new_content_type: 'media' }
         expect(response).to redirect_to solr_document_path(pid)

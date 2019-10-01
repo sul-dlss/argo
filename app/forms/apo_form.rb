@@ -35,6 +35,7 @@ class ApoForm < BaseForm
     model.mods_title           = params[:title]
     model.desc_metadata_format = params[:desc_md]
     model.metadata_source      = params[:metadata_source]
+
     model.agreement            = params[:agreement]
     model.default_workflow     = params[:workflow]
     model.default_rights       = params[:default_object_rights]

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'mods_view', type: :request do
+RSpec.describe 'mods_view' do
   let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::Item) }
   let(:current_user) { create(:user) }
 
@@ -17,7 +17,7 @@ RSpec.describe 'mods_view', type: :request do
       expect(page).to have_content('Limit your search')
     end
 
-    it 'has the expected search facets', js: true do
+    it 'has the expected search facets' do
       search_facets = ['Object Type', 'Content Type', 'Admin Policy']
       visit root_path
       search_facets.each do |facet|
@@ -63,6 +63,10 @@ RSpec.describe 'mods_view', type: :request do
     end
 
     context 'add workflow' do
+      before do
+        allow(Dor::Config.workflow.client).to receive_messages(workflow_templates: [])
+      end
+
       it 'renders the add workflow ui' do
         visit new_item_workflow_path('druid:zt570tx3016')
         expect(page).to have_content('Add workflow')

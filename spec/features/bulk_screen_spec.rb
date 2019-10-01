@@ -8,6 +8,7 @@ RSpec.describe 'Bulk actions view', js: true do
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
+    allow(Dor::Config.workflow.client).to receive_messages(workflow_templates: [], lifecycle: [], active_lifecycle: [])
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
