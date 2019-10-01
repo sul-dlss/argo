@@ -13,6 +13,15 @@ RSpec.describe 'Report view' do
       expect(page).to have_css 'table#report_grid'
       expect(page).to have_content('hj185vb7593')
     end
+
+    it 'shows the column selector when clicked' do
+      visit report_path f: { objectType_ssim: ['item'] }
+      find('.ui-pg-button-text', text: 'Columns').click
+      expect(page).to have_css 'div#column_selector'
+      expect(page).to have_content('Select columns to download:')
+      expect(page).to have_selector('input[name="selected_columns"]', count: 25) # count the total
+      expect(page).to have_selector('input[name="selected_columns"]:checked', count: 5) # count the default
+    end
   end
 
   context 'bulk' do

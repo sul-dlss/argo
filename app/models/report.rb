@@ -23,124 +23,124 @@ class Report
       {
         field: :druid, label: 'Druid',
         proc: lambda { |doc| doc['id'].split(/:/).last },
-        sort: true, default: true, width: 100
+        sort: true, default: true, width: 100, download_default: true
       },
       {
         field: :purl, label: 'Purl',
         proc: lambda { |doc| File.join(Settings.purl_url, doc['id'].split(/:/).last) },
         solr_fields: %w(id),
-        sort: false, default: false, width: 100
+        sort: false, default: false, width: 100, download_default: true
       },
       {
         field: :title, label: 'Title',
         proc: lambda { |doc| retrieve_terms(doc)[:title] },
         solr_fields: %w(sw_display_title_tesim obj_label_ssim),
-        sort: false, default: false, width: 100
+        sort: false, default: false, width: 100, download_default: true
       },
       {
         field: :citation, label: 'Citation',
         proc: lambda { |doc| render_citation(doc) },
         solr_fields: %w(sw_author_tesim sw_display_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim originInfo_publisher_tesim),
-        sort: false, default: true, width: 100
+        sort: false, default: true, width: 100, download_default: false
       },
       {
         field: :source_id_ssim, label: 'Source Id',
-        sort: false, default: true, width: 100
+        sort: false, default: true, width: 100, download_default: true
       },
       {
         field: SolrDocument::FIELD_APO_ID, label: 'Admin Policy ID',
         proc: lambda { |doc| doc[SolrDocument::FIELD_APO_ID].first.split(/:/).last },
-        sort: false, default: false, width: 100
+        sort: false, default: false, width: 100, download_default: false
       },
       {
         field: SolrDocument::FIELD_APO_TITLE, label: 'Admin Policy',
-        sort: false, default: true, width: 100
+        sort: false, default: true, width: 100, download_default: false
       },
       {
         field: SolrDocument::FIELD_COLLECTION_ID, label: 'Collection ID',
         proc: lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| id.split(/:/).last } },
-        sort: false, default: false, width: 100
+        sort: false, default: false, width: 100, download_default: false
       },
       {
         field: SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection',
         proc: lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_TITLE].join(',') },
-        sort: false, default: false, width: 100
+        sort: false, default: false, width: 100, download_default: false
       },
       {
         field: :project_tag_ssim, label: 'Project',
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :registered_by_tag_ssim, label: 'Registered By',
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :registered_earliest_dttsi, label: 'Registered',
         proc: lambda { |doc| render_datetime(doc[:registered_earliest_dttsi]) },
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :tag_ssim, label: 'Tags',
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :objectType_ssim, label: 'Object Type',
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :content_type_ssim, label: 'Content Type',
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: SolrDocument::FIELD_CATKEY_ID, label: 'Catkey',
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :barcode_id_ssim, label: 'Barcode',
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :status_ssi, label: 'Status',
-        sort: false, default: true, width: 100
+        sort: false, default: true, width: 100, download_default: true
       },
       {
         field: :accessioned_dttsim, label: 'Accession. Datetime',
         proc: lambda { |doc| render_datetime(doc[:accessioned_dttsim]) },
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :published_dttsim, label: 'Pub. Date',
         proc: lambda { |doc| render_datetime(doc[:published_dttsim]) },
-        sort: true, default: true, width: 100
+        sort: true, default: true, width: 100, download_default: false
       },
       {
         field: :workflow_status_ssim, label: 'Errors',
         proc: lambda { |doc| doc[:workflow_status_ssim].first.split('|')[2] },
-        sort: true, default: false, width: 100
+        sort: true, default: false, width: 100, download_default: false
       },
       {
         field: :file_count, label: 'Files',
         proc: lambda { |doc| doc[:content_file_count_itsi] },
         solr_fields: %w(content_file_count_itsi),
-        sort: false, default: true, width: 50
+        sort: false, default: true, width: 50, download_default: false
       },
       {
         field: :shelved_file_count, label: 'Shelved Files',
         proc: lambda { |doc| doc[:shelved_content_file_count_itsi] },
         solr_fields: %w(shelved_content_file_count_itsi),
-        sort: false, default: true, width: 50
+        sort: false, default: true, width: 50, download_default: false
       },
       {
         field: :resource_count, label: 'Resources',
         proc: lambda { |doc| doc[:resource_count_itsi] },
         solr_fields: %w(resource_count_itsi),
-        sort: false, default: true, width: 50
+        sort: false, default: true, width: 50, download_default: false
       },
       {
         field: :preserved_size, label: 'Preservation Size',
         proc: lambda { |doc| doc.preservation_size },
         solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
-        sort: false, default: true, width: 50
+        sort: false, default: true, width: 50, download_default: false
       }
     ]
 
