@@ -1,4 +1,5 @@
 import { Controller } from 'stimulus'
+const common_fields_hidden_jobs = [ 'CreateVirtualObjectsJob', 'DownloadReportJob' ]
 
 export default class extends Controller {
   // Shows the correct data tab based on the selected value of the dropdown
@@ -17,7 +18,6 @@ export default class extends Controller {
   // Toggles visibility of common fields based on selected tab
   toggleCommonFieldVisibility(selectedTab) {
     const commonFields = this.element.querySelector('#common_fields')
-    var common_fields_hidden_jobs = [ 'CreateVirtualObjectsJob', 'DownloadReportJob' ]
     if (common_fields_hidden_jobs.includes(selectedTab)) {
       commonFields.classList.add('hidden')
     } else {
