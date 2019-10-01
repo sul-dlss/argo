@@ -52,7 +52,7 @@ $(document).ready(function() {
     caption: "Columns",
     title: "Choose Columns",
     buttonicon: 'ui-icon-script',
-    onClickButton() { $('#column_selector').toggleClass('hidden'); }
+    onClickButton() { document.getElementById('column_selector').classList.toggle('hidden'); }
   }
   );
 
@@ -61,8 +61,8 @@ $(document).ready(function() {
     title: "Download as CSV",
     buttonicon: 'ui-icon-disk',
     onClickButton() {
-      var selected_columns = Array.from(document.querySelectorAll("input[name='selected_columns']:checked"));
-      var field_list = selected_columns.map(col => col.value).join(',');
+      const selected_columns = Array.from(document.querySelectorAll("input[name='selected_columns']:checked"));
+      const field_list = selected_columns.map(col => col.value).join(',');
       return $("body").append(`<iframe src='${report_model.download_url}&fields=${field_list}' style='display: none;' ></iframe>`);
     }
   }
