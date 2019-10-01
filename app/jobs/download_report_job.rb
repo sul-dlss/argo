@@ -38,7 +38,7 @@ class DownloadReportJob < GenericJob
   # produce the report given the search results
   def download_report(params)
     log.puts("#{Time.current} Running report with #{params}")
-    results=[]
+    results = []
     bulk_action.update(druid_count_total: results.size)
     bulk_action.update(druid_count_success: results.size) # this whole job is run in one call, so it either all succeeds or fails
     results
