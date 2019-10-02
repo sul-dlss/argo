@@ -2,6 +2,8 @@
 
 class BulkActionsController < ApplicationController
   before_action :set_bulk_action, only: [:destroy, :file]
+  include Blacklight::Catalog
+  copy_blacklight_config_from CatalogController
 
   rescue_from ActiveRecord::RecordNotFound, with: -> { render plain: 'Record Not Found', status: :not_found }
 
@@ -27,8 +29,7 @@ class BulkActionsController < ApplicationController
 
     # BulkActionPersister is responsible for enqueuing the job
     if BulkActionPersister.persist(@bulk_action)
-      flash[:notice] = 'Bulk action was successfully created.'
-      redirect_to action: :index
+      redirect_to action: :index, notice: 'Bulk action was successfully created.'
     else
       render :new
     end
@@ -62,7 +63,8 @@ class BulkActionsController < ApplicationController
       set_governing_apo: [:new_apo_id],
       manage_catkeys: [:catkeys],
       prepare: [:significance, :description],
-      create_virtual_objects: [:csv_file]
+      create_virtual_objects: [:csv_file],
+      download_report: [:search_params, selected_columns: []]
     )
   end
 

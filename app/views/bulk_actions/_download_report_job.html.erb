@@ -1,0 +1,3 @@
+<% if bulk_action.present? && bulk_action.status == 'Completed' %>
+  <%= link_to('Download Report', file_bulk_action_path(bulk_action.id, filename: Settings.download_report_job.csv_filename, mime_type: 'text/csv')) %>
+<% end %>

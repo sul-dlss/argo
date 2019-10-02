@@ -24,7 +24,7 @@
                       ['Prepare objects', 'PrepareJob'],
                       ['Close versions', 'CloseVersionJob'],
                       ['Checksum report', 'ChecksumReportJob'],
-                      ['Download search report view', 'DownloadReportJob'],
+                      ['Download search results as CSV', 'DownloadReportJob'],
                       ['Create virtual object(s)', 'CreateVirtualObjectsJob']],
                      {},
                      class: 'form-control',
@@ -105,8 +105,7 @@
       </a>
       <div class='form-group'>
         <label>Druids to perform bulk action on</label>
-        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'>
-        </textarea>
+        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'></textarea>
       </div>
     </div>
 

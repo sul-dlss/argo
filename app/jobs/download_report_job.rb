@@ -5,13 +5,15 @@
 class DownloadReportJob < GenericJob
   queue_as :default
 
+  attr_accessor :report
+
   ##
-  # A job that, given a search params, runs a download report for the selected columns and returns a CSV file to the user
+  # A job that, given search params and columns, runs a download report and saves a CSV file for the user
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array]  :groups the groups the user belonged to when the started the job. Required for because groups are not persisted with the user.
+  # @option params [Array]  :the search params and fields requested for the report
   # @option params [Array]  :user the user
-  # @option params [String] :output_directory the output directory to write the CSV checksum report to
+  # @option params [String] :output_directory the output directory to write the CSV download report to
   def perform(bulk_action_id, params)
     super
     report_filename = generate_report_filename(params[:output_directory])
@@ -19,8 +21,15 @@ class DownloadReportJob < GenericJob
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       begin
-        csv_report = download_report(params)
-        File.open(report_filename, 'w') { |file| file.write(csv_report) }
+        search_params = JSON.parse(params[:download_report][:search_params]).with_indifferent_access # reconstruct hash from the json string representation
+        fields = params[:download_report][:selected_columns]
+        log.puts("#{Time.current} Running report with #{search_params} for fields #{fields}")
+        user = bulk_action.user
+        user.set_groups_to_impersonate(@groups)
+        @report = Report.new(search_params, fields, current_user: user)
+        bulk_action.update(druid_count_total: @report.num_found)
+        File.open(report_filename, 'w') { |file| file.write(@report.to_csv) }
+        bulk_action.update(druid_count_success: @report.num_found) # this whole job is run in one call, so it either all succeeds or fails
       rescue StandardError => e
         bulk_action.update(druid_count_fail: 1)
         message = "#{Time.current} DownloadReportJob creation failed #{e.class} #{e.message}"
@@ -34,15 +43,6 @@ class DownloadReportJob < GenericJob
   end
 
   private
-
-  # produce the report given the search results
-  def download_report(params)
-    log.puts("#{Time.current} Running report with #{params}")
-    results = []
-    bulk_action.update(druid_count_total: results.size)
-    bulk_action.update(druid_count_success: results.size) # this whole job is run in one call, so it either all succeeds or fails
-    results
-  end
 
   ##
   # Generate a filename for the job's csv report output file.

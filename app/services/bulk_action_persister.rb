@@ -22,7 +22,7 @@ class BulkActionPersister
 
   attr_reader :bulk_action
   delegate :id, :file, :pids, :output_directory, :manage_release, :set_governing_apo,
-           :manage_catkeys, :groups, :prepare, :create_virtual_objects, to: :bulk_action
+           :manage_catkeys, :groups, :prepare, :create_virtual_objects, :download_report, to: :bulk_action
 
   def create_log_file
     log_filename = file(Settings.bulk_metadata.log)
@@ -56,6 +56,7 @@ class BulkActionPersister
       manage_catkeys: manage_catkeys,
       prepare: prepare,
       create_virtual_objects: virtual_objects_csv_from_file(create_virtual_objects),
+      download_report: download_report,
       groups: groups
     }
   end
