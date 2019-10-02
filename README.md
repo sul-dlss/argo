@@ -58,6 +58,23 @@ docker-compose build web
 docker-compose run --rm web rake argo:repo:load
 ```
 
+## Debugging
+
+It can be useful when debugging to see the local rails server output in realtime and pause with 'byebug'.  You can do
+this while running in the app in the web container.  First stop any existing web container (if running already):
+
+```
+docker-compose stop web
+```
+
+Then start it in a mode that is interactive:
+
+```
+docker-compose run --service-ports web
+```
+
+This will allow you to view rails output in real-time.  You can also add 'byebug' inline in your code to pause for inspection on the console.
+
 ### Note
 
 If you run into errors related to the version of bundler when building the `web` container, that likely means you need to pull a newer copy of the base Ruby image specified in `Dockerfile`, e.g., `docker pull ruby:{MAJOR}.{MINOR}-stretch`.
