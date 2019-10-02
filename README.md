@@ -51,6 +51,14 @@ If you want to run background jobs, which are necessary for spreadsheet bulk upl
 docker-compose run web bin/delayed_job start
 ```
 
+Alternatively, you can also just immediately run any new jobs with interactive output visible
+(and then quit the job worker).  This is useful for debugging and can also be used with "byebug"
+to stop execution in the middle of an activejob for inspection:
+
+```
+docker-compose run web rake jobs:workoff
+```
+
 Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container and reload the data:
 
 ```
