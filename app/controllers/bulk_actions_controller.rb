@@ -27,7 +27,8 @@ class BulkActionsController < ApplicationController
 
     # BulkActionPersister is responsible for enqueuing the job
     if BulkActionPersister.persist(@bulk_action)
-      redirect_to action: :index, notice: 'Bulk action was successfully created.'
+      flash[:notice] = 'Bulk action was successfully created.'
+      redirect_to action: :index
     else
       render :new
     end
