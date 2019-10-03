@@ -144,6 +144,8 @@ class Report
       }
     ]
 
+    config.search_builder_class = ReportSearchBuilder # leave off faceting for report queries
+
     config.default_solr_params[:rows] = 100
     config.default_solr_params[:fl] = config.report_fields.collect { |f| f[:solr_fields] || f[:field] }.flatten.uniq.join(',')
 
