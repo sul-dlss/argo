@@ -33,7 +33,7 @@ class GenericJob < ActiveJob::Base
   def perform(_bulk_action_id, params)
     @groups = params[:groups]
     @pids = params[:pids]
-    @current_user = params[:user]
+    @current_user = bulk_action.user
   end
 
   def bulk_action

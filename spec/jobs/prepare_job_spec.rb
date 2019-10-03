@@ -5,12 +5,12 @@ require 'rails_helper'
 RSpec.describe PrepareJob, type: :job do
   let(:pids) { ['druid:123', 'druid:456'] }
   let(:groups) { [] }
-  let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:workflow_status) { instance_double(DorObjectWorkflowStatus, can_open_version?: true) }
   let(:bulk_action) do
     create(:bulk_action,
            log_name: 'foo.txt')
   end
+  let(:user) { bulk_action.user }
   let(:item1) { Dor::Item.new }
   let(:item2) { Dor::Item.new }
 
@@ -41,7 +41,7 @@ RSpec.describe PrepareJob, type: :job do
 
       expect(VersionService).to have_received(:open).with(identifier: anything,
                                                           description: 'Changed dates',
-                                                          opening_user_name: 'jcoyne85',
+                                                          opening_user_name: user.to_s,
                                                           significance: 'major').twice
     end
   end
