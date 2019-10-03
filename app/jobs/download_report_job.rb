@@ -24,9 +24,8 @@ class DownloadReportJob < GenericJob
         search_params = JSON.parse(params[:download_report][:search_params]).with_indifferent_access # reconstruct hash from the json string representation
         fields = params[:download_report][:selected_columns]
         log.puts("#{Time.current} Running report with #{search_params} for fields #{fields}")
-        user = bulk_action.user
-        user.set_groups_to_impersonate(@groups)
-        @report = Report.new(search_params, fields, current_user: user)
+        @current_user.set_groups_to_impersonate(@groups)
+        @report = Report.new(search_params, fields, current_user: @current_user)
         bulk_action.update(druid_count_total: @report.num_found)
         File.open(report_filename, 'w') { |file| file.write(@report.to_csv) }
         bulk_action.update(druid_count_success: @report.num_found) # this whole job is run in one call, so it either all succeeds or fails
