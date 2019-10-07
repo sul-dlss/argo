@@ -77,7 +77,7 @@ class ModsulatorClient
   rescue Errno::EACCES => e
     delayed_log_url(e, url)
     log.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
-  rescue Faraday::ServerError => e
+  rescue Faraday::ClientError => e
     delayed_log_url(e, url)
     log.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
   rescue StandardError => e
