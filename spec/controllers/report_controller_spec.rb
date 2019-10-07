@@ -33,6 +33,13 @@ RSpec.describe ReportController, type: :controller do
       data = JSON.parse(response.body)
       expect(data['rows'].length).to eq(10)
     end
+    it 'returns data for custom date searches (i.e. with user custom entered dates)' do
+      params = { f: { modified_latest_dttsi: ['[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]'] }, format: :json, rows: 5 }
+      get :data, params: params
+      expect(response).to have_http_status(:ok)
+      data = JSON.parse(response.body)
+      expect(data['rows'].length).to eq(5)
+    end
   end
 
   describe '#pids' do
