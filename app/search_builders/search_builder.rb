@@ -14,8 +14,8 @@ class SearchBuilder < Blacklight::SearchBuilder
     :add_profile_queries
   ]
 
-  # customize facet paging behavior to allow a separately configurable limit for
-  # the full list of facets
+  # Override blacklight in order to customize facet paging behavior.
+  # This allows a separately configurable limit for the full list of facets
   def add_facet_paging_to_solr(solr_params)
     return unless facet.present?
 
