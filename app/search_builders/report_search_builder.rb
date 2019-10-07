@@ -8,5 +8,8 @@ class ReportSearchBuilder < Blacklight::SearchBuilder
 
   self.default_processor_chain -= [:add_facetting_to_solr] # remove faceting from reports
 
-  self.default_processor_chain += [:add_date_field_queries] # ensure date field queries work
+  self.default_processor_chain += [
+    :add_access_controls_to_solr_params, # enforce restrictions
+    :add_date_field_queries # ensure date field queries work
+  ]
 end
