@@ -22,7 +22,7 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
 
   describe '#perform' do
     context 'with all problematic druids' do
-      let(:problematic_druids) { [['parent2'], ['parent1']] }
+      let(:problematic_druids) { [['druid:parent2'], ['druid:parent1']] }
 
       it 'short-circuits invoking the virtual objects creator service' do
         expect(VirtualObjectsCreator).not_to have_received(:create)
@@ -30,8 +30,8 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
 
       it 'logs informative messages' do
         expect(fake_log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
-        expect(fake_log).to have_received(:puts).with(/Could not create virtual objects because user lacks ability to manage the following parent druids: parent1/).once
-        expect(fake_log).to have_received(:puts).with(/Could not create virtual objects because the following parent druids were not found: parent2/).once
+        expect(fake_log).to have_received(:puts).with(/Could not create virtual objects because user lacks ability to manage the following parent druids: druid:parent1/).once
+        expect(fake_log).to have_received(:puts).with(/Could not create virtual objects because the following parent druids were not found: druid:parent2/).once
         expect(fake_log).to have_received(:puts).with(/No virtual objects could be created. See other log entries for more detail/).once
         expect(fake_log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
       end
@@ -44,20 +44,20 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
     end
 
     context 'with some problematic druids' do
-      let(:problematic_druids) { [[], ['parent1']] }
+      let(:problematic_druids) { [[], ['druid:parent1']] }
 
       it 'invokes the virtual objects creator service with an array of length 1' do
         expect(VirtualObjectsCreator).to have_received(:create).with(
           virtual_objects: [
-            { parent_id: 'parent2', child_ids: %w(three four five) }
+            { parent_id: 'druid:parent2', child_ids: %w(druid:three druid:four druid:five) }
           ]
         ).once
       end
 
       it 'logs informative messages' do
         expect(fake_log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
-        expect(fake_log).to have_received(:puts).with(/Could not create virtual objects because user lacks ability to manage the following parent druids: parent1/).once
-        expect(fake_log).to have_received(:puts).with(/Successfully created virtual objects: parent2/)
+        expect(fake_log).to have_received(:puts).with(/Could not create virtual objects because user lacks ability to manage the following parent druids: druid:parent1/).once
+        expect(fake_log).to have_received(:puts).with(/Successfully created virtual objects: druid:parent2/)
         expect(fake_log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
       end
 
@@ -74,15 +74,15 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
       it 'invokes the virtual objects creator service with an array of length 2' do
         expect(VirtualObjectsCreator).to have_received(:create).with(
           virtual_objects: [
-            { parent_id: 'parent1', child_ids: %w(one two) },
-            { parent_id: 'parent2', child_ids: %w(three four five) }
+            { parent_id: 'druid:parent1', child_ids: %w(druid:one druid:two) },
+            { parent_id: 'druid:parent2', child_ids: %w(druid:three druid:four druid:five) }
           ]
         ).once
       end
 
       it 'logs informative messages' do
         expect(fake_log).to have_received(:puts).with(/Starting CreateVirtualObjectsJob for BulkAction/).once
-        expect(fake_log).to have_received(:puts).with(/Successfully created virtual objects: parent1 and parent2/)
+        expect(fake_log).to have_received(:puts).with(/Successfully created virtual objects: druid:parent1 and druid:parent2/)
         expect(fake_log).to have_received(:puts).with(/Finished CreateVirtualObjectsJob for BulkAction/).once
       end
 

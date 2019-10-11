@@ -33,12 +33,12 @@ RSpec.describe VirtualObjectsCsvConverter do
       expect(subject.convert).to eq(
         [
           {
-            parent_id: 'parent1',
-            child_ids: %w(child1 child2)
+            parent_id: 'druid:parent1',
+            child_ids: %w(druid:child1 druid:child2)
           },
           {
-            parent_id: 'parent2',
-            child_ids: %w(child3 child4 child5)
+            parent_id: 'druid:parent2',
+            child_ids: %w(druid:child3 druid:child4 druid:child5)
           }
         ]
       )
@@ -51,12 +51,31 @@ RSpec.describe VirtualObjectsCsvConverter do
         expect(subject.convert).to eq(
           [
             {
-              parent_id: 'parent1',
-              child_ids: %w(child1 child2)
+              parent_id: 'druid:parent1',
+              child_ids: %w(druid:child1 druid:child2)
             },
             {
-              parent_id: 'parent2',
-              child_ids: %w(child3 child4 child5)
+              parent_id: 'druid:parent2',
+              child_ids: %w(druid:child3 druid:child4 druid:child5)
+            }
+          ]
+        )
+      end
+    end
+
+    context 'with rows containing a mix of prefixed and unprefixed druids' do
+      let(:csv) { "parent1,druid:child1,child2\ndruid:parent2,child3,child4,druid:child5" }
+
+      it 'drops blank values and works as expected' do
+        expect(subject.convert).to eq(
+          [
+            {
+              parent_id: 'druid:parent1',
+              child_ids: %w(druid:child1 druid:child2)
+            },
+            {
+              parent_id: 'druid:parent2',
+              child_ids: %w(druid:child3 druid:child4 druid:child5)
             }
           ]
         )
@@ -70,8 +89,8 @@ RSpec.describe VirtualObjectsCsvConverter do
         expect(subject.convert).to eq(
           [
             {
-              parent_id: 'parent1',
-              child_ids: %w(child1 child2)
+              parent_id: 'druid:parent1',
+              child_ids: %w(druid:child1 druid:child2)
             }
           ]
         )

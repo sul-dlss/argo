@@ -17,9 +17,10 @@ class VirtualObjectsCsvConverter
 
   # @return [Array] an array of virtual_object hashes suitable for passing off to dor-services-client
   def convert
-    # `.map(&:compact)` below makes sure CSVs with blanks can be processed successfully
-    CSV.parse(csv_string).map(&:compact).map do |row|
-      { parent_id: row.first, child_ids: row.drop(1) }
-    end
+    CSV
+      .parse(csv_string) # parses CSV string into an array of rows, each row an array of cell values
+      .map(&:compact) # makes sure CSVs with blanks can be processed successfully
+      .map { |row| row.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" } } # prepend "druid:" prefix if absent
+      .map { |row| { parent_id: row.first, child_ids: row.drop(1) } } # put in hash shape as required by dor-services-client
   end
 end
