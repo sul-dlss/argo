@@ -32,7 +32,7 @@ Note that `bundle install` may complain if MySQL isn't installed.  You can eithe
 ### Install components
 ## Run the servers
 
-```
+```bash
 docker-compose up -d
 ```
 
@@ -41,13 +41,13 @@ change the value of `ROLES` to `sdr:administrator-role`
 
 If you want to use the rails console use:
 
-```
+```bash
 docker-compose run --rm web rails console
 ```
 
 If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing to run:
 
-```
+```bash
 docker-compose run web bin/delayed_job start
 ```
 
@@ -55,15 +55,15 @@ Alternatively, you can also just immediately run any new jobs with interactive o
 (and then quit the job worker).  This is useful for debugging and can also be used with "byebug"
 to stop execution in the middle of an activejob for inspection:
 
-```
+```bash
 docker-compose run web rake jobs:workoff
 ```
 
 Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container and reload the data:
 
-```
+```bash
 docker-compose build web
-docker-compose run --rm web rake argo:repo:load
+docker-compose run --rm web rake argo:repo:load # services must already be up and running for this to work
 ```
 
 ## Debugging
@@ -71,13 +71,13 @@ docker-compose run --rm web rake argo:repo:load
 It can be useful when debugging to see the local rails server output in realtime and pause with 'byebug'.  You can do
 this while running in the app in the web container.  First stop any existing web container (if running already):
 
-```
+```bash
 docker-compose stop web
 ```
 
 Then start it in a mode that is interactive:
 
-```
+```bash
 docker-compose run --service-ports web
 ```
 
@@ -87,19 +87,18 @@ This will allow you to view rails output in real-time.  You can also add 'byebug
 
 If you run into errors related to the version of bundler when building the `web` container, that likely means you need to pull a newer copy of the base Ruby image specified in `Dockerfile`, e.g., `docker pull ruby:{MAJOR}.{MINOR}-stretch`.
 
-Also, if you run into webpacker related issues, you may need to manually install yarn and compile webpacker in your Docker container (or local laptop if you running that way):
+Also, if you run into webpacker related issues (e.g. [`Node Sass could not find a binding for your current environment`](https://github.com/sul-dlss/argo/pull/1678)), you may need to manually install yarn and compile webpacker from within your Docker container (or natively from your laptop, if that's how you're running the web service, instead of using Docker):
 
-```
+```bash
 docker-compose run --rm web yarn
 docker-compose run --rm web bundle exec rake webpacker:compile
 ```
 
 ## Load and index records
 
-```
+```bash
 docker-compose run --rm web rake argo:repo:load
 ```
-
 
 ## Common tasks
 
