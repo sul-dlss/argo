@@ -29,6 +29,7 @@ class VirtualObjectsCreator
     Honeybadger.notify("Argo virtual object job errors from #{background_result_url}: #{job_output[:errors].inspect}")
 
     job_output[:errors].map do |error|
+      Honeybadger.notify("Argo virtual object job errors from #{background_result_url}: #{job_output[:errors].inspect}") if error.nil?
       "Problem children for #{error.keys.first}: #{error.values.flatten.to_sentence}"
     end
   end
@@ -45,6 +46,8 @@ class VirtualObjectsCreator
         sleep(SECONDS_BETWEEN_REQUESTS)
         redo
       end
+
+      Honeybadger.notify("Argo received background job results from #{url}: #{results[:output].inspect}")
 
       break results[:output]
     end
