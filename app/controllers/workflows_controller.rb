@@ -35,7 +35,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:repo` The repo to which the workflow applies (optional).
   def update
     params.require [:process, :status, :repo]
-    return render status: :forbidden, plain: 'Unauthorized' if !can?(:update, :workflow) && !(params[:status] == 'waiting' && can?(:manage_item, @object))
+    return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], @object)
 
     # this will raise an exception if the item doesn't have that workflow step
     Dor::Config.workflow.client.workflow_status params[:repo], params[:item_id], params[:id], params[:process]
@@ -93,6 +93,13 @@ class WorkflowsController < ApplicationController
   end
 
   private
+
+  # Returns true if they have been granted permission to update all workflows or
+  # The status is currently "waiting" and they can manage that item
+  def can_update_workflow?(status, object)
+    can?(:update, :workflow) ||
+     (status == 'waiting' && can?(:manage_item, object))
+  end
 
   # Fetches the workflow from the workflow service and checks to see if it's active
   def workflow_active?(wf_name)
