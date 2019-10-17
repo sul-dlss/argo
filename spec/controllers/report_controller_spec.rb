@@ -4,66 +4,94 @@ require 'rails_helper'
 
 RSpec.describe ReportController, type: :controller do
   before do
-    # have to stub any instance, as the user is not the same instance as created here
-    # TODO: we should be stubbing the SearchBuilder instead
-    allow_any_instance_of(User).to receive(:is_admin?).and_return(true)
     sign_in user
   end
 
   let(:user) { create(:user) }
 
-  describe '#workflow_grid' do
-    it 'works' do
-      get :workflow_grid
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template('workflow_grid')
+  context 'as an admin' do
+    before do
+      allow(controller.current_user).to receive(:is_admin?).and_return(true)
     end
-  end
 
-  describe '#data' do
-    it 'returns json' do
-      get :data, params: { format: :json, rows: 5 }
-      expect(response).to have_http_status(:ok)
-      data = JSON.parse(response.body)
-      expect(data['rows'].length).to eq(5)
+    describe '#workflow_grid' do
+      it 'works' do
+        get :workflow_grid
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template('workflow_grid')
+      end
     end
-    it 'defaults to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in' do
-      get :data, params: { format: :json }
-      expect(response).to have_http_status(:ok)
-      data = JSON.parse(response.body)
-      expect(data['rows'].length).to eq(10)
-    end
-    it 'returns data for custom date searches (i.e. with user custom entered dates)' do
-      params = { f: { modified_latest_dttsi: ['[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]'] }, format: :json, rows: 5 }
-      get :data, params: params
-      expect(response).to have_http_status(:ok)
-      data = JSON.parse(response.body)
-      expect(data['rows'].length).to eq(5)
-    end
-  end
 
-  describe '#pids' do
-    it 'returns json' do
-      get :pids, params: { format: :json }
-      expect(response).to have_http_status(:ok)
-      pids = JSON.parse(response.body)['druids']
-      expect(pids).to be_a(Array)
-      expect(pids.length > 1).to be_truthy
-      expect(pids.first).to eq('br481xz7820')
+    describe '#data' do
+      it 'returns json' do
+        get :data, params: { format: :json, rows: 5 }
+        expect(response).to have_http_status(:ok)
+        data = JSON.parse(response.body)
+        expect(data['rows'].length).to eq(5)
+      end
+      it 'defaults to 10 rows per page, rather than defaulting to 0 and generating an exception when the number of pages is infinity when no row count is passed in' do
+        get :data, params: { format: :json }
+        expect(response).to have_http_status(:ok)
+        data = JSON.parse(response.body)
+        expect(data['rows'].length).to eq(10)
+      end
+      it 'returns data for custom date searches (i.e. with user custom entered dates)' do
+        params = { f: { modified_latest_dttsi: ['[2015-10-01T00:00:00.000Z TO 2050-10-07T23:59:59.000Z]'] }, format: :json, rows: 5 }
+        get :data, params: params
+        expect(response).to have_http_status(:ok)
+        data = JSON.parse(response.body)
+        expect(data['rows'].length).to eq(5)
+      end
     end
-  end
 
-  describe '#bulk' do
-    it 'renders the correct template' do
-      get :bulk
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template('bulk')
+    describe '#pids' do
+      it 'returns json' do
+        get :pids, params: { format: :json }
+        expect(response).to have_http_status(:ok)
+        pids = JSON.parse(response.body)['druids']
+        expect(pids).to be_a(Array)
+        expect(pids.length > 1).to be_truthy
+        expect(pids.first).to eq('br481xz7820')
+      end
+    end
+
+    describe '#bulk' do
+      it 'renders the correct template' do
+        get :bulk
+        expect(response).to have_http_status(:ok)
+        expect(response).to render_template('bulk')
+      end
+    end
+
+    describe 'download' do
+      it 'downloads valid CSV data' do
+        get :download, params: { fields: ' ' }
+        expect(response).to have_http_status(:ok)
+        expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
+        data = CSV.parse(response.body)
+        expect(data.first.length).to eq(25)
+        expect(data.length > 1).to be_truthy
+        expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
+      end
+      it 'downloads valid CSV data for specific fields' do
+        get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
+        expect(response).to have_http_status(:ok)
+        data = CSV.parse(response.body)
+        expect(data.first).to eq(%w(Druid Purl Source\ Id Tags))
+        expect(data.length > 1).to be_truthy
+        expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
+      end
     end
   end
 
   describe 'POST reset' do
     let(:workflow) { 'accessionWF' }
     let(:step) { 'descriptive-metadata' }
+    let(:obj) { instance_double Dor::Item }
+
+    before do
+      allow(Dor::Config.workflow.client).to receive(:update_status)
+    end
 
     it 'requires parameters' do
       expect { post :reset, xhr: true }.to raise_error(ActionController::ParameterMissing)
@@ -71,34 +99,59 @@ RSpec.describe ReportController, type: :controller do
       expect { post :reset, xhr: true, params: { reset_step: step } }.to raise_error(ActionController::ParameterMissing)
     end
 
-    it 'sets instance variables and calls update workflow service' do
-      expect(Dor::Config.workflow.client).to receive(:update_status)
-        .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
-      post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
-      expect(assigns(:workflow)).to eq workflow
-      expect(assigns(:step)).to eq step
-      expect(assigns(:ids)).to eq(%w(xb482bw3979))
-      expect(response).to have_http_status(:ok)
-    end
-  end
+    context 'as an admin' do
+      before do
+        allow(controller.current_user).to receive(:is_admin?).and_return(true)
+      end
 
-  describe 'download' do
-    it 'downloads valid CSV data' do
-      get :download, params: { fields: ' ' }
-      expect(response).to have_http_status(:ok)
-      expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
-      data = CSV.parse(response.body)
-      expect(data.first.length).to eq(25)
-      expect(data.length > 1).to be_truthy
-      expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
+      it 'sets instance variables and calls update workflow service' do
+        post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
+        expect(assigns(:workflow)).to eq workflow
+        expect(assigns(:step)).to eq step
+        expect(assigns(:ids)).to eq(%w(xb482bw3979))
+        expect(response).to have_http_status(:ok)
+        expect(Dor::Config.workflow.client).to have_received(:update_status)
+          .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
+      end
     end
-    it 'downloads valid CSV data for specific fields' do
-      get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
-      expect(response).to have_http_status(:ok)
-      data = CSV.parse(response.body)
-      expect(data.first).to eq(%w(Druid Purl Source\ Id Tags))
-      expect(data.length > 1).to be_truthy
-      expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
+
+    context 'a non admin who has access' do
+      before do
+        # We're just forcing the search builder to return some rows (even though this user wouldn't have access)
+        allow_any_instance_of(ReportSearchBuilder).to receive(:apply_gated_discovery)
+        allow(controller.current_ability).to receive(:can_update_workflow?).and_return(true)
+        allow(Dor).to receive(:find).with('druid:xb482bw3979').and_return(obj)
+      end
+
+      it 'sets instance variables and calls update workflow service' do
+        post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
+        expect(assigns(:workflow)).to eq workflow
+        expect(assigns(:step)).to eq step
+        expect(assigns(:ids)).to eq(%w(xb482bw3979))
+        expect(response).to have_http_status(:ok)
+        expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
+        expect(Dor::Config.workflow.client).to have_received(:update_status)
+          .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
+      end
+    end
+
+    context 'a non admin who has no access' do
+      before do
+        # We're just forcing the search builder to return some rows (even though this user wouldn't have access)
+        allow_any_instance_of(ReportSearchBuilder).to receive(:apply_gated_discovery)
+        allow(controller.current_ability).to receive(:can_update_workflow?).and_return(false)
+        allow(Dor).to receive(:find).with('druid:xb482bw3979').and_return(obj)
+      end
+
+      it 'does not call update workflow service' do
+        post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
+        expect(assigns(:workflow)).to eq workflow
+        expect(assigns(:step)).to eq step
+        expect(assigns(:ids)).to eq(%w(xb482bw3979))
+        expect(response).to have_http_status(:ok)
+        expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
+        expect(Dor::Config.workflow.client).not_to have_received(:update_status)
+      end
     end
   end
 

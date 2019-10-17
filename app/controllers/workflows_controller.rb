@@ -94,12 +94,7 @@ class WorkflowsController < ApplicationController
 
   private
 
-  # Returns true if they have been granted permission to update all workflows or
-  # The status is currently "waiting" and they can manage that item
-  def can_update_workflow?(status, object)
-    can?(:update, :workflow) ||
-     (status == 'waiting' && can?(:manage_item, object))
-  end
+  delegate :can_update_workflow?, to: :current_ability
 
   # Fetches the workflow from the workflow service and checks to see if it's active
   def workflow_active?(wf_name)
