@@ -13,13 +13,13 @@ RSpec.describe 'Collection manage release' do
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
-    allow(Dor::StateService).to receive(:new).and_return(state_service)
+    allow(StateService).to receive(:new).and_return(state_service)
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).and_return(obj)
   end
 
   let(:druid) { 'druid:pb873ty1662' }
-  let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
   it 'Has a manage release button' do
     visit solr_document_path(druid)

@@ -22,10 +22,10 @@ RSpec.describe ContentTypesController, type: :controller do
   describe '#update' do
     before do
       allow(controller).to receive(:current_ability).and_return(ability)
-      allow(Dor::StateService).to receive(:new).and_return(state_service)
+      allow(StateService).to receive(:new).and_return(state_service)
     end
 
-    let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     context 'with access' do
       let(:ability) { instance_double(Ability, authorize!: true) }

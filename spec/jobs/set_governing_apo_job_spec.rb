@@ -35,10 +35,10 @@ RSpec.describe SetGoverningApoJob do
 
     context 'in a happy world' do
       before do
-        allow(Dor::StateService).to receive(:new).and_return(state_service)
+        allow(StateService).to receive(:new).and_return(state_service)
       end
 
-      let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+      let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
       it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
         pids.each do |pid|
@@ -115,11 +115,11 @@ RSpec.describe SetGoverningApoJob do
     before do
       subject.instance_variable_set(:@new_apo_id, new_apo_id)
       subject.instance_variable_set(:@ability, ability)
-      allow(Dor::StateService).to receive(:new).and_return(state_service)
+      allow(StateService).to receive(:new).and_return(state_service)
     end
 
     context 'when modification is allowed' do
-      let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+      let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
       it "gets an object that the user can't manage" do
         allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(false)
@@ -133,7 +133,7 @@ RSpec.describe SetGoverningApoJob do
     end
 
     context 'when modification is not allowed' do
-      let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+      let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       it "gets an object that doesn't allow modification, that the user can manage" do
         allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(true)

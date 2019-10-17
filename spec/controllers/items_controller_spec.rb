@@ -24,11 +24,11 @@ RSpec.describe ItemsController, type: :controller do
                                      current_version: '3')
     expect(@item).not_to receive(:workflows)
     allow(ActiveFedora.solr.conn).to receive(:add)
-    allow(Dor::StateService).to receive(:new).and_return(state_service)
+    allow(StateService).to receive(:new).and_return(state_service)
   end
 
   let(:user) { create(:user) }
-  let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
   describe '#purl_preview' do
     before do
@@ -533,7 +533,7 @@ RSpec.describe ItemsController, type: :controller do
           end
 
           context "when the object doesn't allow modification" do
-            let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+            let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
             it 'returns a 403 with an error message' do
               get :refresh_metadata, params: { id: @pid }
@@ -565,7 +565,7 @@ RSpec.describe ItemsController, type: :controller do
     let(:new_apo_id) { 'druid:ab123cd4567' }
 
     context 'object modification not allowed, user authorized to manage governing APOs' do
-      let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+      let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       before do
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, @item, new_apo_id)
