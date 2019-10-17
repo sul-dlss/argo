@@ -5,11 +5,11 @@ require 'rails_helper'
 RSpec.describe 'Item source id change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor::StateService).to receive(:new).and_return(state_service)
+    allow(StateService).to receive(:new).and_return(state_service)
   end
 
   describe 'when modification is not allowed' do
-    let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+    let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     it 'cannot change the source id' do
       visit source_id_ui_item_path 'druid:kv840rx2720'
@@ -21,7 +21,7 @@ RSpec.describe 'Item source id change' do
   end
 
   describe 'when modification is allowed' do
-    let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     before do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.

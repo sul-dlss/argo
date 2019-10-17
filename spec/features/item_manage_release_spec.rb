@@ -15,10 +15,10 @@ RSpec.describe 'Item manage release' do
     )
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).and_return(obj)
-    allow(Dor::StateService).to receive(:new).and_return(state_service)
+    allow(StateService).to receive(:new).and_return(state_service)
   end
 
-  let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:druid) { 'druid:qq613vj0238' }
 
   it 'Has a manage release button' do

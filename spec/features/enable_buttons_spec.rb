@@ -14,11 +14,11 @@ RSpec.describe 'Enable buttons' do
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
-    allow(Dor::StateService).to receive(:new).and_return(state_service)
+    allow(StateService).to receive(:new).and_return(state_service)
     allow(Dor).to receive(:find).and_return(obj)
   end
 
-  let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
   it 'buttons are disabled by default that have check_url' do
     visit solr_document_path 'druid:hj185vb7593'

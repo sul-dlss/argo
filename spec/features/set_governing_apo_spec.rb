@@ -20,12 +20,12 @@ RSpec.describe 'Set governing APO' do
   before do
     allow(Dor).to receive(:find).with(obj.pid).and_return(obj)
     allow(Dor).to receive(:find).with(new_apo.pid).and_return(new_apo)
-    allow(Dor::StateService).to receive(:new).and_return(state_service)
+    allow(StateService).to receive(:new).and_return(state_service)
     sign_in create(:user), groups: groups
   end
 
   context 'when modification is not allowed' do
-    let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+    let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     it 'returns an error' do
       visit set_governing_apo_ui_item_path 'druid:kv840rx2720'
@@ -51,7 +51,7 @@ RSpec.describe 'Set governing APO' do
   end
 
   context 'when modification is allowed' do
-    let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+    let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     context 'when the user is not allowed to move the object to the new APO' do
       before do

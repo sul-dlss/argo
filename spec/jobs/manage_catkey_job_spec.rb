@@ -48,12 +48,12 @@ RSpec.describe ManageCatkeyJob do
 
     before do
       allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object)
-      allow(Dor::StateService).to receive(:new).and_return(state_service)
+      allow(StateService).to receive(:new).and_return(state_service)
       allow(subject.ability).to receive(:can?).and_return(true)
     end
 
     context 'when modification is not allowed' do
-      let(:state_service) { instance_double(Dor::StateService, allows_modification?: false) }
+      let(:state_service) { instance_double(StateService, allows_modification?: false) }
       let(:object_version) { double(Dor::Services::Client::ObjectVersion, openable?: false) }
 
       it 'updates catkey and versions objects' do
@@ -67,7 +67,7 @@ RSpec.describe ManageCatkeyJob do
     end
 
     context 'when modification is allowed' do
-      let(:state_service) { instance_double(Dor::StateService, allows_modification?: true) }
+      let(:state_service) { instance_double(StateService, allows_modification?: true) }
       let(:object_version) { double(Dor::Services::Client::ObjectVersion, openable?: true) }
 
       it 'updates catkey and does not version objects if not needed' do

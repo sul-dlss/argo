@@ -157,7 +157,7 @@ class ButtonsPresenter
   end
 
   def state_service
-    @state_service ||= Dor::StateService.new(pid, version: object.current_version)
+    @state_service ||= StateService.new(pid, version: object.current_version)
   end
 
   def registered_only?
