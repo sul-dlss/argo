@@ -62,16 +62,18 @@ class ReportController < CatalogController
   # an ajax call to reset workflow states for objects
   def reset
     head 501 unless request.xhr?
-    authorize! :update, :workflow
 
     params.require([:reset_workflow, :reset_step])
 
     @workflow = params[:reset_workflow]
     @step = params[:reset_step]
-    @ids  = Report.new(params, current_user: current_user).pids
+    @ids = Report.new(params, current_user: current_user).pids
     @ids.each do |pid|
+      druid = "druid:#{pid}"
+      next unless current_ability.can_update_workflow?('waiting', Dor.find(druid))
+
       Dor::Config.workflow.client.update_status(
-        druid: "druid:#{pid}",
+        druid: druid,
         workflow: @workflow,
         process: @step,
         status: 'waiting'

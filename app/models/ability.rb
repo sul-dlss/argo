@@ -81,6 +81,13 @@ class Ability
     end
   end
 
+  # Returns true if they have been granted permission to update all workflows or
+  # The status is currently "waiting" and they can manage that item
+  def can_update_workflow?(status, object)
+    can?(:update, :workflow) ||
+      (status == 'waiting' && can?(:manage_item, object))
+  end
+
   private
 
   GROUPS_WHICH_MANAGE_ITEMS = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
