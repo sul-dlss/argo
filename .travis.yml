@@ -20,8 +20,8 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  # Start everything except app
-  - docker-compose up -d db solr fcrepo dor-services-app suri
+  # Start Fedora, Solr, and Suri
+  - docker-compose up -d solr fcrepo suri
   - docker-compose ps
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
 
