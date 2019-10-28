@@ -4,7 +4,12 @@ require 'rails_helper'
 
 # Feature/view tests for the (old) bulk actions view.
 RSpec.describe 'Bulk actions view', js: true do
-  let(:object_client) { instance_double(Dor::Services::Client::Object, publish: true) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object, publish: true, find: cocina_model)
+  end
+
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: admin_md) }
+  let(:admin_md) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: nil) }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']

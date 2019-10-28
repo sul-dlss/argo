@@ -54,7 +54,12 @@ RSpec.describe CatalogController, type: :controller do
       context 'when authorized' do
         before do
           allow(controller).to receive(:authorize!).with(:view_metadata, Dor::Item)
+          allow(Dor::Services::Client).to receive(:object).and_return(object_client)
         end
+
+        let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+        let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+        let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
         it 'is successful' do
           get 'show', params: { id: @druid }
