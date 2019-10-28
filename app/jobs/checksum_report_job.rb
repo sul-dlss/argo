@@ -30,7 +30,8 @@ class ChecksumReportJob < GenericJob
         bulk_action.update(druid_count_fail: pids.length)
         message = "#{Time.current} ChecksumReportJob got error from Preservation Catalog API: #{e.class} #{e.message}"
         log.puts(message)
-        # honeybadger and other notifications should happen at prescat level
+        # honeybadger and other notifications should happen at prescat level, but not getting good message
+        Honeybadger.notify message
       rescue Preservation::Client::ConnectionFailedError => e
         bulk_action.update(druid_count_fail: pids.length)
         message = "#{Time.current} ChecksumReportJob failed on call to Preservation Catalog API: #{e.class} #{e.message}"
