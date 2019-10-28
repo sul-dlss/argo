@@ -65,7 +65,7 @@ services:
     ports:
       - 3002:3000
   db:
-    image: postgres:11
+    image: postgres:11 # aligns the pg version with what is supported by dor-services-app
      # No ports shared externally, so that this doesn't conflict with the postgres
      # server that TravisCI starts up.
      # ports:
