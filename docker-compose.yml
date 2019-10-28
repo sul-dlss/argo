@@ -65,7 +65,7 @@ services:
     ports:
       - 3002:3000
   db:
-    image: postgres
+    image: postgres:11
      # No ports shared externally, so that this doesn't conflict with the postgres
      # server that TravisCI starts up.
      # ports:
@@ -73,7 +73,7 @@ services:
     environment:
       - POSTGRES_PASSWORD=sekret
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
 
   workflow:
     image: suldlss/workflow-server:latest
@@ -101,3 +101,4 @@ services:
 #      - 6379:6379
 volumes:
   node_modules:
+  postgres-data:
