@@ -44,10 +44,4 @@ module RegistrationHelper
       'Document'
     ]
   end
-
-  def default_metadata_source
-    [
-      'Auto'
-    ]
-  end
 end
