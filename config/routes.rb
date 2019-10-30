@@ -137,7 +137,7 @@ Rails.application.routes.draw do
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
       post 'collection/add',     action: :add_collection,    as: 'add_collection'
       post 'collection/set',     action: :set_collection,    as: 'set_collection'
-      get 'purge',               action: :purge_object
+      delete 'purge', action: :purge_object
       get  'rights'
       post 'set_rights'
       get 'set_governing_apo_ui'

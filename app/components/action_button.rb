@@ -3,9 +3,10 @@
 # Draws a blue button in the side menu
 class ActionButton < ApplicationComponent
   # @param [Hash] properties the button properties
-  def initialize(label:, url:, confirm: nil, new_page: nil, check_url: nil, disabled: nil)
+  def initialize(label:, url:, method: nil, confirm: nil, new_page: nil, check_url: nil, disabled: nil)
     @label = label
     @url = url
+    @method = method
     @confirm = confirm
     @new_page = new_page
     @check_url = check_url
@@ -28,5 +29,5 @@ class ActionButton < ApplicationComponent
     end
   end
 
-  attr_reader :label, :confirm, :new_page, :check_url, :url, :disabled
+  attr_reader :label, :confirm, :new_page, :check_url, :url, :disabled, :method
 end

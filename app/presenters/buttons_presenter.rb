@@ -135,6 +135,7 @@ class ButtonsPresenter
       url: purge_item_path(id: pid),
       label: 'Purge',
       new_page: true,
+      method: 'delete',
       confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
       disabled: !registered_only?
     }
