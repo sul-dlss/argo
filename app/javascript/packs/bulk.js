@@ -318,7 +318,7 @@ Blacklight.onLoad(()=>{
 		$('#content_type').hide(400)
 	})
 
-	$('#confirm-set-content-type-button').on('click', () => {
+	$('#confirm-purge-button').on('click', () => {
 		fetch_druids(purge)
 		$('#purge').hide(400)
 	})
