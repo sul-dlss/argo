@@ -3,8 +3,10 @@
 class WorkflowsController < ApplicationController
   before_action :load_resource, except: [:history]
 
+  # Called from "Add Workflow" button. This is content for a modal invoked via XHR
+  # so we don't want a layout.
   def new
-    # does default render
+    render 'new', layout: false
   end
 
   ##
