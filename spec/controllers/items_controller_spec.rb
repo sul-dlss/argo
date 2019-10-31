@@ -67,23 +67,31 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'redirects to root and flashes a confirmation notice when successful' do
-        post 'purge_object', params: { id: @pid }
+        delete 'purge_object', params: { id: @pid }
         expect(response.code).to eq('302')
         expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq("#{@pid} has been purged!")
+      end
+
+      it 'does not redirect to root when coming from the bulk update action' do
+        delete 'purge_object', params: { id: @pid, bulk: 'true' }
+        expect(response.code).to eq('200')
+        expect(response.body).to eq('Purged.')
+        expect(response).not_to redirect_to(root_path)
+        expect(flash[:notice]).to be_nil
       end
 
       it 'deletes the object from fedora and solr' do
         expect(@item).to receive(:delete)
         expect(ActiveFedora.solr.conn).to receive(:delete_by_id).with(@pid)
         expect(ActiveFedora.solr.conn).to receive(:commit)
-        post 'purge_object', params: { id: @pid }
+        delete 'purge_object', params: { id: @pid }
         expect(client).to have_received(:delete_all_workflows).with(pid: @pid)
       end
 
       it 'blocks purge on submitted objects' do
         expect(controller).to receive(:dor_lifecycle).with(@item, 'submitted').and_return(true)
-        post 'purge_object', params: { id: @pid }
+        delete 'purge_object', params: { id: @pid }
         expect(response.code).to eq('403')
         expect(response.body).to eq('Cannot purge an object after it is submitted.')
       end

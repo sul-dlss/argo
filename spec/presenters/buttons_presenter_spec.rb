@@ -82,6 +82,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
             label: 'Purge',
             url: "/items/#{item_id}/purge",
             new_page: true,
+            method: 'delete',
             confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
             disabled: true
           },
@@ -234,6 +235,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
             label: 'Purge',
             url: "/items/#{view_apo_id}/purge",
             new_page: true,
+            method: 'delete',
             confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
             disabled: true
           },

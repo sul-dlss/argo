@@ -32,6 +32,10 @@ function process_patch(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'PATCH', req_params, success_string, show_buttons, show_buttons);
 }
 
+function process_delete(druids, action_url, req_params, success_string) {
+	process_request(druids, action_url, 'DELETE', req_params, success_string, show_buttons, show_buttons);
+}
+
 function set_content_type(druids){
 	var params={
 		'new_content_type': $('#new_content_type').val(),
@@ -43,7 +47,7 @@ function set_content_type(druids){
 }
 
 function purge(druids){
-	process_get(druids, purge_url, "Purged");
+	process_delete(druids, purge_url, null, "Purged");
 }
 
 function fetch_pids_txt() {
