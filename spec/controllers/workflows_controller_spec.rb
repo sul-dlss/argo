@@ -53,6 +53,13 @@ RSpec.describe WorkflowsController, type: :controller do
     end
   end
 
+  describe '#new' do
+    it 'renders the template with no layout' do
+      get :new, params: { item_id: pid }
+      expect(response).to render_template(layout: false)
+    end
+  end
+
   describe '#show' do
     let(:workflow) { instance_double(Dor::Workflow::Document) }
     let(:workflow_status) { instance_double(WorkflowStatus) }
