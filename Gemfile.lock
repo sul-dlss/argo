@@ -64,7 +64,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     arel (9.0.0)
     ast (2.4.0)
-    autoprefixer-rails (9.7.0)
+    autoprefixer-rails (9.7.1)
       execjs
     barby (0.6.8)
     bcrypt (3.1.13)
@@ -207,7 +207,7 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (3.3.0)
+    dor-services-client (3.6.0)
       activesupport (>= 4.2, < 7)
       cocina-models (~> 0.6.0)
       deprecation
@@ -300,7 +300,7 @@ GEM
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iso-639 (0.2.8)
-    jaro_winkler (1.5.3)
+    jaro_winkler (1.5.4)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
     jquery-rails (4.3.5)
@@ -340,7 +340,7 @@ GEM
     mimemagic (0.3.3)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
-    minitest (5.12.2)
+    minitest (5.13.0)
     moab-versioning (4.2.2)
       confstruct
       druid-tools (>= 1.0.0)
@@ -364,7 +364,7 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (6.7.0.359)
     nio4r (2.5.2)
-    nokogiri (1.10.4)
+    nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
     nokogiri-happymapper (0.8.1)
       nokogiri (~> 1.5)
@@ -614,7 +614,7 @@ GEM
     xml-simple (1.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.2.0)
+    zeitwerk (2.2.1)
 
 PLATFORMS
   ruby
