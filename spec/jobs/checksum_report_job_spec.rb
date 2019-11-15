@@ -52,12 +52,15 @@ RSpec.describe ChecksumReportJob, type: :job do
           allow(Preservation::Client.objects).to receive(:checksums).with(druids: pids).and_raise(Preservation::Client::UnexpectedResponseError, 'ruh roh')
         end
 
-        it 'calls the presevation_catalog API, does not write a CSV file, and records failure counts' do
-          subject.perform(bulk_action.id,
-                          output_directory: output_directory_fail,
-                          pids: pids,
-                          groups: groups,
-                          user: user)
+        it 'calls the presevation_catalog API, throws RuntimeError, does not write a CSV file, and records failure counts' do
+          exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\: Preservation\:\:Client\:\:UnexpectedResponseError ruh roh/
+          expect {
+            subject.perform(bulk_action.id,
+                            output_directory: output_directory_fail,
+                            pids: pids,
+                            groups: groups,
+                            user: user)
+          }.to raise_error(RuntimeError, exp_msg_regex)
           expect(Preservation::Client.objects).to have_received(:checksums).with(druids: pids)
           expect(File).not_to exist(File.join(output_directory_fail, Settings.checksum_report_job.csv_filename))
           expect(bulk_action.druid_count_total).to eq(pids.length)

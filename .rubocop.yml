@@ -39,4 +39,3 @@ Metrics/BlockLength:
     - 'config/routes.rb'
     - 'spec/**/*'
     - 'lib/tasks/*.rake'
-    - 'app/jobs/checksum_report_job.rb' # it's 26 lines, mostly in rescue clauses
