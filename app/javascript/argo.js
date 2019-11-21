@@ -1,5 +1,5 @@
 import Form from 'modules/apo_form'
-import CollectionForm from 'modules/collection_form'
+import CollectionEditor from 'controllers/collection_editor'
 import BulkActions from 'controllers/bulk_actions'
 import BulkUpload from 'controllers/bulk_upload'
 import WorkflowGrid from 'controllers/workflow_grid_controller'
@@ -10,7 +10,6 @@ function pathTo(path) {
   var root = $('body').attr('data-application-root') || '';
   return(root + path);
 }
-
 
 
 // Allows filtering a list of facets.
@@ -60,12 +59,12 @@ $(document).on('keyup', '#collection_catkey', function(e) {
 export default class Argo {
     initialize() {
         this.apoEditor()
-        this.collectionEditor()
         this.collapsableSections()
         const application = Application.start()
         application.register("bulk_actions", BulkActions)
         application.register("bulk_upload", BulkUpload)
         application.register("workflow-grid", WorkflowGrid)
+        application.register("collection-editor", CollectionEditor)
     }
 
     apoEditor() {
@@ -84,12 +83,5 @@ export default class Argo {
               $(this).toggleClass('collapsed')
           }
       })
-    }
-
-    collectionEditor() {
-        var element = $("[data-behavior='collection-form']")
-        if (element.length > 0) {
-            new CollectionForm(element).init();
-        }
     }
 }

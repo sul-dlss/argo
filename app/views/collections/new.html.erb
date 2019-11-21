@@ -3,22 +3,18 @@
   <h3 class='modal-title'>Create Collection</h3>
 </div>
 
-<div class='modal-body'>
-  <h4>
-    APO
-    &mdash;
-    <%= @apo.label %>
-  </h4>
+<div class='modal-body' data-controller="collection-editor">
+  <h4>APO &mdash; <%= @apo.label %></h4>
   <%= form_tag apo_collections_path(@apo.pid), id: 'collection_form',
                                                role: 'form',
                                                data: { behavior: 'collection-form' } do %>
     <div class="form-group" style="padding-left:20px">
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-colletion' } %>
+        <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-collection', action: "change->collection-editor#toggle" } %>
         Create a Collection from Title/Abstract
       </label>
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', false, data: { reveal: 'create-collection-catkey' }  %>
+        <%= radio_button_tag 'collection_radio', 'create', false, data: { reveal: 'create-collection-catkey', action: "change->collection-editor#toggle" }  %>
         Create a Collection from Symphony
       </label>
     </div>
