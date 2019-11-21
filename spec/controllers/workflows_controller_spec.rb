@@ -92,10 +92,6 @@ RSpec.describe WorkflowsController, type: :controller do
       let(:presenter) { instance_double(WorkflowPresenter) }
       let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow) }
 
-      it 'requires workflow and repo parameters' do
-        expect { get :show, params: { item_id: pid, id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
-      end
-
       it 'fetches the workflow on valid parameters' do
         allow(WorkflowPresenter).to receive(:new).and_return(presenter)
         allow(WorkflowStatus).to receive(:new).and_return(workflow_status)
@@ -171,7 +167,7 @@ RSpec.describe WorkflowsController, type: :controller do
       it 'changes the status' do
         post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'completed' }
         expect(subject).to redirect_to(solr_document_path(pid))
-        expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
+        expect(workflow_client).to have_received(:workflow_status).with(druid: pid, workflow: 'accessionWF', process: 'publish')
         expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'completed')
       end
     end
@@ -197,7 +193,7 @@ RSpec.describe WorkflowsController, type: :controller do
         it 'changes the status' do
           post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'waiting' }
           expect(subject).to redirect_to(solr_document_path(pid))
-          expect(workflow_client).to have_received(:workflow_status).with('dor', pid, 'accessionWF', 'publish')
+          expect(workflow_client).to have_received(:workflow_status).with(druid: pid, workflow: 'accessionWF', process: 'publish')
           expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'waiting')
         end
       end

@@ -14,10 +14,8 @@ class WorkflowsController < ApplicationController
   #
   # @option params [String] `:item_id` The druid for the object.
   # @option params [String] `:id` The workflow name. e.g., accessionWF.
-  # @option params [String] `:repo` The workflow's repository. e.g., dor.
   def show
-    params.require(:repo)
-    workflow = Dor::Config.workflow.client.workflow(repo: params[:repo], pid: params[:item_id], workflow_name: params[:id])
+    workflow = Dor::Config.workflow.client.workflow(pid: params[:item_id], workflow_name: params[:id])
     respond_to do |format|
       format.html do
         @presenter = build_show_presenter(workflow)
@@ -34,13 +32,14 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:id` The workflow name. e.g., accessionWF.
   # @option params [String] `:process` The workflow step. e.g., publish.
   # @option params [String] `:status` The status to which we want to reset the workflow.
-  # @option params [String] `:repo` The repo to which the workflow applies (optional).
   def update
-    params.require [:process, :status, :repo]
+    params.require [:process, :status]
     return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], @object)
 
     # this will raise an exception if the item doesn't have that workflow step
-    Dor::Config.workflow.client.workflow_status params[:repo], params[:item_id], params[:id], params[:process]
+    Dor::Config.workflow.client.workflow_status(druid: params[:item_id],
+                                                workflow: params[:id],
+                                                process: params[:process])
     # update the status for the step and redirect to the workflow view page
     Dor::Config.workflow.client.update_status(druid: params[:item_id],
                                               workflow: params[:id],
