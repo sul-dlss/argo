@@ -2,7 +2,7 @@
 
 # Creates virtual objects using the dor services API
 class VirtualObjectsCreator
-  SECONDS_BETWEEN_REQUESTS = 3
+  SECONDS_BETWEEN_REQUESTS = 10
 
   # @param [Array] virtual_objects an array of virtual object hashes
   # @return [Array] an array of errors (empty if no errors)
