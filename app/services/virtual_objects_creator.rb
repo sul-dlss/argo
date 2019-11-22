@@ -26,10 +26,10 @@ class VirtualObjectsCreator
     # If job output hash lacks an `:errors` key, we interpret that as complete success
     return [] if job_output[:errors].nil?
 
-    Honeybadger.notify("Argo virtual object job errors from #{background_result_url}: #{job_output[:errors].inspect}")
+    Honeybadger.notify("WARN: Argo virtual object job errors from #{background_result_url}: #{job_output[:errors].inspect}")
 
     job_output[:errors].map do |error|
-      Honeybadger.notify("Argo virtual object job errors from #{background_result_url}: #{job_output[:errors].inspect}") if error.nil?
+      Honeybadger.notify("WARN: Argo virtual object job errors from #{background_result_url}: #{job_output[:errors].inspect}") if error.nil?
       "Problem children for #{error.keys.first}: #{error.values.flatten.to_sentence}"
     end
   end
@@ -47,7 +47,7 @@ class VirtualObjectsCreator
         redo
       end
 
-      Honeybadger.notify("Argo received background job results from #{url}: #{results[:output].inspect}")
+      Honeybadger.notify("INFO Argo received background job results from #{url}: #{results[:output].inspect}")
 
       break results[:output]
     end
