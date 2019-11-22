@@ -5,6 +5,16 @@
 class CreateVirtualObjectsJob < GenericJob
   queue_as :default
 
+  # we don't want to retry these jobs -- too messy
+  def max_attempts
+    1
+  end
+
+  # big merges may run ridiculously long
+  def max_run_time
+    96.hours
+  end
+
   NOT_COMBINABLE_MESSAGE = 'Creating some or all virtual objects failed because some objects are not combinable'
   NOT_FOUND_MESSAGE = 'Could not create virtual objects because the following parent druids were not found'
   SUCCESS_MESSAGE = 'Successfully created virtual objects'
