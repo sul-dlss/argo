@@ -38,7 +38,8 @@ RSpec.describe WorkflowsController, type: :controller do
         it 'initializes the new workflow' do
           expect(controller).to receive(:flush_index)
           post :create, params: { item_id: pid, wf: 'accessionWF' }
-          expect(workflow_client).to have_received(:create_workflow_by_name).with(pid, 'accessionWF')
+          expect(workflow_client).to have_received(:create_workflow_by_name)
+            .with(pid, 'accessionWF', version: '1')
         end
       end
 

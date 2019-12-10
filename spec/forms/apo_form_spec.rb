@@ -309,7 +309,7 @@ RSpec.describe ApoForm do
           expect(args[:metadata_source]).to be_nil # descMD is created via the form
           { pid: apo.pid }
         end
-        expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(apo.pid, 'accessionWF')
+        expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(apo.pid, 'accessionWF', version: '1')
 
         expect(apo).to receive(:"use_license=").with(params['use_license'])
 
@@ -323,7 +323,7 @@ RSpec.describe ApoForm do
           )
           { pid: collection.pid }
         end
-        expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF')
+        expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF', version: '1')
 
         instance.validate(params)
         instance.save
