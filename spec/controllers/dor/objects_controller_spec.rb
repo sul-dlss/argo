@@ -79,7 +79,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             other_id: 'label:'
           }
         )
-        expect(workflow_service).to have_received(:create_workflow_by_name).with('druid:abc', 'registrationWF')
+        expect(workflow_service).to have_received(:create_workflow_by_name)
+          .with('druid:abc', 'registrationWF', version: '1')
       end
     end
 

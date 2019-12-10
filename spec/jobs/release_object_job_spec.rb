@@ -28,8 +28,8 @@ RSpec.describe ReleaseObjectJob do
         webauth: { 'privgroup' => 'dorstuff', 'login' => 'esnowden' }
       }
     end
-    let(:item1) { instance_double(Dor::Item) }
-    let(:item2) { instance_double(Dor::Item) }
+    let(:item1) { instance_double(Dor::Item, current_version: '2') }
+    let(:item2) { instance_double(Dor::Item, current_version: '3') }
 
     before do
       allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
@@ -48,8 +48,8 @@ RSpec.describe ReleaseObjectJob do
       it 'updates the total druid count' do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq pids.length
-        expect(client).to have_received(:create_workflow_by_name).with(pids[0], 'releaseWF')
-        expect(client).to have_received(:create_workflow_by_name).with(pids[1], 'releaseWF')
+        expect(client).to have_received(:create_workflow_by_name).with(pids[0], 'releaseWF', version: '2')
+        expect(client).to have_received(:create_workflow_by_name).with(pids[1], 'releaseWF', version: '3')
       end
 
       it 'increments the bulk_actions druid count success' do

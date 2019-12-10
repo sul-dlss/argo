@@ -201,7 +201,7 @@ class ApoForm < BaseForm
   # @return [Dor::AdminPolicyObject] registers the APO
   def register_model
     response = Dor::Services::Client.objects.register(params: register_params)
-    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], 'accessionWF')
+    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], 'accessionWF', version: '1')
     # Once it's been created we populate it with its metadata
     Dor.find(response[:pid])
   end
