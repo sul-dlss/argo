@@ -51,13 +51,13 @@ RSpec.describe FilesController, type: :controller do
   describe '#preserved' do
     context 'when they have manage access' do
       let(:mock_file_name) { 'preserved_file.txt' }
-      let(:mock_version) { 2 }
+      let(:mock_version) { '2' }
       let(:mock_content) { 'preserved file content' }
 
       before do
         allow(controller).to receive(:authorize!).and_return(true)
-        allow_any_instance_of(Dor::Services::Client::Files).to receive(:preserved_content)
-          .with(filename: mock_file_name, version: mock_version)
+        allow(Preservation::Client.objects).to receive(:content)
+          .with(druid: pid, filepath: mock_file_name, version: mock_version)
           .and_return(mock_content)
       end
 
