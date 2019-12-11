@@ -66,13 +66,13 @@ module DorObjectHelper
     end
   end
 
-  def render_workflows(doc, obj)
+  def render_workflows(doc)
     workflows = {}
     Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :symbol)]).each do |line|
-      (wf, status, errors, repo) = line.split(/\|/)
-      workflows[wf] = { status: status, errors: errors.to_i, repo: repo }
+      (wf, status, errors) = line.split(/\|/)
+      workflows[wf] = { status: status, errors: errors.to_i }
     end
-    render partial: 'catalog/show_workflows', locals: { document: doc, object: obj, workflows: workflows }
+    render 'catalog/show_workflows', document_id: doc.id, workflows: workflows
   end
 
   # Datastream helpers
