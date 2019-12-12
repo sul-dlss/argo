@@ -30,6 +30,8 @@ class FilesController < ApplicationController
     response.headers['Content-Disposition'] = "attachment; filename=#{filename}"
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
     self.response_body = file_content
+  rescue Preservation::Client::NotFoundError => e
+    render(plain: "Preserved file not found: #{e}", status: :not_found)
   end
 
   private

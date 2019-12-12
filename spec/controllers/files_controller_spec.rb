@@ -71,6 +71,19 @@ RSpec.describe FilesController, type: :controller do
         expect(response.code).to eq('200')
         expect(response.body).to eq(mock_content)
       end
+
+      it 'when file not found in perservation, returns 404 with error information' do
+        errmsg = 'it is fooched.'
+        allow(Preservation::Client.objects).to receive(:content)
+          .with(druid: pid, filepath: 'not_there.txt', version: mock_version)
+          .and_raise(Preservation::Client::NotFoundError, errmsg)
+        get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
+        expect(response.headers['Content-Type']).to eq('text/plain; charset=utf-8')
+        expect(response.headers['Last-Modified']).to eq nil
+        expect(response.headers['Content-Disposition']).to eq nil
+        expect(response.code).to eq('404')
+        expect(response.body).to eq("Preserved file not found: #{errmsg}")
+      end
     end
   end
 
