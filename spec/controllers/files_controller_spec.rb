@@ -50,7 +50,7 @@ RSpec.describe FilesController, type: :controller do
 
   describe '#preserved' do
     context 'when they have manage access' do
-      let(:mock_file_name) { 'preserved_file.txt' }
+      let(:mock_file_name) { 'preserved file.txt' }
       let(:mock_version) { '2' }
       let(:mock_content) { 'preserved file content' }
 
@@ -67,7 +67,7 @@ RSpec.describe FilesController, type: :controller do
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
         expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
         expect(response.headers['Content-Type']).to eq('application/octet-stream')
-        expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{mock_file_name}")
+        expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{CGI.escape(mock_file_name)}")
         expect(response.code).to eq('200')
         expect(response.body).to eq(mock_content)
       end
