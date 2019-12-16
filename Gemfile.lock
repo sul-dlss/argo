@@ -651,7 +651,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   mods_display
-  mysql2 (~> 0.5.2)
+  mysql2 (< 0.5.3)
   newrelic_rpm
   nokogiri (~> 1.6)
   okcomputer

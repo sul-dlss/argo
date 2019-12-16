@@ -70,7 +70,9 @@ gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'eye' # NOTE: if eye is upgraded, see the note in the 'bin/eye' script about checking to see whether that script needs upgrading (which won't happen automatically).
 gem 'faraday'
 gem 'honeybadger', '~> 4.1'
-gem 'mysql2', '~> 0.5.2'
+
+# mysql 0.5.3 is not compatible with the version of MySQL we are using (5.1)
+gem 'mysql2', '< 0.5.3'
 gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
 # Prawn is used to create "tracksheets"
