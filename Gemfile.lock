@@ -79,10 +79,10 @@ GEM
       rails (>= 4.2, < 6)
       rsolr (>= 1.0.6, < 3)
       twitter-typeahead-rails (= 0.11.1.pre.corejavascript)
-    blacklight-hierarchy (4.0.0)
-      blacklight (> 6.20, < 8.0)
+    blacklight-hierarchy (2.0.0)
+      blacklight (~> 6.0)
       jquery-rails
-      rails (>= 5.1, < 7)
+      rails (>= 4.1, < 6)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     bootstrap-sass (3.4.1)
@@ -624,7 +624,7 @@ DEPENDENCIES
   actionview-component (= 1.3.3)
   barby
   blacklight (~> 6.0)
-  blacklight-hierarchy
+  blacklight-hierarchy (~> 2.0)
   bootsnap (>= 1.1.0)
   byebug
   cancancan
