@@ -9,9 +9,9 @@
         status = workflows[wf]
     -%>
       <tr>
-        <td><%= link_to wf, item_workflow_path(document.id, wf), title: wf, data: { blacklight_modal: 'trigger' } %></td>
+        <td><%= link_to wf, item_workflow_path(document_id, wf), title: wf, data: { blacklight_modal: 'trigger' } %></td>
         <td>
-          <%=status[:status] %>
+          <%= status[:status] %>
           <% if status[:errors] > 0 -%>
             <span class="errortext">(<%= pluralize(status[:errors], 'error') %>)</span>
           <% end %>
