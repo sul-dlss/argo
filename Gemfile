@@ -22,27 +22,7 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-gem 'actionview-component', '1.3.3' # 1.3.4 introduces breaking changes:
-# 1) workflows/_show.html.erb when authorized to make changes to workflow draws a table of all the workflow steps
-#     Failure/Error: <%= render WorkflowProcessRow, index: index, process: process, item: @object %>
-#     ActionView::Template::Error:
-#       private method `controller' called for #<WorkflowProcessRow:0x00007fce72ca0ab0>
-#     # ./app/views/workflows/_show.html.erb:25:in `block in _app_views_workflows__show_html_erb__4057138219954829021_70262332830460'
-#     # ./app/views/workflows/_show.html.erb:24:in `each'
-#     # ./app/views/workflows/_show.html.erb:24:in `each_with_index'
-#     # ./app/views/workflows/_show.html.erb:24:in `_app_views_workflows__show_html_erb__4057138219954829021_70262332830460'
-#     # ./spec/views/workflows/_show.html.erb_spec.rb:34:in `block (2 levels) in <top (required)>'
-#     # ------------------
-#     # --- Caused by: ---
-#     # NoMethodError:
-#     #   private method `controller' called for #<WorkflowProcessRow:0x00007fce72ca0ab0>
-#     #   ./app/views/workflows/_show.html.erb:25:in `block in _app_views_workflows__show_html_erb__4057138219954829021_70262332830460'
-#  2) WorkflowProcessRow render has a relative time
-#     Failure/Error: subject(:body) { render_inline(described_class, process: process, index: 1, item: item) }
-#     NoMethodError:
-#       private method `controller' called for #<WorkflowProcessRow:0x00007fce6703fee8>
-#     # ./spec/components/workflow_process_row_spec.rb:13:in `block (3 levels) in <top (required)>'
-#     # ./spec/components/workflow_process_row_spec.rb:35:in `block (3 levels) in <top (required)>'
+gem 'actionview-component', '~> 1.6'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -17,7 +17,7 @@ class WorkflowProcessRow < ApplicationComponent
   def elapsed
     return unless process.elapsed
 
-    format('%.3f', process.elapsed.to_f)
+    Kernel.format('%.3f', process.elapsed.to_f)
   end
 
   def error?
