@@ -88,24 +88,53 @@ RSpec.describe FilesController, type: :controller do
   end
 
   describe '#index' do
+    before do
+      allow(Dor::Config.workflow.client).to receive(:lifecycle).with('dor', pid, 'accessioned').and_return(true)
+    end
+
     it 'requires an id parameter' do
       expect { get :index, params: { item_id: pid } }.to raise_error(ArgumentError)
     end
 
-    it 'checks for a file in the workspace' do
-      expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
-      get :index, params: { item_id: pid, id: 'foo.jp2' }
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:available_in_workspace)).to be_truthy
-      expect(assigns(:object)).to respond_to(:contentMetadata)
+    context 'when the files are in preservation' do
+      before do
+        allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_return('7')
+      end
+
+      context 'when the files are in the workspace' do
+        it 'sets available_in_workspace to true' do
+          expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
+          get :index, params: { item_id: pid, id: 'foo.jp2' }
+          expect(response).to have_http_status(:ok)
+          expect(assigns(:available_in_workspace)).to be true
+          expect(assigns(:has_been_accessioned)).to be true
+          expect(assigns(:last_accessioned_version)).to eq '7'
+          expect(assigns(:object)).to respond_to(:contentMetadata)
+        end
+      end
+
+      context 'when files are missing from the workspace' do
+        it 'sets available_in_workspace to false' do
+          expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
+          get :index, params: { item_id: pid, id: 'bar.tif' }
+          expect(response).to have_http_status(:ok)
+          expect(assigns(:available_in_workspace)).to be false
+          expect(assigns(:object)).to respond_to(:contentMetadata)
+        end
+      end
     end
 
-    it 'handles missing files in the workspace' do
-      expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
-      get :index, params: { item_id: pid, id: 'bar.tif' }
-      expect(response).to have_http_status(:ok)
-      expect(assigns(:available_in_workspace)).to be_falsey
-      expect(assigns(:object)).to respond_to(:contentMetadata)
+    context 'when files are not in preservation' do
+      before do
+        allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_raise(Preservation::Client::NotFoundError)
+      end
+
+      it 'sets available_in_workspace to false' do
+        expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
+        get :index, params: { item_id: pid, id: 'bar.tif' }
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to eq "Preservation has not yet received #{pid}"
+      end
     end
   end
 end

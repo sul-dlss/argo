@@ -24,16 +24,15 @@ RSpec.describe 'files/index.html.erb' do
 </contentMetadata>'
     cm
   end
-  let(:obj) { double(pid: 'druid:rn653dy9317', to_param: 'druid:rn653dy9317', contentMetadata: contentMetadata) }
+  let(:obj) { instance_double(Dor::Item, pid: 'druid:rn653dy9317', to_param: 'druid:rn653dy9317', contentMetadata: contentMetadata) }
 
   before do
-    assign(:object, obj)
-    assign(:available_in_workspace, true)
-    assign(:available_in_workspace_error, nil)
-    expect(view).to receive(:params).and_return(id: 'M1090_S15_B01_F07_0106.jp2', item_id: 'druid:rn653dy9317').at_least(1)
-    expect(view).to receive(:has_been_accessioned?).with(obj.pid).and_return(true)
-    expect(view).to receive(:last_accessioned_version).with(obj.pid)
-
+    @object = obj
+    @available_in_workspace = true
+    @has_been_accessioned = true
+    @last_accessioned_version = '7'
+    params[:id] = 'M1090_S15_B01_F07_0106.jp2'
+    params[:item_id] = 'druid:rn653dy9317'
     render
   end
 
