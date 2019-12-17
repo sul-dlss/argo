@@ -9,6 +9,15 @@ class FilesController < ApplicationController
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
     @available_in_workspace = Dor::Services::Client.object(params[:item_id]).files.list.include?(filename)
+    @has_been_accessioned = Dor::Config.workflow.client.lifecycle('dor', params[:item_id], 'accessioned')
+
+    if @has_been_accessioned
+      begin
+        @last_accessioned_version = Preservation::Client.objects.current_version(params[:item_id])
+      rescue Preservation::Client::NotFoundError
+        return render status: :unprocessable_entity, plain: "Preservation has not yet received #{params[:item_id]}"
+      end
+    end
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }

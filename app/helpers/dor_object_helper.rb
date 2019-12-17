@@ -48,17 +48,6 @@ module DorObjectHelper
     end
   end
 
-  ##
-  # @deprecated Please use non-blocking requests rather than blocking helpers.
-  # See WorkflowServiceController#accesssioned for JSON API to this logic
-  def has_been_accessioned?(pid)
-    Dor::Config.workflow.client.lifecycle('dor', pid, 'accessioned')
-  end
-
-  def last_accessioned_version(pid)
-    Preservation::Client.objects.current_version(pid)
-  end
-
   def render_qfacet_value(facet_solr_field, item, options = {})
     params = add_facet_params(facet_solr_field, item.qvalue)
     Rails.cache.fetch('route_for' + params.to_s, expires_in: 1.hour) do

@@ -20,11 +20,10 @@
     </p>
   <% end %>
 
-  <%# TODO: has_been_accessioned? is deprecated, migrate to async call %>
-  <% if file['preserve'] == 'yes' && has_been_accessioned?(@object.pid) %>
+  <% if file['preserve'] == 'yes' && @has_been_accessioned %>
         <p>
           Preservation:
-          <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:id], version: last_accessioned_version(@object.pid)) %>
+          <%= link_to params[:file], preserved_item_file_path(item_id: @object, id: params[:id], version: @last_accessioned_version) %>
         </p>
   <% end %>
 <% end %>
