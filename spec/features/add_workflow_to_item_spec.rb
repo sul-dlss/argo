@@ -4,11 +4,13 @@ require 'rails_helper'
 
 RSpec.describe 'Add a workflow to an item' do
   let(:stub_workflow) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
+  let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
+  let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
   let(:workflow_client) do
     instance_double(Dor::Workflow::Client,
                     workflow: stub_workflow,
                     create_workflow_by_name: true,
-                    all_workflows_xml: '',
+                    workflow_routes: workflow_routes,
                     milestones: [],
                     lifecycle: [],
                     workflow_templates: %w[assemblyWF registrationWF],

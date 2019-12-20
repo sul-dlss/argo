@@ -25,10 +25,12 @@ RSpec.describe 'Item catkey change' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
+    let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
+    let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
 
     before do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
-      allow(Dor::Config.workflow.client).to receive_messages(milestones: [], all_workflows_xml: '')
+      allow(Dor::Config.workflow.client).to receive_messages(milestones: [], workflow_routes: workflow_routes)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 

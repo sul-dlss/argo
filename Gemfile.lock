@@ -189,12 +189,12 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.4.0)
       nokogiri
-    dor-services (8.1.1)
+    dor-services (8.2.0)
       active-fedora (>= 8.7.0, < 9)
       activesupport (~> 5.1)
       deprecation (~> 0)
       dor-rights-auth (~> 1.0, >= 1.2.0)
-      dor-workflow-client (~> 3.8)
+      dor-workflow-client (~> 3.9)
       druid-tools (>= 0.4.1)
       json (>= 1.8.1)
       nokogiri (~> 1.6)
@@ -688,4 +688,4 @@ DEPENDENCIES
   webpacker (~> 4.0)
 
 BUNDLED WITH
-   2.1.0
+   2.1.1
