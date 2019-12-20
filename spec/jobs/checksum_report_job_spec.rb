@@ -50,19 +50,25 @@ RSpec.describe ChecksumReportJob, type: :job do
       context 'Preservation::Client throws error' do
         before do
           allow(Preservation::Client.objects).to receive(:checksums).with(druids: pids).and_raise(Preservation::Client::UnexpectedResponseError, 'ruh roh')
+          allow(Honeybadger).to receive(:context)
+          allow(Honeybadger).to receive(:notify)
+          allow(Rails.logger).to receive(:error)
         end
 
-        it 'calls the presevation_catalog API, throws RuntimeError, does not write a CSV file, and records failure counts' do
-          exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\: Preservation\:\:Client\:\:UnexpectedResponseError ruh roh/
+        it 'calls the presevation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts' do
+          exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\ \(Preservation\:\:Client\:\:UnexpectedResponseError\): ruh roh/
           expect {
             subject.perform(bulk_action.id,
                             output_directory: output_directory_fail,
                             pids: pids,
                             groups: groups,
                             user: user)
-          }.to raise_error(RuntimeError, exp_msg_regex)
+          }.not_to raise_error
           expect(Preservation::Client.objects).to have_received(:checksums).with(druids: pids)
           expect(File).not_to exist(File.join(output_directory_fail, Settings.checksum_report_job.csv_filename))
+          expect(Rails.logger).to have_received(:error).with(exp_msg_regex).once
+          expect(Honeybadger).to have_received(:context).with(bulk_action_id: bulk_action.id, params: hash_including(pids: pids)).once
+          expect(Honeybadger).to have_received(:notify).with(exp_msg_regex).once
           expect(bulk_action.druid_count_total).to eq(pids.length)
           expect(bulk_action.druid_count_fail).to eq(pids.length)
           expect(bulk_action.druid_count_success).to eq(0)
@@ -75,18 +81,25 @@ RSpec.describe ChecksumReportJob, type: :job do
 
       before do
         allow(Preservation::Client.objects).to receive(:checksums)
+        allow(Honeybadger).to receive(:context)
+        allow(Honeybadger).to receive(:notify)
+        allow(Rails.logger).to receive(:error)
       end
 
-      it 'does not call the presevation_catalog API, does not write a CSV file, and records failure counts' do
+      it 'does not call the preservation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts' do
+        exp_msg_regex = /ChecksumReportJob not authorized to view all content/
         expect {
           subject.perform(bulk_action.id,
                           output_directory: output_directory_fail,
                           pids: pids,
                           groups: groups,
                           user: user)
-        }.to raise_error(RuntimeError, /ChecksumReportJob not authorized to view all content/)
+        }.not_to raise_error
         expect(Preservation::Client.objects).not_to have_received(:checksums)
         expect(File).not_to exist(File.join(output_directory_fail, Settings.checksum_report_job.csv_filename))
+        expect(Rails.logger).to have_received(:error).with(exp_msg_regex).once
+        expect(Honeybadger).to have_received(:context).with(bulk_action_id: bulk_action.id, params: hash_including(pids: pids)).once
+        expect(Honeybadger).to have_received(:notify).with(exp_msg_regex).once
         expect(bulk_action.druid_count_total).to eq(pids.length)
         expect(bulk_action.druid_count_fail).to eq(pids.length)
         expect(bulk_action.druid_count_success).to eq(0)

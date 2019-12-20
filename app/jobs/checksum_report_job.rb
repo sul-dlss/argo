@@ -26,30 +26,30 @@ class ChecksumReportJob < GenericJob
         csv_report = Preservation::Client.objects.checksums(druids: pids)
         File.open(report_filename, 'w') { |file| file.write(csv_report) }
         bulk_action.update(druid_count_success: pids.length) # this whole job is run in one call, so it either all succeeds or fails
-      rescue Preservation::Client::NotFoundError, Preservation::Client::UnexpectedResponseError => e
-        bulk_action.update(druid_count_fail: pids.length)
-        message = "#{Time.current} ChecksumReportJob got error from Preservation Catalog API: #{e.class} #{e.message}"
-        log.puts(message)
-        # honeybadger and other notifications should happen at prescat level, but not getting good message
-        raise message
-      rescue Preservation::Client::ConnectionFailedError => e
-        bulk_action.update(druid_count_fail: pids.length)
-        message = "#{Time.current} ChecksumReportJob failed on call to Preservation Catalog API: #{e.class} #{e.message}"
-        log.puts(message)
-        # if we couldn't connect to preservation API, we have an issue
-        raise message
       rescue StandardError => e
         bulk_action.update(druid_count_fail: pids.length)
-        message = "#{Time.current} ChecksumReportJob creation failed #{e.class} #{e.message}"
-        log.puts(message)
-        # if we couldn't write out the file, we have an issue
-        raise message
+        message = exception_message_for(e)
+        log.puts(message) # this one goes to the user via the bulk action log
+        logger.error(message) # this is for later archaeological digs
+        Honeybadger.context(bulk_action_id: bulk_action_id, params: params)
+        Honeybadger.notify(message) # this is so the devs see it ASAP
       end
       log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 
   private
+
+  def exception_message_for(exception)
+    case exception
+    when Preservation::Client::NotFoundError, Preservation::Client::UnexpectedResponseError
+      "#{Time.current} ChecksumReportJob got error from Preservation Catalog API (#{exception.class}): #{exception.message}"
+    when Preservation::Client::ConnectionFailedError
+      "#{Time.current} ChecksumReportJob failed on call to Preservation Catalog API: (#{exception.class}): #{exception.message}"
+    else # e.g., StandardError
+      "#{Time.current} ChecksumReportJob creation failed #{exception.class} #{exception.message}"
+    end
+  end
 
   ##
   # Generate a filename for the job's csv report output file.

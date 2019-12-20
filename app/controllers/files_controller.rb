@@ -16,6 +16,11 @@ class FilesController < ApplicationController
         @last_accessioned_version = Preservation::Client.objects.current_version(params[:item_id])
       rescue Preservation::Client::NotFoundError
         return render status: :unprocessable_entity, plain: "Preservation has not yet received #{params[:item_id]}"
+      rescue Preservation::Client::Error => e
+        message = "Preservation client error getting current version of #{params[:item_id]}: #{e}"
+        logger.error(message)
+        Honeybadger.notify(message)
+        return render status: :internal_server_error, plain: message
       end
     end
 
@@ -40,7 +45,12 @@ class FilesController < ApplicationController
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
     self.response_body = file_content
   rescue Preservation::Client::NotFoundError => e
-    render(plain: "Preserved file not found: #{e}", status: :not_found)
+    render status: :not_found, plain: "Preserved file not found: #{e}"
+  rescue Preservation::Client::Error => e
+    message = "Preservation client error getting content of #{filename} for #{@object.pid} (version #{params[:version]}): #{e}"
+    logger.error(message)
+    Honeybadger.notify(message)
+    render status: :internal_server_error, plain: message
   end
 
   private

@@ -72,17 +72,44 @@ RSpec.describe FilesController, type: :controller do
         expect(response.body).to eq(mock_content)
       end
 
-      it 'when file not found in perservation, returns 404 with error information' do
-        errmsg = 'it is fooched.'
-        allow(Preservation::Client.objects).to receive(:content)
-          .with(druid: pid, filepath: 'not_there.txt', version: mock_version)
-          .and_raise(Preservation::Client::NotFoundError, errmsg)
-        get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
-        expect(response.headers['Content-Type']).to eq('text/plain; charset=utf-8')
-        expect(response.headers['Last-Modified']).to eq nil
-        expect(response.headers['Content-Disposition']).to eq nil
-        expect(response.code).to eq('404')
-        expect(response.body).to eq("Preserved file not found: #{errmsg}")
+      context 'when file not found in preservation' do
+        let(:errmsg) { 'it is fooched.' }
+
+        before do
+          allow(Preservation::Client.objects).to receive(:content)
+            .with(druid: pid, filepath: 'not_there.txt', version: mock_version)
+            .and_raise(Preservation::Client::NotFoundError, errmsg)
+        end
+
+        it 'returns 404 with error information' do
+          get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
+          expect(response.headers['Content-Type']).to eq('text/plain; charset=utf-8')
+          expect(response.headers['Last-Modified']).to eq nil
+          expect(response.headers['Content-Disposition']).to eq nil
+          expect(response.code).to eq('404')
+          expect(response.body).to eq("Preserved file not found: #{errmsg}")
+        end
+      end
+
+      context 'when preservation-client raises an error other than NotFoundError' do
+        let(:errmsg) { 'something is busted' }
+
+        before do
+          allow(Preservation::Client.objects).to receive(:content)
+            .with(druid: pid, filepath: 'not_there.txt', version: mock_version)
+            .and_raise(Preservation::Client::UnexpectedResponseError, errmsg)
+          allow(Rails.logger).to receive(:error)
+          allow(Honeybadger).to receive(:notify)
+        end
+
+        it 'renders an HTTP 500 message' do
+          get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
+          expect(Rails.logger).to have_received(:error)
+            .with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\)\: #{errmsg}/).once
+          expect(Honeybadger).to have_received(:notify).with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\)\: #{errmsg}/).once
+          expect(response).to have_http_status(:internal_server_error)
+          expect(response.body).to eq "Preservation client error getting content of not_there.txt for #{pid} (version #{mock_version}): #{errmsg}"
+        end
       end
     end
   end
@@ -129,11 +156,28 @@ RSpec.describe FilesController, type: :controller do
         allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_raise(Preservation::Client::NotFoundError)
       end
 
-      it 'sets available_in_workspace to false' do
+      it 'renders an HTTP 422 message' do
         expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
         get :index, params: { item_id: pid, id: 'bar.tif' }
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to eq "Preservation has not yet received #{pid}"
+      end
+    end
+
+    context 'when preservation-client raises an error other than NotFoundError' do
+      before do
+        allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_raise(Preservation::Client::UnexpectedResponseError, 'something is busted')
+        allow(Rails.logger).to receive(:error)
+        allow(Honeybadger).to receive(:notify)
+      end
+
+      it 'renders an HTTP 500 message' do
+        expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
+        get :index, params: { item_id: pid, id: 'bar.tif' }
+        expect(Rails.logger).to have_received(:error).with(/something is busted/).once
+        expect(Honeybadger).to have_received(:notify).with(/something is busted/).once
+        expect(response).to have_http_status(:internal_server_error)
+        expect(response.body).to eq "Preservation client error getting current version of #{pid}: something is busted"
       end
     end
   end
