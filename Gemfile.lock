@@ -206,10 +206,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (3.9.2)
+    dor-services-client (4.0.0)
       activesupport (>= 4.2, < 7)
       cocina-models (~> 0.6.0)
-      deprecation
       faraday (~> 0.15)
       moab-versioning (~> 4.0)
       nokogiri (~> 1.8)
@@ -646,7 +645,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 8.1)
-  dor-services-client (~> 3.0)
+  dor-services-client (~> 4.0)
   dor-workflow-client (~> 3.11)
   equivalent-xml (>= 0.6.0)
   eye
