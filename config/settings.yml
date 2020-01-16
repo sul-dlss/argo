@@ -57,6 +57,7 @@ dor_services:
 
 preservation_catalog:
   url: 'https://example.org/prescat'
+  token: 'mint-token-with-target-preservation-catalog-rake-generate-token'
 
 # URLs
 dor_indexing_url: 'https://dor-indexing-app.example.com/dor'
