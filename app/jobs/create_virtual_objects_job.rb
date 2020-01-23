@@ -58,6 +58,7 @@ class CreateVirtualObjectsJob < GenericJob
       end
 
       errors = VirtualObjectsCreator.create(virtual_objects: virtual_objects)
+      ActiveRecord::Base.clear_active_connections!
       if errors.empty?
         bulk_action.increment!(:druid_count_success, virtual_objects.length)
         log.puts("#{Time.current} #{SUCCESS_MESSAGE}: #{parent_ids_from(virtual_objects).to_sentence}")
