@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe DorObjectWorkflowStatus do
-  subject { described_class.new(pid) }
+  subject { described_class.new(pid, version: 1) }
 
   let(:pid) { 'druid:abc123def4567' }
 
@@ -24,7 +24,7 @@ RSpec.describe DorObjectWorkflowStatus do
           .to receive(:lifecycle).with('dor', pid, 'accessioned')
                                  .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', pid, 'submitted')
+          .to receive(:active_lifecycle).with('dor', pid, 'submitted', version: 1)
                                         .and_return(true)
       end
 
@@ -37,10 +37,10 @@ RSpec.describe DorObjectWorkflowStatus do
           .to receive(:lifecycle).with('dor', pid, 'accessioned')
                                  .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', pid, 'submitted')
+          .to receive(:active_lifecycle).with('dor', pid, 'submitted', version: 1)
                                         .and_return(false)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', pid, 'opened')
+          .to receive(:active_lifecycle).with('dor', pid, 'opened', version: 1)
                                         .and_return(true)
       end
 
@@ -53,10 +53,10 @@ RSpec.describe DorObjectWorkflowStatus do
           .to receive(:lifecycle).with('dor', pid, 'accessioned')
                                  .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', pid, 'submitted')
+          .to receive(:active_lifecycle).with('dor', pid, 'submitted', version: 1)
                                         .and_return(false)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', pid, 'opened')
+          .to receive(:active_lifecycle).with('dor', pid, 'opened', version: 1)
                                         .and_return(false)
       end
 

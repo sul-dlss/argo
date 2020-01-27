@@ -8,7 +8,8 @@ RSpec.describe 'apo', js: true do
   let(:new_collection_druid) { 'druid:zy333wv6543' }
   let(:apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
   let(:collection) { Dor::Collection.new(pid: new_collection_druid, label: 'New Testing Collection') }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }

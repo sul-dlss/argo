@@ -44,8 +44,8 @@ class WorkflowServiceController < ApplicationController
     Dor::Config.workflow.client.lifecycle('dor', params[:pid], task)
   end
 
-  def get_active_lifecycle(task)
-    Dor::Config.workflow.client.active_lifecycle('dor', params[:pid], task)
+  def active_lifecycle(task, druid:, version:)
+    Dor::Config.workflow.client.active_lifecycle('dor', druid, task, version: version)
   end
 
   ##
@@ -79,8 +79,9 @@ class WorkflowServiceController < ApplicationController
   # Ported over logic from app/helpers/dor_object_helper.rb#LN167
   # @return [Boolean]
   def check_if_can_close_version
-    return true if get_active_lifecycle('opened') &&
-                   !get_active_lifecycle('submitted')
+    version = Dor::Services::Client.object(params[:pid]).version.current
+    return true if active_lifecycle('opened', druid: params[:pid], version: version) &&
+                   !active_lifecycle('submitted', druid: params[:pid], version: version)
 
     false
   end
@@ -90,8 +91,10 @@ class WorkflowServiceController < ApplicationController
   # @return [Boolean]
   def check_if_can_open_version
     return false unless check_if_accessioned
-    return false if get_active_lifecycle('submitted')
-    return false if get_active_lifecycle('opened')
+
+    version = Dor::Services::Client.object(params[:pid]).version.current
+    return false if active_lifecycle('submitted', druid: params[:pid], version: version)
+    return false if active_lifecycle('opened', druid: params[:pid], version: version)
 
     true
   end

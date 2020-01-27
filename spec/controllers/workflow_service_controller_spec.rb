@@ -5,18 +5,21 @@ require 'rails_helper'
 RSpec.describe WorkflowServiceController, type: :controller do
   before do
     sign_in(create(:user))
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
   let(:druid) { 'druid:abc:123' }
 
   describe 'GET closeable' do
     context 'when closeable' do
       it 'returns true' do
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', druid, 'opened')
+          .to receive(:active_lifecycle).with('dor', druid, 'opened', version: 1)
                                         .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted', version: 1)
                                         .and_return(false)
         get :closeable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq true
@@ -28,7 +31,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
       context 'not opened' do
         it 'returns false' do
           expect(Dor::Config.workflow.client)
-            .to receive(:active_lifecycle).with('dor', druid, 'opened')
+            .to receive(:active_lifecycle).with('dor', druid, 'opened', version: 1)
                                           .and_return(false)
           get :closeable, params: { pid: druid, format: :json }
           expect(assigns(:status)).to eq false
@@ -39,10 +42,10 @@ RSpec.describe WorkflowServiceController, type: :controller do
       context 'when opened && is submitted' do
         it 'returns false' do
           expect(Dor::Config.workflow.client)
-            .to receive(:active_lifecycle).with('dor', druid, 'opened')
+            .to receive(:active_lifecycle).with('dor', druid, 'opened', version: 1)
                                           .and_return(true)
           expect(Dor::Config.workflow.client)
-            .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+            .to receive(:active_lifecycle).with('dor', druid, 'submitted', version: 1)
                                           .and_return(true)
           get :closeable, params: { pid: druid, format: :json }
           expect(assigns(:status)).to eq false
@@ -70,7 +73,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
           .to receive(:lifecycle).with('dor', druid, 'accessioned')
                                  .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted', version: 1)
                                         .and_return(true)
         get :openable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
@@ -84,10 +87,10 @@ RSpec.describe WorkflowServiceController, type: :controller do
           .to receive(:lifecycle).with('dor', druid, 'accessioned')
                                  .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted', version: 1)
                                         .and_return(false)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', druid, 'opened')
+          .to receive(:active_lifecycle).with('dor', druid, 'opened', version: 1)
                                         .and_return(true)
         get :openable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq false
@@ -101,10 +104,10 @@ RSpec.describe WorkflowServiceController, type: :controller do
           .to receive(:lifecycle).with('dor', druid, 'accessioned')
                                  .and_return(true)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', druid, 'submitted')
+          .to receive(:active_lifecycle).with('dor', druid, 'submitted', version: 1)
                                         .and_return(false)
         expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', druid, 'opened')
+          .to receive(:active_lifecycle).with('dor', druid, 'opened', version: 1)
                                         .and_return(false)
         get :openable, params: { pid: druid, format: :json }
         expect(assigns(:status)).to eq true

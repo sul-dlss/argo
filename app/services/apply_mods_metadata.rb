@@ -70,7 +70,7 @@ class ApplyModsMetadata
   def version_object
     return unless accessioned?
 
-    unless DorObjectWorkflowStatus.new(item.pid).can_open_version?
+    unless DorObjectWorkflowStatus.new(item.pid, version: item.current_version).can_open_version?
       log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{item.pid}") # totally unexpected
       return
     end
