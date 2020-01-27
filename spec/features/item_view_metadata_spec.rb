@@ -10,7 +10,8 @@ RSpec.describe 'Item view', js: true do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files, version: version_client) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 

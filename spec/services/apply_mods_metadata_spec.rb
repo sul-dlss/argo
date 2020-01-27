@@ -10,6 +10,7 @@ RSpec.describe ApplyModsMetadata do
     instance_double(Dor::Item,
                     descMetadata: desc_metadata,
                     pid: 'druid:123abc',
+                    current_version: 1,
                     admin_policy_object_id: apo_druid,
                     save!: true)
   end
@@ -69,7 +70,7 @@ RSpec.describe ApplyModsMetadata do
     let(:workflow) { instance_double(DorObjectWorkflowStatus) }
 
     it 'writes a log error message if a version cannot be opened' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(item.pid).and_return(workflow)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(item.pid, version: 1).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(false)
 
       action.send(:version_object)
@@ -97,7 +98,7 @@ RSpec.describe ApplyModsMetadata do
     end
 
     it 'updates the version if the object is past the registered state' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(item.pid).and_return(workflow)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(item.pid, version: 1).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(true)
       expect(action).to receive(:commit_new_version)
 
@@ -137,7 +138,7 @@ RSpec.describe ApplyModsMetadata do
 
   describe 'in_accessioning?' do
     (0..9).each do |i|
-      it "returns true for DOR objects that are currently in acccessioning, false otherwise (:status_code #{i})" do
+      it "returns true for DOR objects that are currently in accessioning, false otherwise (:status_code #{i})" do
         allow(action).to receive(:status).and_return(i)
         if [2, 3, 4, 5].include?(i)
           expect(action.send(:in_accessioning?)).to be_truthy
@@ -150,7 +151,7 @@ RSpec.describe ApplyModsMetadata do
 
   describe 'accessioned?' do
     (0..9).each do |i|
-      it "returns true for DOR objects that are acccessioned, false otherwise (:status_code #{i})" do
+      it "returns true for DOR objects that are accessioned, false otherwise (:status_code #{i})" do
         allow(action).to receive(:status).and_return(i)
         if [6, 7, 8].include?(i)
           expect(action.send(:accessioned?)).to be_truthy

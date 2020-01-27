@@ -33,9 +33,10 @@ class PrepareJob < GenericJob
   private
 
   def open_object(pid, significance, description, user_name, log)
-    return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid)
-
     object = Dor.find(pid)
+
+    return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid, version: object.current_version)
+
     return log.puts("#{Time.current} Not authorized for #{pid}") unless ability.can?(:manage_item, object)
 
     VersionService.open(identifier: pid,
@@ -49,7 +50,7 @@ class PrepareJob < GenericJob
     bulk_action.increment(:druid_count_fail).save
   end
 
-  def openable?(pid)
-    DorObjectWorkflowStatus.new(pid).can_open_version?
+  def openable?(pid, version:)
+    DorObjectWorkflowStatus.new(pid, version: version).can_open_version?
   end
 end

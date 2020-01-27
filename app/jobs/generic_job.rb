@@ -73,7 +73,8 @@ class GenericJob < ActiveJob::Base
   end
 
   def open_new_version(object, description)
-    raise "#{Time.current} Unable to open new version for #{object.pid} (bulk_action.id=#{bulk_action.id})" unless DorObjectWorkflowStatus.new(object.pid).can_open_version?
+    wf_status = DorObjectWorkflowStatus.new(object.pid, version: object.current_version)
+    raise "#{Time.current} Unable to open new version for #{object.pid} (bulk_action.id=#{bulk_action.id})" unless wf_status.can_open_version?
 
     VersionService.open(identifier: object.pid,
                         significance: 'minor',
