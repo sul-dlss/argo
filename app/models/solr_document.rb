@@ -69,10 +69,13 @@ class SolrDocument
     end
   end
 
+  # These values are used to drive the display for the datastream table on the item show page
+  # This method is now excluding the workflows datastream because this datastream is deprecated.
   # @return[Array<Hash>] the deserialized datastream attributes
   def datastreams
-    fetch('ds_specs_ssim', []).map do |spec_string|
+    specs = fetch('ds_specs_ssim', []).map do |spec_string|
       Hash[[:dsid, :control_group, :mime_type, :version, :size, :label].zip(spec_string.split(/\|/))]
     end
+    specs.filter { |spec| spec[:dsid] != 'workflows' }
   end
 end
