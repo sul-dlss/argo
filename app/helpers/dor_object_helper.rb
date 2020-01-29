@@ -64,37 +64,6 @@ module DorObjectHelper
     render 'catalog/show_workflows', document_id: doc.id, workflows: workflows
   end
 
-  # Datastream helpers
-  CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }
-  def parse_specs(spec_string)
-    Hash[[:dsid, :control_group, :mime_type, :version, :size, :label].zip(spec_string.split(/\|/))]
-  end
-
-  def render_ds_control_group(doc, specs)
-    cg = specs[:control_group] || 'X'
-    "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
-  end
-
-  def render_ds_id(doc, specs)
-    link_to specs[:dsid], ds_solr_document_path(doc['id'], specs[:dsid]), title: specs[:dsid], data: { behavior: 'persistent-modal' }
-  end
-
-  def render_ds_mime_type(doc, specs)
-    specs[:mime_type]
-  end
-
-  def render_ds_version(doc, specs)
-    "v#{specs[:version]}"
-  end
-
-  def render_ds_size(doc, specs)
-    number_to_human_size(specs[:size])
-  end
-
-  def render_ds_label(doc, specs)
-    specs[:label]
-  end
-
   # rubocop:disable Metrics/LineLength
   def render_ds_profile_header(ds)
     dscd = ds.createDate
