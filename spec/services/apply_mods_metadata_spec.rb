@@ -29,10 +29,10 @@ RSpec.describe ApplyModsMetadata do
   describe '#apply' do
     subject(:apply) { action.apply }
 
-    let(:status_service) { instance_double(Dor::StatusService, status_info: { status_code: 9 }) }
+    let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: 9 }) }
 
     before do
-      allow(Dor::StatusService).to receive(:new).and_return(status_service)
+      allow(Dor::Config.workflow.client).to receive(:status).and_return(status_service)
     end
 
     context 'with permission' do
@@ -62,10 +62,11 @@ RSpec.describe ApplyModsMetadata do
 
   describe 'version_object' do
     before do
-      allow(Dor::StatusService).to receive(:new).and_return(stub_service)
+      allow(Dor::Config.workflow.client).to receive(:status).and_return(status_service)
     end
 
-    let(:stub_service) { instance_double(Dor::StatusService, status_info: { status_code: status_code }) }
+    let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: status_code }) }
+
     let(:status_code) { 6 }
     let(:workflow) { instance_double(DorObjectWorkflowStatus) }
 

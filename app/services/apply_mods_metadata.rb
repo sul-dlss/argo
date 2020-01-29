@@ -118,10 +118,10 @@ class ApplyModsMetadata
     [1, 6, 7, 8, 9].include?(status)
   end
 
-  # Returns the status_info for a DOR object from the StatusService
+  # Returns the status code for a DOR object
   #
   # @return [Integer] value corresponding to the status info list
   def status
-    @status ||= Dor::StatusService.new(item).status_info[:status_code]
+    @status ||= Dor::Config.workflow.client.status(druid: item.pid, version: item.current_version).info[:status_code]
   end
 end
