@@ -69,7 +69,7 @@ gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy', '~> 2.0'
 gem 'dor-services', '~> 8.1'
 gem 'dor-services-client', '~> 4.0'
-gem 'dor-workflow-client', '~> 3.11'
+gem 'dor-workflow-client', '~> 3.19'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '>= 3.1' # 3.1 or greater is needed for token auth and fix for POST requests
