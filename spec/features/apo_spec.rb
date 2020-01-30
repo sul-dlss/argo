@@ -9,7 +9,8 @@ RSpec.describe 'apo', js: true do
   let(:apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
   let(:collection) { Dor::Collection.new(pid: new_collection_druid, label: 'New Testing Collection') }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client) }
+  let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client, events: events_client) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }

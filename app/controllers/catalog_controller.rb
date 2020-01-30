@@ -166,7 +166,7 @@ class CatalogController < ApplicationController
     # Configure document actions framework
     config.index.document_actions.delete(:bookmark)
 
-    config.show.partials = %w(show_header full_view_links thumbnail show datastreams cocina history contents)
+    config.show.partials = %w(show_header full_view_links thumbnail show datastreams events cocina history contents)
   end
 
   def default_solr_doc_params(id = nil)
@@ -187,12 +187,15 @@ class CatalogController < ApplicationController
     authorize! :view_metadata, @obj
     @response, @document = fetch params[:id]
 
+    object_client = Dor::Services::Client.object(params[:id])
+
     # Used for drawing releaseTags in the history section
     begin
-      @cocina = Dor::Services::Client.object(params[:id]).find
+      @cocina = object_client.find
     rescue Dor::Services::Client::UnexpectedResponse
       @cocina = NilModel.new(params[:id])
     end
+    @events = object_client.events.list
 
     @buttons_presenter = ButtonsPresenter.new(
       ability: current_ability,

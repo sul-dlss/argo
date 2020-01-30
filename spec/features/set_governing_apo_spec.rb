@@ -52,7 +52,8 @@ RSpec.describe 'Set governing APO' do
 
   context 'when modification is allowed' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 

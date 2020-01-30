@@ -10,6 +10,8 @@ RSpec.describe 'Item view', js: true do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:event) { Dor::Services::Client::Events::Event.new(event_type: 'shelve_request_received', data: { 'host' => 'dor-services-stage.stanford.edu' }) }
+  let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: []) }
 
@@ -17,7 +19,7 @@ RSpec.describe 'Item view', js: true do
     let(:files) do
       instance_double(Dor::Services::Client::Files, list: ['this_is_not_the_file_you_are_looking_for.txt'])
     end
-    let(:object_client) { instance_double(Dor::Services::Client::Object, files: files, version: version_client) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, files: files, version: version_client, events: events_client) }
 
     before do
       allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
@@ -33,7 +35,7 @@ RSpec.describe 'Item view', js: true do
   end
 
   context 'when the cocina_model exists' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files, version: version_client) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files, version: version_client, events: events_client) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 

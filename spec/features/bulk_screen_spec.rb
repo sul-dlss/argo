@@ -4,8 +4,10 @@ require 'rails_helper'
 
 # Feature/view tests for the (old) bulk actions view.
 RSpec.describe 'Bulk actions view', js: true do
+  let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
+
   let(:object_client) do
-    instance_double(Dor::Services::Client::Object, publish: true, find: cocina_model)
+    instance_double(Dor::Services::Client::Object, publish: true, find: cocina_model, events: events_client)
   end
 
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: admin_md, as_json: {}) }

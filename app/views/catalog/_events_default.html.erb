@@ -1,0 +1,17 @@
+<% if params[:beta] %>
+  <h3 id="document-events-head" class="section-head collapsible-section">
+    Events
+  </h3>
+  <div id="document-events-section" class="document-section">
+    <table class="detail">
+      <thead>
+        <tr><th>When</th><th>Event type</th><th>Data</th></tr>
+      </thead>
+      <tbody>
+      <% @events.each do |event| %>
+        <tr><td><time-ago datetime="<%= event.timestamp %>"><%= event.timestamp %></time-ago></td><td><%= event.event_type %></td><td><%= event.data %></td></tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
