@@ -8,7 +8,7 @@ RSpec.describe 'Bulk actions view', js: true do
     instance_double(Dor::Services::Client::Object, publish: true, find: cocina_model)
   end
 
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: admin_md) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: admin_md, as_json: {}) }
   let(:admin_md) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: nil) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: [], lifecycle: [], active_lifecycle: []) }
 

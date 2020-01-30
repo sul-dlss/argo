@@ -23,7 +23,7 @@ RSpec.describe 'Collection manage release' do
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, release_tags: release_tags_client) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
   it 'Has a manage release button' do

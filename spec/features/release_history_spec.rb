@@ -13,7 +13,7 @@ RSpec.describe 'Release history' do
   let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: []) }
 
   context 'for an item' do
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: [tag]) }
     let(:tag) do
       instance_double(Cocina::Models::ReleaseTag,
@@ -34,7 +34,7 @@ RSpec.describe 'Release history' do
   end
 
   context 'for an adminPolicy' do
-    let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative) }
+    let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicy::Administrative) }
 
     it 'does not show release history' do

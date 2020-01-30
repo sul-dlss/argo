@@ -10,7 +10,7 @@ RSpec.describe 'apo', js: true do
   let(:collection) { Dor::Collection.new(pid: new_collection_druid, label: 'New Testing Collection') }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client) }
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }

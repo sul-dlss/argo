@@ -640,7 +640,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 9.0)
-  dor-services-client (~> 4.0)
+  dor-services-client (~> 4.4)
   dor-workflow-client (~> 3.19)
   equivalent-xml (>= 0.6.0)
   eye
