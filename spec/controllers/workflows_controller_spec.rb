@@ -131,9 +131,10 @@ RSpec.describe WorkflowsController, type: :controller do
 
   describe '#history' do
     let(:xml) { instance_double(String) }
+    let(:workflows) { instance_double(Dor::Workflow::Response::Workflows, xml: xml) }
+    let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows) }
     let(:workflow_client) do
-      instance_double(Dor::Workflow::Client,
-                      all_workflows_xml: xml)
+      instance_double(Dor::Workflow::Client, workflow_routes: workflow_routes)
     end
 
     it 'fetches the workflow history' do

@@ -86,7 +86,7 @@ class WorkflowsController < ApplicationController
   end
 
   def history
-    @history_xml = Dor::Config.workflow.client.all_workflows_xml params[:item_id]
+    @history_xml = Dor::Config.workflow.client.workflow_routes.all_workflows(pid: params[:item_id]).xml
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
