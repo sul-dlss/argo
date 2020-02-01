@@ -56,6 +56,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Book (ltr)',
                 'Registered By : jcoyne85'],
+          seed_datastream: ['descMetadata'],
           rights: 'default',
           source_id: 'foo:bar',
           other_id: 'label:'
@@ -74,6 +75,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             label: 'test parameters for registration',
             tag: ['Process : Content Type : Book (ltr)',
                   'Registered By : jcoyne85'],
+            seed_datastream: ['descMetadata'],
             rights: 'default',
             source_id: 'foo:bar',
             other_id: 'label:'
