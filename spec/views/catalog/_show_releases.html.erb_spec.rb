@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe 'catalog/_show_releases.html.erb' do
   let(:release_tags) do
     [
-      Cocina::Models::DRO::ReleaseTag.new(to: 'SEARCHWORKS', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed', release: false),
-      Cocina::Models::DRO::ReleaseTag.new(to: 'SEARCHWORKS', what: 'self', date: '2016-09-13T20:00Z', who: 'pjreed', release: true)
+      Cocina::Models::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-12T20:00Z', who: 'pjreed', release: false),
+      Cocina::Models::ReleaseTag.new(to: 'Searchworks', what: 'self', date: '2016-09-13T20:00Z', who: 'pjreed', release: true)
     ]
   end
 
@@ -19,7 +19,7 @@ RSpec.describe 'catalog/_show_releases.html.erb' do
     expect(rendered).to have_css 'table.table'
     expect(rendered).to have_css 'tbody td:nth-child(1)', text: 'true'
     expect(rendered).to have_css 'tbody td:nth-child(2)', text: 'self', count: 2
-    expect(rendered).to have_css 'tbody td:nth-child(3)', text: 'SEARCHWORKS', count: 2
+    expect(rendered).to have_css 'tbody td:nth-child(3)', text: 'Searchworks', count: 2
     expect(rendered).to have_css 'tbody td:nth-child(4)', text: 'pjreed', count: 2
     expect(rendered).to have_css 'tbody td:nth-child(5)', text: '2016-09-13T20:00:00+00:00'
   end
