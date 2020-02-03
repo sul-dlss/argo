@@ -34,7 +34,7 @@ class Dor::ObjectsController < ApplicationController
   # source_id and label are required parameters
   def registration_params
     hash = params.permit(:object_type, :admin_policy, :metadata_source, :rights,
-                         :collection, :other_id, tag: [])
+                         :collection, :other_id, tag: [], seed_datastream: [])
     hash[:source_id] = params.require(:source_id)
     hash[:label] = params.require(:label)
     hash
