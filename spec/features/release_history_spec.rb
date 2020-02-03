@@ -15,7 +15,7 @@ RSpec.describe 'Release history' do
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: [tag]) }
     let(:tag) do
-      instance_double(Cocina::Models::DRO::ReleaseTag,
+      instance_double(Cocina::Models::ReleaseTag,
                       release: 'true',
                       what: 'self',
                       to: 'Searchworks',
