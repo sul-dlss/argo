@@ -24,13 +24,11 @@ class CollectionForm < BaseForm
 
   # Copies the values to the model
   def sync
+    # NOTE: collection_abstract only appears in conjunction with collection_title
+    #       and disjoint from collection_catkey
     return if params[:collection_abstract].blank?
 
     model.descMetadata.abstract = params[:collection_abstract]
-    model.descMetadata.content = model.descMetadata.ng_xml.to_s
-
-    # TODO: is this save necessary?
-    model.descMetadata.save
   end
 
   private
@@ -57,8 +55,14 @@ class CollectionForm < BaseForm
                           end
     reg_params[:rights] &&= reg_params[:rights].downcase
     col_catkey = params[:collection_catkey] || ''
-    reg_params[:metadata_source] = col_catkey.blank? ? 'label' : 'symphony'
-    reg_params[:other_id] = "symphony:#{col_catkey}" if col_catkey.present?
+
+    if col_catkey.present?
+      reg_params[:seed_datastream] = ['descMetadata']
+      reg_params[:metadata_source] = 'symphony'
+      reg_params[:other_id] = "symphony:#{col_catkey}"
+    else
+      reg_params[:metadata_source] = 'label'
+    end
     reg_params
   end
 end
