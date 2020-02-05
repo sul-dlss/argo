@@ -58,9 +58,6 @@ RSpec.describe CollectionsController do
       abstract = 'this is the abstract'
       mock_desc_md_ds = double(Dor::DescMetadataDS)
       expect(mock_desc_md_ds).to receive(:abstract=).with(abstract)
-      expect(mock_desc_md_ds).to receive(:ng_xml)
-      expect(mock_desc_md_ds).to receive(:content=)
-      expect(mock_desc_md_ds).to receive(:save)
 
       expect(Dor::Services::Client.objects).to receive(:register) do |params|
         expect(params[:params]).to match a_hash_including(
@@ -74,7 +71,7 @@ RSpec.describe CollectionsController do
       end
       expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name)
         .with(collection.pid, 'accessionWF', version: '1')
-      expect(collection).to receive(:descMetadata).and_return(mock_desc_md_ds).exactly(4).times
+      expect(collection).to receive(:descMetadata).and_return(mock_desc_md_ds)
 
       post :create, params: { 'collection_title' => title,
                               'collection_abstract' => abstract,
