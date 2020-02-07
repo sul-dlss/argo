@@ -8,7 +8,7 @@ module ApoHelper
   end
 
   def apo_metadata_sources
-    [['Symphony'], ['DOR']]
+    [['Symphony'], ['DOR'], ['label']]
   end
 
   # Retrieve a list of workflow templates from  the workflow service and return
