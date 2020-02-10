@@ -3,9 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe ApplyModsMetadata do
-  let(:mods_node) {}
+  let(:xml) do
+    <<~XML
+      <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.loc.gov/mods/v3" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+            <titleInfo>
+              <title>Oral history with Jakob Spielmann</title>
+            </titleInfo>
+      </mods>
+    XML
+  end
+
+  # This gives us the MODS as a Nokogiri::Element rather than as a document (see ModsulatorJob).
+  let(:mods_node) { Nokogiri::XML("<xmlDoc>#{xml}</xmlDoc>").xpath('/xmlDoc').first.first_element_child }
   let(:apo_druid) { 'druid:999apo' }
-  let(:desc_metadata) { instance_double(Dor::DescMetadataDS, content: '<xml/>', 'content=': true) }
+
+  let(:desc_metadata) { Dor::DescMetadataDS.new }
   let(:item) do
     instance_double(Dor::Item,
                     descMetadata: desc_metadata,

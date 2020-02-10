@@ -42,9 +42,16 @@ class ApplyModsMetadata
       return
     end
 
+    item.descMetadata.content = mods_node.to_s
+
+    errors = ModsValidator.validate(item.descMetadata.ng_xml)
+    if errors.present?
+      log.puts "argo.bulk_metadata.bulk_log_validation_error #{item.pid} #{errors.join(';')}"
+      return
+    end
+
     version_object
 
-    item.descMetadata.content = mods_node.to_s
     item.save!
     log.puts("argo.bulk_metadata.bulk_log_job_save_success #{item.pid}")
   rescue StandardError => e
