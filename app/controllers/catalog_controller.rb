@@ -188,7 +188,11 @@ class CatalogController < ApplicationController
     @response, @document = fetch params[:id]
 
     # Used for drawing releaseTags in the history section
-    @cocina = Dor::Services::Client.object(params[:id]).find
+    begin
+      @cocina = Dor::Services::Client.object(params[:id]).find
+    rescue Dor::Services::Client::UnexpectedResponse
+      @cocina = NilModel.new(params[:id])
+    end
 
     @buttons_presenter = ButtonsPresenter.new(
       ability: current_ability,
