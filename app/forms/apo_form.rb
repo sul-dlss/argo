@@ -21,13 +21,16 @@ class ApoForm < BaseForm
     @errors.empty?
   end
 
-  # Copies the values to the model and saves and indexes
+  # Copies the values to the model, saves and indexes, and starts workflow.
   def save
+    @needs_accession_workflow = false
     find_or_register_model
     sync
     add_default_collection
     model.save
     model.update_index
+    # Kick off the accessionWF after all updates are complete.
+    Dor::Config.workflow.client.create_workflow_by_name(model.pid, 'accessionWF', version: '1') if @needs_accession_workflow
   end
 
   # Copies the values to the model
@@ -201,7 +204,7 @@ class ApoForm < BaseForm
   # @return [Dor::AdminPolicyObject] registers the APO
   def register_model
     response = Dor::Services::Client.objects.register(params: register_params)
-    Dor::Config.workflow.client.create_workflow_by_name(response[:pid], 'accessionWF', version: '1')
+    @needs_accession_workflow = true
     # Once it's been created we populate it with its metadata
     Dor.find(response[:pid])
   end
