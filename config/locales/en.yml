@@ -31,6 +31,7 @@ en:
       bulk_log_record_count:       	     'Number of records'
       bulk_log_error_exception:    	     'Exception'
       bulk_log_unable_to_version:    	   'Error - Unable to create new object version, please report this'
+      bulk_log_validation_error:    	   'Error - generated MODS was invalid'
       bulk_log_invalid_column:     	     'Error - spreadsheet contains unrecognized column name'
       bulk_log_skipped_mods:	   	       'Skipped - input matches current MODS'
       bulk_log_skipped_accession:  	     'Skipped - item is currently being accessioned'
