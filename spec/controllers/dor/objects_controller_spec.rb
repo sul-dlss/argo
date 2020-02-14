@@ -96,7 +96,15 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
 
       it 'shows an error' do
-        post :create, params: { source_id: 'foo:bar', label: 'This things' }
+        post :create, params: {
+          source_id: 'foo:bar',
+          label: 'This things',
+          other_id: 'label:',
+          admin_policy: 'druid:fr135sr6388',
+          collection: '',
+          tag: ['Process : Content Type : Book (ltr)',
+                'Registered By : jcoyne85']
+        }
         expect(response.status).to eq 409
         expect(response.body).to eq message
       end

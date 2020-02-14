@@ -10,7 +10,57 @@ class Dor::ObjectsController < ApplicationController
     end
 
     begin
-      response = Dor::Services::Client.objects.register(params: registration_params.to_h)
+      # "tag"=>["Process : Content Type : Book (ltr)", "Registered By : jcoyne85"],
+      process_tag = registration_params[:tag].find { |t| t.start_with?('Process : Content Type :') }.split(' : ').last
+      project_tag = registration_params[:tag].find { |t| t.start_with?('Project : ') }&.partition(' : ')&.last
+
+      type = case process_tag
+             when 'Book (rtl)', 'Book (ltr)'
+               direction = process_tag.end_with?('rtl') ? 'right-to-left' : 'left-to-right'
+               Cocina::Models::Vocab.book
+             when 'File'
+               Cocina::Models::Vocab.object
+             when 'Image'
+               Cocina::Models::Vocab.image
+             when 'Map'
+               Cocina::Models::Vocab.map
+             when 'Media'
+               Cocina::Models::Vocab.media
+             when '3D'
+               Cocina::Models::Vocab.three_dimensional
+             when 'Document'
+               Cocina::Models::Vocab.document
+             else
+               raise "unknown type #{old_type}"
+             end
+
+      model_params = {
+        type: type,
+        depositor: current_user.login,
+        label: registration_params[:label],
+        administrative: {
+          hasAdminPolicy: registration_params[:admin_policy],
+          partOfProject: project_tag
+        },
+        identification: {
+          sourceId: registration_params[:source_id]
+        },
+        structural: {}
+      }
+      if registration_params[:collection]
+        model_params[:structural][:collection] = registration_params[:collection]
+      end
+      if direction
+        model_params[:structural][:hasMemberOrders] = [{ viewingDirection: direction }]
+      end
+      if registration_params[:other_id].start_with?('symphony:') # the alternative is ":label"
+        catalog, record_id = registration_params[:other_id].split(':')
+        model_params[:identification][:catalogLinks] = [{ catalog: catalog, catalogRecordId: record_id }]
+      end
+
+      model_params[:access] = { access: registration_params[:rights] } if registration_params[:rights] != 'default'
+      model = Cocina::Models::RequestDRO.new(model_params)
+      response = Dor::Services::Client.objects.register(params: model)
     rescue Dor::Services::Client::UnexpectedResponse => e
       return render plain: e.message, status: :conflict if e.message.start_with?('Conflict')
 
