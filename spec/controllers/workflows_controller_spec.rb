@@ -13,12 +13,11 @@ RSpec.describe WorkflowsController, type: :controller do
   before do
     sign_in user
     allow(Dor).to receive(:find).with(pid).and_return(item)
-    allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
   end
 
   describe '#create' do
     context 'when they have manage access' do
-      let(:wf_datastream) { instance_double(Dor::WorkflowDs) }
       let(:workflow_client) do
         instance_double(Dor::Workflow::Client,
                         create_workflow_by_name: true,
@@ -26,17 +25,14 @@ RSpec.describe WorkflowsController, type: :controller do
       end
 
       before do
-        allow(item).to receive(:to_solr)
-        allow(ActiveFedora.solr.conn).to receive(:add)
+        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
         allow(controller).to receive(:authorize!).and_return(true)
-        allow(item).to receive(:workflows).and_return wf_datastream
       end
 
       context 'when the workflow is not active' do
         let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
 
         it 'initializes the new workflow' do
-          expect(controller).to receive(:flush_index)
           post :create, params: { item_id: pid, wf: 'accessionWF' }
           expect(workflow_client).to have_received(:create_workflow_by_name)
             .with(pid, 'accessionWF', version: '1')

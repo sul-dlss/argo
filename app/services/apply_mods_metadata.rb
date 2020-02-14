@@ -42,9 +42,16 @@ class ApplyModsMetadata
       return
     end
 
+    item.descMetadata.content = mods_node.to_s
+
+    errors = ModsValidator.validate(item.descMetadata.ng_xml)
+    if errors.present?
+      log.puts "argo.bulk_metadata.bulk_log_validation_error #{item.pid} #{errors.join(';')}"
+      return
+    end
+
     version_object
 
-    item.descMetadata.content = mods_node.to_s
     item.save!
     log.puts("argo.bulk_metadata.bulk_log_job_save_success #{item.pid}")
   rescue StandardError => e
@@ -122,6 +129,6 @@ class ApplyModsMetadata
   #
   # @return [Integer] value corresponding to the status info list
   def status
-    @status ||= Dor::Config.workflow.client.status(druid: item.pid, version: item.current_version).info[:status_code]
+    @status ||= WorkflowClientFactory.build.status(druid: item.pid, version: item.current_version).info[:status_code]
   end
 end

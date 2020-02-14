@@ -12,7 +12,6 @@ RSpec.describe VersionsController, type: :controller do
     allow(Dor).to receive(:find).with(pid).and_return(item)
     idmd = double
     apo  = double
-    wf   = instance_double(Dor::WorkflowDs)
     idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = double(Nokogiri::XML::Document)
     allow(idmd).to receive(:"content_will_change!")
@@ -20,12 +19,11 @@ RSpec.describe VersionsController, type: :controller do
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
     allow(apo).to receive(:pid).and_return('druid:apo')
-    allow(wf).to receive(:content).and_return '<workflows objectId="druid:bx756pk3634"></workflows>'
     allow(item).to receive(:to_solr)
     allow(item).to receive(:save)
     allow(item).to receive(:datastreams).and_return('identityMetadata' => idmd, 'events' => Dor::EventsDS.new)
     allow(item).to receive(:admin_policy_object).and_return(apo)
-    allow(ActiveFedora.solr.conn).to receive(:add)
+    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
   end
 
   let(:user) { create(:user) }
@@ -43,7 +41,8 @@ RSpec.describe VersionsController, type: :controller do
 
       it 'calls dor-services to open a new version' do
         expect(item).to receive(:save)
-        expect(ActiveFedora.solr.conn).to receive(:add)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
+
         get :open, params: {
           item_id: pid,
           significance: options[:significance],
@@ -76,7 +75,8 @@ RSpec.describe VersionsController, type: :controller do
 
       it 'calls dor-services to close the version' do
         expect(item).to receive(:save)
-        expect(ActiveFedora.solr.conn).to receive(:add)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
+
         get :close, params: { item_id: pid, significance: 'major', description: 'something' }
         expect(flash[:notice]).to eq "Version 2 of #{pid} has been closed!"
         expect(version_service).to have_received(:close).with(description: 'something', significance: 'major')

@@ -9,7 +9,7 @@ class FilesController < ApplicationController
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
     @available_in_workspace = Dor::Services::Client.object(params[:item_id]).files.list.include?(filename)
-    @has_been_accessioned = Dor::Config.workflow.client.lifecycle('dor', params[:item_id], 'accessioned')
+    @has_been_accessioned = WorkflowClientFactory.build.lifecycle('dor', params[:item_id], 'accessioned')
 
     if @has_been_accessioned
       begin

@@ -15,7 +15,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:item_id` The druid for the object.
   # @option params [String] `:id` The workflow name. e.g., accessionWF.
   def show
-    workflow = Dor::Config.workflow.client.workflow(pid: params[:item_id], workflow_name: params[:id])
+    workflow = WorkflowClientFactory.build.workflow(pid: params[:item_id], workflow_name: params[:id])
     respond_to do |format|
       format.html do
         @presenter = build_show_presenter(workflow)
@@ -37,11 +37,11 @@ class WorkflowsController < ApplicationController
     return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], @object)
 
     # this will raise an exception if the item doesn't have that workflow step
-    Dor::Config.workflow.client.workflow_status(druid: params[:item_id],
+    WorkflowClientFactory.build.workflow_status(druid: params[:item_id],
                                                 workflow: params[:id],
                                                 process: params[:process])
     # update the status for the step and redirect to the workflow view page
-    Dor::Config.workflow.client.update_status(druid: params[:item_id],
+    WorkflowClientFactory.build.update_status(druid: params[:item_id],
                                               workflow: params[:id],
                                               process: params[:process],
                                               status: params[:status])
@@ -70,11 +70,12 @@ class WorkflowsController < ApplicationController
       return
     end
 
-    Dor::Config.workflow.client.create_workflow_by_name(@object.pid, wf_name, version: @object.current_version)
+    WorkflowClientFactory.build.create_workflow_by_name(@object.pid, wf_name, version: @object.current_version)
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
-    reindex Dor.find(@object.pid)
+    Argo::Indexer.reindex_pid_remotely(@object.pid)
+
     msg = "Added #{wf_name}"
 
     if params[:bulk]
@@ -82,11 +83,10 @@ class WorkflowsController < ApplicationController
     else
       redirect_to solr_document_path(@object.pid), notice: msg
     end
-    flush_index
   end
 
   def history
-    @history_xml = Dor::Config.workflow.client.workflow_routes.all_workflows(pid: params[:item_id]).xml
+    @history_xml = WorkflowClientFactory.build.workflow_routes.all_workflows(pid: params[:item_id]).xml
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -99,7 +99,7 @@ class WorkflowsController < ApplicationController
 
   # Fetches the workflow from the workflow service and checks to see if it's active
   def workflow_active?(wf_name)
-    client = Dor::Config.workflow.client
+    client = WorkflowClientFactory.build
     workflow = client.workflow(pid: @object.pid, workflow_name: wf_name)
     workflow.active_for?(version: @object.current_version)
   end
@@ -113,17 +113,9 @@ class WorkflowsController < ApplicationController
   end
 
   def workflow_processes(workflow_name)
-    client = Dor::Config.workflow.client
+    client = WorkflowClientFactory.build
     workflow_definition = client.workflow_template(workflow_name)
     workflow_definition['processes'].map { |process| process['name'] }
-  end
-
-  def flush_index
-    ActiveFedora.solr.conn.commit
-  end
-
-  def reindex(item)
-    ActiveFedora.solr.conn.add item.to_solr
   end
 
   def load_resource

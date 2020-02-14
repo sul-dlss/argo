@@ -5,11 +5,12 @@ require 'rails_helper'
 RSpec.describe 'Release history' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor::Config.workflow.client).to receive_messages(active_lifecycle: [], lifecycle: [])
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: []) }
 
   context 'for an item' do
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }

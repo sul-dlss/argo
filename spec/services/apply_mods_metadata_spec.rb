@@ -3,9 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe ApplyModsMetadata do
-  let(:mods_node) {}
+  let(:xml) do
+    <<~XML
+      <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.loc.gov/mods/v3" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
+            <titleInfo>
+              <title>Oral history with Jakob Spielmann</title>
+            </titleInfo>
+      </mods>
+    XML
+  end
+
+  # This gives us the MODS as a Nokogiri::Element rather than as a document (see ModsulatorJob).
+  let(:mods_node) { Nokogiri::XML("<xmlDoc>#{xml}</xmlDoc>").xpath('/xmlDoc').first.first_element_child }
   let(:apo_druid) { 'druid:999apo' }
-  let(:desc_metadata) { instance_double(Dor::DescMetadataDS, content: '<xml/>', 'content=': true) }
+
+  let(:desc_metadata) { Dor::DescMetadataDS.new }
   let(:item) do
     instance_double(Dor::Item,
                     descMetadata: desc_metadata,
@@ -26,13 +38,19 @@ RSpec.describe ApplyModsMetadata do
                         log: log)
   end
 
+  let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
+
+  before do
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+  end
+
   describe '#apply' do
     subject(:apply) { action.apply }
 
     let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: 9 }) }
 
     before do
-      allow(Dor::Config.workflow.client).to receive(:status).and_return(status_service)
+      allow(workflow_client).to receive(:status).and_return(status_service)
     end
 
     context 'with permission' do
@@ -62,7 +80,7 @@ RSpec.describe ApplyModsMetadata do
 
   describe 'version_object' do
     before do
-      allow(Dor::Config.workflow.client).to receive(:status).and_return(status_service)
+      allow(workflow_client).to receive(:status).and_return(status_service)
     end
 
     let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: status_code }) }

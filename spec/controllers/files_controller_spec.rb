@@ -115,8 +115,10 @@ RSpec.describe FilesController, type: :controller do
   end
 
   describe '#index' do
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: true) }
+
     before do
-      allow(Dor::Config.workflow.client).to receive(:lifecycle).with('dor', pid, 'accessioned').and_return(true)
+      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     end
 
     it 'requires an id parameter' do

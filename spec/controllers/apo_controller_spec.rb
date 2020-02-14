@@ -9,7 +9,6 @@ RSpec.describe ApoController, type: :controller do
 
     allow(Dor).to receive(:find).with(collection.pid).and_return(collection)
     allow(collection).to receive(:save)
-    allow(controller).to receive(:update_index)
 
     sign_in user
     allow(controller).to receive(:authorize!).with(:manage_item, Dor::AdminPolicyObject).and_return(true)

@@ -73,8 +73,8 @@ RSpec.describe 'Set governing APO' do
 
         expect(obj).not_to receive(:admin_policy_object=)
         expect(obj).not_to receive(:save)
-        expect(obj).not_to receive(:to_solr)
-        expect(ActiveFedora.solr.conn).not_to receive(:add)
+        expect(Argo::Indexer).not_to receive(:reindex_pid_remotely)
+
         click_button 'Update'
         expect(page.status_code).to eq 403
         expect(page).to have_css 'body', text: 'forbidden'
@@ -90,8 +90,8 @@ RSpec.describe 'Set governing APO' do
 
       expect(obj).to receive(:admin_policy_object=).with(new_apo)
       expect(obj).to receive(:save)
-      expect(obj).to receive(:to_solr).and_return({})
-      expect(ActiveFedora.solr.conn).to receive(:add).with({})
+      expect(Argo::Indexer).to receive(:reindex_pid_remotely)
+
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Governing APO updated!'
     end

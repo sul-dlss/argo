@@ -23,6 +23,6 @@ class DorObjectWorkflowStatus
   private
 
   def workflow
-    Dor::Config.workflow.client
+    WorkflowClientFactory.build
   end
 end

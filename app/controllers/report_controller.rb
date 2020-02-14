@@ -72,7 +72,7 @@ class ReportController < CatalogController
       druid = "druid:#{pid}"
       next unless current_ability.can_update_workflow?('waiting', Dor.find(druid))
 
-      Dor::Config.workflow.client.update_status(
+      WorkflowClientFactory.build.update_status(
         druid: druid,
         workflow: @workflow,
         process: @step,

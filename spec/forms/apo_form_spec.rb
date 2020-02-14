@@ -287,14 +287,17 @@ RSpec.describe ApoForm do
         }.with_indifferent_access
       end
 
+      let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
+
       before do
+        allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
         expect(Dor).to receive(:find).with(agreement.pid, cast: true).and_return(agreement)
         expect(Dor).to receive(:find).with(collection.pid).and_return(collection)
         expect(collection).to receive(:save)
-        expect(collection).to receive(:update_index)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely).twice
+
         expect(Dor).to receive(:find).with(apo.pid).and_return(apo)
         expect(apo).to receive(:save)
-        expect(apo).to receive(:update_index)
       end
 
       it 'hits the registration service to register both an APO and a collection' do
@@ -309,7 +312,8 @@ RSpec.describe ApoForm do
           expect(args[:metadata_source]).to be_nil # descMD is created via the form
           { pid: apo.pid }
         end
-        expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(apo.pid, 'accessionWF', version: '1')
+        expect(workflow_client).to receive(:create_workflow_by_name)
+          .with(apo.pid, 'accessionWF', version: '1')
 
         expect(apo).to receive(:"use_license=").with(params['use_license'])
 
@@ -323,7 +327,7 @@ RSpec.describe ApoForm do
           )
           { pid: collection.pid }
         end
-        expect(Dor::Config.workflow.client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF', version: '1')
+        expect(workflow_client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF', version: '1')
 
         instance.validate(params)
         instance.save

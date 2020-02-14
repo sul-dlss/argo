@@ -34,7 +34,7 @@ class ContentTypesController < ApplicationController
       end
     end
     @object.save
-    ActiveFedora.solr.conn.add(@object.to_solr) unless params[:bulk]
+    Argo::Indexer.reindex_pid_remotely(@object.pid) unless params[:bulk]
   end
 
   private

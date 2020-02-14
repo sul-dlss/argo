@@ -15,12 +15,6 @@ Dor.configure do
     url Settings.solrizer_url
   end
 
-  workflow do
-    url Settings.workflow_url
-    logfile Settings.workflow.logfile
-    shift_age Settings.workflow.shift_age
-  end
-
   suri do
     mint_ids     Settings.suri.mint_ids
     id_namespace Settings.suri.id_namespace

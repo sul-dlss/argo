@@ -9,7 +9,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
     allow(Dor).to receive(:find).with(dor_registration[:pid]).and_return(mock_object)
   end
 
-  let(:mock_object) { instance_double(Dor::Item, update_index: true) }
+  let(:mock_object) { instance_double(Dor::Item) }
   let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
   let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: dor_registration) }
   let(:dor_registration) { { pid: 'druid:abc' } }
@@ -17,7 +17,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
   describe '#create' do
     before do
       allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
-      allow(Dor::Config.workflow).to receive(:client).and_return(workflow_service)
+      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_service)
     end
 
     context 'when source_id is not provided' do
