@@ -4,27 +4,25 @@
   </thead>
   <tbody>
     <%
-      ## TODO: Pick a real date format for the date to_s calls.
-      ## Do it here and NOT in the model!!
       version_hash = document.get_versions
       milestones = document.milestones
-      milestones.keys.sort.each do |version|
-        steps=milestones[version]
-        first=true
+      milestones.keys.sort_by { |version_number_string| version_number_string.to_i }.each do |version|
+        steps = milestones[version]
+        first = true
         steps.each_pair do |k,m| -%>
-        <% if first
-            first=false
-        -%>
-          <tr style="display:none" class="last_step<%= version%>">
-            <td><span style="cursor: pointer;" onclick='$(".version<%= version%>").toggle();$(".last_step<%= version%>").toggle();'">+</span><%= version%></td>
+          <% if first
+               first = false
+          -%>
+          <tr style="display:none" class="last_step<%= version %>">
+            <td><span style="cursor: pointer;" onclick='$(".version<%= version %>").toggle();$(".last_step<%= version %>").toggle();'>+</span><%= version %></td>
             <td><%= steps['accessioned'][:display] || k.titleize %></td>
-            <td><%= steps['accessioned'][:time].nil? ? 'pending' : steps['accessioned'][:time].in_time_zone.to_s() %></td>
+            <td><%= steps['accessioned'][:time].nil? ? 'pending' : steps['accessioned'][:time].in_time_zone.to_s %></td>
           </tr>
-          <tr class="version<%= version%>">
-            <td colspan=3 onclick='$(".version<%= version%>") .toggle();$(".last_step<%= version%>").toggle();'><span style="cursor: pointer;">-</span>
-              <%=version%>
+          <tr class="version<%= version %>">
+            <td colspan=3 onclick='$(".version<%= version %>").toggle();$(".last_step<%= version %>").toggle();'><span style="cursor: pointer;">-</span>
+              <%= version %>
               <% if version_hash[version] -%>
-                (<%=version_hash[version][:tag]%>) <%=version_hash[version][:desc]%>
+                (<%= version_hash[version][:tag] %>) <%= version_hash[version][:desc] %>
               <% end -%>
             </td>
           </tr>
@@ -32,7 +30,7 @@
         <tr class="version<%= version %>">
           <td></td>
           <td><%= m[:display] || k.titleize %></td>
-          <td><%= m[:time].nil? ? 'pending' : m[:time].in_time_zone.to_s() %></td>
+          <td><%= m[:time].nil? ? 'pending' : m[:time].in_time_zone.to_s %></td>
         </tr>
       <% end -%>
     <% end -%>
