@@ -82,7 +82,7 @@ if ['test', 'development'].include? Rails.env
             puts "** File #{i}, Try #{attempt} ** file: #{file}"
 
             ActiveFedora::FixtureLoader.import_to_fedora(file, pid)
-            ActiveFedora::FixtureLoader.index(pid)
+            Dor.find(pid).update_index
           end
         end
         puts 'Done loading repo files'

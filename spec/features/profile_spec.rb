@@ -43,7 +43,7 @@ RSpec.describe 'Profile' do
         expect(page).to have_css 'td:nth-child(1)', text: 'SEARCHWORKS'
         expect(page).to have_css 'h5', text: 'Catkeys'
         expect(page).to have_css 'td:nth-child(1)', text: 'has value'
-        expect(page).to have_css 'td:nth-child(2)', text: '2'
+        expect(page).to have_css 'td:nth-child(2)', text: '33'
       end
     end
   end
@@ -54,7 +54,7 @@ RSpec.describe 'Profile' do
       within '#rights' do
         expect(page).to have_css 'h4', text: 'Rights'
         expect(page).to have_css 'td:nth-child(1)', text: 'dark'
-        expect(page).to have_css 'td:nth-child(2)', text: '2'
+        expect(page).to have_css 'td:nth-child(2)', text: '34'
       end
     end
   end
@@ -65,9 +65,9 @@ RSpec.describe 'Profile' do
       within '#contents' do
         expect(page).to have_css 'h4', text: 'Contents'
         expect(page).to have_css 'td:nth-child(1)', text: 'image'
-        expect(page).to have_css 'td:nth-child(2)', text: '3'
+        expect(page).to have_css 'td:nth-child(2)', text: '6'
         expect(page).to have_css 'td:nth-child(1)', text: 'Preserved file size'
-        expect(page).to have_css 'td:nth-child(2)', text: '160 MB'
+        expect(page).to have_css 'td:nth-child(2)', text: '1.58 GB'
       end
     end
   end
@@ -105,7 +105,7 @@ RSpec.describe 'Profile' do
         expect(page).to have_css 'td:nth-child(1)', text: 'has value'
         expect(page).to have_css 'td:nth-child(2)', text: '2'
         expect(page).to have_css 'td:nth-child(1)', text: 'English'
-        expect(page).to have_css 'td:nth-child(2)', text: '2'
+        expect(page).to have_css 'td:nth-child(2)', text: '22'
         expect(page).to have_css 'td:nth-child(1)', text: 'Cephalopoda'
         expect(page).to have_css 'td:nth-child(2)', text: '1'
         expect(page).to have_css 'td:nth-child(1)', text: 'Bermuda Islands'
@@ -120,7 +120,7 @@ RSpec.describe 'Profile' do
       within '#number-of-items' do
         expect(page).to have_css 'h4', text: 'Number of items'
         expect(page).to have_css 'td:nth-child(1)', text: 'item'
-        expect(page).to have_css 'td:nth-child(2)', text: '6'
+        expect(page).to have_css 'td:nth-child(2)', text: '10'
         expect(page).to have_css 'td.indented:nth-child(1)', text: 'Unknown Status'
         # TODO: this isn't always a dependable test, comment it out until we
         # find a way to make it true every time.
