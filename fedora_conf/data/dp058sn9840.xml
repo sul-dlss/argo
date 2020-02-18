@@ -63,9 +63,4 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:xmlContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
-<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
-<foxml:datastreamVersion ID="workflows.0" LABEL="Workflow" CREATED="2012-03-15T18:20:38.026Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:dp058sn9840/workflows"/>
-</foxml:datastreamVersion>
-</foxml:datastream>
 </foxml:digitalObject>

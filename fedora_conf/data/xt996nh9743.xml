@@ -131,7 +131,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
 <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata (MODS)" CREATED="2010-11-10T14:37:29.529Z" MIMETYPE="application/xml" SIZE="-1">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1vZHM6bW9kcyB4bWxuczptb2Rz
               PSJodHRwOi8vd3d3LmxvYy5nb3YvbW9kcy92MyIKICAgICAgICAgICB4bWxuczp4c2k9Imh0dHA6Ly93
               d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIgogICAgICAgICAgIHZlcnNpb249IjMuMyIK
@@ -188,12 +188,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               IDxtb2RzOnBoeXNpY2FsTG9jYXRpb24+U3RhbmZvcmQgVW5pdmVyc2l0eSBMaWJyYXJpZXM8L21vZHM6
               cGh5c2ljYWxMb2NhdGlvbj4KICAgICAgPG1vZHM6dXJsPmh0dHA6Ly9wdXJsLnN0YW5mb3JkLmVkdS94
               dDk5Nm5oOTc0MzwvbW9kczp1cmw+CiAgIDwvbW9kczpsb2NhdGlvbj4KPC9tb2RzOm1vZHM+
-</foxml:binaryContent> 
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="googleScannedBookWF" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
-<foxml:datastreamVersion ID="googleScannedBookWF.0" LABEL="Workflow" CREATED="2010-11-10T13:18:43.820Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:xt996nh9743/workflows/googleScannedBookWF"/>
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
@@ -217,11 +212,6 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <tag>Book : Non-US pre-1891</tag>
 </identityMetadata>
 </foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
-<foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-02-25T21:52:56.770Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:xt996nh9743/workflows"/>
 </foxml:datastreamVersion>
 </foxml:datastream>
 </foxml:digitalObject>

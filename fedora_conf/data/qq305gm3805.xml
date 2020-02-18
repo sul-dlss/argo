@@ -131,7 +131,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="descMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
 <foxml:datastreamVersion ID="descMetadata.0" LABEL="Descriptive Metadata (MODS)" CREATED="2010-11-10T11:25:59.718Z" MIMETYPE="application/xml" SIZE="-1">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPG1vZHM6bW9kcyB4bWxuczptb2Rz
               PSJodHRwOi8vd3d3LmxvYy5nb3YvbW9kcy92MyIKICAgICAgICAgICB4bWxuczp4c2k9Imh0dHA6Ly93
               d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIgogICAgICAgICAgIHZlcnNpb249IjMuMyIK
@@ -195,12 +195,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               PC9tb2RzOnBoeXNpY2FsTG9jYXRpb24+CiAgICAgIDxtb2RzOnVybD5odHRwOi8vcHVybC5zdGFuZm9y
               ZC5lZHUvcXEzMDVnbTM4MDU8L21vZHM6dXJsPgogICA8L21vZHM6bG9jYXRpb24+CjwvbW9kczptb2Rz
               Pg==
-</foxml:binaryContent> 
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="googleScannedBookWF" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
-<foxml:datastreamVersion ID="googleScannedBookWF.0" LABEL="Workflow" CREATED="2010-11-10T10:19:56.742Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:qq305gm3805/workflows/googleScannedBookWF"/>
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="identityMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
@@ -224,11 +219,6 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <tag>Book : US pre-1923</tag>
 </identityMetadata>
 </foxml:xmlContent>
-</foxml:datastreamVersion>
-</foxml:datastream>
-<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
-<foxml:datastreamVersion ID="workflows.0" LABEL="workflows" CREATED="2012-01-28T02:39:40.202Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-test.stanford.edu/workflow/dor/objects/druid:qq305gm3805/workflows"/>
 </foxml:datastreamVersion>
 </foxml:datastream>
 </foxml:digitalObject>

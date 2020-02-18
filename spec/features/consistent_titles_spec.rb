@@ -11,7 +11,7 @@ RSpec.describe 'Consistent titles' do
 
   it 'catalog index views' do
     visit search_catalog_path f: { objectType_ssim: ['item'] }
-    expect(page).to have_css '.index_title', text: '1. ' + title
+    expect(page).to have_css '.index_title a', text: title
   end
 
   describe 'catalog show view' do

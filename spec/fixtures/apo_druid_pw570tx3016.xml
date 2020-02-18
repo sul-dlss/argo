@@ -98,11 +98,6 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:xmlContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
-<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
-<foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2012-04-26T23:48:36.737Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-prod.stanford.edu/workflow/dor/objects/druid:zt570tx3016/workflows"/>
-</foxml:datastreamVersion>
-</foxml:datastream>
 <foxml:datastream ID="roleMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
 <foxml:datastreamVersion ID="roleMetadata.3" LABEL="Role Metadata" CREATED="2013-01-09T20:31:55.690Z" MIMETYPE="text/xml" SIZE="553">
 <foxml:xmlContent>

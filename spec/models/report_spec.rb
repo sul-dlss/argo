@@ -92,7 +92,7 @@ RSpec.describe Report, type: :model do
       expect(described_class.new(
         { q: 'report' }, %w(druid),
         current_user: user
-      ).pids).to eq(%w(fg464dn8891 pb873ty1662 qq613vj0238))
+      ).pids).to eq %w[fg464dn8891 mb062dy1188 pb873ty1662 px302sd8187 qq613vj0238 vr263bv4910 zy430ms2268]
     end
     it 'returns druids and source ids' do
       expect(described_class.new(

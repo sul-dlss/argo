@@ -7324,7 +7324,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <collection id="druid:wn316fx5031"></collection>
     <collection id="druid:cy131kq3062"></collection>
     <collection id="druid:ms016pb9280"></collection>
-    <collection id="druid:ks810ps7555"></collection> 
+    <collection id="druid:ks810ps7555"></collection>
    <collection id="druid:vt225px0749"></collection>
     <collection id="druid:rk213cd8889"></collection>
     <collection id="druid:wc773rb1224"></collection>
@@ -7520,7 +7520,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <collection id="druid:wn316fx5031"></collection>
     <collection id="druid:cy131kq3062"></collection>
     <collection id="druid:ms016pb9280"></collection>
-    <collection id="druid:ks810ps7555"></collection> 
+    <collection id="druid:ks810ps7555"></collection>
    <collection id="druid:vt225px0749"></collection>
     <collection id="druid:rk213cd8889"></collection>
     <collection id="druid:wc773rb1224"></collection>
@@ -7618,7 +7618,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <collection id="druid:wn316fx5031"></collection>
     <collection id="druid:cy131kq3062"></collection>
     <collection id="druid:ms016pb9280"></collection>
-    <collection id="druid:ks810ps7555"></collection> 
+    <collection id="druid:ks810ps7555"></collection>
    <collection id="druid:vt225px0749"></collection>
     <collection id="druid:rk213cd8889"></collection>
     <collection id="druid:wc773rb1224"></collection>
@@ -8605,14 +8605,6 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:xmlContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
-<foxml:datastream ID="workflows" STATE="A" CONTROL_GROUP="E" VERSIONABLE="false">
-<foxml:datastreamVersion ID="workflows.0" LABEL="Workflows" CREATED="2013-04-05T18:18:24.954Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-prod.stanford.edu/workflow/dor/objects/druid:ti057vk7675/workflows"/>
-</foxml:datastreamVersion>
-<foxml:datastreamVersion ID="workflows.4" LABEL="Workflow" CREATED="2014-04-25T17:20:27.668Z" MIMETYPE="application/xml">
-<foxml:contentLocation TYPE="URL" REF="https://lyberservices-prod.stanford.edu/workflow/dor/objects/druid:ti057vk7675/workflows"/>
-</foxml:datastreamVersion>
-</foxml:datastream>
 <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
 <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="Rights Metadata" CREATED="2013-04-05T21:27:20.442Z" MIMETYPE="text/xml" SIZE="572">
 <foxml:xmlContent>
@@ -8664,7 +8656,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="events" STATE="A" CONTROL_GROUP="M" VERSIONABLE="false">
 <foxml:datastreamVersion ID="events.4" LABEL="" CREATED="2014-01-30T19:52:23.764Z" MIMETYPE="text/xml" SIZE="827">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PGV2ZW50cz4KICA8ZXZlbnQgdHlwZT0icmVtZWRpYXRpb24iIHdobz0iRG9yOjpJZGVudGlmaWFibGUg
               My42LjEiIHdoZW49IjIwMTItMDUtMDdUMTY6NDU6MTMtMDc6MDAiPlJlY29yZCBSZW1lZGlhdGlvbiBW
               ZXJzaW9uPC9ldmVudD4KICA8ZXZlbnQgdHlwZT0icmVtZWRpYXRpb24iIHdobz0iRG9yOjpJZGVudGlm
@@ -8679,7 +8671,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               MDQtMDg6MDAiPlZlcnNpb24gMiBjbG9zZWQ8L2V2ZW50PjxldmVudCB0eXBlPSJyZW1lZGlhdGlvbiIg
               d2hvPSJEb3I6OklkZW50aWZpYWJsZSAzLjYuMSIgd2hlbj0iMjAxNC0wMS0zMFQxMTo1MjoyMy0wODow
               MCI+UmVjb3JkIFJlbWVkaWF0aW9uIFZlcnNpb248L2V2ZW50PjwvZXZlbnRzPgo=
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
