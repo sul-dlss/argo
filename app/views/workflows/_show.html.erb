@@ -22,7 +22,7 @@
   <tbody>
     <% if @presenter.processes.any? %>
       <% @presenter.processes.each_with_index do |process, index| %>
-        <%= render WorkflowProcessRow, index: index, process: process, item: @object %>
+        <%= render WorkflowProcessRow.new(index: index, process: process, item: @object) %>
       <% end %>
     <% else %>
       <tr><td colspan="8">No processes defined for this workflow.</td></tr>
