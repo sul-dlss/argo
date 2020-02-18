@@ -5,12 +5,12 @@
   <td>
     <% if can?(:update, :workflow) %>
       <% if error? %>
-        <%= render WorkflowStepStatusSelector, process: process %>
+        <%= render WorkflowStepStatusSelector.new(process: process) %>
       <% else %>
-        <%= render WorkflowUpdateButton, process: process %>
+        <%= render WorkflowUpdateButton.new(process: process) %>
       <% end %>
     <% elsif error? && can?(:manage_item, item) %>
-      <%= render WorkflowUpdateButton, process: process %>
+      <%= render WorkflowUpdateButton.new(process: process) %>
     <% end %>
   </td>
   <td><time-ago datetime="<%= datetime %>"><%= datetime %></time-ago></td>
