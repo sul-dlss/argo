@@ -10,7 +10,7 @@ RSpec.describe WorkflowProcessRow do
   let(:item) { instance_double(Dor::Item) }
 
   describe 'render' do
-    subject(:body) { render_inline(described_class, process: process, index: 1, item: item) }
+    subject(:body) { render_inline(described_class.new(process: process, index: 1, item: item)) }
 
     let(:process) do
       instance_double(Dor::Workflow::Response::Process,
