@@ -149,14 +149,7 @@ class ItemsController < ApplicationController
       fail ArgumentError, 'XML is not well formed!'
     end
     @object.datastreams[params[:dsid]].content = params[:content] # set the XML to be verbatim as posted
-
-    # Catch reindexing errors here to avoid cascading errors
-    begin
-      save_and_reindex
-    rescue ActiveFedora::ObjectNotFoundError
-      render plain: 'The object was not found in Fedora. Please recheck the RELS-EXT XML.', status: :not_found
-      return
-    end
+    save_and_reindex
 
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Datastream was successfully updated' }

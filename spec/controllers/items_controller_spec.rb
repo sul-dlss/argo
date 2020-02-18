@@ -318,15 +318,6 @@ RSpec.describe ItemsController, type: :controller do
       it 'errors on missing dsid parameter' do
         expect { post 'datastream_update', params: { id: @pid, content: xml } }.to raise_error(ArgumentError)
       end
-
-      it 'displays an error message if an invalid APO is entered as governor' do
-        @mock_ds = double(Dor::ContentMetadataDS)
-        allow(@mock_ds).to receive(:content=).and_return(true)
-        allow(@item).to receive(:datastreams).and_return('contentMetadata' => @mock_ds)
-        post 'datastream_update', params: { dsid: 'contentMetadata', id: @pid, content: invalid_apo_xml }
-        expect(response.code).to eq('404')
-        expect(response.body).to include('The object was not found in Fedora. Please recheck the RELS-EXT XML.')
-      end
     end
   end
 
