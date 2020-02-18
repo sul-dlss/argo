@@ -9,7 +9,7 @@ RSpec.describe 'Search results' do
   end
 
   it 'contains Blacklight default index page tools' do
-    visit search_catalog_path f: { empties: ['no_rights_characteristics'] }
+    visit search_catalog_path f: { content_type_ssim: ['book'] }
     within '.constraints-container' do
       expect(page).to have_css '#startOverLink', text: 'Start Over'
     end
@@ -35,7 +35,7 @@ RSpec.describe 'Search results' do
 
   it 'contains appropriate metadata fields' do
     visit search_catalog_path f: { objectType_ssim: ['item'] }
-    within('.document', match: :first) do
+    within('.document:nth-child(9)') do
       within '.document-metadata' do
         expect(page).to have_css 'dt', text: 'DRUID:'
         expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
@@ -55,9 +55,6 @@ RSpec.describe 'Search results' do
         expect(page).to have_css 'dd', text: 'fuller:M1090_S15_B02_F01_0126'
       end
     end
-    expect(page).to have_css 'dt', text: 'Collection:'
-    expect(page).to have_css 'dd a', text: 'druid:pb873ty1662'
-    expect(page).to have_css 'dd a', text: 'State Banking Commission Annual Reports'
   end
 
   it 'contains document image thumbnail' do

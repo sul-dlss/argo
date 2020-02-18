@@ -72,7 +72,7 @@ RSpec.describe 'Date range form', js: true do
       end
 
       find('#appliedParams')
-      expect(page).to have_content '1 entry found'
+      expect(page).to have_content '1 - 5 of 5'
       within '.constraints-container' do
         expect(page).to have_css '.filterValue', text: 'Reports'
         expect(page).to have_css '.filterName', text: 'Last Modified'
