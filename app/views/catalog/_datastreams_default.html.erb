@@ -5,7 +5,7 @@
 <div id="document-datastreams-section" class="document-section">
   <table class="detail">
     <% document.datastreams.each do |attributes| %>
-      <%= render DatastreamRow, document: document, attributes: attributes %>
+      <%= render DatastreamRow.new(document: document, attributes: attributes) %>
     <% end %>
   </table>
 </div>
