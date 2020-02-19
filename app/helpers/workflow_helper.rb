@@ -54,7 +54,7 @@ module WorkflowHelper
   end
 
   def workflow_process_names(workflow_name)
-    client = Dor::Config.workflow.client
+    client = WorkflowClientFactory.build
     workflow_definition = client.workflow_template(workflow_name)
     workflow_definition['processes'].collect { |process| [process['name'], process['label']] }
   rescue Dor::WorkflowException

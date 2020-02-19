@@ -1,4 +1,5 @@
 
+
 # Example settings for configuration
 # NOTE:  Please use lowercase.
 #   The config gem documents the correct usage as lowercase: https://github.com/railsconfig/config#embedded-ruby-erb
@@ -77,6 +78,7 @@ workflow_url: 'http://localhost:3001'
 workflow:
   logfile: 'log/workflow_service.log'
   shift_age: 'weekly'
+  timeout: 60
 
 apo:
   default_workflow_option: 'registrationWF'

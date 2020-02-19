@@ -44,11 +44,6 @@ namespace :argo do
     $stderr.puts "Version bumped to #{version}"
   end
 
-  desc 'Update completed/archived workflow counts'
-  task update_archive_counts: :environment do |t|
-    Dor.find_all('objectType_ssim:workflow').each(&:update_index)
-  end
-
   desc "List APO workgroups from Solr (#{apo_field_default()})"
   task workgroups: :environment do
     facet = workgroups_facet()

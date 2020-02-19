@@ -48,8 +48,6 @@ class ItemsController < ApplicationController
     :set_rights,
     :set_governing_apo
   ]
-  # must run after save_and_reindex
-  prepend_after_action :flush_index, only: [:embargo_update]
 
   def purl_preview
     xml = Dor::Services::Client.object(params[:id]).metadata.descriptive
@@ -151,14 +149,7 @@ class ItemsController < ApplicationController
       fail ArgumentError, 'XML is not well formed!'
     end
     @object.datastreams[params[:dsid]].content = params[:content] # set the XML to be verbatim as posted
-
-    # Catch reindexing errors here to avoid cascading errors
-    begin
-      save_and_reindex
-    rescue ActiveFedora::ObjectNotFoundError
-      render plain: 'The object was not found in Fedora. Please recheck the RELS-EXT XML.', status: :not_found
-      return
-    end
+    save_and_reindex
 
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Datastream was successfully updated' }
@@ -274,7 +265,7 @@ class ItemsController < ApplicationController
     end
 
     @object.delete
-    Dor::Config.workflow.client.delete_all_workflows(pid: @object.pid)
+    WorkflowClientFactory.build.delete_all_workflows(pid: @object.pid)
     ActiveFedora.solr.conn.delete_by_id(params[:id])
     ActiveFedora.solr.conn.commit
 
@@ -445,14 +436,6 @@ class ItemsController < ApplicationController
 
   private
 
-  def reindex(item)
-    ActiveFedora.solr.conn.add item.to_solr
-  end
-
-  def flush_index
-    ActiveFedora.solr.conn.commit
-  end
-
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
@@ -464,7 +447,7 @@ class ItemsController < ApplicationController
 
   def save_and_reindex
     @object.save
-    reindex @object unless params[:bulk]
+    Argo::Indexer.reindex_pid_remotely(@object.pid) unless params[:bulk]
   end
 
   # ---
@@ -496,6 +479,6 @@ class ItemsController < ApplicationController
   # Dor::Workflow utils
 
   def dor_lifecycle(object, stage)
-    Dor::Config.workflow.client.lifecycle('dor', object.pid, stage)
+    WorkflowClientFactory.build.lifecycle('dor', object.pid, stage)
   end
 end

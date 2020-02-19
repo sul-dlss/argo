@@ -102,6 +102,6 @@ class VersionsController < ApplicationController
 
   def save_and_reindex
     @object.save
-    ActiveFedora.solr.conn.add @object.to_solr
+    Argo::Indexer.reindex_pid_remotely(@object.pid)
   end
 end

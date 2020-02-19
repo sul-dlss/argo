@@ -22,7 +22,7 @@ RSpec.describe 'Add a workflow to an item' do
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 

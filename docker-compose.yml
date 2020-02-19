@@ -23,10 +23,34 @@ services:
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
+      SETTINGS__DOR__INDEXING__URL: http://dor-indexing-app:3000/dor
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
+    depends_on:
+      - dor-indexing-app
+
+  dor-indexing-app:
+    image: suldlss/dor-indexing-app:latest
+    ports:
+      - 3004:3000
+    environment:
+      SOLR_URL: http://solr:8983/solr/argo
+      SETTINGS__solr__url: http://solr:8983/solr/argo
+      SETTINGS__dor_services__url: http://dor-services-app:3000/
+      # To generate the token: docker-compose run dor-services-app rake generate_token
+      SETTINGS__dor_services__token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
+      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+      SETTINGS__SURI__URL: http://suri:3000
+      SETTINGS__WORKFLOW_URL: http://workflow:3000
+      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
+    depends_on:
+      - solr
+      - dor-services-app
+      - fcrepo
+      - workflow
 
   dor-services-app:
     image: suldlss/dor-services-app:latest
@@ -43,8 +67,6 @@ services:
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
-      SETTINGS__DOR__SERVICE_USER: dor-service-user
-      SETTINGS__DOR__SERVICE_PASSWORD: dor-service-password
     depends_on:
       - db
   solr:

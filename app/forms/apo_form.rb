@@ -28,9 +28,9 @@ class ApoForm < BaseForm
     sync
     add_default_collection
     model.save
-    model.update_index
+    Argo::Indexer.reindex_pid_remotely(model.pid)
     # Kick off the accessionWF after all updates are complete.
-    Dor::Config.workflow.client.create_workflow_by_name(model.pid, 'accessionWF', version: '1') if @needs_accession_workflow
+    WorkflowClientFactory.build.create_workflow_by_name(model.pid, 'accessionWF', version: '1') if @needs_accession_workflow
   end
 
   # Copies the values to the model

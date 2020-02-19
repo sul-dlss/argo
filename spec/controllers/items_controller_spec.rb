@@ -17,13 +17,13 @@ RSpec.describe ItemsController, type: :controller do
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
     allow(apo).to receive(:pid).and_return('druid:apo')
-    allow(@item).to receive_messages(to_solr: nil, save: nil, delete: nil,
+    allow(@item).to receive_messages(save: nil, delete: nil,
                                      identityMetadata: idmd,
                                      datastreams: { 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new },
                                      admin_policy_object: apo,
                                      current_version: '3')
     expect(@item).not_to receive(:workflows)
-    allow(ActiveFedora.solr.conn).to receive(:add)
+    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
     allow(StateService).to receive(:new).and_return(state_service)
   end
 
@@ -62,7 +62,7 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       before do
-        allow(Dor::Config.workflow).to receive(:client).and_return(client)
+        allow(Dor::Workflow::Client).to receive(:new).and_return(client)
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
@@ -118,8 +118,6 @@ RSpec.describe ItemsController, type: :controller do
         expect(@item).to receive(:update_embargo)
         expect(@item.datastreams['events']).to receive(:add_event).and_call_original
         expect(controller).to receive(:save_and_reindex)
-        expect(controller).to receive(:flush_index).and_call_original
-        expect(ActiveFedora.solr.conn).to receive(:commit) # from flush_index internals
         post :embargo_update, params: { id: @pid, embargo_date: '2100-01-01' }
         expect(response).to have_http_status(:found) # redirect to catalog page
       end
@@ -147,7 +145,7 @@ RSpec.describe ItemsController, type: :controller do
 
       it 'updates the source id' do
         expect(@item).to receive(:source_id=).with('new:source_id')
-        expect(ActiveFedora.solr.conn).to receive(:add)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
         post 'source_id', params: { id: @pid, new_id: 'new:source_id' }
       end
     end
@@ -169,7 +167,7 @@ RSpec.describe ItemsController, type: :controller do
 
       it 'updates the catkey, trimming whitespace' do
         expect(@item).to receive(:catkey=).with('12345')
-        expect(ActiveFedora.solr.conn).to receive(:add)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
         post 'catkey', params: { id: @pid, new_catkey: '   12345 ' }
       end
     end
@@ -180,7 +178,7 @@ RSpec.describe ItemsController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(@item).to receive(:tags).and_return(['some:thing'])
-        expect(ActiveFedora.solr.conn).to receive(:add)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
       end
 
       it 'updates tags' do
@@ -206,7 +204,7 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(@item).to receive(:tags).and_return(['some:thing'])
         expect(@item.datastreams['identityMetadata']).to receive(:save)
-        expect(ActiveFedora.solr.conn).to receive(:add)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
       end
 
       it 'removes an old tag an add a new one' do
@@ -319,16 +317,6 @@ RSpec.describe ItemsController, type: :controller do
       end
       it 'errors on missing dsid parameter' do
         expect { post 'datastream_update', params: { id: @pid, content: xml } }.to raise_error(ArgumentError)
-      end
-
-      it 'displays an error message if an invalid APO is entered as governor' do
-        @mock_ds = double(Dor::ContentMetadataDS)
-        allow(@mock_ds).to receive(:content=).and_return(true)
-        allow(@item).to receive(:to_solr).and_raise(ActiveFedora::ObjectNotFoundError)
-        allow(@item).to receive(:datastreams).and_return('contentMetadata' => @mock_ds)
-        post 'datastream_update', params: { dsid: 'contentMetadata', id: @pid, content: invalid_apo_xml }
-        expect(response.code).to eq('404')
-        expect(response.body).to include('The object was not found in Fedora. Please recheck the RELS-EXT XML.')
       end
     end
   end

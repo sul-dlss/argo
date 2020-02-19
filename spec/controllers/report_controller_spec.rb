@@ -88,9 +88,10 @@ RSpec.describe ReportController, type: :controller do
     let(:workflow) { 'accessionWF' }
     let(:step) { 'descriptive-metadata' }
     let(:obj) { instance_double Dor::Item }
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, update_status: true) }
 
     before do
-      allow(Dor::Config.workflow.client).to receive(:update_status)
+      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     end
 
     it 'requires parameters' do
@@ -110,7 +111,7 @@ RSpec.describe ReportController, type: :controller do
         expect(assigns(:step)).to eq step
         expect(assigns(:ids)).to eq(%w(xb482bw3979))
         expect(response).to have_http_status(:ok)
-        expect(Dor::Config.workflow.client).to have_received(:update_status)
+        expect(workflow_client).to have_received(:update_status)
           .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
       end
     end
@@ -130,7 +131,7 @@ RSpec.describe ReportController, type: :controller do
         expect(assigns(:ids)).to eq(%w(xb482bw3979))
         expect(response).to have_http_status(:ok)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
-        expect(Dor::Config.workflow.client).to have_received(:update_status)
+        expect(workflow_client).to have_received(:update_status)
           .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
       end
     end
@@ -150,7 +151,7 @@ RSpec.describe ReportController, type: :controller do
         expect(assigns(:ids)).to eq(%w(xb482bw3979))
         expect(response).to have_http_status(:ok)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
-        expect(Dor::Config.workflow.client).not_to have_received(:update_status)
+        expect(workflow_client).not_to have_received(:update_status)
       end
     end
   end

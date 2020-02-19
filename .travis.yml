@@ -21,7 +21,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # Start Fedora, Solr, and Suri
-  - docker-compose up -d solr fcrepo suri
+  - docker-compose up -d solr fcrepo dor-indexing-app suri
   - docker-compose ps
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
 

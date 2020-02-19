@@ -18,6 +18,6 @@ class StateService
   attr_reader :pid, :version
 
   def client
-    Dor::Config.workflow.client
+    WorkflowClientFactory.build
   end
 end

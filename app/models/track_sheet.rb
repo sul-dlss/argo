@@ -116,9 +116,7 @@ class TrackSheet
     doc = Dor::SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
     return doc unless doc.nil?
 
-    obj = Dor.find "druid:#{druid}"
-    solr_doc = obj.to_solr
-    ActiveFedora.solr.conn.add(solr_doc)
-    solr_doc
+    Argo::Indexer.reindex_pid_remotely("druid:#{druid}")
+    Dor::SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
   end
 end

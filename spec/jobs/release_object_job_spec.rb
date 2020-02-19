@@ -7,7 +7,7 @@ RSpec.describe ReleaseObjectJob do
   let(:buffer) { StringIO.new }
 
   before do
-    allow(Dor::Config.workflow).to receive(:client).and_return(client)
+    allow(Dor::Workflow::Client).to receive(:new).and_return(client)
 
     # Stub out the file, and send it to a string buffer instead
     allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)

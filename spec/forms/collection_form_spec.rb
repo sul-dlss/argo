@@ -17,7 +17,7 @@ RSpec.describe CollectionForm do
     allow(Dor).to receive(:find).with(collection.pid).and_return(collection)
     allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
     allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
-    allow(Dor::Config.workflow).to receive(:client).and_return(workflow_client)
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(collection).to receive(:descMetadata).and_return(mock_desc_md_ds)
   end
 
@@ -31,7 +31,7 @@ RSpec.describe CollectionForm do
     end
 
     it 'creates a collection from title/abstract by registering the collection, then adding the abstract' do
-      expect(collection).to receive(:update_index)
+      expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
       instance.validate(params.merge(apo_pid: apo.pid))
       instance.save
@@ -59,7 +59,7 @@ RSpec.describe CollectionForm do
     end
 
     it 'creates a collection from catkey by registering the collection and passing seed_datastream' do
-      expect(collection).to receive(:update_index)
+      expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
       instance.validate(params.merge(apo_pid: apo.pid))
       instance.save

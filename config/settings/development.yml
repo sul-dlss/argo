@@ -2,6 +2,6 @@ profiler:
   rackmini_enabled: true
 
 # URLs
-dor_indexing_url: 'http://localhost:4000/dor'
+dor_indexing_url: 'http://localhost:3004/dor'
 fedora_url: 'http://fedoraAdmin:fedoraAdmin@localhost:8983/fedora'
 solrizer_url: 'http://localhost:8984/solr/argo'

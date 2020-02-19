@@ -8,9 +8,15 @@ RSpec.describe DorObjectWorkflowStatus do
   let(:pid) { 'druid:abc123def4567' }
 
   describe '#can_open_version?' do
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: true, active_lifecycle: true) }
+
+    before do
+      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+    end
+
     context 'when not accessioned' do
       before do
-        expect(Dor::Config.workflow.client)
+        expect(workflow_client)
           .to receive(:lifecycle).with('dor', pid, 'accessioned')
                                  .and_return(false)
       end
@@ -20,12 +26,10 @@ RSpec.describe DorObjectWorkflowStatus do
 
     context 'when accessioned and submitted' do
       before do
-        expect(Dor::Config.workflow.client)
-          .to receive(:lifecycle).with('dor', pid, 'accessioned')
-                                 .and_return(true)
-        expect(Dor::Config.workflow.client)
-          .to receive(:active_lifecycle).with('dor', pid, 'submitted', version: 1)
-                                        .and_return(true)
+        expect(workflow_client).to receive(:lifecycle)
+          .with('dor', pid, 'accessioned').and_return(true)
+        expect(workflow_client).to receive(:active_lifecycle)
+          .with('dor', pid, 'submitted', version: 1).and_return(true)
       end
 
       it { expect(subject.can_open_version?).to eq false }
@@ -33,13 +37,13 @@ RSpec.describe DorObjectWorkflowStatus do
 
     context 'when accessioned, not submitted, and opened' do
       before do
-        expect(Dor::Config.workflow.client)
+        expect(workflow_client)
           .to receive(:lifecycle).with('dor', pid, 'accessioned')
                                  .and_return(true)
-        expect(Dor::Config.workflow.client)
+        expect(workflow_client)
           .to receive(:active_lifecycle).with('dor', pid, 'submitted', version: 1)
                                         .and_return(false)
-        expect(Dor::Config.workflow.client)
+        expect(workflow_client)
           .to receive(:active_lifecycle).with('dor', pid, 'opened', version: 1)
                                         .and_return(true)
       end
@@ -49,13 +53,13 @@ RSpec.describe DorObjectWorkflowStatus do
 
     context 'when accessioned, not submitted, and not opened' do
       before do
-        expect(Dor::Config.workflow.client)
+        expect(workflow_client)
           .to receive(:lifecycle).with('dor', pid, 'accessioned')
                                  .and_return(true)
-        expect(Dor::Config.workflow.client)
+        expect(workflow_client)
           .to receive(:active_lifecycle).with('dor', pid, 'submitted', version: 1)
                                         .and_return(false)
-        expect(Dor::Config.workflow.client)
+        expect(workflow_client)
           .to receive(:active_lifecycle).with('dor', pid, 'opened', version: 1)
                                         .and_return(false)
       end

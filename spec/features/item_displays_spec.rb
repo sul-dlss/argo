@@ -63,8 +63,10 @@ RSpec.describe 'mods_view' do
     end
 
     context 'add workflow' do
+      let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
+
       before do
-        allow(Dor::Config.workflow.client).to receive_messages(workflow_templates: [])
+        allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       end
 
       it 'renders the add workflow ui' do

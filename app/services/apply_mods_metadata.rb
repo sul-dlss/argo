@@ -129,6 +129,6 @@ class ApplyModsMetadata
   #
   # @return [Integer] value corresponding to the status info list
   def status
-    @status ||= Dor::Config.workflow.client.status(druid: item.pid, version: item.current_version).info[:status_code]
+    @status ||= WorkflowClientFactory.build.status(druid: item.pid, version: item.current_version).info[:status_code]
   end
 end

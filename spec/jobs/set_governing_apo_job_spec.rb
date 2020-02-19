@@ -44,14 +44,13 @@ RSpec.describe SetGoverningApoJob do
         pids.each do |pid|
           expect(subject).to receive(:set_governing_apo_and_index_safely).with(pid, buffer)
         end
-        expect(ActiveFedora.solr.conn).to receive(:commit)
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq pids.length
       end
 
       it 'logs info about progress' do
         allow(subject).to receive(:set_governing_apo_and_index_safely)
-        allow(ActiveFedora.solr.conn).to receive(:commit)
+        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
 
         subject.perform(bulk_action.id, params)
 
@@ -84,14 +83,11 @@ RSpec.describe SetGoverningApoJob do
         expect(item1).to receive(:identityMetadata).and_return(idmd).exactly(:twice)
         expect(idmd).to receive(:adminPolicy=).with(nil)
         expect(item1).to receive(:save)
-        expect(item1).to receive(:to_solr).and_return(field: 'value')
-        expect(ActiveFedora.solr.conn).to receive(:add).with(field: 'value').exactly(:once)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
         expect(item3).not_to receive(:admin_policy_object=)
         expect(item3).not_to receive(:identityMetadata)
         expect(item3).not_to receive(:save)
-
-        expect(ActiveFedora.solr.conn).to receive(:commit)
 
         subject.perform(bulk_action.id, params)
         expect(state_service).to have_received(:allows_modification?)

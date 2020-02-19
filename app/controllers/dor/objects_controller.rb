@@ -19,7 +19,7 @@ class Dor::ObjectsController < ApplicationController
 
     pid = response[:pid]
 
-    Dor::Config.workflow.client.create_workflow_by_name(pid, params[:workflow_id], version: '1')
+    WorkflowClientFactory.build.create_workflow_by_name(pid, params[:workflow_id], version: '1')
 
     respond_to do |format|
       format.json { render json: response, location: object_location(pid) }

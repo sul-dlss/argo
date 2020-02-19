@@ -5,12 +5,13 @@ require 'rails_helper'
 RSpec.describe 'Item view', js: true do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor::Config.workflow.client).to receive_messages(active_lifecycle: [], lifecycle: [])
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: []) }
 
   context 'when there is an error retrieving the cocina_model' do
     let(:files) do

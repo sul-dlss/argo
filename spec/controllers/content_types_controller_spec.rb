@@ -32,8 +32,9 @@ RSpec.describe ContentTypesController, type: :controller do
 
       it 'is successful' do
         expect(item.contentMetadata).to receive(:set_content_type)
-        expect(item).to receive_messages(save: nil, to_solr: {})
-        expect(ActiveFedora.solr.conn).to receive(:add)
+        expect(item).to receive(:save)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
+
         patch :update, params: { item_id: pid, new_content_type: 'media' }
         expect(response).to redirect_to solr_document_path(pid)
       end
@@ -49,7 +50,8 @@ RSpec.describe ContentTypesController, type: :controller do
         it 'is successful' do
           expect(item.contentMetadata).to receive(:set_content_type)
           expect(item).to receive(:save)
-          expect(ActiveFedora.solr.conn).not_to receive(:add)
+          expect(Argo::Indexer).not_to receive(:reindex_pid_remotely)
+
           patch :update, params: { item_id: pid, new_content_type: 'media', bulk: true }
           expect(response).to be_successful
         end

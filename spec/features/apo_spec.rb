@@ -14,6 +14,7 @@ RSpec.describe 'apo', js: true do
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
   after do
     Dor::AdminPolicyObject.find(new_apo_druid).destroy # clean up after ourselves
@@ -21,12 +22,14 @@ RSpec.describe 'apo', js: true do
   end
 
   before do
-    allow(Dor::Config.workflow.client).to receive_messages(workflow_templates: ['accessionWF'],
-                                                           create_workflow_by_name: true,
-                                                           lifecycle: [],
-                                                           active_lifecycle: [],
-                                                           milestones: [],
-                                                           workflow_routes: workflow_routes)
+    allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+
+    allow(workflow_client).to receive_messages(workflow_templates: ['accessionWF'],
+                                               create_workflow_by_name: true,
+                                               lifecycle: [],
+                                               active_lifecycle: [],
+                                               milestones: [],
+                                               workflow_routes: workflow_routes)
     allow(Dor::Services::Client.objects).to receive(:register)
       .and_return({ pid: new_apo_druid }, pid: new_collection_druid)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)

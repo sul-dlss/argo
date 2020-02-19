@@ -26,8 +26,10 @@ RSpec.describe 'Report view' do
 
   context 'bulk' do
     before do
-      allow(Dor::Config.workflow.client).to receive_messages(workflow_templates: [])
+      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     end
+
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
 
     it 'returns a page with the expected elements' do
       visit '/report/bulk'

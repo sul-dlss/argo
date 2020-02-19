@@ -9,8 +9,10 @@ RSpec.describe 'Bulk jobs view' do
   end
 
   context 'on the page with the list of bulk jobs' do
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
+
     before do
-      allow(Dor::Config.workflow.client).to receive_messages(active_lifecycle: [], lifecycle: [])
+      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     end
 
     it 'the submit button exists' do

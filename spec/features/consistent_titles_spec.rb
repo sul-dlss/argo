@@ -16,10 +16,11 @@ RSpec.describe 'Consistent titles' do
 
   describe 'catalog show view' do
     before do
-      allow(Dor::Config.workflow.client).to receive_messages(lifecycle: [], active_lifecycle: [])
+      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }

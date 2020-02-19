@@ -26,18 +26,20 @@ RSpec.describe TrackSheet do
       end
     end
 
-    context 'when the doc is not in foo' do
+    context 'when the doc is not in the search results' do
       before do
-        allow(Dor).to receive(:find).and_return(obj)
-        allow(ActiveFedora.solr.conn).to receive(:add)
+        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+
+        allow(Dor::SearchService).to receive(:query)
+          .with('id:"druid:xb482bw3979"', rows: 1)
+          .and_return(response, second_response)
       end
 
       let(:docs) { [] }
-      let(:obj) { instance_double(Dor::Item, to_solr: solr_doc) }
+      let(:second_response) { { 'response' => { 'docs' => [solr_doc] } } }
 
-      it 'loads the document from Fedora and adds it to the index' do
+      it 'reindexes and and tries again' do
         expect(call).to eq solr_doc
-        expect(ActiveFedora.solr.conn).to have_received(:add).with(solr_doc)
       end
     end
   end
