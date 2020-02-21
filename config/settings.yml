@@ -93,3 +93,8 @@ inactive_workflows:
   - swIndexWF
   - googleScannedBookWF
   - eemsAccessionWF
+
+tech_md_service:
+  url: 'http://localhost:3005'
+  # To generate the token: docker-compose run techmd rake generate_token
+  token: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhcmdvLXRlc3QifQ.nhJQsj8V98agZxzDP2OSCVPkIb70yE9_dyLUiTzcKko'

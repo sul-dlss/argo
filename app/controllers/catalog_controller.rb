@@ -166,7 +166,7 @@ class CatalogController < ApplicationController
     # Configure document actions framework
     config.index.document_actions.delete(:bookmark)
 
-    config.show.partials = %w(show_header full_view_links thumbnail show datastreams events cocina history contents)
+    config.show.partials = %w(show_header full_view_links thumbnail show datastreams events cocina history contents techmd)
   end
 
   def default_solr_doc_params(id = nil)
@@ -202,6 +202,9 @@ class CatalogController < ApplicationController
       solr_document: @document,
       object: @obj
     )
+
+    @techmd = TechmdService.techmd_for(params[:id]) if params[:beta]
+
     respond_to do |format|
       format.html { setup_next_and_previous_documents }
       format.json { render json: { response: { document: @document } } }
