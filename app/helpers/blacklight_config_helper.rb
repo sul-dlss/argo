@@ -9,15 +9,13 @@ module BlacklightConfigHelper
         text^3
         collection_title_tesim
         creator_tesim
-        dc_creator_tesim
-        dc_identifier_druid_tesim
-        dc_title_tesim
         dor_id_tesim
         extent_ssim
         identifier_tesim
         lifecycle_ssim
         obj_label_tesim
         obj_state_tesim
+        objectId_tesim
         originInfo_place_placeTerm_tesim
         originInfo_publisher_tesim
         sw_display_title_tesim
