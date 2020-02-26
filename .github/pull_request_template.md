@@ -2,7 +2,7 @@
 
 
 
-## Was the documentation updated?
+## Was the documentation (README, DevOpsDocs, wiki, consul, etc.) updated?
 
 
 
