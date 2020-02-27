@@ -1,0 +1,10 @@
+<% if params[:beta] %>
+  <h3 id="document-cocina-head" class="section-head collapsible-section">
+    Cocina Model
+  </h3>
+  <div id="document-cocina-section" class="document-section">
+    <table class="detail">
+      <pre><%= JSON.pretty_generate(@cocina.as_json) %></pre>
+    </table>
+  </div>
+<% end %>

@@ -22,7 +22,7 @@ RSpec.describe 'Consistent titles' do
 
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
     it 'displays the title' do

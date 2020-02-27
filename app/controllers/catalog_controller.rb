@@ -166,7 +166,7 @@ class CatalogController < ApplicationController
     # Configure document actions framework
     config.index.document_actions.delete(:bookmark)
 
-    config.show.partials = %w(show_header full_view_links thumbnail show datastreams history contents)
+    config.show.partials = %w(show_header full_view_links thumbnail show datastreams cocina history contents)
   end
 
   def default_solr_doc_params(id = nil)

@@ -17,7 +17,7 @@ RSpec.describe 'Add a workflow to an item' do
                     active_lifecycle: [])
   end
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
   before do

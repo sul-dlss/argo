@@ -34,7 +34,7 @@ RSpec.describe 'Item view', js: true do
 
   context 'when the cocina_model exists' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files, version: version_client) }
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
+    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
     context 'when the file is not on the workspace' do
