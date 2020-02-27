@@ -103,7 +103,7 @@ end
 group :test do
   gem 'capybara'
   gem 'selenium-webdriver' # for js testing
-  gem 'simplecov', require: false
+  gem 'simplecov', '~> 0.17.1', require: false # 0.18 breaks reporting https://github.com/codeclimate/test-reporter/issues/418
   gem 'webdrivers' # installs the chrome for selenium tests
   gem 'webmock', require: false
 end
