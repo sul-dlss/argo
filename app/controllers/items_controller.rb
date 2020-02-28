@@ -38,16 +38,6 @@ class ItemsController < ApplicationController
     :tags,
     :update_rights
   ]
-  after_action :save_and_reindex, only: [
-    :add_collection, :set_collection, :remove_collection,
-    :apply_apo_defaults,
-    :embargo_update,
-    :tags, :tags_bulk,
-    :source_id,
-    :catkey,
-    :set_rights,
-    :set_governing_apo
-  ]
 
   def purl_preview
     xml = Dor::Services::Client.object(params[:id]).metadata.descriptive
@@ -72,6 +62,7 @@ class ItemsController < ApplicationController
     else
       response_message = 'Collection(s) successfully removed.' # no collection selected from drop-down, so don't bother adding a new one
     end
+    save_and_reindex
     respond_to do |format|
       if params[:bulk]
         format.html { render status: :ok, plain: response_message }
@@ -84,6 +75,7 @@ class ItemsController < ApplicationController
   def add_collection
     if params[:collection].present?
       @object.add_collection(params[:collection])
+      save_and_reindex
       response_message = 'Collection added successfully'
     else
       response_message = 'No collection selected'
@@ -103,6 +95,7 @@ class ItemsController < ApplicationController
 
   def remove_collection
     @object.remove_collection(params[:collection])
+    save_and_reindex
     response_message = 'Collection successfully removed'
     respond_to do |format|
       if params[:bulk]
@@ -129,6 +122,7 @@ class ItemsController < ApplicationController
 
     @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
     @object.datastreams['events'].add_event('Embargo', current_user.to_s, 'Embargo date modified')
+    save_and_reindex
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
     end
@@ -188,6 +182,7 @@ class ItemsController < ApplicationController
 
   def source_id
     @object.source_id = params[:new_id]
+    save_and_reindex
 
     respond_to do |format|
       if params[:bulk]
@@ -201,6 +196,7 @@ class ItemsController < ApplicationController
 
   def catkey
     @object.catkey = params[:new_catkey].strip
+    save_and_reindex
 
     respond_to do |format|
       if params[:bulk]
@@ -221,6 +217,8 @@ class ItemsController < ApplicationController
     tags.each { |tag| Dor::TagService.add(@object, tag) }
     @object.identityMetadata.content_will_change! # mark as dirty
     @object.identityMetadata.save
+    save_and_reindex
+
     respond_to do |format|
       if params[:bulk]
         format.html { render status: :ok, plain: "#{tags.size} Tags updated." }
@@ -252,6 +250,7 @@ class ItemsController < ApplicationController
     end
     @object.identityMetadata.content_will_change!
     @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
+    save_and_reindex
     respond_to do |format|
       msg = "Tags for #{params[:id]} have been updated!"
       format.any { redirect_to solr_document_path(params[:id]), notice: msg }
@@ -368,6 +367,7 @@ class ItemsController < ApplicationController
 
   def set_rights
     @object.read_rights = params[:rights]
+    save_and_reindex
 
     respond_to do |format|
       if params[:bulk]
@@ -383,6 +383,7 @@ class ItemsController < ApplicationController
   # set the rightsMetadata to the APO's defaultObjectRights
   def apply_apo_defaults
     @object.reapplyAdminPolicyObjectDefaults
+    save_and_reindex
     render status: :ok, plain: 'Defaults applied.'
   end
 
@@ -394,7 +395,7 @@ class ItemsController < ApplicationController
 
     @object.admin_policy_object = Dor.find(params[:new_apo_id])
     @object.identityMetadata.adminPolicy = nil if @object.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
-
+    save_and_reindex
     redirect_to solr_document_path(params[:id]), notice: 'Governing APO updated!'
   end
 
