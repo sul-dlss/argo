@@ -20,8 +20,9 @@ RSpec.describe 'Consistent titles' do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
+    let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 

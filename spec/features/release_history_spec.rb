@@ -9,7 +9,8 @@ RSpec.describe 'Release history' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: []) }
 
   context 'for an item' do

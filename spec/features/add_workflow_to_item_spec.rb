@@ -16,7 +16,8 @@ RSpec.describe 'Add a workflow to an item' do
                     workflow_templates: %w[assemblyWF registrationWF],
                     active_lifecycle: [])
   end
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
 
