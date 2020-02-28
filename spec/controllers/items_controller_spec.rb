@@ -224,7 +224,7 @@ RSpec.describe ItemsController, type: :controller do
 
   describe '#set_rights' do
     it 'sets an item to dark' do
-      expect(@item).to receive(:set_read_rights).with('dark')
+      expect(@item).to receive(:read_rights=).with('dark')
       get 'set_rights', params: { id: @pid, rights: 'dark' }
     end
   end
