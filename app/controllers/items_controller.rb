@@ -367,7 +367,7 @@ class ItemsController < ApplicationController
   end
 
   def set_rights
-    @object.set_read_rights(params[:rights])
+    @object.read_rights = params[:rights]
 
     respond_to do |format|
       if params[:bulk]
