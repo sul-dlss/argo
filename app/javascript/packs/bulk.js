@@ -115,8 +115,8 @@ function set_collection(druids){
 	process_post(druids, set_collection_url, {collection: collection_id}, "Collection set");
 }
 
-function apply_apo_defaults(druids){
-	process_get(druids, apo_apply_defaults_url, 'Defaults_applied.')
+function apply_apo_defaults(druids) {
+	process_post(druids, apo_apply_defaults_url, {}, 'Defaults_applied.')
 }
 
 function add_workflow(druids){

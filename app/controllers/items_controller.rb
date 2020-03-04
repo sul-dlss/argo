@@ -382,7 +382,7 @@ class ItemsController < ApplicationController
 
   # set the rightsMetadata to the APO's defaultObjectRights
   def apply_apo_defaults
-    @object.reapplyAdminPolicyObjectDefaults
+    @object.reapply_admin_policy_object_defaults
     save_and_reindex
     render status: :ok, plain: 'Defaults applied.'
   end
