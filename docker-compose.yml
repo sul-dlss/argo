@@ -116,6 +116,22 @@ services:
     ports:
       - 3001:3000
 
+  techmd:
+    image: suldlss/technical-metadata-service:latest
+    environment:
+      DATABASE_NAME: technical_metadata
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
+      RAILS_LOG_TO_STDOUT: "true"
+      REDIS_URL: redis://redis:6379/
+    ports:
+      - 3005:3000
+    depends_on:
+      - db
+      - redis
+
   redis:
     image: redis
     # No external ports enabled.

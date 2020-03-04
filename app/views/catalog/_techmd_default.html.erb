@@ -1,0 +1,62 @@
+<% unless @techmd.blank? %>
+  <h3 id="document-techmd-head" class="section-head collapsible-section">
+    Technical metadata
+  </h3>
+  <div id="document-techmd-section" class="document-section techmd-section">
+    <ul class="file-list">
+      <% @techmd.each do | file_techmd | %>
+        <li class="file">
+          <span class="label">File</span><%= file_techmd['filename'] %>
+          <ul class="metadata-list">
+            <% file_techmd.reject {|key| ['filename', 'druid', 'dro_file_parts'].include?(key) }.each do |file_techmd_key, file_techmd_value| %>
+              <li class="metadata">
+                <span class="label"><%= file_techmd_key %></span>
+                  <% unless file_techmd_value.is_a?(Hash) %>
+                    <%= file_techmd_value %>
+                  <% else %>
+                    <ul class="metadata-list">
+                      <% file_techmd_value.each do |key, value| %>
+                        <li class="metadata">
+                          <span class="label"><%= key %></span><%= value %>
+                        </li>
+                      <% end %>
+                    </ul>
+                  <% end %>
+              </li>
+            <% end %>
+            <% unless file_techmd['dro_file_parts'].nil? %>
+              <li class="metadata">
+                <span class="label">File parts</span>
+                <ul class="file-list">
+                  <% file_techmd['dro_file_parts'].each do | file_part_techmd | %>
+                    <li class="file">
+                      <span class="label">File part</span><%= file_part_techmd['part_id'] %>
+                      <ul class="metadata-list">
+                        <% file_part_techmd.reject {|key| ['part_id'].include?(key) }.each do |file_part_techmd_key, file_part_techmd_value| %>
+                          <li class="metadata">
+                            <span class="label"><%= file_part_techmd_key %></span>
+                            <% unless file_part_techmd_value.is_a?(Hash) %>
+                              <%= file_part_techmd_value %>
+                            <% else %>
+                              <ul class="metadata-list">
+                                <% file_part_techmd_value.each do |key, value| %>
+                                  <li class="metadata">
+                                    <span class="label"><%= key %></span><%= value %>
+                                  </li>
+                                <% end %>
+                              </ul>
+                            <% end %>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </li>
+                  <% end %>
+                </ul>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
