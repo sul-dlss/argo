@@ -142,7 +142,7 @@ Rails.application.routes.draw do
       post 'set_rights'
       get 'set_governing_apo_ui'
       post 'set_governing_apo'
-      get :apply_apo_defaults
+      post :apply_apo_defaults
       match :update_resource, action: :update_resource, as: 'update_resource', via: [:get, :post]
     end
   end
