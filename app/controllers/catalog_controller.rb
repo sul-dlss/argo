@@ -203,7 +203,7 @@ class CatalogController < ApplicationController
       object: @obj
     )
 
-    @techmd = TechmdService.techmd_for(params[:id]) if params[:beta]
+    @techmd = TechmdService.techmd_for(druid: params[:id]) if params[:beta]
 
     respond_to do |format|
       format.html { setup_next_and_previous_documents }
