@@ -2,9 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkflowStepStatusSelector do
-  include ActionView::Component::TestHelpers
-
+RSpec.describe WorkflowStepStatusSelector, type: :component do
   subject(:body) { render_inline(described_class.new(process: process)) }
 
   let(:process) do

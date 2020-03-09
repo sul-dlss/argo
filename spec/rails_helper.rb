@@ -9,7 +9,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
 require 'equivalent-xml/rspec_matchers'
-require 'action_view/component/test_helpers'
+require 'view_component/test_helpers'
 require 'webmock/rspec'
 WebMock.allow_net_connect!(net_http_connect_on_start: true)
 
@@ -75,4 +75,5 @@ RSpec.configure do |config|
   config.include TestViewHelpers, type: :view
   config.include SigninHelper, type: :view
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include ViewComponent::TestHelpers, type: :component
 end

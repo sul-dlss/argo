@@ -2,9 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkflowProcessRow do
-  include ActionView::Component::TestHelpers
-
+RSpec.describe WorkflowProcessRow, type: :component do
   subject(:instance) { described_class.new(process: process_status, index: 1, item: item) }
 
   let(:item) { instance_double(Dor::Item) }

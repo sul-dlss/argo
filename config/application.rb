@@ -2,7 +2,7 @@
 
 require_relative 'boot'
 require 'rails/all'
-require 'action_view/component'
+require 'view_component/engine'
 
 # this is intended to silence deprecation warnings when running rake tasks via
 # cron, to prevent cron jobs from flooding us with emails about deprecation warnings.
