@@ -2,9 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkflowUpdateButton do
-  include ActionView::Component::TestHelpers
-
+RSpec.describe WorkflowUpdateButton, type: :component do
   subject(:body) { render_inline(described_class.new(process: process)) }
 
   let(:process) do
