@@ -120,7 +120,9 @@ class ItemsController < ApplicationController
   def embargo_update
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
 
-    @object.update_embargo(DateTime.parse(params[:embargo_date]).utc)
+    new_date = DateTime.parse(params[:embargo_date]).utc
+    Dor::EmbargoService.new(@object).update(new_date)
+
     @object.datastreams['events'].add_event('Embargo', current_user.to_s, 'Embargo date modified')
     save_and_reindex
     respond_to do |format|

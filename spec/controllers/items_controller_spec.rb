@@ -112,14 +112,17 @@ RSpec.describe ItemsController, type: :controller do
     context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
+        allow(Dor::EmbargoService).to receive(:new).and_return(service)
       end
 
-      it 'calls Dor::Item.update_embargo' do
-        expect(item).to receive(:update_embargo)
+      let(:service) { instance_double(Dor::EmbargoService, update: true) }
+
+      it 'calls Dor::EmbargoService#update' do
         expect(item.datastreams['events']).to receive(:add_event).and_call_original
         expect(controller).to receive(:save_and_reindex)
         post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
         expect(response).to have_http_status(:found) # redirect to catalog page
+        expect(service).to have_received(:update)
       end
       it 'requires a date' do
         expect { post :embargo_update, params: { id: pid } }.to raise_error(ArgumentError)
