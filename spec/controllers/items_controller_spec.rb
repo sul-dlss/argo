@@ -99,6 +99,13 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#embargo_update' do
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
+    end
+
+    let(:object_service) { instance_double(Dor::Services::Client::Object, embargo: embargo_service) }
+    let(:embargo_service) { instance_double(Dor::Services::Client::Embargo, update: true) }
+
     context "when they don't have manage access" do
       it 'returns 403' do
         allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
@@ -112,23 +119,26 @@ RSpec.describe ItemsController, type: :controller do
     context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
-        allow(Dor::EmbargoService).to receive(:new).and_return(service)
       end
 
-      let(:service) { instance_double(Dor::EmbargoService, update: true) }
-
-      it 'calls Dor::EmbargoService#update' do
-        expect(item.datastreams['events']).to receive(:add_event).and_call_original
+      it 'calls Dor::Services::Client::Embargo#update' do
         expect(controller).to receive(:save_and_reindex)
         post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
         expect(response).to have_http_status(:found) # redirect to catalog page
-        expect(service).to have_received(:update)
+        expect(embargo_service).to have_received(:update)
       end
       it 'requires a date' do
         expect { post :embargo_update, params: { id: pid } }.to raise_error(ArgumentError)
       end
-      it 'dies on a malformed date' do
-        expect { post :embargo_update, params: { id: pid, embargo_date: 'not-a-date' } }.to raise_error(ArgumentError)
+
+      context 'when the date is malformed' do
+        before do
+          allow(embargo_service).to receive(:update).and_raise(Dor::Services::Client::UnexpectedResponse)
+        end
+
+        it 'dies' do
+          expect { post :embargo_update, params: { id: pid, embargo_date: 'not-a-date' } }.to raise_error(Dor::Services::Client::UnexpectedResponse)
+        end
       end
     end
   end
