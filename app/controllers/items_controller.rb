@@ -120,10 +120,9 @@ class ItemsController < ApplicationController
   def embargo_update
     fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
 
-    new_date = DateTime.parse(params[:embargo_date]).utc
-    Dor::EmbargoService.new(@object).update(new_date)
+    object_client = Dor::Services::Client.object(@object.pid)
+    object_client.embargo.update(embargo_date: params[:embargo_date], requesting_user: current_user.to_s)
 
-    @object.datastreams['events'].add_event('Embargo', current_user.to_s, 'Embargo date modified')
     save_and_reindex
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
