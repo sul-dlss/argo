@@ -169,6 +169,10 @@ Rails.application.routes.draw do
     get 'forget_impersonated_groups'
   end
 
+  scope path: '/settings' do
+    resources :tokens, only: [:index, :create]
+  end
+
   devise_for :users, skip: [:registrations, :passwords, :sessions]
   devise_scope :user do
     get 'webauth/login' => 'login#login', as: :new_user_session

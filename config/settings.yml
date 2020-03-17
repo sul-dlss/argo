@@ -83,6 +83,12 @@ workflow:
 apo:
   default_workflow_option: 'registrationWF'
 
+
+sdr_api:
+  email: testing@example.org
+  password: notusedanywhere
+  url: https://sdr-api-stage.stanford.edu
+
 # These workflows are inactive, and the workflow-server doesn't know about them
 # so we don't draw them on the workflow grid
 inactive_workflows:
