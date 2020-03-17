@@ -2,6 +2,7 @@ import Form from 'modules/apo_form'
 import CollectionEditor from 'controllers/collection_editor'
 import BulkActions from 'controllers/bulk_actions'
 import BulkUpload from 'controllers/bulk_upload'
+import Tokens from 'controllers/tokens'
 import WorkflowGrid from 'controllers/workflow_grid_controller'
 import { Application } from 'stimulus'
 require('@github/time-elements')
@@ -65,6 +66,7 @@ export default class Argo {
         application.register("bulk_upload", BulkUpload)
         application.register("workflow-grid", WorkflowGrid)
         application.register("collection-editor", CollectionEditor)
+        application.register("tokens", Tokens)
     }
 
     apoEditor() {

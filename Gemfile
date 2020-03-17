@@ -75,6 +75,7 @@ gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '>= 3.1' # 3.1 or greater is needed for token auth and fix for POST requests
 gem 'responders', '~> 2.0'
 gem 'rsolr'
+gem 'sdr-client', '0.19.0'
 gem 'sul_styles', '~> 0.3'
 
 gem 'devise'
