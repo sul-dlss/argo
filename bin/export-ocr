@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# This exports OCR files that are in preservation for a provided list of barcodes
+# This is used by researchers who want to get a dump of OCR files from the google books project
+
+file = ARGV[0]
+directory = ARGV[1]
+
+if !file || !directory
+  warn "\nInvalid arguments\nUsage: #{$PROGRAM_NAME} <input file> <output directory>\n"
+elsif !File.exist?(file)
+  warn "Unable to locate file '#{file}' for reading"
+elsif !File.directory?(directory)
+  warn "'#{file}' is not a directory"
+else
+  require File.expand_path('../config/environment', __dir__)
+
+  OCRExporter.export(file, directory)
+end
