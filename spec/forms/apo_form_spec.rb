@@ -3,7 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe ApoForm do
-  let(:instance) { described_class.new }
+  let(:fake_tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
+
+  before do
+    allow(instance).to receive(:tags_client).and_return(fake_tags_client)
+  end
 
   context 'with a model (update)' do
     let(:instance) { described_class.new(apo) }
@@ -176,6 +180,8 @@ RSpec.describe ApoForm do
   end
 
   context 'no model (new)' do
+    let(:instance) { described_class.new }
+
     describe '#permissions' do
       subject { instance.permissions }
 
@@ -263,7 +269,7 @@ RSpec.describe ApoForm do
       let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Item) }
       let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
 
-      let(:params) do
+      let(:base_params) do
         { # These data mimic the APO registration form
           'title' => +'New APO Title',
           'agreement' => agreement.pid,
@@ -298,10 +304,6 @@ RSpec.describe ApoForm do
 
         expect(Dor).to receive(:find).with(apo.pid).and_return(apo)
         expect(apo).to receive(:save)
-      end
-
-      it 'hits the registration service to register both an APO and a collection' do
-        # verify that an APO is registered
         expect(apo).to receive(:add_roleplayer).exactly(4).times
         expect(Dor::Services::Client.objects).to receive(:register) do |args|
           expect(args[:params]).to match a_hash_including(
@@ -314,7 +316,6 @@ RSpec.describe ApoForm do
         end
         expect(workflow_client).to receive(:create_workflow_by_name)
           .with(apo.pid, 'accessionWF', version: '1')
-
         expect(apo).to receive(:"use_license=").with(params['use_license'])
 
         # verify that the collection is also created
@@ -328,9 +329,27 @@ RSpec.describe ApoForm do
           { pid: collection.pid }
         end
         expect(workflow_client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF', version: '1')
+      end
 
-        instance.validate(params)
-        instance.save
+      context 'with tags in the params' do
+        let(:params) { base_params.merge(tag: tags) }
+        let(:tags) { ['One : Two', 'Two : Three'] }
+
+        it 'hits the dor-services-app administrative tags endpoint to add tags' do
+          instance.validate(params)
+          instance.save
+          expect(fake_tags_client).to have_received(:create).once.with(tags: tags)
+        end
+      end
+
+      context 'without tags in the params' do
+        let(:params) { base_params }
+
+        it 'hits the registration service to register both an APO and a collection' do
+          instance.validate(params)
+          instance.save
+          expect(fake_tags_client).not_to have_received(:create)
+        end
       end
     end
   end

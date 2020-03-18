@@ -25,7 +25,9 @@ RSpec.describe 'Profile' do
       visit search_profile_path f: { objectType_ssim: ['item'] }
       within '#collection' do
         expect(page).to have_css 'h4', text: 'Collection'
-        expect(page).to have_css 'td:nth-child(1)', text: 'druid:pb873ty1662'
+        expect(page).to have_css 'td:nth-child(1)', text: 'Annual report of the State Corporation Commission showing ' \
+                                                          'the condition of the incorporated state banks and other institutions ' \
+                                                          'operating in Virginia at the close of business'
         expect(page).to have_css 'td:nth-child(2)', text: '1'
       end
     end

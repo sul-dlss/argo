@@ -27,6 +27,7 @@ class ApoForm < BaseForm
     find_or_register_model
     sync
     add_default_collection
+    add_administrative_tags!
     model.save
     Argo::Indexer.reindex_pid_remotely(model.pid)
     # Kick off the accessionWF after all updates are complete.
@@ -38,8 +39,8 @@ class ApoForm < BaseForm
     model.mods_title           = params[:title]
     model.desc_metadata_format = params[:desc_md]
     model.metadata_source      = params[:metadata_source]
-
     model.agreement            = params[:agreement]
+
     model.default_workflow     = params[:workflow]
     model.default_rights       = params[:default_object_rights]
     # Set the Use License given a machine-readable code for a creative commons
@@ -47,8 +48,6 @@ class ApoForm < BaseForm
     model.use_license          = params[:use_license]
     model.copyright_statement  = params[:copyright]
     model.use_statement        = params[:use]
-
-    Dor::TagService.add(model, params[:tag]) if params[:tag]
 
     sync_roles
   end
@@ -130,6 +129,16 @@ class ApoForm < BaseForm
   end
 
   private
+
+  def add_administrative_tags!
+    return unless params[:tag]
+
+    tags_client.create(tags: Array(params[:tag]))
+  end
+
+  def tags_client
+    Dor::Services::Client.object(model.pid).administrative_tags
+  end
 
   # return a list of lists, where the sublists are pairs, with the first element being the text to display
   # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated

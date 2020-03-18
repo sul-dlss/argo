@@ -229,7 +229,8 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 	var druid_upd_rows = [];
 	for (i=0; i<druid_upd_lines.length; i++) {
 		dr = druid_upd_lines[i];
-		dr = dr.replace(/ : /g,':');
+    if (upd_textarea_id !== "tags") // Using this with tag strings breaks tag validation
+		  dr = dr.replace(/ : /g,':');
 		row_result = row_processing_fn(dr);
 		druid_upd_rows.push(row_result);
 	}

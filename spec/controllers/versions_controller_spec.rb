@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe VersionsController, type: :controller do
-  let(:pid) { 'druid:oo201oo0001' }
+  let(:pid) { 'druid:bc123df4567' }
   let(:item) { Dor::Item.new pid: pid }
 
   before do

@@ -8,7 +8,7 @@ RSpec.describe ContentTypesController, type: :controller do
     sign_in(user)
   end
 
-  let(:pid) { 'druid:oo201oo0001' }
+  let(:pid) { 'druid:bc123df4567' }
   let(:item) { Dor::Item.new pid: pid }
   let(:user) { create :user }
 

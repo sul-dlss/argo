@@ -14,12 +14,6 @@ email: false
 before_install:
   # Get bundler 2.0 for ruby 2.6.4
   - gem install bundler
-  # Travis's docker-compose is too old to handle v3.6 docker-compose templates.
-  # This code is from Travis's documentation: https://docs.travis-ci.com/user/docker/#using-docker-compose
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
   # Start Fedora, Solr, and Suri
   - docker-compose up -d solr fcrepo dor-indexing-app suri techmd
   - docker-compose ps
@@ -44,7 +38,6 @@ after_script:
 env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # speeds up bundle install
-    - DOCKER_COMPOSE_VERSION=1.23.1
     - CC_TEST_REPORTER_ID=266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a
 
 cache:

@@ -28,7 +28,7 @@ RSpec.describe WorkflowStatus do
       end-accession
     ]
   end
-  let(:pid) { 'druid:oo201oo0001' }
+  let(:pid) { 'druid:bc123df4567' }
   let(:item) { Dor::Item.new pid: pid }
 
   describe '#pid' do
@@ -36,11 +36,11 @@ RSpec.describe WorkflowStatus do
 
     let(:xml) do
       '<?xml version="1.0" encoding="UTF-8"?>
-        <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+        <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
         </workflow>'
     end
 
-    it { is_expected.to eq 'druid:oo201oo0001' }
+    it { is_expected.to eq 'druid:bc123df4567' }
   end
 
   describe '#process_statuses' do
@@ -49,7 +49,7 @@ RSpec.describe WorkflowStatus do
     context 'when xml has no processes' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
-          <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+          <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
           </workflow>'
       end
 
@@ -61,7 +61,7 @@ RSpec.describe WorkflowStatus do
     context 'when xml has processes' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
-          <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+          <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
             <process version="2" lifecycle="submitted" elapsed="0.0" archived="true" attempts="1"
               datetime="2012-11-06T16:18:24-0800" status="completed" name="start-accession"/>
             <process version="2" elapsed="0.0" archived="true" attempts="1"
@@ -96,7 +96,7 @@ RSpec.describe WorkflowStatus do
     context 'when xml has multiple versions of each processes' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
-          <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+          <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
             <process version="1" elapsed="0.0" attempts="1"
               datetime="2012-11-06T16:18:58-0800" status="completed" name="technical-metadata"/>
             <process version="2" lifecycle="submitted" elapsed="0.0" attempts="1"
@@ -118,7 +118,7 @@ RSpec.describe WorkflowStatus do
     context 'when there is xml' do
       let(:xml) do
         '<?xml version="1.0" encoding="UTF-8"?>
-          <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+          <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
             <process version="2" lifecycle="submitted" elapsed="0.0" archived="true" attempts="1"
               datetime="2012-11-06T16:18:24-0800" status="completed" name="start-accession"/>
             <process version="2" elapsed="0.0" archived="true" attempts="1"

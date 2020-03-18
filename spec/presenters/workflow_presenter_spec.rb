@@ -11,7 +11,7 @@ RSpec.describe WorkflowPresenter do
   let(:workflow_status) { instance_double(WorkflowStatus, process_statuses: process_statuses) }
   let(:workflow_name) { 'accessionWF' }
 
-  let(:pid) { 'druid:oo201oo0001' }
+  let(:pid) { 'druid:bc123df4567' }
   let(:item) { Dor::Item.new pid: pid }
 
   describe '#processes' do

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe WorkflowsController, type: :controller do
-  let(:pid) { 'druid:oo201oo0001' }
+  let(:pid) { 'druid:bc123df4567' }
   let(:item) { Dor::Item.new pid: pid, admin_policy_object: apo }
   let(:apo) { Dor::AdminPolicyObject.new pid: pid }
 

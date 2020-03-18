@@ -15,7 +15,8 @@ class ItemsController < ApplicationController
     :update_resource,
     :source_id,
     :catkey,
-    :tags, :tags_bulk,
+    :tags,
+    :tags_bulk,
     :update_rights,
     :update_attributes,
     :embargo_update,
@@ -35,7 +36,6 @@ class ItemsController < ApplicationController
     :refresh_metadata,
     :set_rights,
     :set_governing_apo,
-    :tags,
     :update_rights
   ]
 
@@ -210,15 +210,10 @@ class ItemsController < ApplicationController
   end
 
   def tags_bulk
-    current_tags = @object.tags
-    # delete all tags
-    current_tags.each { |tag| Dor::TagService.remove(@object, tag) }
-    # add all of the recieved tags as new tags
     tags = params[:tags].split(/\t/)
-    tags.each { |tag| Dor::TagService.add(@object, tag) }
-    @object.identityMetadata.content_will_change! # mark as dirty
-    @object.identityMetadata.save
-    save_and_reindex
+    # Destroy all current tags and replace with new ones
+    tags_client.replace(tags: tags)
+    reindex
 
     respond_to do |format|
       if params[:bulk]
@@ -231,27 +226,27 @@ class ItemsController < ApplicationController
   end
 
   def tags
-    current_tags = @object.tags
+    current_tags = tags_client.list
+
     if params[:add]
-      [:new_tag1, :new_tag2, :new_tag3].each do |k|
-        Dor::TagService.add(@object, params[k]) if params[k].present?
-      end
+      tags = params.slice(:new_tag1, :new_tag2, :new_tag3).values.reject(&:empty?)
+      tags_client.create(tags: tags) if tags.any?
     end
 
     if params[:del]
-      raise 'failed to delete' unless Dor::TagService.remove(@object, current_tags[params[:tag].to_i - 1])
+      tag_to_delete = current_tags[params[:tag].to_i - 1]
+      raise 'failed to delete' unless tags_client.destroy(tag: tag_to_delete)
     end
 
     if params[:update]
       count = 1
       current_tags.each do |tag|
-        Dor::TagService.update(@object, tag, params[('tag' + count.to_s).to_sym])
+        tags_client.update(current: tag, new: params["tag#{count}".to_sym])
         count += 1
       end
     end
-    @object.identityMetadata.content_will_change!
-    @object.identityMetadata.content = @object.identityMetadata.ng_xml.to_xml
-    save_and_reindex
+
+    reindex
     respond_to do |format|
       msg = "Tags for #{params[:id]} have been updated!"
       format.any { redirect_to solr_document_path(params[:id]), notice: msg }
@@ -413,6 +408,9 @@ class ItemsController < ApplicationController
   end
 
   def tags_ui
+    @pid = @object.pid
+    @tags = tags_client.list
+
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -438,6 +436,10 @@ class ItemsController < ApplicationController
 
   private
 
+  def tags_client
+    Dor::Services::Client.object(@object.pid).administrative_tags
+  end
+
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
@@ -449,6 +451,10 @@ class ItemsController < ApplicationController
 
   def save_and_reindex
     @object.save
+    reindex
+  end
+
+  def reindex
     Argo::Indexer.reindex_pid_remotely(@object.pid) unless params[:bulk]
   end
 
@@ -466,7 +472,7 @@ class ItemsController < ApplicationController
   def enforce_versioning
     state_service = StateService.new(@object.pid, version: @object.current_version)
 
-    # if this object has been submitted and doesnt have an open version, they cannot change it.
+    # if this object has been submitted and doesn't have an open version, they cannot change it.
     return true if state_service.allows_modification?
 
     render status: :forbidden, plain: 'Object cannot be modified in its current state.'
