@@ -24,10 +24,11 @@ RSpec.describe 'files/index.html.erb' do
 </contentMetadata>'
     cm
   end
-  let(:obj) { instance_double(Dor::Item, pid: 'druid:rn653dy9317', to_param: 'druid:rn653dy9317', contentMetadata: contentMetadata) }
+
+  let(:admin) { instance_double(Cocina::Models::FileAdministrative, shelve: true, sdrPreserve: true) }
 
   before do
-    @object = obj
+    @file = instance_double(Cocina::Models::File, administrative: admin)
     @available_in_workspace = true
     @has_been_accessioned = true
     @last_accessioned_version = '7'

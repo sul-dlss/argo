@@ -36,8 +36,13 @@ RSpec.describe 'Item view', js: true do
 
   context 'when the cocina_model exists' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files, version: version_client, events: events_client) }
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-    let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: dro_admin, structural: dro_struct, as_json: {}) }
+    let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: [fileset]) }
+    let(:fileset) { instance_double(Cocina::Models::FileSet, structural: fs_structural) }
+    let(:fs_structural) { instance_double(Cocina::Models::FileSetStructural, contains: [file]) }
+    let(:file) { instance_double(Cocina::Models::File, administrative: file_admin, externalIdentifier: 'druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2') }
+    let(:file_admin) { instance_double(Cocina::Models::FileAdministrative, shelve: true, sdrPreserve: true) }
+    let(:dro_admin) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
     context 'when the file is not on the workspace' do
       let(:files) do

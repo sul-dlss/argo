@@ -3,18 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe FilesController, type: :controller do
-  let(:pid) { 'druid:oo201oo0001' }
+  let(:pid) { 'druid:rn653dy9317' }
   let(:item) { Dor::Item.new pid: pid }
 
   before do
     allow_any_instance_of(User).to receive(:roles).and_return([])
     sign_in user
-    allow(Dor).to receive(:find).with(pid).and_return(item)
   end
 
   let(:user) { create(:user) }
 
   describe '#show' do
+    before do
+      allow(Dor).to receive(:find).with(pid).and_return(item)
+    end
+
     context 'when they have manage access' do
       let(:object_client) { instance_double(Dor::Services::Client::Object, files: files_client) }
       let(:files_client) { instance_double(Dor::Services::Client::Files, retrieve: 'abc') }
@@ -49,6 +52,10 @@ RSpec.describe FilesController, type: :controller do
   end
 
   describe '#preserved' do
+    before do
+      allow(Dor).to receive(:find).with(pid).and_return(item)
+    end
+
     context 'when they have manage access' do
       let(:mock_file_name) { 'preserved file.txt' }
       let(:mock_version) { '2' }
@@ -132,23 +139,23 @@ RSpec.describe FilesController, type: :controller do
 
       context 'when the files are in the workspace' do
         it 'sets available_in_workspace to true' do
-          expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
-          get :index, params: { item_id: pid, id: 'foo.jp2' }
+          expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['M1090_S15_B01_F07_0106.jp2', 'bar.jp2'])
+          get :index, params: { item_id: pid, id: 'M1090_S15_B01_F07_0106.jp2' }
           expect(response).to have_http_status(:ok)
           expect(assigns(:available_in_workspace)).to be true
           expect(assigns(:has_been_accessioned)).to be true
           expect(assigns(:last_accessioned_version)).to eq '7'
-          expect(assigns(:object)).to respond_to(:contentMetadata)
+          expect(assigns(:file)).to respond_to(:administrative)
         end
       end
 
       context 'when files are missing from the workspace' do
         it 'sets available_in_workspace to false' do
           expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
-          get :index, params: { item_id: pid, id: 'bar.tif' }
+          get :index, params: { item_id: pid, id: 'M1090_S15_B01_F07_0106.jp2' }
           expect(response).to have_http_status(:ok)
           expect(assigns(:available_in_workspace)).to be false
-          expect(assigns(:object)).to respond_to(:contentMetadata)
+          expect(assigns(:file)).to respond_to(:administrative)
         end
       end
     end
