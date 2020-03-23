@@ -107,6 +107,7 @@ class CatalogController < ApplicationController
     add_common_date_facet_fields_to_config! config
 
     config.add_facet_field 'empties', label: 'Empty Fields', home: false, query: {
+      no_source_id: { label: 'No Source ID', fq: '-source_id_ssim:*' },
       no_rights_characteristics: { label: 'No Rights Characteristics', fq: '-rights_characteristics_ssim:*' },
       no_content_type: { label: 'No Content Type', fq: '-content_type_ssim:*' },
       no_has_model: { label: 'No Object Model', fq: '-has_model_ssim:*' },
