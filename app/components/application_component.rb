@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-class ApplicationComponent < ActionView::Component::Base
+class ApplicationComponent < ViewComponent::Base
   delegate :can?, to: :controller
 end
