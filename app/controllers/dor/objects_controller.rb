@@ -10,34 +10,104 @@ class Dor::ObjectsController < ApplicationController
     end
 
     begin
-      response = Dor::Services::Client.objects.register(params: registration_params.to_h)
+      response = Dor::Services::Client.objects.register(params: cocina_model)
+    rescue Cocina::Models::ValidationError => e
+      return render plain: e.message, status: :bad_request
     rescue Dor::Services::Client::UnexpectedResponse => e
       return render plain: e.message, status: :conflict if e.message.start_with?('Conflict')
 
       return render plain: e.message, status: :bad_request
     end
 
-    pid = response[:pid]
+    pid = response.externalIdentifier
 
     WorkflowClientFactory.build.create_workflow_by_name(pid, params[:workflow_id], version: '1')
 
-    respond_to do |format|
-      format.json { render json: response, location: object_location(pid) }
-      format.xml  { render xml: response, location: object_location(pid) }
-      format.text { render plain: pid, location: object_location(pid) }
-      format.html { redirect_to object_location(pid) }
-    end
+    Dor::Services::Client.object(pid).administrative_tags.create(tags: administrative_tags)
+
+    render json: { pid: pid }, status: :created, location: object_location(pid)
   end
 
   private
 
-  # source_id and label are required parameters
-  def registration_params
-    hash = params.permit(:object_type, :admin_policy, :metadata_source, :rights,
-                         :collection, :other_id, tag: [], seed_datastream: [])
-    hash[:source_id] = params.require(:source_id)
-    hash[:label] = params.require(:label)
-    hash
+  def dro_type
+    case content_type_tag
+    when 'Image'
+      Cocina::Models::Vocab.image
+    when '3D'
+      Cocina::Models::Vocab.three_dimensional
+    when 'Map'
+      Cocina::Models::Vocab.map
+    when 'Media'
+      Cocina::Models::Vocab.media
+    when /^Manuscript/
+      Cocina::Models::Vocab.manuscript
+    when 'Book (ltr)', 'Book (rtl)'
+      Cocina::Models::Vocab.book
+    else
+      Cocina::Models::Vocab.object
+    end
+  end
+
+  # helper method to get just the content type tag
+  def content_type_tag
+    content_tag = params[:tag].find { |tag| tag.start_with?('Process : Content Type') }
+    content_tag[0].split(':').last.strip
+  end
+
+  # All the tags from the form except the project and content type, which are handled specially
+  def administrative_tags
+    params[:tag].filter { |t| !t.start_with?('Process : Content Type') && !t.start_with?('Project : ') }
+  end
+
+  # @raises [Cocina::Models::ValidationError]
+  def cocina_model
+    catalog_links = []
+    if params[:other_id] != 'label:'
+      catalog, record_id = params[:other_id].split(':')
+      catalog_links = [{ catalog: catalog, catalogRecordId: record_id }]
+    end
+
+    model_params = {
+      type: dro_type,
+      label: params.require(:label),
+      version: 1,
+      administrative: {
+        hasAdminPolicy: params[:admin_policy]
+      },
+      identification: {
+        sourceId: params.require(:source_id),
+        catalogLinks: catalog_links
+      }
+    }
+    model_params[:access] = access(params[:rights]) if params[:rights] != 'default'
+
+    if params[:collection]
+      model_params[:structural] = {
+        isMemberOf: params[:collection]
+      }
+    end
+    project = params[:tag].find { |t| t.start_with?('Project : ') }
+    if project
+      model_params[:administrative][:partOfProject] = project.sub(/^Project : /, '')
+    end
+
+    Cocina::Models::RequestDRO.new(model_params)
+  end
+
+  # @param [String] the rights representation from the form
+  # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
+  def access(rights)
+    if rights.start_with?('loc:')
+      {
+        access: 'location-based',
+        readLocation: rights.delete_prefix('loc:')
+      }
+    else
+      {
+        access: rights
+      }
+    end
   end
 
   def munge_parameters
