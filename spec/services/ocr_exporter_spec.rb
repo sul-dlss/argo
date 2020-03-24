@@ -11,8 +11,8 @@ RSpec.describe OCRExporter do
   let(:client2) { instance_double(Dor::Services::Client::Object, find: cocina2) }
   let(:cocina1) { instance_double(Cocina::Models::DRO, version: 1, structural: struct1) }
   let(:cocina2) { instance_double(Cocina::Models::DRO, version: 1, structural: struct2) }
-  let(:struct1) { Cocina::Models::DRO::Structural.new(contains: [fs1, fs2]) }
-  let(:struct2) { Cocina::Models::DRO::Structural.new(contains: [fs3, fs4]) }
+  let(:struct1) { Cocina::Models::DROStructural.new(contains: [fs1, fs2]) }
+  let(:struct2) { Cocina::Models::DROStructural.new(contains: [fs3, fs4]) }
   let(:fs1) do
     {
       externalIdentifier: 'fs1', label: 'fs1', type: Cocina::Models::Vocab.fileset,
