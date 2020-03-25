@@ -55,7 +55,7 @@ RSpec.describe 'Set governing APO' do
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-    let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
+    let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)

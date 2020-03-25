@@ -25,7 +25,7 @@ RSpec.describe 'Collection manage release' do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, release_tags: release_tags_client, events: events_client) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-  let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
+  let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
   it 'Has a manage release button' do
     visit solr_document_path(druid)

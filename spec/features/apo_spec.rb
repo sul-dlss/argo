@@ -12,7 +12,7 @@ RSpec.describe 'apo', js: true do
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client, events: events_client) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-  let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
+  let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }

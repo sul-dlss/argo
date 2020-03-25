@@ -23,7 +23,7 @@ RSpec.describe 'Enable buttons' do
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-  let(:administrative) { instance_double(Cocina::Models::DRO::Administrative, releaseTags: []) }
+  let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
   it 'buttons are disabled by default that have check_url' do
     visit solr_document_path 'druid:hj185vb7593'
