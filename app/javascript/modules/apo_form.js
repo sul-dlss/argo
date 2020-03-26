@@ -16,7 +16,7 @@ export default class {
     }
 
     sharing() {
-      var sharing = new Sharing(this.element.find('Sharing')[0])
+      var sharing = new Sharing(this.element.find('sharing')[0])
       sharing.start()
       var form = this.element.closest('form')
 

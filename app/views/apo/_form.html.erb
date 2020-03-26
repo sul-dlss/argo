@@ -17,7 +17,7 @@
       <%= select_tag :metadata_source, options_for_select(apo_metadata_sources, @form.metadata_source) %>
   </div>
 
-  <Sharing data-permissions="<%= @form.permissions.to_json %>"></Sharing>
+  <sharing data-permissions="<%= @form.permissions.to_json %>">
 
   <% if @form.default_collection_objects.present? %>
     <label>Default Collections</label><br/>
