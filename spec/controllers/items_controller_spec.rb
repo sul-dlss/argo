@@ -237,17 +237,14 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     it 'removes an old tag an add a new one' do
-      expect(fake_tags_client).to receive(:destroy).with(tag: current_tag).once
-      expect(fake_tags_client).to receive(:create).with(tags: ['New : Thing'])
+      expect(fake_tags_client).to receive(:replace).with(tags: ['New : Thing']).once
       post 'tags_bulk', params: { id: pid, tags: 'New : Thing' }
     end
 
     it 'adds multiple tags' do
-      expect(fake_tags_client).to receive(:destroy).with(tag: current_tag).once
-      expect(fake_tags_client).to receive(:create)
+      expect(fake_tags_client).to receive(:replace)
         .with(tags: ['Process : Content Type : Book (ltr)', 'Registered By : labware'])
         .once
-      expect(item).to receive(:save).once
       post 'tags_bulk', params: { id: pid, tags: 'Process : Content Type : Book (ltr)	Registered By : labware' }
     end
   end
