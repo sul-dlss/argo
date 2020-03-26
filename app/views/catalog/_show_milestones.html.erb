@@ -19,7 +19,7 @@
             <td><%= steps['accessioned'][:time].nil? ? 'pending' : steps['accessioned'][:time].in_time_zone.to_s %></td>
           </tr>
           <tr class="version<%= version %>">
-            <td colspan=3 onclick='$(".version<%= version %>").toggle();$(".last_step<%= version %>").toggle();'><span style="cursor: pointer;">-</span>
+            <td colspan="3" onclick='$(".version<%= version %>").toggle();$(".last_step<%= version %>").toggle();'><span style="cursor: pointer;">-</span>
               <%= version %>
               <% if version_hash[version] -%>
                 (<%= version_hash[version][:tag] %>) <%= version_hash[version][:desc] %>
