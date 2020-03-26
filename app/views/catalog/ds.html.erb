@@ -6,12 +6,13 @@
 <div class='modal-body'>
   <%
     if(params[:edit])
-      if can?(:manage_item, @obj) %>
-        <%= form_tag url_for(:controller => :items, :action => :datastream_update), :id => 'xmlEditForm', :method => :POST do%>
-          <input type="hidden" name="id" value="<%=@obj.pid %>" />
-          <input name="dsid" id="datastream" type="hidden" value="<%=params[:dsid]%>"/>
+      if can?(:manage_item, @obj)
+  %>
+        <%= form_tag url_for(controller: :items, action: :datastream_update), id: 'xmlEditForm', method: :POST do %>
+          <input type="hidden" name="id" value="<%= @obj.pid %>">
+          <input name="dsid" id="datastream" type="hidden" value="<%= params[:dsid] %>">
           <div class="form-group">
-            <textarea name="content" id="content" class='form-control'><%=@obj.datastreams[params[:dsid]].content.to_s %></textarea>
+            <textarea name="content" id="content" class='form-control'><%= @obj.datastreams[params[:dsid]].content.to_s %></textarea>
           </div>
           <div class="form-group">
             <button type="submit" id="update" class="btn btn-primary">Update Datastream</button>
@@ -23,30 +24,27 @@
       # If the user is a repo admin or is permitted to manage both content and
       # rights, display raw xml editing
   %>
-    <%=
-      if can?(:manage_item, @obj) &&
-        (
-          @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||
-          params[:dsid] == 'RELS-EXT'
-        ) &&
-          params[:dsid] != 'workflows'
-        link_to "Edit #{params[:dsid]}", ds_solr_document_path(params[:id], params[:dsid],:edit=>'true'), :title => params[:dsid], :data => { behavior: 'persistent-modal' }
-      end
-    %>
-  <%
-    content = if params[:dsid] == 'full_dc'
-      Nokogiri::XML(Dor::Services::Client.object(@obj.pid).metadata.dublin_core).prettify
-    elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
-      Nokogiri::XML(@obj.datastreams[params[:dsid]].ng_xml.to_s, &:noblanks).to_s
-    else
-      Nokogiri::XML(@obj.datastreams[params[:dsid]].content, &:noblanks).to_s
+    <%= if can?(:manage_item, @obj) &&
+           (
+             @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||
+             params[:dsid] == 'RELS-EXT'
+           ) &&
+           params[:dsid] != 'workflows'
+          link_to "Edit #{params[:dsid]}", ds_solr_document_path(params[:id], params[:dsid], edit: 'true'), title: params[:dsid], data: { behavior: 'persistent-modal' }
+      end %>
+  <% content = if params[:dsid] == 'full_dc'
+                 Nokogiri::XML(Dor::Services::Client.object(@obj.pid).metadata.dublin_core).prettify
+               elsif @obj.datastreams[params[:dsid]].respond_to? :ng_xml
+                 Nokogiri::XML(@obj.datastreams[params[:dsid]].ng_xml.to_s, &:noblanks).to_s
+               else
+                 Nokogiri::XML(@obj.datastreams[params[:dsid]].content, &:noblanks).to_s
     end
-    raise ActionController::RoutingError.new('Not Found') if content.nil?
-    output = CodeRay::Duo[:xml, :div].highlight content
-  %>
+     raise ActionController::RoutingError, 'Not Found' if content.nil?
+
+     output = CodeRay::Duo[:xml, :div].highlight content %>
   <% unless params[:dsid] == 'full_dc' %>
     <div class="CodeRay" style="color: gray"><pre><%= render_ds_profile_header @obj.datastreams[params[:dsid]] %></pre></div>
   <% end %>
   <%= output.html_safe %>
-  <%end%>
+  <% end %>
 </div>

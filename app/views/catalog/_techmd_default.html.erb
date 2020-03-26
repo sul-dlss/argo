@@ -8,7 +8,7 @@
         <li class="file">
           <span class="label">File</span><%= file_techmd['filename'] %>
           <ul class="metadata-list">
-            <% file_techmd.reject {|key| ['filename', 'druid', 'dro_file_parts'].include?(key) }.each do |file_techmd_key, file_techmd_value| %>
+            <% file_techmd.reject { |key| %w[filename druid dro_file_parts].include?(key) }.each do |file_techmd_key, file_techmd_value| %>
               <li class="metadata">
                 <span class="label"><%= file_techmd_key %></span>
                   <% unless file_techmd_value.is_a?(Hash) %>
@@ -32,7 +32,7 @@
                     <li class="file">
                       <span class="label">File part</span><%= file_part_techmd['part_id'] %>
                       <ul class="metadata-list">
-                        <% file_part_techmd.reject {|key| ['part_id'].include?(key) }.each do |file_part_techmd_key, file_part_techmd_value| %>
+                        <% file_part_techmd.reject { |key| ['part_id'].include?(key) }.each do |file_part_techmd_key, file_part_techmd_value| %>
                           <li class="metadata">
                             <span class="label"><%= file_part_techmd_key %></span>
                             <% unless file_part_techmd_value.is_a?(Hash) %>

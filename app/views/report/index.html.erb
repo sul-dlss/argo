@@ -3,7 +3,7 @@
   <script type="text/javascript">
     report_model = {
       total_rows: <%= @response['response']['numFound'] %>,
-      data_url: <%= report_data_url(params.to_unsafe_h.merge(:format => 'json')).to_json.html_safe %>,
+      data_url: <%= report_data_url(params.to_unsafe_h.merge(format: 'json')).to_json.html_safe %>,
       download_url: <%= report_download_url(params.to_unsafe_h).to_json.html_safe %>,
       column_model: <%= Report.blacklight_config.column_model.to_json.html_safe %>
     }
@@ -21,8 +21,8 @@
     <% @page_title = "#{application_name} Search Results" %>
     <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
     <% if has_search_parameters? %>
-      <%= render :partial => 'did_you_mean' %>
-      <%= render 'constraints', :localized_params => params %>
+      <%= render partial: 'did_you_mean' %>
+      <%= render 'constraints', localized_params: params %>
     <% end %>
 
     <%= render 'catalog/report_view_toggle' %>

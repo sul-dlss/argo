@@ -29,7 +29,10 @@ before_script:
   - echo "Waiting for Solr to start"
   - until curl --silent -XGET --fail -o /dev/null http://localhost:8984/solr/#/argo/core-overview; do printf '.'; sleep 1; done
 
-script: RAILS_ENV=test bundle exec rake
+
+script:
+  - bundle exec erblint --lint-all || travis_terminate 1
+  - RAILS_ENV=test bundle exec rake
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

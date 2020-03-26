@@ -1,0 +1,59 @@
+---
+exclude:
+  - "**/vendor/bundle/**"
+EnableDefaultLinters: false
+linters:
+  ErbSafety:
+    enabled: false # because lots of work to do to get this passing
+  HardCodedString:
+    enabled: false # because it results in broken code
+  SpaceInHtmlTag:
+    enabled: false # because it results in broken code
+  ParserErrors:
+    enabled: true
+  SpaceAroundErbTag:
+    enabled: true
+  ExtraNewline:
+    enabled: true
+  DeprecatedClasses:
+    enabled: true
+  ClosingErbTagIndent:
+    enabled: true
+  FinalNewline:
+    enabled: true
+  RightTrim:
+    enabled: true
+  NoJavascriptTagHelper:
+    enabled: true
+  TrailingWhitespace:
+    enabled: true
+  SelfClosingTag:
+    enabled: true
+  AllowedScriptType:
+    enabled: true
+  SpaceIndentation:
+    enabled: true
+  RubocopText:
+    enabled: true
+  Rubocop:
+    enabled: true
+    rubocop_config:
+      inherit_from:
+        - .rubocop.yml
+      # Disable the following because they are noisy
+      Style/FrozenStringLiteralComment:
+        Enabled: false
+      Layout/InitialIndentation:
+        Enabled: false
+      Layout/TrailingEmptyLines:
+        Enabled: false
+      Lint/UselessAssignment:
+        Enabled: false
+      Layout/LineLength:
+        Enabled: false
+      Rails/OutputSafety:
+        Enabled: false
+      Layout/EndAlignment:
+        Enabled: false
+      Style/BlockDelimiters:
+        Enabled: false

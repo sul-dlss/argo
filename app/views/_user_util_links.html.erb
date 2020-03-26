@@ -9,7 +9,7 @@
       <% end %>
     </li>
 
-    <li><%= link_to "Home", root_path %></li>
+    <li><%= link_to 'Home', root_path %></li>
 
     <% if session[:groups].present? %>
       <li class='dropdown'>
@@ -29,7 +29,7 @@
       </li>
     <% end %>
 
-    <li><%= link_to "All&nbsp;Workflows".html_safe, report_workflow_grid_path %></li>
+    <li><%= link_to 'All&nbsp;Workflows'.html_safe, report_workflow_grid_path %></li>
 
     <li class='dropdown'>
       <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
@@ -63,7 +63,7 @@
       </ul>
     </li>
 
-    <li><%= link_to "Feedback", 'mailto:argo-feedback@lists.stanford.edu' %></li>
+    <li><%= link_to 'Feedback', 'mailto:argo-feedback@lists.stanford.edu' %></li>
 
     <li>
       <p class='navbar-text'>

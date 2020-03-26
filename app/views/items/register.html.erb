@@ -1,4 +1,4 @@
-<% @title = "Register DOR Objects" %>
+<% @title = 'Register DOR Objects' %>
 <% content_for :head do %>
   <%= stylesheet_link_tag 'registration' %>
   <%= javascript_pack_tag 'registration' %>
@@ -7,29 +7,29 @@
   </script>
 <% end %>
 <div id='properties' class="ui-widget" style="display: none">
-        <div class="property-item"><label for="object_type">Type of Object</label><%= select_tag :object_type, options_for_select(valid_object_types), :'data-rcparam' => 'objectType' %></div>
-        <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), :'data-rcparam' => 'apoId' %></div>
-        <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', :'data-rcparam' => 'collection' %></div>
+        <div class="property-item"><label for="object_type">Type of Object</label><%= select_tag :object_type, options_for_select(valid_object_types), 'data-rcparam': 'objectType' %></div>
+        <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), 'data-rcparam': 'apoId' %></div>
+        <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', 'data-rcparam': 'collection' %></div>
 
-        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS), :'data-tagname' => 'Process : Rights' %></div>
-        <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', :'data-rcparam' => 'workflowId' %></div>
-        <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), :class => 'tag-field', :'data-tagname' => 'Process : Content Type' %></div>
-        <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, :class => 'tag-field', :'data-tagname' => 'Project', :'data-rcparam' => 'projectName' %></div>
+        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS), 'data-tagname': 'Process : Rights' %></div>
+        <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', 'data-rcparam': 'workflowId' %></div>
+        <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), class: 'tag-field', 'data-tagname': 'Process : Content Type' %></div>
+        <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, class: 'tag-field', 'data-tagname': 'Project', 'data-rcparam': 'projectName' %></div>
         <div class="property-item wide"><label for='tag_1'>Tags</label>
           <span id="tags" style="width: auto">
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_0', :class => 'free tag-field' %>
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_1', :class => 'free tag-field' %>
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_2', :class => 'free tag-field' %>
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_3', :class => 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_0', class: 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_1', class: 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_2', class: 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_3', class: 'free tag-field' %>
           </span>
           <div class="break"></div>
           <label for='tag_4'>&nbsp;</label>
           <span id="tags" style="width: auto">
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_4', :class => 'free tag-field' %>
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_5', :class => 'free tag-field' %>
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_6', :class => 'free tag-field' %>
-            <%= text_field_tag :'tags[]', nil, :id => 'tags_7', :class => 'free tag-field' %>
-            <%= hidden_field_tag :registered_by, current_user.login, :class => 'tag-field ', :'data-tagname' => 'Registered By' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_4', class: 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_5', class: 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_6', class: 'free tag-field' %>
+            <%= text_field_tag :'tags[]', nil, id: 'tags_7', class: 'free tag-field' %>
+            <%= hidden_field_tag :registered_by, current_user.login, class: 'tag-field ', 'data-tagname': 'Registered By' %>
           </span>
         </div>
         <div class="break"></div>
@@ -65,5 +65,5 @@
 </div>
 <div id='dynamic' class='row'>
   <table id='data'></table>
-  <div id='pdata'></div><%= text_area_tag :id_list, '', :class => 'full-width', :id => :id_list, :rows => 7 %>
+  <div id='pdata'></div><%= text_area_tag :id_list, '', class: 'full-width', id: :id_list, rows: 7 %>
 </div>

@@ -17,9 +17,9 @@
     <![endif]-->
 
     <title><%= render_page_title %></title>
-    <%= opensearch_description_tag application_name, opensearch_catalog_url(:format => 'xml') %>
+    <%= opensearch_description_tag application_name, opensearch_catalog_url(format: 'xml') %>
     <%= favicon_link_tag 'favicon.ico' %>
-    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= stylesheet_link_tag 'application', media: 'all' %>
     <%= javascript_pack_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
     <%= csrf_meta_tags %>
@@ -32,18 +32,18 @@
 
   </head>
   <body data-application-root="<%= ENV['RACK_BASE_URI'] %>" class="<%= render_body_class %>">
-  <%= render :partial => 'shared/header_navbar' %>
+  <%= render partial: 'shared/header_navbar' %>
 
   <%= render partial: 'shared/ajax_modal' %>
 
   <div id="main-container" class="container-fluid">
-    <%= render :partial=>'/flash_msg', layout: 'shared/flash_messages' %>
+    <%= render partial: '/flash_msg', layout: 'shared/flash_messages' %>
 
     <div class="row">
       <%= yield %>
     </div>
   </div>
 
-  <%= render :partial => 'shared/footer' %>
+  <%= render partial: 'shared/footer' %>
   </body>
 </html>

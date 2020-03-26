@@ -6,9 +6,9 @@
     <li><%= render_searchworks_link document %></li>
     <% end %>
     <li><%= render_dor_link document %></li>
-    <li><%= link_to 'FoXML', File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/export?context=archive"), target: '_blank' %></li>
+    <li><%= link_to 'FoXML', File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/export?context=archive"), target: '_blank', rel: 'noopener' %></li>
     <li>
-      <%= link_to 'Solr document', solr_document_path(document, format: :json), target: '_blank' %>
+      <%= link_to 'Solr document', solr_document_path(document, format: :json), target: '_blank', rel: 'noopener' %>
     </li>
     <li><small><%= render_index_info document %></small></li>
   </ul>
