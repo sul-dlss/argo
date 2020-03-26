@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 
 class FilesController < ApplicationController
-  before_action :load_resource
+  before_action :load_resource, only: [:show, :preserved]
 
   ##
   # Brings up a modal dialog that lists all locations of the file
   def index
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
-    @available_in_workspace = Dor::Services::Client.object(params[:item_id]).files.list.include?(filename)
+    object_client = Dor::Services::Client.object(params[:item_id])
+    @available_in_workspace = object_client.files.list.include?(filename)
     @has_been_accessioned = WorkflowClientFactory.build.lifecycle('dor', params[:item_id], 'accessioned')
+    files = object_client.find.structural.contains.map { |fs| fs.structural.contains }.flatten
+    @file = files.find { |file| file.externalIdentifier == "#{params[:item_id]}/#{params[:id]}" }
 
     if @has_been_accessioned
       begin
