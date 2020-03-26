@@ -12,7 +12,7 @@ RSpec.describe WorkflowXmlPresenter do
 
     let(:xml) do
       '<?xml version="1.0" encoding="UTF-8"?>
-        <workflow repository="dor" objectId="druid:oo201oo0001" id="accessionWF">
+        <workflow repository="dor" objectId="druid:bc123df4567" id="accessionWF">
         </workflow>'
     end
 

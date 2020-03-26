@@ -13,14 +13,12 @@ RSpec.describe 'More facet view', js: true do
     filter_field = find_field(id: 'filterInput')
     expect(filter_field).not_to be_nil
 
-    expect(page).to have_content('druid:pb873ty1662')
+    expect(page).to have_content('Annual report of the State Corporation Commission')
     filter_field.fill_in(with: 'foo')
-    expect(page).not_to have_content('druid:pb873ty1662')
-    filter_field.fill_in(with: 'druid:')
-    expect(page).to have_content('druid:pb873ty1662')
+    expect(page).not_to have_content('Annual report of the State Corporation Commission')
+    filter_field.fill_in(with: 'report')
+    expect(page).to have_content('Annual report of the State Corporation Commission')
     filter_field.fill_in(with: 'druid:foo')
     expect(page).not_to have_content('druid:pb873ty1662')
-    filter_field.fill_in(with: 'druid:pb873ty1662')
-    expect(page).to have_content('druid:pb873ty1662')
   end
 end

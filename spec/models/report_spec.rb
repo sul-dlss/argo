@@ -34,7 +34,7 @@ RSpec.describe Report, type: :model do
 
     it 'handles a multivalued fields' do
       row = CSV.parse(@csv).find { |row| row[0] == 'xb482bw3979' }
-      expect(row[12].split('; ').length).to eq(2) # 12 == tag field
+      expect(row[12].split(';').length).to eq(2) # 12 == tag field
     end
   end
 
@@ -104,7 +104,7 @@ RSpec.describe Report, type: :model do
       expect(described_class.new(
         { q: 'report' }, %w(druid tag_ssim),
         current_user: user
-      ).pids(tags: true)).to include "fg464dn8891\tRegistered By : llam813\t Remediated By : 4.6.6.2"
+      ).pids(tags: true)).to include "fg464dn8891\tRegistered By : llam813\tRemediated By : 4.6.6.2"
     end
   end
 end

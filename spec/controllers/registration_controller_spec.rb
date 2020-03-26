@@ -292,7 +292,7 @@ RSpec.describe RegistrationController, type: :controller do
         expect(data).to eq(
           '' => 'None',
           'druid:zy123xw4567' => 'A collection that sorts to the top (zy123xw4567)',
-          'druid:pb873ty1662' => 'Fedora Object Label for this collection (pb873ty1662)',
+          'druid:pb873ty1662' => 'Annual report of the State Corporation Commission showing... (pb873ty1662)',
           'druid:ab098cd7654' => 'Ze last collection in ze list (ab098cd7654)'
         )
       end
@@ -309,7 +309,7 @@ RSpec.describe RegistrationController, type: :controller do
 
         get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
         data = JSON.parse(response.body)
-        expect(data['druid:pb873ty1662']).to eq 'Fedora Object Label for this collection (pb873ty1662)'
+        expect(data['druid:pb873ty1662']).to eq 'Annual report of the State Corporation Commission showing... (pb873ty1662)'
         expect(data['druid:gg191kg3953']).to be nil
         expect(data.length).to eq(2)
       end

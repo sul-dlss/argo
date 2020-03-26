@@ -23,7 +23,7 @@ services:
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
-      SETTINGS__DOR__INDEXING__URL: http://dor-indexing-app:3000/dor
+      SETTINGS__DOR_INDEXING_URL: http://dor-indexing-app:3000/dor
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
@@ -37,10 +37,10 @@ services:
       - 3004:3000
     environment:
       SOLR_URL: http://solr:8983/solr/argo
-      SETTINGS__solr__url: http://solr:8983/solr/argo
-      SETTINGS__dor_services__url: http://dor-services-app:3000/
+      SETTINGS__SOLR__URL: http://solr:8983/solr/argo
+      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
       # To generate the token: docker-compose run dor-services-app rake generate_token
-      SETTINGS__dor_services__token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
+      SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__SURI__URL: http://suri:3000
@@ -48,7 +48,6 @@ services:
       SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
     depends_on:
       - solr
-      - dor-services-app
       - fcrepo
       - workflow
 
@@ -63,12 +62,16 @@ services:
       DATABASE_HOSTNAME: db
       DATABASE_PORT: 5432
       SOLR_URL: http://solr:8983/solr/argo
-      SETTINGS__solr__url: http://solr:8983/solr/argo
+      SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
+      SETTINGS__SOLR__URL: http://solr:8983/solr/argo
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
     depends_on:
       - db
+      - dor-indexing-app
+      - suri
+
   solr:
     image: solr:7
     volumes:
@@ -135,8 +138,9 @@ services:
   redis:
     image: redis
     # No external ports enabled.
-#    ports:
-#      - 6379:6379
+    # ports:
+    #  - 6379:6379
+
 volumes:
   node_modules:
   postgres-data:

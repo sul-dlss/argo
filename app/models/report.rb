@@ -176,7 +176,6 @@ class Report
     end
     @params = params
     @params[:page] ||= 1
-
     (@response, @document_list) = search_results(@params)
     @num_found = @response['response']['numFound'].to_i
   end
@@ -221,7 +220,7 @@ class Report
     docs.each_with_index do |doc, index|
       row = Hash[fields.collect do |spec|
         val = spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s] rescue nil
-        val = val.join('; ') if val.is_a?(Array)
+        val = val.join(';') if val.is_a?(Array)
         [spec[:field].to_sym, val.to_s]
       end]
       row[:id] = index + 1

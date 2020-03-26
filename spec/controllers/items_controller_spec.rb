@@ -25,7 +25,7 @@ RSpec.describe ItemsController, type: :controller do
     allow(StateService).to receive(:new).and_return(state_service)
   end
 
-  let(:pid) { 'druid:oo201oo0001' }
+  let(:pid) { 'druid:bc123df4567' }
   let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -188,50 +188,64 @@ RSpec.describe ItemsController, type: :controller do
 
   describe '#tags' do
     context 'when they have manage access' do
+      let(:current_tag) { 'Some : Thing' }
+      let(:fake_tags_client) do
+        instance_double(Dor::Services::Client::AdministrativeTags,
+                        list: [current_tag],
+                        update: true,
+                        destroy: true,
+                        create: true)
+      end
+
       before do
         allow(controller).to receive(:authorize!).and_return(true)
-        allow(item).to receive(:tags).and_return(['some:thing'])
+        allow(controller).to receive(:tags_client).and_return(fake_tags_client)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely)
       end
 
       it 'updates tags' do
-        expect(Dor::TagService).to receive(:update).with(item, 'some:thing', 'some:thingelse')
-        post 'tags', params: { id: pid, update: 'true', tag1: 'some:thingelse' }
+        expect(fake_tags_client).to receive(:update).with(current: current_tag, new: 'Some : Thing : Else').once
+        post 'tags', params: { id: pid, update: 'true', tag1: 'Some : Thing : Else' }
       end
 
       it 'deletes tag' do
-        expect(Dor::TagService).to receive(:remove).with(item, 'some:thing').and_return(true)
+        expect(fake_tags_client).to receive(:destroy).with(tag: current_tag).once
         post 'tags', params: { id: pid, tag: '1', del: 'true' }
       end
 
       it 'adds a tag' do
-        expect(Dor::TagService).to receive(:add).with(item, 'new:thing')
-        post 'tags', params: { id: pid, new_tag1: 'new:thing', add: 'true' }
+        expect(fake_tags_client).to receive(:create).with(tags: ['New : Thing'])
+        post 'tags', params: { id: pid, new_tag1: 'New : Thing', add: 'true' }
       end
     end
   end
 
   describe '#tags_bulk' do
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-        allow(item).to receive(:tags).and_return(['some:thing'])
-        expect(item.datastreams['identityMetadata']).to receive(:save)
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-      end
+    let(:current_tag) { 'Some : Thing' }
+    let(:fake_tags_client) do
+      instance_double(Dor::Services::Client::AdministrativeTags,
+                      list: [current_tag],
+                      update: true,
+                      destroy: true,
+                      create: true)
+    end
 
-      it 'removes an old tag an add a new one' do
-        expect(Dor::TagService).to receive(:remove).with(item, 'some:thing')
-        expect(Dor::TagService).to receive(:add).with(item, 'new:thing')
-        post 'tags_bulk', params: { id: pid, tags: 'new:thing' }
-      end
+    before do
+      allow(controller).to receive(:authorize!).and_return(true)
+      allow(controller).to receive(:tags_client).and_return(fake_tags_client)
+      expect(Argo::Indexer).to receive(:reindex_pid_remotely)
+    end
 
-      it 'adds multiple tags' do
-        expect(Dor::TagService).to receive(:add).twice
-        expect(Dor::TagService).to receive(:remove).with(item, 'some:thing')
-        expect(item).to receive(:save)
-        post 'tags_bulk', params: { id: pid, tags: 'Process : Content Type : Book (ltr)	 Registered By : labware' }
-      end
+    it 'removes an old tag an add a new one' do
+      expect(fake_tags_client).to receive(:replace).with(tags: ['New : Thing']).once
+      post 'tags_bulk', params: { id: pid, tags: 'New : Thing' }
+    end
+
+    it 'adds multiple tags' do
+      expect(fake_tags_client).to receive(:replace)
+        .with(tags: ['Process : Content Type : Book (ltr)', 'Registered By : labware'])
+        .once
+      post 'tags_bulk', params: { id: pid, tags: 'Process : Content Type : Book (ltr)	Registered By : labware' }
     end
   end
 
