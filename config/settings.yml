@@ -42,6 +42,7 @@ profiler:
 # Stacks
 stacks:
   local_workspace_root: '/foo/workspace'
+  host: 'stacks-test.stanford.edu'
 
 # Suri
 suri:
