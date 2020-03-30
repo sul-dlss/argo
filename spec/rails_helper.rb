@@ -11,7 +11,7 @@ require 'capybara/rspec'
 require 'equivalent-xml/rspec_matchers'
 require 'view_component/test_helpers'
 require 'webmock/rspec'
-WebMock.allow_net_connect!(net_http_connect_on_start: true)
+WebMock.disable_net_connect!(allow_localhost: true, allow: ['https://chromedriver.storage.googleapis.com'])
 
 require 'simplecov'
 SimpleCov.start :rails do

@@ -66,7 +66,7 @@ OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(Settings.sur
 
 # Stacks
 OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.stacks.local_workspace_root)
-OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.stacks.HOST}")
+OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.stacks.host}")
 OkComputer::Registry.register 'stacks_file_url', OkComputer::HttpCheck.new(Settings.stacks_file_url)
 OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(Settings.stacks_url)
 
