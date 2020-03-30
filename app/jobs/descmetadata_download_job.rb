@@ -33,6 +33,10 @@ class DescmetadataDownloadJob < GenericJob
 
   def process_druid(current_druid, log, zip_file)
     dor_object = query_dor(current_druid, log)
+
+    # This may be a long-running job, so this makes sure that the db connection is active.
+    ActiveRecord::Base.clear_active_connections!
+
     if dor_object.nil?
       bulk_action.increment(:druid_count_fail).save
       return
