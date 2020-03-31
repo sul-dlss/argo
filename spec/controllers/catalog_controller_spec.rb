@@ -142,4 +142,70 @@ RSpec.describe CatalogController, type: :controller do
       end
     end
   end
+
+#   describe 'format_milestones' do
+#   it 'builds an empty listing if passed an empty doc' do
+#     milestones = SolrDocument.new({}).milestones
+#     milestones.each do |key, value|
+#       expect(value).to match a_hash_excluding(:time)
+#     end
+#   end
+
+#   it 'generates a correct lifecycle with the old format that lacks version info' do
+#     doc = SolrDocument.new('lifecycle_ssim' => ['registered:2012-02-25T01:40:57Z'])
+
+#     versions = doc.milestones
+#     expect(versions.keys).to eq [1]
+#     expect(versions).to match a_hash_including(
+#       1 => a_hash_including(
+#         'registered' => { time: be_a_kind_of(DateTime) }
+#       )
+#     )
+#     versions[1].each do |key, value|
+#       if key == 'registered'
+#         expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
+#       else
+#         expect(value[:time]).to be_nil
+#       end
+#     end
+#   end
+
+#   it 'recognizes versions and bundle versions together' do
+#     lifecycle_data = ['registered:2012-02-25T01:40:57Z;1', 'opened:2012-02-25T01:39:57Z;2']
+#     versions = SolrDocument.new('lifecycle_ssim' => lifecycle_data).milestones
+#     expect(versions['1'].size).to eq(6)
+#     expect(versions['2'].size).to eq(6)
+#     expect(versions['1']['registered']).not_to be_nil
+#     expect(versions['2']['registered']).to be_nil
+#     expect(versions['2']['opened']).not_to be_nil
+#     expect(versions).to match a_hash_including(
+#       '1' => a_hash_including(
+#         'registered' => {
+#           time: be_a_kind_of(DateTime)
+#         }
+#       ),
+#       '2' => a_hash_including(
+#         'opened' => {
+#           time: be_a_kind_of(DateTime)
+#         }
+#       )
+#     )
+#     versions.each do |version, milestones|
+#       milestones.each do |key, value|
+#         case key
+#         when 'registered'
+#           expect(value[:time]).to be_a_kind_of DateTime
+#           expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:40:57+00:00')
+#           expect(version).to eq('1') # registration is always only on v1
+#         when 'opened'
+#           expect(value[:time]).to be_a_kind_of DateTime
+#           expect(value[:time].to_s(:iso8601)).to eq('2012-02-25T01:39:57+00:00')
+#           expect(version).to eq('2')
+#         else
+#           expect(value[:time]).to be_nil
+#         end
+#       end
+#     end
+#   end
+# end
 end
