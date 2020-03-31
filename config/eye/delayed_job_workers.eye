@@ -39,7 +39,7 @@ Eye.application 'delayed_job' do
         # so every 5 min is fine.  but we expect memory usage to pretty much
         # be monotonically increasing (prob due to memory leak), so don't bother
         # checking multiple times before restarting.
-        check :memory, every: 300.seconds, below: 1500.megabytes, times: 1
+        check :memory, every: 300.seconds, below: 3000.megabytes, times: 1
       end
     end
   end
