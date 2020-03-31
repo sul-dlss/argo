@@ -1,4 +1,4 @@
-<form action=<%= close_item_versions_path(@object.pid) %> method="POST">
+<%= form_with(url: close_item_versions_path(@object.pid), method: :post) do %>
   <div class='form-group'>
     <label for="significance">Type</label>
     <select id="significance" name="significance" class='form-control'>
@@ -15,4 +15,4 @@
   <button type='submit' class='btn btn-primary'>
     Close Version
   </button>
-</form>
+<% end %>
