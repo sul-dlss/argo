@@ -68,10 +68,7 @@ if ['test', 'development'].include? Rails.env
                                              'localhost:8983',
                                              'localhost:8984',
                                              'localhost:3004',
-                                             'dor-indexing-app:3000',
-                                             'dor-services-app:3000',
-                                             'techmd::3000',
-                                             'redis:6379'])
+                                             'dor-indexing-app:3000'])
         include WebMock::API
         WebMock.enable!
         file_list.each do |file|
