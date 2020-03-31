@@ -198,6 +198,8 @@ class CatalogController < ApplicationController
     end
     @events = object_client.events.list
 
+    format_milestones(params[:id])
+
     @buttons_presenter = ButtonsPresenter.new(
       ability: current_ability,
       solr_document: @document,
@@ -279,5 +281,25 @@ class CatalogController < ApplicationController
     blacklight_config.facet_fields.each do |_k, v|
       v.include_in_request = false if v.home == false
     end
+  end
+
+  def format_milestones(pid)
+    hash = {}
+    WorkflowClientFactory.build.milestones('dor', pid).each do |milestone|
+      hash[milestone[:version]] ||= ActiveSupport::OrderedHash[
+        'registered' => {}, # each of these *could* have :display and :time elements
+        'opened' => {},
+        'submitted' => {},
+        'described' => {},
+        'published' => {},
+        'deposited' => {},
+        'accessioned' => {}
+      ]
+      hash[milestone[:version]].delete(milestone[:version] == '1' ? 'opened' : 'registered') # only version 1 has 'registered'
+      hash[milestone[:version]][milestone[:milestone]] = {
+        time: milestone[:at]
+      }
+    end
+    @milestones = hash
   end
 end
