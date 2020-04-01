@@ -23,7 +23,7 @@ Rails:
   Enabled: true
 
 # Configuration parameters: AllowURI, URISchemes.
-Metrics/LineLength:
+Layout/LineLength:
   Max: 180
   IgnoredPatterns:
     - '\A\s*#' # allow long comments
