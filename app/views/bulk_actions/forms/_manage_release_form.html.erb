@@ -14,7 +14,7 @@
     </div>
     <div class='form-group'>
       <label for='bulk_action_manage_release_to'>to</label>
-      <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, { class: 'form-control' } %>
+      <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-control' %>
     </div>
     <%= manage_release_fields.hidden_field('what', value: 'self') %>
     <%= manage_release_fields.hidden_field('who', value: current_user.sunetid) %>

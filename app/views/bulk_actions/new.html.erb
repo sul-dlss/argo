@@ -4,7 +4,7 @@
   <%= form_for(@bulk_action, html: { 'data-controller' => 'bulk_actions' }) do |f| %>
     <% if @bulk_action.errors.any? %>
       <div id="error_explanation">
-        <h2><%= pluralize(@bulk_action.errors.count, "error") %> prohibited this bulk_action from being saved:</h2>
+        <h2><%= pluralize(@bulk_action.errors.count, 'error') %> prohibited this bulk_action from being saved:</h2>
 
         <ul>
         <% @bulk_action.errors.full_messages.each do |message| %>

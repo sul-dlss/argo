@@ -5,14 +5,14 @@
 <div id="admin-policies">
   <h4>Admin Policies</h4>
   <table class='table table-fixed-layout'>
-    <%= render partial: 'table_row',  collection: @presenter.apo_titles, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.apo_titles, as: :item %>
   </table>
 </div>
 
 <div id="collection">
   <h4>Collection</h4>
   <table class='table table-fixed-layout'>
-    <%= render partial: 'table_row',  collection: @presenter.collection_titles, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.collection_titles, as: :item %>
   </table>
 </div>
 
@@ -44,7 +44,7 @@
 <div id='rights'>
   <h4>Rights</h4>
   <table class='table table-fixed-layout'>
-    <%= render partial: 'table_row',  collection: @presenter.rights_descriptions, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.rights_descriptions, as: :item %>
   </table>
 </div>
 
@@ -58,7 +58,7 @@
 <div id='contents'>
   <h4>Contents</h4>
   <table class='table table-fixed-layout'>
-    <%= render partial: 'table_row',  collection: @presenter.content_type, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.content_type, as: :item %>
     <tr>
       <td>Total files</td>
       <td><%= @presenter.content_file_count['sum'].to_i %></td>
@@ -80,15 +80,15 @@
     <tr>
       <td><h5>Use & Reproduction</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.use_statement, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.use_statement, as: :item %>
     <tr>
       <td><h5>Copyright</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.copyright, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.copyright, as: :item %>
     <tr>
       <td><h5>License</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.use_license_machine, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.use_license_machine, as: :item %>
   </table>
 </div>
 
@@ -98,7 +98,7 @@
     <tr>
       <td><h5>Resource Type</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.sw_resource_type, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.sw_resource_type, as: :item %>
     <tr>
       <td><h5>Date</h5></td><td></td>
     </tr>
@@ -113,22 +113,22 @@
     <tr>
       <td><h5>Language</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.sw_language, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.sw_language, as: :item %>
     <tr>
       <td><h5>Topic</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.sw_topic, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.sw_topic, as: :item %>
     <tr>
       <td><h5>Region</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.sw_region, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.sw_region, as: :item %>
     <tr>
       <td><h5>Era</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.sw_era, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.sw_era, as: :item %>
     <tr>
       <td><h5>Genre</h5></td><td></td>
     </tr>
-    <%= render partial: 'table_row',  collection: @presenter.sw_genre, as: :item %>
+    <%= render partial: 'table_row', collection: @presenter.sw_genre, as: :item %>
   </table>
 </div>

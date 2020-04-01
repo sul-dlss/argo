@@ -4,7 +4,7 @@
   });
 </script>
 <div id='embargo_update'>
-  <%= form_tag url_for(:controller => :items, :action => :embargo_update), :method => :POST do%>
+  <%= form_tag url_for(controller: :items, action: :embargo_update), method: :POST do %>
     <div class='form-group'>
       <label for='embargo_date'>New date</label>
       <input name="embargo_date" id="embargo_date" type="text">

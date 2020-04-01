@@ -67,6 +67,14 @@ GEM
       execjs
     barby (0.6.8)
     bcrypt (3.1.13)
+    better_html (1.0.14)
+      actionview (>= 4.0)
+      activesupport (>= 4.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      html_tokenizer (~> 0.0.6)
+      parser (>= 2.4)
+      smart_properties
     bindex (0.8.1)
     blacklight (6.23.0)
       bootstrap-sass (~> 3.2)
@@ -273,6 +281,13 @@ GEM
       activesupport (>= 3.0, < 7.0)
     equivalent-xml (0.6.0)
       nokogiri (>= 1.4.3)
+    erb_lint (0.0.31)
+      activesupport
+      better_html (~> 1.0.7)
+      html_tokenizer
+      rainbow
+      rubocop (~> 0.79.0)
+      smart_properties
     erubi (1.9.0)
     execjs (2.7.0)
     eye (0.10.0)
@@ -300,6 +315,7 @@ GEM
     honeybadger (4.6.0)
     hooks (0.4.1)
       uber (~> 0.0.14)
+    html_tokenizer (0.0.7)
     htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
@@ -488,7 +504,6 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     retries (0.0.5)
-    rexml (3.2.4)
     rsolr (2.3.0)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
@@ -509,12 +524,11 @@ GEM
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
-    rubocop (0.80.1)
+    rubocop (0.79.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
-      rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     rubocop-rails (2.5.0)
@@ -566,6 +580,7 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     slop (3.6.0)
+    smart_properties (1.15.0)
     solrizer (3.4.1)
       activesupport
       daemons
@@ -667,6 +682,7 @@ DEPENDENCIES
   dor-services-client (~> 4.20)
   dor-workflow-client (~> 3.19)
   equivalent-xml (>= 0.6.0)
+  erb_lint (~> 0.0.31)
   eye
   factory_bot_rails
   faraday
@@ -695,7 +711,7 @@ DEPENDENCIES
   retries
   rsolr
   rspec-rails (~> 3.5)
-  rubocop (~> 0.80.0)
+  rubocop (~> 0.79.0)
   rubocop-rails
   rubocop-rspec (~> 1.31.0)
   ruby-prof

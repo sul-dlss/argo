@@ -6,7 +6,7 @@
       <h3 class='panel-title'>Embargo</h3>
     </div>
     <div class='panel-body'>
-      This item is embargoed until <%= Time.parse(document.embargo_release_date).strftime('%Y.%m.%d') %>
+      This item is embargoed until <%= Time.zone.parse(document.embargo_release_date).strftime('%Y.%m.%d') %>
     </div>
   </div>
 <% end %>

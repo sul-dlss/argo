@@ -9,7 +9,7 @@
       <% if document.preservation_size.present? %>
         <span class="label">Preservation Size</span>
         <%= number_to_human_size(document.preservation_size) %>
-        <br/>
+        <br>
       <% end %>
       <span class="label">Type</span>
       <%= content_ds.ng_xml.root['type'] %>

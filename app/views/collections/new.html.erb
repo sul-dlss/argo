@@ -10,11 +10,11 @@
                                                data: { behavior: 'collection-form' } do %>
     <div class="form-group" style="padding-left:20px">
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-collection', action: "change->collection-editor#toggle" } %>
+        <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-collection', action: 'change->collection-editor#toggle' } %>
         Create a Collection from Title/Abstract
       </label>
       <label class="radio">
-        <%= radio_button_tag 'collection_radio', 'create', false, data: { reveal: 'create-collection-catkey', action: "change->collection-editor#toggle" }  %>
+        <%= radio_button_tag 'collection_radio', 'create', false, data: { reveal: 'create-collection-catkey', action: 'change->collection-editor#toggle' } %>
         Create a Collection from Symphony
       </label>
     </div>
@@ -30,13 +30,13 @@
         <label for="collection_abstract">
           Collection Abstract
         </label>
-        <%= text_area_tag 'collection_abstract', nil, class: 'form-control'%>
+        <%= text_area_tag 'collection_abstract', nil, class: 'form-control' %>
       </div>
       <div class="form-group">
         <label for="collection_rights">
           Collection Object Visibility
         </label>
-        <%=select_tag :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' ), class: 'form-control' %>
+        <%= select_tag :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
       </div>
     </div>
     <div id="create-collection-catkey" class="collection_div" style="display:none">
@@ -51,7 +51,7 @@
         <label for="collection_rights_catkey">
           Collection Object Visibility
         </label>
-        <%=select_tag :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world' ), class: 'form-control' %>
+        <%= select_tag :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
       </div>
     </div>
     <div class="form-group">

@@ -1,6 +1,6 @@
 <li class="resource">
   <span class="label">Resource (<%= child_counter + 1 %>)</span>
-  <%= child['type']%>
+  <%= child['type'] %>
   <ul>
     <% if child.at('label') %>
       <li> <span class="label">Label</span> <%= child.at('label').text %></li>
@@ -11,11 +11,11 @@
         <% if can? :manage_item, object %>
           <%= link_to file['id'], item_files_path(item_id: object, id: file['id']), data: { blacklight_modal: 'trigger' } %>
         <% else %>
-          <%=file['id']%>
+          <%= file['id'] %>
         <% end %>
         (<%= file['mimetype'] %>,
          <%= number_to_human_size(file['size']) %>,
-         <%= ['publish','shelve','preserve'].reject { |a| file[a] != 'yes' }.join('/') %>)
+         <%= %w[publish shelve preserve].select { |a| file[a] == 'yes' }.join('/') %>)
       </li>
     <% end %>
     <%= render partial: 'catalog/_show_sections/default_contents_external_file', locals: { resource: child } -%>

@@ -27,7 +27,7 @@
   </div>
   <p class='help-block'>* Any members that have their own overriding release information will not be affected</p>
   <div class='form-group'>
-    <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, { class: 'form-control' } %>
+    <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-control' %>
   </div>
   <%= manage_release_fields.hidden_field('who', value: current_user.sunetid) %>
 <% end %>

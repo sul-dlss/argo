@@ -3,25 +3,25 @@
 <script type="text/javascript">
 report_model = {
   total_rows: <%= @response['response']['numFound'] %>,
-  data_url: <%= report_pids_url(params.to_unsafe_h.merge(:format => 'json')).to_json.html_safe %>,
+  data_url: <%= report_pids_url(params.to_unsafe_h.merge(format: 'json')).to_json.html_safe %>,
 }
 cons=[];
 function catalog_url(element)
 {
-  url='<%=link_to 'druid:xxxxxxxxx', url_for(:controller => :catalog,:action => :show, :id => 'druid:xxxxxxxxx', :bulk => 'true'), :target => '_blank'%>'
+  url='<%= link_to 'druid:xxxxxxxxx', url_for(controller: :catalog, action: :show, id: 'druid:xxxxxxxxx', bulk: 'true'), target: '_blank', rel: 'noopener' %>'
   url=url.replace(/xxxxxxxxx/g,element);
   return url;
 }
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
-purge_url='<%=url_for :controller => :items,:action => :purge_object, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-republish_url='<%=url_for :controller => :dor,:action => :republish, :pid => 'druid:xxxxxxxxx'%>'
-set_rights_url='<%=url_for :controller => :items,:action => :set_rights, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-set_collection_url='<%=url_for :controller => :items,:action => :set_collection, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-apo_apply_defaults_url='<%=url_for :controller => :items,:action => :apply_apo_defaults, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+purge_url='<%= url_for controller: :items, action: :purge_object, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
+republish_url='<%= url_for controller: :dor, action: :republish, pid: 'druid:xxxxxxxxx' %>'
+set_rights_url='<%= url_for controller: :items, action: :set_rights, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
+set_collection_url='<%= url_for controller: :items, action: :set_collection, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
+apo_apply_defaults_url='<%= url_for controller: :items, action: :apply_apo_defaults, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
-refresh_metadata_url='<%=url_for :controller => :items,:action => :refresh_metadata, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-source_id_url='<%=url_for :controller => :items,:action => :source_id, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
-tags_url='<%=url_for :controller => :items,:action => :tags_bulk, :id => 'druid:xxxxxxxxx', :bulk => 'true'%>'
+refresh_metadata_url='<%= url_for controller: :items, action: :refresh_metadata, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
+source_id_url='<%= url_for controller: :items, action: :source_id, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
+tags_url='<%= url_for controller: :items, action: :tags_bulk, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 </script>
 
 <style>
@@ -41,9 +41,9 @@ ul li{
 <% @page_title = "#{application_name} Search Results" %>
 <% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
 <% if has_search_parameters? %>
-<%= render :partial => 'did_you_mean' %>
-<%= render 'constraints', :localized_params=>params %>
-<%= render 'report_view_toggle', :localized_params=>params %>
+<%= render partial: 'did_you_mean' %>
+<%= render 'constraints', localized_params: params %>
+<%= render 'report_view_toggle', localized_params: params %>
 <% end %>
 
 <h1>Bulk update operations</h1>
@@ -52,7 +52,7 @@ ul li{
 <div id="pid_list" name="pid_list" style="display:none;" class="bulk_operation">
   <h1>Druids</h1>
   <p>Bulk actions will be performed on this list of druids. Modify the list or paste a list of druids here to operate on them instead.</p>
-  <br/><textarea id="pids" name="pids"></textarea><br/>
+  <br><textarea id="pids" name="pids"></textarea><br>
   <div id="buttons">
     <strong>Options that require versioning</strong>
     <div class="row bulk-buttons-row">
@@ -90,66 +90,62 @@ ul li{
 <div class="bulk_operation" id="apply_apo_defaults" name="apply_apo_defaults">
   <h1>Reset the rights metadata to match the APO default.</h1>
   <p>This will overwrite any changes in the rights metadata, including embargo.</p>
-  <span class="bulk_button" id="confirm-apo-defaults-button">Apply defaults.</span><br/>
+  <span class="bulk_button" id="confirm-apo-defaults-button">Apply defaults.</span><br>
 </div>
 
 <div class="bulk_operation" id="set_collection" name="set_collection">
   <h1>Add/Set a collection for these objects</h1>
   <p>This will add the selected collection if the object doesn't already have one, or replace any existing collection(s) for an object with the single selected collection.  If you select "None" for the collection, all collection associations will be removed, and no new associations will be added.</p>
-  <%= select_tag :set_collection_select, options_for_select(current_user.permitted_collections)%>
-  <span class="bulk_button" id="confirm-set-collection-button">Set Collection</span><br/>
+  <%= select_tag :set_collection_select, options_for_select(current_user.permitted_collections) %>
+  <span class="bulk_button" id="confirm-set-collection-button">Set Collection</span><br>
 </div>
-<br/>
+<br>
 
 <div class="bulk_operation" id="content_type" name="content_type">
-  <%
-    current_content_types = []
-    # retrieving the content types this way gives a list of values interleaved with facet counts, e.g.:
-    #  ["googleScannedBook", 10, "book", 7]
-    # so just use the evens
-    @response['facet_counts']['facet_fields']['content_type_ssim'].each_with_index do |k, idx|
-      if idx.even?
-        current_content_types << k
-      end
-    end
-    current_content_types = [['none', '']] + current_content_types
-    current_resource_types = [['none', '']] + Constants::RESOURCE_TYPES
-    new_content_types = [['none', '']] + Constants::CONTENT_TYPES
-    new_resource_types = [['none', '']] + Constants::RESOURCE_TYPES
-  %>
+  <% current_content_types = []
+     # retrieving the content types this way gives a list of values interleaved with facet counts, e.g.:
+     #  ["googleScannedBook", 10, "book", 7]
+     # so just use the evens
+     @response['facet_counts']['facet_fields']['content_type_ssim'].each_with_index do |k, idx|
+       current_content_types << k if idx.even?
+     end
+     current_content_types = [['none', '']] + current_content_types
+     current_resource_types = [['none', '']] + Constants::RESOURCE_TYPES
+     new_content_types = [['none', '']] + Constants::CONTENT_TYPES
+     new_resource_types = [['none', '']] + Constants::RESOURCE_TYPES %>
   <h1>Set content and resource types</h1>
   <p>
-    Given the above list of druids, the following will be performed on each object:<br/>
-    <%=I18n.t('argo.content_type.update_explanation_bulk')%>
+    Given the above list of druids, the following will be performed on each object:<br>
+    <%= I18n.t('argo.content_type.update_explanation_bulk') %>
   </p>
-  <p><%=I18n.t('argo.content_type.suggeted_mappings').html_safe%></p>
+  <p><%= I18n.t('argo.content_type.suggeted_mappings').html_safe %></p>
   <p>More complex updates should be executed by hand on the datastream XML of individual objects.</p>
   <p>
     <label>Old content type</label>
-    <%=select_tag :old_content_type, options_for_select(current_content_types) %><br/>
+    <%= select_tag :old_content_type, options_for_select(current_content_types) %><br>
     <label>Old resource type</label>
-    <%=select_tag :old_resource_type, options_for_select(current_resource_types) %><br/>
+    <%= select_tag :old_resource_type, options_for_select(current_resource_types) %><br>
     <label>New content type</label>
-    <%=select_tag :new_content_type, options_for_select(new_content_types) %><br/>
+    <%= select_tag :new_content_type, options_for_select(new_content_types) %><br>
     <label>New resource type</label>
-    <%=select_tag :new_resource_type, options_for_select(new_resource_types) %><br/>
+    <%= select_tag :new_resource_type, options_for_select(new_resource_types) %><br>
     <span class="bulk_button" id="confirm-set-content-type-button">Set content types</span>
   </p>
 </div>
 <div class="bulk_operation" id="purge" name="purge">
   <h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
-  <span class="bulk_button" id="confirm-purge-button">Purge objects from fedora</span><br/>
+  <span class="bulk_button" id="confirm-purge-button">Purge objects from fedora</span><br>
 </div>
 
 <div class="bulk_operation" id="add_workflow" name="add_workflow">
   <h1>Add a workflow to the items.</h1>
-  <%=select_tag :wf, options_for_select(workflow_options, Settings.apo.default_workflow_option)%>
-  <span class="bulk_button" id="confirm-add-workflow-button">Add workflow</span><br/>
+  <%= select_tag :wf, options_for_select(workflow_options, Settings.apo.default_workflow_option) %>
+  <span class="bulk_button" id="confirm-add-workflow-button">Add workflow</span><br>
 </div>
 
 <div class="bulk_operation" id="refresh_metadata" name="refresh_metadata">
   <h1>Refresh metadata from the external source.</h1>
-  <span class="bulk_button" id="confirm-refresh-metadata-button">Refresh metadata</span><br/>
+  <span class="bulk_button" id="confirm-refresh-metadata-button">Refresh metadata</span><br>
 </div>
 
 <div class="bulk_operation" id="republish" name="republish">
@@ -158,27 +154,27 @@ ul li{
 </div>
 <div class="bulk_operation" id="tag">
   <h1>Change tags</h1>
-  <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br/>
+  <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
   druid:bc088fn5010&lt;tab&gt;Project : Something&lt;tab&gt;Process : Content Type : Book
   </p>
   <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
-  <textarea style="width:50%" id="tags" name="tags"></textarea><br/>
+  <textarea style="width:50%" id="tags" name="tags"></textarea><br>
   <span class="bulk_button" id="set_tags" name="set_tags">Update tags</span>
 </div>
 <div class="bulk_operation" id="source_id">
   <h1>Change source id</h1>
-  <p>This needs a list of pids and source ids, with a tab between the pid and the corresponding source id. E.g.:<br/>
+  <p>This needs a list of pids and source ids, with a tab between the pid and the corresponding source id. E.g.:<br>
   druid:bc088fn5010  fuller:M1090_S15_B02_F12_0007
   </p>
   <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
-  <textarea style="width:50%" id="source_ids" name="source_ids"></textarea><br/>
+  <textarea style="width:50%" id="source_ids" name="source_ids"></textarea><br>
   <span class="bulk_button" id="set_source_id" name="set_source_id">Update source ids</span>
 </div>
 <div class="bulk_operation" id="rights" name="rights">
   <h1>Set object rights</h1>
-  <%=select_tag :rights_select, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS)%>
+  <%= select_tag :rights_select, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS) %>
   <span class="bulk_button" id="rights_button" name="rights_button">Set rights</span>
 </div>
 <span class="bulk_button" id="stop" class="stop_button" style="display:none" name="stop">Stop</span>
 
-<br/><div style="display:none;width:50%" id="log" name="log"></div></div>
+<br><div style="display:none;width:50%" id="log" name="log"></div></div>

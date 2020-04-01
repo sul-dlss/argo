@@ -86,12 +86,13 @@ gem 'pry-byebug' # Adds step-by-step debugging and stack navigation capabilities
 gem 'pry-rails' # use pry as the rails console shell instead of IRB
 
 group :test, :development do
+  gem 'erb_lint', '~> 0.0.31', require: false
   gem 'factory_bot_rails'
   gem 'http_logger', require: false # Change this to `true` to see all http requests logged
   gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 3.5'
-  gem 'rubocop', '~> 0.80.0', require: false
+  gem 'rubocop', '~> 0.79.0', require: false # we're stuck with this until erb_lint upgrades
   gem 'rubocop-rails'
   gem 'rubocop-rspec', '~> 1.31.0', require: false
   gem 'sqlite3', '~> 1.3.13'

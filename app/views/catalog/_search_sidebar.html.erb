@@ -1,5 +1,5 @@
 <%= render 'facets' %>
 
-<% unless has_search_parameters? || params[:all]  %>
-  <%= link_to "Show more facets", root_path(all: true), class: 'btn btn-primary' %>
+<% unless has_search_parameters? || params[:all] %>
+  <%= link_to 'Show more facets', root_path(all: true), class: 'btn btn-primary' %>
 <% end %>
