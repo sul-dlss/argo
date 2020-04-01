@@ -13,7 +13,7 @@ Lint/AmbiguousBlockAssociation:
 
 # Offense count: 2
 # Configuration parameters: AllowComments.
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
     - 'spec/support/fixtures.rb'
@@ -101,7 +101,7 @@ Naming/PredicateName:
 # Offense count: 2
 # Configuration parameters: MinNameLength, AllowNamesEndingInNumbers, AllowedNames, ForbiddenNames.
 # AllowedNames: io, id, to, by, on, in, at, ip, db
-Naming/UncommunicativeMethodParamName:
+Naming/MethodParameterName:
   Exclude:
     - 'app/controllers/registration_controller.rb'
     - 'app/helpers/dor_object_helper.rb'
@@ -130,6 +130,9 @@ RSpec/ContextWording:
 
 # Offense count: 72
 RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/EmptyLineAfterExample:
   Enabled: false
 
 # Offense count: 189
@@ -217,6 +220,10 @@ RSpec/PredicateMatcher:
   Exclude:
     - 'spec/helpers/bulk_action_helper_spec.rb'
 
+RSpec/RepeatedExampleGroupDescription:
+  Exclude:
+    - 'spec/features/item_displays_spec.rb'
+
 # Offense count: 14
 RSpec/ScatteredLet:
   Exclude:
@@ -228,10 +235,11 @@ RSpec/ScatteredLet:
 # Offense count: 9
 RSpec/SubjectStub:
   Exclude:
-    - 'spec/models/index_queue_spec.rb'
-    - 'spec/search_builders/argo/date_field_queries_spec.rb'
-    - 'spec/search_builders/argo/profile_queries_spec.rb'
-    - 'spec/services/version_service_spec.rb'
+    - 'spec/**/*'
+    # - 'spec/models/*'
+    # - 'spec/search_builders/argo/date_field_queries_spec.rb'
+    # - 'spec/search_builders/argo/profile_queries_spec.rb'
+    # - 'spec/services/version_service_spec.rb'
 
 # Offense count: 77
 # Configuration parameters: IgnoreNameless, IgnoreSymbolicNames.
@@ -413,6 +421,11 @@ Style/ExpandPathArguments:
     - 'lib/tasks/argo_testing.rake'
     - 'spec/features/bulk_jobs_spec.rb'
     - 'spec/jobs/descmetadata_download_job_spec.rb'
+
+Style/FormatStringToken:
+  Exclude:
+    - 'app/components/workflow_process_row.rb'
+    - 'lib/indexer.rb'
 
 # Offense count: 1
 # Configuration parameters: MinBodyLength.

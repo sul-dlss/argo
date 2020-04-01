@@ -46,7 +46,7 @@ class ManageCatkeyJob < GenericJob
     rescue StandardError => e
       log.puts("#{Time.current} Catkey failed #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save
-      return
+      nil
     end
   end
 end

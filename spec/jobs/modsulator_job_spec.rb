@@ -12,7 +12,7 @@ RSpec.describe ModsulatorJob, type: :job do
   end
 
   let(:output_directory) { File.join(File.expand_path('../../tmp', __dir__), 'job_tests') }
-  let(:job) { ModsulatorJob.new }
+  let(:job) { described_class.new }
   let(:fixtures_dir) { File.expand_path('../fixtures', __dir__) }
   let(:user) { build(:user, sunetid: 'foo') }
 

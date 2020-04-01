@@ -152,7 +152,7 @@ class Report
     config.sort_fields.clear
     config.add_sort_field 'id asc', label: 'Druid'
 
-    config.column_model = config.report_fields.collect { |spec|
+    config.column_model = config.report_fields.collect do |spec|
       {
         'name' => spec[:field],
         'jsonmap' => spec[:field],
@@ -162,7 +162,7 @@ class Report
         'sortable' => spec[:sort],
         'hidden' => (!spec[:default])
       }
-    }
+    end
   end
 
   # @param [Array<String>] fields

@@ -325,7 +325,7 @@ RSpec.describe RegistrationController, type: :controller do
     end
   end
 
-  context '#autocomplete' do
+  describe '#autocomplete' do
     it 'has no spec yet' do
       skip
     end

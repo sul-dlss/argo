@@ -5,14 +5,14 @@ require 'rails_helper'
 RSpec.describe SolrDocument, type: :model do
   describe '#milestones' do
     it 'builds an empty listing if passed an empty doc' do
-      milestones = SolrDocument.new({}).milestones
+      milestones = described_class.new({}).milestones
       milestones.each do |key, value|
         expect(value).to match a_hash_excluding(:time)
       end
     end
 
     it 'generates a correct lifecycle with the old format that lacks version info' do
-      doc = SolrDocument.new('lifecycle_ssim' => ['registered:2012-02-25T01:40:57Z'])
+      doc = described_class.new('lifecycle_ssim' => ['registered:2012-02-25T01:40:57Z'])
 
       versions = doc.milestones
       expect(versions.keys).to eq [1]
@@ -32,7 +32,7 @@ RSpec.describe SolrDocument, type: :model do
 
     it 'recognizes versions and bundle versions together' do
       lifecycle_data = ['registered:2012-02-25T01:40:57Z;1', 'opened:2012-02-25T01:39:57Z;2']
-      versions = SolrDocument.new('lifecycle_ssim' => lifecycle_data).milestones
+      versions = described_class.new('lifecycle_ssim' => lifecycle_data).milestones
       expect(versions['1'].size).to eq(6)
       expect(versions['2'].size).to eq(6)
       expect(versions['1']['registered']).not_to be_nil
@@ -124,7 +124,7 @@ RSpec.describe SolrDocument, type: :model do
       data = []
       data << '1;1.0.0;Initial version'
       data << '2;1.1.0;Minor change'
-      versions = SolrDocument.new('versions_ssm' => data).get_versions
+      versions = described_class.new('versions_ssm' => data).get_versions
       expect(versions['1']).to match a_hash_including(tag: '1.0.0', desc: 'Initial version')
       expect(versions['2']).to match a_hash_including(tag: '1.1.0', desc: 'Minor change')
     end

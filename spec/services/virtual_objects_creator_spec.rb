@@ -30,13 +30,11 @@ RSpec.describe VirtualObjectsCreator do
       allow(described_class).to receive(:new).and_return(creator)
     end
 
-    # rubocop:disable RSpec/SubjectStub
     it 'creates an instance and calls `#create`' do
       allow(creator).to receive(:create)
       described_class.create(virtual_objects: virtual_objects)
       expect(creator).to have_received(:create).once
     end
-    # rubocop:enable RSpec/SubjectStub
   end
 
   describe '.new' do
@@ -64,12 +62,10 @@ RSpec.describe VirtualObjectsCreator do
   describe '#create' do
     let(:url) { 'http://dor-services.example.com/v1/background_job_results/123' }
 
-    # rubocop:disable RSpec/SubjectStub
     before do
       allow(creator).to receive(:poll_until_complete).and_return({})
       allow(Dor::Services::Client.virtual_objects).to receive(:create)
     end
-    # rubocop:enable RSpec/SubjectStub
 
     it 'uses dor-services-client to create a virtual object creation background job' do
       creator.create
@@ -89,7 +85,6 @@ RSpec.describe VirtualObjectsCreator do
     end
 
     context 'when output has errors' do
-      # rubocop:disable RSpec/SubjectStub
       before do
         allow(creator).to receive(:poll_until_complete).and_return(
           errors: [
@@ -98,7 +93,6 @@ RSpec.describe VirtualObjectsCreator do
           ]
         )
       end
-      # rubocop:enable RSpec/SubjectStub
 
       it 'returns an array of error strings' do
         expect(creator.create).to eq(
@@ -116,12 +110,10 @@ RSpec.describe VirtualObjectsCreator do
     let(:result2) { { status: 'processing', output: {} } }
     let(:result3) { { status: 'complete', output: { errors: [{ 'druid:foo' => ['druid:bar'] }] } } }
 
-    # rubocop:disable RSpec/SubjectStub
     before do
       allow(Dor::Services::Client.background_job_results).to receive(:show).and_return(result1, result2, result3)
       allow(creator).to receive(:sleep)
     end
-    # rubocop:enable RSpec/SubjectStub
 
     it 'loops until the job status is complete and returns an output hash' do
       output = creator.send(:poll_until_complete, url: 'not evaluated')
