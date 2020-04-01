@@ -23,7 +23,11 @@ class DescmetadataDownloadJob < GenericJob
         start_log(log, bulk_action.user_id, '', bulk_action.description)
         update_druid_count
         ::Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
-          pids.each { |current_druid| process_druid(current_druid, log, zip_file) }
+          pids.each_with_index do |current_druid, index|
+            process_druid(current_druid, log, zip_file)
+            # Commit every 250 to limit memory usage.
+            zip_file.commit if index % 250 == 0
+          end
           zip_file.close
         end
       end
