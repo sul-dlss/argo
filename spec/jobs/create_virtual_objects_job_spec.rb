@@ -10,7 +10,6 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
   let(:errors) { [] }
   let(:fake_log) { double('logger', puts: nil) }
 
-  # rubocop:disable RSpec/SubjectStub
   before do
     allow(BulkAction).to receive(:find).and_return(bulk_action)
     allow(ProblematicDruidFinder).to receive(:find).and_return(problematic_druids)
@@ -18,7 +17,6 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
     allow(job).to receive(:with_bulk_action_log).and_yield(fake_log)
     job.perform(bulk_action.id, create_virtual_objects: csv_string)
   end
-  # rubocop:enable RSpec/SubjectStub
 
   describe '#perform' do
     context 'with all problematic druids' do

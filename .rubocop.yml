@@ -40,3 +40,12 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'lib/tasks/*.rake'
     - 'app/jobs/create_virtual_objects_job.rb'
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
