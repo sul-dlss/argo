@@ -22,6 +22,13 @@ RSpec.describe 'Bulk jobs view' do
   end
 
   context 'on the form for creating a new bulk job', js: true do
+    let(:bulk_job_data_path) { File.expand_path('../../fixtures/crowdsourcing_bridget_1.xml', __FILE__) }
+
+    before do
+      stub_request(:post, Settings.normalizer_url)
+        .to_return(status: 200, body: File.read(bulk_job_data_path), headers: {})
+    end
+
     it 'click submit button opens bulk upload form' do
       visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
       expect(page).to have_css('div#spreadsheet-upload-container form div#bulk-upload-form')
@@ -43,7 +50,7 @@ RSpec.describe 'Bulk jobs view' do
       expect(page).to have_css('#spreadsheet_file')
       expect(find('input#filetypes_1')).to be_disabled
 
-      attach_file('spreadsheet_file', File.expand_path('../../fixtures/crowdsourcing_bridget_1.xlsx', __FILE__))
+      attach_file('spreadsheet_file', bulk_job_data_path)
 
       # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
       script = <<~JAVASCRIPT
@@ -54,12 +61,17 @@ RSpec.describe 'Bulk jobs view' do
       JAVASCRIPT
       page.execute_script(script)
 
-      expect(find('input#filetypes_1')).not_to be_disabled
       expect(page).to have_css('span#bulk-spreadsheet-warning', text: '', visible: false)
       expect(find('button#spreadsheet_submit')).to be_disabled
-      expect(find('input#filetypes_1')).not_to be_disabled
-      choose('filetypes_1')
+      expect(find('input#convert_only')).not_to be_disabled
+      choose('convert_only')
       expect(find('button#spreadsheet_submit')).not_to be_disabled
+      click_button('Submit')
+      expect(page).to have_button('Delete')
+      click_button('Delete', match: :first)
+      expect(page).to have_content('Are you sure you want to delete the job directory and the files it contains?')
+      click_link('Delete')
+      expect(page).to have_content(/Bulk job for APO.+deleted\./)
     end
 
     it 'uploading a file with an invalid extension displays a warning' do
