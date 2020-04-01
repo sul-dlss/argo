@@ -49,12 +49,12 @@ class BulkJobsController < ApplicationController
 
   def help; end
 
-  # DELETE /items/:item_id/bulk_jobs
-  def delete
-    @apo = params[:item_id]
+  # DELETE /apos/:apo_id/bulk_jobs
+  def destroy
+    @apo = params[:apo_id]
     directory_to_delete = File.join(Settings.bulk_metadata.directory, params[:dir])
     FileUtils.remove_dir(directory_to_delete, true)
-    redirect_to item_bulk_jobs_path(@apo)
+    redirect_to apo_bulk_jobs_path(@apo), notice: "Bulk job for APO (#{@apo}) deleted."
   end
 
   def self.local_prefixes

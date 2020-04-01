@@ -79,6 +79,7 @@ Rails.application.routes.draw do
   end
 
   resources :apos, only: [] do
+    resource :bulk_jobs, only: :destroy
     resources :bulk_jobs, only: :index do
       collection do
         get 'status_help'
