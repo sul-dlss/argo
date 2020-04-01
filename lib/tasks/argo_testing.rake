@@ -62,7 +62,13 @@ if ['test', 'development'].include? Rails.env
 
         require 'webmock'
         # only allow connections to Fcrepo, Solr and workflow
-        WebMock.disable_net_connect!(allow: ['workflow:3000', 'solr:8983', 'fcrepo:8080', 'localhost:8983', 'localhost:8984', 'localhost:3004'])
+        WebMock.disable_net_connect!(allow: ['workflow:3000',
+                                             'solr:8983',
+                                             'fcrepo:8080',
+                                             'localhost:8983',
+                                             'localhost:8984',
+                                             'localhost:3004',
+                                             'dor-indexing-app:3000'])
         include WebMock::API
         WebMock.enable!
         file_list.each do |file|
