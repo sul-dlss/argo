@@ -14,13 +14,11 @@ RSpec.describe ProblematicDruidFinder do
       allow(described_class).to receive(:new).and_return(finder)
     end
 
-    # rubocop:disable RSpec/SubjectStub
     it 'creates an instance and calls `#find`' do
       allow(finder).to receive(:find)
       described_class.find(druids: druids, ability: ability)
       expect(finder).to have_received(:find).once
     end
-    # rubocop:enable RSpec/SubjectStub
   end
 
   describe '.new' do

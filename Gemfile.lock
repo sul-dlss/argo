@@ -488,6 +488,7 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     retries (0.0.5)
+    rexml (3.2.4)
     rsolr (2.3.0)
       builder (>= 2.1.2)
       faraday (>= 0.9.0)
@@ -508,11 +509,12 @@ GEM
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.2)
-    rubocop (0.74.0)
+    rubocop (0.80.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.6)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      rexml
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 1.7)
     rubocop-rails (2.5.0)
@@ -693,7 +695,7 @@ DEPENDENCIES
   retries
   rsolr
   rspec-rails (~> 3.5)
-  rubocop (~> 0.74.0)
+  rubocop (~> 0.80.0)
   rubocop-rails
   rubocop-rspec (~> 1.31.0)
   ruby-prof
