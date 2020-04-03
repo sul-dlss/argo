@@ -5,7 +5,7 @@
   <tbody>
     <%
       version_hash = document.get_versions
-      milestones = document.milestones
+      milestones = @milestones
       milestones.keys.sort_by { |version_number_string| version_number_string.to_i }.each do |version|
         steps = milestones[version]
         first = true

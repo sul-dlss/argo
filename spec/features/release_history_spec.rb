@@ -11,7 +11,7 @@ RSpec.describe 'Release history' do
 
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: []) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: [], milestones: {}) }
 
   context 'for an item' do
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }

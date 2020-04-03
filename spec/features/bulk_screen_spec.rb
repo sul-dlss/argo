@@ -12,7 +12,7 @@ RSpec.describe 'Bulk actions view', js: true do
 
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: admin_md, as_json: {}) }
   let(:admin_md) { instance_double(Cocina::Models::Administrative, releaseTags: nil) }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: [], lifecycle: [], active_lifecycle: []) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: [], lifecycle: [], active_lifecycle: [], milestones: {}) }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']

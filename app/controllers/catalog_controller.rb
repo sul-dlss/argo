@@ -198,6 +198,8 @@ class CatalogController < ApplicationController
     end
     @events = object_client.events.list
 
+    @milestones = MilestoneService.milestones_for(druid: params[:id])
+
     @buttons_presenter = ButtonsPresenter.new(
       ability: current_ability,
       solr_document: @document,
