@@ -89,6 +89,15 @@ services:
     image: suldlss/suri-rails:latest
     ports:
       - 3002:3000
+    depends_on:
+      - db
+    environment:
+      DATABASE_NAME: suri
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
+
   db:
     image: postgres:11 # aligns the pg version with what is supported by dor-services-app
      # No ports shared externally, so that this doesn't conflict with the postgres
