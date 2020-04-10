@@ -1,1 +1,2 @@
-<%= render_workflow_grid %>
+<%# facet_tree is from blacklight-hierarchy %>
+<%= render WorkflowGridComponent.new(data: facet_tree('wf_wps')['wf_wps_ssim']) %>

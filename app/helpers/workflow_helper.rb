@@ -5,17 +5,6 @@ module WorkflowHelper
     controller_name == 'report' && action_name == 'workflow_grid'
   end
 
-  def render_workflow_grid
-    workflow_data = facet_tree('wf_wps')['wf_wps_ssim']
-    return '' if workflow_data.nil?
-
-    workflow_data.keys.sort.collect do |wf_name|
-      next if Settings.inactive_workflows.include?(wf_name)
-
-      render partial: 'workflow_table', locals: { wf_name: wf_name, wf_data: workflow_data[wf_name] }
-    end.join("\n").html_safe
-  end
-
   def render_workflow_name(name)
     new_params = search_state.add_facet_params('wf_wps_ssim', name).merge(controller: 'catalog', action: 'index')
     link_to(name, new_params)
