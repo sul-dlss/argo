@@ -1,3 +1,3 @@
 <% workflows.each do |(name, data)| %>,
-  <%= render 'workflow_table', wf_name: name, wf_data: data %>
+  <%= render WorkflowTableComponent.new(name: name, data: data) %>
 <% end %>

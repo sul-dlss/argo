@@ -5,11 +5,6 @@ module WorkflowHelper
     controller_name == 'report' && action_name == 'workflow_grid'
   end
 
-  def render_workflow_name(name)
-    new_params = search_state.add_facet_params('wf_wps_ssim', name).merge(controller: 'catalog', action: 'index')
-    link_to(name, new_params)
-  end
-
   def render_workflow_process_name(name, process)
     new_params = search_state.add_facet_params('wf_wps_ssim', [name, process].compact.join(':')).merge(controller: 'catalog', action: 'index')
     link_to(process, new_params)
@@ -40,14 +35,5 @@ module WorkflowHelper
       item_count = content_tag :span, item_count, class: 'zero'
     end
     link_to(item_count, new_params)
-  end
-
-  def workflow_process_names(workflow_name)
-    client = WorkflowClientFactory.build
-    workflow_definition = client.workflow_template(workflow_name)
-    workflow_definition['processes'].collect { |process| [process['name'], process['label']] }
-  rescue Dor::WorkflowException
-    Honeybadger.notify("no workflow template found for '#{workflow_name}'")
-    []
   end
 end
