@@ -4,13 +4,6 @@ require 'rails_helper'
 
 RSpec.describe WorkflowTableProcessComponent, type: :component do
   subject(:component) { described_class.new(workflow_table_process: [process, 'desc'], name: name, data: data) }
-  # it "renders something useful" do
-  #   expect(
-  #     render_inline(described_class.new(attr: "value")) { "Hello, components!" }.css("p").to_html
-  #   ).to include(
-  #     "Hello, components!"
-  #   )
-  # end
 
   describe '#workflow_reset_link' do
     subject { component.workflow_reset_link(status) }

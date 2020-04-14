@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class WorkflowTableProcessComponent < ApplicationComponent
-  # TODO
   def initialize(workflow_table_process:, name:, data:)
     @process, @description = workflow_table_process
     @name = name
