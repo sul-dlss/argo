@@ -12,7 +12,6 @@ RSpec.describe 'report/_workflow_grid', type: :view do
   end
 
   before do
-    allow(controller).to receive(:search_state).and_return(search_state)
     allow(view).to receive(:search_state).and_return(search_state)
     allow(view).to receive(:blacklight_config).and_return(blacklight_config)
     allow(view).to receive(:has_search_parameters?).and_return(false)

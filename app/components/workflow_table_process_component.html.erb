@@ -1,0 +1,11 @@
+<tr>
+  <td class="index"></td>
+  <td class="process"><%= workflow_process_name %></td>
+  <td class="description"><%= description %></td>
+  <td class="count waiting"><%= workflow_item_count('waiting') %></td>
+  <td class="count ready"><%= workflow_item_count('ready') %></td>
+  <td class="count queued"><%= workflow_item_count('queued') %></td>
+  <td class="count errors"><%= workflow_item_count('error') %> <%= workflow_reset_link %></td>
+  <td class="count skipped"><%= workflow_item_count('skipped') %></td>
+  <td class="count completed"><%= workflow_item_count('completed') %></td>
+</tr>
