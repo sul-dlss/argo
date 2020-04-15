@@ -3,6 +3,7 @@
 // about available Bootstrap variables, please see:
 // http://getbootstrap.com/customize/
 
+@import 'sul_web_colors';
 
 // Inverted navbar
 $navbar-inverse-color: lighten($color-beige-05, 05%);
@@ -11,3 +12,5 @@ $navbar-inverse-bg: $color-cardinal-red;
 
 // Grid system
 $grid-float-breakpoint: 992px;
+
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";

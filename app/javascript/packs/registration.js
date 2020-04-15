@@ -1,3 +1,5 @@
+import 'style/registration.scss'
+
 import 'jquery'
 
 import 'jquery.defaultText'

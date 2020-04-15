@@ -1,6 +1,16 @@
+// This is a hack because we're using bootstrap 4 code and bootstrap 3 styles.
+// I think we can remove this when we upgrade to blackight 7
+.modal.show {
+  opacity: 1;
+  // This prevents a very tall modal from being in a position where we can't see the top of the modal.
+  .modal-dialog {
+    transform: translate(0,0);
+  }
+}
+
 #header-navbar {
   a.navbar-brand {
-    background: transparent image-url("logo.png") no-repeat top left;
+    background: transparent url($logo-image) no-repeat top left;
     background-size: 152px 52px;
     margin-bottom: 2px;
   }
@@ -237,4 +247,14 @@ button.close {
   width: 50%;
   font-size: 12px;
   line-height: 1.5;
+}
+
+.sharing {
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  fieldset,
+  legend {
+    margin-bottom: 5px;
+  }
 }
