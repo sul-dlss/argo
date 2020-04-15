@@ -1350,7 +1350,7 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.1.0-alpha:
+blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.7.0:
   version "7.7.0"
   resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.7.0.tgz#7f6f5953d1d723480b9977163ac8f4f7a0805e68"
   integrity sha512-NZKIFmVMd9PcFSrywJBXD7rZG6v/6huokINK93iR881JrYRHzg51xJRMNk6jvTV30jY9gJxhX3rMHG1uSauYBg==
@@ -1360,7 +1360,7 @@ blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.1.0-alpha:
     jquery "^3.4.1"
     typeahead.js "^0.11.1"
 
-blacklight-hierarchy@^3.0.0-alpha1:
+blacklight-hierarchy@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-3.0.0.tgz#61eb5a7d078ee42db988b0093a6ea4d8b0101ab4"
   integrity sha512-huL7yU9xc/swvC0tvhs+QcWXcz+cV6ebDP2ICzRptaZBnLF/HuzzhADHJKi5LSNjPT0eCF6EORE/0mK7dcSNZw==
