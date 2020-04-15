@@ -66,6 +66,7 @@ services:
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SURI__URL: http://suri:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
+      REDIS_URL: redis://redis:6379/
     depends_on:
       - db
       - dor-indexing-app
