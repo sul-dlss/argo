@@ -2,6 +2,20 @@
   .zero {
     @extend .text-muted;
   }
+
+  table {
+    counter-reset: rowNumber;
+  }
+
+  tr {
+    counter-increment: rowNumber;
+
+    td:first-child::before {
+      content: counter(rowNumber);
+      margin-right: 0.5em;
+      min-width: 1em;
+    }
+  }
 }
 
 .errors a {

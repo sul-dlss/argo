@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WorkflowGridComponent < ViewComponent::Base
+class WorkflowGridComponent < ApplicationComponent
   # @param [Hash] data
   def initialize(data:)
     @data = data

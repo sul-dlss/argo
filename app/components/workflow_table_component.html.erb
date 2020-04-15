@@ -1,22 +1,19 @@
-<h2>Workflow: <%= render_workflow_name(wf_name) %></h2>
+<h2>Workflow: <%= workflow_name %></h2>
 <table class='table table-striped table-hover table-condensed workflow-grid-table'>
-  <tbody>
+  <thead>
     <tr>
       <th class="process" colspan="2">Process</th>
       <th class="description">Description</th>
       <th class="count waiting info">Waiting</th>
       <th class="count ready warning">Ready</th>
-      <th class="count queued warning">Queued</th>
+      <th class="count started warning">Started</th>
       <th class="count errors danger">Error</th>
       <th class="count skipped success">Skipped</th>
       <th class="count completed success">Completed</th>
     </tr>
-    <%= render(
-          partial: 'workflow_table_process',
-          collection: workflow_process_names(wf_name),
-          as: :process_info,
-          locals: { wf_data: wf_data, wf_name: wf_name }
-        ) %>
+  </thead>
+  <tbody>
+    <%= render WorkflowTableProcessComponent.with_collection(workflow_process_names, name: name, data: data) %>
   </tbody>
 </table>
 <hr>
