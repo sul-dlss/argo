@@ -2,8 +2,8 @@
   "dependencies": {
     "@github/time-elements": "^3.0.7",
     "@rails/webpacker": "^4.0.7",
-    "blacklight-frontend": "^7.1.0-alpha",
-    "blacklight-hierarchy": "^3.0.0-alpha1",
+    "blacklight-frontend": "^7.7.0",
+    "blacklight-hierarchy": "^3.0.0",
     "bootstrap": "3.2.0",
     "free-jqgrid": "^4.15.5",
     "jquery": "^3.4.1",
