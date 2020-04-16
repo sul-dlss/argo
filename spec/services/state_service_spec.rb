@@ -28,7 +28,7 @@ RSpec.describe StateService do
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with('dor', 'ab12cd3456', 'submitted')
+          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
         end
       end
 
@@ -40,8 +40,8 @@ RSpec.describe StateService do
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with('dor', 'ab12cd3456', 'submitted')
-          expect(workflow_client).to have_received(:active_lifecycle).with('dor', 'ab12cd3456', 'opened', version: 4)
+          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'opened', version: 4)
         end
       end
     end
@@ -56,7 +56,7 @@ RSpec.describe StateService do
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with('dor', 'ab12cd3456', 'submitted')
+          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
         end
       end
 
@@ -68,8 +68,8 @@ RSpec.describe StateService do
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with('dor', 'ab12cd3456', 'submitted')
-          expect(workflow_client).to have_received(:active_lifecycle).with('dor', 'ab12cd3456', 'opened', version: 3)
+          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'opened', version: 3)
         end
       end
     end

@@ -41,11 +41,11 @@ class WorkflowServiceController < ApplicationController
   private
 
   def get_lifecycle(task)
-    WorkflowClientFactory.build.lifecycle('dor', params[:pid], task)
+    WorkflowClientFactory.build.lifecycle(druid: params[:pid], milestone_name: task)
   end
 
   def active_lifecycle(task, druid:, version:)
-    WorkflowClientFactory.build.active_lifecycle('dor', druid, task, version: version)
+    WorkflowClientFactory.build.active_lifecycle(druid: druid, milestone_name: task, version: version)
   end
 
   ##

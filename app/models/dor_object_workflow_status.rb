@@ -13,9 +13,9 @@ class DorObjectWorkflowStatus
   ##
   # @return [Boolean]
   def can_open_version?
-    return false unless workflow.lifecycle('dor', pid, 'accessioned')
-    return false if workflow.active_lifecycle('dor', pid, 'submitted', version: version)
-    return false if workflow.active_lifecycle('dor', pid, 'opened', version: version)
+    return false unless workflow.lifecycle(druid: pid, milestone_name: 'accessioned')
+    return false if workflow.active_lifecycle(druid: pid, milestone_name: 'submitted', version: version)
+    return false if workflow.active_lifecycle(druid: pid, milestone_name: 'opened', version: version)
 
     true
   end
