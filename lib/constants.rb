@@ -9,7 +9,7 @@ module Constants
 
   CONTENT_TYPES = %w(image book file map media document 3d).freeze
 
-  RESOURCE_TYPES = %w(image page file audio video document 3d).freeze
+  RESOURCE_TYPES = %w(image page file audio video document 3d object).freeze
 
   RELEASE_TARGETS = [
     %w(Searchworks Searchworks),
