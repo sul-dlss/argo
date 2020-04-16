@@ -9,8 +9,8 @@ class StateService
   end
 
   def allows_modification?
-    !client.lifecycle('dor', pid, 'submitted') ||
-      client.active_lifecycle('dor', pid, 'opened', version: version)
+    !client.lifecycle(druid: pid, milestone_name: 'submitted') ||
+      client.active_lifecycle(druid: pid, milestone_name: 'opened', version: version)
   end
 
   private

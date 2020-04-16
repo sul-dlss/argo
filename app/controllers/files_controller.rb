@@ -10,7 +10,7 @@ class FilesController < ApplicationController
 
     object_client = Dor::Services::Client.object(params[:item_id])
     @available_in_workspace = object_client.files.list.include?(filename)
-    @has_been_accessioned = WorkflowClientFactory.build.lifecycle('dor', params[:item_id], 'accessioned')
+    @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: 'accessioned')
     files = object_client.find.structural.contains.map { |fs| fs.structural.contains }.flatten
     @file = files.find { |file| file.externalIdentifier == "#{params[:item_id]}/#{params[:id]}" }
 

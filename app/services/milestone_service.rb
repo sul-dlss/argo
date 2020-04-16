@@ -24,7 +24,7 @@ class MilestoneService
   end
 
   def self.milestone_client
-    WorkflowClientFactory.build.milestones('dor', @druid)
+    WorkflowClientFactory.build.milestones(druid: @druid)
   end
 
   private_class_method :milestone_client

@@ -492,6 +492,6 @@ class ItemsController < ApplicationController
   # Dor::Workflow utils
 
   def dor_lifecycle(object, stage)
-    WorkflowClientFactory.build.lifecycle('dor', object.pid, stage)
+    WorkflowClientFactory.build.lifecycle(druid: object.pid, milestone_name: stage)
   end
 end
