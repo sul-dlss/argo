@@ -8,8 +8,6 @@ gem 'rack', '~> 2.0.8' # pending https://github.com/sportngin/okcomputer/pull/16
 gem 'rails', '~> 5.2.1'
 # Use Puma as the app server
 gem 'puma', '~> 3.12'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 6.0'
 
 gem 'webpacker', '~> 4.0'
 
@@ -76,7 +74,6 @@ gem 'preservation-client', '>= 3.1' # 3.1 or greater is needed for token auth an
 gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'sdr-client', '0.20.0'
-gem 'sul_styles', '~> 0.3'
 
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'

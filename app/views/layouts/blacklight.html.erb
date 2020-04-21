@@ -18,8 +18,7 @@
 
     <title><%= render_page_title %></title>
     <%= opensearch_description_tag application_name, opensearch_catalog_url(format: 'xml') %>
-    <%= favicon_link_tag %>
-    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= favicon_pack_tag 'favicon.ico' %>
     <%= javascript_pack_tag 'application' %>
     <%= stylesheet_pack_tag 'application' %>
     <%= csrf_meta_tags %>
