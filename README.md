@@ -36,13 +36,12 @@ Note that `bundle install` may complain if MySQL isn't installed.  You can eithe
 docker-compose up -d
 ```
 
-Need to emulate an administrator role in your browser?  Edit `docker-compose.yml`, and under services:web:environment
-change the value of `ROLES` to `sdr:administrator-role`
+Note that docker-compose will spin up Argo and apply the administrator role to you.
 
 If you want to use the rails console use:
 
 ```
-docker-compose run --rm web rails console
+docker-compose run --rm web bin/rails console
 ```
 
 If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing to run:
@@ -56,14 +55,14 @@ Alternatively, you can also just immediately run any new jobs with interactive o
 to stop execution in the middle of an activejob for inspection:
 
 ```
-docker-compose run web rake jobs:workoff
+docker-compose run web bin/rake jobs:workoff
 ```
 
 Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container and reload the data:
 
 ```
 docker-compose build web
-docker-compose run --rm web rake argo:repo:load
+docker-compose run --rm web bin/rake argo:repo:load
 ```
 
 ## Debugging
@@ -90,14 +89,14 @@ If you run into errors related to the version of bundler when building the `web`
 Also, if you run into webpacker related issues, you may need to manually install yarn and compile webpacker in your Docker container (or local laptop if you running that way):
 
 ```
-docker-compose run --rm web yarn
-docker-compose run --rm web bundle exec rake webpacker:compile
+docker-compose run --rm web yarn install
+docker-compose run --rm web bin/rake webpacker:compile
 ```
 
 ## Load and index records
 
 ```
-docker-compose run --rm web rake argo:repo:load
+docker-compose run --rm web bin/rake argo:repo:load
 ```
 
 
