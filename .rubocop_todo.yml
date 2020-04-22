@@ -6,6 +6,11 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
+# erb-lint 0.0.31 requires this :/
+require:
+  - rubocop-rspec
+  - rubocop-rails
+
 # Offense count: 3
 Lint/AmbiguousBlockAssociation:
   Exclude:

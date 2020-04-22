@@ -1,26 +1,33 @@
-FROM ruby:2.6-stretch
+FROM ruby:2.6.4-alpine
 
-RUN apt-get update \
-    && apt-get install -y apt-transport-https \
-    && curl --silent --show-error --location \
-      https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
-    && echo "deb https://deb.nodesource.com/node_12.x/ stretch main" > /etc/apt/sources.list.d/nodesource.list \
-    && curl --silent --show-error --location https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-    nodejs apt-transport-https yarn \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Get bundler 2.0 for ruby 2.6.4
-RUN gem install bundler
-
+RUN apk add --update --no-cache \
+  build-base \
+  # speed up nokogiri gem installation
+  libxml2-dev \
+  libxslt-dev \
+  # needed for mysql2 dependency
+  mariadb-dev \
+  # needed for eye dependency
+  perl \
+  # needed for sqlite dependency
+  sqlite-dev \
+  # rails server cannot start without tzdata
+  tzdata \
+  yarn
 
 WORKDIR /app
 
-ADD Gemfile Gemfile.lock /app/
+RUN gem update --system && \
+  gem install bundler
 
-RUN bundle install
+COPY Gemfile Gemfile.lock ./
+RUN bundle config build.nokogiri --use-system-libraries && \
+  bundle config set without 'production' && \
+  bundle install
 
 COPY package.json yarn.lock ./
 RUN yarn install
+
+COPY . .
+
+CMD ["bin/puma", "-C", "config/puma.rb", "config.ru"]
