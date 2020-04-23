@@ -42,6 +42,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'released_to_ssim',                label: 'Released to'
     config.add_index_field 'status_ssi',                      label: 'Status'
     config.add_index_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
+    config.add_index_field 'rights_descriptions_ssim',        label: 'Access Rights'
 
     config.add_show_field 'id',                              label: 'DRUID'
     config.add_show_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
@@ -57,6 +58,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'released_to_ssim',                label: 'Released to'
     config.add_show_field 'status_ssi',                      label: 'Status'
     config.add_show_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
+    config.add_show_field 'rights_descriptions_ssim',        label: 'Access Rights'
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
