@@ -38,16 +38,14 @@ RSpec.describe Report, type: :model do
     end
   end
 
-  describe 'blacklight config' do
-    let(:config) { subject.instance_variable_get(:@blacklight_config) }
+  describe 'REPORT_FIELDS' do
+    subject(:report_fields) { described_class::REPORT_FIELDS }
 
-    it 'has all the facets available in the catalog controller' do
-      expect(config.facet_fields.keys).to eq CatalogController.blacklight_config.facet_fields.keys
-    end
     it 'has report fields' do
-      expect(config.report_fields.length).to eq(25)
-      expect(config.report_fields).to be_all { |f| f[:field].is_a? Symbol } # all :field keys are symbols
+      expect(report_fields.length).to eq(25)
+      expect(report_fields).to be_all { |f| f[:field].is_a? Symbol } # all :field keys are symbols
     end
+
     it 'has all the mandatory, default report fields' do
       [
         :druid,
@@ -62,9 +60,10 @@ RSpec.describe Report, type: :model do
         :resource_count,
         :preserved_size
       ].each do |k|
-        expect(config.report_fields).to be_any { |f| f[:field] == k }
+        expect(report_fields).to be_any { |f| f[:field] == k }
       end
     end
+
     it 'has all the mandatory, non-default report fields' do
       [
         :title,
@@ -82,8 +81,16 @@ RSpec.describe Report, type: :model do
         :accessioned_dttsim,
         :workflow_status_ssim
       ].each do |k|
-        expect(config.report_fields).to be_any { |f| f[:field] == k }
+        expect(report_fields).to be_any { |f| f[:field] == k }
       end
+    end
+  end
+
+  describe 'blacklight config' do
+    let(:config) { subject.instance_variable_get(:@blacklight_config) }
+
+    it 'has all the facets available in the catalog controller' do
+      expect(config.facet_fields.keys).to eq CatalogController.blacklight_config.facet_fields.keys
     end
   end
 
