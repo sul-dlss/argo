@@ -20,7 +20,7 @@ RSpec.describe Report, type: :model do
       rows = CSV.parse(@csv)
       expect(rows).to be_a(Array)
       expect(rows.length).to be > 1    # at least headers + data
-      expect(rows[0].length).to eq(25) # default headers
+      expect(rows[0].length).to eq(26) # default headers
     end
 
     it 'forces double quotes for all fields' do
@@ -45,7 +45,7 @@ RSpec.describe Report, type: :model do
       expect(config.facet_fields.keys).to eq CatalogController.blacklight_config.facet_fields.keys
     end
     it 'has report fields' do
-      expect(config.report_fields.length).to eq(25)
+      expect(config.report_fields.length).to eq(26)
       expect(config.report_fields).to be_all { |f| f[:field].is_a? Symbol } # all :field keys are symbols
     end
     it 'has all the mandatory, default report fields' do
