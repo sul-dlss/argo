@@ -143,7 +143,7 @@ class Report
         sort: false, default: true, width: 50, download_default: false
       },
       {
-        field: :dissertation_id, label: 'Disseration ID',
+        field: :dissertation_id, label: 'Dissertation ID',
         proc: lambda { |doc| doc[:identifier_ssim].map { |id| id.include?('dissertationid') ? id.split(/:/).last : nil }.join },
         solr_fields: %w(identifier_ssim),
         sort: false, default: true, width: 50, download_default: false
