@@ -141,6 +141,12 @@ class Report
         proc: lambda { |doc| doc.preservation_size },
         solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
         sort: false, default: true, width: 50, download_default: false
+      },
+      {
+        field: :dissertation_id, label: 'Disseration ID',
+        proc: lambda { |doc| doc[:identifier_ssim].map { |id| id.include?('dissertationid') ? id.split(/:/).last : nil }.join },
+        solr_fields: %w(identifier_ssim),
+        sort: false, default: true, width: 50, download_default: false
       }
     ]
 
@@ -174,6 +180,7 @@ class Report
       @fields = blacklight_config.report_fields.select { |f| fields.include?(f[:field].to_s) }
       @fields.sort! { |a, b| fields.index(a[:field].to_s) <=> fields.index(b[:field].to_s) }
     end
+
     @params = params
     @params[:page] ||= 1
     (@response, @document_list) = search_results(@params)
