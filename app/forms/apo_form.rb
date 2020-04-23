@@ -65,6 +65,12 @@ class ApoForm < BaseForm
     model.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
   end
 
+  def agreement
+    return if new_record?
+
+    model.agreement
+  end
+
   def use_license
     return '' if new_record?
 

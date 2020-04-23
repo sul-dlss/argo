@@ -8,7 +8,7 @@
 
   <div class="form-group">
     <label>Agreement</label><br>
-    <%= select_tag :agreement, options_for_select(agreement_options) %>
+    <%= select_tag :agreement, options_for_select(agreement_options, @form.agreement) %>
   </div>
 
   <div class="form-group">

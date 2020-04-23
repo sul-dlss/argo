@@ -114,6 +114,12 @@ RSpec.describe ApoForm do
       it { is_expected.to eq 'digitizationWF' }
     end
 
+    describe '#agreement' do
+      subject { instance.agreement }
+
+      it { is_expected.to eq agreement.pid }
+    end
+
     describe '#use_license' do
       subject { instance.use_license }
 
