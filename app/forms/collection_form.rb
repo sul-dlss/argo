@@ -33,34 +33,48 @@ class CollectionForm < BaseForm
 
   # @return [Dor::Collection] registers the Collection
   def register_model
-    response = Dor::Services::Client.objects.register(params: register_params)
-    WorkflowClientFactory.build.create_workflow_by_name(response[:pid], 'accessionWF', version: '1')
+    response = Dor::Services::Client.objects.register(params: cocina_model)
+    WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1')
     # Once it's been created we populate it with its metadata
-    Dor.find(response[:pid])
+    Dor.find(response.externalIdentifier)
   end
 
   # @return [Hash] the parameters used to register an apo. Must be called after `validate`
-  def register_params
+  def cocina_model
     reg_params = {
-      object_type: 'collection',
-      admin_policy: params[:apo_pid]
+      label: params[:collection_title].presence || ':auto',
+      version: 1,
+      type: Cocina::Models::Vocab.collection,
+      access: {},
+      administrative: {
+        hasAdminPolicy: params[:apo_pid]
+      }
     }
-    reg_params[:label] = params[:collection_title].presence || ':auto'
-    reg_params[:rights] = if reg_params[:label] == ':auto'
-                            params[:collection_rights_catkey]
-                          else
-                            params[:collection_rights]
-                          end
-    reg_params[:rights] &&= reg_params[:rights].downcase
-    col_catkey = params[:collection_catkey] || ''
 
-    if col_catkey.present?
-      reg_params[:seed_datastream] = ['descMetadata']
-      reg_params[:metadata_source] = 'symphony'
-      reg_params[:other_id] = "symphony:#{col_catkey}"
-    else
-      reg_params[:metadata_source] = 'label'
+    raw_rights = params[:collection_catkey].present? ? params[:collection_rights_catkey] : params[:collection_rights]
+    reg_params[:access] = access(raw_rights)
+
+    if params[:collection_catkey].present?
+      reg_params[:identification] = {
+        catalogLinks: [{ catalog: 'symphony', catalogRecordId: params[:collection_catkey] }]
+      }
     end
-    reg_params
+
+    Cocina::Models::RequestCollection.new(reg_params)
+  end
+
+  # @param [String] the rights representation from the form
+  # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
+  def access(rights)
+    if rights.start_with?('loc:')
+      {
+        access: 'location-based',
+        readLocation: rights.delete_prefix('loc:')
+      }
+    else
+      {
+        access: rights
+      }
+    end
   end
 end

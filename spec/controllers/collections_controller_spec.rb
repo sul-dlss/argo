@@ -9,7 +9,6 @@ RSpec.describe CollectionsController do
     sign_in user
   end
 
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: true, active_lifecycle: true) }
   let(:user) { create(:user) }
   let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
   let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
@@ -23,90 +22,19 @@ RSpec.describe CollectionsController do
   end
 
   describe '#create' do
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
+    let(:form) { instance_double(CollectionForm, validate: true, save: true, model: collection) }
 
     before do
-      allow(apo).to receive(:save)
-      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-      allow(Dor).to receive(:find).with(collection.pid).and_return(collection)
-      allow(collection).to receive(:save)
-      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      allow(CollectionForm).to receive(:new).and_return(form)
     end
 
-    it 'creates a collection via catkey' do
-      catkey = '1234567'
-      expect(Dor::Services::Client.objects).to receive(:register) do |params|
-        expect(params[:params]).to match a_hash_including(
-          label: ':auto',
-          object_type: 'collection',
-          admin_policy: apo.pid,
-          other_id: 'symphony:' + catkey,
-          metadata_source: 'symphony',
-          rights: 'dark'
-        )
-        { pid: collection.pid }
-      end
-
+    it 'creates a collection using the form' do
       post :create, params: { 'label' => ':auto',
-                              'collection_catkey' => catkey,
+                              'collection_catkey' => '1234567',
                               'collection_rights_catkey' => 'dark',
                               apo_id: apo.pid }
       expect(response).to be_redirect # redirects to catalog page
-      expect(workflow_client).to have_received(:create_workflow_by_name)
-        .with(collection.pid, 'accessionWF', version: '1')
-    end
-
-    it 'creates a collection from title/abstract by registering the collection, then adding the abstract' do
-      title = 'collection title'
-      abstract = 'this is the abstract'
-      mock_desc_md_ds = double(Dor::DescMetadataDS)
-      expect(mock_desc_md_ds).to receive(:abstract=).with(abstract)
-
-      expect(Dor::Services::Client.objects).to receive(:register) do |params|
-        expect(params[:params]).to match a_hash_including(
-          label: title,
-          object_type: 'collection',
-          admin_policy: apo.pid,
-          metadata_source: 'label',
-          rights: 'dark'
-        )
-        { pid: collection.pid }
-      end
-      expect(workflow_client).to receive(:create_workflow_by_name)
-        .with(collection.pid, 'accessionWF', version: '1')
-      expect(collection).to receive(:descMetadata).and_return(mock_desc_md_ds)
-
-      post :create, params: { 'collection_title' => title,
-                              'collection_abstract' => abstract,
-                              'collection_rights' => 'dark',
-                              apo_id: apo.pid }
-      expect(response).to be_redirect # redirects to catalog page
-    end
-
-    it 'adds the collection to the apo default collection list' do
-      title = 'collection title'
-      abstract = 'this is the abstract'
-      expect(Dor::Services::Client.objects).to receive(:register) do |params|
-        expect(params[:params]).to match a_hash_including(
-          label: title,
-          object_type: 'collection',
-          admin_policy: apo.pid,
-          metadata_source: 'label',
-          rights: 'dark'
-        )
-        { pid: collection.pid }
-      end
-      expect(workflow_client).to receive(:create_workflow_by_name)
-        .with(collection.pid, 'accessionWF', version: '1')
-
-      expect_any_instance_of(CollectionForm).to receive(:sync)
-      expect(apo).to receive(:add_default_collection).with(collection.pid)
-
-      post :create, params: { 'collection_title' => title,
-                              'collection_abstract' => abstract,
-                              'collection_rights' => 'dark',
-                              apo_id: apo.pid }
-      expect(response).to be_redirect # redirects to catalog page
+      expect(form).to have_received(:save)
     end
   end
 

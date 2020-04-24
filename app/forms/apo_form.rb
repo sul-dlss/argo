@@ -178,19 +178,22 @@ class ApoForm < BaseForm
 
   # @return [Dor::AdminPolicyObject] registers the APO
   def register_model
-    response = Dor::Services::Client.objects.register(params: register_params)
+    response = Dor::Services::Client.objects.register(params: cocina_model)
     @needs_accession_workflow = true
     # Once it's been created we populate it with its metadata
-    Dor.find(response[:pid])
+    Dor.find(response.externalIdentifier)
   end
 
   # @return [Hash] the parameters used to register an apo. Must be called after `validate`
-  def register_params
-    {
+  def cocina_model
+    Cocina::Models::RequestAdminPolicy.new(
       label: params[:title],
-      object_type: 'adminPolicy',
-      admin_policy: SolrDocument::UBER_APO_ID
-    }
+      version: 1,
+      type: Cocina::Models::Vocab.admin_policy,
+      administrative: {
+        hasAdminPolicy: SolrDocument::UBER_APO_ID
+      }
+    )
   end
 
   def param_cleanup(params)
