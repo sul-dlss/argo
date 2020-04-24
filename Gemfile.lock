@@ -153,7 +153,7 @@ GEM
     celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
     childprocess (3.0.0)
-    cocina-models (0.31.1)
+    cocina-models (0.32.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -214,9 +214,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (4.20.0)
+    dor-services-client (6.0.0)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.29)
+      cocina-models (~> 0.32.0)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -555,9 +555,9 @@ GEM
     safe_yaml (1.0.5)
     sassc (2.3.0)
       ffi (~> 1.9)
-    sdr-client (0.20.0)
+    sdr-client (0.24.0)
       activesupport
-      cocina-models (~> 0.31.0)
+      cocina-models (~> 0.32.0)
       dry-monads
       faraday (>= 0.16)
     selenium-webdriver (3.142.7)
@@ -666,7 +666,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 9.0)
-  dor-services-client (~> 4.20)
+  dor-services-client (~> 6.0)
   dor-workflow-client (~> 3.19)
   equivalent-xml (>= 0.6.0)
   erb_lint (~> 0.0.31)
@@ -703,7 +703,7 @@ DEPENDENCIES
   rubocop-rspec (~> 1.31.0)
   ruby-prof
   rubyzip
-  sdr-client (= 0.20.0)
+  sdr-client (= 0.24.0)
   selenium-webdriver
   simplecov (~> 0.17.1)
   spring
