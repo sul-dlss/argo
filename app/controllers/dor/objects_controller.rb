@@ -104,14 +104,21 @@ class Dor::ObjectsController < ApplicationController
   # @param [String] the rights representation from the form
   # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
   def access(rights)
-    if rights.start_with?('loc:')
+    if rights.end_with?('-nd')
+      {
+        access: rights.delete_suffix('-nd'),
+        download: 'none'
+      }
+    elsif rights.start_with?('loc:')
       {
         access: 'location-based',
-        readLocation: rights.delete_prefix('loc:')
+        readLocation: rights.delete_prefix('loc:'),
+        download: 'location-based'
       }
     else
       {
-        access: rights
+        access: rights,
+        download: rights
       }
     end
   end
