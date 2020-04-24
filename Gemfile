@@ -66,14 +66,14 @@ gem 'rubyzip'
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy', '~> 2.0'
 gem 'dor-services', '~> 9.0'
-gem 'dor-services-client', '~> 4.20'
+gem 'dor-services-client', '~> 6.0'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '>= 3.1' # 3.1 or greater is needed for token auth and fix for POST requests
 gem 'responders', '~> 2.0'
 gem 'rsolr'
-gem 'sdr-client', '0.20.0'
+gem 'sdr-client', '0.24.0'
 
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'
