@@ -24,6 +24,22 @@ RSpec.describe 'apo', js: true do
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
+  let(:created_apo) do
+    Cocina::Models::AdminPolicy.new(externalIdentifier: new_apo_druid,
+                                    type: Cocina::Models::Vocab.admin_policy,
+                                    label: '',
+                                    version: 1,
+                                    administrative: {})
+  end
+
+  let(:created_collection) do
+    Cocina::Models::Collection.new(externalIdentifier: new_collection_druid,
+                                   type: Cocina::Models::Vocab.collection,
+                                   label: '',
+                                   version: 1,
+                                   access: {})
+  end
+
   after do
     Dor::AdminPolicyObject.find(new_apo_druid).destroy # clean up after ourselves
     Dor::Collection.find(new_collection_druid).destroy # clean up after ourselves
@@ -39,23 +55,13 @@ RSpec.describe 'apo', js: true do
                                                milestones: [],
                                                workflow_routes: workflow_routes)
     allow(Dor::Services::Client.objects).to receive(:register)
-      .and_return({ pid: new_apo_druid }, pid: new_collection_druid)
+      .and_return(created_apo, created_collection)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
 
     # Stubbing this out, because it's the dor-services-app that would have actually created it.
     allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
     allow(Dor).to receive(:find).with(new_collection_druid).and_return(collection)
     allow(Dor).to receive(:find).with('druid:dd327qr3670', cast: true).and_call_original # The agreement
-
-    # Use `#and_wrap_original to inject pre-determined PIDs into the
-    # dor-services client params. We do this so the destroys above in the
-    # `after` block can effectively clean up after the APO integration tests.
-    allow_any_instance_of(ApoForm).to receive(:register_params).and_wrap_original do |method, *args|
-      method.call(*args).merge(pid: new_apo_druid)
-    end
-    allow_any_instance_of(CollectionForm).to receive(:register_params).and_wrap_original do |method, *args|
-      method.call(*args).merge(pid: new_collection_druid)
-    end
     sign_in user, groups: ['sdr:administrator-role']
   end
 

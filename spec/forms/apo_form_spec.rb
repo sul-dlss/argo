@@ -292,6 +292,7 @@ RSpec.describe ApoForm do
           },
           'collection_radio' => 'create',
           'collection_title' => 'col title',
+          'collection_rights' => 'world',
           'collection_abstract' => '',
           'default_object_rights' => 'world',
           'use' => '',
@@ -303,6 +304,21 @@ RSpec.describe ApoForm do
       end
 
       let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
+      let(:created_apo) do
+        Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:zt570tx3016',
+                                        type: Cocina::Models::Vocab.admin_policy,
+                                        label: '',
+                                        version: 1,
+                                        administrative: {}).to_json
+      end
+
+      let(:created_collection) do
+        Cocina::Models::Collection.new(externalIdentifier: 'druid:pb873ty1662',
+                                       type: Cocina::Models::Vocab.collection,
+                                       label: '',
+                                       version: 1,
+                                       access: {}).to_json
+      end
 
       before do
         allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
@@ -314,29 +330,37 @@ RSpec.describe ApoForm do
         expect(Dor).to receive(:find).with(apo.pid).and_return(apo)
         expect(apo).to receive(:save)
         expect(apo).to receive(:add_roleplayer).exactly(4).times
-        expect(Dor::Services::Client.objects).to receive(:register) do |args|
-          expect(args[:params]).to match a_hash_including(
-            label: 'New APO Title',
-            object_type: 'adminPolicy',
-            admin_policy: 'druid:hv992ry2431' # Uber-APO
+
+        stub_request(:post, 'http://localhost:3003/v1/objects')
+          .with(
+            body: '{"type":"http://cocina.sul.stanford.edu/models/admin_policy.jsonld",' \
+            '"label":"New APO Title","version":1,' \
+            '"administrative":{"defaultObjectRights":"\\u003c?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?\\u003e' \
+            '\\u003crightsMetadata\\u003e\\u003caccess type=\\"discover\\"\\u003e\\u003cmachine\\u003e' \
+            '\\u003cworld/\\u003e\\u003c/machine\\u003e' \
+            '\\u003c/access\\u003e\\u003caccess type=\\"read\\"\\u003e\\u003cmachine\\u003e\\u003cworld/\\u003e\\u003c/machine\\u003e' \
+            '\\u003c/access\\u003e\\u003cuse\\u003e\\u003chuman type=\\"useAndReproduction\\"/\\u003e\\u003chuman type=\\"creativeCommons\\"/' \
+            '\\u003e\\u003cmachine type=\\"creativeCommons\\" uri=\\"\\"/\\u003e\\u003chuman type=\\"openDataCommons\\"/' \
+            '\\u003e\\u003cmachine type=\\"openDataCommons\\" uri=\\"\\"/\\u003e\\u003c/use\\u003e\\u003ccopyright\\u003e\\u003chuman/' \
+            '\\u003e\\u003c/copyright\\u003e\\u003c/rightsMetadata\\u003e","hasAdminPolicy":"druid:hv992ry2431"}}'
           )
-          expect(args[:metadata_source]).to be_nil # descMD is created via the form
-          { pid: apo.pid }
-        end
+          .to_return(status: 200, body: created_apo, headers: {})
+
         expect(workflow_client).to receive(:create_workflow_by_name)
           .with(apo.pid, 'accessionWF', version: '1')
         expect(apo).to receive(:"use_license=").with(params['use_license'])
 
         # verify that the collection is also created
         expect(apo).to receive(:add_default_collection).with(collection.pid)
-        expect(Dor::Services::Client.objects).to receive(:register) do |args|
-          expect(args[:params]).to match a_hash_including(
-            label: 'col title',
-            object_type: 'collection',
-            admin_policy: apo.pid
+
+        stub_request(:post, 'http://localhost:3003/v1/objects')
+          .with(
+            body: '{"type":"http://cocina.sul.stanford.edu/models/collection.jsonld",' \
+            '"label":"col title","version":1,"access":{"access":"world","download":"none"},' \
+            '"administrative":{"hasAdminPolicy":"druid:zt570tx3016"}}'
           )
-          { pid: collection.pid }
-        end
+          .to_return(status: 200, body: created_collection)
+
         expect(workflow_client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF', version: '1')
       end
 
