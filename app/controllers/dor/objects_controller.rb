@@ -40,6 +40,8 @@ class Dor::ObjectsController < ApplicationController
       Cocina::Models::Vocab.map
     when 'Media'
       Cocina::Models::Vocab.media
+    when 'Document'
+      Cocina::Models::Vocab.document
     when /^Manuscript/
       Cocina::Models::Vocab.manuscript
     when 'Book (ltr)', 'Book (rtl)'
@@ -52,7 +54,7 @@ class Dor::ObjectsController < ApplicationController
   # helper method to get just the content type tag
   def content_type_tag
     content_tag = params[:tag].find { |tag| tag.start_with?('Process : Content Type') }
-    content_tag[0].split(':').last.strip
+    content_tag.split(':').last.strip
   end
 
   # All the tags from the form except the project and content type, which are handled specially
@@ -82,11 +84,15 @@ class Dor::ObjectsController < ApplicationController
     }
     model_params[:access] = access(params[:rights]) if params[:rights] != 'default'
 
-    if params[:collection]
-      model_params[:structural] = {
-        isMemberOf: params[:collection]
-      }
+    structural = {}
+    structural[:isMemberOf] = params[:collection] if params[:collection]
+    case content_type_tag
+    when 'Book (ltr)'
+      structural[:hasMemberOrders] = [{ viewingDirection: 'left-to-right' }]
+    when 'Book (rtl)'
+      structural[:hasMemberOrders] = [{ viewingDirection: 'right-to-left' }]
     end
+    model_params[:structural] = structural
     project = params[:tag].find { |t| t.start_with?('Project : ') }
     if project
       model_params[:administrative][:partOfProject] = project.sub(/^Project : /, '')
