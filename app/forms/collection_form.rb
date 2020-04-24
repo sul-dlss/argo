@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# Inspired by Reform, but not exactly reform, because of existing deficiencies
-# in dor-services:
-#  https://github.com/sul-dlss/dor-services/pull/360
+# Inspired by Reform, but not exactly reform
 # This is for the collection form and it's only used for create, not for update
 # as it registers a new object on each call to `#save`
 class CollectionForm < BaseForm
@@ -16,7 +14,7 @@ class CollectionForm < BaseForm
 
   # Copies the values to the model and saves and indexes
   def save
-    @model ||= register_model
+    @model = register_model if model.new_record?
     sync
     model.save
     Argo::Indexer.reindex_pid_remotely(model.pid)

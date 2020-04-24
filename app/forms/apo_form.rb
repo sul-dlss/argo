@@ -28,7 +28,7 @@ class ApoForm < BaseForm
     sync
     add_default_collection
     add_administrative_tags!
-    model.save
+    model.save!
     Argo::Indexer.reindex_pid_remotely(model.pid)
     # Kick off the accessionWF after all updates are complete.
     WorkflowClientFactory.build.create_workflow_by_name(model.pid, 'accessionWF', version: '1') if @needs_accession_workflow
@@ -65,28 +65,11 @@ class ApoForm < BaseForm
     model.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
   end
 
-  def agreement
-    return if new_record?
-
-    model.agreement
-  end
-
-  def use_license
-    return '' if new_record?
-
-    model.use_license
-  end
-
-  def default_rights
-    return 'world' if new_record?
-
-    model.default_rights
-  end
+  delegate :use_license, :agreement, :use_statement, :copyright_statement,
+           :default_rights, :mods_title, to: :model
 
   def desc_metadata_format
-    return 'MODS' if new_record?
-
-    model.desc_metadata_format
+    model.desc_metadata_format || 'MODS'
   end
 
   def metadata_source
@@ -95,43 +78,20 @@ class ApoForm < BaseForm
     model.metadata_source
   end
 
-  def use_statement
-    return if new_record?
-
-    model.use_statement
-  end
-
-  def copyright_statement
-    return if new_record?
-
-    model.copyright_statement
-  end
-
-  def mods_title
-    return '' if new_record?
-
-    model.mods_title
-  end
-
   def default_collection_objects
-    return [] if new_record?
-
     @default_collection_objects ||= begin
       Array(model.default_collections).map { |pid| Dor.find(pid) }
     end
   end
 
   def to_param
-    return nil if new_record?
-
     model.pid
   end
 
   def license_options
-    cur_use_license = model ? model.use_license : nil
     [['-- none --', '']] +
-      options_for_use_license_type(Dor::CreativeCommonsLicenseService, cur_use_license) +
-      options_for_use_license_type(Dor::OpenDataLicenseService, cur_use_license)
+      options_for_use_license_type(Dor::CreativeCommonsLicenseService, use_license) +
+      options_for_use_license_type(Dor::OpenDataLicenseService, use_license)
   end
 
   private
@@ -211,7 +171,7 @@ class ApoForm < BaseForm
   end
 
   def find_or_register_model
-    return model if model
+    return model unless new_record?
 
     @model = register_model
   end
@@ -245,7 +205,7 @@ class ApoForm < BaseForm
   # @param [String] apo_pid the identifier for this APO
   # @return [String] the pid for the newly created collection
   def create_collection(apo_pid)
-    form = CollectionForm.new
+    form = CollectionForm.new(Dor::Collection.new)
     form.validate(params.merge(apo_pid: apo_pid))
     form.save
     form.model.id

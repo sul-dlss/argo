@@ -29,14 +29,14 @@ class ApoController < ApplicationController
 
   def new
     authorize! :create, Dor::AdminPolicyObject
-    @form = ApoForm.new
+    @form = ApoForm.new(Dor::AdminPolicyObject.new)
     render layout: 'blacklight'
   end
 
   def create
     authorize! :create, Dor::AdminPolicyObject
 
-    @form = ApoForm.new
+    @form = ApoForm.new(Dor::AdminPolicyObject.new)
     unless @form.validate(params.merge(tag: "Registered By : #{current_user.login}"))
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: form.errors } }

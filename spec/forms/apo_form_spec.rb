@@ -28,6 +28,7 @@ RSpec.describe ApoForm do
     end
 
     before do
+      allow(apo).to receive(:new_record?).and_return(false) # instantiate_record creates unsaved objects
       allow(Dor).to receive(:find).with(agreement.pid, cast: true).and_return(agreement)
     end
 
@@ -76,11 +77,13 @@ RSpec.describe ApoForm do
         expect(apo.copyright_statement).to eq(md_info[:copyright])
       end
 
-      it 'handles no use statement' do
-        md_info[:use] = ' '
-        instance.validate(md_info)
-        instance.sync
-        expect(apo.use_statement).to be_nil
+      context 'when the user provides no statement' do
+        it 'updates it to nil' do
+          md_info[:use] = ' '
+          instance.validate(md_info)
+          instance.sync
+          expect(apo.use_statement).to be_nil
+        end
       end
     end
 
@@ -185,8 +188,8 @@ RSpec.describe ApoForm do
     end
   end
 
-  context 'no model (new)' do
-    let(:instance) { described_class.new }
+  context 'new model' do
+    let(:instance) { described_class.new(Dor::AdminPolicyObject.new) }
 
     describe '#permissions' do
       subject { instance.permissions }
@@ -209,7 +212,7 @@ RSpec.describe ApoForm do
     describe '#use_license' do
       subject { instance.use_license }
 
-      it { is_expected.to eq '' }
+      it { is_expected.to be_nil }
     end
 
     describe '#default_rights' do
@@ -233,13 +236,13 @@ RSpec.describe ApoForm do
     describe '#use_statement' do
       subject { instance.use_statement }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to eq '' }
     end
 
     describe '#copyright_statement' do
       subject { instance.copyright_statement }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to eq '' }
     end
 
     describe '#mods_title' do

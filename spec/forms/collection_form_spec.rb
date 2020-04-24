@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CollectionForm do
-  let(:instance) { described_class.new }
+  let(:instance) { described_class.new(Dor::Collection.new) }
   let(:title) { 'collection title' }
   let(:abstract) { 'this is the abstract' }
 
