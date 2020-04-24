@@ -9,7 +9,7 @@ class BaseForm
   attr_reader :errors, :model, :params
 
   # @param [Dor::Item] the object to update.
-  def initialize(model = nil)
+  def initialize(model)
     @model = model
     @errors = [] # assume no errors yet
   end
@@ -30,8 +30,5 @@ class BaseForm
     model.attributes = params
   end
 
-  # We could delegate this to model if we solved https://github.com/sul-dlss/dor-services/pull/360
-  def new_record?
-    model.nil?
-  end
+  delegate :new_record?, to: :model
 end

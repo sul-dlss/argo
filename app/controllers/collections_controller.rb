@@ -14,7 +14,7 @@ class CollectionsController < ApplicationController
     @apo = Dor.find params[:apo_id]
     authorize! :manage_item, @apo
 
-    form = CollectionForm.new
+    form = CollectionForm.new(Dor::Collection.new)
     return render 'new' unless form.validate(params.merge(apo_pid: params[:apo_id]))
 
     form.save
