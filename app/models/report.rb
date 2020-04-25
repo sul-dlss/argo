@@ -144,7 +144,7 @@ class Report
       },
       {
         field: :dissertation_id, label: 'Dissertation ID',
-        proc: lambda { |doc| doc[:identifier_ssim].map { |id| id.include?('dissertationid') ? id.split(/:/).last : nil }.join },
+        proc: lambda { |doc| doc[:identifier_ssim].filter { |id| id.include?('dissertationid') }.map { |id| id.split(/:/).last } },
         solr_fields: %w(identifier_ssim),
         sort: false, default: true, width: 50, download_default: false
       }
