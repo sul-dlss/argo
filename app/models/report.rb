@@ -135,6 +135,12 @@ class Report
       proc: lambda { |doc| doc.preservation_size },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50, download_default: false
+    },
+    {
+      field: :dissertation_id, label: 'Dissertation ID',
+      proc: lambda { |doc| doc[:identifier_ssim].filter { |id| id.include?('dissertationid') }.map { |id| id.split(/:/).last } },
+      solr_fields: %w(identifier_ssim),
+      sort: false, default: true, width: 50, download_default: false
     }
   ].freeze
 
