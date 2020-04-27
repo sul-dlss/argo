@@ -5,7 +5,7 @@
       <div class="input-group">
         <input class="form-control tag" name="tag<%= count + 1 %>" id="tag<%= count + 1 %>" type="text" value="<%= tag %>">
         <span class='input-group-btn'>
-          <%= link_to url_for(controller: :items, action: :tags, id: @pid, del: 'true', tag: count + 1), class: 'btn btn-default' do %>
+          <%= link_to url_for(controller: :items, action: :tags, id: @pid, del: 'true', tag: count + 1), class: 'btn btn-secondary' do %>
             <span class='glyphicon glyphicon-remove glyphicon text-danger'></span>
           <% end %>
         </span>

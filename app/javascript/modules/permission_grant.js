@@ -17,7 +17,7 @@ export default class {
         var element = this.rootElement()
         var button = document.createElement('button')
         button.innerHTML = 'Remove'
-        button.className = 'btn btn-default'
+        button.className = 'btn btn-secondary'
         button.addEventListener('click', (event) => {
             event.preventDefault()
             this.destroy()
