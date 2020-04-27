@@ -243,6 +243,56 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
     end
 
+    context 'when register is successful with dark' do
+      let(:submitted) do
+        {
+          object_type: 'item',
+          admin_policy: 'druid:hv992ry2431',
+          collection: 'druid:hv992ry7777',
+          workflow_id: 'registrationWF',
+          metadata_source: 'label',
+          label: 'test parameters for registration',
+          tag: ['Process : Content Type : Image',
+                'Registered By : jcoyne85'],
+          seed_datastream: ['descMetadata'],
+          rights: 'dark',
+          source_id: 'foo:bar',
+          other_id: 'label:'
+        }
+      end
+
+      let(:json) do
+        Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
+                                type: Cocina::Models::Vocab.image,
+                                label: '',
+                                version: 1,
+                                access: {
+                                  access: 'world',
+                                  download: 'none'
+                                }).to_json
+      end
+
+      before do
+        stub_request(:post, 'http://localhost:3003/v1/objects')
+          .with(
+            body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
+            '"label":"test parameters for registration","version":1,' \
+            '"access":{"access":"dark","download":"none"},' \
+            '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
+            '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+            '"structural":{"isMemberOf":"druid:hv992ry7777"}}'
+          )
+          .to_return(status: 200, body: json, headers: {})
+      end
+
+      it 'registers the object' do
+        post :create, params: submitted
+        expect(response).to be_created
+        expect(workflow_service).to have_received(:create_workflow_by_name)
+          .with('druid:bc234fg5678', 'registrationWF', version: '1')
+      end
+    end
+
     context 'when register is a conflict' do
       let(:message) { "Conflict: 409 (An object with the source ID 'sul:36105226711146' has already been registered" }
 
