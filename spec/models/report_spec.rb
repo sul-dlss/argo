@@ -20,7 +20,7 @@ RSpec.describe Report, type: :model do
       rows = CSV.parse(@csv)
       expect(rows).to be_a(Array)
       expect(rows.length).to be > 1    # at least headers + data
-      expect(rows[0].length).to eq(25) # default headers
+      expect(rows[0].length).to eq(26) # default headers
     end
 
     it 'forces double quotes for all fields' do
@@ -42,7 +42,7 @@ RSpec.describe Report, type: :model do
     subject(:report_fields) { described_class::REPORT_FIELDS }
 
     it 'has report fields' do
-      expect(report_fields.length).to eq(25)
+      expect(report_fields.length).to eq(26)
       expect(report_fields).to be_all { |f| f[:field].is_a? Symbol } # all :field keys are symbols
     end
 
@@ -58,7 +58,8 @@ RSpec.describe Report, type: :model do
         :file_count,
         :shelved_file_count,
         :resource_count,
-        :preserved_size
+        :preserved_size,
+        :dissertation_id
       ].each do |k|
         expect(report_fields).to be_any { |f| f[:field] == k }
       end
