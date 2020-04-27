@@ -72,28 +72,6 @@ services:
       - dor-indexing-app
       - suri
       - redis
-
-  dor-services-worker:
-    image: suldlss/dor-services-app:latest
-    environment:
-      DATABASE_NAME: dor-services-app
-      DATABASE_USERNAME: postgres
-      DATABASE_PASSWORD: sekret
-      DATABASE_HOSTNAME: db
-      DATABASE_PORT: 5432
-      SOLR_URL: http://solr:8983/solr/argo
-      SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
-      SETTINGS__SOLR__URL: http://solr:8983/solr/argo
-      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
-      SETTINGS__SURI__URL: http://suri:3000
-      SETTINGS__WORKFLOW_URL: http://workflow:3000
-      REDIS_URL: redis://redis:6379/
-    depends_on:
-      - db
-      - dor-indexing-app
-      - suri
-      - redis
-    command: bundle exec sidekiq -C config/sidekiq.yml
     
   solr:
     image: solr:7
