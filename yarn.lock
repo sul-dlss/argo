@@ -1360,10 +1360,10 @@ blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.7.0:
     jquery "^3.4.1"
     typeahead.js "^0.11.1"
 
-blacklight-hierarchy@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-3.0.0.tgz#61eb5a7d078ee42db988b0093a6ea4d8b0101ab4"
-  integrity sha512-huL7yU9xc/swvC0tvhs+QcWXcz+cV6ebDP2ICzRptaZBnLF/HuzzhADHJKi5LSNjPT0eCF6EORE/0mK7dcSNZw==
+blacklight-hierarchy@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-4.0.0.tgz#17527b6b30629afece51dfc7173c49cacdc3f422"
+  integrity sha512-d3dKSgWjj+FWk33wJL0QWc2fA3F3Z0dzOOKRKMg+2nkOtkuSJwrPib/CRf6I2dXXp5RFTrgAkDQXFjMXuiiPZA==
   dependencies:
     blacklight-frontend ">=7.1.0-alpha"
     jquery ">=3.0"
@@ -1427,11 +1427,6 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
-
-bootstrap-sass@^3.4.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/bootstrap-sass/-/bootstrap-sass-3.4.1.tgz#6843c73b1c258a0ac5cb2cc6f6f5285b664a8e9a"
-  integrity sha512-p5rxsK/IyEDQm2CwiHxxUi0MZZtvVFbhWmyMOt4lLkA4bujDA1TGoKT0i1FKIWiugAdP+kK8T5KMDFIKQCLYIA==
 
 bootstrap@^4.3.1:
   version "4.4.1"
@@ -3920,7 +3915,12 @@ jquery-validation@^1.19.1:
   resolved "https://registry.yarnpkg.com/jquery-validation/-/jquery-validation-1.19.1.tgz#a85043467dc2b70d9fff05778646d150e747742f"
   integrity sha512-QNnrZBqSltWUEJx+shOY5WtfrIb0gWmDjFfQP8rZKqMMSfpRSwEkSqhfHPvDfkObD8Hnv5KHSYI8yg73sVFdqA==
 
-jquery@>=1.7, jquery@>=1.8.0, jquery@>=3.0, jquery@^3.4.1:
+jquery@>=1.7, jquery@>=3.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
+  integrity sha512-Xb7SVYMvygPxbFMpTFQiHh1J7HClEaThguL15N/Gg37Lri/qKyhRGZYzHRyLH8Stq3Aow0LsHO2O2ci86fCrNQ==
+
+jquery@>=1.8.0, jquery@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
@@ -5913,9 +5913,9 @@ qs@6.7.0:
   integrity sha512-VCdBRNFTX1fyE7Nb6FYoURo/SPe62QCaAyzJvUjwRaIsc+NePBEniHlvxFmmX56+HZphIGtV0XeCirBtpDrTyQ==
 
 qs@^6.5.1:
-  version "6.9.1"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.1.tgz#20082c65cb78223635ab1a9eaca8875a29bf8ec9"
-  integrity sha512-Cxm7/SS/y/Z3MHWSxXb8lIFqgqBowP5JMlTUFyJN88y0SGQhVmZnqFK/PeuMX9LzUyWsqqhNxIyg0jlzq946yA==
+  version "6.9.3"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.3.tgz#bfadcd296c2d549f1dffa560619132c977f5008e"
+  integrity sha512-EbZYNarm6138UKKq46tdx08Yo/q9ZhFoAXAI1meAFd2GtbRDhbZY2WQSICskT0c5q99aFzLG1D4nvTk9tqfXIw==
 
 qs@~6.5.2:
   version "6.5.2"

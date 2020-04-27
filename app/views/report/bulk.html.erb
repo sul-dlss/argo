@@ -39,7 +39,7 @@ ul li{
 <% end %>
 
 <% @page_title = "#{application_name} Search Results" %>
-<% content_for(:head) { render_opensearch_response_metadata.html_safe } %>
+<% content_for(:head) { render 'catalog/opensearch_response_metadata', response: @response } %>
 <% if has_search_parameters? %>
 <%= render partial: 'did_you_mean' %>
 <%= render 'constraints', localized_params: params %>

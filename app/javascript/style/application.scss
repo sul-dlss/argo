@@ -1,20 +1,25 @@
 //@import 'jquery-ui/themes/base/all.css';
 @import 'free-jqgrid/css/ui.jqgrid.css';
+@import 'variables';
+@import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-overrides';
-@import 'bootstrap-sass';
-// While this would work for blacklight 7, it require bootstrap 4, so we can't do it here.
-// @import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';
-
 // Override before importing Blacklight
 $logo-image: "../images/logo.png";
-@import 'blacklight/blacklight';
-@import 'blacklight_hierarchy';
+@import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';
+
+// Here we override blacklight to wrap the $logo-image in a url()
+.navbar-logo {  // The main logo image for the Blacklight instance
+  @if $logo-image {
+    background: transparent url($logo-image) no-repeat top left;
+  }
+}
+
+@import 'blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy';
 
 @import "argo";
 @import "dialog";
 @import "document";
 @import "embargo";
-@import "icons";
 @import "index_queue";
 @import "profile";
 @import "search_results";

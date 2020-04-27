@@ -12,7 +12,7 @@ class ReportController < CatalogController
   end
 
   def bulk
-    (@response, @document_list) = search_results(params)
+    (@response, _deprecated_document_list) = search_service.search_results
   end
 
   def data
@@ -82,7 +82,7 @@ class ReportController < CatalogController
   end
 
   def workflow_grid
-    (@response, @document_list) = search_results(params)
+    (@response, _deprecated_document_list) = search_service.search_results
 
     if request.xhr?
       # This is triggered by javascript that refreshes the data every 10s

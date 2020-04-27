@@ -5,7 +5,6 @@
 # have been received
 class Report
   include Blacklight::Configurable
-  include Blacklight::SearchHelper
   include CsvConcern
   include DateFacetConfigurations
 
@@ -210,7 +209,24 @@ class Report
     docs_to_records(@document_list)
   end
 
-  protected
+  private
+
+  delegate :search_results, to: :search_service
+
+  # TODO: In blacklight 7.1.0 use Blacklight::Searchable instead
+  def search_results(params)
+    search_service(params).search_results
+  end
+
+  def search_service(params)
+    search_service_class.new(config: blacklight_config,
+                             user_params: params,
+                             current_user: current_user)
+  end
+
+  def search_service_class
+    CatalogController.blacklight_config.search_service_class
+  end
 
   # @param [Array<SolrDocument>] docs
   # @param [Array<Hash>] fields

@@ -2,6 +2,7 @@
 
 # Handles HTTP interaction that allows management of bulk jobs for an APO
 class BulkJobsController < ApplicationController
+  include Blacklight::Searchable
   # Generates the index page for a given DRUID's past bulk metadata upload jobs.
   def index
     params[:apo_id] = 'druid:' + params[:apo_id] unless params[:apo_id].include? 'druid'
@@ -64,7 +65,7 @@ class BulkJobsController < ApplicationController
   private
 
   def find(id)
-    CatalogController.new.repository.find(id).documents.first
+    search_service.fetch(id).last
   end
 
   # Given a DRUID, loads any metadata bulk upload information associated with that DRUID into a hash.

@@ -27,7 +27,7 @@ RSpec.describe 'Item view', js: true do
 
     it 'shows the page' do
       visit solr_document_path 'druid:hj185vb7593'
-      within '.dl-horizontal' do
+      within '.document-metadata' do
         expect(page).to have_css 'dt', text: 'DRUID:'
         expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
       end
@@ -51,7 +51,7 @@ RSpec.describe 'Item view', js: true do
 
       it 'shows the file info' do
         visit solr_document_path 'druid:hj185vb7593'
-        within '.dl-horizontal' do
+        within '.document-metadata' do
           expect(page).to have_css 'dt', text: 'DRUID:'
           expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
           expect(page).to have_css 'dt', text: 'Object Type:'

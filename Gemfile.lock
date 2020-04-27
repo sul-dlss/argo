@@ -63,8 +63,6 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     arel (9.0.0)
     ast (2.4.0)
-    autoprefixer-rails (9.7.6)
-      execjs
     barby (0.6.8)
     bcrypt (3.1.13)
     better_html (1.0.14)
@@ -76,25 +74,18 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (6.23.0)
-      bootstrap-sass (~> 3.2)
+    blacklight (7.7.0)
       deprecation
       globalid
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
-      nokogiri (~> 1.6)
-      rails (>= 4.2, < 6)
-      rsolr (>= 1.0.6, < 3)
-      twitter-typeahead-rails (= 0.11.1.pre.corejavascript)
-    blacklight-hierarchy (2.0.0)
-      blacklight (~> 6.0)
+      rails (>= 5.1, < 7)
+    blacklight-hierarchy (4.0.0)
+      blacklight (> 6.20, < 8.0)
       jquery-rails
-      rails (>= 4.1, < 6)
+      rails (>= 5.1, < 7)
     bootsnap (1.4.6)
       msgpack (~> 1.0)
-    bootstrap-sass (3.4.1)
-      autoprefixer-rails (>= 5.2.1)
-      sassc (>= 2.0.0)
     builder (3.2.4)
     bundler-audit (0.6.1)
       bundler (>= 1.2.0, < 3)
@@ -289,7 +280,6 @@ GEM
       rubocop (~> 0.79)
       smart_properties
     erubi (1.9.0)
-    execjs (2.7.0)
     eye (0.10.0)
       celluloid (~> 0.17.3)
       celluloid-io (~> 0.17.0)
@@ -553,8 +543,6 @@ GEM
       rest-client
     rubyzip (2.3.0)
     safe_yaml (1.0.5)
-    sassc (2.3.0)
-      ffi (~> 1.9)
     sdr-client (0.24.0)
       activesupport
       cocina-models (~> 0.32.0)
@@ -604,10 +592,6 @@ GEM
     tilt (2.0.10)
     timers (4.3.0)
     ttfunk (1.4.0)
-    twitter-typeahead-rails (0.11.1.pre.corejavascript)
-      actionpack (>= 3.1)
-      jquery-rails
-      railties (>= 3.1)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
     uber (0.0.15)
@@ -649,8 +633,8 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 6.0)
-  blacklight-hierarchy (~> 2.0)
+  blacklight (~> 7.0)
+  blacklight-hierarchy (~> 4.0)
   bootsnap (>= 1.1.0)
   byebug
   cancancan

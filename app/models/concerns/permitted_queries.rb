@@ -3,8 +3,6 @@
 ##
 # Determine user authorization based on index
 class PermittedQueries
-  include Blacklight::SearchHelper
-
   attr_reader :groups, :known_roles, :is_admin
 
   PERMITTED_COLLECTIONS_LIMIT = 5000
@@ -80,6 +78,8 @@ class PermittedQueries
   end
 
   private
+
+  delegate :repository, to: :blacklight_config
 
   def blacklight_config
     @blacklight_config ||= CatalogController.blacklight_config.configure

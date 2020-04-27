@@ -12,6 +12,7 @@
 //
 //= require jquery3
 //= require jquery_ujs
+//= require bootstrap
 //
 // Required by Blacklight
 //= require blacklight/blacklight
@@ -19,7 +20,7 @@
 // Not added by Blacklight, but required for tabs to work
 //= require bootstrap/tab
 //= require bootstrap/button
-//
+
 // Required by Blacklight Hierarchical Facet Plugin
 //= require blacklight/hierarchy/hierarchy
 //

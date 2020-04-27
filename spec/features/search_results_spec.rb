@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 require 'rails_helper'
@@ -11,20 +10,20 @@ RSpec.describe 'Search results' do
   it 'contains Blacklight default index page tools' do
     visit search_catalog_path f: { content_type_ssim: ['book'] }
     within '.constraints-container' do
-      expect(page).to have_css '#startOverLink', text: 'Start Over'
+      expect(page).to have_css '.catalog_startOverLink', text: 'Start Over'
     end
     within '.search-widgets' do
       within '#bulk-update-button' do
-        expect(page).to have_css 'a.btn.btn-default', text: 'Bulk Update'
+        expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Update'
       end
-      expect(page).to have_css 'a.btn.btn-default', text: 'Bulk Action'
+      expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Action'
       within '#sort-dropdown' do
         expect(page).to have_css 'button', text: 'Sort by Druid'
-        expect(page).to have_css 'ul li', count: 3
+        expect(page).to have_css '.dropdown-item', count: 3
       end
       within '#per_page-dropdown' do
         expect(page).to have_css 'button', text: '10 per page'
-        expect(page).to have_css 'ul li', count: 4
+        expect(page).to have_css '.dropdown-item', count: 4
       end
       within '.report-toggle' do
         expect(page).to have_css 'a', text: 'Report View'

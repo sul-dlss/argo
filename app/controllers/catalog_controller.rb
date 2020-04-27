@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'blacklight/catalog'
 class CatalogController < ApplicationController
   include Blacklight::Catalog
   helper ArgoHelper
@@ -8,12 +7,12 @@ class CatalogController < ApplicationController
 
   before_action :reformat_dates, :set_user_obj_instance_var
   before_action :show_aspect, only: [:dc, :ds]
-  before_action :sort_collection_actions_buttons, only: [:index]
   before_action :limit_facets_on_home_page, only: [:index]
 
   configure_blacklight do |config|
     ## Class for converting Blacklight's url parameters to into request parameters for the search index
     config.search_builder_class = ::SearchBuilder
+    config.search_service_class = ::SearchService
 
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
@@ -36,7 +35,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'content_type_ssim',               label: 'Content Type'
     config.add_index_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy
     config.add_index_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
-    config.add_index_field 'project_tag_ssim',                label: 'Project',           link_to_search: true
+    config.add_index_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
     config.add_index_field 'source_id_ssim',                  label: 'Source'
     config.add_index_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field 'released_to_ssim',                label: 'Released to'
@@ -49,12 +48,12 @@ class CatalogController < ApplicationController
     config.add_show_field 'content_type_ssim',               label: 'Content Type'
     config.add_show_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy_with_objs
     config.add_show_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections_with_objs
-    config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_search: true
+    config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
     config.add_show_field 'source_id_ssim',                  label: 'Source'
     config.add_show_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_show_field 'originInfo_date_created_tesim',   label: 'Created'
     config.add_show_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :preserved_size_human
-    config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_search: true
+    config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_facet: true
     config.add_show_field 'released_to_ssim',                label: 'Released to'
     config.add_show_field 'status_ssi',                      label: 'Status'
     config.add_show_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
@@ -161,9 +160,12 @@ class CatalogController < ApplicationController
       }
     }
 
-    config.add_results_collection_tool(:report_view_toggle)
     config.add_results_collection_tool(:bulk_update_view_button)
     config.add_results_collection_tool(:bulk_action_button)
+    config.add_results_collection_tool(:sort_widget)
+    config.add_results_collection_tool(:per_page_widget)
+    # config.add_results_collection_tool(:view_type_group)
+    config.add_results_collection_tool(:report_view_toggle)
 
     ##
     # Configure document actions framework
@@ -188,7 +190,8 @@ class CatalogController < ApplicationController
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
     authorize! :view_metadata, @obj
-    @response, @document = fetch params[:id]
+    deprecated_response, @document = search_service.fetch(params[:id])
+    @response = ActiveSupport::Deprecation::DeprecatedObjectProxy.new(deprecated_response, 'The @response instance variable is deprecated; use @document.response instead.')
 
     object_client = Dor::Services::Client.object(params[:id])
 
@@ -231,24 +234,12 @@ class CatalogController < ApplicationController
 
   def manage_release
     authorize! :manage_item, Dor.find(params[:id])
-    @response, @document = fetch params[:id]
+    @response, @document = search_service.fetch params[:id]
     @bulk_action = BulkAction.new
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
-  end
-
-  private
-
-  def show_aspect
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @obj ||= Dor.find(pid)
-    @response, @document = fetch pid
-  end
-
-  def set_user_obj_instance_var
-    @user = current_user
   end
 
   def reformat_dates
@@ -262,19 +253,16 @@ class CatalogController < ApplicationController
     end
   end
 
-  # Sorts the Blacklight collection actions buttons so that the "Bulk Action" and "Bulk Update View" buttons appear
-  # at the front of the list.
-  def sort_collection_actions_buttons
-    collection_actions_order = blacklight_config.index.collection_actions.keys
-    collection_actions_order.delete(:bulk_update_view_button)
-    collection_actions_order.insert(0, :bulk_update_view_button)
-    collection_actions_order.delete(:bulk_action_button)
-    collection_actions_order.insert(1, :bulk_action_button)
+  private
 
-    # Use the order of indices in the collection_actions_order array for the Blacklight hash
-    blacklight_config.index.collection_actions = blacklight_config.index.collection_actions.to_h.sort do |(key1, _value1), (key2, _value2)|
-      collection_actions_order.index(key1) <=> collection_actions_order.index(key2)
-    end
+  def show_aspect
+    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
+    @obj ||= Dor.find(pid)
+    @response, @document = search_service.fetch pid
+  end
+
+  def set_user_obj_instance_var
+    @user = current_user
   end
 
   def limit_facets_on_home_page
@@ -283,5 +271,11 @@ class CatalogController < ApplicationController
     blacklight_config.facet_fields.each do |_k, v|
       v.include_in_request = false if v.home == false
     end
+  end
+
+  # This overrides Blacklight to pass context to the search service
+  # @return [Hash] a hash of context information to pass through to the search service
+  def search_service_context
+    { current_user: current_user }
   end
 end

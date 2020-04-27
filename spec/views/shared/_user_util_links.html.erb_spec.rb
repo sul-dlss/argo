@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe '_user_util_links.html.erb' do
+RSpec.describe 'shared/_user_util_links.html.erb' do
   before do
     allow(view).to receive(:current_user).and_return(current_user)
     allow(controller).to receive(:current_user).and_return(current_user)
@@ -15,11 +15,10 @@ RSpec.describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 10
-      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register Items'
-      expect(rendered).not_to have_css 'li.dropdown ul li a', text: 'Register APO'
-      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Bulk Update (synchronous)'
-      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Bulk Actions (asynchronous)'
+      expect(rendered).to have_css 'li.dropdown .dropdown-menu a.dropdown-item', text: 'Register Items'
+      expect(rendered).not_to have_css 'li.dropdown .dropdown-menu a.dropdown-item', text: 'Register APO'
+      expect(rendered).to have_css 'li.dropdown .dropdown-menu a.dropdown-item', text: 'Bulk Update (synchronous)'
+      expect(rendered).to have_css 'li.dropdown .dropdown-menu a.dropdown-item', text: 'Bulk Actions (asynchronous)'
     end
   end
 
@@ -30,9 +29,8 @@ RSpec.describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 12
-      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register Items'
-      expect(rendered).to have_css 'li.dropdown ul li a', text: 'Register APO'
+      expect(rendered).to have_css 'li.dropdown .dropdown-menu a.dropdown-item', text: 'Register Items'
+      expect(rendered).to have_css 'li.dropdown .dropdown-menu a.dropdown-item', text: 'Register APO'
       expect(rendered).to have_css 'li', text: 'Impersonate'
     end
   end
@@ -56,7 +54,6 @@ RSpec.describe '_user_util_links.html.erb' do
       render
       expect(rendered).to have_css '.navbar-right'
       expect(rendered).to have_css 'ul.nav.navbar-nav'
-      expect(rendered).to have_css 'li', count: 11
     end
   end
 end

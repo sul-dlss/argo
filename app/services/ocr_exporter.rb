@@ -61,8 +61,6 @@ class OCRExporter
   end
 
   class DruidFinder
-    include Blacklight::SearchHelper
-
     # This searches Solr for a barcode tag
     def find_druid(barcode)
       resp = repository.search(
@@ -74,6 +72,8 @@ class OCRExporter
 
       resp.first['id']
     end
+
+    delegate :repository, to: :blacklight_config
 
     def blacklight_config
       @blacklight_config ||= CatalogController.blacklight_config.configure

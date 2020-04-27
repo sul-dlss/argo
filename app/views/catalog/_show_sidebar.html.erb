@@ -1,17 +1,17 @@
 <% document = @document %>
 <div class="show_sidebar">
   <h3 class="start-open">View in new window</h3>
-  <ul class='nav nav-stacked'>
-    <li><%= render_purl_link document %></li>
+  <ul class='nav flex-column'>
+    <li class="nav-item"><%= render_purl_link document %></li>
     <% if document.catkey.present? %>
-    <li><%= render_searchworks_link document %></li>
+    <li class="nav-item"><%= render_searchworks_link document %></li>
     <% end %>
-    <li><%= render_dor_link document %></li>
-    <li><%= link_to 'FoXML', File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/export?context=archive"), target: '_blank', rel: 'noopener' %></li>
-    <li>
-      <%= link_to 'Solr document', solr_document_path(document, format: :json), target: '_blank', rel: 'noopener' %>
+    <li class="nav-item"><%= render_dor_link document %></li>
+    <li class="nav-item"><%= link_to 'FoXML', File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/export?context=archive"), target: '_blank', class: 'nav-link', rel: 'noopener' %></li>
+    <li class="nav-item">
+      <%= link_to 'Solr document', solr_document_path(document, format: :json), target: '_blank', class: 'nav-link', rel: 'noopener' %>
     </li>
-    <li><small><%= render_index_info document %></small></li>
+    <li class="nav-item"><small><%= render_index_info document %></small></li>
   </ul>
   <hr>
   <%= render 'items/button_link_list', buttons: @buttons_presenter.buttons %>
