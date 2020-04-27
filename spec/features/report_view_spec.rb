@@ -19,7 +19,7 @@ RSpec.describe 'Report view' do
       find('.ui-pg-button-text', text: 'Columns').click
       expect(page).to have_css 'div#column_selector'
       expect(page).to have_content('Select columns to download:')
-      expect(page).to have_selector('input[name="selected_columns"]', count: 25) # count the total
+      expect(page).to have_selector('input[name="selected_columns"]', count: 26) # count the total
       expect(page).to have_selector('input[name="selected_columns"]:checked', count: 5) # count the default
     end
   end

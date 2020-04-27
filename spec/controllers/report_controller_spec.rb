@@ -69,7 +69,7 @@ RSpec.describe ReportController, type: :controller do
         expect(response).to have_http_status(:ok)
         expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
         data = CSV.parse(response.body)
-        expect(data.first.length).to eq(25)
+        expect(data.first.length).to eq(26)
         expect(data.length > 1).to be_truthy
         expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
       end
