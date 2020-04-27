@@ -104,7 +104,7 @@ class Dor::ObjectsController < ApplicationController
   # @param [String] the rights representation from the form
   # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
   def access(rights)
-    if rights.end_with?('-nd')
+    if rights.end_with?('-nd') || rights == 'dark'
       {
         access: rights.delete_suffix('-nd'),
         download: 'none'
