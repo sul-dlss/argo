@@ -24,7 +24,7 @@ export default class {
 
       var button = document.createElement('button')
       button.innerHTML = 'Add'
-      button.className = 'btn btn-default'
+      button.className = 'btn btn-secondary'
       button.addEventListener('click', (event) => {
           event.preventDefault()
           this.parent.add({name: document.getElementById('permissionName').value, type: "group", access: document.getElementById('permissionRole').value}, )

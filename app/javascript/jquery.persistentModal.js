@@ -104,7 +104,7 @@
           '    <div class="modal-content">',
           '      ' + modalBody,
           '      <div class="modal-footer">',
-          '        <button data-dismiss="modal" class="btn btn-default">',
+          '        <button data-dismiss="modal" class="btn btn-secondary">',
           '          Cancel',
           '        </button>',
           '      </div>',

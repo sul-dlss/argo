@@ -130,10 +130,10 @@
   <div class="form-group">
     <% if @form.new_record? %>
       <%= submit_tag 'Register APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', '/', class: 'btn btn-default' %>
+      <%= link_to 'Cancel', '/', class: 'btn btn-secondary' %>
     <% else %>
       <%= submit_tag 'Update APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-default' %>
+      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-secondary' %>
     <% end %>
   </div>
 <% end %>

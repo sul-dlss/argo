@@ -19,7 +19,7 @@ RSpec.describe WorkflowUpdateButton, type: :component do
 
     it 'renders a form with a button' do
       expect(body.css('input[name="process"]').first['value']).to eq 'technical-metadata'
-      expect(body.css('button').to_html).to eq '<button name="button" type="submit" class="btn btn-default">Set to waiting</button>'
+      expect(body.css('button').to_html).to eq '<button name="button" type="submit" class="btn btn-secondary">Set to waiting</button>'
     end
   end
 
@@ -27,7 +27,7 @@ RSpec.describe WorkflowUpdateButton, type: :component do
     let(:status) { 'waiting' }
 
     it 'renders a button' do
-      expect(body.css('button').to_html).to eq '<button name="button" type="submit" class="btn btn-default">Set to completed</button>'
+      expect(body.css('button').to_html).to eq '<button name="button" type="submit" class="btn btn-secondary">Set to completed</button>'
     end
   end
 
