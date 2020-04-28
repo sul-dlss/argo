@@ -45,6 +45,21 @@ RSpec.describe 'Item view', js: true do
     let(:dro_admin) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
     context 'when the file is not on the workspace' do
+      before do
+        ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+                                      SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                                      content_type_ssim: 'image',
+                                      status_ssi: 'v1 Unknown Status',
+                                      SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057vk7675',
+                                      SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
+                                      project_tag_ssim: 'Fuller Slides',
+                                      source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',
+                                      identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
+                                      tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo'],
+                                      ds_specs_ssim: ['descMetadata|M|text/xml|0|1552|Descriptive Metadata (MODS)'])
+        ActiveFedora::SolrService.commit
+      end
+
       let(:files) do
         instance_double(Dor::Services::Client::Files, list: ['this_is_not_the_file_you_are_looking_for.txt'])
       end
