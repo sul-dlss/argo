@@ -11,7 +11,7 @@
         <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), 'data-rcparam': 'apoId' %></div>
         <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', 'data-rcparam': 'collection' %></div>
 
-        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS), 'data-tagname': 'Process : Rights' %></div>
+        <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS), 'data-tagname': 'Process : Rights' %></div>
         <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', 'data-rcparam': 'workflowId' %></div>
         <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), class: 'tag-field', 'data-tagname': 'Process : Content Type' %></div>
         <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, class: 'tag-field', 'data-tagname': 'Project', 'data-rcparam': 'projectName' %></div>
@@ -33,7 +33,6 @@
           </span>
         </div>
         <div class="break"></div>
-    </table>
 </div>
 
 <div id='dialogs'>

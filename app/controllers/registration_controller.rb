@@ -69,13 +69,14 @@ class RegistrationController < ApplicationController
     apo_object = Dor.find(params[:apo_id])
 
     default_opt = apo_object.default_rights
+    default_opt = 'citation-only' if default_opt == 'none'
 
     # iterate through the default version of the rights list.  if we found a default option
     # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
     # we didn't find a default option, we'll just return the default list of rights options with no
     # specified selection.
     result = {}
-    Constants::DEFAULT_RIGHTS_OPTIONS.each do |val|
+    Constants::REGISTRATION_RIGHTS_OPTIONS.each do |val|
       if default_opt == val[1]
         result['default'] = "#{val[0]} (APO default)"
       else
