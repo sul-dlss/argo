@@ -1,4 +1,19 @@
-.btn-secondary,
+// Set color of selected facet
+.card-header {
+  @extend .bg-secondary;
+}
+
+// Set text color of selected facets
+.facet-values li .selected {
+  color: $body-color !important;
+}
+
+// Set border color of facets
+.facet-limit{
+  border-color: $tahuna-sands;
+}
+
+// Set the background color of the active dropdown button
 .btn-outline-secondary {
-  @include button-variant($sul-btn-secondary-color, $sul-btn-secondary-border);
+  @include button-outline-variant($body-color, $body-color, $tea, $body-color);
 }

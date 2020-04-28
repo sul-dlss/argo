@@ -5,10 +5,16 @@
 
 @import 'sul_variables';
 
-// This sets the navbar background to red
+$barley-corn: #b3995d;
+$floral-white: #f9f6ef;
+$tahuna-sands: #d2c295;
+$tea: #b6b1a9;
+
 $theme-colors: (
   "primary": $blue,
+  "secondary": $floral-white,
   "dark": $color-cardinal-red,
+  "success": $barley-corn
 );
 
 
@@ -16,6 +22,3 @@ $link-color: $bright-blue;
 $link-hover-color: $blue;
 
 $navbar-dark-color: $white;
-
-// Text on the header
-//$navbar-dark-color: lighten($gray-base, 86%);
