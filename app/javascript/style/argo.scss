@@ -1,3 +1,12 @@
+// Overriding blacklight to keep the border-color
+.applied-filter {
+  .constraint-value {
+    &:hover, &:active {
+      border-color: $body-color;
+    }
+  }
+}
+
 .modal {
   table.detail {
     font-size: 14px;
