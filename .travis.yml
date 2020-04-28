@@ -8,6 +8,7 @@ addons:
   chrome: stable
 rvm:
   - 2.6.4 # deployed
+  - 2.7.1
 
 before_install:
   # Get bundler 2.0 for ruby 2.6.4
