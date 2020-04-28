@@ -180,14 +180,10 @@ RSpec.describe RegistrationController, type: :controller do
       </rightsMetadata>
       XML
 
-      @item = double(Dor::Item)
-      xml = Nokogiri::XML(content)
-      allow(Dor).to receive(:find).and_return(@item)
+      object_rights = instance_double(Dor::ContentMetadataDS, ng_xml: Nokogiri::XML(content))
+      apo = instance_double(Dor::AdminPolicyObject, defaultObjectRights: object_rights, default_rights: 'none')
+      allow(Dor).to receive(:find).and_return(apo)
       # using content metadata, but any datastream would do
-      object_rights = double(Dor::ContentMetadataDS)
-      allow(object_rights).to receive(:ng_xml).and_return xml
-      allow(@item).to receive(:defaultObjectRights).and_return object_rights
-      allow(@item).to receive(:default_rights).and_return 'none'
       get 'rights_list', params: { apo_id: 'abc', format: :xml }
       expect(response.body.include?('Citation Only (APO default)')).to eq(true)
     end
