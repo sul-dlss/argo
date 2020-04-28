@@ -24,10 +24,9 @@ RSpec.describe 'Bulk actions view', js: true do
     visit report_bulk_path
 
     expect(page).to have_css('h1', text: 'Bulk update operations')
-    expect(find(:xpath, "//span[@class='bulk_button'][text()='Get druids from search'][not(@disabled)]")).to be_truthy
-    expect(find(:xpath, "//span[@class='bulk_button'][text()='Paste a druid list'][not(@disabled)]")).to be_truthy
+    expect(page).to have_button 'Paste a druid list', disabled: false
 
-    find(:xpath, "//span[@class='bulk_button'][text()='Get druids from search'][not(@disabled)]").click
+    click_button 'Get druids from search'
 
     within '#pids' do
       # Test that the textarea was populated from a search
@@ -47,7 +46,7 @@ RSpec.describe 'Bulk actions view', js: true do
 
     fill_in 'pids', with: 'druid:zt570tx3016' # just one druid
     click_button 'Republish'
-    find('#republish_button').click
+    click_button 'Refresh metadata on PURL'
 
     expect(page).to have_content 'Done!'
   end

@@ -41,8 +41,8 @@ RSpec.describe 'Report view' do
     it 'returns a page with the expected elements' do
       visit '/report/bulk'
       expect(page).to have_content('Bulk update operations')
-      expect(page).to have_css('.bulk_button', text: 'Get druids from search')
-      expect(page).to have_css('.bulk_button', text: 'Paste a druid list')
+      expect(page).to have_css('.btn-primary', text: 'Get druids from search')
+      expect(page).to have_css('.btn-primary', text: 'Paste a druid list')
     end
   end
 end

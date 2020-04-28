@@ -139,20 +139,6 @@ legend {
   }
 }
 
-.bulk_button {
-  cursor: pointer;
-  width: 160px;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
-  height: 25px;
-  line-height: 25px;
-  background: #4479BA;
-  color: #FFF;
-  font: Arial;
-  border: 1px solid #84bbf3;
-}
-
 .CodeRay {
   pre {
     border: none !important;
@@ -216,18 +202,9 @@ button.close {
   margin-top: 6px;
 }
 
-.bulk-buttons {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
 .bulk-buttons-row {
   margin-top: 16px;
   margin-bottom: 16px;
-}
-
-.bulk-btn-danger {
-  background-color: $danger;
 }
 
 #import-csv {
