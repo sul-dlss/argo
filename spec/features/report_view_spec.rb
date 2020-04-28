@@ -8,6 +8,13 @@ RSpec.describe 'Report view' do
   end
 
   describe 'the show page', js: true do
+    before do
+      ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+                                    objectType_ssim: 'item',
+                                    sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+      ActiveFedora::SolrService.commit
+    end
+
     it 'shows table without error' do
       visit report_path f: { objectType_ssim: ['item'] }
       expect(page).to have_css 'table#report_grid'
