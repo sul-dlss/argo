@@ -101,8 +101,11 @@ RSpec.describe ReportController, type: :controller do
     end
 
     context 'as an admin' do
+      let(:report) { instance_double(Report, pids: %w(xb482bw3979)) }
+
       before do
         allow(controller.current_user).to receive(:is_admin?).and_return(true)
+        allow(Report).to receive(:new).and_return(report)
       end
 
       it 'sets instance variables and calls update workflow service' do
@@ -117,11 +120,12 @@ RSpec.describe ReportController, type: :controller do
     end
 
     context 'a non admin who has access' do
+      let(:report) { instance_double(Report, pids: %w(xb482bw3979)) }
+
       before do
-        # We're just forcing the search builder to return some rows (even though this user wouldn't have access)
-        allow_any_instance_of(ReportSearchBuilder).to receive(:apply_gated_discovery)
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(true)
         allow(Dor).to receive(:find).with('druid:xb482bw3979').and_return(obj)
+        allow(Report).to receive(:new).and_return(report)
       end
 
       it 'sets instance variables and calls update workflow service' do
@@ -137,11 +141,12 @@ RSpec.describe ReportController, type: :controller do
     end
 
     context 'a non admin who has no access' do
+      let(:report) { instance_double(Report, pids: %w(xb482bw3979)) }
+
       before do
-        # We're just forcing the search builder to return some rows (even though this user wouldn't have access)
-        allow_any_instance_of(ReportSearchBuilder).to receive(:apply_gated_discovery)
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(false)
         allow(Dor).to receive(:find).with('druid:xb482bw3979').and_return(obj)
+        allow(Report).to receive(:new).and_return(report)
       end
 
       it 'does not call update workflow service' do

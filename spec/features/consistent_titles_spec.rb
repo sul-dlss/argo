@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Consistent titles' do
   before do
+    ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+                                  objectType_ssim: 'item',
+                                  sw_display_title_tesim: title)
+    ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 

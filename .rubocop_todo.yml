@@ -189,11 +189,6 @@ RSpec/MessageChain:
 RSpec/MessageSpies:
   Enabled: false
 
-# Offense count: 367
-# Configuration parameters: AggregateFailuresByDefault.
-RSpec/MultipleExpectations:
-  Max: 22
-
 # Offense count: 194
 # Configuration parameters: IgnoreSharedExamples.
 RSpec/NamedSubject:
