@@ -17,3 +17,9 @@
 .btn-outline-secondary {
   @include button-outline-variant($body-color, $body-color, $tea, $body-color);
 }
+
+.btn.disabled {
+  background-color: $silver;
+  color: $body-color;
+  opacity: 1.0;
+}
