@@ -129,5 +129,28 @@ RSpec.describe 'Item view', js: true do
         end
       end
     end
+
+    context 'when the title has an ampersand in it' do
+      let(:item) do
+        Dor::Item.create!(label: 'Road & Track')
+      end
+
+      let(:files) { instance_double(Dor::Services::Client::Files, list: []) }
+      let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
+
+      before do
+        # Necessary because our testing Docker dor-services-app isn't linked to dor-indexing-app via ActiveMQ
+        Argo::Indexer.reindex_pid_remotely(item.pid)
+      end
+
+      after do
+        item.destroy
+      end
+
+      it 'properly escapes the title' do
+        visit solr_document_path item.pid
+        expect(page).to have_title 'Road & Track'
+      end
+    end
   end
 end
