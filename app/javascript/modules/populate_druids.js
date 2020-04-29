@@ -21,10 +21,11 @@
 
     return this.each(function() {
       var $el = $(this);
-      var url = $el.data('populateDruids');
-      var target = $el.data('target');
-      $el.on('click', function() {
-        getAndUpdatePids(url, target);
+      var url = $el.data('populateDruids')
+      var target = $el.data('target')
+      $el.on('click', function(e) {
+        e.preventDefault()
+        getAndUpdatePids(url, target)
       });
     });
   };
