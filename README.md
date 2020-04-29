@@ -5,7 +5,7 @@
 
 # Argo
 
-Argo is the administrative interface to the Stanford Digital Repository.
+Argo is **the** administrative interface to the Stanford Digital Repository.
 
 ## Installation
 
