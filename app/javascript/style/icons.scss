@@ -1,0 +1,29 @@
+.icon-exclamation-sign {
+  &::before {
+    content: '⚠';
+  }
+}
+
+.icon-remove-sign {
+  &::before {
+    content: '×';
+  }
+}
+
+.icon-ok-sign {
+  &::before {
+    content: '✔️';
+  }
+}
+
+.icon-question-sign {
+  &::before {
+    content: '❓';
+  }
+}
+
+.registration-status {
+  &.icon-exclamation-sign, &.icon-remove-sign {
+    @extend .text-danger
+  }
+}
