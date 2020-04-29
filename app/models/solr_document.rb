@@ -21,7 +21,6 @@ class SolrDocument
   attribute :dor_services_version, Blacklight::Types::String, :dor_services_version_ssi
   attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
 
-
   # self.unique_key = 'id'
 
   # Email uses the semantic field mappings below to generate the body of an email.
@@ -44,7 +43,7 @@ class SolrDocument
   )
 
   attribute :versions, Blacklight::Types::Array, 'versions_ssm'
-  
+
   def embargoed?
     embargo_status == 'embargoed'
   end

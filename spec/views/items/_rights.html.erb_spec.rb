@@ -3,11 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'items/_rights.html.erb' do
-  let(:object) { double('object', pid: 'druid:abc123') }
+  before do
+    @object = instance_double(Dor::Item, pid: 'druid:abc123')
+    @form = instance_double(AccessForm, model_name: instance_double(ActiveModel::Name, param_key: 'pid'))
+    render
+  end
 
   it 'renders the partial content' do
-    assign(:object, object)
-    render
     expect(rendered)
       .to have_css '.form-group select.form-control option', text: 'World'
     expect(rendered)
