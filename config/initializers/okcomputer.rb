@@ -58,7 +58,6 @@ OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.n
 #   - at individual endpoint, HTTP response code reflects the actual result
 #   - in /status/all, these checks will display their result text, but will not affect HTTP response code
 OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(Settings.dor_services.url)
-OkComputer::Registry.register 'robot_status_url', OkComputer::HttpCheck.new(Settings.robot_status_url)
 OkComputer::Registry.register 'workflow_url', OkComputer::HttpCheck.new(Settings.workflow_url)
 
 # suri is essential for registering objects
@@ -87,7 +86,6 @@ OkComputer.make_optional %w(
   dor_services_url
   modsulator_url
   normalizer_url
-  robot_status_url
   spreadsheet_url
   stacks_file_url
   stacks_host
