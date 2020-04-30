@@ -64,8 +64,6 @@ RSpec.describe FilesController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(Preservation::Client.objects).to receive(:content)
-          .with(druid: pid, filepath: mock_file_name, version: mock_version)
-          .and_return(mock_content)
       end
 
       it 'returns a response with the preserved file content as the body and the right headers' do
@@ -76,7 +74,8 @@ RSpec.describe FilesController, type: :controller do
         expect(response.headers['Content-Type']).to eq('application/octet-stream')
         expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{CGI.escape(mock_file_name)}")
         expect(response.code).to eq('200')
-        expect(response.body).to eq(mock_content)
+        expect(Preservation::Client.objects).to have_received(:content)
+          .with(druid: pid, filepath: mock_file_name, version: mock_version, on_data: Proc)
       end
 
       context 'when file not found in preservation' do
@@ -84,7 +83,6 @@ RSpec.describe FilesController, type: :controller do
 
         before do
           allow(Preservation::Client.objects).to receive(:content)
-            .with(druid: pid, filepath: 'not_there.txt', version: mock_version)
             .and_raise(Preservation::Client::NotFoundError, errmsg)
         end
 
@@ -103,7 +101,6 @@ RSpec.describe FilesController, type: :controller do
 
         before do
           allow(Preservation::Client.objects).to receive(:content)
-            .with(druid: pid, filepath: 'not_there.txt', version: mock_version)
             .and_raise(Preservation::Client::UnexpectedResponseError, errmsg)
           allow(Rails.logger).to receive(:error)
           allow(Honeybadger).to receive(:notify)

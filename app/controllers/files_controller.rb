@@ -42,11 +42,14 @@ class FilesController < ApplicationController
 
   def preserved
     authorize! :view_content, @object
-    file_content = Preservation::Client.objects.content(druid: @object.pid, filepath: filename, version: params[:version])
+    Preservation::Client.objects.content(druid: @object.pid,
+                                         filepath: filename,
+                                         version: params[:version],
+                                         on_data: proc { |data, _count| response.stream.write data })
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = "attachment; filename=#{CGI.escape(filename)}"
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    self.response_body = file_content
+    response.stream.close
   rescue Preservation::Client::NotFoundError => e
     render status: :not_found, plain: "Preserved file not found: #{e}"
   rescue Preservation::Client::Error => e

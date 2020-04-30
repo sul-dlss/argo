@@ -70,7 +70,7 @@ gem 'dor-services-client', '~> 6.0'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
-gem 'preservation-client', '>= 3.1' # 3.1 or greater is needed for token auth and fix for POST requests
+gem 'preservation-client', '~> 3.2'
 gem 'responders', '~> 2.0'
 gem 'rsolr'
 gem 'sdr-client', '0.24.0'
