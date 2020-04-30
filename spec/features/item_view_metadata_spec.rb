@@ -99,7 +99,7 @@ RSpec.describe 'Item view', js: true do
         end
 
         expect(page).to have_content 'Workspace: not available'
-        expect(page).to have_link 'https://stacks.example.com/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
+        expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
       end
     end
 
@@ -125,7 +125,7 @@ RSpec.describe 'Item view', js: true do
         end
 
         within '.modal-content' do
-          expect(page).to have_link 'https://stacks.example.com/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
+          expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
         end
       end
     end

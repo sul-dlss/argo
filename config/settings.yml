@@ -58,21 +58,21 @@ dor_services:
   token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
 
 preservation_catalog:
-  url: 'https://example.org/prescat'
+  url: 'https://preservation-catalog-stage-01.stanford.edu'
   token: 'mint-token-with-target-preservation-catalog-rake-generate-token'
 
 # URLs
-dor_indexing_url: 'https://dor-indexing-app.example.com/dor'
-fedora_url: 'https://user:password@fedora.example.com:1000/fedora'
-modsulator_url: 'https://services.example.com/v1/modsulator'
-normalizer_url: 'https://services.example.com/v1/normalizer'
-purl_url: 'https://purl.example.com'
-robot_status_url: 'https://robot.example.com/robots'
-solrizer_url: 'https://solr.example.com/solr/collection'
-spreadsheet_url: 'https://services.example.com/v1/spreadsheet'
-stacks_file_url: 'https://stacks.example.com/file'
-stacks_url: 'https://stacks.example.com/image'
-status_indexer_url: 'https://status.example.com/render/?format=json&other=params'
+dor_indexing_url: 'https://dor-indexing-app:3000/dor'
+fedora_url: 'http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora'
+modsulator_url: 'https://modsulator-app-stage.stanford.edu/v1/modsulator'
+normalizer_url: 'https://modsulator-app-stage.stanford.edu/v1/normalizer'
+purl_url: 'https://sul-purl-test.stanford.edum'
+robot_status_url: 'https://robot-console-stage.stanford.edu'
+solrizer_url: 'http://solr:8983/solr/argo'
+spreadsheet_url: 'https://modsulator-app-stage.stanford.edu/v1/spreadsheet'
+stacks_file_url: 'https://stacks-test.stanford.edu/file'
+stacks_url: 'https://stacks-test.stanford.edu/image'
+status_indexer_url: 'https://dor-indexing-app:3000/dor/queue_size.json'
 workflow_url: 'http://localhost:3001'
 
 # Workflow
@@ -86,7 +86,7 @@ apo:
 
 
 sdr_api:
-  email: testing@example.org
+  email: argo@dlss.sul.stanford.edu
   password: notusedanywhere
   url: https://sdr-api-stage.stanford.edu
 
