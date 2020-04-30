@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'mods_view' do
-  let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::Item) }
+RSpec.describe 'Viewing an Admin policy' do
+  let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::AdminPolicyObject) }
   let(:current_user) { create(:user) }
 
   before do
