@@ -6,7 +6,7 @@
     "blacklight-hierarchy": "^3.0.0",
     "bootstrap-sass": "^3.4.1",
     "free-jqgrid": "^4.15.5",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jquery-ui": "^1.12.1",
     "jquery-ujs": "^1.2.2",
     "jquery-validation": "^1.19.1",
