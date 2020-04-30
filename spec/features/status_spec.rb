@@ -17,9 +17,6 @@ RSpec.describe 'application and dependency monitoring' do
 
   context 'all checks' do
     before do
-      stub_request(:get, Settings.robot_status_url)
-        .to_return(status: 200, body: '', headers: {})
-
       stub_request(:get, Settings.spreadsheet_url)
         .to_return(status: 200, body: '', headers: {})
 
