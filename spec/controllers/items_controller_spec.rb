@@ -92,7 +92,7 @@ RSpec.describe ItemsController, type: :controller do
       it 'blocks purge on submitted objects' do
         expect(controller).to receive(:dor_lifecycle).with(item, 'submitted').and_return(true)
         delete 'purge_object', params: { id: pid }
-        expect(response.code).to eq('403')
+        expect(response.code).to eq('400')
         expect(response.body).to eq('Cannot purge an object after it is submitted.')
       end
     end
@@ -511,10 +511,10 @@ RSpec.describe ItemsController, type: :controller do
 
       let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true) }
 
-      it 'returns a 403 with an error message if there is no catkey' do
+      it 'returns a 400 with an error message if there is no catkey' do
         expect(item).to receive(:catkey).and_return('')
         get :refresh_metadata, params: { id: pid }
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to eq 'object must have catkey to refresh descMetadata'
       end
 
@@ -561,9 +561,9 @@ RSpec.describe ItemsController, type: :controller do
           context "when the object doesn't allow modification" do
             let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
-            it 'returns a 403 with an error message' do
+            it 'returns a 400 with an error message' do
               get :refresh_metadata, params: { id: pid }
-              expect(response).to have_http_status(:forbidden)
+              expect(response).to have_http_status(:bad_request)
               expect(response.body).to eq 'Object cannot be modified in its current state.'
             end
           end
@@ -597,12 +597,12 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).with(:manage_governing_apo, item, new_apo_id)
       end
 
-      it 'returns a 403' do
+      it 'returns a 400' do
         expect(item).not_to receive(:admin_policy_object=)
         expect(item.identityMetadata).not_to receive(:adminPolicy)
         expect(item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
         post :set_governing_apo, params: { id: pid, new_apo_id: new_apo_id }
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:bad_request)
         expect(response.body).to eq 'Object cannot be modified in its current state.'
       end
     end
@@ -662,7 +662,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(item.identityMetadata).not_to receive(:adminPolicy)
         expect(item.datastreams['identityMetadata']).not_to receive(:adminPolicy=)
         post :set_governing_apo, params: { id: pid, new_apo_id: new_apo_id, bulk: true }
-        expect(response).to have_http_status(:forbidden)
+        expect(response).to have_http_status(:gone)
         expect(response.body).to eq 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
       end
     end

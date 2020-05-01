@@ -31,7 +31,7 @@ RSpec.describe 'Set governing APO' do
       visit set_governing_apo_ui_item_path 'druid:kv840rx2720'
       select 'Stanford University Libraries - Special Collections', from: 'new_apo_id', match: :first
       click_button 'Update'
-      expect(page.status_code).to eq 403
+      expect(page.status_code).to eq 400
       expect(page).to have_css 'body', text: 'Object cannot be modified in its current state.'
     end
 
