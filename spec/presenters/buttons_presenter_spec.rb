@@ -248,10 +248,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
             url: "/items/#{view_apo_id}/tags_ui"
           },
           {
-            label: 'Set rights',
-            url: "/items/#{view_apo_id}/rights"
-          },
-          {
             label: 'Manage release',
             url: "/view/#{view_apo_id}/manage_release"
           }

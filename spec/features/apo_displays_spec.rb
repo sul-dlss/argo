@@ -97,13 +97,6 @@ RSpec.describe 'Viewing an Admin policy' do
       end
     end
 
-    context 'rights form' do
-      it 'renders the access rights update ui' do
-        visit '/items/druid:zt570tx3016/rights'
-        expect(page).to have_content('Dark (Preserve Only)')
-      end
-    end
-
     context 'source id ui' do
       it 'renders the source id update ui' do
         idmd = double(Dor::IdentityMetadataDS)
@@ -121,15 +114,6 @@ RSpec.describe 'Viewing an Admin policy' do
         allow(idmd).to receive(:tags).and_return(['something:123'])
         visit '/items/druid:zt570tx3016/tags_ui'
         expect(page).to have_content('Update tags')
-      end
-    end
-
-    context 'register' do
-      it 'loads the registration form' do
-        skip "appears to pass even if blacklight JS isn't included in application.js or register.js, which you'd expect to break things. skipping since it might be useless anyway."
-        visit '/items/register'
-        expect(page).to have_content('Admin Policy')
-        expect(page).to have_content('Register')
       end
     end
   end

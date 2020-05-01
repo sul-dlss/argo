@@ -79,7 +79,7 @@ class ButtonsPresenter
     end
 
     buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if object.datastreams.include? 'contentMetadata'
-    buttons << { url: rights_item_path(id: pid), label: 'Set rights' } if object.datastreams.include? 'rightsMetadata'
+    buttons << { url: rights_item_path(id: pid), label: 'Set rights' } unless object.is_a?(Dor::AdminPolicyObject)
     if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present? # indicates there's a symphony record
       buttons << { url: refresh_metadata_item_path(id: pid), label: 'Refresh descMetadata', new_page: true, disabled: !state_service.allows_modification? }
     end
