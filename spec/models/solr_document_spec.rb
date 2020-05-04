@@ -54,23 +54,13 @@ RSpec.describe SolrDocument, type: :model do
   end
 
   describe '#versions' do
+    subject(:versions) { document.versions }
+
     let(:data) { ['1;1.0.0;Initial version', '2;1.1.0;Minor change'] }
     let(:document) { described_class.new('versions_ssm' => data) }
-    subject(:versions) { document.versions }
 
     it 'is a list of versions' do
       expect(versions).to eq data
-    end
-  end
-
-  describe '#get_versions' do
-    let(:data) { ['1;1.0.0;Initial version', '2;1.1.0;Minor change'] }
-    let(:document) { described_class.new('versions_ssm' => data) }
-    subject(:versions) { document.get_versions }
-
-    it 'builds a version hash' do
-      expect(versions['1']).to match a_hash_including(tag: '1.0.0', desc: 'Initial version')
-      expect(versions['2']).to match a_hash_including(tag: '1.1.0', desc: 'Minor change')
     end
   end
 end

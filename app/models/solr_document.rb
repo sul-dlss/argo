@@ -35,18 +35,6 @@ class SolrDocument
 
   attribute :versions, Blacklight::Types::Array, 'versions_ssm'
 
-  def get_versions
-    version_hash = {}
-    versions&.each do |rec|
-      (version, tag, desc) = rec.split(';')
-      version_hash[version] = {
-        tag: tag,
-        desc: desc
-      }
-    end
-    version_hash
-  end
-
   # These values are used to drive the display for the datastream table on the item show page
   # This method is now excluding the workflows datastream because this datastream is deprecated.
   # @return[Array<Hash>] the deserialized datastream attributes
