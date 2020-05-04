@@ -33,17 +33,18 @@ class SolrDocument
     format: 'sw_format_ssim'
   )
 
+  attribute :versions, Blacklight::Types::Array, 'versions_ssm'
+
   def get_versions
-    versions = {}
-    recs = self['versions_ssm']
-    recs&.each do |rec|
+    version_hash = {}
+    versions&.each do |rec|
       (version, tag, desc) = rec.split(';')
-      versions[version] = {
+      version_hash[version] = {
         tag: tag,
         desc: desc
       }
     end
-    versions
+    version_hash
   end
 
   # These values are used to drive the display for the datastream table on the item show page
