@@ -255,7 +255,7 @@ class ItemsController < ApplicationController
 
   def purge_object
     if dor_lifecycle(@object, 'submitted')
-      render status: :forbidden, plain: 'Cannot purge an object after it is submitted.'
+      render status: :bad_request, plain: 'Cannot purge an object after it is submitted.'
       return
     end
 
@@ -309,7 +309,7 @@ class ItemsController < ApplicationController
 
   def refresh_metadata
     if @object.catkey.blank?
-      render status: :forbidden, plain: 'object must have catkey to refresh descMetadata'
+      render status: :bad_request, plain: 'object must have catkey to refresh descMetadata'
       return
     end
 
@@ -373,7 +373,7 @@ class ItemsController < ApplicationController
       end
     end
   rescue ArgumentError
-    render status: :forbidden, plain: 'Invalid new rights setting.'
+    render status: :bad_request, plain: 'Invalid new rights setting.'
   end
 
   # set the rightsMetadata to the APO's defaultObjectRights
@@ -385,7 +385,7 @@ class ItemsController < ApplicationController
 
   def set_governing_apo
     if params[:bulk]
-      render status: :forbidden, plain: 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
+      render status: :gone, plain: 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
       return
     end
 
@@ -480,7 +480,7 @@ class ItemsController < ApplicationController
     # if this object has been submitted and doesn't have an open version, they cannot change it.
     return true if state_service.allows_modification?
 
-    render status: :forbidden, plain: 'Object cannot be modified in its current state.'
+    render status: :bad_request, plain: 'Object cannot be modified in its current state.'
     false
   end
 
