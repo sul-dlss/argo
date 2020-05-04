@@ -66,34 +66,36 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
-      it 'redirects to root and flashes a confirmation notice when successful' do
-        delete 'purge_object', params: { id: pid }
-        expect(response.code).to eq('302')
-        expect(response).to redirect_to(root_path)
-        expect(flash[:notice]).to eq("#{pid} has been purged!")
+      context 'when the object has not been submitted' do
+        before do
+          allow(controller).to receive(:dor_lifecycle).with(item, 'submitted').and_return(false)
+          allow(item).to receive(:delete)
+          allow(ActiveFedora.solr.conn).to receive(:delete_by_id)
+          allow(ActiveFedora.solr.conn).to receive(:commit)
+        end
+
+        it 'deletes the object' do
+          delete 'purge_object', params: { id: pid }
+          expect(response).to redirect_to root_path
+          expect(flash[:notice]).to eq "#{pid} has been purged!"
+          
+          expect(client).to have_received(:delete_all_workflows).with(pid: pid)
+          expect(item).to have_received(:delete)
+          expect(ActiveFedora.solr.conn).to have_received(:delete_by_id).with(pid)
+          expect(ActiveFedora.solr.conn).to have_received(:commit)
+        end
       end
 
-      it 'does not redirect to root when coming from the bulk update action' do
-        delete 'purge_object', params: { id: pid, bulk: 'true' }
-        expect(response.code).to eq('200')
-        expect(response.body).to eq('Purged.')
-        expect(response).not_to redirect_to(root_path)
-        expect(flash[:notice]).to be_nil
-      end
+      context 'when the object has been submitted' do
+        before do
+          allow(controller).to receive(:dor_lifecycle).with(item, 'submitted').and_return(true)
+        end
 
-      it 'deletes the object from fedora and solr' do
-        expect(item).to receive(:delete)
-        expect(ActiveFedora.solr.conn).to receive(:delete_by_id).with(pid)
-        expect(ActiveFedora.solr.conn).to receive(:commit)
-        delete 'purge_object', params: { id: pid }
-        expect(client).to have_received(:delete_all_workflows).with(pid: pid)
-      end
-
-      it 'blocks purge on submitted objects' do
-        expect(controller).to receive(:dor_lifecycle).with(item, 'submitted').and_return(true)
-        delete 'purge_object', params: { id: pid }
-        expect(response.code).to eq('400')
-        expect(response.body).to eq('Cannot purge an object after it is submitted.')
+        it 'blocks purge' do
+          delete 'purge_object', params: { id: pid }
+          expect(response.code).to eq('400')
+          expect(response.body).to eq('Cannot purge an object after it is submitted.')
+        end
       end
     end
   end

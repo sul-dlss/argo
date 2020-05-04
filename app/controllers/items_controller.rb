@@ -265,13 +265,7 @@ class ItemsController < ApplicationController
     ActiveFedora.solr.conn.delete_by_id(params[:id])
     ActiveFedora.solr.conn.commit
 
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render plain: 'Purged.' }
-      else
-        format.any { redirect_to '/', notice: params[:id] + ' has been purged!' }
-      end
-    end
+    redirect_to '/', notice: params[:id] + ' has been purged!'
   end
 
   def update_resource

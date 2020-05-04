@@ -32,10 +32,6 @@ function process_patch(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'PATCH', req_params, success_string, show_buttons, show_buttons);
 }
 
-function process_delete(druids, action_url, req_params, success_string) {
-	process_request(druids, action_url, 'DELETE', req_params, success_string, show_buttons, show_buttons);
-}
-
 function set_content_type(druids){
 	var params={
 		'new_content_type': document.getElementById('new_content_type').value,
@@ -44,10 +40,6 @@ function set_content_type(druids){
 		'old_resource_type': document.getElementById('old_resource_type').value
 	}
 	process_patch(druids, set_content_type_url, params, "Updated");
-}
-
-function purge(druids){
-	process_delete(druids, purge_url, null, "Purged");
 }
 
 function fetch_pids_txt() {
@@ -170,7 +162,6 @@ function get_tags() {
 	var req_url = report_model['data_url']+'&tags=true';
 	get_druids_req(log, null, druid_each_callback, null, null, req_url);
 }
-
 
 function show_buttons() {
 	$('#updates').show(400);
@@ -306,7 +297,6 @@ Blacklight.onLoad(()=>{
 		$('#tag').show(400)
 		get_tags()
 	})
-  $('#purge-button').on('click', () => $('#purge').show(400))
 
   $('#confirm-apo-defaults-button').on('click', () => {
 		fetch_druids(apply_apo_defaults)
@@ -321,11 +311,6 @@ Blacklight.onLoad(()=>{
 	$('#confirm-set-content-type-button').on('click', () => {
 		fetch_druids(set_content_type)
 		$('#content_type').hide(400)
-	})
-
-	$('#confirm-purge-button').on('click', () => {
-		fetch_druids(purge)
-		$('#purge').hide(400)
 	})
 
 	$('#confirm-add-workflow-button').on('click', () => {
