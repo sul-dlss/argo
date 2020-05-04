@@ -78,7 +78,7 @@ RSpec.describe ItemsController, type: :controller do
           delete 'purge_object', params: { id: pid }
           expect(response).to redirect_to root_path
           expect(flash[:notice]).to eq "#{pid} has been purged!"
-          
+
           expect(client).to have_received(:delete_all_workflows).with(pid: pid)
           expect(item).to have_received(:delete)
           expect(ActiveFedora.solr.conn).to have_received(:delete_by_id).with(pid)
