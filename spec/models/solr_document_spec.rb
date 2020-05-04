@@ -3,18 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe SolrDocument, type: :model do
-  describe '#datastreams' do
-    subject(:datastreams) { doc.datastreams }
+  let(:document) { described_class.new(document_attributes) }
 
-    let(:doc) do
-      described_class.new('ds_specs_ssim' => [
-                            'DC|X|text/xml|0|475|Dublin Core Record for this object',
-                            'RELS-EXT|X|application/rdf+xml|0|821|Fedora Object-to-Object Relationship Metadata',
-                            'identityMetadata|M|text/xml|0|635|Identity Metadata',
-                            'rightsMetadata|M|text/xml|4|652|Rights metadata',
-                            'descMetadata|M|text/xml|3|5988|Descriptive Metadata',
-                            'workflows|E|application/xml|0|10780|Workflows'
-                          ])
+  describe '#datastreams' do
+    subject(:datastreams) { document.datastreams }
+
+    let(:document_attributes) do
+      { 'ds_specs_ssim' => [
+        'DC|X|text/xml|0|475|Dublin Core Record for this object',
+        'RELS-EXT|X|application/rdf+xml|0|821|Fedora Object-to-Object Relationship Metadata',
+        'identityMetadata|M|text/xml|0|635|Identity Metadata',
+        'rightsMetadata|M|text/xml|4|652|Rights metadata',
+        'descMetadata|M|text/xml|3|5988|Descriptive Metadata',
+        'workflows|E|application/xml|0|10780|Workflows'
+      ] }
     end
 
     it 'excludes workflows' do
@@ -61,6 +63,48 @@ RSpec.describe SolrDocument, type: :model do
       versions = SolrDocument.new('versions_ssm' => data).get_versions
       expect(versions['1']).to match a_hash_including(tag: '1.0.0', desc: 'Initial version')
       expect(versions['2']).to match a_hash_including(tag: '1.1.0', desc: 'Minor change')
+    end
+  end
+
+  context 'when it is embargoed' do
+    let(:document_attributes) do
+      {
+        SolrDocument::FIELD_EMBARGO_STATUS => ['embargoed'],
+        SolrDocument::FIELD_EMBARGO_RELEASE_DATE => ['24/02/2259']
+      }
+    end
+
+    it 'returns embargo status' do
+      expect(document).to be_embargoed
+      expect(document.embargo_status).to eq 'embargoed'
+      expect(document.embargo_release_date).to eq '24/02/2259'
+    end
+  end
+
+  context 'when it is not embargoed' do
+    let(:document_attributes) { {} }
+
+    context 'with no field' do
+      it 'returns nil' do
+        expect(document).not_to be_embargoed
+        expect(document.embargo_status).to be_nil
+        expect(document.embargo_release_date).to be_nil
+      end
+    end
+
+    context 'with empty field' do
+      let(:document_attributes) do
+        {
+          SolrDocument::FIELD_EMBARGO_STATUS => nil,
+          SolrDocument::FIELD_EMBARGO_RELEASE_DATE => nil
+        }
+      end
+
+      it 'returns nil' do
+        expect(document).not_to be_embargoed
+        expect(document.embargo_status).to be_nil
+        expect(document.embargo_release_date).to be_nil
+      end
     end
   end
 end
