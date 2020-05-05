@@ -42,18 +42,7 @@ class SolrDocument
     format: 'sw_format_ssim'
   )
 
-  def get_versions
-    versions = {}
-    recs = self['versions_ssm']
-    recs&.each do |rec|
-      (version, tag, desc) = rec.split(';')
-      versions[version] = {
-        tag: tag,
-        desc: desc
-      }
-    end
-    versions
-  end
+  attribute :versions, Blacklight::Types::Array, 'versions_ssm'
 
   # These values are used to drive the display for the datastream table on the item show page
   # This method is now excluding the workflows datastream because this datastream is deprecated.

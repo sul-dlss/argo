@@ -200,7 +200,8 @@ class CatalogController < ApplicationController
     end
     @events = object_client.events.list
 
-    @milestones = MilestoneService.milestones_for(druid: params[:id])
+    milestones = MilestoneService.milestones_for(druid: params[:id])
+    @milestones_presenter = MilestonesPresenter.new(milestones: milestones, versions: @document.versions)
 
     @buttons_presenter = ButtonsPresenter.new(
       ability: current_ability,
