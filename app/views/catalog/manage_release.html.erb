@@ -1,8 +1,4 @@
-<div class='modal-header'>
-  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
-  <h3 class='modal-title'>Manage release</h3>
-</div>
-
-<div class='modal-body'>
-  <%= render partial: 'manage_release' %>
-</div>
+<%= render BlacklightModalComponent.new do |component| %>
+  <% component.with(:header, 'Manage release') %>
+  <% component.with(:body) { render 'manage_release' } %>
+<% end %>

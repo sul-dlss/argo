@@ -8,6 +8,6 @@ RSpec.describe 'items/embargo_form.html.erb' do
     render
     expect(rendered).to have_css '.modal-header h3.modal-title', text: 'Update embargo'
     expect(rendered).to have_css '.modal-body', text: 'stubbed_embargo_form'
-    expect(rendered).to have_css '.modal-body button', text: 'Cancel'
+    expect(rendered).to have_css '.modal-footer button', text: 'Cancel'
   end
 end
