@@ -40,10 +40,6 @@ legend {
   border: 0;
 }
 
-#bd, #bd #sidebar {
-  overflow: visible !important;
-}
-
 .header-column {
   padding-left: 2px;
   padding-right: 2px;
@@ -100,10 +96,6 @@ legend {
 
 .blacklight-wf_error_ssim {
   color: red;
-}
-
-#doc4 {
-  width: 100%;
 }
 
 .apo-register-error {
@@ -165,19 +157,6 @@ legend {
 
 .pageEntriesInfo {
   display: none;
-}
-
-#previousNextDocument {
-  padding: 0.8em;
-  border-top: 0;
-
-  .next {
-    float: none;
-  }
-
-  .disabled {
-    color: #AAA;
-  }
 }
 
 #pid_list {
