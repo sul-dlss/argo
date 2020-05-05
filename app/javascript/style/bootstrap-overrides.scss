@@ -18,7 +18,8 @@
   @include button-outline-variant($body-color, $body-color, $tea, $body-color);
 }
 
-.btn.disabled {
+// Document action items that are disabled
+.btn-primary.disabled {
   background-color: $silver;
   color: $body-color;
   opacity: 1.0;
