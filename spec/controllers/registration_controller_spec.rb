@@ -320,10 +320,4 @@ RSpec.describe RegistrationController, type: :controller do
       expect(data).to eq [Settings.apo.default_workflow_option, 'digitizationWF', 'dpgImageWF', 'goobiWF']
     end
   end
-
-  context '#autocomplete' do
-    it 'has no spec yet' do
-      skip
-    end
-  end
 end

@@ -18,10 +18,7 @@ RSpec.describe 'Bulk Descriptive Metadata Download' do
     expect(page).to have_css 'a[data-populate-druids="/catalog?action=index&' \
       'controller=catalog&pids_only=true&q=stanford"]'
   end
-  it 'Populate druids from last search' do
-    pending 'not implemented spec due to js testing restrictions'
-    fail
-  end
+
   it 'Creates a new jobs' do
     visit new_bulk_action_path
     select 'Download Descriptive Metadata'
