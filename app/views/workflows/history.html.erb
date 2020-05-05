@@ -1,8 +1,4 @@
-<div class='modal-header'>
-  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
-  <h3 class='modal-title'>Workflow history</h3>
-</div>
-
-<div class='modal-body'>
-  <%= render 'history' %>
-</div>
+<%= render BlacklightModalComponent.new do |component| %>
+  <% component.with(:header, 'Workflow history') %>
+  <% component.with(:body) { render 'history' } %>
+<% end %>

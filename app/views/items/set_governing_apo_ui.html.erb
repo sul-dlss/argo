@@ -1,7 +1,4 @@
-<div class='modal-header'>
-  <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button>
-  <h3 class="modal-title">Set governing APO</h3>
-</div>
-<div class='modal-body'>
-  <%= render partial: 'set_governing_apo_ui' %>
-</div>
+<%= render BlacklightModalComponent.new do |component| %>
+  <% component.with(:header, 'Set governing APO') %>
+  <% component.with(:body) { render 'set_governing_apo_ui' } %>
+<% end %>
