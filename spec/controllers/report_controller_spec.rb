@@ -73,6 +73,17 @@ RSpec.describe ReportController, type: :controller do
         expect(data.length > 1).to be_truthy
         expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
       end
+
+      it 'downloads valid CSV data when not on the first page' do
+        get :download, params: { fields: ' ', page: 3 }
+        expect(response).to have_http_status(:ok)
+        expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
+        data = CSV.parse(response.body)
+        expect(data.first.length).to eq(26)
+        expect(data.length > 1).to be_truthy
+        expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
+      end
+
       it 'downloads valid CSV data for specific fields' do
         get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
         expect(response).to have_http_status(:ok)
