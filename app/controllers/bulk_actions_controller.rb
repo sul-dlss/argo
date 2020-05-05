@@ -37,7 +37,7 @@ class BulkActionsController < ApplicationController
   # DELETE /bulk_actions/1
   def destroy
     @bulk_action.destroy
-    redirect_to bulk_actions_url, notice: 'Bulk action was successfully destroyed.'
+    redirect_to bulk_actions_url, notice: 'Bulk action was deleted.'
   end
 
   # GET /bulk_actions/1/file
