@@ -41,13 +41,12 @@ RSpec.describe 'Bulk actions view', js: true do
     expect(page).to have_button('Set collection', disabled: false)
     expect(page).to have_button('Apply APO defaults', disabled: false)
     expect(page).to have_button('Add a workflow', disabled: false)
-    expect(page).to have_button('Republish', disabled: false)
-    expect(page).to have_button('Tags', disabled: false)
     expect(page).to have_button('Purge', disabled: false)
 
     fill_in 'pids', with: 'druid:zt570tx3016' # just one druid
-    click_button 'Republish'
-    find('#republish_button').click
+    click_button 'Tags'
+    fill_in 'tags', with: 'druid:cx969bz4046	Project : Test project'
+    click_button 'Update tags'
 
     expect(page).to have_content 'Done!'
   end
