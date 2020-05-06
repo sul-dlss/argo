@@ -53,6 +53,7 @@ class ReportController < CatalogController
   def download
     fields = params['fields'].present? ? params.delete('fields').split(/\s*,\s*/) : nil
     params[:per_page] = 10
+    params[:page] = 1
     response.headers['Content-Type'] = 'application/octet-stream'
     response.headers['Content-Disposition'] = 'attachment; filename=report.csv'
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time

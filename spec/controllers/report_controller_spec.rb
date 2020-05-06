@@ -50,7 +50,7 @@ RSpec.describe ReportController, type: :controller do
         expect(response).to have_http_status(:ok)
         pids = JSON.parse(response.body)['druids']
         expect(pids).to be_a(Array)
-        expect(pids.length > 1).to be_truthy
+        expect(pids.length).to be > 1
         expect(pids.first).to eq('br481xz7820')
       end
     end
@@ -70,15 +70,26 @@ RSpec.describe ReportController, type: :controller do
         expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
         data = CSV.parse(response.body)
         expect(data.first.length).to eq(26)
-        expect(data.length > 1).to be_truthy
+        expect(data.length).to be > 1
         expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
       end
+
+      it 'downloads valid CSV data when not on the first page' do
+        get :download, params: { fields: ' ', page: 3 }
+        expect(response).to have_http_status(:ok)
+        expect(response.header['Content-Disposition']).to eq('attachment; filename=report.csv')
+        data = CSV.parse(response.body)
+        expect(data.first.length).to eq(26)
+        expect(data.length).to be > 1
+        expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
+      end
+
       it 'downloads valid CSV data for specific fields' do
         get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
         expect(response).to have_http_status(:ok)
         data = CSV.parse(response.body)
         expect(data.first).to eq(%w(Druid Purl Source\ Id Tags))
-        expect(data.length > 1).to be_truthy
+        expect(data.length).to be > 1
         expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
       end
     end
