@@ -32,32 +32,6 @@ dl.deflist {
   }
 }
 
-div.column {
-  float: left;
-
-  &.narrow {
-    width: 45em;
-    overflow: visible;
-
-    dl {
-      overflow: visible;
-
-      dd {
-        width: 35em;
-        overflow: visible;
-      }
-    }
-  }
-
-  &.wide {
-    width: 35em;
-
-    dd {
-      width: 25em;
-    }
-  }
-}
-
 h1, h2, h3, h4, h5, h6 {
   &.inline {
     display: inline;

@@ -2,8 +2,8 @@
   <span class="section-head-link"></span>
   History
 </h3>
-<div id="document-history-section" class="document-section">
-  <div class="wide column" style="width:45em;">
+<div id="document-history-section" class="row">
+  <div class="col-sm-6">
     <dl class="defList">
       <dt>Lifecycle</dt>
       <dt>
@@ -15,7 +15,7 @@
     </dl>
   </div>
 
-  <div class="wide column">
+  <div class="col-sm-6">
     <dl class="defList">
       <dt>Workflows</dt>
       <dd>
@@ -26,7 +26,7 @@
 
   <% if @cocina.administrative.respond_to? :releaseTags %>
     <% if @cocina.administrative.releaseTags.present? %>
-      <div>
+      <div class="col-sm-12">
         <dl>
           <dt>Releases</dt>
           <dd>
