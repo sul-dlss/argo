@@ -7,6 +7,6 @@ module DruidConcern
   # Access a SolrDocument's druid parsed from the id format of 'druid:abc123'
   # @return [String]
   def druid
-    id.split(/:/).last
+    id.delete_prefix('druid:')
   end
 end
