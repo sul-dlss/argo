@@ -23,22 +23,22 @@ module ItemsHelper
     mods_rec.from_nk_node(xml)
     # should have a title
     title = mods_rec.sw_full_title
-    messages << 'Missing title.' unless title && title.length > 0
+    messages << 'Missing title.' if title.blank?
     # should have a dateIssued
-    vals = mods_rec.term_values([:origin_info, :dateIssued])
+    vals = mods_rec.term_values(%i[origin_info dateIssued])
     if vals
-      vals = vals.concat mods_rec.term_values([:origin_info, :dateCreated]) if mods_rec.term_values([:origin_info, :dateCreated])
+      vals = vals.concat mods_rec.term_values(%i[origin_info dateCreated]) if mods_rec.term_values(%i[origin_info dateCreated])
     else
-      vals = mods_rec.term_values([:origin_info, :dateCreated])
+      vals = mods_rec.term_values(%i[origin_info dateCreated])
     end
-    messages << 'Missing dateIssued or dateCreated.' unless vals && vals.length > 0
+    messages << 'Missing dateIssued or dateCreated.' if vals.blank?
     # should have a typeOfResource
     good_formats = [
       'still image', 'mixed material', 'moving image', 'three dimensional object', 'cartographic',
       'sound recording-musical', 'sound recording-nonmusical', 'software, multimedia'
     ]
     format = mods_rec.term_values(:typeOfResource)
-    messages << 'Missing or invalid typeOfResource' unless format && format.length > 0 && good_formats.include?(format.first)
+    messages << 'Missing or invalid typeOfResource' unless format.present? && good_formats.include?(format.first)
     messages
   end
 end

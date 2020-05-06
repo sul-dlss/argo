@@ -40,7 +40,7 @@ class TrackSheet
     doc = nil
     begin
       doc = find_or_create_in_solr_by_id(druid)
-    rescue
+    rescue StandardError
       pdf.text "DRUID #{druid} not found in index", size: 15, style: :bold, align: :center
       return pdf
     end
@@ -80,7 +80,7 @@ class TrackSheet
     pdf.y -= 0.5.in
     pdf.text('Notes:')
     pdf.stroke do
-      while (pdf.y >= pdf.bounds.absolute_bottom)
+      while pdf.y >= pdf.bounds.absolute_bottom
         baseline = pdf.y - top_margin - pdf.font.height
         pdf.line 0, baseline, pdf.bounds.width, baseline
         pdf.y -= pdf.font.height * 1.5
@@ -94,17 +94,17 @@ class TrackSheet
   def doc_to_table(doc)
     table_data = []
     labels = doc['obj_label_ssim']
-    label = (labels.nil? || labels.empty?) ? '' : labels.first
+    label = labels.nil? || labels.empty? ? '' : labels.first
     label = label[0..110] + '...' if label.length > 110
     table_data.push(['Object Label:', label])
     table_data.push(['Project Name:', doc['project_tag_ssim'].to_s]) if doc['project_tag_ssim']
 
     tags = Array(doc['tag_ssim']).collect { |tag| /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP) }.compact
-    table_data.push(['Tags:', tags.join("\n")]) if tags.length > 0
+    table_data.push(['Tags:', tags.join("\n")]) unless tags.empty?
     table_data.push(['Catkey:',    Array(doc['catkey_id_ssim']).join(', ')]) if doc['catkey_id_ssim'].present?
     table_data.push(['Source ID:', Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
     table_data.push(['Barcode:',   Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
-    table_data.push(['Date Printed:', Time.now.strftime('%c')])
+    table_data.push(['Date Printed:', Time.zone.now.strftime('%c')])
     table_data
   end
 

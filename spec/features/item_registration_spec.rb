@@ -8,7 +8,7 @@ RSpec.describe 'Item registration page', js: true do
   before do
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
     allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).and_return([])
-    allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).with('druid:hv992ry2431').and_return(['dpgImageWF', 'goobiWF'])
+    allow_any_instance_of(RegistrationController).to receive(:workflows_for_apo).with('druid:hv992ry2431').and_return(%w[dpgImageWF goobiWF])
   end
 
   it 'loads page with registration form' do

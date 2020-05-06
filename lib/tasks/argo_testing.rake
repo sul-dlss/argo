@@ -4,14 +4,14 @@ require 'fileutils'
 require 'retries'
 
 def load_order_files(fedora_files)
-  data_path = File.expand_path('../../../fedora_conf/data/', __FILE__)
+  data_path = File.expand_path('../../fedora_conf/data', __dir__)
   fedora_files.delete_if { |f| f.strip.empty? }
   fedora_files.map { |f| File.join(data_path, f.strip) }
 end
 
 task(:default).clear
 desc 'run specs and rubocop (for CI)'
-task default: [:rubocop, :ci]
+task default: %i[rubocop ci]
 
 desc 'run specs after loading up solr, fedora, etc.'
 task :ci do
@@ -33,7 +33,7 @@ rescue LoadError
   end
 end
 
-if ['test', 'development'].include? Rails.env
+if %w[test development].include? Rails.env
   require 'rspec/core/rake_task'
 
   desc 'Larger integration/acceptance style tests (take several minutes to complete)'
@@ -41,7 +41,7 @@ if ['test', 'development'].include? Rails.env
     spec.pattern = 'spec/integration/**/*_spec.rb'
   end
 
-  fedora_files = File.foreach(File.join(File.expand_path('../../../fedora_conf/data/', __FILE__), 'load_order')).to_a
+  fedora_files = File.foreach(File.join(File.expand_path('../../fedora_conf/data', __dir__), 'load_order')).to_a
 
   namespace :argo do
     namespace :repo do
@@ -87,7 +87,7 @@ if ['test', 'development'].include? Rails.env
           end
         end
         puts 'Done loading repo files'
-        puts "ERROR in #{errors.size()} of #{i} files" if errors.size() > 0
+        puts "ERROR in #{errors.size} of #{i} files" unless errors.empty?
         #     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
         puts "travis_fold:end:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
       end

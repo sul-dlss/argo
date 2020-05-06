@@ -11,7 +11,7 @@ OkComputer.check_in_parallel = true
 class RubydoraCheck < OkComputer::PingCheck
   def initialize(options = {})
     @client = options[:client]
-    raise ArgumentError.new(':client not specified') unless @client
+    raise ArgumentError, ':client not specified' unless @client
 
     self.host = options[:host] || URI(@client.client.url).host
     self.port = options[:port] || URI(@client.client.url).port
@@ -21,12 +21,12 @@ class RubydoraCheck < OkComputer::PingCheck
   def check
     tcp_socket_request
     message_lines = ['Rubydora check successful<br/>', '<ul>']
-    %w(repositoryName repositoryBaseURL repositoryVersion).each do |key|
+    %w[repositoryName repositoryBaseURL repositoryVersion].each do |key|
       message_lines << "<li>#{key} - #{profile[key]}\</li>"
     end
     message_lines << '</ul>'
     mark_message message_lines.join('')
-  rescue => e
+  rescue StandardError => e
     mark_message "Error: '#{e}'"
     mark_failure
   end
@@ -34,7 +34,7 @@ class RubydoraCheck < OkComputer::PingCheck
   def profile
     @luke ||= begin
                 @client.profile
-              rescue
+              rescue StandardError
                 {}
               end
   end
@@ -80,7 +80,7 @@ OkComputer::Registry.register 'spreadsheet_url', OkComputer::HttpCheck.new(Setti
 
 # purl_url is only used for links out and we decided not to include it here
 
-OkComputer.make_optional %w(
+OkComputer.make_optional %w[
   bulk_metadata_dir
   bulk_metadata_tmp_dir
   dor_services_url
@@ -93,4 +93,4 @@ OkComputer.make_optional %w(
   stacks_thumbnail_url
   suri_url
   workflow_url
-)
+]

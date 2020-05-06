@@ -16,7 +16,7 @@ RSpec.describe BulkActionPersister do
       .with(
         bulk_action.id,
         hash_including(
-          pids: %w(a b c),
+          pids: %w[a b c],
           output_directory: Settings.bulk_metadata.directory +
             "#{bulk_action.action_type}_#{bulk_action.id}",
           manage_release: {}

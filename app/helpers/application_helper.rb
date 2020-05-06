@@ -6,7 +6,7 @@ module ApplicationHelper
   end
 
   def fedora_base
-    URI.parse(Dor::Config.fedora.safeurl.sub(/\/*$/, '/'))
+    URI.parse(Dor::Config.fedora.safeurl.sub(%r{/*$}, '/'))
   end
 
   def location_to_send_search_form

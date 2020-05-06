@@ -88,7 +88,7 @@ RSpec.describe ReportController, type: :controller do
         get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
         expect(response).to have_http_status(:ok)
         data = CSV.parse(response.body)
-        expect(data.first).to eq(%w(Druid Purl Source\ Id Tags))
+        expect(data.first).to eq(%w[Druid Purl Source\ Id Tags])
         expect(data.length).to be > 1
         expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
       end
@@ -112,7 +112,7 @@ RSpec.describe ReportController, type: :controller do
     end
 
     context 'as an admin' do
-      let(:report) { instance_double(Report, pids: %w(xb482bw3979)) }
+      let(:report) { instance_double(Report, pids: %w[xb482bw3979]) }
 
       before do
         allow(controller.current_user).to receive(:is_admin?).and_return(true)
@@ -123,7 +123,7 @@ RSpec.describe ReportController, type: :controller do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
         expect(assigns(:workflow)).to eq workflow
         expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w(xb482bw3979))
+        expect(assigns(:ids)).to eq(%w[xb482bw3979])
         expect(response).to have_http_status(:ok)
         expect(workflow_client).to have_received(:update_status)
           .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
@@ -131,7 +131,7 @@ RSpec.describe ReportController, type: :controller do
     end
 
     context 'a non admin who has access' do
-      let(:report) { instance_double(Report, pids: %w(xb482bw3979)) }
+      let(:report) { instance_double(Report, pids: %w[xb482bw3979]) }
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(true)
@@ -143,7 +143,7 @@ RSpec.describe ReportController, type: :controller do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
         expect(assigns(:workflow)).to eq workflow
         expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w(xb482bw3979))
+        expect(assigns(:ids)).to eq(%w[xb482bw3979])
         expect(response).to have_http_status(:ok)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
         expect(workflow_client).to have_received(:update_status)
@@ -152,7 +152,7 @@ RSpec.describe ReportController, type: :controller do
     end
 
     context 'a non admin who has no access' do
-      let(:report) { instance_double(Report, pids: %w(xb482bw3979)) }
+      let(:report) { instance_double(Report, pids: %w[xb482bw3979]) }
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(false)
@@ -164,7 +164,7 @@ RSpec.describe ReportController, type: :controller do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
         expect(assigns(:workflow)).to eq workflow
         expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w(xb482bw3979))
+        expect(assigns(:ids)).to eq(%w[xb482bw3979])
         expect(response).to have_http_status(:ok)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
         expect(workflow_client).not_to have_received(:update_status)

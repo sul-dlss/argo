@@ -8,7 +8,7 @@ module ApoConcern
 
   UBER_APO_ID = 'druid:hv992ry2431' # TODO: Uber-APO is hardcoded
   HYDRUS_UBER_APO_ID = 'druid:zw306xn5593' # TODO: Hydrus Uber-APO is hardcoded
-  UBER_APO_IDS = [UBER_APO_ID, HYDRUS_UBER_APO_ID]
+  UBER_APO_IDS = [UBER_APO_ID, HYDRUS_UBER_APO_ID].freeze
 
   ##
   # Access a SolrDocument's APO druid

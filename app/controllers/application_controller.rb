@@ -18,9 +18,7 @@ class ApplicationController < ActionController::Base
     super.tap do |cur_user|
       break unless cur_user
 
-      if session[:groups]
-        cur_user.set_groups_to_impersonate session[:groups]
-      end
+      cur_user.set_groups_to_impersonate session[:groups] if session[:groups]
       # TODO: Perhaps move these to the the LoginController and cache on the user model?
       cur_user.display_name = request.env['displayName']
       if request.env['eduPersonEntitlement']

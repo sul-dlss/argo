@@ -9,7 +9,7 @@ RSpec.describe 'auth/groups.html.erb' do
   end
 
   context 'as admin' do
-    let(:user) { mock_user(is_admin?: true, groups: %w(dlss dpg)) }
+    let(:user) { mock_user(is_admin?: true, groups: %w[dlss dpg]) }
 
     it 'shows groups and impersonate form' do
       render

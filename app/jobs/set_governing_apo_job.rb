@@ -47,7 +47,7 @@ class SetGoverningApoJob < GenericJob
 
     log.puts("#{Time.current} SetGoverningApoJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
-  rescue => e
+  rescue StandardError => e
     log.puts("#{Time.current} SetGoverningApoJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e} #{e.backtrace}")
     bulk_action.increment(:druid_count_fail).save
   end

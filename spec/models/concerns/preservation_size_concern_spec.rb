@@ -8,11 +8,11 @@ RSpec.describe PreservationSizeConcern do
   describe '#preservation_size' do
     context 'with data' do
       let(:document_attributes) do
-        { SolrDocument::FIELD_PRESERVATION_SIZE => 123214 }
+        { SolrDocument::FIELD_PRESERVATION_SIZE => 123_214 }
       end
 
       it 'returns size' do
-        expect(document.preservation_size).to eq 123214
+        expect(document.preservation_size).to eq 123_214
       end
     end
 

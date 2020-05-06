@@ -4,11 +4,11 @@ module DorObjectHelper
   # Metadata helpers
   def retrieve_terms(doc)
     terms = {
-      creator: { selector: %w(sw_author_tesim) },
-      title: { selector: %w(sw_display_title_tesim obj_label_tesim), combiner: lambda { |s| s.join(' -- ') } },
+      creator: { selector: %w[sw_author_tesim] },
+      title: { selector: %w[sw_display_title_tesim obj_label_tesim], combiner: ->(s) { s.join(' -- ') } },
       place: { selector: ['originInfo_place_placeTerm_tesim'] },
-      publisher: { selector: %w(originInfo_publisher_tesim) },
-      date: { selector: %w(originInfo_date_created_tesim) }
+      publisher: { selector: %w[originInfo_publisher_tesim] },
+      date: { selector: %w[originInfo_date_created_tesim] }
     }
     result = {}
     terms.each_pair do |term, finder|
@@ -42,8 +42,8 @@ module DorObjectHelper
       zone = ActiveSupport::TimeZone.new('Pacific Time (US & Canada)')
       d = datetime.is_a?(Time) ? datetime : DateTime.parse(datetime).in_time_zone(zone)
       I18n.l(d)
-    rescue
-      d = datetime.is_a?(Time) ? datetime : Time.parse(datetime.to_s)
+    rescue StandardError
+      d = datetime.is_a?(Time) ? datetime : Time.zone.parse(datetime.to_s)
       d.strftime('%Y-%m-%d %I:%M%p')
     end
   end

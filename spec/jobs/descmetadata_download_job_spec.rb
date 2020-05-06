@@ -5,7 +5,7 @@ require 'fileutils'
 
 RSpec.describe DescmetadataDownloadJob, type: :job do
   let(:download_job) { described_class.new }
-  let(:output_directory) { File.join(File.expand_path('../../../tmp/', __FILE__), 'descmetadata_download_job_spec') }
+  let(:output_directory) { File.join(File.expand_path('../../tmp', __dir__), 'descmetadata_download_job_spec') }
   let(:output_zip_filename) { File.join(output_directory, Settings.bulk_metadata.zip) }
   let(:pid_list) { ['druid:hj185vb7593', 'druid:kv840rx2720'] }
   let(:dl_job_params) do

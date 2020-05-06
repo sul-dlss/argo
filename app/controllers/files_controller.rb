@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FilesController < ApplicationController
-  before_action :load_resource, only: [:show, :preserved]
+  before_action :load_resource, only: %i[show preserved]
 
   ##
   # Brings up a modal dialog that lists all locations of the file

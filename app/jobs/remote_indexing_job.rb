@@ -27,7 +27,7 @@ class RemoteIndexingJob < GenericJob
     Argo::Indexer.reindex_pid_remotely(current_druid)
     log_buffer.puts("#{Time.current} RemoteIndexingJob: Successfully reindexed #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
-  rescue => e
+  rescue StandardError => e
     log_buffer.puts("#{Time.current} RemoteIndexingJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e}")
     bulk_action.increment(:druid_count_fail).save
   end

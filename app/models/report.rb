@@ -17,25 +17,25 @@ class Report
   REPORT_FIELDS = [
     {
       field: :druid, label: 'Druid',
-      proc: lambda { |doc| doc.druid },
+      proc: ->(doc) { doc.druid },
       sort: true, default: true, width: 100, download_default: true
     },
     {
       field: :purl, label: 'Purl',
-      proc: lambda { |doc| File.join(Settings.purl_url, doc.druid) },
-      solr_fields: %w(id),
+      proc: ->(doc) { File.join(Settings.purl_url, doc.druid) },
+      solr_fields: %w[id],
       sort: false, default: false, width: 100, download_default: true
     },
     {
       field: :title, label: 'Title',
-      proc: lambda { |doc| retrieve_terms(doc)[:title] },
-      solr_fields: %w(sw_display_title_tesim obj_label_ssim),
+      proc: ->(doc) { retrieve_terms(doc)[:title] },
+      solr_fields: %w[sw_display_title_tesim obj_label_ssim],
       sort: false, default: false, width: 100, download_default: true
     },
     {
       field: :citation, label: 'Citation',
-      proc: lambda { |doc| render_citation(doc) },
-      solr_fields: %w(sw_author_tesim sw_display_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim originInfo_publisher_tesim),
+      proc: ->(doc) { render_citation(doc) },
+      solr_fields: %w[sw_author_tesim sw_display_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim originInfo_publisher_tesim],
       sort: false, default: true, width: 100, download_default: false
     },
     {
@@ -44,7 +44,7 @@ class Report
     },
     {
       field: SolrDocument::FIELD_APO_ID, label: 'Admin Policy ID',
-      proc: lambda { |doc| doc[SolrDocument::FIELD_APO_ID].first.delete_prefix('druid:') },
+      proc: ->(doc) { doc[SolrDocument::FIELD_APO_ID].first.delete_prefix('druid:') },
       sort: false, default: false, width: 100, download_default: false
     },
     {
@@ -53,12 +53,12 @@ class Report
     },
     {
       field: SolrDocument::FIELD_COLLECTION_ID, label: 'Collection ID',
-      proc: lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| id.delete_prefix('druid:') } },
+      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| id.delete_prefix('druid:') } },
       sort: false, default: false, width: 100, download_default: false
     },
     {
       field: SolrDocument::FIELD_COLLECTION_TITLE, label: 'Collection',
-      proc: lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_TITLE].join(',') },
+      proc: ->(doc) { doc[SolrDocument::FIELD_COLLECTION_TITLE].join(',') },
       sort: false, default: false, width: 100, download_default: false
     },
     {
@@ -71,7 +71,7 @@ class Report
     },
     {
       field: :registered_earliest_dttsi, label: 'Registered',
-      proc: lambda { |doc| render_datetime(doc[:registered_earliest_dttsi]) },
+      proc: ->(doc) { render_datetime(doc[:registered_earliest_dttsi]) },
       sort: true, default: false, width: 100, download_default: false
     },
     {
@@ -100,52 +100,52 @@ class Report
     },
     {
       field: :accessioned_dttsim, label: 'Accession. Datetime',
-      proc: lambda { |doc| render_datetime(doc[:accessioned_dttsim]) },
+      proc: ->(doc) { render_datetime(doc[:accessioned_dttsim]) },
       sort: true, default: false, width: 100, download_default: false
     },
     {
       field: :published_dttsim, label: 'Pub. Date',
-      proc: lambda { |doc| render_datetime(doc[:published_dttsim]) },
+      proc: ->(doc) { render_datetime(doc[:published_dttsim]) },
       sort: true, default: true, width: 100, download_default: false
     },
     {
       field: :workflow_status_ssim, label: 'Errors',
-      proc: lambda { |doc| doc[:workflow_status_ssim].first.split('|')[2] },
+      proc: ->(doc) { doc[:workflow_status_ssim].first.split('|')[2] },
       sort: true, default: false, width: 100, download_default: false
     },
     {
       field: :file_count, label: 'Files',
-      proc: lambda { |doc| doc[:content_file_count_itsi] },
-      solr_fields: %w(content_file_count_itsi),
+      proc: ->(doc) { doc[:content_file_count_itsi] },
+      solr_fields: %w[content_file_count_itsi],
       sort: false, default: true, width: 50, download_default: false
     },
     {
       field: :shelved_file_count, label: 'Shelved Files',
-      proc: lambda { |doc| doc[:shelved_content_file_count_itsi] },
-      solr_fields: %w(shelved_content_file_count_itsi),
+      proc: ->(doc) { doc[:shelved_content_file_count_itsi] },
+      solr_fields: %w[shelved_content_file_count_itsi],
       sort: false, default: true, width: 50, download_default: false
     },
     {
       field: :resource_count, label: 'Resources',
-      proc: lambda { |doc| doc[:resource_count_itsi] },
-      solr_fields: %w(resource_count_itsi),
+      proc: ->(doc) { doc[:resource_count_itsi] },
+      solr_fields: %w[resource_count_itsi],
       sort: false, default: true, width: 50, download_default: false
     },
     {
       field: :preserved_size, label: 'Preservation Size',
-      proc: lambda { |doc| doc.preservation_size },
+      proc: ->(doc) { doc.preservation_size },
       solr_fields: [SolrDocument::FIELD_PRESERVATION_SIZE],
       sort: false, default: true, width: 50, download_default: false
     },
     {
       field: :dissertation_id, label: 'Dissertation ID',
-      proc: lambda { |doc| doc[:identifier_ssim].filter { |id| id.include?('dissertationid') }.map { |id| id.split(/:/).last } },
-      solr_fields: %w(identifier_ssim),
+      proc: ->(doc) { doc[:identifier_ssim].filter { |id| id.include?('dissertationid') }.map { |id| id.split(/:/).last } },
+      solr_fields: %w[identifier_ssim],
       sort: false, default: true, width: 50, download_default: false
     }
   ].freeze
 
-  COLUMN_MODEL = REPORT_FIELDS.collect { |spec|
+  COLUMN_MODEL = REPORT_FIELDS.collect do |spec|
     {
       'name' => spec[:field],
       'jsonmap' => spec[:field],
@@ -155,7 +155,7 @@ class Report
       'sortable' => spec[:sort],
       'hidden' => (!spec[:default])
     }
-  }
+  end
 
   attr_reader :response, :document_list, :num_found, :params, :current_user
 
@@ -191,7 +191,7 @@ class Report
     params[:per_page] = 100
     (@response, @document_list) = search_results(params)
     pids = []
-    while @document_list.length > 0
+    until @document_list.empty?
       report_data.each do |rec|
         if opts[:source_id].present?
           pids << rec[:druid] + "\t" + rec[:source_id_ssim]
@@ -225,7 +225,11 @@ class Report
     result = []
     docs.each_with_index do |doc, index|
       row = Hash[fields.collect do |spec|
-        val = spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s] rescue nil
+        val = begin
+                spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s]
+              rescue StandardError
+                nil
+              end
         val = val.join(';') if val.is_a?(Array)
         [spec[:field].to_sym, val.to_s]
       end]

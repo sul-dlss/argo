@@ -11,7 +11,7 @@ module RegistrationHelper
     result = Dor::SearchService.query(
       q,
       defType: 'lucene',
-      rows: 99999,
+      rows: 99_999,
       fl: 'id,tag_ssim,sw_display_title_tesim',
       fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
     )['response']['docs']
@@ -26,7 +26,7 @@ module RegistrationHelper
 
   def valid_object_types
     [
-      %w(Item item),
+      %w[Item item],
       ['Workflow Definition', 'workflow']
     ]
   end

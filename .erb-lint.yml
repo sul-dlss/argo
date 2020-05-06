@@ -43,6 +43,8 @@ linters:
       # Disable the following because they are noisy
       Style/FrozenStringLiteralComment:
         Enabled: false
+      Style/WordArray:
+        Enabled: false
       Layout/InitialIndentation:
         Enabled: false
       Layout/TrailingEmptyLines:

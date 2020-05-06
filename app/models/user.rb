@@ -6,9 +6,9 @@ class User < ApplicationRecord
   has_many :bulk_actions
 
   # The code base requires Arrays for these constants, for intersection ops.
-  ADMIN_GROUPS = %w(workgroup:sdr:administrator-role).freeze
-  MANAGER_GROUPS = %w(workgroup:sdr:manager-role).freeze
-  VIEWER_GROUPS = %w(workgroup:sdr:viewer-role).freeze
+  ADMIN_GROUPS = %w[workgroup:sdr:administrator-role].freeze
+  MANAGER_GROUPS = %w[workgroup:sdr:manager-role].freeze
+  VIEWER_GROUPS = %w[workgroup:sdr:viewer-role].freeze
 
   # TODO: redefine `KNOWN_ROLES` using Dor::Governable.
   # The KNOWN_ROLES should be consistent with Dor::Governable so that the
@@ -18,7 +18,7 @@ class User < ApplicationRecord
   # Dor::Governable::KNOWN_ROLES
 
   # @return [Array<String>] list of roles the user can adopt
-  KNOWN_ROLES = %w(
+  KNOWN_ROLES = %w[
     dor-apo-creator
     dor-apo-depositor
     dor-apo-manager
@@ -27,7 +27,7 @@ class User < ApplicationRecord
     dor-apo-viewer
     sdr-administrator
     sdr-viewer
-  ).freeze
+  ].freeze
 
   devise :remote_user_authenticatable
 
@@ -62,7 +62,7 @@ class User < ApplicationRecord
 
     pid_roles = Set.new
     # Determine whether user has 'dor-apo-manager' role
-    solr_apo_roles = %w(apo_role_group_manager_ssim apo_role_person_manager_ssim)
+    solr_apo_roles = %w[apo_role_group_manager_ssim apo_role_person_manager_ssim]
     pid_roles << 'dor-apo-manager' if solr_apo_roles.any? { |r| solr_role_allowed?(obj_doc, r) }
     # Check additional known roles
     KNOWN_ROLES.each do |role|

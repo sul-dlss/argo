@@ -12,7 +12,7 @@ module CsvConcern
     @params[:page] = 1
     CSV.generate(force_quotes: true) do |csv|
       csv << @fields.map { |f| f[:label] } # header
-      while @document_list.length > 0
+      until @document_list.empty?
         report_data.each do |record|
           csv << @fields.map { |f| record[f[:field]].to_s }
         end

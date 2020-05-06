@@ -18,7 +18,7 @@ class DescmetadataDownloadJob < GenericJob
       #  Fail with an error message if the calling BulkAction doesn't exist
       if bulk_action.nil?
         log.puts("argo.bulk_metadata.bulk_log_bulk_action_not_found (looking for #{bulk_action_id})")
-        log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
+        log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.zone.now.strftime(TIME_FORMAT)}")
       else
         start_log(log, bulk_action.user_id, '', bulk_action.description)
         update_druid_count
@@ -31,7 +31,7 @@ class DescmetadataDownloadJob < GenericJob
           zip_file.close
         end
       end
-      log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
+      log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.zone.now.strftime(TIME_FORMAT)}")
     end
   end
 
@@ -80,7 +80,7 @@ class DescmetadataDownloadJob < GenericJob
       log.puts "argo.bulk_metadata.bulk_log_timeout #{druid}"
       return nil
     end
-    return dor_object
+    dor_object
   end
 
   def write_to_zip(value, entry_name, zip_file)
@@ -94,10 +94,10 @@ class DescmetadataDownloadJob < GenericJob
   # @param [String]  filename  An optional input filename
   # @param [String]  note      An optional comment that describes this job.
   def start_log(log_file, username, filename = '', note = '')
-    log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.zone.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_user #{username}")
-    log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}") if filename && filename.length > 0
-    log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if note && note.length > 0
+    log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}") if filename.present?
+    log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if note.present?
     log_file.flush # record start in case of crash
   end
 
