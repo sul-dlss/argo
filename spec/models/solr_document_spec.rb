@@ -117,6 +117,14 @@ RSpec.describe SolrDocument, type: :model do
     end
   end
 
+  describe '#druid' do
+    let(:document_attributes) { { id: 'druid:abc123456' } }
+
+    it 'returns the druid' do
+      expect(document.druid).to eq 'abc123456'
+    end
+  end
+
   context 'when it is embargoed' do
     let(:document_attributes) do
       {
