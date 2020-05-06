@@ -25,7 +25,7 @@ RSpec.describe FilesController, type: :controller do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
         allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-        allow(Time).to receive(:now).and_return(Time.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
+        allow(Time).to receive(:now).and_return(Time.zone.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
       end
 
       it 'has dor-services-app fetch a file from the workspace' do

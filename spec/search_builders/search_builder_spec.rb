@@ -68,7 +68,7 @@ RSpec.describe SearchBuilder do
 
       subject.add_facet_paging_to_solr(solr_params)
 
-      expect(solr_params).to include "f.#{facet}.facet.limit": 10000,
+      expect(solr_params).to include "f.#{facet}.facet.limit": 10_000,
                                      "f.#{facet}.facet.offset": 0
     end
   end

@@ -4,7 +4,7 @@
 # in dor-services:
 #  https://github.com/sul-dlss/dor-services/pull/360
 class ApoForm < BaseForm
-  DEFAULT_MANAGER_WORKGROUPS = %w(developer service-manager metadata-staff).freeze
+  DEFAULT_MANAGER_WORKGROUPS = %w[developer service-manager metadata-staff].freeze
 
   attr_reader :default_collection_pid
 
@@ -198,7 +198,7 @@ class ApoForm < BaseForm
 
   def param_cleanup(params)
     params[:title]&.strip!
-    [:managers, :viewers].each do |role_param_sym|
+    %i[managers viewers].each do |role_param_sym|
       params[role_param_sym] = params[role_param_sym].tr("\n,", ' ') if params[role_param_sym]
     end
     params

@@ -202,11 +202,11 @@ RSpec.describe User, type: :model do
     end
     let(:solr_doc) do
       {
-        'apo_role_sdr-administrator_ssim' => %w(workgroup:dlss:groupA workgroup:dlss:groupB),
-        'apo_role_sdr-viewer_ssim' => %w(workgroup:dlss:groupE workgroup:dlss:groupF),
-        'apo_role_dor-apo-manager_ssim' => %w(workgroup:dlss:groupC workgroup:dlss:groupD),
-        'apo_role_person_sdr-viewer_ssim' => %w(sunetid:tcramer),
-        'apo_role_group_manager_ssim' => %w(workgroup:dlss:groupR)
+        'apo_role_sdr-administrator_ssim' => %w[workgroup:dlss:groupA workgroup:dlss:groupB],
+        'apo_role_sdr-viewer_ssim' => %w[workgroup:dlss:groupE workgroup:dlss:groupF],
+        'apo_role_dor-apo-manager_ssim' => %w[workgroup:dlss:groupC workgroup:dlss:groupD],
+        'apo_role_person_sdr-viewer_ssim' => %w[sunetid:tcramer],
+        'apo_role_group_manager_ssim' => %w[workgroup:dlss:groupR]
       }
     end
 
@@ -225,8 +225,8 @@ RSpec.describe User, type: :model do
       end
     end
     it 'builds a set of roles from groups' do
-      user_groups = %w(workgroup:dlss:groupF workgroup:dlss:groupA)
-      user_roles = %w(sdr-administrator sdr-viewer)
+      user_groups = %w[workgroup:dlss:groupF workgroup:dlss:groupA]
+      user_roles = %w[sdr-administrator sdr-viewer]
       expect(subject).to receive(:groups).and_return(user_groups).at_least(:once)
       expect(subject.roles(druid)).to eq(user_roles)
     end
@@ -260,7 +260,7 @@ RSpec.describe User, type: :model do
     let(:user) { build(:user, sunetid: 'asdf', webauth_groups: webauth_groups) }
 
     context 'specified' do
-      let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
+      let(:webauth_groups) { %w[dlss:testgroup1 dlss:testgroup2 dlss:testgroup3] }
 
       it 'returns the groups by webauth' do
         expected_groups = ['sunetid:asdf'] + webauth_groups.map { |g| "workgroup:#{g}" }
@@ -270,7 +270,7 @@ RSpec.describe User, type: :model do
 
     context 'when impersonating' do
       before do
-        user.set_groups_to_impersonate(%w(workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2))
+        user.set_groups_to_impersonate(%w[workgroup:dlss:impersonatedgroup1 workgroup:dlss:impersonatedgroup2])
       end
 
       context 'and the impersonating user is an admin' do
@@ -311,7 +311,7 @@ RSpec.describe User, type: :model do
         user.webauth_groups = webauth_groups
       end
 
-      let(:webauth_groups) { %w(dlss:testgroup1 dlss:testgroup2 dlss:testgroup3) }
+      let(:webauth_groups) { %w[dlss:testgroup1 dlss:testgroup2 dlss:testgroup3] }
 
       it 'returns the groups by webauth' do
         expected_groups = ['sunetid:asdf'] + webauth_groups.map { |g| "workgroup:#{g}" }
@@ -325,7 +325,7 @@ RSpec.describe User, type: :model do
       subject.instance_variable_get(:@groups_to_impersonate)
     end
     before do
-      subject.instance_variable_set(:@groups_to_impersonate, %w(a b))
+      subject.instance_variable_set(:@groups_to_impersonate, %w[a b])
     end
 
     it 'resets the role_cache' do

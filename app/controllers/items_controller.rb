@@ -2,25 +2,25 @@
 
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
-  before_action :create_obj, except: [
-    :purl_preview,
-    :open_bulk,
-    :register
+  before_action :create_obj, except: %i[
+    purl_preview
+    open_bulk
+    register
   ]
-  before_action :authorize_manage!, only: [
-    :add_collection, :set_collection, :remove_collection,
-    :datastream_update,
-    :mods,
-    :purge_object,
-    :update_resource,
-    :source_id,
-    :catkey,
-    :tags,
-    :tags_bulk,
-    :update_rights,
-    :update_attributes,
-    :embargo_update,
-    :embargo_form
+  before_action :authorize_manage!, only: %i[
+    add_collection set_collection remove_collection
+    datastream_update
+    mods
+    purge_object
+    update_resource
+    source_id
+    catkey
+    tags
+    tags_bulk
+    update_rights
+    update_attributes
+    embargo_update
+    embargo_form
   ]
 
   before_action :authorize_manage_desc_metadata!, only: [
@@ -29,14 +29,14 @@ class ItemsController < ApplicationController
   before_action :authorize_set_governing_apo!, only: [
     :set_governing_apo
   ]
-  before_action :enforce_versioning, only: [
-    :add_collection, :set_collection, :remove_collection,
-    :source_id, :set_source_id,
-    :catkey,
-    :refresh_metadata,
-    :set_rights,
-    :set_governing_apo,
-    :update_rights
+  before_action :enforce_versioning, only: %i[
+    add_collection set_collection remove_collection
+    source_id set_source_id
+    catkey
+    refresh_metadata
+    set_rights
+    set_governing_apo
+    update_rights
   ]
 
   def purl_preview
@@ -118,7 +118,7 @@ class ItemsController < ApplicationController
   end
 
   def embargo_update
-    fail ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
+    raise ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
 
     object_client = Dor::Services::Client.object(@object.pid)
     object_client.embargo.update(embargo_date: params[:embargo_date], requesting_user: current_user.to_s)
@@ -134,14 +134,14 @@ class ItemsController < ApplicationController
   # @option params [String] `:dsid` the identifier for the datastream, e.g., `identityMetadata`
   # @option params [String] `:id` the druid to modify
   def datastream_update
-    fail ArgumentError, 'Missing content' unless params[:content].present?
-    fail ArgumentError, 'Missing datastream identifier' unless params[:dsid].present?
+    raise ArgumentError, 'Missing content' unless params[:content].present?
+    raise ArgumentError, 'Missing datastream identifier' unless params[:dsid].present?
 
     begin
       # check that the content is well-formed xml
-      Nokogiri::XML(params[:content]) { |config| config.strict }
+      Nokogiri::XML(params[:content], &:strict)
     rescue Nokogiri::XML::SyntaxError
-      fail ArgumentError, 'XML is not well formed!'
+      raise ArgumentError, 'XML is not well formed!'
     end
     @object.datastreams[params[:dsid]].content = params[:content] # set the XML to be verbatim as posted
     save_and_reindex
@@ -152,8 +152,8 @@ class ItemsController < ApplicationController
   end
 
   def update_attributes
-    [:publish, :shelve, :preserve].each do |k|
-      params[k] = (params[k].nil? || params[k] != 'on') ? 'no' : 'yes'
+    %i[publish shelve preserve].each do |k|
+      params[k] = params[k].nil? || params[k] != 'on' ? 'no' : 'yes'
     end
     @object.contentMetadata.update_attributes(
       params[:file_name],
@@ -287,7 +287,7 @@ class ItemsController < ApplicationController
 
   def discoverable
     messages = mods_discoverable @object.descMetadata.ng_xml
-    if messages.length == 0
+    if messages.empty?
       render status: :ok, plain: 'Discoverable.'
     else
       render status: :internal_server_error, plain: messages.join(' ')
@@ -300,7 +300,7 @@ class ItemsController < ApplicationController
 
   def schema_validation
     errors = schema_validate @object.descMetadata.ng_xml
-    if errors.length == 0
+    if errors.empty?
       render status: :ok, plain: 'Valid.'
     else
       render status: :internal_server_error, plain: errors.join('<br>')[0...490]
@@ -330,7 +330,7 @@ class ItemsController < ApplicationController
   end
 
   def scrubbed_content_ng_utf8(content)
-    %w(amp lt gt quot).each do |char|
+    %w[amp lt gt quot].each do |char|
       content = content.gsub('&amp;' + char + ';', '&' + char + ';')
     end
     content = content.gsub(/&amp;(\#[0-9]+;)/, '&\1')

@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
 class ApoController < ApplicationController
-  before_action :create_obj, except: [
-    :new,
-    :create,
-    :spreadsheet_template
+  before_action :create_obj, except: %i[
+    new
+    create
+    spreadsheet_template
   ]
-  after_action :save_and_index, only: [
-    :add_roleplayer,
-    :add_collection, :delete_collection,
-    :update_copyright, :update_creative_commons,
-    :update_default_object_rights, :update_desc_metadata,
-    :update_title, :update_use
+  after_action :save_and_index, only: %i[
+    add_roleplayer
+    add_collection delete_collection
+    update_copyright update_creative_commons
+    update_default_object_rights update_desc_metadata
+    update_title update_use
   ]
 
-  before_action :authorize, except: [
-    :edit,
-    :new,
-    :create,
-    :spreadsheet_template
+  before_action :authorize, except: %i[
+    edit
+    new
+    create
+    spreadsheet_template
   ]
 
   def edit
@@ -49,9 +49,7 @@ class ApoController < ApplicationController
     notice = "APO #{@form.model.pid} created."
 
     # register a collection and make it the default if requested
-    if @form.default_collection_pid
-      notice += " Collection #{@form.default_collection_pid} created."
-    end
+    notice += " Collection #{@form.default_collection_pid} created." if @form.default_collection_pid
 
     redirect_to solr_document_path(@form.model.pid), notice: notice
   end

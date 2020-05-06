@@ -34,19 +34,17 @@ class Ability
     can :manage, :all if current_user.is_admin?
     cannot :impersonate, User unless current_user.is_webauth_admin?
 
-    can [:manage_item, :manage_desc_metadata, :manage_governing_apo, :view_content, :view_metadata], ActiveFedora::Base if current_user.is_manager?
+    can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], ActiveFedora::Base if current_user.is_manager?
     can :create, Dor::AdminPolicyObject if current_user.is_manager?
 
-    can [:view_metadata, :view_content], ActiveFedora::Base if current_user.is_viewer?
+    can %i[view_metadata view_content], ActiveFedora::Base if current_user.is_viewer?
 
     can :manage_item, Dor::AdminPolicyObject do |dor_item|
       can_manage_items? current_user.roles(dor_item.pid)
     end
 
     can :manage_item, ActiveFedora::Base do |dor_item|
-      if dor_item.admin_policy_object
-        can_manage_items? current_user.roles(dor_item.admin_policy_object.pid)
-      end
+      can_manage_items? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
     end
 
     can :manage_desc_metadata, Dor::AdminPolicyObject do |dor_item|
@@ -54,9 +52,7 @@ class Ability
     end
 
     can :manage_desc_metadata, ActiveFedora::Base do |dor_item|
-      if dor_item.admin_policy_object
-        can_edit_desc_metadata? current_user.roles(dor_item.admin_policy_object.pid)
-      end
+      can_edit_desc_metadata? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
     end
 
     can :manage_governing_apo, ActiveFedora::Base do |dor_item, new_apo_id|
@@ -69,15 +65,11 @@ class Ability
     end
 
     can :view_content, ActiveFedora::Base do |dor_item|
-      if dor_item.admin_policy_object
-        can_view? current_user.roles(dor_item.admin_policy_object.pid)
-      end
+      can_view? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
     end
 
     can :view_metadata, ActiveFedora::Base do |dor_item|
-      if dor_item.admin_policy_object
-        can_view? current_user.roles(dor_item.admin_policy_object.pid)
-      end
+      can_view? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
     end
   end
 

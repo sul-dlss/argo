@@ -11,12 +11,12 @@ module Constants
     [human_readable, type_code == 'none' ? 'citation-only' : type_code]
   end
 
-  CONTENT_TYPES = %w(image book file map media document 3d).freeze
+  CONTENT_TYPES = %w[image book file map media document 3d].freeze
 
-  RESOURCE_TYPES = %w(image page file audio video document 3d).freeze
+  RESOURCE_TYPES = %w[image page file audio video document 3d].freeze
 
   RELEASE_TARGETS = [
-    %w(Searchworks Searchworks),
-    %w(Earthworks Earthworks)
+    %w[Searchworks Searchworks],
+    %w[Earthworks Earthworks]
   ].freeze
 end

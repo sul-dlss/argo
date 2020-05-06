@@ -21,7 +21,7 @@ RSpec.describe ApplicationController, type: :controller do
     it 'is called in development mode' do
       allow(Rails.env).to receive(:development?).and_return(true)
       called = false
-      block = lambda { called = true }
+      block = -> { called = true }
       subject.send(:development_only!, &block)
       expect(called).to be true
     end
@@ -29,7 +29,7 @@ RSpec.describe ApplicationController, type: :controller do
     it 'is called when DOR_SERVICES_DEBUG_MODE is set' do
       expect(ENV).to receive(:[]).with('DOR_SERVICES_DEBUG_MODE').and_return('true')
       called = false
-      block = lambda { called = true }
+      block = -> { called = true }
       subject.send(:development_only!, &block)
       expect(called).to be true
     end
@@ -39,7 +39,7 @@ RSpec.describe ApplicationController, type: :controller do
       expect(ENV).to receive(:[]).with('DOR_SERVICES_DEBUG_MODE').and_return(nil)
       expect(subject).to receive(:render)
       called = false
-      block = lambda { called = true }
+      block = -> { called = true }
       subject.send(:development_only!, &block)
       expect(called).to be false
     end

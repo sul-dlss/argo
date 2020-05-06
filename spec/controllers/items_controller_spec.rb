@@ -7,8 +7,8 @@ RSpec.describe ItemsController, type: :controller do
     allow_any_instance_of(User).to receive(:roles).and_return([])
     sign_in user
     allow(Dor).to receive(:find).with(pid).and_return(item)
-    idmd = double()
-    apo  = double()
+    idmd = double
+    apo  = double
     idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = instance_double(Nokogiri::XML::Document, to_xml: idmd_ds_content)
     allow(idmd).to receive(:"content_will_change!")
@@ -486,7 +486,7 @@ RSpec.describe ItemsController, type: :controller do
       it 'returns the mods xml for a GET' do
         @request.env['HTTP_ACCEPT'] = 'application/xml'
         xml = '<somexml>stuff</somexml>'
-        descmd = double()
+        descmd = double
         expect(descmd).to receive(:content).and_return(xml)
         expect(item).to receive(:descMetadata).and_return(descmd)
         get 'mods', params: { id: pid }

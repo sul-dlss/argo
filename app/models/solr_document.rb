@@ -65,7 +65,7 @@ class SolrDocument
   # @return[Array<Hash>] the deserialized datastream attributes
   def datastreams
     specs = fetch('ds_specs_ssim', []).map do |spec_string|
-      Hash[[:dsid, :control_group, :mime_type, :version, :size, :label].zip(spec_string.split(/\|/))]
+      Hash[%i[dsid control_group mime_type version size label].zip(spec_string.split(/\|/))]
     end
     specs.filter { |spec| spec[:dsid] != 'workflows' }
   end

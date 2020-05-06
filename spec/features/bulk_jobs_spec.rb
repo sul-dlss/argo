@@ -22,7 +22,7 @@ RSpec.describe 'Bulk jobs view' do
   end
 
   context 'on the form for creating a new bulk job', js: true do
-    let(:bulk_job_data_path) { File.expand_path('../../fixtures/crowdsourcing_bridget_1.xml', __FILE__) }
+    let(:bulk_job_data_path) { File.expand_path('../fixtures/crowdsourcing_bridget_1.xml', __dir__) }
 
     before do
       stub_request(:post, Settings.normalizer_url)

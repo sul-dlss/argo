@@ -7,7 +7,7 @@ RSpec.describe ProblematicDruidFinder do
 
   let(:ability) { instance_double(Ability, can?: can_manage) }
   let(:can_manage) { true }
-  let(:druids) { %w(druid:one123 druid:two234 druid:thr345) }
+  let(:druids) { %w[druid:one123 druid:two234 druid:thr345] }
 
   describe '.find' do
     before do
@@ -58,7 +58,7 @@ RSpec.describe ProblematicDruidFinder do
       end
 
       it 'returns an array with a non-empty array and an empty array (in that order)' do
-        expect(finder.find).to eq([%w(druid:one123 druid:thr345), []])
+        expect(finder.find).to eq([%w[druid:one123 druid:thr345], []])
       end
     end
 
@@ -70,7 +70,7 @@ RSpec.describe ProblematicDruidFinder do
       end
 
       it 'returns an array with an empty array and a non-empty array (in that order)' do
-        expect(finder.find).to eq([[], %w(druid:one123 druid:two234 druid:thr345)])
+        expect(finder.find).to eq([[], %w[druid:one123 druid:two234 druid:thr345]])
       end
     end
 
@@ -84,7 +84,7 @@ RSpec.describe ProblematicDruidFinder do
       end
 
       it 'returns an array with two non-empty arrays' do
-        expect(finder.find).to eq([%w(druid:two234), %w(druid:one123 druid:thr345)])
+        expect(finder.find).to eq([%w[druid:two234], %w[druid:one123 druid:thr345]])
       end
     end
   end

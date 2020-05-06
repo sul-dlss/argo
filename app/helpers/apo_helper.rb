@@ -24,7 +24,7 @@ module ApoHelper
 
   def agreement_options
     q = 'objectType_ssim:agreement '
-    result = Dor::SearchService.query(q, rows: 99999, fl: 'id,tag_ssim,sw_display_title_tesim')['response']['docs']
+    result = Dor::SearchService.query(q, rows: 99_999, fl: 'id,tag_ssim,sw_display_title_tesim')['response']['docs']
     result.sort! do |a, b|
       a['sw_display_title_tesim'].to_s <=> b['sw_display_title_tesim'].to_s
     end

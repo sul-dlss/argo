@@ -59,7 +59,7 @@ class UserLog
         split_line = log_line.split(/\s+/, 2)
 
         # A few of the log messages are considered 'too technical' and will not be displayed
-        next unless split_line.length > 0 && USER_MESSAGES.include?(split_line[0])
+        next unless !split_line.empty? && USER_MESSAGES.include?(split_line[0])
 
         # Ignore lines that don't conform to the format
         current_hash = {}
@@ -106,9 +106,7 @@ class UserLog
       user_messages.each do |message|
         key = message.keys[0]
 
-        if USER_MESSAGES.include?(key)
-          csv_file.puts("\"#{I18n.t(key)}\",\"#{message[key]}\"")
-        end
+        csv_file.puts("\"#{I18n.t(key)}\",\"#{message[key]}\"") if USER_MESSAGES.include?(key)
       end
     end
   end

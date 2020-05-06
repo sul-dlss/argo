@@ -6,7 +6,7 @@ end
 
 # @return [#keys]
 def workgroups_facet(apo_field = nil)
-  apo_field = apo_field_default() if apo_field.nil?
+  apo_field = apo_field_default if apo_field.nil?
   resp = Dor::SearchService.query('objectType_ssim:adminPolicy', rows: 0,
                                                                  'facet.field': apo_field,
                                                                  'facet.prefix': 'workgroup:',
@@ -18,21 +18,21 @@ end
 
 desc 'Get application version'
 task :app_version do
-  puts File.read(File.expand_path('../../../VERSION', __FILE__)).strip
+  puts File.read(File.expand_path('../../VERSION', __dir__)).strip
 end
 
 namespace :argo do
   desc "Bump Argo's version number before release"
   task :bump_version, [:level] do |t, args|
-    levels = %w(major minor patch rc)
-    version_file = File.expand_path('../../../VERSION', __FILE__)
+    levels = %w[major minor patch rc]
+    version_file = File.expand_path('../../VERSION', __dir__)
     version = File.read(version_file)
     version = version.split(/\./)
     index = levels.index(args[:level] || (version.length == 4 ? 'rc' : 'patch'))
     version.pop if version.length == 4 && index < 3
     if index == 3
       rc = version.length == 4 ? version.pop : 'rc0'
-      rc.sub!(/^rc(\d+)$/) { |m| "rc#{$1.to_i + 1}" }
+      rc.sub!(/^rc(\d+)$/) { |m| "rc#{Regexp.last_match(1).to_i + 1}" }
       version << rc
       puts version.inspect
     else
@@ -41,12 +41,12 @@ namespace :argo do
     end
     version = version.join('.')
     File.open(version_file, 'w') { |f| f.write(version) }
-    $stderr.puts "Version bumped to #{version}"
+    warn "Version bumped to #{version}"
   end
 
-  desc "List APO workgroups from Solr (#{apo_field_default()})"
+  desc "List APO workgroups from Solr (#{apo_field_default})"
   task workgroups: :environment do
-    facet = workgroups_facet()
+    facet = workgroups_facet
     puts "#{facet.length} Workgroups:\n#{facet.keys.join(%(\n))}"
   end
 end # :argo

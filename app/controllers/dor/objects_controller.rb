@@ -5,10 +5,6 @@ class Dor::ObjectsController < ApplicationController
   before_action :munge_parameters
 
   def create
-    if params[:collection] && params[:collection].length == 0
-      params.delete :collection
-    end
-
     begin
       response = Dor::Services::Client.objects.register(params: cocina_model)
     rescue Cocina::Models::ValidationError => e
@@ -85,7 +81,7 @@ class Dor::ObjectsController < ApplicationController
     model_params[:access] = access(params[:rights]) if params[:rights] != 'default'
 
     structural = {}
-    structural[:isMemberOf] = params[:collection] if params[:collection]
+    structural[:isMemberOf] = params[:collection] if params[:collection].present?
     case content_type_tag
     when 'Book (ltr)'
       structural[:hasMemberOrders] = [{ viewingDirection: 'left-to-right' }]
@@ -94,9 +90,7 @@ class Dor::ObjectsController < ApplicationController
     end
     model_params[:structural] = structural
     project = params[:tag].find { |t| t.start_with?('Project : ') }
-    if project
-      model_params[:administrative][:partOfProject] = project.sub(/^Project : /, '')
-    end
+    model_params[:administrative][:partOfProject] = project.sub(/^Project : /, '') if project
 
     Cocina::Models::RequestDRO.new(model_params)
   end

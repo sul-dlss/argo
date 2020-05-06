@@ -29,7 +29,7 @@ class ModsulatorJob < ActiveJob::Base
     user.set_groups_to_impersonate(groups)
     ability = Ability.new(user)
 
-    File.open(log_filename, 'a') { |log|
+    File.open(log_filename, 'a') do |log|
       start_log(log, user, original_filename, note)
 
       # If a modsulator request fails, the job will fail and automatically be
@@ -42,7 +42,7 @@ class ModsulatorJob < ActiveJob::Base
 
       if response_xml.nil?
         log.puts('argo.bulk_metadata.bulk_log_error_exception Got no response from server')
-        log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
+        log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.zone.now.strftime(TIME_FORMAT)}")
         return nil
       end
 
@@ -54,8 +54,8 @@ class ModsulatorJob < ActiveJob::Base
         update_metadata(apo_id, response_xml, original_filename, ability, log) # Load into DOR
       end
 
-      log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.now.strftime(TIME_FORMAT)}")
-    }
+      log.puts("argo.bulk_metadata.bulk_log_job_complete #{Time.zone.now.strftime(TIME_FORMAT)}")
+    end
     # Remove the (temporary) uploaded file only if everything worked. Removing upon catching an exception causes
     # subsequent job attempts to fail.
     FileUtils.rm(uploaded_filename, force: true)
@@ -132,10 +132,10 @@ class ModsulatorJob < ActiveJob::Base
   # @param [String] filename The name of this job's input file.
   # @param [String] note An optional comment that describes this job.
   def start_log(log_file, user, filename, note = '')
-    log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("argo.bulk_metadata.bulk_log_job_start #{Time.zone.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_user #{user.sunetid}")
     log_file.puts("argo.bulk_metadata.bulk_log_input_file #{filename}")
-    log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if note && note.length > 0
+    log_file.puts("argo.bulk_metadata.bulk_log_note #{note}") if note.present?
     log_file.flush # record start in case of crash
   end
 
@@ -149,7 +149,7 @@ class ModsulatorJob < ActiveJob::Base
     return if xml.nil?
 
     File.open(output_filename, 'w') { |f| f.write(xml) }
-    log_file.puts("argo.bulk_metadata.bulk_log_xml_timestamp #{Time.now.strftime(TIME_FORMAT)}")
+    log_file.puts("argo.bulk_metadata.bulk_log_xml_timestamp #{Time.zone.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_xml_filename #{File.basename(output_filename)}")
     log_file.puts("argo.bulk_metadata.bulk_log_record_count #{xml.scan('<xmlDoc id').size}")
   end

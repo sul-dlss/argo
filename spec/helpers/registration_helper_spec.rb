@@ -12,7 +12,7 @@ RSpec.describe RegistrationHelper do
       expect(Dor::SearchService).to receive(:query).with(
         q,
         defType: 'lucene',
-        rows: 99999,
+        rows: 99_999,
         fl: 'id,tag_ssim,sw_display_title_tesim',
         fq: ['objectType_ssim:adminPolicy', '!tag_ssim:"Project : Hydrus"']
       ).and_return('response' => { 'docs' => [] })
@@ -29,7 +29,7 @@ RSpec.describe RegistrationHelper do
       expect(Dor::SearchService).to receive(:query).and_return('response' => { 'docs' => result_rows })
 
       apos = apo_list(perm_keys)
-      expect(apos).to eq [['y', '2'], ['x', '3'], ['z', '1']]
+      expect(apos).to eq [%w[y 2], %w[x 3], %w[z 1]]
     end
   end
 

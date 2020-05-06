@@ -57,13 +57,13 @@ RSpec.describe ChecksumReportJob, type: :job do
 
         it 'calls the presevation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts' do
           exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\ \(Preservation\:\:Client\:\:UnexpectedResponseError\): ruh roh/
-          expect {
+          expect do
             subject.perform(bulk_action.id,
                             output_directory: output_directory_fail,
                             pids: pids,
                             groups: groups,
                             user: user)
-          }.not_to raise_error
+          end.not_to raise_error
           expect(Preservation::Client.objects).to have_received(:checksums).with(druids: pids)
           expect(File).not_to exist(File.join(output_directory_fail, Settings.checksum_report_job.csv_filename))
           expect(Rails.logger).to have_received(:error).with(exp_msg_regex).once
@@ -88,13 +88,13 @@ RSpec.describe ChecksumReportJob, type: :job do
 
       it 'does not call the preservation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts' do
         exp_msg_regex = /ChecksumReportJob not authorized to view all content/
-        expect {
+        expect do
           subject.perform(bulk_action.id,
                           output_directory: output_directory_fail,
                           pids: pids,
                           groups: groups,
                           user: user)
-        }.not_to raise_error
+        end.not_to raise_error
         expect(Preservation::Client.objects).not_to have_received(:checksums)
         expect(File).not_to exist(File.join(output_directory_fail, Settings.checksum_report_job.csv_filename))
         expect(Rails.logger).to have_received(:error).with(exp_msg_regex).once

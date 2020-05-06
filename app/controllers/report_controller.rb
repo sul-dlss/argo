@@ -34,8 +34,7 @@ class ReportController < CatalogController
     end
   end
 
-  def content_types
-  end
+  def content_types; end
 
   def pids
     respond_to do |format|
@@ -64,7 +63,7 @@ class ReportController < CatalogController
   def reset
     head 501 unless request.xhr?
 
-    params.require([:reset_workflow, :reset_step])
+    params.require(%i[reset_workflow reset_step])
 
     @workflow = params[:reset_workflow]
     @step = params[:reset_step]

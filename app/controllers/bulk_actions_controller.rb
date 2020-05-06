@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BulkActionsController < ApplicationController
-  before_action :set_bulk_action, only: [:destroy, :file]
+  before_action :set_bulk_action, only: %i[destroy file]
 
   rescue_from ActiveRecord::RecordNotFound, with: -> { render plain: 'Record Not Found', status: :not_found }
 
@@ -58,10 +58,10 @@ class BulkActionsController < ApplicationController
       :action_type,
       :description,
       :pids,
-      manage_release: [:tag, :what, :who, :to],
+      manage_release: %i[tag what who to],
       set_governing_apo: [:new_apo_id],
       manage_catkeys: [:catkeys],
-      prepare: [:significance, :description],
+      prepare: %i[significance description],
       create_virtual_objects: [:csv_file]
     )
   end

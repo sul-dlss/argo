@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'bulk_actions/new.html.erb' do
-  let(:user_groups) { ['dlss-developers', 'top-secret-clearance'] }
+  let(:user_groups) { %w[dlss-developers top-secret-clearance] }
   let(:apo_list) { [['APO 1', 'druid:123'], ['APO 2', 'druid:234']] }
 
   before do

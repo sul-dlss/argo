@@ -33,7 +33,7 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:process` The workflow step. e.g., publish.
   # @option params [String] `:status` The status to which we want to reset the workflow.
   def update
-    params.require [:process, :status]
+    params.require %i[process status]
     return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], @object)
 
     # this will raise an exception if the item doesn't have that workflow step

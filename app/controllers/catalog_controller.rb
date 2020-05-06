@@ -7,7 +7,7 @@ class CatalogController < ApplicationController
   include DateFacetConfigurations
 
   before_action :reformat_dates, :set_user_obj_instance_var
-  before_action :show_aspect, only: [:dc, :ds]
+  before_action :show_aspect, only: %i[dc ds]
   before_action :sort_collection_actions_buttons, only: [:index]
   before_action :limit_facets_on_home_page, only: [:index]
 
@@ -169,7 +169,7 @@ class CatalogController < ApplicationController
     # Configure document actions framework
     config.index.document_actions.delete(:bookmark)
 
-    config.show.partials = %w(show_header full_view_links thumbnail show datastreams events cocina history contents techmd)
+    config.show.partials = %w[show_header full_view_links thumbnail show datastreams events cocina history contents techmd]
   end
 
   def default_solr_doc_params(id = nil)
@@ -254,12 +254,12 @@ class CatalogController < ApplicationController
 
   def reformat_dates
     params.each do |key, val|
-      next unless key =~ /_datepicker/ && val =~ /[0-9]{2}\/[0-9]{2}\/[0-9]{4}/
+      next unless key =~ /_datepicker/ && val =~ %r{[0-9]{2}/[0-9]{2}/[0-9]{4}}
 
       val = DateTime.parse(val).beginning_of_day.utc.xmlschema
       field = key.split('_after_datepicker').first.split('_before_datepicker').first
       params[:f][field] = '[' + val.to_s + 'Z TO *]'
-    rescue
+    rescue StandardError
     end
   end
 

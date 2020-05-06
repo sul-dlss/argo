@@ -47,7 +47,7 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
       it 'invokes the virtual objects creator service with an array of length 1' do
         expect(VirtualObjectsCreator).to have_received(:create).with(
           virtual_objects: [
-            { parent_id: 'druid:parent2', child_ids: %w(druid:three druid:four druid:five) }
+            { parent_id: 'druid:parent2', child_ids: %w[druid:three druid:four druid:five] }
           ]
         ).once
       end
@@ -72,8 +72,8 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
       it 'invokes the virtual objects creator service with an array of length 2' do
         expect(VirtualObjectsCreator).to have_received(:create).with(
           virtual_objects: [
-            { parent_id: 'druid:parent1', child_ids: %w(druid:one druid:two) },
-            { parent_id: 'druid:parent2', child_ids: %w(druid:three druid:four druid:five) }
+            { parent_id: 'druid:parent1', child_ids: %w[druid:one druid:two] },
+            { parent_id: 'druid:parent2', child_ids: %w[druid:three druid:four druid:five] }
           ]
         ).once
       end

@@ -14,8 +14,8 @@ RSpec.describe ManageCatkeyJob do
 
   let(:webauth) { { 'privgroup' => 'dorstuff', 'login' => 'someuser' } }
 
-  let(:pids) { %w(druid:bb111cc2222 druid:cc111dd2222 druid:dd111ee2222) }
-  let(:catkeys) { %w(12345 6789 44444) }
+  let(:pids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ee2222] }
+  let(:catkeys) { %w[12345 6789 44444] }
   let(:buffer) { StringIO.new }
 
   before do

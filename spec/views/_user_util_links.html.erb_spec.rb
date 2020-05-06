@@ -39,7 +39,7 @@ RSpec.describe '_user_util_links.html.erb' do
 
   context 'while impersonating' do
     let(:current_user) { mock_user(is_admin?: true) }
-    let(:session) { { groups: ['cool', 'stuff'] } }
+    let(:session) { { groups: %w[cool stuff] } }
 
     it 'renders impersonation content' do
       expect(view).to receive(:session).and_return(session).twice

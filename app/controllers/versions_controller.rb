@@ -2,7 +2,7 @@
 
 class VersionsController < ApplicationController
   before_action :create_obj
-  after_action :save_and_reindex, only: [:open, :close]
+  after_action :save_and_reindex, only: %i[open close]
 
   def open_ui
     respond_to do |format|
@@ -18,7 +18,7 @@ class VersionsController < ApplicationController
     # the item for versioning, so that the form can pre-select the correct significance level
     @changed_significance = which_significance_changed(get_current_version_tag(@object), get_prior_version_tag(@object))
     @significance_selected = {}
-    [:major, :minor, :admin].each do |significance|
+    %i[major minor admin].each do |significance|
       @significance_selected[significance] = (@changed_significance == significance)
     end
 

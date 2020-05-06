@@ -5,7 +5,7 @@ class BulkAction < ApplicationRecord
   belongs_to :user
   validates :action_type,
             inclusion: {
-              in: %w(GenericJob
+              in: %w[GenericJob
                      DescmetadataDownloadJob
                      ReleaseObjectJob
                      RemoteIndexingJob
@@ -14,7 +14,7 @@ class BulkAction < ApplicationRecord
                      PrepareJob
                      CloseVersionJob
                      ChecksumReportJob
-                     CreateVirtualObjectsJob)
+                     CreateVirtualObjectsJob]
             }
 
   before_destroy :remove_output_directory

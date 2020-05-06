@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'workflows/_new.html.erb' do
   before do
-    allow(view).to receive(:workflow_options).and_return([['assemblyWF', 'assemblyWF'], ['registrationWF', 'registrationWF']])
+    allow(view).to receive(:workflow_options).and_return([%w[assemblyWF assemblyWF], %w[registrationWF registrationWF]])
   end
 
   it 'renders the partial content' do

@@ -114,7 +114,7 @@ RSpec.describe OCRExporter do
     allow(finder).to receive(:find_druid).and_return('druid:one', 'druid:two')
     allow(Dor::Services::Client).to receive(:object).and_return(client1, client2)
     allow(File).to receive(:open).and_call_original
-    allow(File).to receive(:open).with(filename, 'r').and_return(["00001231\n", "00002222\n"])
+    allow(File).to receive(:open).with(filename, 'r').and_return(%W[00001231\n 00002222\n])
 
     FileUtils.rm_r('tmp/druid:one') if File.directory? 'tmp/druid:one'
     FileUtils.rm_r('tmp/druid:two') if File.directory? 'tmp/druid:two'
