@@ -5,22 +5,8 @@ module ArgoHelper
   include BlacklightHelper
   include ValueHelper
 
-  def get_thumbnail_info(doc)
-    fname = doc['first_shelved_image_ss']
-    return nil unless fname
-
-    fname = File.basename(fname, File.extname(fname))
-    druid = doc['id'].to_s.split(/:/).last
-    url = "#{Settings.stacks_url}/iiif/#{druid}%2F#{ERB::Util.url_encode(fname)}/full/!400,400/0/default.jpg"
-    { fname: fname, druid: druid, url: url }
-  end
-
   def render_thumbnail_helper(doc, thumb_class = '', thumb_alt = '', thumb_style = 'max-width:240px;max-height:240px;')
-    thumbnail_info = get_thumbnail_info(doc)
-    return nil unless thumbnail_info
-
-    thumbnail_url = thumbnail_info[:url]
-    image_tag thumbnail_url, class: thumb_class, alt: thumb_alt, style: thumb_style
+    image_tag doc.thumbnail_url, class: thumb_class, alt: thumb_alt, style: thumb_style if doc.thumbnail_url
   end
 
   def render_purl_link(document, link_text = 'PURL', opts = { target: '_blank' })
