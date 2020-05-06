@@ -3,7 +3,6 @@
 class SolrDocument
   include Blacklight::Solr::Document
   include ApoConcern
-  include CatkeyConcern
   include CollectionConcern
   include DruidConcern
   include TitleConcern
@@ -13,19 +12,14 @@ class SolrDocument
   FIELD_OBJECT_TYPE          = :objectType_ssim
   FIELD_EMBARGO_STATUS       = :embargo_status_ssim
   FIELD_EMBARGO_RELEASE_DATE = :embargo_release_dtsim
+  FIELD_CATKEY_ID = :catkey_id_ssim
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
+  attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
   attribute :embargo_release_date, Blacklight::Types::String, FIELD_EMBARGO_RELEASE_DATE
   attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
 
-  def embargoed?
-    embargo_status == 'embargoed'
-  end
-
-  def admin_policy?
-    object_type == 'adminPolicy'
-  end
 
   # self.unique_key = 'id'
 
@@ -49,6 +43,14 @@ class SolrDocument
   )
 
   attribute :versions, Blacklight::Types::Array, 'versions_ssm'
+  
+  def embargoed?
+    embargo_status == 'embargoed'
+  end
+
+  def admin_policy?
+    object_type == 'adminPolicy'
+  end
 
   def thumbnail_url
     return nil unless first_shelved_image
@@ -58,6 +60,13 @@ class SolrDocument
       druid = id.delete_prefix('druid:')
       "#{Settings.stacks_url}/iiif/#{druid}%2F#{ERB::Util.url_encode(file_id)}/full/!400,400/0/default.jpg"
     end
+  end
+
+  ##
+  # Access a SolrDocument's catkey identifier
+  # @return [String, nil]
+  def catkey_id
+    catkey&.delete_prefix('catkey:')
   end
 
   # These values are used to drive the display for the datastream table on the item show page

@@ -157,4 +157,24 @@ RSpec.describe SolrDocument, type: :model do
       end
     end
   end
+
+  describe '#catkey' do
+    context 'when catkey is not present' do
+      let(:document_attributes) { {} }
+
+      it 'returns nil' do
+        expect(document.catkey).to be_nil
+        expect(document.catkey_id).to be_nil
+      end
+    end
+
+    context 'when a catkey is present' do
+      let(:document_attributes) { { SolrDocument::FIELD_CATKEY_ID => ['catkey:8675309'] } }
+
+      it 'returns catkey value' do
+        expect(document.catkey).to eq 'catkey:8675309'
+        expect(document.catkey_id).to eq '8675309'
+      end
+    end
+  end
 end
