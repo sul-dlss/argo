@@ -17,12 +17,12 @@ class Report
   REPORT_FIELDS = [
     {
       field: :druid, label: 'Druid',
-      proc: lambda { |doc| doc['id'].split(/:/).last },
+      proc: lambda { |doc| doc.druid },
       sort: true, default: true, width: 100, download_default: true
     },
     {
       field: :purl, label: 'Purl',
-      proc: lambda { |doc| File.join(Settings.purl_url, doc['id'].split(/:/).last) },
+      proc: lambda { |doc| File.join(Settings.purl_url, doc.druid) },
       solr_fields: %w(id),
       sort: false, default: false, width: 100, download_default: true
     },
@@ -44,7 +44,7 @@ class Report
     },
     {
       field: SolrDocument::FIELD_APO_ID, label: 'Admin Policy ID',
-      proc: lambda { |doc| doc[SolrDocument::FIELD_APO_ID].first.split(/:/).last },
+      proc: lambda { |doc| doc[SolrDocument::FIELD_APO_ID].first.delete_prefix('druid:') },
       sort: false, default: false, width: 100, download_default: false
     },
     {
@@ -53,7 +53,7 @@ class Report
     },
     {
       field: SolrDocument::FIELD_COLLECTION_ID, label: 'Collection ID',
-      proc: lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| id.split(/:/).last } },
+      proc: lambda { |doc| doc[SolrDocument::FIELD_COLLECTION_ID].map { |id| id.delete_prefix('druid:') } },
       sort: false, default: false, width: 100, download_default: false
     },
     {
