@@ -9,16 +9,21 @@ class SolrDocument
   include TitleConcern
   include DocumentDateConcern
   include PreservationSizeConcern
-  include ObjectTypeConcern
 
+  FIELD_OBJECT_TYPE          = :objectType_ssim
   FIELD_EMBARGO_STATUS       = :embargo_status_ssim
   FIELD_EMBARGO_RELEASE_DATE = :embargo_release_dtsim
 
+  attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
   attribute :embargo_release_date, Blacklight::Types::String, FIELD_EMBARGO_RELEASE_DATE
 
   def embargoed?
     embargo_status == 'embargoed'
+  end
+
+  def admin_policy?
+    object_type == 'adminPolicy'
   end
 
   # self.unique_key = 'id'
