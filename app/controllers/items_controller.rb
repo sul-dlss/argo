@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :create_obj, except: %i[
@@ -362,7 +363,7 @@ class ItemsController < ApplicationController
   end
 
   def set_rights
-    @object.read_rights = params[:rights]
+    @object.read_rights = params[:access_form][:rights]
     save_and_reindex
 
     respond_to do |format|
@@ -402,6 +403,15 @@ class ItemsController < ApplicationController
   end
 
   def rights
+    object_client = Dor::Services::Client.object(params[:id])
+
+    begin
+      cocina = object_client.find
+    rescue Dor::Services::Client::UnexpectedResponse
+      cocina = NilModel.new(params[:id])
+    end
+    @form = AccessForm.new(cocina)
+
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -495,3 +505,4 @@ class ItemsController < ApplicationController
     WorkflowClientFactory.build.lifecycle(druid: object.pid, milestone_name: stage)
   end
 end
+# rubocop:enable Metrics/ClassLength
