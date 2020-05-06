@@ -17,6 +17,7 @@ class SolrDocument
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
   attribute :embargo_release_date, Blacklight::Types::String, FIELD_EMBARGO_RELEASE_DATE
+  attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
 
   def embargoed?
     embargo_status == 'embargoed'
@@ -48,6 +49,16 @@ class SolrDocument
   )
 
   attribute :versions, Blacklight::Types::Array, 'versions_ssm'
+
+  def thumbnail_url
+    return nil unless first_shelved_image
+
+    @thumbnail_url ||= begin
+      file_id = File.basename(first_shelved_image, '.*')
+      druid = id.delete_prefix('druid:')
+      "#{Settings.stacks_url}/iiif/#{druid}%2F#{ERB::Util.url_encode(file_id)}/full/!400,400/0/default.jpg"
+    end
+  end
 
   # These values are used to drive the display for the datastream table on the item show page
   # This method is now excluding the workflows datastream because this datastream is deprecated.
