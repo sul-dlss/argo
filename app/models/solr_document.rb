@@ -6,13 +6,20 @@ class SolrDocument
   include CollectionConcern
   include DruidConcern
   include TitleConcern
-  include DocumentDateConcern
   include PreservationSizeConcern
 
   FIELD_OBJECT_TYPE          = :objectType_ssim
   FIELD_EMBARGO_STATUS       = :embargo_status_ssim
   FIELD_EMBARGO_RELEASE_DATE = :embargo_release_dtsim
   FIELD_CATKEY_ID = :catkey_id_ssim
+  FIELD_REGISTERED_DATE           = :registered_dttsim
+  FIELD_LAST_ACCESSIONED_DATE     = :accessioned_latest_dttsi
+  FIELD_EARLIEST_ACCESSIONED_DATE = :accessioned_earliest_dttsi
+  FIELD_LAST_PUBLISHED_DATE       = :published_latest_dttsi
+  FIELD_LAST_SUBMITTED_DATE       = :submitted_latest_dttsi
+  FIELD_LAST_DEPOSITED_DATE       = :deposited_latest_dttsi
+  FIELD_LAST_MODIFIED_DATE        = :modified_latest_dttsi
+  FIELD_LAST_OPENED_DATE          = :opened_latest_dttsi
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
@@ -20,6 +27,14 @@ class SolrDocument
   attribute :embargo_release_date, Blacklight::Types::String, FIELD_EMBARGO_RELEASE_DATE
   attribute :dor_services_version, Blacklight::Types::String, :dor_services_version_ssi
   attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
+
+  attribute :registered_date, Blacklight::Types::Array, FIELD_REGISTERED_DATE
+  attribute :accessioned_date, Blacklight::Types::Array, FIELD_LAST_ACCESSIONED_DATE
+  attribute :published_date, Blacklight::Types::Array, FIELD_LAST_PUBLISHED_DATE
+  attribute :submitted_date, Blacklight::Types::Array, FIELD_LAST_SUBMITTED_DATE
+  attribute :deposited_date, Blacklight::Types::Array, FIELD_LAST_DEPOSITED_DATE
+  attribute :modified_date, Blacklight::Types::Array, FIELD_LAST_MODIFIED_DATE
+  attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
 
   # self.unique_key = 'id'
 
