@@ -17,7 +17,7 @@ export default class extends Controller {
 
   load() {
     // We're setting this header so that the controller can check for request.xhr?
-    fetch(this.data.get("url"), { headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+    fetch(this.data.get("url"), { headers: { 'X-Requester': 'frontend' }})
       .then(response => response.text())
       .then(html => {
         this.element.innerHTML = html
