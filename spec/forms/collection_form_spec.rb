@@ -75,7 +75,7 @@ RSpec.describe CollectionForm do
         .to_return(status: 200, body: created_collection, headers: {})
     end
 
-    it 'creates a collection from catkey by registering the collection and passing seed_datastream' do
+    it 'creates a collection from catkey by registering the collection' do
       expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
       instance.validate(params.merge(apo_pid: apo.pid))

@@ -56,7 +56,6 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Document',
                 'Registered By : jcoyne85'],
-          seed_datastream: ['descMetadata'],
           rights: 'default',
           source_id: 'foo:bar',
           other_id: 'label:'
@@ -104,7 +103,6 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Image',
                 'Registered By : jcoyne85'],
-          seed_datastream: ['descMetadata'],
           rights: 'stanford',
           source_id: 'foo:bar',
           other_id: 'label:'
@@ -154,7 +152,6 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Book (ltr)',
                 'Registered By : jcoyne85'],
-          seed_datastream: ['descMetadata'],
           rights: 'loc:music',
           source_id: 'foo:bar',
           other_id: 'label:'
@@ -204,7 +201,6 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Image',
                 'Registered By : jcoyne85'],
-          seed_datastream: ['descMetadata'],
           rights: 'world-nd',
           source_id: 'foo:bar',
           other_id: 'label:'
@@ -254,7 +250,6 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Image',
                 'Registered By : jcoyne85'],
-          seed_datastream: ['descMetadata'],
           rights: 'dark',
           source_id: 'foo:bar',
           other_id: 'label:'
