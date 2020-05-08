@@ -48,6 +48,7 @@ export default function DorRegistration(initOpts) {
       var params = {
         'object_type' : $t.objectType,
         'admin_policy' : apo,
+        'project' : $t.projectName,
         'workflow_id' : $('#workflow_id').val(),
         'metadata_source' : ($t.metadataSource !== 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
