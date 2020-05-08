@@ -55,7 +55,7 @@ class Dor::ObjectsController < ApplicationController
 
   # All the tags from the form except the project and content type, which are handled specially
   def administrative_tags
-    params[:tag].filter { |t| !t.start_with?('Process : Content Type') && !t.start_with?('Project : ') }
+    params[:tag].filter { |t| !t.start_with?('Process : Content Type') }
   end
 
   # @raises [Cocina::Models::ValidationError]
@@ -89,8 +89,7 @@ class Dor::ObjectsController < ApplicationController
       structural[:hasMemberOrders] = [{ viewingDirection: 'right-to-left' }]
     end
     model_params[:structural] = structural
-    project = params[:tag].find { |t| t.start_with?('Project : ') }
-    model_params[:administrative][:partOfProject] = project.sub(/^Project : /, '') if project
+    model_params[:administrative][:partOfProject] = params[:project] if params[:project]
 
     Cocina::Models::RequestDRO.new(model_params)
   end
