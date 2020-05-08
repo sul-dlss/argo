@@ -20,18 +20,12 @@ RSpec.describe OCRExporter do
       structural: {
         contains: [
           {
-            externalIdentifier: 'fs1/00000001.jp2',
+            externalIdentifier: 'fs1/fs1-gb-jp2.zip',
             type: Cocina::Models::Vocab.file,
             version: 1,
-            hasMimeType: 'image/jp2',
-            label: '00000001.jp2'
-          },
-          {
-            externalIdentifier: 'fs1/00000001.txt',
-            type: Cocina::Models::Vocab.file,
-            version: 1,
-            hasMimeType: 'text/plain',
-            label: '00000001.txt'
+            hasMimeType: 'application/zip',
+            label: 'fs1-gb-jp2.zip',
+            filename: 'fs1-gb-jp2.zip'
           }
         ]
       }
@@ -44,18 +38,12 @@ RSpec.describe OCRExporter do
       structural: {
         contains: [
           {
-            externalIdentifier: 'fs2/00000002.jp2',
+            externalIdentifier: 'fs2/fs2-gb-txt.zip',
             type: Cocina::Models::Vocab.file,
             version: 1,
-            hasMimeType: 'image/jp2',
-            label: '00000002.jp2'
-          },
-          {
-            externalIdentifier: 'fs2/00000002.txt',
-            type: Cocina::Models::Vocab.file,
-            version: 1,
-            hasMimeType: 'text/plain',
-            label: '00000002.txt'
+            hasMimeType: 'application/zip',
+            label: 'fs2-gb-txt.zip',
+            filename: 'fs2-gb-txt.zip'
           }
         ]
       }
@@ -68,18 +56,12 @@ RSpec.describe OCRExporter do
       structural: {
         contains: [
           {
-            externalIdentifier: 'fs3/00000001.jp2',
+            externalIdentifier: 'fs3/fs3-gb-jp2.zip',
             type: Cocina::Models::Vocab.file,
             version: 1,
-            hasMimeType: 'image/jp2',
-            label: '00000001.jp2'
-          },
-          {
-            externalIdentifier: 'fs3/00000001.txt',
-            type: Cocina::Models::Vocab.file,
-            version: 1,
-            hasMimeType: 'text/plain',
-            label: '00000001.txt'
+            hasMimeType: 'application/zip',
+            label: 'fs3-gb-jp2.zip',
+            filename: 'fs3-gb-jp2.zip'
           }
         ]
       }
@@ -92,18 +74,12 @@ RSpec.describe OCRExporter do
       structural: {
         contains: [
           {
-            externalIdentifier: 'fs4/00000002.jp2',
+            externalIdentifier: 'fs4/fs4-gb-txt.zip',
             type: Cocina::Models::Vocab.file,
             version: 1,
-            hasMimeType: 'image/jp2',
-            label: '00000002.jp2'
-          },
-          {
-            externalIdentifier: 'fs4/00000002.txt',
-            type: Cocina::Models::Vocab.file,
-            version: 1,
-            hasMimeType: 'text/plain',
-            label: '00000002.txt'
+            hasMimeType: 'application/zip',
+            label: 'fs4-gb-txt.zip',
+            filename: 'fs4-gb-txt.zip'
           }
         ]
       }
@@ -125,9 +101,7 @@ RSpec.describe OCRExporter do
   it 'downloads files' do
     exporter.export
 
-    expect(File).to exist('tmp/druid:one/00000001.txt')
-    expect(File).to exist('tmp/druid:one/00000002.txt')
-    expect(File).to exist('tmp/druid:two/00000001.txt')
-    expect(File).to exist('tmp/druid:two/00000002.txt')
+    expect(File).to exist('tmp/druid:one/fs2-gb-txt.zip')
+    expect(File).to exist('tmp/druid:two/fs4-gb-txt.zip')
   end
 end
