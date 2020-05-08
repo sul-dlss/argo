@@ -1,5 +1,6 @@
-
-<%= form_tag url_for(controller: :items, action: :tags, id: @pid, update: 'true') do %>
+<% # Temporarily disable this form, until tags migration is complete %>
+<%= form_tag url_for(controller: :items, action: :tags, id: @pid, update: 'true'), onsubmit: "return false;" do %>
+  <p><em>Tag update is presently disabled for a migration until 5/14/2020</em>. See jcoyne85@stanford.edu with questions.</p>
   <% @tags.each_with_index do |tag, count| %>
     <div class="form-group">
       <div class="input-group">
