@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class BulkActionsController < ApplicationController
+  include Blacklight::SearchContext
+
   before_action :set_bulk_action, only: %i[destroy file]
 
   rescue_from ActiveRecord::RecordNotFound, with: -> { render plain: 'Record Not Found', status: :not_found }
