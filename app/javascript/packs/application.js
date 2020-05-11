@@ -21,8 +21,6 @@ import "bootstrap/dist/js/bootstrap"
 
 import 'spreadsheet'
 
-import 'jquery.persistentModal'
-
 import 'modules/apo_form'
 import 'modules/button_checker'
 import 'modules/datastream_edit'
@@ -51,12 +49,6 @@ Blacklight.onLoad(function(){
 $('#spreadsheet-upload-container').argoSpreadsheet()
   })
 })
-
-
-Blacklight.onLoad(function() {
-  $('[data-behavior="persistent-modal"]').persistentModal()
-})
-
 
 Blacklight.onLoad(function() {
   $('a.disabled[data-check-url]').buttonChecker()
