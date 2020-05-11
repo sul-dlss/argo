@@ -38,10 +38,10 @@ function process_delete(druids, action_url, req_params, success_string) {
 
 function set_content_type(druids){
 	var params={
-		'new_content_type': $('#new_content_type').val(),
-		'new_resource_type': $('#new_resource_type').val(),
-		'old_content_type': $('#old_content_type').val(),
-		'old_resource_type': $('#old_resource_type').val()
+		'new_content_type': document.getElementById('new_content_type').value,
+		'new_resource_type': document.getElementById('new_resource_type').value,
+		'old_content_type': document.getElementById('old_content_type').value,
+		'old_resource_type': document.getElementById('old_resource_type').value
 	}
 	process_patch(druids, set_content_type_url, params, "Updated");
 }
@@ -107,9 +107,10 @@ function republish(druids){
 }
 
 function set_rights(druids){
-	var params = {rights: $('#rights_select').val()}
+	var params = { 'access_form[rights]': document.getElementById('rights_select').value }
 	process_post(druids, set_rights_url, params, "Updated");
 }
+
 function set_collection(druids){
 	var collection_id = document.getElementById('set_collection_select').value;
 	process_post(druids, set_collection_url, {collection: collection_id}, "Collection set");
@@ -120,7 +121,7 @@ function apply_apo_defaults(druids) {
 }
 
 function add_workflow(druids){
-	var params = { 'wf': $('#wf').val() }
+	var params = { 'wf': document.getElementById('wf').value }
 	process_post(druids, add_workflow_url, params, 'Workflow Added');
 }
 
