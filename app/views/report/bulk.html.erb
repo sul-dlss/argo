@@ -73,9 +73,6 @@ ul li{
     <strong>Options that do not require versioning</strong>
     <div class="row bulk-buttons-row">
       <div class="col-sm-2">
-        <button class="bulk_button btn-block" id="republish_show" name="republish_show">Republish</button>
-      </div>
-      <div class="col-sm-2">
         <button class="bulk_button btn-block" id="show_tags" name="show_tags">Tags</button>
       </div>
       <div class="col-sm-2">
@@ -148,10 +145,6 @@ ul li{
   <span class="bulk_button" id="confirm-refresh-metadata-button">Refresh metadata</span><br>
 </div>
 
-<div class="bulk_operation" id="republish" name="republish">
-  <h1>Republish items</h1>
-  <span class="bulk_button" id="republish_button" name="republish_button">Refresh metadata on PURL</span>
-</div>
 <div class="bulk_operation" id="tag">
   <h1>Change tags</h1>
   <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
@@ -159,7 +152,7 @@ ul li{
   </p>
   <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
   <textarea style="width:50%" id="tags" name="tags"></textarea><br>
-  <span class="bulk_button" id="set_tags" name="set_tags">Update tags</span>
+  <button class="bulk_button" id="set_tags" name="set_tags">Update tags</button>
 </div>
 <div class="bulk_operation" id="source_id">
   <h1>Change source id</h1>

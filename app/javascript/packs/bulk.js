@@ -302,7 +302,6 @@ Blacklight.onLoad(()=>{
 	$('#apply-apo-defaults-button').on('click', () => $('#apply_apo_defaults').show(400))
 	$('#add-workflow-button').on('click', () => $('#add_workflow').show(400))
 	$('#close-versions-button').on('click', () => $('#close').show(400))
-  $('#republish_show').on('click', () => $('#republish').show(400))
   $('#show_tags').on('click', () => {
 		$('#tag').show(400)
 		get_tags()

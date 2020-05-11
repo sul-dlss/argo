@@ -12,6 +12,7 @@ class BulkAction < ApplicationRecord
                      SetGoverningApoJob
                      ManageCatkeyJob
                      PrepareJob
+                     RepublishJob
                      CloseVersionJob
                      ChecksumReportJob
                      CreateVirtualObjectsJob]
