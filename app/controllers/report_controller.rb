@@ -81,17 +81,11 @@ class ReportController < CatalogController
     end
   end
 
+  # This draws the full page that supports the workflow grid
   def workflow_grid
     (@response, @document_list) = search_results(params)
 
-    if request.xhr?
-      # This is triggered by javascript that refreshes the data every 10s
-      render partial: 'workflow_grid'
-      return
-    end
-
-    respond_to do |format|
-      format.html
-    end
+    # This is triggered by javascript that refreshes the data every 10s
+    return render partial: 'workflow_grid' if request.headers['X-Requester'] == 'frontend'
   end
 end
