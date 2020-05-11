@@ -10,10 +10,11 @@ RSpec.describe ExternalLinksComponent, type: :component do
   context 'with a catkey' do
     let(:catkey) { '123456' }
 
-    it 'links to searchworks with the catkey' do
+    it 'links to searchworks with the catkey and links to purl' do
       render_inline(described_class.new(document: document))
 
       expect(page).to have_link 'Searchworks', href: 'http://searchworks.stanford.edu/view/123456'
+      expect(page).to have_link 'PURL', href: 'https://sul-purl-test.stanford.edu/ab123cd3445'
     end
   end
 

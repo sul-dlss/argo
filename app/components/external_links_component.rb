@@ -6,7 +6,7 @@ class ExternalLinksComponent < ViewComponent::Base
   end
 
   def purl_link
-    link_to 'PURL', File.join(Settings.purl_url, document.id), target: '_blank', rel: 'noopener'
+    link_to 'PURL', File.join(Settings.purl_url, document.druid), target: '_blank', rel: 'noopener'
   end
 
   def dor_link
