@@ -1,0 +1,102 @@
+# frozen_string_literal: true
+
+# This models the values set from the registration form
+class RegistrationForm
+  def initialize(params)
+    @params = params
+  end
+
+  # @raises [Cocina::Models::ValidationError]
+  def cocina_model
+    catalog_links = []
+    if params[:other_id] != 'label:'
+      catalog, record_id = params[:other_id].split(':')
+      catalog_links = [{ catalog: catalog, catalogRecordId: record_id }]
+    end
+
+    model_params = {
+      type: dro_type,
+      label: params.require(:label),
+      version: 1,
+      administrative: {
+        hasAdminPolicy: params.require(:admin_policy)
+      },
+      identification: {
+        sourceId: params.require(:source_id),
+        catalogLinks: catalog_links
+      }
+    }
+    model_params[:access] = access(params[:rights]) if params[:rights] != 'default'
+
+    structural = {}
+    structural[:isMemberOf] = params[:collection] if params[:collection].present?
+    case content_type_tag
+    when 'Book (ltr)'
+      structural[:hasMemberOrders] = [{ viewingDirection: 'left-to-right' }]
+    when 'Book (rtl)'
+      structural[:hasMemberOrders] = [{ viewingDirection: 'right-to-left' }]
+    end
+    model_params[:structural] = structural
+    model_params[:administrative][:partOfProject] = params[:project] if params[:project].present?
+
+    Cocina::Models::RequestDRO.new(model_params)
+  end
+
+  # All the tags from the form except the project and content type, which are handled specially
+  def administrative_tags
+    params[:tag].filter { |t| !t.start_with?('Process : Content Type') }
+  end
+
+  private
+
+  attr_reader :params
+
+  def dro_type
+    case content_type_tag
+    when 'Image'
+      Cocina::Models::Vocab.image
+    when '3D'
+      Cocina::Models::Vocab.three_dimensional
+    when 'Map'
+      Cocina::Models::Vocab.map
+    when 'Media'
+      Cocina::Models::Vocab.media
+    when 'Document'
+      Cocina::Models::Vocab.document
+    when /^Manuscript/
+      Cocina::Models::Vocab.manuscript
+    when 'Book (ltr)', 'Book (rtl)'
+      Cocina::Models::Vocab.book
+    else
+      Cocina::Models::Vocab.object
+    end
+  end
+
+  # helper method to get just the content type tag
+  def content_type_tag
+    content_tag = params[:tag].find { |tag| tag.start_with?('Process : Content Type') }
+    content_tag.split(':').last.strip
+  end
+
+  # @param [String] the rights representation from the form
+  # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
+  def access(rights)
+    if rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
+      {
+        access: rights.delete_suffix('-nd'),
+        download: 'none'
+      }
+    elsif rights.start_with?('loc:')
+      {
+        access: 'location-based',
+        readLocation: rights.delete_prefix('loc:'),
+        download: 'location-based'
+      }
+    else
+      {
+        access: rights,
+        download: rights
+      }
+    end
+  end
+end
