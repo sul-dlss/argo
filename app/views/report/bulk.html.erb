@@ -70,12 +70,6 @@ ul li{
         <button class="bulk_button bulk-btn-danger btn-block" id="add-workflow-button">Add a workflow</button>
       </div>
     </div>
-    <strong>Options that do not require versioning</strong>
-    <div class="row bulk-buttons-row">
-      <div class="col-sm-2">
-        <button class="bulk_button btn-block" id="show_tags" name="show_tags">Tags</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -138,15 +132,6 @@ ul li{
   <span class="bulk_button" id="confirm-refresh-metadata-button">Refresh metadata</span><br>
 </div>
 
-<div class="bulk_operation" id="tag">
-  <h1>Change tags</h1>
-  <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
-  druid:bc088fn5010&lt;tab&gt;Project : Something&lt;tab&gt;Process : Content Type : Book
-  </p>
-  <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
-  <textarea style="width:50%" id="tags" name="tags"></textarea><br>
-  <button class="bulk_button" id="set_tags" name="set_tags">Update tags</button>
-</div>
 <div class="bulk_operation" id="source_id">
   <h1>Change source id</h1>
   <p>This needs a list of pids and source ids, with a tab between the pid and the corresponding source id. E.g.:<br>

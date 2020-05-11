@@ -14,6 +14,7 @@ class BulkAction < ApplicationRecord
                      ManageCatkeyJob
                      PrepareJob
                      RepublishJob
+                     SetTagsJob
                      CloseVersionJob
                      ChecksumReportJob
                      CreateVirtualObjectsJob]
