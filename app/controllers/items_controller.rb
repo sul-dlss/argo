@@ -362,6 +362,7 @@ class ItemsController < ApplicationController
     end
   end
 
+  # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
     @object.read_rights = params[:access_form][:rights]
     save_and_reindex
