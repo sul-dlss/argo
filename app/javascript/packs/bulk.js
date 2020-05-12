@@ -20,10 +20,6 @@ function process_request(druids, action_url, req_type, req_params, success_strin
 	})
 }
 
-function process_get(druids, action_url, success_string) {
-	process_request(druids, action_url, 'GET', null, success_string);
-}
-
 function process_post(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'POST', req_params, success_string, show_buttons, show_buttons);
 }
@@ -119,7 +115,7 @@ function add_workflow(druids){
 
 
 function refresh_metadata(druids){
-	process_get(druids, refresh_metadata_url, "Updated.");
+	process_post(druids, refresh_metadata_url, {}, "Updated.");
 }
 
 function get_druids() {

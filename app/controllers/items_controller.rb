@@ -23,9 +23,6 @@ class ItemsController < ApplicationController
     embargo_form
   ]
 
-  before_action :authorize_manage_desc_metadata!, only: [
-    :refresh_metadata
-  ]
   before_action :authorize_set_governing_apo!, only: [
     :set_governing_apo
   ]
@@ -273,6 +270,8 @@ class ItemsController < ApplicationController
   end
 
   def refresh_metadata
+    authorize! :manage_desc_metadata, @object
+
     if @object.catkey.blank?
       render status: :bad_request, plain: 'object must have catkey to refresh descMetadata'
       return
@@ -289,8 +288,8 @@ class ItemsController < ApplicationController
     end
   rescue Dor::Services::Client::UnexpectedResponse => e
     user_begin = 'An error occurred while attempting to refresh metadata'
-    user_end = 'Please try again or contact the sdr-operations Slack channel for assistance.'
-    Rails.logger.error "#{user_begin}: #{e.message}"
+    user_end = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'
+    logger.error "#{user_begin}: #{e.message}"
     redirect_to solr_document_path(params[:id]), flash: { error: "#{user_begin}: #{e.message}. #{user_end}" }
   end
 
@@ -411,10 +410,6 @@ class ItemsController < ApplicationController
 
   def authorize_manage!
     authorize! :manage_item, @object
-  end
-
-  def authorize_manage_desc_metadata!
-    authorize! :manage_desc_metadata, @object
   end
 
   def enforce_versioning

@@ -532,7 +532,7 @@ RSpec.describe ItemsController, type: :controller do
 
             expect(response).to redirect_to(solr_document_path(pid))
             friendly1 = 'An error occurred while attempting to refresh metadata: foo.'
-            friendly2 = 'Please try again or contact the sdr-operations Slack channel for assistance.'
+            friendly2 = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'
             expect(flash[:error]).to eq "#{friendly1} #{friendly2}"
           end
         end

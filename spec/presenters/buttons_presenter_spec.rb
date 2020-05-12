@@ -171,6 +171,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         buttons = presenter.buttons
         default_buttons.push(
           label: 'Refresh descMetadata',
+          method: 'post',
           url: "/items/#{item_id}/refresh_metadata",
           new_page: true,
           disabled: false
