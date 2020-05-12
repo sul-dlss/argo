@@ -20,7 +20,7 @@ class DatastreamRow < ApplicationComponent
   end
 
   def link_to_identifier
-    link_to specs[:dsid], ds_solr_document_path(document, specs[:dsid]), title: specs[:dsid], data: { behavior: 'persistent-modal' }
+    link_to specs[:dsid], ds_solr_document_path(document, specs[:dsid]), title: specs[:dsid], data: { blacklight_modal: 'trigger' }
   end
 
   def mime_type
