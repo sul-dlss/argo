@@ -27,7 +27,6 @@ install_plugin Capistrano::SCM::Git
 # require 'capistrano/rails/migrations'
 
 require 'capistrano/bundler'
-require 'capistrano/delayed_job'
 require 'capistrano/honeybadger'
 require 'capistrano/passenger'
 require 'capistrano/rails'

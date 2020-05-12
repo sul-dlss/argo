@@ -29,7 +29,6 @@ bundle install
 
 Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the `mysql2` inclusion in `Gemfile` and come back to it later (you can develop using `sqlite3`), or you can install MySQL.
 
-### Install components
 ## Run the servers
 
 ```
@@ -115,6 +114,7 @@ rspec
 _Important Note: Running `rake ci` will reload fixtures for the `test` environment only._
 
 The continuous integration build can be run by:
+
 ```bash
 RAILS_ENV=test bundle exec rake ci
 ```
@@ -149,6 +149,32 @@ and in development or testing mode:
 - RSpec
 - Capybara
 - Chrome
+
+## Background Job Workers (in deployed environments)
+
+Argo uses the [eye](https://github.com/kostya/eye) gem to manage and monitor its DelayedJob-based background job workers in all deployed environments. To facilitate this, Argo defines Capistrano tasks in order to start, stop, and provide information about running workers:
+
+```
+$ cap {ENV} delayed_job:stop # stop workers in ENV environment
+$ cap {ENV} delayed_job:start # start workers in ENV environment
+$ cap {ENV} delayed_job:restart # restart workers in ENV environment
+$ cap {ENV} delayed_job:status # view status of workers in ENV environment
+```
+
+The above tasks are linked into the [Capistrano flow](https://capistranorb.com/documentation/getting-started/flow/) so that workers are started and stopped at appropriate stages of deployments and rollbacks.
+
+NOTE: If when invoking the `delayed_job:status` task, you see output like the following:
+
+```
+00:00 delayed_job:status
+      01 ./bin/eye info delayed_job
+      01 command :info, objects not found!
+      01 command :info, objects not found!
+    ✘ 01 lyberadmin@argo-qa-a.stanford.edu 0.801s
+    ✘ 01 lyberadmin@argo-qa-b.stanford.edu 0.813s
+```
+
+This means the eye daemon was shutdown and did not restart. To start it back up, invoke `cap {ENV} delayed_job:reload`. Note that this is for reloading eye, not for restarting the workers. You should not have to invoke this task with any regularity; it is for recovering from unusual circumstances only.
 
 ## Further reading
 

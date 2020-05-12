@@ -110,6 +110,5 @@ end
 group :deployment do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'capistrano3-delayed-job', '~> 1.0'
   gem 'dlss-capistrano', '~> 3.1'
 end
