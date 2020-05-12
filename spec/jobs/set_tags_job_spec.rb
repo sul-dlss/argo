@@ -3,11 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe SetTagsJob, type: :job do
-  let(:pids) { ["druid:123\tProject : Testing 1", "druid:456\tProject : Testing 2"] }
+  let(:pids) { ["druid:123\tProject : Testing 1", "druid:456\tProject : Testing 2\tTest Tag : Testing 3"] }
   let(:druid1) { 'druid:123' }
-  let(:tags1) { 'Project : Testing 1' }
+  let(:tags1) { ['Project : Testing 1'] }
   let(:druid2) { 'druid:456' }
-  let(:tags2) { 'Project : Testing 2' }
+  let(:tags2) { ['Project : Testing 2', 'Test Tag : Testing 3'] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:bulk_action) { create(:bulk_action, log_name: 'foo.txt') }
@@ -20,8 +20,8 @@ RSpec.describe SetTagsJob, type: :job do
   before do
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
-    allow(tags_client1).to receive(:create).with(tags: tags1)
-    allow(tags_client2).to receive(:create).with(tags: tags2)
+    allow(tags_client1).to receive(:replace).with(tags: tags1)
+    allow(tags_client2).to receive(:replace).with(tags: tags2)
 
     described_class.perform_now(bulk_action.id,
                                 pids: pids,
@@ -34,7 +34,7 @@ RSpec.describe SetTagsJob, type: :job do
   end
 
   it 'publishes objects' do
-    expect(tags_client1).to have_received(:create).with(tags: tags1)
-    expect(tags_client2).to have_received(:create).with(tags: tags2)
+    expect(tags_client1).to have_received(:replace).with(tags: tags1)
+    expect(tags_client2).to have_received(:replace).with(tags: tags2)
   end
 end
