@@ -4,7 +4,6 @@ class SolrDocument
   include Blacklight::Solr::Document
   include ApoConcern
   include CollectionConcern
-  include DruidConcern
   include TitleConcern
   include PreservationSizeConcern
 
@@ -92,5 +91,12 @@ class SolrDocument
       Hash[%i[dsid control_group mime_type version size label].zip(spec_string.split(/\|/))]
     end
     specs.filter { |spec| spec[:dsid] != 'workflows' }
+  end
+
+  ##
+  # Access a SolrDocument's druid parsed from the id format of 'druid:abc123'
+  # @return [String]
+  def druid
+    id.delete_prefix('druid:')
   end
 end
