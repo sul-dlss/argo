@@ -26,6 +26,22 @@ RSpec.describe SolrDocument, type: :model do
     end
   end
 
+  describe '#title' do
+    subject(:title) { document.title }
+
+    context 'with data' do
+      let(:document_attributes) { { SolrDocument::FIELD_TITLE => 'My title' } }
+
+      it { is_expected.to eq 'My title' }
+    end
+
+    context 'without data' do
+      let(:document_attributes) { {} }
+
+      it { is_expected.to be_nil }
+    end
+  end
+
   describe '#admin_policy?' do
     context 'when object type is an adminPolicy' do
       let(:document_attributes) do
