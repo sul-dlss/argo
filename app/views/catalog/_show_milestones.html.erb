@@ -5,7 +5,7 @@
   <tbody>
     <% @milestones_presenter.each_version do |version|
          steps = @milestones_presenter.steps_for(version)
-         steps.each_with_index do |k, m, index| %>
+         steps.each_with_index do |(k, m), index| %>
         <% if index.zero? %>
           <tr style="display: none" class="last_step<%= version %>">
             <td><span style="cursor: pointer;" onclick='$(".version<%= version %>").toggle();$(".last_step<%= version %>").toggle();'>+</span><%= version %></td>
