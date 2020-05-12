@@ -6,6 +6,7 @@ class ManageCatkeyJob < GenericJob
   queue_as :manage_catkey
 
   attr_reader :catkeys
+
   ##
   # A job that allows a user to specify a list of pids and a list of catkeys to be associated with these pids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
