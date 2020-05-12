@@ -14,5 +14,6 @@ class HomeTextPresenter
   private
 
   attr_reader :current_user
+
   delegate :is_admin?, :is_manager?, :is_viewer?, :permitted_apos, to: :current_user
 end

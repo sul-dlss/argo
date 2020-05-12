@@ -21,6 +21,7 @@ class BulkActionPersister
   private
 
   attr_reader :bulk_action
+
   delegate :id, :file, :pids, :output_directory, :manage_release, :set_governing_apo,
            :manage_catkeys, :groups, :prepare, :create_virtual_objects, to: :bulk_action
 
