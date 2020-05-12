@@ -133,7 +133,6 @@ Rails.application.routes.draw do
       get 'tags_ui'
       get 'catkey_ui'
       match 'tags',      via: %i[get post]
-      match 'tags_bulk', via: %i[get post]
       get 'collection_ui'
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
       post 'collection/add',     action: :add_collection,    as: 'add_collection'

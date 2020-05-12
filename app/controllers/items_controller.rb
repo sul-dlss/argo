@@ -17,7 +17,6 @@ class ItemsController < ApplicationController
     source_id
     catkey
     tags
-    tags_bulk
     update_rights
     update_attributes
     embargo_update
@@ -205,22 +204,6 @@ class ItemsController < ApplicationController
         format.html { render status: :ok, plain: 'Updated catkey' }
       else
         msg = "Catkey for #{params[:id]} has been updated!"
-        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-      end
-    end
-  end
-
-  def tags_bulk
-    tags = params[:tags].split(/\t/)
-    # Destroy all current tags and replace with new ones
-    tags_client.replace(tags: tags)
-    reindex
-
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: "#{tags.size} Tags updated." }
-      else
-        msg = "#{tags.size} tags for #{params[:id]} have been updated!"
         format.any { redirect_to solr_document_path(params[:id]), notice: msg }
       end
     end
