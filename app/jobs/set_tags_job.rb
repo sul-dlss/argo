@@ -5,15 +5,16 @@
 class SetTagsJob < GenericJob
   queue_as :default
 
+  DELIM = "\t"
+
   def perform(bulk_action_id, params)
     super
 
     with_bulk_action_log do |log_buffer|
       log_buffer.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       update_druid_count
-      byebug
 
-      pids.map { |druid_with_tag| druid_with_tag.split('	') }.each do |pid|
+      pids.map { |druid_with_tag| druid_with_tag.split(DELIM) }.each do |pid|
         log_buffer.puts("#{Time.current} #{self.class}: Attempting to set tags for #{pid[0]} (bulk_action.id=#{bulk_action_id})")
         set_tags(pid[0], pid[1], log_buffer)
       end
