@@ -7,7 +7,7 @@
   </div>
   <h2><%= @document.title %></h2>
   <div class='form-group'>
-    <label>Released for:</label> <%= @document.fetch(:released_to_ssim, ['']).to_sentence %>
+    <label>Released for:</label> <%= @document.released_to.to_sentence %>
   </div>
   <%= render "#{@document.object_type}_manage_release_bulk_action_form", f: f %>
   <div class='form-group'>

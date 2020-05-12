@@ -39,7 +39,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'project_tag_ssim',                label: 'Project',           link_to_search: true
     config.add_index_field 'source_id_ssim',                  label: 'Source'
     config.add_index_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
-    config.add_index_field 'released_to_ssim',                label: 'Released to'
+    config.add_index_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released to'
     config.add_index_field 'status_ssi',                      label: 'Status'
     config.add_index_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
     config.add_index_field 'rights_descriptions_ssim',        label: 'Access Rights'
@@ -55,7 +55,7 @@ class CatalogController < ApplicationController
     config.add_show_field 'originInfo_date_created_tesim',   label: 'Created'
     config.add_show_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :preserved_size_human
     config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_search: true
-    config.add_show_field 'released_to_ssim',                label: 'Released to'
+    config.add_show_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released to'
     config.add_show_field 'status_ssi',                      label: 'Status'
     config.add_show_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
     config.add_show_field 'rights_descriptions_ssim',        label: 'Access Rights'
@@ -76,7 +76,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 10, more_limit: 9999, sort: 'index', home: false
     config.add_facet_field 'current_version_isi',             label: 'Version',             limit: 10, home: false
     config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   limit: 10, home: false
-    config.add_facet_field 'released_to_ssim',                label: 'Released To',         limit: 10
+    config.add_facet_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released To',         limit: 10
     config.add_facet_field 'wf_wps_ssim',                     label: 'Workflows (WPS)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
     config.add_facet_field 'wf_wsp_ssim',                     label: 'Workflows (WSP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy', home: false
     config.add_facet_field 'wf_swp_ssim',                     label: 'Workflows (SWP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy', home: false

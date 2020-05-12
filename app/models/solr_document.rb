@@ -18,6 +18,7 @@ class SolrDocument
   FIELD_LAST_MODIFIED_DATE        = :modified_latest_dttsi
   FIELD_LAST_OPENED_DATE          = :opened_latest_dttsi
   FIELD_PRESERVATION_SIZE         = :preserved_size_dbtsi
+  FIELD_RELEASED_TO               = :released_to_ssim
   FIELD_TITLE                     = 'sw_display_title_tesim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
@@ -35,6 +36,7 @@ class SolrDocument
   attribute :modified_date, Blacklight::Types::Array, FIELD_LAST_MODIFIED_DATE
   attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
   attribute :preservation_size, Blacklight::Types::String, FIELD_PRESERVATION_SIZE
+  attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
   attribute :title, Blacklight::Types::String, FIELD_TITLE
 
   # self.unique_key = 'id'

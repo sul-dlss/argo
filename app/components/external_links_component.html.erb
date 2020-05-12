@@ -1,7 +1,9 @@
 <h3 class="start-open">View in new window</h3>
 <ul class='nav nav-stacked'>
   <li><%= purl_link %></li>
-  <li><%= searchworks_link %></li>
+  <% if released_to_searchworks? %>
+    <li><%= searchworks_link %></li>
+  <% end %>
   <li><%= dor_link %></li>
   <li><%= link_to 'FoXML', File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/export?context=archive"), target: '_blank', rel: 'noopener' %></li>
   <li>
