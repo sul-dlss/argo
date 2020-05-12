@@ -8,11 +8,11 @@ class MilestonesPresenter
   end
 
   def each_version
-    milestones.keys.sort_by(&:to_i)
+    milestones.keys.sort_by(&:to_i).each { |version| yield(version) }
   end
 
   def steps_for(version)
-    @milestones[version].each_with_index { |(key, milestone), index| yield(key, milestone, index) }
+    @milestones[version]
   end
 
   def version_title(version)
