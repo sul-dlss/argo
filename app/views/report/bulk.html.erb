@@ -75,9 +75,6 @@ ul li{
       <div class="col-sm-2">
         <button class="bulk_button btn-block" id="show_tags" name="show_tags">Tags</button>
       </div>
-      <div class="col-sm-2">
-        <button class="bulk_button bulk-btn-danger btn-block" id="purge-button">Purge</button>
-      </div>
     </div>
   </div>
 </div>
@@ -128,10 +125,6 @@ ul li{
     <%= select_tag :new_resource_type, options_for_select(new_resource_types) %><br>
     <span class="bulk_button" id="confirm-set-content-type-button">Set content types</span>
   </p>
-</div>
-<div class="bulk_operation" id="purge" name="purge">
-  <h1>Purge items that have been registered but have not been submitted for accessioning from fedora</h1>
-  <span class="bulk_button" id="confirm-purge-button">Purge objects from fedora</span><br>
 </div>
 
 <div class="bulk_operation" id="add_workflow" name="add_workflow">

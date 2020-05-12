@@ -9,6 +9,7 @@ class BulkAction < ApplicationRecord
                      DescmetadataDownloadJob
                      ReleaseObjectJob
                      RemoteIndexingJob
+                     PurgeJob
                      SetGoverningApoJob
                      ManageCatkeyJob
                      PrepareJob

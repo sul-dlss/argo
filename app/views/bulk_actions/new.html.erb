@@ -18,6 +18,7 @@
         <%= f.select(:action_type,
                      [['Download Descriptive Metadata', 'DescmetadataDownloadJob'],
                       ['Manage release', 'ReleaseObjectJob'],
+                      ['Purge object', 'PurgeJob'],
                       ['Update governing APO', 'SetGoverningApoJob'],
                       ['Reindex', 'RemoteIndexingJob'],
                       ['Manage Catkeys', 'ManageCatkeyJob'],
@@ -54,6 +55,12 @@
         <div role='tabpanel' class='tab-pane' id='RemoteIndexingJob'>
           <span class='help-block'>
             Reindexes the DOR object to Solr
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='PurgeJob'>
+          <span class='help-block'>
+            Deletes unpublished DOR objects
           </span>
         </div>
 
@@ -104,8 +111,7 @@
       </a>
       <div class='form-group'>
         <label>Druids to perform bulk action on</label>
-        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'>
-        </textarea>
+        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'></textarea>
       </div>
     </div>
 
