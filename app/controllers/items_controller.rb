@@ -446,7 +446,7 @@ class ItemsController < ApplicationController
     # Skip reindexing all bulk operations *except* bulk tag operations which do
     # require immediate reindexing since they do not touch Fedora (and thus do
     # not send messages to Solr)
-    return if params[:bulk] && params[:tags].nil?
+    return if params[:bulk]
 
     Argo::Indexer.reindex_pid_remotely(@object.pid)
   end
