@@ -72,6 +72,24 @@ RSpec.describe SolrDocument, type: :model do
     end
   end
 
+  describe '#preservation_size' do
+    subject(:preservation_size) { document.preservation_size }
+
+    context 'with data' do
+      let(:document_attributes) do
+        { SolrDocument::FIELD_PRESERVATION_SIZE => 123_214 }
+      end
+
+      it { is_expected.to eq 123_214 }
+    end
+
+    context 'without data' do
+      let(:document_attributes) { {} }
+
+      it { is_expected.to be_nil }
+    end
+  end
+
   describe '#datastreams' do
     subject(:datastreams) { document.datastreams }
 
