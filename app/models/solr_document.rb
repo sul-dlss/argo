@@ -4,7 +4,6 @@ class SolrDocument
   include Blacklight::Solr::Document
   include ApoConcern
   include CollectionConcern
-  include TitleConcern
   include PreservationSizeConcern
 
   FIELD_OBJECT_TYPE          = :objectType_ssim
@@ -19,6 +18,7 @@ class SolrDocument
   FIELD_LAST_DEPOSITED_DATE       = :deposited_latest_dttsi
   FIELD_LAST_MODIFIED_DATE        = :modified_latest_dttsi
   FIELD_LAST_OPENED_DATE          = :opened_latest_dttsi
+  FIELD_TITLE                     = 'sw_display_title_tesim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
@@ -34,6 +34,7 @@ class SolrDocument
   attribute :deposited_date, Blacklight::Types::Array, FIELD_LAST_DEPOSITED_DATE
   attribute :modified_date, Blacklight::Types::Array, FIELD_LAST_MODIFIED_DATE
   attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
+  attribute :title, Blacklight::Types::String, FIELD_TITLE
 
   # self.unique_key = 'id'
 
