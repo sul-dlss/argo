@@ -43,9 +43,9 @@ RSpec.describe 'Bulk actions view', js: true do
     expect(page).to have_button('Add a workflow', disabled: false)
 
     fill_in 'pids', with: 'druid:zt570tx3016' # just one druid
-    click_button 'Tags'
-    fill_in 'tags', with: 'druid:cx969bz4046	Project : Test project'
-    click_button 'Update tags'
+    click_button 'Set source Id'
+    fill_in 'source_ids', with: 'druid:cx969bz4046	test:SOURCE_ID_1234'
+    click_button 'Update source ids'
 
     expect(page).to have_content 'Done!'
   end
