@@ -3,27 +3,10 @@
     <tr><th>version</th><th>what</th><th>when</th></tr>
   </thead>
   <tbody>
-    <% @milestones_presenter.each_version do |version|
-         steps = @milestones_presenter.steps_for(version)
-         steps.each_with_index do |(k, m), index| %>
-        <% if index.zero? %>
-          <tr style="display: none" class="last_step<%= version %>">
-            <td><span style="cursor: pointer;" onclick='$(".version<%= version %>").toggle();$(".last_step<%= version %>").toggle();'>+</span><%= version %></td>
-            <td><%= steps['accessioned'][:display] || k.titleize %></td>
-            <td><%= steps['accessioned'][:time].nil? ? 'pending' : steps['accessioned'][:time].in_time_zone.to_s %></td>
-          </tr>
-          <tr class="version<%= version %>">
-            <td colspan="3" onclick='$(".version<%= version %>").toggle();$(".last_step<%= version %>").toggle();'><span style="cursor: pointer;">-</span>
-              <%= @milestones_presenter.version_title(version) %>
-            </td>
-          </tr>
-        <% end -%>
-        <tr class="version<%= version %>">
-          <td></td>
-          <td><%= m[:display] || k.titleize %></td>
-          <td><%= m[:time].nil? ? 'pending' : m[:time].in_time_zone.to_s %></td>
-        </tr>
-      <% end %>
+    <% @milestones_presenter.each_version do |version| %>
+      <%= render VersionMilestonesComponent.new(version: version,
+                                                title: @milestones_presenter.version_title(version),
+                                                steps: @milestones_presenter.steps_for(version)) %>
     <% end %>
   </tbody>
 </table>
