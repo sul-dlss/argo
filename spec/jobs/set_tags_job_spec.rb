@@ -22,6 +22,7 @@ RSpec.describe SetTagsJob, type: :job do
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
     allow(tags_client1).to receive(:replace).with(tags: tags1)
     allow(tags_client2).to receive(:replace).with(tags: tags2)
+    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
 
     described_class.perform_now(bulk_action.id,
                                 pids: pids,
@@ -33,8 +34,9 @@ RSpec.describe SetTagsJob, type: :job do
     FileUtils.rm('foo.txt')
   end
 
-  it 'publishes objects' do
+  it 'adds tags to pids in list' do
     expect(tags_client1).to have_received(:replace).with(tags: tags1)
     expect(tags_client2).to have_received(:replace).with(tags: tags2)
+    expect(Argo::Indexer).to have_received(:reindex_pid_remotely).twice
   end
 end

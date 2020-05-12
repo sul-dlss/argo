@@ -31,10 +31,10 @@ class SetTagsJob < GenericJob
     # not send messages to Solr)
     Argo::Indexer.reindex_pid_remotely(druid)
 
-    log_buffer.puts("#{Time.current} #{self.class}: Successfully set tags for #{current_druid} (bulk_action.id=#{bulk_action.id})")
+    log_buffer.puts("#{Time.current} #{self.class}: Successfully set tags for #{druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
   rescue StandardError => e
-    log_buffer.puts("#{Time.current} #{self.class}: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e}")
+    log_buffer.puts("#{Time.current} #{self.class}: Unexpected error for #{druid} (bulk_action.id=#{bulk_action.id}): #{e}")
     bulk_action.increment(:druid_count_fail).save
   end
 end
