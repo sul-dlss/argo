@@ -115,6 +115,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resouces :tags, only: [] do
+      collection do
+        get 'search'
+      end
+    end
+
     member do
       get 'purl_preview'
       post 'refresh_metadata'
