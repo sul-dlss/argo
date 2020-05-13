@@ -126,7 +126,7 @@ function get_druids() {
 
 // create a callback function that will request a list of druids based on the current search, but which
 // will also filter the list of druids on the list the user entered in the pids list text area, so that
-// unwanted druids can get filtered out of search results.  useful for, e.g., get_source_ids and get_tags.
+// unwanted druids can get filtered out of search results.  useful for, e.g., get_source_ids.
 function get_filtered_druid_each_callback(log) {
 	var pids_txt = fetch_pids_txt();
 	var selected_druids = (pids_txt.length > 5) ? extract_pids_list(pids_txt) : null; //in case the user entered druids on which to filter
@@ -145,13 +145,6 @@ function get_source_ids() {
 	var log = document.getElementById('source_ids');
 	var druid_each_callback = get_filtered_druid_each_callback(log);
 	var req_url = report_model['data_url']+'&source_id=true';
-	get_druids_req(log, null, druid_each_callback, null, null, req_url);
-}
-
-function get_tags() {
-	var log = document.getElementById('tags');
-	var druid_each_callback = get_filtered_druid_each_callback(log);
-	var req_url = report_model['data_url']+'&tags=true';
 	get_druids_req(log, null, druid_each_callback, null, null, req_url);
 }
 
@@ -213,8 +206,6 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 	var druid_upd_rows = [];
 	for (i=0; i<druid_upd_lines.length; i++) {
 		dr = druid_upd_lines[i];
-    if (upd_textarea_id !== "tags") // Using this with tag strings breaks tag validation
-		  dr = dr.replace(/ : /g,':');
 		row_result = row_processing_fn(dr);
 		druid_upd_rows.push(row_result);
 	}
@@ -256,19 +247,6 @@ function source_id() {
 	upd_values_for_druids(source_id_url, 'source_ids', row_processing_fn, "user supplied druids and source ids.", is_invalid_row_fn, "invalid source id", get_upd_req_params_from_row_fn);
 }
 
-function set_tags() {
-	var row_processing_fn = function(row_str) {
-		parts = row_str.split("\t");
-		druid = parts.shift();
-		tags = parts.join("\t");
-		row_result = {'druid': druid, 'upd_data': tags};
-		return row_result;
-	};
-	var is_invalid_row_fn = function(row_obj) { return (row_obj['upd_data']==null || row_obj['upd_data'].length<=1 || row_obj['upd_data'].indexOf(':')<1); };
-	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'tags': row_obj['upd_data'] }; };
-	upd_values_for_druids(tags_url, 'tags', row_processing_fn, "user supplied druids and tags.", is_invalid_row_fn, "invalid tags", get_upd_req_params_from_row_fn);
-}
-
 Blacklight.onLoad(()=>{
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
@@ -285,10 +263,6 @@ Blacklight.onLoad(()=>{
 	$('#apply-apo-defaults-button').on('click', () => $('#apply_apo_defaults').show(400))
 	$('#add-workflow-button').on('click', () => $('#add_workflow').show(400))
 	$('#close-versions-button').on('click', () => $('#close').show(400))
-  $('#show_tags').on('click', () => {
-		$('#tag').show(400)
-		get_tags()
-	})
 
   $('#confirm-apo-defaults-button').on('click', () => {
 		fetch_druids(apply_apo_defaults)
@@ -313,11 +287,6 @@ Blacklight.onLoad(()=>{
 	$('#confirm-refresh-metadata-button').on('click', () => {
 		fetch_druids(refresh_metadata)
 		$('#refresh_metadata').hide(400)
-	})
-
-	$('#set_tags').on('click', () => {
-		set_tags()
-		$('#tag').hide(400)
 	})
 
 	$('#set_source_id').on('click', () => {

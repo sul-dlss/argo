@@ -50,4 +50,10 @@ RSpec.describe 'bulk_actions/new.html.erb' do
       expect(rendered).to have_css 'select option[value="RemoteIndexingJob"]'
     end
   end
+
+  describe 'Set Tags form' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'select option[value="SetTagsJob"]'
+    end
+  end
 end

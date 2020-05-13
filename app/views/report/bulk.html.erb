@@ -19,7 +19,6 @@ apo_apply_defaults_url='<%= url_for controller: :items, action: :apply_apo_defau
 add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
 refresh_metadata_url='<%= refresh_metadata_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 source_id_url='<%= url_for controller: :items, action: :source_id, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
-tags_url='<%= url_for controller: :items, action: :tags_bulk, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 </script>
 
 <style>
@@ -66,12 +65,6 @@ ul li{
       <div class="col-sm-2">
         <button class="bulk_button btn-block bulk-btn-danger" id="apply-apo-defaults-button">Apply APO defaults</button>
         <button class="bulk_button bulk-btn-danger btn-block" id="add-workflow-button">Add a workflow</button>
-      </div>
-    </div>
-    <strong>Options that do not require versioning</strong>
-    <div class="row bulk-buttons-row">
-      <div class="col-sm-2">
-        <button class="bulk_button btn-block" id="show_tags" name="show_tags">Tags</button>
       </div>
     </div>
   </div>
@@ -136,15 +129,6 @@ ul li{
   <span class="bulk_button" id="confirm-refresh-metadata-button">Refresh metadata</span><br>
 </div>
 
-<div class="bulk_operation" id="tag">
-  <h1>Change tags</h1>
-  <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
-  druid:bc088fn5010&lt;tab&gt;Project : Something&lt;tab&gt;Process : Content Type : Book
-  </p>
-  <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
-  <textarea style="width:50%" id="tags" name="tags"></textarea><br>
-  <button class="bulk_button" id="set_tags" name="set_tags">Update tags</button>
-</div>
 <div class="bulk_operation" id="source_id">
   <h1>Change source id</h1>
   <p>This needs a list of pids and source ids, with a tab between the pid and the corresponding source id. E.g.:<br>
@@ -152,7 +136,7 @@ ul li{
   </p>
   <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
   <textarea style="width:50%" id="source_ids" name="source_ids"></textarea><br>
-  <span class="bulk_button" id="set_source_id" name="set_source_id">Update source ids</span>
+  <button class="bulk_button" id="set_source_id" name="set_source_id">Update source ids</button>
 </div>
 <div class="bulk_operation" id="rights" name="rights">
   <h1>Set object rights</h1>
