@@ -188,40 +188,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#tags' do
-    context 'when they have manage access' do
-      let(:current_tag) { 'Some : Thing' }
-      let(:fake_tags_client) do
-        instance_double(Dor::Services::Client::AdministrativeTags,
-                        list: [current_tag],
-                        update: true,
-                        destroy: true,
-                        create: true)
-      end
-
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-        allow(controller).to receive(:tags_client).and_return(fake_tags_client)
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-      end
-
-      it 'updates tags' do
-        expect(fake_tags_client).to receive(:update).with(current: current_tag, new: 'Some : Thing : Else').once
-        post 'tags', params: { id: pid, update: 'true', tag1: 'Some : Thing : Else' }
-      end
-
-      it 'deletes tag' do
-        expect(fake_tags_client).to receive(:destroy).with(tag: current_tag).once
-        post 'tags', params: { id: pid, tag: '1', del: 'true' }
-      end
-
-      it 'adds a tag' do
-        expect(fake_tags_client).to receive(:create).with(tags: ['New : Thing'])
-        post 'tags', params: { id: pid, new_tag1: 'New : Thing', add: 'true' }
-      end
-    end
-  end
-
   describe '#set_rights' do
     it 'sets an item to dark' do
       expect(item).to receive(:read_rights=).with('dark')

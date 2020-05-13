@@ -109,10 +109,7 @@ RSpec.describe 'Viewing an Admin policy' do
 
     context 'tag ui' do
       it 'renders the tag ui' do
-        idmd = double(Dor::IdentityMetadataDS)
-        allow(Dor::Item).to receive(:identityMetadata).and_return(idmd)
-        allow(idmd).to receive(:tags).and_return(['something:123'])
-        visit '/items/druid:zt570tx3016/tags_ui'
+        visit '/items/druid:zt570tx3016/tags/edit'
         expect(page).to have_content('Update tags')
       end
     end

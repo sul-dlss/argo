@@ -96,7 +96,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
           },
           {
             label: 'Edit tags',
-            url: "/items/#{item_id}/tags_ui"
+            url: "/items/#{item_id}/tags/edit"
           },
           {
             label: 'Edit collections',
@@ -246,7 +246,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
           },
           {
             label: 'Edit tags',
-            url: "/items/#{view_apo_id}/tags_ui"
+            url: "/items/#{view_apo_id}/tags/edit"
           },
           {
             label: 'Manage release',
