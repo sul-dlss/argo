@@ -2,6 +2,13 @@
 
 # This controller is responsible for managing tags on an item
 class TagsController < ApplicationController
+  def search
+    render json: Dor::Services::Client.administrative_tags.search(q: params[:q])
+  rescue Dor::Services::Client::ConnectionFailed
+    render json: []
+    raise
+  end
+
   def update
     @object = Dor.find params[:item_id]
     authorize! :manage_item, @object

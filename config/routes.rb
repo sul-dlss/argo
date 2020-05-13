@@ -89,6 +89,12 @@ Rails.application.routes.draw do
     resources :uploads, only: %i[new create]
   end
 
+  resource :tags, only: [] do
+    collection do
+      get 'search'
+    end
+  end
+
   resources :items, only: [] do
     resources 'files', only: %i[index], constraints: { id: /.*/ } do
       member do
