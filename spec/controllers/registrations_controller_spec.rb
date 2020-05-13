@@ -2,9 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationController, type: :controller do
+RSpec.describe RegistrationsController, type: :controller do
   before do
-    @item = double(Dor::Item)
     sign_in user
     allow(user).to receive(:is_admin?).and_return(true)
   end
@@ -36,14 +35,14 @@ RSpec.describe RegistrationController, type: :controller do
       </rightsMetadata>
       XML
 
-      @item = double(Dor::Item)
+      item = instance_double(Dor::AdminPolicyObject)
       xml = Nokogiri::XML(content)
-      allow(Dor).to receive(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(item)
       # using content metadata, but any datastream would do
-      object_rights = double(Dor::ContentMetadataDS)
+      object_rights = instance_double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
-      allow(@item).to receive(:defaultObjectRights).and_return object_rights
-      allow(@item).to receive(:default_rights).and_return 'stanford'
+      allow(item).to receive(:defaultObjectRights).and_return object_rights
+      allow(item).to receive(:default_rights).and_return 'stanford'
       get 'rights_list', params: { apo_id: 'abc', format: :xml }
       expect(response.body.include?('Stanford (APO default)')).to eq(true)
     end
@@ -72,14 +71,14 @@ RSpec.describe RegistrationController, type: :controller do
       </rightsMetadata>
       XML
 
-      @item = double(Dor::Item)
+      item = instance_double(Dor::AdminPolicyObject)
       xml = Nokogiri::XML(content)
-      allow(Dor).to receive(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(item)
       # using content metadata, but any datastream would do
-      object_rights = double(Dor::ContentMetadataDS)
+      object_rights = instance_double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
-      allow(@item).to receive(:defaultObjectRights).and_return object_rights
-      allow(@item).to receive(:default_rights).and_return nil
+      allow(item).to receive(:defaultObjectRights).and_return object_rights
+      allow(item).to receive(:default_rights).and_return nil
       get 'rights_list', params: { apo_id: 'abc', format: :xml }
       expect(response.body.include?('Stanford (APO default)')).to eq(false)
     end
@@ -108,14 +107,14 @@ RSpec.describe RegistrationController, type: :controller do
       </rightsMetadata>
       XML
 
-      @item = double(Dor::Item)
+      item = instance_double(Dor::AdminPolicyObject)
       xml = Nokogiri::XML(content)
-      allow(Dor).to receive(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(item)
       # using content metadata, but any datastream would do
-      object_rights = double(Dor::ContentMetadataDS)
+      object_rights = instance_double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
-      allow(@item).to receive(:defaultObjectRights).and_return object_rights
-      allow(@item).to receive(:default_rights).and_return 'world'
+      allow(item).to receive(:defaultObjectRights).and_return object_rights
+      allow(item).to receive(:default_rights).and_return 'world'
       get 'rights_list', params: { apo_id: 'abc', format: :xml }
       expect(response.body.include?('World (APO default)')).to eq(true)
     end
@@ -144,14 +143,14 @@ RSpec.describe RegistrationController, type: :controller do
       </rightsMetadata>
       XML
 
-      @item = double(Dor::Item)
+      item = instance_double(Dor::AdminPolicyObject)
       xml = Nokogiri::XML(content)
-      allow(Dor).to receive(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(item)
       # using content metadata, but any datastream would do
-      object_rights = double(Dor::ContentMetadataDS)
+      object_rights = instance_double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
-      allow(@item).to receive(:defaultObjectRights).and_return object_rights
-      allow(@item).to receive(:default_rights).and_return 'dark'
+      allow(item).to receive(:defaultObjectRights).and_return object_rights
+      allow(item).to receive(:default_rights).and_return 'dark'
       get 'rights_list', params: { apo_id: 'abc', format: :xml }
       expect(response.body.include?('Dark (Preserve Only) (APO default)')).to eq(true)
     end
@@ -190,14 +189,14 @@ RSpec.describe RegistrationController, type: :controller do
 
     it 'shows no default if there is no xml' do
       content = ''
-      @item = double(Dor::Item)
+      item = instance_double(Dor::AdminPolicyObject)
       xml = Nokogiri::XML(content)
-      allow(Dor).to receive(:find).and_return(@item)
+      allow(Dor).to receive(:find).and_return(item)
       # using content metadata, but any datastream would do
-      object_rights = double(Dor::ContentMetadataDS)
+      object_rights = instance_double(Dor::ContentMetadataDS)
       allow(object_rights).to receive(:ng_xml).and_return xml
-      allow(@item).to receive(:defaultObjectRights).and_return object_rights
-      allow(@item).to receive(:default_rights).and_return nil
+      allow(item).to receive(:defaultObjectRights).and_return object_rights
+      allow(item).to receive(:default_rights).and_return nil
       get 'rights_list', params: { apo_id: 'abc', format: :xml }
       expect(response.body.include?('World (APO default)')).to eq(false)
       expect(response.body.include?('Stanford (APO default)')).to eq(false)
@@ -277,8 +276,8 @@ RSpec.describe RegistrationController, type: :controller do
         # after "None", and the 'a' druid has a title that should cause it to sort last.
         col_ids_for_apo = ['druid:pb873ty1662', 'druid:ab098cd7654', 'druid:zy123xw4567']
         allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return(col_ids_for_apo)
-        mock_collection_z = double(Dor::Collection, label: 'A collection that sorts to the top')
-        mock_collection_a = double(Dor::Collection, label: 'Ze last collection in ze list')
+        mock_collection_z = instance_double(Dor::Collection, label: 'A collection that sorts to the top')
+        mock_collection_a = instance_double(Dor::Collection, label: 'Ze last collection in ze list')
         allow(Dor).to receive(:find).with('druid:zy123xw4567').and_return(mock_collection_z)
         allow(Dor).to receive(:find).with('druid:pb873ty1662').and_call_original
         allow(Dor).to receive(:find).with('druid:ab098cd7654').and_return(mock_collection_a)

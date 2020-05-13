@@ -3,11 +3,7 @@
 # rubocop:disable Metrics/ClassLength
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
-  before_action :create_obj, except: %i[
-    purl_preview
-    open_bulk
-    register
-  ]
+  before_action :create_obj, except: :purl_preview
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
     datastream_update
@@ -100,10 +96,6 @@ class ItemsController < ApplicationController
         format.any  { redirect_to solr_document_path(params[:id]), notice: response_message }
       end
     end
-  end
-
-  def register
-    @perm_keys = current_user.groups
   end
 
   def mods
