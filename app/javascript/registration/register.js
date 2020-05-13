@@ -4,7 +4,6 @@ import pathTo from './pathTo'
 export default function DorRegistration(initOpts) {
   var $t = {
     defaultValues: {
-      objectType: 'item',
       projectName: '',
       apoId: 'druid:hv992ry2431',   // TODO: uber APO druid must be pulled from config, not hardcoded
       workflowId: null,
@@ -32,7 +31,6 @@ export default function DorRegistration(initOpts) {
 
     register : function(rowid, progressFunction) {
       var apo = $t.apoId;
-      var sourcePrefix = $t.metadataSource;
       progressFunction = progressFunction || function() {}
 
       // Grab list of tags from textarea, split, and reject blanks
@@ -46,11 +44,9 @@ export default function DorRegistration(initOpts) {
       data.id = rowid
 
       var params = {
-        'object_type' : $t.objectType,
         'admin_policy' : apo,
         'project' : $t.projectName,
         'workflow_id' : $('#workflow_id').val(),
-        'metadata_source' : ($t.metadataSource !== 'label') ? null : $t.metadataSource,
         'label' : data.label || ':auto',
         'tag' : tags,
         'rights' : $('#rights').val(),
@@ -61,7 +57,7 @@ export default function DorRegistration(initOpts) {
         params.source_id = data.source_id;
       }
 
-      params.other_id = sourcePrefix + ':' + data.metadata_id;
+      params.other_id = $t.metadataSource + ':' + data.metadata_id;
 
       if (data.druid) {
         params.pid = 'druid:' + data.druid;
@@ -131,8 +127,7 @@ export default function DorRegistration(initOpts) {
               return false;
           }
       }
-      var sourcePrefix = $t.metadataSource;
-      if (sourcePrefix === 'symphony') {
+      if ($t.metadataSource === 'symphony') {
         if ($.grep(mdIds,function(id) { return id.trim() === '' }).length > 0) {
           $t.displayRequirements('Metadata source was detected as "symphony", which requires metadata IDs for all items.');
           return false
@@ -158,7 +153,6 @@ export default function DorRegistration(initOpts) {
 
     registerAll : function() {
       var apo = $t.apoId;
-      var sourcePrefix = $t.metadataSource;
       if (this.validate()) {
         var ids = $t.getDataIds();
         $t.progress(true);

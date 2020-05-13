@@ -63,10 +63,8 @@ RSpec.describe 'Item registration page', js: true do
     # to check the params below.
     expect(page).to have_css('span.glyphicon-exclamation-sign', visible: true)
     expect(registration_params).to include(
-      'object_type' => 'item',
       'admin_policy' => 'druid:hv992ry2431',
       'workflow_id' => 'goobiWF',
-      'metadata_source' => 'label',
       'label' => 'object title',
       'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
       'rights' => 'default',

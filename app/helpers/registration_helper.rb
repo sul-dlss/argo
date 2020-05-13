@@ -24,13 +24,6 @@ module RegistrationHelper
     end
   end
 
-  def valid_object_types
-    [
-      %w[Item item],
-      ['Workflow Definition', 'workflow']
-    ]
-  end
-
   def valid_content_types
     [
       'Book (ltr)',

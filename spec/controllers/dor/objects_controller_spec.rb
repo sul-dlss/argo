@@ -24,11 +24,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
     context 'when source_id is not provided' do
       let(:submitted) do
         {
-          object_type: 'item',
           admin_policy: 'druid:hv992ry2431',
           collection: 'druid:hv992ry7777',
           workflow_id: 'registrationWF',
-          metadata_source: 'label',
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Book (ltr)',
                 'Registered By : jcoyne85'],
@@ -48,11 +46,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
     context 'when register is successful with default rights' do
       let(:submitted) do
         {
-          object_type: 'item',
           admin_policy: 'druid:hv992ry2431',
           collection: 'druid:hv992ry7777',
           workflow_id: 'registrationWF',
-          metadata_source: 'label',
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Document',
                 'Registered By : jcoyne85'],
@@ -95,11 +91,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
     context 'when register is successful with explicit rights' do
       let(:submitted) do
         {
-          object_type: 'item',
           admin_policy: 'druid:hv992ry2431',
           collection: 'druid:hv992ry7777',
           workflow_id: 'registrationWF',
-          metadata_source: 'label',
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Image',
                 'Registered By : jcoyne85'],
@@ -144,11 +138,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
     context 'when register is successful with location access' do
       let(:submitted) do
         {
-          object_type: 'item',
           admin_policy: 'druid:hv992ry2431',
           collection: 'druid:hv992ry7777',
           workflow_id: 'registrationWF',
-          metadata_source: 'label',
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Book (ltr)',
                 'Registered By : jcoyne85'],
@@ -193,11 +185,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
     context 'when register is successful with no-download' do
       let(:submitted) do
         {
-          object_type: 'item',
           admin_policy: 'druid:hv992ry2431',
           collection: 'druid:hv992ry7777',
           workflow_id: 'registrationWF',
-          metadata_source: 'label',
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Image',
                 'Registered By : jcoyne85'],
@@ -242,11 +232,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
     context 'when register is successful with dark' do
       let(:submitted) do
         {
-          object_type: 'item',
           admin_policy: 'druid:hv992ry2431',
           collection: 'druid:hv992ry7777',
           workflow_id: 'registrationWF',
-          metadata_source: 'label',
           label: 'test parameters for registration',
           tag: ['Process : Content Type : Image',
                 'Registered By : jcoyne85'],
