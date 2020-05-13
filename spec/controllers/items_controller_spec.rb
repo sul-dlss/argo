@@ -272,42 +272,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#update_resource' do
-    before do
-      @mock_ds = double(Dor::ContentMetadataDS)
-      allow(@mock_ds).to receive(:dirty?).and_return(false)
-      allow(@mock_ds).to receive(:save)
-      allow(item).to receive(:datastreams).and_return('contentMetadata' => @mock_ds)
-    end
-
-    context 'without manage content access' do
-      it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
-        post 'update_resource', params: { resource: '0001', position: '3', id: pid }
-        expect(response.code).to eq('403')
-      end
-    end
-
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'calls dor-services to reorder the resources' do
-        expect(item).to receive(:move_resource)
-        post 'update_resource', params: { resource: '0001', position: '3', id: pid }
-      end
-      it 'calls dor-services to change the label' do
-        expect(item).to receive(:update_resource_label)
-        post 'update_resource', params: { resource: '0001', label: 'label!', id: pid }
-      end
-      it 'calls dor-services to update the resource type' do
-        expect(item).to receive(:update_resource_type)
-        post 'update_resource', params: { resource: '0001', type: 'book', id: pid }
-      end
-    end
-  end
-
   describe '#add_collection' do
     context 'when they have manage access' do
       before do

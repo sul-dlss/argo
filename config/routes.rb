@@ -137,7 +137,6 @@ Rails.application.routes.draw do
       get 'set_governing_apo_ui'
       post 'set_governing_apo'
       post :apply_apo_defaults
-      match :update_resource, action: :update_resource, as: 'update_resource', via: %i[get post]
     end
   end
 
