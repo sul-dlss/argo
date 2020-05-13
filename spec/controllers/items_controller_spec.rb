@@ -229,55 +229,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#update_attributes' do
-    before do
-      @content_md = double(Dor::ContentMetadataDS)
-      allow(item).to receive(:contentMetadata).and_return(@content_md)
-    end
-
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'updates the shelve, publish and preserve to yes (used to be true)' do
-        allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
-          expect(shelve).to eq('yes')
-          expect(preserve).to eq('yes')
-          expect(publish).to eq('yes')
-        end
-        post 'update_attributes', params: { shelve: 'on', publish: 'on', preserve: 'on', id: pid, file_name: 'something.txt' }
-      end
-
-      it 'works if not all of the values are set' do
-        allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
-          expect(shelve).to eq('no')
-          expect(preserve).to eq('yes')
-          expect(publish).to eq('yes')
-        end
-        post 'update_attributes', params: { publish: 'on', preserve: 'on', id: pid, file_name: 'something.txt' }
-      end
-
-      it 'updates the shelve, publish and preserve to no (used to be false)' do
-        allow(@content_md).to receive(:update_attributes) do |file, publish, shelve, preserve|
-          expect(shelve).to eq('no')
-          expect(preserve).to eq('no')
-          expect(publish).to eq('no')
-        end
-        expect(@content_md).to receive(:update_attributes)
-        post 'update_attributes', params: { shelve: 'no', publish: 'no', preserve: 'no', id: pid, file_name: 'something.txt' }
-      end
-    end
-
-    context 'without manage content access' do
-      it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
-        post 'update_attributes', params: { shelve: 'no', publish: 'no', preserve: 'no', id: pid, file_name: 'something.txt' }
-        expect(response.code).to eq('403')
-      end
-    end
-  end
-
   describe '#datastream_update' do
     let(:xml) { '<contentMetadata/>' }
     let(:invalid_apo_xml) { '<hydra:isGovernedBy rdf:resource="info:fedora/druid:not_exist"/>' }
@@ -549,7 +500,7 @@ RSpec.describe ItemsController, type: :controller do
 
             expect(response).to redirect_to(solr_document_path(pid))
             friendly1 = 'An error occurred while attempting to refresh metadata: foo.'
-            friendly2 = 'Please try again or contact the sdr-operations Slack channel for assistance.'
+            friendly2 = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'
             expect(flash[:error]).to eq "#{friendly1} #{friendly2}"
           end
         end

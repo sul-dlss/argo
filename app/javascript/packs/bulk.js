@@ -20,10 +20,6 @@ function process_request(druids, action_url, req_type, req_params, success_strin
 	})
 }
 
-function process_get(druids, action_url, success_string) {
-	process_request(druids, action_url, 'GET', null, success_string);
-}
-
 function process_post(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'POST', req_params, success_string, show_buttons, show_buttons);
 }
@@ -94,10 +90,6 @@ function fetch_druids(fun) {
 	}
 }
 
-function republish(druids){
-	process_get(druids, republish_url, "Republished.");
-}
-
 function set_rights(druids){
 	var params = { 'access_form[rights]': document.getElementById('rights_select').value }
 	process_post(druids, set_rights_url, params, "Updated");
@@ -119,7 +111,7 @@ function add_workflow(druids){
 
 
 function refresh_metadata(druids){
-	process_get(druids, refresh_metadata_url, "Updated.");
+	process_post(druids, refresh_metadata_url, {}, "Updated.");
 }
 
 function get_druids() {
@@ -295,11 +287,6 @@ Blacklight.onLoad(()=>{
 	$('#confirm-refresh-metadata-button').on('click', () => {
 		fetch_druids(refresh_metadata)
 		$('#refresh_metadata').hide(400)
-	})
-
-  $('#republish_button').on('click', () => {
-		fetch_druids(republish)
-		$('#republish').hide(400)
 	})
 
 	$('#set_source_id').on('click', () => {

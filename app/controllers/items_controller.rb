@@ -18,14 +18,10 @@ class ItemsController < ApplicationController
     catkey
     tags
     update_rights
-    update_attributes
     embargo_update
     embargo_form
   ]
 
-  before_action :authorize_manage_desc_metadata!, only: [
-    :refresh_metadata
-  ]
   before_action :authorize_set_governing_apo!, only: [
     :set_governing_apo
   ]
@@ -151,22 +147,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def update_attributes
-    %i[publish shelve preserve].each do |k|
-      params[k] = params[k].nil? || params[k] != 'on' ? 'no' : 'yes'
-    end
-    @object.contentMetadata.update_attributes(
-      params[:file_name],
-      params[:publish],
-      params[:shelve],
-      params[:preserve]
-    )
-    respond_to do |format|
-      msg = "Updated attributes for file #{params[:file_name]}!"
-      format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-    end
-  end
-
   # Given two instances of VersionTag, find the most significant difference
   # between the two (return nil if either one is nil or if they're the same)
   # @param [String] cur_version_tag   current version tag
@@ -263,19 +243,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def discoverable
-    messages = mods_discoverable @object.descMetadata.ng_xml
-    if messages.empty?
-      render status: :ok, plain: 'Discoverable.'
-    else
-      render status: :internal_server_error, plain: messages.join(' ')
-    end
-  end
-
-  def remediate_mods
-    render status: :ok, plain: 'method disabled'
-  end
-
   def schema_validation
     errors = schema_validate @object.descMetadata.ng_xml
     if errors.empty?
@@ -286,6 +253,8 @@ class ItemsController < ApplicationController
   end
 
   def refresh_metadata
+    authorize! :manage_desc_metadata, @object
+
     if @object.catkey.blank?
       render status: :bad_request, plain: 'object must have catkey to refresh descMetadata'
       return
@@ -302,41 +271,9 @@ class ItemsController < ApplicationController
     end
   rescue Dor::Services::Client::UnexpectedResponse => e
     user_begin = 'An error occurred while attempting to refresh metadata'
-    user_end = 'Please try again or contact the sdr-operations Slack channel for assistance.'
-    Rails.logger.error "#{user_begin}: #{e.message}"
+    user_end = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'
+    logger.error "#{user_begin}: #{e.message}"
     redirect_to solr_document_path(params[:id]), flash: { error: "#{user_begin}: #{e.message}. #{user_end}" }
-  end
-
-  def scrubbed_content_ng_utf8(content)
-    %w[amp lt gt quot].each do |char|
-      content = content.gsub('&amp;' + char + ';', '&' + char + ';')
-    end
-    content = content.gsub(/&amp;(\#[0-9]+;)/, '&\1')
-    content = content.gsub(/&amp;(\#x[0-9A-Fa-f];)/, '&\1')
-    Nokogiri::XML(content, nil, 'UTF-8')
-  end
-
-  def detect_duplicate_encoding
-    ds = @object.descMetadata
-    ng = scrubbed_content_ng_utf8(ds.content)
-    if EquivalentXml.equivalent?(ng, ds.ng_xml)
-      render status: :ok, plain: 'No change'
-    else
-      render status: :internal_server_error, plain: 'Has duplicates'
-    end
-  end
-
-  def remove_duplicate_encoding
-    ds = @object.descMetadata
-    ng = scrubbed_content_ng_utf8(ds.content)
-    if EquivalentXml.equivalent?(ng, ds.ng_xml)
-      render status: :internal_server_error, plain: 'No duplicate encoding'
-    else
-      ds.ng_xml = ng
-      ds.content = ng.to_s
-      @object.save
-      render status: :ok, plain: 'Has duplicates'
-    end
   end
 
   # This is called from the item page and from the bulk (synchronous) update page
@@ -456,10 +393,6 @@ class ItemsController < ApplicationController
 
   def authorize_manage!
     authorize! :manage_item, @object
-  end
-
-  def authorize_manage_desc_metadata!
-    authorize! :manage_desc_metadata, @object
   end
 
   def enforce_versioning

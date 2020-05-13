@@ -117,18 +117,12 @@ Rails.application.routes.draw do
 
     member do
       get 'purl_preview'
-      get 'discoverable'
-      get 'refresh_metadata'
+      post 'refresh_metadata'
       get 'schema_validate', action: :schema_validation, as: 'schema_validation'
-      get 'remediate_mods'
       get 'mods'
-      get 'remove_duplicate_encoding'
-      get 'detect_duplicate_encoding'
       post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'
-      post 'datastream',         action: :datastream_update,     as: 'datastream_update'
-
-      post 'file/attributes',    action: :update_attributes, as: 'update_attributes'
+      post 'datastream', action: :datastream_update, as: 'datastream_update'
       get 'source_id_ui'
       get 'tags_ui'
       get 'catkey_ui'

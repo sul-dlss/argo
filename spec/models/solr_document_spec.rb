@@ -26,6 +26,22 @@ RSpec.describe SolrDocument, type: :model do
     end
   end
 
+  describe '#title' do
+    subject(:title) { document.title }
+
+    context 'with data' do
+      let(:document_attributes) { { SolrDocument::FIELD_TITLE => 'My title' } }
+
+      it { is_expected.to eq 'My title' }
+    end
+
+    context 'without data' do
+      let(:document_attributes) { {} }
+
+      it { is_expected.to be_nil }
+    end
+  end
+
   describe '#admin_policy?' do
     context 'when object type is an adminPolicy' do
       let(:document_attributes) do
@@ -53,6 +69,24 @@ RSpec.describe SolrDocument, type: :model do
       it 'checks and returns false' do
         expect(document.admin_policy?).to be false
       end
+    end
+  end
+
+  describe '#preservation_size' do
+    subject(:preservation_size) { document.preservation_size }
+
+    context 'with data' do
+      let(:document_attributes) do
+        { SolrDocument::FIELD_PRESERVATION_SIZE => 123_214 }
+      end
+
+      it { is_expected.to eq 123_214 }
+    end
+
+    context 'without data' do
+      let(:document_attributes) { {} }
+
+      it { is_expected.to be_nil }
     end
   end
 
@@ -114,6 +148,14 @@ RSpec.describe SolrDocument, type: :model do
 
     it 'is a list of versions' do
       expect(versions).to eq data
+    end
+  end
+
+  describe '#druid' do
+    let(:document_attributes) { { id: 'druid:abc123456' } }
+
+    it 'returns the druid' do
+      expect(document.druid).to eq 'abc123456'
     end
   end
 

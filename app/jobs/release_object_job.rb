@@ -6,6 +6,7 @@ class ReleaseObjectJob < GenericJob
   queue_as :release_object
 
   attr_reader :manage_release
+
   ##
   # This is a shameless green approach to a job that calls release from dor
   # services app and then kicks off release WF.

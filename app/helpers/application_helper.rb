@@ -31,12 +31,6 @@ module ApplicationHelper
 
   ##
   # @return [Boolean]
-  def bulk_update_view?
-    current_page?(report_bulk_path)
-  end
-
-  ##
-  # @return [Boolean]
   def catalog_view?
     current_page?(search_catalog_path)
   end
