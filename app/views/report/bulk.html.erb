@@ -19,7 +19,7 @@ set_rights_url='<%= url_for controller: :items, action: :set_rights, id: 'druid:
 set_collection_url='<%= url_for controller: :items, action: :set_collection, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 apo_apply_defaults_url='<%= url_for controller: :items, action: :apply_apo_defaults, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
-refresh_metadata_url='<%= url_for controller: :items, action: :refresh_metadata, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
+refresh_metadata_url='<%= refresh_metadata_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 source_id_url='<%= url_for controller: :items, action: :source_id, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 tags_url='<%= url_for controller: :items, action: :tags_bulk, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 </script>
