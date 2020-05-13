@@ -16,7 +16,6 @@ class ItemsController < ApplicationController
     update_resource
     source_id
     catkey
-    tags
     update_rights
     embargo_update
     embargo_form
@@ -189,34 +188,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def tags
-    current_tags = tags_client.list
-
-    if params[:add]
-      tags = params.slice(:new_tag1, :new_tag2, :new_tag3).values.reject(&:empty?)
-      tags_client.create(tags: tags) if tags.any?
-    end
-
-    if params[:del]
-      tag_to_delete = current_tags[params[:tag].to_i - 1]
-      raise 'failed to delete' unless tags_client.destroy(tag: tag_to_delete)
-    end
-
-    if params[:update]
-      count = 1
-      current_tags.each do |tag|
-        tags_client.update(current: tag, new: params["tag#{count}".to_sym])
-        count += 1
-      end
-    end
-
-    reindex
-    respond_to do |format|
-      msg = "Tags for #{params[:id]} have been updated!"
-      format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-    end
-  end
-
   def purge_object
     if dor_lifecycle(@object, 'submitted')
       render status: :bad_request, plain: 'Cannot purge an object after it is submitted.'
@@ -332,15 +303,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def tags_ui
-    @pid = @object.pid
-    @tags = tags_client.list
-
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
   def catkey_ui
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -360,10 +322,6 @@ class ItemsController < ApplicationController
   end
 
   private
-
-  def tags_client
-    Dor::Services::Client.object(@object.pid).administrative_tags
-  end
 
   # Filters
   def create_obj

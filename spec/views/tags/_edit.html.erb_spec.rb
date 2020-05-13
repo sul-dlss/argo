@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/_tags_ui.html.erb' do
+RSpec.describe 'tags/_edit.html.erb' do
   let(:pid) { 'druid:bc123df5678' }
   let(:tags) { ['Catz are awesome', 'Nice!'] }
 

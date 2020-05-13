@@ -22,7 +22,7 @@ class ButtonsPresenter
            :workflow_service_published_path,
            :purge_item_path,
            :source_id_ui_item_path,
-           :tags_ui_item_path,
+           :edit_item_tags_path,
            :catkey_ui_item_path,
            :collection_ui_item_path,
            :item_content_type_path,
@@ -72,7 +72,7 @@ class ButtonsPresenter
     buttons << purge_button
 
     buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
-    buttons << { url: tags_ui_item_path(id: pid), label: 'Edit tags' }
+    buttons << { url: edit_item_tags_path(item_id: pid), label: 'Edit tags' }
     if [Dor::Item, Dor::Set].any? { |clazz| object.is_a? clazz } # these only apply for items, sets and collections
       buttons << { url: catkey_ui_item_path(id: pid), label: 'Manage catkey' }
       buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
