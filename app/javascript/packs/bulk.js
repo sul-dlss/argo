@@ -90,10 +90,6 @@ function fetch_druids(fun) {
 	}
 }
 
-function republish(druids){
-	process_get(druids, republish_url, "Republished.");
-}
-
 function set_rights(druids){
 	var params = { 'access_form[rights]': document.getElementById('rights_select').value }
 	process_post(druids, set_rights_url, params, "Updated");
@@ -317,11 +313,6 @@ Blacklight.onLoad(()=>{
 	$('#confirm-refresh-metadata-button').on('click', () => {
 		fetch_druids(refresh_metadata)
 		$('#refresh_metadata').hide(400)
-	})
-
-  $('#republish_button').on('click', () => {
-		fetch_druids(republish)
-		$('#republish').hide(400)
 	})
 
 	$('#set_tags').on('click', () => {

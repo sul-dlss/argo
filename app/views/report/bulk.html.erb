@@ -13,8 +13,6 @@ function catalog_url(element)
   return url;
 }
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
-purge_url='<%= url_for controller: :items, action: :purge_object, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
-republish_url='<%= url_for controller: :dor, action: :republish, pid: 'druid:xxxxxxxxx' %>'
 set_rights_url='<%= url_for controller: :items, action: :set_rights, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 set_collection_url='<%= url_for controller: :items, action: :set_collection, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
 apo_apply_defaults_url='<%= url_for controller: :items, action: :apply_apo_defaults, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
