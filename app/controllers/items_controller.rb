@@ -13,7 +13,6 @@ class ItemsController < ApplicationController
     datastream_update
     mods
     purge_object
-    update_resource
     source_id
     catkey
     tags
@@ -229,18 +228,6 @@ class ItemsController < ApplicationController
     ActiveFedora.solr.conn.commit
 
     redirect_to '/', notice: params[:id] + ' has been purged!'
-  end
-
-  def update_resource
-    @object.move_resource(params[:resource], params[:position]) if params[:position]
-    @object.update_resource_label(params[:resource], params[:label]) if params[:label]
-    @object.update_resource_type(params[:resource], params[:type]) if params[:type]
-    acted = params[:position] || params[:label] || params[:type]
-    @object.save if acted
-    notice = (acted ? 'updated' : 'no action received for') + " resource #{params[:resource]}!"
-    respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), notice: notice }
-    end
   end
 
   def schema_validation
