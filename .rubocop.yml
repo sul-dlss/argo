@@ -38,7 +38,7 @@ Metrics/BlockLength:
   Exclude:
     - 'config/routes.rb'
     - 'spec/**/*'
-    - 'lib/tasks/*.rake'
+    - 'lib/**/*.rake'
     - 'app/jobs/create_virtual_objects_job.rb'
 
 RSpec/MultipleExpectations:

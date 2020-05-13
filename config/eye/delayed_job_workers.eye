@@ -8,11 +8,11 @@ end
 workers_count = ENV['ARGO_DELAYED_JOB_WORKER_COUNT'].to_i
 Logger.info "workers_count=#{workers_count}"
 
-Eye.application 'delayed_job' do
+Eye.application :delayed_job do
   working_dir cwd
   stop_on_delete true
 
-  group 'workers' do
+  group :workers do
     # workers can take a while to restart, especially when they've consumed a lot of memory
     start_timeout 90.seconds
     start_grace 10.seconds
@@ -28,7 +28,7 @@ Eye.application 'delayed_job' do
     # "delayed_job.0").  in that situation, this configuration will have trouble monitoring the worker (and will
     # start its own "delayed_job.0" by calling "delayed_job start 1", because it will think no workers are running).
     # as such, it's best to just use this configuration with two or more workers.
-    (0..workers_count-1).each do |i|
+    workers_count.times do |i|
       process "delayed_job.#{i}" do
         pid_file "tmp/pids/delayed_job.#{i}.pid"
         start_command "bundle exec bin/delayed_job start -i #{i}"

@@ -33,41 +33,6 @@ set :linked_dirs, %w[log config/settings tmp/pids tmp/cache tmp/sockets vendor/b
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-namespace :deploy do
-  # execute the eye script located in the deployed argo's bin directory, since
-  # eye may not be installed system-wide.  load the delayed_job_workers.eye config,
-  # which should monitor workers for memory consumption (restarting them individually
-  # if and when they exceed the configured threshold).
-  desc "stop/start eye, config for monitoring the deployment's delayed_job workers"
-  after :restart, :load_eye_dj_config do
-    on roles(:app) do
-      within release_path do
-        # :delayed_job_workers is set by the env specific cap configs.  it won't
-        # yet be set when this task is defined (though it will be by the time it's
-        # executed).
-        with rails_env: fetch(:rails_env), argo_delayed_job_worker_count: fetch(:delayed_job_workers) do
-          # Stop jobs before quitting and loading else stale jobs can hang around
-          execute :'./bin/eye', :stop, :delayed_job
-          # quit first to make sure the new config is loaded
-          execute :'./bin/eye', :quit
-          # avoid spaces in the command name, see http://capistranorb.com/documentation/getting-started/tasks/
-          execute :'./bin/eye', :load, :'config/eye/delayed_job_workers.eye'
-        end
-      end
-    end
-  end
-
-  desc 'Run rake yarn:install'
-  task :yarn_install do
-    on roles(:web) do
-      within release_path do
-        execute("cd #{release_path} && yarn install")
-      end
-    end
-  end
-  before 'assets:precompile', 'yarn_install'
-end
-
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
 
