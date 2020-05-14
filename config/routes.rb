@@ -178,8 +178,6 @@ Rails.application.routes.draw do
     resources :objects, only: :create # we only implement create for object registration
   end
 
-  get 'index_queue/depth', to: 'index_queue#depth'
-
   namespace :workflow_service do
     get '/:pid/closeable',
         action: 'closeable',

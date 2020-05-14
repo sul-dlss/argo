@@ -25,7 +25,6 @@ import 'modules/apo_form'
 import 'modules/button_checker'
 import 'modules/datastream_edit'
 import 'modules/date_range_query'
-import 'modules/index_queue'
 import ItemCollection from 'modules/item_collection'
 import 'modules/permission_add'
 import 'modules/permission_grant'
@@ -70,12 +69,6 @@ Blacklight.onLoad(function() {
   $('[data-range-query]').dateRangeQuery()
 //  $('[data-datepicker]').datepicker()
 })
-
-
-Blacklight.onLoad(function() {
-  $('[data-index-queue-depth-url]').indexQueueDepth()
-})
-
 
 Blacklight.onLoad(function() {
   new ItemCollection().initialize()
