@@ -10,7 +10,7 @@ RSpec.describe Constants do
   end
   it 'has correct RESOURCE_TYPES defined' do
     expect(Constants::RESOURCE_TYPES).to include(
-      'image', 'page', 'file', 'audio', 'video', '3d'
+      'image', 'page', 'file', 'audio', 'video', '3d', 'object'
     )
   end
 end
