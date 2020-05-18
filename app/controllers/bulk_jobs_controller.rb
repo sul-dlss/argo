@@ -47,8 +47,6 @@ class BulkJobsController < ApplicationController
 
   def status_help; end
 
-  def help; end
-
   # DELETE /apos/:apo_id/bulk_jobs
   def destroy
     @apo = params[:apo_id]

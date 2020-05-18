@@ -1,14 +1,11 @@
 <div data-blacklight-modal="container">
     <div id="spreadsheet-upload-container">
   <%= form_tag(apo_uploads_path(@obj.id), multipart: true, data: { controller: 'bulk_upload' }) do %>
-        <div id="bulk-upload-form" class="container-fluid">
+    <div id="bulk-upload-form" class="container-fluid">
       <div class="row spreadsheet-row">
-    <div class="col-md-10">
-        <strong>Submit MODS descriptive metadata for bulk processing</strong>
-    </div>
-    <div class="col-md-2 spreadsheet-right">
-        <%= link_to('Help', help_apo_bulk_jobs_path(@obj.id), data: { blacklight_modal: 'trigger' }) %>
-    </div>
+        <div class="col-md-12">
+            <strong>Submit MODS descriptive metadata for bulk processing</strong>
+        </div>
       </div>
       <div class="row spreadsheet-row">
     <div class="col-md-2 spreadsheet-file-action-column"><strong>1. Select</strong></div>
