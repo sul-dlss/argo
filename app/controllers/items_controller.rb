@@ -15,6 +15,7 @@ class ItemsController < ApplicationController
     purge_object
     source_id
     catkey
+    tags_bulk
     update_rights
     embargo_update
     embargo_form
@@ -187,6 +188,22 @@ class ItemsController < ApplicationController
     end
   end
 
+  def tags_bulk
+    tags = params[:tags].split(/\t/)
+    # Destroy all current tags and replace with new ones
+    tags_client.replace(tags: tags)
+    reindex
+
+    respond_to do |format|
+      if params[:bulk]
+        format.html { render status: :ok, plain: "#{tags.size} Tags updated." }
+      else
+        msg = "#{tags.size} tags for #{params[:id]} have been updated!"
+        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
+      end
+    end
+  end
+
   def purge_object
     if dor_lifecycle(@object, 'submitted')
       render status: :bad_request, plain: 'Cannot purge an object after it is submitted.'
@@ -310,6 +327,11 @@ class ItemsController < ApplicationController
 
   private
 
+  # NOTE: temporarily added to revert argo#2008; remove once argo#2007 is resolved
+  def tags_client
+    Dor::Services::Client.object(@object.pid).administrative_tags
+  end
+
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
@@ -328,7 +350,7 @@ class ItemsController < ApplicationController
     # Skip reindexing all bulk operations *except* bulk tag operations which do
     # require immediate reindexing since they do not touch Fedora (and thus do
     # not send messages to Solr)
-    return if params[:bulk]
+    return if params[:bulk] && params[:tags].nil?
 
     Argo::Indexer.reindex_pid_remotely(@object.pid)
   end

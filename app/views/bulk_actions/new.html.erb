@@ -24,7 +24,7 @@
                       ['Manage Catkeys', 'ManageCatkeyJob'],
                       ['Prepare objects', 'PrepareJob'],
                       ['Republish objects', 'RepublishJob'],
-                      ['Update tags', 'SetTagsJob'],
+                      # ['Update tags', 'SetTagsJob'], # NOTE: temporarily commented out until argo#2007 is resolved
                       ['Close versions', 'CloseVersionJob'],
                       ['Checksum report', 'ChecksumReportJob'],
                       ['Create virtual object(s)', 'CreateVirtualObjectsJob']],
@@ -85,6 +85,7 @@
           </span>
         </div>
 
+        <!-- # NOTE: temporarily commented out until argo#2007 is resolved
         <div role='tabpanel' class='tab-pane' id='SetTagsJob'>
           <span class='help-block'>
           <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
@@ -92,6 +93,7 @@
           </p>
           <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>          </span>
         </div>
+        -->
 
         <div role='tabpanel' class='tab-pane' id='CloseVersionJob'>
           <span class='help-block'>
