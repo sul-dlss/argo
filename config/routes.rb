@@ -83,7 +83,6 @@ Rails.application.routes.draw do
     resources :bulk_jobs, only: :index do
       collection do
         get 'status_help'
-        get 'help'
         get ':time/log', action: :show, as: 'show'
       end
     end
