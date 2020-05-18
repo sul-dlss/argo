@@ -127,6 +127,7 @@ Rails.application.routes.draw do
       post 'datastream', action: :datastream_update, as: 'datastream_update'
       get 'source_id_ui'
       get 'catkey_ui'
+      match 'tags_bulk', via: %i[get post]
       get 'collection_ui'
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
       post 'collection/add',     action: :add_collection,    as: 'add_collection'

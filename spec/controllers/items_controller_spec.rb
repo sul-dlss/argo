@@ -188,6 +188,38 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
+  describe '#tags_bulk' do
+    let(:current_tag) { 'Some : Thing' }
+    let(:fake_tags_client) do
+      instance_double(Dor::Services::Client::AdministrativeTags,
+                      list: [current_tag],
+                      update: true,
+                      destroy: true,
+                      create: true,
+                      replace: true)
+    end
+
+    before do
+      allow(controller).to receive(:authorize!).and_return(true)
+      allow(controller).to receive(:tags_client).and_return(fake_tags_client)
+      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    end
+
+    it 'removes an old tag an add a new one' do
+      post 'tags_bulk', params: { id: pid, tags: 'New : Thing', bulk: true }
+      expect(fake_tags_client).to have_received(:replace).with(tags: ['New : Thing']).once
+      expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
+    end
+
+    it 'adds multiple tags' do
+      post 'tags_bulk', params: { id: pid, tags: 'Process : Content Type : Book (ltr)	Registered By : labware', bulk: true }
+      expect(fake_tags_client).to have_received(:replace)
+        .with(tags: ['Process : Content Type : Book (ltr)', 'Registered By : labware'])
+        .once
+      expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
+    end
+  end
+
   describe '#set_rights' do
     it 'sets an item to dark' do
       expect(item).to receive(:read_rights=).with('dark')

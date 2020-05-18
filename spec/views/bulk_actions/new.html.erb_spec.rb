@@ -52,7 +52,8 @@ RSpec.describe 'bulk_actions/new.html.erb' do
   end
 
   describe 'Set Tags form' do
-    it 'has proper form input values' do
+    # NOTE: temporarily commented out until argo#2007 is resolved
+    xit 'has proper form input values' do
       expect(rendered).to have_css 'select option[value="SetTagsJob"]'
     end
   end
