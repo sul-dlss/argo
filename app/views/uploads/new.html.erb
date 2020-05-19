@@ -8,13 +8,18 @@
         </div>
       </div>
       <div class="row spreadsheet-row">
-    <div class="col-md-2 spreadsheet-file-action-column"><strong>1. Select</strong></div>
-    <div class="col-md-4 spreadsheet-file-upload-column">
-        <%= file_field_tag :spreadsheet_file, data: { action: 'change->bulk_upload#fileChanged' } %>
-        <input type="hidden" name="druid" value="<%= @obj.id %>">
-    </div>
+        <div class="col-md-2 spreadsheet-file-action-column">
+          <%= label_tag :spreadsheet_file do %>
+            <strong>1. Select</strong>
+          <% end %>
+        </div>
+        <div class="col-md-4 spreadsheet-file-upload-column">
+          <%= file_field_tag :spreadsheet_file, data: { action: 'change->bulk_upload#fileChanged' } %>
+          <input type="hidden" name="druid" value="<%= @obj.id %>">
+        </div>
       </div>
-          <div class="row spreadsheet-row">
+
+      <div class="row spreadsheet-row">
     <div class="col-md-2"><strong>2. Action</strong></div>
     <div class="col-md-8">
         <div class="radio spreadsheet-radio">
