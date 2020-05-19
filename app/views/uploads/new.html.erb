@@ -15,7 +15,6 @@
         </div>
         <div class="col-md-4 spreadsheet-file-upload-column">
           <%= file_field_tag :spreadsheet_file, data: { action: 'change->bulk_upload#fileChanged' } %>
-          <input type="hidden" name="druid" value="<%= @obj.id %>">
         </div>
       </div>
 
