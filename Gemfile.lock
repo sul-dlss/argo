@@ -196,7 +196,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.4.0)
       nokogiri
-    dor-services (9.3.0)
+    dor-services (9.4.0)
       active-fedora (>= 8.7.0, < 9)
       activesupport (~> 5.1)
       deprecation (~> 0)
@@ -663,7 +663,7 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
-  dor-services (~> 9.0)
+  dor-services (~> 9.4)
   dor-services-client (~> 6.0)
   dor-workflow-client (~> 3.19)
   equivalent-xml (>= 0.6.0)

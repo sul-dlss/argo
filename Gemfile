@@ -64,7 +64,7 @@ gem 'rubyzip'
 # Stanford/Hydra related gems
 gem 'blacklight', '~> 6.0'
 gem 'blacklight-hierarchy', '~> 2.0'
-gem 'dor-services', '~> 9.0'
+gem 'dor-services', '~> 9.4'
 gem 'dor-services-client', '~> 6.0'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'mods_display'
