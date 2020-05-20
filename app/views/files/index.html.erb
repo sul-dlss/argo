@@ -1,15 +1,6 @@
 <%= render BlacklightModalComponent.new do |component| %>
   <% component.with(:header, 'File Availability') %>
   <% component.with(:body) do %>
-    <div>
-      Workspace:
-    <% if @available_in_workspace %>
-      <%= link_to params[:id], item_file_path(item_id: params[:item_id], id: params[:id]) %>
-    <% else %>
-      not available
-    <% end %>
-    </div>
-
     <% if @file.administrative.shelve %>
       <p>
         Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>

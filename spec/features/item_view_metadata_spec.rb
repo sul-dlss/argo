@@ -16,10 +16,7 @@ RSpec.describe 'Item view', js: true do
   let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: [], milestones: {}) }
 
   context 'when there is an error retrieving the cocina_model' do
-    let(:files) do
-      instance_double(Dor::Services::Client::Files, list: ['this_is_not_the_file_you_are_looking_for.txt'])
-    end
-    let(:object_client) { instance_double(Dor::Services::Client::Object, files: files, version: version_client, events: events_client) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client, events: events_client) }
 
     before do
       allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
@@ -35,7 +32,7 @@ RSpec.describe 'Item view', js: true do
   end
 
   context 'when the cocina_model exists' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, files: files, version: version_client, events: events_client) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client, events: events_client) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: dro_admin, structural: dro_struct, as_json: {}) }
     let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: [fileset]) }
     let(:fileset) { instance_double(Cocina::Models::FileSet, structural: fs_structural) }
@@ -44,7 +41,7 @@ RSpec.describe 'Item view', js: true do
     let(:file_admin) { instance_double(Cocina::Models::FileAdministrative, shelve: true, sdrPreserve: true) }
     let(:dro_admin) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
-    context 'when the file is not on the workspace' do
+    context 'when the file is on stacks' do
       before do
         ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
                                       SolrDocument::FIELD_OBJECT_TYPE => 'item',
@@ -58,10 +55,6 @@ RSpec.describe 'Item view', js: true do
                                       tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo'],
                                       ds_specs_ssim: ['descMetadata|M|text/xml|0|1552|Descriptive Metadata (MODS)'])
         ActiveFedora::SolrService.commit
-      end
-
-      let(:files) do
-        instance_double(Dor::Services::Client::Files, list: ['this_is_not_the_file_you_are_looking_for.txt'])
       end
 
       it 'shows the file info' do
@@ -98,16 +91,14 @@ RSpec.describe 'Item view', js: true do
           click_link 'M1090_S15_B02_F01_0126.jp2'
         end
 
-        expect(page).to have_content 'Workspace: not available'
-        expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
+        within '.modal-content' do
+          expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
+        end
       end
     end
 
-    context 'when the file is on the workspace' do
+    context 'when the file is on stacks' do
       let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
-      let(:files) do
-        instance_double(Dor::Services::Client::Files, list: [filename], retrieve: 'the file contents')
-      end
 
       before do
         page.driver.browser.download_path = '.'
@@ -123,10 +114,6 @@ RSpec.describe 'Item view', js: true do
         within '.resource-list' do
           click_link 'M1090_S15_B02_F01_0126.jp2'
         end
-
-        within '.modal-content' do
-          expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
-        end
       end
     end
 
@@ -135,7 +122,6 @@ RSpec.describe 'Item view', js: true do
         Dor::Item.create!(label: 'Road & Track')
       end
 
-      let(:files) { instance_double(Dor::Services::Client::Files, list: []) }
       let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
 
       before do

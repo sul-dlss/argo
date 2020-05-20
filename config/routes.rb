@@ -90,7 +90,7 @@ Rails.application.routes.draw do
   end
 
   resources :items, only: [] do
-    resources 'files', only: %i[index show], constraints: { id: /.*/ } do
+    resources 'files', only: %i[index], constraints: { id: /.*/ } do
       member do
         get 'preserved'
       end

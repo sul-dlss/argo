@@ -29,7 +29,6 @@ RSpec.describe 'files/index.html.erb' do
 
   before do
     @file = instance_double(Cocina::Models::File, administrative: admin)
-    @available_in_workspace = true
     @has_been_accessioned = true
     @last_accessioned_version = '7'
     params[:id] = 'M1090_S15_B01_F07_0106.jp2'
@@ -38,7 +37,6 @@ RSpec.describe 'files/index.html.erb' do
   end
 
   it 'renders the partial content' do
-    expect(rendered).to have_content 'Workspace'
     expect(rendered).to have_content 'Stacks'
     expect(rendered).to have_content 'Preservation'
   end
