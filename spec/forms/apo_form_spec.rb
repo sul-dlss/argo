@@ -11,7 +11,7 @@ RSpec.describe ApoForm do
 
   context 'with a model (update)' do
     let(:instance) { described_class.new(apo) }
-    let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Item) }
+    let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Agreement) }
     let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
     let(:md_info) do
       {
@@ -275,7 +275,7 @@ RSpec.describe ApoForm do
 
     describe '#save' do
       let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
-      let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Item) }
+      let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Agreement) }
       let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
 
       let(:base_params) do
