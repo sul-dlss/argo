@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class RegistrationController < ApplicationController
-  def form
-    redirect_to register_items_url
+class RegistrationsController < ApplicationController
+  def show
+    @perm_keys = current_user.groups
   end
 
   def tracksheet
@@ -47,7 +47,8 @@ class RegistrationController < ApplicationController
         collections[col_id] = "#{short_label(solr_doc[col_title_field].first, truncate_limit)} (#{col_druid})"
       else
         Honeybadger.notify("Unable to find title of the collection #{col_id} in Solr. Checking Fedora, but this is slow.")
-        begin # Title not found in Solr, so check DOR
+        begin
+          # Title not found in Solr, so check DOR
           collection = Dor.find(col_id)
           collections[col_id] = "#{short_label(collection.label, truncate_limit)} (#{col_druid})"
         rescue ActiveFedora::ObjectNotFoundError
@@ -108,10 +109,10 @@ class RegistrationController < ApplicationController
 
   private
 
-  # @param [String] s string to truncate at word boundary
+  # @param [String] label string to truncate at word boundary
   # @param [Integer] truncate_limit character limit for truncation target
-  def short_label(s, truncate_limit = 60)
-    s.truncate(truncate_limit, separator: /\s/)
+  def short_label(label, truncate_limit = 60)
+    label.truncate(truncate_limit, separator: /\s/)
   end
 
   def registration_collection_ids_for_apo(apo_id)

@@ -145,13 +145,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#register' do
-    it 'loads the registration form' do
-      get :register
-      expect(response).to render_template('register')
-    end
-  end
-
   describe '#source_id' do
     context 'when they have manage access' do
       before do

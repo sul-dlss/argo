@@ -96,7 +96,6 @@ Rails.application.routes.draw do
       end
     end
 
-    get :register, on: :collection
     resource :content_type, only: %i[show update]
 
     resources :workflows, only: %i[new create show update] do
@@ -147,13 +146,14 @@ Rails.application.routes.draw do
     post 'set_collection'
   end
 
-  namespace :registration do
-    get '/', action: :form
-    get 'tracksheet'
-    get 'collection_list'
-    get 'workflow_list'
-    get 'rights_list'
-    get 'suggest_project', action: 'autocomplete', field: 'project_tag_ssim'
+  resource :registration, only: :show do
+    collection do
+      get 'tracksheet'
+      get 'collection_list'
+      get 'workflow_list'
+      get 'rights_list'
+      get 'suggest_project', action: 'autocomplete', field: 'project_tag_ssim'
+    end
   end
 
   namespace :auth do
