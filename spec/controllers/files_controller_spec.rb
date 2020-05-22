@@ -13,44 +13,6 @@ RSpec.describe FilesController, type: :controller do
 
   let(:user) { create(:user) }
 
-  describe '#show' do
-    before do
-      allow(Dor).to receive(:find).with(pid).and_return(item)
-    end
-
-    context 'when they have manage access' do
-      let(:object_client) { instance_double(Dor::Services::Client::Object, files: files_client) }
-      let(:files_client) { instance_double(Dor::Services::Client::Files, retrieve: 'abc') }
-
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-        allow(Time).to receive(:now).and_return(Time.zone.parse('Mon, 30 Nov 2015 20:19:43 UTC'))
-      end
-
-      it 'has dor-services-app fetch a file from the workspace' do
-        get :show, params: { id: 'somefile.txt', item_id: pid }
-
-        expect(files_client).to have_received(:retrieve).with(filename: 'somefile.txt')
-
-        expect(response.headers['Last-Modified']).to eq 'Mon, 30 Nov 2015 20:19:43 -0000'
-        expect(response.headers['Content-Disposition']).to eq 'attachment; filename=somefile.txt'
-        expect(response.body).to eq 'abc'
-      end
-    end
-
-    context 'when the user can not view_content' do
-      before do
-        allow(controller).to receive(:authorize!).with(:view_content, Dor::Item).and_raise(CanCan::AccessDenied)
-      end
-
-      it 'returns a 403' do
-        get :show, params: { id: 'somefile.txt', item_id: pid }
-        expect(response.code).to eq('403')
-      end
-    end
-  end
-
   describe '#preserved' do
     before do
       allow(Dor).to receive(:find).with(pid).and_return(item)
@@ -134,26 +96,12 @@ RSpec.describe FilesController, type: :controller do
         allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_return('7')
       end
 
-      context 'when the files are in the workspace' do
-        it 'sets available_in_workspace to true' do
-          expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['M1090_S15_B01_F07_0106.jp2', 'bar.jp2'])
-          get :index, params: { item_id: pid, id: 'M1090_S15_B01_F07_0106.jp2' }
-          expect(response).to have_http_status(:ok)
-          expect(assigns(:available_in_workspace)).to be true
-          expect(assigns(:has_been_accessioned)).to be true
-          expect(assigns(:last_accessioned_version)).to eq '7'
-          expect(assigns(:file)).to respond_to(:administrative)
-        end
-      end
-
-      context 'when files are missing from the workspace' do
-        it 'sets available_in_workspace to false' do
-          expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
-          get :index, params: { item_id: pid, id: 'M1090_S15_B01_F07_0106.jp2' }
-          expect(response).to have_http_status(:ok)
-          expect(assigns(:available_in_workspace)).to be false
-          expect(assigns(:file)).to respond_to(:administrative)
-        end
+      it 'is successful' do
+        get :index, params: { item_id: pid, id: 'M1090_S15_B01_F07_0106.jp2' }
+        expect(response).to have_http_status(:ok)
+        expect(assigns(:has_been_accessioned)).to be true
+        expect(assigns(:last_accessioned_version)).to eq '7'
+        expect(assigns(:file)).to respond_to(:administrative)
       end
     end
 
@@ -163,7 +111,6 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'renders an HTTP 422 message' do
-        expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
         get :index, params: { item_id: pid, id: 'bar.tif' }
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to eq "Preservation has not yet received #{pid}"
@@ -178,7 +125,6 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'renders an HTTP 500 message' do
-        expect_any_instance_of(Dor::Services::Client::Files).to receive(:list).and_return(['foo.jp2', 'bar.jp2'])
         get :index, params: { item_id: pid, id: 'bar.tif' }
         expect(Rails.logger).to have_received(:error).with(/something is busted/).once
         expect(Honeybadger).to have_received(:notify).with(/something is busted/).once

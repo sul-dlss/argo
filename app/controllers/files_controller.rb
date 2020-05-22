@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FilesController < ApplicationController
-  before_action :load_resource, only: %i[show preserved]
+  before_action :load_resource, only: :preserved
 
   ##
   # Brings up a modal dialog that lists all locations of the file
@@ -9,7 +9,6 @@ class FilesController < ApplicationController
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
     object_client = Dor::Services::Client.object(params[:item_id])
-    @available_in_workspace = object_client.files.list.include?(filename)
     @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: 'accessioned')
     files = object_client.find.structural.contains.map { |fs| fs.structural.contains }.flatten
     @file = files.find { |file| file.externalIdentifier == "#{params[:item_id]}/#{params[:id]}" }
@@ -30,14 +29,6 @@ class FilesController < ApplicationController
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
-  end
-
-  def show
-    authorize! :view_content, @object
-    response.headers['Content-Type'] = 'application/octet-stream'
-    response.headers['Content-Disposition'] = 'attachment; filename=' + filename
-    response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    self.response_body = Dor::Services::Client.object(params[:item_id]).files.retrieve(filename: filename)
   end
 
   def preserved
