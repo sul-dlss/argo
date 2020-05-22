@@ -18,7 +18,6 @@ RSpec.describe 'catalog/show.html.erb' do
   it 'assigns page title, truncating it' do
     expect(view).to receive(:document_show_html_title).and_return(title)
     expect(view).to receive(:render_document_sidebar_partial)
-    expect(view).to receive(:item_page_entry_info)
     expect(view).to receive(:render_document_partial).twice
     expect(view).to receive(:current_search_session)
     expect(view).to receive(:should_render_field?).at_least(:once).and_return false
