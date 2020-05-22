@@ -37,7 +37,7 @@ class Ability
     can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], ActiveFedora::Base if current_user.is_manager?
     can :create, Dor::AdminPolicyObject if current_user.is_manager?
 
-    can %i[view_metadata view_content], ActiveFedora::Base if current_user.is_viewer?
+    can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.is_viewer?
 
     can :manage_item, Dor::AdminPolicyObject do |dor_item|
       can_manage_items? current_user.roles(dor_item.pid)
@@ -66,6 +66,10 @@ class Ability
 
     can :view_content, ActiveFedora::Base do |dor_item|
       can_view? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
+    end
+
+    can :view_content, Cocina::Models::DRO do |dro|
+      can_view? current_user.roles(dro.administrative.hasAdminPolicy)
     end
 
     can :view_metadata, ActiveFedora::Base do |dor_item|

@@ -1,5 +1,8 @@
 <h3 id="document-contents-head" class="section-head collapsible-section">
   Contents
+  <small style="margin-top: 5px" class="pull-right">
+    <%= link_to 'Download all files', download_item_files_path(document) %>
+  </small>
 </h3>
 <div id="document-contents-section" class="document-section contents-section">
   <% if object.datastreams.keys.include?('contentMetadata') &&

@@ -646,6 +646,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.3.0)
+    zip_tricks (5.3.0)
 
 PLATFORMS
   ruby
@@ -715,6 +716,7 @@ DEPENDENCIES
   webdrivers
   webmock
   webpacker (~> 5.0)
+  zip_tricks (~> 5.3)
 
 BUNDLED WITH
    2.1.4

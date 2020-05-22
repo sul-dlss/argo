@@ -6,6 +6,14 @@ require 'cancan/matchers'
 RSpec.describe Ability do
   let(:subject) { described_class.new(user) }
   let(:item) { Dor::Item.new(pid: 'x') }
+  let(:dro) do
+    Cocina::Models::DRO.new(externalIdentifier: 'druid:bc123df4567',
+                            label: 'test',
+                            type: Cocina::Models::Vocab.object,
+                            version: 1,
+                            access: {})
+  end
+
   let(:user) do
     instance_double(User,
                     is_admin?: admin,
@@ -39,6 +47,7 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:create, Dor::AdminPolicyObject) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
+    it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:update, :workflow) }
   end
 
