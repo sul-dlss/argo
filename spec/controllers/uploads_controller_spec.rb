@@ -29,7 +29,6 @@ RSpec.describe UploadsController do
 
     it 'is successful' do
       post :create, params: { apo_id: apo_id,
-                              druid: 'foo',
                               spreadsheet_file: file,
                               filetypes: 'spreadsheet',
                               note: 'test note' }
