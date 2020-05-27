@@ -14,7 +14,7 @@ RSpec.describe ItemsController, type: :controller do
     allow(idmd).to receive(:"content_will_change!")
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
-    allow(apo).to receive(:pid).and_return('druid:apo')
+    allow(apo).to receive(:pid).and_return('')
     allow(item).to receive_messages(save: nil, delete: nil,
                                     identityMetadata: idmd,
                                     datastreams: { 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new },
@@ -217,6 +217,20 @@ RSpec.describe ItemsController, type: :controller do
     it 'sets an item to dark' do
       expect(item).to receive(:read_rights=).with('dark')
       get 'set_rights', params: { id: pid, access_form: { rights: 'dark' } }
+    end
+  end
+
+  describe '#rights' do
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+    end
+
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
+    let(:cocina) { instance_double(Cocina::Models::DRO, version: 1) }
+
+    it 'renders the modal with rights selector' do
+      get :rights, params: { id: pid }
+      expect(response).to have_http_status(:ok)
     end
   end
 
