@@ -8,13 +8,12 @@ RSpec.describe ItemsController, type: :controller do
     sign_in user
     allow(Dor).to receive(:find).with(pid).and_return(item)
     idmd = double
-    apo  = double
     idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = instance_double(Nokogiri::XML::Document, to_xml: idmd_ds_content)
     allow(idmd).to receive(:"content_will_change!")
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
-    allow(apo).to receive(:pid).and_return('')
+    allow(apo).to receive(:pid).and_return('druid:zt570tx3016')
     allow(item).to receive_messages(save: nil, delete: nil,
                                     identityMetadata: idmd,
                                     datastreams: { 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new },
@@ -29,6 +28,7 @@ RSpec.describe ItemsController, type: :controller do
   let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
 
   describe '#purl_preview' do
     before do
@@ -223,6 +223,7 @@ RSpec.describe ItemsController, type: :controller do
   describe '#rights' do
     before do
       allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+      allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
     end
 
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
