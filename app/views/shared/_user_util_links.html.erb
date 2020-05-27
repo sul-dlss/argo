@@ -48,7 +48,7 @@
         <span class='caret'></span>
       </a>
       <div class="dropdown-menu" aria-labelledby="registerDropdown">
-        <%= link_to 'Register Items', register_items_path, class: 'dropdown-item' %>
+        <%= link_to 'Register Items', registration_path, class: 'dropdown-item' %>
         <% if can? :create, Dor::AdminPolicyObject %>
           <%= link_to 'Register APO', new_apo_path, class: 'dropdown-item' %>
         <% end %>
