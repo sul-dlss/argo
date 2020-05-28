@@ -223,15 +223,55 @@ RSpec.describe ItemsController, type: :controller do
   describe '#rights' do
     before do
       allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
-      allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
     end
 
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
     let(:cocina) { instance_double(Cocina::Models::DRO, version: 1) }
 
-    it 'renders the modal with rights selector' do
-      get :rights, params: { id: pid }
-      expect(response).to have_http_status(:ok)
+    context 'without an assigned apo' do
+      before do
+        get :rights, params: { id: pid }
+      end
+
+      let(:apo) { nil }
+
+      it 'returns the rights list constant' do
+        expect(assigns(:rights_list)).to eq(Constants::REGISTRATION_RIGHTS_OPTIONS)
+      end
+
+      it 'renders the modal' do
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context 'with an assigned apo' do
+      before do
+        allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
+        get :rights, params: { id: pid }
+      end
+
+      let(:rights_with_default) {
+        [["World (APO default)", "world"],
+         ["World (no-download)", "world-nd"],
+         ["Stanford", "stanford"],
+         ["Stanford (no-download)", "stanford-nd"],
+         ["Location: Special Collections", "loc:spec"],
+         ["Location: Music Library", "loc:music"],
+         ["Location: Archive of Recorded Sound", "loc:ars"],
+         ["Location: Art Library", "loc:art"], 
+         ["Location: Hoover Library", "loc:hoover"],
+         ["Location: Media & Microtext", "loc:m&m"],
+         ["Dark (Preserve Only)", "dark"],
+         ["Citation Only", "citation-only"]]
+      }
+
+      it 'updates the rights_list with (APO default)' do
+        expect(assigns(:rights_list)).to eq(rights_with_default)
+      end
+
+      it 'renders the modal' do
+        expect(response).to have_http_status(:ok)
+      end
     end
   end
 
