@@ -8,12 +8,13 @@ RSpec.describe ItemsController, type: :controller do
     sign_in user
     allow(Dor).to receive(:find).with(pid).and_return(item)
     idmd = double
+    apo  = double
     idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = instance_double(Nokogiri::XML::Document, to_xml: idmd_ds_content)
     allow(idmd).to receive(:"content_will_change!")
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
-    allow(apo).to receive(:pid).and_return('druid:zt570tx3016')
+    allow(apo).to receive(:pid).and_return('druid:apo')
     allow(item).to receive_messages(save: nil, delete: nil,
                                     identityMetadata: idmd,
                                     datastreams: { 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new },
@@ -28,7 +29,6 @@ RSpec.describe ItemsController, type: :controller do
   let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
-  let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
 
   describe '#purl_preview' do
     before do
@@ -217,61 +217,6 @@ RSpec.describe ItemsController, type: :controller do
     it 'sets an item to dark' do
       expect(item).to receive(:read_rights=).with('dark')
       get 'set_rights', params: { id: pid, access_form: { rights: 'dark' } }
-    end
-  end
-
-  describe '#rights' do
-    before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
-    end
-
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
-    let(:cocina) { instance_double(Cocina::Models::DRO, version: 1) }
-
-    context 'without an assigned apo' do
-      before do
-        get :rights, params: { id: pid }
-      end
-
-      let(:apo) { nil }
-
-      it 'returns the rights list constant' do
-        expect(assigns(:rights_list)).to eq(Constants::REGISTRATION_RIGHTS_OPTIONS)
-      end
-
-      it 'renders the modal' do
-        expect(response).to have_http_status(:ok)
-      end
-    end
-
-    context 'with an assigned apo' do
-      before do
-        allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
-        get :rights, params: { id: pid }
-      end
-
-      let(:rights_with_default) {
-        [["World (APO default)", "world"],
-         ["World (no-download)", "world-nd"],
-         ["Stanford", "stanford"],
-         ["Stanford (no-download)", "stanford-nd"],
-         ["Location: Special Collections", "loc:spec"],
-         ["Location: Music Library", "loc:music"],
-         ["Location: Archive of Recorded Sound", "loc:ars"],
-         ["Location: Art Library", "loc:art"], 
-         ["Location: Hoover Library", "loc:hoover"],
-         ["Location: Media & Microtext", "loc:m&m"],
-         ["Dark (Preserve Only)", "dark"],
-         ["Citation Only", "citation-only"]]
-      }
-
-      it 'updates the rights_list with (APO default)' do
-        expect(assigns(:rights_list)).to eq(rights_with_default)
-      end
-
-      it 'renders the modal' do
-        expect(response).to have_http_status(:ok)
-      end
     end
   end
 

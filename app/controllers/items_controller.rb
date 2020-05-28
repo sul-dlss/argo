@@ -292,9 +292,10 @@ class ItemsController < ApplicationController
     rescue Dor::Services::Client::UnexpectedResponse
       cocina = NilModel.new(params[:id])
     end
-    @form = AccessForm.new(cocina)
-    @rights_list = rights_list_for_apo(@apo)
 
+    apo_object = Dor.find(@apo)
+    @form = AccessForm.new(cocina, apo_object)
+    
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
@@ -346,27 +347,6 @@ class ItemsController < ApplicationController
     return if params[:bulk] && params[:tags].nil?
 
     Argo::Indexer.reindex_pid_remotely(@object.pid)
-  end
-
-  def rights_list_for_apo(apo_id)
-    return Constants::REGISTRATION_RIGHTS_OPTIONS if apo_id.blank?
-
-    apo_object = Dor.find(apo_id)
-    default_opt = apo_object.default_rights || 'citation-only'
-
-    # iterate through the default version of the rights list.  if we found a default option
-    # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
-    # we didn't find a default option, we'll just return the default list of rights options with no
-    # specified selection.
-    result = []
-    Constants::REGISTRATION_RIGHTS_OPTIONS.each do |val|
-      result << if default_opt == val[1]
-                  ["#{val[0]} (APO default)", val[1]]
-                else
-                  val
-                end
-    end
-    result
   end
 
   # ---
