@@ -2,7 +2,7 @@
 
 # Inspired by Reform, but not exactly reform
 # This is for the collection form and it's only used for create, not for update
-# as it registers a new object on each call to `#save`
+# as it registers a new object (of type collection) on each call to `#save`
 class CollectionForm < BaseForm
   # @param [HashWithIndifferentAccess] params the parameters from the form
   # @return [Boolean] true if the parameters are valid
@@ -14,13 +14,19 @@ class CollectionForm < BaseForm
 
   # Copies the values to the model and saves and indexes
   def save
-    @model = register_model if model.new_record?
-    sync
+    if model.new_record?
+      @model = register_model
+    else
+      # update case
+      # TODO: after cocina updater supports descriptive metadata, make a cocina update call instead
+      sync
+    end
     model.save
+    # update index immediately. Do not pass Go. Do not collect $200.
     Argo::Indexer.reindex_pid_remotely(model.pid)
   end
 
-  # Copies the values to the model
+  # Copies the abstract value to the model descMetadata
   def sync
     # NOTE: collection_abstract only appears in conjunction with collection_title
     #       and disjoint from collection_catkey
@@ -39,20 +45,21 @@ class CollectionForm < BaseForm
     Dor.find(response.externalIdentifier)
   end
 
-  # @return [Hash] the parameters used to register an apo. Must be called after `validate`
+  # @return [Hash] the parameters used to register a collection. Must be called after `validate`
   def cocina_model
     reg_params = {
       label: params[:collection_title].presence || ':auto',
       version: 1,
       type: Cocina::Models::Vocab.collection,
-      access: {},
       administrative: {
         hasAdminPolicy: params[:apo_pid]
       }
     }
 
+    reg_params[:description] = build_description if params[:collection_title].present? && params[:collection_abstract].present?
+
     raw_rights = params[:collection_catkey].present? ? params[:collection_rights_catkey] : params[:collection_rights]
-    reg_params[:access] = access(raw_rights)
+    reg_params[:access] = access(raw_rights) || {}
 
     if params[:collection_catkey].present?
       reg_params[:identification] = {
@@ -76,5 +83,12 @@ class CollectionForm < BaseForm
         access: rights
       }
     end
+  end
+
+  def build_description
+    {
+      title: [{ value: params[:collection_title], status: 'primary' }],
+      note: [{ value: params[:collection_abstract], type: 'summary' }]
+    }
   end
 end

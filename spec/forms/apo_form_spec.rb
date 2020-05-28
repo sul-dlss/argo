@@ -28,7 +28,7 @@ RSpec.describe ApoForm do
     end
 
     before do
-      allow(apo).to receive(:new_record?).and_return(false) # instantiate_record creates unsaved objects
+      allow(apo).to receive(:new_record?).and_return(false) # instantiate_fixture creates unsaved objects
       allow(Dor).to receive(:find).with(agreement.pid, cast: true).and_return(agreement)
     end
 
@@ -277,6 +277,7 @@ RSpec.describe ApoForm do
       let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
       let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Agreement) }
       let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
+      let(:coll_title) { 'col title' }
 
       let(:base_params) do
         { # These data mimic the APO registration form
@@ -291,7 +292,7 @@ RSpec.describe ApoForm do
             '3' => { access: 'view', name: 'forensics-staff', type: 'group' }
           },
           'collection_radio' => 'create',
-          'collection_title' => 'col title',
+          'collection_title' => coll_title,
           'collection_rights' => 'world',
           'collection_abstract' => '',
           'default_object_rights' => 'world',
@@ -318,6 +319,15 @@ RSpec.describe ApoForm do
                                        label: '',
                                        version: 1,
                                        access: {}).to_json
+      end
+      let(:collection_req_body_hash) do
+        {
+          type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
+          label: coll_title,
+          version: 1,
+          access: { access: 'world', download: 'none' },
+          administrative: { hasAdminPolicy: 'druid:zt570tx3016' }
+        }
       end
 
       before do
@@ -346,19 +356,14 @@ RSpec.describe ApoForm do
           )
           .to_return(status: 200, body: created_apo, headers: {})
 
-        expect(workflow_client).to receive(:create_workflow_by_name)
-          .with(apo.pid, 'accessionWF', version: '1')
+        expect(workflow_client).to receive(:create_workflow_by_name).with(apo.pid, 'accessionWF', version: '1')
         expect(apo).to receive(:"use_license=").with(params['use_license'])
 
         # verify that the collection is also created
         expect(apo).to receive(:add_default_collection).with(collection.pid)
 
         stub_request(:post, 'http://localhost:3003/v1/objects')
-          .with(
-            body: '{"type":"http://cocina.sul.stanford.edu/models/collection.jsonld",' \
-            '"label":"col title","version":1,"access":{"access":"world","download":"none"},' \
-            '"administrative":{"hasAdminPolicy":"druid:zt570tx3016"}}'
-          )
+          .with(body: JSON.generate(collection_req_body_hash))
           .to_return(status: 200, body: created_collection)
 
         expect(workflow_client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF', version: '1')
