@@ -352,8 +352,7 @@ class ItemsController < ApplicationController
     return Constants::REGISTRATION_RIGHTS_OPTIONS if apo_id.blank?
 
     apo_object = Dor.find(apo_id)
-    default_opt = apo_object.default_rights
-    default_opt = 'citation-only' if default_opt == 'none'
+    default_opt = apo_object.default_rights || 'citation-only'
 
     # iterate through the default version of the rights list.  if we found a default option
     # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
