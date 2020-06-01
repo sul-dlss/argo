@@ -2,6 +2,7 @@ import Form from 'modules/apo_form'
 import CollectionEditor from 'controllers/collection_editor'
 import BulkActions from 'controllers/bulk_actions'
 import BulkUpload from 'controllers/bulk_upload'
+import FacetFilter from 'controllers/facet_filter'
 import Tokens from 'controllers/tokens'
 import WorkflowGrid from 'controllers/workflow_grid_controller'
 import { Application } from 'stimulus'
@@ -11,28 +12,6 @@ function pathTo(path) {
   var root = $('body').attr('data-application-root') || '';
   return(root + path);
 }
-
-
-// Allows filtering a list of facets.
-function filterList() {
-    var input = document.getElementById('filterInput');
-    var filter = input.value.toUpperCase();
-    var ul = document.getElementsByClassName('facet-values')[0];
-    var li = ul.getElementsByTagName('li');
-
-    // Loop through all list items, and hide those who don't match the search query
-    for (var i = 0; i < li.length; i++) {
-        var a = li[i].getElementsByTagName("a")[0];
-        var txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
-}
-
-$(document).on('keyup', '#filterInput', function(e) { filterList() });
 
 // Provide warnings when creating a collection.
 function collectionExistsWarning(warningElem, field, value) {
@@ -64,6 +43,7 @@ export default class Argo {
         const application = Application.start()
         application.register("bulk_actions", BulkActions)
         application.register("bulk_upload", BulkUpload)
+        application.register("facet-filter", FacetFilter)
         application.register("workflow-grid", WorkflowGrid)
         application.register("collection-editor", CollectionEditor)
         application.register("tokens", Tokens)
