@@ -6,8 +6,8 @@
     <%= select_tag('status',
                    options_for_select([['Rerun', 'waiting'], ['Skip', 'skipped'], ['Complete', 'completed']]),
                    prompt: 'Select',
-                   class: 'form-control') %>
-    <span class="input-group-btn">
+                   class: 'form-control custom-select') %>
+    <span class="input-group-append">
         <%= button_tag('Save', type: 'submit',
                                class: 'btn btn-secondary',
                                data: { confirm: confirm }) %>
