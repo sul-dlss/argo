@@ -124,11 +124,12 @@ legend {
   }
 }
 
+// This is used for highlighting XML when displaying Fedora 3 datastreams
 .CodeRay {
   pre {
-    border: none !important;
+    border: 1px solid $gray-300;
     white-space: pre-wrap;
-    font-family: monospace;
+    padding: 9px;
   }
 }
 
