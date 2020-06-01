@@ -65,9 +65,10 @@ h3.section-head {
 }
 
 .section-head-link {
-  float: right;
-  padding-right: 6px;
+  padding-right: 16px;
   font-weight: normal;
+  position: absolute;
+  right: 40px;
 }
 
 #bulk-button {
