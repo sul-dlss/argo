@@ -1,6 +1,14 @@
 // Set color of selected facet
 .card-header {
-  @extend .bg-secondary;
+  background-color: $floral-white;
+}
+
+.btn-secondary {
+  @include button-variant($white, $blue);
+  color: $blue;
+  &:hover {
+    color: darken($blue, 7.5%);
+  }
 }
 
 // Set text color of selected facets
