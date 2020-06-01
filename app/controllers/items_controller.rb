@@ -292,7 +292,9 @@ class ItemsController < ApplicationController
     rescue Dor::Services::Client::UnexpectedResponse
       cocina = NilModel.new(params[:id])
     end
-    @form = AccessForm.new(cocina)
+
+    apo_object = Dor.find(@apo)
+    @form = AccessForm.new(cocina, apo_object)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
