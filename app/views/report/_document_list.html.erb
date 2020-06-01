@@ -1,0 +1,17 @@
+<% content_for :head do %>
+  <%= javascript_pack_tag 'report' %>
+  <script type="text/javascript">
+    report_model = {
+      total_rows: <%= @response['response']['numFound'] %>,
+      data_url: <%= report_data_url(params.to_unsafe_h.merge(format: 'json')).to_json.html_safe %>,
+      download_url: <%= report_download_url(params.to_unsafe_h).to_json.html_safe %>,
+      column_model: <%= Report::COLUMN_MODEL.to_json.html_safe %>
+    }
+  </script>
+<% end %>
+
+<div id="report_container">
+  <table id="report_grid"></table>
+  <div id="preport_grid"></div>
+</div>
+<%= render 'report/column_selector' %>

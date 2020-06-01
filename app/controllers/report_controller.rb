@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'blacklight/catalog'
-
 class ReportController < CatalogController
   include Blacklight::Catalog
   helper ArgoHelper
