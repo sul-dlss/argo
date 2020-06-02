@@ -14,12 +14,13 @@
         <td><%= job['argo.bulk_metadata.bulk_log_input_file'] %></td>
         <td><%= job['argo.bulk_metadata.bulk_log_note'] %></td>
         <td>
-          <% if(job.has_key?('error')) %>
-            system errors
-          <% elsif(job['argo.bulk_metadata.bulk_log_job_complete']) %>
+          <% if(job['argo.bulk_metadata.bulk_log_job_complete']) %>
             completed
           <% else %>
             in process
+          <% end %>
+          <% if(job.has_key?('error')) %>
+            (with system errors)
           <% end %>
         </td>
         <td><%= job['argo.bulk_metadata.bulk_log_record_count'] %></td>
