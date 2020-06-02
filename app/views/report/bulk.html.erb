@@ -39,18 +39,24 @@ ul li{
 <% @page_title = "#{application_name} Search Results" %>
 <% content_for(:head) { render 'catalog/opensearch_response_metadata', response: @response } %>
 <% if has_search_parameters? %>
-<%= render partial: 'did_you_mean' %>
-<%= render 'constraints', localized_params: params %>
-<%= render 'report_view_toggle', localized_params: params %>
+  <%= render 'did_you_mean' %>
+  <%= render 'constraints', localized_params: params %>
+  <%= render 'report_view_toggle', localized_params: params %>
 <% end %>
 
 <h1>Bulk update operations</h1>
+
 <button class="btn btn-primary" id="get_druids" name="get_druids">Get druids from search</button>
 <button class="btn btn-primary" id="paste-druids-button">Paste a druid list</button>
+
 <div id="pid_list" name="pid_list" style="display:none;" class="bulk_operation">
   <h1>Druids</h1>
-  <p>Bulk actions will be performed on this list of druids. Modify the list or paste a list of druids here to operate on them instead.</p>
-  <br><textarea id="pids" name="pids"></textarea><br>
+
+  <div class="form-group">
+    <label for="pids">Bulk actions will be performed on this list of druids. Modify the list or paste a list of druids here to operate on them instead.</label>
+    <textarea id="pids" name="pids" class="form-control" rows="8"></textarea>
+  </div>
+
   <div id="buttons">
     <div class="row">
       <div class="col-sm-12"><strong>Options that require versioning</strong></div>
@@ -140,23 +146,29 @@ ul li{
 
 <div class="bulk_operation" id="tag">
   <h1>Change tags</h1>
-  <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
-  druid:bc088fn5010&lt;tab&gt;Project : Something&lt;tab&gt;Process : Content Type : Book
-  </p>
-  <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
-  <textarea style="width:50%" id="tags" name="tags"></textarea><br>
+
+  <div class="form-group">
+    <label for="tags"><p>This needs a list of pids and tags, with a tab between the pid and each tag.<br>E.g.:
+    <code>druid:bc088fn5010&lt;tab&gt;Project : Something&lt;tab&gt;Process : Content Type : Book</code></p>
+    This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</label>
+    <textarea id="tags" name="tags" class="form-control" rows="8"></textarea><br>
+  </div>
   <span class="btn btn-primary" id="set_tags" name="set_tags">Update tags</span>
 </div>
 
 <div class="bulk_operation" id="source_id">
   <h1>Change source id</h1>
-  <p>This needs a list of pids and source ids, with a tab between the pid and the corresponding source id. E.g.:<br>
-  druid:bc088fn5010  fuller:M1090_S15_B02_F12_0007
-  </p>
-  <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>
-  <textarea style="width:50%" id="source_ids" name="source_ids"></textarea><br>
+
+  <div class="form-group">
+    <label for="source_ids"><p>This needs a list of pids and source ids, with a tab between the pid and the corresponding source id. E.g.:<br>
+    druid:bc088fn5010  fuller:M1090_S15_B02_F12_0007
+    </p>
+    <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p></label>
+    <textarea id="source_ids" name="source_ids" class="form-control" rows="8"></textarea><br>
+  </div>
   <button class="btn btn-primary" id="set_source_id" name="set_source_id">Update source ids</button>
 </div>
+
 <div class="bulk_operation" id="rights" name="rights">
   <h1>Set object rights</h1>
   <%= select_tag :rights_select, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS) %>
