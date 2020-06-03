@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
   let(:bulk_jobs) do
     [
-      {},
-      {
+      {}, # job log dir not found (status is 'not started')
+      { # completed without errors
         'argo.bulk_metadata.bulk_log_job_start' => '2016-04-21 09:57am',
         'argo.bulk_metadata.bulk_log_user' => 'tommyi',
         'argo.bulk_metadata.bulk_log_input_file' => 'crowdsourcing_bridget_1.xlsx',
@@ -17,16 +17,38 @@ RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
         'dir' => 'druid:bc682xk5613/2016_04_21_16_56_40_824',
         'argo.bulk_metadata.bulk_log_druids_loaded' => 0
       },
-      {
+      { # completed with errors
         'argo.bulk_metadata.bulk_log_job_start' => '2016-04-21 10:34am',
         'argo.bulk_metadata.bulk_log_user' => 'tommyi',
-        'argo.bulk_metadata.bulk_log_input_file' => 'crowdsourcing_bridget_1.xlsx',
+        'argo.bulk_metadata.bulk_log_input_file' => 'crowdsourcing_bridget_2.xlsx',
         'argo.bulk_metadata.bulk_log_note' => 'convertonly',
         'argo.bulk_metadata.bulk_log_internal_error' => 'the server responded with status 500',
         'error' => 1,
         'argo.bulk_metadata.bulk_log_empty_response' => 'ERROR: No response from https://modsulator-app-stage.stanford.edu/v1/modsulator',
         'argo.bulk_metadata.bulk_log_error_exception' => 'Got no response from server',
         'argo.bulk_metadata.bulk_log_job_complete' => '2016-04-21 10:34am',
+        'dir' => 'druid:bc682xk5613/2016_04_21_17_34_02_445',
+        'argo.bulk_metadata.bulk_log_druids_loaded' => 0
+      },
+      { # in progress without errors
+        'argo.bulk_metadata.bulk_log_job_start' => '2016-04-21 09:57am',
+        'argo.bulk_metadata.bulk_log_user' => 'tommyi',
+        'argo.bulk_metadata.bulk_log_input_file' => 'crowdsourcing_bridget_3.xlsx',
+        'argo.bulk_metadata.bulk_log_xml_timestamp' => '2016-04-21 09:57am',
+        'argo.bulk_metadata.bulk_log_xml_filename' => 'crowdsourcing_bridget_1-MODS.xml',
+        'argo.bulk_metadata.bulk_log_record_count' => '20',
+        'dir' => 'druid:bc682xk5613/2016_04_21_16_56_40_824',
+        'argo.bulk_metadata.bulk_log_druids_loaded' => 0
+      },
+      { # in progress with errors
+        'argo.bulk_metadata.bulk_log_job_start' => '2016-04-21 11:34am',
+        'argo.bulk_metadata.bulk_log_user' => 'tommyi',
+        'argo.bulk_metadata.bulk_log_input_file' => 'crowdsourcing_bridget_4.xlsx',
+        'argo.bulk_metadata.bulk_log_note' => 'convertonly',
+        'argo.bulk_metadata.bulk_log_internal_error' => 'the server responded with status 500',
+        'error' => 1,
+        'argo.bulk_metadata.bulk_log_empty_response' => 'ERROR: No response from https://modsulator-app-stage.stanford.edu/v1/modsulator',
+        'argo.bulk_metadata.bulk_log_error_exception' => 'Got no response from server',
         'dir' => 'druid:bc682xk5613/2016_04_21_17_34_02_445',
         'argo.bulk_metadata.bulk_log_druids_loaded' => 0
       }
@@ -41,8 +63,8 @@ RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
 
   it 'has a delete button for each row with log info' do
     render
-    expect(rendered).to have_css 'button.job-delete-button', text: 'Delete', count: 2
-    bulk_jobs[1..2].each do |job|
+    expect(rendered).to have_css 'button.job-delete-button', text: 'Delete', count: 4
+    bulk_jobs[1..4].each do |job|
       expect(rendered).to have_css 'button.job-delete-button', text: 'Delete'
       expect(rendered).to have_xpath "//button[@id='#{job['dir']}']", text: 'Delete' # id att has chars that cause problems in have_css call
     end
@@ -61,5 +83,14 @@ RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
     render
     expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: 'error:  job log dir not found', count: 3
     expect(rendered).to have_css 'div#bulk-upload-table table tr', text: 'error:  job log dir not found', count: 1
+  end
+
+  it 'shows the status' do
+    render
+    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Anot started\z/, count: 1
+    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Acompleted\z/, count: 1
+    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Ain progress\z/, count: 1
+    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Acompleted [(]with system errors[)]\z/, count: 1
+    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Ain progress [(]with system errors[)]\z/, count: 1
   end
 end
