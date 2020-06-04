@@ -8,24 +8,20 @@
       <th>Druids</th><th>Success</th><th /><th />
     </tr>
     <% @bulk_jobs.each do |job| %>
+      <% job_status = 'not started'
+         job_status = 'in progress' if job.key?('dir')
+         job_status = 'completed' if job['argo.bulk_metadata.bulk_log_job_complete']
+         job_status += ' (with system errors)' if job.key?('error') %>
       <tr>
         <td><%= job['argo.bulk_metadata.bulk_log_job_start'] %></td>
         <td><%= job['argo.bulk_metadata.bulk_log_user'] %></td>
         <td><%= job['argo.bulk_metadata.bulk_log_input_file'] %></td>
         <td><%= job['argo.bulk_metadata.bulk_log_note'] %></td>
-        <td>
-          <% if(job.has_key?('error')) %>
-            system errors
-          <% elsif(job['argo.bulk_metadata.bulk_log_job_complete']) %>
-            completed
-          <% else %>
-            in process
-          <% end %>
-        </td>
+        <td><%= job_status %></td>
         <td><%= job['argo.bulk_metadata.bulk_log_record_count'] %></td>
         <td><%= job['argo.bulk_metadata.bulk_log_druids_loaded'] %></td>
 
-        <% if(job.has_key?('dir')) %>
+        <% if(job.key?('dir')) %>
           <% druid_and_time = job['dir'].split(%r{/}) %>
           <td><%= link_to('Log', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1]), data: { blacklight_modal: 'trigger', ajax_modal_title: 'MODS Bulk Load Log' }) %></td>
           <td><%= link_to('XML', show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)) %></td>
