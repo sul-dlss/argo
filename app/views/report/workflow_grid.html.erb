@@ -6,9 +6,13 @@
 <% end %>
 
 <% if has_search_parameters? %>
-  <%= render 'did_you_mean' %>
-  <%= render 'constraints', localized_params: params %>
+  <% content_for(:container_header) do -%>
+    <h1 class="sr-only top-content-title"><%= t('blacklight.search.header') %></h1>
+    <%= render 'did_you_mean' %>
+    <%= render 'constraints' %>
+  <% end %>
 <% end %>
+
 <%= render 'catalog/report_view_toggle' %>
 <a href="<%= Settings.robot_status_url %>" target="_blank">Robots queue/job status</a>
 <div data-controller="workflow-grid" data-workflow-grid-url="<%= url_for(search_state.to_h) %>" data-workflow-grid-refresh-interval="10000">
