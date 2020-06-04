@@ -1,7 +1,8 @@
 <h3 id="document-contents-head" class="section-head collapsible-section">
   Contents
   <small style="margin-top: 5px" class="pull-right">
-    <%= link_to 'Download all files', download_item_files_path(document) %>
+    <% opts = document.preservation_size && document.preservation_size > 1_000_000_000 ? { confirm: 'This will be a large download. Are you sure?' } : {} %>
+    <%= link_to 'Download all files', download_item_files_path(document), opts %>
   </small>
 </h3>
 <div id="document-contents-section" class="document-section contents-section">
