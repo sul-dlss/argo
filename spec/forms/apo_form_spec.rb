@@ -29,7 +29,6 @@ RSpec.describe ApoForm do
 
     before do
       allow(apo).to receive(:new_record?).and_return(false) # instantiate_fixture creates unsaved objects
-      allow(Dor).to receive(:find).with(agreement.pid, cast: true).and_return(agreement)
     end
 
     describe '#sync' do
@@ -42,7 +41,7 @@ RSpec.describe ApoForm do
         expect(apo.mods_title).to           eq(md_info[:title])
         expect(apo.desc_metadata_format).to eq(md_info[:desc_md])
         expect(apo.metadata_source).to      eq(md_info[:metadata_source])
-        expect(apo.agreement).to            eq(md_info[:agreement])
+        expect(apo.agreement_object_id).to  eq(md_info[:agreement])
         expect(apo.default_workflows).to    eq([md_info[:workflow]])
         expect(apo.default_rights).to       eq(md_info[:default_object_rights])
         expect(apo.use_license).to          eq(md_info[:use_license])
@@ -117,8 +116,8 @@ RSpec.describe ApoForm do
       it { is_expected.to eq 'digitizationWF' }
     end
 
-    describe '#agreement' do
-      subject { instance.agreement }
+    describe '#agreement_object_id' do
+      subject { instance.agreement_object_id }
 
       it { is_expected.to eq agreement.pid }
     end
@@ -332,7 +331,6 @@ RSpec.describe ApoForm do
 
       before do
         allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-        expect(Dor).to receive(:find).with(agreement.pid, cast: true).and_return(agreement)
         expect(Dor).to receive(:find).with(collection.pid).and_return(collection)
         expect(collection).to receive(:save)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).twice
