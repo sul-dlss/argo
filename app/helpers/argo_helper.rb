@@ -7,6 +7,8 @@ module ArgoHelper
 
   # This overrides a blacklight helper so that the page is full-width
   def container_classes
+    return super if controller_name == 'apo'
+
     'container-fluid'
   end
 
