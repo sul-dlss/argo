@@ -26,7 +26,6 @@
                @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||
                params[:dsid] == 'RELS-EXT'
              ) &&
-             params[:dsid] != 'workflows' &&
              Settings.editable_datastreams.include?(params[:dsid])
             link_to "Edit #{params[:dsid]}", ds_solr_document_path(params[:id], params[:dsid], edit: 'true'), title: params[:dsid], data: { blacklight_modal: 'preserve' }
         end %>
