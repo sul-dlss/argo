@@ -16,38 +16,87 @@ RSpec.describe WorkflowServiceController, type: :controller do
 
   describe 'GET closeable' do
     context 'when closeable' do
-      it 'returns true' do
-        expect(workflow_client).to receive(:active_lifecycle)
-          .with(druid: druid, milestone_name: 'opened', version: 1).and_return(true)
-        expect(workflow_client).to receive(:active_lifecycle)
-          .with(druid: druid, milestone_name: 'submitted', version: 1).and_return(false)
+      context 'when opened and not submitted' do
+        before do
+          allow(workflow_client)
+            .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
+                                          .and_return(true)
+          allow(workflow_client)
+            .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
+                                          .and_return(false)
+        end
 
-        get :closeable, params: { pid: druid, format: :json }
-        expect(assigns(:status)).to eq true
-        expect(response.body).to eq 'true'
+        context 'when there is no assemblyWF' do
+          it 'returns true' do
+            expect(workflow_client)
+              .to receive(:workflow_status).with(druid: druid, workflow: 'assemblyWF', process: 'accessioning-initiate')
+                                           .and_return(nil)
+            get :closeable, params: { pid: druid, format: :json }
+            expect(workflow_client).to have_received(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
+            expect(workflow_client).to have_received(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
+            expect(assigns(:status)).to eq true
+            expect(response.body).to eq 'true'
+          end
+        end
+
+        context 'when assemblyWF is completed' do
+          it 'returns true' do
+            expect(workflow_client)
+              .to receive(:workflow_status).with(druid: druid, workflow: 'assemblyWF', process: 'accessioning-initiate')
+                                           .and_return('completed')
+
+            get :closeable, params: { pid: druid, format: :json }
+            expect(workflow_client).to have_received(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
+            expect(workflow_client).to have_received(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
+            expect(assigns(:status)).to eq true
+            expect(response.body).to eq 'true'
+          end
+        end
       end
     end
 
     context 'when !closeable' do
-      context 'not opened' do
-        it 'returns false' do
-          expect(workflow_client)
-            .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
-                                          .and_return(false)
-          get :closeable, params: { pid: druid, format: :json }
-          expect(assigns(:status)).to eq false
-          expect(response.body).to eq 'false'
+      context 'when assemblyWF is completed' do
+        before do
+          allow(workflow_client)
+            .to receive(:workflow_status).with(druid: druid, workflow: 'assemblyWF', process: 'accessioning-initiate')
+                                         .and_return('completed')
+        end
+
+        context 'when !opened' do
+          it 'returns false' do
+            expect(workflow_client)
+              .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
+                                            .and_return(false)
+            get :closeable, params: { pid: druid, format: :json }
+            expect(workflow_client).to have_received(:workflow_status)
+            expect(assigns(:status)).to eq false
+            expect(response.body).to eq 'false'
+          end
+        end
+
+        context 'when opened && submitted' do
+          it 'returns false' do
+            expect(workflow_client)
+              .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
+                                            .and_return(true)
+            expect(workflow_client)
+              .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
+                                            .and_return(true)
+            get :closeable, params: { pid: druid, format: :json }
+            expect(workflow_client).to have_received(:workflow_status)
+            expect(assigns(:status)).to eq false
+            expect(response.body).to eq 'false'
+          end
         end
       end
 
-      context 'when opened && is submitted' do
+      context 'when assemblyWF is in progress' do
         it 'returns false' do
           expect(workflow_client)
-            .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
-                                          .and_return(true)
-          expect(workflow_client)
-            .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
-                                          .and_return(true)
+            .to receive(:workflow_status).with(druid: druid, workflow: 'assemblyWF', process: 'accessioning-initiate')
+                                         .and_return('waiting')
+
           get :closeable, params: { pid: druid, format: :json }
           expect(assigns(:status)).to eq false
           expect(response.body).to eq 'false'
@@ -68,51 +117,55 @@ RSpec.describe WorkflowServiceController, type: :controller do
       end
     end
 
-    context 'when accessioned && submitted' do
-      it 'returns false' do
-        expect(workflow_client)
+    context 'when accessionied' do
+      before do
+        allow(workflow_client)
           .to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
                                  .and_return(true)
-        expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
-                                        .and_return(true)
-        get :openable, params: { pid: druid, format: :json }
-        expect(assigns(:status)).to eq false
-        expect(response.body).to eq 'false'
       end
-    end
 
-    context 'when accessioned && !submitted && opened' do
-      it 'returns false' do
-        expect(workflow_client)
-          .to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
-                                 .and_return(true)
-        expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
-                                        .and_return(false)
-        expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
-                                        .and_return(true)
-        get :openable, params: { pid: druid, format: :json }
-        expect(assigns(:status)).to eq false
-        expect(response.body).to eq 'false'
+      context 'when submitted' do
+        it 'returns false' do
+          expect(workflow_client)
+            .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
+                                          .and_return(true)
+          get :openable, params: { pid: druid, format: :json }
+          expect(workflow_client).to have_received(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
+          expect(assigns(:status)).to eq false
+          expect(response.body).to eq 'false'
+        end
       end
-    end
 
-    context 'when accessioned && !submitted && !opened' do
-      it 'returns true' do
-        expect(workflow_client)
-          .to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
-                                 .and_return(true)
-        expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
-                                        .and_return(false)
-        expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
-                                        .and_return(false)
-        get :openable, params: { pid: druid, format: :json }
-        expect(assigns(:status)).to eq true
-        expect(response.body).to eq 'true'
+      context 'when !submitted' do
+        before do
+          allow(workflow_client)
+            .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
+                                          .and_return(false)
+        end
+
+        context 'when opened' do
+          it 'returns false' do
+            expect(workflow_client)
+              .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
+                                            .and_return(true)
+            get :openable, params: { pid: druid, format: :json }
+            expect(workflow_client).to have_received(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
+            expect(assigns(:status)).to eq false
+            expect(response.body).to eq 'false'
+          end
+        end
+
+        context 'when !opened' do
+          it 'returns true' do
+            expect(workflow_client)
+              .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
+                                            .and_return(false)
+            get :openable, params: { pid: druid, format: :json }
+            expect(workflow_client).to have_received(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
+            expect(assigns(:status)).to eq true
+            expect(response.body).to eq 'true'
+          end
+        end
       end
     end
   end

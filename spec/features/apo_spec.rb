@@ -53,7 +53,8 @@ RSpec.describe 'apo', js: true do
                                                lifecycle: [],
                                                active_lifecycle: [],
                                                milestones: [],
-                                               workflow_routes: workflow_routes)
+                                               workflow_routes: workflow_routes,
+                                               workflow_status: nil)
     allow(Dor::Services::Client.objects).to receive(:register)
       .and_return(created_apo, created_collection)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
