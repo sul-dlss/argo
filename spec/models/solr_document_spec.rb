@@ -140,17 +140,6 @@ RSpec.describe SolrDocument, type: :model do
     end
   end
 
-  describe '#versions' do
-    subject(:versions) { document.versions }
-
-    let(:data) { ['1;1.0.0;Initial version', '2;1.1.0;Minor change'] }
-    let(:document) { described_class.new('versions_ssm' => data) }
-
-    it 'is a list of versions' do
-      expect(versions).to eq data
-    end
-  end
-
   describe '#druid' do
     let(:document_attributes) { { id: 'druid:abc123456' } }
 

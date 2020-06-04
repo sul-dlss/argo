@@ -19,6 +19,23 @@ RSpec.describe VersionService do
     end
   end
 
+  describe '.list' do
+    subject(:versions) { described_class.list(resource: resource) }
+
+    let(:resource) { Dor::Item.new }
+
+    before do
+      allow(resource.versionMetadata).to receive(:tag_for_version).and_return('1.0.0', '1.1.0')
+      allow(resource.versionMetadata).to receive(:description_for_version)
+        .and_return('Initial version', 'Minor change')
+      allow(resource).to receive(:current_version).and_return('2')
+    end
+
+    it 'is a list of versions' do
+      expect(versions).to eq(1 => { tag: '1.0.0', desc: 'Initial version' }, 2 => { tag: '1.1.0', desc: 'Minor change' })
+    end
+  end
+
   describe '#new' do
     it 'has an identifier attribute' do
       expect(service.identifier).to eq(identifier)

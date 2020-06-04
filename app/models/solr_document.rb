@@ -58,8 +58,6 @@ class SolrDocument
     format: 'sw_format_ssim'
   )
 
-  attribute :versions, Blacklight::Types::Array, 'versions_ssm'
-
   def embargoed?
     embargo_status == 'embargoed'
   end

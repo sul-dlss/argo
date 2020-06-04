@@ -28,7 +28,10 @@ RSpec.describe MilestonesPresenter do
       'accessioned' => { time: '2020-05-01 19:26:37 +0000' }
     }, '2' => milestone2 }
   end
-  let(:versions) { ['1;1.0.0;Initial version', '2;1.1.0;Minor change'] }
+
+  let(:versions) do
+    { 1 => { tag: '1.0.0', desc: 'Initial version' }, 2 => { tag: '1.1.0', desc: 'Minor change' } }
+  end
 
   describe '#each_version' do
     let(:actual_versions) do

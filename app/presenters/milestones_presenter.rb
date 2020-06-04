@@ -2,6 +2,8 @@
 
 # Displays milestones for each of the versions for an object
 class MilestonesPresenter
+  # @param [Hash<String,Hash>] milestones the milestone data
+  # @param [Hash<Integer,Hash>] versions the version tag data
   def initialize(milestones:, versions:)
     @milestones = milestones
     @versions = versions
@@ -16,20 +18,13 @@ class MilestonesPresenter
   end
 
   def version_title(version)
-    version_hash[version] ? "#{version} (#{version_hash[version][:tag]}) #{version_hash[version][:desc]}" : version
+    val = versions[version.to_i]
+    return version unless val
+
+    "#{version} (#{val[:tag]}) #{val[:desc]}"
   end
 
   private
 
   attr_reader :milestones, :versions
-
-  def version_hash
-    @version_hash ||= versions&.each_with_object({}) do |rec, obj|
-      (version, tag, desc) = rec.split(';')
-      obj[version] = {
-        tag: tag,
-        desc: desc
-      }
-    end
-  end
 end
