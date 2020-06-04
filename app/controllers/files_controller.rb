@@ -63,9 +63,12 @@ class FilesController < ApplicationController
                                                filepath: filename,
                                                version: @cocina_model.version,
                                                on_data: proc { |data, _count| sink.write data })
-        rescue Faraday::ClientError => e
+        rescue StandardError => e
           sink.close
-          raise e
+          message = "Could not zip #{filename} (#{@cocina_model.externalIdentifier}) for download: #{e}"
+          logger.error(message)
+          Honeybadger.notify(message)
+          render status: :internal_server_error, plain: message
         end
       end
     end
