@@ -39,7 +39,7 @@ class ApoForm < BaseForm
     model.mods_title           = params[:title]
     model.desc_metadata_format = params[:desc_md]
     model.metadata_source      = params[:metadata_source]
-    model.agreement            = params[:agreement]
+    model.agreement_object_id  = params[:agreement]
 
     model.default_workflow     = params[:workflow]
     model.default_rights       = params[:default_object_rights]
@@ -65,7 +65,7 @@ class ApoForm < BaseForm
     model.administrativeMetadata.ng_xml.xpath('//registration/workflow/@id').to_s
   end
 
-  delegate :use_license, :agreement, :use_statement, :copyright_statement,
+  delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
            :default_rights, :mods_title, to: :model
 
   def desc_metadata_format
