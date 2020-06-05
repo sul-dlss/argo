@@ -1,0 +1,124 @@
+<h1>Message alerts</h1>
+
+<p class="text-muted font-italic">Primary messages will appear in a yellow box at the top of the homepage. Secondary messages
+  will display below the yellow primary messages boxes in a bulleted list. Max 1,000 characters per message.</p>
+<%= form_with(model: ContentBlock.new, local: true, data: { controller: 'content-block-new', target: 'content-block-form' }) do |form| %>
+  <template id="edit-row">
+    <td class="field">
+      <%= form.label :value, class: 'sr-only' %>
+      <%= form.text_area :value, data: { target: 'content-block-edit.value' }, class: 'form-control' %>
+    </td>
+
+    <td class="field">
+      <%= form.label :ordinal, class: 'sr-only' %>
+      <%= form.select :ordinal, [['Primary', 1], ['Secondary', 2]], {}, class: 'form-control', data: { target: 'content-block-edit.ordinal' } %>
+    </td>
+
+    <td class="field">
+      <%= form.label :start_at, class: 'sr-only' %>
+      <%= form.date_field :start_at, data: { target: 'content-block-edit.startAt' }, class: 'form-control' %>
+    </td>
+
+    <td class="field">
+      <%= form.label :end_at, class: 'sr-only' %>
+      <%= form.date_field :end_at, data: { target: 'content-block-edit.endAt' }, class: 'form-control' %>
+    </td>
+
+    <td class="actions">
+      <button class="btn btn-link"
+              data-action="click->content-block-edit#cancel">Cancel</button>
+      <button class="btn btn-primary"
+              data-action="click->content-block-edit#save">Save</button>
+    </td>
+  </template>
+
+  <table class="table">
+    <thead class="thead-light<%= ' d-none' if @unexpired_blocks.empty? %>" data-target="content-block-new.headerRow">
+      <tr>
+        <th scope="col">Message alerts</th>
+        <th scope="col">Primary/Secondary</th>
+        <th scope="col">Start date</th>
+        <th scope="col">Expiration date</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @unexpired_blocks.each do |block| %>
+        <tr data-controller="content-block-edit"
+          data-content-block-edit-url="<%= content_block_path(block) %>"
+          data-content-block-edit-value="<%= block.value %>"
+          data-content-block-edit-ordinal="<%= block.ordinal %>"
+          data-content-block-edit-start_at="<%= block.pacific_start.to_date %>"
+          data-content-block-edit-end_at="<%= block.pacific_end.to_date %>">
+          <td><%= block.value %></td>
+          <td><%= block.ordinal_string %></td>
+          <td><%= block.pacific_start.to_date %></td>
+          <td><%= block.pacific_end.to_date %></td>
+          <td>
+            <button class="btn" data-action="click->content-block-edit#display">
+              <span class="fas fa-pen" role="img" aria-label="Edit"></span>
+            </button>
+            <%= link_to block, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn' do %>
+              <span class="fas fa-times" role="img" aria-label="Delete"></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+
+      <tr class="d-none" data-target="content-block-new.form">
+        <td class="field">
+          <%= form.label :value, 'Text', class: 'sr-only' %>
+          <%= form.text_area :value, class: 'form-control' %>
+        </td>
+
+        <td class="field">
+          <%= form.label :ordinal, 'Primary/Secondary', class: 'sr-only' %>
+          <%= form.select :ordinal, [['Primary', 1], ['Secondary', 2]], {}, class: 'form-control' %>
+        </td>
+
+        <td class="field">
+          <%= form.label :start_at, 'Start date', class: 'sr-only' %>
+          <%= form.date_field :start_at, value: Time.zone.today, class: 'form-control' %>
+        </td>
+
+        <td class="field">
+          <%= form.label :end_at, 'Expiration date', class: 'sr-only' %>
+          <%= form.date_field :end_at, value: Time.zone.today + 3.months, class: 'form-control' %>
+        </td>
+
+        <td class="actions">
+          <button class="btn btn-link"
+                  data-action="click->content-block-new#cancel">Cancel</button>
+          <%= form.submit 'Save', class: 'btn btn-primary' %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button class="btn btn-outline-secondary"
+          data-action="click->content-block-new#display"
+          data-target="content-block-new.button">Add another message</button>
+<% end %>
+
+<table class="table mt-5">
+  <thead class="thead-light<%= ' d-none' if @unexpired_blocks.empty? %>" data-target="content-block-new.headerRow">
+    <tr>
+      <th scope="col">Expired message alerts</th>
+      <th scope="col">Primary/Secondary</th>
+      <th scope="col">Start date</th>
+      <th scope="col">Expiration date</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @expired_blocks.each do |block| %>
+      <tr>
+        <td><%= block.value %></td>
+        <td><%= block.ordinal_string %></td>
+        <td><%= block.start_at.to_date %></td>
+        <td><%= block.end_at.to_date %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

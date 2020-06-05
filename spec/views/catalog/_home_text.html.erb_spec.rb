@@ -9,7 +9,9 @@ RSpec.describe 'catalog/_home_text.html.erb' do
   end
 
   context 'as someone who can view something' do
-    let(:presenter) { instance_double(HomeTextPresenter, view_something?: true) }
+    let(:presenter) do
+      instance_double(HomeTextPresenter, view_something?: true, primary_messages: [], secondary_messages: [])
+    end
 
     it 'shows the home page text' do
       expect(rendered).to have_css 'p', text: 'Enter one or more search terms ' \
@@ -18,7 +20,9 @@ RSpec.describe 'catalog/_home_text.html.erb' do
   end
 
   context 'as one who cannot view anything' do
-    let(:presenter) { instance_double(HomeTextPresenter, view_something?: false) }
+    let(:presenter) do
+      instance_double(HomeTextPresenter, view_something?: false, primary_messages: [], secondary_messages: [])
+    end
 
     it 'shows an access denied error' do
       expect(rendered).to have_css 'p', text: 'You do not appear to have ' \

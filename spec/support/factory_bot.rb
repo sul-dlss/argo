@@ -3,8 +3,11 @@
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
-  # Avoid doing this because it registers new items/collections which is slow
-  # config.before(:suite) do
-  #   FactoryBot.lint
-  # end
+  config.before(:suite) do
+    conn = ActiveRecord::Base.connection
+    conn.transaction do
+      FactoryBot.lint
+      raise ActiveRecord::Rollback
+    end
+  end
 end

@@ -9,4 +9,23 @@
       You do not appear to have permission to view any items in Argo. Please contact an administrator.
     </p>
   <% end %>
+
+  <% @presenter.primary_messages.each do |block| %>
+    <div class="alert alert-warning" role="alert">
+      <span class="fas fa-exclamation-circle" aria-hidden="true"></span>
+      <%= block.value %>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  <% end %>
+
+  <% if @presenter.secondary_messages.present? %>
+    <h4>Messages from the Argo team</h4>
+    <ul>
+    <% @presenter.secondary_messages.each do |block| %>
+      <li><%= block.value %></li>
+    <% end %>
+    </ul>
+  <% end %>
 </div>

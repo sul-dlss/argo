@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_10_050959) do
+ActiveRecord::Schema.define(version: 2020_05_14_171819) do
 
   create_table "bookmarks", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -35,6 +35,15 @@ ActiveRecord::Schema.define(version: 2018_05_10_050959) do
     t.datetime "updated_at", null: false
     t.integer "user_id"
     t.index ["user_id"], name: "index_bulk_actions_on_user_id"
+  end
+
+  create_table "content_blocks", force: :cascade do |t|
+    t.text "value", null: false
+    t.datetime "start_at", null: false
+    t.datetime "end_at", null: false
+    t.integer "ordinal", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "delayed_jobs", force: :cascade do |t|

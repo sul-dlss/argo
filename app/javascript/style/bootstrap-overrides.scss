@@ -32,3 +32,14 @@
   color: $body-color;
   opacity: 1.0;
 }
+
+.alert-warning {
+  @include alert-variant(theme-color-level('warning', $alert-bg-level), $gamboge, $body-color);
+
+  .fa-exclamation-circle {
+    color: $gamboge;
+    font-size: 2em;
+    margin-right: .5em;
+    vertical-align: middle;
+  }
+}

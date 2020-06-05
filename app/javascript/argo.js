@@ -1,5 +1,8 @@
 import Form from 'modules/apo_form'
 import CollectionEditor from 'controllers/collection_editor'
+import ContentBlockNew from 'controllers/content_block_new'
+import ContentBlockEdit from 'controllers/content_block_edit'
+
 import BulkActions from 'controllers/bulk_actions'
 import BulkUpload from 'controllers/bulk_upload'
 import FacetFilter from 'controllers/facet_filter'
@@ -46,6 +49,8 @@ export default class Argo {
         application.register("facet-filter", FacetFilter)
         application.register("workflow-grid", WorkflowGrid)
         application.register("collection-editor", CollectionEditor)
+        application.register("content-block-new", ContentBlockNew)
+        application.register("content-block-edit", ContentBlockEdit)
         application.register("tokens", Tokens)
     }
 

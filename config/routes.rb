@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get '/is_it_working' => 'ok_computer/ok_computer#show', defaults: { check: 'default' }
 
+  resources :content_blocks, only: %i[new create edit update destroy index]
+
   resources :bulk_actions, except: %i[edit show update] do
     member do
       get :file
