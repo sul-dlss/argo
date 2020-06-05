@@ -41,11 +41,11 @@ class WorkflowServiceController < ApplicationController
   private
 
   def get_lifecycle(task)
-    WorkflowClientFactory.build.lifecycle(druid: params[:pid], milestone_name: task)
+    workflow_client.lifecycle(druid: params[:pid], milestone_name: task)
   end
 
   def active_lifecycle(task, druid:, version:)
-    WorkflowClientFactory.build.active_lifecycle(druid: druid, milestone_name: task, version: version)
+    workflow_client.active_lifecycle(druid: druid, milestone_name: task, version: version)
   end
 
   ##
@@ -75,10 +75,16 @@ class WorkflowServiceController < ApplicationController
     false
   end
 
+  def active_assembly_wf?
+    return true if workflow_client.workflow_status(druid: params[:pid], workflow: 'assemblyWF', process: 'accessioning-initiate') == 'waiting'
+  end
+
   ##
   # Ported over logic from app/helpers/dor_object_helper.rb#LN167
   # @return [Boolean]
   def check_if_can_close_version
+    return false if active_assembly_wf?
+
     version = Dor::Services::Client.object(params[:pid]).version.current
     return true if active_lifecycle('opened', druid: params[:pid], version: version) &&
                    !active_lifecycle('submitted', druid: params[:pid], version: version)
@@ -97,5 +103,9 @@ class WorkflowServiceController < ApplicationController
     return false if active_lifecycle('opened', druid: params[:pid], version: version)
 
     true
+  end
+
+  def workflow_client
+    @workflow_client ||= WorkflowClientFactory.build
   end
 end

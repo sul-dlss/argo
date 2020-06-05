@@ -28,6 +28,9 @@ Layout/LineLength:
   IgnoredPatterns:
     - '\A\s*#' # allow long comments
 
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
 # Offense count: 166
 # Configuration parameters: CountComments, ExcludedMethods.
 Metrics/BlockLength:

@@ -13,7 +13,7 @@ RSpec.describe 'Item view', js: true do
   let(:event) { Dor::Services::Client::Events::Event.new(event_type: 'shelve_request_received', data: { 'host' => 'dor-services-stage.stanford.edu' }) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
-  let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: [], milestones: {}) }
+  let(:workflow_client) { instance_double(Dor::Workflow::Client, active_lifecycle: [], lifecycle: [], milestones: {}, workflow_status: nil) }
 
   context 'when there is an error retrieving the cocina_model' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client, events: events_client) }
