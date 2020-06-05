@@ -22,10 +22,7 @@
         # rights, display raw xml editing
     %>
       <%= if can?(:manage_item, @obj) &&
-             (
-               @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) ||
-               params[:dsid] == 'RELS-EXT'
-             ) &&
+             @obj.datastreams[params[:dsid]].respond_to?(:ng_xml) &&
              Settings.editable_datastreams.include?(params[:dsid])
             link_to "Edit #{params[:dsid]}", ds_solr_document_path(params[:id], params[:dsid], edit: 'true'), title: params[:dsid], data: { blacklight_modal: 'preserve' }
         end %>
