@@ -91,7 +91,7 @@ class ProfilePresenter
   end
 
   def released_to
-    aggregations['released_to_ssim'].items
+    aggregations[SolrDocument::FIELD_RELEASED_TO.to_s].items
   end
 
   def catkey

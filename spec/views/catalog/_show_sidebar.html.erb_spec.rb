@@ -4,10 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'catalog/_show_sidebar.html.erb' do
   let(:document) do
-    SolrDocument.new(id: 'druid:abc123', catkey_id_ssim: 'catz')
+    SolrDocument.new(id: 'druid:abc123')
   end
   let(:current_user) { mock_user }
-  let(:button_presenter) {}
 
   before do
     config = Blacklight::Configuration.new
@@ -19,10 +18,9 @@ RSpec.describe 'catalog/_show_sidebar.html.erb' do
   end
 
   it 'renders a list of links' do
+    allow(view).to receive(:render).and_call_original
+    allow(view).to receive(:render).with(ExternalLinksComponent).and_return('')
     render
     expect(rendered).to have_css '.show_sidebar'
-    expect(rendered).to have_css 'ul.nav.nav-stacked'
-    expect(rendered).to have_css 'li', count: 6
-    expect(rendered).to have_css 'a[href="/view/druid:abc123.json"]', text: 'Solr document'
   end
 end
