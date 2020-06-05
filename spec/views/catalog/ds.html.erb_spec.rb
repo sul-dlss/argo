@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'catalog/ds.html.erb' do
-  let(:stub_ds) { instance_double(Dor::IdentityMetadataDS, content: '<xml />', ng_xml: true) }
+  let(:stub_ds) { instance_double(Dor::IdentityMetadataDS, content: '<xml />') }
 
   before do
     params[:dsid] = dsid
