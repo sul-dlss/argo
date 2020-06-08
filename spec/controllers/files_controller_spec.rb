@@ -71,8 +71,8 @@ RSpec.describe FilesController, type: :controller do
         it 'renders an HTTP 500 message' do
           get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
           expect(Rails.logger).to have_received(:error)
-            .with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\)\: #{errmsg}/).once
-          expect(Honeybadger).to have_received(:notify).with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\)\: #{errmsg}/).once
+            .with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\): #{errmsg}/).once
+          expect(Honeybadger).to have_received(:notify).with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\): #{errmsg}/).once
           expect(response).to have_http_status(:internal_server_error)
           expect(response.body).to eq "Preservation client error getting content of not_there.txt for #{pid} (version #{mock_version}): #{errmsg}"
         end
