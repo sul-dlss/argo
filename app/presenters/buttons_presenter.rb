@@ -28,7 +28,7 @@ class ButtonsPresenter
            :item_content_type_path,
            :rights_item_path,
            :refresh_metadata_item_path,
-           :manage_release_solr_document_path,
+           :item_manage_release_path,
            :embargo_form_item_path,
            :dor_path,
            to: :url_helpers
@@ -85,7 +85,7 @@ class ButtonsPresenter
       # a catkey indicates there's a symphony record
       buttons << refresh_metadata_button
     end
-    buttons << { url: manage_release_solr_document_path(pid), label: 'Manage release' }
+    buttons << { url: item_manage_release_path(pid), label: 'Manage release' }
 
     # TODO: add a date picker and button to change the embargo date for those who should be able to.
     buttons << { label: 'Update embargo', url: embargo_form_item_path(pid) } if object.is_a?(Dor::Item) && object.embargoed?

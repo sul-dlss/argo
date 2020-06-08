@@ -225,16 +225,6 @@ class CatalogController < ApplicationController
     end
   end
 
-  def manage_release
-    authorize! :manage_item, Dor.find(params[:id])
-    @response, @document = fetch params[:id]
-    @bulk_action = BulkAction.new
-
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
   private
 
   def show_aspect

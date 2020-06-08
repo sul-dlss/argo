@@ -28,7 +28,6 @@ Rails.application.routes.draw do
     member do
       get 'dc', to: 'catalog#dc'
       get 'ds/:dsid', to: 'catalog#ds', as: 'ds'
-      get 'manage_release', to: 'catalog#manage_release'
     end
   end
 
@@ -114,6 +113,8 @@ Rails.application.routes.draw do
     end
 
     resource :tags, only: %i[edit update]
+
+    resource :manage_release, only: :show
 
     member do
       get 'purl_preview'
