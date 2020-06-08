@@ -172,13 +172,6 @@ class CatalogController < ApplicationController
     config.show.partials = %w[show_header full_view_links thumbnail show datastreams events cocina history contents techmd]
   end
 
-  def default_solr_doc_params(id = nil)
-    id ||= params[:id]
-    {
-      q: %(id:"#{id}")
-    }
-  end
-
   def index
     @presenter = HomeTextPresenter.new(current_user)
     super
