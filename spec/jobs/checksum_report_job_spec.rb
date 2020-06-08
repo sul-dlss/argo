@@ -56,7 +56,7 @@ RSpec.describe ChecksumReportJob, type: :job do
         end
 
         it 'calls the presevation_catalog API, notifies honeybadger, logs an error, does not write a CSV file, and records failure counts' do
-          exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\ \(Preservation\:\:Client\:\:UnexpectedResponseError\): ruh roh/
+          exp_msg_regex = /ChecksumReportJob got error from Preservation Catalog API\ \(Preservation::Client::UnexpectedResponseError\): ruh roh/
           expect do
             subject.perform(bulk_action.id,
                             output_directory: output_directory_fail,

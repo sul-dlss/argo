@@ -21,7 +21,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
     if data[process] && data[process][status] && item = data[process][status][:_] # rubocop:disable Lint/AssignmentInCondition
       item_count = item.hits
     end
-    item_count = content_tag :span, item_count, class: 'zero' if item_count.zero?
+    item_count = tag.span item_count, class: 'zero' if item_count.zero?
     link_to(item_count, new_params)
   end
 

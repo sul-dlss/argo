@@ -73,7 +73,7 @@ RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
   it 'has links to log info and XML for each row with log info' do
     render
     bulk_jobs[1..2].each do |job|
-      druid_and_time = job['dir'].split %r{\/}
+      druid_and_time = job['dir'].split %r{/}
       expect(rendered).to have_link 'Log', href: show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1])
       expect(rendered).to have_link 'XML', href: show_apo_bulk_jobs_path(druid_and_time[0], druid_and_time[1], format: :xml)
     end
