@@ -22,11 +22,6 @@ RSpec.describe CatalogController do
         .to route_to('catalog#ds', id: 'druid:xyz', dsid: 'identityMetadata')
     end
 
-    it 'routes to #manage_release' do
-      expect(get: '/view/druid:xyz/manage_release')
-        .to route_to('catalog#manage_release', id: 'druid:xyz')
-    end
-
     context 'redirections' do
       include RSpec::Rails::RequestExampleGroup
 

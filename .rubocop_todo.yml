@@ -112,6 +112,7 @@ RSpec/AnyInstance:
     - 'spec/features/enable_buttons_spec.rb'
     - 'spec/features/item_registration_spec.rb'
     - 'spec/features/set_governing_apo_spec.rb'
+    - 'spec/requests/manage_release_spec.rb'
 
 # Offense count: 87
 # Configuration parameters: Prefixes.

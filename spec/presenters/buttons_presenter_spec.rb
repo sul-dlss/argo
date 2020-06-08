@@ -112,7 +112,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
           },
           {
             label: 'Manage release',
-            url: "/view/#{item_id}/manage_release"
+            url: "/items/#{item_id}/manage_release"
           }
         ]
       end
@@ -250,7 +250,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
           },
           {
             label: 'Manage release',
-            url: "/view/#{view_apo_id}/manage_release"
+            url: "/items/#{view_apo_id}/manage_release"
           }
         ]
       end

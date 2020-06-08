@@ -33,7 +33,7 @@ RSpec.describe 'Item manage release' do
   end
 
   it 'Creates a new bulk action' do
-    visit manage_release_solr_document_path(druid)
+    visit item_manage_release_path(druid)
     expect(page).to have_css 'label', text: "Manage release to discovery applications for item #{druid}"
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'

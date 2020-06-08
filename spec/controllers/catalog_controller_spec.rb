@@ -116,30 +116,4 @@ RSpec.describe CatalogController, type: :controller do
       expect(config.http_method).to eq :post
     end
   end
-
-  describe '#manage_release' do
-    before do
-      allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
-      sign_in user
-    end
-
-    context 'for content managers' do
-      before do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_return(true)
-        allow(controller).to receive(:fetch).with("druid:#{@druid}").and_return(double)
-      end
-
-      it 'authorizes the view' do
-        get :manage_release, params: { id: "druid:#{@druid}" }
-        expect(response).to have_http_status(:success)
-      end
-    end
-
-    context 'for unauthorized_user' do
-      it 'returns forbidden' do
-        get :manage_release, params: { id: "druid:#{@druid}" }
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-  end
 end
