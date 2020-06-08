@@ -11,9 +11,7 @@ module BlacklightConfigHelper
         dor_id_tesim
         extent_ssim
         identifier_tesim
-        lifecycle_ssim
         obj_label_tesim
-        obj_state_tesim
         objectId_tesim
         originInfo_place_placeTerm_tesim
         originInfo_publisher_tesim
