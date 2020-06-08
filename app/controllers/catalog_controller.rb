@@ -6,7 +6,7 @@ class CatalogController < ApplicationController
   helper ArgoHelper
   include DateFacetConfigurations
 
-  before_action :reformat_dates, :set_user_obj_instance_var
+  before_action :set_user_obj_instance_var
   before_action :show_aspect, only: %i[dc ds]
   before_action :sort_collection_actions_buttons, only: [:index]
   before_action :limit_facets_on_home_page, only: [:index]
@@ -252,17 +252,6 @@ class CatalogController < ApplicationController
 
   def set_user_obj_instance_var
     @user = current_user
-  end
-
-  def reformat_dates
-    params.each do |key, val|
-      next unless key =~ /_datepicker/ && val =~ %r{[0-9]{2}/[0-9]{2}/[0-9]{4}}
-
-      val = DateTime.parse(val).beginning_of_day.utc.xmlschema
-      field = key.split('_after_datepicker').first.split('_before_datepicker').first
-      params[:f][field] = '[' + val.to_s + 'Z TO *]'
-    rescue StandardError
-    end
   end
 
   # Sorts the Blacklight collection actions buttons so that the "Bulk Action" and "Bulk Update View" buttons appear
