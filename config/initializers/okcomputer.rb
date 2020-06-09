@@ -60,9 +60,6 @@ OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.n
 OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(Settings.dor_services.url)
 OkComputer::Registry.register 'workflow_url', OkComputer::HttpCheck.new(Settings.workflow_url)
 
-# suri is essential for registering objects
-OkComputer::Registry.register 'suri_url', OkComputer::HttpCheck.new(Settings.suri.url)
-
 # Stacks
 OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.stacks.local_workspace_root)
 OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.stacks.host}")
@@ -91,6 +88,5 @@ OkComputer.make_optional %w[
   stacks_host
   stacks_local_workspace_root
   stacks_thumbnail_url
-  suri_url
   workflow_url
 ]

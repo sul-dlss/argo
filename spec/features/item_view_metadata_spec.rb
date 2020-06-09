@@ -119,7 +119,8 @@ RSpec.describe 'Item view', js: true do
 
     context 'when the title has an ampersand in it' do
       let(:item) do
-        Dor::Item.create!(label: 'Road & Track')
+        # this is not how items are created in the app -- this is for testing purposes only
+        Dor::Item.create!(label: 'Road & Track', pid: 'druid:fc123ky4567')
       end
 
       let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
