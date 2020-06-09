@@ -6,7 +6,6 @@ class CatalogController < ApplicationController
   helper ArgoHelper
   include DateFacetConfigurations
 
-  before_action :set_user_obj_instance_var
   before_action :show_aspect, only: %i[dc ds]
   before_action :sort_collection_actions_buttons, only: [:index]
   before_action :limit_facets_on_home_page, only: [:index]
@@ -231,10 +230,6 @@ class CatalogController < ApplicationController
     pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
     @obj ||= Dor.find(pid)
     @response, @document = fetch pid
-  end
-
-  def set_user_obj_instance_var
-    @user = current_user
   end
 
   # Sorts the Blacklight collection actions buttons so that the "Bulk Action" and "Bulk Update View" buttons appear
