@@ -63,6 +63,16 @@ var gridContext = function() {
     });
   };
 
+  // Validates free-text tags fields and sets the .invalid class on elements
+  // that aren't well formed tags
+  let freeTagValidator = function(sender) {
+    let value = sender.value.trim().split(/\s*:\s*/)
+    sender.value = value.join(' : ')
+    let invalid = (value.length == 1 && value[0] != '') ||
+      (value.length > 1 && value.includes(''))
+    sender.classList.toggle('invalid', invalid)
+  }
+
   var $t = {
     rc: createRegistrationContext(),
     statusIcons: {},
@@ -397,18 +407,12 @@ var gridContext = function() {
         return true
       });
 
-      $('#properties input.free.tag-field').change(function(evt) {
-        var sender = $(evt.target)
-        var value = sender.val().trim().split(/\s*:\s*/)
-        sender.val(value.join(' : '))
-        if ((value.length == 1 && value[0] != '') || (value.length > 1 && $.grep(value, function(x) { return(x == '') }).length > 0)) {
-          sender.addClass('invalid')
-        } else {
-          sender.removeClass('invalid')
-        }
-        $t.setTags();
-        return(true);
-      });
+      document.querySelectorAll('input.free.tag-field').forEach(elem => {
+        elem.addEventListener('blur', (event) => {
+          freeTagValidator(event.target)
+          $t.setTags()
+        })
+      })
 
       $('#properties input.ui-autocomplete-input').blur(function(evt) {
         $t.setTags();

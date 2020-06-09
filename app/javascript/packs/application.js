@@ -31,6 +31,7 @@ import 'modules/permission_grant'
 import 'modules/permission_list'
 import 'modules/populate_druids'
 import 'modules/sharing'
+import TagsAutocomplete from 'modules/tags_autocomplete'
 import Argo from  'argo'
 
 import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
@@ -39,6 +40,8 @@ import 'blacklight-hierarchy/app/assets/javascripts/blacklight/hierarchy/hierarc
 // The Blacklight onLoad event works better than the regular onLoad event if
 // turbolinks is enabled.
 Blacklight.onLoad(function(){
+  new TagsAutocomplete().initialize()
+
   $('#spreadsheet-upload-container').argoSpreadsheet()
 
   // When the user clicks the 'MODS bulk loads' button, a lightbox is opened.
