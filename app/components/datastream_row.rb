@@ -2,40 +2,38 @@
 
 # Draws a row for a datastream
 class DatastreamRow < ApplicationComponent
-  # @param [SolrDocument] document the Solr document model for the item
-  # @param [Hash] attributes the datastream attributes
-  def initialize(document:, attributes:)
-    @document = document
-    @specs = attributes
+  with_collection_parameter :datastream
+
+  # @param [ActiveFedora::Datastream] datastream
+  def initialize(datastream:)
+    @datastream = datastream
   end
 
-  attr_reader :document, :specs
+  attr_reader :datastream
+
+  delegate :label, :dsid, :pid, to: :datastream
 
   # Datastream helpers
   CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }.freeze
 
   def control_group
-    cg = specs.fetch(:control_group, 'X')
-    "#{cg}/#{CONTROL_GROUP_TEXT[cg]}"
+    "#{datastream.controlGroup}/#{CONTROL_GROUP_TEXT[datastream.controlGroup]}"
   end
 
   def link_to_identifier
-    link_to specs[:dsid], ds_solr_document_path(document, specs[:dsid]), title: specs[:dsid], data: { blacklight_modal: 'trigger' }
-  end
-
-  def mime_type
-    specs[:mime_type]
-  end
-
-  def version
-    "v#{specs[:version]}"
+    link_to dsid, ds_solr_document_path(pid, dsid), title: dsid, data: { blacklight_modal: 'trigger' }
   end
 
   def size
-    number_to_human_size(specs[:size])
+    number_to_human_size(datastream.size)
   end
 
-  def label
-    specs[:label]
+  def mime_type
+    datastream.mimeType
+  end
+
+  def version
+    v = datastream.versionID.nil? ? '0' : datastream.versionID.to_s.split(/\./).last
+    "v#{v}"
   end
 end

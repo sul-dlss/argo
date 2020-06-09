@@ -4,8 +4,6 @@
 </h3>
 <div id="document-datastreams-section" class="document-section">
   <table class="detail">
-    <% document.datastreams.each do |attributes| %>
-      <%= render DatastreamRow.new(document: document, attributes: attributes) %>
-    <% end %>
+    <%= render DatastreamRow.with_collection(object.datastreams.values.reject(&:new?)) %>
   </table>
 </div>
