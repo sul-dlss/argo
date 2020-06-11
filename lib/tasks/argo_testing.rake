@@ -36,11 +36,6 @@ end
 if %w[test development].include? Rails.env
   require 'rspec/core/rake_task'
 
-  desc 'Larger integration/acceptance style tests (take several minutes to complete)'
-  RSpec::Core::RakeTask.new(:integration_tests) do |spec|
-    spec.pattern = 'spec/integration/**/*_spec.rb'
-  end
-
   fedora_files = File.foreach(File.join(File.expand_path('../../fedora_conf/data', __dir__), 'load_order')).to_a
 
   namespace :argo do
