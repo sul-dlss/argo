@@ -29,6 +29,92 @@ bundle install
 
 Note that `bundle install` may complain if MySQL isn't installed.  You can either comment out the `mysql2` inclusion in `Gemfile` and come back to it later (you can develop using `sqlite3`), or you can install MySQL.
 
+
+## Run the tests locally
+
+CI runs a series of steps;  this the sequence to do it locally, along with some helpful info.
+
+1. **Pull down the latest docker containers**
+
+    ```
+    docker-compose pull
+    ```
+
+2. **Start up the docker services needed for testing**
+
+    Once everything has been successfully pulled, start up the docker services needed for testing
+
+    ```
+    docker-compose up -d dor-services-app dor-indexing-app techmd
+    ```
+
+    You should do the following to make sure all the services are up:
+
+    ```
+    docker-compose ps
+    ```
+
+3. **Install Chrome**
+
+    You will need to have Google Chrome browser installed, as the tests use chrome for a headless browser.
+
+4. **Update javascript dependencies**
+
+    ```
+    yarn install
+    ```
+
+5. **Compile javascript**
+
+    ```
+    RAILS_ENV=test bin/rails webpacker:compile
+    ```
+
+    If you run into trouble with the docker containers complaining about webpacker, then ... figure out what to do to fix it and please update this document.  (There's a way to do it, something like `docker-compose run --container command`)
+
+6. **Run the tests (without rubocop)**
+
+    Note that
+
+    ```
+    RAILS_ENV=test bundle exec rake ci
+    ```
+
+    is a shortcut for running the following 2 steps:
+
+    ```
+    RAILS_ENV=test bundle exec rake argo:repo:load
+    RAILS_ENV=test bundle exec rake spec
+    ```
+
+    `rake argo:repo:load` loads test fixture objects into fedora/solr.   You will NOT be able to re-run this task successfully unless fixtures are no longer in the docker containers (e.g. if you `docker-compose down`).  That is because they are already loaded.  The error messages in your terminal output do not surface this cause, but that is likely at play if you see `"Rubydora::FedoraInvalidRequest: See logger for details"`, esp with `"Caused by: RestClient::InternalServerError: 500 Internal Server Error"` in there. In this case, run only `bundle exec rake spec` instead.
+
+    Note that `RAILS_ENV=test` should not be necessary when running `bundle exec rake spec` on its own.
+
+7. **Problem test that fails locally but passes on CI**
+
+    spec/helpers/items_helper_spec.rb:40
+
+    ```
+    ItemsHelper
+      schema_validate
+        validates a document (FAILED - 1)
+
+    Failures:
+
+      1) ItemsHelper schema_validate validates a document
+         Failure/Error: expect(schema_validate(doc).length).to eq(3)
+
+           expected: 3
+                got: 2
+
+           (compared using ==)
+         # ./spec/helpers/items_helper_spec.rb:49:in `block (3 levels) in <top (required)>'
+
+    Finished in 0.80643 seconds (files took 3.43 seconds to load)
+    1 example, 1 failure
+    ```
+
 ## Run the servers
 
 ```
