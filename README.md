@@ -91,30 +91,6 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
     Note that `RAILS_ENV=test` should not be necessary when running `bundle exec rake spec` on its own.
 
-7. **Problem test that fails locally but passes on CI**
-
-    spec/helpers/items_helper_spec.rb:40
-
-    ```
-    ItemsHelper
-      schema_validate
-        validates a document (FAILED - 1)
-
-    Failures:
-
-      1) ItemsHelper schema_validate validates a document
-         Failure/Error: expect(schema_validate(doc).length).to eq(3)
-
-           expected: 3
-                got: 2
-
-           (compared using ==)
-         # ./spec/helpers/items_helper_spec.rb:49:in `block (3 levels) in <top (required)>'
-
-    Finished in 0.80643 seconds (files took 3.43 seconds to load)
-    1 example, 1 failure
-    ```
-
 ## Run the servers
 
 ```
@@ -186,24 +162,6 @@ docker-compose run --rm web bin/rake argo:repo:load
 
 
 ## Common tasks
-
-### Run the tests
-
-To run the test suite, invoke `rspec` from the Argo app root.  Note that the docker containers need to be running already for this work.
-```bash
-# docker-compose up -d # (if not already running)
-rspec
-```
-
-### Run the continuous integration build
-
-_Important Note: Running `rake ci` will reload fixtures for the `test` environment only._
-
-The continuous integration build can be run by:
-
-```bash
-RAILS_ENV=test bundle exec rake ci
-```
 
 ### Delete records
 
