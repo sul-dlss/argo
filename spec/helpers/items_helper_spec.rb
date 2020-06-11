@@ -44,9 +44,14 @@ RSpec.describe ItemsHelper, type: :helper do
       # the expected length is the number of error statements from validation
       # here's what the array looks like:
       # ["Element '{http://www.loc.gov/mods/v3}titleInfo', attribute 'type': [facet 'enumeration'] The value 'main' is not an element of the set {'abbreviated', 'translated', 'alternative', 'uniform'}.",
-      # "Element '{http://www.loc.gov/mods/v3}titleInfo', attribute 'type': 'main' is not a valid value of the atomic type '{http://www.loc.gov/mods/v3}titleInfoTypeAttributeDefinition'.",
       # "Element '{http://www.loc.gov/mods/v3}typeOfResource': This element is not expected."]
-      expect(schema_validate(doc).length).to eq(3)
+      #
+      # NOTE: if this test fails due to a third validation error being reported,
+      # it is likely due to a difference in the underlying libxml version. that
+      # error would look like:
+      #
+      # "Element '{http://www.loc.gov/mods/v3}titleInfo', attribute 'type': 'main' is not a valid value of the atomic type '{http://www.loc.gov/mods/v3}titleInfoTypeAttributeDefinition'.",
+      expect(schema_validate(doc).length).to eq(2)
     end
   end
 end

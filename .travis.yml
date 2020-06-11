@@ -39,7 +39,6 @@ after_script:
 
 env:
   global:
-    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true # speeds up bundle install
     - CC_TEST_REPORTER_ID=266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a
 
 cache:
