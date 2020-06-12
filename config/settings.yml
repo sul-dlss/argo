@@ -70,8 +70,6 @@ workflow_url: 'http://localhost:3001'
 
 # Workflow
 workflow:
-  logfile: 'log/workflow_service.log'
-  shift_age: 'weekly'
   timeout: 60
 
 apo:
