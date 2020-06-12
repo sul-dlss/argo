@@ -91,6 +91,8 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
     Note that `RAILS_ENV=test` should not be necessary when running `bundle exec rake spec` on its own.
 
+    Note further that ```docker-compose down -v``` will wipe out the volumes for solr & fedora and allows you to start afresh (with ```docker-compose pull```) if your test data is in a strange state.
+
 ## Run the servers
 
 ```
