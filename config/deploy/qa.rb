@@ -8,5 +8,3 @@ set :rails_env, 'production'
 set :bundle_without, %w[deployment test development].join(' ')
 
 set :deploy_to, '/opt/app/lyberadmin/argo'
-
-set :delayed_job_workers, 4

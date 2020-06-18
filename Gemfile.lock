@@ -119,27 +119,6 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
-    celluloid (0.17.4)
-      celluloid-essentials
-      celluloid-extras
-      celluloid-fsm
-      celluloid-pool
-      celluloid-supervision
-      timers (>= 4.1.1)
-    celluloid-essentials (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-extras (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-fsm (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-io (0.17.3)
-      celluloid (>= 0.17.2)
-      nio4r (>= 1.1)
-      timers (>= 4.1.1)
-    celluloid-pool (0.20.5)
-      timers (>= 4.1.1)
-    celluloid-supervision (0.20.6)
-      timers (>= 4.1.1)
     childprocess (3.0.0)
     cocina-models (0.33.0)
       activesupport
@@ -156,16 +135,12 @@ GEM
     config (2.2.1)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
+    connection_pool (2.2.3)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.6)
     daemons (1.3.1)
     deep_merge (1.2.1)
-    delayed_job (4.1.8)
-      activesupport (>= 3.0, < 6.1)
-    delayed_job_active_record (4.1.4)
-      activerecord (>= 3.0, < 6.1)
-      delayed_job (>= 3.0, < 5)
     deprecation (0.99.0)
       activesupport
     devise (4.7.2)
@@ -277,12 +252,6 @@ GEM
       rubocop (~> 0.79)
       smart_properties
     erubi (1.9.0)
-    eye (0.10.0)
-      celluloid (~> 0.17.3)
-      celluloid-io (~> 0.17.0)
-      kostya-sigar (~> 2.0.0)
-      state_machines
-      thor
     factory_bot (5.2.0)
       activesupport (>= 4.2.0)
     factory_bot_rails (5.2.0)
@@ -331,7 +300,6 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
-    kostya-sigar (2.0.6)
     link_header (0.0.8)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -424,6 +392,8 @@ GEM
     rack (2.2.3)
     rack-mini-profiler (2.0.2)
       rack (>= 1.2.0)
+    rack-protection (2.0.8.1)
+      rack
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -480,6 +450,7 @@ GEM
       rdf (~> 1.1, >= 1.1.10)
     rdf-xsd (1.99.0)
       rdf (~> 1.99)
+    redis (4.2.1)
     regexp_parser (1.7.1)
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
@@ -553,6 +524,11 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (2.3.0)
+    sidekiq (6.0.7)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      rack-protection (>= 2.0.0)
+      redis (>= 4.1.0)
     simplecov (0.17.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -586,13 +562,11 @@ GEM
       mods (~> 2.2)
     stanford-mods-normalizer (0.1.0)
       nokogiri (~> 1.8)
-    state_machines (0.5.0)
     stomp (1.4.9)
     temple (0.8.2)
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    timers (4.3.0)
     ttfunk (1.4.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
@@ -647,8 +621,6 @@ DEPENDENCIES
   capybara
   coderay
   config
-  delayed_job
-  delayed_job_active_record
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
@@ -657,7 +629,6 @@ DEPENDENCIES
   dor-workflow-client (~> 3.19)
   equivalent-xml (>= 0.6.0)
   erb_lint (~> 0.0.31)
-  eye
   factory_bot_rails
   faraday
   honeybadger (~> 4.1)
@@ -691,6 +662,7 @@ DEPENDENCIES
   rubyzip
   sdr-client (~> 0.27)
   selenium-webdriver
+  sidekiq (~> 6.0)
   simplecov (~> 0.17.1)
   spring
   spring-watcher-listen (~> 2.0.0)

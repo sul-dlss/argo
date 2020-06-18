@@ -7,8 +7,6 @@ RUN apk add --update --no-cache \
   libxslt-dev \
   # needed for mysql2 dependency
   mariadb-dev \
-  # needed for eye dependency
-  perl \
   # needed for sqlite dependency
   sqlite-dev \
   # rails server cannot start without tzdata
