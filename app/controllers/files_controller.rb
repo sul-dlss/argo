@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 class FilesController < ApplicationController
-  before_action :load_resource, only: :preserved
+  include ActionController::Live # required for streaming
+  include ZipTricks::RailsStreaming
+
+  before_action :load_resource
 
   ##
   # Brings up a modal dialog that lists all locations of the file
   def index
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
-    object_client = Dor::Services::Client.object(params[:item_id])
     @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: 'accessioned')
-    files = object_client.find.structural.contains.map { |fs| fs.structural.contains }.flatten
+    files = @cocina_model.structural.contains.map { |fs| fs.structural.contains }.flatten
     @file = files.find { |file| file.externalIdentifier == "#{params[:item_id]}/#{params[:id]}" }
 
     if @has_been_accessioned
@@ -32,8 +34,8 @@ class FilesController < ApplicationController
   end
 
   def preserved
-    authorize! :view_content, @object
-    Preservation::Client.objects.content(druid: @object.pid,
+    authorize! :view_content, @cocina_model
+    Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
                                          filepath: filename,
                                          version: params[:version],
                                          on_data: proc { |data, _count| response.stream.write data })
@@ -44,19 +46,50 @@ class FilesController < ApplicationController
   rescue Preservation::Client::NotFoundError => e
     render status: :not_found, plain: "Preserved file not found: #{e}"
   rescue Preservation::Client::Error => e
-    message = "Preservation client error getting content of #{filename} for #{@object.pid} (version #{params[:version]}): #{e}"
+    message = "Preservation client error getting content of #{filename} for #{@cocina_model.externalIdentifier} (version #{params[:version]}): #{e}"
     logger.error(message)
     Honeybadger.notify(message)
     render status: :internal_server_error, plain: message
   end
 
+  def download
+    authorize! :view_content, @cocina_model
+
+    response.headers['Content-Disposition'] = "attachment; filename=#{@cocina_model.externalIdentifier.delete_prefix('druid:')}.zip"
+    zip_tricks_stream do |zip|
+      preserved_files(@cocina_model).each do |filename|
+        zip.write_deflated_file(filename) do |sink|
+          Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
+                                               filepath: filename,
+                                               version: @cocina_model.version,
+                                               on_data: proc { |data, _count| sink.write data })
+        rescue StandardError => e
+          sink.close
+          message = "Could not zip #{filename} (#{@cocina_model.externalIdentifier}) for download: #{e}"
+          logger.error(message)
+          Honeybadger.notify(message)
+          render status: :internal_server_error, plain: message
+        end
+      end
+    end
+  end
+
   private
+
+  def preserved_files(cocina_model)
+    resources = Array(cocina_model.structural.contains)
+    resources.flat_map do |resource|
+      resource.structural.contains.select do |file|
+        file.administrative.sdrPreserve
+      end.map(&:filename)
+    end
+  end
 
   def filename
     params[:id]
   end
 
   def load_resource
-    @object = Dor.find params[:item_id]
+    @cocina_model = Dor::Services::Client.object(params[:item_id]).find
   end
 end

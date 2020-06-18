@@ -32,7 +32,7 @@ RSpec.describe 'catalog/_contents_default.html.erb', type: :view do
                       datastreams: { 'contentMetadata' => content_md })
     end
     let(:solr_doc) do
-      SolrDocument.new
+      SolrDocument.new(id: 'druid:bb000zn0114')
     end
 
     before do

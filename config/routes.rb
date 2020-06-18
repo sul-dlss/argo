@@ -99,6 +99,10 @@ Rails.application.routes.draw do
       member do
         get 'preserved'
       end
+
+      collection do
+        get 'download'
+      end
     end
 
     resource :content_type, only: %i[show update]

@@ -60,6 +60,7 @@ gem 'rake'
 gem 'retries'
 gem 'ruby-prof'
 gem 'rubyzip'
+gem 'zip_tricks', '~> 5.3'
 
 # Stanford/Hydra related gems
 gem 'blacklight', '~> 6.0'
