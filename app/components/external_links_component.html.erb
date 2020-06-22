@@ -1,13 +1,11 @@
 <h3 class="start-open">View in new window</h3>
-<ul class='nav nav-stacked'>
-  <li><%= purl_link %></li>
+<ul class='nav flex-column'>
+  <li class="nav-item"><%= purl_link %></li>
   <% if released_to_searchworks? %>
-    <li><%= searchworks_link %></li>
+    <li class="nav-item"><%= searchworks_link %></li>
   <% end %>
-  <li><%= dor_link %></li>
-  <li><%= link_to 'FoXML', File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/export?context=archive"), target: '_blank', rel: 'noopener' %></li>
-  <li>
-    <%= link_to 'Solr document', solr_document_path(document, format: :json), target: '_blank', rel: 'noopener' %>
-  </li>
-  <li><small><%= index_info %></small></li>
+  <li class="nav-item"><%= dor_link %></li>
+  <li class="nav-item"><%= foxml_link %></li>
+  <li class="nav-item"><%= solr_link %></li>
+  <li class="nav-item"><small><%= index_info %></small></li>
 </ul>

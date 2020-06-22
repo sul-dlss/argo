@@ -52,7 +52,7 @@ $(document).ready(function() {
     caption: "Columns",
     title: "Choose Columns",
     buttonicon: 'ui-icon-script',
-    onClickButton() { document.getElementById('column_selector').classList.toggle('hidden'); }
+    onClickButton() { document.getElementById('column_selector').classList.toggle('d-none'); }
   }
   );
 

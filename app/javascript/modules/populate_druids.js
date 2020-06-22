@@ -11,7 +11,7 @@
       $.getJSON(url)
       .done(function(data) {
         var docs = '';
-        $.each(data.response.docs, function(i, value) {
+        $.each(data.data, function(i, value) {
           docs += value.id + '\n';
         });
 
@@ -21,10 +21,11 @@
 
     return this.each(function() {
       var $el = $(this);
-      var url = $el.data('populateDruids');
-      var target = $el.data('target');
-      $el.on('click', function() {
-        getAndUpdatePids(url, target);
+      var url = $el.data('populateDruids')
+      var target = $el.data('target')
+      $el.on('click', function(e) {
+        e.preventDefault()
+        getAndUpdatePids(url, target)
       });
     });
   };

@@ -1,0 +1,24 @@
+//
+// Overrides of Bootstrap variables can be added here. For more information
+// about available Bootstrap variables, please see:
+// https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
+
+@import 'sul_variables';
+
+$barley-corn: #b3995d;
+$floral-white: #f9f6ef;
+$tahuna-sands: #d2c295;
+$tea: #b6b1a9;
+$silver: #c5c5c5;
+
+$theme-colors: (
+  "primary": $blue,
+  "dark": $color-cardinal-red,
+  "success": $barley-corn
+);
+
+
+$link-color: $bright-blue;
+$link-hover-color: $blue;
+
+$navbar-dark-color: $white;

@@ -36,7 +36,7 @@ RSpec.describe 'Release history' do
 
   context 'for an adminPolicy' do
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
-    let(:administrative) { instance_double(Cocina::Models::Administrative) }
+    let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
 
     it 'does not show release history' do
       visit solr_document_path 'druid:fg464dn8891'

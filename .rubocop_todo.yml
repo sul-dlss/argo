@@ -49,7 +49,7 @@ Metrics/AbcSize:
 # Offense count: 6
 # Configuration parameters: CountComments.
 Metrics/ClassLength:
-  Max: 220
+  Max: 227
 
 # Offense count: 8
 # Configuration parameters: IgnoredMethods.
@@ -115,17 +115,17 @@ RSpec/AnyInstance:
     - 'spec/requests/manage_release_spec.rb'
     - 'spec/requests/item_files_download_spec.rb'
 
-# Offense count: 86
+# Offense count: 85
 # Configuration parameters: Prefixes.
 # Prefixes: when, with, without
 RSpec/ContextWording:
   Enabled: false
 
-# Offense count: 74
+# Offense count: 72
 RSpec/DescribeClass:
   Enabled: false
 
-# Offense count: 183
+# Offense count: 179
 # Configuration parameters: Max.
 RSpec/ExampleLength:
   Enabled: false
@@ -172,7 +172,7 @@ RSpec/MessageChain:
     - 'spec/jobs/descmetadata_download_job_spec.rb'
     - 'spec/views/items/_collection_ui.html.erb_spec.rb'
 
-# Offense count: 241
+# Offense count: 239
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: have_received, receive
 RSpec/MessageSpies:
@@ -213,7 +213,7 @@ RSpec/SubjectStub:
     - 'spec/services/version_service_spec.rb'
     - 'spec/services/virtual_objects_creator_spec.rb'
 
-# Offense count: 52
+# Offense count: 51
 # Configuration parameters: IgnoreNameless, IgnoreSymbolicNames.
 RSpec/VerifiedDoubles:
   Enabled: false
@@ -318,7 +318,7 @@ Style/CommentedKeyword:
     - 'lib/tasks/argo.rake'
     - 'lib/tasks/argo_testing.rake'
 
-# Offense count: 59
+# Offense count: 60
 Style/Documentation:
   Enabled: false
 

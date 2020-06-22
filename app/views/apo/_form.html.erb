@@ -1,20 +1,23 @@
 <%= form_tag url, method: method, data: { behavior: 'apo-form' } do %>
-
   <div class="form-group">
-    <label for="title">Title</label><br>
-    <input type="text" style="width:auto" size="40" id="title" name="title" value="<%= @form.mods_title %>">
+    <label for="title">Title</label>
+    <input type="text" class="form-control" id="title" name="title" value="<%= @form.mods_title %>">
     <span id="title-err-msg-elt" class="apo-register-error"></span>
   </div>
 
   <div class="form-group">
-    <label>Agreement</label><br>
-    <%= select_tag :agreement, options_for_select(agreement_options, @form.agreement_object_id) %>
+    <label>Agreement</label>
+    <%= select_tag :agreement, options_for_select(agreement_options, @form.agreement_object_id), class: 'form-control' %>
   </div>
 
   <div class="form-group">
-    <label>Descriptive Metadata format</label><br>
-      <%= select_tag :desc_md, options_for_select(options_for_desc_md, @form.desc_metadata_format) %>
-      <%= select_tag :metadata_source, options_for_select(apo_metadata_sources, @form.metadata_source) %>
+    <label>Descriptive Metadata format</label>
+      <%= select_tag :desc_md, options_for_select(options_for_desc_md, @form.desc_metadata_format), class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <label>Metadata source</label>
+    <%= select_tag :metadata_source, options_for_select(apo_metadata_sources, @form.metadata_source), class: 'form-control' %>
   </div>
 
   <sharing data-permissions="<%= @form.permissions.to_json %>">
@@ -104,36 +107,36 @@
   </div>
 
   <div class="form-group">
-    <label>Default Object Rights</label><br>
-      <%= select_tag :default_object_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, @form.default_rights) %>
+    <label>Default Object Rights</label>
+      <%= select_tag :default_object_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, @form.default_rights), class: 'form-control' %>
   </div>
   <div class="form-group">
     <label for="use">Default Use and Reproduction statement</label><br>
     <p>See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Use and Reproduction statements.</p>
-    <textarea style="width:95%;height:40px" rows="2" name="use" id="use"><%= @form.use_statement %></textarea>
+    <textarea class="form-control" rows="2" name="use" id="use"><%= @form.use_statement %></textarea>
   </div>
 
   <div class="form-group">
     <label for="copyright">Default Copyright statement</label><br>
     <p>See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Copyright statements.</p>
-    <textarea style="width:95%;height:40px" id='copyright' name="copyright"><%= @form.copyright_statement %></textarea>
+    <textarea class="form-control" id='copyright' name="copyright"><%= @form.copyright_statement %></textarea>
   </div>
   <div class="form-group">
-    <label>Default use license</label><br>
-      <%= select_tag :use_license, options_for_select(@form.license_options, @form.use_license) %>
+    <label>Default use license</label>
+    <%= select_tag :use_license, options_for_select(@form.license_options, @form.use_license), class: 'form-control' %>
   </div>
 
   <div class="form-group">
-    <label>Default workflow</label><br>
-    <%= select_tag :workflow, options_for_select(workflow_options, @form.default_workflow) %>
+    <label>Default workflow</label>
+    <%= select_tag :workflow, options_for_select(workflow_options, @form.default_workflow), class: 'form-control' %>
   </div>
   <div class="form-group">
     <% if @form.new_record? %>
       <%= submit_tag 'Register APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', '/', class: 'btn btn-default' %>
+      <%= link_to 'Cancel', '/', class: 'btn btn-secondary' %>
     <% else %>
       <%= submit_tag 'Update APO', class: 'btn btn-primary' %>
-      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-default' %>
+      <%= link_to 'Cancel', solr_document_path(@form), class: 'btn btn-secondary' %>
     <% end %>
   </div>
 <% end %>

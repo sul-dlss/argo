@@ -1,16 +1,34 @@
-//
-// Overrides of Bootstrap variables can be added here. For more information
-// about available Bootstrap variables, please see:
-// http://getbootstrap.com/customize/
+// Set color of selected facet
+.card-header {
+  background-color: $floral-white;
+}
 
-@import 'sul_web_colors';
+.btn-secondary {
+  @include button-variant($white, $blue);
+  color: $blue;
+  &:hover {
+    color: darken($blue, 7.5%);
+  }
+}
 
-// Inverted navbar
-$navbar-inverse-color: lighten($color-beige-05, 05%);
-$navbar-inverse-link-color: lighten($color-beige-05, 05%);
-$navbar-inverse-bg: $color-cardinal-red;
+// Set text color of selected facets
+.facet-values li .selected {
+  color: $body-color !important;
+}
 
-// Grid system
-$grid-float-breakpoint: 992px;
+// Set border color of facets
+.facet-limit{
+  border-color: $tahuna-sands;
+}
 
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+// Set the background color of the active dropdown button
+.btn-outline-secondary {
+  @include button-outline-variant($body-color, $body-color, $tea, $body-color);
+}
+
+// Document action items that are disabled
+.btn-primary.disabled {
+  background-color: $silver;
+  color: $body-color;
+  opacity: 1.0;
+}

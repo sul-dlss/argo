@@ -117,9 +117,9 @@
     </div>
 
     <div id="common_fields">
-      <a class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids(@last_search)) %>" data-target='#pids'>
+      <button class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids(@last_search)) %>" data-target='#pids'>
         Populate with previous search
-      </a>
+      </button>
       <div class='form-group'>
         <label>Druids to perform bulk action on</label>
         <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'></textarea>

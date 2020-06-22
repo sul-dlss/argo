@@ -24,13 +24,13 @@ class ApoController < ApplicationController
   def edit
     authorize! :create, Dor::AdminPolicyObject
     @form = ApoForm.new(@object)
-    render layout: 'blacklight'
+    render layout: 'one_column'
   end
 
   def new
     authorize! :create, Dor::AdminPolicyObject
     @form = ApoForm.new(Dor::AdminPolicyObject.new)
-    render layout: 'blacklight'
+    render layout: 'one_column'
   end
 
   def create

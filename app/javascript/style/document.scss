@@ -32,32 +32,6 @@ dl.deflist {
   }
 }
 
-div.column {
-  float: left;
-
-  &.narrow {
-    width: 45em;
-    overflow: visible;
-
-    dl {
-      overflow: visible;
-
-      dd {
-        width: 35em;
-        overflow: visible;
-      }
-    }
-  }
-
-  &.wide {
-    width: 35em;
-
-    dd {
-      width: 25em;
-    }
-  }
-}
-
 h1, h2, h3, h4, h5, h6 {
   &.inline {
     display: inline;
@@ -69,29 +43,32 @@ h3.section-head {
   display: block;
   clear: both;
   width: 100%;
-  padding: 2px;
+  padding: 2px 15px;
   color: #2A306C;
   background-color: #D4E0E0;
 
-  &.collapsible-section:before {
+  &.collapsible-section.collapsed::after {
+    transform: rotate(0deg);
+    transition: transform 0.1s ease, -webkit-transform 0.1s ease;
+  }
+
+  &.collapsible-section::after {
     /* symbol for "opening" panels */
-    font-family: "Glyphicons Halflings";
-    content: "";
+    content: "❯";
+    float: right;
     color: grey;
     font-size: 0.8em;
     line-height: normal;
-  }
-
-  &.collapsed:before {
-    /* symbol for "collapsed" panels */
-    content: "";
+    margin-top: 3px;
+    transform: rotate(90deg);
   }
 }
 
 .section-head-link {
-  float: right;
-  padding-right: 6px;
+  padding-right: 16px;
   font-weight: normal;
+  position: absolute;
+  right: 40px;
 }
 
 #bulk-button {

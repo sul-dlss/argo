@@ -1,24 +1,23 @@
-// This is a hack because we're using bootstrap 4 code and bootstrap 3 styles.
-// I think we can remove this when we upgrade to blackight 7
-.modal.show {
-  opacity: 1;
-  // This prevents a very tall modal from being in a position where we can't see the top of the modal.
-  .modal-dialog {
-    transform: translate(0,0);
+// Overriding blacklight to keep the border-color
+.applied-filter {
+  .constraint-value {
+    &:hover, &:active {
+      border-color: $body-color;
+    }
   }
 }
 
-#header-navbar {
-  a.navbar-brand {
-    background: transparent url($logo-image) no-repeat top left;
-    background-size: 152px 52px;
-    margin-bottom: 2px;
-  }
-}
+.report-toggle {
+  .dropdown-item.active {
+    background-color: inherit;
 
-a.no-underline {
-  text-decoration: none;
-  border-bottom: none;
+    &::before {
+      color: $text-muted;
+      content: '• ';
+      left: 10px;
+      position: fixed;
+    }
+  }
 }
 
 table {
@@ -28,10 +27,6 @@ table {
 
 legend {
   border: 0;
-}
-
-#bd, #bd #sidebar {
-  overflow: visible !important;
 }
 
 .header-column {
@@ -88,23 +83,8 @@ legend {
   margin-right: 0px;
 }
 
-#facets {
-  .facet-count {
-    margin-left: 0.5em;
-  }
-
-  a.remove {
-    margin-left: 0.5em;
-    float: right;
-  }
-}
-
 .blacklight-wf_error_ssim {
   color: red;
-}
-
-#doc4 {
-  width: 100%;
 }
 
 .apo-register-error {
@@ -144,25 +124,12 @@ legend {
   }
 }
 
-.bulk_button {
-  cursor: pointer;
-  width: 160px;
-  padding-left: 10px;
-  padding-right: 10px;
-  text-align: center;
-  height: 25px;
-  line-height: 25px;
-  background: #4479BA;
-  color: #FFF;
-  font: Arial;
-  border: 1px solid #84bbf3;
-}
-
+// This is used for highlighting XML when displaying Fedora 3 datastreams
 .CodeRay {
   pre {
-    border: none !important;
+    border: 1px solid $gray-300;
     white-space: pre-wrap;
-    font-family: monospace;
+    padding: 9px;
   }
 }
 
@@ -180,26 +147,6 @@ legend {
 
 .pageEntriesInfo {
   display: none;
-}
-
-#previousNextDocument {
-  padding: 0.8em;
-  border-top: 0;
-
-  .next {
-    float: none;
-  }
-
-  .disabled {
-    color: #AAA;
-  }
-}
-
-#pid_list {
-  textarea {
-    height: 17em;
-    width: 30em;
-  }
 }
 
 button.close {
@@ -221,18 +168,9 @@ button.close {
   margin-top: 6px;
 }
 
-.bulk-buttons {
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
 .bulk-buttons-row {
   margin-top: 16px;
   margin-bottom: 16px;
-}
-
-.bulk-btn-danger {
-  background-color: $brand-danger;
 }
 
 #import-csv {

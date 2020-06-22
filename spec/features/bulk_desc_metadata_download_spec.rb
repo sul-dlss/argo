@@ -15,7 +15,7 @@ RSpec.describe 'Bulk Descriptive Metadata Download' do
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     click_link 'New Bulk Action'
     expect(page).to have_css 'h1', text: 'New Bulk Action'
-    expect(page).to have_css 'a[data-populate-druids="/catalog?action=index&' \
+    expect(page).to have_css 'button[data-populate-druids="/catalog?action=index&' \
       'controller=catalog&pids_only=true&q=stanford"]'
   end
 
