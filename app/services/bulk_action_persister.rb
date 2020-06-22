@@ -60,18 +60,9 @@ class BulkActionPersister
       pids: pids.split,
       manage_release: manage_release,
       set_governing_apo: set_governing_apo,
-      manage_catkeys: manage_catkeys,
       prepare: prepare,
-      create_virtual_objects: csv_from_file(create_virtual_objects),
-      import_tags: csv_from_file(import_tags),
+      csv_file: bulk_action_form.csv_as_string,
       groups: groups
     }
-  end
-
-  def csv_from_file(params)
-    # Short-circuit if request is not related to creating virtual objects
-    return if params.nil? || params[:csv_file].nil?
-
-    File.read(params[:csv_file].path)
   end
 end

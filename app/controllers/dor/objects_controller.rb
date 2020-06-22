@@ -6,26 +6,27 @@ class Dor::ObjectsController < ApplicationController
 
   def create
     form = RegistrationForm.new(params)
-    begin
-      response = Dor::Services::Client.objects.register(params: form.cocina_model)
-    rescue Cocina::Models::ValidationError => e
-      return render plain: e.message, status: :bad_request
-    rescue Dor::Services::Client::UnexpectedResponse => e
-      return render plain: e.message, status: :conflict if e.message.start_with?('Conflict')
+    request_model = begin
+                      form.cocina_model
+                    rescue Cocina::Models::ValidationError => e
+                      return render plain: e.message, status: :bad_request
+                    end
 
-      return render plain: e.message, status: :bad_request
-    end
+    result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
 
-    pid = response.externalIdentifier
-
-    WorkflowClientFactory.build.create_workflow_by_name(pid, params[:workflow_id], version: '1')
-
-    Dor::Services::Client.object(pid).administrative_tags.create(tags: form.administrative_tags)
-
-    render json: { pid: pid }, status: :created, location: object_location(pid)
+    result.either(
+      ->(model) { render json: { pid: model.externalIdentifier }, status: :created, location: object_location(model.externalIdentifier) },
+      ->(message) { render_failure(message) }
+    )
   end
 
   private
+
+  def render_failure(message)
+    return render plain: message, status: :conflict if message.start_with?('Conflict')
+
+    render plain: message, status: :bad_request
+  end
 
   def munge_parameters
     case request.content_type

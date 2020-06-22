@@ -128,7 +128,7 @@ RSpec.describe BulkActionsController do
     end
 
     it 'sends through a BulkActions file' do
-      get :file, params: { id: bulk_action.id, filename: 'test.log', mime_type: 'text/plain' }
+      get :file, params: { id: bulk_action.id, filename: 'test.log' }
       expect(response.status).to eq 200
     end
 

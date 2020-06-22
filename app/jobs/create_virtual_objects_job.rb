@@ -22,18 +22,16 @@ class CreateVirtualObjectsJob < GenericJob
   # A job that creates virtual objects
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [String] :create_virtual_objects CSV string
+  # @option params [String] :csv_file CSV string
   def perform(bulk_action_id, params)
     super
 
-    virtual_objects = VirtualObjectsCsvConverter.convert(csv_string: params[:create_virtual_objects])
+    virtual_objects = VirtualObjectsCsvConverter.convert(csv_string: params[:csv_file])
 
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
 
-      # NOTE: We use this instead of `update_druid_count` because virtual object
-      #       creation does not use the `pids` form field.
-      bulk_action.update(druid_count_total: virtual_objects.length)
+      update_druid_count(count: virtual_objects.length)
 
       # NOTE: `ability` is defined in this job's superclass, `GenericJob`
       not_found_druids, unauthorized_druids = ProblematicDruidFinder.find(druids: parent_ids_from(virtual_objects), ability: ability)

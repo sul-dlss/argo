@@ -1,0 +1,20 @@
+<%= f.fields_for :register_druids do |register_druids_fields| %>
+  <div class='form-group'>
+    <%= register_druids_fields.label :csv_file, 'Upload a CSV file' %>
+      <p><small><em>Please note that each row should have headers for:
+        <ul>
+        <li>APO (required)</li>
+        <li>Collection</li>
+        <li>Rights (required)</li>
+        <li>Initial Workflow (required)</li>
+        <li>Content Type (required)</li>
+        <li>Project Name</li>
+        <li>Tags (not required, may repeat)</li>
+        <li>Catkey</li>
+        <li>Source ID (required)</li>
+        <li>Label (required if no Catkey)</li>
+        </ul>
+</em></small></p>
+    <%= register_druids_fields.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+  </div>
+<% end %>

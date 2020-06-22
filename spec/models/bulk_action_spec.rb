@@ -17,6 +17,49 @@ RSpec.describe BulkAction do
     end
   end
 
+  describe 'has_report?' do
+    subject { bulk_action.has_report?(Settings.checksum_report_job.csv_filename) }
+
+    let(:bulk_action) { create(:bulk_action, action_type: 'ChecksumReportJob', status: status) }
+
+    context 'when status completed and file exists' do
+      before do
+        allow(File).to receive(:exist?).and_return(true)
+      end
+
+      let(:status) { 'Completed' }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when status completed but file has zero length' do
+      before do
+        allow(File).to receive(:exist?).and_return(true)
+        allow(File).to receive(:zero?).and_return(true)
+      end
+
+      let(:status) { 'Completed' }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when status completed but file does not exist' do
+      before do
+        allow(File).to receive(:exist?).and_return(false)
+      end
+
+      let(:status) { 'Completed' }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when status not completed' do
+      let(:status) { 'Processing' }
+
+      it { is_expected.to be false }
+    end
+  end
+
   ##
   # This is testing the completion of private methods
 
