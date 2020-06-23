@@ -34,7 +34,7 @@ RSpec.describe FilesController, type: :controller do
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
         expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
         expect(response.headers['Content-Type']).to eq('application/octet-stream')
-        expect(response.headers['Content-Disposition']).to eq("attachment; filename=#{CGI.escape(mock_file_name)}")
+        expect(response.headers['Content-Disposition']).to eq("attachment; filename=\"#{CGI.escape(mock_file_name)}\"")
         expect(response.code).to eq('200')
         expect(Preservation::Client.objects).to have_received(:content)
           .with(druid: pid, filepath: mock_file_name, version: mock_version, on_data: Proc)
@@ -50,7 +50,7 @@ RSpec.describe FilesController, type: :controller do
 
         it 'returns 404 with error information' do
           get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
-          expect(response.headers['Content-Type']).to eq('text/plain; charset=utf-8')
+          expect(response.headers['Content-Type']).to eq('application/octet-stream')
           expect(response.headers['Last-Modified']).to eq nil
           expect(response.headers['Content-Disposition']).to eq nil
           expect(response.code).to eq('404')
