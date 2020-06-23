@@ -62,7 +62,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   describe 'perform' do
     let(:ability) { instance_double(Ability) }
     let(:bulk_action) do
-      create(:bulk_action, action_type: 'DescmetadataDownloadJob', pids: pid_list, log_name: 'foo.txt')
+      create(:bulk_action, action_type: 'DescmetadataDownloadJob', log_name: 'foo.txt')
     end
 
     before do

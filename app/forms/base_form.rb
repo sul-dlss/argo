@@ -11,7 +11,7 @@ class BaseForm
   # @param [Dor::Item] the object to update.
   def initialize(model)
     @model = model
-    @errors = [] # assume no errors yet
+    @errors = model.errors
   end
 
   # @param [HashWithIndifferentAccess] params the parameters from the form
@@ -30,5 +30,5 @@ class BaseForm
     model.attributes = params
   end
 
-  delegate :new_record?, to: :model
+  delegate :model_name, :to_key, :to_model, :new_record?, to: :model
 end

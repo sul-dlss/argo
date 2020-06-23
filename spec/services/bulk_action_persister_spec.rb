@@ -3,12 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe BulkActionPersister do
+  let(:form) do
+    BulkActionForm.new(bulk_action, groups: nil)
+  end
+
   let(:bulk_action) do
-    BulkAction.create(
-      action_type: 'GenericJob',
-      pids: 'a b c',
-      manage_release: {}
-    )
+    BulkAction.create(action_type: 'GenericJob')
+  end
+
+  let(:params) do
+    { pids: %w[a b c], manage_release: {} }
+  end
+
+  before do
+    form.validate(params)
+    form.sync
   end
 
   it 'makes sure BulkAction job was kicked off' do
@@ -16,15 +25,15 @@ RSpec.describe BulkActionPersister do
       .with(
         bulk_action.id,
         hash_including(
-          pids: %w[a b c],
+          pids: %w[druid:a druid:b druid:c],
           manage_release: {}
         )
       )
-    described_class.persist(bulk_action)
+    described_class.persist(form)
   end
 
   describe 'all the steps are called' do
-    let(:service) { described_class.new(bulk_action) }
+    let(:service) { described_class.new(form) }
 
     it '#create_output_directory' do
       expect(service).to receive(:create_output_directory)
@@ -43,7 +52,7 @@ RSpec.describe BulkActionPersister do
   end
 
   describe 'directory and file creation' do
-    let(:service) { described_class.new(bulk_action) }
+    let(:service) { described_class.new(form) }
 
     let(:directory) do
       File.join(
@@ -68,15 +77,15 @@ RSpec.describe BulkActionPersister do
   describe '#job_params' do
     subject { service.send(:job_params) }
 
-    let(:service) { described_class.new(bulk_action) }
+    let(:service) { described_class.new(form) }
 
     context 'for a prepare job' do
       let(:bulk_action) do
-        BulkAction.create(
-          action_type: 'PrepareJob',
-          pids: 'a b c',
-          prepare: { 'significance' => 'minor', 'description' => 'change the data' }
-        )
+        BulkAction.create(action_type: 'PrepareJob')
+      end
+
+      let(:params) do
+        { pids: %w[a b c], prepare: { 'significance' => 'minor', 'description' => 'change the data' } }
       end
 
       it { is_expected.to include(prepare: { 'description' => 'change the data', 'significance' => 'minor' }) }
@@ -84,11 +93,10 @@ RSpec.describe BulkActionPersister do
 
     context 'for a create virtual objects job' do
       let(:bulk_action) do
-        BulkAction.create(
-          action_type: 'CreateVirtualObjectsJob',
-          pids: 'a b c',
-          create_virtual_objects: { csv_file: fake_io }
-        )
+        BulkAction.create(action_type: 'CreateVirtualObjectsJob')
+      end
+      let(:params) do
+        { pids: %w[a b c], create_virtual_objects: { csv_file: fake_io } }
       end
       let(:fake_io) { double('IO', path: '/path/unused/in/spec') }
 

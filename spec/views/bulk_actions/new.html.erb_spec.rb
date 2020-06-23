@@ -7,7 +7,7 @@ RSpec.describe 'bulk_actions/new.html.erb' do
   let(:apo_list) { [['APO 1', 'druid:123'], ['APO 2', 'druid:234']] }
 
   before do
-    @bulk_action = assign(:bulk_actions, create(:bulk_action))
+    @form = BulkActionForm.new(create(:bulk_action), groups: user_groups)
     allow(view).to receive(:current_user).and_return(double(sunetid: 'esnowden', groups: user_groups))
     allow(view).to receive(:apo_list).with(user_groups).and_return(apo_list)
 
