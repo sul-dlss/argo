@@ -35,21 +35,34 @@ class FilesController < ApplicationController
 
   def preserved
     authorize! :view_content, @cocina_model
-    Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
-                                         filepath: filename,
-                                         version: params[:version],
-                                         on_data: proc { |data, _count| response.stream.write data })
-    response.headers['Content-Type'] = 'application/octet-stream'
-    response.headers['Content-Disposition'] = "attachment; filename=#{CGI.escape(filename)}"
+
+    # Set headers on the response before writing to the response stream
+    send_file_headers!(
+      type: 'application/octet-stream',
+      disposition: 'attachment',
+      filename: CGI.escape(filename)
+    )
     response.headers['Last-Modified'] = Time.now.utc.rfc2822 # HTTP requires GMT date/time
-    response.stream.close
+
+    Preservation::Client.objects.content(
+      druid: @cocina_model.externalIdentifier,
+      filepath: filename,
+      version: params[:version],
+      on_data: proc { |data, _count| response.stream.write data }
+    )
   rescue Preservation::Client::NotFoundError => e
+    # Undo the header setting above for the streaming response. Not relevant here.
+    response.headers.delete('Last-Modified')
+    response.headers.delete('Content-Disposition')
+
     render status: :not_found, plain: "Preserved file not found: #{e}"
   rescue Preservation::Client::Error => e
     message = "Preservation client error getting content of #{filename} for #{@cocina_model.externalIdentifier} (version #{params[:version]}): #{e}"
     logger.error(message)
     Honeybadger.notify(message)
     render status: :internal_server_error, plain: message
+  ensure
+    response.stream.close
   end
 
   def download
