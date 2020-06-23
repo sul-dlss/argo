@@ -19,7 +19,7 @@ import 'jquery-ui'
 import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
 
-import 'spreadsheet'
+import 'spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
 
 import 'modules/apo_form'
 import 'modules/button_checker'
