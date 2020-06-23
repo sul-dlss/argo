@@ -51,7 +51,6 @@ class BulkActionPersister
   def job_params
     {
       pids: pids.split,
-      output_directory: output_directory,
       manage_release: manage_release,
       set_governing_apo: set_governing_apo,
       manage_catkeys: manage_catkeys,

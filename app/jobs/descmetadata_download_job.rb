@@ -10,10 +10,9 @@ class DescmetadataDownloadJob < GenericJob
 
   # @param [Integer] bulk_action_id ActiveRecord identifier of the BulkAction object that originated this job.
   # @param [Hash] params Custom params for this job
-  # requires `:pids` (an Array of pids) and output_directory
+  # requires `:pids` (an Array of pids)
   def perform(bulk_action_id, params)
     super
-    zip_filename = generate_zip_filename(params[:output_directory])
     with_bulk_action_log do |log|
       #  Fail with an error message if the calling BulkAction doesn't exist
       if bulk_action.nil?
@@ -105,8 +104,8 @@ class DescmetadataDownloadJob < GenericJob
   # Generate a filename for the job's zip output file.
   # @param  [String] output_dir Where to store the zip file.
   # @return [String] A filename for the zip file.
-  def generate_zip_filename(output_dir)
-    FileUtils.mkdir_p(output_dir) unless File.directory?(output_dir)
-    File.join(output_dir, Settings.bulk_metadata.zip)
+  def zip_filename
+    FileUtils.mkdir_p(bulk_action.output_directory) unless File.directory?(bulk_action.output_directory)
+    File.join(bulk_action.output_directory, Settings.bulk_metadata.zip)
   end
 end
