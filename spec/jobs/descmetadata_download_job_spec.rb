@@ -4,21 +4,26 @@ require 'rails_helper'
 require 'fileutils'
 
 RSpec.describe DescmetadataDownloadJob, type: :job do
-  let(:download_job) { described_class.new }
-  let(:output_directory) { File.join(File.expand_path('../../tmp', __dir__), 'descmetadata_download_job_spec') }
+  let(:download_job) { described_class.new(bulk_action.id) }
+  let(:bulk_action) do
+    create(:bulk_action,
+           action_type: 'DescmetadataDownloadJob',
+           log_name: 'foo.txt')
+  end
+  let(:output_directory) { bulk_action.output_directory }
   let(:output_zip_filename) { File.join(output_directory, Settings.bulk_metadata.zip) }
   let(:pid_list) { ['druid:hj185vb7593', 'druid:kv840rx2720'] }
   let(:dl_job_params) do
-    { output_directory: output_directory, pids: pid_list }
+    { pids: pid_list }
   end
 
   after do
     FileUtils.rm_rf(output_directory) if Dir.exist?(output_directory)
   end
 
-  describe 'generate_zip_filename' do
+  describe '#zip_filename' do
     it 'returns a filename of the correct form' do
-      expect(download_job.generate_zip_filename(output_directory)).to eq(output_zip_filename)
+      expect(download_job.zip_filename).to eq(output_zip_filename)
     end
   end
 
@@ -73,7 +78,6 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
       expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
 
       download_job.perform(bulk_action.id, dl_job_params)
-
       expect(File).to be_exist(output_zip_filename)
       Zip::File.open(output_zip_filename) do |open_file|
         expect(open_file.glob('*').map(&:name).sort).to eq ["#{pid_list.first}.xml", "#{pid_list.second}.xml"].sort
@@ -86,7 +90,6 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
       allow(bulk_action).to receive_message_chain(:increment, :save)
       expect(bulk_action).to receive(:increment).with(:druid_count_fail)
       expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-
       download_job.perform(bulk_action.id, dl_job_params)
 
       expect(File).to be_exist(output_zip_filename)

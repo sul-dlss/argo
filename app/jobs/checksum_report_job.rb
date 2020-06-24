@@ -12,10 +12,9 @@ class ChecksumReportJob < GenericJob
   # @option params [Array]  :pids required list of pids
   # @option params [Array]  :groups the groups the user belonged to when the started the job. Required for because groups are not persisted with the user.
   # @option params [Array]  :user the user
-  # @option params [String] :output_directory the output directory to write the CSV checksum report to
   def perform(bulk_action_id, params)
     super
-    report_filename = generate_report_filename(params[:output_directory])
+    report_filename = generate_report_filename(bulk_action.output_directory)
 
     with_bulk_action_log do |log|
       log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
