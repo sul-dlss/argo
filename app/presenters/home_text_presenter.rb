@@ -8,12 +8,12 @@ class HomeTextPresenter
 
   # @return [Boolean] true if this user has permissions to see anything in Argo
   def view_something?
-    is_admin? || is_manager? || is_viewer? || permitted_apos.any?
+    admin? || manager? || viewer? || permitted_apos.any?
   end
 
   private
 
   attr_reader :current_user
 
-  delegate :is_admin?, :is_manager?, :is_viewer?, :permitted_apos, to: :current_user
+  delegate :admin?, :manager?, :viewer?, :permitted_apos, to: :current_user
 end

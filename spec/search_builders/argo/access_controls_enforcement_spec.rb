@@ -9,9 +9,9 @@ end
 RSpec.describe Argo::AccessControlsEnforcement, type: :model do
   let(:user) do
     instance_double(User,
-                    is_admin?: false,
-                    is_manager?: false,
-                    is_viewer?: false,
+                    admin?: false,
+                    manager?: false,
+                    viewer?: false,
                     permitted_apos: [])
   end
 
@@ -41,13 +41,13 @@ RSpec.describe Argo::AccessControlsEnforcement, type: :model do
       expect(solr_params).to eq(fq: ["#{SolrDocument::FIELD_APO_ID}:(dummy_value)"])
     end
     it 'returns no fq if the user is a repository admin' do
-      allow(user).to receive(:is_admin?).and_return(true)
+      allow(user).to receive(:admin?).and_return(true)
       solr_params = {}
       @obj.add_access_controls_to_solr_params(solr_params)
       expect(solr_params).to eq({})
     end
     it 'returns no fq if the user is a repository viewer' do
-      allow(user).to receive(:is_viewer?).and_return(true)
+      allow(user).to receive(:viewer?).and_return(true)
       solr_params = {}
       @obj.add_access_controls_to_solr_params(solr_params)
       expect(solr_params).to eq({})

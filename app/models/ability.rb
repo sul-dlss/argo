@@ -4,7 +4,7 @@
 #  * basic intro to permission checking w/ CanCan:  https://github.com/CanCanCommunity/cancancan/wiki/Checking-Abilities
 #  * rules which are defined later have higher precedence, i.e. the last rule defined is the first rule applied.
 #    * e.g.:
-#      * if "user.is_admin?" were true, but "user.is_webauth_admin?" were false, "can? :impersonate, User" would be false
+#      * if "user.admin?" were true, but "user.webauth_admin?" were false, "can? :impersonate, User" would be false
 #      * the :manage_item rule would be checked using the logic for ActiveFedora::Base before falling through
 #      to the Dor::AdminPolicyObject logic.
 #    * more info at https://github.com/CanCanCommunity/cancancan/wiki/Ability-Precedence
@@ -31,13 +31,13 @@ class Ability
   attr_reader :current_user, :options, :cache
 
   def grant_permissions
-    can :manage, :all if current_user.is_admin?
-    cannot :impersonate, User unless current_user.is_webauth_admin?
+    can :manage, :all if current_user.admin?
+    cannot :impersonate, User unless current_user.webauth_admin?
 
-    can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.is_manager?
-    can :create, Dor::AdminPolicyObject if current_user.is_manager?
+    can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.manager?
+    can :create, Dor::AdminPolicyObject if current_user.manager?
 
-    can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.is_viewer?
+    can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.viewer?
 
     can :manage_item, Dor::AdminPolicyObject do |dor_item|
       can_manage_items? current_user.roles(dor_item.pid)

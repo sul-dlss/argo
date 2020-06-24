@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Report, type: :model do
-  let(:user) { instance_double(User, is_admin?: true) }
+  let(:user) { instance_double(User, admin?: true) }
 
   context 'csv' do
     let(:csv) do

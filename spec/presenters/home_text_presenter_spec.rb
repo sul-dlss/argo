@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe HomeTextPresenter do
   let(:user) do
     instance_double(User,
-                    is_admin?: false,
-                    is_manager?: false,
-                    is_viewer?: false,
+                    admin?: false,
+                    manager?: false,
+                    viewer?: false,
                     permitted_apos: [])
   end
 
@@ -20,7 +20,7 @@ RSpec.describe HomeTextPresenter do
 
     context 'when admin' do
       before do
-        allow(user).to receive(:is_admin?).and_return(true)
+        allow(user).to receive(:admin?).and_return(true)
       end
 
       it { is_expected.to be true }
@@ -28,7 +28,7 @@ RSpec.describe HomeTextPresenter do
 
     context 'when manager' do
       before do
-        allow(user).to receive(:is_manager?).and_return(true)
+        allow(user).to receive(:manager?).and_return(true)
       end
 
       it { is_expected.to be true }
@@ -36,7 +36,7 @@ RSpec.describe HomeTextPresenter do
 
     context 'when viewer' do
       before do
-        allow(user).to receive(:is_viewer?).and_return(true)
+        allow(user).to receive(:viewer?).and_return(true)
       end
 
       it { is_expected.to be true }

@@ -159,7 +159,7 @@ RSpec.describe WorkflowsController, type: :controller do
 
     context 'when the user is an administrator' do
       before do
-        allow(controller.current_user).to receive(:is_admin?).and_return(true)
+        allow(controller.current_user).to receive(:admin?).and_return(true)
       end
 
       it 'changes the status' do
@@ -172,7 +172,7 @@ RSpec.describe WorkflowsController, type: :controller do
 
     context 'when the user is not an administrator' do
       before do
-        allow(controller.current_user).to receive(:is_admin?).and_return(false)
+        allow(controller.current_user).to receive(:admin?).and_return(false)
       end
 
       context 'when they are changing an item they do not manage' do

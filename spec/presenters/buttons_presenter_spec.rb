@@ -13,10 +13,10 @@ RSpec.describe ButtonsPresenter, type: :presenter do
   let(:ability) { Ability.new(user) }
   let(:user) do
     instance_double(User,
-                    is_admin?: true,
-                    is_webauth_admin?: false,
-                    is_manager?: false,
-                    is_viewer?: false,
+                    admin?: true,
+                    webauth_admin?: false,
+                    manager?: false,
+                    viewer?: false,
                     roles: false)
   end
 
@@ -134,7 +134,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       end
 
       it 'generates the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
-        allow(user).to receive(:is_admin?).and_return(false)
+        allow(user).to receive(:admin?).and_return(false)
 
         allow(ability).to receive(:can?).with(:manage_item, Dor::Item).and_return(true)
         buttons = presenter.buttons
@@ -157,7 +157,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       end
 
       it "does not generate errors given an object that has no associated APO and a user that can't manage the object" do
-        allow(user).to receive(:is_admin?).and_return(false)
+        allow(user).to receive(:admin?).and_return(false)
         allow(doc).to receive(:apo_pid).and_return(nil)
         allow(object).to receive(:admin_policy_object).and_return(nil)
         allow(user).to receive(:roles).with(nil).and_return([])
