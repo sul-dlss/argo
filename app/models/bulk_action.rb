@@ -22,10 +22,6 @@ class BulkAction < ApplicationRecord
 
   before_destroy :remove_output_directory
 
-  # A virtual attribute used for job creation but not persisted
-  attr_accessor :pids, :manage_release, :set_governing_apo, :manage_catkeys, :prepare, :create_virtual_objects
-  attr_accessor :groups # the groups the user was a member of when they launched the job
-
   def file(filename)
     File.join(output_directory, filename)
   end

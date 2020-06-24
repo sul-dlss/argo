@@ -25,10 +25,11 @@ RSpec.describe BulkActionsController do
   end
 
   describe 'GET new' do
-    it 'assigns @bulk_action' do
+    it 'assigns @form' do
       get :new
-      expect(assigns(:bulk_action)).not_to be_nil
+      expect(assigns(:form)).not_to be_nil
     end
+
     describe 'assigns @last_search' do
       it 'with no session[:search]' do
         first_search = Search.create
@@ -64,42 +65,28 @@ RSpec.describe BulkActionsController do
         allow_any_instance_of(User).to receive(:groups).and_return(groups)
       end
 
-      it 'assigns @bulk_action to current_user and passes current groups, prepending druid: to all pids if missing' do
-        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: "a\nb\nc" } }
-        expect(assigns(:bulk_action)).to be_an BulkAction
-        expect(assigns(:bulk_action).user).to eq current_user
-        expect(assigns(:bulk_action).groups).to eq groups
-        expect(assigns(:bulk_action).pids).to eq "druid:a\ndruid:b\ndruid:c"
-      end
-
-      it 'assigns @bulk_action to current_user and passes current groups, leaving pids alone if druid: prefix exists' do
-        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: "druid:a\nb\ndruid:c" } }
-        expect(assigns(:bulk_action)).to be_an BulkAction
-        expect(assigns(:bulk_action).user).to eq current_user
-        expect(assigns(:bulk_action).groups).to eq groups
-        expect(assigns(:bulk_action).pids).to eq "druid:a\ndruid:b\ndruid:c"
-      end
-
-      it 'assigns @bulk_action with catkeys passed in from form' do
-        post :create, params: { bulk_action: { action_type: 'ManageCatkeyJob', pids: '', 'manage_catkeys[catkeys]' => "1234\n5678" } }
-        expect(assigns(:bulk_action)).to be_an BulkAction
-        expect(assigns(:bulk_action).manage_catkeys).to eq('catkeys' => "1234\n5678")
-      end
-
       it 'creates a new BulkAction' do
         expect do
           post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         end.to change(BulkAction, :count).by(1)
       end
+
       it 'has a 302 status code' do
         post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         expect(response.status).to eq 302
       end
-      it 'when not saveable render new' do
-        fake_bulk_action = double('fake', save: false, 'user=' => nil)
-        expect(BulkAction).to receive(:new).and_return fake_bulk_action
-        post :create, params: { bulk_action: { action_type: 'GenericJob' } }
-        expect(response).to render_template('new')
+
+      context 'when not saveable' do
+        before do
+          fake_bulk_action = build(:bulk_action)
+          allow(fake_bulk_action).to receive(:save).and_return(false)
+          allow(BulkAction).to receive(:new).and_return fake_bulk_action
+        end
+
+        it 'renders new' do
+          post :create, params: { bulk_action: { action_type: 'GenericJob' } }
+          expect(response).to render_template('new')
+        end
       end
     end
 

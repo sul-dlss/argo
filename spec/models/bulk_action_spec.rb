@@ -11,7 +11,7 @@ RSpec.describe BulkAction do
 
   describe '#file' do
     it 'returns the filename with path' do
-      @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
+      @bulk_action = described_class.create(action_type: 'GenericJob')
       expect(@bulk_action.file('hello_world.txt'))
         .to eq "#{Settings.bulk_metadata.directory}GenericJob_#{@bulk_action.id}/hello_world.txt"
     end
@@ -22,7 +22,7 @@ RSpec.describe BulkAction do
 
   describe 'before_destroy callbacks' do
     it 'calls #remove_output_directory' do
-      @bulk_action = described_class.create(action_type: 'GenericJob', pids: '')
+      @bulk_action = described_class.create(action_type: 'GenericJob')
       expect(@bulk_action).to receive(:remove_output_directory)
       @bulk_action.run_callbacks(:destroy) { true }
     end
@@ -35,7 +35,7 @@ RSpec.describe BulkAction do
         "#{bulk_action.action_type}_#{bulk_action.id}"
       )
     end
-    let(:bulk_action) { described_class.create(action_type: 'GenericJob', pids: '') }
+    let(:bulk_action) { described_class.create(action_type: 'GenericJob') }
 
     before do
       FileUtils.mkdir_p(directory)

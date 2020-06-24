@@ -14,21 +14,16 @@ class BulkActionsController < ApplicationController
 
   # GET /bulk_actions/new
   def new
-    @bulk_action = BulkAction.new
+    @form = BulkActionForm.new(BulkAction.new, groups: current_user.groups)
     @last_search = session[:search].present? ? searches_from_history.find(session[:search]['id']) : searches_from_history.first
   end
 
   # POST /bulk_actions
   def create
     # Since the groups aren't persisted, we need to pass them here.
-    @bulk_action = BulkAction.new(
-      bulk_action_params.merge(user: current_user,
-                               groups: current_user.groups,
-                               pids: pids_with_prefix(bulk_action_params[:pids]))
-    )
+    @form = BulkActionForm.new(BulkAction.new(user: current_user), groups: current_user.groups)
 
-    # BulkActionPersister is responsible for enqueuing the job
-    if BulkActionPersister.persist(@bulk_action)
+    if @form.validate(bulk_action_params) && @form.save
       flash[:notice] = 'Bulk action was successfully created.'
       redirect_to action: :index
     else
@@ -54,7 +49,7 @@ class BulkActionsController < ApplicationController
     @bulk_action = current_user.bulk_actions.find(params[:id])
   end
 
-  # Only allow a trusted parameter "white list" through.
+  # Only accept trusted parameters.
   def bulk_action_params
     params.require(:bulk_action).permit(
       :action_type,
@@ -66,12 +61,5 @@ class BulkActionsController < ApplicationController
       prepare: %i[significance description],
       create_virtual_objects: [:csv_file]
     )
-  end
-
-  # add druid: prefix to list of pids if it doesn't have it yet
-  def pids_with_prefix(pids)
-    return pids if pids.blank?
-
-    pids.split.flatten.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" }.join("\n")
   end
 end

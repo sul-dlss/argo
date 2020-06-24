@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 class BulkActionPersister
-  def self.persist(bulk_action)
-    new(bulk_action).persist
+  def self.persist(bulk_action_form)
+    new(bulk_action_form).persist
   end
 
-  def initialize(bulk_action)
-    @bulk_action = bulk_action
+  def initialize(bulk_action_form)
+    @bulk_action_form = bulk_action_form
   end
 
   def persist
@@ -20,10 +20,16 @@ class BulkActionPersister
 
   private
 
-  attr_reader :bulk_action
+  attr_reader :bulk_action_form
 
-  delegate :id, :file, :pids, :output_directory, :manage_release, :set_governing_apo,
-           :manage_catkeys, :groups, :prepare, :create_virtual_objects, to: :bulk_action
+  delegate :pids, :manage_release, :set_governing_apo,
+           :manage_catkeys, :groups, :prepare, :create_virtual_objects, to: :bulk_action_form
+
+  delegate :id, :file, :output_directory, to: :bulk_action
+
+  def bulk_action
+    bulk_action_form.model
+  end
 
   def create_log_file
     log_filename = file(Settings.bulk_metadata.log)
