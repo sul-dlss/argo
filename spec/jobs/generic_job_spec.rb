@@ -53,7 +53,7 @@ RSpec.describe GenericJob do
   describe '#open_new_version' do
     let(:current_user) do
       instance_double(User,
-                      is_admin?: true)
+                      admin?: true)
     end
     let(:dor_object) { instance_double(Dor::Item, pid: 'druid:123abc', current_version: 1) }
     let(:workflow) { double('workflow') }

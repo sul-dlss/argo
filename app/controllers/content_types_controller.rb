@@ -47,11 +47,9 @@ class ContentTypesController < ApplicationController
     Constants::CONTENT_TYPES.include? params[:new_content_type]
   end
 
-  # rubocop:disable Naming/PredicateName
   def has_content?
     @object.datastreams.include? 'contentMetadata'
   end
-  # rubocop:enable Naming/PredicateName
 
   # Filters
   def load_resource

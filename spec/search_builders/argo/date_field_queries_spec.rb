@@ -12,7 +12,7 @@ RSpec.describe Argo::DateFieldQueries do
   subject { TestClass.new }
 
   let(:user) do
-    double('user', is_manager?: false, is_admin?: false, is_viewer?: false)
+    double('user', manager?: false, admin?: false, viewer?: false)
   end
 
   describe 'add_date_field_queries' do

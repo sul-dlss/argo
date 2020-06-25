@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe RegistrationsController, type: :controller do
   before do
     sign_in user
-    allow(user).to receive(:is_admin?).and_return(true)
+    allow(user).to receive(:admin?).and_return(true)
   end
 
   let(:user) { create(:user) }

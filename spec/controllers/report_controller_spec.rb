@@ -11,7 +11,7 @@ RSpec.describe ReportController, type: :controller do
 
   context 'as an admin' do
     before do
-      allow(controller.current_user).to receive(:is_admin?).and_return(true)
+      allow(controller.current_user).to receive(:admin?).and_return(true)
     end
 
     describe '#workflow_grid' do
@@ -115,7 +115,7 @@ RSpec.describe ReportController, type: :controller do
       let(:report) { instance_double(Report, pids: %w[xb482bw3979]) }
 
       before do
-        allow(controller.current_user).to receive(:is_admin?).and_return(true)
+        allow(controller.current_user).to receive(:admin?).and_return(true)
         allow(Report).to receive(:new).and_return(report)
       end
 

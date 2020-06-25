@@ -90,17 +90,6 @@ Naming/MethodParameterName:
   Exclude:
     - 'app/helpers/dor_object_helper.rb'
 
-# Offense count: 4
-# Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
-# NamePrefix: is_, has_, have_
-# ForbiddenPrefixes: is_, has_, have_
-# AllowedMethods: is_a?
-# MethodDefinitionMacros: define_method, define_singleton_method
-Naming/PredicateName:
-  Exclude:
-    - 'spec/**/*'
-    - 'app/models/user.rb'
-
 # Offense count: 15
 RSpec/AnyInstance:
   Exclude:

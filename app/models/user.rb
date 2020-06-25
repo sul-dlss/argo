@@ -37,7 +37,7 @@ class User < ApplicationRecord
   attr_accessor :display_name
 
   def permitted_queries
-    @permitted_queries ||= PermittedQueries.new(groups, KNOWN_ROLES, is_admin?)
+    @permitted_queries ||= PermittedQueries.new(groups, KNOWN_ROLES, admin?)
   end
 
   def to_s
@@ -111,25 +111,25 @@ class User < ApplicationRecord
   end
 
   # @return [Boolean] is the user a repository wide administrator
-  def is_admin?
+  def admin?
     !(groups & ADMIN_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide administrator without
   #     taking into account impersonation.
-  def is_webauth_admin?
+  def webauth_admin?
     # we're casting to an array, because this may be called in a background job,
     # where webauth_groups has not been set.
     !(Array(webauth_groups) & ADMIN_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide manager
-  def is_manager?
+  def manager?
     !(groups & MANAGER_GROUPS).empty?
   end
 
   # @return [Boolean] is the user a repository wide viewer
-  def is_viewer?
+  def viewer?
     !(groups & VIEWER_GROUPS).empty?
   end
 

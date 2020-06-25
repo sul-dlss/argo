@@ -6,8 +6,8 @@ require 'rails_helper'
 # https://consul.stanford.edu/display/chimera/Repository+Roles+and+Permissions
 
 RSpec.describe User, type: :model do
-  describe '#is_admin?' do
-    subject { user.is_admin? }
+  describe '#admin?' do
+    subject { user.admin? }
 
     let(:user) { described_class.new }
 
@@ -52,8 +52,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#is_webauth_admin?' do
-    subject { user.is_webauth_admin? }
+  describe '#webauth_admin?' do
+    subject { user.webauth_admin? }
 
     let(:user) { described_class.new }
 
@@ -68,8 +68,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#is_manager?' do
-    subject { user.is_manager? }
+  describe '#manager?' do
+    subject { user.manager? }
 
     let(:user) { described_class.new }
 
@@ -114,8 +114,8 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#is_viewer?' do
-    subject { user.is_viewer? }
+  describe '#viewer?' do
+    subject { user.viewer? }
 
     let(:user) { described_class.new }
 

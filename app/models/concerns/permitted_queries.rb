@@ -3,7 +3,7 @@
 ##
 # Determine user authorization based on index
 class PermittedQueries
-  attr_reader :groups, :known_roles, :is_admin
+  attr_reader :groups, :known_roles
 
   PERMITTED_COLLECTIONS_LIMIT = 5000
 
@@ -14,7 +14,7 @@ class PermittedQueries
   def initialize(groups, known_roles, is_admin)
     @groups = groups
     @known_roles = known_roles
-    @is_admin = is_admin
+    @admin = is_admin
   end
 
   ##
@@ -25,7 +25,7 @@ class PermittedQueries
     query = groups.map { |g| RSolr.solr_escape(g) }.join(' OR ')
 
     q = ''
-    if is_admin
+    if admin?
       q += '*:*'
     else
       q += 'apo_role_group_manager_ssim:(' + query + ') OR apo_role_person_manager_ssim:(' + query + ')'
@@ -50,7 +50,7 @@ class PermittedQueries
   # FIXME: seems to include display logic
   # @return [Array<Array<String>>] Sorted array of pairs of strings, each pair like: ["Title (PID)", "PID"]
   def permitted_collections
-    q = if is_admin
+    q = if admin?
           '*:*'
         elsif permitted_apos.empty?
           '-id:*'
@@ -78,6 +78,10 @@ class PermittedQueries
   end
 
   private
+
+  def admin?
+    @admin == true
+  end
 
   delegate :repository, to: :blacklight_config
 

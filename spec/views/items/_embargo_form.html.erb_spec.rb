@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'items/_embargo_form.html.erb' do
-  let(:current_user) { mock_user(is_admin?: true) }
+  let(:current_user) { mock_user(admin?: true) }
 
   before do
     allow(view).to receive(:current_user).and_return(current_user)

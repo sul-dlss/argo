@@ -26,10 +26,10 @@ RSpec.describe Ability do
 
   let(:user) do
     instance_double(User,
-                    is_admin?: admin,
-                    is_webauth_admin?: webauth_admin,
-                    is_manager?: manager,
-                    is_viewer?: viewer,
+                    admin?: admin,
+                    webauth_admin?: webauth_admin,
+                    manager?: manager,
+                    viewer?: viewer,
                     roles: roles)
   end
   let(:admin) { false }

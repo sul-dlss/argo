@@ -23,7 +23,7 @@ RSpec.describe 'Download item files' do
     let(:fake_zip) { instance_double(ZipTricks::Streamer) }
 
     before do
-      allow_any_instance_of(User).to receive(:is_manager?).and_return(true)
+      allow_any_instance_of(User).to receive(:manager?).and_return(true)
       allow(Preservation::Client.objects).to receive(:content)
       allow(ZipTricks::Streamer).to receive(:open).and_yield(fake_zip)
       allow(fake_zip).to receive(:write_deflated_file).and_yield(fake_sink)
