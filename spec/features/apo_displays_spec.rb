@@ -11,21 +11,6 @@ RSpec.describe 'Viewing an Admin policy' do
     allow(Dor).to receive(:find).and_return(object)
   end
 
-  context 'main page tests' do
-    it 'has the expected heading for search facets' do
-      visit root_path
-      expect(page).to have_content('Limit your search')
-    end
-
-    it 'has the expected search facets' do
-      search_facets = ['Object Type', 'Content Type', 'Admin Policy']
-      visit root_path
-      search_facets.each do |facet|
-        expect(page).to have_content(facet)
-      end
-    end
-  end
-
   context 'mods view' do
     before do
       allow(Dor::Services::Client).to receive(:object).with('druid:zt570tx3016').and_return(object_service)
