@@ -7,7 +7,7 @@ RSpec.describe ApoController, type: :controller do
     allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
     allow(apo).to receive(:save)
 
-    allow(Dor).to receive(:find).with(collection.pid).and_return(collection)
+    allow(Dor).to receive(:find).with(collection.externalIdentifier).and_return(collection)
     allow(collection).to receive(:save)
 
     sign_in user
@@ -17,7 +17,7 @@ RSpec.describe ApoController, type: :controller do
   let(:user) { create(:user) }
 
   let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
-  let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
+  let(:collection) { FactoryBot.create_for_repository(:collection) }
 
   describe '#create' do
     let(:form) do
@@ -100,14 +100,14 @@ RSpec.describe ApoController, type: :controller do
   describe '#delete_collection' do
     it 'calls remove_default_collection' do
       expect(apo).to receive(:remove_default_collection)
-      post 'delete_collection', params: { id: apo.pid, collection: collection.pid }
+      post 'delete_collection', params: { id: apo.pid, collection: collection.externalIdentifier }
     end
   end
 
   describe '#add_collection' do
     it 'calls add_default_collection' do
       expect(apo).to receive(:add_default_collection)
-      post 'add_collection', params: { id: apo.pid, collection: collection.pid }
+      post 'add_collection', params: { id: apo.pid, collection: collection.externalIdentifier }
     end
   end
 

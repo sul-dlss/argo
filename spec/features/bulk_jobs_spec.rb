@@ -5,8 +5,12 @@ require 'rails_helper'
 # Feature tests for the spreadsheet bulk uploads view.
 RSpec.describe 'Bulk jobs view' do
   before do
+    ActiveFedora::SolrService.add(id: apo_id, objectType_ssim: 'adminPolicy')
+    ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
+
+  let(:apo_id) { 'druid:hv992ry2431' }
 
   context 'on the page with the list of bulk jobs' do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
@@ -16,7 +20,7 @@ RSpec.describe 'Bulk jobs view' do
     end
 
     it 'the submit button exists' do
-      visit apo_bulk_jobs_path('druid:hv992ry2431')
+      visit apo_bulk_jobs_path(apo_id)
       expect(page).to have_link 'Submit new file ...', href: new_apo_upload_path(apo_id: 'druid:hv992ry2431')
     end
   end
@@ -30,13 +34,13 @@ RSpec.describe 'Bulk jobs view' do
     end
 
     it 'click submit button opens bulk upload form' do
-      visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
+      visit new_apo_upload_path(apo_id: apo_id)
       expect(page).to have_css('div#spreadsheet-upload-container form div#bulk-upload-form')
       expect(page).to have_css('input#spreadsheet_file')
     end
 
     it 'bulk upload form buttons are disabled upon first page visit' do
-      visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
+      visit new_apo_upload_path(apo_id: apo_id)
       expect(find('input#filetypes_1')).to be_disabled
       expect(find('input#filetypes_2')).to be_disabled
       expect(find('input#convert_only')).to be_disabled
@@ -46,7 +50,7 @@ RSpec.describe 'Bulk jobs view' do
     end
 
     it 'selecting a file to upload and selecting one of the radio buttons enables the submit button' do
-      visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
+      visit new_apo_upload_path(apo_id: apo_id)
       expect(page).to have_css('#spreadsheet_file')
       expect(find('input#filetypes_1')).to be_disabled
 
@@ -75,7 +79,7 @@ RSpec.describe 'Bulk jobs view' do
     end
 
     it 'uploading a file with an invalid extension displays a warning' do
-      visit new_apo_upload_path(apo_id: 'druid:hv992ry2431')
+      visit new_apo_upload_path(apo_id: apo_id)
       expect(page).to have_css('#spreadsheet_file')
       attach_file('spreadsheet_file', File.absolute_path(__FILE__))
 

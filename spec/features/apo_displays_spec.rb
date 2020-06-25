@@ -7,6 +7,7 @@ RSpec.describe 'Viewing an Admin policy' do
   let(:current_user) { create(:user) }
 
   before do
+    Argo::Indexer.reindex_pid_remotely 'druid:zt570tx3016'
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).and_return(object)
   end

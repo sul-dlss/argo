@@ -5,6 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Enable buttons' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
+    ActiveFedora::SolrService.add(id: item_id, objectType_ssim: 'item')
+    ActiveFedora::SolrService.commit
 
     obj = instance_double(
       Dor::Item,
@@ -19,6 +21,7 @@ RSpec.describe 'Enable buttons' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:item_id) { 'druid:hj185vb7593' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
@@ -26,7 +29,7 @@ RSpec.describe 'Enable buttons' do
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
   it 'buttons are disabled by default that have check_url' do
-    visit solr_document_path 'druid:hj185vb7593'
+    visit solr_document_path item_id
     expect(page).to have_css 'a.disabled', text: 'Close Version'
     expect(page).to have_css 'a.disabled', text: 'Open for modification'
     expect(page).to have_css 'a.disabled', text: 'Republish'
@@ -36,7 +39,7 @@ RSpec.describe 'Enable buttons' do
     allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_close_version).and_return(true)
     allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_open_version).and_return(true)
     allow_any_instance_of(WorkflowServiceController).to receive(:check_if_published).and_return(true)
-    visit solr_document_path 'druid:hj185vb7593'
+    visit solr_document_path item_id
     expect(page).not_to have_css 'a.disabled', text: 'Close Version'
     expect(page).not_to have_css 'a.disabled', text: 'Open for modification'
     expect(page).not_to have_css 'a.disabled', text: 'Republish'

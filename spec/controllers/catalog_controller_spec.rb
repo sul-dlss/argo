@@ -3,11 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CatalogController, type: :controller do
-  before do
-    @druid = 'rn653dy9317' # a fixture Dor::Item record
-    @item = instantiate_fixture(@druid, Dor::Item)
-  end
-
+  let(:druid) { 'druid:rn653dy9317' } # a fixture Dor::Item record
   let(:user) { create(:user) }
 
   describe '#index' do
@@ -27,12 +23,16 @@ RSpec.describe CatalogController, type: :controller do
 
   describe '#show' do
     before do
-      allow(Dor).to receive(:find).with("druid:#{@druid}").and_return(@item)
+      ActiveFedora::SolrService.add(id: druid,
+                                    sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+      ActiveFedora::SolrService.commit
+      item = instantiate_fixture(druid, Dor::Item)
+      allow(Dor).to receive(:find).with(druid).and_return(item)
     end
 
     context 'without logging in' do
       it 'redirects to login' do
-        get 'show', params: { id: @druid }
+        get 'show', params: { id: druid }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -48,7 +48,7 @@ RSpec.describe CatalogController, type: :controller do
         end
 
         it 'is forbidden' do
-          get 'show', params: { id: @druid }
+          get 'show', params: { id: druid }
           expect(response).to be_forbidden
         end
       end
@@ -65,7 +65,7 @@ RSpec.describe CatalogController, type: :controller do
         let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
         it 'is successful' do
-          get 'show', params: { id: @druid }
+          get 'show', params: { id: druid }
           expect(response).to be_successful
         end
       end

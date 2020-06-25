@@ -4,16 +4,13 @@ require 'rails_helper'
 
 RSpec.describe 'Item registration page', js: true do
   let(:user) { create(:user) }
+  let(:ur_apo_id) { 'druid:hv992ry2431' }
 
   before do
+    Argo::Indexer.reindex_pid_remotely ur_apo_id
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
     allow_any_instance_of(RegistrationsController).to receive(:workflows_for_apo).and_return([])
     allow_any_instance_of(RegistrationsController).to receive(:workflows_for_apo).with('druid:hv992ry2431').and_return(%w[dpgImageWF goobiWF])
-  end
-
-  it 'loads page with registration form' do
-    visit registration_path
-    expect(page).to have_css '#gbox_data'
   end
 
   it 'invokes item registration method with the expected values and relays errors properly' do
