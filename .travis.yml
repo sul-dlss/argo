@@ -13,7 +13,6 @@ before_install:
   # Get bundler 2.0 for ruby 2.6.4
   - gem install bundler
   # Pull latest & start up needed underlying services
-  - docker-compose pull
   - docker-compose up -d dor-services-app dor-indexing-app techmd
   - docker-compose ps
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
