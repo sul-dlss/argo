@@ -275,7 +275,9 @@ RSpec.describe ApoForm do
     describe '#save' do
       let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
       let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Agreement) }
-      let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
+      let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
+      let(:collection) { Dor.find(cocina_collection.externalIdentifier) }
+
       let(:coll_title) { 'col title' }
 
       let(:base_params) do
@@ -313,7 +315,7 @@ RSpec.describe ApoForm do
       end
 
       let(:created_collection) do
-        Cocina::Models::Collection.new(externalIdentifier: 'druid:pb873ty1662',
+        Cocina::Models::Collection.new(externalIdentifier: cocina_collection.externalIdentifier,
                                        type: Cocina::Models::Vocab.collection,
                                        label: '',
                                        version: 1,
@@ -331,7 +333,7 @@ RSpec.describe ApoForm do
 
       before do
         allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-        expect(Dor).to receive(:find).with(collection.pid).and_return(collection)
+        expect(Dor).to receive(:find).with(cocina_collection.externalIdentifier).and_return(collection)
         expect(collection).to receive(:save)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).twice
 

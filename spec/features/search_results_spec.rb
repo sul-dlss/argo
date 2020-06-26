@@ -7,33 +7,46 @@ RSpec.describe 'Search results' do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
-  it 'contains Blacklight default index page tools' do
-    visit search_catalog_path f: { content_type_ssim: ['book'] }
-    within '.constraints-container' do
-      expect(page).to have_css '.catalog_startOverLink', text: 'Start Over'
+  context 'for a book' do
+    before do
+      ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+
+      ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+                                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                                    content_type_ssim: 'book')
+      ActiveFedora::SolrService.commit
     end
-    within '.search-widgets' do
-      within '#bulk-update-button' do
-        expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Update'
+
+    it 'contains Blacklight default index page tools' do
+      visit search_catalog_path f: { content_type_ssim: ['book'] }
+      within '.constraints-container' do
+        expect(page).to have_css '.catalog_startOverLink', text: 'Start Over'
       end
-      expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Action'
-      within '#sort-dropdown' do
-        expect(page).to have_css 'button', text: 'Sort by Druid'
-        expect(page).to have_css '.dropdown-item', count: 3
-      end
-      within '#per_page-dropdown' do
-        expect(page).to have_css 'button', text: '10 per page'
-        expect(page).to have_css '.dropdown-item', count: 4
-      end
-      within '.report-toggle' do
-        expect(page).to have_css 'a', text: 'Report View'
-        expect(page).to have_css 'a', text: 'Workflow Grid View'
+      within '.search-widgets' do
+        within '#bulk-update-button' do
+          expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Update'
+        end
+        expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Action'
+        within '#sort-dropdown' do
+          expect(page).to have_css 'button', text: 'Sort by Druid'
+          expect(page).to have_css '.dropdown-item', count: 3
+        end
+        within '#per_page-dropdown' do
+          expect(page).to have_css 'button', text: '10 per page'
+          expect(page).to have_css '.dropdown-item', count: 4
+        end
+        within '.report-toggle' do
+          expect(page).to have_css 'a', text: 'Report View'
+          expect(page).to have_css 'a', text: 'Workflow Grid View'
+        end
       end
     end
   end
 
   context 'the result' do
     before do
+      ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+
       ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
                                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
                                     content_type_ssim: 'image',
@@ -43,14 +56,13 @@ RSpec.describe 'Search results' do
                                     project_tag_ssim: 'Fuller Slides',
                                     source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',
                                     identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
-                                    tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo'],
-                                    ds_specs_ssim: ['descMetadata|M|text/xml|0|1552|Descriptive Metadata (MODS)'])
+                                    tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo'])
       ActiveFedora::SolrService.commit
     end
 
     it 'contains appropriate metadata fields' do
       visit search_catalog_path f: { objectType_ssim: ['item'] }
-      within('.document:nth-child(9)') do
+      within('.document:nth-child(1)') do
         within '.document-metadata' do
           expect(page).to have_css 'dt', text: 'DRUID:'
           expect(page).to have_css 'dd', text: 'druid:hj185vb7593'

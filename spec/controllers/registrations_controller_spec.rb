@@ -271,15 +271,16 @@ RSpec.describe RegistrationsController, type: :controller do
       it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
         apo_id = 'druid:fg464dn8891'
 
-        # 'pb873ty1662' is a real object in our fixture data.  for the other two druids, we mock the
-        # results of the calls to fedora.  the 'z' druid has a title that should cause it to sort first
+        # The 'z' druid has a title that should cause it to sort first
         # after "None", and the 'a' druid has a title that should cause it to sort last.
         col_ids_for_apo = ['druid:pb873ty1662', 'druid:ab098cd7654', 'druid:zy123xw4567']
         allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return(col_ids_for_apo)
         mock_collection_z = instance_double(Dor::Collection, label: 'A collection that sorts to the top')
         mock_collection_a = instance_double(Dor::Collection, label: 'Ze last collection in ze list')
+        mock_collection_b = instance_double(Dor::Collection, label: 'Annual report of the State Corporation Commission showing a bunch of stuff')
+
         allow(Dor).to receive(:find).with('druid:zy123xw4567').and_return(mock_collection_z)
-        allow(Dor).to receive(:find).with('druid:pb873ty1662').and_call_original
+        allow(Dor).to receive(:find).with('druid:pb873ty1662').and_return(mock_collection_b)
         allow(Dor).to receive(:find).with('druid:ab098cd7654').and_return(mock_collection_a)
 
         get 'collection_list', params: { apo_id: apo_id, format: :json }
@@ -299,8 +300,13 @@ RSpec.describe RegistrationsController, type: :controller do
         ]
         missing_registration_collections.each do |col_id|
           col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
+          allow(Dor).to receive(:find).with(col_id).and_raise(ActiveFedora::ObjectNotFoundError)
           expect(Rails.logger).to receive(:warning).with(col_not_found_warning)
         end
+        mock_collection_b = instance_double(Dor::Collection, label: 'Annual report of the State Corporation Commission showing a bunch of stuff')
+
+        allow(Dor).to receive(:find).with('druid:pb873ty1662').and_return(mock_collection_b)
+        allow(Dor).to receive(:find).with('druid:fg464dn8891').and_call_original
 
         get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
         data = JSON.parse(response.body)
@@ -312,10 +318,15 @@ RSpec.describe RegistrationsController, type: :controller do
   end
 
   describe '#workflow_list' do
+    before do
+      ActiveFedora::SolrService.add(id: 'druid:ww057vk7675',
+                                    registration_workflow_id_ssim: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'])
+      ActiveFedora::SolrService.commit
+    end
+
     it 'handles an APO with multiple workflows, putting the default workflow first always' do
       get 'workflow_list', params: { apo_id: 'druid:ww057vk7675', format: :json }
       data = JSON.parse(response.body)
-      expect(data.length).to eq(4)
       expect(data).to eq [Settings.apo.default_workflow_option, 'digitizationWF', 'dpgImageWF', 'goobiWF']
     end
   end

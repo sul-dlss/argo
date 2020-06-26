@@ -11,7 +11,9 @@ RSpec.describe CollectionForm do
 
   context 'when creating collection' do
     let(:instance) { described_class.new(Dor::Collection.new) }
-    let(:collection_from_fixture) { instantiate_fixture('pb873ty1662', Dor::Collection) }
+    let(:collection_from_fixture) { Dor.find(cocina_collection.externalIdentifier) }
+    let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
+
     let(:title) { 'collection title' }
     let(:abstract) { 'this is the abstract' }
     let(:description) do
@@ -31,7 +33,7 @@ RSpec.describe CollectionForm do
       }
     end
     let(:created_collection) do
-      Cocina::Models::Collection.new(externalIdentifier: 'druid:pb873ty1662',
+      Cocina::Models::Collection.new(externalIdentifier: cocina_collection.externalIdentifier,
                                      type: Cocina::Models::Vocab.collection,
                                      label: '',
                                      version: 1,
@@ -42,7 +44,7 @@ RSpec.describe CollectionForm do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: true) }
 
     before do
-      allow(Dor).to receive(:find).with(collection_from_fixture.pid).and_return(collection_from_fixture)
+      allow(Dor).to receive(:find).with(cocina_collection.externalIdentifier).and_return(collection_from_fixture)
       allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(collection_from_fixture).to receive(:descMetadata).and_return(mock_desc_md_ds)
@@ -71,7 +73,7 @@ RSpec.describe CollectionForm do
 
         expect(instance).to have_received(:register_model)
         expect(instance).not_to have_received(:sync)
-        expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_from_fixture.pid, 'accessionWF', version: '1')
+        expect(workflow_client).to have_received(:create_workflow_by_name).with(cocina_collection.externalIdentifier, 'accessionWF', version: '1')
         expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       end
@@ -100,7 +102,7 @@ RSpec.describe CollectionForm do
 
         expect(instance).to have_received(:register_model)
         expect(instance).not_to have_received(:sync)
-        expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_from_fixture.pid, 'accessionWF', version: '1')
+        expect(workflow_client).to have_received(:create_workflow_by_name).with(cocina_collection.externalIdentifier, 'accessionWF', version: '1')
         expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       end
@@ -109,7 +111,8 @@ RSpec.describe CollectionForm do
 
   context 'when updating a collection' do
     let(:instance) { described_class.new(existing_collection) }
-    let(:existing_collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
+    let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
+    let(:existing_collection) { Dor.find(cocina_collection.externalIdentifier) }
     let(:new_title) { 'new coll title' }
     let(:new_abstract) { 'new coll abstract' }
     let(:new_description) do

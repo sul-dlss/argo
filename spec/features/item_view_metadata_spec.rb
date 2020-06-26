@@ -19,6 +19,9 @@ RSpec.describe 'Item view', js: true do
     let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client, events: events_client) }
 
     before do
+      ActiveFedora::SolrService.add(id: 'druid:hj185vb7593')
+      ActiveFedora::SolrService.commit
+
       allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
     end
 

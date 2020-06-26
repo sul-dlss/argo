@@ -4,6 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'Home page' do
   before do
+    ActiveFedora::SolrService.add(id: 'druid:xb482bw3983',
+                                  objectType_ssim: 'item',
+                                  obj_label_tesim: 'Report about stuff',
+                                  nonhydrus_collection_title_ssim: '123',
+                                  current_version_isi: '1')
+    ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 

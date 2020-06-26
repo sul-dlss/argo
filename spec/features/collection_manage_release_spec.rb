@@ -19,22 +19,24 @@ RSpec.describe 'Collection manage release' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  let(:druid) { 'druid:pb873ty1662' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, release_tags: release_tags_client, events: events_client) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+  let(:item) do
+    FactoryBot.create_for_repository(:collection)
+  end
 
   it 'Has a manage release button' do
-    visit solr_document_path(druid)
+    visit solr_document_path(item.externalIdentifier)
     expect(page).to have_css 'a', text: 'Manage release'
   end
 
   it 'Creates a new bulk action' do
-    visit item_manage_release_path(druid)
-    expect(page).to have_css 'label', text: "Manage release to discovery applications for collection #{druid}"
+    visit item_manage_release_path(item.externalIdentifier)
+    expect(page).to have_css 'label', text: "Manage release to discovery applications for collection #{item.externalIdentifier}"
     choose 'This collection and all its members*'
     choose 'Release it'
     click_button 'Submit'

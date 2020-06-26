@@ -16,6 +16,9 @@ RSpec.describe 'Bulk actions view', js: true do
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
+    ActiveFedora::SolrService.add(id: 'druid:zt570tx3016',
+                                  nonhydrus_collection_title_ssim: 'Foo')
+    ActiveFedora::SolrService.commit
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end

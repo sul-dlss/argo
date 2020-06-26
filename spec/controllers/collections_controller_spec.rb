@@ -11,7 +11,7 @@ RSpec.describe CollectionsController do
 
   let(:user) { create(:user) }
   let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
-  let(:collection) { instantiate_fixture('pb873ty1662', Dor::Collection) }
+  let(:collection) { FactoryBot.create_for_repository(:collection) }
 
   describe '#new' do
     it 'is successful' do
@@ -22,7 +22,7 @@ RSpec.describe CollectionsController do
   end
 
   describe '#create' do
-    let(:form) { instance_double(CollectionForm, validate: true, save: true, model: collection) }
+    let(:form) { instance_double(CollectionForm, validate: true, save: true, model: Dor::Collection.find(collection.externalIdentifier)) }
 
     before do
       allow(CollectionForm).to receive(:new).and_return(form)

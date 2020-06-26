@@ -5,6 +5,11 @@ require 'rails_helper'
 RSpec.describe Report, type: :model do
   let(:user) { instance_double(User, admin?: true) }
 
+  before do
+    ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+    ActiveFedora::SolrService.commit
+  end
+
   context 'csv' do
     let(:csv) do
       described_class.new(
@@ -119,17 +124,27 @@ RSpec.describe Report, type: :model do
 
       before do
         ActiveFedora::SolrService.add(id: 'druid:fg464dn8891',
-                                      obj_label_tesim: 'State Banking Commission Annual Reports',
-                                      tag_ssim: ['Remediated By : 4.6.6.2', 'Registered By : llam813'])
+                                      obj_label_tesim: 'State Banking Commission Annual Reports')
+        ActiveFedora::SolrService.add(id: 'druid:mb062dy1188',
+                                      obj_label_tesim: 'maxims found in the leading English and American reports and elementary works')
         ActiveFedora::SolrService.commit
       end
 
       it 'returns unqualified druids by default' do
-        expect(report).to eq %w[fg464dn8891 mb062dy1188 pb873ty1662 px302sd8187 qq613vj0238 vr263bv4910 zy430ms2268]
+        expect(report).to eq %w[fg464dn8891 mb062dy1188]
       end
     end
 
     it 'returns druids and source ids' do
+      doc = SolrDocument.new(id: 'druid:qq613vj0238', source_id_ssim: 'sul:36105011952764')
+      service = instance_double(SearchService)
+      allow(SearchService).to receive(:new).and_return(service)
+      allow(service).to receive(:search_results).and_return(
+        [{ 'response' => { 'numFound' => '1' } }, [doc]],
+        [{ 'response' => { 'numFound' => '1' } }, [doc]],
+        [{ 'response' => { 'numFound' => '1' } }, []]
+      )
+
       expect(described_class.new(
         { q: 'report' }, %w[druid source_id_ssim],
         current_user: user

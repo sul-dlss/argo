@@ -24,9 +24,12 @@ RSpec.describe 'Release history' do
                       who: 'pjreed',
                       date: '2017-10-20T15:42:15Z')
     end
+    let(:item) do
+      FactoryBot.create_for_repository(:item)
+    end
 
     it 'items show a release history' do
-      visit solr_document_path 'druid:qq613vj0238'
+      visit solr_document_path item.externalIdentifier
       expect(page).to have_css 'dt', text: 'Releases'
       expect(page).to have_css 'table.table thead tr th', text: 'Release'
       expect(page).to have_css 'tr td', text: /Searchworks/
@@ -37,9 +40,14 @@ RSpec.describe 'Release history' do
   context 'for an adminPolicy' do
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
+    let(:apo_id) { 'druid:fg464dn8891' }
+
+    before do
+      Argo::Indexer.reindex_pid_remotely apo_id
+    end
 
     it 'does not show release history' do
-      visit solr_document_path 'druid:fg464dn8891'
+      visit solr_document_path apo_id
       expect(page).not_to have_css 'dt', text: 'Releases'
     end
   end
