@@ -3,8 +3,6 @@
 ##
 # Job to close objects
 class CloseVersionJob < GenericJob
-  queue_as :default
-
   ##
   # A job that allows a user to specify a list of pids of objects to close
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object

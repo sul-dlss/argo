@@ -3,8 +3,6 @@
 ##
 # job to set tags on objects
 class SetTagsJob < GenericJob
-  queue_as :default
-
   DELIM = "\t"
 
   def perform(bulk_action_id, params)

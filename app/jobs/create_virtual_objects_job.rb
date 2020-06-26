@@ -3,8 +3,6 @@
 ##
 # job to create batches of virtual objects
 class CreateVirtualObjectsJob < GenericJob
-  queue_as :default
-
   # we don't want to retry these jobs -- too messy
   def max_attempts
     1

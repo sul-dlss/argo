@@ -3,8 +3,6 @@
 ##
 # Job to run checksum report
 class ChecksumReportJob < GenericJob
-  queue_as :default
-
   ##
   # A job that, given list of pids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
