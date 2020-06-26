@@ -3,8 +3,6 @@
 # This class defines a ActiveJob task that is started when the user uploads a bulk metadata file for
 # an APO.
 class ModsulatorJob < ActiveJob::Base
-  queue_as :default
-
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 

@@ -3,8 +3,6 @@
 ##
 # job to republish objects
 class RepublishJob < GenericJob
-  queue_as :default
-
   def perform(bulk_action_id, params)
     super
 

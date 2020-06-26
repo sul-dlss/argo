@@ -3,8 +3,6 @@
 ##
 # job to move an object to a new governing APO
 class SetGoverningApoJob < GenericJob
-  queue_as :set_governing_apo
-
   attr_reader :new_apo_id
 
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object

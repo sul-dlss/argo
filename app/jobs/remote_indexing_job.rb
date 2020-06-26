@@ -3,8 +3,6 @@
 ##
 # job to reindex a DOR object to Solr using the dor_indexing_app endpoint
 class RemoteIndexingJob < GenericJob
-  queue_as :indexing_remote
-
   def perform(bulk_action_id, params)
     super
 

@@ -3,8 +3,6 @@
 ##
 # job to purge unpublished objects
 class PurgeJob < GenericJob
-  queue_as :default
-
   def perform(bulk_action_id, params)
     super
 

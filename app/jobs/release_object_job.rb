@@ -3,8 +3,6 @@
 ##
 # Job to add release and then release a Dor Object
 class ReleaseObjectJob < GenericJob
-  queue_as :release_object
-
   attr_reader :manage_release
 
   ##

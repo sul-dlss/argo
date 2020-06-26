@@ -3,8 +3,6 @@
 ##
 # Job to open objects
 class PrepareJob < GenericJob
-  queue_as :default
-
   ##
   # A job that allows a user to specify a list of pids of objects to open
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object

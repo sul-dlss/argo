@@ -3,8 +3,6 @@
 ##
 # Job to update/add catkey to objects
 class ManageCatkeyJob < GenericJob
-  queue_as :manage_catkey
-
   attr_reader :catkeys
 
   ##

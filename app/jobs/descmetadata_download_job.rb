@@ -3,8 +3,6 @@
 require 'zip'
 
 class DescmetadataDownloadJob < GenericJob
-  queue_as :default
-
   MAX_TRIES = 3
   SLEEP_SECONDS = 3
 
