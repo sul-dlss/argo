@@ -14,6 +14,7 @@ services:
       ROLES: sdr:administrator-role
       REMOTE_USER: blalbrit@stanford.edu
       RAILS_LOG_TO_STDOUT: 'true'
+      REDIS_URL: redis://redis:6379/
       SOLR_URL: http://solr:8983/solr/argo
       # Allow bulk action logs to be written (can't write to /tmp)
       SETTINGS__BULK_METADATA__DIRECTORY: '/app/tmp'
@@ -145,9 +146,8 @@ services:
 
   redis:
     image: redis
-    # No external ports enabled.
-    # ports:
-    #  - 6379:6379
+    ports:
+     - 6379:6379
 
 volumes:
   node_modules:

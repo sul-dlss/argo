@@ -45,7 +45,7 @@ class ModsulatorClient
   attr_reader :uploaded_filename, :log, :pretty_filename
 
   # Calls the MODSulator web service (modsulator-app) to process the uploaded file.
-  # Retries are handled by DelayedJob, so don't retry here.
+  # Retries are handled by ActiveJob, so don't retry here.
   #
   # @param    [String]   url                 Then endpoint to call
   # @param    [String]   content_type        The mime type of the object
@@ -87,12 +87,12 @@ class ModsulatorClient
     log.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
   end
 
-  # Logs a remote request-related exception to the standard Delayed Job log file.
+  # Logs a remote request-related exception to the standard ActiveJob log file.
   #
   # @param  [Exception] e   The exception
   # @param  [String]    url The URL that we attempted to access
   # @return [Void]
   def delayed_log_url(error, url)
-    Delayed::Worker.logger.error("#{__FILE__} tried to access #{url} got: #{error.message} #{error.backtrace}")
+    Rails.logger.error("#{__FILE__} tried to access #{url} got: #{error.message} #{error.backtrace}")
   end
 end

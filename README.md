@@ -110,7 +110,7 @@ docker-compose run --rm web bin/rails console
 If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing to run:
 
 ```
-docker-compose run web bin/delayed_job start
+docker-compose run web sidekiq start
 ```
 
 Alternatively, you can also just immediately run any new jobs with interactive output visible
@@ -186,7 +186,7 @@ Argo uses Blacklight and ActiveFedora to expose the repository contents, and `do
   - ActiveFedora
   - dor-workflow-service
 - RSolr
-- DelayedJob
+- Sidekiq
 - Bootstrap
 - JQuery
 
@@ -198,29 +198,7 @@ and in development or testing mode:
 
 ## Background Job Workers (in deployed environments)
 
-Argo uses the [eye](https://github.com/kostya/eye) gem to manage and monitor its DelayedJob-based background job workers in all deployed environments. To facilitate this, Argo defines Capistrano tasks in order to start, stop, and provide information about running workers:
-
-```
-$ cap {ENV} delayed_job:stop # stop workers in ENV environment
-$ cap {ENV} delayed_job:start # start workers in ENV environment
-$ cap {ENV} delayed_job:restart # restart workers in ENV environment
-$ cap {ENV} delayed_job:status # view status of workers in ENV environment
-```
-
-The above tasks are linked into the [Capistrano flow](https://capistranorb.com/documentation/getting-started/flow/) so that workers are started and stopped at appropriate stages of deployments and rollbacks.
-
-NOTE: If when invoking the `delayed_job:status` task, you see output like the following:
-
-```
-00:00 delayed_job:status
-      01 ./bin/eye info delayed_job
-      01 command :info, objects not found!
-      01 command :info, objects not found!
-    ✘ 01 lyberadmin@argo-qa-a.stanford.edu 0.801s
-    ✘ 01 lyberadmin@argo-qa-b.stanford.edu 0.813s
-```
-
-This means the eye daemon was shutdown and did not restart. To start it back up, invoke `cap {ENV} delayed_job:reload`. Note that this is for reloading eye, not for restarting the workers. You should not have to invoke this task with any regularity; it is for recovering from unusual circumstances only.
+Argo uses systemd to manage and monitor its Sidekiq-based background job workers in all deployed environments. See  [Sidekiq via systemd](https://github.com/sul-dlss/dlss-capistrano#sidekiq-via-systemd)
 
 ## Further reading
 

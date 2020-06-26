@@ -22,8 +22,6 @@ module Argo
     require 'constants'
     require 'fileutils'
 
-    config.active_job.queue_adapter = :delayed_job
-
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
 

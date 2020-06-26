@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
-# This class defines a Delayed Job task that is started when the user uploads a bulk metadata file for
-# an APO. For configuration details, see app/config/initializers/delayed_job.rb.
+# This class defines a ActiveJob task that is started when the user uploads a bulk metadata file for
+# an APO.
 class ModsulatorJob < ActiveJob::Base
   queue_as :default
 
   # A somewhat easy to understand and informative time stamp format
   TIME_FORMAT = '%Y-%m-%d %H:%M%P'
 
-  # This method is called by the caller running perform_later(), so we're using ActiveJob with Delayed Job as a backend.
   # The method does all the work of converting any input spreadsheets to XML, writing a log file as it goes along.
   # Later, this log file will be used to generate a nicer looking log for the user to view and to generate the list of
   # spreadsheet upload jobs within the Argo UI.
@@ -32,8 +31,7 @@ class ModsulatorJob < ActiveJob::Base
     File.open(log_filename, 'a') do |log|
       start_log(log, user, original_filename, note)
 
-      # If a modsulator request fails, the job will fail and automatically be
-      # retried (see config/initializers/delayed_job.rb)
+      # If a modsulator request fails, the job will fail and automatically be retried
       response_xml = if method == 'normalize'
                        ModsulatorClient.normalize_mods(uploaded_filename: uploaded_filename, pretty_filename: original_filename, log: log)
                      else
