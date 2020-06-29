@@ -70,7 +70,7 @@ class Report
     },
     {
       field: :registered_earliest_dttsi, label: 'Registered',
-      proc: ->(doc) { render_datetime(doc[:registered_earliest_dttsi]) },
+      proc: ->(doc) { DatePresenter.render(doc[:registered_earliest_dttsi]) },
       sort: true, default: false, width: 100, download_default: false
     },
     {
@@ -99,12 +99,12 @@ class Report
     },
     {
       field: :accessioned_dttsim, label: 'Accession. Datetime',
-      proc: ->(doc) { render_datetime(doc[:accessioned_dttsim]) },
+      proc: ->(doc) { DatePresenter.render(doc[:accessioned_dttsim]) },
       sort: true, default: false, width: 100, download_default: false
     },
     {
       field: :published_dttsim, label: 'Pub. Date',
-      proc: ->(doc) { render_datetime(doc[:published_dttsim]) },
+      proc: ->(doc) { DatePresenter.render(doc[:published_dttsim]) },
       sort: true, default: true, width: 100, download_default: false
     },
     {
