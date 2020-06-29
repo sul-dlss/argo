@@ -12,16 +12,6 @@ RSpec.describe CatalogController do
         .to route_to('catalog#show', id: 'druid:xyz')
     end
 
-    it 'routes to #dc' do
-      expect(get: '/view/druid:xyz/dc')
-        .to route_to('catalog#dc', id: 'druid:xyz')
-    end
-
-    it 'routes to #ds' do
-      expect(get: '/view/druid:xyz/ds/identityMetadata')
-        .to route_to('catalog#ds', id: 'druid:xyz', dsid: 'identityMetadata')
-    end
-
     context 'redirections' do
       include RSpec::Rails::RequestExampleGroup
 

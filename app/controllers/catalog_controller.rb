@@ -5,7 +5,6 @@ class CatalogController < ApplicationController
   helper ArgoHelper
   include DateFacetConfigurations
 
-  before_action :show_aspect, only: %i[dc ds]
   before_action :limit_facets_on_home_page, only: [:index]
 
   configure_blacklight do |config|
@@ -215,39 +214,7 @@ class CatalogController < ApplicationController
     end
   end
 
-  def dc
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
-  def ds
-    if params[:dsid] == 'full_dc'
-      @content = Nokogiri::XML(Dor::Services::Client.object(@obj.pid).metadata.dublin_core).prettify
-    else
-      @ds = @obj.datastreams[params[:dsid]]
-
-      @content = if @ds.respond_to? :ng_xml
-                   Nokogiri::XML(@ds.ng_xml.to_s, &:noblanks).to_s
-                 else
-                   Nokogiri::XML(@ds.content, &:noblanks).to_s
-                 end
-    end
-
-    raise ActionController::RoutingError, 'Not Found' if @content.nil?
-
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
   private
-
-  def show_aspect
-    pid = params[:id].include?('druid') ? params[:id] : "druid:#{params[:id]}"
-    @obj ||= Dor.find(pid)
-    @response, @document = search_service.fetch pid
-  end
 
   def limit_facets_on_home_page
     return if has_search_parameters? || params[:all]
