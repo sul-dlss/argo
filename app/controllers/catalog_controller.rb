@@ -194,6 +194,7 @@ class CatalogController < ApplicationController
     end
     @events = object_client.events.list
 
+    @workflows = WorkflowService.workflows_for(druid: params[:id])
     milestones = MilestoneService.milestones_for(druid: params[:id])
     versions = VersionService.list(resource: @obj)
 

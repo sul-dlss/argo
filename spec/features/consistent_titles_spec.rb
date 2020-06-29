@@ -25,7 +25,15 @@ RSpec.describe 'Consistent titles' do
     end
 
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: [], milestones: {}) }
+    let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
+    let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: all_workflows) }
+    let(:workflow_client) do
+      instance_double(Dor::Workflow::Client,
+                      active_lifecycle: [],
+                      lifecycle: [],
+                      milestones: {},
+                      workflow_routes: workflow_routes)
+    end
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
