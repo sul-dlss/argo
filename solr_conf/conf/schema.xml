@@ -135,6 +135,9 @@
     <dynamicField name="*_bi"  type="boolean" stored="false" indexed="true"  multiValued="false"/>
     <dynamicField name="*_bs"  type="boolean" stored="true"  indexed="false" multiValued="false"/>
     <dynamicField name="*_bsi" type="boolean" stored="true"  indexed="true"  multiValued="false"/>
+    
+    <!-- for structured values (JSON blobs) -->
+    <dynamicField name="*_struct" type="string" stored="true" indexed="false" multiValued="true" omitNorms="true" />
 
     <!-- Type used to index the lat and lon components for the "location" FieldType -->
     <dynamicField name="*_coordinate" type="tdouble" indexed="true"  stored="false" />
