@@ -12,7 +12,11 @@ RSpec.describe 'catalog/show.html.erb' do
     allow(view).to receive(:blacklight_config).and_return(blacklight_config)
     allow(view).to receive(:render_link_rel_alternates)
     allow(view).to receive(:render_document_class)
-    allow(view).to receive_messages(current_search_session: nil, search_session: {})
+    allow(view).to receive_messages(
+      current_search_session: nil,
+      search_session: {},
+      search_state: Blacklight::SearchState.new({}, nil)
+    )
   end
 
   it 'assigns page title, truncating it' do
