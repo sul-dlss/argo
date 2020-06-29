@@ -4,6 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Item view', js: true do
   before do
+    ActiveFedora::SolrService.add(solr_doc)
+    ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
@@ -17,11 +19,9 @@ RSpec.describe 'Item view', js: true do
 
   context 'when there is an error retrieving the cocina_model' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client, events: events_client) }
+    let(:solr_doc) { { id: 'druid:hj185vb7593' } }
 
     before do
-      ActiveFedora::SolrService.add(id: 'druid:hj185vb7593')
-      ActiveFedora::SolrService.commit
-
       allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
     end
 
@@ -45,19 +45,19 @@ RSpec.describe 'Item view', js: true do
     let(:dro_admin) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
     context 'when the file is on stacks' do
-      before do
-        ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
-                                      SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                                      content_type_ssim: 'image',
-                                      status_ssi: 'v1 Unknown Status',
-                                      SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057vk7675',
-                                      SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
-                                      project_tag_ssim: 'Fuller Slides',
-                                      source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',
-                                      identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
-                                      tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo'],
-                                      ds_specs_ssim: ['descMetadata|M|text/xml|0|1552|Descriptive Metadata (MODS)'])
-        ActiveFedora::SolrService.commit
+      let(:solr_doc) do
+        {
+          id: 'druid:hj185vb7593',
+          SolrDocument::FIELD_OBJECT_TYPE => 'item',
+          content_type_ssim: 'image',
+          status_ssi: 'v1 Unknown Status',
+          SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057vk7675',
+          SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
+          project_tag_ssim: 'Fuller Slides',
+          source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',
+          identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
+          tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo']
+        }
       end
 
       it 'shows the file info' do
@@ -102,6 +102,7 @@ RSpec.describe 'Item view', js: true do
 
     context 'when the file is on stacks' do
       let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
+      let(:solr_doc) { { id: 'druid:hj185vb7593' } }
 
       before do
         page.driver.browser.download_path = '.'
@@ -121,24 +122,12 @@ RSpec.describe 'Item view', js: true do
     end
 
     context 'when the title has an ampersand in it' do
-      let(:item) do
-        # this is not how items are created in the app -- this is for testing purposes only
-        Dor::Item.create!(label: 'Road & Track', pid: 'druid:fc123ky4567')
-      end
+      let(:solr_doc) { { id: 'druid:hj185vb7593', obj_label_tesim: 'Road & Track' } }
 
       let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
 
-      before do
-        # Necessary because our testing Docker dor-services-app isn't linked to dor-indexing-app via ActiveMQ
-        Argo::Indexer.reindex_pid_remotely(item.pid)
-      end
-
-      after do
-        item.destroy
-      end
-
       it 'properly escapes the title' do
-        visit solr_document_path item.pid
+        visit solr_document_path 'druid:hj185vb7593'
         expect(page).to have_title 'Road & Track'
       end
     end
