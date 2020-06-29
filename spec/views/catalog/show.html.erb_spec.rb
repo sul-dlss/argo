@@ -15,7 +15,7 @@ RSpec.describe 'catalog/show.html.erb' do
     allow(view).to receive_messages(
       current_search_session: nil,
       search_session: {},
-      search_state: double('SearchState', params_for_search: {})
+      search_state: Blacklight::SearchState.new({}, nil)
     )
   end
 
