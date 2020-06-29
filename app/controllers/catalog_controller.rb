@@ -222,6 +222,20 @@ class CatalogController < ApplicationController
   end
 
   def ds
+    if params[:dsid] == 'full_dc'
+      @content = Nokogiri::XML(Dor::Services::Client.object(@obj.pid).metadata.dublin_core).prettify
+    else
+      @ds = @obj.datastreams[params[:dsid]]
+
+      @content = if @ds.respond_to? :ng_xml
+                   Nokogiri::XML(@ds.ng_xml.to_s, &:noblanks).to_s
+                 else
+                   Nokogiri::XML(@ds.content, &:noblanks).to_s
+                 end
+    end
+
+    raise ActionController::RoutingError, 'Not Found' if @content.nil?
+
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
