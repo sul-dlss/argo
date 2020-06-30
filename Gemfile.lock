@@ -608,7 +608,7 @@ PLATFORMS
 DEPENDENCIES
   barby
   blacklight (~> 7.0)
-  blacklight-hierarchy (~> 4.0)
+  blacklight-hierarchy (~> 4.2)
   bootsnap (>= 1.1.0)
   byebug
   cancancan
