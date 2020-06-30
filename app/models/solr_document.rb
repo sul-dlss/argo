@@ -20,6 +20,11 @@ class SolrDocument
   FIELD_PRESERVATION_SIZE         = :preserved_size_dbtsi
   FIELD_RELEASED_TO               = :released_to_ssim
   FIELD_TITLE                     = 'sw_display_title_tesim'
+  FIELD_AUTHOR                    = 'sw_author_tesim'
+  FIELD_LABEL                     = 'obj_label_tesim'
+  FIELD_PLACE                     = 'originInfo_place_placeTerm_tesim'
+  FIELD_PUBLISHER                 = 'originInfo_publisher_tesim'
+  FIELD_CREATED_DATE              = 'originInfo_date_created_tesim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
@@ -37,7 +42,13 @@ class SolrDocument
   attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
   attribute :preservation_size, Blacklight::Types::String, FIELD_PRESERVATION_SIZE
   attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
-  attribute :title, Blacklight::Types::String, FIELD_TITLE
+
+  attribute :label, Blacklight::Types::String, FIELD_LABEL
+  attribute :sw_title, Blacklight::Types::Array, FIELD_TITLE
+  attribute :author, Blacklight::Types::String, FIELD_AUTHOR
+  attribute :place, Blacklight::Types::String, FIELD_PLACE
+  attribute :publisher, Blacklight::Types::String, FIELD_PUBLISHER
+  attribute :created_date, Blacklight::Types::String, FIELD_CREATED_DATE
 
   # self.unique_key = 'id'
 
@@ -90,5 +101,9 @@ class SolrDocument
   # @return [String]
   def druid
     id.delete_prefix('druid:')
+  end
+
+  def title
+    (sw_title.presence || [label]).join(' -- ')
   end
 end

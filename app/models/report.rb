@@ -3,13 +3,13 @@
 # Runs a query against solr and returns the results.
 # Does exactly what blacklight does, paginates the solr requests untill all results
 # have been received
+# rubocop:disable Metrics/ClassLength
 class Report
   include Blacklight::Configurable
   include CsvConcern
   include DateFacetConfigurations
 
   class << self
-    include DorObjectHelper
     include ValueHelper
   end
 
@@ -27,14 +27,20 @@ class Report
     },
     {
       field: :title, label: 'Title',
-      proc: ->(doc) { retrieve_terms(doc)[:title] },
-      solr_fields: %w[sw_display_title_tesim obj_label_ssim],
+      proc: ->(doc) { doc.title },
+      solr_fields: [SolrDocument::FIELD_TITLE,
+                    SolrDocument::FIELD_LABEL],
       sort: false, default: false, width: 100, download_default: true
     },
     {
       field: :citation, label: 'Citation',
-      proc: ->(doc) { render_citation(doc) },
-      solr_fields: %w[sw_author_tesim sw_display_title_tesim obj_label_ssim originInfo_place_placeTerm_tesim originInfo_publisher_tesim],
+      proc: ->(doc) { CitationPresenter.new(doc).render },
+      solr_fields: [SolrDocument::FIELD_AUTHOR,
+                    SolrDocument::FIELD_TITLE,
+                    SolrDocument::FIELD_LABEL,
+                    SolrDocument::FIELD_PLACE,
+                    SolrDocument::FIELD_PUBLISHER,
+                    SolrDocument::FIELD_CREATED_DATE],
       sort: false, default: true, width: 100, download_default: false
     },
     {
@@ -255,3 +261,4 @@ class Report
     result
   end
 end
+# rubocop:enable Metrics/ClassLength
