@@ -34,20 +34,6 @@ module DorObjectHelper
     result.html_safe
   end
 
-  def render_datetime(datetime)
-    return '' if datetime.nil? || datetime == ''
-
-    # this needs to use the timezone set in config.time_zone
-    begin
-      zone = ActiveSupport::TimeZone.new('Pacific Time (US & Canada)')
-      d = datetime.is_a?(Time) ? datetime : DateTime.parse(datetime).in_time_zone(zone)
-      I18n.l(d)
-    rescue StandardError
-      d = datetime.is_a?(Time) ? datetime : Time.zone.parse(datetime.to_s)
-      d.strftime('%Y-%m-%d %I:%M%p')
-    end
-  end
-
   def render_workflows(doc)
     workflows = {}
     Array(doc[ActiveFedora::SolrService.solr_name('workflow_status', :symbol)]).each do |line|
