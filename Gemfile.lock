@@ -152,7 +152,7 @@ GEM
       warden (~> 1.2.3)
     devise-remote-user (1.0.0)
       devise
-    diff-lcs (1.4.2)
+    diff-lcs (1.4.3)
     dlss-capistrano (3.9.0)
       capistrano (~> 3.0)
       capistrano-bundle_audit (>= 0.3.0)
