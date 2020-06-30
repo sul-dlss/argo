@@ -134,7 +134,6 @@ Rails.application.routes.draw do
     member do
       get 'purl_preview'
       post 'refresh_metadata'
-      get 'schema_validate', action: :schema_validation, as: 'schema_validation'
       get 'mods'
       post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'

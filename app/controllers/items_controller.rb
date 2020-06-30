@@ -187,15 +187,6 @@ class ItemsController < ApplicationController
     redirect_to '/', notice: params[:id] + ' has been purged!'
   end
 
-  def schema_validation
-    errors = schema_validate @object.descMetadata.ng_xml
-    if errors.empty?
-      render status: :ok, plain: 'Valid.'
-    else
-      render status: :internal_server_error, plain: errors.join('<br>')[0...490]
-    end
-  end
-
   def refresh_metadata
     authorize! :manage_desc_metadata, @object
 
