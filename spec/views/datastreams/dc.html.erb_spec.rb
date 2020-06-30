@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'catalog/dc.html.erb' do
+RSpec.describe 'datastreams/dc.html.erb' do
   let(:object_client) { instance_double(Dor::Services::Client::Object, metadata: metadata) }
   let(:metadata) { instance_double(Dor::Services::Client::Metadata, dublin_core: xml) }
   let(:xml) do
