@@ -29,16 +29,28 @@ RSpec.describe SolrDocument, type: :model do
   describe '#title' do
     subject(:title) { document.title }
 
-    context 'with data' do
+    context 'with title' do
       let(:document_attributes) { { SolrDocument::FIELD_TITLE => 'My title' } }
 
       it { is_expected.to eq 'My title' }
     end
 
+    context 'with multiple titles' do
+      let(:document_attributes) { { SolrDocument::FIELD_TITLE => %w[title1 title2] } }
+
+      it { is_expected.to eq 'title1 -- title2' }
+    end
+
+    context 'with label' do
+      let(:document_attributes) { { SolrDocument::FIELD_LABEL => 'My label' } }
+
+      it { is_expected.to eq 'My label' }
+    end
+
     context 'without data' do
       let(:document_attributes) { {} }
 
-      it { is_expected.to be_nil }
+      it { is_expected.to eq '' }
     end
   end
 
