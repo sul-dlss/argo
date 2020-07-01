@@ -11,22 +11,22 @@ services:
       - 3000:3000
     environment:
       NODE_ENV: development
-      ROLES: sdr:administrator-role
-      REMOTE_USER: blalbrit@stanford.edu
       RAILS_LOG_TO_STDOUT: 'true'
-      REDIS_URL: redis://redis:6379/
-      SOLR_URL: http://solr:8983/solr/argo
+      REMOTE_USER: blalbrit@stanford.edu
+      ROLES: sdr:administrator-role
       # Allow bulk action logs to be written (can't write to /tmp)
       SETTINGS__BULK_METADATA__DIRECTORY: '/app/tmp'
       SETTINGS__BULK_METADATA__TEMPORARY_DIRECTORY: '/app/tmp/tmp'
-      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
-      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
-      SETTINGS__WORKFLOW_URL: http://workflow:3000
+      SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
       SETTINGS__DOR_INDEXING_URL: http://dor-indexing-app:3000/dor
-      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
-      SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
+      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
+      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+      SETTINGS__REDIS_URL: redis://redis:6379/
+      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+      SETTINGS__WORKFLOW_URL: http://workflow:3000
+      SOLR_URL: http://solr:8983/solr/argo
     depends_on:
       - dor-indexing-app
 
