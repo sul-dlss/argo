@@ -10,7 +10,7 @@ rvm:
   - 2.7.1 # deployed
 
 before_install:
-  # Get bundler 2.0 for ruby 2.6.4
+  # Get latest bundler
   - gem install bundler
   # Pull latest & start up needed underlying services
   - docker-compose up -d dor-services-app dor-indexing-app techmd
