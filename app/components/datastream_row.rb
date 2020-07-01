@@ -21,7 +21,7 @@ class DatastreamRow < ApplicationComponent
   end
 
   def link_to_identifier
-    link_to dsid, item_datastream_path(pid, dsid), title: dsid, data: { blacklight_modal: 'trigger' }
+    link_to dsid, ds_solr_document_path(pid, dsid), title: dsid, data: { blacklight_modal: 'trigger' }
   end
 
   def size
