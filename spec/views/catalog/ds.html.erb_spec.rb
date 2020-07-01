@@ -2,17 +2,16 @@
 
 require 'rails_helper'
 
-RSpec.describe 'datastreams/show.html.erb' do
-  before do
-    params[:id] = dsid
-    params[:item_id] = pid
-    allow(view).to receive(:can?).and_return(true)
-    @obj = obj
-    @ds = Dor::IdentityMetadataDS.new(obj, 'identityMetadata')
-  end
+RSpec.describe 'catalog/ds.html.erb' do
+  let(:stub_ds) { instance_double(Dor::IdentityMetadataDS, content: '<xml />') }
 
-  let(:pid) { 'druid:abc123' }
-  let(:obj) { instance_double(Dor::Item, pid: pid) }
+  before do
+    params[:dsid] = dsid
+    params[:id] = 'druid:abc123'
+    allow(view).to receive(:can?).and_return(true)
+    allow(view).to receive(:render_ds_profile_header)
+    @obj = instance_double(Dor::Item, datastreams: { dsid => stub_ds })
+  end
 
   context 'with an editable datastream' do
     let(:dsid) { 'identityMetadata' }

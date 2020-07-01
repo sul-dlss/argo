@@ -28,6 +28,11 @@ Rails.application.routes.draw do
 
   resources :solr_documents, only: [:show], controller: 'catalog', path: '/view' do
     concerns :exportable
+
+    member do
+      get 'dc', to: 'catalog#dc'
+      get 'ds/:dsid', to: 'catalog#ds', as: 'ds'
+    end
   end
 
   match 'catalog',      via: %i[get post], to: redirect { |params, req| req.fullpath.sub(%r{^/catalog}, '/view') }, as: 'search_catalog_redirect'
@@ -125,12 +130,6 @@ Rails.application.routes.draw do
 
     resource :manage_release, only: :show
 
-    resources :datastreams, only: %i[show edit update] do
-      member do
-        get 'dc'
-      end
-    end
-
     member do
       get 'purl_preview'
       post 'refresh_metadata'
@@ -138,6 +137,7 @@ Rails.application.routes.draw do
       get 'mods'
       post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'
+      post 'datastream', action: :datastream_update, as: 'datastream_update'
       get 'source_id_ui'
       get 'catkey_ui'
       match 'tags_bulk', via: %i[get post]
