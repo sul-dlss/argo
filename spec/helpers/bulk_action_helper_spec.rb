@@ -47,6 +47,18 @@ RSpec.describe BulkActionHelper do
       end
     end
 
+    context 'when status completed but file has zero length' do
+      before do
+        allow(bulk_action).to receive(:status).and_return('Completed')
+        allow(File).to receive(:exist?).and_return(true)
+        allow(File).to receive(:zero?).and_return(true)
+      end
+
+      it 'returns false' do
+        expect(helper.show_report_link?(bulk_action, Settings.checksum_report_job.csv_filename)).to be_falsey
+      end
+    end
+
     context 'when status completed but file does not exist' do
       before do
         allow(bulk_action).to receive(:status).and_return('Completed')

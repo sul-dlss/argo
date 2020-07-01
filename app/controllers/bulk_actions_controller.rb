@@ -59,7 +59,8 @@ class BulkActionsController < ApplicationController
       set_governing_apo: [:new_apo_id],
       manage_catkeys: [:catkeys],
       prepare: %i[significance description],
-      create_virtual_objects: [:csv_file]
+      create_virtual_objects: [:csv_file],
+      import_tags: [:csv_file]
     )
   end
 end
