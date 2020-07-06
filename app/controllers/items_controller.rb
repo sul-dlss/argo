@@ -6,7 +6,6 @@ class ItemsController < ApplicationController
   before_action :create_obj, except: :purl_preview
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
-    datastream_update
     mods
     purge_object
     source_id
@@ -113,28 +112,6 @@ class ItemsController < ApplicationController
     save_and_reindex
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
-    end
-  end
-
-  ##
-  # @option params [String] `:content` the XML with which to replace the datastream
-  # @option params [String] `:dsid` the identifier for the datastream, e.g., `identityMetadata`
-  # @option params [String] `:id` the druid to modify
-  def datastream_update
-    raise ArgumentError, 'Missing content' unless params[:content].present?
-    raise ArgumentError, 'Missing datastream identifier' unless params[:dsid].present?
-
-    begin
-      # check that the content is well-formed xml
-      Nokogiri::XML(params[:content], &:strict)
-    rescue Nokogiri::XML::SyntaxError
-      raise ArgumentError, 'XML is not well formed!'
-    end
-    @object.datastreams[params[:dsid]].content = params[:content] # set the XML to be verbatim as posted
-    save_and_reindex
-
-    respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), notice: 'Datastream was successfully updated' }
     end
   end
 
