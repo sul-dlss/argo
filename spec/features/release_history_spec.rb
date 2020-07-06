@@ -40,14 +40,12 @@ RSpec.describe 'Release history' do
   context 'for an adminPolicy' do
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
-    let(:apo_id) { 'druid:fg464dn8891' }
-
-    before do
-      Argo::Indexer.reindex_pid_remotely apo_id
+    let(:apo) do
+      FactoryBot.create_for_repository(:apo)
     end
 
     it 'does not show release history' do
-      visit solr_document_path apo_id
+      visit solr_document_path apo.externalIdentifier
       expect(page).not_to have_css 'dt', text: 'Releases'
     end
   end
