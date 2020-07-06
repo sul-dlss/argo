@@ -27,11 +27,6 @@ Lint/ShadowingOuterLocalVariable:
   Exclude:
     - 'spec/models/report_spec.rb'
 
-# Offense count: 1
-Lint/UnreachableCode:
-  Exclude:
-    - 'app/jobs/descmetadata_download_job.rb'
-
 # Offense count: 7
 # Cop supports --auto-correct.
 # Configuration parameters: IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
