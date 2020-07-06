@@ -17,6 +17,9 @@ jobs:
           name: Install latest bundler
           command: gem install bundler
       - run:
+          name: Config bundler
+          command: bundle config set without 'production'
+      - run:
           name: Install latest docker-compose
           command: |
             set -x
