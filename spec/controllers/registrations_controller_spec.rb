@@ -301,7 +301,7 @@ RSpec.describe RegistrationsController, type: :controller do
         missing_registration_collections.each do |col_id|
           col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
           allow(Dor).to receive(:find).with(col_id).and_raise(ActiveFedora::ObjectNotFoundError)
-          expect(Rails.logger).to receive(:warning).with(col_not_found_warning)
+          expect(Rails.logger).to receive(:warn).with(col_not_found_warning)
         end
         mock_collection_b = instance_double(Dor::Collection, label: 'Annual report of the State Corporation Commission showing a bunch of stuff')
 

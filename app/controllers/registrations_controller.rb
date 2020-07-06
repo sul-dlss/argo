@@ -54,7 +54,7 @@ class RegistrationsController < ApplicationController
         rescue ActiveFedora::ObjectNotFoundError
           Honeybadger.notify("Unable to find the collection #{col_id} in Fedora, but it's listed in the administrativeMetadata datastream for #{params[:apo_id]}")
           col_not_found_warning = "#{params[:apo_id]} lists collection #{col_id} for registration, but it wasn't found in Fedora."
-          Rails.logger.warning col_not_found_warning
+          logger.warn col_not_found_warning
         end
       end
     end
