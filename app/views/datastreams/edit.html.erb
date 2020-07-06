@@ -2,7 +2,7 @@
   <% component.with(:header, params[:dsid]) %>
   <% component.with(:body) do %>
     <% if can?(:manage_item, @obj) %>
-      <%= form_tag url_for(controller: :items, action: :datastream_update), id: 'xmlEditForm', method: :POST do %>
+      <%= form_tag item_datastream_path(@obj.pid, @ds.dsid), id: 'xmlEditForm', method: :patch do %>
           <input type="hidden" name="id" value="<%= @obj.pid %>">
           <input name="dsid" id="datastream" type="hidden" value="<%= params[:dsid] %>">
           <div class="form-group">

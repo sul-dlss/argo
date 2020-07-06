@@ -4,12 +4,17 @@ class DatastreamsController < ApplicationController
   include Blacklight::Catalog
   copy_blacklight_config_from CatalogController
 
-  before_action :show_aspect, only: %i[dc show]
+  before_action :show_aspect, only: %i[dc show edit]
 
   def dc
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
+  end
+
+  def edit
+    @ds = @obj.datastreams[params[:id]]
+    render layout: !request.xhr?
   end
 
   def show
@@ -53,7 +58,7 @@ class DatastreamsController < ApplicationController
     Argo::Indexer.reindex_pid_remotely(@object.pid)
 
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), notice: 'Datastream was successfully updated' }
+      format.any { redirect_to solr_document_path(params[:item_id]), notice: 'Datastream was successfully updated' }
     end
   end
 
