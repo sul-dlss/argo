@@ -47,8 +47,6 @@ gem 'faraday'
 gem 'honeybadger', '~> 4.1'
 gem 'sidekiq', '~> 6.0'
 
-# mysql 0.5.3 is not compatible with the version of MySQL we are using (5.1)
-gem 'mysql2', '< 0.5.3'
 gem 'newrelic_rpm'
 gem 'nokogiri', '~> 1.6'
 # Prawn is used to create "tracksheets"
@@ -110,4 +108,9 @@ group :deployment do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'dlss-capistrano', '~> 3.1'
+end
+
+group :production do
+  # mysql 0.5.3 is not compatible with the version of MySQL we are using (5.1)
+  gem 'mysql2', '< 0.5.3'
 end
