@@ -18,6 +18,9 @@ bulk_metadata:
 checksum_report_job:
   csv_filename: 'checksum_report.csv'
 
+export_tags_job:
+  csv_filename: 'tags.csv'
+
 # Newrelic
 newrelic:
   enabled: false

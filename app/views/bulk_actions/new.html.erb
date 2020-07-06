@@ -24,10 +24,11 @@
                       ['Manage Catkeys', 'ManageCatkeyJob'],
                       ['Prepare objects', 'PrepareJob'],
                       ['Republish objects', 'RepublishJob'],
-                      # ['Update tags', 'SetTagsJob'], # NOTE: temporarily commented out until argo#2007 is resolved
                       ['Close versions', 'CloseVersionJob'],
                       ['Checksum report', 'ChecksumReportJob'],
-                      ['Create virtual object(s)', 'CreateVirtualObjectsJob']],
+                      ['Create virtual object(s)', 'CreateVirtualObjectsJob'],
+                      ['Export tags to CSV', 'ExportTagsJob'],
+                      ['Import tags from CSV', 'ImportTagsJob']],
                      {},
                      class: 'form-control',
                      data: { action: 'change->bulk_actions#showTab' }) %>
@@ -85,16 +86,6 @@
           </span>
         </div>
 
-        <!-- # NOTE: temporarily commented out until argo#2007 is resolved
-        <div role='tabpanel' class='tab-pane' id='SetTagsJob'>
-          <span class='help-block'>
-          <p>This needs a list of pids and tags, with a tab between the pid and each tag. E.g.:<br>
-          druid:bc088fn5010&lt;tab&gt;Project : Something&lt;tab&gt;Process : Content Type : Book
-          </p>
-          <p>This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</p>          </span>
-        </div>
-        -->
-
         <div role='tabpanel' class='tab-pane' id='CloseVersionJob'>
           <span class='help-block'>
             Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
@@ -112,6 +103,19 @@
             Create one or more virtual objects.
           </span>
           <%= render 'bulk_actions/forms/create_virtual_objects_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='ExportTagsJob'>
+          <span class='help-block'>
+            Download tags as CSV (comma-separated values) for druids specified below
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='ImportTagsJob'>
+          <span class='help-block'>
+            Upload tags as CSV (comma-separated values)
+          </span>
+          <%= render 'bulk_actions/forms/import_tags_form', f: f %>
         </div>
       </div>
     </div>

@@ -23,7 +23,8 @@ class BulkActionPersister
   attr_reader :bulk_action_form
 
   delegate :pids, :manage_release, :set_governing_apo,
-           :manage_catkeys, :groups, :prepare, :create_virtual_objects, to: :bulk_action_form
+           :manage_catkeys, :groups, :prepare, :create_virtual_objects,
+           :import_tags, to: :bulk_action_form
 
   delegate :id, :file, :output_directory, to: :bulk_action
 
@@ -61,12 +62,13 @@ class BulkActionPersister
       set_governing_apo: set_governing_apo,
       manage_catkeys: manage_catkeys,
       prepare: prepare,
-      create_virtual_objects: virtual_objects_csv_from_file(create_virtual_objects),
+      create_virtual_objects: csv_from_file(create_virtual_objects),
+      import_tags: csv_from_file(import_tags),
       groups: groups
     }
   end
 
-  def virtual_objects_csv_from_file(params)
+  def csv_from_file(params)
     # Short-circuit if request is not related to creating virtual objects
     return if params.nil? || params[:csv_file].nil?
 

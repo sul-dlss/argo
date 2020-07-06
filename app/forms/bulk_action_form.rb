@@ -13,16 +13,21 @@ class BulkActionForm < BaseForm
   end
 
   def sync
-    model.attributes = params.except(:pids, :groups, :manage_release, :set_governing_apo, :manage_catkeys, :prepare, :create_virtual_objects)
+    model.attributes = params.except(:pids, :groups, :manage_release,
+                                     :set_governing_apo, :manage_catkeys,
+                                     :prepare, :create_virtual_objects,
+                                     :import_tags)
     @pids = pids_with_prefix
     @create_virtual_objects = params[:create_virtual_objects]
+    @import_tags = params[:import_tags]
     @manage_catkeys = params[:manage_catkeys]
     @manage_release = params[:manage_release]
     @prepare = params[:prepare]
     @set_governing_apo = params[:set_governing_apo]
   end
 
-  attr_reader :groups, :pids, :create_virtual_objects, :manage_catkeys, :manage_release, :prepare, :set_governing_apo
+  attr_reader :groups, :pids, :create_virtual_objects, :manage_catkeys,
+              :manage_release, :prepare, :set_governing_apo, :import_tags
 
   delegate :action_type, :description, to: :model
 

@@ -22,6 +22,9 @@ module BulkActionHelper
   end
 
   def show_report_link?(bulk_action, filename)
-    bulk_action&.status == 'Completed' && File.exist?(File.join(bulk_action.output_directory, filename))
+    return false unless bulk_action&.status == 'Completed'
+
+    path = File.join(bulk_action.output_directory, filename)
+    File.exist?(path) && !File.zero?(path)
   end
 end

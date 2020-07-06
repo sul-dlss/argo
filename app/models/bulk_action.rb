@@ -14,10 +14,11 @@ class BulkAction < ApplicationRecord
                      ManageCatkeyJob
                      PrepareJob
                      RepublishJob
-                     SetTagsJob
                      CloseVersionJob
                      ChecksumReportJob
-                     CreateVirtualObjectsJob]
+                     CreateVirtualObjectsJob
+                     ExportTagsJob
+                     ImportTagsJob]
             }
 
   before_destroy :remove_output_directory
