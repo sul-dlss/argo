@@ -5,8 +5,6 @@ class BulkActionsController < ApplicationController
 
   before_action :set_bulk_action, only: %i[destroy file]
 
-  rescue_from ActiveRecord::RecordNotFound, with: -> { render plain: 'Record Not Found', status: :not_found }
-
   # GET /bulk_actions
   def index
     @bulk_actions = BulkAction.where(user: current_user).order('created_at DESC')
@@ -47,6 +45,8 @@ class BulkActionsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_bulk_action
     @bulk_action = current_user.bulk_actions.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render plain: 'Object Not Found', status: :not_found
   end
 
   # Only accept trusted parameters.

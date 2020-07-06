@@ -224,11 +224,6 @@ RSpec.describe RegistrationsController, type: :controller do
       expect { get 'collection_list' }.to raise_error(ArgumentError)
     end
 
-    it 'handles a bogus APO' do
-      get 'collection_list', params: { apo_id: 'druid:aa111bb2222' }
-      expect(response).to have_http_status(:not_found)
-    end
-
     it 'handles an APO with no collections' do
       get 'collection_list', params: { apo_id: 'druid:zt570tx3016', format: :json }
       data = JSON.parse(response.body)

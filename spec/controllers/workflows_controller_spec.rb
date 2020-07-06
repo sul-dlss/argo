@@ -100,12 +100,6 @@ RSpec.describe WorkflowsController, type: :controller do
         expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
         expect(assigns[:presenter]).to eq presenter
       end
-
-      it 'returns 404 on missing item' do
-        expect(Dor).to receive(:find).with(pid).and_raise(ActiveFedora::ObjectNotFoundError)
-        get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
-        expect(response).to have_http_status(:not_found)
-      end
     end
 
     context 'when the user wants to see the xml' do
@@ -137,12 +131,6 @@ RSpec.describe WorkflowsController, type: :controller do
       get :history, params: { item_id: pid, format: :html }
       expect(response).to have_http_status(:ok)
       expect(assigns[:history_xml]).to eq xml
-    end
-
-    it 'returns 404 on missing item' do
-      expect(Dor).to receive(:find).with(pid).and_raise(ActiveFedora::ObjectNotFoundError)
-      get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
-      expect(response).to have_http_status(:not_found)
     end
   end
 

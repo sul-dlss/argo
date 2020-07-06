@@ -69,19 +69,6 @@ RSpec.describe CatalogController, type: :controller do
           expect(response).to be_successful
         end
       end
-
-      context 'when not found' do
-        before do
-          allow(Dor).to receive(:find).with(druid).and_raise(ActiveFedora::ObjectNotFoundError)
-        end
-
-        let(:druid) { 'druid:zz999zz9999' }
-
-        it 'returns not found' do
-          get 'show', params: { id: druid }
-          expect(response).to be_not_found
-        end
-      end
     end
   end
 
