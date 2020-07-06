@@ -220,49 +220,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#datastream_update' do
-    let(:xml) { '<contentMetadata/>' }
-    let(:invalid_apo_xml) { '<hydra:isGovernedBy rdf:resource="info:fedora/druid:not_exist"/>' }
-
-    context 'without management access' do
-      before do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
-      end
-
-      it 'prevents access' do
-        expect(item).not_to receive(:save)
-        post 'datastream_update', params: { dsid: 'contentMetadata', id: pid, content: xml }
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'updates the datastream' do
-        expect(item).to receive(:datastreams).and_return(
-          'contentMetadata' => double(Dor::ContentMetadataDS, 'content=': xml)
-        )
-        expect(item).to receive(:save)
-        expect(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_return(true)
-        post 'datastream_update', params: { dsid: 'contentMetadata', id: pid, content: xml }
-        expect(response).to have_http_status(:found)
-      end
-
-      it 'errors on empty xml' do
-        expect { post 'datastream_update', params: { dsid: 'contentMetadata', id: pid, content: ' ' } }.to raise_error(ArgumentError)
-      end
-      it 'errors on malformed xml' do
-        expect { post 'datastream_update', params: { dsid: 'contentMetadata', id: pid, content: '<this>isnt well formed.' } }.to raise_error(ArgumentError)
-      end
-      it 'errors on missing dsid parameter' do
-        expect { post 'datastream_update', params: { id: pid, content: xml } }.to raise_error(ArgumentError)
-      end
-    end
-  end
-
   describe '#add_collection' do
     context 'when they have manage access' do
       before do
