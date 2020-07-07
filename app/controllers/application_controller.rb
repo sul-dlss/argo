@@ -6,7 +6,6 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user!
 
-  rescue_from ActiveFedora::ObjectNotFoundError, with: -> { render plain: 'Object Not Found', status: :not_found }
   rescue_from CanCan::AccessDenied, with: -> { render status: :forbidden, plain: 'forbidden' }
 
   layout :determine_layout

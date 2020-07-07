@@ -28,6 +28,9 @@ module Argo
     initializer :after_append_asset_paths, group: :all, after: :append_assets_path do
       config.assets.paths.unshift Rails.root.join('app', 'assets', 'stylesheets', 'jquery-ui', 'custom-theme').to_s
     end
+
+    # Configure action_dispatch to handle not found errors
+    config.action_dispatch.rescue_responses['ActiveFedora::ObjectNotFoundError'] = :not_found
   end
 
   ARGO_VERSION = File.read(File.join(Rails.root, 'VERSION'))
