@@ -3,6 +3,11 @@
 @import 'variables';
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-overrides';
+
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+@import "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "@fortawesome/fontawesome-free/scss/solid.scss";
+
 // Override before importing Blacklight
 $logo-image: "../images/logo.png";
 @import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';

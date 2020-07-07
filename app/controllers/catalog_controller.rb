@@ -174,6 +174,10 @@ class CatalogController < ApplicationController
 
   def index
     @presenter = HomeTextPresenter.new(current_user)
+    unless has_search_parameters?
+      @presenter.primary_messages = ContentBlock.active.primary
+      @presenter.secondary_messages = ContentBlock.active.secondary
+    end
     super
   end
 

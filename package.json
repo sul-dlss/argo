@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "@github/time-elements": "^3.0.7",
     "@rails/webpacker": "^5.1.1",
     "autocomplete.js": "^0.37.1",

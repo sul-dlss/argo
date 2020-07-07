@@ -23,9 +23,16 @@
           </li>
         </ul>
       </li>
-    <% elsif can? :impersonate, User %>
-      <li class="nav-item">
-        <%= link_to 'Impersonate', auth_groups_path, class: 'nav-link' %>
+    <% elsif can?(:impersonate, User) || can?(:index, ContentBlock) %>
+      <li class='nav-item dropdown'>
+        <a href='#' class='nav-link dropdown-toggle' id="adminDropdown" data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+          Admin
+          <span class='caret'></span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="adminDropdown">
+          <%= link_to 'Impersonate', auth_groups_path, class: 'dropdown-item' if can?(:impersonate, User) %>
+          <%= link_to 'Message alerts', content_blocks_path, class: 'dropdown-item' if can?(:index, ContentBlock) %>
+        </div>
       </li>
     <% end %>
 
