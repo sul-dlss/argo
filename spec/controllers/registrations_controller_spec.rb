@@ -268,6 +268,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     context 'when the collections are not in solr' do
+      let(:apo_id) { 'druid:fg464dn8891' }
+
       it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
         apo_id = 'druid:fg464dn8891'
 
@@ -293,26 +295,38 @@ RSpec.describe RegistrationsController, type: :controller do
         )
       end
 
-      it 'does not include collections that are not found in Solr/Fedora' do
-        missing_registration_collections = [
-          'druid:kk203bw3276', 'druid:zx663qq1749', 'druid:nq832zg5474', 'druid:fb337wh0818', 'druid:kd973gk0505',
-          'druid:jm980xw3297', 'druid:fz658ss5788', 'druid:vh782pm7216', 'druid:gg191kg3953'
-        ]
-        missing_registration_collections.each do |col_id|
-          col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
-          allow(Dor).to receive(:find).with(col_id).and_raise(ActiveFedora::ObjectNotFoundError)
-          expect(Rails.logger).to receive(:warn).with(col_not_found_warning)
+      context 'when collections are not found in Fedora either' do
+        let(:apo) { instance_double(Dor::AdminPolicyObject, default_collections: default_collections) }
+        let(:default_collections) do
+          ['druid:pb873ty1662'] + missing_registration_collections
         end
-        mock_collection_b = instance_double(Dor::Collection, label: 'Annual report of the State Corporation Commission showing a bunch of stuff')
+        let(:missing_registration_collections) do
+          [
+            'druid:kk203bw3276', 'druid:zx663qq1749', 'druid:nq832zg5474', 'druid:fb337wh0818', 'druid:kd973gk0505',
+            'druid:jm980xw3297', 'druid:fz658ss5788', 'druid:vh782pm7216', 'druid:gg191kg3953'
+          ]
+        end
 
-        allow(Dor).to receive(:find).with('druid:pb873ty1662').and_return(mock_collection_b)
-        allow(Dor).to receive(:find).with('druid:fg464dn8891').and_call_original
+        before do
+          allow(Dor).to receive(:find).with(apo_id).and_return(apo)
+        end
 
-        get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
-        data = JSON.parse(response.body)
-        expect(data['druid:pb873ty1662']).to eq 'Annual report of the State Corporation Commission showing... (pb873ty1662)'
-        expect(data['druid:gg191kg3953']).to be nil
-        expect(data.length).to eq(2)
+        it 'does not include them' do
+          missing_registration_collections.each do |col_id|
+            col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
+            allow(Dor).to receive(:find).with(col_id).and_raise(ActiveFedora::ObjectNotFoundError)
+            expect(Rails.logger).to receive(:warn).with(col_not_found_warning)
+          end
+          mock_collection_b = instance_double(Dor::Collection, label: 'Annual report of the State Corporation Commission showing a bunch of stuff')
+
+          allow(Dor).to receive(:find).with('druid:pb873ty1662').and_return(mock_collection_b)
+
+          get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
+          data = JSON.parse(response.body)
+          expect(data['druid:pb873ty1662']).to eq 'Annual report of the State Corporation Commission showing... (pb873ty1662)'
+          expect(data['druid:gg191kg3953']).to be nil
+          expect(data.length).to eq(2)
+        end
       end
     end
   end
