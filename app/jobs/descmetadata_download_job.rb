@@ -67,7 +67,7 @@ class DescmetadataDownloadJob < GenericJob
   # @return  The Dor::Item corresponding to the given druid, or nil if none was found.
   def query_dor(druid, log)
     attempts ||= MAX_TRIES
-    dor_object = Dor.find druid
+    Dor.find druid
   rescue RestClient::RequestTimeout
     if (attempts -= 1) > 0
       log.puts "argo.bulk_metadata.bulk_log_retry #{druid}"
@@ -75,9 +75,8 @@ class DescmetadataDownloadJob < GenericJob
       retry
     else
       log.puts "argo.bulk_metadata.bulk_log_timeout #{druid}"
-      return nil
+      nil
     end
-    dor_object
   end
 
   def write_to_zip(value, entry_name, zip_file)
