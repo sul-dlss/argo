@@ -31,6 +31,7 @@ jobs:
           command: docker-compose up -d dor-services-app dor-indexing-app techmd
       - node/install:
           node-version: latest
+      - node/install-yarn
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - ruby/install:
