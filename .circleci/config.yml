@@ -1,0 +1,68 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@1.0.5
+  node: circleci/node@3.0.1
+  browser-tools: circleci/browser-tools@1.0.1
+
+jobs:
+  build:
+    environment:
+      TZ: "America/Los_Angeles"
+      CC_TEST_REPORTER_ID: "266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a"
+    machine:
+      image: ubuntu-1604:202004-01
+    steps:
+      - checkout
+      - run:
+          name: Install latest bundler
+          command: gem install bundler
+      - run:
+          name: Config bundler
+          command: bundle config set without 'production'
+      - run:
+          name: Install latest docker-compose
+          command: |
+            set -x
+            curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+          name: Spin up system dependencies
+          command: docker-compose up -d dor-services-app dor-indexing-app techmd
+      - node/install:
+          node-version: latest
+      - node/install-yarn
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - ruby/install:
+          version: 2.7.1
+      - ruby/install-deps
+      - run:
+          name: Install yarn dependencies
+          command: yarn install
+      - run:
+          name: Compile webpack
+          command: RAILS_ENV=test bin/rails webpacker:compile
+      - run:
+          name: Set up CodeClimate
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+            ./cc-test-reporter before-build
+      - run:
+          name: Wait for services used in integration tests
+          command: |
+            until curl --silent -XGET --fail -o /dev/null http://localhost:8983; do printf '.'; sleep 1; done
+            until curl --silent -XGET --fail -o /dev/null http://localhost:8984/solr/#/argo/core-overview; do printf '.'; sleep 1; done
+      - run:
+          name: Run linter
+          command: bundle exec rubocop
+      - run:
+          name: Load fixtures
+          command: RAILS_ENV=test bundle exec rake argo:repo:load
+      - run:
+          name: Run tests
+          command: RAILS_ENV=test bundle exec rake spec
+      - run:
+          name: Report test coverage results to CodeClimate
+          command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
