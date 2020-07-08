@@ -40,10 +40,41 @@ class RubydoraCheck < OkComputer::PingCheck
   end
 end
 
+# check models to see if at least they have some data
+class TablesHaveDataCheck < OkComputer::Check
+  def check
+    msg = [
+      Bookmark,
+      BulkAction,
+      Search,
+      User
+    ].map { |klass| table_check(klass) }.join(' ')
+    mark_message msg
+  end
+
+  private
+
+  # @return [String] message
+  def table_check(klass)
+    # has at least 1 record
+    return "#{klass.name} has data." if klass.any?
+
+    mark_failure
+    "#{klass.name} has no data."
+  rescue ActiveRecord::RecordNotFound
+    mark_failure
+    "#{klass.name} has no data."
+  rescue => e # rubocop:disable Style/RescueStandardError
+    mark_failure
+    "#{e.class.name} received: #{e.message}."
+  end
+end
+
 # REQUIRED checks, required to pass for /status/all
 #  individual checks also avail at /status/<name-of-check>
 OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
 OkComputer::Registry.register 'rails_cache', OkComputer::GenericCacheCheck.new
+OkComputer::Registry.register 'feature-tables-have-data', TablesHaveDataCheck.new
 
 OkComputer::Registry.register 'active_fedora_conn', RubydoraCheck.new(client: ActiveFedora::Base.connection_for_pid(0))
 # fedora_url is covered by checking ActiveFedora::Base.connection_for_pid(0)
