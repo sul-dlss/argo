@@ -59,7 +59,7 @@ class CollectionForm < BaseForm
     reg_params[:description] = build_description if params[:collection_title].present? && params[:collection_abstract].present?
 
     raw_rights = params[:collection_catkey].present? ? params[:collection_rights_catkey] : params[:collection_rights]
-    reg_params[:access] = access(raw_rights) || {}
+    reg_params.merge! CocinaAccess.from_form_value(raw_rights)
 
     if params[:collection_catkey].present?
       reg_params[:identification] = {
@@ -68,21 +68,6 @@ class CollectionForm < BaseForm
     end
 
     Cocina::Models::RequestCollection.new(reg_params)
-  end
-
-  # @param [String] the rights representation from the form
-  # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
-  def access(rights)
-    if rights.start_with?('loc:')
-      {
-        access: 'location-based',
-        readLocation: rights.delete_prefix('loc:')
-      }
-    else
-      {
-        access: rights
-      }
-    end
   end
 
   def build_description
