@@ -26,7 +26,8 @@ class RegistrationForm
         catalogLinks: catalog_links
       }
     }
-    model_params[:access] = access(params[:rights]) if params[:rights] != 'default'
+
+    model_params.merge!(CocinaAccess.from_form_value(params[:rights]))
 
     structural = {}
     structural[:isMemberOf] = params[:collection] if params[:collection].present?
@@ -76,27 +77,5 @@ class RegistrationForm
   def content_type_tag
     content_tag = params[:tag].find { |tag| tag.start_with?('Process : Content Type') }
     content_tag.split(':').last.strip
-  end
-
-  # @param [String] the rights representation from the form
-  # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
-  def access(rights)
-    if rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
-      {
-        access: rights.delete_suffix('-nd'),
-        download: 'none'
-      }
-    elsif rights.start_with?('loc:')
-      {
-        access: 'location-based',
-        readLocation: rights.delete_prefix('loc:'),
-        download: 'location-based'
-      }
-    else
-      {
-        access: rights,
-        download: rights
-      }
-    end
   end
 end
