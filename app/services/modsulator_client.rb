@@ -25,7 +25,7 @@ class ModsulatorClient
 
   # @param [String] uploaded_filename The full path to the Spreadsheet/XML file.
   # @param [String] pretty_filename A prettified version of the filename. Modsulator writes this to xmlDocs[@sourceFile].
-  # @param [#puts] log the logger to write to
+  # @param [#puts(String)] log handle to output stream from caller (e.g. to provide user with job-specific log file)
   def initialize(uploaded_filename:, pretty_filename:, log:)
     @uploaded_filename = uploaded_filename
     @pretty_filename = pretty_filename
@@ -69,20 +69,15 @@ class ModsulatorClient
     end
     response_xml.body
   rescue Faraday::ResourceNotFound => e
-    delayed_log_url(e, url)
-    log.puts "argo.bulk_metadata.bulk_log_invalid_url #{e.message}"
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_invalid_url')
   rescue Errno::ENOENT => e
-    delayed_log_url(e, url)
-    log.puts "argo.bulk_metadata.bulk_log_nonexistent_file #{e.message}"
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_nonexistent_file')
   rescue Errno::EACCES => e
-    delayed_log_url(e, url)
-    log.puts "argo.bulk_metadata.bulk_log_invalid_permission #{e.message}"
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_invalid_permission')
   rescue Faraday::Error => e
-    delayed_log_url(e, url)
-    log.puts "argo.bulk_metadata.bulk_log_internal_error #{e.message}"
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_internal_error')
   rescue StandardError => e
-    delayed_log_url(e, url)
-    log.puts "argo.bulk_metadata.bulk_log_error_exception #{e.message}"
+    log_request_error(e, url, 'argo.bulk_metadata.bulk_log_error_exception')
   ensure
     log.puts "argo.bulk_metadata.bulk_log_empty_response ERROR: No response from #{url}" if response_xml.nil?
   end
@@ -91,8 +86,10 @@ class ModsulatorClient
   #
   # @param  [Exception] e   The exception
   # @param  [String]    url The URL that we attempted to access
+  # @param  [String]    error_code a string prefix denoting the category of error, for the external log stream
   # @return [Void]
-  def delayed_log_url(error, url)
+  def log_request_error(error, url, error_code)
     Rails.logger.error("#{__FILE__} tried to access #{url} got: #{error.message} #{error.backtrace}")
+    log.puts "#{error_code} #{error.message}"
   end
 end
