@@ -14,7 +14,7 @@ class UploadsController < ApplicationController
     output_directory = File.join(Settings.bulk_metadata.directory, params[:apo_id], directory_name)
     temp_spreadsheet_filename = params[:spreadsheet_file].original_filename + '.' + directory_name
 
-    # Temporary files are sometimes garbage collected before the Delayed Job is run, so make a copy and let the job delete it when it's done.
+    # Temporary files are sometimes garbage collected before the job is run, so make a copy and let the job delete it when it's done.
     temp_filename = make_tmp_filename(temp_spreadsheet_filename)
     FileUtils.copy(params[:spreadsheet_file].path, temp_filename)
     ModsulatorJob.perform_later(params[:apo_id],
