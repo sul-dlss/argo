@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class ModsValidator
-  SCHEMA = 'app/helpers/xml/mods-3-6.xsd'
+  SCHEMA = 'mods-3-6.xsd'
   def self.validate(doc)
-    xsd = Nokogiri::XML::Schema(File.read(SCHEMA))
-    xsd.validate(doc).map(&:message)
+    Dir.chdir('app/helpers/xml') do
+      xsd = Nokogiri::XML::Schema(File.open(SCHEMA))
+      xsd.validate(doc).map(&:message)
+    end
   end
 end
