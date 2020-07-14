@@ -29,7 +29,9 @@ RSpec.describe 'apo', js: true do
                                     type: Cocina::Models::Vocab.admin_policy,
                                     label: '',
                                     version: 1,
-                                    administrative: {})
+                                    administrative: {
+                                      hasAdminPolicy: 'druid:hv992ry2431'
+                                    })
   end
 
   let(:created_collection) do

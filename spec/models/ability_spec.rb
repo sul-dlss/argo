@@ -6,14 +6,8 @@ require 'cancan/matchers'
 RSpec.describe Ability do
   let(:subject) { described_class.new(user) }
   let(:item) { Dor::Item.new(pid: 'x') }
+
   let(:dro) do
-    Cocina::Models::DRO.new(externalIdentifier: 'druid:bc123df4567',
-                            label: 'test',
-                            type: Cocina::Models::Vocab.object,
-                            version: 1,
-                            access: {})
-  end
-  let(:dro_with_apo) do
     Cocina::Models::DRO.new(externalIdentifier: 'druid:bc123df4567',
                             label: 'test',
                             type: Cocina::Models::Vocab.object,
@@ -110,9 +104,8 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:view_content, item) }
-    it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, item_with_apo) }
-    it { is_expected.to be_able_to(:view_content, dro_with_apo) }
+    it { is_expected.to be_able_to(:view_content, dro) }
   end
 
   context 'with the edit role' do
@@ -128,9 +121,8 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:view_metadata, item) }
     it { is_expected.not_to be_able_to(:view_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:view_content, item) }
-    it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_content, item_with_apo) }
-    it { is_expected.not_to be_able_to(:view_content, dro_with_apo) }
+    it { is_expected.not_to be_able_to(:view_content, dro) }
   end
 
   context 'with the view role' do
@@ -146,8 +138,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:view_content, item) }
-    it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_content, item_with_apo) }
-    it { is_expected.to be_able_to(:view_content, dro_with_apo) }
+    it { is_expected.to be_able_to(:view_content, dro) }
   end
 end
