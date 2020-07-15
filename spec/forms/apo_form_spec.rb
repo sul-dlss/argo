@@ -343,7 +343,7 @@ RSpec.describe ApoForm do
         expect(apo).to receive(:save)
         expect(apo).to receive(:add_roleplayer).exactly(4).times
 
-        stub_request(:post, 'http://localhost:3003/v1/objects')
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/admin_policy.jsonld",' \
             '"label":"New APO Title","version":1,' \
@@ -364,7 +364,7 @@ RSpec.describe ApoForm do
         # verify that the collection is also created
         expect(apo).to receive(:add_default_collection).with(collection.pid)
 
-        stub_request(:post, 'http://localhost:3003/v1/objects')
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(body: JSON.generate(collection_req_body_hash))
           .to_return(status: 200, body: created_collection)
 

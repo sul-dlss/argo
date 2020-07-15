@@ -169,6 +169,6 @@ RSpec.describe ReleaseObjectJob do
 end
 
 def stub_release_tags(druid, status = 201)
-  stub_request(:post, "http://localhost:3003/v1/objects/#{druid}/release_tags")
+  stub_request(:post, "#{Settings.dor_services.url}/v1/objects/#{druid}/release_tags")
     .to_return(status: status)
 end
