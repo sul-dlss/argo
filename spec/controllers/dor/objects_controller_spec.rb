@@ -65,6 +65,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'location-based'
+                                },
+                                administrative: {
+                                  hasAdminPolicy: 'druid:hv992ry2431'
                                 }).to_json
       end
 
@@ -111,6 +114,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 access: {
                                   access: 'stanford',
                                   download: 'stanford'
+                                },
+                                administrative: {
+                                  hasAdminPolicy: 'druid:hv992ry2431'
                                 }).to_json
       end
 
@@ -157,6 +163,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'location-based'
+                                },
+                                administrative: {
+                                  hasAdminPolicy: 'druid:hv992ry2431'
                                 }).to_json
       end
 
@@ -205,6 +214,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 access: {
                                   access: 'world',
                                   download: 'none'
+                                },
+                                administrative: {
+                                  hasAdminPolicy: 'druid:hv992ry2431'
                                 }).to_json
       end
 
@@ -252,6 +264,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 access: {
                                   access: 'world',
                                   download: 'none'
+                                },
+                                administrative: {
+                                  hasAdminPolicy: 'druid:hv992ry2431'
                                 }).to_json
       end
 

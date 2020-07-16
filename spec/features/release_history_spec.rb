@@ -46,6 +46,11 @@ RSpec.describe 'Release history' do
   end
 
   context 'for an adminPolicy' do
+    before do
+      # Ensure the UR-APO is in the index
+      Argo::Indexer.reindex_pid_remotely('druid:hv992ry2431')
+    end
+
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
     let(:apo) do

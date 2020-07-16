@@ -311,7 +311,9 @@ RSpec.describe ApoForm do
                                         type: Cocina::Models::Vocab.admin_policy,
                                         label: '',
                                         version: 1,
-                                        administrative: {}).to_json
+                                        administrative: {
+                                          hasAdminPolicy: 'druid:hv992ry2431'
+                                        }).to_json
       end
 
       let(:created_collection) do
