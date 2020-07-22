@@ -21,6 +21,9 @@ checksum_report_job:
 export_tags_job:
   csv_filename: 'tags.csv'
 
+hidden_datastreams:
+  - 'workflows'
+
 # Newrelic
 newrelic:
   enabled: false

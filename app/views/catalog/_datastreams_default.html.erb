@@ -4,6 +4,12 @@
 </h3>
 <div id="document-datastreams-section" class="document-section">
   <table class="detail">
-    <%= render DatastreamRow.with_collection(object.datastreams.values.reject(&:new?)) %>
+    <%=
+      render DatastreamRow.with_collection(
+        object.datastreams.reject do |name, instance|
+          instance.new? || Settings.hidden_datastreams.include?(name)
+        end.values
+      )
+    %>
   </table>
 </div>
