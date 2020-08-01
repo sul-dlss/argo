@@ -46,8 +46,11 @@ RSpec.describe 'Update a datastream' do
       expect { patch "/items/#{pid}/datastreams/contentMetadata", params: { content: ' ' } }.to raise_error(ArgumentError)
     end
 
-    it 'errors on malformed xml' do
-      expect { patch "/items/#{pid}/datastreams/contentMetadata", params: { content: '<this>isnt well formed.' } }.to raise_error(ArgumentError)
+    it 'does not update the datastream with malformed xml' do
+      patch "/items/#{pid}/datastreams/contentMetadata", params: { content: '<this>isnt well formed.' }
+      expect(item).not_to receive(:save)
+      expect(Argo::Indexer).not_to receive(:reindex_pid_remotely)
+      expect(response).to redirect_to "/view/#{pid}"
     end
   end
 end
