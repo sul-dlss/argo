@@ -48,17 +48,18 @@ class DatastreamsController < ApplicationController
     raise ArgumentError, 'Missing content' if params[:content].blank?
 
     begin
-      # check that the content is well-formed xml
       Nokogiri::XML(params[:content], &:strict)
+      @object.datastreams[params[:id]].content = params[:content] # set the XML to be verbatim as posted
+      @object.save
+      Argo::Indexer.reindex_pid_remotely(@object.pid)
+      msg = 'Datastream was successfully updated'
     rescue Nokogiri::XML::SyntaxError
-      raise ArgumentError, 'XML is not well formed!'
+      # if the content is not well-formed xml, inform the user rather than raising an exception
+      error_msg = 'The datastream could not be saved due to malformed XML.'
     end
-    @object.datastreams[params[:id]].content = params[:content] # set the XML to be verbatim as posted
-    @object.save
-    Argo::Indexer.reindex_pid_remotely(@object.pid)
 
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:item_id]), notice: 'Datastream was successfully updated' }
+      format.any { redirect_to solr_document_path(params[:item_id]), notice: msg, flash: { error: error_msg } }
     end
   end
 
