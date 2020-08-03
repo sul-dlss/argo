@@ -108,5 +108,6 @@ editable_datastreams:
   - contentMetadata
   - versionMetadata
   - rightsMetadata
+  - administrativeMetadata
 
 redis_url: 'redis://localhost:6379/'
