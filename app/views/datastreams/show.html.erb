@@ -9,10 +9,10 @@
 
     <% unless params[:id] == 'full_dc' %>
       <div class="CodeRay">
-        <pre>
+        <textarea id="content" class="form-control" rows=3 disabled>
           <foxml:datastream ID="<%= @ds.dsid %>" STATE="<%= @ds.state %>" CONTROL_GROUP="<%= @ds.controlGroup %>" VERSIONABLE="<%= @ds.versionable %>">
           <foxml:datastreamVersion ID="<%= @ds.dsVersionID %>" LABEL="<%= @ds.label %>" CREATED="<%= @ds.createDate&.xmlschema %>" MIMETYPE="<%= @ds.mimeType %>">
-        </pre>
+        </textarea>
       </div>
     <% end %>
     <%= CodeRay::Duo[:xml, :div].highlight(@content).html_safe %>
