@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class CatalogController < ApplicationController
   include Blacklight::Catalog
   helper ArgoHelper
@@ -61,86 +62,102 @@ class CatalogController < ApplicationController
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
     config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 limit: 9999,
-                                                              partial: 'blacklight/hierarchy/facet_hierarchy',
+                                                              component: Blacklight::Hierarchy::FacetFieldListComponent,
                                                               unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         limit: 10
-    config.add_facet_field 'content_type_ssim',               label: 'Content Type',        limit: 10
-    config.add_facet_field 'content_file_mimetypes_ssim',     label: 'MIME Types',          limit: 10, home: false
-    config.add_facet_field 'content_file_roles_ssim',         label: 'File Role',           limit: 10, home: false
-    config.add_facet_field 'rights_descriptions_ssim',        label: 'Access Rights',       limit: 1000, sort: 'index', home: false
-    config.add_facet_field 'use_license_machine_ssi',         label: 'License',             limit: 10, home: false
-    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          limit: 10, more_limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   limit: 10, more_limit: 9999, sort: 'index', home: false
-    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        limit: 10, more_limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', limit: 10, more_limit: 9999, sort: 'index', home: false
-    config.add_facet_field 'current_version_isi',             label: 'Version',             limit: 10, home: false
-    config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   limit: 10, home: false
-    config.add_facet_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released To',         limit: 10
-    config.add_facet_field 'wf_wps_ssim',                     label: 'Workflows (WPS)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy'
-    config.add_facet_field 'wf_wsp_ssim',                     label: 'Workflows (WSP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy', home: false
-    config.add_facet_field 'wf_swp_ssim',                     label: 'Workflows (SWP)',     limit: 9999, partial: 'blacklight/hierarchy/facet_hierarchy', home: false
-    config.add_facet_field 'has_model_ssim',                  label: 'Object Model',        limit: 10, home: false
+    config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         component: true, limit: 10
+    config.add_facet_field 'content_type_ssim',               label: 'Content Type',        component: true, limit: 10
+    config.add_facet_field 'content_file_mimetypes_ssim',     label: 'MIME Types',          component: true, limit: 10, home: false
+    config.add_facet_field 'content_file_roles_ssim',         label: 'File Role',           component: true, limit: 10, home: false
+    config.add_facet_field 'rights_descriptions_ssim',        label: 'Access Rights',       component: true, limit: 1000, sort: 'index', home: false
+    config.add_facet_field 'use_license_machine_ssi',         label: 'License',             component: true, limit: 10, home: false
+    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          component: true, limit: 10, more_limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
+    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        component: true, limit: 10, more_limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
+    config.add_facet_field 'current_version_isi',             label: 'Version',             component: true, limit: 10, home: false
+    config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   component: true, limit: 10, home: false
+    config.add_facet_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released To',         component: true, limit: 10
+    config.add_facet_field 'wf_wps_ssim', label: 'Workflows (WPS)',
+                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                          limit: 9999
+    config.add_facet_field 'wf_wsp_ssim', label: 'Workflows (WSP)',
+                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                          limit: 9999,
+                                          home: false
+    config.add_facet_field 'wf_swp_ssim', label: 'Workflows (SWP)',
+                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                          limit: 9999,
+                                          home: false
+    config.add_facet_field 'has_model_ssim', label: 'Object Model',
+                                             component: true,
+                                             limit: 10,
+                                             home: false
 
     ## This is the costlier way to do this.  Instead convert this logic to delivering new values to a new field.  Then use normal add_facet_field.
     ## For now, if you add an additional case, make sure the DOR case gets the negation.
-    config.add_facet_field 'source', label: 'Object Source', home: false, query: {
-      other: {
-        label: 'DOR',
-        fq: '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
-          ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
-          ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'\
-          ' AND -has_model_ssim:"info:fedora/dor:googleScannedBook"'
-      },
+    config.add_facet_field 'source', label: 'Object Source', home: false,
+                                     component: true,
+                                     query: {
+                                       other: {
+                                         label: 'DOR',
+                                         fq: '-has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+                                           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
+                                           ' AND -has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'\
+                                           ' AND -has_model_ssim:"info:fedora/dor:googleScannedBook"'
+                                       },
 
-      google: { label: 'Google', fq: 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
+                                       google: { label: 'Google', fq: 'has_model_ssim:"info:fedora/dor:googleScannedBook"' },
 
-      hydrus: {
-        label: 'Hydrus/SDR',
-        fq: 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
-          ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
-          ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'
-      }
-    }
+                                       hydrus: {
+                                         label: 'Hydrus/SDR',
+                                         fq: 'has_model_ssim:"info:fedora/afmodel:Hydrus_Item"'\
+            ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_Collection"'\
+            ' OR has_model_ssim:"info:fedora/afmodel:Hydrus_AdminPolicyObject"'
+                                       }
+                                     }
 
-    config.add_facet_field 'metadata_source_ssi', label: 'Metadata Source', home: false
+    config.add_facet_field 'metadata_source_ssi', label: 'Metadata Source', home: false,
+                                                  component: true
 
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
-    config.add_facet_field 'empties', label: 'Empty Fields', home: false, query: {
-      no_source_id: { label: 'No Source ID', fq: '-source_id_ssim:*' },
-      no_rights_characteristics: { label: 'No Rights Characteristics', fq: '-rights_characteristics_ssim:*' },
-      no_content_type: { label: 'No Content Type', fq: '-content_type_ssim:*' },
-      no_has_model: { label: 'No Object Model', fq: '-has_model_ssim:*' },
-      no_objectType: { label: 'No Object Type', fq: '-objectType_ssim:*' },
-      no_object_title: { label: 'No Object Title', fq: '-dc_title_ssi:*' },
-      no_is_governed_by: { label: 'No APO', fq: "-#{SolrDocument::FIELD_APO_ID}:*" },
-      no_collection_title: { label: 'No Collection Title', fq: "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
-      no_copyright: { label: 'No Copyright', fq: '-copyright_ssim:*' },
-      no_license: { label: 'No License', fq: '-use_license_machine_ssi:*' },
-      no_sw_author_ssim: { label: 'No SW Author', fq: '-sw_author_ssim:*' },
-      # TODO: mods extent (?)
-      # TODO: mods form (?)
-      no_sw_genre: { label: 'No SW Genre', fq: '-sw_genre_ssim:*' }, # spec said "mods genre"
-      no_sw_language_ssim: { label: 'No SW Language', fq: '-sw_language_ssim:*' },
-      no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource', fq: '-mods_typeOfResource_ssim:*' },
-      no_sw_pub_date_sort: { label: 'No SW Date', fq: '-sw_pub_date_sort_ssi:*' },
-      no_sw_topic_ssim: { label: 'No SW Topic', fq: '-sw_topic_ssim:*' },
-      no_sw_subject_temporal: { label: 'No SW Era', fq: '-sw_subject_temporal_ssim:*' },
-      no_sw_subject_geographic: { label: 'No SW Region', fq: '-sw_subject_geographic_ssim:*' },
-      no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' },
-      no_use_statement: { label: 'No Use & Reproduction Statement', fq: '-use_statement_ssim:*' }
-    }
+    config.add_facet_field 'empties', label: 'Empty Fields', home: false,
+                                      component: true,
+                                      query: {
+                                        no_source_id: { label: 'No Source ID', fq: '-source_id_ssim:*' },
+                                        no_rights_characteristics: { label: 'No Rights Characteristics', fq: '-rights_characteristics_ssim:*' },
+                                        no_content_type: { label: 'No Content Type', fq: '-content_type_ssim:*' },
+                                        no_has_model: { label: 'No Object Model', fq: '-has_model_ssim:*' },
+                                        no_objectType: { label: 'No Object Type', fq: '-objectType_ssim:*' },
+                                        no_object_title: { label: 'No Object Title', fq: '-dc_title_ssi:*' },
+                                        no_is_governed_by: { label: 'No APO', fq: "-#{SolrDocument::FIELD_APO_ID}:*" },
+                                        no_collection_title: { label: 'No Collection Title', fq: "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
+                                        no_copyright: { label: 'No Copyright', fq: '-copyright_ssim:*' },
+                                        no_license: { label: 'No License', fq: '-use_license_machine_ssi:*' },
+                                        no_sw_author_ssim: { label: 'No SW Author', fq: '-sw_author_ssim:*' },
+                                        # TODO: mods extent (?)
+                                        # TODO: mods form (?)
+                                        no_sw_genre: { label: 'No SW Genre', fq: '-sw_genre_ssim:*' }, # spec said "mods genre"
+                                        no_sw_language_ssim: { label: 'No SW Language', fq: '-sw_language_ssim:*' },
+                                        no_mods_typeOfResource_ssim: { label: 'No MODS typeOfResource', fq: '-mods_typeOfResource_ssim:*' },
+                                        no_sw_pub_date_sort: { label: 'No SW Date', fq: '-sw_pub_date_sort_ssi:*' },
+                                        no_sw_topic_ssim: { label: 'No SW Topic', fq: '-sw_topic_ssim:*' },
+                                        no_sw_subject_temporal: { label: 'No SW Era', fq: '-sw_subject_temporal_ssim:*' },
+                                        no_sw_subject_geographic: { label: 'No SW Region', fq: '-sw_subject_geographic_ssim:*' },
+                                        no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' },
+                                        no_use_statement: { label: 'No Use & Reproduction Statement', fq: '-use_statement_ssim:*' }
+                                      }
 
-    config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', limit: 10, home: false
-    config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',   limit: 10, home: false
-    config.add_facet_field 'sw_pub_date_facet_ssi',      label: 'SW Date',            limit: 10, home: false
-    config.add_facet_field 'topic_ssim',                 label: 'SW Topic',           limit: 10, home: false
-    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region',          limit: 10, home: false
-    config.add_facet_field 'sw_subject_temporal_ssim',   label: 'SW Era',             limit: 10, home: false
-    config.add_facet_field 'sw_genre_ssim',              label: 'SW Genre',           limit: 10, home: false
-    config.add_facet_field 'sw_language_ssim',           label: 'SW Language',        limit: 10, home: false
-    config.add_facet_field 'mods_typeOfResource_ssim',   label: 'MODS Resource Type', limit: 10, home: false
+    config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', component: true, limit: 10, home: false
+    config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',     component: true, limit: 10, home: false
+    config.add_facet_field 'sw_pub_date_facet_ssi',      label: 'SW Date',              component: true, limit: 10, home: false
+    config.add_facet_field 'topic_ssim',                 label: 'SW Topic',             component: true, limit: 10, home: false
+    config.add_facet_field 'sw_subject_geographic_ssim', label: 'SW Region',            component: true, limit: 10, home: false
+    config.add_facet_field 'sw_subject_temporal_ssim',   label: 'SW Era',               component: true, limit: 10, home: false
+    config.add_facet_field 'sw_genre_ssim',              label: 'SW Genre',             component: true, limit: 10, home: false
+    config.add_facet_field 'sw_language_ssim',           label: 'SW Language',          component: true, limit: 10, home: false
+    config.add_facet_field 'mods_typeOfResource_ssim',   label: 'MODS Resource Type',   component: true, limit: 10, home: false
 
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
@@ -233,3 +250,4 @@ class CatalogController < ApplicationController
     { current_user: current_user }
   end
 end
+# rubocop:enable Metrics/ClassLength

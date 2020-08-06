@@ -58,9 +58,9 @@ gem 'ruby-prof'
 gem 'rubyzip'
 gem 'zip_tricks', '~> 5.3'
 
-# Stanford/Hydra related gems
+# Stanford related gems
 gem 'blacklight', '~> 7.0'
-gem 'blacklight-hierarchy', '~> 4.0'
+gem 'blacklight-hierarchy', '~> 4.2'
 gem 'dor-services', '~> 9.4'
 gem 'dor-services-client', '~> 6.3'
 gem 'dor-workflow-client', '~> 3.19'
