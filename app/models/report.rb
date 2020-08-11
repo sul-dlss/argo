@@ -8,6 +8,7 @@ class Report
   include Blacklight::Configurable
   include CsvConcern
   include DateFacetConfigurations
+  include Blacklight::Searchable
 
   class << self
     include ValueHelper
@@ -225,19 +226,20 @@ class Report
 
   delegate :search_results, to: :search_service
 
-  # TODO: In blacklight 7.1.0 use Blacklight::Searchable instead
   def search_results(params)
     search_service(params).search_results
   end
 
+  # TODO: Refactor to use Blacklight::Searchable instead.  Requires a SearchState rather than params
   def search_service(params)
     search_service_class.new(config: blacklight_config,
                              user_params: params,
                              current_user: current_user)
   end
 
+  # We can remove this when https://github.com/projectblacklight/blacklight/pull/2320 is merged into Blacklight
   def search_service_class
-    CatalogController.blacklight_config.search_service_class
+    Blacklight::SearchService
   end
 
   # @param [Array<SolrDocument>] docs
