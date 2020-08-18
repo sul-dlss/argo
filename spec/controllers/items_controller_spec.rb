@@ -213,13 +213,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#set_rights' do
-    it 'sets an item to dark' do
-      expect(item).to receive(:read_rights=).with('dark')
-      get 'set_rights', params: { id: pid, access_form: { rights: 'dark' } }
-    end
-  end
-
   describe '#add_collection' do
     context 'when they have manage access' do
       before do

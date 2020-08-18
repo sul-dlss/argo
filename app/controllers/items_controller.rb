@@ -213,8 +213,11 @@ class ItemsController < ApplicationController
 
   # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
-    @object.read_rights = params[:access_form][:rights]
-    save_and_reindex
+    object_client = Dor::Services::Client.object(@object.pid)
+    dro = object_client.find
+    json = JSON.parse(dro.to_json)
+               .merge(CocinaAccess.from_form_value(params[:access_form][:rights]).deep_stringify_keys)
+    object_client.update(params: json)
 
     respond_to do |format|
       if params[:bulk]
