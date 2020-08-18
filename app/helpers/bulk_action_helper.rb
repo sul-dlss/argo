@@ -20,11 +20,4 @@ module BulkActionHelper
 
     search.query_params.merge('pids_only' => true)
   end
-
-  def show_report_link?(bulk_action, filename)
-    return false unless bulk_action&.status == 'Completed'
-
-    path = File.join(bulk_action.output_directory, filename)
-    File.exist?(path) && !File.zero?(path)
-  end
 end

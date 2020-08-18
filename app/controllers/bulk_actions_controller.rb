@@ -37,7 +37,7 @@ class BulkActionsController < ApplicationController
 
   # GET /bulk_actions/1/file
   def file
-    send_file(@bulk_action.file(params[:filename]), type: params[:mime_type]) if @bulk_action.present?
+    send_file(@bulk_action.file(params[:filename])) if @bulk_action.present?
   end
 
   private
@@ -60,7 +60,8 @@ class BulkActionsController < ApplicationController
       manage_catkeys: [:catkeys],
       prepare: %i[significance description],
       create_virtual_objects: [:csv_file],
-      import_tags: [:csv_file]
+      import_tags: [:csv_file],
+      register_druids: [:csv_file]
     )
   end
 end

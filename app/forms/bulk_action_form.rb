@@ -2,6 +2,9 @@
 
 # This models the values set from the bulk action form
 class BulkActionForm < BaseForm
+  VIRTUAL_PROPERTIES = %i[manage_release set_governing_apo manage_catkeys
+                          prepare register_druids create_virtual_objects import_tags].freeze
+
   def initialize(model, groups:)
     super(model)
     @groups = groups
@@ -13,23 +16,25 @@ class BulkActionForm < BaseForm
   end
 
   def sync
-    model.attributes = params.except(:pids, :groups, :manage_release,
-                                     :set_governing_apo, :manage_catkeys,
-                                     :prepare, :create_virtual_objects,
-                                     :import_tags)
+    model.attributes = params.except(:pids, :groups, *VIRTUAL_PROPERTIES)
     @pids = pids_with_prefix
-    @create_virtual_objects = params[:create_virtual_objects]
-    @import_tags = params[:import_tags]
-    @manage_catkeys = params[:manage_catkeys]
-    @manage_release = params[:manage_release]
-    @prepare = params[:prepare]
-    @set_governing_apo = params[:set_governing_apo]
+
+    VIRTUAL_PROPERTIES.each do |prop|
+      public_send("#{prop}=".to_sym, params[prop])
+    end
   end
 
-  attr_reader :groups, :pids, :create_virtual_objects, :manage_catkeys,
-              :manage_release, :prepare, :set_governing_apo, :import_tags
+  attr_accessor :groups, :pids, *VIRTUAL_PROPERTIES
 
   delegate :action_type, :description, to: :model
+
+  def csv_as_string
+    csv_file = create_virtual_objects&.fetch(:csv_file) || register_druids&.fetch(:csv_file)
+    # Short-circuit if request is not related to creating virtual objects
+    return unless csv_file
+
+    File.read(csv_file.path)
+  end
 
   private
 

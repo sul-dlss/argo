@@ -12,7 +12,7 @@ class ImportTagsJob < GenericJob
     with_bulk_action_log do |log_buffer|
       log_buffer.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
 
-      druids_with_tags = ImportTagsCsvConverter.convert(csv_string: params[:import_tags])
+      druids_with_tags = ImportTagsCsvConverter.convert(csv_string: params[:csv_file])
 
       # NOTE: We use this instead of `update_druid_count` because import
       #       tags does not use the `pids` form field.

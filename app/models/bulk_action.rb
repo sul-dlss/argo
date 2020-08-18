@@ -18,13 +18,25 @@ class BulkAction < ApplicationRecord
                      ChecksumReportJob
                      CreateVirtualObjectsJob
                      ExportTagsJob
-                     ImportTagsJob]
+                     ImportTagsJob
+                     RegisterDruidsJob]
             }
 
   before_destroy :remove_output_directory
 
   def file(filename)
     File.join(output_directory, filename)
+  end
+
+  def completed?
+    status == 'Completed'
+  end
+
+  def has_report?(filename)
+    return false unless completed?
+
+    path = file(filename)
+    File.exist?(path) && !File.zero?(path)
   end
 
   def reset_druid_counts

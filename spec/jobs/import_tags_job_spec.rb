@@ -29,7 +29,7 @@ RSpec.describe ImportTagsJob, type: :job do
 
     context 'when happy path' do
       before do
-        job.perform(bulk_action.id, import_tags: csv_string)
+        job.perform(bulk_action.id, csv_file: csv_string)
       end
 
       it 'collaborates with the tags client for each pid' do
@@ -59,7 +59,7 @@ RSpec.describe ImportTagsJob, type: :job do
       before do
         allow(tags_client1).to receive(:list).and_raise(StandardError, 'ruh roh')
         allow(tags_client2).to receive(:replace).with(tags: tags2).and_raise(StandardError, 'ruh roh')
-        job.perform(bulk_action.id, import_tags: csv_string)
+        job.perform(bulk_action.id, csv_file: csv_string)
       end
 
       it 'collaborates with the tags client for each pid' do

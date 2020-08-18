@@ -42,6 +42,7 @@ gem 'cancancan'
 # Pretty format for XML
 gem 'coderay'
 gem 'config'
+gem 'dry-monads'
 gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'faraday'
 gem 'honeybadger', '~> 4.1'

@@ -1,6 +1,8 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
+  static targets = [ "commonFields" ]
+
   // Shows the correct data tab based on the selected value of the dropdown
   showTab(event) {
     const selected = event.target.selectedOptions[0].value
@@ -16,10 +18,9 @@ export default class extends Controller {
 
   // Toggles visibility of common fields based on selected tab
   toggleCommonFieldVisibility(selectedTab) {
-    const tabsWithUncommonFields = ['CreateVirtualObjectsJob', 'ImportTagsJob']
-    const commonFields = this.element.querySelector('#common_fields')
+    const tabsWithUncommonFields = ['CreateVirtualObjectsJob', 'ImportTagsJob', 'RegisterDruidsJob']
 
     // Hide common fields for tab IDs present in tabsWithUncommonFields
-    commonFields.hidden = tabsWithUncommonFields.includes(selectedTab)
+    this.commonFieldsTarget.hidden = tabsWithUncommonFields.includes(selectedTab)
   }
 }

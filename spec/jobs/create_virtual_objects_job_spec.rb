@@ -14,8 +14,9 @@ RSpec.describe CreateVirtualObjectsJob, type: :job do
     allow(BulkAction).to receive(:find).and_return(bulk_action)
     allow(ProblematicDruidFinder).to receive(:find).and_return(problematic_druids)
     allow(VirtualObjectsCreator).to receive(:create).and_return(errors)
-    allow(job).to receive(:with_bulk_action_log).and_yield(fake_log)
-    job.perform(bulk_action.id, create_virtual_objects: csv_string)
+    allow(BulkJobLog).to receive(:open).and_yield(fake_log)
+
+    job.perform(bulk_action.id, csv_file: csv_string)
   end
 
   describe '#perform' do

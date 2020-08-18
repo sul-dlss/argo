@@ -96,7 +96,7 @@ RSpec.describe BulkActionPersister do
         BulkAction.create(action_type: 'CreateVirtualObjectsJob')
       end
       let(:params) do
-        { pids: %w[a b c], create_virtual_objects: { csv_file: fake_io } }
+        { pids: '', create_virtual_objects: { csv_file: fake_io } }
       end
       let(:fake_io) { double('IO', path: '/path/unused/in/spec') }
 
@@ -104,7 +104,23 @@ RSpec.describe BulkActionPersister do
         allow(File).to receive(:read).and_return("parent1,child1,child2\nparent2,child3,child4,child5")
       end
 
-      it { is_expected.to include(create_virtual_objects: "parent1,child1,child2\nparent2,child3,child4,child5") }
+      it { is_expected.to include(csv_file: "parent1,child1,child2\nparent2,child3,child4,child5") }
+    end
+
+    context 'for a register druids job' do
+      let(:bulk_action) do
+        BulkAction.create(action_type: 'RegisterDruidsJob')
+      end
+      let(:params) do
+        { pids: '', register_druids: { csv_file: fake_io } }
+      end
+      let(:fake_io) { double('IO', path: '/path/unused/in/spec') }
+
+      before do
+        allow(File).to receive(:read).and_return("Source ID,Label\nsul:0001,Test object1\nsul:0002,Test object1")
+      end
+
+      it { is_expected.to include(csv_file: "Source ID,Label\nsul:0001,Test object1\nsul:0002,Test object1") }
     end
   end
 end

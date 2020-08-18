@@ -624,6 +624,7 @@ DEPENDENCIES
   dor-services (~> 9.4)
   dor-services-client (~> 6.3)
   dor-workflow-client (~> 3.19)
+  dry-monads
   equivalent-xml (>= 0.6.0)
   erb_lint (~> 0.0.31)
   factory_bot_rails

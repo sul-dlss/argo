@@ -21,6 +21,9 @@ checksum_report_job:
 export_tags_job:
   csv_filename: 'tags.csv'
 
+register_druids_job:
+  csv_filename: 'registration_report.csv'
+
 hidden_datastreams:
   - 'workflows'
 

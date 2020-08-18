@@ -47,7 +47,7 @@ class GenericJob < ActiveJob::Base
   #   log_buf.puts 'another thing about the state of this bulk action'
   # end
   def with_bulk_action_log(&block)
-    File.open(bulk_action.log_name, 'a', &block)
+    BulkJobLog.open(bulk_action.log_name, &block)
   end
 
   def ability
@@ -68,8 +68,8 @@ class GenericJob < ActiveJob::Base
     end
   end
 
-  def update_druid_count
-    bulk_action.update(druid_count_total: pids.length)
+  def update_druid_count(count: pids.length)
+    bulk_action.update(druid_count_total: count)
   end
 
   def open_new_version(object, description)
