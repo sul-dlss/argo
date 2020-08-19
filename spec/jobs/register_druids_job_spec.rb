@@ -9,8 +9,18 @@ RSpec.describe RegisterDruidsJob, type: :job do
 
   let(:bulk_action) { create(:bulk_action) }
   let(:response) { Success(model) }
-  let(:model) { instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:123') }
   let(:fake_log) { double('logger', puts: nil) }
+  let(:identification) do
+    instance_double(Cocina::Models::Identification, sourceId: 'foo:bar1')
+  end
+
+  let(:model) do
+    instance_double(Cocina::Models::DRO,
+                    externalIdentifier: 'druid:123',
+                    label: 'My object',
+                    identification: identification)
+  end
+
   let(:csv_string) do
     <<~CSV
       APO,Rights,Initial Workflow,Content Type,Source ID,Label,Tags,Tags
