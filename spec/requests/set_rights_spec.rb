@@ -28,7 +28,7 @@ RSpec.describe 'Set rights for an object' do
     before do
       allow(Dor).to receive(:find).and_return(fedora_obj)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-
+      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
     end
 
@@ -37,6 +37,7 @@ RSpec.describe 'Set rights for an object' do
       expect(response).to redirect_to(solr_document_path(pid))
       expect(object_client).to have_received(:update)
         .with(params: updated_model)
+      expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
     end
   end
 end
