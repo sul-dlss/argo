@@ -215,9 +215,9 @@ class ItemsController < ApplicationController
   def set_rights
     object_client = Dor::Services::Client.object(@object.pid)
     dro = object_client.find
-    json = JSON.parse(dro.to_json)
-               .merge(CocinaAccess.from_form_value(params[:access_form][:rights]).deep_stringify_keys)
-    object_client.update(params: json)
+    updated = dro.new(CocinaAccess.from_form_value(params[:access_form][:rights]))
+    object_client.update(params: updated)
+    Argo::Indexer.reindex_pid_remotely(@object.pid)
 
     respond_to do |format|
       if params[:bulk]
