@@ -129,5 +129,31 @@ RSpec.describe 'Set rights for an object' do
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
       end
     end
+
+    context 'when setting to cdl' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'access' => 'citation-only',
+              'download' => 'none',
+              'controlledDigitalLending' => true,
+              'embargo' => {
+                'releaseDate' => '2021-02-11T00:00:00.000+00:00',
+                'access' => 'world'
+              }
+            }
+          }
+        )
+      end
+
+      it 'sets the access' do
+        post "/items/#{pid}/set_rights", params: { access_form: { rights: 'cdl-stanford-nd' } }
+        expect(response).to redirect_to(solr_document_path(pid))
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+      end
+    end
   end
 end
