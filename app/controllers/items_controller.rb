@@ -109,7 +109,7 @@ class ItemsController < ApplicationController
     object_client = Dor::Services::Client.object(@object.pid)
     object_client.embargo.update(embargo_date: params[:embargo_date], requesting_user: current_user.to_s)
 
-    save_and_reindex
+    reindex
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
     end
