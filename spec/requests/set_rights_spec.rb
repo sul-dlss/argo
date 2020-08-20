@@ -14,7 +14,13 @@ RSpec.describe 'Set rights for an object' do
         'version' => 1,
         'type' => Cocina::Models::Vocab.object,
         'externalIdentifier' => pid,
-        'access' => { 'access' => 'world' },
+        'access' => {
+          'access' => 'world',
+          "embargo": {
+            "releaseDate": '2021-02-11T00:00:00.000+00:00',
+            "access": 'world'
+          }
+        },
         'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
         'structural' => {},
         'identification' => {}
@@ -22,7 +28,13 @@ RSpec.describe 'Set rights for an object' do
     end
 
     let(:updated_model) do
-      cocina_model.new('access' => { 'access' => 'dark', 'download' => 'none' })
+      cocina_model.new('access' => {
+                         'access' => 'dark', 'download' => 'none',
+                         "embargo": {
+                           "releaseDate": '2021-02-11T00:00:00.000+00:00',
+                           "access": 'world'
+                         }
+                       })
     end
 
     before do

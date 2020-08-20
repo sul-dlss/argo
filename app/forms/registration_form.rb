@@ -27,7 +27,8 @@ class RegistrationForm
       }
     }
 
-    model_params.merge!(CocinaAccess.from_form_value(params[:rights]))
+    access = CocinaAccess.from_form_value(params[:rights])
+    model_params.merge!(access: access.value!) unless access.none?
 
     structural = {}
     structural[:isMemberOf] = params[:collection] if params[:collection].present?

@@ -215,7 +215,9 @@ class ItemsController < ApplicationController
   def set_rights
     object_client = Dor::Services::Client.object(@object.pid)
     dro = object_client.find
-    updated = dro.new(CocinaAccess.from_form_value(params[:access_form][:rights]))
+    access_additions = CocinaAccess.from_form_value(params[:access_form][:rights])
+    updated_access = dro.access.new(access_additions.value!)
+    updated = dro.new(access: updated_access)
     object_client.update(params: updated)
     Argo::Indexer.reindex_pid_remotely(@object.pid)
 
