@@ -622,7 +622,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 9.6)
-  dor-services-client (~> 6.3)
+  dor-services-client (~> 6.8)
   dor-workflow-client (~> 3.19)
   dry-monads
   equivalent-xml (>= 0.6.0)
