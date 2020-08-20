@@ -1,8 +1,8 @@
 <% unless @techmd.blank? %>
-  <h3 id="document-techmd-head" class="section-head collapsible-section">
+  <h3 id="document-techmd-head" class="section-head collapsible-section collapsed">
     Technical metadata
   </h3>
-  <div id="document-techmd-section" class="document-section techmd-section">
+  <div id="document-techmd-section" class="document-section techmd-section" style="display:none">
     <ul class="file-list">
       <% @techmd.each do | file_techmd | %>
         <li class="file">
