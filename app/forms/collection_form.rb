@@ -59,7 +59,8 @@ class CollectionForm < BaseForm
     reg_params[:description] = build_description if params[:collection_title].present? && params[:collection_abstract].present?
 
     raw_rights = params[:collection_catkey].present? ? params[:collection_rights_catkey] : params[:collection_rights]
-    reg_params.merge! CocinaAccess.from_form_value(raw_rights)
+    access = CocinaAccess.from_form_value(raw_rights)
+    reg_params.merge!(access: access.value!) unless access.none?
 
     if params[:collection_catkey].present?
       reg_params[:identification] = {
