@@ -9,7 +9,13 @@ class CocinaAccess
     # Default only appears on the registration form, not the update form.
     return None() if rights == 'default'
 
-    data = if rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
+    data = if rights == 'cdl-stanford-nd'
+             {
+               access: 'citation-only',
+               download: 'none',
+               controlledDigitalLending: true
+             }
+           elsif rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
              {
                access: rights.delete_suffix('-nd'),
                download: 'none'
