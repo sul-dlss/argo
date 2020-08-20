@@ -124,7 +124,7 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'calls Dor::Services::Client::Embargo#update' do
-        expect(controller).to receive(:save_and_reindex)
+        expect(controller).to receive(:reindex)
         post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
         expect(response).to have_http_status(:found) # redirect to catalog page
         expect(embargo_service).to have_received(:update)
