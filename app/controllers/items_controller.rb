@@ -217,7 +217,7 @@ class ItemsController < ApplicationController
     dro = object_client.find
     updated = dro.new(CocinaAccess.from_form_value(params[:access_form][:rights]))
     object_client.update(params: updated)
-    Argo::Indexer.reindex_pid_remotely(@object.pid)
+    reindex
 
     respond_to do |format|
       if params[:bulk]
