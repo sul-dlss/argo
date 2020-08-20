@@ -16,9 +16,6 @@ class ItemsController < ApplicationController
     embargo_form
   ]
 
-  before_action :authorize_set_governing_apo!, only: [
-    :set_governing_apo
-  ]
   before_action :enforce_versioning, only: %i[
     add_collection set_collection remove_collection
     source_id set_source_id
@@ -240,14 +237,15 @@ class ItemsController < ApplicationController
   end
 
   def set_governing_apo
-    if params[:bulk]
-      render status: :gone, plain: 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
-      return
-    end
+    authorize! :manage_governing_apo, @object, params[:new_apo_id]
 
-    @object.admin_policy_object = Dor.find(params[:new_apo_id])
-    @object.identityMetadata.adminPolicy = nil if @object.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
-    save_and_reindex
+    object_client = Dor::Services::Client.object(@object.pid)
+    dro = object_client.find
+    updated_administrative = dro.administrative.new(hasAdminPolicy: params[:new_apo_id])
+    updated = dro.new(administrative: updated_administrative)
+    object_client.update(params: updated)
+    reindex
+
     redirect_to solr_document_path(params[:id]), notice: 'Governing APO updated!'
   end
 
@@ -337,10 +335,6 @@ class ItemsController < ApplicationController
 
     render status: :bad_request, plain: 'Object cannot be modified in its current state.'
     false
-  end
-
-  def authorize_set_governing_apo!
-    authorize! :manage_governing_apo, @object, params[:new_apo_id]
   end
 
   # ---
