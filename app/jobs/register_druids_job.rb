@@ -19,7 +19,9 @@ class RegisterDruidsJob < GenericJob
       log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
 
       update_druid_count(count: results.length)
-      File.open(report_filename, 'w') do |report|
+      CSV.open(report_filename, 'wb') do |report|
+        report << ['Druid', 'Source Id', 'Label']
+
         results.each do |parse_result|
           parse_result.either(->(value) { register(value, bulk_action: bulk_action, log: log, report: report) },
                               ->(error) { log_error(error, bulk_action: bulk_action, log: log) })
@@ -37,13 +39,13 @@ class RegisterDruidsJob < GenericJob
   def register(value, bulk_action:, log:, report:)
     log.puts("#{Time.current} #{self.class}: Registering with #{value.inspect}")
     registration_result = RegistrationService.register(**value)
-    registration_result.either(->(cocina_model) { log_success(cocina_model.externalIdentifier, bulk_action: bulk_action, log: log, report: report) },
+    registration_result.either(->(cocina_model) { log_success(cocina_model, bulk_action: bulk_action, log: log, report: report) },
                                ->(error) { log_error(error, bulk_action: bulk_action, log: log) })
   end
 
-  def log_success(pid, bulk_action:, log:, report:)
-    log.puts("#{Time.current} #{self.class}: Successfully registered #{pid}")
-    report.puts pid
+  def log_success(model, bulk_action:, log:, report:)
+    log.puts("#{Time.current} #{self.class}: Successfully registered #{model.externalIdentifier}")
+    report << [model.externalIdentifier, model.identification.sourceId, model.label]
     bulk_action.increment(:druid_count_success).save
   end
 
