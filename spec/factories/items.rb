@@ -3,17 +3,17 @@
 FactoryBot.define do
   factory :item, class: Cocina::Models::RequestDRO do
     initialize_with do
-      Cocina::Models.build_request(
-        'type' => type,
-        'label' => 'test object',
-        'version' => 1,
-        'identification' => {
-          'sourceId' => "sul:#{SecureRandom.uuid}"
-        },
-        'administrative' => {
-          'hasAdminPolicy' => apo.pid
-        }
-      )
+      Cocina::Models.build_request({
+                                     'type' => type,
+                                     'label' => 'test object',
+                                     'version' => 1,
+                                     'identification' => {
+                                       'sourceId' => "sul:#{SecureRandom.uuid}"
+                                     },
+                                     'administrative' => {
+                                       'hasAdminPolicy' => apo.pid
+                                     }
+                                   })
     end
 
     to_create do |cocina_model|
