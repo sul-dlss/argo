@@ -54,6 +54,7 @@ RSpec.describe AccessForm do
        ['World (no-download)', 'world-nd'],
        %w[Stanford stanford],
        ['Stanford (no-download)', 'stanford-nd'],
+       ['Controlled Digital Lending (no-download)', 'cdl-stanford-nd'],
        ['Location: Special Collections', 'loc:spec'],
        ['Location: Music Library', 'loc:music'],
        ['Location: Archive of Recorded Sound', 'loc:ars'],

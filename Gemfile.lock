@@ -121,7 +121,7 @@ GEM
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
     childprocess (3.0.0)
-    cocina-models (0.34.1)
+    cocina-models (0.36.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -163,7 +163,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     dor-rights-auth (1.4.0)
       nokogiri
-    dor-services (9.5.0)
+    dor-services (9.6.0)
       active-fedora (>= 8.7.0, < 9)
       activesupport (~> 5.1)
       deprecation (~> 0)
@@ -178,9 +178,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.7.0)
+    dor-services-client (6.8.0)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.34.1)
+      cocina-models (~> 0.36.0)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -214,7 +214,7 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer
-    dry-schema (1.5.2)
+    dry-schema (1.5.3)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.8, >= 0.8.3)
       dry-core (~> 0.4)
@@ -234,7 +234,7 @@ GEM
       dry-equalizer (~> 0.3)
       dry-inflector (~> 0.1, >= 0.1.2)
       dry-logic (~> 1.0, >= 1.0.2)
-    dry-validation (1.5.3)
+    dry-validation (1.5.4)
       concurrent-ruby (~> 1.0)
       dry-container (~> 0.7, >= 0.7.1)
       dry-core (~> 0.4)
@@ -513,9 +513,9 @@ GEM
       rest-client
     rubyzip (2.3.0)
     safe_yaml (1.0.5)
-    sdr-client (0.29.0)
+    sdr-client (0.30.0)
       activesupport
-      cocina-models (~> 0.34.1)
+      cocina-models (~> 0.36.0)
       dry-monads
       faraday (>= 0.16)
     selenium-webdriver (3.142.7)
@@ -559,7 +559,7 @@ GEM
       mods (~> 2.2)
     stanford-mods-normalizer (0.1.0)
       nokogiri (~> 1.8)
-    stomp (1.4.9)
+    stomp (1.4.10)
     temple (0.8.2)
     thor (1.0.1)
     thread_safe (0.3.6)
