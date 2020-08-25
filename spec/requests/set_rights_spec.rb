@@ -22,19 +22,33 @@ RSpec.describe 'Set rights for an object' do
           }
         },
         'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-        'structural' => {},
+        'structural' => {
+          'contains' => [
+            {
+              'externalIdentifier' => 'cc243mg0841_1',
+              'label' => 'Fileset 1',
+              'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+              'version' => 1,
+              'structural' => {
+                'contains' => [
+                  { 'externalIdentifier' => 'cc243mg0841_1',
+                    'label' => 'Page 1',
+                    'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                    'version' => 1,
+                    'access' => { access: 'world' },
+                    'administrative' => {
+                      'shelve' => true,
+                      'sdrPreserve' => true
+                    },
+                    'hasMessageDigests' => [],
+                    'filename' => 'page1.txt' }
+                ]
+              }
+            }
+          ]
+        },
         'identification' => {}
       )
-    end
-
-    let(:updated_model) do
-      cocina_model.new('access' => {
-                         'access' => 'dark', 'download' => 'none',
-                         "embargo": {
-                           "releaseDate": '2021-02-11T00:00:00.000+00:00',
-                           "access": 'world'
-                         }
-                       })
     end
 
     before do
@@ -44,12 +58,76 @@ RSpec.describe 'Set rights for an object' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    it 'sets the access' do
-      post "/items/#{pid}/set_rights", params: { access_form: { rights: 'dark' } }
-      expect(response).to redirect_to(solr_document_path(pid))
-      expect(object_client).to have_received(:update)
-        .with(params: updated_model)
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+    context 'when setting an object to dark' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'access' => 'dark', 'download' => 'none',
+              "embargo": {
+                "releaseDate": '2021-02-11T00:00:00.000+00:00',
+                "access": 'world'
+              }
+            },
+            'structural' => {
+              'contains' => [
+                {
+                  'externalIdentifier' => 'cc243mg0841_1',
+                  'label' => 'Fileset 1',
+                  'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+                  'version' => 1,
+                  'structural' => {
+                    'contains' => [
+                      {
+                        'externalIdentifier' => 'cc243mg0841_1',
+                        'label' => 'Page 1',
+                        'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                        'version' => 1,
+                        'access' => { access: 'dark' },
+                        'administrative' => { 'shelve' => false },
+                        'filename' => 'page1.txt'
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        )
+      end
+
+      it 'sets the access and propagates changes to content metadata' do
+        post "/items/#{pid}/set_rights", params: { access_form: { rights: 'dark' } }
+        expect(response).to redirect_to(solr_document_path(pid))
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+      end
+    end
+
+    context 'when setting an object to stanford-only' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'access' => 'stanford',
+              'download' => 'stanford',
+              'embargo' => {
+                'releaseDate' => '2021-02-11T00:00:00.000+00:00',
+                'access' => 'world'
+              }
+            }
+          }
+        )
+      end
+
+      it 'sets the access and does not change content metadata' do
+        post "/items/#{pid}/set_rights", params: { access_form: { rights: 'stanford' } }
+        expect(response).to redirect_to(solr_document_path(pid))
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+      end
     end
   end
 end
