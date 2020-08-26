@@ -214,7 +214,9 @@ class ItemsController < ApplicationController
     dro = object_client.find
     access_additions = CocinaAccess.from_form_value(params[:access_form][:rights])
     updated_access = dro.access.new(access_additions.value!)
-    updated = dro.new(access: updated_access)
+    structural_additions = CocinaStructural.from_form_value(params[:access_form][:rights], dro.structural)
+    updated_structural = dro.structural.new(structural_additions)
+    updated = dro.new(access: updated_access, structural: updated_structural)
     object_client.update(params: updated)
     reindex
 
