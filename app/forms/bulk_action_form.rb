@@ -29,7 +29,10 @@ class BulkActionForm < BaseForm
   delegate :action_type, :description, to: :model
 
   def csv_as_string
-    csv_file = create_virtual_objects&.fetch(:csv_file) || register_druids&.fetch(:csv_file)
+    csv_file = create_virtual_objects&.fetch(:csv_file) ||
+               register_druids&.fetch(:csv_file) ||
+               import_tags&.fetch(:csv_file)
+
     # Short-circuit if request is not related to creating virtual objects
     return unless csv_file
 
