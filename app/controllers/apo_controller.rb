@@ -6,20 +6,6 @@ class ApoController < ApplicationController
     create
     spreadsheet_template
   ]
-  after_action :save_and_index, only: %i[
-    add_roleplayer
-    add_collection delete_collection
-    update_copyright update_creative_commons
-    update_default_object_rights update_desc_metadata
-    update_title update_use
-  ]
-
-  before_action :authorize, except: %i[
-    edit
-    new
-    create
-    spreadsheet_template
-  ]
 
   def edit
     authorize! :create, Dor::AdminPolicyObject
@@ -55,6 +41,7 @@ class ApoController < ApplicationController
   end
 
   def update
+    authorize! :manage_item, @object
     @form = ApoForm.new(@object)
     unless @form.validate(params)
       respond_to do |format|
@@ -68,50 +55,12 @@ class ApoController < ApplicationController
     redirect_to solr_document_path(@form.model.pid)
   end
 
-  def add_roleplayer
-    @object.add_roleplayer(params[:role], params[:roleplayer])
-    redirect
-  end
-
   def delete_collection
+    authorize! :manage_item, @object
     @object.remove_default_collection(params[:collection])
-    redirect
-  end
+    @object.save # indexing happens automatically
 
-  def add_collection
-    @object.add_default_collection(params[:collection])
-    redirect
-  end
-
-  def update_title
-    @object.mods_title = params[:title]
-    redirect
-  end
-
-  def update_creative_commons
-    @object.creative_commons_license = params[:cc_license]
-    @object.creative_commons_license_human = Dor::CreativeCommonsLicenseService.property(params[:cc_license]).label
-    redirect
-  end
-
-  def update_use
-    @object.use_statement = params[:use]
-    redirect
-  end
-
-  def update_copyright
-    @object.copyright_statement = params[:copyright]
-    redirect
-  end
-
-  def update_default_object_rights
-    @object.default_rights = params[:rights]
-    redirect
-  end
-
-  def update_desc_metadata
-    @object.desc_metadata_format = params[:desc_metadata_format]
-    redirect
+    redirect_to solr_document_path(params[:id]), notice: 'APO updated.'
   end
 
   def spreadsheet_template
@@ -129,19 +78,5 @@ class ApoController < ApplicationController
     raise 'missing druid' unless params[:id]
 
     @object = Dor.find params[:id]
-  end
-
-  def save_and_index
-    @object.save # indexing happens automatically
-  end
-
-  def redirect
-    respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), notice: 'APO updated.' }
-    end
-  end
-
-  def authorize
-    authorize! :manage_item, @object
   end
 end
