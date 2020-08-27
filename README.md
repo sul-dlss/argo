@@ -181,7 +181,7 @@ Dor.find("druid:pv820dk6668").destroy
 Argo uses Blacklight and ActiveFedora to expose the repository contents, and `dor-services` to enable editing and updating. Its key components include:
 
 - Rails 5.2
-- Blacklight 6
+- Blacklight 7
 - dor-services
   - ActiveFedora
   - dor-workflow-service
