@@ -43,7 +43,6 @@ services:
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
       SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
       SETTINGS__WORKFLOW_URL: http://workflow:3000
-      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
     depends_on:
       - solr
       - fcrepo
