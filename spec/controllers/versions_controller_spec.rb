@@ -40,7 +40,6 @@ RSpec.describe VersionsController, type: :controller do
       let(:options) { { significance: 'major', description: 'something', opening_user_name: user.to_s } }
 
       it 'calls dor-services to open a new version' do
-        expect(item).to receive(:save)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
         get :open, params: {
@@ -74,12 +73,11 @@ RSpec.describe VersionsController, type: :controller do
       let(:version_service) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
 
       it 'calls dor-services to close the version' do
-        expect(item).to receive(:save)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
         get :close, params: { item_id: pid, significance: 'major', description: 'something' }
         expect(flash[:notice]).to eq "Version 2 of #{pid} has been closed!"
-        expect(version_service).to have_received(:close).with(description: 'something', significance: 'major')
+        expect(version_service).to have_received(:close).with(description: 'something', significance: 'major', user_name: user.to_s)
       end
     end
 

@@ -2,7 +2,6 @@
 
 class VersionsController < ApplicationController
   before_action :create_obj
-  after_action :save_and_reindex, only: %i[open close]
 
   def open_ui
     respond_to do |format|
@@ -36,6 +35,7 @@ class VersionsController < ApplicationController
                         opening_user_name: current_user.to_s)
     msg = "#{@object.pid} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
+    reindex
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
 
@@ -52,13 +52,12 @@ class VersionsController < ApplicationController
       VersionService.close(
         identifier: @object.pid,
         description: params[:description],
-        significance: params[:significance]
+        significance: params[:significance],
+        user_name: current_user.to_s
       )
-      msg = "Version #{@object.current_version} closed"
-      @object.events.add_event('close', current_user.to_s, msg)
       msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
       redirect_to solr_document_path(params[:item_id]), notice: msg
-      save_and_reindex
+      reindex
     rescue Dor::Exception # => e
       render status: :internal_server_error, plain: 'No version to close.'
     end
@@ -100,8 +99,7 @@ class VersionsController < ApplicationController
     @object = Dor.find params[:item_id]
   end
 
-  def save_and_reindex
-    @object.save
+  def reindex
     Argo::Indexer.reindex_pid_remotely(@object.pid)
   end
 end
