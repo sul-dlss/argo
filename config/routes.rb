@@ -64,15 +64,7 @@ Rails.application.routes.draw do
       get :spreadsheet_template
     end
     member do
-      post 'add_collection'
       get  'delete_collection'
-      post 'update_title'
-      post 'update_creative_commons'
-      post 'update_use'
-      post 'update_copyright'
-      post 'update_default_object_rights'
-      post 'add_roleplayer'
-      post 'update_desc_metadata'
     end
   end
 
