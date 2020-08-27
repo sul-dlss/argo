@@ -3,16 +3,16 @@
 FactoryBot.define do
   factory :collection, class: Cocina::Models::RequestDRO do
     initialize_with do
-      Cocina::Models.build_request(
-        'type' => type,
-        'label' => 'test object',
-        'version' => 1,
-        'access' => {
-        },
-        'administrative' => {
-          'hasAdminPolicy' => apo.pid
-        }
-      )
+      Cocina::Models.build_request({
+                                     'type' => type,
+                                     'label' => 'test object',
+                                     'version' => 1,
+                                     'access' => {
+                                     },
+                                     'administrative' => {
+                                       'hasAdminPolicy' => apo.pid
+                                     }
+                                   })
     end
 
     to_create do |cocina_model|
