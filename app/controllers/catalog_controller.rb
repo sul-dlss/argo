@@ -11,7 +11,6 @@ class CatalogController < ApplicationController
   configure_blacklight do |config|
     ## Class for converting Blacklight's url parameters to into request parameters for the search index
     config.search_builder_class = ::SearchBuilder
-    config.search_service_class = ::SearchService
 
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config

@@ -137,8 +137,8 @@ RSpec.describe Report, type: :model do
 
     it 'returns druids and source ids' do
       doc = SolrDocument.new(id: 'druid:qq613vj0238', source_id_ssim: 'sul:36105011952764')
-      service = instance_double(SearchService)
-      allow(SearchService).to receive(:new).and_return(service)
+      service = instance_double(Blacklight::SearchService)
+      allow(Blacklight::SearchService).to receive(:new).and_return(service)
       allow(service).to receive(:search_results).and_return(
         [{ 'response' => { 'numFound' => '1' } }, [doc]],
         [{ 'response' => { 'numFound' => '1' } }, [doc]],
