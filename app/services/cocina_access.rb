@@ -18,18 +18,21 @@ class CocinaAccess
            elsif rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
              {
                access: rights.delete_suffix('-nd'),
-               download: 'none'
+               download: 'none',
+               controlledDigitalLending: false
              }
            elsif rights.start_with?('loc:')
              {
                access: 'location-based',
                readLocation: rights.delete_prefix('loc:'),
-               download: 'location-based'
+               download: 'location-based',
+               controlledDigitalLending: false
              }
            else
              {
                access: rights,
-               download: rights
+               download: rights,
+               controlledDigitalLending: false
              }
            end
     Some(data)
