@@ -142,14 +142,9 @@ Rails.application.routes.draw do
       get 'set_governing_apo_ui'
       post 'set_governing_apo'
       post :apply_apo_defaults
+      post 'source_id'
+      post 'catkey'
     end
-  end
-
-  namespace :items do
-    post 'source_id'
-    post 'catkey'
-    post 'add_collection'
-    post 'set_collection'
   end
 
   resource :registration, only: :show do

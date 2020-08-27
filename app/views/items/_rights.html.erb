@@ -1,4 +1,4 @@
-<%= form_with model: @form, url: url_for(controller: :items, action: :set_rights, id: @object.pid) do |f| %>
+<%= form_with model: @form, url: set_rights_item_path(@object) do |f| %>
   <div class='form-group'>
     <%= f.select :rights, f.object.rights_list, {}, class: 'form-control' %>
   </div>

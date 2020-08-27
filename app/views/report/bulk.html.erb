@@ -8,18 +8,18 @@ report_model = {
 cons=[];
 function catalog_url(element)
 {
-  url='<%= link_to 'druid:xxxxxxxxx', url_for(controller: :catalog, action: :show, id: 'druid:xxxxxxxxx', bulk: 'true'), target: '_blank', rel: 'noopener' %>'
+  url='<%= link_to 'druid:xxxxxxxxx', solr_document_path(id: 'druid:xxxxxxxxx', bulk: 'true'), target: '_blank', rel: 'noopener' %>'
   url=url.replace(/xxxxxxxxx/g,element);
   return url;
 }
 set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk: 'true') %>'
-set_rights_url='<%= url_for controller: :items, action: :set_rights, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
-set_collection_url='<%= url_for controller: :items, action: :set_collection, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
-apo_apply_defaults_url='<%= url_for controller: :items, action: :apply_apo_defaults, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
-add_workflow_url = '<%= item_workflows_path 'druid:xxxxxxxxx', bulk: 'true' %>'
+set_rights_url='<%= set_rights_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
+set_collection_url='<%= set_collection_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
+apo_apply_defaults_url='<%= apply_apo_defaults_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
+add_workflow_url = '<%= item_workflows_path('druid:xxxxxxxxx', bulk: 'true') %>'
 refresh_metadata_url='<%= refresh_metadata_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
-source_id_url='<%= url_for controller: :items, action: :source_id, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
-tags_url='<%= url_for controller: :items, action: :tags_bulk, id: 'druid:xxxxxxxxx', bulk: 'true' %>'
+source_id_url='<%=  source_id_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
+tags_url='<%= tags_bulk_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 </script>
 
 <style>
