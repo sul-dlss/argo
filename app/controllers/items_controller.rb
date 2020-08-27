@@ -51,7 +51,7 @@ class ItemsController < ApplicationController
     dro = object_client.find
     collection_id = params[:collection].presence
     updated_structural = if collection_id
-                           dro.structural.new(isMemberOf: collection_id)
+                           dro.structural.new(isMemberOf: [collection_id])
                          else
                            dro.structural.to_h.without(:isMemberOf)
                          end
