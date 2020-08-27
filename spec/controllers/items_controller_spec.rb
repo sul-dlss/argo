@@ -242,42 +242,116 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#set_collection' do
-    before do
-      @collection_druid = 'druid:1234'
-    end
+    let(:collection_druid) { 'druid:tv123cg4444' }
 
     context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
-      it 'adds a collection if there is none yet' do
-        allow(item).to receive(:collections).and_return([])
-        expect(item).to receive(:add_collection).with(@collection_druid)
-        post 'set_collection', params: { id: pid, collection: @collection_druid, bulk: true }
-        expect(response.code).to eq('200')
-      end
+      let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
 
-      context 'when a new collection is not selected' do
-        it 'removes the collection only without adding a new one' do
-          removed_collection_pid1 = 'druid:oo00ooo0001'
-          allow(item).to receive(:collections).and_return([Dor::Collection.new(pid: removed_collection_pid1)])
-          expect(item).to receive(:remove_collection).with(removed_collection_pid1)
-          expect(item).not_to receive(:add_collection)
-          post 'set_collection', params: { id: pid, collection: '', bulk: true }
+      context 'when there are no collections' do
+        let(:cocina_model) do
+          Cocina::Models.build({
+                                 'label' => 'My ETD',
+                                 'version' => 1,
+                                 'type' => Cocina::Models::Vocab.object,
+                                 'externalIdentifier' => pid,
+                                 'access' => {
+                                   'access' => 'world'
+                                 },
+                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                                 'structural' => {},
+                                 'identification' => {}
+                               })
+        end
+
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              'structural' => {
+                'isMemberOf' => collection_druid
+              }
+            }
+          )
+        end
+
+        it 'sets the collection' do
+          post 'set_collection', params: { id: pid, collection: collection_druid, bulk: true }
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
           expect(response.code).to eq('200')
         end
       end
 
-      it 'removes existing collections first if there are already one or more, then adds new collection' do
-        removed_collection_pid1 = 'druid:oo00ooo0001'
-        removed_collection_pid2 = 'druid:oo00ooo0002'
-        allow(item).to receive(:collections).and_return([Dor::Collection.new(pid: removed_collection_pid1), Dor::Collection.new(pid: removed_collection_pid2)])
-        expect(item).to receive(:remove_collection).with(removed_collection_pid1)
-        expect(item).to receive(:remove_collection).with(removed_collection_pid2)
-        expect(item).to receive(:add_collection).with(@collection_druid)
-        post 'set_collection', params: { id: pid, collection: @collection_druid, bulk: true }
-        expect(response.code).to eq('200')
+      context 'when a new collection is not selected' do
+        let(:cocina_model) do
+          Cocina::Models.build({
+                                 'label' => 'My ETD',
+                                 'version' => 1,
+                                 'type' => Cocina::Models::Vocab.object,
+                                 'externalIdentifier' => pid,
+                                 'access' => {
+                                   'access' => 'world'
+                                 },
+                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                                 'structural' => { 'isMemberOf' => collection_druid },
+                                 'identification' => {}
+                               })
+        end
+
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              'structural' => {}
+            }
+          )
+        end
+
+        it 'removes the collection only without adding a new one' do
+          post 'set_collection', params: { id: pid, collection: '', bulk: true }
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+          expect(response.code).to eq('200')
+        end
+      end
+
+      context 'when a collection is set' do
+        let(:cocina_model) do
+          Cocina::Models.build({
+                                 'label' => 'My ETD',
+                                 'version' => 1,
+                                 'type' => Cocina::Models::Vocab.object,
+                                 'externalIdentifier' => pid,
+                                 'access' => {
+                                   'access' => 'world'
+                                 },
+                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                                 'structural' => {
+                                   'isMemberOf' => 'druid:xg999dg9393'
+                                 },
+                                 'identification' => {}
+                               })
+        end
+
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              'structural' => {
+                'isMemberOf' => collection_druid
+              }
+            }
+          )
+        end
+
+        it 'sets the new collection' do
+          post 'set_collection', params: { id: pid, collection: collection_druid, bulk: true }
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+          expect(response.code).to eq('200')
+        end
       end
     end
   end
