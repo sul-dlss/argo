@@ -17,7 +17,7 @@ class ItemsController < ApplicationController
 
   before_action :enforce_versioning, only: %i[
     add_collection set_collection remove_collection
-    source_id set_source_id
+    source_id
     catkey
     refresh_metadata
     set_rights

@@ -146,49 +146,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#source_id' do
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      end
-
-      let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
-
-      let(:cocina_model) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::Vocab.object,
-                               'externalIdentifier' => pid,
-                               'access' => {
-                                 'access' => 'world'
-                               },
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'structural' => {},
-                               'identification' => { sourceId: 'some:thing'}
-                             })
-      end
-      
-      let(:updated_model) do
-        cocina_model.new(
-          {
-            'identification' => {
-              'sourceId' => 'new:source_id'
-            }
-          }
-        )
-      end
-
-      it 'updates the source id' do
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-        post 'source_id', params: { id: pid, new_id: 'new:source_id' }
-        expect(object_client).to have_received(:update)
-          .with(params: updated_model)
-      end
-    end
-  end
-
   describe '#catkey' do
     context 'without manage content access' do
       it 'returns a 403' do
