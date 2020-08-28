@@ -160,8 +160,14 @@ class ItemsController < ApplicationController
   end
 
   def catkey
-    @object.catkey = params[:new_catkey].strip
-    save_and_reindex
+    object_client = Dor::Services::Client.object(@object.pid)
+    dro = object_client.find
+    updated_identification = dro.identification.new(
+      catalogLinks: [{ catalog: 'symphony', catalogRecordId: params[:new_catkey].strip }]
+    )
+    updated = dro.new(identification: updated_identification)
+    object_client.update(params: updated)
+    reindex
 
     respond_to do |format|
       if params[:bulk]
