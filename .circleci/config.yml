@@ -1,48 +1,221 @@
 version: 2.1
+
 orbs:
   ruby: circleci/ruby@1.0.5
-  node: circleci/node@3.0.1
-  browser-tools: circleci/browser-tools@1.0.1
+  node: circleci/node@2.1.1
 
+references:
+  default_ruby_version: &default_ruby_version 2.7.1-node-browsers
+  default_postgres_version: &default_postgres_version 9.5-alpine
+  ruby_envs: &ruby_envs
+    environment:
+      BUNDLE_JOBS: 3
+      BUNDLE_RETRY: 3
+      BUNDLE_PATH: vendor/bundle
+      PGHOST: 127.0.0.1
+      PGPASSWORD: sekret
+      RAILS_ENV: test
+  postgres_envs: &postgres_envs
+    name: db
+    environment:
+      POSTGRES_DB: dor-services-app
+      POSTGRES_PASSWORD: sekret
+
+commands:
+  configure_solr:
+    description: Installs a solr core into a running Solr docker container.
+    parameters:
+      core_name:
+        default: argo
+        type: string
+      solr_config_path:
+        default: solr/config
+        type: string
+      solr_host:
+        default: 'solr'
+        type: string
+      solr_port:
+        default: '8983'
+        type: string
+    steps:
+      - run:
+          command: 'dockerize -wait tcp://<< parameters.solr_host >>:<< parameters.solr_port >> -timeout 1m'
+          name: Wait for Solr
+      - run:
+          command: >
+            cd << parameters.solr_config_path >>
+
+            zip -1 -r solr_config.zip ./*
+
+            curl -H "Content-type:application/octet-stream" --data-binary
+            @solr_config.zip "http://<< parameters.solr_host >>:<< parameters.solr_port
+            >>/solr/admin/configs?action=UPLOAD&name=solrconfig"
+
+            curl -H 'Content-type: application/json' http://<< parameters.solr_host >>:<<
+            parameters.solr_port >>/api/collections/ -d '{create: {name: <<
+            parameters.core_name >>, config: solrconfig, numShards: 1}}'
+          name: Load config into solr
+
+executors:
+  default:
+    parameters:
+      ruby_tag:
+        description: "The `circleci/ruby` Docker image version tag."
+        type: string
+        default: *default_ruby_version
+    docker:
+      - image: circleci/ruby:<< parameters.ruby_tag >>
+        <<: *ruby_envs
+  ruby_with_all_deps:
+    parameters:
+      ruby_tag:
+        description: "The `circleci/ruby` Docker image version tag."
+        type: string
+        default: *default_ruby_version
+      postgres_tag:
+        description: "The `circleci/postgres` Docker image version tag."
+        type: string
+        default: *default_postgres_version
+    docker:
+      - image: circleci/ruby:<< parameters.ruby_tag >>
+        <<: *ruby_envs
+      - image: circleci/postgres:<< parameters.postgres_tag >>
+        <<: *postgres_envs
+      - image: solr:7
+        command: bin/solr -cloud -noprompt -f
+        name: solr
+      - image: suldlss/fcrepo:no-messaging-latest
+        name: fcrepo
+      - image: suldlss/dor-indexing-app:latest
+        name: dor-indexing-app
+        environment:
+          SOLR_URL: http://solr:8983/solr/argo
+          SETTINGS__SOLR__URL: http://solr:8983/solr/argo
+          SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
+          # To generate the token: docker-compose run dor-services-app rake generate_token
+          SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
+          SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+          SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+          SETTINGS__WORKFLOW_URL: http://workflow:3000
+      - image: suldlss/dor-services-app:latest
+        name: dor-services-app
+        environment:
+          DATABASE_NAME: dor-services-app
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: sekret
+          DATABASE_HOSTNAME: db
+          DATABASE_PORT: 5432
+          SOLR_URL: http://solr:8983/solr/argo
+          SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
+          SETTINGS__SOLR__URL: http://solr:8983/solr/argo
+          SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+          SETTINGS__SURI__URL: http://suri:3000
+          SETTINGS__WORKFLOW_URL: http://workflow:3000
+          REDIS_URL: redis://redis:6379/
+      - image: suldlss/suri-rails:latest
+        name: suri
+        environment:
+          DATABASE_NAME: suri
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: sekret
+          DATABASE_HOSTNAME: db
+          DATABASE_PORT: 5432
+      - image: suldlss/technical-metadata-service:latest
+        name: techmd
+        environment:
+          DATABASE_NAME: technical_metadata
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: sekret
+          DATABASE_HOSTNAME: db
+          DATABASE_PORT: 5432
+          RAILS_LOG_TO_STDOUT: "true"
+          REDIS_URL: redis://redis:6379/
+      - image: suldlss/workflow-server:latest
+        name: workflow
+        environment:
+          RAILS_LOG_TO_STDOUT: true
+          DATABASE_NAME: workflow-server
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: sekret
+          DATABASE_HOSTNAME: db
+          DATABASE_PORT: 5432
+          SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
+          SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
+          SETTINGS__ENABLE_STOMP: false
+          SETTINGS__REDIS__HOSTNAME: redis
+      - image: circleci/redis
+        name: redis
+
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - test:
+          requires:
+            - build
+            - lint
 jobs:
   build:
-    environment:
-      TZ: "America/Los_Angeles"
-      CC_TEST_REPORTER_ID: "266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a"
-    machine:
-      image: ubuntu-1604:202004-01
+    executor: default
     steps:
       - checkout
+      - ruby/install-deps:
+          key: gems-v2
+      - node/install-packages:
+          cache-key: yarn.lock
+          pkg-manager: yarn
+  lint:
+    executor: default
+    steps:
+      - checkout
+      - ruby/install-deps:
+          key: gems-v2
       - run:
-          name: Install latest bundler
-          command: gem install bundler
+          name: Run linter
+          command: bundle exec rubocop
+  test:
+    environment:
+      TZ: "America/Los_Angeles"
+      CC_TEST_REPORTER_ID: "5e29920968a573958452b8d1d58e5ca6f385d733d93330f414f4682b5b474f2f"
+      SETTINGS__DOR_INDEXING_URL: http://dor-indexing-app:3000/dor
+      # To generate the token: docker-compose run dor-services-app rake generate_token
+      SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
+      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000
+      SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
+      SETTINGS__REDIS_URL: redis://redis:6379/
+      SETTINGS__SOLRIZER_URL: http://solr:8983/solr/argo
+      SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
+      SETTINGS__WORKFLOW_URL: http://workflow:3000
+    executor: ruby_with_all_deps
+    steps:
+      - checkout
+      - ruby/install-deps:
+          key: gems-v2
+      - node/install-packages:
+          cache-key: yarn.lock
+          pkg-manager: yarn
+      # Check DB status
       - run:
-          name: Config bundler
-          command: bundle config set without 'production'
+          name: Wait for DB
+          command: dockerize -wait tcp://db:5432 -timeout 10s
+      # Setup database
       - run:
-          name: Install latest docker-compose
-          command: |
-            set -x
-            curl -L https://github.com/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
       - run:
-          name: Spin up system dependencies
-          command: docker-compose up -d dor-services-app dor-indexing-app techmd
-      - node/install:
-          node-version: latest
-      - node/install-yarn
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-      - ruby/install:
-          version: 2.7.1
-      - ruby/install-deps
+          name: Set up database
+          command: bundle exec rake db:setup RAILS_ENV=test
       - run:
-          name: Install yarn dependencies
-          command: yarn install
+          name: Create directories
+          command: mkdir -p public/workspace tmp/preview
       - run:
-          name: Compile webpack
-          command: RAILS_ENV=test bin/rails webpacker:compile
+          name: Wait for fedora
+          command: 'dockerize -wait tcp://fcrepo:8080/fedora/describe -timeout 1m'
+      - configure_solr:
+          solr_config_path: solr_conf/conf
       - run:
           name: Set up CodeClimate
           command: |
@@ -50,19 +223,10 @@ jobs:
             chmod +x ./cc-test-reporter
             ./cc-test-reporter before-build
       - run:
-          name: Wait for services used in integration tests
-          command: |
-            until curl --silent -XGET --fail -o /dev/null http://localhost:8983; do printf '.'; sleep 1; done
-            until curl --silent -XGET --fail -o /dev/null http://localhost:8984/solr/#/argo/core-overview; do printf '.'; sleep 1; done
-      - run:
-          name: Run linter
-          command: bundle exec rubocop
-      - run:
           name: Load fixtures
           command: RAILS_ENV=test bundle exec rake argo:repo:load
-      - run:
-          name: Run tests
-          command: RAILS_ENV=test bundle exec rake spec
+      # Run rspec in parallel
+      - ruby/rspec-test
       - run:
           name: Report test coverage results to CodeClimate
           command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?

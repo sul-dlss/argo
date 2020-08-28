@@ -11,7 +11,16 @@ require 'capybara/rspec'
 require 'equivalent-xml/rspec_matchers'
 require 'view_component/test_helpers'
 require 'webmock/rspec'
-WebMock.disable_net_connect!(allow_localhost: true, allow: ['https://chromedriver.storage.googleapis.com'])
+WebMock.disable_net_connect!(allow_localhost: true,
+                             allow: [
+                               'https://chromedriver.storage.googleapis.com',
+                               'solr',
+                               'fcrepo',
+                               'dor-indexing-app',
+                               'dor-services-app',
+                               'workflow',
+                               'techmd'
+                             ])
 
 require 'simplecov'
 SimpleCov.start :rails do

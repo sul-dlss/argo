@@ -6,7 +6,7 @@ RSpec.describe TechmdService do
   describe '.techmd_for' do
     let(:techmd) { described_class.techmd_for(druid: 'druid:abc123xyz') }
 
-    let(:url) { 'http://localhost:3005/v1/technical-metadata/druid/druid:abc123xyz' }
+    let(:url) { "#{Settings.tech_md_service.url}/v1/technical-metadata/druid/druid:abc123xyz" }
 
     context 'when service returns OK' do
       let(:response) { instance_double(ActionDispatch::Response, status: 200, body: '[{"foo": "bar"}]') }

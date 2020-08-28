@@ -17,7 +17,6 @@ services:
       # Allow bulk action logs to be written (can't write to /tmp)
       SETTINGS__BULK_METADATA__DIRECTORY: '/app/tmp'
       SETTINGS__BULK_METADATA__TEMPORARY_DIRECTORY: '/app/tmp/tmp'
-      SETTINGS__CONTENT__SDR_SERVER_URL: http://dor-services-app:3000/v1/sdr
       SETTINGS__DOR_INDEXING_URL: http://dor-indexing-app:3000/dor
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
@@ -37,7 +36,6 @@ services:
     environment:
       SOLR_URL: http://solr:8983/solr/argo
       SETTINGS__SOLR__URL: http://solr:8983/solr/argo
-      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora

@@ -72,7 +72,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
 
       before do
-        stub_request(:post, 'http://localhost:3003/v1/objects')
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/document.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
@@ -121,7 +121,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
 
       before do
-        stub_request(:post, 'http://localhost:3003/v1/objects')
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
@@ -170,7 +170,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
 
       before do
-        stub_request(:post, 'http://localhost:3003/v1/objects')
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
@@ -221,7 +221,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
 
       before do
-        stub_request(:post, 'http://localhost:3003/v1/objects')
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
@@ -271,7 +271,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
 
       before do
-        stub_request(:post, 'http://localhost:3003/v1/objects')
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
