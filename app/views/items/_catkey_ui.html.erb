@@ -1,4 +1,4 @@
-<%= form_tag url_for(controller: :items, action: :catkey, id: @object.pid) do %>
+<%= form_tag catkey_item_path(@object) do %>
   <div class="form-group">
     <input class="form-control" name="new_catkey" id="new_catkey" type="text" value="<%= @object.catkey %>">
     <p class='help-block'>

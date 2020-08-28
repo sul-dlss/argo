@@ -1,4 +1,4 @@
-<%= form_tag url_for(controller: :items, action: :source_id, id: @object.pid) do %>
+<%= form_tag source_id_item_path(@object) do %>
   <div class="form-group">
     <input class="form-control" name="new_id" id="new_id" type="text" value="<%= @object.identityMetadata.sourceId %>">
     <p class='help-block'>

@@ -9,6 +9,7 @@ RSpec.describe 'Viewing an Admin policy' do
   before do
     Argo::Indexer.reindex_pid_remotely 'druid:zt570tx3016'
     sign_in current_user, groups: ['sdr:administrator-role']
+    allow(object).to receive(:persisted?).and_return(true) # This allows to_param to function
     allow(Dor).to receive(:find).and_return(object)
   end
 
