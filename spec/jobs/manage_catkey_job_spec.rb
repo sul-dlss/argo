@@ -92,8 +92,35 @@ RSpec.describe ManageCatkeyJob do
     let(:catkey) { catkeys[0] }
     let(:current_object) { instance_double(Dor::Item, pid: pid, current_version: '3') }
     let(:client) { double(Dor::Services::Client) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+
+    let(:cocina_model) do
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => {
+                               'access' => 'world'
+                             },
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
+    end
+
+    let(:updated_model) do
+      cocina_model.new(
+        {
+          'identification' => {
+            'catalogLinks' => [{ catalog: 'symphony', catalogRecordId: '12345' }]
+          }
+        }
+      )
+    end
 
     before do
+      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
       allow(StateService).to receive(:new).and_return(state_service)
       allow(subject.ability).to receive(:can?).and_return(true)
     end
@@ -104,9 +131,9 @@ RSpec.describe ManageCatkeyJob do
       it 'updates catkey and versions objects' do
         expect(Dor).to receive(:find).with(pid).and_return(current_object)
         expect(subject).to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
-        expect(current_object).to receive(:catkey=).with(catkey)
-        expect(current_object).to receive(:save)
         subject.send(:update_catkey, pid, catkey, buffer)
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
       end
     end
 
@@ -116,9 +143,9 @@ RSpec.describe ManageCatkeyJob do
       it 'updates catkey and does not version objects if not needed' do
         expect(Dor).to receive(:find).with(pid).and_return(current_object)
         expect(subject).not_to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
-        expect(current_object).to receive(:catkey=).with(catkey)
-        expect(current_object).to receive(:save)
         subject.send(:update_catkey, pid, catkey, buffer)
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
       end
     end
   end

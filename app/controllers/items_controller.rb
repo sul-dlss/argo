@@ -160,13 +160,7 @@ class ItemsController < ApplicationController
   end
 
   def catkey
-    object_client = Dor::Services::Client.object(@object.pid)
-    dro = object_client.find
-    updated_identification = dro.identification.new(
-      catalogLinks: [{ catalog: 'symphony', catalogRecordId: params[:new_catkey].strip }]
-    )
-    updated = dro.new(identification: updated_identification)
-    object_client.update(params: updated)
+    CatkeyService.update(@object.pid, params[:new_catkey].strip)
     reindex
 
     respond_to do |format|

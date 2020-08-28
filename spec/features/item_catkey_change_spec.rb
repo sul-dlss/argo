@@ -21,14 +21,28 @@ RSpec.describe 'Item catkey change' do
   end
 
   describe 'when modification is allowed' do
+    let(:pid) { 'druid:kv840rx2720' }
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client, update: true) }
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes: workflow_routes) }
+    let(:cocina_model) do
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => {
+                               'access' => 'world'
+                             },
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
+    end
 
     before do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
@@ -37,7 +51,7 @@ RSpec.describe 'Item catkey change' do
     end
 
     it 'changes the catkey' do
-      visit catkey_ui_item_path 'druid:kv840rx2720'
+      visit catkey_ui_item_path pid
       fill_in 'new_catkey', with: '12345'
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Catkey for ' \

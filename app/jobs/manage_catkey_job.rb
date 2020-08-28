@@ -39,8 +39,7 @@ class ManageCatkeyJob < GenericJob
     begin
       state_service = StateService.new(current_druid, version: current_obj.current_version)
       open_new_version(current_obj, "Catkey updated to #{new_catkey}") unless state_service.allows_modification?
-      current_obj.catkey = new_catkey
-      current_obj.save
+      CatkeyService.update(current_druid, new_catkey)
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} Catkey added/updated/removed successfully")
     rescue StandardError => e
