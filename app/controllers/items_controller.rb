@@ -11,7 +11,6 @@ class ItemsController < ApplicationController
     source_id
     catkey
     tags_bulk
-    update_rights
     embargo_update
     embargo_form
   ]
@@ -23,7 +22,6 @@ class ItemsController < ApplicationController
     refresh_metadata
     set_rights
     set_governing_apo
-    update_rights
   ]
 
   def purl_preview
