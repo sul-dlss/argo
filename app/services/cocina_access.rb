@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# This transcodes the access from the collection and APO forms to Cocina Access schema
 class CocinaAccess
   extend Dry::Monads[:maybe]
 

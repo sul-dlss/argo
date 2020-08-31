@@ -208,15 +208,15 @@ class ItemsController < ApplicationController
 
   # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
-    object_client = Dor::Services::Client.object(@object.pid)
-    dro = object_client.find
-    access_additions = CocinaAccess.from_form_value(params[:access_form][:rights])
-    updated_access = dro.access.new(access_additions.value!)
-    structural_additions = CocinaStructural.from_form_value(params[:access_form][:rights], dro.structural)
-    updated_structural = dro.structural.new(structural_additions)
-    updated = dro.new(access: updated_access, structural: updated_structural)
-    object_client.update(params: updated)
-    reindex
+    # Item may be a Collection or a DRO
+    item = Dor::Services::Client.object(@object.pid).find
+
+    form_type = item.collection? ? CollectionRightsForm : DRORightsForm
+    form = form_type.new(item)
+    # The bulk form always uses `dro_rights_form` as the key
+    form_key = params[:bulk] ? DRORightsForm.model_name.param_key : form.model_name.param_key
+    form.validate(params[form_key])
+    form.save
 
     respond_to do |format|
       if params[:bulk]
@@ -264,8 +264,9 @@ class ItemsController < ApplicationController
       cocina = NilModel.new(params[:id])
     end
 
-    apo_object = Dor.find(@apo)
-    @form = AccessForm.new(cocina, apo_object)
+    form_type = cocina.collection? ? CollectionRightsForm : DRORightsForm
+
+    @form = form_type.new(cocina, default_rights: @object.admin_policy_object.default_rights)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -302,8 +303,6 @@ class ItemsController < ApplicationController
     raise 'missing druid' unless params[:id]
 
     @object = Dor.find params[:id]
-    @apo = @object.admin_policy_object
-    @apo = (@apo ? @apo.pid : '')
   end
 
   def save_and_reindex

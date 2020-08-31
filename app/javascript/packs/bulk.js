@@ -91,7 +91,7 @@ function fetch_druids(fun) {
 }
 
 function set_rights(druids){
-	var params = { 'access_form[rights]': document.getElementById('rights_select').value }
+	var params = { 'dro_rights_form[rights]': document.getElementById('rights_select').value }
 	process_post(druids, set_rights_url, params, "Updated");
 }
 
