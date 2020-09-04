@@ -44,9 +44,7 @@ end
 class TablesHaveDataCheck < OkComputer::Check
   def check
     msg = [
-      Bookmark,
       BulkAction,
-      Search,
       User
     ].map { |klass| table_check(klass) }.join(' ')
     mark_message msg
