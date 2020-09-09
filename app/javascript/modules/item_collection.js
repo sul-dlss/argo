@@ -9,13 +9,15 @@ export default class ItemCollection {
 
   initialize() {
 
+      let that = this
+
       // bind with .on('click') since the DOM does not have these elements until the modal pops up
       $(document).on('click', '#remove_collection', function(evt) {
         $.ajax({
                 url: ($(this).parent()).attr('href'),
                 dataType: 'json',
                 type: 'get',
-                error: ()=> this.collectionErrorOccurred(),
+                error: () => that.collectionErrorOccurred(),
                 success: function(data, status, xhr) {
                   $('#collection_message').html(xhr.responseJSON.message);
                   $('#collection_' + xhr.responseJSON.druid).remove();
@@ -31,7 +33,7 @@ export default class ItemCollection {
                 dataType: 'json',
                 type: form.attr('method').toUpperCase(),
                 data: form.serialize(),
-                error: ()=> this.collectionErrorOccurred(),
+                error: ()=> that.collectionErrorOccurred(),
                 success: function(data, status, xhr) {
                   $('#collection_message').html(xhr.responseJSON.message);
                   $('#collection_list').append(xhr.responseJSON.new_collection_html);
