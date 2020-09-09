@@ -78,7 +78,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"label":"test parameters for registration","version":1,' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
-            '"structural":{"isMemberOf":"druid:hv992ry7777"}}'
+            '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
       end
@@ -128,7 +128,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"access":{"access":"stanford","download":"stanford"},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
-            '"structural":{"isMemberOf":"druid:hv992ry7777"}}'
+            '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
       end
@@ -178,7 +178,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"hasMemberOrders":[{"viewingDirection":"left-to-right"}],' \
-            '"isMemberOf":"druid:hv992ry7777"}}'
+            '"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
       end
@@ -228,7 +228,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"access":{"access":"world","download":"none"},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
-            '"structural":{"isMemberOf":"druid:hv992ry7777"}}'
+            '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
       end
@@ -278,7 +278,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"access":{"access":"dark","download":"none"},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
-            '"structural":{"isMemberOf":"druid:hv992ry7777"}}'
+            '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
       end

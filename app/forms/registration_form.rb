@@ -31,7 +31,7 @@ class RegistrationForm
     model_params.merge!(access: access.value!) unless access.none?
 
     structural = {}
-    structural[:isMemberOf] = params[:collection] if params[:collection].present?
+    structural[:isMemberOf] = [params[:collection]] if params[:collection].present?
     case content_type_tag
     when 'Book (ltr)'
       structural[:hasMemberOrders] = [{ viewingDirection: 'left-to-right' }]
