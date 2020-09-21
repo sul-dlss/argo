@@ -32,11 +32,12 @@ class RubydoraCheck < OkComputer::PingCheck
   end
 
   def profile
-    @luke ||= begin
-                @client.profile
-              rescue StandardError
-                {}
-              end
+    @luke ||=
+      begin
+        @client.profile
+      rescue StandardError
+        {}
+      end
   end
 end
 

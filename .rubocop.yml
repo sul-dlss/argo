@@ -45,43 +45,34 @@ Naming/PredicateName:
 RSpec/MultipleExpectations:
   Enabled: false
 
+Layout/BeginEndAlignment: # (new in 0.91)
+  Enabled: true
+
 Layout/EmptyLinesAroundAttributeAccessor:
   Enabled: true
 
 Layout/SpaceAroundMethodCallOperator:
   Enabled: true
 
-Lint/RaiseException:
+Lint/ConstantDefinitionInBlock: # (new in 0.91)
   Enabled: true
 
-Lint/StructNewOverride:
+Lint/DuplicateRequire: # (new in 0.90)
   Enabled: true
 
-Style/ExponentialNotation:
+Lint/EmptyFile: # (new in 0.90)
   Enabled: true
 
-Style/HashEachMethods:
+Lint/IdentityComparison: # (new in 0.91)
   Enabled: true
 
-Style/HashTransformKeys:
+Lint/TrailingCommaInAttributeDeclaration: # (new in 0.90)
   Enabled: true
 
-Style/HashTransformValues:
+Lint/UselessMethodDefinition: # (new in 0.90)
   Enabled: true
 
-Style/SlicingWithRange:
-  Enabled: true
-
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-
-Style/RedundantRegexpEscape:
-  Enabled: true
-
-Style/RedundantFetchBlock:
+Lint/UselessTimes: # (new in 0.91)
   Enabled: true
 
 Lint/BinaryOperatorWithIdenticalOperands:
@@ -102,16 +93,49 @@ Lint/FloatComparison:
 Lint/MissingSuper:
   Enabled: true
 
+Lint/MixedRegexpCaptureTypes:
+  Enabled: true
+
 Lint/OutOfRangeRegexpRef:
   Enabled: true
 
 Lint/SelfAssignment:
   Enabled: true
 
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
 Lint/TopLevelReturnWithArgument:
   Enabled: true
 
 Lint/UnreachableLoop:
+  Enabled: true
+
+Style/ExponentialNotation:
+  Enabled: true
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Style/SlicingWithRange:
+  Enabled: true
+
+Style/RedundantRegexpCharacterClass:
+  Enabled: true
+
+Style/RedundantRegexpEscape:
+  Enabled: true
+
+Style/RedundantFetchBlock:
   Enabled: true
 
 Style/AccessorGrouping:
@@ -126,6 +150,9 @@ Style/BisectedAttrAccessor:
 Style/CaseLikeIf:
   Enabled: true
 
+Style/CombinableLoops: # (new in 0.90)
+  Enabled: true
+
 Style/ExplicitBlockArgument:
   Enabled: true
 
@@ -138,6 +165,9 @@ Style/HashAsLastArrayItem:
 Style/HashLikeCase:
   Enabled: true
 
+Style/KeywordParametersOrder: # (new in 0.90)
+  Enabled: true
+
 Style/OptionalBooleanParameter:
   Enabled: true
 
@@ -147,13 +177,22 @@ Style/RedundantAssignment:
 Style/RedundantFileExtensionInRequire:
   Enabled: true
 
+Style/RedundantSelfAssignment: # (new in 0.90)
+  Enabled: true
+
 Style/SingleArgumentDig:
+  Enabled: true
+
+Style/SoleNestedConditional: # (new in 0.89)
   Enabled: true
 
 Style/StringConcatenation:
   Enabled: true
 
 Rails/ActiveRecordCallbacksOrder:
+  Enabled: true
+
+Rails/AfterCommitOverride: # (new in 2.8)
   Enabled: true
 
 Rails/FindById:
@@ -186,5 +225,11 @@ Rails/RenderPlainText:
 Rails/ShortI18n:
   Enabled: true
 
+Rails/SquishedSQLHeredocs: # (new in 2.8)
+  Enabled: true
+
 Rails/WhereExists:
+  Enabled: true
+
+Rails/WhereNot: # (new in 2.8)
   Enabled: true

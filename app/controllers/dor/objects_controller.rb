@@ -6,11 +6,12 @@ class Dor::ObjectsController < ApplicationController
 
   def create
     form = RegistrationForm.new(params)
-    request_model = begin
-                      form.cocina_model
-                    rescue Cocina::Models::ValidationError => e
-                      return render plain: e.message, status: :bad_request
-                    end
+    request_model =
+      begin
+        form.cocina_model
+      rescue Cocina::Models::ValidationError => e
+        return render plain: e.message, status: :bad_request
+      end
 
     result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
 
