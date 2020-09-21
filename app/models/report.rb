@@ -249,11 +249,12 @@ class Report
     result = []
     docs.each_with_index do |doc, index|
       row = Hash[fields.collect do |spec|
-        val = begin
-                spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s]
-              rescue StandardError
-                nil
-              end
+        val =
+          begin
+            spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s]
+          rescue StandardError
+            nil
+          end
         val = val.join(';') if val.is_a?(Array)
         [spec[:field].to_sym, val.to_s]
       end]
