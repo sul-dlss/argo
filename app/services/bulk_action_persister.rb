@@ -59,6 +59,7 @@ class BulkActionPersister
     {
       pids: pids.split,
       manage_release: manage_release,
+      manage_catkeys: manage_catkeys,
       set_governing_apo: set_governing_apo,
       prepare: prepare,
       csv_file: bulk_action_form.csv_as_string,
