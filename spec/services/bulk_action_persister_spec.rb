@@ -91,6 +91,18 @@ RSpec.describe BulkActionPersister do
       it { is_expected.to include(prepare: { 'description' => 'change the data', 'significance' => 'minor' }) }
     end
 
+    context 'for a manage_catkeys job' do
+      let(:bulk_action) do
+        BulkAction.create(action_type: 'ManageCatkeyJob')
+      end
+
+      let(:params) do
+        { pids: %w[a b c], manage_catkeys: { 'catkeys' => "one\ntwo\nthree" } }
+      end
+
+      it { is_expected.to include(manage_catkeys: { 'catkeys' => "one\ntwo\nthree" }) }
+    end
+
     context 'for a create virtual objects job' do
       let(:bulk_action) do
         BulkAction.create(action_type: 'CreateVirtualObjectsJob')
