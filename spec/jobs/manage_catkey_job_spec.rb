@@ -23,19 +23,52 @@ RSpec.describe ManageCatkeyJob do
   end
 
   describe '#perform' do
+    let(:params) do
+      {
+        pids: pids,
+        manage_catkeys: { 'catkeys' => catkeys.join("\n") },
+        webauth: webauth
+      }
+    end
+
     it 'attempts to update the catkey for each druid with correct corresponding catkey' do
-      params =
-        {
-          pids: pids,
-          manage_catkeys: { 'catkeys' => catkeys.join("\n") },
-          webauth: webauth
-        }
       expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
       pids.each_with_index do |pid, i|
         expect(subject).to receive(:update_catkey).with(pid, catkeys[i], buffer)
       end
       subject.perform(bulk_action_no_process_callback.id, params)
       expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+    end
+
+    context 'empty catkeys are provided' do
+      let(:catkeys) { ['', '6789', '44444'] }
+
+      it 'attempts to update the catkey for each druid with correct corresponding catkey' do
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+        pids.each_with_index do |pid, i|
+          expect(subject).to receive(:update_catkey).with(pid, catkeys[i], buffer)
+        end
+        subject.perform(bulk_action_no_process_callback.id, params)
+        expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+      end
+    end
+
+    context 'no catkeys are provided' do
+    let(:params) do
+      {
+        pids: pids,
+        webauth: webauth
+      }
+    end
+
+      it 'attempts to update the catkey for each druid with a blank catkey' do
+        expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+        pids.each_with_index do |pid, i|
+          expect(subject).to receive(:update_catkey).with(pid, '', buffer)
+        end
+        subject.perform(bulk_action_no_process_callback.id, params)
+        expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+      end
     end
   end
 
