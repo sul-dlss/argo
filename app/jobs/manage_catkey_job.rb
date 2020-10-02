@@ -29,7 +29,9 @@ class ManageCatkeyJob < GenericJob
   def update_catkey(current_druid, new_catkey, log)
     log.puts("#{Time.current} Beginning ManageCatkeyJob for #{current_druid}")
     current_obj = Dor.find(current_druid)
-    unless ability.can?(:manage_item, current_obj)
+    cocina = Dor::Services::Client.object(current_druid).find
+
+    unless ability.can?(:manage_item, cocina)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end

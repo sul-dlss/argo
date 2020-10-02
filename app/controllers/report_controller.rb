@@ -68,7 +68,8 @@ class ReportController < CatalogController
     @ids = Report.new(params, current_user: current_user).pids
     @ids.each do |pid|
       druid = "druid:#{pid}"
-      next unless current_ability.can_update_workflow?('waiting', Dor.find(druid))
+      cocina = Dor::Services::Client.object(druid).find
+      next unless current_ability.can_update_workflow?('waiting', cocina)
 
       WorkflowClientFactory.build.update_status(
         druid: druid,

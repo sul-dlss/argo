@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class VersionsController < ApplicationController
-  before_action :create_obj
+  before_action :create_obj, only: %i[open_ui close_ui]
 
   def open_ui
     respond_to do |format|
@@ -27,15 +27,16 @@ class VersionsController < ApplicationController
   end
 
   def open
-    authorize! :manage_item, @object
+    cocina = Dor::Services::Client.object(params[:item_id]).find
+    authorize! :manage_item, cocina
 
-    VersionService.open(identifier: @object.pid,
+    VersionService.open(identifier: cocina.externalIdentifier,
                         significance: params[:significance],
                         description: params[:description],
                         opening_user_name: current_user.to_s)
-    msg = "#{@object.pid} is open for modification!"
+    msg = "#{cocina.externalIdentifier} is open for modification!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
-    reindex
+    Argo::Indexer.reindex_pid_remotely(cocina.externalIdentifier)
   rescue StandardError => e
     raise e unless e.to_s == 'Object net yet accessioned'
 
@@ -46,18 +47,19 @@ class VersionsController < ApplicationController
   # as long as this isn't a bulk operation, and we get non-nil significance and description
   # values, update those fields on the version metadata datastream
   def close
-    authorize! :manage_item, @object
+    cocina = Dor::Services::Client.object(params[:item_id]).find
+    authorize! :manage_item, cocina
 
     begin
       VersionService.close(
-        identifier: @object.pid,
+        identifier: cocina.externalIdentifier,
         description: params[:description],
         significance: params[:significance],
         user_name: current_user.to_s
       )
-      msg = "Version #{@object.current_version} of #{@object.pid} has been closed!"
+      msg = "Version #{cocina.version} of #{cocina.externalIdentifier} has been closed!"
       redirect_to solr_document_path(params[:item_id]), notice: msg
-      reindex
+      Argo::Indexer.reindex_pid_remotely(cocina.externalIdentifier)
     rescue Dor::Exception # => e
       render status: :internal_server_error, plain: 'No version to close.'
     end
@@ -97,9 +99,5 @@ class VersionsController < ApplicationController
   # Filters
   def create_obj
     @object = Dor.find params[:item_id]
-  end
-
-  def reindex
-    Argo::Indexer.reindex_pid_remotely(@object.pid)
   end
 end

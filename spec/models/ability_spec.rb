@@ -45,9 +45,9 @@ RSpec.describe Ability do
     let(:admin) { true }
 
     it { is_expected.to be_able_to(:manage, :everything) }
-    it { is_expected.to be_able_to(:manage_item, item) }
+    it { is_expected.to be_able_to(:manage_item, dro) }
     it { is_expected.to be_able_to(:manage_desc_metadata, item) }
-    it { is_expected.to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.to be_able_to(:create, Dor::AdminPolicyObject) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
@@ -59,9 +59,9 @@ RSpec.describe Ability do
     let(:manager) { true }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.to be_able_to(:manage_item, item) }
+    it { is_expected.to be_able_to(:manage_item, dro) }
     it { is_expected.to be_able_to(:manage_desc_metadata, item) }
-    it { is_expected.to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.to be_able_to(:create, Dor::AdminPolicyObject) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
@@ -72,10 +72,10 @@ RSpec.describe Ability do
   context 'as a viewer' do
     let(:viewer) { true }
 
-    it { is_expected.not_to be_able_to(:manage_item, item) }
+    it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.not_to be_able_to(:create, Dor::AdminPolicyObject) }
-    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
     it { is_expected.to be_able_to(:view_content, dro) }
@@ -83,9 +83,9 @@ RSpec.describe Ability do
   end
 
   context 'for items without an APO' do
-    it { is_expected.not_to be_able_to(:manage_item, item) }
+    it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
-    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.not_to be_able_to(:view_content, item) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:view_metadata, item) }
@@ -95,9 +95,8 @@ RSpec.describe Ability do
     let(:roles) { ['dor-administrator'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.not_to be_able_to(:manage_item, item) }
-    it { is_expected.to be_able_to(:manage_item, item_with_apo) }
-    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.to be_able_to(:manage_item, dro) }
+    it { is_expected.to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.to be_able_to(:manage_desc_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:create, Dor::AdminPolicyObject) }
@@ -112,9 +111,8 @@ RSpec.describe Ability do
     let(:roles) { ['dor-apo-metadata'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.not_to be_able_to(:manage_item, item) }
-    it { is_expected.not_to be_able_to(:manage_item, item_with_apo) }
-    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.not_to be_able_to(:manage_item, dro) }
+    it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.to be_able_to(:manage_desc_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:create, Dor::AdminPolicyObject) }
@@ -129,10 +127,9 @@ RSpec.describe Ability do
     let(:roles) { ['dor-viewer'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
-    it { is_expected.not_to be_able_to(:manage_item, item) }
-    it { is_expected.not_to be_able_to(:manage_item, item_with_apo) }
+    it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
-    it { is_expected.not_to be_able_to(:manage_governing_apo, item, new_apo_id) }
+    it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:create, Dor::AdminPolicyObject) }
     it { is_expected.not_to be_able_to(:view_metadata, item) }

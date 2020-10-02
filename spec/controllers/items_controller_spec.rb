@@ -7,6 +7,8 @@ RSpec.describe ItemsController, type: :controller do
     allow_any_instance_of(User).to receive(:roles).and_return([])
     sign_in user
     allow(Dor).to receive(:find).with(pid).and_return(item)
+    allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
+
     idmd = double
     apo  = double
     idmd_ds_content = '<test-xml/>'
@@ -29,6 +31,8 @@ RSpec.describe ItemsController, type: :controller do
   let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
+  let(:cocina) { instance_double(Cocina::Models::DRO) }
 
   describe '#purl_preview' do
     before do
@@ -48,7 +52,7 @@ RSpec.describe ItemsController, type: :controller do
   describe '#purge_object' do
     context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
         post 'purge_object', params: { id: pid }
         expect(response.code).to eq('403')
       end
@@ -101,16 +105,12 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#embargo_update' do
-    before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
-    end
-
-    let(:object_service) { instance_double(Dor::Services::Client::Object, embargo: embargo_service) }
+    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, embargo: embargo_service) }
     let(:embargo_service) { instance_double(Dor::Services::Client::Embargo, update: true) }
 
     context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
         expect(subject).not_to receive(:save_and_reindex)
         expect(subject).not_to receive(:flush_index)
         post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
@@ -163,7 +163,7 @@ RSpec.describe ItemsController, type: :controller do
   describe '#catkey' do
     context 'without manage content access' do
       it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
         post 'catkey', params: { id: pid, new_catkey: '12345' }
         expect(response.code).to eq('403')
       end
@@ -234,7 +234,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
         post 'add_collection', params: { id: pid, collection: 'druid:1234' }
         expect(response.code).to eq('403')
       end
@@ -296,7 +296,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
         expect(item).not_to receive(:remove_collection)
         post 'remove_collection', params: { id: pid, collection: 'druid:1234' }
         expect(response.code).to eq('403')
@@ -323,7 +323,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context "when they don't have manage access" do
       it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, Dor::Item).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
         get 'mods', params: { id: pid }
         expect(response.code).to eq('403')
       end
@@ -336,7 +336,7 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
-      let(:object_service) { instance_double(Dor::Services::Client::Object, refresh_metadata: true) }
+      let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, refresh_metadata: true) }
 
       it 'returns a 400 with an error message if there is no catkey' do
         expect(item).to receive(:catkey).and_return('')
@@ -393,21 +393,6 @@ RSpec.describe ItemsController, type: :controller do
               expect(response).to have_http_status(:bad_request)
               expect(response.body).to eq 'Object cannot be modified in its current state.'
             end
-          end
-        end
-
-        context 'Dor::Services::Client::UnexpectedResponse' do
-          before do
-            allow(Dor::Services::Client).to receive(:object).and_raise(Dor::Services::Client::UnexpectedResponse, 'foo')
-          end
-
-          it 'redirects with a user friendly flash error message' do
-            get :refresh_metadata, params: { id: pid }
-
-            expect(response).to redirect_to(solr_document_path(pid))
-            friendly1 = 'An error occurred while attempting to refresh metadata: foo.'
-            friendly2 = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'
-            expect(flash[:error]).to eq "#{friendly1} #{friendly2}"
           end
         end
       end

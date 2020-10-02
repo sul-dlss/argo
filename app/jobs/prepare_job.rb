@@ -31,11 +31,11 @@ class PrepareJob < GenericJob
   private
 
   def open_object(pid, significance, description, user_name, log)
-    object = Dor.find(pid)
+    cocina = Dor::Services::Client.object(pid).find
 
-    return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid, version: object.current_version)
+    return log.puts("#{Time.current} #{pid} is not openable") unless openable?(pid, version: cocina.version)
 
-    return log.puts("#{Time.current} Not authorized for #{pid}") unless ability.can?(:manage_item, object)
+    return log.puts("#{Time.current} Not authorized for #{pid}") unless ability.can?(:manage_item, cocina)
 
     VersionService.open(identifier: pid,
                         significance: significance,

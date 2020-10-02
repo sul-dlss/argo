@@ -41,7 +41,7 @@ class ApoController < ApplicationController
   end
 
   def update
-    authorize! :manage_item, @object
+    authorize! :manage_item, @cocina
     @form = ApoForm.new(@object)
     unless @form.validate(params)
       respond_to do |format|
@@ -56,7 +56,7 @@ class ApoController < ApplicationController
   end
 
   def delete_collection
-    authorize! :manage_item, @object
+    authorize! :manage_item, @cocina
     @object.remove_default_collection(params[:collection])
     @object.save # indexing happens automatically
 
@@ -78,5 +78,6 @@ class ApoController < ApplicationController
     raise 'missing druid' unless params[:id]
 
     @object = Dor.find params[:id]
+    @cocina = Dor::Services::Client.object(params[:id]).find
   end
 end

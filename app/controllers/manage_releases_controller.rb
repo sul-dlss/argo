@@ -5,7 +5,8 @@ class ManageReleasesController < ApplicationController
   include Blacklight::Searchable
 
   def show
-    authorize! :manage_item, Dor.find(params[:item_id])
+    cocina = Dor::Services::Client.object(params[:item_id]).find
+    authorize! :manage_item, cocina
     _, @document = search_service.fetch params[:item_id]
     @bulk_action = BulkAction.new
 

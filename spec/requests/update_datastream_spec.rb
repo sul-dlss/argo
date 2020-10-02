@@ -7,8 +7,24 @@ RSpec.describe 'Update a datastream' do
     allow(Dor).to receive(:find).with(pid).and_return(item)
     allow(item).to receive_messages(save: nil)
     allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) do
+    Cocina::Models.build(
+      'label' => 'My Item',
+      'version' => 1,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pid,
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
   let(:pid) { 'druid:bc123df4567' }
   let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }

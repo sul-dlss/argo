@@ -140,6 +140,26 @@ RSpec.describe WorkflowsController, type: :controller do
                       workflow_status: nil,
                       update_status: nil)
     end
+    let(:cocina) do
+      Cocina::Models.build(
+        'label' => 'My Item',
+        'version' => 2,
+        'type' => Cocina::Models::Vocab.object,
+        'externalIdentifier' => pid,
+        'access' => {
+          'access' => 'world'
+        },
+        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+        'structural' => {},
+        'identification' => {}
+      )
+    end
+
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
+
+    before do
+      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+    end
 
     it 'requires various workflow parameters' do
       expect { post :update, params: { item_id: pid, repo: 'dor', id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)

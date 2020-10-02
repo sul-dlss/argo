@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Draw the manage release form' do
-  let(:item) do
-    instance_double(Dor::Item, pid: 'druid:bc123df4567')
-  end
+  # let(:item) do
+  #   instance_double(Dor::Item, pid: 'druid:bc123df4567')
+  # end
   let(:document) do
     instance_double(SolrDocument,
                     id: 'druid:bc123df4567',
@@ -15,9 +15,26 @@ RSpec.describe 'Draw the manage release form' do
   end
 
   let(:user) { create(:user) }
+  let(:pid) { 'druid:bc123df4567' }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) do
+    Cocina::Models.build(
+      'label' => 'The item',
+      'version' => 1,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pid,
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
 
   before do
-    allow(Dor).to receive(:find).with('druid:bc123df4567').and_return(item)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    # allow(Dor).to receive(:find).with('druid:bc123df4567').and_return(item)
   end
 
   context 'for content managers' do

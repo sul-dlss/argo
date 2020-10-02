@@ -39,12 +39,12 @@ class Ability
 
     can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.viewer?
 
-    can :manage_item, Dor::AdminPolicyObject do |dor_item|
-      can_manage_items? current_user.roles(dor_item.pid)
+    can :manage_item, Cocina::Models::AdminPolicy do |cocina|
+      can_manage_items? current_user.roles(cocina.externalIdentifier)
     end
 
-    can :manage_item, ActiveFedora::Base do |dor_item|
-      can_manage_items? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
+    can :manage_item, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina|
+      can_manage_items? current_user.roles(cocina.administrative.hasAdminPolicy)
     end
 
     can :manage_desc_metadata, Dor::AdminPolicyObject do |dor_item|
@@ -55,7 +55,7 @@ class Ability
       can_edit_desc_metadata? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
     end
 
-    can :manage_governing_apo, ActiveFedora::Base do |dor_item, new_apo_id|
+    can :manage_governing_apo, [Cocina::Models::Collection, Cocina::Models::DRO] do |dor_item, new_apo_id|
       # user must have management privileges on both the target APO and the APO currently governing the item
       can_manage_items?(current_user.roles(new_apo_id)) && can?(:manage_item, dor_item)
     end
@@ -69,7 +69,7 @@ class Ability
     end
 
     can :view_content, Cocina::Models::DRO do |dro|
-      can_view? current_user.roles(dro.administrative.hasAdminPolicy) if dro&.administrative&.hasAdminPolicy
+      can_view? current_user.roles(dro.administrative.hasAdminPolicy)
     end
 
     can :view_metadata, ActiveFedora::Base do |dor_item|

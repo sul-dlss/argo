@@ -22,9 +22,8 @@ class PurgeJob < GenericJob
   private
 
   def purge(current_druid, log_buffer)
-    object = Dor.find(current_druid)
-
-    unless ability.can?(:manage_item, object)
+    cocina = Dor::Services::Client.object(current_druid).find
+    unless ability.can?(:manage_item, cocina)
       log.puts("#{Time.current} Not authorized to purge #{current_druid}")
       return
     end
@@ -35,7 +34,7 @@ class PurgeJob < GenericJob
       bulk_action.increment(:druid_count_fail).save
       return
     end
-
+    object = Dor.find(current_druid)
     object.delete
     workflow_client.delete_all_workflows(pid: current_druid)
     ActiveFedora.solr.conn.delete_by_id(current_druid)

@@ -3,17 +3,20 @@
 # Manages HTTP interactions for creating collections
 class CollectionsController < ApplicationController
   def new
+    cocina = Dor::Services::Client.object(params[:apo_id]).find
+    authorize! :manage_item, cocina
+
     @apo = Dor.find params[:apo_id]
-    authorize! :manage_item, @apo
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
   end
 
   def create
-    @apo = Dor.find params[:apo_id]
-    authorize! :manage_item, @apo
+    cocina = Dor::Services::Client.object(params[:apo_id]).find
+    authorize! :manage_item, cocina
 
+    @apo = Dor.find params[:apo_id]
     form = CollectionForm.new(Dor::Collection.new)
     return render 'new' unless form.validate(params.merge(apo_pid: params[:apo_id]))
 

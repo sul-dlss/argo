@@ -216,10 +216,8 @@ class ItemsController < ApplicationController
   # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
     # Item may be a Collection or a DRO
-    item = Dor::Services::Client.object(@object.pid).find
-
-    form_type = item.collection? ? CollectionRightsForm : DRORightsForm
-    form = form_type.new(item)
+    form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
+    form = form_type.new(@cocina)
     # The bulk form always uses `dro_rights_form` as the key
     form_key = params[:bulk] ? DRORightsForm.model_name.param_key : form.model_name.param_key
     form.validate(params[form_key])
@@ -244,12 +242,11 @@ class ItemsController < ApplicationController
   end
 
   def set_governing_apo
-    authorize! :manage_governing_apo, @object, params[:new_apo_id]
+    authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
 
-    object_client = Dor::Services::Client.object(@object.pid)
-    dro = object_client.find
-    updated_administrative = dro.administrative.new(hasAdminPolicy: params[:new_apo_id])
-    updated = dro.new(administrative: updated_administrative)
+    updated_administrative = @cocina.administrative.new(hasAdminPolicy: params[:new_apo_id])
+    updated = @cocina.new(administrative: updated_administrative)
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
     object_client.update(params: updated)
     reindex
 
@@ -263,16 +260,9 @@ class ItemsController < ApplicationController
   end
 
   def rights
-    object_client = Dor::Services::Client.object(params[:id])
+    form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
 
-    begin
-      cocina = object_client.find
-    rescue Dor::Services::Client::UnexpectedResponse
-      cocina = NilModel.new(params[:id])
-    end
-
-    form_type = cocina.collection? ? CollectionRightsForm : DRORightsForm
-    @form = form_type.new(cocina, default_rights: @object.admin_policy_object.default_rights)
+    @form = form_type.new(@cocina, default_rights: @object.admin_policy_object.default_rights)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -301,12 +291,14 @@ class ItemsController < ApplicationController
 
   # NOTE: temporarily added to revert argo#2008; remove once argo#2007 is resolved
   def tags_client
-    Dor::Services::Client.object(@object.pid).administrative_tags
+    Dor::Services::Client.object(@cocina.externalIdentifier).administrative_tags
   end
 
   # Filters
   def create_obj
     raise 'missing druid' unless params[:id]
+
+    @cocina = Dor::Services::Client.object(params[:id]).find
 
     @object = Dor.find params[:id]
   end
@@ -329,7 +321,7 @@ class ItemsController < ApplicationController
   # Permissions
 
   def authorize_manage!
-    authorize! :manage_item, @object
+    authorize! :manage_item, @cocina
   end
 
   def enforce_versioning

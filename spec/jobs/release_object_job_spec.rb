@@ -6,6 +6,38 @@ RSpec.describe ReleaseObjectJob do
   let(:client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
   let(:buffer) { StringIO.new }
 
+  let(:item1) do
+    Cocina::Models.build(
+      'label' => 'My Item',
+      'version' => 2,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pids[0],
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
+  let(:item2) do
+    Cocina::Models.build(
+      'label' => 'My Item',
+      'version' => 3,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pids[1],
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
+  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, release_tags: release_tags_client) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, release_tags: release_tags_client) }
+
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(client)
 
@@ -28,28 +60,23 @@ RSpec.describe ReleaseObjectJob do
         webauth: { 'privgroup' => 'dorstuff', 'login' => 'esnowden' }
       }
     end
-    let(:item1) { instance_double(Dor::Item, current_version: '2') }
-    let(:item2) { instance_double(Dor::Item, current_version: '3') }
 
     before do
-      allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
-      allow(Dor).to receive(:find).with(pids[1]).and_return(item2)
+      allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
+      allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
     end
 
     context 'in a happy world' do
       before do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
         expect(subject.ability).to receive(:can?).and_return(true).exactly(pids.length).times
-        pids.each do |pid|
-          stub_release_tags(pid)
-        end
       end
 
       it 'updates the total druid count' do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq pids.length
-        expect(client).to have_received(:create_workflow_by_name).with(pids[0], 'releaseWF', version: '2')
-        expect(client).to have_received(:create_workflow_by_name).with(pids[1], 'releaseWF', version: '3')
+        expect(client).to have_received(:create_workflow_by_name).with(pids[0], 'releaseWF', version: 2)
+        expect(client).to have_received(:create_workflow_by_name).with(pids[1], 'releaseWF', version: 3)
       end
 
       it 'increments the bulk_actions druid count success' do
@@ -77,9 +104,7 @@ RSpec.describe ReleaseObjectJob do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
         expect(subject.ability).to receive(:can?).and_return(true).exactly(pids.length).times
         # no stubbed release wf calls (they should never get called)
-        pids.each do |pid|
-          stub_release_tags(pid, 500)
-        end
+        allow(release_tags_client).to receive(:create).and_raise Dor::Services::Client::UnexpectedResponse, ': 500 (Response from dor-services-app did not contain a body.'
       end
 
       it 'updates the total druid count' do
@@ -113,9 +138,6 @@ RSpec.describe ReleaseObjectJob do
         expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
         expect(subject.ability).to receive(:can?).and_return(true).exactly(pids.length).times
         allow(client).to receive(:create_workflow_by_name).and_raise(Dor::WorkflowException)
-        pids.each do |pid|
-          stub_release_tags(pid)
-        end
       end
 
       it 'updates the total druid count' do
@@ -166,9 +188,4 @@ RSpec.describe ReleaseObjectJob do
       end
     end
   end
-end
-
-def stub_release_tags(druid, status = 201)
-  stub_request(:post, "#{Settings.dor_services.url}/v1/objects/#{druid}/release_tags")
-    .to_return(status: status)
 end

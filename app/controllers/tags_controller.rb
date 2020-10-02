@@ -10,8 +10,8 @@ class TagsController < ApplicationController
   end
 
   def update
-    @object = Dor.find params[:item_id]
-    authorize! :manage_item, @object
+    cocina = Dor::Services::Client.object(params[:item_id]).find
+    authorize! :manage_item, cocina
 
     current_tags = tags_client.list
 
