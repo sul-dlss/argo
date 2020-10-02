@@ -121,6 +121,10 @@ class CatalogController < ApplicationController
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
+    # This will help us find records that need to be fixed before we can move to cocina.
+    config.add_facet_field 'source_id_errors_ssim', label: 'Source ID Errors', home: false,
+                                                    component: true
+
     config.add_facet_field 'empties', label: 'Empty Fields', home: false,
                                       component: true,
                                       query: {
