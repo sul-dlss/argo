@@ -90,27 +90,25 @@ RSpec.describe ManageCatkeyJob do
   describe '#update_catkey' do
     let(:pid) { pids[0] }
     let(:catkey) { catkeys[0] }
-    let(:current_object) { instance_double(Dor::Item, pid: pid, current_version: '3') }
     let(:client) { double(Dor::Services::Client) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
-
-    let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::Vocab.object,
-                             'externalIdentifier' => pid,
-                             'access' => {
-                               'access' => 'world'
-                             },
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             'identification' => {}
-                           })
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
+    let(:item1) do
+      Cocina::Models.build(
+        'label' => 'My Item',
+        'version' => 3,
+        'type' => Cocina::Models::Vocab.object,
+        'externalIdentifier' => pids[0],
+        'access' => {
+          'access' => 'world'
+        },
+        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+        'structural' => {},
+        'identification' => {}
+      )
     end
 
     let(:updated_model) do
-      cocina_model.new(
+      item1.new(
         {
           'identification' => {
             'catalogLinks' => [{ catalog: 'symphony', catalogRecordId: '12345' }]
@@ -129,8 +127,7 @@ RSpec.describe ManageCatkeyJob do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       it 'updates catkey and versions objects' do
-        expect(Dor).to receive(:find).with(pid).and_return(current_object)
-        expect(subject).to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
+        expect(subject).to receive(:open_new_version).with(pid, 3, "Catkey updated to #{catkey}")
         subject.send(:update_catkey, pid, catkey, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
@@ -141,8 +138,7 @@ RSpec.describe ManageCatkeyJob do
       let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
       it 'updates catkey and does not version objects if not needed' do
-        expect(Dor).to receive(:find).with(pid).and_return(current_object)
-        expect(subject).not_to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
+        expect(subject).not_to receive(:open_new_version).with(pid, 3, "Catkey updated to #{catkey}")
         subject.send(:update_catkey, pid, catkey, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)

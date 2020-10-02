@@ -72,11 +72,11 @@ class GenericJob < ActiveJob::Base
     bulk_action.update(druid_count_total: count)
   end
 
-  def open_new_version(object, description)
-    wf_status = DorObjectWorkflowStatus.new(object.pid, version: object.current_version)
-    raise "#{Time.current} Unable to open new version for #{object.pid} (bulk_action.id=#{bulk_action.id})" unless wf_status.can_open_version?
+  def open_new_version(druid, version, description)
+    wf_status = DorObjectWorkflowStatus.new(druid, version: version)
+    raise "#{Time.current} Unable to open new version for #{druid} (bulk_action.id=#{bulk_action.id})" unless wf_status.can_open_version?
 
-    VersionService.open(identifier: object.pid,
+    VersionService.open(identifier: druid,
                         significance: 'minor',
                         description: description,
                         opening_user_name: bulk_action.user.to_s)
