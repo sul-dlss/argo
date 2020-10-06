@@ -39,7 +39,6 @@ class ManageCatkeyJob < GenericJob
       open_new_version(current_obj, "Catkey updated to #{new_catkey}") unless state_service.allows_modification?
       current_obj.catkey = new_catkey
       current_obj.save
-      VersionService.close(identifier: current_obj.pid) unless VersionService.openable?(identifier: current_obj.pid)
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} Catkey added/updated/removed successfully")
     rescue StandardError => e
