@@ -44,38 +44,32 @@ RSpec.describe ManageCatkeyJob do
     let(:catkey) { catkeys[0] }
     let(:current_object) { instance_double(Dor::Item, pid: pid, current_version: '3') }
     let(:client) { double(Dor::Services::Client) }
-    let(:object) { instance_double(Dor::Services::Client::Object, version: object_version) }
 
     before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object)
       allow(StateService).to receive(:new).and_return(state_service)
       allow(subject.ability).to receive(:can?).and_return(true)
     end
 
     context 'when modification is not allowed' do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
-      let(:object_version) { double(Dor::Services::Client::ObjectVersion, openable?: false) }
 
       it 'updates catkey and versions objects' do
         expect(Dor).to receive(:find).with(pid).and_return(current_object)
         expect(subject).to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
         expect(current_object).to receive(:catkey=).with(catkey)
         expect(current_object).to receive(:save)
-        expect(VersionService).to receive(:close).with(identifier: current_object.pid)
         subject.send(:update_catkey, pid, catkey, buffer)
       end
     end
 
     context 'when modification is allowed' do
       let(:state_service) { instance_double(StateService, allows_modification?: true) }
-      let(:object_version) { double(Dor::Services::Client::ObjectVersion, openable?: true) }
 
       it 'updates catkey and does not version objects if not needed' do
         expect(Dor).to receive(:find).with(pid).and_return(current_object)
         expect(subject).not_to receive(:open_new_version).with(current_object, "Catkey updated to #{catkey}")
         expect(current_object).to receive(:catkey=).with(catkey)
         expect(current_object).to receive(:save)
-        expect(VersionService).not_to receive(:close).with(identifier: current_object.pid)
         subject.send(:update_catkey, pid, catkey, buffer)
       end
     end
