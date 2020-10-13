@@ -12,7 +12,6 @@ class Dor::ObjectsController < ApplicationController
       rescue Cocina::Models::ValidationError => e
         return render plain: e.message, status: :bad_request
       end
-
     result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
 
     result.either(
