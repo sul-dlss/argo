@@ -27,7 +27,7 @@ class RegistrationForm
       }
     }
 
-    access = CocinaAccess.from_form_value(params[:rights])
+    access = CocinaDROAccess.from_form_value(params[:rights])
     model_params.merge!(access: access.value!) unless access.none?
 
     structural = {}

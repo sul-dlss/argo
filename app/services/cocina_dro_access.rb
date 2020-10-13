@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# This transcodes the access from the item set rights form to Cocina DROAccess schema
+# This transcodes the access from the item set rights form and registration form to Cocina DROAccess schema
 class CocinaDROAccess
   extend Dry::Monads[:maybe]
 

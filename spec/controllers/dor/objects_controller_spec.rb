@@ -113,7 +113,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'stanford',
-                                  download: 'stanford'
+                                  download: 'stanford',
+                                  controlledDigitalLending: false
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -125,7 +126,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"stanford","download":"stanford"},' \
+            '"access":{"access":"stanford","controlledDigitalLending":false,"download":"stanford"},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
@@ -162,7 +163,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 label: '',
                                 version: 1,
                                 access: {
-                                  access: 'location-based'
+                                  access: 'location-based',
+                                  controlledDigitalLending: false
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -174,7 +176,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"location-based","download":"location-based","readLocation":"music"},' \
+            '"access":{"access":"location-based","controlledDigitalLending":false,"download":"location-based","readLocation":"music"},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"hasMemberOrders":[{"viewingDirection":"left-to-right"}],' \
@@ -213,7 +215,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'world',
-                                  download: 'none'
+                                  download: 'none',
+                                  controlledDigitalLending: false
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -225,7 +228,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"world","download":"none"},' \
+            '"access":{"access":"world","controlledDigitalLending":false,"download":"none"},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
@@ -263,7 +266,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'world',
-                                  download: 'none'
+                                  download: 'none',
+                                  controlledDigitalLending: false
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -275,7 +279,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"dark","download":"none"},' \
+            '"access":{"access":"dark","controlledDigitalLending":false,"download":"none"},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
@@ -311,6 +315,58 @@ RSpec.describe Dor::ObjectsController, type: :controller do
         }
         expect(response.status).to eq 409
         expect(response.body).to eq message
+      end
+    end
+
+    context 'when register is successful with controlled digital lending' do
+      let(:submitted) do
+        {
+          admin_policy: 'druid:hv992ry2431',
+          collection: 'druid:hv992ry7777',
+          workflow_id: 'registrationWF',
+          label: 'test parameters for registration',
+          tag: ['Process : Content Type : Book (ltr)',
+                'Registered By : jcoyne85'],
+          rights: 'cdl-stanford-nd',
+          source_id: 'foo:bar',
+          other_id: 'label:'
+        }
+      end
+
+      let(:json) do
+        Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
+                                type: Cocina::Models::Vocab.book,
+                                label: '',
+                                version: 1,
+                                access: {
+                                  access: 'citation-only',
+                                  download: 'none',
+                                  controlledDigitalLending: true
+                                },
+                                administrative: {
+                                  hasAdminPolicy: 'druid:hv992ry2431'
+                                }).to_json
+      end
+
+      before do
+        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
+          .with(
+            body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
+        '"label":"test parameters for registration","version":1,' \
+        '"access":{"access":"citation-only","controlledDigitalLending":true,"download":"none"},' \
+        '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
+        '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+        '"structural":{"hasMemberOrders":[{"viewingDirection":"left-to-right"}],' \
+        '"isMemberOf":["druid:hv992ry7777"]}}'
+          )
+          .to_return(status: 200, body: json, headers: {})
+      end
+
+      it 'registers the object' do
+        post :create, params: submitted
+        expect(response).to be_created
+        expect(workflow_service).to have_received(:create_workflow_by_name)
+          .with('druid:bc234fg5678', 'registrationWF', version: '1')
       end
     end
   end
