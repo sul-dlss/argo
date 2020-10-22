@@ -16,15 +16,36 @@ class CollectionRightsForm < AccessForm
     @model = model.new(access: updated_access)
   end
 
-  # all the rights except CDL
-  def rights_list
-    super.filter { |i| i.last != 'cdl-stanford-nd' }
-  end
-
   private
 
   # Used by AccessForm#validate
   def valid_rights_options
-    Constants::REGISTRATION_RIGHTS_OPTIONS.map(&:last).without('cdl-stanford-nd')
+    Constants::COLLECTION_RIGHTS_OPTIONS.map(&:last)
+  end
+
+  def derive_rights_from_cocina
+    if @model.access.readLocation
+      "loc:#{@model.access.readLocation}"
+    elsif @model.access.access == 'citation-only'
+      'none' # TODO: we could remove this if we switch to REGISTRATION_RIGHTS_OPTIONS from DEFAULT_RIGHTS_OPTIONS
+    else
+      @model.access.access
+    end
+  end
+
+  def rights_list_for_apo
+    # iterate through the default version of the rights list.  if we found a default option
+    # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
+    # we didn't find a default option, we'll just return the default list of rights options with no
+    # specified selection.
+    result = []
+    Constants::COLLECTION_RIGHTS_OPTIONS.each do |val|
+      result << if @default_rights == val[1]
+                  ["#{val[0]} (APO default)", val[1]]
+                else
+                  val
+                end
+    end
+    result
   end
 end

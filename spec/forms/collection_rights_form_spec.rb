@@ -27,21 +27,13 @@ RSpec.describe CollectionRightsForm do
 
     let(:model) { instance_double(Cocina::Models::Collection, access: cocina_access) }
     let(:cocina_access) do
-      instance_double(Cocina::Models::Access, access: access, download: download, readLocation: read_location)
+      instance_double(Cocina::Models::Access, access: access, readLocation: read_location)
     end
     let(:access) { 'world' }
-    let(:download) { true }
+
     let(:read_location) { nil }
 
-    context 'with download is true' do
-      it { is_expected.to eq 'world' }
-    end
-
-    context 'with download is false' do
-      let(:download) { 'none' }
-
-      it { is_expected.to eq 'world-nd' }
-    end
+    it { is_expected.to eq 'world' }
 
     context 'with location access' do
       let(:access) { 'location-based' }
@@ -68,9 +60,7 @@ RSpec.describe CollectionRightsForm do
   describe '#rights_list' do
     it 'displays the rights list with (APO default)' do
       expect(instance.rights_list).to eq [['World (APO default)', 'world'],
-                                          ['World (no-download)', 'world-nd'],
                                           %w[Stanford stanford],
-                                          ['Stanford (no-download)', 'stanford-nd'],
                                           ['Location: Special Collections', 'loc:spec'],
                                           ['Location: Music Library', 'loc:music'],
                                           ['Location: Archive of Recorded Sound', 'loc:ars'],

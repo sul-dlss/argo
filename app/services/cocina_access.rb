@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# This transcodes the access from the collection and APO forms to Cocina Access schema
+# This transcodes the access from the collection forms to Cocina Access schema
 class CocinaAccess
   extend Dry::Monads[:maybe]
 
@@ -12,19 +12,16 @@ class CocinaAccess
 
     data = if rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
              {
-               access: rights.delete_suffix('-nd'),
-               download: 'none'
+               access: rights.delete_suffix('-nd')
              }
            elsif rights.start_with?('loc:')
              {
                access: 'location-based',
-               readLocation: rights.delete_prefix('loc:'),
-               download: 'location-based'
+               readLocation: rights.delete_prefix('loc:')
              }
            else
              {
-               access: rights,
-               download: rights
+               access: rights
              }
            end
     Some(data)

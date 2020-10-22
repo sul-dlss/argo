@@ -253,8 +253,7 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'dark',
-                'download' => 'none'
+                'access' => 'dark'
               }
             }
           )
@@ -274,8 +273,7 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'stanford',
-                'download' => 'stanford'
+                'access' => 'stanford'
               }
             }
           )
@@ -295,8 +293,7 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'stanford',
-                'download' => 'stanford'
+                'access' => 'stanford'
               }
             }
           )

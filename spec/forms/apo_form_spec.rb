@@ -328,7 +328,7 @@ RSpec.describe ApoForm do
           type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
           label: coll_title,
           version: 1,
-          access: { access: 'world', download: 'world' },
+          access: { access: 'world' },
           administrative: { hasAdminPolicy: 'druid:zt570tx3016' }
         }
       end

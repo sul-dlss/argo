@@ -27,7 +27,7 @@ RSpec.describe CollectionForm do
         type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
         label: title,
         version: 1,
-        access: { access: 'dark', download: 'none' },
+        access: { access: 'dark' },
         administrative: { hasAdminPolicy: 'druid:zt570tx3016' },
         description: description
       }
