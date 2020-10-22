@@ -53,20 +53,4 @@ class AccessForm
     rights += '-nd' if @model.access.download == 'none' && !%w[citation-only dark].include?(@model.access.access)
     rights
   end
-
-  def rights_list_for_apo
-    # iterate through the default version of the rights list.  if we found a default option
-    # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
-    # we didn't find a default option, we'll just return the default list of rights options with no
-    # specified selection.
-    result = []
-    Constants::REGISTRATION_RIGHTS_OPTIONS.each do |val|
-      result << if @default_rights == val[1]
-                  ["#{val[0]} (APO default)", val[1]]
-                else
-                  val
-                end
-    end
-    result
-  end
 end

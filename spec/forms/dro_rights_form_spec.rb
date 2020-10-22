@@ -33,7 +33,7 @@ RSpec.describe DRORightsForm do
 
     let(:model) { instance_double(Cocina::Models::DRO, access: cocina_access) }
     let(:cocina_access) do
-      instance_double(Cocina::Models::Access, access: access, download: download, readLocation: read_location)
+      instance_double(Cocina::Models::DROAccess, access: access, download: download, readLocation: read_location)
     end
     let(:access) { 'world' }
     let(:download) { true }

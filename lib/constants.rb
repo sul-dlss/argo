@@ -3,13 +3,51 @@
 ##
 # A module for including constants throughout the Argo application
 module Constants
-  DEFAULT_RIGHTS_OPTIONS = Dor::RightsMetadataDS::RIGHTS_TYPE_CODES.map do |type_code, human_readable|
-    [human_readable, type_code]
-  end
+  # From https://github.com/sul-dlss/dor-services/blob/master/lib/dor/datastreams/rights_metadata_ds.rb
+  DEFAULT_RIGHTS_OPTIONS = [
+    %w[World world],
+    ['World (no-download)', 'world-nd'],
+    %w[Stanford stanford],
+    ['Stanford (no-download)', 'stanford-nd'],
+    ['Controlled Digital Lending (no-download)', 'cdl-stanford-nd'],
+    ['Location: Special Collections', 'loc:spec'],
+    ['Location: Music Library', 'loc:music'],
+    ['Location: Archive of Recorded Sound', 'loc:ars'],
+    ['Location: Art Library', 'loc:art'],
+    ['Location: Hoover Library', 'loc:hoover'],
+    ['Location: Media & Microtext', 'loc:m&m'],
+    ['Dark (Preserve Only)', 'dark'],
+    ['Citation Only', 'none']
+  ].freeze
 
-  REGISTRATION_RIGHTS_OPTIONS = Dor::RightsMetadataDS::RIGHTS_TYPE_CODES.map do |type_code, human_readable|
-    [human_readable, type_code == 'none' ? 'citation-only' : type_code]
-  end
+  REGISTRATION_RIGHTS_OPTIONS = [
+    %w[World world],
+    ['World (no-download)', 'world-nd'],
+    %w[Stanford stanford],
+    ['Stanford (no-download)', 'stanford-nd'],
+    ['Controlled Digital Lending (no-download)', 'cdl-stanford-nd'],
+    ['Location: Special Collections', 'loc:spec'],
+    ['Location: Music Library', 'loc:music'],
+    ['Location: Archive of Recorded Sound', 'loc:ars'],
+    ['Location: Art Library', 'loc:art'],
+    ['Location: Hoover Library', 'loc:hoover'],
+    ['Location: Media & Microtext', 'loc:m&m'],
+    ['Dark (Preserve Only)', 'dark'],
+    ['Citation Only', 'citation-only']
+  ].freeze
+
+  COLLECTION_RIGHTS_OPTIONS = [
+    %w[World world],
+    %w[Stanford stanford],
+    ['Location: Special Collections', 'loc:spec'],
+    ['Location: Music Library', 'loc:music'],
+    ['Location: Archive of Recorded Sound', 'loc:ars'],
+    ['Location: Art Library', 'loc:art'],
+    ['Location: Hoover Library', 'loc:hoover'],
+    ['Location: Media & Microtext', 'loc:m&m'],
+    ['Dark (Preserve Only)', 'dark'],
+    ['Citation Only', 'citation-only']
+  ].freeze
 
   CONTENT_TYPES = %w[image book file map media document 3d].freeze
 
