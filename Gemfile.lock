@@ -74,7 +74,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.12.1)
+    blacklight (7.13.0)
       deprecation
       globalid
       jbuilder (~> 2.7)
@@ -608,7 +608,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.12.1)
+  blacklight (~> 7.13)
   blacklight-hierarchy (~> 4.2)
   bootsnap (>= 1.1.0)
   byebug
