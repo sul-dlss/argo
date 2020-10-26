@@ -60,17 +60,17 @@ gem 'rubyzip'
 gem 'zip_tricks', '~> 5.3'
 
 # Stanford related gems
-gem 'blacklight', '~> 7.11'
+gem 'blacklight', '~> 7.12.1' # See https://github.com/sul-dlss/argo/issues/2288
 gem 'blacklight-hierarchy', '~> 4.2'
 gem 'dor-services', '~> 9.6'
-gem 'dor-services-client', '~> 6.13'
+gem 'dor-services-client', '~> 6.14'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '~> 3.2'
 gem 'responders', '~> 2.0'
 gem 'rsolr'
-gem 'sdr-client', '~> 0.34'
+gem 'sdr-client', '~> 0.35'
 
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'

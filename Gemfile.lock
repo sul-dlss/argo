@@ -85,7 +85,7 @@ GEM
       blacklight (~> 7.9)
       deprecation
       rails (>= 5.1, < 7)
-    bootsnap (1.4.8)
+    bootsnap (1.4.9)
       msgpack (~> 1.0)
     builder (3.2.4)
     bundler-audit (0.7.0.1)
@@ -121,7 +121,7 @@ GEM
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
     childprocess (3.0.0)
-    cocina-models (0.41.0)
+    cocina-models (0.42.1)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -177,9 +177,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.13.0)
+    dor-services-client (6.14.1)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.41.0)
+      cocina-models (~> 0.42.1)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -213,7 +213,7 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer
-    dry-schema (1.5.5)
+    dry-schema (1.5.6)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.8, >= 0.8.3)
       dry-core (~> 0.4)
@@ -388,7 +388,7 @@ GEM
     public_suffix (4.0.6)
     puma (3.12.6)
     rack (2.2.3)
-    rack-mini-profiler (2.1.0)
+    rack-mini-profiler (2.2.0)
       rack (>= 1.2.0)
     rack-proxy (0.6.5)
       rack
@@ -463,7 +463,7 @@ GEM
       faraday (>= 0.9.0)
     rspec-core (3.9.3)
       rspec-support (~> 3.9.3)
-    rspec-expectations (3.9.2)
+    rspec-expectations (3.9.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
     rspec-mocks (3.9.1)
@@ -477,7 +477,7 @@ GEM
       rspec-expectations (~> 3.9.0)
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
-    rspec-support (3.9.3)
+    rspec-support (3.9.4)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (0.93.1)
@@ -489,7 +489,7 @@ GEM
       rubocop-ast (>= 0.6.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.8.0)
+    rubocop-ast (1.0.1)
       parser (>= 2.7.1.5)
     rubocop-rails (2.8.1)
       activesupport (>= 4.2.0)
@@ -513,9 +513,9 @@ GEM
       nokogiri
       rest-client
     rubyzip (2.3.0)
-    sdr-client (0.34.0)
+    sdr-client (0.35.1)
       activesupport
-      cocina-models (~> 0.41.0)
+      cocina-models (~> 0.42.1)
       dry-monads
       faraday (>= 0.16)
     selenium-webdriver (3.142.7)
@@ -572,7 +572,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.7)
     unicode-display_width (1.7.0)
-    view_component (2.19.1)
+    view_component (2.20.0)
       activesupport (>= 5.0.0, < 7.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -608,7 +608,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.11)
+  blacklight (~> 7.12.1)
   blacklight-hierarchy (~> 4.2)
   bootsnap (>= 1.1.0)
   byebug
@@ -622,7 +622,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 9.6)
-  dor-services-client (~> 6.13)
+  dor-services-client (~> 6.14)
   dor-workflow-client (~> 3.19)
   dry-monads
   equivalent-xml (>= 0.6.0)
@@ -659,7 +659,7 @@ DEPENDENCIES
   rubocop-rspec (~> 1.31.0)
   ruby-prof
   rubyzip
-  sdr-client (~> 0.34)
+  sdr-client (~> 0.35)
   selenium-webdriver
   sidekiq (~> 6.0)
   simplecov (~> 0.17.1)
