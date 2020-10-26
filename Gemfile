@@ -60,7 +60,7 @@ gem 'rubyzip'
 gem 'zip_tricks', '~> 5.3'
 
 # Stanford related gems
-gem 'blacklight', '~> 7.12.1' # See https://github.com/sul-dlss/argo/issues/2288
+gem 'blacklight', '~> 7.13'
 gem 'blacklight-hierarchy', '~> 4.2'
 gem 'dor-services', '~> 9.6'
 gem 'dor-services-client', '~> 6.14'
