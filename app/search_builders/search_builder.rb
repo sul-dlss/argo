@@ -32,7 +32,7 @@ class SearchBuilder < Blacklight::SearchBuilder
                 facet_config[:more_limit]
               end
 
-      page = blacklight_params.fetch(request_keys[:page], 1).to_i
+      page = blacklight_params.fetch(request[:page], 1).to_i
       offset = (page - 1) * limit
 
       solr_params[:"f.#{facet}.facet.limit"] = limit + 1
