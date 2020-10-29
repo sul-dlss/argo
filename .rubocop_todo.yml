@@ -16,23 +16,6 @@ Lint/AmbiguousBlockAssociation:
   Exclude:
     - 'spec/models/report_spec.rb'
 
-# Offense count: 13
-Lint/MissingSuper:
-  Exclude:
-    - 'app/components/action_button.rb'
-    - 'app/components/datastream_row.rb'
-    - 'app/components/download_all_button_component.rb'
-    - 'app/components/external_links_component.rb'
-    - 'app/components/throbber.rb'
-    - 'app/components/version_milestones_component.rb'
-    - 'app/components/workflow_grid_component.rb'
-    - 'app/components/workflow_process_row.rb'
-    - 'app/components/workflow_step_status_selector.rb'
-    - 'app/components/workflow_table_component.rb'
-    - 'app/components/workflow_table_process_component.rb'
-    - 'app/components/workflow_update_button.rb'
-    - 'config/initializers/okcomputer.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 Lint/NonDeterministicRequireOrder:

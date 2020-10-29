@@ -92,6 +92,9 @@ Lint/FloatComparison:
 
 Lint/MissingSuper:
   Enabled: true
+  Exclude:
+    - 'app/components/**/*'
+    - 'config/initializers/okcomputer.rb'
 
 Lint/MixedRegexpCaptureTypes:
   Enabled: true

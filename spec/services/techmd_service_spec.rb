@@ -16,7 +16,7 @@ RSpec.describe TechmdService do
       end
 
       it 'returns techmd' do
-        expect(techmd).to eq([{ 'foo' => 'bar' }])
+        expect(techmd.value!).to eq([{ 'foo' => 'bar' }])
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe TechmdService do
       end
 
       it 'returns empty techmd' do
-        expect(techmd).to eq([])
+        expect(techmd.value!).to eq([])
       end
     end
 
@@ -39,8 +39,8 @@ RSpec.describe TechmdService do
         allow(Faraday).to receive(:get).with(url).and_return(response)
       end
 
-      it 'raises' do
-        expect { techmd }.to raise_error(/Unexpected response/)
+      it 'is a failure' do
+        expect(techmd).to be_failure
       end
     end
   end
