@@ -10,10 +10,12 @@
 const images = require.context('../images', true)
 const imagePath = (name) => images(name, true)
 
+require('@rails/ujs').start()
+global.Rails = Rails
+
 import 'style/application.scss'
 
 import 'jquery'
-import "jquery-ujs"
 require('jquery-ui/themes/base/all')
 import 'jquery-ui'
 import 'jquery-validation'
