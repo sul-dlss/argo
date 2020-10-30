@@ -235,7 +235,7 @@ class CatalogController < ApplicationController
     @techmd = TechmdService.techmd_for(druid: params[:id])
 
     respond_to do |format|
-      format.html { setup_next_and_previous_documents }
+      format.html { @search_context = setup_next_and_previous_documents }
       format.json { render json: { response: { document: @document } } }
       additional_export_formats(@document, format)
     end
