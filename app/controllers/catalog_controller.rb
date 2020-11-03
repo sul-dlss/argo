@@ -60,9 +60,11 @@ class CatalogController < ApplicationController
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
-    config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 limit: 9999,
+    config.add_facet_field 'exploded_tag_ssim',               label: 'Tag', limit: 100,
                                                               component: Blacklight::Hierarchy::FacetFieldListComponent,
                                                               unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    config.add_facet_field 'project_tag_ssim',                label: 'Project',             component: true
+    config.add_facet_field 'registered_by_tag_ssim',          label: 'Registered By',       component: true
     config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         component: true, limit: 10
     config.add_facet_field 'content_type_ssim',               label: 'Content Type',        component: true, limit: 10
     config.add_facet_field 'content_file_mimetypes_ssim',     label: 'MIME Types',          component: true, limit: 10, home: false
@@ -164,7 +166,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'is_governed_by_ssim', if: false
     config.add_facet_field 'is_member_of_collection_ssim', if: false
     config.add_facet_field 'tag_ssim', if: false
-    config.add_facet_field 'project_tag_ssim', if: false
+    # config.add_facet_field 'project_tag_ssim', if: false
 
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
