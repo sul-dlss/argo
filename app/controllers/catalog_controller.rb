@@ -161,10 +161,10 @@ class CatalogController < ApplicationController
     config.add_facet_field 'sw_language_ssim',           label: 'SW Language',          component: true, limit: 10, home: false
     config.add_facet_field 'mods_typeOfResource_ssim',   label: 'MODS Resource Type',   component: true, limit: 10, home: false
     # Adding the facet field allows it to be queried (e.g., from value_helper)
-    config.add_facet_field 'is_governed_by_ssim', if: false
-    config.add_facet_field 'is_member_of_collection_ssim', if: false
-    config.add_facet_field 'tag_ssim', if: false
-    config.add_facet_field 'project_tag_ssim', if: false
+    config.add_facet_field 'is_governed_by_ssim', component: true, if: false
+    config.add_facet_field 'is_member_of_collection_ssim', component: true, if: false
+    config.add_facet_field 'tag_ssim', component: true, if: false
+    config.add_facet_field 'project_tag_ssim', component: true, if: false
 
     config.add_facet_fields_to_solr_request! # deprecated in newer Blacklights
 
