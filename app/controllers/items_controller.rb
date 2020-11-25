@@ -268,10 +268,10 @@ class ItemsController < ApplicationController
     # rescue NoMethodError => e
       # msg = "Cocina validation problem, e.g. bad source id: #{e.inspect}"
       # render status: :unprocessable_entity, plain: msg
-      msg = "Unable to retrieve object; could be Cocina Validation Problem (e.g. bad source id, ...): #{e.message}"
+      msg = "Unable to retrieve object: #{e.message}"
       logger.error msg
-      # redirect_to solr_document_path(params[:id]), flash: { error: msg }
-      flash.now[:alert] = msg
+      redirect_to solr_document_path(params[:id]), flash: { error: msg }
+      #flash.now[:alert] = msg
       # redirect_to request.referrer, flash: { error: msg }
 
       # respond_to do |format|
