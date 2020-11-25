@@ -280,9 +280,11 @@ class ItemsController < ApplicationController
   rescue NoMethodError => e
     msg = "Cocina validation problem, e.g. bad source id: #{e.message}"
     # raise(e, msg)
-    respond_to do |format|
-      format.html { render status: :unprocessable_entity, plain: msg }
-    end
+    redirect_to solr_document_path(params[:id]), flash: { error: msg }
+    #
+    # respond_to do |format|
+    #   format.html { render status: :unprocessable_entity, plain: msg }
+    # end
     # render status: :unprocessable_entity, plain: msg
   end
 
