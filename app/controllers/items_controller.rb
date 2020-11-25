@@ -227,6 +227,9 @@ class ItemsController < ApplicationController
     end
   rescue ArgumentError
     render status: :bad_request, plain: 'Invalid new rights setting.'
+  rescue NoMethodError => e
+    msg = "Cocina validation problem, e.g. bad source id: #{e.inspect}"
+    render status: :unprocessable_entity, plain: msg
   end
 
   # set the rightsMetadata to the APO's defaultObjectRights
@@ -264,19 +267,12 @@ class ItemsController < ApplicationController
       cocina = NilModel.new(params[:id])
     end
 
-    begin
-      form_type = cocina.collection? ? CollectionRightsForm : DRORightsForm
+    form_type = cocina.collection? ? CollectionRightsForm : DRORightsForm
 
-      @form = form_type.new(cocina, default_rights: @object.admin_policy_object.default_rights)
+    @form = form_type.new(cocina, default_rights: @object.admin_policy_object.default_rights)
 
-      respond_to do |format|
-        format.html { render layout: !request.xhr? }
-      end
-    rescue NoMethodError => e
-      msg = 'Cocina validation problem, e.g. bad source id.'
-      logger.error "#{msg}"
-      logger.error e.inspect
-      render status: :unprocessable_entity, plain: msg
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
     end
   end
 
