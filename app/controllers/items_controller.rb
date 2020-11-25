@@ -270,9 +270,9 @@ class ItemsController < ApplicationController
       # render status: :unprocessable_entity, plain: msg
       msg = "Cocina Validation Problem (e.g. bad source id, ...): #{e.message}"
       logger.error msg
-      # redirect_to solr_document_path(params[:id]), flash: { error: msg }
+      redirect_to solr_document_path(params[:id]), flash: { error: msg }
       # flash.now[:alert] = msg
-      redirect_to request.referrer, flash: { error: msg }
+      # redirect_to request.referrer, flash: { error: msg }
 
       # respond_to do |format|
       #   format.any { redirect_to solr_document_path(params[:id]), notice: msg, flash: { error: error_msg } }
