@@ -278,8 +278,9 @@ class ItemsController < ApplicationController
       format.html { render layout: !request.xhr? }
     end
   rescue NoMethodError => e
-    msg = "Cocina validation problem, e.g. bad source id: #{e.inspect}"
-    render status: :unprocessable_entity, plain: msg
+    msg = "Cocina validation problem, e.g. bad source id: #{e.message}"
+    raise(e, msg)
+    # render status: :unprocessable_entity, plain: msg
   end
 
   def catkey_ui
