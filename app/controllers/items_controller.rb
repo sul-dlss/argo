@@ -271,7 +271,10 @@ class ItemsController < ApplicationController
       msg = "Cocina Validation Problem (e.g. bad source id, ...): #{e.message}"
       logger.error msg
       # redirect_to solr_document_path(params[:id]), flash: { error: msg }
-      flash.now[:error] = msg
+      flash.now[:alert] = msg
+      # respond_to do |format|
+      #   format.any { redirect_to solr_document_path(params[:id]), notice: msg, flash: { error: error_msg } }
+      # end
       return
     end
 
