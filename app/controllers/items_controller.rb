@@ -263,8 +263,11 @@ class ItemsController < ApplicationController
 
     begin
       cocina = object_client.find
-    rescue Dor::Services::Client::UnexpectedResponse
-      cocina = NilModel.new(params[:id])
+    rescue Dor::Services::Client::UnexpectedResponse => e
+    #   cocina = NilModel.new(params[:id])
+    # rescue NoMethodError => e
+      msg = "Cocina validation problem, e.g. bad source id: #{e.inspect}"
+      render status: :unprocessable_entity, plain: msg
     end
 
     form_type = cocina.collection? ? CollectionRightsForm : DRORightsForm
