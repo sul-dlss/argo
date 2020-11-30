@@ -34,9 +34,11 @@ import 'modules/permission_list'
 import 'modules/populate_druids'
 import 'modules/sharing'
 import TagsAutocomplete from 'modules/tags_autocomplete'
-import Argo from  'argo'
+import Argo from 'argo'
 
 import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
+import 'modules/blacklight-override'
+
 import 'blacklight-hierarchy/app/assets/javascripts/blacklight/hierarchy/hierarchy'
 
 // The Blacklight onLoad event works better than the regular onLoad event if
