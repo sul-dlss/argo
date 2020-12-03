@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CatalogController, type: :controller do
-  let(:druid) { 'druid:rn653dy9317' } # a fixture Dor::Item record
+  let(:druid) { 'druid:pv820dk6668' } # a fixture Dor::Item record
   let(:user) { create(:user) }
 
   describe '#index' do

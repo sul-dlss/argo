@@ -3,10 +3,26 @@
 require 'rails_helper'
 
 RSpec.describe FilesController, type: :controller do
-  let(:pid) { 'druid:rn653dy9317' }
-  let(:item) { Dor::Item.new pid: pid }
+  let(:pid) { 'druid:bc123df4567' }
+  let(:cocina_model) do
+    instance_double(Cocina::Models::DRO, externalIdentifier: pid, structural: structural)
+  end
+  let(:file_set) do
+    instance_double(Cocina::Models::FileSet, structural: fs_structural)
+  end
+  let(:structural) do
+    instance_double(Cocina::Models::DROStructural, contains: [file_set])
+  end
+  let(:fs_structural) do
+    instance_double(Cocina::Models::FileSetStructural, contains: [file])
+  end
+  let(:file) do
+    instance_double(Cocina::Models::File, externalIdentifier: "#{pid}/M1090_S15_B01_F07_0106.jp2")
+  end
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   before do
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     allow_any_instance_of(User).to receive(:roles).and_return([])
     sign_in user
   end
@@ -14,10 +30,6 @@ RSpec.describe FilesController, type: :controller do
   let(:user) { create(:user) }
 
   describe '#preserved' do
-    before do
-      allow(Dor).to receive(:find).with(pid).and_return(item)
-    end
-
     context 'when they have manage access' do
       let(:mock_file_name) { 'preserved file.txt' }
       let(:mock_version) { '2' }
@@ -101,7 +113,7 @@ RSpec.describe FilesController, type: :controller do
         expect(response).to have_http_status(:ok)
         expect(assigns(:has_been_accessioned)).to be true
         expect(assigns(:last_accessioned_version)).to eq '7'
-        expect(assigns(:file)).to respond_to(:administrative)
+        expect(assigns(:file)).to eq file
       end
     end
 
