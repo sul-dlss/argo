@@ -24,6 +24,13 @@ class ItemsController < ApplicationController
     set_governing_apo
   ]
 
+  rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
+    md = /\((.*)\)/.match exception.message
+    detail = JSON.parse(md[1])['errors'].first['detail']
+    redirect_to solr_document_path(params[:id]),
+                flash: { error: "Unable to retrieve the cocina model: #{detail.truncate(200)}" }
+  end
+
   def purl_preview
     xml = Dor::Services::Client.object(params[:id]).metadata.descriptive
     @mods_display = ModsDisplayObject.new(xml)

@@ -308,5 +308,45 @@ RSpec.describe 'Set rights for an object' do
         end
       end
     end
+
+    context "when the cocina model isn't found" do
+      let(:cocina_model) do
+        Cocina::Models.build({
+                               'label' => 'My ETD',
+                               'version' => 1,
+                               'type' => Cocina::Models::Vocab.collection,
+                               'externalIdentifier' => pid,
+                               'access' => {
+                                 'access' => 'world'
+                               },
+                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                               'identification' => {}
+                             })
+      end
+      let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
+      let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
+      let(:service) { instance_double(Blacklight::SearchService, fetch: [nil, doc]) }
+      let(:doc) { SolrDocument.new id: pid }
+      let(:error) do
+        '{"errors":[{"status":"422","title":"Unexpected Cocina::Mapper.build error",' \
+        '"detail":"#/components/schemas/SourceId pattern ^.+:.+$ does not match value: bad_source_id:, ' \
+        'example: sul:PC0170_s3_Fiesta_Bowl_2012-01-02_210609_2026"}]}'
+      end
+
+      before do
+        allow(fedora_obj).to receive(:datastreams).and_return({})
+        allow(Blacklight::SearchService).to receive(:new).and_return(service)
+        allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse, "Error (#{error})")
+      end
+
+      it 'redirects to the show page with an error' do
+        post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'dark' } }
+        expect(response).to redirect_to(solr_document_path(pid))
+        follow_redirect!
+        expect(response.body).to include 'Unable to retrieve the cocina model: ' \
+          '#/components/schemas/SourceId pattern ^.+:.+$ does not match value: ' \
+          'bad_source_id:, example: sul:PC0170_s3_Fiesta_Bowl_2012-01-02_210609_2026'
+      end
+    end
   end
 end
