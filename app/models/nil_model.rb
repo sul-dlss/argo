@@ -10,6 +10,14 @@ class NilModel
     NilAdministrative.new
   end
 
+  def access
+    Cocina::Models::DROAccess.new
+  end
+
+  def collection?
+    false
+  end
+
   # This stands in for the administrative metadata
   class NilAdministrative
     # rubocop:disable Naming/MethodName

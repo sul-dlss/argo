@@ -265,7 +265,6 @@ class ItemsController < ApplicationController
     end
 
     form_type = cocina.collection? ? CollectionRightsForm : DRORightsForm
-
     @form = form_type.new(cocina, default_rights: @object.admin_policy_object.default_rights)
 
     respond_to do |format|
