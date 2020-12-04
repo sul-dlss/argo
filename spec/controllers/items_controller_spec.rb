@@ -135,11 +135,12 @@ RSpec.describe ItemsController, type: :controller do
 
       context 'when the date is malformed' do
         before do
-          allow(embargo_service).to receive(:update).and_raise(Dor::Services::Client::UnexpectedResponse)
+          allow(embargo_service).to receive(:update).and_raise(Dor::Services::Client::UnexpectedResponse, 'Error: ({"errors":[{"detail":"Invalid date"}]})')
         end
 
-        it 'dies' do
-          expect { post :embargo_update, params: { id: pid, embargo_date: 'not-a-date' } }.to raise_error(Dor::Services::Client::UnexpectedResponse)
+        it 'shows the error' do
+          post :embargo_update, params: { id: pid, embargo_date: 'not-a-date' }
+          expect(flash[:error]).to eq 'Unable to retrieve the cocina model: Invalid date'
         end
       end
     end
