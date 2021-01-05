@@ -6,13 +6,18 @@ RSpec.describe 'Item source id change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(StateService).to receive(:new).and_return(state_service)
+    allow(Dor).to receive(:find).with(druid).and_return(obj)
+    allow(obj).to receive(:new_record?).and_return(false)
   end
+
+  let(:druid) { 'druid:kv840xx0000' }
+  let(:obj) { Dor::Item.new(pid: druid, catkey: '99999') }
 
   describe 'when modification is not allowed' do
     let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     it 'cannot change the source id' do
-      visit source_id_ui_item_path 'druid:kv840rx2720'
+      visit source_id_ui_item_path druid
       fill_in 'new_id', with: 'sulair:newSource'
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Object cannot be modified in ' \
@@ -47,14 +52,18 @@ RSpec.describe 'Item source id change' do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      ActiveFedora::SolrService.add(id: druid, objectType_ssim: 'item')
+      ActiveFedora::SolrService.commit
     end
 
     it 'changes the source id' do
-      visit source_id_ui_item_path 'druid:kv840rx2720'
+      visit source_id_ui_item_path druid
       fill_in 'new_id', with: 'sulair:newSource'
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Source Id for ' \
-        'druid:kv840rx2720 has been updated!'
+        "#{druid} has been updated!"
+      expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       expect(state_service).to have_received(:allows_modification?).exactly(3).times
     end
   end

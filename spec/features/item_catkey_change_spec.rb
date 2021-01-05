@@ -6,13 +6,18 @@ RSpec.describe 'Item catkey change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(StateService).to receive(:new).and_return(state_service)
+    allow(Dor).to receive(:find).with(druid).and_return(obj)
+    allow(obj).to receive(:new_record?).and_return(false)
   end
+
+  let(:druid) { 'druid:kv840xx0000' }
+  let(:obj) { Dor::Item.new(pid: druid, catkey: '99999') }
 
   describe 'when modification is not allowed' do
     let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     it 'cannot change the catkey' do
-      visit catkey_ui_item_path 'druid:kv840rx2720'
+      visit catkey_ui_item_path druid
       fill_in 'new_catkey', with: '12345'
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Object cannot be modified in ' \
@@ -21,7 +26,6 @@ RSpec.describe 'Item catkey change' do
   end
 
   describe 'when modification is allowed' do
-    let(:pid) { 'druid:kv840rx2720' }
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client, update: true) }
@@ -34,7 +38,7 @@ RSpec.describe 'Item catkey change' do
                              'label' => 'My ETD',
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.object,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'access' => {
                                'access' => 'world'
                              },
@@ -51,11 +55,11 @@ RSpec.describe 'Item catkey change' do
     end
 
     it 'changes the catkey' do
-      visit catkey_ui_item_path pid
+      visit catkey_ui_item_path druid
       fill_in 'new_catkey', with: '12345'
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Catkey for ' \
-        'druid:kv840rx2720 has been updated!'
+        "#{druid} has been updated!"
       expect(state_service).to have_received(:allows_modification?).exactly(3).times
     end
   end
