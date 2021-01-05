@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe CatalogController, type: :controller do
-  let(:druid) { 'druid:pv820dk6668' } # a fixture Dor::Item record
   let(:user) { create(:user) }
 
   describe '#index' do
@@ -22,11 +21,13 @@ RSpec.describe CatalogController, type: :controller do
   end
 
   describe '#show' do
+    let(:druid) { 'druid:fakepid' }
+    let(:item) { instance_double(Dor::Item) }
+
     before do
       ActiveFedora::SolrService.add(id: druid,
                                     sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
       ActiveFedora::SolrService.commit
-      item = instantiate_fixture(druid, Dor::Item)
       allow(Dor).to receive(:find).with(druid).and_return(item)
     end
 
@@ -44,7 +45,7 @@ RSpec.describe CatalogController, type: :controller do
 
       context 'when unauthorized' do
         before do
-          allow(controller).to receive(:authorize!).with(:view_metadata, Dor::Item).and_raise(CanCan::AccessDenied)
+          allow(controller).to receive(:authorize!).with(:view_metadata, item).and_raise(CanCan::AccessDenied)
         end
 
         it 'is forbidden' do
@@ -55,7 +56,7 @@ RSpec.describe CatalogController, type: :controller do
 
       context 'when authorized' do
         before do
-          allow(controller).to receive(:authorize!).with(:view_metadata, Dor::Item)
+          allow(controller).to receive(:authorize!).with(:view_metadata, item)
           allow(Dor::Services::Client).to receive(:object).and_return(object_client)
         end
 
