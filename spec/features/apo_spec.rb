@@ -64,7 +64,7 @@ RSpec.describe 'apo', js: true do
     # Stubbing this out, because it's the dor-services-app that would have actually created it.
     allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
     allow(Dor).to receive(:find).with(new_collection_druid).and_return(collection)
-    allow(Dor).to receive(:find).with('druid:dd327qr3670', cast: true).and_call_original # The agreement
+    allow(Dor).to receive(:find).with('druid:dd327rv8888', cast: true).and_call_original # The agreement
     sign_in user, groups: ['sdr:administrator-role']
   end
 

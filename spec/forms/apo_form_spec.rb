@@ -11,7 +11,7 @@ RSpec.describe ApoForm do
 
   context 'with a model (update)' do
     let(:instance) { described_class.new(apo) }
-    let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327qr3670') }
+    let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
     let(:apo) do
       Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
     end
@@ -135,7 +135,7 @@ RSpec.describe ApoForm do
       subject { instance.agreement_object_id }
 
       before do
-        apo.agreement_object_id = 'druid:dd327qr3670'
+        apo.agreement_object_id = 'druid:dd327rv8888'
       end
 
       it { is_expected.to eq agreement.pid }
@@ -311,7 +311,7 @@ RSpec.describe ApoForm do
       let(:apo) do
         Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
       end
-      let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327qr3670') }
+      let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
       let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
       let(:collection) { Dor.find(cocina_collection.externalIdentifier) }
 
