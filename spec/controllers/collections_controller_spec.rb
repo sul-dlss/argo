@@ -10,7 +10,7 @@ RSpec.describe CollectionsController do
   end
 
   let(:user) { create(:user) }
-  let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
+  let(:apo) { instance_double(Dor::AdminPolicyObject, pid: 'druid:zt570qh4444', add_default_collection: true, save: true) }
   let(:collection) { FactoryBot.create_for_repository(:collection) }
 
   describe '#new' do

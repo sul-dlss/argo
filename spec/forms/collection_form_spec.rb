@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CollectionForm do
-  let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
+  let(:apo) { instance_double(Dor::AdminPolicyObject, pid: 'druid:zt570qh4444') }
 
   before do
     allow(Argo::Indexer).to receive(:reindex_pid_remotely)
@@ -28,7 +28,7 @@ RSpec.describe CollectionForm do
         label: title,
         version: 1,
         access: { access: 'dark' },
-        administrative: { hasAdminPolicy: 'druid:zt570tx3016' },
+        administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
         description: description
       }
     end
@@ -127,7 +127,7 @@ RSpec.describe CollectionForm do
         label: new_title,
         version: 1,
         access: { access: 'dark', download: 'none' },
-        administrative: { hasAdminPolicy: 'druid:zt570tx3016' },
+        administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
         description: new_description
       }
     end
@@ -141,7 +141,6 @@ RSpec.describe CollectionForm do
     end
 
     before do
-      allow(existing_collection).to receive(:new_record?).and_return(false) # instantiate_fixture creates unsaved objects
       allow(Dor).to receive(:find).with(existing_collection.pid).and_return(existing_collection)
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: JSON.generate(expected_update_body_hash))

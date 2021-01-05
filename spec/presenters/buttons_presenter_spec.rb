@@ -179,8 +179,9 @@ RSpec.describe ButtonsPresenter, type: :presenter do
     end
 
     context 'a Dor::AdminPolicyObject the user can manage' do
-      let(:view_apo_id) { 'druid:zt570tx3016' }
-      let(:object) { instantiate_fixture(view_apo_id, Dor::AdminPolicyObject) }
+      let(:view_apo_id) { 'druid:zt570qh4444' }
+      let(:object) { instance_double(Dor::AdminPolicyObject, current_version: '3', datastreams: {}) }
+
       let(:doc) do
         SolrDocument.new('id' => view_apo_id,
                          'processing_status_text_ssi' => 'not registered',
@@ -249,6 +250,11 @@ RSpec.describe ButtonsPresenter, type: :presenter do
             url: "/items/#{view_apo_id}/manage_release"
           }
         ]
+      end
+
+      before do
+        allow(object).to receive(:is_a?).and_return(false)
+        allow(object).to receive(:is_a?).with(Dor::AdminPolicyObject).and_return(true)
       end
 
       it 'renders the appropriate default buttons for an apo' do
