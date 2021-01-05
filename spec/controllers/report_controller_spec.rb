@@ -76,7 +76,7 @@ RSpec.describe ReportController, type: :controller do
       end
 
       let(:report) { instance_double(Report, pids: pids) }
-      let(:pids) { %w[ab123gg7777 qh056xw6806] }
+      let(:pids) { %w[ab123gg7777 qh056qq6868] }
 
       it 'returns json' do
         get :pids, params: { format: :json }
@@ -102,7 +102,7 @@ RSpec.describe ReportController, type: :controller do
       end
 
       let(:report) { instance_double(Report, to_csv: csv) }
-      let(:csv) { "Druid,Purl,Source Id,Tags\nab123gg7777\nqh056xw6806" }
+      let(:csv) { "Druid,Purl,Source Id,Tags\nab123gg7777\nqh056qq6868" }
 
       it 'downloads valid CSV data for specific fields' do
         get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
