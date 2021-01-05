@@ -12,7 +12,7 @@ RSpec.describe 'Bulk Reindex of DOR Objects' do
   it 'Creates a new job' do
     visit new_bulk_action_path
     select 'Reindex'
-    fill_in 'pids', with: 'druid:br481xz7820'
+    fill_in 'pids', with: 'druid:ab123gg7777'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     within 'table.table' do

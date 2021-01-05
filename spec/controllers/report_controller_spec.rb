@@ -76,7 +76,7 @@ RSpec.describe ReportController, type: :controller do
       end
 
       let(:report) { instance_double(Report, pids: pids) }
-      let(:pids) { %w[br481xz7820 qh056xw6806] }
+      let(:pids) { %w[ab123gg7777 qh056xw6806] }
 
       it 'returns json' do
         get :pids, params: { format: :json }
@@ -84,7 +84,7 @@ RSpec.describe ReportController, type: :controller do
         pids = JSON.parse(response.body)['druids']
         expect(pids).to be_a(Array)
         expect(pids.length).to be > 1
-        expect(pids.first).to eq('br481xz7820')
+        expect(pids.first).to eq('ab123gg7777')
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe ReportController, type: :controller do
       end
 
       let(:report) { instance_double(Report, to_csv: csv) }
-      let(:csv) { "Druid,Purl,Source Id,Tags\nbr481xz7820\nqh056xw6806" }
+      let(:csv) { "Druid,Purl,Source Id,Tags\nab123gg7777\nqh056xw6806" }
 
       it 'downloads valid CSV data for specific fields' do
         get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
@@ -111,7 +111,7 @@ RSpec.describe ReportController, type: :controller do
         expect(data.first).to eq(%w[Druid Purl Source\ Id Tags])
         expect(Report).to have_received(:new).with(ActionController::Parameters, %w[druid purl source_id_ssim tag_ssim], Hash)
         expect(data.length).to be > 1
-        expect(data[1].first).to eq('br481xz7820') # first data row starts with pid
+        expect(data[1].first).to eq('ab123gg7777') # first data row starts with pid
       end
     end
   end
