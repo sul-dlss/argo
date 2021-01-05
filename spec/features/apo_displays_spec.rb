@@ -3,21 +3,21 @@
 require 'rails_helper'
 
 RSpec.describe 'Viewing an Admin policy' do
-  let(:object) { Dor::AdminPolicyObject.new(pid: 'druid:zt570tx3016') }
+  let(:apo_druid) { 'druid:zt570qh4444' }
+  let(:object) { Dor::AdminPolicyObject.new(pid: apo_druid) }
   let(:current_user) { create(:user) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:pid) { 'druid:zt570tx3016' }
   let(:cocina_model) do
     Cocina::Models.build(
       'label' => 'The APO',
       'version' => 1,
       'type' => Cocina::Models::Vocab.admin_policy,
-      'externalIdentifier' => pid,
+      'externalIdentifier' => apo_druid,
       'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
     )
   end
 
-  let(:solr_doc) { { id: pid } }
+  let(:solr_doc) { { id: apo_druid } }
 
   before do
     ActiveFedora::SolrService.add(solr_doc)
@@ -30,7 +30,7 @@ RSpec.describe 'Viewing an Admin policy' do
 
   context 'mods view' do
     before do
-      allow(Dor::Services::Client).to receive(:object).with('druid:zt570tx3016').and_return(object_service)
+      allow(Dor::Services::Client).to receive(:object).with(apo_druid).and_return(object_service)
     end
 
     let(:object_service) { instance_double(Dor::Services::Client::Object, metadata: metadata_service) }
@@ -44,7 +44,7 @@ RSpec.describe 'Viewing an Admin policy' do
     end
 
     it 'renders the mods view including a title' do
-      visit '/items/druid:zt570tx3016/purl_preview'
+      visit "/items/#{apo_druid}/purl_preview"
       expect(page).to have_content('Ampex')
     end
   end
@@ -52,14 +52,14 @@ RSpec.describe 'Viewing an Admin policy' do
   context 'item dialogs' do
     context 'open version ui' do
       it 'renders the open version ui' do
-        visit '/items/druid:zt570tx3016/versions/open_ui'
+        visit "/items/#{apo_druid}/versions/open_ui"
         expect(page).to have_content('description')
       end
     end
 
     context 'close version ui' do
       it 'renders the close version ui' do
-        visit '/items/druid:zt570tx3016/versions/close_ui'
+        visit "/items/#{apo_druid}/versions/close_ui"
         expect(page).to have_content('description')
       end
     end
@@ -72,7 +72,7 @@ RSpec.describe 'Viewing an Admin policy' do
       end
 
       it 'renders the add workflow ui' do
-        visit new_item_workflow_path('druid:zt570tx3016')
+        visit new_item_workflow_path(apo_druid)
         expect(page).to have_content('Add workflow')
       end
     end
@@ -80,21 +80,21 @@ RSpec.describe 'Viewing an Admin policy' do
     context 'open version ui' do
       it 'renders the add collection ui' do
         allow(current_user).to receive(:permitted_collections).and_return(['druid:ab123cd4567'])
-        visit '/items/druid:zt570tx3016/collection_ui'
+        visit "/items/#{apo_druid}/collection_ui"
         expect(page).to have_content('Add Collection')
       end
     end
 
     context 'content type' do
       it 'renders the edit content type ui' do
-        visit '/items/druid:zt570tx3016/content_type'
+        visit "/items/#{apo_druid}/content_type"
         expect(page).to have_content('Set content type')
       end
     end
 
     context 'embargo form' do
       it 'renders the embargo update ui' do
-        visit '/items/druid:zt570tx3016/embargo_form'
+        visit "/items/#{apo_druid}/embargo_form"
         expect(page).to have_content('Embargo')
       end
     end
@@ -104,19 +104,29 @@ RSpec.describe 'Viewing an Admin policy' do
         idmd = double(Dor::IdentityMetadataDS)
         allow(object).to receive(:identityMetadata).and_return(idmd)
         allow(idmd).to receive(:sourceId).and_return('something123')
-        visit '/items/druid:zt570tx3016/source_id_ui'
+        visit "/items/#{apo_druid}/source_id_ui"
         expect(page).to have_content('Update')
       end
     end
 
     context 'tag ui' do
+<<<<<<< HEAD
       let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
       let(:object_client) do
         instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
       end
 
+=======
+      before do
+        allow(Dor::Services::Client).to receive(:object).with(apo_druid).and_return(object_service)
+      end
+
+      let(:object_service) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client) }
+      let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
+
+>>>>>>> Remove unnecessary fixture
       it 'renders the tag ui' do
-        visit '/items/druid:zt570tx3016/tags/edit'
+        visit "/items/#{apo_druid}/tags/edit"
         expect(page).to have_content('Update tags')
       end
     end

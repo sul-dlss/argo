@@ -16,7 +16,7 @@ RSpec.describe 'Bulk actions view', js: true do
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    ActiveFedora::SolrService.add(id: 'druid:zt570tx3016',
+    ActiveFedora::SolrService.add(id: 'druid:zt570qh4444',
                                   nonhydrus_collection_title_ssim: 'Foo')
     ActiveFedora::SolrService.commit
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
@@ -33,7 +33,7 @@ RSpec.describe 'Bulk actions view', js: true do
 
     within '#pids' do
       # Test that the textarea was populated from a search
-      expect(page).to have_content 'druid:zt570tx3016'
+      expect(page).to have_content 'druid:zt570qh4444'
     end
 
     expect(page).to have_button('Refresh MODS', disabled: false)
@@ -44,7 +44,7 @@ RSpec.describe 'Bulk actions view', js: true do
     expect(page).to have_button('Apply APO defaults', disabled: false)
     expect(page).to have_button('Add a workflow', disabled: false)
 
-    fill_in 'pids', with: 'druid:zt570tx3016' # just one druid
+    fill_in 'pids', with: 'druid:zt570qh4444' # just one druid
     click_button 'Set source Id'
     fill_in 'source_ids', with: 'druid:cx969bz4046	test:SOURCE_ID_1234'
     click_button 'Update source ids'

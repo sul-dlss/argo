@@ -13,7 +13,7 @@ RSpec.describe ApoForm do
     let(:instance) { described_class.new(apo) }
     let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327qr3670') }
     let(:apo) do
-      Dor::AdminPolicyObject.new(pid: 'druid:zt570tx3016')
+      Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
     end
     let(:md_info) do
       {
@@ -208,7 +208,7 @@ RSpec.describe ApoForm do
     describe '#to_param' do
       subject { instance.to_param }
 
-      it { is_expected.to eq 'druid:zt570tx3016' }
+      it { is_expected.to eq 'druid:zt570qh4444' }
     end
 
     describe '#license_options' do
@@ -309,7 +309,7 @@ RSpec.describe ApoForm do
 
     describe '#save' do
       let(:apo) do
-        Dor::AdminPolicyObject.new(pid: 'druid:zt570tx3016')
+        Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
       end
       let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327qr3670') }
       let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
@@ -344,7 +344,7 @@ RSpec.describe ApoForm do
 
       let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
       let(:created_apo) do
-        Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:zt570tx3016',
+        Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:zt570qh4444',
                                         type: Cocina::Models::Vocab.admin_policy,
                                         label: '',
                                         version: 1,
@@ -366,7 +366,7 @@ RSpec.describe ApoForm do
           label: coll_title,
           version: 1,
           access: { access: 'world' },
-          administrative: { hasAdminPolicy: 'druid:zt570tx3016' }
+          administrative: { hasAdminPolicy: 'druid:zt570qh4444' }
         }
       end
 

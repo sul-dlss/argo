@@ -229,15 +229,23 @@ RSpec.describe RegistrationsController, type: :controller do
   end
 
   describe '#collection_list' do
+    let(:apo_id) { 'druid:fg464dn8891' }
+
     it 'handles invalid parameters' do
       expect { get 'collection_list' }.to raise_error(ArgumentError)
     end
 
-    it 'handles an APO with no collections' do
-      get 'collection_list', params: { apo_id: 'druid:zt570tx3016', format: :json }
-      data = JSON.parse(response.body)
-      expect(data).to include('' => 'None')
-      expect(data.length).to eq(1)
+    context 'when there are no collections' do
+      before do
+        allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return([])
+      end
+
+      it 'shows "None"' do
+        get 'collection_list', params: { apo_id: apo_id, format: :json }
+        data = JSON.parse(response.body)
+        expect(data).to include('' => 'None')
+        expect(data.length).to eq(1)
+      end
     end
 
     context 'when the collections are in solr' do
@@ -272,11 +280,7 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     context 'when the collections are not in solr' do
-      let(:apo_id) { 'druid:fg464dn8891' }
-
       it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
-        apo_id = 'druid:fg464dn8891'
-
         # The 'z' druid has a title that should cause it to sort first
         # after "None", and the 'a' druid has a title that should cause it to sort last.
         col_ids_for_apo = ['druid:pb873ty1662', 'druid:ab098cd7654', 'druid:zy123xw4567']
