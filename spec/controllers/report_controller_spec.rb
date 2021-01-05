@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe ReportController, type: :controller do
   before do
     ActiveFedora::SolrService.instance.conn.delete_by_query('*:*')
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3979',
+    ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
                                   objectType_ssim: 'item',
                                   obj_label_tesim: 'Report about stuff')
     ActiveFedora::SolrService.commit
@@ -149,29 +149,31 @@ RSpec.describe ReportController, type: :controller do
     end
 
     context 'as an admin' do
-      let(:report) { instance_double(Report, pids: %w[xb482bw3979]) }
+      let(:report) { instance_double(Report, pids: %w[xb482ww9999]) }
 
       before do
         allow(controller.current_user).to receive(:admin?).and_return(true)
         allow(Report).to receive(:new).and_return(report)
+        allow(Dor).to receive(:find).with('druid:xb482ww9999').and_return(obj)
       end
 
       it 'sets instance variables and calls update workflow service' do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
         expect(assigns(:workflow)).to eq workflow
         expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w[xb482bw3979])
+        expect(assigns(:ids)).to eq(%w[xb482ww9999])
         expect(response).to have_http_status(:ok)
         expect(workflow_client).to have_received(:update_status)
-          .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
+          .with(druid: 'druid:xb482ww9999', workflow: workflow, process: step, status: 'waiting')
       end
     end
 
     context 'a non admin who has access' do
-      let(:report) { instance_double(Report, pids: %w[xb482bw3979]) }
+      let(:report) { instance_double(Report, pids: %w[xb482ww9999]) }
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(true)
+        allow(Dor).to receive(:find).with('druid:xb482ww9999').and_return(obj)
         allow(Report).to receive(:new).and_return(report)
       end
 
@@ -179,19 +181,20 @@ RSpec.describe ReportController, type: :controller do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
         expect(assigns(:workflow)).to eq workflow
         expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w[xb482bw3979])
+        expect(assigns(:ids)).to eq(%w[xb482ww9999])
         expect(response).to have_http_status(:ok)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', cocina_model)
         expect(workflow_client).to have_received(:update_status)
-          .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
+          .with(druid: 'druid:xb482ww9999', workflow: workflow, process: step, status: 'waiting')
       end
     end
 
     context 'a non admin who has no access' do
-      let(:report) { instance_double(Report, pids: %w[xb482bw3979]) }
+      let(:report) { instance_double(Report, pids: %w[xb482ww9999]) }
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(false)
+        allow(Dor).to receive(:find).with('druid:xb482ww9999').and_return(obj)
         allow(Report).to receive(:new).and_return(report)
       end
 
@@ -199,7 +202,7 @@ RSpec.describe ReportController, type: :controller do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
         expect(assigns(:workflow)).to eq workflow
         expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w[xb482bw3979])
+        expect(assigns(:ids)).to eq(%w[xb482ww9999])
         expect(response).to have_http_status(:ok)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', cocina_model)
         expect(workflow_client).not_to have_received(:update_status)

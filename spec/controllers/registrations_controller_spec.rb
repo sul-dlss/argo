@@ -206,15 +206,24 @@ RSpec.describe RegistrationsController, type: :controller do
   end
 
   describe 'tracksheet' do
+    before do
+      allow(TrackSheet).to receive(:new).with([druid]).and_return(track_sheet)
+    end
+
+    let(:druid) { 'xb482ww9999' }
+    let(:track_sheet) { instance_double(TrackSheet, generate_tracking_pdf: doc) }
+    let(:doc) { instance_double(Prawn::Document, render: '') }
+
     it 'generates a tracking sheet with the right default name' do
-      get 'tracksheet', params: { druid: 'xb482bw3979' }
+      get 'tracksheet', params: { druid: druid }
       expect(response.headers['Content-Type']).to eq('pdf; charset=utf-8')
       expect(response.headers['content-disposition']).to eq('attachment; filename=tracksheet-1.pdf')
     end
+
     it 'generates a tracking sheet with the specified name (and sequence number)' do
       test_name = 'test_name'
       test_seq_no = 7
-      get 'tracksheet', params: { druid: 'xb482bw3979', name: test_name, sequence: test_seq_no }
+      get 'tracksheet', params: { druid: druid, name: test_name, sequence: test_seq_no }
       expect(response.headers['content-disposition']).to eq("attachment; filename=#{test_name}-#{test_seq_no}.pdf")
     end
   end

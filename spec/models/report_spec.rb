@@ -47,13 +47,13 @@ RSpec.describe Report, type: :model do
 
     context 'with multivalued fields' do
       before do
-        ActiveFedora::SolrService.add(id: 'druid:xb482bw3979',
+        ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
                                       tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
         ActiveFedora::SolrService.commit
       end
 
       it 'handles a multivalued fields' do
-        row = CSV.parse(csv).find { |row| row[0] == 'xb482bw3979' }
+        row = CSV.parse(csv).find { |row| row[0] == 'xb482ww9999' }
         expect(row[12].split(';').length).to eq(2) # 12 == tag field
       end
     end
