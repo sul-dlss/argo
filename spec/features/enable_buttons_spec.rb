@@ -21,7 +21,7 @@ RSpec.describe 'Enable buttons' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  let(:item_id) { 'druid:hj185vb7593' }
+  let(:item_id) { 'druid:hj185xx2222' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }

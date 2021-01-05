@@ -16,7 +16,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   let(:dl_job_params) do
     { pids: pid_list }
   end
-  let(:item1) { Dor::Item.new(pid: 'druid:hj185vb7593') }
+  let(:item1) { Dor::Item.new(pid: 'druid:hj185xx2222') }
   let(:item2) { Dor::Item.new(pid: 'druid:kv840xx0000') }
 
   before do
@@ -129,7 +129,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
     let(:log) { double('log') }
 
     it 'does not log anything upon success' do
-      result = download_job.query_dor('druid:hj185vb7593', log)
+      result = download_job.query_dor('druid:hj185xx2222', log)
       expect(result).not_to be_nil
       expect(log).not_to receive(:puts)
     end

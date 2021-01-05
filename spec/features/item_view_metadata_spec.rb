@@ -10,8 +10,28 @@ RSpec.describe 'Item view', js: true do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(Dor).to receive(:find).and_return(obj)
+    allow(obj).to receive(:new_record?).and_return(false)
+    obj.descMetadata.mods_title = 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953'
+    allow(obj.descMetadata).to receive(:new?).and_return(false) # Must come after setting properties
+    obj.contentMetadata.content = <<~XML
+      <contentMetadata type="file">
+        <resource type="image" sequence="126" id="hj185xx2222_126">
+          <label>M1090_S15_B02_F01_0126</label>
+          <file mimetype="image/jp2" preserve="yes" format="JPEG2000" size="3304904" shelve="yes" id="M1090_S15_B02_F01_0126.jp2" publish="yes">
+            <imageData width="5033" height="3472"/>
+            <attr name="representation">uncropped</attr>
+            <checksum type="sha1">a992c8237b640b4ea413dfd3baec5e8972f53613</checksum>
+            <checksum type="md5">f92f9722cb9993dd35fdea6a2219b673</checksum>
+          </file>
+        </resource>
+      </contentMetadata>
+    XML
+    allow(obj.contentMetadata).to receive(:new?).and_return(false)
   end
 
+  let(:obj) { Dor::Item.new(pid: item_id) }
+  let(:item_id) { 'druid:hj185xx2222' }
   let(:event) { Dor::Services::Client::Events::Event.new(event_type: 'shelve_request_received', data: { 'host' => 'dor-services-stage.stanford.edu' }) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
@@ -28,17 +48,17 @@ RSpec.describe 'Item view', js: true do
 
   context 'when there is an error retrieving the cocina_model' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client, events: events_client) }
-    let(:solr_doc) { { id: 'druid:hj185vb7593' } }
+    let(:solr_doc) { { id: item_id } }
 
     before do
       allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
     end
 
     it 'shows the page' do
-      visit solr_document_path 'druid:hj185vb7593'
+      visit solr_document_path item_id
       within '.document-metadata' do
         expect(page).to have_css 'dt', text: 'DRUID:'
-        expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
+        expect(page).to have_css 'dd', text: item_id
       end
     end
   end
@@ -49,14 +69,14 @@ RSpec.describe 'Item view', js: true do
     let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: [fileset]) }
     let(:fileset) { instance_double(Cocina::Models::FileSet, structural: fs_structural) }
     let(:fs_structural) { instance_double(Cocina::Models::FileSetStructural, contains: [file]) }
-    let(:file) { instance_double(Cocina::Models::File, administrative: file_admin, externalIdentifier: 'druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2') }
+    let(:file) { instance_double(Cocina::Models::File, administrative: file_admin, externalIdentifier: 'druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2') }
     let(:file_admin) { instance_double(Cocina::Models::FileAdministrative, shelve: true, sdrPreserve: true) }
     let(:dro_admin) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
     context 'when the file is on stacks' do
       let(:solr_doc) do
         {
-          id: 'druid:hj185vb7593',
+          id: item_id,
           SolrDocument::FIELD_OBJECT_TYPE => 'item',
           content_type_ssim: 'image',
           status_ssi: 'v1 Unknown Status',
@@ -70,10 +90,10 @@ RSpec.describe 'Item view', js: true do
       end
 
       it 'shows the file info' do
-        visit solr_document_path 'druid:hj185vb7593'
+        visit solr_document_path item_id
         within '.document-metadata' do
           expect(page).to have_css 'dt', text: 'DRUID:'
-          expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
+          expect(page).to have_css 'dd', text: item_id
           expect(page).to have_css 'dt', text: 'Object Type:'
           expect(page).to have_css 'dd', text: 'item'
           expect(page).to have_css 'dt', text: 'Content Type:'
@@ -95,7 +115,7 @@ RSpec.describe 'Item view', js: true do
 
         click_link 'descMetadata' # Open the datastream modal
         within '.code' do
-          expect(page).to have_content '<mods:title type="main">Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953</mods:title>'
+          expect(page).to have_content '<title>Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953</title>'
         end
         click_button '×' # close the modal
 
@@ -104,14 +124,14 @@ RSpec.describe 'Item view', js: true do
         end
 
         within '.modal-content' do
-          expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185vb7593/M1090_S15_B02_F01_0126.jp2'
+          expect(page).to have_link 'https://stacks-test.stanford.edu/file/druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2'
         end
       end
     end
 
     context 'when the file is on stacks' do
       let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
-      let(:solr_doc) { { id: 'druid:hj185vb7593' } }
+      let(:solr_doc) { { id: item_id } }
 
       before do
         page.driver.browser.download_path = '.'
@@ -122,7 +142,7 @@ RSpec.describe 'Item view', js: true do
       end
 
       it 'can be downloaded' do
-        visit solr_document_path 'druid:hj185vb7593'
+        visit solr_document_path item_id
 
         within '.resource-list' do
           click_link 'M1090_S15_B02_F01_0126.jp2'
@@ -131,12 +151,12 @@ RSpec.describe 'Item view', js: true do
     end
 
     context 'when the title has an ampersand in it' do
-      let(:solr_doc) { { id: 'druid:hj185vb7593', obj_label_tesim: 'Road & Track' } }
+      let(:solr_doc) { { id: item_id, obj_label_tesim: 'Road & Track' } }
 
       let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
 
       it 'properly escapes the title' do
-        visit solr_document_path 'druid:hj185vb7593'
+        visit solr_document_path item_id
         expect(page).to have_title 'Road & Track'
       end
     end

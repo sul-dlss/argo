@@ -34,13 +34,13 @@ RSpec.describe Report, type: :model do
 
     context 'when a field has double quotes' do
       before do
-        ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+        ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
                                       sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
         ActiveFedora::SolrService.commit
       end
 
       it 'handles a title with double quotes in it' do
-        row = CSV.parse(csv).find { |row| row[0] == 'hj185vb7593' }
+        row = CSV.parse(csv).find { |row| row[0] == 'hj185xx2222' }
         expect(row[2]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953') # 2 == title field
       end
     end

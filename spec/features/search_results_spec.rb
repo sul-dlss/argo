@@ -11,7 +11,7 @@ RSpec.describe 'Search results' do
     before do
       ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
 
-      ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+      ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
                                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
                                     content_type_ssim: 'book')
       ActiveFedora::SolrService.commit
@@ -47,7 +47,7 @@ RSpec.describe 'Search results' do
     before do
       ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
 
-      ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+      ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
                                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
                                     content_type_ssim: 'image',
                                     status_ssi: 'v1 Unknown Status',
@@ -65,7 +65,7 @@ RSpec.describe 'Search results' do
       within('.document:nth-child(1)') do
         within '.document-metadata' do
           expect(page).to have_css 'dt', text: 'DRUID:'
-          expect(page).to have_css 'dd', text: 'druid:hj185vb7593'
+          expect(page).to have_css 'dd', text: 'druid:hj185xx2222'
           expect(page).to have_css 'dt', text: 'Object Type:'
           expect(page).to have_css 'dd', text: 'item'
           expect(page).to have_css 'dt', text: 'Content Type:'
@@ -87,7 +87,7 @@ RSpec.describe 'Search results' do
 
   context 'the thumbnail' do
     before do
-      ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+      ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
                                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
                                     first_shelved_image_ss: 'M1090_S15_B02_F01_0126.jp2')
       ActiveFedora::SolrService.commit
