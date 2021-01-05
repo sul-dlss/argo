@@ -341,13 +341,13 @@ RSpec.describe RegistrationsController, type: :controller do
 
   describe '#workflow_list' do
     before do
-      ActiveFedora::SolrService.add(id: 'druid:ww057vk7675',
+      ActiveFedora::SolrService.add(id: 'druid:ww057qx5555',
                                     registration_workflow_id_ssim: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'])
       ActiveFedora::SolrService.commit
     end
 
     it 'handles an APO with multiple workflows, putting the default workflow first always' do
-      get 'workflow_list', params: { apo_id: 'druid:ww057vk7675', format: :json }
+      get 'workflow_list', params: { apo_id: 'druid:ww057qx5555', format: :json }
       data = JSON.parse(response.body)
       expect(data).to eq [Settings.apo.default_workflow_option, 'digitizationWF', 'dpgImageWF', 'goobiWF']
     end

@@ -51,7 +51,7 @@ RSpec.describe 'Search results' do
                                     SolrDocument::FIELD_OBJECT_TYPE => 'item',
                                     content_type_ssim: 'image',
                                     status_ssi: 'v1 Unknown Status',
-                                    SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057vk7675',
+                                    SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
                                     SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
                                     project_tag_ssim: 'Fuller Slides',
                                     source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',

@@ -7,7 +7,7 @@ RSpec.describe 'Set governing APO' do
   let(:new_apo) do
     Dor::AdminPolicyObject.create(mods_title: 'Stanford University Libraries - Special Collections',
                                   objectType: 'adminPolicy',
-                                  pid: 'druid:ww057vk7675') do |apo|
+                                  pid: 'druid:ww057qx5555') do |apo|
       apo.add_roleplayer('dor-apo-manager', 'sdr:administrator-role')
     end
   end
