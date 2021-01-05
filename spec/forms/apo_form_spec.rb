@@ -11,8 +11,10 @@ RSpec.describe ApoForm do
 
   context 'with a model (update)' do
     let(:instance) { described_class.new(apo) }
-    let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Agreement) }
-    let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
+    let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327qr3670') }
+    let(:apo) do
+      Dor::AdminPolicyObject.new(pid: 'druid:zt570tx3016')
+    end
     let(:md_info) do
       {
         copyright: 'My copyright statement',
@@ -28,7 +30,7 @@ RSpec.describe ApoForm do
     end
 
     before do
-      allow(apo).to receive(:new_record?).and_return(false) # instantiate_fixture creates unsaved objects
+      allow(apo).to receive(:new_record?).and_return(false)
     end
 
     describe '#sync' do
@@ -49,8 +51,11 @@ RSpec.describe ApoForm do
         expect(apo.use_license_human).to    eq(license_info.label)
         expect(apo.copyright_statement).to  eq(md_info[:copyright])
         expect(apo.use_statement).to        eq(md_info[:use])
-        doc = Nokogiri::XML(File.read('spec/fixtures/apo_defaultObjectRights_clean.xml'))
-        expect(apo.defaultObjectRights.content).to be_equivalent_to(doc)
+        default = apo.defaultObjectRights.ng_xml
+        expect(default.xpath('//copyright/human').text).to eq 'My copyright statement'
+        expect(default.xpath('//use/machine').text).to eq 'by-nc'
+        expect(default.xpath('//use/human[@type="useAndReproduction"]').text).to eq 'My use and reproduction statement'
+        expect(default.xpath('//access[@type="read"]/machine/world')).to be_present
       end
 
       it 'handles no use license' do
@@ -98,6 +103,12 @@ RSpec.describe ApoForm do
     describe '#permissions' do
       subject { instance.permissions }
 
+      before do
+        allow(apo).to receive(:roles).and_return('dor-apo-manager' =>
+          ['workgroup:dlss:developers', 'workgroup:dlss:pmag-staff', 'workgroup:dlss:smpl-staff',
+           'workgroup:dlss:dpg-staff', 'workgroup:dlss:argo-access-spec', 'lmcrae'])
+      end
+
       it 'has the defaults' do
         expect(subject).to match_array [
           { name: 'developers', type: 'group', access: 'manage' },
@@ -113,17 +124,29 @@ RSpec.describe ApoForm do
     describe '#default_workflow' do
       subject { instance.default_workflow }
 
+      before do
+        apo.default_workflow = 'digitizationWF'
+      end
+
       it { is_expected.to eq 'digitizationWF' }
     end
 
     describe '#agreement_object_id' do
       subject { instance.agreement_object_id }
 
+      before do
+        apo.agreement_object_id = 'druid:dd327qr3670'
+      end
+
       it { is_expected.to eq agreement.pid }
     end
 
     describe '#use_license' do
       subject { instance.use_license }
+
+      before do
+        apo.use_license = 'by-nc-sa'
+      end
 
       it { is_expected.to eq 'by-nc-sa' }
     end
@@ -149,17 +172,29 @@ RSpec.describe ApoForm do
     describe '#use_statement' do
       subject { instance.use_statement }
 
-      it { is_expected.to start_with 'Rights are owned by Stanford University Libraries' }
+      before do
+        apo.use_statement = 'Rights are owned by Stanford University Libraries'
+      end
+
+      it { is_expected.to eq 'Rights are owned by Stanford University Libraries' }
     end
 
     describe '#copyright_statement' do
       subject { instance.copyright_statement }
+
+      before do
+        apo.copyright_statement = 'Additional copyright info'
+      end
 
       it { is_expected.to eq 'Additional copyright info' }
     end
 
     describe '#mods_title' do
       subject { instance.mods_title }
+
+      before do
+        apo.mods_title = 'Ampex'
+      end
 
       it { is_expected.to eq 'Ampex' }
     end
@@ -273,8 +308,10 @@ RSpec.describe ApoForm do
     end
 
     describe '#save' do
-      let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
-      let(:agreement) { instantiate_fixture('dd327qr3670', Dor::Agreement) }
+      let(:apo) do
+        Dor::AdminPolicyObject.new(pid: 'druid:zt570tx3016')
+      end
+      let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327qr3670') }
       let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
       let(:collection) { Dor.find(cocina_collection.externalIdentifier) }
 

@@ -52,6 +52,9 @@ RSpec.describe 'Item catkey change' do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      ActiveFedora::SolrService.add(id: druid, objectType_ssim: 'item')
+      ActiveFedora::SolrService.commit
     end
 
     it 'changes the catkey' do
@@ -60,6 +63,7 @@ RSpec.describe 'Item catkey change' do
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Catkey for ' \
         "#{druid} has been updated!"
+      expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       expect(state_service).to have_received(:allows_modification?).exactly(3).times
     end
   end

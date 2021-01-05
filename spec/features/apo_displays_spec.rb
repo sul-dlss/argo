@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Viewing an Admin policy' do
-  let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::AdminPolicyObject) }
+  let(:object) { Dor::AdminPolicyObject.new(pid: 'druid:zt570tx3016') }
   let(:current_user) { create(:user) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:pid) { 'druid:zt570tx3016' }
@@ -17,8 +17,11 @@ RSpec.describe 'Viewing an Admin policy' do
     )
   end
 
+  let(:solr_doc) { { id: pid } }
+
   before do
-    Argo::Indexer.reindex_pid_remotely pid
+    ActiveFedora::SolrService.add(solr_doc)
+    ActiveFedora::SolrService.commit
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(object).to receive(:persisted?).and_return(true) # This allows to_param to function
     allow(Dor).to receive(:find).and_return(object)
