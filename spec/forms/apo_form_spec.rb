@@ -312,8 +312,8 @@ RSpec.describe ApoForm do
         Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
       end
       let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
-      let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
-      let(:collection) { Dor.find(cocina_collection.externalIdentifier) }
+      let(:collection) { instance_double(Dor::Collection, id: collection_id, pid: collection_id) }
+      let(:collection_id) { 'druid:gh567vb7777' }
 
       let(:coll_title) { 'col title' }
 
@@ -354,7 +354,7 @@ RSpec.describe ApoForm do
       end
 
       let(:created_collection) do
-        Cocina::Models::Collection.new(externalIdentifier: cocina_collection.externalIdentifier,
+        Cocina::Models::Collection.new(externalIdentifier: collection_id,
                                        type: Cocina::Models::Vocab.collection,
                                        label: '',
                                        version: 1,
@@ -372,11 +372,12 @@ RSpec.describe ApoForm do
 
       before do
         allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-        expect(Dor).to receive(:find).with(cocina_collection.externalIdentifier).and_return(collection)
+        expect(Dor).to receive(:find).with(collection_id).and_return(collection)
         expect(collection).to receive(:save)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).twice
 
         expect(Dor).to receive(:find).with(apo.pid).and_return(apo)
+        expect(apo).to receive(:new_record?).and_return(false)
         expect(apo).to receive(:save)
         expect(apo).to receive(:add_roleplayer).exactly(4).times
 
@@ -399,13 +400,13 @@ RSpec.describe ApoForm do
         expect(apo).to receive(:"use_license=").with(params['use_license'])
 
         # verify that the collection is also created
-        expect(apo).to receive(:add_default_collection).with(collection.pid)
+        expect(apo).to receive(:add_default_collection).with(collection_id)
 
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(body: JSON.generate(collection_req_body_hash))
           .to_return(status: 200, body: created_collection)
 
-        expect(workflow_client).to receive(:create_workflow_by_name).with(collection.pid, 'accessionWF', version: '1')
+        expect(workflow_client).to receive(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
       end
 
       context 'with tags in the params' do

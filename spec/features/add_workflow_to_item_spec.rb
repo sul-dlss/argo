@@ -20,10 +20,14 @@ RSpec.describe 'Add a workflow to an item' do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
-
+  let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item) do
-    FactoryBot.create_for_repository(:item)
+    item = Dor::Item.new(pid: 'druid:bg444xg6666', label: 'Foo', source_id: 'sauce:99', admin_policy_object_id: uber_apo_id)
+    item.descMetadata.mods_title = 'Test'
+    item.save!
+    item
   end
+  let(:item_id) { item.id }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
@@ -32,7 +36,7 @@ RSpec.describe 'Add a workflow to an item' do
   end
 
   it 'redirect and display on show page' do
-    visit new_item_workflow_path item.externalIdentifier
+    visit new_item_workflow_path item_id
     click_button 'Add'
     within '.flash_messages' do
       # The selected workflow defaults to Settings.apo.default_workflow_option (registrationWF)

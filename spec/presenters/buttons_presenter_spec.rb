@@ -20,7 +20,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
                     roles: false)
   end
 
-  let(:governing_apo_id) { 'druid:hv992ry2431' }
+  let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:doc) do
     SolrDocument.new('id' => item_id,
                      'processing_status_text_ssi' => 'not registered',

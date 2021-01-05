@@ -29,7 +29,15 @@ RSpec.describe ApoController, type: :controller do
       'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
     )
   end
-  let(:collection) { FactoryBot.create_for_repository(:collection) }
+
+  let(:collection_id) { 'druid:bq377wp9578' }
+  let(:collection) do
+    Cocina::Models::Collection.new(externalIdentifier: collection_id,
+                                   type: Cocina::Models::Vocab.collection,
+                                   label: '',
+                                   version: 1,
+                                   access: {})
+  end
 
   describe '#create' do
     let(:form) do

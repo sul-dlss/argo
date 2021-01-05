@@ -8,7 +8,6 @@ RSpec.describe 'Add collection' do
     allow(Dor).to receive(:find).with(apo_id).and_return(apo)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor).to receive(:find).with(apo_druid).and_return(apo)
   end
 
   let(:apo_id) { 'druid:vt333hq2222' }

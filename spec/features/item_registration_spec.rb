@@ -5,18 +5,26 @@ require 'rails_helper'
 RSpec.describe 'Item registration page', js: true do
   let(:user) { create(:user) }
   let(:ur_apo_id) { 'druid:hv992ry2431' }
+  let(:solr_doc) do
+    {
+      "id": ur_apo_id,
+      "apo_register_permissions_ssim": ['workgroup:dlss:developers'],
+      "objectType_ssim": ['adminPolicy'],
+      "sw_display_title_tesim": ['[Internal System Objects]']
+    }
+  end
 
   before do
-    Argo::Indexer.reindex_pid_remotely ur_apo_id
+    ActiveFedora::SolrService.add(solr_doc)
+    ActiveFedora::SolrService.commit
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
     allow_any_instance_of(RegistrationsController).to receive(:workflows_for_apo).and_return([])
-    allow_any_instance_of(RegistrationsController).to receive(:workflows_for_apo).with('druid:hv992ry2431').and_return(%w[dpgImageWF goobiWF])
+    allow_any_instance_of(RegistrationsController).to receive(:workflows_for_apo).with(ur_apo_id).and_return(%w[dpgImageWF goobiWF])
   end
 
   it 'invokes item registration method with the expected values and relays errors properly' do
     visit registration_path
-
-    select '[Internal System Objects]', from: 'apo_id' # "uber APO", druid:hv992ry2431
+    select '[Internal System Objects]', from: 'apo_id' # "uber APO"
 
     find("option[value='goobiWF']")
     select 'goobiWF', from: 'workflow_id'
@@ -60,7 +68,7 @@ RSpec.describe 'Item registration page', js: true do
     # to check the params below.
     expect(page).to have_css('span.icon-exclamation-sign', visible: true)
     expect(registration_params).to include(
-      'admin_policy' => 'druid:hv992ry2431',
+      'admin_policy' => ur_apo_id,
       'workflow_id' => 'goobiWF',
       'label' => 'object title',
       'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],

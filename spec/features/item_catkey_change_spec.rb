@@ -8,10 +8,13 @@ RSpec.describe 'Item catkey change' do
     allow(StateService).to receive(:new).and_return(state_service)
     allow(Dor).to receive(:find).with(druid).and_return(obj)
     allow(obj).to receive(:new_record?).and_return(false)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   let(:druid) { 'druid:kv840xx0000' }
   let(:obj) { Dor::Item.new(pid: druid, catkey: '99999') }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO) }
 
   describe 'when modification is not allowed' do
     let(:state_service) { instance_double(StateService, allows_modification?: false) }

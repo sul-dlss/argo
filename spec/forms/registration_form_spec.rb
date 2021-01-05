@@ -13,7 +13,7 @@ RSpec.describe RegistrationForm do
         {
           other_id: 'label:',
           source_id: 'foo:bar',
-          admin_policy: 'druid:hv992ry2431',
+          admin_policy: 'druid:hv992yv2222',
           label: 'test parameters for registration',
           tag: ['Process : Content Type : File'],
           rights: 'default',

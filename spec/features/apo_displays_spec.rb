@@ -110,21 +110,11 @@ RSpec.describe 'Viewing an Admin policy' do
     end
 
     context 'tag ui' do
-<<<<<<< HEAD
       let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
       let(:object_client) do
         instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
       end
 
-=======
-      before do
-        allow(Dor::Services::Client).to receive(:object).with(apo_druid).and_return(object_service)
-      end
-
-      let(:object_service) { instance_double(Dor::Services::Client::Object, administrative_tags: tags_client) }
-      let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
-
->>>>>>> Remove unnecessary fixture
       it 'renders the tag ui' do
         visit "/items/#{apo_druid}/tags/edit"
         expect(page).to have_content('Update tags')

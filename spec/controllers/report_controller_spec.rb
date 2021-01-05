@@ -154,7 +154,6 @@ RSpec.describe ReportController, type: :controller do
       before do
         allow(controller.current_user).to receive(:admin?).and_return(true)
         allow(Report).to receive(:new).and_return(report)
-        allow(Dor).to receive(:find).with('druid:xb482ww9999').and_return(obj)
       end
 
       it 'sets instance variables and calls update workflow service' do
@@ -173,7 +172,6 @@ RSpec.describe ReportController, type: :controller do
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(true)
-        allow(Dor).to receive(:find).with('druid:xb482ww9999').and_return(obj)
         allow(Report).to receive(:new).and_return(report)
       end
 
@@ -194,7 +192,6 @@ RSpec.describe ReportController, type: :controller do
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(false)
-        allow(Dor).to receive(:find).with('druid:xb482ww9999').and_return(obj)
         allow(Report).to receive(:new).and_return(report)
       end
 

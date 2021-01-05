@@ -5,18 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Collection manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   before do
-    obj = instance_double(
-      Dor::Collection,
-      current_version: '1',
-      admin_policy_object: nil,
-      datastreams: {},
-      catkey: nil,
-      identityMetadata: double(ng_xml: Nokogiri::XML(''))
-    )
     allow(StateService).to receive(:new).and_return(state_service)
     sign_in current_user, groups: ['sdr:administrator-role']
-    allow(Dor).to receive(:find).and_return(obj)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    Argo::Indexer.reindex_pid_remotely(collection_id)
   end
 
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -25,18 +17,20 @@ RSpec.describe 'Collection manage release' do
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+  let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item) do
-    FactoryBot.create_for_repository(:collection)
+    Dor::Collection.create!(pid: 'druid:gg232vv1111', source_id: 'sauce:99', objectType: 'collection', admin_policy_object_id: uber_apo_id)
   end
+  let(:collection_id) { item.id }
 
   it 'Has a manage release button' do
-    visit solr_document_path(item.externalIdentifier)
+    visit solr_document_path(collection_id)
     expect(page).to have_css 'a', text: 'Manage release'
   end
 
   it 'Creates a new bulk action' do
-    visit item_manage_release_path(item.externalIdentifier)
-    expect(page).to have_css 'label', text: "Manage release to discovery applications for collection #{item.externalIdentifier}"
+    visit item_manage_release_path(collection_id)
+    expect(page).to have_css 'label', text: "Manage release to discovery applications for collection #{collection_id}"
     choose 'This collection and all its members*'
     choose 'Release it'
     click_button 'Submit'
