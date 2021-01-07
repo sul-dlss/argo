@@ -9,7 +9,7 @@ class WorkflowTableComponent < ApplicationComponent
   attr_reader :name, :data
 
   def workflow_name
-    new_params = search_state.add_facet_params('wf_wps_ssim', name).merge(controller: 'catalog', action: 'index')
+    new_params = search_state.filter('wf_wps_ssim').add(name).params.merge(controller: 'catalog', action: 'index')
     link_to(name, new_params)
   end
 
