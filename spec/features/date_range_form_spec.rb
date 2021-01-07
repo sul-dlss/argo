@@ -8,7 +8,7 @@ RSpec.describe 'Date range form', js: true do
 
   before do
     ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3979',
+    ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
                                   objectType_ssim: 'item',
                                   obj_label_tesim: 'Report about stuff',
                                   SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)

@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe TrackSheet do
-  let(:druid) { 'xb482bw3979' }
+  let(:druid) { 'xb482ww9999' }
   let(:instance) { described_class.new([druid]) }
 
   describe '#find_or_create_in_solr_by_id' do
@@ -11,7 +11,7 @@ RSpec.describe TrackSheet do
 
     before do
       allow(Dor::SearchService).to receive(:query)
-        .with('id:"druid:xb482bw3979"', rows: 1)
+        .with('id:"druid:xb482ww9999"', rows: 1)
         .and_return(response)
     end
 
@@ -31,7 +31,7 @@ RSpec.describe TrackSheet do
         allow(Argo::Indexer).to receive(:reindex_pid_remotely)
 
         allow(Dor::SearchService).to receive(:query)
-          .with('id:"druid:xb482bw3979"', rows: 1)
+          .with('id:"druid:xb482ww9999"', rows: 1)
           .and_return(response, second_response)
       end
 

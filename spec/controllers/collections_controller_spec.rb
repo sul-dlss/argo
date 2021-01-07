@@ -10,8 +10,12 @@ RSpec.describe CollectionsController do
   end
 
   let(:user) { create(:user) }
-  let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
-  let(:collection) { FactoryBot.create_for_repository(:collection) }
+  let(:apo) { instance_double(Dor::AdminPolicyObject, pid: 'druid:zt570qh4444', add_default_collection: true, save: true) }
+  let(:collection_id) { 'druid:bp475vb4486' }
+
+  let(:collection) do
+    Dor::Collection.new(pid: collection_id)
+  end
 
   describe '#new' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
@@ -38,7 +42,7 @@ RSpec.describe CollectionsController do
   end
 
   describe '#create' do
-    let(:form) { instance_double(CollectionForm, validate: true, save: true, model: Dor::Collection.find(collection.externalIdentifier)) }
+    let(:form) { instance_double(CollectionForm, validate: true, save: true, model: collection) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) do
       Cocina::Models.build(

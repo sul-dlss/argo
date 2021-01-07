@@ -101,7 +101,7 @@ RSpec.describe 'Download item files' do
         "isMemberOf": [
           'druid:rh056sr3313'
         ],
-        "hasAgreement": 'druid:xf765cv5573'
+        "hasAgreement": 'druid:xf765vv6666'
       }
     }
   end

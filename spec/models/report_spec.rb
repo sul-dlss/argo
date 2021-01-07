@@ -34,26 +34,26 @@ RSpec.describe Report, type: :model do
 
     context 'when a field has double quotes' do
       before do
-        ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+        ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
                                       sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
         ActiveFedora::SolrService.commit
       end
 
       it 'handles a title with double quotes in it' do
-        row = CSV.parse(csv).find { |row| row[0] == 'hj185vb7593' }
+        row = CSV.parse(csv).find { |row| row[0] == 'hj185xx2222' }
         expect(row[2]).to eq('Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953') # 2 == title field
       end
     end
 
     context 'with multivalued fields' do
       before do
-        ActiveFedora::SolrService.add(id: 'druid:xb482bw3979',
+        ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
                                       tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
         ActiveFedora::SolrService.commit
       end
 
       it 'handles a multivalued fields' do
-        row = CSV.parse(csv).find { |row| row[0] == 'xb482bw3979' }
+        row = CSV.parse(csv).find { |row| row[0] == 'xb482ww9999' }
         expect(row[12].split(';').length).to eq(2) # 12 == tag field
       end
     end

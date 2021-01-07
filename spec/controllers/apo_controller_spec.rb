@@ -17,8 +17,8 @@ RSpec.describe ApoController, type: :controller do
   end
 
   let(:user) { create(:user) }
-  let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
-  let(:pid) { 'druid:zt570tx3016' }
+  let(:apo) { instance_double(Dor::AdminPolicyObject, pid: pid) }
+  let(:pid) { 'druid:zt570qh4444' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
     Cocina::Models.build(
@@ -29,7 +29,15 @@ RSpec.describe ApoController, type: :controller do
       'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
     )
   end
-  let(:collection) { FactoryBot.create_for_repository(:collection) }
+
+  let(:collection_id) { 'druid:bq377wp9578' }
+  let(:collection) do
+    Cocina::Models::Collection.new(externalIdentifier: collection_id,
+                                   type: Cocina::Models::Vocab.collection,
+                                   label: '',
+                                   version: 1,
+                                   access: {})
+  end
 
   describe '#create' do
     let(:form) do
@@ -51,7 +59,7 @@ RSpec.describe ApoController, type: :controller do
         post :create, params: {}
         expect(form).to have_received(:validate).with(ActionController::Parameters)
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq 'APO druid:zt570tx3016 created.'
+        expect(flash[:notice]).to eq 'APO druid:zt570qh4444 created.'
       end
     end
 

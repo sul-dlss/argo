@@ -32,7 +32,7 @@ RSpec.describe Ability do
   let(:viewer) { false }
   let(:roles) { [] }
 
-  let(:new_apo_id) { 'druid:hv992ry2431' }
+  let(:new_apo_id) { 'druid:hv992yv2222' }
   let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_id) }
 
   let(:item_with_apo) { Dor::Item.new(pid: 'y') }

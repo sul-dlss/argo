@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'uploads/new.html.erb', type: :view do
   before do
-    @obj = double('dor_object', id: 'druid:hv992ry2431')
+    @obj = double('dor_object', id: 'druid:hv992yv2222')
     render
   end
 

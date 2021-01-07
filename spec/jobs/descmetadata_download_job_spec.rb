@@ -12,9 +12,16 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
   let(:output_directory) { bulk_action.output_directory }
   let(:output_zip_filename) { File.join(output_directory, Settings.bulk_metadata.zip) }
-  let(:pid_list) { ['druid:hj185vb7593', 'druid:kv840rx2720'] }
+  let(:pid_list) { [item1.pid, item2.pid] }
   let(:dl_job_params) do
     { pids: pid_list }
+  end
+  let(:item1) { Dor::Item.new(pid: 'druid:hj185xx2222') }
+  let(:item2) { Dor::Item.new(pid: 'druid:kv840xx0000') }
+
+  before do
+    allow(Dor).to receive(:find).with(pid_list[0]).and_return(item1)
+    allow(Dor).to receive(:find).with(pid_list[1]).and_return(item2)
   end
 
   after do
@@ -122,7 +129,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
     let(:log) { double('log') }
 
     it 'does not log anything upon success' do
-      result = download_job.query_dor('druid:hj185vb7593', log)
+      result = download_job.query_dor('druid:hj185xx2222', log)
       expect(result).not_to be_nil
       expect(log).not_to receive(:puts)
     end

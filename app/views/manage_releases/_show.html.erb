@@ -1,4 +1,3 @@
-
 <%= form_for(@bulk_action) do |f| %>
   <%= f.hidden_field(:action_type, value: 'ReleaseObjectJob') %>
   <%= f.hidden_field('pids', value: @document.id) %>

@@ -14,7 +14,6 @@ references:
       BUNDLE_PATH: vendor/bundle
       PGHOST: 127.0.0.1
       PGPASSWORD: sekret
-      RAILS_ENV: test
   postgres_envs: &postgres_envs
     name: db
     environment:
@@ -222,9 +221,6 @@ jobs:
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
             ./cc-test-reporter before-build
-      - run:
-          name: Load fixtures
-          command: RAILS_ENV=test bundle exec rake argo:repo:load
       # Run rspec in parallel
       - ruby/rspec-test
       - run:

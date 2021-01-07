@@ -74,24 +74,9 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
 6. **Run the tests (without rubocop)**
 
-    Note that
-
-    ```
-    RAILS_ENV=test bundle exec rake ci
-    ```
-
-    is a shortcut for running the following 2 steps:
-
-    ```
-    RAILS_ENV=test bundle exec rake argo:repo:load
-    RAILS_ENV=test bundle exec rake spec
-    ```
-
-    `rake argo:repo:load` loads test fixture objects into fedora/solr.   You will NOT be able to re-run this task successfully unless fixtures are no longer in the docker containers (e.g. if you `docker-compose down`).  That is because they are already loaded.  The error messages in your terminal output do not surface this cause, but that is likely at play if you see `"Rubydora::FedoraInvalidRequest: See logger for details"`, esp with `"Caused by: RestClient::InternalServerError: 500 Internal Server Error"` in there. In this case, run only `bundle exec rake spec` instead.
-
-    Note that `RAILS_ENV=test` should not be necessary when running `bundle exec rake spec` on its own.
-
-    Note further that ```docker-compose down -v``` will wipe out the volumes for solr & fedora and allows you to start afresh (with ```docker-compose pull```) if your test data is in a strange state.
+```
+bin/rake
+```
 
 ## Run the servers
 
@@ -121,11 +106,10 @@ to stop execution in the middle of an activejob for inspection:
 docker-compose run web bin/rake jobs:workoff
 ```
 
-Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container and reload the data:
+Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container.
 
 ```
 docker-compose build web
-docker-compose run --rm web bin/rake argo:repo:load
 ```
 
 ## Debugging
@@ -155,13 +139,6 @@ Also, if you run into webpacker related issues, you may need to manually install
 docker-compose run --rm web yarn install
 docker-compose run --rm web bin/rake webpacker:compile
 ```
-
-## Load and index records
-
-```
-docker-compose run --rm web bin/rake argo:repo:load
-```
-
 
 ## Common tasks
 

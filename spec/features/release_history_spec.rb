@@ -32,12 +32,18 @@ RSpec.describe 'Release history' do
                       who: 'pjreed',
                       date: '2017-10-20T15:42:15Z')
     end
-    let(:item) do
-      FactoryBot.create_for_repository(:item)
+    let(:item) { Dor::Item.new(pid: id) }
+    let(:id) { 'druid:qv778ht9999' }
+
+    before do
+      ActiveFedora::SolrService.add(id: id)
+      ActiveFedora::SolrService.commit
+      allow(Dor).to receive(:find).and_return(item)
+      allow(item).to receive(:new_record?).and_return(false)
     end
 
     it 'items show a release history' do
-      visit solr_document_path item.externalIdentifier
+      visit solr_document_path id
       expect(page).to have_css 'dt', text: 'Releases'
       expect(page).to have_css 'table.table thead tr th', text: 'Release'
       expect(page).to have_css 'tr td', text: /Searchworks/
@@ -46,19 +52,20 @@ RSpec.describe 'Release history' do
   end
 
   context 'for an adminPolicy' do
-    before do
-      # Ensure the UR-APO is in the index
-      Argo::Indexer.reindex_pid_remotely('druid:hv992ry2431')
-    end
-
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
-    let(:apo) do
-      FactoryBot.create_for_repository(:apo)
+    let(:item) { Dor::AdminPolicyObject.new(pid: id) }
+    let(:id) { 'druid:qv778ht9999' }
+
+    before do
+      ActiveFedora::SolrService.add(id: id)
+      ActiveFedora::SolrService.commit
+      allow(Dor).to receive(:find).and_return(item)
+      allow(item).to receive(:new_record?).and_return(false)
     end
 
     it 'does not show release history' do
-      visit solr_document_path apo.externalIdentifier
+      visit solr_document_path id
       expect(page).not_to have_css 'dt', text: 'Releases'
     end
   end

@@ -3,16 +3,23 @@
 require 'rails_helper'
 
 RSpec.describe CollectionForm do
-  let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
-
   before do
     allow(Argo::Indexer).to receive(:reindex_pid_remotely)
   end
 
+  let(:apo) { instance_double(Dor::AdminPolicyObject, pid: 'druid:zt570qh4444') }
+  let(:uber_apo_id) { 'druid:hv992ry2431' }
+  let(:collection_from_fixture) do
+    item = Dor::Item.new(pid: 'druid:gg232vv1111')
+    item.descMetadata.mods_title = 'Test'
+    item.source_id = 'sauce:99'
+    item.admin_policy_object_id = uber_apo_id
+    item
+  end
+  let(:collection_id) { collection_from_fixture.id }
+
   context 'when creating collection' do
     let(:instance) { described_class.new(Dor::Collection.new) }
-    let(:collection_from_fixture) { Dor.find(cocina_collection.externalIdentifier) }
-    let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
 
     let(:title) { 'collection title' }
     let(:abstract) { 'this is the abstract' }
@@ -28,12 +35,12 @@ RSpec.describe CollectionForm do
         label: title,
         version: 1,
         access: { access: 'dark' },
-        administrative: { hasAdminPolicy: 'druid:zt570tx3016' },
+        administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
         description: description
       }
     end
     let(:created_collection) do
-      Cocina::Models::Collection.new(externalIdentifier: cocina_collection.externalIdentifier,
+      Cocina::Models::Collection.new(externalIdentifier: collection_id,
                                      type: Cocina::Models::Vocab.collection,
                                      label: '',
                                      version: 1,
@@ -44,7 +51,7 @@ RSpec.describe CollectionForm do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: true) }
 
     before do
-      allow(Dor).to receive(:find).with(cocina_collection.externalIdentifier).and_return(collection_from_fixture)
+      allow(Dor).to receive(:find).with(collection_id).and_return(collection_from_fixture)
       allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(collection_from_fixture).to receive(:descMetadata).and_return(mock_desc_md_ds)
@@ -73,9 +80,9 @@ RSpec.describe CollectionForm do
 
         expect(instance).to have_received(:register_model)
         expect(instance).not_to have_received(:sync)
-        expect(workflow_client).to have_received(:create_workflow_by_name).with(cocina_collection.externalIdentifier, 'accessionWF', version: '1')
+        expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
         expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(collection_id)
       end
     end
 
@@ -102,17 +109,15 @@ RSpec.describe CollectionForm do
 
         expect(instance).to have_received(:register_model)
         expect(instance).not_to have_received(:sync)
-        expect(workflow_client).to have_received(:create_workflow_by_name).with(cocina_collection.externalIdentifier, 'accessionWF', version: '1')
+        expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
         expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(collection_id)
       end
     end
   end
 
   context 'when updating a collection' do
-    let(:instance) { described_class.new(existing_collection) }
-    let(:cocina_collection) { FactoryBot.create_for_repository(:collection) }
-    let(:existing_collection) { Dor.find(cocina_collection.externalIdentifier) }
+    let(:instance) { described_class.new(collection_from_fixture) }
     let(:new_title) { 'new coll title' }
     let(:new_abstract) { 'new coll abstract' }
     let(:new_description) do
@@ -127,7 +132,7 @@ RSpec.describe CollectionForm do
         label: new_title,
         version: 1,
         access: { access: 'dark', download: 'none' },
-        administrative: { hasAdminPolicy: 'druid:zt570tx3016' },
+        administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
         description: new_description
       }
     end
@@ -141,8 +146,8 @@ RSpec.describe CollectionForm do
     end
 
     before do
-      allow(existing_collection).to receive(:new_record?).and_return(false) # instantiate_fixture creates unsaved objects
-      allow(Dor).to receive(:find).with(existing_collection.pid).and_return(existing_collection)
+      allow(collection_from_fixture).to receive(:new_record?).and_return(false)
+      allow(Dor).to receive(:find).with(collection_id).and_return(collection_from_fixture)
       stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
         .with(body: JSON.generate(expected_update_body_hash))
         .to_return(status: 200, body: updated_collection, headers: {})
@@ -164,7 +169,7 @@ RSpec.describe CollectionForm do
         instance.save
         expect(instance).not_to have_received(:register_model)
         expect(instance).to have_received(:sync)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(collection_id)
       end
 
       it 'descMetadata.abstract is updated' do

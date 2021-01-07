@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe MilestoneService do
-  let(:druid1) { 'druid:br481xz7820' }
+  let(:druid1) { 'druid:ab123gg7777' }
   let(:druid2) { 'druid:ab123cd4567' }
   let(:args) do
     {

@@ -4,13 +4,15 @@ require 'rails_helper'
 
 RSpec.describe 'Consistent titles' do
   before do
-    ActiveFedora::SolrService.add(id: 'druid:hj185vb7593',
+    ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
                                   objectType_ssim: 'item',
                                   sw_display_title_tesim: title)
     ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
+    allow(Dor).to receive(:find).and_return(item)
   end
 
+  let(:item) { instance_double(Dor::Item, datastreams: {}, current_version: 3) }
   let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
 
   it 'catalog index views' do
@@ -39,7 +41,7 @@ RSpec.describe 'Consistent titles' do
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 
     it 'displays the title' do
-      visit solr_document_path 'druid:hj185vb7593'
+      visit solr_document_path 'druid:hj185xx2222'
       expect(page).to have_css 'h1', text: title
     end
   end

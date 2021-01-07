@@ -19,7 +19,12 @@ FactoryBot.define do
       Dor::Services::Client.objects.register(params: cocina_model)
     end
 
-    apo { Dor::AdminPolicyObject.create(pid: 'druid:hv992ry2431') }
+    apo do
+      Dor::AdminPolicyObject.create(pid: 'druid:hv992ry2431').tap do
+        Argo::Indexer.reindex_pid_remotely('druid:hv992ry2431')
+      end
+    end
+
     type { Cocina::Models::Vocab.collection }
   end
 end
