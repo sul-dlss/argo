@@ -47,14 +47,24 @@ class ItemsController < ApplicationController
   end
 
   def set_collection
-    @object.collections.each { |collection| @object.remove_collection(collection.pid) } # first remove any existing collections
-    if params[:collection].present?
-      @object.add_collection(params[:collection]) # collection provided, so add it
-      response_message = 'Collection successfully set.'
-    else
-      response_message = 'Collection(s) successfully removed.' # no collection selected from drop-down, so don't bother adding a new one
-    end
-    save_and_reindex
+    object_client = Dor::Services::Client.object(@object.pid)
+    dro = object_client.find
+    collection_id = params[:collection].presence
+    updated_structural = if collection_id
+                           dro.structural.new(isMemberOf: [collection_id])
+                         else
+                           dro.structural.to_h.without(:isMemberOf)
+                         end
+    updated = dro.new(structural: updated_structural)
+    object_client.update(params: updated)
+    reindex
+
+    response_message = if params[:collection].present?
+                         'Collection successfully set.'
+                       else
+                         'Collection(s) successfully removed.' # no collection selected from drop-down, so don't bother adding a new one
+                       end
+
     respond_to do |format|
       if params[:bulk]
         format.html { render status: :ok, plain: response_message }

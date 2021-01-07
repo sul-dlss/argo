@@ -241,47 +241,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#set_collection' do
-    before do
-      @collection_druid = 'druid:1234'
-    end
-
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'adds a collection if there is none yet' do
-        allow(item).to receive(:collections).and_return([])
-        expect(item).to receive(:add_collection).with(@collection_druid)
-        post 'set_collection', params: { id: pid, collection: @collection_druid, bulk: true }
-        expect(response.code).to eq('200')
-      end
-
-      context 'when a new collection is not selected' do
-        it 'removes the collection only without adding a new one' do
-          removed_collection_pid1 = 'druid:oo00ooo0001'
-          allow(item).to receive(:collections).and_return([Dor::Collection.new(pid: removed_collection_pid1)])
-          expect(item).to receive(:remove_collection).with(removed_collection_pid1)
-          expect(item).not_to receive(:add_collection)
-          post 'set_collection', params: { id: pid, collection: '', bulk: true }
-          expect(response.code).to eq('200')
-        end
-      end
-
-      it 'removes existing collections first if there are already one or more, then adds new collection' do
-        removed_collection_pid1 = 'druid:oo00ooo0001'
-        removed_collection_pid2 = 'druid:oo00ooo0002'
-        allow(item).to receive(:collections).and_return([Dor::Collection.new(pid: removed_collection_pid1), Dor::Collection.new(pid: removed_collection_pid2)])
-        expect(item).to receive(:remove_collection).with(removed_collection_pid1)
-        expect(item).to receive(:remove_collection).with(removed_collection_pid2)
-        expect(item).to receive(:add_collection).with(@collection_druid)
-        post 'set_collection', params: { id: pid, collection: @collection_druid, bulk: true }
-        expect(response.code).to eq('200')
-      end
-    end
-  end
-
   describe '#remove_collection' do
     context 'when they have manage access' do
       before do
