@@ -37,7 +37,8 @@ class SetGoverningApoJob < GenericJob
     check_can_set_governing_apo!(cocina, state_service)
 
     current_obj = Dor.find(current_druid)
-    open_new_version(current_obj, 'Set new governing APO') unless state_service.allows_modification?
+
+    open_new_version(current_druid, current_obj.current_version, 'Set new governing APO') unless state_service.allows_modification?
 
     current_obj.admin_policy_object = Dor.find(new_apo_id)
     current_obj.identityMetadata.adminPolicy = nil if current_obj.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation

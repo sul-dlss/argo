@@ -160,8 +160,10 @@ class ItemsController < ApplicationController
   end
 
   def catkey
-    @object.catkey = params[:new_catkey].strip
-    save_and_reindex
+    object_client = Dor::Services::Client.object(params[:id])
+    dro = object_client.find
+    CatkeyService.update(dro, object_client, params[:new_catkey].strip)
+    reindex
 
     respond_to do |format|
       if params[:bulk]

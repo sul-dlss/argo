@@ -146,28 +146,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#catkey' do
-    context 'without manage content access' do
-      it 'returns a 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
-        post 'catkey', params: { id: pid, new_catkey: '12345' }
-        expect(response.code).to eq('403')
-      end
-    end
-
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'updates the catkey, trimming whitespace' do
-        expect(item).to receive(:catkey=).with('12345')
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-        post 'catkey', params: { id: pid, new_catkey: '   12345 ' }
-      end
-    end
-  end
-
   describe '#tags_bulk' do
     let(:current_tag) { 'Some : Thing' }
     let(:fake_tags_client) do
