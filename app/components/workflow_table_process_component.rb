@@ -10,12 +10,12 @@ class WorkflowTableProcessComponent < ApplicationComponent
   attr_reader :name, :data, :process, :description
 
   def workflow_process_name
-    new_params = search_state.add_facet_params('wf_wps_ssim', [name, process].compact.join(':')).merge(controller: 'catalog', action: 'index')
+    new_params = search_state.filter('wf_wps_ssim').add([name, process].compact.join(':')).params.merge(controller: 'catalog', action: 'index')
     link_to(process, new_params)
   end
 
   def workflow_item_count(status)
-    new_params = search_state.add_facet_params('wf_wps_ssim', [name, process, status].compact.join(':')).merge(controller: 'catalog', action: 'index')
+    new_params = search_state.filter('wf_wps_ssim').add([name, process, status].compact.join(':')).params.merge(controller: 'catalog', action: 'index')
     rotate_facet_params('wf_wps', 'wps', facet_order('wf_wps'), new_params)
     item_count = 0
     if data[process] && data[process][status] && item = data[process][status][:_] # rubocop:disable Lint/AssignmentInCondition
