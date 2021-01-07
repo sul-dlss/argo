@@ -33,9 +33,9 @@ class ReleaseObjectJob < GenericJob
 
   def release_object(current_druid, log)
     log.puts("#{Time.current} Beginning ReleaseObjectJob for #{current_druid}")
+    cocina = Dor::Services::Client.object(current_druid).find
 
-    object = Dor.find(current_druid)
-    unless ability.can?(:manage_item, object)
+    unless ability.can?(:manage_item, cocina)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end
@@ -56,7 +56,7 @@ class ReleaseObjectJob < GenericJob
     end
     log.puts("#{Time.current} Trying to start release workflow")
     begin
-      WorkflowClientFactory.build.create_workflow_by_name(current_druid, 'releaseWF', version: object.current_version)
+      WorkflowClientFactory.build.create_workflow_by_name(current_druid, 'releaseWF', version: cocina.version)
       log.puts("#{Time.current} Workflow creation successful")
       bulk_action.increment(:druid_count_success).save
     rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::WorkflowException => e

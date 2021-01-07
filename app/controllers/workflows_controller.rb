@@ -34,7 +34,9 @@ class WorkflowsController < ApplicationController
   # @option params [String] `:status` The status to which we want to reset the workflow.
   def update
     params.require %i[process status]
-    return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], @object)
+    cocina = Dor::Services::Client.object(params[:item_id]).find
+
+    return render status: :forbidden, plain: 'Unauthorized' unless can_update_workflow?(params[:status], cocina)
 
     # this will raise an exception if the item doesn't have that workflow step
     WorkflowClientFactory.build.workflow_status(druid: params[:item_id],

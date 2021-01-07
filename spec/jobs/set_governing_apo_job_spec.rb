@@ -18,7 +18,7 @@ RSpec.describe SetGoverningApoJob do
   end
 
   describe '#perform' do
-    let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ee2222'] }
+    let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ff2222'] }
     let(:params) do
       {
         pids: pids,
@@ -63,50 +63,98 @@ RSpec.describe SetGoverningApoJob do
         expect(buffer.string).to include "Finished SetGoverningApoJob for BulkAction #{bulk_action_id}"
       end
 
-      # it might be cleaner to break the testing here into smaller cases for #set_governing_apo_and_index_safely,
-      # assuming one is inclined to test private methods, but it also seemed reasonable to do a slightly more end-to-end
-      # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
-      it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
-        item1 = instance_double(Dor::Item, pid: pids[0], current_version: '1')
-        item3 = instance_double(Dor::Item, pid: pids[2], current_version: '1')
-        apo = instance_double(Dor::AdminPolicyObject)
+      context 'when an individual update fails' do
+        let(:item1) { instance_double(Dor::Item, pid: pids[0], current_version: '1') }
+        let(:apo) { instance_double(Dor::AdminPolicyObject) }
 
-        expect(Dor).to receive(:find).with(pids[0]).and_return(item1)
-        expect(subject).to receive(:check_can_set_governing_apo!).with(item1).and_return true
-        expect(Dor).to receive(:find).with(pids[1]).and_raise(ActiveFedora::ObjectNotFoundError)
-        expect(Dor).to receive(:find).with(pids[2]).and_return(item3)
-        expect(subject).to receive(:check_can_set_governing_apo!).with(item3).and_raise('user not allowed to move to target apo')
+        let(:cocina1) do
+          Cocina::Models.build(
+            'label' => 'My Item',
+            'version' => 2,
+            'type' => Cocina::Models::Vocab.object,
+            'externalIdentifier' => pids[0],
+            'access' => {
+              'access' => 'world'
+            },
+            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+            'structural' => {},
+            'identification' => {}
+          )
+        end
+        let(:cocina3) do
+          Cocina::Models.build(
+            'label' => 'My Item',
+            'version' => 3,
+            'type' => Cocina::Models::Vocab.object,
+            'externalIdentifier' => pids[2],
+            'access' => {
+              'access' => 'world'
+            },
+            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+            'structural' => {},
+            'identification' => {}
+          )
+        end
 
-        expect(Dor).to receive(:find).with(new_apo_id).and_return(apo)
-        idmd = double(Dor::IdentityMetadataDS, adminPolicy: double(Dor::AdminPolicyObject))
-        expect(item1).to receive(:admin_policy_object=).with(apo)
-        expect(item1).to receive(:identityMetadata).and_return(idmd).exactly(:twice)
-        expect(idmd).to receive(:adminPolicy=).with(nil)
-        expect(item1).to receive(:save)
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
+        let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
+        let(:object_client3) { instance_double(Dor::Services::Client::Object, find: cocina3) }
 
-        expect(item3).not_to receive(:admin_policy_object=)
-        expect(item3).not_to receive(:identityMetadata)
-        expect(item3).not_to receive(:save)
+        before do
+          allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
+          allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
+          allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
 
-        subject.perform(bulk_action.id, params)
-        expect(state_service).to have_received(:allows_modification?)
+          allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
+          allow(subject).to receive(:check_can_set_governing_apo!).with(cocina1, state_service).and_return true
+          allow(subject).to receive(:check_can_set_governing_apo!).with(cocina3, state_service).and_raise('user not allowed to move to target apo')
 
-        expect(bulk_action.druid_count_success).to eq 1
-        expect(bulk_action.druid_count_fail).to eq 2
+          allow(Dor).to receive(:find).with(new_apo_id).and_return(apo)
+        end
 
-        bulk_action_id = bulk_action.id
-        expect(buffer.string).to include "SetGoverningApoJob: Successfully updated #{pids[0]} (bulk_action.id=#{bulk_action_id})"
-        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action_id}): ActiveFedora::ObjectNotFoundError"
-        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[2]} (bulk_action.id=#{bulk_action_id}): user not allowed to move to target apo"
+        # it might be cleaner to break the testing here into smaller cases for #set_governing_apo_and_index_safely,
+        # assuming one is inclined to test private methods, but it also seemed reasonable to do a slightly more end-to-end
+        # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
+        it 'increments the failure and success counts and logs status of each update' do
+          idmd = double(Dor::IdentityMetadataDS, adminPolicy: double(Dor::AdminPolicyObject))
+          expect(item1).to receive(:admin_policy_object=).with(apo)
+          expect(item1).to receive(:identityMetadata).and_return(idmd).exactly(:twice)
+          expect(idmd).to receive(:adminPolicy=).with(nil)
+          expect(item1).to receive(:save)
+          expect(Argo::Indexer).to receive(:reindex_pid_remotely)
+
+          subject.perform(bulk_action.id, params)
+          expect(state_service).to have_received(:allows_modification?)
+
+          expect(bulk_action.druid_count_success).to eq 1
+          expect(bulk_action.druid_count_fail).to eq 2
+
+          bulk_action_id = bulk_action.id
+          expect(buffer.string).to include "SetGoverningApoJob: Successfully updated #{pids[0]} (bulk_action.id=#{bulk_action_id})"
+          expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action_id}): Dor::Services::Client::NotFoundResponse"
+          expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[2]} (bulk_action.id=#{bulk_action_id}): user not allowed to move to target apo"
+        end
       end
     end
   end
 
   describe '#check_can_set_governing_apo!' do
-    let(:pid) { '123' }
-    let(:obj) { double(Dor::Collection, pid: pid, current_version: '1') }
+    let(:pid) { 'druid:bc123df4567' }
+    # let(:obj) { double(Dor::Collection, pid: pid, current_version: '1') }
     let(:ability) { double(Ability) }
+    let(:obj) do
+      Cocina::Models.build(
+        'label' => 'My Item',
+        'version' => 1,
+        'type' => Cocina::Models::Vocab.object,
+        'externalIdentifier' => pid,
+        'access' => {
+          'access' => 'world'
+        },
+        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+        'structural' => {},
+        'identification' => {}
+      )
+    end
 
     before do
       subject.instance_variable_set(:@new_apo_id, new_apo_id)
@@ -119,12 +167,12 @@ RSpec.describe SetGoverningApoJob do
 
       it "gets an object that the user can't manage" do
         allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(false)
-        expect { subject.send(:check_can_set_governing_apo!, obj) }.to raise_error("user not authorized to move #{pid} to #{new_apo_id}")
+        expect { subject.send(:check_can_set_governing_apo!, obj, state_service) }.to raise_error("user not authorized to move #{pid} to #{new_apo_id}")
       end
 
       it 'gets an object that the user can manage' do
         allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(true)
-        expect { subject.send(:check_can_set_governing_apo!, obj) }.not_to raise_error
+        expect { subject.send(:check_can_set_governing_apo!, obj, state_service) }.not_to raise_error
       end
     end
 
@@ -133,12 +181,12 @@ RSpec.describe SetGoverningApoJob do
 
       it "gets an object that doesn't allow modification, that the user can manage" do
         allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(true)
-        expect { subject.send(:check_can_set_governing_apo!, obj) }.to raise_error("#{pid} is not open for modification")
+        expect { subject.send(:check_can_set_governing_apo!, obj, state_service) }.to raise_error("#{pid} is not open for modification")
       end
 
       it "gets an object that doesn't allow modification, that the user can't manage" do
         allow(ability).to receive(:can?).with(:manage_governing_apo, obj, new_apo_id).and_return(false)
-        expect { subject.send(:check_can_set_governing_apo!, obj) }.to raise_error("#{pid} is not open for modification")
+        expect { subject.send(:check_can_set_governing_apo!, obj, state_service) }.to raise_error("#{pid} is not open for modification")
       end
     end
   end

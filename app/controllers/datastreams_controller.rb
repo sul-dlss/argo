@@ -42,13 +42,14 @@ class DatastreamsController < ApplicationController
   # @option params [String] `:id` the identifier for the datastream, e.g., `identityMetadata`
   # @option params [String] `:item_id` the druid to modify
   def update
-    @object = Dor.find params[:item_id]
-    authorize! :manage_item, @object
+    cocina = Dor::Services::Client.object(params[:item_id]).find
+    authorize! :manage_item, cocina
 
     raise ArgumentError, 'Missing content' if params[:content].blank?
 
     begin
       Nokogiri::XML(params[:content], &:strict)
+      @object = Dor.find params[:item_id]
       @object.datastreams[params[:id]].content = params[:content] # set the XML to be verbatim as posted
       @object.save
       Argo::Indexer.reindex_pid_remotely(@object.pid)

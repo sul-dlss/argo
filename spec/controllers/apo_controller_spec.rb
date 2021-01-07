@@ -4,6 +4,8 @@ require 'rails_helper'
 
 RSpec.describe ApoController, type: :controller do
   before do
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+
     allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
     allow(apo).to receive(:save)
 
@@ -11,12 +13,22 @@ RSpec.describe ApoController, type: :controller do
     allow(collection).to receive(:save)
 
     sign_in user
-    allow(controller).to receive(:authorize!).with(:manage_item, Dor::AdminPolicyObject).and_return(true)
+    allow(controller).to receive(:authorize!).with(:manage_item, Cocina::Models::AdminPolicy).and_return(true)
   end
 
   let(:user) { create(:user) }
-
   let(:apo) { instantiate_fixture('zt570tx3016', Dor::AdminPolicyObject) }
+  let(:pid) { 'druid:zt570tx3016' }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) do
+    Cocina::Models.build(
+      'label' => 'The APO',
+      'version' => 1,
+      'type' => Cocina::Models::Vocab.admin_policy,
+      'externalIdentifier' => pid,
+      'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+    )
+  end
   let(:collection) { FactoryBot.create_for_repository(:collection) }
 
   describe '#create' do

@@ -26,9 +26,9 @@ class CloseVersionJob < GenericJob
   private
 
   def close_object(pid, log)
-    object = Dor.find(pid)
+    cocina = Dor::Services::Client.object(pid).find
 
-    unless ability.can?(:manage_item, object)
+    unless ability.can?(:manage_item, cocina)
       log.puts("#{Time.current} Not authorized for #{pid}")
       return
     end

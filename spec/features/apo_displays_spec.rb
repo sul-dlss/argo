@@ -5,12 +5,24 @@ require 'rails_helper'
 RSpec.describe 'Viewing an Admin policy' do
   let(:object) { instantiate_fixture('druid_zt570tx3016', Dor::AdminPolicyObject) }
   let(:current_user) { create(:user) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:pid) { 'druid:zt570tx3016' }
+  let(:cocina_model) do
+    Cocina::Models.build(
+      'label' => 'The APO',
+      'version' => 1,
+      'type' => Cocina::Models::Vocab.admin_policy,
+      'externalIdentifier' => pid,
+      'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+    )
+  end
 
   before do
-    Argo::Indexer.reindex_pid_remotely 'druid:zt570tx3016'
+    Argo::Indexer.reindex_pid_remotely pid
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(object).to receive(:persisted?).and_return(true) # This allows to_param to function
     allow(Dor).to receive(:find).and_return(object)
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   context 'mods view' do
@@ -95,6 +107,11 @@ RSpec.describe 'Viewing an Admin policy' do
     end
 
     context 'tag ui' do
+      let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
+      let(:object_client) do
+        instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
+      end
+
       it 'renders the tag ui' do
         visit '/items/druid:zt570tx3016/tags/edit'
         expect(page).to have_content('Update tags')

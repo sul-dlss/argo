@@ -119,11 +119,27 @@ RSpec.describe ReportController, type: :controller do
   describe 'POST reset' do
     let(:workflow) { 'accessionWF' }
     let(:step) { 'descriptive-metadata' }
-    let(:obj) { instance_double Dor::Item }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, update_status: true) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:pid) { 'druid:xb482bw3979' }
+    let(:cocina_model) do
+      Cocina::Models.build(
+        'label' => 'My ETD',
+        'version' => 1,
+        'type' => Cocina::Models::Vocab.object,
+        'externalIdentifier' => pid,
+        'access' => {
+          'access' => 'world'
+        },
+        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405', partOfProject: 'EEMS' },
+        'structural' => {},
+        'identification' => {}
+      )
+    end
 
     before do
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
     it 'requires parameters' do
@@ -156,7 +172,6 @@ RSpec.describe ReportController, type: :controller do
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(true)
-        allow(Dor).to receive(:find).with('druid:xb482bw3979').and_return(obj)
         allow(Report).to receive(:new).and_return(report)
       end
 
@@ -166,7 +181,7 @@ RSpec.describe ReportController, type: :controller do
         expect(assigns(:step)).to eq step
         expect(assigns(:ids)).to eq(%w[xb482bw3979])
         expect(response).to have_http_status(:ok)
-        expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
+        expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', cocina_model)
         expect(workflow_client).to have_received(:update_status)
           .with(druid: 'druid:xb482bw3979', workflow: workflow, process: step, status: 'waiting')
       end
@@ -177,7 +192,6 @@ RSpec.describe ReportController, type: :controller do
 
       before do
         allow(controller.current_ability).to receive(:can_update_workflow?).and_return(false)
-        allow(Dor).to receive(:find).with('druid:xb482bw3979').and_return(obj)
         allow(Report).to receive(:new).and_return(report)
       end
 
@@ -187,7 +201,7 @@ RSpec.describe ReportController, type: :controller do
         expect(assigns(:step)).to eq step
         expect(assigns(:ids)).to eq(%w[xb482bw3979])
         expect(response).to have_http_status(:ok)
-        expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', obj)
+        expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', cocina_model)
         expect(workflow_client).not_to have_received(:update_status)
       end
     end

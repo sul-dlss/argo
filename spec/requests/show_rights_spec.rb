@@ -104,12 +104,13 @@ RSpec.describe 'Show rights for an object' do
       end
 
       before do
-        allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
+        allow(object_client).to receive(:find)
+          .and_raise(Dor::Services::Client::UnexpectedResponse, 'Error: ({"errors":[{"detail":"Invalid date"}]})')
       end
 
-      it 'draws the page' do
+      it 'shows the error' do
         get "/items/#{pid}/rights"
-        expect(response).to be_successful
+        expect(flash[:error]).to eq 'Unable to retrieve the cocina model: Invalid date'
       end
     end
   end

@@ -49,7 +49,7 @@ RSpec.describe 'Set APO for an object' do
 
       before do
         allow(Ability).to receive(:new).and_return(ability)
-        allow(ability).to receive(:authorize!).with(:manage_governing_apo, fedora_obj, new_apo_id).and_raise(CanCan::AccessDenied)
+        allow(ability).to receive(:authorize!).with(:manage_governing_apo, cocina_model, new_apo_id).and_raise(CanCan::AccessDenied)
       end
 
       it 'returns a 403' do

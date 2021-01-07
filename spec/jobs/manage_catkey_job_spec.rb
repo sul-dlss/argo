@@ -17,9 +17,57 @@ RSpec.describe ManageCatkeyJob do
   let(:pids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ee2222] }
   let(:catkeys) { %w[12345 6789 44444] }
   let(:buffer) { StringIO.new }
+  let(:item1) do
+    Cocina::Models.build(
+      'label' => 'My Item',
+      'version' => 2,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pids[0],
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
+  let(:item2) do
+    Cocina::Models.build(
+      'label' => 'My Item',
+      'version' => 3,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pids[1],
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
+  let(:item3) do
+    Cocina::Models.build(
+      'label' => 'My Item',
+      'version' => 3,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pids[1],
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
+  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
+    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
   end
 
   describe '#perform' do

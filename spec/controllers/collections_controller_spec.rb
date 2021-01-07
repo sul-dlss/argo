@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe CollectionsController do
   before do
     allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
-    allow(controller).to receive(:authorize!).with(:manage_item, Dor::AdminPolicyObject).and_return(true)
+    allow(controller).to receive(:authorize!).with(:manage_item, Cocina::Models::AdminPolicy).and_return(true)
     sign_in user
   end
 
@@ -14,6 +14,22 @@ RSpec.describe CollectionsController do
   let(:collection) { FactoryBot.create_for_repository(:collection) }
 
   describe '#new' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:cocina_model) do
+      Cocina::Models.build(
+        'label' => 'The APO',
+        'version' => 1,
+        'type' => Cocina::Models::Vocab.admin_policy,
+        'externalIdentifier' => pid,
+        'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+      )
+    end
+    let(:pid) { 'druid:zt570tx3016' }
+
+    before do
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    end
+
     it 'is successful' do
       get :new, params: { apo_id: apo.pid }
       expect(assigns[:apo]).to eq apo
@@ -23,8 +39,20 @@ RSpec.describe CollectionsController do
 
   describe '#create' do
     let(:form) { instance_double(CollectionForm, validate: true, save: true, model: Dor::Collection.find(collection.externalIdentifier)) }
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:cocina_model) do
+      Cocina::Models.build(
+        'label' => 'The APO',
+        'version' => 1,
+        'type' => Cocina::Models::Vocab.admin_policy,
+        'externalIdentifier' => pid,
+        'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+      )
+    end
+    let(:pid) { 'druid:zt570tx3016' }
 
     before do
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(CollectionForm).to receive(:new).and_return(form)
     end
 
