@@ -11,12 +11,22 @@ RSpec.describe WorkflowTableProcessComponent, type: :component do
     let(:name) { 'accessionWF' }
     let(:process) { 'descriptive-metadata' }
     let(:status) { 'error' }
-    let(:blacklight_config) { Blacklight::Configuration.new }
+    let(:blacklight_config) do
+      Blacklight::Configuration.new.configure do |config|
+        config.facet_display = {
+          hierarchy: {
+            'wf_wps' => [['ssim'], ':'],
+            'wf_wsp' => [['ssim'], ':'],
+            'wf_swp' => [['ssim'], ':'],
+            'exploded_tag' => [['ssim'], ':']
+          }
+        }
+      end
+    end
     let(:query_params) { { controller: 'report', action: 'workflow_grid' } }
     let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }
 
     before do
-      #    allow(component.view_context).to receive(:blacklight_config).and_return blacklight_config
       allow(component).to receive(:search_state).and_return search_state
       allow(component).to receive(:report_reset_path).and_return('/foo')
     end

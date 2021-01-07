@@ -25,6 +25,39 @@ class WorkflowTableProcessComponent < ApplicationComponent
     link_to(item_count, new_params)
   end
 
+  # rubocop:disable Naming/MethodParameterName
+  def rotate_facet_params(prefix, from, to, p = params.dup)
+    return p if from == to
+
+    from_field = "#{prefix}_#{from}"
+    to_field = "#{prefix}_#{to}"
+    p[:f] = (p[:f] || {}).dup # the command above is not deep in rails3, !@#$!@#$
+    p[:f][from_field] = (p[:f][from_field] || []).dup
+    p[:f][to_field] = (p[:f][to_field] || []).dup
+    # rubocop:disable Style/Semicolon
+    p[:f][from_field].reject! { |v| p[:f][to_field] << rotate_facet_value(v, from, to); true }
+    # rubocop:enable Style/Semicolon
+    p[:f].delete(from_field)
+    p[:f][to_field].compact!
+    p[:f].delete(to_field) if p[:f][to_field].empty?
+    p
+  end
+  # rubocop:enable Naming/MethodParameterName
+
+  def rotate_facet_value(val, from, to)
+    components = Hash[from.split(//).zip(val.split(/:/))]
+    new_values = components.values_at(*to.split(//))
+    new_values.pop while new_values.last.nil?
+    return nil if new_values.include?(nil)
+
+    new_values.compact.join(':')
+  end
+
+  def facet_order(prefix)
+    param_name = "#{prefix}_facet_order".to_sym
+    params[param_name] || blacklight_config.facet_display[:hierarchy][prefix].first
+  end
+
   def workflow_reset_link(status = 'error')
     return unless data[process] && data[process][status] && data[process][status][:_]
 
@@ -39,4 +72,6 @@ class WorkflowTableProcessComponent < ApplicationComponent
     raw ' | ' + link_to('reset', report_reset_path(new_params), remote: true, method: :post)
     # rubocop:enable Rails/OutputSafety
   end
+
+  delegate :blacklight_config, to: :search_state
 end
