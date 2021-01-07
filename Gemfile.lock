@@ -316,7 +316,7 @@ GEM
     mime-types-data (3.2020.1104)
     mimemagic (0.3.5)
     mini_mime (1.0.2)
-    mini_portile2 (2.4.0)
+    mini_portile2 (2.5.0)
     minitest (5.14.2)
     moab-versioning (4.4.1)
       druid-tools (>= 1.0.0)
@@ -340,8 +340,13 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (6.14.0)
     nio4r (2.5.4)
-    nokogiri (1.10.10)
-      mini_portile2 (~> 2.4.0)
+    nokogiri (1.11.0)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
+    nokogiri (1.11.0-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.11.0-x86_64-linux)
+      racc (~> 1.4)
     nokogiri-happymapper (0.8.1)
       nokogiri (~> 1.5)
     nom-xml (1.1.0)
@@ -387,6 +392,7 @@ GEM
     psych (3.2.1)
     public_suffix (4.0.6)
     puma (3.12.6)
+    racc (1.5.2)
     rack (2.2.3)
     rack-mini-profiler (2.2.0)
       rack (>= 1.2.0)
@@ -638,7 +644,7 @@ DEPENDENCIES
   mods_display
   mysql2 (< 0.5.3)
   newrelic_rpm
-  nokogiri (~> 1.6)
+  nokogiri (~> 1.11)
   okcomputer
   prawn (~> 1)
   prawn-table
