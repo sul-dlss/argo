@@ -49,7 +49,7 @@ gem 'honeybadger', '~> 4.1'
 gem 'sidekiq', '~> 6.0'
 
 gem 'newrelic_rpm'
-gem 'nokogiri', '~> 1.6'
+gem 'nokogiri', '~> 1.11'
 # Prawn is used to create "tracksheets"
 gem 'prawn', '~> 1'
 gem 'prawn-table'
