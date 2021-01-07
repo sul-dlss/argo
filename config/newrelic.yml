@@ -4,7 +4,7 @@
 # overhead.  For more information, visit www.newrelic.com.
 #
 # Generated November 18, 2015
-# 
+#
 # This configuration file is custom generated for SUL DLSS DevOps
 #
 # For full documentation of agent configuration options, please refer to
@@ -40,9 +40,6 @@ test:
   <<: *default_settings
   # It doesn't make sense to report to New Relic from automated test runs.
   monitor_mode: false
-
-staging:
-  <<: *default_settings
 
 production:
   <<: *default_settings
