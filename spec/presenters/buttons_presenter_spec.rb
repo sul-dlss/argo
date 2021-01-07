@@ -37,19 +37,15 @@ RSpec.describe ButtonsPresenter, type: :presenter do
     context 'a Dor::Item the user can manage, with the usual data streams, and no catkey or embargo info' do
       subject(:buttons) { presenter.buttons }
 
-      let(:id_md) do
-        instance_double(Dor::IdentityMetadataDS, ng_xml: Nokogiri::XML('<identityMetadata><identityMetadata>'),
-                                                 otherId: [])
-      end
-      let(:desc_md) { instance_double(Dor::DescMetadataDS, new?: true) }
       let(:item_id) { 'druid:kv840xx0000' }
       let(:governing_apo) { instance_double(Dor::AdminPolicyObject, pid: governing_apo_id) }
       let(:object) do
-        instance_double(Dor::Item, identityMetadata: id_md, pid: item_id, current_version: '3',
+        instance_double(Dor::Item, pid: item_id, current_version: '3',
                                    admin_policy_object: governing_apo,
                                    embargoed?: false,
-                                   datastreams: { 'contentMetadata' => nil, 'rightsMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => id_md })
+                                   catkey: catkey)
       end
+      let(:catkey) { nil }
 
       let(:default_buttons) do
         [
@@ -163,24 +159,31 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         expect(buttons.length).to eq 0
       end
 
-      it 'includes the refresh descMetadata button for items with catkey' do
-        allow(id_md).to receive(:otherId).with('catkey').and_return(['1234567'])
-        default_buttons.push(
-          label: 'Refresh descMetadata',
-          method: 'post',
-          url: "/items/#{item_id}/refresh_metadata",
-          new_page: true,
-          disabled: false
-        ).each do |button|
-          expect(buttons).to include(button)
+      context 'when the item has a catkey' do
+        let(:catkey) { '1234567' }
+
+        it 'includes the refresh descMetadata button' do
+          default_buttons.push(
+            label: 'Refresh descMetadata',
+            method: 'post',
+            url: "/items/#{item_id}/refresh_metadata",
+            new_page: true,
+            disabled: false
+          ).each do |button|
+            expect(buttons).to include(button)
+          end
+          expect(buttons.length).to eq default_buttons.length
         end
-        expect(buttons.length).to eq default_buttons.length
       end
     end
 
     context 'a Dor::AdminPolicyObject the user can manage' do
       let(:view_apo_id) { 'druid:zt570qh4444' }
-      let(:object) { instance_double(Dor::AdminPolicyObject, current_version: '3', datastreams: {}) }
+      let(:object) do
+        instance_double(Dor::AdminPolicyObject,
+                        current_version: '3',
+                        catkey: nil)
+      end
 
       let(:doc) do
         SolrDocument.new('id' => view_apo_id,
@@ -274,7 +277,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       instance_double(Dor::IdentityMetadataDS)
     end
     let(:item_id) { 'druid:kv840xx0000' }
-    let(:object) { instance_double(Dor::Item, identityMetadata: id_md, pid: item_id, current_version: '3') }
+    let(:object) { instance_double(Dor::Item, pid: item_id, current_version: '3') }
 
     context 'when registered' do
       let(:doc) do

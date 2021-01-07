@@ -78,10 +78,10 @@ class ButtonsPresenter
       buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
     end
 
-    buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if object.datastreams.include? 'contentMetadata'
+    buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if object.is_a?(Dor::Item)
     buttons << { url: rights_item_path(id: pid), label: 'Set rights' } unless object.is_a?(Dor::AdminPolicyObject)
 
-    if object.datastreams.include?('identityMetadata') && object.identityMetadata.otherId('catkey').present?
+    if object.catkey
       # a catkey indicates there's a symphony record
       buttons << refresh_metadata_button
     end
