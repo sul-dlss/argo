@@ -17,7 +17,7 @@ class ItemsController < ApplicationController
 
   before_action :enforce_versioning, only: %i[
     add_collection set_collection remove_collection
-    source_id set_source_id
+    source_id
     catkey
     refresh_metadata
     set_rights
@@ -142,8 +142,12 @@ class ItemsController < ApplicationController
   end
 
   def source_id
-    @object.source_id = params[:new_id]
-    save_and_reindex
+    object_client = Dor::Services::Client.object(@object.pid)
+    dro = object_client.find
+    updated_identification = dro.identification.new(sourceId: params[:new_id])
+    updated = dro.new(identification: updated_identification)
+    object_client.update(params: updated)
+    reindex
 
     respond_to do |format|
       if params[:bulk]

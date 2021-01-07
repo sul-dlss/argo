@@ -146,20 +146,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#source_id' do
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'updates the source id' do
-        expect(item).to receive(:source_id=).with('new:source_id')
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-        post 'source_id', params: { id: pid, new_id: 'new:source_id' }
-      end
-    end
-  end
-
   describe '#catkey' do
     context 'without manage content access' do
       it 'returns a 403' do
