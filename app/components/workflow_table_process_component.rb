@@ -28,10 +28,9 @@ class WorkflowTableProcessComponent < ApplicationComponent
   def workflow_reset_link(status = 'error')
     return unless data[process] && data[process][status] && data[process][status][:_]
 
-    new_params = search_state.add_facet_params(
-      'wf_wps_ssim',
-      [name, process, status].compact.join(':')
-    )
+    new_params = search_state.filter('wf_wps_ssim')
+                             .add([name, process, status].compact.join(':'))
+                             .params
                              .merge(
                                reset_workflow: name,
                                reset_step: process
