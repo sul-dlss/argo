@@ -14,7 +14,6 @@ references:
       BUNDLE_PATH: vendor/bundle
       PGHOST: 127.0.0.1
       PGPASSWORD: sekret
-      RAILS_ENV: test
   postgres_envs: &postgres_envs
     name: db
     environment:
