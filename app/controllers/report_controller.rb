@@ -83,8 +83,19 @@ class ReportController < CatalogController
   # This draws the full page that supports the workflow grid
   def workflow_grid
     (@response, _deprecated_document_list) = search_service.search_results
+    return unless request.headers['X-Requester'] == 'frontend'
 
     # This is triggered by javascript that refreshes the data every 10s
-    return render partial: 'workflow_grid' if request.headers['X-Requester'] == 'frontend'
+    facet_id = 'wf_wps_ssim'
+    facet = blacklight_config.facet_fields[facet_id]
+    display_facet = @response.aggregations[facet.field]
+    presenter = facet.presenter.new(facet, display_facet, self, search_state)
+    @facet_tree = Blacklight::Hierarchy::FacetTree.build(
+      prefix: 'wf_wps',
+      facet_display: blacklight_config.facet_display,
+      facet_field: presenter
+    )[facet_id]
+
+    render partial: 'workflow_grid'
   end
 end
