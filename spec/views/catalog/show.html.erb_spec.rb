@@ -6,6 +6,7 @@ RSpec.describe 'catalog/show.html.erb' do
   let(:document) { SolrDocument.new id: 'xyz', content_type_ssim: 'a' }
   let(:title) { 'Long title that should be truncated at 50 characters' }
   let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:document_presenter) { instance_double(Blacklight::ShowPresenter, html_title: title) }
 
   before do
     assign :document, document
@@ -20,7 +21,7 @@ RSpec.describe 'catalog/show.html.erb' do
   end
 
   it 'assigns page title, truncating it' do
-    expect(view).to receive(:document_show_html_title).and_return(title)
+    expect(view).to receive(:document_presenter).and_return(document_presenter)
     expect(view).to receive(:render_document_sidebar_partial)
     expect(view).to receive(:render_document_partials)
     render
