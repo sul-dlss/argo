@@ -1,5 +1,5 @@
 <% @page_title = "Bulk Uploads for APO #{@obj.id}" %>
-<% content_for(:head) { show_presenter(@document).link_rel_alternates } -%>
+<% content_for(:head) { document_presenter(@document).link_rel_alternates } -%>
 <% content_for(:sidebar) do %>
   <%= render_document_sidebar_partial @document %>
 <% end %>
