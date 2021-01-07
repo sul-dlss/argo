@@ -67,7 +67,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 5. **Compile javascript**
 
     ```
-    RAILS_ENV=test bin/rails webpacker:compile
+    bin/rails webpacker:compile
     ```
 
     If you run into trouble with the docker containers complaining about webpacker, then ... figure out what to do to fix it and please update this document.  (There's a way to do it, something like `docker-compose run --container command`)

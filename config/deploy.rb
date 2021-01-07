@@ -7,7 +7,10 @@ set :repo_url, 'https://github.com/sul-dlss/argo.git'
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/home/lyberadmin/argo'
+set :deploy_to, '/opt/app/lyberadmin/argo'
+
+set :rails_env, 'production'
+set :bundle_without, %w[deployment test development].join(' ')
 
 # Default value for :scm is :git
 # set :scm, :git
