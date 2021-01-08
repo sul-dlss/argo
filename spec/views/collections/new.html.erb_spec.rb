@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'collections/new.html.erb', type: :view do
   it 'renders the HTML template form' do
-    assign(:apo, double('pid' => 'druid:zt570qh4444', 'label' => 'My label'))
+    assign(:cocina, instance_double(Cocina::Models::AdminPolicy, externalIdentifier: 'druid:zt570qh4444', label: 'My label'))
     render
     expect(rendered).to have_css 'form#collection_form'
     expect(rendered).to have_css 'div#create-collection'

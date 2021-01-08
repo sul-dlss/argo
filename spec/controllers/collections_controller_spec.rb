@@ -36,7 +36,6 @@ RSpec.describe CollectionsController do
 
     it 'is successful' do
       get :new, params: { apo_id: apo.pid }
-      expect(assigns[:apo]).to eq apo
       expect(response).to be_successful
     end
   end
