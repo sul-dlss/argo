@@ -2,6 +2,9 @@
 
 # determines which links display in the sidebar
 class ButtonsPresenter
+  # @param [Ability] ability
+  # @param [SolrDocument] solr_document
+  # @param [Dor::Item] object
   def initialize(ability:, solr_document:, object:)
     @ability = ability
     @doc = solr_document
@@ -52,15 +55,13 @@ class ButtonsPresenter
   # you should not need to use both fields, since use of `check_url` disables the button at
   # first anyway.
   #
-  # @param [SolrDocument] doc
-  # @param [Dor::Item] object
   # @return [Array]
   def buttons
     return [] unless ability.can?(:manage_item, object)
 
     buttons = [close_button, open_button]
 
-    if object.is_a? Dor::AdminPolicyObject
+    if doc.admin_policy?
       buttons << { url: edit_apo_path(pid), label: 'Edit APO', new_page: true }
       buttons << { url: new_apo_collection_path(apo_id: pid), label: 'Create Collection' }
     end
@@ -73,22 +74,22 @@ class ButtonsPresenter
 
     buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
     buttons << { url: edit_item_tags_path(item_id: pid), label: 'Edit tags' }
-    if [Dor::Item, Dor::Set].any? { |clazz| object.is_a? clazz } # these only apply for items, sets and collections
+    if doc.item? || doc.collection?
       buttons << { url: catkey_ui_item_path(id: pid), label: 'Manage catkey' }
       buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
     end
 
-    buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if object.is_a?(Dor::Item)
-    buttons << { url: rights_item_path(id: pid), label: 'Set rights' } unless object.is_a?(Dor::AdminPolicyObject)
+    buttons << { url: item_content_type_path(item_id: pid), label: 'Set content type' } if doc.item?
+    buttons << { url: rights_item_path(id: pid), label: 'Set rights' } unless doc.admin_policy?
 
-    if object.catkey
+    if doc.catkey_id
       # a catkey indicates there's a symphony record
       buttons << refresh_metadata_button
     end
     buttons << { url: item_manage_release_path(pid), label: 'Manage release' }
 
     # TODO: add a date picker and button to change the embargo date for those who should be able to.
-    buttons << { label: 'Update embargo', url: embargo_form_item_path(pid) } if object.is_a?(Dor::Item) && object.embargoed?
+    buttons << { label: 'Update embargo', url: embargo_form_item_path(pid) } if doc.embargoed?
 
     buttons
   end
@@ -170,7 +171,7 @@ class ButtonsPresenter
   end
 
   def state_service
-    @state_service ||= StateService.new(pid, version: object.current_version)
+    @state_service ||= StateService.new(pid, version: doc.current_version)
   end
 
   def registered_only?

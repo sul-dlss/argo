@@ -21,11 +21,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
   end
 
   let(:governing_apo_id) { 'druid:hv992yv2222' }
-  let(:doc) do
-    SolrDocument.new('id' => item_id,
-                     'processing_status_text_ssi' => 'not registered',
-                     SolrDocument::FIELD_APO_ID => [governing_apo_id])
-  end
 
   describe '#buttons' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -44,6 +39,13 @@ RSpec.describe ButtonsPresenter, type: :presenter do
                                    admin_policy_object: governing_apo,
                                    embargoed?: false,
                                    catkey: catkey)
+      end
+      let(:doc) do
+        SolrDocument.new('id' => item_id,
+                         'processing_status_text_ssi' => 'not registered',
+                         SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                         SolrDocument::FIELD_CATKEY_ID => catkey,
+                         SolrDocument::FIELD_APO_ID => [governing_apo_id])
       end
       let(:catkey) { nil }
 
@@ -118,11 +120,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         ]
       end
 
-      before do
-        allow(object).to receive(:is_a?).and_return(false)
-        allow(object).to receive(:is_a?).with(Dor::Item).and_return(true)
-      end
-
       it 'creates a hash with the needed button info for an admin' do
         default_buttons.each do |button|
           expect(buttons).to include(button)
@@ -140,7 +137,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       end
 
       it 'only includes the embargo update button if the user is an admin and the object is embargoed' do
-        allow(object).to receive(:embargoed?).and_return(true)
+        allow(doc).to receive(:embargoed?).and_return(true)
         default_buttons.push(
           label: 'Update embargo',
           url: "/items/#{item_id}/embargo_form"
@@ -160,7 +157,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       end
 
       context 'when the item has a catkey' do
-        let(:catkey) { '1234567' }
+        let(:catkey) { 'catkey:1234567' }
 
         it 'includes the refresh descMetadata button' do
           default_buttons.push(
@@ -188,6 +185,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       let(:doc) do
         SolrDocument.new('id' => view_apo_id,
                          'processing_status_text_ssi' => 'not registered',
+                         SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy',
                          SolrDocument::FIELD_APO_ID => [governing_apo_id])
       end
 
@@ -253,11 +251,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
             url: "/items/#{view_apo_id}/manage_release"
           }
         ]
-      end
-
-      before do
-        allow(object).to receive(:is_a?).and_return(false)
-        allow(object).to receive(:is_a?).with(Dor::AdminPolicyObject).and_return(true)
       end
 
       it 'renders the appropriate default buttons for an apo' do

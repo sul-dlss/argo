@@ -60,33 +60,33 @@ class CatalogController < ApplicationController
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
-    config.add_facet_field 'exploded_tag_ssim',               label: 'Tag',                 limit: 9999,
-                                                              component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                                              unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field 'objectType_ssim',                 label: 'Object Type',         component: true, limit: 10
-    config.add_facet_field 'content_type_ssim',               label: 'Content Type',        component: true, limit: 10
-    config.add_facet_field 'content_file_mimetypes_ssim',     label: 'MIME Types',          component: true, limit: 10, home: false
-    config.add_facet_field 'content_file_roles_ssim',         label: 'File Role',           component: true, limit: 10, home: false
-    config.add_facet_field 'rights_descriptions_ssim',        label: 'Access Rights',       component: true, limit: 1000, sort: 'index', home: false
-    config.add_facet_field 'use_license_machine_ssi',         label: 'License',             component: true, limit: 10, home: false
-    config.add_facet_field 'nonhydrus_collection_title_ssim', label: 'Collection',          component: true, limit: 10, more_limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_collection_title_ssim',    label: 'Hydrus Collection',   component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
-    config.add_facet_field 'nonhydrus_apo_title_ssim',        label: 'Admin Policy',        component: true, limit: 10, more_limit: 9999, sort: 'index'
-    config.add_facet_field 'hydrus_apo_title_ssim',           label: 'Hydrus Admin Policy', component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
-    config.add_facet_field 'current_version_isi',             label: 'Version',             component: true, limit: 10, home: false
-    config.add_facet_field 'processing_status_text_ssi',      label: 'Processing Status',   component: true, limit: 10, home: false
-    config.add_facet_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released To',         component: true, limit: 10
-    config.add_facet_field 'wf_wps_ssim', label: 'Workflows (WPS)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999
-    config.add_facet_field 'wf_wsp_ssim', label: 'Workflows (WSP)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999,
-                                          home: false
-    config.add_facet_field 'wf_swp_ssim', label: 'Workflows (SWP)',
-                                          component: Blacklight::Hierarchy::FacetFieldListComponent,
-                                          limit: 9999,
-                                          home: false
+    config.add_facet_field 'exploded_tag_ssim',                 label: 'Tag',                 limit: 9999,
+                                                                component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                                                unless: ->(controller, _config, _response) { controller.params[:no_tags] }
+    config.add_facet_field 'objectType_ssim',                   label: 'Object Type',         component: true, limit: 10
+    config.add_facet_field 'content_type_ssim',                 label: 'Content Type',        component: true, limit: 10
+    config.add_facet_field 'content_file_mimetypes_ssim',       label: 'MIME Types',          component: true, limit: 10, home: false
+    config.add_facet_field 'content_file_roles_ssim',           label: 'File Role',           component: true, limit: 10, home: false
+    config.add_facet_field 'rights_descriptions_ssim',          label: 'Access Rights',       component: true, limit: 1000, sort: 'index', home: false
+    config.add_facet_field 'use_license_machine_ssi',           label: 'License',             component: true, limit: 10, home: false
+    config.add_facet_field 'nonhydrus_collection_title_ssim',   label: 'Collection',          component: true, limit: 10, more_limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_collection_title_ssim',      label: 'Hydrus Collection',   component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
+    config.add_facet_field 'nonhydrus_apo_title_ssim',          label: 'Admin Policy',        component: true, limit: 10, more_limit: 9999, sort: 'index'
+    config.add_facet_field 'hydrus_apo_title_ssim',             label: 'Hydrus Admin Policy', component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
+    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: 'Version',             component: true, limit: 10, home: false
+    config.add_facet_field 'processing_status_text_ssi',        label: 'Processing Status',   component: true, limit: 10, home: false
+    config.add_facet_field SolrDocument::FIELD_RELEASED_TO,     label: 'Released To',         component: true, limit: 10
+    config.add_facet_field 'wf_wps_ssim',    label: 'Workflows (WPS)',
+                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                             limit: 9999
+    config.add_facet_field 'wf_wsp_ssim',    label: 'Workflows (WSP)',
+                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                             limit: 9999,
+                                             home: false
+    config.add_facet_field 'wf_swp_ssim',    label: 'Workflows (SWP)',
+                                             component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                             limit: 9999,
+                                             home: false
     config.add_facet_field 'has_model_ssim', label: 'Object Model',
                                              component: true,
                                              limit: 10,
