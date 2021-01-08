@@ -4,10 +4,10 @@
 </div>
 
 <div class='modal-body' data-controller="collection-editor">
-  <h4>APO &mdash; <%= @apo.label %></h4>
-  <%= form_tag apo_collections_path(@apo.pid), id: 'collection_form',
-                                               role: 'form',
-                                               data: { behavior: 'collection-form' } do %>
+  <h4>APO &mdash; <%= @cocina.label %></h4>
+  <%= form_tag apo_collections_path(@cocina.externalIdentifier), id: 'collection_form',
+                                                                 role: 'form',
+                                                                 data: { behavior: 'collection-form' } do %>
     <div class="form-group" style="padding-left:20px">
       <label class="radio">
         <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-collection', action: 'change->collection-editor#toggle' } %>
@@ -60,7 +60,7 @@
 
     <% if !request.xhr? %>
       <div class="form-group">
-        <%= button_to 'Cancel', solr_document_path(@apo.pid), method: :get, class: 'btn btn-secondary' %>
+        <%= button_to 'Cancel', solr_document_path(@cocina.externalIdentifier), method: :get, class: 'btn btn-secondary' %>
       </div>
     <% end %>
   <% end %>

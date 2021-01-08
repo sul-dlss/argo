@@ -3,10 +3,9 @@
 # Manages HTTP interactions for creating collections
 class CollectionsController < ApplicationController
   def new
-    cocina = Dor::Services::Client.object(params[:apo_id]).find
-    authorize! :manage_item, cocina
+    @cocina = Dor::Services::Client.object(params[:apo_id]).find
+    authorize! :manage_item, @cocina
 
-    @apo = Dor.find params[:apo_id]
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end

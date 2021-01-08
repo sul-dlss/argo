@@ -5,14 +5,12 @@ require 'rails_helper'
 RSpec.describe 'Add collection' do
   before do
     allow(Dor::Collection).to receive(:where).and_return([1])
-    allow(Dor).to receive(:find).with(apo_id).and_return(apo)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
   let(:apo_id) { 'druid:vt333hq2222' }
-  let(:apo) { instance_double(Dor::AdminPolicyObject, label: 'hey', pid: apo_id) }
-  let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy) }
+  let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, label: 'hey', externalIdentifier: apo_id) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   describe 'when collection catkey is provided', js: true do
