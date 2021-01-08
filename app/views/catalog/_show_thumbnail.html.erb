@@ -1,0 +1,4 @@
+<% # The thumbnail partial provided by blacklight 7 is only suitable for the index
+   # as it depends on the deprecated @response ivar. Furthermore we don't need a link
+   # that goes to the very same page that we are on. %>
+<%= document_presenter(document).thumbnail.render %>
