@@ -227,9 +227,8 @@ class CatalogController < ApplicationController
     @milestones_presenter = MilestonesPresenter.new(milestones: milestones, versions: versions)
 
     @buttons_presenter = ButtonsPresenter.new(
-      ability: current_ability,
-      solr_document: @document,
-      object: @obj
+      manager: can?(:manage_item, @cocina),
+      solr_document: @document
     )
 
     @techmd = TechmdService.techmd_for(druid: params[:id])

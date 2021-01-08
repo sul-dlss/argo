@@ -65,7 +65,7 @@ RSpec.describe 'apo', js: true do
     allow(apo).to receive(:save!)
     allow(apo).to receive(:new_record?).and_return(false)
     allow(Argo::Indexer).to receive(:reindex_pid_remotely).and_call_original # for the collection
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely).with(new_apo_druid) do |key|
+    allow(Argo::Indexer).to receive(:reindex_pid_remotely).with(new_apo_druid) do |_key|
       # Since the register was mocked, this wouldn't build the correct solr document.
       # This will make one truer to what we need:
       ActiveFedora::SolrService.add(id: new_apo_druid,

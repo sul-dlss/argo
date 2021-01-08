@@ -2,16 +2,14 @@
 
 # determines which links display in the sidebar
 class ButtonsPresenter
-  # @param [Ability] ability
+  # @param [Boolean] manager
   # @param [SolrDocument] solr_document
-  # @param [Dor::Item] object
-  def initialize(ability:, solr_document:, object:)
-    @ability = ability
+  def initialize(manager:, solr_document:)
+    @manager = manager
     @doc = solr_document
-    @object = object
   end
 
-  attr_reader :ability, :doc, :object
+  attr_reader :manager, :doc
 
   delegate :close_ui_item_versions_path,
            :workflow_service_closeable_path,
@@ -57,7 +55,7 @@ class ButtonsPresenter
   #
   # @return [Array]
   def buttons
-    return [] unless ability.can?(:manage_item, object)
+    return [] unless manager
 
     buttons = [close_button, open_button]
 

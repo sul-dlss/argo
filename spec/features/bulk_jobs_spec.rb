@@ -9,15 +9,11 @@ RSpec.describe 'Bulk jobs view' do
     ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor).to receive(:find).with(apo_id).and_return(apo)
-    apo.datastreams['DC'].content = <<~XML
-      <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
-        <dc:title>Default Admin Policy</dc:title>
-        <dc:identifier>druid:hv992yv2222</dc:identifier>
-        <dc:language>eng</dc:language>
-      </oai_dc:dc>
-    XML
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO) }
   let(:apo_id) { 'druid:hv992yv2222' }
   let(:apo) { Dor::AdminPolicyObject.new(pid: apo_id) }
 

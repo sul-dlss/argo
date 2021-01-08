@@ -4,23 +4,13 @@ require 'rails_helper'
 
 RSpec.describe ButtonsPresenter, type: :presenter do
   let(:presenter) do
-    described_class.new(ability: ability,
-                        solr_document: doc,
-                        object: object)
+    described_class.new(manager: manager,
+                        solr_document: doc)
   end
 
   let(:url_helpers) { Rails.application.routes.url_helpers }
-  let(:ability) { Ability.new(user) }
-  let(:user) do
-    instance_double(User,
-                    admin?: true,
-                    webauth_admin?: false,
-                    manager?: false,
-                    viewer?: false,
-                    roles: false)
-  end
-
   let(:governing_apo_id) { 'druid:hv992yv2222' }
+  let(:manager) { true }
 
   describe '#buttons' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -127,15 +117,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         expect(buttons.length).to eq default_buttons.length
       end
 
-      it 'generates the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
-        allow(user).to receive(:admin?).and_return(false)
-        allow(ability).to receive(:can?).with(:manage_item, object).and_return(true)
-        default_buttons.each do |button|
-          expect(buttons).to include(button)
-        end
-        expect(buttons.length).to eq default_buttons.length
-      end
-
       it 'only includes the embargo update button if the user is an admin and the object is embargoed' do
         allow(doc).to receive(:embargoed?).and_return(true)
         default_buttons.push(
@@ -147,13 +128,12 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         expect(buttons.length).to eq default_buttons.length
       end
 
-      it "does not generate errors given an object that has no associated APO and a user that can't manage the object" do
-        allow(user).to receive(:admin?).and_return(false)
-        allow(doc).to receive(:apo_pid).and_return(nil)
-        allow(object).to receive(:admin_policy_object).and_return(nil)
-        allow(user).to receive(:roles).with(nil).and_return([])
-        expect(buttons).not_to be_nil
-        expect(buttons.length).to eq 0
+      context "with a user that can't manage the object" do
+        let(:manager) { false }
+
+        it 'does not generate errors given an object that has no associated APO' do
+          expect(buttons).to eq []
+        end
       end
 
       context 'when the item has a catkey' do
