@@ -3,7 +3,7 @@
 ##
 # A module for including constants throughout the Argo application
 module Constants
-  # From https://github.com/sul-dlss/dor-services/blob/master/lib/dor/datastreams/rights_metadata_ds.rb
+  # From https://github.com/sul-dlss/dor-services/blob/main/lib/dor/datastreams/rights_metadata_ds.rb
   DEFAULT_RIGHTS_OPTIONS = [
     %w[World world],
     ['World (no-download)', 'world-nd'],
