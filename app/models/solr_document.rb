@@ -25,9 +25,11 @@ class SolrDocument
   FIELD_PLACE                     = 'originInfo_place_placeTerm_tesim'
   FIELD_PUBLISHER                 = 'originInfo_publisher_tesim'
   FIELD_CREATED_DATE              = 'originInfo_date_created_tesim'
+  FIELD_CURRENT_VERSION           = 'current_version_isi'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
+  attribute :current_version, Blacklight::Types::String, FIELD_CURRENT_VERSION
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
   attribute :embargo_release_date, Blacklight::Types::String, FIELD_EMBARGO_RELEASE_DATE
   attribute :dor_services_version, Blacklight::Types::String, :dor_services_version_ssi
@@ -77,6 +79,14 @@ class SolrDocument
 
   def admin_policy?
     object_type == 'adminPolicy'
+  end
+
+  def item?
+    object_type == 'item'
+  end
+
+  def collection?
+    object_type == 'collection'
   end
 
   def thumbnail_url

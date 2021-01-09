@@ -6,7 +6,13 @@ RSpec.describe 'Set rights for an object' do
   context 'when they have manage access' do
     let(:user) { create(:user) }
     let(:pid) { 'druid:cc243mg0841' }
-    let(:fedora_obj) { instance_double(Dor::Item, pid: pid, current_version: 1, admin_policy_object: nil) }
+    let(:fedora_obj) do
+      instance_double(Dor::Item,
+                      pid: pid,
+                      current_version: 1,
+                      admin_policy_object: nil,
+                      catkey: nil)
+    end
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
 
     before do

@@ -4,28 +4,13 @@ require 'rails_helper'
 
 RSpec.describe ButtonsPresenter, type: :presenter do
   let(:presenter) do
-    described_class.new(ability: ability,
-                        solr_document: doc,
-                        object: object)
+    described_class.new(manager: manager,
+                        solr_document: doc)
   end
 
   let(:url_helpers) { Rails.application.routes.url_helpers }
-  let(:ability) { Ability.new(user) }
-  let(:user) do
-    instance_double(User,
-                    admin?: true,
-                    webauth_admin?: false,
-                    manager?: false,
-                    viewer?: false,
-                    roles: false)
-  end
-
   let(:governing_apo_id) { 'druid:hv992yv2222' }
-  let(:doc) do
-    SolrDocument.new('id' => item_id,
-                     'processing_status_text_ssi' => 'not registered',
-                     SolrDocument::FIELD_APO_ID => [governing_apo_id])
-  end
+  let(:manager) { true }
 
   describe '#buttons' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -37,19 +22,22 @@ RSpec.describe ButtonsPresenter, type: :presenter do
     context 'a Dor::Item the user can manage, with the usual data streams, and no catkey or embargo info' do
       subject(:buttons) { presenter.buttons }
 
-      let(:id_md) do
-        instance_double(Dor::IdentityMetadataDS, ng_xml: Nokogiri::XML('<identityMetadata><identityMetadata>'),
-                                                 otherId: [])
-      end
-      let(:desc_md) { instance_double(Dor::DescMetadataDS, new?: true) }
       let(:item_id) { 'druid:kv840xx0000' }
       let(:governing_apo) { instance_double(Dor::AdminPolicyObject, pid: governing_apo_id) }
       let(:object) do
-        instance_double(Dor::Item, identityMetadata: id_md, pid: item_id, current_version: '3',
+        instance_double(Dor::Item, pid: item_id, current_version: '3',
                                    admin_policy_object: governing_apo,
                                    embargoed?: false,
-                                   datastreams: { 'contentMetadata' => nil, 'rightsMetadata' => nil, 'descMetadata' => desc_md, 'identityMetadata' => id_md })
+                                   catkey: catkey)
       end
+      let(:doc) do
+        SolrDocument.new('id' => item_id,
+                         'processing_status_text_ssi' => 'not registered',
+                         SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                         SolrDocument::FIELD_CATKEY_ID => catkey,
+                         SolrDocument::FIELD_APO_ID => [governing_apo_id])
+      end
+      let(:catkey) { nil }
 
       let(:default_buttons) do
         [
@@ -122,11 +110,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         ]
       end
 
-      before do
-        allow(object).to receive(:is_a?).and_return(false)
-        allow(object).to receive(:is_a?).with(Dor::Item).and_return(true)
-      end
-
       it 'creates a hash with the needed button info for an admin' do
         default_buttons.each do |button|
           expect(buttons).to include(button)
@@ -134,17 +117,8 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         expect(buttons.length).to eq default_buttons.length
       end
 
-      it 'generates the same button set for a non Dor-wide admin with APO specific mgmt privileges' do
-        allow(user).to receive(:admin?).and_return(false)
-        allow(ability).to receive(:can?).with(:manage_item, object).and_return(true)
-        default_buttons.each do |button|
-          expect(buttons).to include(button)
-        end
-        expect(buttons.length).to eq default_buttons.length
-      end
-
       it 'only includes the embargo update button if the user is an admin and the object is embargoed' do
-        allow(object).to receive(:embargoed?).and_return(true)
+        allow(doc).to receive(:embargoed?).and_return(true)
         default_buttons.push(
           label: 'Update embargo',
           url: "/items/#{item_id}/embargo_form"
@@ -154,37 +128,44 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         expect(buttons.length).to eq default_buttons.length
       end
 
-      it "does not generate errors given an object that has no associated APO and a user that can't manage the object" do
-        allow(user).to receive(:admin?).and_return(false)
-        allow(doc).to receive(:apo_pid).and_return(nil)
-        allow(object).to receive(:admin_policy_object).and_return(nil)
-        allow(user).to receive(:roles).with(nil).and_return([])
-        expect(buttons).not_to be_nil
-        expect(buttons.length).to eq 0
+      context "with a user that can't manage the object" do
+        let(:manager) { false }
+
+        it 'does not generate errors given an object that has no associated APO' do
+          expect(buttons).to eq []
+        end
       end
 
-      it 'includes the refresh descMetadata button for items with catkey' do
-        allow(id_md).to receive(:otherId).with('catkey').and_return(['1234567'])
-        default_buttons.push(
-          label: 'Refresh descMetadata',
-          method: 'post',
-          url: "/items/#{item_id}/refresh_metadata",
-          new_page: true,
-          disabled: false
-        ).each do |button|
-          expect(buttons).to include(button)
+      context 'when the item has a catkey' do
+        let(:catkey) { 'catkey:1234567' }
+
+        it 'includes the refresh descMetadata button' do
+          default_buttons.push(
+            label: 'Refresh descMetadata',
+            method: 'post',
+            url: "/items/#{item_id}/refresh_metadata",
+            new_page: true,
+            disabled: false
+          ).each do |button|
+            expect(buttons).to include(button)
+          end
+          expect(buttons.length).to eq default_buttons.length
         end
-        expect(buttons.length).to eq default_buttons.length
       end
     end
 
     context 'a Dor::AdminPolicyObject the user can manage' do
       let(:view_apo_id) { 'druid:zt570qh4444' }
-      let(:object) { instance_double(Dor::AdminPolicyObject, current_version: '3', datastreams: {}) }
+      let(:object) do
+        instance_double(Dor::AdminPolicyObject,
+                        current_version: '3',
+                        catkey: nil)
+      end
 
       let(:doc) do
         SolrDocument.new('id' => view_apo_id,
                          'processing_status_text_ssi' => 'not registered',
+                         SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy',
                          SolrDocument::FIELD_APO_ID => [governing_apo_id])
       end
 
@@ -252,11 +233,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
         ]
       end
 
-      before do
-        allow(object).to receive(:is_a?).and_return(false)
-        allow(object).to receive(:is_a?).with(Dor::AdminPolicyObject).and_return(true)
-      end
-
       it 'renders the appropriate default buttons for an apo' do
         buttons = presenter.buttons
         default_buttons.each do |button|
@@ -274,7 +250,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       instance_double(Dor::IdentityMetadataDS)
     end
     let(:item_id) { 'druid:kv840xx0000' }
-    let(:object) { instance_double(Dor::Item, identityMetadata: id_md, pid: item_id, current_version: '3') }
+    let(:object) { instance_double(Dor::Item, pid: item_id, current_version: '3') }
 
     context 'when registered' do
       let(:doc) do

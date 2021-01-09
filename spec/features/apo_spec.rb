@@ -43,7 +43,6 @@ RSpec.describe 'apo', js: true do
   end
 
   after do
-    Dor::AdminPolicyObject.find(new_apo_druid).destroy # clean up after ourselves
     Dor::Collection.find(new_collection_druid).destroy # clean up after ourselves
   end
 
@@ -63,6 +62,16 @@ RSpec.describe 'apo', js: true do
 
     # Stubbing this out, because it's the dor-services-app that would have actually created it.
     allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
+    allow(apo).to receive(:save!)
+    allow(apo).to receive(:new_record?).and_return(false)
+    allow(Argo::Indexer).to receive(:reindex_pid_remotely).and_call_original # for the collection
+    allow(Argo::Indexer).to receive(:reindex_pid_remotely).with(new_apo_druid) do |_key|
+      # Since the register was mocked, this wouldn't build the correct solr document.
+      # This will make one truer to what we need:
+      ActiveFedora::SolrService.add(id: new_apo_druid,
+                                    SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy')
+      ActiveFedora::SolrService.commit
+    end
     allow(Dor).to receive(:find).with(new_collection_druid).and_return(collection)
     allow(Dor).to receive(:find).with('druid:dd327rv8888', cast: true).and_call_original # The agreement
     sign_in user, groups: ['sdr:administrator-role']

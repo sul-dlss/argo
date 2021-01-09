@@ -11,10 +11,11 @@ class BulkJobsController < ApplicationController
     authorize! :view_metadata, @obj
     @document = find(params[:apo_id])
     @bulk_jobs = load_bulk_jobs(params[:apo_id])
+    @cocina =  Dor::Services::Client.object(params[:apo_id]).find
+
     @buttons_presenter = ButtonsPresenter.new(
-      ability: current_ability,
-      solr_document: @document,
-      object: @obj
+      manager: can?(:manage_item, @cocina),
+      solr_document: @document
     )
   end
 

@@ -56,7 +56,8 @@ RSpec.describe 'Item catkey change' do
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_pid_remotely)
-      ActiveFedora::SolrService.add(id: druid, objectType_ssim: 'item')
+      ActiveFedora::SolrService.add(id: druid, objectType_ssim: 'item',
+                                    SolrDocument::FIELD_CATKEY_ID => 'catkey:99999')
       ActiveFedora::SolrService.commit
     end
 
