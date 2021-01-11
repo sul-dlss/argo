@@ -26,10 +26,10 @@ Lint/DeprecatedOpenSSLConstant:
   Enabled: true
 
 # Offense count: 166
-# Configuration parameters: CountComments, ExcludedMethods.
+# Configuration parameters: CountComments, IgnoredMethods.
 Metrics/BlockLength:
   Max: 25
-  ExcludedMethods:
+  IgnoredMethods:
     - 'configure_blacklight'
     - 'Dor.configure'
   Exclude:
