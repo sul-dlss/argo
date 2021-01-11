@@ -303,6 +303,7 @@ Rails/Present:
 # Include: **/Rakefile, **/*.rake
 Rails/RakeEnvironment:
   Exclude:
+    - 'lib/capistrano/tasks/*.rake'
     - 'lib/tasks/argo.rake'
     - 'lib/tasks/argo_testing.rake'
 
