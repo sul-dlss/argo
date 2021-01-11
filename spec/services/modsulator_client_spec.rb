@@ -32,7 +32,7 @@ RSpec.describe ModsulatorClient do
     end
   end
 
-  context '.convert_spreadsheet_to_mods' do
+  describe '.convert_spreadsheet_to_mods' do
     subject(:response) do
       described_class.convert_spreadsheet_to_mods(uploaded_filename: file_path, pretty_filename: 'foo', log: log_file)
     end

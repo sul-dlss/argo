@@ -25,6 +25,7 @@ RSpec.describe Argo::DateFieldQueries do
         subject.add_date_field_queries(solr_params)
         expect(solr_params).to eq fq: ['date_field_dt:* TO *']
       end
+
       it 'does not affect non-date queries' do
         blacklight_params = { 'f' => { title_ssi: ['hello'] } }
         solr_params = { fq: ['{!term f=title_ssi}hello'] }

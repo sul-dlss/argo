@@ -87,6 +87,7 @@ RSpec.describe CatalogController, type: :controller do
       expect(keys).to include 'version_opened_date', SolrDocument::FIELD_LAST_OPENED_DATE.to_s
       expect(keys).to include 'embargo_release_date', SolrDocument::FIELD_EMBARGO_RELEASE_DATE.to_s
     end
+
     it 'does not show raw date field facets' do
       raw_fields = [
         SolrDocument::FIELD_REGISTERED_DATE,
@@ -102,6 +103,7 @@ RSpec.describe CatalogController, type: :controller do
         expect(field[1].if).to eq false if raw_fields.include?(field[0])
       end
     end
+
     it 'uses POST as the http method' do
       expect(config.http_method).to eq :post
     end

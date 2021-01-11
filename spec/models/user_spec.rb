@@ -175,16 +175,20 @@ RSpec.describe User, type: :model do
     it 'returns true when DOR solr document has a role with values that include a user group' do
       expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be true
     end
+
     it 'returns false when DOR solr document has a role with values that do not include a user group' do
       allow(subject).to receive(:groups).and_return(['dlss:groupX'])
       expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be false
     end
+
     it 'returns false when DOR solr document has no matching roles' do
       expect(subject.solr_role_allowed?(solr_doc, 'roleX')).to be false
     end
+
     it 'returns false when DOR solr document is empty' do
       expect(subject.solr_role_allowed?({}, 'roleA')).to be false
     end
+
     it 'returns false when user belongs to no groups' do
       allow(subject).to receive(:groups).and_return([])
       expect(subject.solr_role_allowed?(solr_doc, 'roleA')).to be false
@@ -218,22 +222,26 @@ RSpec.describe User, type: :model do
       expect { subject.roles(druid) }.not_to raise_error
       expect { subject.roles('anyStringOK') }.not_to raise_error
     end
+
     it 'returns an empty array for any blank object identifer' do
       ['', nil].each do |pid|
         expect { subject.roles(pid) }.not_to raise_error
         expect(subject.roles(pid)).to be_empty
       end
     end
+
     it 'builds a set of roles from groups' do
       user_groups = %w[workgroup:dlss:groupF workgroup:dlss:groupA]
       user_roles = %w[sdr-administrator sdr-viewer]
       expect(subject).to receive(:groups).and_return(user_groups).at_least(:once)
       expect(subject.roles(druid)).to eq(user_roles)
     end
+
     it 'translates the old "manager" role into dor-apo-manager' do
       expect(subject).to receive(:groups).and_return(['workgroup:dlss:groupR']).at_least(:once)
       expect(subject.roles(druid)).to eq(['dor-apo-manager'])
     end
+
     it 'returns an empty set of roles if the DRUID solr search fails' do
       empty_doc = { 'response' => { 'docs' => [] } }
       allow(Dor::SearchService).to receive(:query).and_return(empty_doc)
@@ -242,10 +250,12 @@ RSpec.describe User, type: :model do
       expect(subject).not_to receive(:solr_role_allowed?)
       expect(subject.roles(druid)).to be_empty
     end
+
     it 'works correctly if the individual is named in the apo, but is not in any groups that matter' do
       expect(subject).to receive(:groups).and_return(['sunetid:tcramer']).at_least(:once)
       expect(subject.roles(druid)).to eq(['sdr-viewer'])
     end
+
     it 'hangs onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
       expect(subject).to receive(:groups).and_return(['testdoesnotcarewhatishere']).at_least(:once)
       expect(Dor::SearchService).to receive(:query).once
@@ -333,26 +343,32 @@ RSpec.describe User, type: :model do
       subject.set_groups_to_impersonate []
       expect(subject.instance_variable_get(:@role_cache)).to be_empty
     end
+
     it 'removes impersonation groups when given nil' do
       subject.set_groups_to_impersonate nil
       expect(groups_to_impersonate).to be_nil
     end
+
     it 'removes impersonation groups when given an empty String' do
       subject.set_groups_to_impersonate ''
       expect(groups_to_impersonate).to be_nil
     end
+
     it 'removes impersonation groups when given an empty Array' do
       subject.set_groups_to_impersonate []
       expect(groups_to_impersonate).to be_nil
     end
+
     it 'removes impersonation groups when given an empty Hash' do
       subject.set_groups_to_impersonate({})
       expect(groups_to_impersonate).to be_nil
     end
+
     it 'returns an Array<String> given a String argument' do
       subject.set_groups_to_impersonate 'groupA'
       expect(groups_to_impersonate).to eq ['groupA']
     end
+
     it 'returns an Array<String> argument as given' do
       subject.set_groups_to_impersonate ['groupA']
       expect(groups_to_impersonate).to eq ['groupA']

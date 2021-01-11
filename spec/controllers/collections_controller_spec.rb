@@ -81,6 +81,7 @@ RSpec.describe CollectionsController do
       }
       expect(response.body).to eq('true')
     end
+
     it 'returns false if collection with title exists' do
       allow(Dor::Collection).to receive(:where).and_return([])
       expect(Dor::Collection).to receive(:where).with(title_ssi: title)
@@ -89,6 +90,7 @@ RSpec.describe CollectionsController do
       }
       expect(response.body).to eq('false')
     end
+
     it 'returns true if collection with catkey exists' do
       allow(Dor::Collection).to receive(:where).and_return([1])
       expect(Dor::Collection).to receive(:where).with(identifier_ssim: "catkey:#{catkey}")
@@ -97,6 +99,7 @@ RSpec.describe CollectionsController do
       }
       expect(response.body).to eq('true')
     end
+
     it 'returns false if collection with catkey exists' do
       allow(Dor::Collection).to receive(:where).and_return([])
       expect(Dor::Collection).to receive(:where).with(identifier_ssim: "catkey:#{catkey}")
@@ -105,6 +108,7 @@ RSpec.describe CollectionsController do
       }
       expect(response.body).to eq('false')
     end
+
     it 'returns true if collection with title and catkey exists' do
       allow(Dor::Collection).to receive(:where).and_return([1])
       expect(Dor::Collection).to receive(:where).with(title_ssi: title, identifier_ssim: "catkey:#{catkey}")

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :apo, class: Cocina::Models::RequestAdminPolicy do
+  factory :apo, class: 'Cocina::Models::RequestAdminPolicy' do
     initialize_with do
       Cocina::Models.build_request(
         'type' => type,
