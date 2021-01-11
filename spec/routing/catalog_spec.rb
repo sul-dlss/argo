@@ -7,6 +7,7 @@ RSpec.describe CatalogController do
     it 'routes to #index' do
       expect(get: '/catalog').to route_to('catalog#index')
     end
+
     it 'routes to #show' do
       expect(get: '/view/druid:xyz')
         .to route_to('catalog#show', id: 'druid:xyz')

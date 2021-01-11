@@ -18,6 +18,7 @@ RSpec.describe BulkActionsController do
       get :index
       expect(assigns(:bulk_actions)).to eq [b_action]
     end
+
     it 'has a 200 status code' do
       get :index
       expect(response.status).to eq 200
@@ -41,6 +42,7 @@ RSpec.describe BulkActionsController do
         expect(assigns(:last_search)).to be_an Search
         expect(assigns(:last_search)).to eq last_search
       end
+
       it 'with last session[:search]' do
         Search.create
         request.session[:search] = { 'id' => 1 }
@@ -104,6 +106,7 @@ RSpec.describe BulkActionsController do
         delete :destroy, params: { id: b_action.id }
       end.to change(BulkAction, :count).by(-1)
     end
+
     it 'does not delete other users bulk actions' do
       b_action = create(:bulk_action, user_id: current_user.id + 1)
       expect do

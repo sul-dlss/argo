@@ -144,11 +144,13 @@ RSpec.describe ReleaseObjectJob do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq pids.length
       end
+
       it 'increments the bulk_actions druid count fail' do
         expect do
           subject.perform(bulk_action.id, params)
         end.to change(bulk_action, :druid_count_fail).from(0).to(pids.length)
       end
+
       it 'logs information to the logfile' do
         # Stub out the file, and send it to a string buffer instead
         buffer = StringIO.new
@@ -174,6 +176,7 @@ RSpec.describe ReleaseObjectJob do
         subject.perform(bulk_action.id, params)
         expect(bulk_action.druid_count_total).to eq pids.length
       end
+
       it 'logs druid info to logfile' do
         buffer = StringIO.new
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)

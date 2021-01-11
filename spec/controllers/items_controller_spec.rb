@@ -129,6 +129,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(response).to have_http_status(:found) # redirect to catalog page
         expect(embargo_service).to have_received(:update)
       end
+
       it 'requires a date' do
         expect { post :embargo_update, params: { id: pid } }.to raise_error(ArgumentError)
       end
@@ -188,6 +189,7 @@ RSpec.describe ItemsController, type: :controller do
         expect(item).to receive(:add_collection).with('druid:1234')
         post 'add_collection', params: { id: pid, collection: 'druid:1234' }
       end
+
       context 'when no collection parameter is supplied' do
         it 'does not add a collection' do
           expect(item).not_to receive(:add_collection).with('druid:1234')

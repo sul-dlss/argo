@@ -25,6 +25,7 @@ RSpec.describe ValueHelper do
       allow(collection).to receive_message_chain(:descMetadata, :title_info).and_return(['But catz are nice too', 'A different node that will not show'])
       expect(helper.object_title(collection)).to eq 'But catz are nice too'
     end
+
     it 'notifies HoneyBadger and return Fedora label if there is no title in descMetadata' do
       allow(collection).to receive_message_chain(:descMetadata, :title_info).and_return([''])
       expect(Honeybadger).to receive(:notify).with('No title found in descMetadata for collection druid:abc123')

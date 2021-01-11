@@ -23,6 +23,7 @@ RSpec.describe SearchBuilder do
       expect(subject.processor_chain
         .count { |x| x == :add_access_controls_to_solr_params }).to eq 1
     end
+
     it 'has pids_only in chain once' do
       expect(subject.processor_chain)
         .to include :pids_only
@@ -34,6 +35,7 @@ RSpec.describe SearchBuilder do
       expect(subject.processor_chain
         .count { |x| x == :pids_only }).to eq 1
     end
+
     it 'has add_date_field_queries in chain once' do
       expect(subject.processor_chain)
         .to include :add_date_field_queries
@@ -45,6 +47,7 @@ RSpec.describe SearchBuilder do
       expect(subject.processor_chain
         .count { |x| x == :add_date_field_queries }).to eq 1
     end
+
     it 'contains add_profile_queries once' do
       expect(subject.processor_chain)
         .to include :add_profile_queries

@@ -88,7 +88,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 3.5'
   gem 'rubocop', require: false
   gem 'rubocop-rails'
-  gem 'rubocop-rspec', '~> 1.31.0', require: false
+  gem 'rubocop-rspec', '~> 2.1.0', require: false
   gem 'sqlite3', '~> 1.3.13'
 end
 

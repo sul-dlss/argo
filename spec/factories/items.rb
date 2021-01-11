@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :item, class: Cocina::Models::RequestDRO do
+  factory :item, class: 'Cocina::Models::RequestDRO' do
     initialize_with do
       Cocina::Models.build_request({
                                      'type' => type,

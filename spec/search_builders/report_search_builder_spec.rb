@@ -23,6 +23,7 @@ RSpec.describe ReportSearchBuilder do
       expect(subject.processor_chain
         .count { |x| x == :add_access_controls_to_solr_params }).to eq 1
     end
+
     it 'has add_date_field_queries in chain once' do
       expect(subject.processor_chain)
         .to include :add_date_field_queries

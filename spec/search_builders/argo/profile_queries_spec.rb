@@ -41,6 +41,7 @@ RSpec.describe Argo::ProfileQueries do
       facet_fields = solr_parameters.facet_fields.map { |f| f[0] } + solr_parameters['facet.field']
       expect(facet_fields).to include(*required_facet_fields)
     end
+
     it 'handles an existing string facet field' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       catalog_config['facet.field'] = 'nonhydrus_apo_title_ssim'
@@ -49,6 +50,7 @@ RSpec.describe Argo::ProfileQueries do
       expect(facet_fields).to include(*required_facet_fields)
       expect(facet_fields).to include('nonhydrus_apo_title_ssim')
     end
+
     it 'adds in required stats fields' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
@@ -63,6 +65,7 @@ RSpec.describe Argo::ProfileQueries do
       expect(solr_parameters['stats']).to be true
       expect(stats_fields).to include(*required_fields)
     end
+
     it 'adds in required pivot fields' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)
@@ -70,6 +73,7 @@ RSpec.describe Argo::ProfileQueries do
       required_fields = ["#{SolrDocument::FIELD_OBJECT_TYPE},processing_status_text_ssi"]
       expect(pivot_fields).to include(*required_fields)
     end
+
     it 'adds in required facet queries' do
       catalog_config = CatalogController.blacklight_config.deep_copy
       solr_parameters = subject.add_profile_queries(catalog_config)

@@ -7,10 +7,12 @@ RSpec.describe 'catalog/_show_sections/default_contents_external_file.html.erb',
     render partial: subject, locals: { resource: Nokogiri::XML('') }
     expect(rendered).to eq('')
   end
+
   it 'is silent if only file resources' do
     render partial: subject, locals: { resource: Nokogiri::XML('<file/><file/>') }
     expect(rendered).to eq('')
   end
+
   it 'shows an external file' do
     render partial: subject, locals: { resource: Nokogiri::XML('
       <externalFile fileId="2542A.jp2" objectId="druid:cg767mn6478" resourceId="cg767mn6478_1" mimetype="image/jp2"/>') }
@@ -20,6 +22,7 @@ RSpec.describe 'catalog/_show_sections/default_contents_external_file.html.erb',
     expect(rendered).to have_link('druid:cg767mn6478', href: '/view/druid:cg767mn6478')
     expect(rendered).to have_css('li.external-file', text: 'resource \'cg767mn6478_1\'')
   end
+
   it 'shows an external file even if it has bad data' do
     render partial: subject, locals: { resource: Nokogiri::XML('<externalFile fileId="2542A.jp2"/>') }
     expect(rendered).to have_css('li.external-file span.label', text: 'External File')
@@ -27,6 +30,7 @@ RSpec.describe 'catalog/_show_sections/default_contents_external_file.html.erb',
     expect(rendered).to have_css('li.external-file', text: 'from item \'\'')
     expect(rendered).to have_css('li.external-file', text: 'resource \'\'')
   end
+
   it 'shows multiple external files' do
     render partial: subject, locals: { resource: Nokogiri::XML('<resource>
       <externalFile fileId="2542A.jp2" objectId="druid:cg767mn6478" resourceId="cg767mn6478_1" mimetype="image/jp2"/>
