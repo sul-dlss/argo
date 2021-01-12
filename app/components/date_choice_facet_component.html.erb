@@ -16,7 +16,7 @@
       </div>
       <div>
         <%= form_tag search_catalog_path, method: :get do %>
-          <%= render_hash_as_hidden_fields(search_params) %>
+          <%= render Blacklight::HiddenSearchStateComponent.new(params: search_params) %>
           <%= hidden_field_tag "f[#{solr_field_name}][]", '[* TO *]', data: { range_value: '' } %>
           <%= submit_tag('submit', class: 'btn btn-primary') %>
         <% end %>
