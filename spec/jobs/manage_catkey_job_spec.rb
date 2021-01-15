@@ -14,7 +14,7 @@ RSpec.describe ManageCatkeyJob do
 
   let(:webauth) { { 'privgroup' => 'dorstuff', 'login' => 'someuser' } }
 
-  let(:pids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ee2222] }
+  let(:pids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
   let(:catkeys) { %w[12345 6789 44444] }
   let(:buffer) { StringIO.new }
   let(:item1) do
@@ -50,7 +50,7 @@ RSpec.describe ManageCatkeyJob do
       'label' => 'My Item',
       'version' => 3,
       'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[1],
+      'externalIdentifier' => pids[2],
       'access' => {
         'access' => 'world'
       },
@@ -60,14 +60,10 @@ RSpec.describe ManageCatkeyJob do
     )
   end
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
-  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
-    allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
   end
 
   describe '#perform' do
@@ -139,6 +135,28 @@ RSpec.describe ManageCatkeyJob do
 
       it 'updates catkey and does not version objects if not needed' do
         expect(subject).not_to receive(:open_new_version).with(pid, 3, "Catkey updated to #{catkey}")
+        subject.send(:update_catkey, pid, catkey, buffer)
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+      end
+    end
+
+    context 'when catkey is nil' do
+      let(:state_service) { instance_double(StateService, allows_modification?: true) }
+      let(:catkey) { nil }
+
+      let(:updated_model) do
+        item1.new(
+          {
+            'identification' => {
+              'catalogLinks' => []
+            }
+          }
+        )
+      end
+
+      it 'removes catkey' do
+        expect(subject).not_to receive(:open_new_version).with(pid, 3, 'Catkey removed')
         subject.send(:update_catkey, pid, catkey, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)

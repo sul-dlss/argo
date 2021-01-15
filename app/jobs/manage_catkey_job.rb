@@ -34,12 +34,17 @@ class ManageCatkeyJob < GenericJob
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end
-    log.puts("#{Time.current} Adding catkey of #{new_catkey}")
+    if new_catkey
+      log.puts("#{Time.current} Adding catkey of #{new_catkey}")
+    else
+      log.puts("#{Time.current} Removing catkey")
+    end
     begin
       object_client = Dor::Services::Client.object(current_druid)
       dro = object_client.find
       state_service = StateService.new(current_druid, version: dro.version)
-      open_new_version(dro.externalIdentifier, dro.version, "Catkey updated to #{new_catkey}") unless state_service.allows_modification?
+      msg = new_catkey ? "Catkey updated to #{new_catkey}" : 'Catkey removed'
+      open_new_version(dro.externalIdentifier, dro.version, msg) unless state_service.allows_modification?
 
       CatkeyService.update(dro, object_client, new_catkey)
       bulk_action.increment(:druid_count_success).save
