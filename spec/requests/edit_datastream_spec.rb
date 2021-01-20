@@ -25,8 +25,11 @@ RSpec.describe 'Draw the edit datastream form' do
   end
 
   let(:user) { create(:user) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) { instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:bc123df4567') }
 
   before do
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     allow(Dor).to receive(:find).with('druid:bc123df4567').and_return(item)
   end
 

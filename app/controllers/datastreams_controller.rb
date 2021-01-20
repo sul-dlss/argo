@@ -69,6 +69,7 @@ class DatastreamsController < ApplicationController
   def show_aspect
     pid = params[:item_id].include?('druid') ? params[:item_id] : "druid:#{params[:item_id]}"
     @obj = Dor.find(pid)
+    @cocina = Dor::Services::Client.object(pid).find
     @response, @document = search_service.fetch pid # this does the authorization
   end
 end
