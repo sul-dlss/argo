@@ -34,7 +34,11 @@ class Ability
     can :manage, :all if current_user.admin?
     cannot :impersonate, User unless current_user.webauth_admin?
 
-    can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.manager?
+    can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], ActiveFedora::Base do
+      Honeybadger.notify('Deprecated call to ability with an ActiveFedora object')
+      current_user.manager?
+    end
+    can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], Cocina::Models::DRO if current_user.manager?
     can :create, Dor::AdminPolicyObject if current_user.manager?
 
     can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.viewer?

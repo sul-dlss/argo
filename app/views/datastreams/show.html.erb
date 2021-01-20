@@ -3,7 +3,7 @@
   <% component.with(:body) do %>
     <%# If the user is a repo admin or is permitted to manage both content and %>
     <%# rights, display raw xml editing %>
-    <% if can?(:manage_item, @obj) && Settings.editable_datastreams.include?(params[:id]) %>
+    <% if can?(:manage_item, @cocina) && Settings.editable_datastreams.include?(params[:id]) %>
       <%= link_to "Edit #{@ds.dsid}", edit_item_datastream_path(@ds.pid, @ds.dsid), title: @ds.dsid, data: { blacklight_modal: 'preserve' } %>
     <% end %>
 
