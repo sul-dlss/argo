@@ -210,14 +210,9 @@ class CatalogController < ApplicationController
     deprecated_response, @document = search_service.fetch(params[:id])
     @response = ActiveSupport::Deprecation::DeprecatedObjectProxy.new(deprecated_response, 'The @response instance variable is deprecated; use @document.response instead.')
 
+    @cocina = maybe_load_cocina(params[:id])
     object_client = Dor::Services::Client.object(params[:id])
 
-    # Used for drawing releaseTags in the history section
-    begin
-      @cocina = object_client.find
-    rescue Dor::Services::Client::UnexpectedResponse
-      @cocina = NilModel.new(params[:id])
-    end
     @events = object_client.events.list
 
     @workflows = WorkflowService.workflows_for(druid: params[:id])

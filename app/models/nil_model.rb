@@ -6,6 +6,12 @@ class NilModel
     @pid = pid
   end
 
+  # rubocop:disable Naming/MethodName
+  def externalIdentifier
+    @pid
+  end
+  # rubocop:enable Naming/MethodName
+
   def administrative
     NilAdministrative.new
   end

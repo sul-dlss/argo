@@ -78,6 +78,6 @@ class ApoController < ApplicationController
     raise 'missing druid' unless params[:id]
 
     @object = Dor.find params[:id]
-    @cocina = Dor::Services::Client.object(params[:id]).find
+    @cocina = maybe_load_cocina(params[:id])
   end
 end

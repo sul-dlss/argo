@@ -11,7 +11,7 @@ class ContentTypesController < ApplicationController
 
   # set the content type in the content metadata
   def update
-    cocina = Dor::Services::Client.object(params[:item_id]).find
+    cocina = maybe_load_cocina(params[:item_id])
     authorize! :manage_item, cocina
 
     # if this object has been submitted and doesnt have an open version, they cannot change it.

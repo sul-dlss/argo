@@ -25,16 +25,15 @@ RSpec.describe 'Draw the edit datastream form' do
   end
 
   let(:user) { create(:user) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:bc123df4567') }
-
-  before do
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Dor).to receive(:find).with('druid:bc123df4567').and_return(item)
-  end
 
   context 'for content managers' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:cocina_model) { instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:bc123df4567') }
+
     before do
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(Dor).to receive(:find).with('druid:bc123df4567').and_return(item)
+
       sign_in create(:user), groups: ['sdr:administrator-role']
 
       allow_any_instance_of(Blacklight::Solr::Repository).to receive(:find)
@@ -42,9 +41,24 @@ RSpec.describe 'Draw the edit datastream form' do
         .and_return(instance_double(Blacklight::Solr::Response, documents: [document]))
     end
 
-    it 'authorizes the view' do
-      get '/items/druid:bc123df4567/datastreams/descMetadata/edit', xhr: true
-      expect(response).to have_http_status(:success)
+    context 'when dsa returns a cocina model' do
+      it 'authorizes the view' do
+        get '/items/druid:bc123df4567/datastreams/descMetadata/edit', xhr: true
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include('Update Datastream')
+      end
+    end
+
+    context 'when dsa returns an UnexpectedResponse' do
+      before do
+        allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
+      end
+
+      it 'authorizes the view' do
+        get '/items/druid:bc123df4567/datastreams/descMetadata/edit', xhr: true
+        expect(response).to have_http_status(:success)
+        expect(response.body).to include('Update Datastream')
+      end
     end
   end
 
