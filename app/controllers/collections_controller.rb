@@ -3,7 +3,7 @@
 # Manages HTTP interactions for creating collections
 class CollectionsController < ApplicationController
   def new
-    @cocina = Dor::Services::Client.object(params[:apo_id]).find
+    @cocina = maybe_load_cocina(params[:apo_id])
     authorize! :manage_item, @cocina
 
     respond_to do |format|
@@ -12,7 +12,7 @@ class CollectionsController < ApplicationController
   end
 
   def create
-    cocina = Dor::Services::Client.object(params[:apo_id]).find
+    cocina = maybe_load_cocina(params[:apo_id])
     authorize! :manage_item, cocina
 
     @apo = Dor.find params[:apo_id]

@@ -10,6 +10,16 @@ class ApplicationController < ActionController::Base
 
   layout :determine_layout
 
+  # Currently we know that not all objects are Cocina compliant, this ensures that we can at least
+  # receive some object and so, at least administrators can be authorized to operate on it.
+  # @return [Cocina::Models::DRO,NilModel]
+  def maybe_load_cocina(druid)
+    object_client = Dor::Services::Client.object(druid)
+    object_client.find
+  rescue Dor::Services::Client::UnexpectedResponse
+    NilModel.new(druid)
+  end
+
   def current_user
     super.tap do |cur_user|
       break unless cur_user
