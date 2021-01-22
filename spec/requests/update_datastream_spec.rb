@@ -4,8 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Update a datastream' do
   before do
-    allow(Dor).to receive(:find).with(pid).and_return(item)
-    allow(item).to receive_messages(save: nil)
     allow(Argo::Indexer).to receive(:reindex_pid_remotely)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
@@ -26,7 +24,6 @@ RSpec.describe 'Update a datastream' do
     )
   end
   let(:pid) { 'druid:bc123df4567' }
-  let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:xml) { '<contentMetadata/>' }
@@ -38,9 +35,9 @@ RSpec.describe 'Update a datastream' do
     end
 
     it 'prevents access' do
-      expect(item).not_to receive(:save)
       patch "/items/#{pid}/datastreams/contentMetadata", params: { content: xml }
       expect(response).to have_http_status(:forbidden)
+      expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
     end
   end
 
@@ -49,13 +46,38 @@ RSpec.describe 'Update a datastream' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    it 'updates the datastream' do
-      expect(item).to receive(:datastreams).and_return(
-        'contentMetadata' => double(Dor::ContentMetadataDS, 'content=': xml)
-      )
-      expect(item).to receive(:save)
-      patch "/items/#{pid}/datastreams/contentMetadata", params: { content: xml }
-      expect(response).to redirect_to "/view/#{pid}"
+    context 'for a common datastream' do
+      let(:object_client) do
+        instance_double(Dor::Services::Client::Object, find: cocina_model, metadata: metadata_client)
+      end
+      let(:metadata_client) do
+        instance_double(Dor::Services::Client::Metadata, legacy_update: true)
+      end
+
+      it 'updates the datastream' do
+        patch "/items/#{pid}/datastreams/contentMetadata", params: { content: xml }
+        expect(response).to redirect_to "/view/#{pid}"
+        expect(metadata_client).to have_received(:legacy_update)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+      end
+    end
+
+    context 'for an uncommon datastream (as on an old ETD)' do
+      before do
+        allow(Dor).to receive(:find).with(pid).and_return(item)
+        allow(item).to receive_messages(save: nil)
+      end
+
+      let(:item) { Dor::Item.new pid: pid }
+
+      it 'updates the datastream' do
+        expect(item).to receive(:datastreams).and_return(
+          'properties' => double(ActiveFedora::Datastream, 'content=': xml)
+        )
+        expect(item).to receive(:save)
+        patch "/items/#{pid}/datastreams/properties", params: { content: xml }
+        expect(response).to redirect_to "/view/#{pid}"
+      end
     end
 
     it 'errors on empty xml' do
@@ -64,8 +86,7 @@ RSpec.describe 'Update a datastream' do
 
     it 'does not update the datastream with malformed xml' do
       patch "/items/#{pid}/datastreams/contentMetadata", params: { content: '<this>isnt well formed.' }
-      expect(item).not_to receive(:save)
-      expect(Argo::Indexer).not_to receive(:reindex_pid_remotely)
+      expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
       expect(response).to redirect_to "/view/#{pid}"
     end
   end
