@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ApplyModsMetadata do
-  let(:xml) do
+  let(:mods) do
     <<~XML
       <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.loc.gov/mods/v3" version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
             <titleInfo>
@@ -13,26 +13,22 @@ RSpec.describe ApplyModsMetadata do
     XML
   end
 
-  # This gives us the MODS as a Nokogiri::Element rather than as a document (see ModsulatorJob).
-  let(:mods_node) { Nokogiri::XML("<xmlDoc>#{xml}</xmlDoc>").xpath('/xmlDoc').first.first_element_child }
   let(:apo_druid) { 'druid:999apo' }
-
   let(:desc_metadata) { Dor::DescMetadataDS.new }
-  let(:item) do
-    instance_double(Dor::Item,
-                    descMetadata: desc_metadata,
-                    pid: 'druid:123abc',
-                    current_version: 1,
-                    admin_policy_object_id: apo_druid,
-                    save!: true)
-  end
+  let(:druid) { 'druid:bc123hv8998' }
   let(:log) { instance_double(File, puts: true) }
   let(:ability) { Ability.new(user) }
   let(:user) { build(:user) }
+  let(:cocina) do
+    instance_double(Cocina::Models::DRO, administrative: administrative, externalIdentifier: druid, version: 1)
+  end
+  let(:administrative) { instance_double(Cocina::Models::Administrative, hasAdminPolicy: apo_druid) }
+
   let(:action) do
     described_class.new(apo_druid: apo_druid,
-                        mods_node: mods_node,
-                        item: item,
+                        mods: mods,
+                        cocina: cocina,
+                        existing_mods: desc_metadata.content,
                         original_filename: 'testfile.xlsx',
                         ability: ability,
                         log: log)
@@ -48,8 +44,15 @@ RSpec.describe ApplyModsMetadata do
     subject(:apply) { action.apply }
 
     let(:status_service) { instance_double(Dor::Workflow::Client::Status, info: { status_code: 9 }) }
+    let(:object_client) do
+      instance_double(Dor::Services::Client::Object, metadata: metadata_client)
+    end
+    let(:metadata_client) do
+      instance_double(Dor::Services::Client::Metadata, legacy_update: true)
+    end
 
     before do
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(workflow_client).to receive(:status).and_return(status_service)
     end
 
@@ -61,7 +64,7 @@ RSpec.describe ApplyModsMetadata do
 
       it 'saves the metadata' do
         apply
-        expect(item).to have_received(:save!)
+        expect(metadata_client).to have_received(:legacy_update)
         expect(action).not_to have_received(:log_error!)
       end
     end
@@ -73,7 +76,7 @@ RSpec.describe ApplyModsMetadata do
 
       it 'saves the metadata' do
         apply
-        expect(item).not_to have_received(:save!)
+        expect(metadata_client).not_to have_received(:legacy_update)
       end
     end
   end
@@ -89,11 +92,11 @@ RSpec.describe ApplyModsMetadata do
     let(:workflow) { instance_double(DorObjectWorkflowStatus) }
 
     it 'writes a log error message if a version cannot be opened' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(item.pid, version: 1).and_return(workflow)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(druid, version: 1).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(false)
 
       action.send(:version_object)
-      expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_unable_to_version #{item.pid}")
+      expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_unable_to_version #{druid}")
     end
 
     context 'the object is in the registered state' do
@@ -117,7 +120,7 @@ RSpec.describe ApplyModsMetadata do
     end
 
     it 'updates the version if the object is past the registered state' do
-      expect(DorObjectWorkflowStatus).to receive(:new).with(item.pid, version: 1).and_return(workflow)
+      expect(DorObjectWorkflowStatus).to receive(:new).with(druid, version: 1).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(true)
       expect(action).to receive(:commit_new_version)
 
@@ -134,7 +137,7 @@ RSpec.describe ApplyModsMetadata do
       action.send(:commit_new_version)
 
       expect(VersionService).to have_received(:open).with(
-        identifier: item.pid,
+        identifier: druid,
         significance: 'minor',
         description: 'Descriptive metadata upload from testfile.xlsx',
         opening_user_name: user.sunetid

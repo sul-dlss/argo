@@ -3,72 +3,65 @@
 # Updates the metadata of an object with the given MODS
 class ApplyModsMetadata
   # @param [String] apo_druid
-  # @param [Nokogiri::XML::Element] mods_node A MODS XML node.
-  # @param [Dor::Item] item the item to be updated
+  # @param [String] mods A string containing MODS XML.
+  # @param [Cocina::Models::DRO] cocina the item to be updated
+  # @param [String] existing_mods A string containing the current descriptive metadata for the object.
   # @param [String] original_filename the filename these updates came from
   # @param [Ability] ability the abilities of the acting user
   # @param [#puts] log
-  def initialize(apo_druid:, mods_node:, item:, original_filename:, ability:, log:)
+  def initialize(apo_druid:, mods:, existing_mods:, cocina:, original_filename:, ability:, log:)
     @apo_druid = apo_druid
-    @mods_node = mods_node
-    @item = item
+    @mods = mods
+    @existing_mods = existing_mods
+    @cocina = cocina
     @original_filename = original_filename
     @ability = ability
     @log = log
   end
 
   def apply
-    return unless item
-
     # Only update objects that are governed by the correct APO
-    unless item.admin_policy_object_id == apo_druid
-      log.puts("argo.bulk_metadata.bulk_log_apo_fail #{item.pid}")
+    unless cocina.administrative.hasAdminPolicy == apo_druid
+      log.puts("argo.bulk_metadata.bulk_log_apo_fail #{cocina.externalIdentifier}")
       return
     end
 
     if in_accessioning?
-      log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{item.pid}")
+      log.puts("argo.bulk_metadata.bulk_log_skipped_accession #{cocina.externalIdentifier}")
       return
     end
 
     return unless status_ok?
 
-    return unless ability.can? :manage_item, item
+    return unless ability.can? :manage_item, cocina
 
     # We only update objects if the descMetadata XML is different
-    current_metadata = item.descMetadata.content
-    if equivalent_nodes(Nokogiri::XML(current_metadata).root, mods_node)
-      log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{item.pid}")
+    if equivalent_xml?(existing_mods, mods)
+      log.puts("argo.bulk_metadata.bulk_log_skipped_mods #{cocina.externalIdentifier}")
       return
     end
 
-    item.descMetadata.content = mods_node.to_s
-
-    errors = ModsValidator.validate(item.descMetadata.ng_xml)
+    errors = ModsValidator.validate(Nokogiri::XML(mods))
     if errors.present?
-      log.puts "argo.bulk_metadata.bulk_log_validation_error #{item.pid} #{errors.join(';')}"
+      log.puts "argo.bulk_metadata.bulk_log_validation_error #{cocina.externalIdentifier} #{errors.join(';')}"
       return
     end
 
     version_object
+    update_metadata
 
-    item.save!
-    log.puts("argo.bulk_metadata.bulk_log_job_save_success #{item.pid}")
+    log.puts("argo.bulk_metadata.bulk_log_job_save_success #{cocina.externalIdentifier}")
   rescue StandardError => e
     log_error!(e)
   end
 
   private
 
-  attr_reader :apo_druid, :mods_node, :item, :original_filename, :ability, :log
-
-  def item_druid
-    item.pid
-  end
+  attr_reader :apo_druid, :mods, :existing_mods, :cocina, :original_filename, :ability, :log
 
   # Log the error
   def log_error!(exception)
-    log.puts("argo.bulk_metadata.bulk_log_error_exception #{item.pid}")
+    log.puts("argo.bulk_metadata.bulk_log_error_exception #{cocina.externalIdentifier}")
     log.puts(exception.message.to_s)
     log.puts(exception.backtrace.to_s)
   end
@@ -77,16 +70,26 @@ class ApplyModsMetadata
   def version_object
     return unless accessioned?
 
-    unless DorObjectWorkflowStatus.new(item.pid, version: item.current_version).can_open_version?
-      log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{item.pid}") # totally unexpected
+    unless DorObjectWorkflowStatus.new(cocina.externalIdentifier, version: cocina.version).can_open_version?
+      log.puts("argo.bulk_metadata.bulk_log_unable_to_version #{cocina.externalIdentifier}") # totally unexpected
       return
     end
     commit_new_version
   end
 
+  def update_metadata
+    object_client = Dor::Services::Client.object(cocina.externalIdentifier)
+    object_client.metadata.legacy_update(
+      descriptive: {
+        updated: Time.zone.now,
+        content: mods
+      }
+    )
+  end
+
   # Open a new version for the given object.
   def commit_new_version
-    VersionService.open(identifier: item.pid,
+    VersionService.open(identifier: cocina.externalIdentifier,
                         significance: 'minor',
                         description: "Descriptive metadata upload from #{original_filename}",
                         opening_user_name: ability.current_user.sunetid)
@@ -97,7 +100,7 @@ class ApplyModsMetadata
   # @param [Nokogiri::XML::Element] node1 A MODS XML node.
   # @param [Nokogiri::XML::Element] node2 A MODS XML node.
   # @return [Boolean] true if the given nodes are equivalent, false otherwise.
-  def equivalent_nodes(node1, node2)
+  def equivalent_xml?(node1, node2)
     EquivalentXml.equivalent?(node1,
                               node2,
                               element_order: false,
@@ -129,6 +132,7 @@ class ApplyModsMetadata
   #
   # @return [Integer] value corresponding to the status info list
   def status
-    @status ||= WorkflowClientFactory.build.status(druid: item.pid, version: item.current_version).info[:status_code]
+    # We must provide a string version here: https://github.com/sul-dlss/dor-workflow-client/issues/169
+    @status ||= WorkflowClientFactory.build.status(druid: cocina.externalIdentifier, version: cocina.version.to_s).info[:status_code]
   end
 end
