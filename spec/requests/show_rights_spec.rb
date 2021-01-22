@@ -110,7 +110,7 @@ RSpec.describe 'Show rights for an object' do
 
       it 'shows the error' do
         get "/items/#{pid}/rights"
-        expect(flash[:error]).to eq 'Unable to retrieve the cocina model: Invalid date'
+        expect(flash[:error]).to eq 'Unable to retrieve the cocina model'
       end
     end
   end

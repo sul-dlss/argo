@@ -349,9 +349,7 @@ RSpec.describe 'Set rights for an object' do
         post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'dark' } }
         expect(response).to redirect_to(solr_document_path(pid))
         follow_redirect!
-        expect(response.body).to include 'Unable to retrieve the cocina model: ' \
-          '#/components/schemas/SourceId pattern ^.+:.+$ does not match value: ' \
-          'bad_source_id:, example: sul:PC0170_s3_Fiesta_Bowl_2012-01-02_210609_2026'
+        expect(response.body).to include 'Can&#39;t set rights on an invalid model'
       end
     end
   end
