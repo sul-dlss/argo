@@ -47,15 +47,16 @@ class ItemsController < ApplicationController
   end
 
   def set_collection
-    object_client = Dor::Services::Client.object(@object.pid)
-    dro = object_client.find
+    return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
+
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
     collection_id = params[:collection].presence
     updated_structural = if collection_id
-                           dro.structural.new(isMemberOf: [collection_id])
+                           @cocina.structural.new(isMemberOf: [collection_id])
                          else
-                           dro.structural.to_h.without(:isMemberOf)
+                           @cocina.structural.to_h.without(:isMemberOf)
                          end
-    updated = dro.new(structural: updated_structural)
+    updated = @cocina.new(structural: updated_structural)
     object_client.update(params: updated)
     reindex
 
@@ -231,6 +232,8 @@ class ItemsController < ApplicationController
 
   # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
+    return redirect_to solr_document_path(params[:id]), flash: { error: "Can't set rights on an invalid model" } if @cocina.is_a? NilModel
+
     # Item may be a Collection or a DRO
     form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
     form = form_type.new(@cocina)
@@ -258,6 +261,8 @@ class ItemsController < ApplicationController
   end
 
   def set_governing_apo
+    return redirect_to solr_document_path(params[:id]), flash: { error: "Can't set governing APO on an invalid model" } if @cocina.is_a? NilModel
+
     authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
 
     updated_administrative = @cocina.administrative.new(hasAdminPolicy: params[:new_apo_id])
@@ -276,6 +281,8 @@ class ItemsController < ApplicationController
   end
 
   def rights
+    return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
+
     form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
 
     @form = form_type.new(@cocina, default_rights: @object.admin_policy_object.default_rights)
@@ -314,7 +321,7 @@ class ItemsController < ApplicationController
   def create_obj
     raise 'missing druid' unless params[:id]
 
-    @cocina = Dor::Services::Client.object(params[:id]).find
+    @cocina = maybe_load_cocina(params[:id])
 
     @object = Dor.find params[:id]
   end
