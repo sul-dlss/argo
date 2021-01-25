@@ -69,9 +69,12 @@ class FilesController < ApplicationController
     authorize! :view_content, @cocina_model
 
     response.headers['Content-Disposition'] = "attachment; filename=#{@cocina_model.externalIdentifier.delete_prefix('druid:')}.zip"
+    logger.info("Before Zip stream #{@cocina_model.externalIdentifier}")
     zip_tricks_stream do |zip|
       preserved_files(@cocina_model).each do |filename|
+        logger.info("In preserved_files loop #{@cocina_model.externalIdentifier} #{filename}")
         zip.write_deflated_file(filename) do |sink|
+          logger.info("Before pres cat api call #{@cocina_model.externalIdentifier} #{filename}")
           Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
                                                filepath: filename,
                                                version: @cocina_model.version,
