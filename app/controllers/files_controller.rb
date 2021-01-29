@@ -74,11 +74,13 @@ class FilesController < ApplicationController
       preserved_files(@cocina_model).each do |filename|
         logger.info("In preserved_files loop #{@cocina_model.externalIdentifier} #{filename}")
         zip.write_deflated_file(filename) do |sink|
-          logger.info("Before pres cat api call #{@cocina_model.externalIdentifier} #{filename}")
-          Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
+          logger.info("Before pres cat api call #{@cocina_model.externalIdentifier} file #{filename}")
+          result = Preservation::Client.objects.content(druid: @cocina_model.externalIdentifier,
                                                filepath: filename,
                                                version: @cocina_model.version,
-                                               on_data: proc { |data, _count| sink.write data })
+                                               on_data: proc { |data, _count| logger.info("In on data #{data}"); sink.write data })
+          logger.info("After pres cat call for #{@cocina_model.externalIdentifier} file #{filename}\n#{result}")
+          result
         rescue StandardError => e
           sink.close
           message = "Could not zip #{filename} (#{@cocina_model.externalIdentifier}) for download: #{e}"
