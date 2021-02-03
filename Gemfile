@@ -57,7 +57,7 @@ gem 'rake'
 gem 'retries'
 gem 'ruby-prof'
 gem 'rubyzip'
-gem 'zip_tricks', '~> 5.3'
+gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all feature
 
 # Stanford related gems
 gem 'blacklight', '~> 7.13'
