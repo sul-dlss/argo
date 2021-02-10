@@ -87,7 +87,7 @@ GEM
       blacklight (~> 7.13)
       deprecation
       rails (>= 5.1, < 7)
-    bootsnap (1.6.0)
+    bootsnap (1.7.2)
       msgpack (~> 1.0)
     builder (3.2.4)
     bundler-audit (0.7.0.1)
@@ -123,7 +123,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (3.0.0)
-    cocina-models (0.46.0)
+    cocina-models (0.47.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -180,9 +180,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.18.0)
+    dor-services-client (6.19.0)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.46.0)
+      cocina-models (~> 0.47.0)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -214,7 +214,7 @@ GEM
       concurrent-ruby (~> 1.0)
       dry-core (~> 0.4, >= 0.4.4)
       dry-equalizer
-    dry-schema (1.6.0)
+    dry-schema (1.6.1)
       concurrent-ruby (~> 1.0)
       dry-configurable (~> 0.8, >= 0.8.3)
       dry-core (~> 0.5, >= 0.5)
@@ -279,7 +279,7 @@ GEM
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_logger (0.6.0)
-    i18n (1.8.7)
+    i18n (1.8.8)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iso-639 (0.3.5)
@@ -339,7 +339,7 @@ GEM
     net-ssh (6.1.0)
     netrc (0.11.0)
     newrelic_rpm (6.15.0)
-    nio4r (2.5.4)
+    nio4r (2.5.5)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
@@ -353,7 +353,7 @@ GEM
       activesupport (>= 3.2.18)
       i18n
       nokogiri
-    okcomputer (1.18.2)
+    okcomputer (1.18.4)
     om (3.2.0)
       activemodel (>= 5.1, < 7)
       activesupport
@@ -521,9 +521,9 @@ GEM
       nokogiri
       rest-client
     rubyzip (2.3.0)
-    sdr-client (0.42.0)
+    sdr-client (0.43.0)
       activesupport
-      cocina-models (~> 0.46.0)
+      cocina-models (~> 0.47.0)
       dry-monads
       faraday (>= 0.16)
     selenium-webdriver (3.142.7)
@@ -580,7 +580,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.7)
     unicode-display_width (2.0.0)
-    view_component (2.25.0)
+    view_component (2.25.1)
       activesupport (>= 5.0.0, < 7.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -632,7 +632,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 9.6)
-  dor-services-client (~> 6.18)
+  dor-services-client (~> 6.19)
   dor-workflow-client (~> 3.19)
   dry-monads
   equivalent-xml (>= 0.6.0)
@@ -669,7 +669,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.1.0)
   ruby-prof
   rubyzip
-  sdr-client (~> 0.42)
+  sdr-client (~> 0.43)
   selenium-webdriver
   sidekiq (~> 6.0)
   simplecov (~> 0.17.1)
@@ -684,4 +684,4 @@ DEPENDENCIES
   zip_tricks (= 5.3.1)
 
 BUNDLED WITH
-   2.2.7
+   2.2.8
