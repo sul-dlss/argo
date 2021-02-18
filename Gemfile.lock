@@ -1,3 +1,16 @@
+GIT
+  remote: https://github.com/sul-dlss/dor-services-client.git
+  revision: 5430534f96aefa81b2348f233c39c2006d8657bf
+  branch: edit-more-datastreams
+  specs:
+    dor-services-client (6.19.1)
+      activesupport (>= 4.2, < 7)
+      cocina-models (~> 0.47.2)
+      deprecation
+      faraday (>= 0.15, < 2)
+      moab-versioning (~> 4.0)
+      zeitwerk (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -180,13 +193,6 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.19.1)
-      activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.47.2)
-      deprecation
-      faraday (>= 0.15, < 2)
-      moab-versioning (~> 4.0)
-      zeitwerk (~> 2.1)
     dor-workflow-client (3.23.0)
       activesupport (>= 3.2.1, < 7)
       deprecation (>= 0.99.0)
@@ -632,7 +638,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 9.6)
-  dor-services-client (~> 6.19)
+  dor-services-client (~> 6.19)!
   dor-workflow-client (~> 3.19)
   dry-monads
   equivalent-xml (>= 0.6.0)
