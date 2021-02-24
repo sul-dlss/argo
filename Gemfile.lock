@@ -123,7 +123,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (3.0.0)
-    cocina-models (0.47.2)
+    cocina-models (0.48.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -180,9 +180,9 @@ GEM
       solrizer (~> 3.0)
       stanford-mods (>= 2.3.1)
       stanford-mods-normalizer (~> 0.1)
-    dor-services-client (6.19.2)
+    dor-services-client (6.20.0)
       activesupport (>= 4.2, < 7)
-      cocina-models (~> 0.47.2)
+      cocina-models (~> 0.48.0)
       deprecation
       faraday (>= 0.15, < 2)
       moab-versioning (~> 4.0)
@@ -317,7 +317,7 @@ GEM
     mimemagic (0.3.5)
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
-    minitest (5.14.3)
+    minitest (5.14.4)
     moab-versioning (4.4.1)
       druid-tools (>= 1.0.0)
       json
@@ -390,7 +390,7 @@ GEM
     pry-remote (0.1.8)
       pry (~> 0.9)
       slop (~> 3.0)
-    psych (3.3.0)
+    psych (3.3.1)
     public_suffix (4.0.6)
     puma (3.12.6)
     racc (1.5.2)
@@ -521,9 +521,9 @@ GEM
       nokogiri
       rest-client
     rubyzip (2.3.0)
-    sdr-client (0.43.1)
+    sdr-client (0.44.0)
       activesupport
-      cocina-models (~> 0.47.2)
+      cocina-models (~> 0.48.0)
       dry-monads
       faraday (>= 0.16)
     selenium-webdriver (3.142.7)
@@ -632,7 +632,7 @@ DEPENDENCIES
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
   dor-services (~> 9.6)
-  dor-services-client (~> 6.19)
+  dor-services-client (~> 6.20)
   dor-workflow-client (~> 3.19)
   dry-monads
   equivalent-xml (>= 0.6.0)
@@ -669,7 +669,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.1.0)
   ruby-prof
   rubyzip
-  sdr-client (~> 0.43)
+  sdr-client (~> 0.44)
   selenium-webdriver
   sidekiq (~> 6.0)
   simplecov (~> 0.17.1)
