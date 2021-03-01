@@ -4,11 +4,11 @@
 class WorkflowProcessRow < ApplicationComponent
   # @param [Dor::Workflow::Response::Process] process_status the model for the WorkflowProcess
   # @param [Integer] index the row index
-  # @param [Dor::Item] item the repository object that the workflow is about
-  def initialize(process:, index:, item:)
+  # @param [Cocina::Models::DRO,Cocina::Models::Collection] cocina_object the repository object that the workflow is about
+  def initialize(process:, index:, cocina_object:)
     @process = process
     @index = index
-    @item = item
+    @cocina_object = cocina_object
   end
 
   delegate :pid, :workflow_name, :repository, :name, :status, :datetime,
@@ -24,5 +24,9 @@ class WorkflowProcessRow < ApplicationComponent
     status == 'error'
   end
 
-  attr_reader :process, :index, :item
+  def show_reset_button?
+    error? && can?(:manage_item, cocina_object)
+  end
+
+  attr_reader :process, :index, :cocina_object
 end

@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe 'workflows/_show.html.erb' do
   let(:druid) { 'druid:aa111bb2222' }
   let(:workflow_name) { 'accessionWF' }
+  let(:item) { instance_double(Cocina::Models::DRO) }
 
   let(:process_status) do
     instance_double(Dor::Workflow::Response::Process,
@@ -25,7 +26,8 @@ RSpec.describe 'workflows/_show.html.erb' do
     instance_double(WorkflowPresenter,
                     pid: druid,
                     workflow_name: workflow_name,
-                    processes: [process_status])
+                    processes: [process_status],
+                    cocina_object: item)
   end
 
   before do
