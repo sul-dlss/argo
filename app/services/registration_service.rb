@@ -13,9 +13,7 @@ class RegistrationService
 
     Dor::Services::Client.object(pid).administrative_tags.create(tags: tags) unless tags.empty?
     Success(response)
-  rescue Cocina::Models::ValidationError => e
-    Failure(e.message)
-  rescue Dor::Services::Client::UnexpectedResponse => e
+  rescue Cocina::Models::ValidationError, Dor::Services::Client::UnexpectedResponse => e
     Failure(e.message)
   end
 end

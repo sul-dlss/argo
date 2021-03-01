@@ -25,7 +25,7 @@ class RubydoraCheck < OkComputer::PingCheck
       message_lines << "<li>#{key} - #{profile[key]}\</li>"
     end
     message_lines << '</ul>'
-    mark_message message_lines.join('')
+    mark_message message_lines.join
   rescue StandardError => e
     mark_message "Error: '#{e}'"
     mark_failure

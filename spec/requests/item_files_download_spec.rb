@@ -7,101 +7,101 @@ RSpec.describe 'Download item files' do
   let(:cocina_model) { Cocina::Models.build(cocina_params.stringify_keys) }
   let(:cocina_params) do
     {
-      "type": 'http://cocina.sul.stanford.edu/models/image.jsonld',
-      "externalIdentifier": 'druid:rn653dy9317',
-      "label": 'M1090_S15_B01_F07_0106',
-      "version": 4,
-      "access": {
-        "access": 'location-based',
-        "copyright": '© The Estate of R. Buckminster Fuller.',
-        "download": 'location-based',
-        "readLocation": 'spec'
+      type: 'http://cocina.sul.stanford.edu/models/image.jsonld',
+      externalIdentifier: 'druid:rn653dy9317',
+      label: 'M1090_S15_B01_F07_0106',
+      version: 4,
+      access: {
+        access: 'location-based',
+        copyright: '© The Estate of R. Buckminster Fuller.',
+        download: 'location-based',
+        readLocation: 'spec'
       },
-      "administrative": {
-        "hasAdminPolicy": 'druid:rd845kr7465'
+      administrative: {
+        hasAdminPolicy: 'druid:rd845kr7465'
       },
-      "identification": {
-        "sourceId": 'fuller:M1090_S15_B01_F07_0106'
+      identification: {
+        sourceId: 'fuller:M1090_S15_B01_F07_0106'
       },
-      "structural": {
-        "contains": [
+      structural: {
+        contains: [
           {
-            "type": 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
-            "externalIdentifier": 'rn653dy9317_106',
-            "label": 'M1090_S15_B01_F07_0106',
-            "version": 4,
-            "structural": {
-              "contains": [
+            type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+            externalIdentifier: 'rn653dy9317_106',
+            label: 'M1090_S15_B01_F07_0106',
+            version: 4,
+            structural: {
+              contains: [
                 {
-                  "type": 'http://cocina.sul.stanford.edu/models/file.jsonld',
-                  "externalIdentifier": 'druid:rn653dy9317/M1090_S15_B01_F07_0106.jp2',
-                  "label": 'M1090_S15_B01_F07_0106.jp2',
-                  "filename": 'M1090_S15_B01_F07_0106.jp2',
-                  "size": 3_305_991,
-                  "version": 4,
-                  "hasMimeType": 'image/jp2',
-                  "hasMessageDigests": [
+                  type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                  externalIdentifier: 'druid:rn653dy9317/M1090_S15_B01_F07_0106.jp2',
+                  label: 'M1090_S15_B01_F07_0106.jp2',
+                  filename: 'M1090_S15_B01_F07_0106.jp2',
+                  size: 3_305_991,
+                  version: 4,
+                  hasMimeType: 'image/jp2',
+                  hasMessageDigests: [
                     {
-                      "type": 'sha1',
-                      "digest": 'fd28e74b3139b04a0e5c5c3d3263598f629f8967'
+                      type: 'sha1',
+                      digest: 'fd28e74b3139b04a0e5c5c3d3263598f629f8967'
                     },
                     {
-                      "type": 'md5',
-                      "digest": '244cbb3960407f59ac77a916870e0502'
+                      type: 'md5',
+                      digest: '244cbb3960407f59ac77a916870e0502'
                     }
                   ],
-                  "access": {
-                    "access": 'world',
-                    "download": 'world'
+                  access: {
+                    access: 'world',
+                    download: 'world'
                   },
-                  "administrative": {
-                    "sdrPreserve": true,
-                    "shelve": true
+                  administrative: {
+                    sdrPreserve: true,
+                    shelve: true
                   },
-                  "presentation": {
-                    "height": 3426,
-                    "width": 5102
+                  presentation: {
+                    height: 3426,
+                    width: 5102
                   }
                 },
                 {
-                  "type": 'http://cocina.sul.stanford.edu/models/file.jsonld',
-                  "externalIdentifier": 'druid:rn653dy9317/M1090_S15_B01_F07_0106.tif',
-                  "label": 'M1090_S15_B01_F07_0106.tif',
-                  "filename": 'M1090_S15_B01_F07_0106.tif',
-                  "size": 52_467_428,
-                  "version": 4,
-                  "hasMimeType": 'image/tiff',
-                  "hasMessageDigests": [
+                  type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                  externalIdentifier: 'druid:rn653dy9317/M1090_S15_B01_F07_0106.tif',
+                  label: 'M1090_S15_B01_F07_0106.tif',
+                  filename: 'M1090_S15_B01_F07_0106.tif',
+                  size: 52_467_428,
+                  version: 4,
+                  hasMimeType: 'image/tiff',
+                  hasMessageDigests: [
                     {
-                      "type": 'sha1',
-                      "digest": 'cf336c4f714b180a09bbfefde159d689e1d517bd'
+                      type: 'sha1',
+                      digest: 'cf336c4f714b180a09bbfefde159d689e1d517bd'
                     },
                     {
-                      "type": 'md5',
-                      "digest": '56978088366e66f87d4d5a531f2fea04'
+                      type: 'md5',
+                      digest: '56978088366e66f87d4d5a531f2fea04'
                     }
                   ],
-                  "access": {
-                    "access": 'dark',
-                    "download": 'none'
+                  access: {
+                    access: 'dark',
+                    download: 'none'
                   },
-                  "administrative": {
-                    "sdrPreserve": true,
-                    "shelve": false
+                  administrative: {
+                    sdrPreserve: true,
+                    shelve: false
                   },
-                  "presentation": {
-                    "height": 3426,
-                    "width": 5102
+                  presentation: {
+                    height: 3426,
+                    width: 5102
                   }
                 }
               ]
             }
           }
         ],
-        "isMemberOf": [
+        isMemberOf: [
           'druid:rh056sr3313'
         ],
-        "hasAgreement": 'druid:xf765vv6666'
+        hasAgreement: 'druid:xf765vv6666'
       }
     }
   end

@@ -248,7 +248,7 @@ class Report
   def docs_to_records(docs, fields = REPORT_FIELDS)
     result = []
     docs.each_with_index do |doc, index|
-      row = Hash[fields.collect do |spec|
+      row = fields.collect do |spec|
         val =
           begin
             spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s]
@@ -257,7 +257,7 @@ class Report
           end
         val = val.join(';') if val.is_a?(Array)
         [spec[:field].to_sym, val.to_s]
-      end]
+      end.to_h
       row[:id] = index + 1
       result << row
     end
