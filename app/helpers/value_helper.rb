@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 
 module ValueHelper
-  # Renderers
-
-  # Given a fedora object, fetch the preferred object title from MODs, if not found, notify Honeybadger and return Fedora label
-  # @return [String] object title, as pulled from descMetadata
-  def object_title(obj)
-    return obj.descMetadata.title_info.first.strip if obj.descMetadata.title_info.first.present?
-
-    Honeybadger.notify("No title found in descMetadata for collection #{obj.pid}")
-    obj.label
-  end
-
   # TODO: dynamically generate these methods so we don't hardcode Solr field identifiers
 
   ##

@@ -78,6 +78,8 @@ RSpec.describe 'Viewing an Admin policy' do
     end
 
     context 'open version ui' do
+      let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, collections: []) }
+
       it 'renders the add collection ui' do
         allow(current_user).to receive(:permitted_collections).and_return(['druid:ab123cd4567'])
         visit "/items/#{apo_druid}/collection_ui"

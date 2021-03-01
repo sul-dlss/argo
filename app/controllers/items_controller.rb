@@ -88,7 +88,13 @@ class ItemsController < ApplicationController
         format.html { render status: :ok, plain: response_message }
       else
         format.json do
-          new_collection_html = render_to_string('items/_collection_ui_line_item', formats: [:html], layout: false, locals: { col: Dor.find(params[:collection]) })
+          collection = Dor::Services::Client.object(params[:collection]).find
+          new_collection_html = render_to_string('items/_collection_ui_line_item', formats: [:html], layout: false,
+                                                                                   locals: {
+                                                                                     collection_label: collection.label,
+                                                                                     collection_id: collection.externalIdentifier,
+                                                                                     item_id: @object.id
+                                                                                   })
           render status: :ok, plain: { message: response_message, new_collection_html: new_collection_html }.to_json
         end
         format.html { redirect_to solr_document_path(params[:id]), notice: response_message }
@@ -275,6 +281,8 @@ class ItemsController < ApplicationController
   end
 
   def collection_ui
+    object_client = Dor::Services::Client.object(@object.id)
+    @collection_list = object_client.collections
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
