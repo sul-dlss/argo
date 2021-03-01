@@ -1,6 +1,6 @@
 <div data-blacklight-modal="container">
     <div id="spreadsheet-upload-container">
-  <%= form_tag(apo_uploads_path(@obj.id), multipart: true, data: { controller: 'bulk_upload' }) do %>
+  <%= form_tag(apo_uploads_path(params[:apo_id]), multipart: true, data: { controller: 'bulk_upload' }) do %>
     <div id="bulk-upload-form" class="container-fluid">
       <div class="row spreadsheet-row">
         <div class="col-md-12">

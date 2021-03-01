@@ -3,9 +3,7 @@
 # Handles the HTTP interaction for creating bulk metadata uploads for an APO
 class UploadsController < ApplicationController
   # GET /apos/:apo_id/uploads/new
-  def new
-    @obj = Dor.find params[:apo_id]
-  end
+  def new; end
 
   # Lets the user start a bulk metadata job (i.e. upload a metadata spreadsheet/XML file).
   # POST /apos/:apo_id/uploads
