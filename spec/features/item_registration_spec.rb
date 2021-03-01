@@ -51,7 +51,7 @@ RSpec.describe 'Item registration page', js: true do
       # will respond with a 500 (because the failure produces an exception, and this block
       # is running in place of the mocked method).  But it won't result in a nice explanatory
       # test failure message (presumably because it's not executing and bubbling up within
-      # the context of the test definition).  So write to a var defined in the test and inpsect
+      # the context of the test definition). So write to a var defined in the test and inspect
       # the var out there.
       registration_params.merge!(arg.params.to_unsafe_h)
 
@@ -72,7 +72,7 @@ RSpec.describe 'Item registration page', js: true do
       'workflow_id' => 'goobiWF',
       'label' => 'object title',
       'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
-      'rights' => 'default',
+      'rights' => 'world',
       'collection' => '',
       'source_id' => 'source:id1'
     )
