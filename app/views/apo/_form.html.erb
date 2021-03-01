@@ -81,7 +81,7 @@
     <div class="form-group">
       <label for="collection_rights" class="col-sm-2 control-label">Collection Rights</label>
       <div class="col-sm-10">
-        <%= select_tag :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
+        <%= select_tag :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
       </div>
     </div>
   </div>
@@ -96,7 +96,7 @@
     <div class="form-group">
       <label for="collection_rights_catkey" class="col-sm-2 control-label">Collection Rights</label>
       <div class="col-sm-10">
-        <%= select_tag :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
+        <%= select_tag :collection_rights_catkey, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
       </div>
     </div>
   </div>
@@ -108,7 +108,7 @@
 
   <div class="form-group">
     <label>Default Object Rights</label>
-      <%= select_tag :default_object_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, @form.default_rights), class: 'form-control' %>
+      <%= select_tag :default_object_rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS, @form.default_rights), class: 'form-control' %>
   </div>
   <div class="form-group">
     <label for="use">Default Use and Reproduction statement</label><br>

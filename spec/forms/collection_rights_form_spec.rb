@@ -46,7 +46,7 @@ RSpec.describe CollectionRightsForm do
       let(:access) { 'citation-only' }
       let(:download) { 'none' }
 
-      it { is_expected.to eq 'none' }
+      it { is_expected.to eq 'citation-only' }
     end
 
     context 'with dark' do
