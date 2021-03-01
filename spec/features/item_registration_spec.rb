@@ -72,7 +72,7 @@ RSpec.describe 'Item registration page', js: true do
       'workflow_id' => 'goobiWF',
       'label' => 'object title',
       'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
-      'rights' => 'world',
+      'rights' => 'default',
       'collection' => '',
       'source_id' => 'source:id1'
     )
