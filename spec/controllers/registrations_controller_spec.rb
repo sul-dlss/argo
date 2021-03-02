@@ -340,14 +340,27 @@ RSpec.describe RegistrationsController, type: :controller do
   end
 
   describe '#workflow_list' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:cocina_model) do
+      Cocina::Models.build(
+        'label' => 'The APO',
+        'version' => 1,
+        'type' => Cocina::Models::Vocab.admin_policy,
+        'externalIdentifier' => apo_id,
+        'administrative' => {
+          hasAdminPolicy: 'druid:hv992ry2431',
+          registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF']
+        }
+      )
+    end
+    let(:apo_id) { 'druid:zt570tx3016' }
+
     before do
-      ActiveFedora::SolrService.add(id: 'druid:ww057qx5555',
-                                    registration_workflow_id_ssim: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'])
-      ActiveFedora::SolrService.commit
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
     it 'handles an APO with multiple workflows, putting the default workflow first always' do
-      get 'workflow_list', params: { apo_id: 'druid:ww057qx5555', format: :json }
+      get 'workflow_list', params: { apo_id: apo_id, format: :json }
       data = JSON.parse(response.body)
       expect(data).to eq [Settings.apo.default_workflow_option, 'digitizationWF', 'dpgImageWF', 'goobiWF']
     end

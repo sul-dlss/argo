@@ -14,16 +14,12 @@ class RegistrationsController < ApplicationController
     render plain: pdf.render, content_type: :pdf
   end
 
-  def workflows_for_apo(apo_id)
-    docs = Dor::SearchService.query(%(id:"#{apo_id}"))['response']['docs']
-    result = docs.collect { |doc| doc['registration_workflow_id_ssim'] }.compact
-    # always put default workflow option first, then alpha sort the rest
-    result.flatten.sort.unshift(Settings.apo.default_workflow_option).uniq
-  end
-
   def workflow_list
+    cocina =  Dor::Services::Client.object(params[:apo_id]).find
+    workflows = ([Settings.apo.default_workflow_option] + Array(cocina.administrative.registrationWorkflow)).uniq
+
     respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => workflows_for_apo(params[:apo_id]) }
+      format.any(:json, :xml) { render request.format.to_sym => workflows }
     end
   end
 
