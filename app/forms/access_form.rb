@@ -44,8 +44,6 @@ class AccessForm
   def derive_rights_from_cocina
     rights = if @model.access.readLocation
                "loc:#{@model.access.readLocation}"
-             elsif @model.access.access == 'citation-only'
-               'none' # TODO: we could remove this if we switch to REGISTRATION_RIGHTS_OPTIONS from DEFAULT_RIGHTS_OPTIONS
              else
                @model.access.access
              end
