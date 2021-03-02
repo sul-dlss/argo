@@ -6,18 +6,15 @@ class Dor::ObjectsController < ApplicationController
 
   def create
     form = RegistrationForm.new(params)
-    request_model =
-      begin
-        form.cocina_model
-      rescue Cocina::Models::ValidationError => e
-        return render plain: e.message, status: :bad_request
-      end
+    request_model = form.cocina_model # might raise Cocina::Models::ValidationError
     result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
 
     result.either(
       ->(model) { render json: { pid: model.externalIdentifier }, status: :created, location: object_location(model.externalIdentifier) },
       ->(message) { render_failure(message) }
     )
+  rescue Cocina::Models::ValidationError => e
+    render plain: e.message, status: :bad_request
   end
 
   private

@@ -63,7 +63,7 @@ class ModsulatorJob < ActiveJob::Base
   end
 
   def operation(filetype)
-    filetype != 'xml_only' ? 'convert' : 'normalize'
+    filetype == 'xml_only' ? 'normalize' : 'convert'
   end
 
   # Upload metadata into DOR.

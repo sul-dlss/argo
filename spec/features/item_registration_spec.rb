@@ -7,10 +7,10 @@ RSpec.describe 'Item registration page', js: true do
   let(:ur_apo_id) { 'druid:hv992ry2431' }
   let(:solr_doc) do
     {
-      "id": ur_apo_id,
-      "apo_register_permissions_ssim": ['workgroup:dlss:developers'],
-      "objectType_ssim": ['adminPolicy'],
-      "sw_display_title_tesim": ['[Internal System Objects]']
+      id: ur_apo_id,
+      apo_register_permissions_ssim: ['workgroup:dlss:developers'],
+      objectType_ssim: ['adminPolicy'],
+      sw_display_title_tesim: ['[Internal System Objects]']
     }
   end
 

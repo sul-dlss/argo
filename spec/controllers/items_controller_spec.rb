@@ -13,7 +13,7 @@ RSpec.describe ItemsController, type: :controller do
     apo  = double
     idmd_ds_content = '<test-xml/>'
     idmd_ng_xml = instance_double(Nokogiri::XML::Document, to_xml: idmd_ds_content)
-    allow(idmd).to receive(:"content_will_change!")
+    allow(idmd).to receive(:content_will_change!)
     allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
     allow(idmd).to receive(:"content=").with(idmd_ds_content)
     allow(apo).to receive(:pid).and_return('druid:apo')

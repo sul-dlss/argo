@@ -26,9 +26,9 @@ RSpec.describe 'Show rights for an object' do
                                'externalIdentifier' => pid,
                                'access' => {
                                  'access' => 'world',
-                                 "embargo": {
-                                   "releaseDate": '2021-02-11T00:00:00.000+00:00',
-                                   "access": 'world'
+                                 embargo: {
+                                   releaseDate: '2021-02-11T00:00:00.000+00:00',
+                                   access: 'world'
                                  }
                                },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },

@@ -45,7 +45,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
   # rubocop:enable Naming/MethodParameterName
 
   def rotate_facet_value(val, from, to)
-    components = Hash[from.split(//).zip(val.split(/:/))]
+    components = from.split(//).zip(val.split(/:/)).to_h
     new_values = components.values_at(*to.split(//))
     new_values.pop while new_values.last.nil?
     return nil if new_values.include?(nil)

@@ -31,9 +31,9 @@ RSpec.describe 'Set rights for an object' do
                                'externalIdentifier' => pid,
                                'access' => {
                                  'access' => 'world',
-                                 "embargo": {
-                                   "releaseDate": '2021-02-11T00:00:00.000+00:00',
-                                   "access": 'world'
+                                 embargo: {
+                                   releaseDate: '2021-02-11T00:00:00.000+00:00',
+                                   access: 'world'
                                  }
                                },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -74,9 +74,9 @@ RSpec.describe 'Set rights for an object' do
                 'access' => 'dark',
                 'download' => 'none',
                 'controlledDigitalLending' => false,
-                "embargo": {
-                  "releaseDate": '2021-02-11T00:00:00.000+00:00',
-                  "access": 'world'
+                embargo: {
+                  releaseDate: '2021-02-11T00:00:00.000+00:00',
+                  access: 'world'
                 }
               },
               'structural' => {
@@ -179,8 +179,8 @@ RSpec.describe 'Set rights for an object' do
                                    'download' => 'none',
                                    'controlledDigitalLending' => true,
                                    'embargo' => {
-                                     "releaseDate": '2021-02-11T00:00:00.000+00:00',
-                                     "access": 'world'
+                                     releaseDate: '2021-02-11T00:00:00.000+00:00',
+                                     access: 'world'
                                    }
                                  },
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },

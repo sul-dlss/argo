@@ -89,7 +89,7 @@ class ItemsController < ApplicationController
       else
         format.json do
           new_collection_html = render_to_string('items/_collection_ui_line_item', formats: [:html], layout: false, locals: { col: Dor.find(params[:collection]) })
-          render status: :ok, plain: { 'message': response_message, 'new_collection_html': new_collection_html }.to_json
+          render status: :ok, plain: { message: response_message, new_collection_html: new_collection_html }.to_json
         end
         format.html { redirect_to solr_document_path(params[:id]), notice: response_message }
       end
@@ -104,7 +104,7 @@ class ItemsController < ApplicationController
       if params[:bulk]
         format.html { render status: :ok, plain: response_message }
       else
-        format.json { render status: :ok, plain: { 'message': response_message, 'druid': params[:collection].gsub('druid:', '') }.to_json }
+        format.json { render status: :ok, plain: { message: response_message, druid: params[:collection].gsub('druid:', '') }.to_json }
         format.any  { redirect_to solr_document_path(params[:id]), notice: response_message }
       end
     end
