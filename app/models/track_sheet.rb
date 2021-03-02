@@ -93,7 +93,7 @@ class TrackSheet
   # @return [Array<Array<String>>] Complex array suitable for pdf.table()
   def doc_to_table(doc)
     table_data = []
-    labels = doc['obj_label_ssim']
+    labels = doc[SolrDocument::FIELD_LABEL]
     label = labels.nil? || labels.empty? ? '' : labels.first
     label = label[0..110] + '...' if label.length > 110
     table_data.push(['Object Label:', label])
@@ -101,7 +101,7 @@ class TrackSheet
 
     tags = Array(doc['tag_ssim']).collect { |tag| /^Project\s*:/.match?(tag) ? nil : tag.gsub(/\s+/, Prawn::Text::NBSP) }.compact
     table_data.push(['Tags:', tags.join("\n")]) unless tags.empty?
-    table_data.push(['Catkey:',    Array(doc['catkey_id_ssim']).join(', ')]) if doc['catkey_id_ssim'].present?
+    table_data.push(['Catkey:',    Array(doc[SolrDocument::FIELD_CATKEY_ID]).join(', ')]) if doc[SolrDocument::FIELD_CATKEY_ID].present?
     table_data.push(['Source ID:', Array(doc['source_id_ssim']).first]) if doc['source_id_ssim'].present?
     table_data.push(['Barcode:',   Array(doc['barcode_id_ssim']).first]) if doc['barcode_id_ssim'].present?
     table_data.push(['Date Printed:', Time.zone.now.strftime('%c')])
