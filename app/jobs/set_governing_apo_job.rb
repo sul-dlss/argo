@@ -31,19 +31,18 @@ class SetGoverningApoJob < GenericJob
   private
 
   def set_governing_apo_and_index_safely(current_druid, log)
-    cocina = Dor::Services::Client.object(current_druid).find
+    object_client = Dor::Services::Client.object(current_druid)
+    cocina = object_client.find
 
     state_service = StateService.new(current_druid, version: cocina.version)
     check_can_set_governing_apo!(cocina, state_service)
+    open_new_version(current_druid, cocina.version, 'Set new governing APO') unless state_service.allows_modification?
 
-    current_obj = Dor.find(current_druid)
+    updated_administrative = cocina.administrative.new(hasAdminPolicy: new_apo_id)
+    updated = cocina.new(administrative: updated_administrative)
+    object_client.update(params: updated)
 
-    open_new_version(current_druid, current_obj.current_version, 'Set new governing APO') unless state_service.allows_modification?
-
-    current_obj.admin_policy_object = Dor.find(new_apo_id)
-    current_obj.identityMetadata.adminPolicy = nil if current_obj.identityMetadata.adminPolicy # no longer supported, erase if present as a bit of remediation
-    current_obj.save
-    Argo::Indexer.reindex_pid_remotely(current_obj.pid)
+    Argo::Indexer.reindex_pid_remotely(current_druid)
 
     log.puts("#{Time.current} SetGoverningApoJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
