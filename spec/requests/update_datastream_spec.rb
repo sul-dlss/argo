@@ -90,4 +90,12 @@ RSpec.describe 'Update a datastream' do
       expect(response).to redirect_to "/view/#{pid}"
     end
   end
+
+  describe 'DatastreamsController.endpoint_for_datastream' do
+    subject { DatastreamsController.endpoint_for_datastream(datastream) }
+
+    let(:datastream) { 'descMetadata' }
+
+    it { is_expected.to eq 'descriptive' }
+  end
 end
