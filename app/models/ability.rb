@@ -12,8 +12,8 @@
 #
 # Argo specific notes:
 #   * permissions granted by an APO apply to objects governed by the APO, as well as to the APO itself; hence, the fallthrough
-#   check to the APO's own ID for Dor::AdminPolicyObject types in addition to the checks for ActiveFedora::Base types (e.g. the
-#   "can :manage_item, Dor::AdminPolicyObject" and "can :manage_item, ActiveFedora::Base" definitions, with the latter being checked
+#   check to the APO's own ID for Cocina::Models::AdminPolicy types in addition to the checks for ActiveFedora::Base types (e.g. the
+#   "can :manage_item, Cocina::Models::AdminPolicy" and "can :manage_item, ActiveFedora::Base" definitions, with the latter being checked
 #   first).  see https://github.com/sul-dlss/argo/issues/76
 #
 # note about confusing dor-services method declarations:
@@ -39,7 +39,7 @@ class Ability
       current_user.manager?
     end
     can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], [NilModel, Cocina::Models::DRO] if current_user.manager?
-    can :create, Dor::AdminPolicyObject if current_user.manager?
+    can :create, Cocina::Models::AdminPolicy if current_user.manager?
 
     can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.viewer?
 
