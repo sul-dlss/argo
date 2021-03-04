@@ -61,6 +61,17 @@ class DatastreamsController < ApplicationController
     end
   end
 
+  def self.endpoint_for_datastream(datastream)
+    case datastream
+    when 'RELS-EXT'
+      'relationships'
+    when 'descMetadata'
+      'descriptive'
+    else
+      datastream.delete_suffix('Metadata')
+    end
+  end
+
   private
 
   LEGACY_API = %w[
@@ -77,7 +88,7 @@ class DatastreamsController < ApplicationController
   ].freeze
 
   def store_xml(druid:, datastream:, content:)
-    endpoint = datastream == 'RELS-EXT' ? 'relationships' : datastream.delete_suffix('Metadata')
+    endpoint = self.class.endpoint_for_datastream datastream
     return update_directly(druid: druid, datastream: datastream, content: content) unless LEGACY_API.include? endpoint
 
     object_client = Dor::Services::Client.object(druid)
