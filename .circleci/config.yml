@@ -5,7 +5,7 @@ orbs:
   node: circleci/node@2.1.1
 
 references:
-  default_ruby_version: &default_ruby_version 2.7.1-node-browsers
+  default_ruby_version: &default_ruby_version 2.7.2-node-browsers
   default_postgres_version: &default_postgres_version 9.5-alpine
   ruby_envs: &ruby_envs
     environment:
