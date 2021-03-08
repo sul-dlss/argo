@@ -14,12 +14,26 @@ RSpec.describe 'Item registration page', js: true do
     }
   end
 
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:cocina_model) do
+    Cocina::Models.build(
+      'label' => 'The APO',
+      'version' => 1,
+      'type' => Cocina::Models::Vocab.admin_policy,
+      'externalIdentifier' => ur_apo_id,
+      'administrative' => {
+        hasAdminPolicy: ur_apo_id,
+        registrationWorkflow: %w[dpgImageWF goobiWF]
+      }
+    )
+  end
+
   before do
+    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+
     ActiveFedora::SolrService.add(solr_doc)
     ActiveFedora::SolrService.commit
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
-    allow_any_instance_of(RegistrationsController).to receive(:workflows_for_apo).and_return([])
-    allow_any_instance_of(RegistrationsController).to receive(:workflows_for_apo).with(ur_apo_id).and_return(%w[dpgImageWF goobiWF])
   end
 
   it 'invokes item registration method with the expected values and relays errors properly' do
