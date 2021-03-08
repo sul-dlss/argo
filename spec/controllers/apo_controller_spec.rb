@@ -49,7 +49,7 @@ RSpec.describe ApoController, type: :controller do
 
     before do
       allow(ApoForm).to receive(:new).and_return(form)
-      allow(controller).to receive(:authorize!).with(:create, Dor::AdminPolicyObject).and_return(true)
+      allow(controller).to receive(:authorize!).with(:create, Cocina::Models::AdminPolicy).and_return(true)
     end
 
     context 'when the form is valid' do
@@ -85,7 +85,7 @@ RSpec.describe ApoController, type: :controller do
 
     before do
       allow(ApoForm).to receive(:new).and_return(form)
-      allow(controller).to receive(:authorize!).with(:create, Dor::AdminPolicyObject).and_return(true)
+      allow(controller).to receive(:authorize!).with(:create, Cocina::Models::AdminPolicy).and_return(true)
     end
 
     context 'when the form is valid' do

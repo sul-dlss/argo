@@ -8,19 +8,19 @@ class ApoController < ApplicationController
   ]
 
   def edit
-    authorize! :create, Dor::AdminPolicyObject
+    authorize! :create, Cocina::Models::AdminPolicy
     @form = ApoForm.new(@object)
     render layout: 'one_column'
   end
 
   def new
-    authorize! :create, Dor::AdminPolicyObject
+    authorize! :create, Cocina::Models::AdminPolicy
     @form = ApoForm.new(Dor::AdminPolicyObject.new)
     render layout: 'one_column'
   end
 
   def create
-    authorize! :create, Dor::AdminPolicyObject
+    authorize! :create, Cocina::Models::AdminPolicy
 
     @form = ApoForm.new(Dor::AdminPolicyObject.new)
     unless @form.validate(params.merge(tag: "Registered By : #{current_user.login}"))
