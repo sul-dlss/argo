@@ -34,7 +34,6 @@ RSpec.describe 'Draw the manage release form' do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    # allow(Dor).to receive(:find).with('druid:bc123df4567').and_return(item)
   end
 
   context 'for content managers' do

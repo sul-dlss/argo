@@ -96,7 +96,7 @@ RSpec.describe SetGoverningApoJob do
           )
         end
 
-        let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }
+        let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
         let(:object_client3) { instance_double(Dor::Services::Client::Object, find: cocina3) }
 
         before do
@@ -104,26 +104,19 @@ RSpec.describe SetGoverningApoJob do
           allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
           allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
 
-          allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
           allow(subject).to receive(:check_can_set_governing_apo!).with(cocina1, state_service).and_return true
           allow(subject).to receive(:check_can_set_governing_apo!).with(cocina3, state_service).and_raise('user not allowed to move to target apo')
-
-          allow(Dor).to receive(:find).with(new_apo_id).and_return(apo)
         end
 
         # it might be cleaner to break the testing here into smaller cases for #set_governing_apo_and_index_safely,
         # assuming one is inclined to test private methods, but it also seemed reasonable to do a slightly more end-to-end
         # test of #perform, to prove that common failure cases for individual objects wouldn't fail the whole run.
         it 'increments the failure and success counts and logs status of each update' do
-          idmd = double(Dor::IdentityMetadataDS, adminPolicy: double(Dor::AdminPolicyObject))
-          expect(item1).to receive(:admin_policy_object=).with(apo)
-          expect(item1).to receive(:identityMetadata).and_return(idmd).exactly(:twice)
-          expect(idmd).to receive(:adminPolicy=).with(nil)
-          expect(item1).to receive(:save)
           expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
           subject.perform(bulk_action.id, params)
           expect(state_service).to have_received(:allows_modification?)
+          expect(object_client1).to have_received(:update).with(params: Cocina::Models::DRO)
 
           expect(bulk_action.druid_count_success).to eq 1
           expect(bulk_action.druid_count_fail).to eq 2
