@@ -7,7 +7,6 @@ module BlacklightConfigHelper
       defType: 'dismax',
       qf: %(
         collection_title_tesim
-        creator_tesim
         dor_id_tesim
         extent_ssim
         identifier_tesim
