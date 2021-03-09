@@ -19,20 +19,6 @@ RSpec.describe ValueHelper do
     allow(helper).to receive(:search_action_path).and_return search_action_path
   end
 
-  describe '#object_title' do
-    it 'fetches the object title from descMetadata and not fedora label' do
-      expect(Honeybadger).not_to receive(:notify)
-      allow(collection).to receive_message_chain(:descMetadata, :title_info).and_return(['But catz are nice too', 'A different node that will not show'])
-      expect(helper.object_title(collection)).to eq 'But catz are nice too'
-    end
-
-    it 'notifies HoneyBadger and return Fedora label if there is no title in descMetadata' do
-      allow(collection).to receive_message_chain(:descMetadata, :title_info).and_return([''])
-      expect(Honeybadger).to receive(:notify).with('No title found in descMetadata for collection druid:abc123')
-      expect(helper.object_title(collection)).to eq 'Boring Fedora Object Label'
-    end
-  end
-
   describe '#link_to_admin_policy' do
     let(:value) { 'druid:yolo' }
     let(:document_attributes) do
