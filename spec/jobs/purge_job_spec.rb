@@ -54,6 +54,8 @@ RSpec.describe PurgeJob, type: :job do
     allow(Dor).to receive(:find).with(pids[1]).and_return(item2)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(object_client1).to receive(:destroy).and_return(true)
+    allow(object_client2).to receive(:destroy).and_return(true)
 
     described_class.perform_now(bulk_action.id,
                                 pids: pids,
@@ -72,8 +74,8 @@ RSpec.describe PurgeJob, type: :job do
       let(:submitted) { true }
 
       it "doesn't purge" do
-        expect(item1).not_to have_received(:delete)
-        expect(item2).not_to have_received(:delete)
+        expect(object_client1).not_to have_received(:destroy)
+        expect(object_client2).not_to have_received(:destroy)
       end
     end
 
@@ -81,8 +83,8 @@ RSpec.describe PurgeJob, type: :job do
       let(:submitted) { false }
 
       it 'purges objects' do
-        expect(item1).to have_received(:delete)
-        expect(item2).to have_received(:delete)
+        expect(object_client1).to have_received(:destroy)
+        expect(object_client2).to have_received(:destroy)
         expect(client).to have_received(:delete_all_workflows).twice
       end
     end

@@ -34,8 +34,7 @@ class PurgeJob < GenericJob
       bulk_action.increment(:druid_count_fail).save
       return
     end
-    object = Dor.find(current_druid)
-    object.delete
+    Dor::Services::Client.object(current_druid).destroy
     workflow_client.delete_all_workflows(pid: current_druid)
     ActiveFedora.solr.conn.delete_by_id(current_druid)
     ActiveFedora.solr.conn.commit
