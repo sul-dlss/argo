@@ -22,7 +22,7 @@ RSpec.describe CatalogController, type: :controller do
 
   describe '#show' do
     let(:druid) { 'druid:fakepid' }
-    let(:item) { instance_double(Dor::Item) }
+    let(:item) { instance_double(Dor::Item, datastreams: {}) }
 
     before do
       ActiveFedora::SolrService.add(id: druid,
