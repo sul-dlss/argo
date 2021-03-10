@@ -30,6 +30,7 @@ class DRORightsForm < AccessForm
           fileset[:structural][:contains].each do |file|
             # Ensure files attached to dark objects are neither published nor shelved
             file[:access].merge!(access: 'dark')
+            file[:administrative].merge!(publish: false)
             file[:administrative].merge!(shelve: false)
           end
         end

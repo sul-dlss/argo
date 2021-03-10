@@ -47,6 +47,7 @@ RSpec.describe 'Show rights for an object' do
                                            'version' => 1,
                                            'access' => { access: 'world' },
                                            'administrative' => {
+                                             'publish' => true,
                                              'shelve' => true,
                                              'sdrPreserve' => true
                                            },
