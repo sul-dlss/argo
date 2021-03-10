@@ -6,6 +6,7 @@ class SolrDocument
   include CollectionConcern
 
   FIELD_OBJECT_TYPE               = :objectType_ssim
+  FIELD_CONTENT_TYPE              = :content_type_ssim
   FIELD_EMBARGO_STATUS            = :embargo_status_ssim
   FIELD_EMBARGO_RELEASE_DATE      = :embargo_release_dtsim
   FIELD_CATKEY_ID                 = :catkey_id_ssim
@@ -28,6 +29,7 @@ class SolrDocument
   FIELD_CURRENT_VERSION           = 'current_version_isi'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
+  attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
   attribute :current_version, Blacklight::Types::String, FIELD_CURRENT_VERSION
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
