@@ -22,7 +22,7 @@ class CatalogController < ApplicationController
     config.index.document_presenter_class = ArgoIndexPresenter
     config.show.document_presenter_class = ArgoShowPresenter
 
-    config.index.display_type_field = 'content_type_ssim'
+    config.index.display_type_field = SolrDocument::FIELD_CONTENT_TYPE
 
     config.show.display_type_field = 'objectType_ssim'
 
@@ -30,7 +30,7 @@ class CatalogController < ApplicationController
 
     config.add_index_field 'id',                              label: 'DRUID'
     config.add_index_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
-    config.add_index_field 'content_type_ssim',               label: 'Content Type'
+    config.add_index_field SolrDocument::FIELD_CONTENT_TYPE,  label: 'Content Type'
     config.add_index_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy
     config.add_index_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections
     config.add_index_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
@@ -43,7 +43,7 @@ class CatalogController < ApplicationController
 
     config.add_show_field 'id',                              label: 'DRUID'
     config.add_show_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
-    config.add_show_field 'content_type_ssim',               label: 'Content Type'
+    config.add_show_field SolrDocument::FIELD_CONTENT_TYPE,  label: 'Content Type'
     config.add_show_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy_with_objs
     config.add_show_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections_with_objs
     config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
@@ -64,7 +64,7 @@ class CatalogController < ApplicationController
                                                                 component: Blacklight::Hierarchy::FacetFieldListComponent,
                                                                 unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field 'objectType_ssim',                   label: 'Object Type',         component: true, limit: 10
-    config.add_facet_field 'content_type_ssim',                 label: 'Content Type',        component: true, limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE,    label: 'Content Type',        component: true, limit: 10
     config.add_facet_field 'content_file_mimetypes_ssim',       label: 'MIME Types',          component: true, limit: 10, home: false
     config.add_facet_field 'content_file_roles_ssim',           label: 'File Role',           component: true, limit: 10, home: false
     config.add_facet_field 'rights_descriptions_ssim',          label: 'Access Rights',       component: true, limit: 1000, sort: 'index', home: false
