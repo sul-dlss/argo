@@ -207,8 +207,7 @@ class CatalogController < ApplicationController
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
     @obj = Dor.find params[:id]
     authorize! :view_metadata, @obj
-    deprecated_response, @document = search_service.fetch(params[:id])
-    @response = ActiveSupport::Deprecation::DeprecatedObjectProxy.new(deprecated_response, 'The @response instance variable is deprecated; use @document.response instead.')
+    _deprecated_response, @document = search_service.fetch(params[:id])
 
     @cocina = maybe_load_cocina(params[:id])
     object_client = Dor::Services::Client.object(params[:id])
