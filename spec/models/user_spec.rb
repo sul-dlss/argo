@@ -209,8 +209,7 @@ RSpec.describe User, type: :model do
         'apo_role_sdr-administrator_ssim' => %w[workgroup:dlss:groupA workgroup:dlss:groupB],
         'apo_role_sdr-viewer_ssim' => %w[workgroup:dlss:groupE workgroup:dlss:groupF],
         'apo_role_dor-apo-manager_ssim' => %w[workgroup:dlss:groupC workgroup:dlss:groupD],
-        'apo_role_person_sdr-viewer_ssim' => %w[sunetid:tcramer],
-        'apo_role_group_manager_ssim' => %w[workgroup:dlss:groupR]
+        'apo_role_person_sdr-viewer_ssim' => %w[sunetid:tcramer]
       }
     end
 
@@ -235,11 +234,6 @@ RSpec.describe User, type: :model do
       user_roles = %w[sdr-administrator sdr-viewer]
       expect(subject).to receive(:groups).and_return(user_groups).at_least(:once)
       expect(subject.roles(druid)).to eq(user_roles)
-    end
-
-    it 'translates the old "manager" role into dor-apo-manager' do
-      expect(subject).to receive(:groups).and_return(['workgroup:dlss:groupR']).at_least(:once)
-      expect(subject.roles(druid)).to eq(['dor-apo-manager'])
     end
 
     it 'returns an empty set of roles if the DRUID solr search fails' do
