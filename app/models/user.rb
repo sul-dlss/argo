@@ -61,9 +61,6 @@ class User < ApplicationRecord
     return [] if obj_doc.empty?
 
     pid_roles = Set.new
-    # Determine whether user has 'dor-apo-manager' role
-    solr_apo_roles = %w[apo_role_group_manager_ssim apo_role_person_manager_ssim]
-    pid_roles << 'dor-apo-manager' if solr_apo_roles.any? { |r| solr_role_allowed?(obj_doc, r) }
     # Check additional known roles
     KNOWN_ROLES.each do |role|
       solr_apo_roles = ["apo_role_#{role}_ssim", "apo_role_person_#{role}_ssim"]

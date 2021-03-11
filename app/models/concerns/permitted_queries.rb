@@ -24,18 +24,16 @@ class PermittedQueries
   def permitted_apos
     query = groups.map { |g| RSolr.solr_escape(g) }.join(' OR ')
 
-    q = ''
-    if admin?
-      q += '*:*'
-    else
-      q += 'apo_role_group_manager_ssim:(' + query + ') OR apo_role_person_manager_ssim:(' + query + ')'
-      known_roles.each do |role|
-        q += ' OR apo_role_' + role + '_ssim:(' + query + ')'
-      end
-    end
+    clauses = if admin?
+                ['*:*']
+              else
+                known_roles.map do |role|
+                  "apo_role_#{role}_ssim:(#{query})"
+                end
+              end
 
     resp = repository.search(
-      q: q,
+      q: clauses.join(' OR '),
       defType: 'lucene',
       rows: 1000,
       fl: 'id',
