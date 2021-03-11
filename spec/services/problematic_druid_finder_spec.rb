@@ -42,8 +42,10 @@ RSpec.describe ProblematicDruidFinder do
 
     context 'when no druids are problematic' do
       before do
-        allow(Dor).to receive(:find)
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
+
+      let(:object_client) { instance_double(Dor::Services::Client::Object, find: nil) }
 
       it 'returns an array with two empty arrays' do
         expect(finder.find).to eq([[], []])
@@ -52,10 +54,18 @@ RSpec.describe ProblematicDruidFinder do
 
     context 'with not found druids' do
       before do
-        allow(Dor).to receive(:find).with('druid:one123').and_raise(ActiveFedora::ObjectNotFoundError)
-        allow(Dor).to receive(:find).with('druid:thr345').and_raise(ActiveFedora::ObjectNotFoundError)
-        allow(Dor).to receive(:find).with('druid:two234')
+        allow(object_client1).to receive(:find).and_raise(Dor::Services::Client::NotFoundResponse)
+        allow(object_client2).to receive(:find).and_raise(Dor::Services::Client::NotFoundResponse)
+
+        allow(Dor::Services::Client).to receive(:object).with('druid:one123').and_return(object_client1)
+        allow(Dor::Services::Client).to receive(:object).with('druid:thr345').and_return(object_client2)
+        allow(Dor::Services::Client).to receive(:object).with('druid:two234').and_return(object_client3)
       end
+
+      let(:object_client1) { instance_double(Dor::Services::Client::Object) }
+      let(:object_client2) { instance_double(Dor::Services::Client::Object) }
+      let(:object_client3) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+      let(:cocina_model) { instance_double(Cocina::Models::DRO) }
 
       it 'returns an array with a non-empty array and an empty array (in that order)' do
         expect(finder.find).to eq([%w[druid:one123 druid:thr345], []])
@@ -64,9 +74,10 @@ RSpec.describe ProblematicDruidFinder do
 
     context 'with unauthorized druids' do
       let(:can_manage) { false }
+      let(:object_client) { instance_double(Dor::Services::Client::Object, find: nil) }
 
       before do
-        allow(Dor).to receive(:find)
+        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
       it 'returns an array with an empty array and a non-empty array (in that order)' do
@@ -76,11 +87,17 @@ RSpec.describe ProblematicDruidFinder do
 
     context 'with not found and unauthorized druids' do
       let(:can_manage) { false }
+      let(:object_client1) { instance_double(Dor::Services::Client::Object) }
+      let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+      let(:object_client3) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+      let(:cocina_model) { instance_double(Cocina::Models::DRO) }
 
       before do
-        allow(Dor).to receive(:find).with('druid:two234').and_raise(ActiveFedora::ObjectNotFoundError)
-        allow(Dor).to receive(:find).with('druid:one123')
-        allow(Dor).to receive(:find).with('druid:thr345')
+        allow(object_client1).to receive(:find).and_raise(Dor::Services::Client::NotFoundResponse)
+
+        allow(Dor::Services::Client).to receive(:object).with('druid:two234').and_return(object_client1)
+        allow(Dor::Services::Client).to receive(:object).with('druid:one123').and_return(object_client2)
+        allow(Dor::Services::Client).to receive(:object).with('druid:thr345').and_return(object_client3)
       end
 
       it 'returns an array with two non-empty arrays' do
