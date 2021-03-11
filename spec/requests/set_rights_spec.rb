@@ -52,6 +52,7 @@ RSpec.describe 'Set rights for an object' do
                                            'version' => 1,
                                            'access' => { access: 'world' },
                                            'administrative' => {
+                                             'publish' => true,
                                              'shelve' => true,
                                              'sdrPreserve' => true
                                            },
@@ -199,6 +200,7 @@ RSpec.describe 'Set rights for an object' do
                                              'version' => 1,
                                              'access' => { access: 'world' },
                                              'administrative' => {
+                                               'publish' => true,
                                                'shelve' => true,
                                                'sdrPreserve' => true
                                              },
