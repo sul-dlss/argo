@@ -17,6 +17,13 @@ class WorkflowService
     end
   end
 
+  # @return [Boolean] if the object has been published or not before
+  def self.published?(druid:)
+    return true if workflow_client.lifecycle(druid: druid, milestone_name: 'published')
+
+    false
+  end
+
   # Get the workflow definition from the server so we know which processes should be present
   # TODO: This could be cached for better performance
   def self.definition_process_names(workflow_name)

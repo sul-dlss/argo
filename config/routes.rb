@@ -174,7 +174,7 @@ Rails.application.routes.draw do
   end
 
   namespace :dor do
-    match 'republish/:pid', action: :republish, via: %i[get post]
+    match 'republish/:pid', action: :republish, as: 'republish', via: %i[get post]
     match 'reindex/:pid',   action: :reindex, as: 'reindex', via: %i[get post]
     resources :objects, only: :create # we only implement create for object registration
   end
