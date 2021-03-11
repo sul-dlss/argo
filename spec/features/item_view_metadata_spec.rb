@@ -65,13 +65,126 @@ RSpec.describe 'Item view', js: true do
 
   context 'when the cocina_model exists' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client, events: events_client) }
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: dro_admin, structural: dro_struct, as_json: {}) }
-    let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: [fileset]) }
-    let(:fileset) { instance_double(Cocina::Models::FileSet, structural: fs_structural) }
-    let(:fs_structural) { instance_double(Cocina::Models::FileSetStructural, contains: [file]) }
-    let(:file) { instance_double(Cocina::Models::File, administrative: file_admin, externalIdentifier: 'druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2') }
-    let(:file_admin) { instance_double(Cocina::Models::FileAdministrative, shelve: true, sdrPreserve: true) }
-    let(:dro_admin) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+
+    let(:attrs) do
+      <<~JSON
+        {
+          "type": "http://cocina.sul.stanford.edu/models/image.jsonld",
+          "externalIdentifier": "druid:hj185xx2222",
+          "label": "image integration test miry low_explosive",
+          "version": 3,
+          "access": {
+            "access": "world",
+            "download": "world"
+          },
+          "administrative": {
+            "hasAdminPolicy": "druid:qc410yz8746",
+            "partOfProject": "Integration Test - Image via Preassembly"
+          },
+          "description": {
+            "title": [
+              {
+                "value": "image integration test miry low_explosive"
+              }
+            ],
+            "purl": "http://purl.stanford.edu/hj185xx2222",
+            "access": {
+              "digitalRepository": [
+                {
+                  "value": "Stanford Digital Repository"
+                }
+              ]
+            }
+          },
+          "identification": {
+            "sourceId": "image-integration-test:birken-edward_weston"
+          },
+          "structural": {
+            "contains": [
+              {
+                "type": "http://cocina.sul.stanford.edu/models/resources/file.jsonld",
+                "externalIdentifier": "hj185xx2222_1",
+                "label": "Image 1",
+                "version": 3,
+                "structural": {
+                  "contains": [
+                    {
+                      "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                      "externalIdentifier": "druid:hj185xx2222/image.jpg",
+                      "label": "image.jpg",
+                      "filename": "image.jpg",
+                      "size": 29634,
+                      "version": 3,
+                      "hasMimeType": "image/jpeg",
+                      "hasMessageDigests": [
+                        {
+                          "type": "sha1",
+                          "digest": "85a32f398e228e8228ad84422941110597e0d87a"
+                        },
+                        {
+                          "type": "md5",
+                          "digest": "3e9498107f73ff827e718d5c743f8813"
+                        }
+                      ],
+                      "access": {
+                        "access": "dark",
+                        "download": "none"
+                      },
+                      "administrative": {
+                        "sdrPreserve": true,
+                        "shelve": false,
+                        "publish": false
+                      },
+                      "presentation": {
+                        "height": 700,
+                        "width": 500
+                      }
+                    },
+                    {
+                      "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                      "externalIdentifier": "druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2",
+                      "label": "M1090_S15_B02_F01_0126.jp2",
+                      "filename": "M1090_S15_B02_F01_0126.jp2",
+                      "size": 65738,
+                      "version": 3,
+                      "hasMimeType": "image/jp2",
+                      "hasMessageDigests": [
+                        {
+                          "type": "sha1",
+                          "digest": "547818142cca6bf8c888ab14644a386459fe5f92"
+                        },
+                        {
+                          "type": "md5",
+                          "digest": "45f7262c456d2ee14570881416a7432e"
+                        }
+                      ],
+                      "access": {
+                        "access": "world",
+                        "download": "world"
+                      },
+                      "administrative": {
+                        "sdrPreserve": false,
+                        "shelve": true,
+                        "publish": true
+                      },
+                      "presentation": {
+                        "height": 700,
+                        "width": 500
+                      }
+                    }
+                  ]
+                }
+              }
+            ],
+            "isMemberOf": [
+              "druid:bc778pm9866"
+            ]
+          }
+        }
+      JSON
+    end
+
+    let(:cocina_model) { Cocina::Models::DRO.new(JSON.parse(attrs)) }
 
     context 'when the file is on stacks' do
       let(:solr_doc) do
