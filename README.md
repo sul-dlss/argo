@@ -140,28 +140,13 @@ docker-compose run --rm web yarn install
 docker-compose run --rm web bin/rake webpacker:compile
 ```
 
-## Common tasks
-
-### Delete records
-
-You cannot just load records twice and overwrite.  The repo namespace has been provisioned and you need to remove the old record first.
-
-For example, using `rails console` to target one ID, or five:
-
-```ruby
-Dor.find("druid:pv820dk6668").destroy
-%w[pv820dk6668 xb482bw3979 hj185vb7593 hv992ry2431].each{ |pid| Dor.find("druid:#{pid}").destroy }
-```
-
 ## Internals
 
 Argo uses Blacklight and ActiveFedora to expose the repository contents, and `dor-services` to enable editing and updating. Its key components include:
 
 - Rails 5.2
 - Blacklight 7
-- dor-services
-  - ActiveFedora
-  - dor-workflow-service
+- dor-services-client
 - RSolr
 - Sidekiq
 - Bootstrap
