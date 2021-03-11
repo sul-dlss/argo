@@ -4,16 +4,30 @@ require 'rails_helper'
 
 RSpec.describe WorkflowsController, type: :controller do
   let(:pid) { 'druid:bc123df4567' }
-  let(:item) { Dor::Item.new pid: pid, admin_policy_object: apo }
-  let(:apo) { Dor::AdminPolicyObject.new pid: pid }
-
   let(:user) { create(:user) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
+  let(:cocina) do
+    Cocina::Models.build(
+      'label' => 'My Item',
+      'version' => 2,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => pid,
+      'access' => {
+        'access' => 'world'
+      },
+      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+      'structural' => {},
+      'identification' => {}
+    )
+  end
+
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
+
   before do
     sign_in user
-    allow(Dor).to receive(:find).with(pid).and_return(item)
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+    allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
   end
 
   describe '#create' do
@@ -35,7 +49,7 @@ RSpec.describe WorkflowsController, type: :controller do
         it 'initializes the new workflow' do
           post :create, params: { item_id: pid, wf: 'accessionWF' }
           expect(workflow_client).to have_received(:create_workflow_by_name)
-            .with(pid, 'accessionWF', version: '1')
+            .with(pid, 'accessionWF', version: 2)
         end
       end
 
@@ -97,7 +111,7 @@ RSpec.describe WorkflowsController, type: :controller do
         expect(response).to have_http_status(:ok)
         expect(WorkflowStatus).to have_received(:new)
           .with(workflow_steps: workflow_steps.map { |item| item['name'] }, workflow: wf_response)
-        expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status)
+        expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status, cocina_object: cocina)
         expect(assigns[:presenter]).to eq presenter
       end
     end
@@ -139,26 +153,6 @@ RSpec.describe WorkflowsController, type: :controller do
       instance_double(Dor::Workflow::Client,
                       workflow_status: nil,
                       update_status: nil)
-    end
-    let(:cocina) do
-      Cocina::Models.build(
-        'label' => 'My Item',
-        'version' => 2,
-        'type' => Cocina::Models::Vocab.object,
-        'externalIdentifier' => pid,
-        'access' => {
-          'access' => 'world'
-        },
-        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-        'structural' => {},
-        'identification' => {}
-      )
-    end
-
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }
-
-    before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
     end
 
     it 'requires various workflow parameters' do

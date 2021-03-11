@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class WorkflowsController < ApplicationController
-  before_action :load_resource, except: [:history]
-
   # Called from "Add Workflow" button. This is content for a modal invoked via XHR
   # so we don't want a layout.
   def new
@@ -59,6 +57,8 @@ class WorkflowsController < ApplicationController
 
   # add a workflow to an object if the workflow is not present in the active table
   def create
+    cocina_object = maybe_load_cocina(params[:item_id])
+
     unless params[:wf]
       return respond_to do |format|
         format.html { render layout: !request.xhr? }
@@ -67,23 +67,25 @@ class WorkflowsController < ApplicationController
     wf_name = params[:wf]
 
     # check the workflow is present and active (not archived)
-    if workflow_active?(wf_name)
+    if workflow_active?(wf_name, cocina_object.externalIdentifier, cocina_object.version)
       render status: :forbidden, plain: "#{wf_name} already exists!"
       return
     end
 
-    WorkflowClientFactory.build.create_workflow_by_name(@object.pid, wf_name, version: @object.current_version)
+    WorkflowClientFactory.build.create_workflow_by_name(cocina_object.externalIdentifier,
+                                                        wf_name,
+                                                        version: cocina_object.version)
 
     # We need to sync up the workflows datastream with workflow service (using #find)
     # and then force a committed Solr update before redirection.
-    Argo::Indexer.reindex_pid_remotely(@object.pid)
+    Argo::Indexer.reindex_pid_remotely(cocina_object.externalIdentifier)
 
     msg = "Added #{wf_name}"
 
     if params[:bulk]
       render plain: msg
     else
-      redirect_to solr_document_path(@object.pid), notice: msg
+      redirect_to solr_document_path(cocina_object.externalIdentifier), notice: msg
     end
   end
 
@@ -100,10 +102,10 @@ class WorkflowsController < ApplicationController
   delegate :can_update_workflow?, to: :current_ability
 
   # Fetches the workflow from the workflow service and checks to see if it's active
-  def workflow_active?(wf_name)
+  def workflow_active?(wf_name, pid, version)
     client = WorkflowClientFactory.build
-    workflow = client.workflow(pid: @object.pid, workflow_name: wf_name)
-    workflow.active_for?(version: @object.current_version)
+    workflow = client.workflow(pid: pid, workflow_name: wf_name)
+    workflow.active_for?(version: version)
   end
 
   def build_show_presenter(workflow)
@@ -111,16 +113,14 @@ class WorkflowsController < ApplicationController
 
     status = WorkflowStatus.new(workflow: workflow,
                                 workflow_steps: workflow_processes(params[:id]))
-    WorkflowPresenter.new(view: view_context, workflow_status: status)
+    WorkflowPresenter.new(view: view_context,
+                          workflow_status: status,
+                          cocina_object: maybe_load_cocina(params[:item_id]))
   end
 
   def workflow_processes(workflow_name)
     client = WorkflowClientFactory.build
     workflow_definition = client.workflow_template(workflow_name)
     workflow_definition['processes'].map { |process| process['name'] }
-  end
-
-  def load_resource
-    @object = Dor.find params[:item_id]
   end
 end

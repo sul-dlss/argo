@@ -9,7 +9,7 @@
       <% else %>
         <%= render WorkflowUpdateButton.new(process: process) %>
       <% end %>
-    <% elsif error? && can?(:manage_item, item) %>
+    <% elsif show_reset_button? %>
       <%= render WorkflowUpdateButton.new(process: process) %>
     <% end %>
   </td>
