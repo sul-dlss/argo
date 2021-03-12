@@ -48,26 +48,26 @@ class User < ApplicationRecord
   # (1) for User by sunet id
   # (2) groups actually contains the sunetid, so it is just looking at different solr fields
   # NOTE: includes legacy roles that have to be translated
-  # @param [String] Object identifier (PID)
+  # @param [String] admin_policy_id Object identifier of an Admin Policy
   # @return [Array<String>] set of roles permitted for PID
-  def roles(pid)
-    return [] if pid.blank?
+  def roles(admin_policy_id)
+    return [] if admin_policy_id.blank?
 
     @role_cache ||= {}
-    return @role_cache[pid] if @role_cache[pid]
+    return @role_cache[admin_policy_id] if @role_cache[admin_policy_id]
 
     # Try to retrieve a Solr doc
-    obj_doc = Dor::SearchService.query('id:"' + pid + '"')['response']['docs'].first || {}
+    obj_doc = Dor::SearchService.query('id:"' + admin_policy_id + '"')['response']['docs'].first || {}
     return [] if obj_doc.empty?
 
-    pid_roles = Set.new
+    apo_roles = Set.new
     # Check additional known roles
     KNOWN_ROLES.each do |role|
       solr_apo_roles = ["apo_role_#{role}_ssim", "apo_role_person_#{role}_ssim"]
-      pid_roles << role if solr_apo_roles.any? { |r| solr_role_allowed?(obj_doc, r) }
+      apo_roles << role if solr_apo_roles.any? { |r| solr_role_allowed?(obj_doc, r) }
     end
     # store and return an array of roles (Set.sort is an Array)
-    @role_cache[pid] = pid_roles.sort
+    @role_cache[admin_policy_id] = apo_roles.sort
   end
 
   # Validate a user belongs to a workgroup allowed to access a DOR object
