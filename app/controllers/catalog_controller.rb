@@ -205,17 +205,18 @@ class CatalogController < ApplicationController
 
   def show
     params[:id] = 'druid:' + params[:id] unless params[:id].include? 'druid'
-    @obj = Dor.find params[:id]
-    authorize! :view_metadata, @obj
     _deprecated_response, @document = search_service.fetch(params[:id])
 
     @cocina = maybe_load_cocina(params[:id])
-    object_client = Dor::Services::Client.object(params[:id])
+    authorize! :view_metadata, @cocina
 
+    object_client = Dor::Services::Client.object(params[:id])
     @events = object_client.events.list
 
     @workflows = WorkflowService.workflows_for(druid: params[:id])
     milestones = MilestoneService.milestones_for(druid: params[:id])
+
+    @obj = Dor.find params[:id]
     versions = VersionService.list(resource: @obj)
 
     @milestones_presenter = MilestonesPresenter.new(milestones: milestones, versions: versions)
