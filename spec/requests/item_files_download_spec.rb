@@ -26,7 +26,7 @@ RSpec.describe 'Download item files' do
       structural: {
         contains: [
           {
-            type: 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+            type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
             externalIdentifier: 'rn653dy9317_106',
             label: 'M1090_S15_B01_F07_0106',
             version: 4,

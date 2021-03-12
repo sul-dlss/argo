@@ -15,7 +15,9 @@ RSpec.describe OCRExporter do
   let(:struct2) { Cocina::Models::DROStructural.new(contains: [fs3, fs4]) }
   let(:fs1) do
     {
-      externalIdentifier: 'fs1', label: 'fs1', type: Cocina::Models::Vocab.fileset,
+      externalIdentifier: 'fs1',
+      label: 'fs1',
+      type: Cocina::Models::Vocab::Resources.file,
       version: 1,
       structural: {
         contains: [
@@ -33,7 +35,7 @@ RSpec.describe OCRExporter do
   end
   let(:fs2) do
     {
-      externalIdentifier: 'fs2', label: 'fs2', type: Cocina::Models::Vocab.fileset,
+      externalIdentifier: 'fs2', label: 'fs2', type: Cocina::Models::Vocab::Resources.file,
       version: 1,
       structural: {
         contains: [
@@ -51,7 +53,9 @@ RSpec.describe OCRExporter do
   end
   let(:fs3) do
     {
-      externalIdentifier: 'fs3', label: 'fs3', type: Cocina::Models::Vocab.fileset,
+      externalIdentifier: 'fs3',
+      label: 'fs3',
+      type: Cocina::Models::Vocab::Resources.file,
       version: 1,
       structural: {
         contains: [
@@ -69,7 +73,9 @@ RSpec.describe OCRExporter do
   end
   let(:fs4) do
     {
-      externalIdentifier: 'fs4', label: 'fs4', type: Cocina::Models::Vocab.fileset,
+      externalIdentifier: 'fs4',
+      label: 'fs4',
+      type: Cocina::Models::Vocab::Resources.file,
       version: 1,
       structural: {
         contains: [
