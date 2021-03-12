@@ -12,14 +12,21 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
   let(:output_directory) { bulk_action.output_directory }
   let(:output_zip_filename) { File.join(output_directory, Settings.bulk_metadata.zip) }
-  let(:pid_list) { [item1.pid, item2.pid] }
+  let(:pid_list) { ['druid:hj185xx2222', 'druid:kv840xx0000'] }
   let(:dl_job_params) do
     { pids: pid_list }
   end
-  let(:item1) { Dor::Item.new(pid: 'druid:hj185xx2222') }
-  let(:item2) { Dor::Item.new(pid: 'druid:kv840xx0000') }
+  let(:item1) { Dor::Item.new }
+  let(:item2) { Dor::Item.new }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_model1) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model2) }
+  let(:cocina_model1) { instance_double(Cocina::Models::DRO) }
+  let(:cocina_model2) { instance_double(Cocina::Models::DRO) }
 
   before do
+    allow(Dor::Services::Client).to receive(:object).with(pid_list[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(pid_list[1]).and_return(object_client2)
+
     allow(Dor).to receive(:find).with(pid_list[0]).and_return(item1)
     allow(Dor).to receive(:find).with(pid_list[1]).and_return(item2)
   end
@@ -74,7 +81,8 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
 
     before do
       allow(Ability).to receive(:new).and_return(ability)
-      allow(ability).to receive(:can?).with(:view_metadata, kind_of(ActiveFedora::Base)).and_return(true)
+      allow(ability).to receive(:can?).with(:view_metadata, cocina_model1).and_return(true)
+      allow(ability).to receive(:can?).with(:view_metadata, cocina_model2).and_return(true)
     end
 
     after do
@@ -107,8 +115,8 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
 
     context 'user lacks permission to view metadata on one of the objects' do
       before do
-        allow(ability).to receive(:can?).with(:view_metadata, kind_of(ActiveFedora::Base)).and_return(true)
-        allow(ability).to receive(:can?).with(:view_metadata, satisfy { |obj| obj.id == pid_list.second }).and_return(false)
+        allow(ability).to receive(:can?).with(:view_metadata, cocina_model1).and_return(true)
+        allow(ability).to receive(:can?).with(:view_metadata, cocina_model2).and_return(false)
       end
 
       it 'creates a valid zip file with only the objects for which the user has view_metadata authorization' do

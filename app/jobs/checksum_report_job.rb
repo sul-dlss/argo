@@ -18,7 +18,7 @@ class ChecksumReportJob < GenericJob
       log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       update_druid_count
       begin
-        raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, ActiveFedora::Base)
+        raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, Cocina::Models::DRO)
 
         csv_report = Preservation::Client.objects.checksums(druids: pids)
         File.open(report_filename, 'w') { |file| file.write(csv_report) }
