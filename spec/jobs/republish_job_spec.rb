@@ -14,6 +14,7 @@ RSpec.describe RepublishJob, type: :job do
   before do
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(client1)
     allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(client2)
+    allow(Dor::Workflow::Client).to receive(:new).and_return(client)
 
     described_class.perform_now(bulk_action.id,
                                 pids: pids,
@@ -25,8 +26,21 @@ RSpec.describe RepublishJob, type: :job do
     FileUtils.rm('foo.txt')
   end
 
-  it 'publishes objects' do
-    expect(client1).to have_received(:publish)
-    expect(client2).to have_received(:publish)
+  context 'with already published objects' do
+    let(:client) { instance_double(Dor::Workflow::Client, lifecycle: Time.zone.now) }
+
+    it 'publishes objects' do
+      expect(client1).to have_received(:publish)
+      expect(client2).to have_received(:publish)
+    end
+  end
+
+  context 'when objects have never been published' do
+    let(:client) { instance_double(Dor::Workflow::Client, lifecycle: nil) }
+
+    it 'does not publish objects' do
+      expect(client1).not_to have_received(:publish)
+      expect(client2).not_to have_received(:publish)
+    end
   end
 end

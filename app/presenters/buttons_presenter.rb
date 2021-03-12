@@ -31,7 +31,7 @@ class ButtonsPresenter
            :refresh_metadata_item_path,
            :item_manage_release_path,
            :embargo_form_item_path,
-           :dor_path,
+           :dor_republish_path,
            to: :url_helpers
 
   def url_helpers
@@ -134,7 +134,7 @@ class ButtonsPresenter
 
   def republish_button
     {
-      url: dor_path(pid: pid),
+      url: dor_republish_path(pid: pid),
       label: 'Republish',
       check_url: workflow_service_published_path(pid),
       new_page: true

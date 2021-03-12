@@ -33,6 +33,12 @@ class ReleaseObjectJob < GenericJob
 
   def release_object(current_druid, log)
     log.puts("#{Time.current} Beginning ReleaseObjectJob for #{current_druid}")
+
+    unless WorkflowService.published?(druid: current_druid)
+      log.puts("#{Time.current} Object has never been published and cannot be released for #{current_druid}")
+      return
+    end
+
     cocina = Dor::Services::Client.object(current_druid).find
 
     unless ability.can?(:manage_item, cocina)
