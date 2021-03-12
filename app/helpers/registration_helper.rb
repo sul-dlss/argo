@@ -32,9 +32,10 @@ module RegistrationHelper
       'Image',
       'Map',
       'Media',
-      'Software',
       '3D',
-      'Document'
+      'Document',
+      'Geo',
+      'Webarchive-seed'
     ]
   end
 end

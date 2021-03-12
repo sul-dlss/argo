@@ -69,6 +69,10 @@ class RegistrationForm
       Cocina::Models::Vocab.manuscript
     when 'Book (ltr)', 'Book (rtl)'
       Cocina::Models::Vocab.book
+    when 'Webarchive-seed'
+      Cocina::Models::Vocab.webarchive_seed
+    when 'Geo'
+      Cocina::Models::Vocab.geo
     else
       Cocina::Models::Vocab.object
     end
