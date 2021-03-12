@@ -32,7 +32,21 @@ RSpec.describe ItemsController, type: :controller do
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
-  let(:cocina) { instance_double(Cocina::Models::DRO) }
+  let(:cocina) do
+    Cocina::Models.build({
+                           'label' => 'My ETD',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pid,
+                           'access' => { 'access' => 'world' },
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {
+                             'catalogLinks' => catalog_links
+                           }
+                         })
+  end
+  let(:catalog_links) { [{ catalog: 'symphony', catalogRecordId: '12345' }] }
 
   describe '#purl_preview' do
     before do
@@ -263,18 +277,17 @@ RSpec.describe ItemsController, type: :controller do
 
       let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, refresh_metadata: true) }
 
-      it 'returns a 400 with an error message if there is no catkey' do
-        expect(item).to receive(:catkey).and_return('')
-        get :refresh_metadata, params: { id: pid }
-        expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq 'object must have catkey to refresh descMetadata'
+      context 'when the object has no catkey' do
+        let(:catalog_links) { [] }
+
+        it 'returns a 400 with an error message' do
+          get :refresh_metadata, params: { id: pid }
+          expect(response).to have_http_status(:bad_request)
+          expect(response.body).to eq 'object must have catkey to refresh descMetadata'
+        end
       end
 
-      context 'there is a catkey present' do
-        before do
-          allow(item).to receive(:catkey).and_return('12345')
-        end
-
+      context 'when a catkey is present' do
         context 'user has permission and object is editable' do
           before do
             allow(Dor::Services::Client).to receive(:object).and_return(object_service)
@@ -303,11 +316,16 @@ RSpec.describe ItemsController, type: :controller do
             expect(controller).not_to receive(:save_and_reindex)
           end
 
-          it 'returns a 403 with an error message if the user is not allowed to edit desc metadata' do
-            expect(controller).to receive(:authorize!).with(:manage_desc_metadata, item).and_raise(CanCan::AccessDenied)
-            get :refresh_metadata, params: { id: pid }
-            expect(response).to have_http_status(:forbidden)
-            expect(response.body).to eq 'forbidden'
+          context 'when the user is not allowed to edit desc metadata' do
+            before do
+              allow(controller).to receive(:authorize!).with(:manage_desc_metadata, cocina).and_raise(CanCan::AccessDenied)
+            end
+
+            it 'returns a 403 with an error message' do
+              get :refresh_metadata, params: { id: pid }
+              expect(response).to have_http_status(:forbidden)
+              expect(response.body).to eq 'forbidden'
+            end
           end
 
           context "when the object doesn't allow modification" do

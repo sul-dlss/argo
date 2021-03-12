@@ -213,20 +213,21 @@ class ItemsController < ApplicationController
   end
 
   def refresh_metadata
-    authorize! :manage_desc_metadata, @object
+    authorize! :manage_desc_metadata, @cocina
 
-    if @object.catkey.blank?
+    catkey = @cocina.identification&.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
+    if catkey.blank?
       render status: :bad_request, plain: 'object must have catkey to refresh descMetadata'
       return
     end
 
-    Dor::Services::Client.object(@object.pid).refresh_metadata
+    Dor::Services::Client.object(@cocina.externalIdentifier).refresh_metadata
 
     respond_to do |format|
       if params[:bulk]
         format.html { render status: :ok, plain: 'Refreshed.' }
       else
-        format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@object.pid} successfully refreshed from catkey: #{@object.catkey}" }
+        format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from catkey: #{catkey}" }
       end
     end
   rescue Dor::Services::Client::UnexpectedResponse => e
