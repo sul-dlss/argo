@@ -89,6 +89,25 @@ RSpec.describe 'Update a datastream' do
       expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
       expect(response).to redirect_to "/view/#{pid}"
     end
+
+    context 'for a datastream that fails validation' do
+      let(:object_client) do
+        instance_double(Dor::Services::Client::Object, find: cocina_model, metadata: metadata_client)
+      end
+      let(:metadata_client) do
+        instance_double(Dor::Services::Client::Metadata, legacy_update: true)
+      end
+
+      before do
+        allow(metadata_client).to receive(:legacy_update).and_raise(Dor::Services::Client::UnexpectedResponse)
+      end
+
+      it 'does not update the datastream' do
+        patch "/items/#{pid}/datastreams/contentMetadata", params: { content: xml }
+        expect(response).to redirect_to "/view/#{pid}"
+        expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
+      end
+    end
   end
 
   describe 'DatastreamsController.endpoint_for_datastream' do
