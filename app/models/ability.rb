@@ -3,23 +3,11 @@
 # notes for those who are new to CanCan:
 #  * basic intro to permission checking w/ CanCan:  https://github.com/CanCanCommunity/cancancan/wiki/Checking-Abilities
 #  * rules which are defined later have higher precedence, i.e. the last rule defined is the first rule applied.
-#    * e.g.:
-#      * if "user.admin?" were true, but "user.webauth_admin?" were false, "can? :impersonate, User" would be false
-#      * the :manage_item rule would be checked using the logic for ActiveFedora::Base before falling through
-#      to the Dor::AdminPolicyObject logic.
 #    * more info at https://github.com/CanCanCommunity/cancancan/wiki/Ability-Precedence
 #  * Argo uses this pattern for checking permissions via CanCan:  https://github.com/CanCanCommunity/cancancan/wiki/Non-RESTful-Controllers
 #
 # Argo specific notes:
-#   * permissions granted by an APO apply to objects governed by the APO, as well as to the APO itself; hence, the fallthrough
-#   check to the APO's own ID for Cocina::Models::AdminPolicy types in addition to the checks for ActiveFedora::Base types (e.g. the
-#   "can :manage_item, Cocina::Models::AdminPolicy" and "can :manage_item, ActiveFedora::Base" definitions, with the latter being checked
-#   first).  see https://github.com/sul-dlss/argo/issues/76
-#
-# note about confusing dor-services method declarations:
-#  * the can_manage_*? and can_view_*? method calls (e.g. dor_item.can_manage_items? or dor_item.can_view?) don't
-#  actually do anything with the state of the object that receives the message.  they could all be static methods in Dor::Governable,
-#  since  they just check the intersection of the given roles with the appropriate static list of known roles.
+#   * permissions granted by an APO apply to objects governed by the APO, as well as to the APO itself
 class Ability
   include CanCan::Ability
 
@@ -28,21 +16,17 @@ class Ability
     grant_permissions
   end
 
-  attr_reader :current_user, :options, :cache
+  attr_reader :current_user
 
   def grant_permissions
     can :manage, :all if current_user.admin?
     cannot :impersonate, User unless current_user.webauth_admin?
 
-    can %i[manage_item], ActiveFedora::Base do
-      Honeybadger.notify('Deprecated call to ability with an ActiveFedora object')
-      current_user.manager?
-    end
     if current_user.manager?
       can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata],
           [NilModel, Cocina::Models::DRO, Cocina::Models::Collection]
+      can :create, Cocina::Models::AdminPolicy
     end
-    can :create, Cocina::Models::AdminPolicy if current_user.manager?
 
     can %i[view_metadata view_content], [Cocina::Models::DRO, Cocina::Models::Collection, Cocina::Models::AdminPolicy] if current_user.viewer?
 
@@ -78,9 +62,9 @@ class Ability
 
   # Returns true if they have been granted permission to update all workflows or
   # The status is currently "waiting" and they can manage that item
-  def can_update_workflow?(status, object)
+  def can_update_workflow?(status, cocina_object)
     can?(:update, :workflow) ||
-      (status == 'waiting' && can?(:manage_item, object))
+      (status == 'waiting' && can?(:manage_item, cocina_object))
   end
 
   private
