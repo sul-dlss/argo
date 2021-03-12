@@ -76,6 +76,10 @@ class Ability
       can_view? current_user.roles(dro.administrative.hasAdminPolicy)
     end
 
+    can :view_metadata, [Cocina::Models::Collection, Cocina::Models::DRO, Cocina::Models::AdminPolicy] do |dro|
+      can_view? current_user.roles(dro.administrative.hasAdminPolicy)
+    end
+
     can :view_metadata, ActiveFedora::Base do |dor_item|
       can_view? current_user.roles(dor_item.admin_policy_object.pid) if dor_item.admin_policy_object
     end

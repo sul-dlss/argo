@@ -10,13 +10,6 @@ class User < ApplicationRecord
   MANAGER_GROUPS = %w[workgroup:sdr:manager-role].freeze
   VIEWER_GROUPS = %w[workgroup:sdr:viewer-role].freeze
 
-  # TODO: redefine `KNOWN_ROLES` using Dor::Governable.
-  # The KNOWN_ROLES should be consistent with Dor::Governable so that the
-  # set intersections can work as required.
-  # This depends on changes in dor-services, e.g.
-  # https://github.com/sul-dlss/dor-services/pull/150
-  # Dor::Governable::KNOWN_ROLES
-
   # @return [Array<String>] list of roles the user can adopt
   KNOWN_ROLES = %w[
     dor-apo-creator
