@@ -8,14 +8,12 @@ RSpec.describe 'Bulk jobs view' do
     ActiveFedora::SolrService.add(id: apo_id, objectType_ssim: 'adminPolicy')
     ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor).to receive(:find).with(apo_id).and_return(apo)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) { instance_double(Cocina::Models::DRO) }
+  let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy) }
   let(:apo_id) { 'druid:hv992yv2222' }
-  let(:apo) { Dor::AdminPolicyObject.new(pid: apo_id) }
 
   context 'on the page with the list of bulk jobs' do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }

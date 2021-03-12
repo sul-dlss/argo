@@ -41,7 +41,7 @@ class Ability
     can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], [NilModel, Cocina::Models::DRO] if current_user.manager?
     can :create, Cocina::Models::AdminPolicy if current_user.manager?
 
-    can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO] if current_user.viewer?
+    can %i[view_metadata view_content], [ActiveFedora::Base, Cocina::Models::DRO, Cocina::Models::Collection, Cocina::Models::AdminPolicy] if current_user.viewer?
 
     can :manage_item, Cocina::Models::AdminPolicy do |cocina|
       can_manage_items? current_user.roles(cocina.externalIdentifier)
@@ -73,6 +73,10 @@ class Ability
     end
 
     can :view_content, Cocina::Models::DRO do |dro|
+      can_view? current_user.roles(dro.administrative.hasAdminPolicy)
+    end
+
+    can :view_metadata, [Cocina::Models::Collection, Cocina::Models::DRO, Cocina::Models::AdminPolicy] do |dro|
       can_view? current_user.roles(dro.administrative.hasAdminPolicy)
     end
 

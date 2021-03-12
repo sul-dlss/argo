@@ -18,6 +18,27 @@ RSpec.describe Ability do
                             })
   end
 
+  let(:admin_policy) do
+    Cocina::Models::AdminPolicy.new(externalIdentifier: new_apo_id,
+                                    label: 'test',
+                                    type: Cocina::Models::Vocab.admin_policy,
+                                    version: 1,
+                                    administrative: {
+                                      hasAdminPolicy: new_apo_id
+                                    })
+  end
+
+  let(:collection) do
+    Cocina::Models::Collection.new(externalIdentifier: 'druid:bc123df4567',
+                                   label: 'test',
+                                   type: Cocina::Models::Vocab.collection,
+                                   version: 1,
+                                   access: {},
+                                   administrative: {
+                                     hasAdminPolicy: new_apo_id
+                                   })
+  end
+
   let(:user) do
     instance_double(User,
                     admin?: admin,
@@ -78,7 +99,12 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_content, item) }
+    it { is_expected.to be_able_to(:view_metadata, dro) }
     it { is_expected.to be_able_to(:view_content, dro) }
+    it { is_expected.to be_able_to(:view_metadata, admin_policy) }
+    it { is_expected.to be_able_to(:view_content, admin_policy) }
+    it { is_expected.to be_able_to(:view_metadata, collection) }
+    it { is_expected.to be_able_to(:view_content, collection) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
@@ -92,7 +118,7 @@ RSpec.describe Ability do
   end
 
   context 'with the manage role' do
-    let(:roles) { ['dor-administrator'] }
+    let(:roles) { ['dor-apo-manager'] }
 
     it { is_expected.not_to be_able_to(:manage, :everything) }
     it { is_expected.to be_able_to(:manage_item, dro) }
@@ -100,8 +126,13 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.to be_able_to(:manage_desc_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
+
     it { is_expected.not_to be_able_to(:view_metadata, item) }
     it { is_expected.to be_able_to(:view_metadata, item_with_apo) }
+    it { is_expected.to be_able_to(:view_metadata, dro) }
+    it { is_expected.to be_able_to(:view_metadata, collection) }
+    it { is_expected.to be_able_to(:view_metadata, admin_policy) }
+
     it { is_expected.not_to be_able_to(:view_content, item) }
     it { is_expected.to be_able_to(:view_content, item_with_apo) }
     it { is_expected.to be_able_to(:view_content, dro) }
