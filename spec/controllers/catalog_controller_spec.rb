@@ -41,16 +41,12 @@ RSpec.describe CatalogController, type: :controller do
     describe 'with user' do
       before do
         sign_in user
-        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       end
 
       context 'when unauthorized' do
         before do
-          allow(controller).to receive(:authorize!).with(:view_metadata, cocina_model).and_raise(CanCan::AccessDenied)
+          allow(controller).to receive(:authorize!).with(:view_metadata, item).and_raise(CanCan::AccessDenied)
         end
-
-        let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-        let(:cocina_model) { instance_double(Cocina::Models::DRO) }
 
         it 'is forbidden' do
           get 'show', params: { id: druid }
@@ -60,7 +56,8 @@ RSpec.describe CatalogController, type: :controller do
 
       context 'when authorized' do
         before do
-          allow(controller).to receive(:authorize!).with(:view_metadata, cocina_model)
+          allow(controller).to receive(:authorize!).with(:view_metadata, item)
+          allow(Dor::Services::Client).to receive(:object).and_return(object_client)
         end
 
         let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
