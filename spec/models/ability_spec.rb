@@ -70,8 +70,6 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
-    it { is_expected.to be_able_to(:view_metadata, item) }
-    it { is_expected.to be_able_to(:view_content, item) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:update, :workflow) }
   end
@@ -84,8 +82,6 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.to be_able_to(:create, Cocina::Models::AdminPolicy) }
-    it { is_expected.to be_able_to(:view_metadata, item) }
-    it { is_expected.to be_able_to(:view_content, item) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
@@ -97,14 +93,10 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
-    it { is_expected.to be_able_to(:view_metadata, item) }
-    it { is_expected.to be_able_to(:view_content, item) }
     it { is_expected.to be_able_to(:view_metadata, dro) }
     it { is_expected.to be_able_to(:view_content, dro) }
     it { is_expected.to be_able_to(:view_metadata, admin_policy) }
-    it { is_expected.to be_able_to(:view_content, admin_policy) }
     it { is_expected.to be_able_to(:view_metadata, collection) }
-    it { is_expected.to be_able_to(:view_content, collection) }
     it { is_expected.not_to be_able_to(:update, :workflow) }
   end
 
@@ -112,9 +104,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_item, dro) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
-    it { is_expected.not_to be_able_to(:view_content, item) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
-    it { is_expected.not_to be_able_to(:view_metadata, item) }
   end
 
   context 'with the manage role' do
@@ -127,14 +117,9 @@ RSpec.describe Ability do
     it { is_expected.to be_able_to(:manage_desc_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
 
-    it { is_expected.not_to be_able_to(:view_metadata, item) }
-    it { is_expected.to be_able_to(:view_metadata, item_with_apo) }
     it { is_expected.to be_able_to(:view_metadata, dro) }
     it { is_expected.to be_able_to(:view_metadata, collection) }
     it { is_expected.to be_able_to(:view_metadata, admin_policy) }
-
-    it { is_expected.not_to be_able_to(:view_content, item) }
-    it { is_expected.to be_able_to(:view_content, item_with_apo) }
     it { is_expected.to be_able_to(:view_content, dro) }
   end
 
@@ -147,10 +132,6 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item) }
     it { is_expected.to be_able_to(:manage_desc_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
-    it { is_expected.not_to be_able_to(:view_metadata, item) }
-    it { is_expected.not_to be_able_to(:view_metadata, item_with_apo) }
-    it { is_expected.not_to be_able_to(:view_content, item) }
-    it { is_expected.not_to be_able_to(:view_content, item_with_apo) }
     it { is_expected.not_to be_able_to(:view_content, dro) }
   end
 
@@ -163,10 +144,6 @@ RSpec.describe Ability do
     it { is_expected.not_to be_able_to(:manage_governing_apo, dro, new_apo_id) }
     it { is_expected.not_to be_able_to(:manage_desc_metadata, item_with_apo) }
     it { is_expected.not_to be_able_to(:create, Cocina::Models::AdminPolicy) }
-    it { is_expected.not_to be_able_to(:view_metadata, item) }
-    it { is_expected.to be_able_to(:view_metadata, item_with_apo) }
-    it { is_expected.not_to be_able_to(:view_content, item) }
-    it { is_expected.to be_able_to(:view_content, item_with_apo) }
     it { is_expected.to be_able_to(:view_content, dro) }
   end
 end

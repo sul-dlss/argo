@@ -38,8 +38,8 @@ class DescmetadataDownloadJob < GenericJob
       bulk_action.increment(:druid_count_fail).save
       return
     end
-
-    unless ability.can?(:view_metadata, dor_object)
+    cocina_object = Dor::Services::Client.object(current_druid).find
+    unless ability.can?(:view_metadata, cocina_object)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end
