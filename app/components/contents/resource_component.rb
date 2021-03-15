@@ -15,8 +15,7 @@ module Contents
     end
 
     def type
-      # TODO: resource type will be in the metadata
-      resource.type.delete_prefix('http://cocina.sul.stanford.edu/models/').delete_suffix('.jsonld')
+      resource.type.delete_prefix('http://cocina.sul.stanford.edu/models/resources/').delete_suffix('.jsonld')
     end
 
     delegate :label, to: :resource
