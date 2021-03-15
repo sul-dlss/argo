@@ -34,11 +34,14 @@ class Ability
     can :manage, :all if current_user.admin?
     cannot :impersonate, User unless current_user.webauth_admin?
 
-    can %i[manage_item manage_governing_apo], ActiveFedora::Base do
+    can %i[manage_item], ActiveFedora::Base do
       Honeybadger.notify('Deprecated call to ability with an ActiveFedora object')
       current_user.manager?
     end
-    can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata], [NilModel, Cocina::Models::DRO] if current_user.manager?
+    if current_user.manager?
+      can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata],
+          [NilModel, Cocina::Models::DRO, Cocina::Models::Collection]
+    end
     can :create, Cocina::Models::AdminPolicy if current_user.manager?
 
     can %i[view_metadata view_content], [Cocina::Models::DRO, Cocina::Models::Collection, Cocina::Models::AdminPolicy] if current_user.viewer?
@@ -59,9 +62,9 @@ class Ability
       can_edit_desc_metadata? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
-    can :manage_governing_apo, [Cocina::Models::Collection, Cocina::Models::DRO] do |dor_item, new_apo_id|
+    can :manage_governing_apo, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object, new_apo_id|
       # user must have management privileges on both the target APO and the APO currently governing the item
-      can_manage_items?(current_user.roles(new_apo_id)) && can?(:manage_item, dor_item)
+      can_manage_items?(current_user.roles(new_apo_id)) && can?(:manage_item, cocina_object)
     end
 
     can :view_content, Cocina::Models::DRO do |dro|
