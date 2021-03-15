@@ -1,7 +1,7 @@
 <li class="resource">
-  <span class="label">Resource (<%= resource_counter + 1 %>)</span> <%= type %>
+  <span class="label">Resource (<%= resource_counter %>)</span> <%= type %>
   <% if label %>
-    <span class="label">Label</span> <%= label %>
+    <br><span class="label">Label</span> <%= label %>
   <% end %>
   <ul class="child-list">
     <%= render Contents::FileComponent.with_collection(files, viewable: viewable?) %>
