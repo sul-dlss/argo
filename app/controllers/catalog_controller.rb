@@ -151,7 +151,6 @@ class CatalogController < ApplicationController
                                         no_use_statement: { label: 'No Use & Reproduction Statement', fq: '-use_statement_ssim:*' }
                                       }
 
-    config.add_facet_field 'rights_errors_ssim',         label: 'Access Rights Errors', component: true, limit: 10, home: false
     config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',     component: true, limit: 10, home: false
     config.add_facet_field 'sw_pub_date_facet_ssi',      label: 'SW Date',              component: true, limit: 10, home: false
     config.add_facet_field 'topic_ssim',                 label: 'SW Topic',             component: true, limit: 10, home: false
