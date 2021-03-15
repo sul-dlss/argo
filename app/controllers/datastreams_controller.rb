@@ -54,6 +54,8 @@ class DatastreamsController < ApplicationController
     rescue Nokogiri::XML::SyntaxError
       # if the content is not well-formed xml, inform the user rather than raising an exception
       error_msg = 'The datastream could not be saved due to malformed XML.'
+    rescue Dor::Services::Client::UnexpectedResponse => e
+      error_msg = e.message
     end
 
     respond_to do |format|
