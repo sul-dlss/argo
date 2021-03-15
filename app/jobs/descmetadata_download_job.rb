@@ -33,18 +33,17 @@ class DescmetadataDownloadJob < GenericJob
   end
 
   def process_druid(current_druid, log, zip_file)
-    dor_object = query_dor(current_druid, log)
-    if dor_object.nil?
+    cocina_object = query_dor(current_druid, log)
+    if cocina_object.nil?
       bulk_action.increment(:druid_count_fail).save
       return
     end
-    cocina_object = Dor::Services::Client.object(current_druid).find
     unless ability.can?(:view_metadata, cocina_object)
       log.puts("#{Time.current} Not authorized for #{current_druid}")
       return
     end
 
-    desc_metadata = dor_object.descMetadata.content
+    desc_metadata = Dor::Services::Client.object(current_druid).metadata.mods
 
     write_to_zip(desc_metadata, current_druid, zip_file)
     log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
@@ -64,11 +63,11 @@ class DescmetadataDownloadJob < GenericJob
   # Queries DOR for a given druid, attempting up to MAX_TRIES times in case of failure.
   # @param [String]   druid   The ID of the object to find
   # @param [File]     log     Log file to write to
-  # @return  The Dor::Item corresponding to the given druid, or nil if none was found.
+  # @return [Cocina::Models::DRO,Cocina::Models::Collection,Cocina::Models::AdminPolicy,nil] cocina model instance corresponding to the given druid, or nil if none was found.
   def query_dor(druid, log)
     attempts ||= MAX_TRIES
-    Dor.find druid
-  rescue RestClient::RequestTimeout
+    Dor::Services::Client.object(druid).find
+  rescue Faraday::TimeoutError
     if (attempts -= 1) > 0
       log.puts "argo.bulk_metadata.bulk_log_retry #{druid}"
       sleep(SLEEP_SECONDS**attempts) unless Rails.env.test?

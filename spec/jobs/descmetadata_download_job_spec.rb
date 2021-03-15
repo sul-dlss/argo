@@ -18,21 +18,20 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
   let(:item1) { Dor::Item.new }
   let(:item2) { Dor::Item.new }
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_model1) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model2) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_model1, metadata: metadata_client1) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model2, metadata: metadata_client2) }
+  let(:metadata_client1) { instance_double(Dor::Services::Client::Metadata, mods: item1.descMetadata.content) }
+  let(:metadata_client2) { instance_double(Dor::Services::Client::Metadata, mods: item2.descMetadata.content) }
   let(:cocina_model1) { instance_double(Cocina::Models::DRO) }
   let(:cocina_model2) { instance_double(Cocina::Models::DRO) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(pid_list[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(pid_list[1]).and_return(object_client2)
-
-    allow(Dor).to receive(:find).with(pid_list[0]).and_return(item1)
-    allow(Dor).to receive(:find).with(pid_list[1]).and_return(item2)
   end
 
   after do
-    FileUtils.rm_rf(output_directory) if Dir.exist?(output_directory)
+    FileUtils.rm_rf(output_directory)
   end
 
   describe '#zip_filename' do
@@ -42,9 +41,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'start_log' do
-    let(:log) { double('log') }
-
-    before { allow(log).to receive(:flush) }
+    let(:log) { double('log', flush: nil) }
 
     it 'writes the correct information to the log' do
       expect(log).to receive(:puts).with(/^argo.bulk_metadata.bulk_log_job_start .*/)
@@ -86,7 +83,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
     end
 
     after do
-      FileUtils.rm('foo.txt')
+      FileUtils.rm_f('foo.txt')
     end
 
     it 'creates a valid zip file' do
@@ -99,17 +96,34 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
       end
     end
 
-    it 'retries DOR connections upon failure' do
-      dor_double = class_double('Dor').as_stubbed_const(transfer_nested_constants: false)
-      expect(dor_double).to receive(:find).exactly(pid_list.length * 3).times.and_raise(RestClient::RequestTimeout)
-      allow(bulk_action).to receive_message_chain(:increment, :save)
-      expect(bulk_action).to receive(:increment).with(:druid_count_fail)
-      expect(download_job).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
-      download_job.perform(bulk_action.id, dl_job_params)
+    context 'when dor-services-app fails to find the object' do
+      let(:log) { double('log', puts: nil, flush: nil) }
 
-      expect(File).to be_exist(output_zip_filename)
-      Zip::File.open(output_zip_filename) do |open_file|
-        expect(open_file.glob('*').length).to eq 0
+      before do
+        allow(object_client1).to receive(:find).and_raise(Faraday::TimeoutError)
+        allow(object_client2).to receive(:find).and_raise(Faraday::TimeoutError)
+        allow(bulk_action).to receive(:increment).with(:druid_count_fail)
+        allow(bulk_action).to receive_message_chain(:increment, :save)
+        allow(download_job).to receive(:bulk_action).and_return(bulk_action)
+        allow(download_job).to receive(:with_bulk_action_log).and_yield(log)
+      end
+
+      it 'tries again and logs messages' do
+        download_job.perform(bulk_action.id, dl_job_params)
+
+        expect(object_client1).to have_received(:find).exactly(described_class::MAX_TRIES).times
+        expect(object_client2).to have_received(:find).exactly(described_class::MAX_TRIES).times
+        expect(bulk_action).to have_received(:increment).with(:druid_count_fail).twice
+        expect(download_job).to have_received(:bulk_action).at_least(:once)
+        expect(File).to be_exist(output_zip_filename)
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{pid_list.first}").twice
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_timeout #{pid_list.first}").once
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_retry #{pid_list.last}").twice
+        expect(log).to have_received(:puts).with("argo.bulk_metadata.bulk_log_timeout #{pid_list.last}").once
+
+        Zip::File.open(output_zip_filename) do |open_file|
+          expect(open_file.glob('*').length).to eq 0
+        end
       end
     end
 
@@ -134,7 +148,11 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   end
 
   describe 'query_dor' do
-    let(:log) { double('log') }
+    let(:log) { double('log', puts: nil, flush: nil) }
+
+    before do
+      allow(download_job).to receive(:with_bulk_action_log).and_yield(log)
+    end
 
     it 'does not log anything upon success' do
       result = download_job.query_dor('druid:hj185xx2222', log)
@@ -142,13 +160,16 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
       expect(log).not_to receive(:puts)
     end
 
-    it 'attempts three connections and logs failures' do
-      dor_double = class_double('Dor').as_stubbed_const(transfer_nested_constants: false)
-      expect(dor_double).to receive(:find).exactly(3).times.and_raise(RestClient::RequestTimeout)
-      expect(log).to receive(:puts).twice.with('argo.bulk_metadata.bulk_log_retry druid:123')
-      expect(log).to receive(:puts).once.with('argo.bulk_metadata.bulk_log_timeout druid:123')
-      result = download_job.query_dor('druid:123', log)
-      expect(result).to eq(nil)
+    context 'when query fails' do
+      before do
+        allow(object_client1).to receive(:find).and_raise(Faraday::TimeoutError)
+        allow(object_client2).to receive(:find).and_raise(Faraday::TimeoutError)
+      end
+
+      it 'returns nil' do
+        result = download_job.query_dor(pid_list.first, log)
+        expect(result).to eq(nil)
+      end
     end
   end
 end
