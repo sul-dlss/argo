@@ -15,8 +15,15 @@ RSpec.describe 'Collection manage release' do
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, release_tags: release_tags_client, events: events_client) }
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
+  let(:cocina_model) do
+    instance_double(Cocina::Models::DRO,
+                    administrative: administrative,
+                    structural: structural,
+                    as_json: {})
+  end
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+  let(:structural) { instance_double(Cocina::Models::DROStructural, contains: []) }
+
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item) do
     Dor::Collection.create!(pid: 'druid:gg232vv1111', source_id: 'sauce:99', objectType: 'collection', admin_policy_object_id: uber_apo_id)

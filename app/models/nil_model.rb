@@ -20,6 +20,10 @@ class NilModel
     Cocina::Models::DROAccess.new
   end
 
+  def structural
+    Cocina::Models::DROStructural.new
+  end
+
   def collection?
     false
   end

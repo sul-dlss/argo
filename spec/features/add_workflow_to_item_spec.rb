@@ -19,12 +19,15 @@ RSpec.describe 'Add a workflow to an item' do
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
   let(:cocina_model) do
-    instance_double(Cocina::Models::DRO, administrative: administrative,
-                                         externalIdentifier: item_id,
-                                         version: 2,
-                                         as_json: {})
+    instance_double(Cocina::Models::DRO,
+                    externalIdentifier: item_id,
+                    version: 2,
+                    administrative: administrative,
+                    structural: structural,
+                    as_json: {})
   end
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+  let(:structural) { instance_double(Cocina::Models::DROStructural, contains: []) }
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item_id) { 'druid:bg444xg6666' }
 

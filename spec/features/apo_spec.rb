@@ -18,7 +18,11 @@ RSpec.describe 'apo', js: true do
                     events: events_client,
                     administrative_tags: tags_client)
   end
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
+  let(:cocina_model) do
+    instance_double(Cocina::Models::AdminPolicy,
+                    administrative: administrative,
+                    as_json: {})
+  end
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
