@@ -42,7 +42,7 @@ RSpec.describe 'Set rights for an object' do
                                    {
                                      'externalIdentifier' => 'cc243mg0841_1',
                                      'label' => 'Fileset 1',
-                                     'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+                                     'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
                                      'version' => 1,
                                      'structural' => {
                                        'contains' => [
@@ -85,7 +85,7 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
                     'version' => 1,
                     'structural' => {
                       'contains' => [
@@ -190,7 +190,7 @@ RSpec.describe 'Set rights for an object' do
                                      {
                                        'externalIdentifier' => 'cc243mg0841_1',
                                        'label' => 'Fileset 1',
-                                       'type' => 'http://cocina.sul.stanford.edu/models/fileset.jsonld',
+                                       'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
                                        'version' => 1,
                                        'structural' => {
                                          'contains' => [
