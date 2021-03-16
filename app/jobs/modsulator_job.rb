@@ -85,10 +85,9 @@ class ModsulatorJob < ActiveJob::Base
     mods_list.each do |xmldoc_node|
       item_druid = "druid:#{xmldoc_node.attr('objectId')}"
       begin
-        item = Dor::Item.find(item_druid)
-        current_metadata = item.descMetadata.content
-
-        cocina = Dor::Services::Client.object(item_druid).find
+        object_client = Dor::Services::Client.object(item_druid)
+        cocina = object_client.find
+        current_metadata = object_client.metadata.mods
 
         ApplyModsMetadata.new(apo_druid: druid,
                               mods: xmldoc_node.first_element_child.to_s,
@@ -97,7 +96,7 @@ class ModsulatorJob < ActiveJob::Base
                               original_filename: original_filename,
                               ability: ability,
                               log: log).apply
-      rescue ActiveFedora::ObjectNotFoundError => e
+      rescue Dor::Services::Client::NotFoundResponse => e
         log.puts("argo.bulk_metadata.bulk_log_not_exist #{item_druid}")
         log.puts(e.message.to_s)
         log.puts(e.backtrace.to_s)
