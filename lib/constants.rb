@@ -49,9 +49,26 @@ module Constants
     ['Citation Only', 'citation-only']
   ].freeze
 
-  CONTENT_TYPES = %w[image book file map media document 3d].freeze
+  CONTENT_TYPES = {
+    'image' => Cocina::Models::Vocab.image,
+    'book' => Cocina::Models::Vocab.book,
+    'file' => Cocina::Models::Vocab.file,
+    'map' => Cocina::Models::Vocab.map,
+    'media' => Cocina::Models::Vocab.media,
+    'document' => Cocina::Models::Vocab.document,
+    '3d' => Cocina::Models::Vocab.three_dimensional
+  }.freeze
 
-  RESOURCE_TYPES = %w[image page file audio video document 3d object].freeze
+  RESOURCE_TYPES = {
+    'image' => Cocina::Models::Vocab::Resources.image,
+    'page' => Cocina::Models::Vocab::Resources.page,
+    'file' => Cocina::Models::Vocab::Resources.file,
+    'audio' => Cocina::Models::Vocab::Resources.audio,
+    'video' => Cocina::Models::Vocab::Resources.video,
+    'document' => Cocina::Models::Vocab::Resources.document,
+    '3d' => Cocina::Models::Vocab::Resources.three_dimensional,
+    'object' => Cocina::Models::Vocab::Resources.object
+  }.freeze
 
   RELEASE_TARGETS = [
     %w[Searchworks Searchworks],
