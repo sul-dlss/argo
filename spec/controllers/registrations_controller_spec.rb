@@ -278,65 +278,6 @@ RSpec.describe RegistrationsController, type: :controller do
         )
       end
     end
-
-    context 'when the collections are not in solr' do
-      it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
-        # The 'z' druid has a title that should cause it to sort first
-        # after "None", and the 'a' druid has a title that should cause it to sort last.
-        col_ids_for_apo = ['druid:pb873ty1662', 'druid:ab098cd7654', 'druid:zy123xw4567']
-        allow(subject).to receive(:registration_collection_ids_for_apo).with(apo_id).and_return(col_ids_for_apo)
-        mock_collection_z = instance_double(Dor::Collection, label: 'A collection that sorts to the top')
-        mock_collection_a = instance_double(Dor::Collection, label: 'Ze last collection in ze list')
-        mock_collection_b = instance_double(Dor::Collection, label: 'Annual report of the State Corporation Commission showing a bunch of stuff')
-
-        allow(Dor).to receive(:find).with('druid:zy123xw4567').and_return(mock_collection_z)
-        allow(Dor).to receive(:find).with('druid:pb873ty1662').and_return(mock_collection_b)
-        allow(Dor).to receive(:find).with('druid:ab098cd7654').and_return(mock_collection_a)
-
-        get 'collection_list', params: { apo_id: apo_id, format: :json }
-        data = JSON.parse(response.body)
-        expect(data).to eq(
-          '' => 'None',
-          'druid:zy123xw4567' => 'A collection that sorts to the top (zy123xw4567)',
-          'druid:pb873ty1662' => 'Annual report of the State Corporation Commission showing... (pb873ty1662)',
-          'druid:ab098cd7654' => 'Ze last collection in ze list (ab098cd7654)'
-        )
-      end
-
-      context 'when collections are not found in Fedora either' do
-        let(:apo) { instance_double(Dor::AdminPolicyObject, default_collections: default_collections) }
-        let(:default_collections) do
-          ['druid:pb873ty1662'] + missing_registration_collections
-        end
-        let(:missing_registration_collections) do
-          [
-            'druid:kk203bw3276', 'druid:zx663qq1749', 'druid:nq832zg5474', 'druid:fb337wh0818', 'druid:kd973gk0505',
-            'druid:jm980xw3297', 'druid:fz658ss5788', 'druid:vh782pm7216', 'druid:gg191kg3953'
-          ]
-        end
-
-        before do
-          allow(Dor).to receive(:find).with(apo_id).and_return(apo)
-        end
-
-        it 'does not include them' do
-          missing_registration_collections.each do |col_id|
-            col_not_found_warning = "druid:fg464dn8891 lists collection #{col_id} for registration, but it wasn't found in Fedora."
-            allow(Dor).to receive(:find).with(col_id).and_raise(ActiveFedora::ObjectNotFoundError)
-            expect(Rails.logger).to receive(:warn).with(col_not_found_warning)
-          end
-          mock_collection_b = instance_double(Dor::Collection, label: 'Annual report of the State Corporation Commission showing a bunch of stuff')
-
-          allow(Dor).to receive(:find).with('druid:pb873ty1662').and_return(mock_collection_b)
-
-          get 'collection_list', params: { apo_id: 'druid:fg464dn8891', format: :json }
-          data = JSON.parse(response.body)
-          expect(data['druid:pb873ty1662']).to eq 'Annual report of the State Corporation Commission showing... (pb873ty1662)'
-          expect(data['druid:gg191kg3953']).to be nil
-          expect(data.length).to eq(2)
-        end
-      end
-    end
   end
 
   describe '#workflow_list' do
