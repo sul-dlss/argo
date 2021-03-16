@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
 module ApoHelper
-  def options_for_desc_md
-    [
-      ['MODS']
-    ]
-  end
-
-  def apo_metadata_sources
-    [['Symphony'], ['DOR']]
-  end
-
   # Retrieve a list of workflow templates from  the workflow service and return
   # an array suitable for select_tag options
   def workflow_options
