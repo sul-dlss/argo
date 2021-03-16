@@ -95,7 +95,6 @@ RSpec.describe 'apo', js: true do
     select 'View', from: 'permissionRole'
     click_button 'Add'
 
-    page.select('MODS', from: 'desc_md')
     page.select('Attribution Share Alike 3.0 Unported', from: 'use_license')
 
     choose 'Create a Collection'
@@ -110,7 +109,6 @@ RSpec.describe 'apo', js: true do
     expect(find_field('use').value).to eq('Use statement')
     expect(page).to have_selector('.permissionName', text: 'developers')
     expect(page).to have_selector('.permissionName', text: 'someone')
-    expect(find_field('desc_md').value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-sa')
     expect(page).to have_link('New Testing Collection')
 
@@ -126,7 +124,6 @@ RSpec.describe 'apo', js: true do
     fill_in 'Default Copyright statement', with: 'New copyright statement'
     fill_in 'Default Use and Reproduction statement', with: 'New use statement'
     page.select('Attribution No Derivatives 3.0 Unported', from: 'use_license')
-    page.select('MODS', from: 'desc_md')
     click_button 'Update APO'
 
     click_on 'Edit APO'
@@ -137,7 +134,6 @@ RSpec.describe 'apo', js: true do
     expect(page).to have_selector('.permissionName', text: 'dpg-staff')
     expect(page).to have_selector('.permissionName', text: 'anyone')
 
-    expect(find_field('desc_md').value).to eq('MODS')
     expect(find_field('use_license').value).to eq('by-nd')
   end
 end

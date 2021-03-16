@@ -10,16 +10,6 @@
     <%= select_tag :agreement, options_for_select(agreement_options, @form.agreement_object_id), class: 'form-control' %>
   </div>
 
-  <div class="form-group">
-    <label>Descriptive Metadata format</label>
-      <%= select_tag :desc_md, options_for_select(options_for_desc_md, @form.desc_metadata_format), class: 'form-control' %>
-  </div>
-
-  <div class="form-group">
-    <label>Metadata source</label>
-    <%= select_tag :metadata_source, options_for_select(apo_metadata_sources, @form.metadata_source), class: 'form-control' %>
-  </div>
-
   <sharing data-permissions="<%= @form.permissions.to_json %>">
 
   <% if @form.default_collection_objects.present? %>

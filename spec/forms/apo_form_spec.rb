@@ -20,8 +20,6 @@ RSpec.describe ApoForm do
         copyright: 'My copyright statement',
         use: 'My use and reproduction statement',
         title: +'My title',
-        desc_md: 'MODS',
-        metadata_source: 'DOR',
         agreement: agreement.pid,
         workflow: 'registrationWF',
         default_object_rights: 'world',
@@ -41,8 +39,6 @@ RSpec.describe ApoForm do
         instance.sync
 
         expect(apo.mods_title).to           eq(md_info[:title])
-        expect(apo.desc_metadata_format).to eq(md_info[:desc_md])
-        expect(apo.metadata_source).to      eq(md_info[:metadata_source])
         expect(apo.agreement_object_id).to  eq(md_info[:agreement])
         expect(apo.default_workflows).to    eq([md_info[:workflow]])
         expect(apo.default_rights).to       eq(md_info[:default_object_rights])
@@ -157,18 +153,6 @@ RSpec.describe ApoForm do
       it { is_expected.to eq 'world' }
     end
 
-    describe '#desc_metadata_format' do
-      subject { instance.desc_metadata_format }
-
-      it { is_expected.to eq 'MODS' }
-    end
-
-    describe '#metadata_source' do
-      subject { instance.metadata_source }
-
-      it { is_expected.to be_nil }
-    end
-
     describe '#use_statement' do
       subject { instance.use_statement }
 
@@ -255,18 +239,6 @@ RSpec.describe ApoForm do
       it { is_expected.to eq 'world' }
     end
 
-    describe '#desc_metadata_format' do
-      subject { instance.desc_metadata_format }
-
-      it { is_expected.to eq 'MODS' }
-    end
-
-    describe '#metadata_source' do
-      subject { instance.metadata_source }
-
-      it { is_expected.to eq 'DOR' }
-    end
-
     describe '#use_statement' do
       subject { instance.use_statement }
 
@@ -321,8 +293,6 @@ RSpec.describe ApoForm do
         { # These data mimic the APO registration form
           'title' => +'New APO Title',
           'agreement' => agreement.pid,
-          'desc_md' => 'MODS',
-          'metadata_source' => 'DOR',
           permissions: {
             '0' => { access: 'manage', name: 'developers', type: 'group' },
             '1' => { access: 'manage', name: 'dpg-staff', type: 'group' },

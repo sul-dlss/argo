@@ -37,8 +37,6 @@ class ApoForm < BaseForm
   # Copies the values to the model
   def sync
     model.mods_title           = params[:title]
-    model.desc_metadata_format = params[:desc_md]
-    model.metadata_source      = params[:metadata_source]
     model.agreement_object_id  = params[:agreement]
 
     model.default_workflow     = params[:workflow]
@@ -67,16 +65,6 @@ class ApoForm < BaseForm
 
   delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
            :default_rights, :mods_title, to: :model
-
-  def desc_metadata_format
-    model.desc_metadata_format || 'MODS'
-  end
-
-  def metadata_source
-    return 'DOR' if new_record?
-
-    model.metadata_source
-  end
 
   def default_collection_objects
     @default_collection_objects ||= begin
