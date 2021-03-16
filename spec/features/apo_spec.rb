@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'apo', js: true do
+RSpec.describe 'Create an apo', js: true do
   let(:user) { create(:user) }
   let(:new_apo_druid) { 'druid:zy987wv6543' }
   let(:new_collection_druid) { 'druid:zy333wv6543' }
@@ -64,7 +64,7 @@ RSpec.describe 'apo', js: true do
       .and_return(created_apo, created_collection)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
 
-    # Stubbing this out, because it's the dor-services-app that would have actually created it.
+    # Stubbing out the registration process, because it's the dor-services-app that would have actually created it.
     allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
     allow(apo).to receive(:save!)
     allow(apo).to receive(:new_record?).and_return(false)

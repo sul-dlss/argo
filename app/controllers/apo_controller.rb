@@ -9,20 +9,20 @@ class ApoController < ApplicationController
 
   def edit
     authorize! :create, Cocina::Models::AdminPolicy
-    @form = ApoForm.new(@object)
+    @form = ApoForm.new(@object, search_service: search_service)
     render layout: 'one_column'
   end
 
   def new
     authorize! :create, Cocina::Models::AdminPolicy
-    @form = ApoForm.new(Dor::AdminPolicyObject.new)
+    @form = ApoForm.new(Dor::AdminPolicyObject.new, search_service: search_service)
     render layout: 'one_column'
   end
 
   def create
     authorize! :create, Cocina::Models::AdminPolicy
 
-    @form = ApoForm.new(Dor::AdminPolicyObject.new)
+    @form = ApoForm.new(Dor::AdminPolicyObject.new, search_service: search_service)
     unless @form.validate(params.merge(tag: "Registered By : #{current_user.login}"))
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: form.errors } }
@@ -42,7 +42,7 @@ class ApoController < ApplicationController
 
   def update
     authorize! :manage_item, @cocina
-    @form = ApoForm.new(@object)
+    @form = ApoForm.new(@object, search_service: search_service)
     unless @form.validate(params)
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: @form.errors } }
@@ -73,6 +73,11 @@ class ApoController < ApplicationController
   end
 
   private
+
+  def search_service
+    @search_service ||= Blacklight::SearchService.new(config: CatalogController.blacklight_config,
+                                                      current_user: current_user)
+  end
 
   def create_obj
     raise 'missing druid' unless params[:id]

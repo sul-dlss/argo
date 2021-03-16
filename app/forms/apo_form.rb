@@ -6,7 +6,14 @@
 class ApoForm < BaseForm
   DEFAULT_MANAGER_WORKGROUPS = %w[developer service-manager metadata-staff].freeze
 
-  attr_reader :default_collection_pid
+  attr_reader :default_collection_pid, :search_service
+
+  # @param [Dor::Item] model the object to update.
+  # @param [Blacklight::SearchService] search_service a way to search solr
+  def initialize(model, search_service:)
+    super(model)
+    @search_service = search_service
+  end
 
   # @param [HashWithIndifferentAccess] params the parameters from the form
   # @return [Boolean] true if the parameters are valid
@@ -66,10 +73,9 @@ class ApoForm < BaseForm
   delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
            :default_rights, :mods_title, to: :model
 
+  # @return [Array<SolrDocument>]
   def default_collection_objects
-    @default_collection_objects ||= begin
-      Array(model.default_collections).map { |pid| Dor.find(pid) }
-    end
+    @default_collection_objects ||= search_service.fetch(Array(model.default_collections)).last
   end
 
   def to_param
