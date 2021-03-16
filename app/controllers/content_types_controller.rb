@@ -11,21 +11,16 @@ class ContentTypesController < ApplicationController
 
   # set the content type in the content metadata
   def update
-    cocina = maybe_load_cocina(params[:item_id])
-    authorize! :manage_item, cocina
+    authorize! :manage_item, @cocina_object
 
     # if this object has been submitted and doesnt have an open version, they cannot change it.
-    state_service = StateService.new(cocina.externalIdentifier, version: cocina.version)
+    state_service = StateService.new(@cocina_object.externalIdentifier, version: @cocina_object.version)
     return render_error('Object cannot be modified in its current state.') unless state_service.allows_modification?
     return render_error('Invalid new content type.') unless valid_content_type?
-    return render_error('Object doesnt have a content metadata datastream to update.') unless has_content?
+    return render_error("Object doesn't contain resources to update.") unless has_content?
 
-    @object.contentMetadata.set_content_type(
-      params[:old_content_type],
-      params[:old_resource_type],
-      params[:new_content_type],
-      params[:new_resource_type]
-    )
+    object_client.update(params: @cocina_object.new(cocina_update_attributes))
+    Argo::Indexer.reindex_pid_remotely(@cocina_object.externalIdentifier) unless params[:bulk]
 
     respond_to do |format|
       if params[:bulk]
@@ -34,8 +29,6 @@ class ContentTypesController < ApplicationController
         format.any { redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!' }
       end
     end
-    @object.save
-    Argo::Indexer.reindex_pid_remotely(@object.pid) unless params[:bulk]
   end
 
   private
@@ -44,19 +37,46 @@ class ContentTypesController < ApplicationController
     render status: :forbidden, plain: msg
   end
 
+  def cocina_update_attributes
+    {}.tap do |attributes|
+      attributes[:type] = Constants::CONTENT_TYPES[params[:new_content_type]] if content_type_should_change?
+      attributes[:structural] = structural_with_resource_type_changes if resource_types_should_change?
+    end
+  end
+
+  def structural_with_resource_type_changes
+    @cocina_object.structural.new(
+      contains: @cocina_object.structural.contains.map do |resource|
+        next resource unless resource.type == Constants::RESOURCE_TYPES[params[:old_resource_type]]
+
+        resource.new(type: Constants::RESOURCE_TYPES[params[:new_resource_type]])
+      end
+    )
+  end
+
+  def resource_types_should_change?
+    @cocina_object.structural.contains.map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
+  end
+
+  def content_type_should_change?
+    @cocina_object.type == Constants::CONTENT_TYPES[params[:old_content_type]]
+  end
+
   def valid_content_type?
-    Constants::CONTENT_TYPES.include? params[:new_content_type]
+    Constants::CONTENT_TYPES.keys.include?(params[:new_content_type])
   end
 
   def has_content?
-    @object.datastreams.include? 'contentMetadata'
+    @cocina_object&.structural&.contains&.size&.positive?
   end
 
-  # Filters
-  def load_resource
-    obj_pid = params[:item_id]
-    raise 'missing druid' unless obj_pid
+  def object_client
+    Dor::Services::Client.object(params[:item_id])
+  end
 
-    @object = Dor.find(obj_pid)
+  def load_resource
+    raise 'missing druid' if params[:item_id].blank?
+
+    @cocina_object = object_client.find
   end
 end
