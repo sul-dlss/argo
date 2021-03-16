@@ -110,9 +110,9 @@ ul li{
        current_content_types << k if idx.even?
      end
      current_content_types = [['none', '']] + current_content_types
-     current_resource_types = [['none', '']] + Constants::RESOURCE_TYPES
-     new_content_types = [['none', '']] + Constants::CONTENT_TYPES
-     new_resource_types = [['none', '']] + Constants::RESOURCE_TYPES %>
+     current_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys
+     new_content_types = [['none', '']] + Constants::CONTENT_TYPES.keys
+     new_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys %>
   <h1>Set content and resource types</h1>
   <p>
     Given the above list of druids, the following will be performed on each object:<br>
