@@ -50,8 +50,6 @@ RSpec.describe PurgeJob, type: :job do
   before do
     allow(WorkflowClientFactory).to receive(:build).and_return(client)
     allow(Ability).to receive(:new).and_return(ability)
-    allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
-    allow(Dor).to receive(:find).with(pids[1]).and_return(item2)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
     allow(object_client1).to receive(:destroy).and_return(true)
