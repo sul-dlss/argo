@@ -49,7 +49,7 @@ module Constants
     ['Citation Only', 'citation-only']
   ].freeze
 
-  CONTENT_TYPES = %w[image book file map media document 3d].freeze
+  CONTENT_TYPES = %w[image book file map media document 3d geo webarchive-seed].freeze
 
   RESOURCE_TYPES = %w[image page file audio video document 3d object].freeze
 
