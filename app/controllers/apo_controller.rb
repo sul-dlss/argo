@@ -8,24 +8,25 @@ class ApoController < ApplicationController
   ]
 
   def edit
-    authorize! :create, Cocina::Models::AdminPolicy
-    object = Dor.find params[:id]
+    authorize! :manage_item, @cocina
+    @form = ApoForm.new(@cocina, search_service: search_service)
 
-    @form = ApoForm.new(object, search_service: search_service)
     render layout: 'one_column'
   end
 
   def new
     authorize! :create, Cocina::Models::AdminPolicy
-    @form = ApoForm.new(Dor::AdminPolicyObject.new, search_service: search_service)
+    @form = ApoForm.new(nil, search_service: search_service)
+
     render layout: 'one_column'
   end
 
   def create
     authorize! :create, Cocina::Models::AdminPolicy
 
-    @form = ApoForm.new(Dor::AdminPolicyObject.new, search_service: search_service)
-    unless @form.validate(params.merge(tag: "Registered By : #{current_user.login}"))
+    change_set = AdminPolicyChangeSet.new
+    unless change_set.validate(params[:apo_form].merge(registered_by: current_user.login))
+      @form = ApoForm.new(nil, search_service: search_service)
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: form.errors } }
         format.html { render 'new' }
@@ -33,21 +34,20 @@ class ApoController < ApplicationController
       return
     end
 
-    @form.save
-    notice = "APO #{@form.model.pid} created."
+    change_set.save
+    notice = "APO #{change_set.model.externalIdentifier} created."
 
     # register a collection and make it the default if requested
-    notice += " Collection #{@form.default_collection_pid} created." if @form.default_collection_pid
+    notice += " Collection #{change_set.model.administrative.collectionsForRegistration.first} created." if change_set.model.administrative.collectionsForRegistration.present?
 
-    redirect_to solr_document_path(@form.model.pid), notice: notice
+    redirect_to solr_document_path(change_set.model.externalIdentifier), notice: notice
   end
 
   def update
     authorize! :manage_item, @cocina
-    object = Dor.find params[:id]
-
-    @form = ApoForm.new(object, search_service: search_service)
-    unless @form.validate(params)
+    change_set = AdminPolicyChangeSet.new
+    unless change_set.validate(params[:apo_form])
+      @form = ApoForm.new(@cocina, search_service: search_service)
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: @form.errors } }
         format.html { render 'edit' }
@@ -55,8 +55,8 @@ class ApoController < ApplicationController
       return
     end
 
-    @form.save
-    redirect_to solr_document_path(@form.model.pid)
+    change_set.save
+    redirect_to solr_document_path(change_set.model.externalIdentifier)
   end
 
   def delete_collection

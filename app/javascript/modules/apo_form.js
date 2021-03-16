@@ -26,7 +26,7 @@ export default class {
     }
 
     collection() {
-      $('[name="collection_radio"]').on('change', (event) => {
+      $('[name="apo_form[collection_radio]"]').on('change', (event) => {
         $('.collection_div').hide()
         var reveal
         if (reveal = $(event.target).data('reveal')) {
