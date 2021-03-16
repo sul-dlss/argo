@@ -4,13 +4,14 @@ require 'rails_helper'
 
 RSpec.describe ApoForm do
   let(:fake_tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
+  let(:search_service) { instance_double(Blacklight::SearchService) }
+  let(:instance) { described_class.new(apo, search_service: search_service) }
 
   before do
     allow(instance).to receive(:tags_client).and_return(fake_tags_client)
   end
 
-  context 'with a model (update)' do
-    let(:instance) { described_class.new(apo) }
+  context 'with a persisted model (update)' do
     let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
     let(:apo) do
       Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
@@ -183,12 +184,6 @@ RSpec.describe ApoForm do
       it { is_expected.to eq 'Ampex' }
     end
 
-    describe '#default_collection_objects' do
-      subject { instance.default_collection_objects }
-
-      it { is_expected.to eq [] }
-    end
-
     describe '#to_param' do
       subject { instance.to_param }
 
@@ -206,8 +201,8 @@ RSpec.describe ApoForm do
     end
   end
 
-  context 'new model' do
-    let(:instance) { described_class.new(Dor::AdminPolicyObject.new) }
+  context 'with an unsaved model' do
+    let(:apo) { Dor::AdminPolicyObject.new }
 
     describe '#permissions' do
       subject { instance.permissions }
@@ -257,12 +252,6 @@ RSpec.describe ApoForm do
       it { is_expected.to eq '' }
     end
 
-    describe '#default_collection_objects' do
-      subject { instance.default_collection_objects }
-
-      it { is_expected.to eq [] }
-    end
-
     describe '#to_param' do
       subject { instance.to_param }
 
@@ -280,7 +269,7 @@ RSpec.describe ApoForm do
     end
 
     describe '#save' do
-      let(:apo) do
+      let(:registered_model) do
         Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
       end
       let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
@@ -346,10 +335,10 @@ RSpec.describe ApoForm do
         expect(collection).to receive(:save)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).twice
 
-        expect(Dor).to receive(:find).with(apo.pid).and_return(apo)
-        expect(apo).to receive(:new_record?).and_return(false)
-        expect(apo).to receive(:save)
-        expect(apo).to receive(:add_roleplayer).exactly(4).times
+        expect(Dor).to receive(:find).with(registered_model.pid).and_return(registered_model)
+        expect(registered_model).to receive(:new_record?).and_return(false)
+        expect(registered_model).to receive(:save)
+        expect(registered_model).to receive(:add_roleplayer).exactly(4).times
 
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
@@ -366,11 +355,11 @@ RSpec.describe ApoForm do
           )
           .to_return(status: 200, body: created_apo, headers: {})
 
-        expect(workflow_client).to receive(:create_workflow_by_name).with(apo.pid, 'accessionWF', version: '1')
-        expect(apo).to receive(:"use_license=").with(params['use_license'])
+        expect(workflow_client).to receive(:create_workflow_by_name).with(registered_model.pid, 'accessionWF', version: '1')
+        expect(registered_model).to receive(:"use_license=").with(params['use_license'])
 
         # verify that the collection is also created
-        expect(apo).to receive(:add_default_collection).with(collection_id)
+        expect(registered_model).to receive(:add_default_collection).with(collection_id)
 
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(body: JSON.generate(collection_req_body_hash))
@@ -400,5 +389,15 @@ RSpec.describe ApoForm do
         end
       end
     end
+  end
+
+  describe '#default_collection_objects' do
+    subject { instance.default_collection_objects }
+
+    let(:apo) { Dor::AdminPolicyObject.new }
+    let(:search_service) { instance_double(Blacklight::SearchService, fetch: [nil, [doc1]]) }
+    let(:doc1) { instance_double(SolrDocument) }
+
+    it { is_expected.to eq [doc1] }
   end
 end
