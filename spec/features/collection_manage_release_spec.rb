@@ -8,7 +8,9 @@ RSpec.describe 'Collection manage release' do
     allow(StateService).to receive(:new).and_return(state_service)
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    Argo::Indexer.reindex_pid_remotely(collection_id)
+    ActiveFedora::SolrService.add(id: 'druid:gg232vv1111',
+                                  objectType_ssim: 'collection')
+    ActiveFedora::SolrService.commit
   end
 
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
@@ -23,12 +25,7 @@ RSpec.describe 'Collection manage release' do
   end
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
   let(:structural) { instance_double(Cocina::Models::DROStructural, contains: []) }
-
-  let(:uber_apo_id) { 'druid:hv992ry2431' }
-  let(:item) do
-    Dor::Collection.create!(pid: 'druid:gg232vv1111', source_id: 'sauce:99', objectType: 'collection', admin_policy_object_id: uber_apo_id)
-  end
-  let(:collection_id) { item.id }
+  let(:collection_id) { 'druid:gg232vv1111' }
 
   it 'Has a manage release button' do
     visit solr_document_path(collection_id)
