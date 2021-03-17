@@ -22,3 +22,10 @@ RSpec::Matchers.define :a_cocina_object_with_types do |expected|
     actual.structural.contains.map(&:type).all? { |type| type.in?(expected[:resource_types]) }
   end
 end
+
+RSpec::Matchers.define :a_cocina_admin_policy_with_registration_collections do |expected|
+  match do |actual|
+    actual.type == Cocina::Models::Vocab.admin_policy &&
+      expected.all? { |collection_id| collection_id.in?(actual.administrative.collectionsForRegistration) }
+  end
+end
