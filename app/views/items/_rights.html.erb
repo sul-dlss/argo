@@ -1,4 +1,4 @@
-<%= form_with model: @form, url: set_rights_item_path(@object) do |f| %>
+<%= form_with model: @form, url: set_rights_item_path(@cocina.externalIdentifier) do |f| %>
   <div class='form-group'>
     <%= f.select :rights, f.object.rights_list, {}, class: 'form-control' %>
   </div>

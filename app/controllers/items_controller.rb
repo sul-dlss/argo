@@ -4,7 +4,7 @@
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :load_cocina, except: :purl_preview
-  before_action :create_obj, only: %i[apply_apo_defaults rights]
+  before_action :create_obj, only: %i[apply_apo_defaults]
 
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
@@ -299,8 +299,10 @@ class ItemsController < ApplicationController
     return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
 
     form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
+    cocina_admin_policy = Dor::Services::Client.object(@cocina.administrative.hasAdminPolicy).find
 
-    @form = form_type.new(@cocina, default_rights: @object.admin_policy_object.default_rights)
+    default_rights = RightsLabeler.label(cocina_admin_policy.administrative.defaultObjectRights)
+    @form = form_type.new(@cocina, default_rights: default_rights)
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
