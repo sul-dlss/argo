@@ -6,13 +6,34 @@ RSpec.describe 'Show rights for an object' do
   context 'when they have manage access' do
     let(:user) { create(:user) }
     let(:pid) { 'druid:cc243mg0841' }
-    let(:apo) { instance_double(Dor::AdminPolicyObject, default_rights: 'world') }
-    let(:fedora_obj) { instance_double(Dor::Item, pid: pid, current_version: 1, admin_policy_object: apo) }
+    let(:apo_pid) { 'druid:cg532dg5405' }
+
+    let(:world_access) do
+      <<~XML
+        <rightsMetadata>
+        </rightsMetadata>
+      XML
+    end
+
+    let(:apo) do
+      Cocina::Models.build({
+                             'label' => 'My APO',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'externalIdentifier' => apo_pid,
+                             'administrative' => {
+                               'hasAdminPolicy' => apo_pid,
+                               'defaultObjectRights' => world_access
+                             }
+                           })
+    end
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+    let(:apo_client) { instance_double(Dor::Services::Client::Object, find: apo) }
 
     before do
-      allow(Dor).to receive(:find).and_return(fedora_obj)
-      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+      allow(Dor::Services::Client).to receive(:object).with(apo_pid).and_return(apo_client)
+
       allow(Argo::Indexer).to receive(:reindex_pid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
     end
@@ -31,7 +52,7 @@ RSpec.describe 'Show rights for an object' do
                                    access: 'world'
                                  }
                                },
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                               'administrative' => { hasAdminPolicy: apo_pid },
                                'structural' => {
                                  'contains' => [
                                    {
@@ -78,7 +99,7 @@ RSpec.describe 'Show rights for an object' do
                                'access' => {
                                  'access' => 'world'
                                },
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                               'administrative' => { hasAdminPolicy: apo_pid },
                                'identification' => {}
                              })
       end
@@ -99,7 +120,7 @@ RSpec.describe 'Show rights for an object' do
                                'access' => {
                                  'access' => 'world'
                                },
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                               'administrative' => { hasAdminPolicy: apo_pid },
                                'identification' => {}
                              })
       end
