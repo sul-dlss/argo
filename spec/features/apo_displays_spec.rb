@@ -101,16 +101,6 @@ RSpec.describe 'Viewing an Admin policy' do
       end
     end
 
-    context 'source id ui' do
-      it 'renders the source id update ui' do
-        idmd = double(Dor::IdentityMetadataDS)
-        allow(object).to receive(:identityMetadata).and_return(idmd)
-        allow(idmd).to receive(:sourceId).and_return('something123')
-        visit "/items/#{apo_druid}/source_id_ui"
-        expect(page).to have_content('Update')
-      end
-    end
-
     context 'tag ui' do
       let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
       let(:object_client) do

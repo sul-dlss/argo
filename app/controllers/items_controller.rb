@@ -3,7 +3,10 @@
 # rubocop:disable Metrics/ClassLength
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
-  before_action :create_obj, except: :purl_preview
+  before_action :load_cocina, except: :purl_preview
+  before_action :create_obj, only: %i[add_collection remove_collection
+                                      apply_apo_defaults purge_object rights]
+
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
     mods
@@ -47,8 +50,6 @@ class ItemsController < ApplicationController
   end
 
   def set_collection
-    return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
-
     object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
     collection_id = params[:collection].presence
     updated_structural = if collection_id
@@ -93,7 +94,7 @@ class ItemsController < ApplicationController
                                                                                    locals: {
                                                                                      collection_label: collection.label,
                                                                                      collection_id: collection.externalIdentifier,
-                                                                                     item_id: @object.id
+                                                                                     item_id: @cocina.externalIdentifier
                                                                                    })
           render status: :ok, plain: { message: response_message, new_collection_html: new_collection_html }.to_json
         end
@@ -127,7 +128,7 @@ class ItemsController < ApplicationController
   def embargo_update
     raise ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
 
-    object_client = Dor::Services::Client.object(@object.pid)
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
     object_client.embargo.update(embargo_date: params[:embargo_date], requesting_user: current_user.to_s)
 
     reindex
@@ -151,10 +152,9 @@ class ItemsController < ApplicationController
   end
 
   def source_id
-    object_client = Dor::Services::Client.object(@object.pid)
-    dro = object_client.find
-    updated_identification = dro.identification.new(sourceId: params[:new_id])
-    updated = dro.new(identification: updated_identification)
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    updated_identification = @cocina.identification.new(sourceId: params[:new_id])
+    updated = @cocina.new(identification: updated_identification)
     object_client.update(params: updated)
     reindex
 
@@ -201,13 +201,13 @@ class ItemsController < ApplicationController
   end
 
   def purge_object
-    if dor_lifecycle(@object, 'submitted')
+    if dor_lifecycle(@cocina.externalIdentifier, 'submitted')
       render status: :bad_request, plain: 'Cannot purge an object after it is submitted.'
       return
     end
 
     @object.delete
-    WorkflowClientFactory.build.delete_all_workflows(pid: @object.pid)
+    WorkflowClientFactory.build.delete_all_workflows(pid: @cocina.externalIdentifier)
     ActiveFedora.solr.conn.delete_by_id(params[:id])
     ActiveFedora.solr.conn.commit
 
@@ -241,8 +241,6 @@ class ItemsController < ApplicationController
 
   # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
-    return redirect_to solr_document_path(params[:id]), flash: { error: "Can't set rights on an invalid model" } if @cocina.is_a? NilModel
-
     # Item may be a Collection or a DRO
     form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
     form = form_type.new(@cocina)
@@ -284,7 +282,7 @@ class ItemsController < ApplicationController
   end
 
   def collection_ui
-    object_client = Dor::Services::Client.object(@object.id)
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
     @collection_list = object_client.collections
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -330,11 +328,13 @@ class ItemsController < ApplicationController
 
   # Filters
   def create_obj
+    @object = Dor.find params[:id]
+  end
+
+  def load_cocina
     raise 'missing druid' unless params[:id]
 
     @cocina = maybe_load_cocina(params[:id])
-
-    @object = Dor.find params[:id]
   end
 
   def save_and_reindex
@@ -348,7 +348,7 @@ class ItemsController < ApplicationController
     # not send messages to Solr)
     return if params[:bulk] && params[:tags].nil?
 
-    Argo::Indexer.reindex_pid_remotely(@object.pid)
+    Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
   end
 
   # ---
@@ -359,7 +359,9 @@ class ItemsController < ApplicationController
   end
 
   def enforce_versioning
-    state_service = StateService.new(@object.pid, version: @object.current_version)
+    return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
+
+    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
 
     # if this object has been submitted and doesn't have an open version, they cannot change it.
     return true if state_service.allows_modification?
@@ -371,8 +373,8 @@ class ItemsController < ApplicationController
   # ---
   # Dor::Workflow utils
 
-  def dor_lifecycle(object, stage)
-    WorkflowClientFactory.build.lifecycle(druid: object.pid, milestone_name: stage)
+  def dor_lifecycle(druid, stage)
+    WorkflowClientFactory.build.lifecycle(druid: druid, milestone_name: stage)
   end
 end
 # rubocop:enable Metrics/ClassLength

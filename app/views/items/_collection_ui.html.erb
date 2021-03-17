@@ -9,7 +9,7 @@
       <% @collection_list.each do |collection| %>
         <%= render 'collection_ui_line_item', collection_label: collection.label,
                                               collection_id: collection.externalIdentifier,
-                                              item_id: @object.pid %>
+                                              item_id: @cocina.externalIdentifier %>
       <% end %>
   </div>
 </div>
@@ -19,7 +19,7 @@
     <h3 class="panel-title">Add a collection</h3>
   </div>
   <div class='panel-body'>
-    <%= form_tag add_collection_item_path(id: @object.pid), id: 'add_collection_form' do %>
+    <%= form_tag add_collection_item_path(@cocina.externalIdentifier), id: 'add_collection_form' do %>
       <div class='form-group'>
         <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-control' %>
       </div>

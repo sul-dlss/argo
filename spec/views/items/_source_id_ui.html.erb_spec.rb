@@ -3,13 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe 'items/_source_id_ui.html.erb' do
-  let(:identity_metadata) { double('idmd', sourceId: 'source id') }
-  let(:object) do
-    double('object', pid: 'druid:abc123', identityMetadata: identity_metadata)
+  let(:identification) do
+    instance_double(Cocina::Models::Identification, sourceId: 'source id')
+  end
+
+  before do
+    @cocina = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:987', identification: identification)
   end
 
   it 'renders the partial content' do
-    assign(:object, object)
     render
     expect(rendered)
       .to have_css 'form .form-group input.form-control[value="source id"]'

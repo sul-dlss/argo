@@ -8,7 +8,7 @@ RSpec.describe 'items/_embargo_form.html.erb' do
   before do
     allow(view).to receive(:current_user).and_return(current_user)
     allow(controller).to receive(:current_user).and_return(current_user)
-    @object = instance_double(Dor::Item, pid: 'druid:abc123')
+    @cocina = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:abc123')
   end
 
   it 'renders the partial content' do
