@@ -4,8 +4,6 @@
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :load_cocina, except: :purl_preview
-  before_action :create_obj, only: %i[apply_apo_defaults]
-
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
     mods
@@ -266,10 +264,10 @@ class ItemsController < ApplicationController
     render status: :bad_request, plain: 'Invalid new rights setting.'
   end
 
-  # set the rightsMetadata to the APO's defaultObjectRights
+  # set the rightsMetadata to the AdminPolicies' defaultObjectRights
   def apply_apo_defaults
-    @object.reapply_admin_policy_object_defaults
-    save_and_reindex
+    Dor::Services::Client.object(@cocina.externalIdentifier).apply_admin_policy_defaults
+    reindex
     render status: :ok, plain: 'Defaults applied.'
   end
 
@@ -334,20 +332,10 @@ class ItemsController < ApplicationController
     Dor::Services::Client.object(@cocina.externalIdentifier).administrative_tags
   end
 
-  # Filters
-  def create_obj
-    @object = Dor.find params[:id]
-  end
-
   def load_cocina
     raise 'missing druid' unless params[:id]
 
     @cocina = maybe_load_cocina(params[:id])
-  end
-
-  def save_and_reindex
-    @object.save
-    reindex
   end
 
   def reindex

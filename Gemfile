@@ -63,7 +63,7 @@ gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all fe
 gem 'blacklight', '~> 7.13'
 gem 'blacklight-hierarchy', '~> 5.0'
 gem 'dor-services', '~> 9.6'
-gem 'dor-services-client', '~> 6.27.0'
+gem 'dor-services-client', '~> 6.28'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
