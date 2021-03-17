@@ -15,15 +15,27 @@ class CollectionsController < ApplicationController
     cocina = maybe_load_cocina(params[:apo_id])
     authorize! :manage_item, cocina
 
-    @apo = Dor.find params[:apo_id]
     form = CollectionForm.new(Dor::Collection.new)
     return render 'new' unless form.validate(params.merge(apo_pid: params[:apo_id]))
 
     form.save
     collection_pid = form.model.id
-    @apo.add_default_collection collection_pid
+
+    cocina_admin_policy = object_client.find
+    collections = Array(cocina_admin_policy.administrative.collectionsForRegistration)
+    # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection`
+    # 1. If collection is already listed, remove it temporarily
+    collections.delete(collection_pid)
+    # 2. Move the collection PID to the front of the list of registration collections
+    collections.unshift(collection_pid)
+    updated_cocina_admin_policy = cocina_admin_policy.new(
+      administrative: cocina_admin_policy.administrative.new(
+        collectionsForRegistration: collections
+      )
+    )
+    object_client.update(params: updated_cocina_admin_policy)
+    Argo::Indexer.reindex_pid_remotely(params[:apo_id])
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_pid}"
-    @apo.save # indexing happens automatically
   end
 
   def exists
@@ -32,5 +44,11 @@ class CollectionsController < ApplicationController
     where_params[:identifier_ssim] = "catkey:#{params[:catkey]}" if params[:catkey].present?
     resp = where_params.empty? ? false : Dor::Collection.where(where_params).any?
     render json: resp.to_json, layout: false
+  end
+
+  private
+
+  def object_client
+    Dor::Services::Client.object(params[:apo_id])
   end
 end
