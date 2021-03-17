@@ -27,7 +27,8 @@ RSpec.describe 'Collection manage release' do
   let(:structural) { instance_double(Cocina::Models::DROStructural, contains: []) }
   let(:collection_id) { 'druid:gg232vv1111' }
 
-  it 'Has a manage release button' do
+  # TODO: Figure out why this is flappy in CI and un-xit
+  xit 'Has a manage release button' do
     visit solr_document_path(collection_id)
     expect(page).to have_css 'a', text: 'Manage release'
   end

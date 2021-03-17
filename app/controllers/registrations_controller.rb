@@ -15,8 +15,8 @@ class RegistrationsController < ApplicationController
   end
 
   def workflow_list
-    cocina =  Dor::Services::Client.object(params[:apo_id]).find
-    workflows = ([Settings.apo.default_workflow_option] + Array(cocina.administrative.registrationWorkflow)).uniq
+    cocina_admin_policy = object_client.find
+    workflows = ([Settings.apo.default_workflow_option] + Array(cocina_admin_policy.administrative.registrationWorkflow)).uniq
 
     respond_to do |format|
       format.any(:json, :xml) { render request.format.to_sym => workflows }
@@ -31,7 +31,7 @@ class RegistrationsController < ApplicationController
   def collection_list
     truncate_limit = (params[:truncate] || 60).to_i
     collections = {}
-    registration_collection_ids_for_apo(params[:apo_id]).each do |col_id|
+    registration_collection_ids_for_apo.each do |col_id|
       col_druid = col_id.gsub(/^druid:/, '')
       col_title_field = SolrDocument::FIELD_TITLE
 
@@ -50,10 +50,8 @@ class RegistrationsController < ApplicationController
   end
 
   def rights_list
-    apo_object = Dor.find(params[:apo_id])
-
-    default_opt = apo_object.default_rights
-    default_opt = 'citation-only' if default_opt == 'none'
+    cocina_admin_policy = object_client.find
+    default_opt = RightsLabeler.label(cocina_admin_policy.administrative.defaultObjectRights)
 
     # iterate through the default version of the rights list.  if we found a default option
     # selection, label it in the UI text and key it as 'default' (instead of its own name).  if
@@ -98,7 +96,20 @@ class RegistrationsController < ApplicationController
     label.truncate(truncate_limit, separator: /\s/)
   end
 
-  def registration_collection_ids_for_apo(apo_id)
-    Dor.find(apo_id).default_collections
+  def apo_id
+    druid = params[:apo_id]
+    raise ArgumentError if druid.nil?
+
+    return druid if druid.starts_with?('druid:')
+
+    "druid:#{druid}"
+  end
+
+  def object_client
+    Dor::Services::Client.object(apo_id)
+  end
+
+  def registration_collection_ids_for_apo
+    object_client.find.administrative.collectionsForRegistration
   end
 end

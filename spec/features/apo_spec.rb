@@ -81,6 +81,7 @@ RSpec.describe 'Create an apo', js: true do
     sign_in user, groups: ['sdr:administrator-role']
   end
 
+  # TODO: Figure out why this is flappy in CI and un-xit
   it 'creates and edits an apo' do
     # go to the registration form and fill it in
     visit new_apo_path
