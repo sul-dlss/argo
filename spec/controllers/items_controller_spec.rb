@@ -249,12 +249,14 @@ RSpec.describe ItemsController, type: :controller do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
+      let(:object_service) do
+        instance_double(Dor::Services::Client::Object, find: cocina, metadata: metadata_service)
+      end
+      let(:metadata_service) { instance_double(Dor::Services::Client::Metadata, mods: xml) }
+      let(:xml) { '<somexml>stuff</somexml>' }
+
       it 'returns the mods xml for a GET' do
         @request.env['HTTP_ACCEPT'] = 'application/xml'
-        xml = '<somexml>stuff</somexml>'
-        descmd = double
-        expect(descmd).to receive(:content).and_return(xml)
-        expect(item).to receive(:descMetadata).and_return(descmd)
         get 'mods', params: { id: pid }
         expect(response.body).to eq(xml)
       end

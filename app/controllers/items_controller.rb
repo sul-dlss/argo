@@ -117,8 +117,10 @@ class ItemsController < ApplicationController
   end
 
   def mods
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+
     respond_to do |format|
-      format.xml  { render xml: @object.descMetadata.content }
+      format.xml  { render xml: object_client.metadata.mods }
     end
   end
 
