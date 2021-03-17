@@ -188,51 +188,108 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#add_collection' do
+    let(:cocina) do
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => { 'access' => 'world' },
+                             'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                             'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
+                           })
+    end
+    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true) }
+
     context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
+      let(:expected) do
+        Cocina::Models.build({
+                               'label' => 'My ETD',
+                               'version' => 1,
+                               'type' => Cocina::Models::Vocab.object,
+                               'externalIdentifier' => pid,
+                               'access' => { 'access' => 'world' },
+                               'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                               'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
+                             })
+      end
+
       it 'adds a collection' do
-        expect(item).to receive(:add_collection).with('druid:1234')
-        post 'add_collection', params: { id: pid, collection: 'druid:1234' }
+        post 'add_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
+        expect(object_service).to have_received(:update).with(params: expected)
       end
 
       context 'when no collection parameter is supplied' do
         it 'does not add a collection' do
-          expect(item).not_to receive(:add_collection).with('druid:1234')
           post 'add_collection', params: { id: pid, collection: '' }
+          expect(object_service).not_to have_received(:update)
         end
       end
     end
 
     context "when they don't have manage access" do
-      it 'returns 403' do
+      before do
         allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
+      end
+
+      it 'returns 403' do
         post 'add_collection', params: { id: pid, collection: 'druid:1234' }
         expect(response.code).to eq('403')
+        expect(object_service).not_to have_received(:update)
       end
     end
   end
 
   describe '#remove_collection' do
+    let(:cocina) do
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => { 'access' => 'world' },
+                             'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                             'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
+                           })
+    end
+    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true) }
+
     context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
+      let(:expected) do
+        Cocina::Models.build({
+                               'label' => 'My ETD',
+                               'version' => 1,
+                               'type' => Cocina::Models::Vocab.object,
+                               'externalIdentifier' => pid,
+                               'access' => { 'access' => 'world' },
+                               'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                               'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
+                             })
+      end
+
       it 'removes a collection' do
-        expect(item).to receive(:remove_collection).with('druid:1234')
-        post 'remove_collection', params: { id: pid, collection: 'druid:1234' }
+        post 'remove_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
+        expect(object_service).to have_received(:update).with(params: expected)
       end
     end
 
     context "when they don't have manage access" do
-      it 'returns 403' do
+      before do
         allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
-        expect(item).not_to receive(:remove_collection)
+      end
+
+      it 'returns 403' do
         post 'remove_collection', params: { id: pid, collection: 'druid:1234' }
         expect(response.code).to eq('403')
+        expect(object_service).not_to have_received(:update)
       end
     end
   end
