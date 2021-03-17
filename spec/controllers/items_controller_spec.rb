@@ -86,27 +86,21 @@ RSpec.describe ItemsController, type: :controller do
 
       context 'when the object has not been submitted' do
         before do
-          allow(controller).to receive(:dor_lifecycle).with(pid, 'submitted').and_return(false)
-          allow(item).to receive(:delete)
-          allow(ActiveFedora.solr.conn).to receive(:delete_by_id)
-          allow(ActiveFedora.solr.conn).to receive(:commit)
+          allow(WorkflowService).to receive(:submitted?).with(druid: pid).and_return(false)
+          allow(PurgeService).to receive(:purge)
         end
 
         it 'deletes the object' do
           delete 'purge_object', params: { id: pid }
           expect(response).to redirect_to root_path
           expect(flash[:notice]).to eq "#{pid} has been purged!"
-
-          expect(client).to have_received(:delete_all_workflows).with(pid: pid)
-          expect(item).to have_received(:delete)
-          expect(ActiveFedora.solr.conn).to have_received(:delete_by_id).with(pid)
-          expect(ActiveFedora.solr.conn).to have_received(:commit)
+          expect(PurgeService).to have_received(:purge)
         end
       end
 
       context 'when the object has been submitted' do
         before do
-          allow(controller).to receive(:dor_lifecycle).with(pid, 'submitted').and_return(true)
+          allow(WorkflowService).to receive(:submitted?).with(druid: pid).and_return(true)
         end
 
         it 'blocks purge' do

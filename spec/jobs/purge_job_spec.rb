@@ -6,7 +6,7 @@ RSpec.describe PurgeJob, type: :job do
   let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
-  let(:client) { instance_double(Dor::Workflow::Client, lifecycle: submitted, delete_all_workflows: true) }
+  let(:client) { instance_double(Dor::Workflow::Client, lifecycle: submitted) }
   let(:submitted) { false }
   let(:bulk_action) do
     create(:bulk_action,
@@ -54,6 +54,7 @@ RSpec.describe PurgeJob, type: :job do
     allow(Dor).to receive(:find).with(pids[1]).and_return(item2)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(PurgeService).to receive(:purge)
 
     described_class.perform_now(bulk_action.id,
                                 pids: pids,
@@ -72,8 +73,7 @@ RSpec.describe PurgeJob, type: :job do
       let(:submitted) { true }
 
       it "doesn't purge" do
-        expect(item1).not_to have_received(:delete)
-        expect(item2).not_to have_received(:delete)
+        expect(PurgeService).not_to have_received(:purge)
       end
     end
 
@@ -81,9 +81,8 @@ RSpec.describe PurgeJob, type: :job do
       let(:submitted) { false }
 
       it 'purges objects' do
-        expect(item1).to have_received(:delete)
-        expect(item2).to have_received(:delete)
-        expect(client).to have_received(:delete_all_workflows).twice
+        expect(PurgeService).to have_received(:purge).with(druid: pids[0])
+        expect(PurgeService).to have_received(:purge).with(druid: pids[1])
       end
     end
   end

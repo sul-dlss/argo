@@ -28,17 +28,13 @@ class PurgeJob < GenericJob
       return
     end
 
-    if workflow_client.lifecycle(druid: current_druid, milestone_name: 'submitted')
+    if WorkflowService.submitted?(druid: current_druid)
       log_buffer.puts("#{Time.current} #{self.class}: Cannot purge #{current_druid} because it has already been submitted (bulk_action.id=#{bulk_action.id})")
 
       bulk_action.increment(:druid_count_fail).save
       return
     end
-    object = Dor.find(current_druid)
-    object.delete
-    workflow_client.delete_all_workflows(pid: current_druid)
-    ActiveFedora.solr.conn.delete_by_id(current_druid)
-    ActiveFedora.solr.conn.commit
+    PurgeService.purge(druid: current_druid)
 
     log_buffer.puts("#{Time.current} #{self.class}: Successfully purged #{current_druid} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
