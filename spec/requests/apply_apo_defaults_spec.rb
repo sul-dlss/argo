@@ -13,7 +13,9 @@ RSpec.describe 'Apply APO defaults' do
   let(:pid) { 'druid:bc123df4567' }
   let(:apo) { instance_double(Dor::AdminPolicyObject, pid: 'druid:999') }
   let(:user) { create(:user) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object, find: cocina_model, apply_admin_policy_defaults: true)
+  end
   let(:cocina_model) do
     Cocina::Models.build(
       'label' => 'The item',
@@ -38,7 +40,7 @@ RSpec.describe 'Apply APO defaults' do
 
   it 'applies the defaults' do
     post '/items/druid:123/apply_apo_defaults'
-    expect(item).to have_received(:reapply_admin_policy_object_defaults)
+    expect(object_client).to have_received(:apply_admin_policy_defaults)
     expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
     expect(response).to be_successful
   end
