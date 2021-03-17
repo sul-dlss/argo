@@ -17,6 +17,13 @@ class WorkflowService
     end
   end
 
+  # @return [Boolean] if the object has been submitted or not before
+  def self.submitted?(druid:)
+    return true if workflow_client.lifecycle(druid: druid, milestone_name: 'submitted')
+
+    false
+  end
+
   # @return [Boolean] if the object has been published or not before
   def self.published?(druid:)
     return true if workflow_client.lifecycle(druid: druid, milestone_name: 'published')

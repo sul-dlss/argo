@@ -4,8 +4,7 @@
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :load_cocina, except: :purl_preview
-  before_action :create_obj, only: %i[add_collection remove_collection
-                                      apply_apo_defaults purge_object rights]
+  before_action :create_obj, only: %i[add_collection remove_collection apply_apo_defaults rights]
 
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
@@ -201,17 +200,14 @@ class ItemsController < ApplicationController
   end
 
   def purge_object
-    if dor_lifecycle(@cocina.externalIdentifier, 'submitted')
+    if WorkflowService.submitted?(druid: params[:id])
       render status: :bad_request, plain: 'Cannot purge an object after it is submitted.'
       return
     end
 
-    @object.delete
-    WorkflowClientFactory.build.delete_all_workflows(pid: @cocina.externalIdentifier)
-    ActiveFedora.solr.conn.delete_by_id(params[:id])
-    ActiveFedora.solr.conn.commit
+    PurgeService.purge(druid: params[:id])
 
-    redirect_to '/', notice: params[:id] + ' has been purged!'
+    redirect_to '/', notice: "#{params[:id]} has been purged!"
   end
 
   def refresh_metadata
@@ -368,13 +364,6 @@ class ItemsController < ApplicationController
 
     render status: :bad_request, plain: 'Object cannot be modified in its current state.'
     false
-  end
-
-  # ---
-  # Dor::Workflow utils
-
-  def dor_lifecycle(druid, stage)
-    WorkflowClientFactory.build.lifecycle(druid: druid, milestone_name: stage)
   end
 end
 # rubocop:enable Metrics/ClassLength
