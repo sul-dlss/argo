@@ -86,7 +86,7 @@ RSpec.describe ItemsController, type: :controller do
 
       context 'when the object has not been submitted' do
         before do
-          allow(controller).to receive(:dor_lifecycle).with(item, 'submitted').and_return(false)
+          allow(controller).to receive(:dor_lifecycle).with(pid, 'submitted').and_return(false)
           allow(item).to receive(:delete)
           allow(ActiveFedora.solr.conn).to receive(:delete_by_id)
           allow(ActiveFedora.solr.conn).to receive(:commit)
@@ -106,7 +106,7 @@ RSpec.describe ItemsController, type: :controller do
 
       context 'when the object has been submitted' do
         before do
-          allow(controller).to receive(:dor_lifecycle).with(item, 'submitted').and_return(true)
+          allow(controller).to receive(:dor_lifecycle).with(pid, 'submitted').and_return(true)
         end
 
         it 'blocks purge' do

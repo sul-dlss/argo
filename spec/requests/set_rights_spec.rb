@@ -351,7 +351,7 @@ RSpec.describe 'Set rights for an object' do
         post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'dark' } }
         expect(response).to redirect_to(solr_document_path(pid))
         follow_redirect!
-        expect(response.body).to include 'Can&#39;t set rights on an invalid model'
+        expect(response.body).to include 'Unable to retrieve the cocina model'
       end
     end
   end

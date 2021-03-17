@@ -1,6 +1,6 @@
-<%= form_tag catkey_item_path(@object) do %>
+<%= form_tag catkey_item_path(@cocina.externalIdentifier) do %>
   <div class="form-group">
-    <input class="form-control" name="new_catkey" id="new_catkey" type="text" value="<%= @object.catkey %>">
+    <input class="form-control" name="new_catkey" id="new_catkey" type="text" value="<%= @cocina.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId %>">
     <p class='help-block'>
     </p>
   </div>

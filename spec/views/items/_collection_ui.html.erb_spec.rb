@@ -8,15 +8,12 @@ RSpec.describe 'items/_collection_ui.html.erb' do
       instance_double(Cocina::Models::Collection, label: 'But catz are nice too', externalIdentifier: 'druid:abc123')
     ]
   end
-  let(:object) do
-    instance_double(Dor::Item, pid: 'druid:abc123')
-  end
   let(:current_user) do
     mock_user(permitted_collections: ['Catz are our legacy'])
   end
 
   before do
-    assign(:object, object)
+    @cocina = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:abc123')
     assign(:collection_list, collection_list)
     allow(view).to receive(:current_user).and_return(current_user)
   end

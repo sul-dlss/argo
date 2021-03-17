@@ -6,6 +6,7 @@ RSpec.describe 'Item source id change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(StateService).to receive(:new).and_return(state_service)
+    # Required until the CatalogControler#show no longer loads from Fedora:
     allow(Dor).to receive(:find).with(druid).and_return(obj)
     allow(obj).to receive(:new_record?).and_return(false)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
@@ -14,7 +15,20 @@ RSpec.describe 'Item source id change' do
   let(:druid) { 'druid:kv840xx0000' }
   let(:obj) { Dor::Item.new(pid: druid, catkey: '99999') }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) { instance_double(Cocina::Models::DRO) }
+  let(:cocina_model) do
+    Cocina::Models.build({
+                           'label' => 'My ETD',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => druid,
+                           'access' => {
+                             'access' => 'world'
+                           },
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => { sourceId: 'some:thing' }
+                         })
+  end
 
   describe 'when modification is not allowed' do
     let(:state_service) { instance_double(StateService, allows_modification?: false) }
@@ -29,27 +43,12 @@ RSpec.describe 'Item source id change' do
   end
 
   describe 'when modification is allowed' do
-    let(:pid) { 'druid:kv840rx2720' }
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client, update: true) }
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes: workflow_routes) }
-    let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::Vocab.object,
-                             'externalIdentifier' => pid,
-                             'access' => {
-                               'access' => 'world'
-                             },
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             'identification' => { sourceId: 'some:thing' }
-                           })
-    end
 
     before do
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
