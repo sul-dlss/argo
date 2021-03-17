@@ -52,7 +52,7 @@ module Constants
   CONTENT_TYPES = {
     'image' => Cocina::Models::Vocab.image,
     'book' => Cocina::Models::Vocab.book,
-    'file' => Cocina::Models::Vocab.file,
+    'file' => Cocina::Models::Vocab.object,
     'map' => Cocina::Models::Vocab.map,
     'media' => Cocina::Models::Vocab.media,
     'document' => Cocina::Models::Vocab.document,
