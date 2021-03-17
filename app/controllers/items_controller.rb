@@ -4,7 +4,7 @@
 class ItemsController < ApplicationController
   include ModsDisplay::ControllerExtension
   before_action :load_cocina, except: :purl_preview
-  before_action :create_obj, only: %i[add_collection remove_collection apply_apo_defaults rights]
+  before_action :create_obj, only: %i[apply_apo_defaults rights]
 
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
@@ -76,13 +76,18 @@ class ItemsController < ApplicationController
   end
 
   def add_collection
-    if params[:collection].present?
-      @object.add_collection(params[:collection])
-      save_and_reindex
-      response_message = 'Collection added successfully'
-    else
-      response_message = 'No collection selected'
-    end
+    response_message = if params[:collection].present?
+                         collection_id = params[:collection]
+                         updated_structural = @cocina.structural.new(isMemberOf: @cocina.structural.isMemberOf + [collection_id])
+                         updated = @cocina.new(structural: updated_structural)
+                         object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+                         object_client.update(params: updated)
+
+                         reindex
+                         'Collection added successfully'
+                       else
+                         'No collection selected'
+                       end
     respond_to do |format|
       if params[:bulk]
         format.html { render status: :ok, plain: response_message }
@@ -103,8 +108,13 @@ class ItemsController < ApplicationController
   end
 
   def remove_collection
-    @object.remove_collection(params[:collection])
-    save_and_reindex
+    collection_id = params[:collection]
+    updated_structural = @cocina.structural.new(isMemberOf: @cocina.structural.isMemberOf - [collection_id])
+    updated = @cocina.new(structural: updated_structural)
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    object_client.update(params: updated)
+    reindex
+
     response_message = 'Collection successfully removed'
     respond_to do |format|
       if params[:bulk]
