@@ -3,11 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe 'versions/_close_ui.html.erb' do
-  let(:object) { double('object', pid: 'druid:abc123') }
+  before do
+    @cocina_object = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:abc123')
+    assign(:significance_selected, major: false, minor: true, admin: nil)
+  end
 
   it 'renders the partial content' do
-    assign(:object, object)
-    assign(:significance_selected, major: false, minor: true, admin: nil)
     render
     expect(rendered).to have_css 'form'
     expect(rendered).to have_css '.form-group label', text: 'Type'
