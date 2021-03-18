@@ -6,7 +6,14 @@ RSpec.describe 'Viewing an Admin policy' do
   let(:apo_druid) { 'druid:zt570qh4444' }
   let(:object) { Dor::AdminPolicyObject.new(pid: apo_druid) }
   let(:current_user) { create(:user) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: versions) }
+  let(:versions) do
+    [
+      Dor::Services::Client::ObjectVersion::Version.new(message: 'description 1'),
+      Dor::Services::Client::ObjectVersion::Version.new(message: 'description 2')
+    ]
+  end
   let(:cocina_model) do
     Cocina::Models.build(
       'label' => 'The APO',
