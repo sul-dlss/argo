@@ -178,7 +178,7 @@ jobs:
   test:
     environment:
       TZ: "America/Los_Angeles"
-      CC_TEST_REPORTER_ID: "5e29920968a573958452b8d1d58e5ca6f385d733d93330f414f4682b5b474f2f"
+      CC_TEST_REPORTER_ID: "266992849463aa465e0884ad7d582306656214e31ac9245258f93190868cbc9a"
       SETTINGS__DOR_INDEXING_URL: http://dor-indexing-app:3000/dor
       # To generate the token: docker-compose run dor-services-app rake generate_token
       SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
