@@ -2,7 +2,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/fa27202b0a02e2d41486/maintainability)](https://codeclimate.com/github/sul-dlss/argo/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/fa27202b0a02e2d41486/test_coverage)](https://codeclimate.com/github/sul-dlss/argo/test_coverage)
 [![GitHub version](https://badge.fury.io/gh/sul-dlss%2Fargo.svg)](https://badge.fury.io/gh/sul-dlss%2Fargo)
-
+  
 # Argo
 
 Argo is the administrative interface to the Stanford Digital Repository.
