@@ -6,14 +6,10 @@ RSpec.describe 'Item catkey change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(StateService).to receive(:new).and_return(state_service)
-    # Required until the CatalogControler#show no longer loads from Fedora:
-    allow(Dor).to receive(:find).with(druid).and_return(obj)
-    allow(obj).to receive(:new_record?).and_return(false)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
   let(:druid) { 'druid:kv840xx0000' }
-  let(:obj) { Dor::Item.new(pid: druid, catkey: '99999') }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
     Cocina::Models.build({
@@ -46,12 +42,14 @@ RSpec.describe 'Item catkey change' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
     let(:object_client) do
       instance_double(Dor::Services::Client::Object,
                       find: cocina_model,
                       events: events_client,
                       update: true,
-                      metadata: metadata_client)
+                      metadata: metadata_client,
+                      version: version_client)
     end
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }

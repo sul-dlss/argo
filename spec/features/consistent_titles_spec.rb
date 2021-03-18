@@ -9,10 +9,8 @@ RSpec.describe 'Consistent titles' do
                                   sw_display_title_tesim: title)
     ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
-    allow(Dor).to receive(:find).and_return(item)
   end
 
-  let(:item) { instance_double(Dor::Item, datastreams: {}, current_version: 3) }
   let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
 
   it 'catalog index views' do
@@ -37,11 +35,13 @@ RSpec.describe 'Consistent titles' do
                       workflow_routes: workflow_routes)
     end
     let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
     let(:object_client) do
       instance_double(Dor::Services::Client::Object,
                       find: cocina_model,
                       events: events_client,
-                      metadata: metadata_client)
+                      metadata: metadata_client,
+                      version: version_client)
     end
     let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }

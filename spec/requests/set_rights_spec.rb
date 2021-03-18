@@ -6,17 +6,9 @@ RSpec.describe 'Set rights for an object' do
   context 'when they have manage access' do
     let(:user) { create(:user) }
     let(:pid) { 'druid:cc243mg0841' }
-    let(:fedora_obj) do
-      instance_double(Dor::Item,
-                      pid: pid,
-                      current_version: 1,
-                      admin_policy_object: nil,
-                      catkey: nil)
-    end
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
 
     before do
-      allow(Dor).to receive(:find).and_return(fedora_obj)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_pid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
@@ -332,11 +324,13 @@ RSpec.describe 'Set rights for an object' do
                              })
       end
       let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+      let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
       let(:object_client) do
         instance_double(Dor::Services::Client::Object,
                         find: cocina_model,
                         events: events_client,
-                        metadata: metadata_client)
+                        metadata: metadata_client,
+                        version: version_client)
       end
       let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
       let(:service) { instance_double(Blacklight::SearchService, fetch: [nil, doc]) }
@@ -348,7 +342,6 @@ RSpec.describe 'Set rights for an object' do
       end
 
       before do
-        allow(fedora_obj).to receive(:datastreams).and_return({})
         allow(Blacklight::SearchService).to receive(:new).and_return(service)
         allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse, "Error (#{error})")
       end

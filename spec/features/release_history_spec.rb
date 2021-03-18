@@ -11,11 +11,13 @@ RSpec.describe 'Release history' do
 
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: cocina_model,
                     events: events_client,
-                    metadata: metadata_client)
+                    metadata: metadata_client,
+                    version: version_client)
   end
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: all_workflows) }
@@ -38,14 +40,11 @@ RSpec.describe 'Release history' do
                       who: 'pjreed',
                       date: '2017-10-20T15:42:15Z')
     end
-    let(:item) { Dor::Item.new(pid: id) }
     let(:id) { 'druid:qv778ht9999' }
 
     before do
       ActiveFedora::SolrService.add(id: id)
       ActiveFedora::SolrService.commit
-      allow(Dor).to receive(:find).and_return(item)
-      allow(item).to receive(:new_record?).and_return(false)
     end
 
     it 'items show a release history' do
@@ -60,14 +59,11 @@ RSpec.describe 'Release history' do
   context 'for an adminPolicy' do
     let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy, administrative: administrative, as_json: {}) }
     let(:administrative) { instance_double(Cocina::Models::AdminPolicyAdministrative) }
-    let(:item) { Dor::AdminPolicyObject.new(pid: id) }
     let(:id) { 'druid:qv778ht9999' }
 
     before do
       ActiveFedora::SolrService.add(id: id)
       ActiveFedora::SolrService.commit
-      allow(Dor).to receive(:find).and_return(item)
-      allow(item).to receive(:new_record?).and_return(false)
     end
 
     it 'does not show release history' do

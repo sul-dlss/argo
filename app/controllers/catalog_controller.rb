@@ -213,12 +213,10 @@ class CatalogController < ApplicationController
     @events = object_client.events.list
 
     @workflows = WorkflowService.workflows_for(druid: params[:id])
+
     milestones = MilestoneService.milestones_for(druid: params[:id])
-
-    obj = Dor.find params[:id]
-    versions = VersionService.list(resource: obj)
-
-    @milestones_presenter = MilestonesPresenter.new(milestones: milestones, versions: versions)
+    @milestones_presenter = MilestonesPresenter.new(milestones: milestones,
+                                                    versions: object_client.version.inventory)
 
     @datastreams = object_client.metadata.datastreams
 

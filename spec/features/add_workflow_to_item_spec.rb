@@ -18,11 +18,13 @@ RSpec.describe 'Add a workflow to an item' do
   end
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: cocina_model,
                     events: events_client,
-                    metadata: metadata_client)
+                    metadata: metadata_client,
+                    version: version_client)
   end
   let(:cocina_model) do
     instance_double(Cocina::Models::DRO,
@@ -38,10 +40,6 @@ RSpec.describe 'Add a workflow to an item' do
   let(:item_id) { 'druid:bg444xg6666' }
 
   before do
-    # this bit required while the CatalogController still loads from Fedora:
-    item = Dor::Item.new(pid: 'druid:bg444xg6666', label: 'Foo', source_id: 'sauce:99', admin_policy_object_id: uber_apo_id)
-    item.descMetadata.mods_title = 'Test'
-    item.save!
     ActiveFedora::SolrService.add(id: item_id, objectType_ssim: 'item')
     ActiveFedora::SolrService.commit
     sign_in create(:user), groups: ['sdr:administrator-role']

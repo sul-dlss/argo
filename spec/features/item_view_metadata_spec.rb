@@ -36,7 +36,8 @@ RSpec.describe 'Item view', js: true do
   let(:datastream) { Dor::Services::Client::Metadata::Datastream.new(dsid: 'descMetadata', pid: item_id) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: [datastream]) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
-  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1, inventory: [version1]) }
+  let(:version1) { Dor::Services::Client::ObjectVersion::Version.new }
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: all_workflows) }
   let(:workflow_client) do
