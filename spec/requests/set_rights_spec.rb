@@ -331,7 +331,13 @@ RSpec.describe 'Set rights for an object' do
                                'identification' => {}
                              })
       end
-      let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
+      let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+      let(:object_client) do
+        instance_double(Dor::Services::Client::Object,
+                        find: cocina_model,
+                        events: events_client,
+                        metadata: metadata_client)
+      end
       let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
       let(:service) { instance_double(Blacklight::SearchService, fetch: [nil, doc]) }
       let(:doc) { SolrDocument.new id: pid }

@@ -17,7 +17,13 @@ RSpec.describe 'Add a workflow to an item' do
                     active_lifecycle: [])
   end
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
+  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object,
+                    find: cocina_model,
+                    events: events_client,
+                    metadata: metadata_client)
+  end
   let(:cocina_model) do
     instance_double(Cocina::Models::DRO,
                     externalIdentifier: item_id,

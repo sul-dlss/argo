@@ -12,7 +12,6 @@ RSpec.describe 'Enable buttons' do
       Dor::Item,
       current_version: '1',
       admin_policy_object: nil,
-      datastreams: {},
       catkey: nil,
       identityMetadata: double(ng_xml: Nokogiri::XML(''))
     )
@@ -24,7 +23,13 @@ RSpec.describe 'Enable buttons' do
   let(:item_id) { 'druid:hj185xx2222' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
+  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object,
+                    find: cocina_model,
+                    events: events_client,
+                    metadata: metadata_client)
+  end
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
 

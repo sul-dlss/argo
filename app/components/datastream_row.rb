@@ -11,14 +11,7 @@ class DatastreamRow < ApplicationComponent
 
   attr_reader :datastream
 
-  delegate :label, :dsid, :pid, to: :datastream
-
-  # Datastream helpers
-  CONTROL_GROUP_TEXT = { 'X' => 'inline', 'M' => 'managed', 'R' => 'redirect', 'E' => 'external' }.freeze
-
-  def control_group
-    "#{datastream.controlGroup}/#{CONTROL_GROUP_TEXT[datastream.controlGroup]}"
-  end
+  delegate :label, :dsid, :pid, :versionId, to: :datastream
 
   def link_to_identifier
     link_to dsid, item_datastream_path(pid, dsid), title: dsid, data: { blacklight_modal: 'trigger' }
@@ -30,10 +23,5 @@ class DatastreamRow < ApplicationComponent
 
   def mime_type
     datastream.mimeType
-  end
-
-  def version
-    v = datastream.versionID.nil? ? '0' : datastream.versionID.to_s.split(/\./).last
-    "v#{v}"
   end
 end

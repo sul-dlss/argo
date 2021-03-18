@@ -45,7 +45,14 @@ RSpec.describe 'Item catkey change' do
   describe 'when modification is allowed' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client, update: true) }
+    let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+    let(:object_client) do
+      instance_double(Dor::Services::Client::Object,
+                      find: cocina_model,
+                      events: events_client,
+                      update: true,
+                      metadata: metadata_client)
+    end
     let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
     let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }

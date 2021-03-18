@@ -10,7 +10,13 @@ RSpec.describe 'Release history' do
   end
 
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
+  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object,
+                    find: cocina_model,
+                    events: events_client,
+                    metadata: metadata_client)
+  end
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: all_workflows) }
   let(:workflow_client) do
