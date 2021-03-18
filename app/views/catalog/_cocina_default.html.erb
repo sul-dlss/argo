@@ -1,8 +1,7 @@
 <h3 id="document-cocina-head" class="section-head collapsible-section collapsed">
   Cocina Model
 </h3>
-<div id="document-cocina-section" class="document-section" style="display:none">
-  <table class="detail">
-    <pre><%= JSON.pretty_generate(@cocina.as_json) %></pre>
+<div id="document-cocina-section" class="document-section" style="display:none" data-controller="json-renderer">
+  <table class="detail" data-target="json-renderer.section" data-cocina='<%= @cocina.to_json.html_safe %>'>
   </table>
 </div>
