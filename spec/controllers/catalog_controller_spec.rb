@@ -20,62 +20,6 @@ RSpec.describe CatalogController, type: :controller do
     end
   end
 
-  describe '#show' do
-    let(:druid) { 'druid:fakepid' }
-    let(:item) { instance_double(Dor::Item, datastreams: {}) }
-
-    before do
-      ActiveFedora::SolrService.add(id: druid,
-                                    sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
-      ActiveFedora::SolrService.commit
-      allow(Dor).to receive(:find).with(druid).and_return(item)
-    end
-
-    context 'without logging in' do
-      it 'redirects to login' do
-        get 'show', params: { id: druid }
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    describe 'with user' do
-      before do
-        sign_in user
-        allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      end
-
-      context 'when unauthorized' do
-        before do
-          allow(controller).to receive(:authorize!).with(:view_metadata, cocina_model).and_raise(CanCan::AccessDenied)
-        end
-
-        let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-        let(:cocina_model) { instance_double(Cocina::Models::DRO) }
-
-        it 'is forbidden' do
-          get 'show', params: { id: druid }
-          expect(response).to be_forbidden
-        end
-      end
-
-      context 'when authorized' do
-        before do
-          allow(controller).to receive(:authorize!).with(:view_metadata, cocina_model)
-        end
-
-        let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-        let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, events: events_client) }
-        let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative) }
-        let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
-
-        it 'is successful' do
-          get 'show', params: { id: druid }
-          expect(response).to be_successful
-        end
-      end
-    end
-  end
-
   describe 'blacklight config' do
     let(:config) { controller.blacklight_config }
 

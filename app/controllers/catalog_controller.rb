@@ -220,9 +220,7 @@ class CatalogController < ApplicationController
 
     @milestones_presenter = MilestonesPresenter.new(milestones: milestones, versions: versions)
 
-    @datastreams = obj.datastreams.reject do |name, instance|
-      instance.new? || Settings.hidden_datastreams.include?(name)
-    end.values
+    @datastreams = object_client.metadata.datastreams
 
     @buttons_presenter = ButtonsPresenter.new(
       manager: can?(:manage_item, @cocina),

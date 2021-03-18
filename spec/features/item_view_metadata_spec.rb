@@ -33,6 +33,8 @@ RSpec.describe 'Item view', js: true do
   let(:obj) { Dor::Item.new(pid: item_id) }
   let(:item_id) { 'druid:hj185xx2222' }
   let(:event) { Dor::Services::Client::Events::Event.new(event_type: 'shelve_request_received', data: { 'host' => 'dor-services-stage.stanford.edu' }) }
+  let(:datastream) { Dor::Services::Client::Metadata::Datastream.new(dsid: 'descMetadata', pid: item_id) }
+  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: [datastream]) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: [event]) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
   let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
@@ -47,7 +49,12 @@ RSpec.describe 'Item view', js: true do
   end
 
   context 'when there is an error retrieving the cocina_model' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, version: version_client, events: events_client) }
+    let(:object_client) do
+      instance_double(Dor::Services::Client::Object,
+                      version: version_client,
+                      events: events_client,
+                      metadata: metadata_client)
+    end
     let(:solr_doc) { { id: item_id } }
 
     before do
@@ -64,8 +71,13 @@ RSpec.describe 'Item view', js: true do
   end
 
   context 'when the cocina_model exists' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client, events: events_client) }
-
+    let(:object_client) do
+      instance_double(Dor::Services::Client::Object,
+                      find: cocina_model,
+                      version: version_client,
+                      events: events_client,
+                      metadata: metadata_client)
+    end
     let(:attrs) do
       <<~JSON
         {
