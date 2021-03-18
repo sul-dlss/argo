@@ -30,7 +30,10 @@ RSpec.describe MilestonesPresenter do
   end
 
   let(:versions) do
-    { 1 => { tag: '1.0.0', desc: 'Initial version' }, 2 => { tag: '1.1.0', desc: 'Minor change' } }
+    [
+      Dor::Services::Client::ObjectVersion::Version.new(versionId: 1, tag: '1.0.0', message: 'Initial version'),
+      Dor::Services::Client::ObjectVersion::Version.new(versionId: 2, tag: '1.1.0', message: 'Minor change')
+    ]
   end
 
   describe '#each_version' do

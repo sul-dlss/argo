@@ -9,7 +9,7 @@ RSpec.describe 'Create an apo', js: true do
   let(:apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
   let(:collection) { Dor::Collection.new(pid: new_collection_druid, label: 'New Testing Collection') }
   let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
-  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, current: 1) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
   let(:object_client) do

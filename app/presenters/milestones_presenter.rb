@@ -3,7 +3,7 @@
 # Displays milestones for each of the versions for an object
 class MilestonesPresenter
   # @param [Hash<String,Hash>] milestones the milestone data
-  # @param [Hash<Integer,Hash>] versions the version tag data
+  # @param [Array<Dor::Services::Client::ObjectVersion::Version>] versions the version tag data
   def initialize(milestones:, versions:)
     @milestones = milestones
     @versions = versions
@@ -18,10 +18,10 @@ class MilestonesPresenter
   end
 
   def version_title(version)
-    val = versions[version.to_i]
+    val = versions.find { |this| this.versionId == version.to_i }
     return version unless val
 
-    "#{version} (#{val[:tag]}) #{val[:desc]}"
+    "#{version} (#{val.tag}) #{val.message}"
   end
 
   private
