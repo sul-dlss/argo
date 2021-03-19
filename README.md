@@ -86,6 +86,13 @@ docker-compose up -d
 
 Note that docker-compose will spin up Argo and apply the administrator role to you.
 
+If you want some fixtures to assist with development, run:
+
+```
+bundler exec rake argo:repo:load
+``` 
+You will NOT be able to re-run this task successfully unless fixtures are no longer in the docker containers (e.g. if you `docker-compose down`). That is because they are already loaded. The error messages in your terminal output do not surface this cause, but that is likely at play if you see `"Rubydora::FedoraInvalidRequest: See logger for details"`, esp with `"Caused by: RestClient::InternalServerError: 500 Internal Server Error"` in there.
+
 If you want to use the rails console use:
 
 ```

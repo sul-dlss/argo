@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+require 'fileutils'
+require 'retries'
+
+def load_order_files(fedora_files)
+  data_path = File.expand_path('../../fedora_conf/data', __dir__)
+  fedora_files.delete_if { |f| f.strip.empty? }
+  fedora_files.map { |f| File.join(data_path, f.strip) }
+end
+
 begin
   require 'rubocop/rake_task'
   RuboCop::RakeTask.new
@@ -23,3 +32,56 @@ task(:default).clear
 
 desc 'run specs and rubocop (for CI)'
 task default: %i[rubocop spec]
+
+fedora_files = File.foreach(File.join(File.expand_path('../../fedora_conf/data', __dir__), 'load_order')).to_a
+
+namespace :argo do
+  namespace :repo do
+    desc "Load XML file(s) into repo (fedora and solr), default: contents of 'load_order' file. With a glob: rake argo:repo:load[fedora_conf/data/*.xml]"
+    task :load, [:glob] => :environment do |_task, args|
+      puts "travis_fold:start:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
+
+      file_list = []
+      if args.key?(:glob)
+        file_list = Dir.glob(args[:glob])
+      else
+        puts 'No file glob was specified so file order and inclusion is determined by the load_order file'
+        file_list = load_order_files(fedora_files)
+      end
+
+      errors = []
+      i = 0
+
+      require 'webmock'
+      # only allow connections to Fcrepo, Solr and workflow
+      WebMock.disable_net_connect!(allow: ['workflow:3000',
+                                           'solr:8983',
+                                           'fcrepo:8080',
+                                           'localhost:8983',
+                                           'localhost:8984',
+                                           'localhost:3004',
+                                           'dor-indexing-app:3000'])
+      include WebMock::API
+      WebMock.enable!
+      file_list.each do |file|
+        i += 1
+
+        handler = proc do |e, _attempt_number, _total_delay|
+          puts warn "ERROR loading #{file}:\n#{e.message}\n#{e.backtrace.join "\n"}"
+          errors << file
+        end
+        pid = "druid:#{File.basename(file, '.xml')}"
+        with_retries(max_tries: 3, handler: handler, rescue: [StandardError]) do |attempt|
+          puts "** File #{i}, Try #{attempt} ** file: #{file}"
+
+          ActiveFedora::FixtureLoader.import_to_fedora(file, pid)
+          Argo::Indexer.reindex_pid_remotely(pid)
+        end
+      end
+      puts 'Done loading repo files'
+      puts "ERROR in #{errors.size} of #{i} files" unless errors.empty?
+      #     puts "Loaded #{i-errors.size()} of #{i} files successfully"   # these won't be true until repo:load actually fails unless successful
+      puts "travis_fold:end:argo-repo-load\r" if ENV['TRAVIS'] == 'true'
+    end
+  end
+end
