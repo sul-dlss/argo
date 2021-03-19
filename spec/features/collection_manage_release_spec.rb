@@ -15,7 +15,16 @@ RSpec.describe 'Collection manage release' do
 
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, release_tags: release_tags_client, events: events_client) }
+  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
+  let(:object_client) do
+    instance_double(Dor::Services::Client::Object,
+                    find: cocina_model,
+                    release_tags: release_tags_client,
+                    events: events_client,
+                    metadata: metadata_client,
+                    version: version_client)
+  end
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
   let(:cocina_model) do
     instance_double(Cocina::Models::DRO,
@@ -27,8 +36,7 @@ RSpec.describe 'Collection manage release' do
   let(:structural) { instance_double(Cocina::Models::DROStructural, contains: []) }
   let(:collection_id) { 'druid:gg232vv1111' }
 
-  # TODO: Figure out why this is flappy in CI and un-xit
-  xit 'Has a manage release button' do
+  it 'Has a manage release button' do
     visit solr_document_path(collection_id)
     expect(page).to have_css 'a', text: 'Manage release'
   end
