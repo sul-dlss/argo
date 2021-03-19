@@ -104,6 +104,7 @@ executors:
           DATABASE_PASSWORD: sekret
           DATABASE_HOSTNAME: db
           DATABASE_PORT: 5432
+          SECRET_KEY_BASE: 769171f88c527d564fb65b4b7ef712d5ae9761a21e26a41cd7c88eb0af89c74f857b9be4089119f71cf806dfc8bf9d9d2f0df91c00b119c96f462b46ebf43b0f
           SOLR_URL: http://solr:8983/solr/argo
           SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
           SETTINGS__SOLR__URL: http://solr:8983/solr/argo
