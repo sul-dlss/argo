@@ -1,12 +1,12 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, params[:dsid]) %>
+  <% component.with(:header, params[:id]) %>
   <% component.with(:body) do %>
     <% if can?(:manage_item, @cocina) %>
-      <%= form_tag item_datastream_path(@cocina.externalIdentifier, @ds.dsid), id: 'xmlEditForm', method: :patch do %>
+      <%= form_tag item_datastream_path(@cocina.externalIdentifier, params[:id]), id: 'xmlEditForm', method: :patch do %>
           <input type="hidden" name="id" value="<%= @cocina.externalIdentifier %>">
-          <input name="dsid" id="datastream" type="hidden" value="<%= params[:dsid] %>">
+          <input name="dsid" id="datastream" type="hidden" value="<%= params[:id] %>">
           <div class="form-group">
-            <textarea name="content" id="content" class='form-control'><%= @ds.content.to_s %></textarea>
+            <textarea name="content" id="content" class='form-control'><%= @content %></textarea>
           </div>
           <div class="form-group">
             <button type="submit" id="update" class="btn btn-primary">Update Datastream</button>

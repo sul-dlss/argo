@@ -13,21 +13,16 @@ class DatastreamsController < ApplicationController
   end
 
   def edit
-    @ds = @obj.datastreams[params[:id]]
+    @content = @object_client.metadata.datastream(params[:id])
     render layout: !request.xhr?
   end
 
   def show
     if params[:dsid] == 'full_dc'
-      @content = Nokogiri::XML(Dor::Services::Client.object(@obj.pid).metadata.dublin_core).prettify
+      @content = Nokogiri::XML(@object_client.metadata.dublin_core).prettify
     else
-      @ds = @obj.datastreams[params[:id]]
-
-      @content = if @ds.respond_to? :ng_xml
-                   Nokogiri::XML(@ds.ng_xml.to_s, &:noblanks).to_s
-                 else
-                   Nokogiri::XML(@ds.content, &:noblanks).to_s
-                 end
+      raw_content = @object_client.metadata.datastream(params[:id])
+      @content = Nokogiri::XML(raw_content, &:noblanks).to_s
     end
 
     raise ActionController::RoutingError, 'Not Found' if @content.nil?
@@ -76,22 +71,8 @@ class DatastreamsController < ApplicationController
 
   private
 
-  LEGACY_API = %w[
-    administrative
-    descriptive
-    content
-    geo
-    identity
-    provenance
-    relationships
-    rights
-    technical
-    version
-  ].freeze
-
   def store_xml(druid:, datastream:, content:)
     endpoint = self.class.endpoint_for_datastream datastream
-    return update_directly(druid: druid, datastream: datastream, content: content) unless LEGACY_API.include? endpoint
 
     object_client = Dor::Services::Client.object(druid)
     object_client.metadata.legacy_update(
@@ -103,20 +84,10 @@ class DatastreamsController < ApplicationController
     Argo::Indexer.reindex_pid_remotely(druid)
   end
 
-  # This is the deprecated path where we write directly to Fedora 3
-  def update_directly(druid:, datastream:, content:)
-    Honeybadger.notify("Deprecated call to update_directly for #{druid}, #{datastream}")
-
-    @object = Dor.find druid
-    @object.datastreams[datastream].content = content # set the XML to be verbatim as posted
-    @object.save
-    Argo::Indexer.reindex_pid_remotely(druid)
-  end
-
   def show_aspect
     pid = params[:item_id].include?('druid') ? params[:item_id] : "druid:#{params[:item_id]}"
     @response, @document = search_service.fetch pid # this does the authorization
-    @obj = Dor.find(pid)
     @cocina = maybe_load_cocina(pid)
+    @object_client = Dor::Services::Client.object(pid)
   end
 end

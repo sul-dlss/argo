@@ -3,19 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Draw the edit datastream form' do
-  let(:item) do
-    instance_double(Dor::Item, pid: 'druid:bc123df4567', datastreams: { 'descMetadata' => datastream })
-  end
-  let(:datastream) do
-    instance_double(Dor::DescMetadataDS, dsid: 'descMetadata', content: xml)
-  end
-
-  let(:xml) do
-    <<~XML
-      <descMetadata></descMetadata>
-    XML
-  end
-
   let(:document) do
     instance_double(SolrDocument,
                     id: 'druid:bc123df4567',
@@ -27,12 +14,17 @@ RSpec.describe 'Draw the edit datastream form' do
   let(:user) { create(:user) }
 
   context 'for content managers' do
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:object_client) do
+      instance_double(Dor::Services::Client::Object,
+                      find: cocina_model,
+                      metadata: metadata_client)
+    end
+    let(:metadata_client) { instance_double(Dor::Services::Client::Metadata) }
     let(:cocina_model) { instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:bc123df4567') }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Dor).to receive(:find).with('druid:bc123df4567').and_return(item)
+      allow(metadata_client).to receive(:datastream).with('descMetadata').and_return('<descMetadata></descMetadata>')
 
       sign_in create(:user), groups: ['sdr:administrator-role']
 
