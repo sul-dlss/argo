@@ -4,10 +4,12 @@ require 'rails_helper'
 
 RSpec.describe Report, type: :model do
   let(:user) { instance_double(User, admin?: true) }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
-    ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
-    ActiveFedora::SolrService.commit
+    solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+    solr_conn.commit
   end
 
   context 'csv' do
@@ -34,9 +36,9 @@ RSpec.describe Report, type: :model do
 
     context 'when a field has double quotes' do
       before do
-        ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
-                                      sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
-        ActiveFedora::SolrService.commit
+        solr_conn.add(id: 'druid:hj185xx2222',
+                      sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+        solr_conn.commit
       end
 
       it 'handles a title with double quotes in it' do
@@ -47,9 +49,9 @@ RSpec.describe Report, type: :model do
 
     context 'with multivalued fields' do
       before do
-        ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
-                                      tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
-        ActiveFedora::SolrService.commit
+        solr_conn.add(id: 'druid:xb482ww9999',
+                      tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
+        solr_conn.commit
       end
 
       it 'handles a multivalued fields' do
@@ -123,11 +125,11 @@ RSpec.describe Report, type: :model do
       end
 
       before do
-        ActiveFedora::SolrService.add(id: 'druid:fg464dn8891',
-                                      obj_label_tesim: 'State Banking Commission Annual Reports')
-        ActiveFedora::SolrService.add(id: 'druid:mb062dy1188',
-                                      obj_label_tesim: 'maxims found in the leading English and American reports and elementary works')
-        ActiveFedora::SolrService.commit
+        solr_conn.add(id: 'druid:fg464dn8891',
+                      obj_label_tesim: 'State Banking Commission Annual Reports')
+        solr_conn.add(id: 'druid:mb062dy1188',
+                      obj_label_tesim: 'maxims found in the leading English and American reports and elementary works')
+        solr_conn.commit
       end
 
       it 'returns unqualified druids by default' do
@@ -157,10 +159,10 @@ RSpec.describe Report, type: :model do
       end
 
       before do
-        ActiveFedora::SolrService.add(id: 'druid:fg464dn8891',
-                                      obj_label_tesim: 'State Banking Commission Annual Reports',
-                                      tag_ssim: ['Registered By : llam813', 'Remediated By : 4.6.6.2'])
-        ActiveFedora::SolrService.commit
+        solr_conn.add(id: 'druid:fg464dn8891',
+                      obj_label_tesim: 'State Banking Commission Annual Reports',
+                      tag_ssim: ['Registered By : llam813', 'Remediated By : 4.6.6.2'])
+        solr_conn.commit
       end
 
       it 'returns druids and tags' do
