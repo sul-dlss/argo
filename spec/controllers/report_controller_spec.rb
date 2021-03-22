@@ -4,13 +4,16 @@ require 'rails_helper'
 
 RSpec.describe ReportController, type: :controller do
   before do
-    ActiveFedora::SolrService.instance.conn.delete_by_query('*:*')
-    ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
-                                  objectType_ssim: 'item',
-                                  obj_label_tesim: 'Report about stuff')
-    ActiveFedora::SolrService.commit
+    solr_conn.delete_by_query('*:*')
+    solr_conn.add(id: 'druid:xb482ww9999',
+                  objectType_ssim: 'item',
+                  obj_label_tesim: 'Report about stuff')
+    solr_conn.commit
     sign_in user
   end
+
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   let(:user) { create(:user) }
 
