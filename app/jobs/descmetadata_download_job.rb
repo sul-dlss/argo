@@ -48,11 +48,6 @@ class DescmetadataDownloadJob < GenericJob
     write_to_zip(desc_metadata, current_druid, zip_file)
     log.puts("argo.bulk_metadata.bulk_log_bulk_action_success #{current_druid}")
     bulk_action.increment(:druid_count_success).save
-  rescue ActiveFedora::ObjectNotFoundError => e
-    log.puts("argo.bulk_metadata.bulk_log_not_exist #{current_druid}")
-    log.puts(e.message)
-    log.puts(e.backtrace)
-    bulk_action.increment(:druid_count_fail).save
   rescue StandardError => e
     log.puts("argo.bulk_metadata.bulk_log_error_exception #{current_druid}")
     log.puts(e.message)
