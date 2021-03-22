@@ -23,10 +23,12 @@ RSpec.describe 'Set governing APO' do
     item
   end
   let(:item_id) { item.id }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
-    ActiveFedora::SolrService.instance.conn.delete_by_query('*:*')
-    ActiveFedora::SolrService.commit
+    solr_conn.delete_by_query('*:*')
+    solr_conn.commit
 
     Argo::Indexer.reindex_pid_remotely(new_apo.pid)
     Argo::Indexer.reindex_pid_remotely(item_id)

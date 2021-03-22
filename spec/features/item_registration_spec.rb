@@ -14,6 +14,8 @@ RSpec.describe 'Item registration page', js: true do
     }
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
     Cocina::Models.build(
@@ -31,8 +33,8 @@ RSpec.describe 'Item registration page', js: true do
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
 
-    ActiveFedora::SolrService.add(solr_doc)
-    ActiveFedora::SolrService.commit
+    solr_conn.add(solr_doc)
+    solr_conn.commit
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
   end
 

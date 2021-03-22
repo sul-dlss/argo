@@ -5,30 +5,32 @@ require 'rails_helper'
 RSpec.describe 'Date range form', js: true do
   let(:tomorrow) { (Time.current + 1.day).strftime('%m/%d/%Y') }
   let(:last_modified) { Time.new.utc.beginning_of_day.iso8601 }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
-    ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
-    ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
-                                  objectType_ssim: 'item',
-                                  obj_label_tesim: 'Report about stuff',
-                                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3980',
-                                  objectType_ssim: 'item',
-                                  obj_label_tesim: 'Report about stuff',
-                                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3981',
-                                  objectType_ssim: 'item',
-                                  obj_label_tesim: 'Report about stuff',
-                                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3982',
-                                  objectType_ssim: 'item',
-                                  obj_label_tesim: 'Report about stuff',
-                                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3983',
-                                  objectType_ssim: 'item',
-                                  obj_label_tesim: 'Report about stuff',
-                                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
-    ActiveFedora::SolrService.commit
+    solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+    solr_conn.add(id: 'druid:xb482ww9999',
+                  objectType_ssim: 'item',
+                  obj_label_tesim: 'Report about stuff',
+                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
+    solr_conn.add(id: 'druid:xb482bw3980',
+                  objectType_ssim: 'item',
+                  obj_label_tesim: 'Report about stuff',
+                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
+    solr_conn.add(id: 'druid:xb482bw3981',
+                  objectType_ssim: 'item',
+                  obj_label_tesim: 'Report about stuff',
+                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
+    solr_conn.add(id: 'druid:xb482bw3982',
+                  objectType_ssim: 'item',
+                  obj_label_tesim: 'Report about stuff',
+                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
+    solr_conn.add(id: 'druid:xb482bw3983',
+                  objectType_ssim: 'item',
+                  obj_label_tesim: 'Report about stuff',
+                  SolrDocument::FIELD_LAST_MODIFIED_DATE => last_modified)
+    solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 

@@ -25,10 +25,12 @@ RSpec.describe 'Viewing an Admin policy' do
   end
 
   let(:solr_doc) { { id: apo_druid } }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
-    ActiveFedora::SolrService.add(solr_doc)
-    ActiveFedora::SolrService.commit
+    solr_conn.add(solr_doc)
+    solr_conn.commit
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(object).to receive(:persisted?).and_return(true) # This allows to_param to function
     allow(Dor).to receive(:find).and_return(object)

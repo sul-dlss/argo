@@ -13,12 +13,14 @@ RSpec.describe 'Bulk actions view', js: true do
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: admin_md, as_json: {}) }
   let(:admin_md) { instance_double(Cocina::Models::Administrative, releaseTags: nil) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: [], lifecycle: [], active_lifecycle: [], milestones: {}) }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    ActiveFedora::SolrService.add(id: 'druid:zt570qh4444',
-                                  nonhydrus_collection_title_ssim: 'Foo')
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: 'druid:zt570qh4444',
+                  nonhydrus_collection_title_ssim: 'Foo')
+    solr_conn.commit
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end

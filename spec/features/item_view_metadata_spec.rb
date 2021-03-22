@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Item view', js: true do
   before do
-    ActiveFedora::SolrService.add(solr_doc)
-    ActiveFedora::SolrService.commit
+    solr_conn.add(solr_doc)
+    solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
@@ -30,6 +30,8 @@ RSpec.describe 'Item view', js: true do
     allow(obj.contentMetadata).to receive(:new?).and_return(false)
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:obj) { Dor::Item.new(pid: item_id) }
   let(:item_id) { 'druid:hj185xx2222' }
   let(:event) { Dor::Services::Client::Events::Event.new(event_type: 'shelve_request_received', data: { 'host' => 'dor-services-stage.stanford.edu' }) }

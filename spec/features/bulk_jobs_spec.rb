@@ -5,12 +5,14 @@ require 'rails_helper'
 # Feature tests for the spreadsheet bulk uploads view.
 RSpec.describe 'Bulk jobs view' do
   before do
-    ActiveFedora::SolrService.add(id: apo_id, objectType_ssim: 'adminPolicy')
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: apo_id, objectType_ssim: 'adminPolicy')
+    solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy) }
   let(:apo_id) { 'druid:hv992yv2222' }

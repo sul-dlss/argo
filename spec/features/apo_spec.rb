@@ -47,6 +47,8 @@ RSpec.describe 'Create an apo', js: true do
                                    version: 1,
                                    access: {})
   end
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   after do
     Dor::Collection.find(new_collection_druid).destroy # clean up after ourselves
@@ -74,9 +76,9 @@ RSpec.describe 'Create an apo', js: true do
     allow(Argo::Indexer).to receive(:reindex_pid_remotely).with(new_apo_druid) do |_key|
       # Since the register was mocked, this wouldn't build the correct solr document.
       # This will make one truer to what we need:
-      ActiveFedora::SolrService.add(id: new_apo_druid,
-                                    SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy')
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: new_apo_druid,
+                    SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy')
+      solr_conn.commit
     end
     allow(Dor).to receive(:find).with(new_collection_druid).and_return(collection)
     allow(Dor).to receive(:find).with('druid:dd327rv8888', cast: true).and_call_original # The agreement

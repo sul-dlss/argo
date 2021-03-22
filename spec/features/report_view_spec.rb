@@ -8,11 +8,14 @@ RSpec.describe 'Report view' do
   end
 
   describe 'the show page', js: true do
+    let(:blacklight_config) { CatalogController.blacklight_config }
+    let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+
     before do
-      ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
-                                    objectType_ssim: 'item',
-                                    sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: 'druid:hj185xx2222',
+                    objectType_ssim: 'item',
+                    sw_display_title_tesim: 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953')
+      solr_conn.commit
     end
 
     it 'shows table without error' do

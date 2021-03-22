@@ -5,12 +5,14 @@ require 'rails_helper'
 RSpec.describe 'Enable buttons' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
-    ActiveFedora::SolrService.add(id: item_id, objectType_ssim: 'item')
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: item_id, objectType_ssim: 'item')
+    solr_conn.commit
     allow(StateService).to receive(:new).and_return(state_service)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:item_id) { 'druid:hj185xx2222' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
