@@ -9,6 +9,8 @@ RSpec.describe 'Item source id change' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:druid) { 'druid:kv840xx0000' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
@@ -60,9 +62,9 @@ RSpec.describe 'Item source id change' do
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_pid_remotely)
-      ActiveFedora::SolrService.add(id: druid, objectType_ssim: 'item',
-                                    SolrDocument::FIELD_CATKEY_ID => 'catkey:99999')
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: druid, objectType_ssim: 'item',
+                    SolrDocument::FIELD_CATKEY_ID => 'catkey:99999')
+      solr_conn.commit
     end
 
     it 'changes the source id' do

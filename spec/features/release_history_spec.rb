@@ -9,6 +9,8 @@ RSpec.describe 'Release history' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
@@ -43,8 +45,8 @@ RSpec.describe 'Release history' do
     let(:id) { 'druid:qv778ht9999' }
 
     before do
-      ActiveFedora::SolrService.add(id: id)
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: id)
+      solr_conn.commit
     end
 
     it 'items show a release history' do
@@ -62,8 +64,8 @@ RSpec.describe 'Release history' do
     let(:id) { 'druid:qv778ht9999' }
 
     before do
-      ActiveFedora::SolrService.add(id: id)
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: id)
+      solr_conn.commit
     end
 
     it 'does not show release history' do

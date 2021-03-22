@@ -7,14 +7,17 @@ RSpec.describe 'Search results' do
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+
   context 'for a book' do
     before do
-      ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+      solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
 
-      ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
-                                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                                    content_type_ssim: 'book')
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: 'druid:hj185xx2222',
+                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                    content_type_ssim: 'book')
+      solr_conn.commit
     end
 
     it 'contains Blacklight default index page tools' do
@@ -45,19 +48,19 @@ RSpec.describe 'Search results' do
 
   context 'the result' do
     before do
-      ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+      solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
 
-      ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
-                                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                                    content_type_ssim: 'image',
-                                    status_ssi: 'v1 Unknown Status',
-                                    SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
-                                    SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
-                                    project_tag_ssim: 'Fuller Slides',
-                                    source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',
-                                    identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
-                                    tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo'])
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: 'druid:hj185xx2222',
+                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                    content_type_ssim: 'image',
+                    status_ssi: 'v1 Unknown Status',
+                    SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
+                    SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
+                    project_tag_ssim: 'Fuller Slides',
+                    source_id_ssim: 'fuller:M1090_S15_B02_F01_0126',
+                    identifier_tesim: ['fuller:M1090_S15_B02_F01_0126', 'uuid:ad2d8894-7eba-11e1-b714-0016034322e7'],
+                    tag_ssim: ['Project : Fuller Slides', 'Registered By : renzo'])
+      solr_conn.commit
     end
 
     it 'contains appropriate metadata fields' do
@@ -87,10 +90,10 @@ RSpec.describe 'Search results' do
 
   context 'the thumbnail' do
     before do
-      ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
-                                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
-                                    first_shelved_image_ss: 'M1090_S15_B02_F01_0126.jp2')
-      ActiveFedora::SolrService.commit
+      solr_conn.add(id: 'druid:hj185xx2222',
+                    SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                    first_shelved_image_ss: 'M1090_S15_B02_F01_0126.jp2')
+      solr_conn.commit
     end
 
     it 'contains document image thumbnail' do

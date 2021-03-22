@@ -4,13 +4,15 @@ require 'rails_helper'
 
 RSpec.describe 'Consistent titles' do
   before do
-    ActiveFedora::SolrService.add(id: 'druid:hj185xx2222',
-                                  objectType_ssim: 'item',
-                                  sw_display_title_tesim: title)
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: 'druid:hj185xx2222',
+                  objectType_ssim: 'item',
+                  sw_display_title_tesim: title)
+    solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:title) { 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953' }
 
   it 'catalog index views' do

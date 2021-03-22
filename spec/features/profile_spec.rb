@@ -3,28 +3,31 @@
 require 'rails_helper'
 
 RSpec.describe 'Profile' do
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+
   before do
-    ActiveFedora::SolrService.instance.conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
+    solr_conn.delete_by_query("#{SolrDocument::FIELD_OBJECT_TYPE}:item")
 
-    ActiveFedora::SolrService.add(id: 'druid:xb482ww9999',
-                                  objectType_ssim: 'item',
-                                  topic_ssim: 'Cephalopoda',
-                                  sw_subject_geographic_ssim: 'Bermuda Islands',
-                                  tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
+    solr_conn.add(id: 'druid:xb482ww9999',
+                  objectType_ssim: 'item',
+                  topic_ssim: 'Cephalopoda',
+                  sw_subject_geographic_ssim: 'Bermuda Islands',
+                  tag_ssim: ['Project : Argo Demo', 'Registered By : mbklein'])
 
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3988',
-                                  objectType_ssim: 'item',
-                                  content_type_ssim: 'image',
-                                  SolrDocument::FIELD_RELEASED_TO => 'SEARCHWORKS',
-                                  collection_title_ssim: 'Annual report of the State Corporation Commission',
-                                  apo_title_ssim: 'Stanford University Libraries - Special Collections',
-                                  rights_descriptions_ssim: 'dark',
-                                  use_statement_ssim: 'contact govinfolib@lists.stanford.edu',
-                                  copyright_ssim: 'Copyright © Stanford University. All Rights Reserved.',
-                                  sw_format_ssim: 'Image',
-                                  sw_language_ssim: 'English',
-                                  processing_status_text_ssi: 'Unknown Status')
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: 'druid:xb482bw3988',
+                  objectType_ssim: 'item',
+                  content_type_ssim: 'image',
+                  SolrDocument::FIELD_RELEASED_TO => 'SEARCHWORKS',
+                  collection_title_ssim: 'Annual report of the State Corporation Commission',
+                  apo_title_ssim: 'Stanford University Libraries - Special Collections',
+                  rights_descriptions_ssim: 'dark',
+                  use_statement_ssim: 'contact govinfolib@lists.stanford.edu',
+                  copyright_ssim: 'Copyright © Stanford University. All Rights Reserved.',
+                  sw_format_ssim: 'Image',
+                  sw_language_ssim: 'English',
+                  processing_status_text_ssi: 'Unknown Status')
+    solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 

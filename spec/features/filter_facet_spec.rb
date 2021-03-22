@@ -3,10 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe 'More facet view', js: true do
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+
   before do
-    ActiveFedora::SolrService.add(id: 'druid:xb482bw3983',
-                                  nonhydrus_collection_title_ssim: 'Annual report of the State Corporation Commission')
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: 'druid:xb482bw3983',
+                  nonhydrus_collection_title_ssim: 'Annual report of the State Corporation Commission')
+    solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
   end
 

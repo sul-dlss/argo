@@ -8,11 +8,13 @@ RSpec.describe 'Collection manage release' do
     allow(StateService).to receive(:new).and_return(state_service)
     sign_in current_user, groups: ['sdr:administrator-role']
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    ActiveFedora::SolrService.add(id: 'druid:gg232vv1111',
-                                  objectType_ssim: 'collection')
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: 'druid:gg232vv1111',
+                  objectType_ssim: 'collection')
+    solr_conn.commit
   end
 
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }

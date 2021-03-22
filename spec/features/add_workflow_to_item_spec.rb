@@ -38,10 +38,12 @@ RSpec.describe 'Add a workflow to an item' do
   let(:structural) { instance_double(Cocina::Models::DROStructural, contains: []) }
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item_id) { 'druid:bg444xg6666' }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
-    ActiveFedora::SolrService.add(id: item_id, objectType_ssim: 'item')
-    ActiveFedora::SolrService.commit
+    solr_conn.add(id: item_id, objectType_ssim: 'item')
+    solr_conn.commit
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
