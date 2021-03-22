@@ -9,11 +9,12 @@ RSpec.describe PurgeService do
     let(:object_client) { instance_double(Dor::Services::Client::Object, destroy: true) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, delete_all_workflows: true) }
     let(:solr_client) { instance_double(RSolr::Client, delete_by_id: true, commit: true) }
+    let(:repo) { instance_double(Blacklight::Solr::Repository, connection: solr_client) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(WorkflowClientFactory).to receive(:build).and_return(workflow_client)
-      allow(ActiveFedora.solr).to receive(:conn).and_return(solr_client)
+      allow(Blacklight::Solr::Repository).to receive(:new).and_return(repo)
     end
 
     it 'removes the object' do
