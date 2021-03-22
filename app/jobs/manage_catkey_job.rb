@@ -41,12 +41,13 @@ class ManageCatkeyJob < GenericJob
     end
     begin
       object_client = Dor::Services::Client.object(current_druid)
-      dro = object_client.find
-      state_service = StateService.new(current_druid, version: dro.version)
+      cocina_item = object_client.find
+      state_service = StateService.new(current_druid, version: cocina_item.version)
       msg = new_catkey ? "Catkey updated to #{new_catkey}" : 'Catkey removed'
-      open_new_version(dro.externalIdentifier, dro.version, msg) unless state_service.allows_modification?
+      open_new_version(cocina_item.externalIdentifier, cocina_item.version, msg) unless state_service.allows_modification?
+      change_set = ItemChangeSet.new { |change| change.catkey = new_catkey }
+      ItemChangeSetPersister.update(cocina_item, change_set)
 
-      CatkeyService.update(dro, object_client, new_catkey)
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} Catkey added/updated/removed successfully")
     rescue StandardError => e

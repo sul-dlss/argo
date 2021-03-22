@@ -73,7 +73,9 @@ RSpec.describe 'Set the collection for an object' do
       let(:updated_model) do
         cocina_model.new(
           {
-            'structural' => {}
+            'structural' => {
+              'isMemberOf' => []
+            }
           }
         )
       end
