@@ -16,12 +16,10 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
   let(:dl_job_params) do
     { pids: pid_list }
   end
-  let(:item1) { Dor::Item.new }
-  let(:item2) { Dor::Item.new }
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina_model1, metadata: metadata_client1) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina_model2, metadata: metadata_client2) }
-  let(:metadata_client1) { instance_double(Dor::Services::Client::Metadata, mods: item1.descMetadata.content) }
-  let(:metadata_client2) { instance_double(Dor::Services::Client::Metadata, mods: item2.descMetadata.content) }
+  let(:metadata_client1) { instance_double(Dor::Services::Client::Metadata, mods: '<mods/>') }
+  let(:metadata_client2) { instance_double(Dor::Services::Client::Metadata, mods: '<mods/>') }
   let(:cocina_model1) { instance_double(Cocina::Models::DRO) }
   let(:cocina_model2) { instance_double(Cocina::Models::DRO) }
 

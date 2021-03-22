@@ -12,8 +12,6 @@ RSpec.describe PurgeJob, type: :job do
     create(:bulk_action,
            log_name: 'foo.txt')
   end
-  let(:item1) { instance_double(Dor::Item, delete: true) }
-  let(:item2) { instance_double(Dor::Item, delete: true) }
 
   let(:cocina1) do
     Cocina::Models.build(
@@ -50,8 +48,6 @@ RSpec.describe PurgeJob, type: :job do
   before do
     allow(WorkflowClientFactory).to receive(:build).and_return(client)
     allow(Ability).to receive(:new).and_return(ability)
-    allow(Dor).to receive(:find).with(pids[0]).and_return(item1)
-    allow(Dor).to receive(:find).with(pids[1]).and_return(item2)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
     allow(PurgeService).to receive(:purge)
@@ -91,8 +87,7 @@ RSpec.describe PurgeJob, type: :job do
     let(:ability) { instance_double(Ability, can?: false) }
 
     it "doesn't purge" do
-      expect(item1).not_to have_received(:delete)
-      expect(item2).not_to have_received(:delete)
+      expect(PurgeService).not_to have_received(:purge)
     end
   end
 end

@@ -64,9 +64,6 @@ RSpec.describe SetGoverningApoJob do
       end
 
       context 'when an individual update fails' do
-        let(:item1) { instance_double(Dor::Item, pid: pids[0], current_version: '1') }
-        let(:apo) { instance_double(Dor::AdminPolicyObject) }
-
         let(:cocina1) do
           Cocina::Models.build(
             'label' => 'My Item',
@@ -132,7 +129,6 @@ RSpec.describe SetGoverningApoJob do
 
   describe '#check_can_set_governing_apo!' do
     let(:pid) { 'druid:bc123df4567' }
-    # let(:obj) { double(Dor::Collection, pid: pid, current_version: '1') }
     let(:ability) { double(Ability) }
     let(:obj) do
       Cocina::Models.build(
