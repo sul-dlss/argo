@@ -83,10 +83,30 @@ RSpec.describe ContentTypesController, type: :controller do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     context 'with access' do
-      it 'is successful at changing the content type' do
+      it 'is successful at changing the content type to media' do
         patch :update, params: { item_id: pid, old_content_type: 'image', new_content_type: 'media' }
         expect(response).to redirect_to solr_document_path(pid)
-        expect(object_client).to have_received(:update).with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.media)).once
+        expect(object_client).to have_received(:update)
+          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.media, viewing_direction: nil))
+          .once
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
+      end
+
+      it 'is successful at changing the content type to book (ltr)' do
+        patch :update, params: { item_id: pid, old_content_type: 'image', new_content_type: 'book (ltr)' }
+        expect(response).to redirect_to solr_document_path(pid)
+        expect(object_client).to have_received(:update)
+          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.book, viewing_direction: 'left-to-right'))
+          .once
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
+      end
+
+      it 'is successful at changing the content type to book (rtl)' do
+        patch :update, params: { item_id: pid, old_content_type: 'image', new_content_type: 'book (rtl)' }
+        expect(response).to redirect_to solr_document_path(pid)
+        expect(object_client).to have_received(:update)
+          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.book, viewing_direction: 'right-to-left'))
+          .once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
 

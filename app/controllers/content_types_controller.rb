@@ -38,21 +38,51 @@ class ContentTypesController < ApplicationController
 
   def cocina_update_attributes
     {}.tap do |attributes|
-      attributes[:type] = Constants::CONTENT_TYPES[params[:new_content_type]] if content_type_should_change?
-      attributes[:structural] = structural_with_resource_type_changes if resource_types_should_change?
-
-      # The book content type is a special case, since we need to deal with the rtl vs ltr viewing direction attribute update
-      case params[:new_content_type]
-      when 'book (ltr)'
-        attributes[:structural][:hasMemberOrders] = [{ viewingDirection: 'left-to-right' }]
-      when 'book (rtl)'
-        attributes[:structural][:hasMemberOrders] = [{ viewingDirection: 'right-to-left' }]
-      end
+      attributes[:type] = Constants::CONTENT_TYPES[new_content_type] if content_type_should_change?
+      attributes[:structural] = if resource_types_should_change?
+                                  structural_with_resource_type_changes
+                                else
+                                  @cocina_object.structural.new(hasMemberOrders: member_orders)
+                                end
     end
+  end
+
+  def old_content_type
+    if @cocina_object.type == 'http://cocina.sul.stanford.edu/models/book.jsonld' && @cocina_object.structural.hasMemberOrders[0]&.viewingDirection == 'right-to-left'
+      # if we have a book type, we need to also check the viewing direction
+      'book (rtl)'
+    else
+      Constants::CONTENT_TYPES.key(@cocina_object.type)
+    end
+  rescue StandardError
+    ''
+  end
+
+  def old_resource_type
+    Constants::RESOURCE_TYPES.key(@cocina_object.structural.contains.first.type)
+  rescue StandardError
+    ''
+  end
+
+  def new_content_type
+    params[:new_content_type]
+  end
+
+  # If the new content type is a book, we need to set the viewing direction attribute in the cocina model
+  def member_orders
+    return [nil] unless new_content_type.start_with?('book')
+
+    viewing_direction = if new_content_type == 'book (ltr)'
+                          'left-to-right'
+                        else
+                          'right-to-left'
+                        end
+    [{ viewingDirection: viewing_direction }]
   end
 
   def structural_with_resource_type_changes
     @cocina_object.structural.new(
+      hasMemberOrders: member_orders,
       contains: @cocina_object.structural.contains.map do |resource|
         next resource unless resource.type == Constants::RESOURCE_TYPES[params[:old_resource_type]]
 
@@ -70,7 +100,7 @@ class ContentTypesController < ApplicationController
   end
 
   def valid_content_type?
-    Constants::CONTENT_TYPES.keys.include?(params[:new_content_type])
+    Constants::CONTENT_TYPES.keys.include?(new_content_type)
   end
 
   def object_client
@@ -81,5 +111,7 @@ class ContentTypesController < ApplicationController
     raise 'missing druid' if params[:item_id].blank?
 
     @cocina_object = object_client.find
+    @old_content_type = old_content_type
+    @old_resource_type = old_resource_type
   end
 end
