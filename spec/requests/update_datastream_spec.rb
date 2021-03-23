@@ -62,24 +62,6 @@ RSpec.describe 'Update a datastream' do
       end
     end
 
-    context 'for an uncommon datastream (as on an old ETD)' do
-      before do
-        allow(Dor).to receive(:find).with(pid).and_return(item)
-        allow(item).to receive_messages(save: nil)
-      end
-
-      let(:item) { Dor::Item.new pid: pid }
-
-      it 'updates the datastream' do
-        expect(item).to receive(:datastreams).and_return(
-          'properties' => double(ActiveFedora::Datastream, 'content=': xml)
-        )
-        expect(item).to receive(:save)
-        patch "/items/#{pid}/datastreams/properties", params: { content: xml }
-        expect(response).to redirect_to "/view/#{pid}"
-      end
-    end
-
     it 'errors on empty xml' do
       expect { patch "/items/#{pid}/datastreams/contentMetadata", params: { content: ' ' } }.to raise_error(ArgumentError)
     end

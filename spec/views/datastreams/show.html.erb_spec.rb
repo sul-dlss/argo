@@ -7,12 +7,12 @@ RSpec.describe 'datastreams/show.html.erb' do
     params[:id] = dsid
     params[:item_id] = pid
     allow(view).to receive(:can?).and_return(true)
-    @obj = obj
-    @ds = Dor::IdentityMetadataDS.new(obj, 'identityMetadata')
+    @cocina = cocina
+    @content = '<identityMetadata></identityMetadata>'
   end
 
   let(:pid) { 'druid:abc123' }
-  let(:obj) { instance_double(Dor::Item, pid: pid) }
+  let(:cocina) { instance_double(Cocina::Models::DRO, externalIdentifier: pid) }
 
   context 'with an editable datastream' do
     let(:dsid) { 'identityMetadata' }

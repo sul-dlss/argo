@@ -217,8 +217,15 @@ RSpec.describe 'Item view', js: true do
         }
       end
 
+      before do
+        allow(metadata_client).to receive(:datastream)
+          .with('descMetadata')
+          .and_return('<titleInfo><title>Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953</title></titleInfo>')
+      end
+
       it 'shows the file info' do
         visit solr_document_path item_id
+
         within '.document-metadata' do
           expect(page).to have_css 'dt', text: 'DRUID:'
           expect(page).to have_css 'dd', text: item_id
