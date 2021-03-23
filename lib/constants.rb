@@ -50,13 +50,14 @@ module Constants
   ].freeze
 
   CONTENT_TYPES = {
-    'image' => Cocina::Models::Vocab.image,
-    'book' => Cocina::Models::Vocab.book,
+    'book (ltr)' => Cocina::Models::Vocab.book,
+    'book (rtl)' => Cocina::Models::Vocab.book,
     'file' => Cocina::Models::Vocab.object,
+    'image' => Cocina::Models::Vocab.image,
     'map' => Cocina::Models::Vocab.map,
     'media' => Cocina::Models::Vocab.media,
-    'document' => Cocina::Models::Vocab.document,
     '3d' => Cocina::Models::Vocab.three_dimensional,
+    'document' => Cocina::Models::Vocab.document,
     'geo' => Cocina::Models::Vocab.geo,
     'webarchive-seed' => Cocina::Models::Vocab.webarchive_seed
   }.freeze

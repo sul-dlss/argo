@@ -40,6 +40,14 @@ class ContentTypesController < ApplicationController
     {}.tap do |attributes|
       attributes[:type] = Constants::CONTENT_TYPES[params[:new_content_type]] if content_type_should_change?
       attributes[:structural] = structural_with_resource_type_changes if resource_types_should_change?
+
+      # The book content type is a special case, since we need to deal with the rtl vs ltr viewing direction attribute update
+      case params[:new_content_type]
+      when 'book (ltr)'
+        attributes[:structural][:hasMemberOrders] = [{ viewingDirection: 'left-to-right' }]
+      when 'book (rtl)'
+        attributes[:structural][:hasMemberOrders] = [{ viewingDirection: 'right-to-left' }]
+      end
     end
   end
 
