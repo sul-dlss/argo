@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Rails/RakeEnvironment
 desc 'Install Javascript dependencies via `yarn`'
 task :yarn_install do
   on roles(:web) do
@@ -8,5 +9,6 @@ task :yarn_install do
     end
   end
 end
+# rubocop:enable Rails/RakeEnvironment
 
 before 'deploy:assets:precompile', 'yarn_install'

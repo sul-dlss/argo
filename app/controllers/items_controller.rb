@@ -47,15 +47,8 @@ class ItemsController < ApplicationController
   end
 
   def set_collection
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-    collection_id = params[:collection].presence
-    updated_structural = if collection_id
-                           @cocina.structural.new(isMemberOf: [collection_id])
-                         else
-                           @cocina.structural.to_h.without(:isMemberOf)
-                         end
-    updated = @cocina.new(structural: updated_structural)
-    object_client.update(params: updated)
+    change_set = ItemChangeSet.new { |change| change.collection_ids = Array(params[:collection].presence) }
+    ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
     response_message = if params[:collection].present?
@@ -75,11 +68,9 @@ class ItemsController < ApplicationController
 
   def add_collection
     response_message = if params[:collection].present?
-                         collection_id = params[:collection]
-                         updated_structural = @cocina.structural.new(isMemberOf: @cocina.structural.isMemberOf + [collection_id])
-                         updated = @cocina.new(structural: updated_structural)
-                         object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-                         object_client.update(params: updated)
+                         new_collections = @cocina.structural.isMemberOf + [params[:collection]]
+                         change_set = ItemChangeSet.new { |change| change.collection_ids = new_collections }
+                         ItemChangeSetPersister.update(@cocina, change_set)
 
                          reindex
                          'Collection added successfully'
@@ -106,11 +97,9 @@ class ItemsController < ApplicationController
   end
 
   def remove_collection
-    collection_id = params[:collection]
-    updated_structural = @cocina.structural.new(isMemberOf: @cocina.structural.isMemberOf - [collection_id])
-    updated = @cocina.new(structural: updated_structural)
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-    object_client.update(params: updated)
+    new_collections = @cocina.structural.isMemberOf - [params[:collection]]
+    change_set = ItemChangeSet.new { |change| change.collection_ids = new_collections }
+    ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
     response_message = 'Collection successfully removed'
@@ -159,10 +148,8 @@ class ItemsController < ApplicationController
   end
 
   def source_id
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-    updated_identification = @cocina.identification.new(sourceId: params[:new_id])
-    updated = @cocina.new(identification: updated_identification)
-    object_client.update(params: updated)
+    change_set = ItemChangeSet.new { |change| change.source_id = params[:new_id] }
+    ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
     respond_to do |format|
@@ -176,9 +163,8 @@ class ItemsController < ApplicationController
   end
 
   def catkey
-    object_client = Dor::Services::Client.object(params[:id])
-    dro = object_client.find
-    CatkeyService.update(dro, object_client, params[:new_catkey].strip)
+    change_set = ItemChangeSet.new { |change| change.catkey = params[:new_catkey].strip }
+    ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
     respond_to do |format|
@@ -276,10 +262,8 @@ class ItemsController < ApplicationController
 
     authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
 
-    updated_administrative = @cocina.administrative.new(hasAdminPolicy: params[:new_apo_id])
-    updated = @cocina.new(administrative: updated_administrative)
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-    object_client.update(params: updated)
+    change_set = ItemChangeSet.new { |change| change.admin_policy_id = params[:new_apo_id] }
+    ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
     redirect_to solr_document_path(params[:id]), notice: 'Governing APO updated!'
