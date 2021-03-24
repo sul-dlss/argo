@@ -13,7 +13,7 @@ class FilesController < ApplicationController
 
     @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: 'accessioned')
     files = @cocina_model.structural.contains.map { |fs| fs.structural.contains }.flatten
-    @file = files.find { |file| file.externalIdentifier == "#{params[:item_id]}/#{params[:id]}" }
+    @file = files.find { |file| file.filename == params[:id] }
 
     if @has_been_accessioned
       begin
