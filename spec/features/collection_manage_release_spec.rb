@@ -30,6 +30,7 @@ RSpec.describe 'Collection manage release' do
   let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
   let(:cocina_model) do
     instance_double(Cocina::Models::DRO,
+                    externalIdentifier: 'druid:999', 
                     administrative: administrative,
                     structural: structural,
                     as_json: {})

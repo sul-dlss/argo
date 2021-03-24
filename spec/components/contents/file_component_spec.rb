@@ -3,12 +3,12 @@
 require 'rails_helper'
 
 RSpec.describe Contents::FileComponent, type: :component do
-  let(:component) { described_class.new(file: file, viewable: true) }
+  let(:component) { described_class.new(file: file, object_id: 'druid:kb487gt5106', viewable: true) }
   let(:rendered) { render_inline(component) }
   let(:file) do
     instance_double(Cocina::Models::File,
                     filename: '0220_MLK_Kids_Gadson_459-25.tif',
-                    externalIdentifier: 'druid:kb487gt5106/0220_MLK_Kids_Gadson_459-25.tif',
+                    externalIdentifier: 'http://cocina.sul.stanford.edu/file/b7cdfa7a-6e1f-484b-bbb0-f9a46c40dbb4',
                     hasMimeType: 'image/tiff',
                     size: 99,
                     access: access,

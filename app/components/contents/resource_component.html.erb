@@ -4,7 +4,7 @@
     <br><span class="label">Label</span> <%= label %>
   <% end %>
   <ul class="child-list">
-    <%= render Contents::FileComponent.with_collection(files, viewable: viewable?) %>
+    <%= render Contents::FileComponent.with_collection(files, object_id: object_id, viewable: viewable?) %>
     <%# TODO: external files%>
   </ul>
 </li>

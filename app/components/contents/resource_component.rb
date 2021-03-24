@@ -2,13 +2,14 @@
 
 module Contents
   class ResourceComponent < ViewComponent::Base
-    def initialize(resource:, resource_counter:, viewable:)
+    def initialize(resource:, resource_counter:, object_id:, viewable:)
       @resource = resource
       @resource_counter = resource_counter
+      @object_id = object_id
       @viewable = viewable
     end
 
-    attr_reader :resource, :resource_counter
+    attr_reader :resource, :resource_counter, :object_id
 
     def viewable?
       @viewable
