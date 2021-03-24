@@ -17,7 +17,7 @@ RSpec.describe FilesController, type: :controller do
     instance_double(Cocina::Models::FileSetStructural, contains: [file])
   end
   let(:file) do
-    instance_double(Cocina::Models::File, externalIdentifier: "#{pid}/M1090_S15_B01_F07_0106.jp2")
+    instance_double(Cocina::Models::File, filename: 'M1090_S15_B01_F07_0106.jp2')
   end
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 

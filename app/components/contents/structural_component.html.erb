@@ -1,3 +1,3 @@
 <ul class="resource-list">
-  <%= render Contents::ResourceComponent.with_collection(structural.contains, viewable: viewable?) %>
+  <%= render Contents::ResourceComponent.with_collection(structural.contains, object_id: object_id, viewable: viewable?) %>
 </ul>

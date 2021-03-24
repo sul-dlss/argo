@@ -2,12 +2,13 @@
 
 module Contents
   class FileComponent < ViewComponent::Base
-    def initialize(file:, viewable:)
+    def initialize(file:, object_id:, viewable:)
       @file = file
+      @object_id = object_id
       @viewable = viewable
     end
 
-    attr_reader :file
+    attr_reader :file, :object_id
 
     def viewable?
       @viewable
@@ -16,9 +17,7 @@ module Contents
     delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, to: :file
 
     def link_attrs
-      # TODO: we should avoid having to parse meaning out of identifiers
-      object_id, file_id = externalIdentifier.split('/')
-      { item_id: object_id, id: file_id }
+      { item_id: object_id, id: filename }
     end
 
     def routing
