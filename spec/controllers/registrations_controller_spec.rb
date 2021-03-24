@@ -231,6 +231,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     context 'when there are no collections' do
+      let(:collections) { nil }
+
       it 'shows "None"' do
         get 'collection_list', params: { apo_id: druid, format: :json }
         data = JSON.parse(response.body)

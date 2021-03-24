@@ -110,6 +110,6 @@ class RegistrationsController < ApplicationController
   end
 
   def registration_collection_ids_for_apo
-    object_client.find.administrative.collectionsForRegistration
+    Array(object_client.find.administrative.collectionsForRegistration)
   end
 end
