@@ -125,17 +125,6 @@ RSpec.describe ContentTypesController, type: :controller do
         end
       end
 
-      context 'without structural metadata' do
-        let(:structural) { Cocina::Models::DROStructural.new({}) }
-
-        it 'renders an error' do
-          patch :update, params: { item_id: pid, new_content_type: 'media' }
-          expect(response).to be_forbidden
-          expect(response.body).to eq("Object doesn't contain resources to update.")
-          expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
-        end
-      end
-
       context 'with an invalid content_type' do
         it 'is forbidden' do
           patch :update, params: { item_id: pid, new_content_type: 'frog' }

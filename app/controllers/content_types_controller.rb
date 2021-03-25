@@ -17,7 +17,6 @@ class ContentTypesController < ApplicationController
     state_service = StateService.new(@cocina_object.externalIdentifier, version: @cocina_object.version)
     return render_error('Object cannot be modified in its current state.') unless state_service.allows_modification?
     return render_error('Invalid new content type.') unless valid_content_type?
-    return render_error("Object doesn't contain resources to update.") unless has_content?
 
     object_client.update(params: @cocina_object.new(cocina_update_attributes))
     Argo::Indexer.reindex_pid_remotely(@cocina_object.externalIdentifier) unless params[:bulk]
@@ -64,10 +63,6 @@ class ContentTypesController < ApplicationController
 
   def valid_content_type?
     Constants::CONTENT_TYPES.keys.include?(params[:new_content_type])
-  end
-
-  def has_content?
-    @cocina_object&.structural&.contains&.size&.positive?
   end
 
   def object_client
