@@ -188,7 +188,7 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#add_collection' do
-    let(:cocina) do
+    let(:cocina_collection) do
       Cocina::Models.build({
                              'label' => 'My ETD',
                              'version' => 1,
@@ -196,44 +196,67 @@ RSpec.describe ItemsController, type: :controller do
                              'externalIdentifier' => pid,
                              'access' => { 'access' => 'world' },
                              'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                             'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
+                             'structural' => structural
                            })
     end
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true) }
+    let(:structural) { { 'isMemberOf' => ['druid:gg333xx4444'] } }
+    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_collection, update: true) }
 
     context 'when they have manage access' do
       before do
         allow(controller).to receive(:authorize!).and_return(true)
       end
 
-      let(:expected) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::Vocab.object,
-                               'externalIdentifier' => pid,
-                               'access' => { 'access' => 'world' },
-                               'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                               'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
-                             })
+      context 'when collections already exist' do
+        let(:expected) do
+          Cocina::Models.build({
+                                 'label' => 'My ETD',
+                                 'version' => 1,
+                                 'type' => Cocina::Models::Vocab.object,
+                                 'externalIdentifier' => pid,
+                                 'access' => { 'access' => 'world' },
+                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                                 'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
+                               })
+        end
+
+        it 'adds a collection' do
+          post 'add_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
+          expect(object_service).to have_received(:update).with(params: expected)
+        end
+
+        context 'when no collection parameter is supplied' do
+          it 'does not add a collection' do
+            post 'add_collection', params: { id: pid, collection: '' }
+            expect(object_service).not_to have_received(:update)
+          end
+        end
       end
 
-      it 'adds a collection' do
-        post 'add_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
-        expect(object_service).to have_received(:update).with(params: expected)
-      end
+      context 'when the object is not currently in a collection' do
+        let(:expected) do
+          Cocina::Models.build({
+                                 'label' => 'My ETD',
+                                 'version' => 1,
+                                 'type' => Cocina::Models::Vocab.object,
+                                 'externalIdentifier' => pid,
+                                 'access' => { 'access' => 'world' },
+                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                                 'structural' => { 'isMemberOf' => ['druid:bc555gh3434'] }
+                               })
+        end
+        let(:structural) { {} }
 
-      context 'when no collection parameter is supplied' do
-        it 'does not add a collection' do
-          post 'add_collection', params: { id: pid, collection: '' }
-          expect(object_service).not_to have_received(:update)
+        it 'adds a collection' do
+          post 'add_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
+          expect(object_service).to have_received(:update).with(params: expected)
         end
       end
     end
 
     context "when they don't have manage access" do
       before do
-        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
+        allow(controller).to receive(:authorize!).with(:manage_item, cocina_collection).and_raise(CanCan::AccessDenied)
       end
 
       it 'returns 403' do

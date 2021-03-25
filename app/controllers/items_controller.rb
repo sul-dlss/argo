@@ -68,7 +68,7 @@ class ItemsController < ApplicationController
 
   def add_collection
     response_message = if params[:collection].present?
-                         new_collections = @cocina.structural.isMemberOf + [params[:collection]]
+                         new_collections = Array(@cocina.structural.isMemberOf) + [params[:collection]]
                          change_set = ItemChangeSet.new { |change| change.collection_ids = new_collections }
                          ItemChangeSetPersister.update(@cocina, change_set)
 
