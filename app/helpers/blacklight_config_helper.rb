@@ -18,7 +18,6 @@ module BlacklightConfigHelper
         scale_ssim
         source_id_ssim
         tag_ssim
-        title_tesim
         topic_tesim
       ),
       facet: true,
