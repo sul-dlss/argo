@@ -8,7 +8,6 @@ module BlacklightConfigHelper
       qf: %(
         collection_title_tesim
         dor_id_tesim
-        extent_ssim
         identifier_tesim
         obj_label_tesim
         objectId_tesim
