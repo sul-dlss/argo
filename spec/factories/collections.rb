@@ -20,9 +20,7 @@ FactoryBot.define do
     end
 
     apo do
-      Dor::AdminPolicyObject.create(pid: 'druid:hv992ry2431').tap do
-        Argo::Indexer.reindex_pid_remotely('druid:hv992ry2431')
-      end
+      FactoryBot.create_for_repository(:ur_apo)
     end
 
     type { Cocina::Models::Vocab.collection }

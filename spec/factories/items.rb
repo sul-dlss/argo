@@ -3,24 +3,31 @@
 FactoryBot.define do
   factory :item, class: 'Cocina::Models::RequestDRO' do
     initialize_with do
-      Cocina::Models.build_request({
-                                     'type' => type,
-                                     'label' => 'test object',
-                                     'version' => 1,
-                                     'identification' => {
-                                       'sourceId' => "sul:#{SecureRandom.uuid}"
-                                     },
-                                     'administrative' => {
-                                       'hasAdminPolicy' => apo.pid
-                                     }
-                                   })
+      ItemMethodSender.new(
+        Cocina::Models.build_request({
+                                       'type' => type,
+                                       'label' => label,
+                                       'version' => 1,
+                                       'identification' => {
+                                         'sourceId' => "sul:#{SecureRandom.uuid}"
+                                       },
+                                       'administrative' => {
+                                         'hasAdminPolicy' => admin_policy_id
+                                       }
+                                     })
+      )
     end
 
-    to_create do |cocina_model|
-      Dor::Services::Client.objects.register(params: cocina_model)
+    to_create do |builder|
+      Dor::Services::Client.objects.register(params: builder.cocina_model)
     end
 
-    apo { Dor::AdminPolicyObject.create(pid: 'druid:hv992ry2431') }
+    admin_policy_id { FactoryBot.create_for_repository(:ur_apo).pid }
+    label { 'test object' }
     type { Cocina::Models::Vocab.object }
+
+    factory :agreement do
+      type { Cocina::Models::Vocab.agreement }
+    end
   end
 end
