@@ -202,9 +202,9 @@ class ApoForm < BaseForm
   # @param [String] apo_pid the identifier for this APO
   # @return [String] the pid for the newly created collection
   def create_collection(apo_pid)
-    form = CollectionForm.new(Dor::Collection.new)
+    form = CollectionForm.new
     form.validate(params.merge(apo_pid: apo_pid))
     form.save
-    form.model.id
+    form.model.externalIdentifier
   end
 end

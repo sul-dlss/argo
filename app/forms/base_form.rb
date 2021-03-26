@@ -8,7 +8,7 @@
 class BaseForm
   attr_reader :errors, :model, :params
 
-  # @param [Dor::Item] the object to update.
+  # @param [ActiveModel::Base] the object to update.
   def initialize(model)
     @model = model
     @errors = model.errors

@@ -11,10 +11,7 @@ RSpec.describe CollectionsController do
   let(:apo_id) { 'druid:zt570qh4444' }
   let(:collection_id) { 'druid:bp475vb4486' }
   let(:user) { create(:user) }
-
-  let(:collection) do
-    Dor::Collection.new(pid: collection_id)
-  end
+  let(:collection) { instance_double(Cocina::Models::Collection, externalIdentifier: collection_id) }
 
   describe '#new' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }

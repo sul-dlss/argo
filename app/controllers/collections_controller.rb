@@ -15,11 +15,11 @@ class CollectionsController < ApplicationController
     cocina = maybe_load_cocina(params[:apo_id])
     authorize! :manage_item, cocina
 
-    form = CollectionForm.new(Dor::Collection.new)
+    form = CollectionForm.new
     return render 'new' unless form.validate(params.merge(apo_pid: params[:apo_id]))
 
     form.save
-    collection_pid = form.model.id
+    collection_pid = form.model.externalIdentifier
 
     cocina_admin_policy = object_client.find
     collections = Array(cocina_admin_policy.administrative.collectionsForRegistration)

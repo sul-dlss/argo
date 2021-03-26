@@ -3,10 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe CollectionForm do
-  before do
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
-  end
-
   let(:apo) { instance_double(Dor::AdminPolicyObject, pid: 'druid:zt570qh4444') }
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:collection_from_fixture) do
@@ -19,7 +15,7 @@ RSpec.describe CollectionForm do
   let(:collection_id) { collection_from_fixture.id }
 
   context 'when creating collection' do
-    let(:instance) { described_class.new(Dor::Collection.new) }
+    let(:instance) { described_class.new }
 
     let(:title) { 'collection title' }
     let(:abstract) { 'this is the abstract' }
@@ -82,7 +78,6 @@ RSpec.describe CollectionForm do
         expect(instance).not_to have_received(:sync)
         expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
         expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(collection_id)
       end
     end
 
@@ -111,71 +106,6 @@ RSpec.describe CollectionForm do
         expect(instance).not_to have_received(:sync)
         expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
         expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(collection_id)
-      end
-    end
-  end
-
-  context 'when updating a collection' do
-    let(:instance) { described_class.new(collection_from_fixture) }
-    let(:new_title) { 'new coll title' }
-    let(:new_abstract) { 'new coll abstract' }
-    let(:new_description) do
-      {
-        title: [{ value: new_title, status: 'primary' }],
-        note: [{ value: new_abstract, type: 'summary' }]
-      }
-    end
-    let(:expected_update_body_hash) do
-      {
-        type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
-        label: new_title,
-        version: 1,
-        access: { access: 'dark', download: 'none' },
-        administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
-        description: new_description
-      }
-    end
-    let(:updated_collection) do
-      Cocina::Models::Collection.new(externalIdentifier: 'druid:pb873ty1662',
-                                     type: Cocina::Models::Vocab.collection,
-                                     label: new_title,
-                                     version: 1,
-                                     access: {},
-                                     description: new_description).to_json
-    end
-
-    before do
-      allow(collection_from_fixture).to receive(:new_record?).and_return(false)
-      allow(Dor).to receive(:find).with(collection_id).and_return(collection_from_fixture)
-      stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
-        .with(body: JSON.generate(expected_update_body_hash))
-        .to_return(status: 200, body: updated_collection, headers: {})
-      allow(instance).to receive(:register_model)
-      allow(instance).to receive(:sync).and_call_original
-      instance.validate(params.merge(apo_pid: apo.pid))
-    end
-
-    context 'when metadata_source is label' do
-      let(:params) do
-        {
-          collection_title: new_title,
-          collection_abstract: new_abstract,
-          collection_rights: 'dark'
-        }.with_indifferent_access
-      end
-
-      it '#save' do
-        instance.save
-        expect(instance).not_to have_received(:register_model)
-        expect(instance).to have_received(:sync)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(collection_id)
-      end
-
-      it 'descMetadata.abstract is updated' do
-        expect(instance.model.datastreams['descMetadata'].abstract).to eq []
-        instance.save
-        expect(instance.model.datastreams['descMetadata'].abstract).to eq [new_abstract]
       end
     end
   end
