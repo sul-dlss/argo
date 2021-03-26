@@ -3,16 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe CollectionForm do
-  let(:apo) { instance_double(Dor::AdminPolicyObject, pid: 'druid:zt570qh4444') }
+  let(:apo_pid) { 'druid:zt570qh4444' }
   let(:uber_apo_id) { 'druid:hv992ry2431' }
-  let(:collection_from_fixture) do
-    item = Dor::Item.new(pid: 'druid:gg232vv1111')
-    item.descMetadata.mods_title = 'Test'
-    item.source_id = 'sauce:99'
-    item.admin_policy_object_id = uber_apo_id
-    item
-  end
-  let(:collection_id) { collection_from_fixture.id }
+  let(:collection_id) { 'druid:gg232vv1111' }
 
   context 'when creating collection' do
     let(:instance) { described_class.new }
@@ -43,14 +36,10 @@ RSpec.describe CollectionForm do
                                      access: {},
                                      description: description).to_json
     end
-    let(:mock_desc_md_ds) { double(Dor::DescMetadataDS, :abstract= => true) }
     let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: true) }
 
     before do
-      allow(Dor).to receive(:find).with(collection_id).and_return(collection_from_fixture)
-      allow(Dor).to receive(:find).with(apo.pid).and_return(apo)
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-      allow(collection_from_fixture).to receive(:descMetadata).and_return(mock_desc_md_ds)
       allow(instance).to receive(:register_model).and_call_original
       allow(instance).to receive(:sync)
     end
@@ -71,13 +60,12 @@ RSpec.describe CollectionForm do
       end
 
       it 'creates a collection from title/abstract by registering the collection, without adding the abstract to descMetadata' do
-        instance.validate(params.merge(apo_pid: apo.pid))
+        instance.validate(params.merge(apo_pid: apo_pid))
         instance.save
 
         expect(instance).to have_received(:register_model)
         expect(instance).not_to have_received(:sync)
         expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
-        expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
       end
     end
 
@@ -99,13 +87,12 @@ RSpec.describe CollectionForm do
       end
 
       it 'creates a collection from catkey by registering the collection, without adding the abstract to descMetadata' do
-        instance.validate(params.merge(apo_pid: apo.pid))
+        instance.validate(params.merge(apo_pid: apo_pid))
         instance.save
 
         expect(instance).to have_received(:register_model)
         expect(instance).not_to have_received(:sync)
         expect(workflow_client).to have_received(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
-        expect(mock_desc_md_ds).not_to have_received(:abstract=).with(abstract)
       end
     end
   end
