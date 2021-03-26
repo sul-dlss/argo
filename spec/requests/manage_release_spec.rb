@@ -3,9 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe 'Draw the manage release form' do
-  # let(:item) do
-  #   instance_double(Dor::Item, pid: 'druid:bc123df4567')
-  # end
   let(:document) do
     instance_double(SolrDocument,
                     id: 'druid:bc123df4567',

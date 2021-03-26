@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe VersionsController, type: :controller do
   let(:pid) { 'druid:bc123df4567' }
-  let(:item) { Dor::Item.new pid: pid }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
     Cocina::Models.build(

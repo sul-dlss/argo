@@ -5,16 +5,7 @@ require 'rails_helper'
 RSpec.describe 'Item manage release' do
   let(:current_user) { create(:user, sunetid: 'esnowden') }
   before do
-    obj = instance_double(
-      Dor::Item,
-      current_version: '1',
-      admin_policy_object: nil,
-      datastreams: {},
-      catkey: nil,
-      identityMetadata: double(ng_xml: Nokogiri::XML(''))
-    )
     sign_in current_user, groups: ['sdr:administrator-role']
-    allow(Dor).to receive(:find).and_return(obj)
     allow(StateService).to receive(:new).and_return(state_service)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end

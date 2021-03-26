@@ -6,29 +6,12 @@ RSpec.describe ItemsController, type: :controller do
   before do
     allow_any_instance_of(User).to receive(:roles).and_return([])
     sign_in user
-    allow(Dor).to receive(:find).with(pid).and_return(item)
     allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
-
-    idmd = double
-    apo  = double
-    idmd_ds_content = '<test-xml/>'
-    idmd_ng_xml = instance_double(Nokogiri::XML::Document, to_xml: idmd_ds_content)
-    allow(idmd).to receive(:content_will_change!)
-    allow(idmd).to receive(:ng_xml).and_return idmd_ng_xml
-    allow(idmd).to receive(:"content=").with(idmd_ds_content)
-    allow(apo).to receive(:pid).and_return('druid:apo')
-    allow(item).to receive_messages(save: nil, delete: nil,
-                                    identityMetadata: idmd,
-                                    datastreams: { 'identityMetadata' => idmd, 'events' => Dor::EventsDS.new },
-                                    admin_policy_object: apo,
-                                    current_version: '3')
-    expect(item).not_to receive(:workflows)
     allow(Argo::Indexer).to receive(:reindex_pid_remotely)
     allow(StateService).to receive(:new).and_return(state_service)
   end
 
   let(:pid) { 'druid:bc123df4567' }
-  let(:item) { Dor::Item.new pid: pid }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
@@ -119,8 +102,6 @@ RSpec.describe ItemsController, type: :controller do
     context "when they don't have manage access" do
       it 'returns 403' do
         allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
-        expect(subject).not_to receive(:save_and_reindex)
-        expect(subject).not_to receive(:flush_index)
         post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
         expect(response).to have_http_status(:forbidden)
       end
@@ -374,7 +355,7 @@ RSpec.describe ItemsController, type: :controller do
             expect(object_service).to have_received(:refresh_metadata)
 
             expect(response).to redirect_to(solr_document_path(pid))
-            expect(flash[:notice]).to eq "Metadata for #{item.pid} successfully refreshed from catkey: 12345"
+            expect(flash[:notice]).to eq "Metadata for #{pid} successfully refreshed from catkey: 12345"
           end
 
           it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
@@ -387,11 +368,6 @@ RSpec.describe ItemsController, type: :controller do
         end
 
         context "object doesn't allow modification or user doesn't have permission to edit desc metadata" do
-          before do
-            expect(item).not_to receive(:build_descMetadata_datastream)
-            expect(controller).not_to receive(:save_and_reindex)
-          end
-
           context 'when the user is not allowed to edit desc metadata' do
             before do
               allow(controller).to receive(:authorize!).with(:manage_desc_metadata, cocina).and_raise(CanCan::AccessDenied)

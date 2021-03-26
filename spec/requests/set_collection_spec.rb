@@ -5,12 +5,10 @@ require 'rails_helper'
 RSpec.describe 'Set the collection for an object' do
   let(:user) { create(:user) }
   let(:pid) { 'druid:bc123df4567' }
-  let(:fedora_obj) { instance_double(Dor::Item, pid: pid, current_version: 1, admin_policy_object: nil) }
   let(:collection_druid) { 'druid:tv123cg4444' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
 
   before do
-    allow(Dor).to receive(:find).and_return(fedora_obj)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 

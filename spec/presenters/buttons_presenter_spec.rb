@@ -19,17 +19,11 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       allow(StateService).to receive(:new).and_return(state_service)
     end
 
-    context 'a Dor::Item the user can manage, with the usual data streams, and no catkey or embargo info' do
+    context 'a DRO the user can manage, with the usual data streams, and no catkey or embargo info' do
       subject(:buttons) { presenter.buttons }
 
       let(:item_id) { 'druid:kv840xx0000' }
-      let(:governing_apo) { instance_double(Dor::AdminPolicyObject, pid: governing_apo_id) }
-      let(:object) do
-        instance_double(Dor::Item, pid: item_id, current_version: '3',
-                                   admin_policy_object: governing_apo,
-                                   embargoed?: false,
-                                   catkey: catkey)
-      end
+
       let(:doc) do
         SolrDocument.new('id' => item_id,
                          'processing_status_text_ssi' => 'not registered',
@@ -154,13 +148,8 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       end
     end
 
-    context 'a Dor::AdminPolicyObject the user can manage' do
+    context 'an AdminPolicy the user can manage' do
       let(:view_apo_id) { 'druid:zt570qh4444' }
-      let(:object) do
-        instance_double(Dor::AdminPolicyObject,
-                        current_version: '3',
-                        catkey: nil)
-      end
 
       let(:doc) do
         SolrDocument.new('id' => view_apo_id,
@@ -250,7 +239,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
       instance_double(Dor::IdentityMetadataDS)
     end
     let(:item_id) { 'druid:kv840xx0000' }
-    let(:object) { instance_double(Dor::Item, pid: item_id, current_version: '3') }
 
     context 'when registered' do
       let(:doc) do
