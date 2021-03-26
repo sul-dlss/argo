@@ -19,7 +19,7 @@ RSpec::Matchers.define :a_cocina_object_with_types do |expected|
   end
 
   def match_contained_cocina_types?(actual, expected)
-    actual.structural.contains.map(&:type).all? { |type| type.in?(expected[:resource_types]) }
+    Array(actual.structural.contains).map(&:type).all? { |type| type.in?(expected[:resource_types]) }
   end
 end
 

@@ -54,7 +54,7 @@ class ContentTypesController < ApplicationController
   end
 
   def resource_types_should_change?
-    @cocina_object.structural.contains.map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
+    Array(@cocina_object.structural.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
   end
 
   def content_type_should_change?
