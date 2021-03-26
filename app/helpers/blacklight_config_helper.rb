@@ -15,7 +15,6 @@ module BlacklightConfigHelper
         originInfo_place_placeTerm_tesim
         originInfo_publisher_tesim
         sw_display_title_tesim
-        scale_ssim
         source_id_ssim
         tag_ssim
         topic_tesim
