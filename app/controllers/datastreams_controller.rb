@@ -4,13 +4,7 @@ class DatastreamsController < ApplicationController
   include Blacklight::Catalog
   copy_blacklight_config_from CatalogController
 
-  before_action :show_aspect, only: %i[dc show edit]
-
-  def dc
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
+  before_action :show_aspect, only: %i[show edit]
 
   def edit
     @content = @object_client.metadata.datastream(params[:id])
@@ -18,7 +12,7 @@ class DatastreamsController < ApplicationController
   end
 
   def show
-    if params[:dsid] == 'full_dc'
+    if params[:id] == 'full_dc'
       @content = Nokogiri::XML(@object_client.metadata.dublin_core).prettify
     else
       raw_content = @object_client.metadata.datastream(params[:id])

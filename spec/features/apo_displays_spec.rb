@@ -37,27 +37,6 @@ RSpec.describe 'Viewing an Admin policy' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  context 'mods view' do
-    before do
-      allow(Dor::Services::Client).to receive(:object).with(apo_druid).and_return(object_service)
-    end
-
-    let(:object_service) { instance_double(Dor::Services::Client::Object, metadata: metadata_service) }
-    let(:metadata_service) { instance_double(Dor::Services::Client::Metadata, descriptive: xml) }
-    let(:xml) do
-      <<~XML
-        <mods version="3.6" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
-          <titleInfo lang="eng" script="Latn"><title>Ampex</title></titleInfo>
-        </mods>
-      XML
-    end
-
-    it 'renders the mods view including a title' do
-      visit "/items/#{apo_druid}/purl_preview"
-      expect(page).to have_content('Ampex')
-    end
-  end
-
   context 'item dialogs' do
     context 'open version ui' do
       it 'renders the open version ui' do

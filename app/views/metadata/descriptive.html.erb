@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
   <% component.with(:header, render_mods_display(@mods_display).title.first.html_safe) %>
-  <% component.with(:body) { render 'purl_preview' } %>
+  <% component.with(:body) { render 'descriptive' } %>
 <% end %>
