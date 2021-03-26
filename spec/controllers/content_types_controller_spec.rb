@@ -114,6 +114,17 @@ RSpec.describe ContentTypesController, type: :controller do
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
 
+      context 'without structural metadata' do
+        let(:structural) { Cocina::Models::DROStructural.new({}) }
+
+        it 'changes the content type only' do
+          patch :update, params: { item_id: pid, new_content_type: 'media' }
+          expect(response).to redirect_to solr_document_path(pid)
+          expect(object_client).to have_received(:update)
+            .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.image))
+        end
+      end
+
       context 'when modification not allowed' do
         let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
