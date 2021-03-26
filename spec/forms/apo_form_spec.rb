@@ -273,7 +273,7 @@ RSpec.describe ApoForm do
         Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
       end
       let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
-      let(:collection) { instance_double(Dor::Collection, id: collection_id, pid: collection_id) }
+      let(:collection_form) { instance_double(CollectionForm, validate: true, model: created_collection) }
       let(:collection_id) { 'druid:gh567vb7777' }
 
       let(:coll_title) { 'col title' }
@@ -317,7 +317,7 @@ RSpec.describe ApoForm do
                                        type: Cocina::Models::Vocab.collection,
                                        label: '',
                                        version: 1,
-                                       access: {}).to_json
+                                       access: {})
       end
       let(:collection_req_body_hash) do
         {
@@ -331,9 +331,9 @@ RSpec.describe ApoForm do
 
       before do
         allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-        expect(Dor).to receive(:find).with(collection_id).and_return(collection)
-        expect(collection).to receive(:save)
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely).twice
+        expect(CollectionForm).to receive(:new).and_return(collection_form)
+        expect(collection_form).to receive(:save)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
 
         expect(Dor).to receive(:find).with(registered_model.pid).and_return(registered_model)
         expect(registered_model).to receive(:new_record?).and_return(false)
@@ -360,12 +360,6 @@ RSpec.describe ApoForm do
 
         # verify that the collection is also created
         expect(registered_model).to receive(:add_default_collection).with(collection_id)
-
-        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
-          .with(body: JSON.generate(collection_req_body_hash))
-          .to_return(status: 200, body: created_collection)
-
-        expect(workflow_client).to receive(:create_workflow_by_name).with(collection_id, 'accessionWF', version: '1')
       end
 
       context 'with tags in the params' do

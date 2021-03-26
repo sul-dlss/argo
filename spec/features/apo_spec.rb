@@ -7,7 +7,6 @@ RSpec.describe 'Create an apo', js: true do
   let(:new_apo_druid) { 'druid:zy987wv6543' }
   let(:new_collection_druid) { 'druid:zy333wv6543' }
   let(:apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
-  let(:collection) { Dor::Collection.new(pid: new_collection_druid, label: 'New Testing Collection') }
   let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
@@ -50,10 +49,8 @@ RSpec.describe 'Create an apo', js: true do
   end
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-
-  after do
-    Dor::Collection.find(new_collection_druid).destroy # clean up after ourselves
-  end
+  let(:docs) { [SolrDocument.new(id: new_collection_druid, label: 'New Testing Collection')] }
+  let(:search_service) { instance_double(Blacklight::SearchService) }
 
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
@@ -73,7 +70,6 @@ RSpec.describe 'Create an apo', js: true do
     allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
     allow(apo).to receive(:save!)
     allow(apo).to receive(:new_record?).and_return(false)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely).and_call_original # for the collection
     allow(Argo::Indexer).to receive(:reindex_pid_remotely).with(new_apo_druid) do |_key|
       # Since the register was mocked, this wouldn't build the correct solr document.
       # This will make one truer to what we need:
@@ -81,7 +77,14 @@ RSpec.describe 'Create an apo', js: true do
                     SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy')
       solr_conn.commit
     end
-    allow(Dor).to receive(:find).with(new_collection_druid).and_return(collection)
+
+    # Since registering the collection is stubbed out, we need to stub out the find too:
+    solr_conn.add(id: new_collection_druid,
+                  SolrDocument::FIELD_OBJECT_TYPE => 'collection',
+                  SolrDocument::FIELD_LABEL => 'New Testing Collection')
+
+    solr_conn.commit
+
     allow(Dor).to receive(:find).with('druid:dd327rv8888', cast: true).and_call_original # The agreement
     sign_in user, groups: ['sdr:administrator-role']
   end
