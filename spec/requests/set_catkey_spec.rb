@@ -5,13 +5,11 @@ require 'rails_helper'
 RSpec.describe 'Set catkey for an object' do
   let(:user) { create(:user) }
   let(:pid) { 'druid:dc243mg0841' }
-  let(:fedora_obj) { instance_double(Dor::Item, pid: pid, current_version: 1, admin_policy_object: nil) }
   let(:cocina) { instance_double(Cocina::Models::DRO) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
-    allow(Dor).to receive(:find).and_return(fedora_obj)
   end
 
   context 'without manage content access' do

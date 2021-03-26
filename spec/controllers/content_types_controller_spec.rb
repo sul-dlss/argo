@@ -9,7 +9,6 @@ RSpec.describe ContentTypesController, type: :controller do
   end
 
   let(:pid) { 'druid:bc123df4567' }
-  let(:item) { Dor::Item.new(pid: pid) }
   let(:user) { create :user }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:cocina_model) do

@@ -10,29 +10,10 @@ RSpec.describe 'Item view', js: true do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Preservation::Client.objects).to receive(:current_version).and_return('1')
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Dor).to receive(:find).and_return(obj)
-    allow(obj).to receive(:new_record?).and_return(false)
-    obj.descMetadata.mods_title = 'Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953'
-    allow(obj.descMetadata).to receive(:new?).and_return(false) # Must come after setting properties
-    obj.contentMetadata.content = <<~XML
-      <contentMetadata type="file">
-        <resource type="image" sequence="126" id="hj185xx2222_126">
-          <label>M1090_S15_B02_F01_0126</label>
-          <file mimetype="image/jp2" preserve="yes" format="JPEG2000" size="3304904" shelve="yes" id="M1090_S15_B02_F01_0126.jp2" publish="yes">
-            <imageData width="5033" height="3472"/>
-            <attr name="representation">uncropped</attr>
-            <checksum type="sha1">a992c8237b640b4ea413dfd3baec5e8972f53613</checksum>
-            <checksum type="md5">f92f9722cb9993dd35fdea6a2219b673</checksum>
-          </file>
-        </resource>
-      </contentMetadata>
-    XML
-    allow(obj.contentMetadata).to receive(:new?).and_return(false)
   end
 
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:obj) { Dor::Item.new(pid: item_id) }
   let(:item_id) { 'druid:hj185xx2222' }
   let(:event) { Dor::Services::Client::Events::Event.new(event_type: 'shelve_request_received', data: { 'host' => 'dor-services-stage.stanford.edu' }) }
   let(:datastream) { Dor::Services::Client::Metadata::Datastream.new(dsid: 'descMetadata', pid: item_id) }

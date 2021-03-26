@@ -5,8 +5,6 @@ require 'cancan/matchers'
 
 RSpec.describe Ability do
   let(:subject) { described_class.new(user) }
-  let(:item) { Dor::Item.new(pid: 'x') }
-
   let(:dro) do
     Cocina::Models::DRO.new(externalIdentifier: 'druid:bc123df4567',
                             label: 'test',
@@ -52,15 +50,8 @@ RSpec.describe Ability do
   let(:manager) { false }
   let(:viewer) { false }
   let(:roles) { [] }
-
   let(:new_apo_id) { 'druid:hv992yv2222' }
   let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_id) }
-
-  let(:item_with_apo) { Dor::Item.new(pid: 'y') }
-
-  before do
-    allow(item_with_apo).to receive(:admin_policy_object).and_return(new_apo)
-  end
 
   context 'as an administrator' do
     let(:admin) { true }

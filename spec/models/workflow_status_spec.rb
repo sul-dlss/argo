@@ -28,8 +28,6 @@ RSpec.describe WorkflowStatus do
       end-accession
     ]
   end
-  let(:pid) { 'druid:bc123df4567' }
-  let(:item) { Dor::Item.new pid: pid }
 
   describe '#pid' do
     subject { workflow_status.pid }

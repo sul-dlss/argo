@@ -14,12 +14,7 @@ RSpec.describe StateService do
     let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
     context 'when version is not passed in' do
-      let(:item) { instance_double(Dor::Item, current_version: 4) }
-      let(:service) { described_class.new(pid, version: item.current_version) }
-
-      before do
-        allow(Dor).to receive(:find).and_return(item)
-      end
+      let(:service) { described_class.new(pid, version: 4) }
 
       context "if the object hasn't been submitted" do
         before do

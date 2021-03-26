@@ -5,11 +5,9 @@ require 'rails_helper'
 RSpec.describe Dor::ObjectsController, type: :controller do
   before do
     sign_in(create(:user))
-    allow(Dor).to receive(:find).with(pid).and_return(mock_object)
   end
 
   let(:pid) { 'druid:abc' }
-  let(:mock_object) { instance_double(Dor::Item) }
   let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, administrative_tags: administrative_tags) }
   let(:administrative_tags) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }

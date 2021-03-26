@@ -7,7 +7,6 @@ RSpec.describe 'Set APO for an object' do
     let(:user) { create(:user) }
     let(:pid) { 'druid:dc243mg0841' }
     let(:new_apo_id) { 'druid:ab123cd4567' }
-    let(:fedora_obj) { instance_double(Dor::Item, pid: pid, current_version: 1, admin_policy_object: nil) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) do
       Cocina::Models.build(
@@ -26,7 +25,6 @@ RSpec.describe 'Set APO for an object' do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     before do
-      allow(Dor).to receive(:find).and_return(fedora_obj)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_pid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
