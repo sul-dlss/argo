@@ -31,21 +31,6 @@ RSpec.describe ItemsController, type: :controller do
   end
   let(:catalog_links) { [{ catalog: 'symphony', catalogRecordId: '12345' }] }
 
-  describe '#purl_preview' do
-    before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
-    end
-
-    let(:object_service) { instance_double(Dor::Services::Client::Object, metadata: metadata_service) }
-    let(:metadata_service) { instance_double(Dor::Services::Client::Metadata, descriptive: '<xml />') }
-
-    it 'is successful' do
-      get :purl_preview, params: { id: pid }
-      expect(response).to be_successful
-      expect(assigns(:mods_display)).to be_kind_of ModsDisplayObject
-    end
-  end
-
   describe '#purge_object' do
     context "when they don't have manage access" do
       it 'returns 403' do

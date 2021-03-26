@@ -2,8 +2,7 @@
 
 # rubocop:disable Metrics/ClassLength
 class ItemsController < ApplicationController
-  include ModsDisplay::ControllerExtension
-  before_action :load_cocina, except: :purl_preview
+  before_action :load_cocina
   before_action :authorize_manage!, only: %i[
     add_collection set_collection remove_collection
     mods
@@ -29,15 +28,6 @@ class ItemsController < ApplicationController
     detail = JSON.parse(md[1])['errors'].first['detail']
     redirect_to solr_document_path(params[:id]),
                 flash: { error: "Unable to retrieve the cocina model: #{detail.truncate(200)}" }
-  end
-
-  def purl_preview
-    xml = Dor::Services::Client.object(params[:id]).metadata.descriptive
-    @mods_display = ModsDisplayObject.new(xml)
-
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
   end
 
   def embargo_form

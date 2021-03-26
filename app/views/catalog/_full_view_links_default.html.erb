@@ -1,4 +1,4 @@
 <div class='btn-group full-view-links' role='group'>
-  <%= link_to 'View full Dublin Core', dc_item_datastream_path(document.id), title: 'Dublin Core (derived from MODS)', class: 'btn btn-secondary btn-sm', data: { blacklight_modal: 'trigger' } %>
-  <%= link_to 'View MODS', purl_preview_item_url(document.id), title: 'MODS View', class: 'btn btn-secondary btn-sm', data: { blacklight_modal: 'trigger' } %>
+  <%= link_to 'View full Dublin Core', full_dc_item_metadata_path(document.id), title: 'Dublin Core (derived from MODS)', class: 'btn btn-secondary btn-sm', data: { blacklight_modal: 'trigger' } %>
+  <%= link_to 'View MODS', descriptive_item_metadata_path(document.id), title: 'MODS View', class: 'btn btn-secondary btn-sm', data: { blacklight_modal: 'trigger' } %>
 </div>

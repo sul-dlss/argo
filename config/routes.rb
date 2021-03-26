@@ -116,15 +116,16 @@ Rails.application.routes.draw do
     resource :tags, only: %i[edit update]
 
     resource :manage_release, only: :show
-
-    resources :datastreams, only: %i[show edit update] do
-      member do
-        get 'dc'
+    resources :metadata, only: [] do
+      collection do
+        get 'full_dc'
+        get 'descriptive'
       end
     end
 
+    resources :datastreams, only: %i[show edit update]
+
     member do
-      get 'purl_preview'
       post 'refresh_metadata'
       get 'mods'
       post 'embargo', action: :embargo_update, as: 'embargo_update'
