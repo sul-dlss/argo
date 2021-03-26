@@ -8,39 +8,6 @@ require 'okcomputer'
 OkComputer.mount_at = 'status'
 OkComputer.check_in_parallel = true
 
-class RubydoraCheck < OkComputer::PingCheck
-  def initialize(options = {})
-    @client = options[:client]
-    raise ArgumentError, ':client not specified' unless @client
-
-    self.host = options[:host] || URI(@client.client.url).host
-    self.port = options[:port] || URI(@client.client.url).port
-    self.request_timeout = options[:timeout].to_i || 5
-  end
-
-  def check
-    tcp_socket_request
-    message_lines = ['Rubydora check successful<br/>', '<ul>']
-    %w[repositoryName repositoryBaseURL repositoryVersion].each do |key|
-      message_lines << "<li>#{key} - #{profile[key]}\</li>"
-    end
-    message_lines << '</ul>'
-    mark_message message_lines.join
-  rescue StandardError => e
-    mark_message "Error: '#{e}'"
-    mark_failure
-  end
-
-  def profile
-    @luke ||=
-      begin
-        @client.profile
-      rescue StandardError
-        {}
-      end
-  end
-end
-
 # check models to see if at least they have some data
 class TablesHaveDataCheck < OkComputer::Check
   def check
@@ -72,12 +39,8 @@ OkComputer::Registry.register 'ruby_version', OkComputer::RubyVersionCheck.new
 OkComputer::Registry.register 'rails_cache', OkComputer::GenericCacheCheck.new
 OkComputer::Registry.register 'feature-tables-have-data', TablesHaveDataCheck.new
 
-OkComputer::Registry.register 'active_fedora_conn', RubydoraCheck.new(client: ActiveFedora::Base.connection_for_pid(0))
-# fedora_url is covered by checking ActiveFedora::Base.connection_for_pid(0)
-
-# remove trailing slashes to avoid constructing bad solr ping URLs
-OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new(ActiveFedora.solr.conn.uri.to_s.sub(%r{/$}, '') + '/admin/ping')
-# solrizer_url is coverd by checking ActiveFedora.solr.conn.uri
+solr_url = Blacklight.connection_config.fetch(:url)
+OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new("#{solr_url}/admin/ping")
 
 # ------------------------------------------------------------------------------
 
