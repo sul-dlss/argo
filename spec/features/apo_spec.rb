@@ -22,6 +22,7 @@ RSpec.describe 'Create an apo', js: true do
   end
   let(:cocina_model) do
     instance_double(Cocina::Models::AdminPolicy,
+                    externalIdentifier: new_apo_druid,
                     administrative: administrative,
                     as_json: {})
   end

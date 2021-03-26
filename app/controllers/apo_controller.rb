@@ -9,7 +9,9 @@ class ApoController < ApplicationController
 
   def edit
     authorize! :create, Cocina::Models::AdminPolicy
-    @form = ApoForm.new(@object, search_service: search_service)
+    object = Dor.find params[:id]
+
+    @form = ApoForm.new(object, search_service: search_service)
     render layout: 'one_column'
   end
 
@@ -42,7 +44,9 @@ class ApoController < ApplicationController
 
   def update
     authorize! :manage_item, @cocina
-    @form = ApoForm.new(@object, search_service: search_service)
+    object = Dor.find params[:id]
+
+    @form = ApoForm.new(object, search_service: search_service)
     unless @form.validate(params)
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: @form.errors } }
@@ -57,8 +61,10 @@ class ApoController < ApplicationController
 
   def delete_collection
     authorize! :manage_item, @cocina
-    @object.remove_default_collection(params[:collection])
-    @object.save # indexing happens automatically
+    collection_ids = @cocina.administrative.collectionsForRegistration - [params[:collection]]
+    updated_administrative = @cocina.administrative.new(collectionsForRegistration: collection_ids)
+    updated = @cocina.new(administrative: updated_administrative)
+    Dor::Services::Client.object(@cocina.externalIdentifier).update(params: updated)
 
     redirect_to solr_document_path(params[:id]), notice: 'APO updated.'
   end
@@ -82,7 +88,6 @@ class ApoController < ApplicationController
   def create_obj
     raise 'missing druid' unless params[:id]
 
-    @object = Dor.find params[:id]
     @cocina = maybe_load_cocina(params[:id])
   end
 end
