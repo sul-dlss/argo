@@ -111,9 +111,37 @@ RSpec.describe ApoController, type: :controller do
   end
 
   describe '#delete_collection' do
+    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+    let(:cocina_model) do
+      Cocina::Models.build(
+        'label' => 'The APO',
+        'version' => 1,
+        'type' => Cocina::Models::Vocab.admin_policy,
+        'externalIdentifier' => pid,
+        'administrative' => {
+          hasAdminPolicy: 'druid:hv992ry2431',
+          collectionsForRegistration: ['druid:1', collection_id]
+        }
+      )
+    end
+
+    let(:expected) do
+      Cocina::Models.build(
+        'label' => 'The APO',
+        'version' => 1,
+        'type' => Cocina::Models::Vocab.admin_policy,
+        'externalIdentifier' => pid,
+        'administrative' => {
+          hasAdminPolicy: 'druid:hv992ry2431',
+          collectionsForRegistration: ['druid:1'] # only one collection now
+        }
+      )
+    end
+
     it 'calls remove_default_collection' do
-      expect(apo).to receive(:remove_default_collection)
-      post 'delete_collection', params: { id: apo.pid, collection: collection.externalIdentifier }
+      post 'delete_collection', params: { id: apo.pid, collection: collection_id }
+      expect(object_client).to have_received(:update)
+        .with(params: expected)
     end
   end
 end
