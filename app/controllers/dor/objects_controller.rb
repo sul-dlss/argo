@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Dor::ObjectsController < ApplicationController
-  include ApplicationHelper # for fedora_base
   before_action :munge_parameters
 
   def create
@@ -10,7 +9,7 @@ class Dor::ObjectsController < ApplicationController
     result = RegistrationService.register(model: request_model, workflow: params[:workflow_id], tags: form.administrative_tags)
 
     result.either(
-      ->(model) { render json: { pid: model.externalIdentifier }, status: :created, location: object_location(model.externalIdentifier) },
+      ->(model) { render json: { pid: model.externalIdentifier }, status: :created, location: solr_document_url(model.externalIdentifier) },
       ->(message) { render_failure(message) }
     )
   rescue Cocina::Models::ValidationError => e
@@ -41,9 +40,5 @@ class Dor::ObjectsController < ApplicationController
       key = k.underscore
       params[key.to_sym] = v
     end
-  end
-
-  def object_location(pid)
-    fedora_base.merge("objects/#{pid}").to_s
   end
 end
