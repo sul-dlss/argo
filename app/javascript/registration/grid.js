@@ -5,21 +5,14 @@ import 'jquery-ui/ui/widgets/dialog'
 import 'jquery-ui/ui/widgets/progressbar'
 
 var gridContext = function() {
-  var druidFormatter = function(val, opts, rowObj) {
-    if (val.trim() != '') {
-      var href = dor_path + "objects/druid:" + val.trim();
-      return '<a href="'+href+'" title="'+val+'" target="_blank">'+val+'</a>';
-    } else {
-      return val;
-    }
-  };
+  const view_path = '/view'
 
   var statusFormatter = function(val, opts, rowObj) {
     if (val in $t.statusIcons) {
       var result = '<span class="' + $t.statusIcons[val] + '" title="' +
         (rowObj.error||val)+'" aria-hidden="true"></span>';
       if (rowObj.druid) {
-        var href = dor_path + "objects/druid:" + rowObj.druid;
+        var href = view_path + "/druid:" + rowObj.druid;
         return '<a href="'+href+'" target="_blank">'+result+'</a>';
       }
       return(result)
