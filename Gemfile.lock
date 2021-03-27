@@ -662,6 +662,7 @@ DEPENDENCIES
   rails-controller-testing
   rake
   responders (~> 2.0)
+  rest-client
   retries
   rsolr
   rspec-rails (~> 3.5)
