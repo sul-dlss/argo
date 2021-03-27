@@ -14,7 +14,7 @@ RSpec.describe ApplyModsMetadata do
   end
 
   let(:apo_druid) { 'druid:999apo' }
-  let(:desc_metadata) { Dor::DescMetadataDS.new }
+  let(:existing_mods) { nil }
   let(:druid) { 'druid:bc123hv8998' }
   let(:log) { instance_double(File, puts: true) }
   let(:ability) { Ability.new(user) }
@@ -28,7 +28,7 @@ RSpec.describe ApplyModsMetadata do
     described_class.new(apo_druid: apo_druid,
                         mods: mods,
                         cocina: cocina,
-                        existing_mods: desc_metadata.content,
+                        existing_mods: existing_mods,
                         original_filename: 'testfile.xlsx',
                         ability: ability,
                         log: log)
