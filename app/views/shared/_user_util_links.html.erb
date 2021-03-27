@@ -49,7 +49,7 @@
       </a>
       <div class="dropdown-menu" aria-labelledby="registerDropdown">
         <%= link_to 'Register Items', registration_path, class: 'dropdown-item' %>
-        <% if can? :create, Dor::AdminPolicyObject %>
+        <% if can? :create, Cocina::Models::AdminPolicy %>
           <%= link_to 'Register APO', new_apo_path, class: 'dropdown-item' %>
         <% end %>
       </div>
