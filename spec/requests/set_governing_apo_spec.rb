@@ -62,8 +62,6 @@ RSpec.describe 'Set APO for an object' do
         cocina_model.new('administrative' => { 'hasAdminPolicy' => new_apo_id, 'partOfProject' => 'EEMS' })
       end
 
-      let(:new_apo) { double(Dor::AdminPolicyObject, id: new_apo_id) }
-
       it 'updates the governing APO' do
         post "/items/#{pid}/set_governing_apo", params: { new_apo_id: new_apo_id }
         expect(response).to redirect_to(solr_document_path(pid))

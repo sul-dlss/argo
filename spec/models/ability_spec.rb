@@ -51,7 +51,6 @@ RSpec.describe Ability do
   let(:viewer) { false }
   let(:roles) { [] }
   let(:new_apo_id) { 'druid:hv992yv2222' }
-  let(:new_apo) { Dor::AdminPolicyObject.new(pid: new_apo_id) }
 
   context 'as an administrator' do
     let(:admin) { true }
