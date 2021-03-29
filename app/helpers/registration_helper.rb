@@ -8,7 +8,7 @@ module RegistrationHelper
 
     q = permission_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
 
-    result = Dor::SearchService.query(
+    result = SearchService.query(
       q,
       defType: 'lucene',
       rows: 99_999,

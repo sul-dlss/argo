@@ -257,7 +257,7 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       before do
-        allow(Dor::SearchService).to receive(:query).and_return(solr_response)
+        allow(SearchService).to receive(:query).and_return(solr_response)
       end
 
       it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do

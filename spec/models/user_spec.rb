@@ -197,7 +197,7 @@ RSpec.describe User, type: :model do
 
   describe 'roles' do
     # The exact DRUID is not important in these specs, because
-    # the Dor::SearchService is mocked to return solr_doc.
+    # the SearchService is mocked to return solr_doc.
     let(:druid) { 'druid:ab123cd4567' }
     let(:answer) do
       {
@@ -214,7 +214,7 @@ RSpec.describe User, type: :model do
     end
 
     before do
-      allow(Dor::SearchService).to receive(:query).and_return(answer)
+      allow(SearchService).to receive(:query).and_return(answer)
     end
 
     it 'accepts any object identifier' do
@@ -238,7 +238,7 @@ RSpec.describe User, type: :model do
 
     it 'returns an empty set of roles if the DRUID solr search fails' do
       empty_doc = { 'response' => { 'docs' => [] } }
-      allow(Dor::SearchService).to receive(:query).and_return(empty_doc)
+      allow(SearchService).to receive(:query).and_return(empty_doc)
       # check that the code will return immediately if solr doc is empty
       expect(subject).not_to receive(:groups)
       expect(subject).not_to receive(:solr_role_allowed?)
@@ -252,7 +252,7 @@ RSpec.describe User, type: :model do
 
     it 'hangs onto results through the life of the user object, avoiding multiple solr searches to find the roles for the same pid multiple times' do
       expect(subject).to receive(:groups).and_return(['testdoesnotcarewhatishere']).at_least(:once)
-      expect(Dor::SearchService).to receive(:query).once
+      expect(SearchService).to receive(:query).once
       subject.roles(druid)
       subject.roles(druid)
     end
