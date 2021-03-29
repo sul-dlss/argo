@@ -1,1 +1,1 @@
-<%= CodeRay::Duo[:xml, :div].highlight(Nokogiri::XML(@history_xml).prettify).html_safe %>
+<%= CodeRay::Duo[:xml, :div].highlight(PrettyXml.print(@history_xml)).html_safe %>
