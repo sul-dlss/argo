@@ -89,19 +89,5 @@ RSpec.describe GenericJob do
 
       expect(version_client).not_to have_received(:open)
     end
-
-    context 'when something goes wrong updating the version' do
-      before do
-        allow(version_client).to receive(:open).and_raise Dor::Exception
-      end
-
-      it 'fails with an exception' do
-        expect(DorObjectWorkflowStatus).to receive(:new)
-          .with(pid, version: version).and_return(workflow)
-        expect(workflow).to receive(:can_open_version?).and_return(true)
-        allow(subject).to receive(:current_user).and_return(current_user)
-        expect { subject.send(:open_new_version, pid, version, 'Set new governing APO') }.to raise_error(Dor::Exception)
-      end
-    end
   end
 end
