@@ -12,7 +12,7 @@ RSpec.describe ApoForm do
   end
 
   context 'with a persisted model (update)' do
-    let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
+    let(:agreement_id) { 'druid:dd327rv8888' }
     let(:apo) do
       Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
     end
@@ -21,7 +21,7 @@ RSpec.describe ApoForm do
         copyright: 'My copyright statement',
         use: 'My use and reproduction statement',
         title: +'My title',
-        agreement: agreement.pid,
+        agreement: agreement_id,
         workflow: 'registrationWF',
         default_object_rights: 'world',
         use_license: 'by-nc'
@@ -135,7 +135,7 @@ RSpec.describe ApoForm do
         apo.agreement_object_id = 'druid:dd327rv8888'
       end
 
-      it { is_expected.to eq agreement.pid }
+      it { is_expected.to eq agreement_id }
     end
 
     describe '#use_license' do
@@ -272,7 +272,7 @@ RSpec.describe ApoForm do
       let(:registered_model) do
         Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
       end
-      let(:agreement) { instance_double(Dor::Agreement, pid: 'druid:dd327rv8888') }
+      let(:agreement_id) { 'druid:dd327rv8888' }
       let(:collection_form) { instance_double(CollectionForm, validate: true, model: created_collection) }
       let(:collection_id) { 'druid:gh567vb7777' }
 
@@ -281,7 +281,7 @@ RSpec.describe ApoForm do
       let(:base_params) do
         { # These data mimic the APO registration form
           'title' => +'New APO Title',
-          'agreement' => agreement.pid,
+          'agreement' => agreement_id,
           permissions: {
             '0' => { access: 'manage', name: 'developers', type: 'group' },
             '1' => { access: 'manage', name: 'dpg-staff', type: 'group' },
