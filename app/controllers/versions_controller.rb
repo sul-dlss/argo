@@ -56,8 +56,6 @@ class VersionsController < ApplicationController
     msg = "Version #{@cocina_object.version} of #{@cocina_object.externalIdentifier} has been closed!"
     redirect_to solr_document_path(params[:item_id]), notice: msg
     Argo::Indexer.reindex_pid_remotely(@cocina_object.externalIdentifier)
-  rescue Dor::Exception # => e
-    render status: :internal_server_error, plain: 'No version to close.'
   end
 
   private
