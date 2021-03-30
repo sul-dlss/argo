@@ -69,51 +69,76 @@ RSpec.describe CollectionsController do
   describe '#exists' do
     let(:title) { 'foo' }
     let(:catkey) { '123' }
+    let(:repo) { instance_double(Blacklight::Solr::Repository, connection: solr_client) }
+    let(:solr_client) { instance_double(RSolr::Client, get: result) }
 
-    it 'returns true if collection with title exists' do
-      allow(Dor::Collection).to receive(:where).and_return([1])
-      expect(Dor::Collection).to receive(:where).with(title_ssi: title)
-      post :exists, params: {
-        'title' => title
-      }
-      expect(response.body).to eq('true')
+    before do
+      allow(Blacklight::Solr::Repository).to receive(:new).and_return(repo)
     end
 
-    it 'returns false if collection with title exists' do
-      allow(Dor::Collection).to receive(:where).and_return([])
-      expect(Dor::Collection).to receive(:where).with(title_ssi: title)
-      post :exists, params: {
-        'title' => title
-      }
-      expect(response.body).to eq('false')
+    context 'when the title is provided and the collection exists' do
+      let(:result) { { 'response' => { 'numFound' => 1 } } }
+
+      it 'returns true' do
+        post :exists, params: {
+          'title' => title
+        }
+        expect(response.body).to eq('true')
+        expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
+          q: '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND title_ssi:"foo"'
+        ))
+      end
     end
 
-    it 'returns true if collection with catkey exists' do
-      allow(Dor::Collection).to receive(:where).and_return([1])
-      expect(Dor::Collection).to receive(:where).with(identifier_ssim: "catkey:#{catkey}")
-      post :exists, params: {
-        'catkey' => catkey
-      }
-      expect(response.body).to eq('true')
+    context 'when the title is provided and the collection does not exist' do
+      let(:result) { { 'response' => { 'numFound' => 0 } } }
+
+      it 'returns false' do
+        post :exists, params: {
+          'title' => title
+        }
+        expect(response.body).to eq('false')
+      end
     end
 
-    it 'returns false if collection with catkey exists' do
-      allow(Dor::Collection).to receive(:where).and_return([])
-      expect(Dor::Collection).to receive(:where).with(identifier_ssim: "catkey:#{catkey}")
-      post :exists, params: {
-        'catkey' => catkey
-      }
-      expect(response.body).to eq('false')
+    context 'when the catkey is provided and the collection exists' do
+      let(:result) { { 'response' => { 'numFound' => 1 } } }
+
+      it 'returns true' do
+        post :exists, params: {
+          'catkey' => catkey
+        }
+        expect(response.body).to eq('true')
+        expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
+          q: '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND identifier_ssim:"catkey:123"'
+        ))
+      end
     end
 
-    it 'returns true if collection with title and catkey exists' do
-      allow(Dor::Collection).to receive(:where).and_return([1])
-      expect(Dor::Collection).to receive(:where).with(title_ssi: title, identifier_ssim: "catkey:#{catkey}")
-      post :exists, params: {
-        'title' => title,
-        'catkey' => catkey
-      }
-      expect(response.body).to eq('true')
+    context 'when the catkey is provided and the collection does not exist' do
+      let(:result) { { 'response' => { 'numFound' => 0 } } }
+
+      it 'returns false' do
+        post :exists, params: {
+          'catkey' => catkey
+        }
+        expect(response.body).to eq('false')
+      end
+    end
+
+    context 'when the title and catkey is provided and the collection exists' do
+      let(:result) { { 'response' => { 'numFound' => 1 } } }
+
+      it 'returns true if collection with title and catkey exists' do
+        post :exists, params: {
+          'title' => title,
+          'catkey' => catkey
+        }
+        expect(response.body).to eq('true')
+        expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
+          q: '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND title_ssi:"foo" AND identifier_ssim:"catkey:123"'
+        ))
+      end
     end
   end
 end
