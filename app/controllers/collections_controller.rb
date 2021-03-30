@@ -39,14 +39,24 @@ class CollectionsController < ApplicationController
   end
 
   def exists
-    where_params = {}
-    where_params[:title_ssi] = params[:title] if params[:title].present?
-    where_params[:identifier_ssim] = "catkey:#{params[:catkey]}" if params[:catkey].present?
-    resp = where_params.empty? ? false : Dor::Collection.where(where_params).any?
+    resp = collection_exists?(title: params[:title].presence, catkey: params[:catkey].presence)
     render json: resp.to_json, layout: false
   end
 
   private
+
+  def collection_exists?(title:, catkey:)
+    return false unless title || catkey
+
+    query = '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection"'
+    query += " AND title_ssi:\"#{title}\"" if title
+    query += " AND identifier_ssim:\"catkey:#{params[:catkey]}\"" if catkey
+
+    blacklight_config = CatalogController.blacklight_config
+    conn = blacklight_config.repository_class.new(blacklight_config).connection
+    result = conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+    result.dig('response', 'numFound').to_i.positive?
+  end
 
   def object_client
     Dor::Services::Client.object(params[:apo_id])
