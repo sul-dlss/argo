@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  ruby: circleci/ruby@1.0.5
+  ruby: circleci/ruby@1.1.2
   node: circleci/node@2.1.1
 
 references:
@@ -162,8 +162,7 @@ jobs:
     executor: default
     steps:
       - checkout
-      - ruby/install-deps:
-          key: gems-v2
+      - ruby/install-deps
       - node/install-packages:
           cache-key: yarn.lock
           pkg-manager: yarn
@@ -171,8 +170,7 @@ jobs:
     executor: default
     steps:
       - checkout
-      - ruby/install-deps:
-          key: gems-v2
+      - ruby/install-deps
       - run:
           name: Run linter
           command: bundle exec rubocop
@@ -192,8 +190,7 @@ jobs:
     executor: ruby_with_all_deps
     steps:
       - checkout
-      - ruby/install-deps:
-          key: gems-v2
+      - ruby/install-deps
       - node/install-packages:
           cache-key: yarn.lock
           pkg-manager: yarn
