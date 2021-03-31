@@ -48,20 +48,16 @@ class ContentTypesController < ApplicationController
   end
 
   def old_content_type
-    if @cocina_object.type == 'http://cocina.sul.stanford.edu/models/book.jsonld' && @cocina_object.structural.hasMemberOrders[0]&.viewingDirection == 'right-to-left'
+    if @cocina_object.type == Cocina::Models::Vocab.book && @cocina_object.structural.hasMemberOrders[0]&.viewingDirection == 'right-to-left'
       # if we have a book type, we need to also check the viewing direction
       'book (rtl)'
     else
-      Constants::CONTENT_TYPES.key(@cocina_object.type)
+      Constants::CONTENT_TYPES.key(@cocina_object.type) || ''
     end
-  rescue StandardError
-    ''
   end
 
   def old_resource_type
-    Constants::RESOURCE_TYPES.key(@cocina_object.structural.contains.first.type)
-  rescue StandardError
-    ''
+    Constants::RESOURCE_TYPES.key(@cocina_object.structural.contains&.first&.type) || ''
   end
 
   def new_content_type

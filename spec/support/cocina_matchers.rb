@@ -21,7 +21,7 @@ RSpec::Matchers.define :a_cocina_object_with_types do |expected|
   end
 
   def match_cocina_viewing_direction?(actual, expected)
-    actual.structural.hasMemberOrders.map(&:viewingDirection).all? { |viewing_direction| viewing_direction.in?(expected[:viewing_direction]) }
+    actual.structural.hasMemberOrders.map(&:viewingDirection).all? { |viewing_direction| viewing_direction == expected[:viewing_direction] }
   end
 
   def match_contained_cocina_types?(actual, expected)
