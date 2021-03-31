@@ -48,7 +48,7 @@ class ContentTypesController < ApplicationController
   end
 
   def old_content_type
-    if @cocina_object.type == Cocina::Models::Vocab.book && @cocina_object.structural.hasMemberOrders[0]&.viewingDirection == 'right-to-left'
+    if @cocina_object.type == Cocina::Models::Vocab.book && @cocina_object.structural.hasMemberOrders&.first&.viewingDirection == 'right-to-left'
       # if we have a book type, we need to also check the viewing direction
       'book (rtl)'
     else
@@ -57,6 +57,8 @@ class ContentTypesController < ApplicationController
   end
 
   def old_resource_type
+    return '' if [Cocina::Models::Vocab.collection, Cocina::Models::Vocab.admin_policy].include? @cocina_object.type
+
     Constants::RESOURCE_TYPES.key(@cocina_object.structural.contains&.first&.type) || ''
   end
 
