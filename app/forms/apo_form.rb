@@ -83,9 +83,7 @@ class ApoForm < BaseForm
   end
 
   def license_options
-    [['-- none --', '']] +
-      options_for_use_license_type(Dor::CreativeCommonsLicenseService, use_license) +
-      options_for_use_license_type(Dor::OpenDataLicenseService, use_license)
+    [['-- none --', '']] + options_for_use_license_type(use_license)
   end
 
   private
@@ -100,16 +98,42 @@ class ApoForm < BaseForm
     Dor::Services::Client.object(model.pid).administrative_tags
   end
 
+  LICENSES = {
+    'pddl' => { label: 'Open Data Commons Public Domain Dedication and License 1.0',
+                uri: 'http://opendatacommons.org/licenses/pddl/1.0/' },
+    'odc-by' => { label: 'Open Data Commons Attribution License 1.0',
+                  uri: 'http://opendatacommons.org/licenses/by/1.0/' },
+    'odc-odbl' => { label: 'Open Data Commons Open Database License 1.0',
+                    uri: 'http://opendatacommons.org/licenses/odbl/1.0/' },
+    'by' => { label: 'Attribution 3.0 Unported',
+              uri: 'https://creativecommons.org/licenses/by/3.0/' },
+    'by-sa' => { label: 'Attribution Share Alike 3.0 Unported',
+                 uri: 'https://creativecommons.org/licenses/by-sa/3.0/' },
+    'by_sa' => { label: 'Attribution Share Alike 3.0 Unported',
+                 uri: 'https://creativecommons.org/licenses/by-sa/3.0/',
+                 deprecation_warning: 'license code "by_sa" was a typo in argo, prefer "by-sa"' },
+    'by-nd' => { label: 'Attribution No Derivatives 3.0 Unported',
+                 uri: 'https://creativecommons.org/licenses/by-nd/3.0/' },
+    'by-nc' => { label: 'Attribution Non-Commercial 3.0 Unported',
+                 uri: 'https://creativecommons.org/licenses/by-nc/3.0/' },
+    'by-nc-sa' => { label: 'Attribution Non-Commercial Share Alike 3.0 Unported',
+                    uri: 'https://creativecommons.org/licenses/by-nc-sa/3.0/' },
+    'by-nc-nd' => { label: 'Attribution Non-Commercial, No Derivatives 3.0 Unported',
+                    uri: 'https://creativecommons.org/licenses/by-nc-nd/3.0/' },
+    'pdm' => { label: 'Public Domain Mark 1.0',
+               uri: 'https://creativecommons.org/publicdomain/mark/1.0/' }
+  }.freeze
+
   # return a list of lists, where the sublists are pairs, with the first element being the text to display
   # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated
   # entries, unless the current value is a deprecated entry, in which case, include that entry with the
   # deprecation warning in a parenthetical.
-  def options_for_use_license_type(license_service, current_value)
-    license_service.options do |term|
-      if term.key == current_value && term.deprecation_warning
-        ["#{term.label} (#{term.deprecation_warning})", term.key]
-      elsif term.deprecation_warning.nil?
-        [term.label, term.key]
+  def options_for_use_license_type(current_value)
+    LICENSES.map do |key, attributes|
+      if key == current_value && attributes.key?(:deprecation_warning)
+        ["#{attributes.fetch(:label)} (#{attributes.fetch(:deprecation_warning)})", key]
+      elsif !attributes.key?(:deprecation_warning)
+        [attributes.fetch(:label), key]
       end
     end.compact # the options block will produce nils for unused deprecated entries, compact will get rid of them
   end
