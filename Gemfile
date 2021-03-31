@@ -71,7 +71,7 @@ gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '~> 3.2'
 gem 'responders', '~> 2.0'
 gem 'rsolr'
-gem 'sdr-client', '~> 0.53.0'
+gem 'sdr-client', '~> 0.55.0'
 
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'
