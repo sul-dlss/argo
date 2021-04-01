@@ -6,6 +6,7 @@ module BlacklightConfigHelper
       'q.alt': '*:*',
       defType: 'dismax',
       qf: %(
+        id
         collection_title_tesim
         dor_id_tesim
         identifier_tesim
