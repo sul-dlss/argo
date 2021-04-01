@@ -13,7 +13,7 @@ services:
       NODE_ENV: development
       RAILS_LOG_TO_STDOUT: 'true'
       REMOTE_USER: blalbrit@stanford.edu
-      ROLES: sdr:administrator-role
+      ROLES: sdr:administrator-role;sdr:service-manager
       # Allow bulk action logs to be written (can't write to /tmp)
       SETTINGS__BULK_METADATA__DIRECTORY: '/app/tmp'
       SETTINGS__BULK_METADATA__TEMPORARY_DIRECTORY: '/app/tmp/tmp'
@@ -61,6 +61,7 @@ services:
       RAILS_LOG_TO_STDOUT: 'true'
       SECRET_KEY_BASE: 769171f88c527d564fb65b4b7ef712d5ae9761a21e26a41cd7c88eb0af89c74f857b9be4089119f71cf806dfc8bf9d9d2f0df91c00b119c96f462b46ebf43b0f
       SOLR_URL: http://solr:8983/solr/argo
+      SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
       SETTINGS__DOR_INDEXING__URL: http://dor-indexing-app:3000/dor
       SETTINGS__SOLR__URL: http://solr:8983/solr/argo
       SETTINGS__FEDORA_URL: http://fedoraAdmin:fedoraAdmin@fcrepo:8080/fedora
