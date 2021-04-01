@@ -10,7 +10,7 @@
     <%= select_tag :agreement, options_for_select(agreement_options, @form.agreement_object_id), class: 'form-control' %>
   </div>
 
-  <sharing data-permissions="<%= @form.permissions.to_json %>">
+  <sharing data-permissions="<%= @form.permissions.to_json %>"></sharing>
 
   <% if @form.default_collection_objects.present? %>
     <label>Default Collections</label><br>
