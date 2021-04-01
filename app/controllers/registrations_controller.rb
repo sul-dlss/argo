@@ -36,9 +36,9 @@ class RegistrationsController < ApplicationController
       col_title_field = SolrDocument::FIELD_TITLE
 
       # grab the collection title from Solr, or fall back to DOR
-      solr_doc = Dor::SearchService.query("id:\"#{col_id}\"",
-                                          rows: 1,
-                                          fl: col_title_field)['response']['docs'].first
+      solr_doc = SearchService.query("id:\"#{col_id}\"",
+                                     rows: 1,
+                                     fl: col_title_field)['response']['docs'].first
       collections[col_id] = "#{short_label(solr_doc[col_title_field].first, truncate_limit)} (#{col_druid})"
     end
 
@@ -73,7 +73,7 @@ class RegistrationsController < ApplicationController
 
   def autocomplete
     facet_field = params[:field]
-    response = Dor::SearchService.query(
+    response = SearchService.query(
       '*:*',
       rows: 0,
       'facet.field': facet_field,

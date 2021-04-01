@@ -9,7 +9,7 @@ RSpec.describe RegistrationHelper do
     it 'runs the appropriate query for the given permission keys' do
       q = perm_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
 
-      expect(Dor::SearchService).to receive(:query).with(
+      expect(SearchService).to receive(:query).with(
         q,
         defType: 'lucene',
         rows: 99_999,
@@ -26,7 +26,7 @@ RSpec.describe RegistrationHelper do
         { 'id' => 2, 'tag_ssim' => 'AdminPolicy : default', 'sw_display_title_tesim' => 'y' },
         { 'id' => 3, 'tag_ssim' => 'prefix : suffix2', 'sw_display_title_tesim' => 'x' }
       ]
-      expect(Dor::SearchService).to receive(:query).and_return('response' => { 'docs' => result_rows })
+      expect(SearchService).to receive(:query).and_return('response' => { 'docs' => result_rows })
 
       apos = apo_list(perm_keys)
       expect(apos).to eq [%w[y 2], %w[x 3], %w[z 1]]
@@ -34,7 +34,7 @@ RSpec.describe RegistrationHelper do
   end
 
   it 'returns nothing when permission_keys is empty' do
-    expect(Dor::SearchService).not_to receive(:query)
+    expect(SearchService).not_to receive(:query)
     expect(apo_list([])).to eq []
   end
 end

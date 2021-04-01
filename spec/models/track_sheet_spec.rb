@@ -10,7 +10,7 @@ RSpec.describe TrackSheet do
     subject(:call) { instance.send(:find_or_create_in_solr_by_id, druid) }
 
     before do
-      allow(Dor::SearchService).to receive(:query)
+      allow(SearchService).to receive(:query)
         .with('id:"druid:xb482ww9999"', rows: 1)
         .and_return(response)
     end
@@ -30,7 +30,7 @@ RSpec.describe TrackSheet do
       before do
         allow(Argo::Indexer).to receive(:reindex_pid_remotely)
 
-        allow(Dor::SearchService).to receive(:query)
+        allow(SearchService).to receive(:query)
           .with('id:"druid:xb482ww9999"', rows: 1)
           .and_return(response, second_response)
       end

@@ -113,10 +113,10 @@ class TrackSheet
   # @note To the extent we use Solr input filters or copyField(s), the Solr version will differ from the to_solr hash.
   # @note That difference shouldn't be important for the few known fields we use here.
   def find_or_create_in_solr_by_id(druid)
-    doc = Dor::SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
+    doc = SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
     return doc unless doc.nil?
 
     Argo::Indexer.reindex_pid_remotely("druid:#{druid}")
-    Dor::SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
+    SearchService.query(%(id:"druid:#{druid}"), rows: 1)['response']['docs'].first
   end
 end
