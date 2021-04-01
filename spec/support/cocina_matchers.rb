@@ -5,6 +5,8 @@ RSpec::Matchers.define :a_cocina_object_with_types do |expected|
   match do |actual|
     if expected[:content_type] && expected[:resource_types]
       match_cocina_type?(actual, expected) && match_contained_cocina_types?(actual, expected)
+    elsif expected[:content_type] && expected[:viewing_direction]
+      match_cocina_type?(actual, expected) && match_cocina_viewing_direction?(actual, expected)
     elsif expected[:content_type]
       match_cocina_type?(actual, expected)
     elsif expected[:resource_types]
@@ -16,6 +18,10 @@ RSpec::Matchers.define :a_cocina_object_with_types do |expected|
 
   def match_cocina_type?(actual, expected)
     actual.type == expected[:content_type]
+  end
+
+  def match_cocina_viewing_direction?(actual, expected)
+    actual.structural.hasMemberOrders.map(&:viewingDirection).all? { |viewing_direction| viewing_direction == expected[:viewing_direction] }
   end
 
   def match_contained_cocina_types?(actual, expected)

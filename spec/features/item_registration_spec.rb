@@ -44,6 +44,7 @@ RSpec.describe 'Item registration page', js: true do
 
     find("option[value='goobiWF']")
     select 'goobiWF', from: 'workflow_id'
+    select 'Book (ltr)', from: 'content_type'
 
     fill_in 'tags_0', with: 'tag : test'
 
