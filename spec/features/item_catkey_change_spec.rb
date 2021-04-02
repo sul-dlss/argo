@@ -14,7 +14,7 @@ RSpec.describe 'Item catkey change' do
     let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     it 'cannot change the catkey' do
-      visit catkey_ui_item_path druid
+      visit edit_item_catkey_path druid
       fill_in 'new_catkey', with: '12345'
       click_button 'Update'
       expect(page).to have_css 'body', text: 'Object cannot be modified in ' \
@@ -71,7 +71,7 @@ RSpec.describe 'Item catkey change' do
     end
 
     it 'changes the catkey' do
-      visit catkey_ui_item_path druid
+      visit edit_item_catkey_path druid
       fill_in 'new_catkey', with: '12345'
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Catkey for ' \

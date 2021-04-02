@@ -126,6 +126,7 @@ Rails.application.routes.draw do
     end
 
     resources :datastreams, only: %i[show edit update]
+    resource :catkey, only: %i[edit update]
 
     member do
       post 'refresh_metadata'
@@ -133,7 +134,6 @@ Rails.application.routes.draw do
       post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'
       get 'source_id_ui'
-      get 'catkey_ui'
       match 'tags_bulk', via: %i[get post]
       get 'collection_ui'
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
@@ -146,7 +146,6 @@ Rails.application.routes.draw do
       post 'set_governing_apo'
       post :apply_apo_defaults
       post 'source_id'
-      post 'catkey'
     end
   end
 

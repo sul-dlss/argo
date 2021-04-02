@@ -41,7 +41,7 @@ RSpec.describe SidebarControlsComponent, type: :component do
         expect(rendered.css("a[href='/dor/republish/druid:kv840xx0000']").inner_text).to eq 'Republish'
         expect(rendered.css("a.disabled[data-confirm][data-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/source_id_ui']").inner_text).to eq 'Change source id'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/catkey_ui']").inner_text).to eq 'Manage catkey'
+        expect(rendered.css("a[href='/items/druid:kv840xx0000/catkey/edit']").inner_text).to eq 'Manage catkey'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/tags/edit']").inner_text).to eq 'Edit tags'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/collection_ui']").inner_text).to eq 'Edit collections'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/content_type']").inner_text).to eq 'Set content type'

@@ -49,4 +49,16 @@ class ApplicationController < ActionController::Base
       render plain: 'Not Found', status: :not_found
     end
   end
+
+  def enforce_versioning
+    return redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
+
+    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+
+    # if this object has been submitted and doesn't have an open version, they cannot change it.
+    return true if state_service.allows_modification?
+
+    redirect_to solr_document_path(params[:id]), flash: { error: 'Object cannot be modified in its current state.' }
+    false
+  end
 end

@@ -18,7 +18,7 @@ RSpec.describe 'Set catkey for an object' do
     end
 
     it 'returns a 403' do
-      post "/items/#{pid}/catkey", params: { new_catkey: '12345' }
+      patch "/items/#{pid}/catkey", params: { new_catkey: '12345' }
 
       expect(response.code).to eq('403')
     end
@@ -57,7 +57,7 @@ RSpec.describe 'Set catkey for an object' do
     end
 
     it 'updates the catkey, trimming whitespace' do
-      post "/items/#{pid}/catkey", params: { new_catkey: '   12345 ' }
+      patch "/items/#{pid}/catkey", params: { new_catkey: '   12345 ' }
 
       expect(object_client).to have_received(:update)
         .with(params: updated_model)
