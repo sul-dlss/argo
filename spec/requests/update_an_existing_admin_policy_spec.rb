@@ -47,26 +47,47 @@ RSpec.describe 'Update an existing Admin Policy' do
     let(:objects_client) { instance_double(Dor::Services::Client::Objects, register: nil) }
     let(:workflow_service) { instance_double(Dor::Workflow::Client, create_workflow_by_name: nil) }
 
+    let(:params) do
+      {
+        apo_form: {
+          title: 'my title',
+          agreement_object_id: 'druid:dd327rv8888',
+          default_rights: rights,
+          default_workflows: ['registrationWF'],
+          collection: { collection: '' }
+        }
+      }
+    end
+
     before do
       allow(Dor::Services::Client).to receive(:objects).and_return(objects_client)
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_service)
     end
 
-    it 'updates the record and does not re-register' do
-      patch "/apo/#{pid}", params: {
-        apo_form: {
-          title: 'my title',
-          agreement_object_id: 'druid:dd327rv8888',
-          default_rights: 'world',
-          default_workflows: ['registrationWF'],
-          collection: { collection: '' }
-        }
-      }
-      expect(object_client).to have_received(:update)
-      expect(objects_client).not_to have_received(:register)
-      expect(workflow_service).not_to have_received(:create_workflow_by_name)
+    context 'with controlledDigitalLending' do
+      let(:rights) { 'cdl-stanford-nd' }
 
-      expect(response).to redirect_to solr_document_path(pid)
+      it 'updates the record and does not re-register' do
+        patch "/apo/#{pid}", params: params
+        expect(object_client).to have_received(:update)
+        expect(objects_client).not_to have_received(:register)
+        expect(workflow_service).not_to have_received(:create_workflow_by_name)
+
+        expect(response).to redirect_to solr_document_path(pid)
+      end
+    end
+
+    context 'with citation-only' do
+      let(:rights) { 'citation-only' }
+
+      it 'updates the record and does not re-register' do
+        patch "/apo/#{pid}", params: params
+        expect(object_client).to have_received(:update)
+        expect(objects_client).not_to have_received(:register)
+        expect(workflow_service).not_to have_received(:create_workflow_by_name)
+
+        expect(response).to redirect_to solr_document_path(pid)
+      end
     end
   end
 end

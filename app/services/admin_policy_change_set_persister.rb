@@ -88,7 +88,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   end
 
   def updated_administrative(updated)
-    rights = CocinaAccess.from_form_value(default_rights)
+    rights = CocinaDROAccess.from_form_value(default_rights)
     administrative = {
       referencesAgreement: agreement_object_id,
       registrationWorkflow: registration_workflow,

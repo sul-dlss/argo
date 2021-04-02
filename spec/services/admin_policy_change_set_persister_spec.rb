@@ -71,6 +71,8 @@ RSpec.describe AdminPolicyChangeSetPersister do
           administrative: {
             defaultAccess: {
               access: 'world',
+              controlledDigitalLending: false,
+              download: 'world',
               copyright: 'My copyright statement',
               license: 'https://creativecommons.org/licenses/by-nc/3.0/',
               useAndReproductionStatement: 'My use and reproduction statement'
