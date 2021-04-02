@@ -24,7 +24,8 @@ class BulkActionPersister
 
   delegate :pids, :manage_release, :set_governing_apo,
            :manage_catkeys, :groups, :prepare, :create_virtual_objects,
-           :import_tags, to: :bulk_action_form
+           :import_tags, :set_license_and_rights_statements,
+           to: :bulk_action_form
 
   delegate :id, :file, :output_directory, to: :bulk_action
 
@@ -61,6 +62,7 @@ class BulkActionPersister
       manage_release: manage_release,
       manage_catkeys: manage_catkeys,
       set_governing_apo: set_governing_apo,
+      set_license_and_rights_statements: set_license_and_rights_statements,
       prepare: prepare,
       csv_file: bulk_action_form.csv_as_string,
       groups: groups

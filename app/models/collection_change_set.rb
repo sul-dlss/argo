@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
-# Represents a set of changes to an item.
-class ItemChangeSet
+# Represents a set of changes to a collection
+class CollectionChangeSet
   PROPERTIES = %i[
-    admin_policy_id
-    catkey
-    collection_ids
     copyright_statement
     license
-    source_id
     use_statement
   ].freeze
 

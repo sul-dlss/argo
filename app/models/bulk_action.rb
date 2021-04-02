@@ -19,7 +19,8 @@ class BulkAction < ApplicationRecord
                      CreateVirtualObjectsJob
                      ExportTagsJob
                      ImportTagsJob
-                     RegisterDruidsJob]
+                     RegisterDruidsJob
+                     SetLicenseAndRightsStatementsJob]
             }
 
   before_destroy :remove_output_directory
