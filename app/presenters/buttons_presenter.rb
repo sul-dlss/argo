@@ -24,7 +24,7 @@ class ButtonsPresenter
            :purge_item_path,
            :source_id_ui_item_path,
            :edit_item_tags_path,
-           :catkey_ui_item_path,
+           :edit_item_catkey_path,
            :collection_ui_item_path,
            :item_content_type_path,
            :rights_item_path,
@@ -73,7 +73,7 @@ class ButtonsPresenter
     buttons << { url: source_id_ui_item_path(id: pid), label: 'Change source id' }
     buttons << { url: edit_item_tags_path(item_id: pid), label: 'Edit tags' }
     if doc.item? || doc.collection?
-      buttons << { url: catkey_ui_item_path(id: pid), label: 'Manage catkey' }
+      buttons << { url: edit_item_catkey_path(item_id: pid), label: 'Manage catkey' }
       buttons << { url: collection_ui_item_path(id: pid), label: 'Edit collections' }
     end
 

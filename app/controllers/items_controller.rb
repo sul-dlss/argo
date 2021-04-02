@@ -8,7 +8,6 @@ class ItemsController < ApplicationController
     mods
     purge_object
     source_id
-    catkey
     tags_bulk
     embargo_update
     embargo_form
@@ -17,7 +16,6 @@ class ItemsController < ApplicationController
   before_action :enforce_versioning, only: %i[
     add_collection set_collection remove_collection
     source_id
-    catkey
     refresh_metadata
     set_rights
     set_governing_apo
@@ -166,21 +164,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def catkey
-    change_set = ItemChangeSet.new(catkey: params[:new_catkey].strip)
-    ItemChangeSetPersister.update(@cocina, change_set)
-    reindex
-
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: 'Updated catkey' }
-      else
-        msg = "Catkey for #{params[:id]} has been updated!"
-        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-      end
-    end
-  end
-
   def tags_bulk
     tags = params[:tags].split(/\t/)
     # Destroy all current tags and replace with new ones
@@ -295,12 +278,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def catkey_ui
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
-  end
-
   def set_governing_apo_ui
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -340,18 +317,6 @@ class ItemsController < ApplicationController
 
   def authorize_manage!
     authorize! :manage_item, @cocina
-  end
-
-  def enforce_versioning
-    return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
-
-    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
-
-    # if this object has been submitted and doesn't have an open version, they cannot change it.
-    return true if state_service.allows_modification?
-
-    render status: :bad_request, plain: 'Object cannot be modified in its current state.'
-    false
   end
 end
 # rubocop:enable Metrics/ClassLength

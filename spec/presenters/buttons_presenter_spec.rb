@@ -79,7 +79,7 @@ RSpec.describe ButtonsPresenter, type: :presenter do
           },
           {
             label: 'Manage catkey',
-            url: "/items/#{item_id}/catkey_ui"
+            url: "/items/#{item_id}/catkey/edit"
           },
           {
             label: 'Edit tags',
