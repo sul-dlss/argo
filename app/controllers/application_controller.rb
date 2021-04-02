@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
     # if this object has been submitted and doesn't have an open version, they cannot change it.
     return true if state_service.allows_modification?
 
-    redirect_to solr_document_path(params[:id]), flash: { error: 'Object cannot be modified in its current state.' }
+    redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Object cannot be modified in its current state.' }
     false
   end
 end

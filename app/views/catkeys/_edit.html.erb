@@ -1,6 +1,7 @@
-<%= form_tag item_catkey_path(@cocina.externalIdentifier), method: :patch do %>
+<%= form_with model: @change_set, url: item_catkey_path(@change_set), method: :patch do |f| %>
   <div class="form-group">
-    <input class="form-control" name="new_catkey" id="new_catkey" type="text" value="<%= @cocina.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId %>">
+    <%= f.label :catkey %>
+    <%= f.text_field :catkey, class: 'form-control' %>
     <p class='help-block'>
     </p>
   </div>

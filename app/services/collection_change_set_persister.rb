@@ -16,6 +16,7 @@ class CollectionChangeSetPersister
 
   def update
     updated = model
+    updated = update_identification(updated) if changed?(:source_id) || changed?(:catkey) || changed?(:barcode)
     updated = updated_access(updated) if access_changed?
     object_client.update(params: updated)
   end
@@ -24,7 +25,7 @@ class CollectionChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :license, :copyright_statement, :use_statement, :changed?, to: :change_set
+  delegate :license, :copyright_statement, :use_statement, :catkey, :changed?, to: :change_set
 
   def access_changed?
     changed?(:copyright_statement) || changed?(:license) || changed?(:use_statement)
@@ -38,6 +39,14 @@ class CollectionChangeSetPersister
         useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
       )
     )
+  end
+
+  def update_identification(updated)
+    identification_props = updated.identification&.to_h || {}
+    if changed?(:catkey)
+      identification_props[:catalogLinks] = catkey ? [{ catalog: 'symphony', catalogRecordId: catkey }] : nil
+    end
+    updated.new(identification: identification_props.compact.presence)
   end
 
   def object_client
