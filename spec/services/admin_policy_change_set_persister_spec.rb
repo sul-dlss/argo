@@ -33,7 +33,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
     let(:copyright_statement) { 'My copyright statement' }
     let(:agreement_object_id) { 'druid:dd327rv8888' }
     let(:use_license) { 'https://creativecommons.org/licenses/by-nc/3.0/' }
-    let(:default_workflow) { 'registrationWF' }
+    let(:default_workflows) { ['registrationWF'] }
 
     let(:change_set) do
       instance_double(AdminPolicyChangeSet,
@@ -41,7 +41,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
                       use_statement: use_statement,
                       title: 'My title',
                       agreement_object_id: agreement_object_id,
-                      default_workflow: default_workflow,
+                      default_workflows: default_workflows,
                       default_rights: 'world',
                       use_license: use_license,
                       permissions: { '0' => { name: 'developer', access: 'manage', type: 'group' },
@@ -121,7 +121,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
                         use_statement: use_statement,
                         title: 'My title',
                         agreement_object_id: agreement_object_id,
-                        default_workflow: default_workflow,
+                        default_workflows: default_workflows,
                         default_rights: 'world',
                         use_license: use_license,
                         permissions: {},

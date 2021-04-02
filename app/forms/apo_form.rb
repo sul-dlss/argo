@@ -27,7 +27,7 @@ class ApoForm
     @model = model
     @search_service = search_service
     self.default_rights = 'world'
-    self.default_workflow = 'registrationWF'
+    self.default_workflows = ['registrationWF']
     populate_from_model if model
     @errors = []
   end
@@ -40,11 +40,11 @@ class ApoForm
     self.use_statement = model.administrative.defaultAccess&.useAndReproductionStatement
     self.copyright_statement = model.administrative.defaultAccess&.copyright
     self.use_license = model.administrative.defaultAccess&.license
-    self.default_workflow = model.administrative.registrationWorkflow.first
+    self.default_workflows = model.administrative.registrationWorkflow
   end
 
   attr_accessor :use_license, :agreement_object_id, :use_statement, :copyright_statement,
-                :default_rights, :title, :default_workflow
+                :default_rights, :title, :default_workflows
 
   def persisted?
     !model.nil?

@@ -110,16 +110,16 @@ class AdminPolicyChangeSet # rubocop:disable Metrics/ClassLength
     @changes.key?(:title)
   end
 
-  def default_workflow=(workflow)
-    @changes[:default_workflow] = workflow
+  def default_workflows=(workflows)
+    @changes[:default_workflows] = workflows
   end
 
-  def default_workflow
-    @changes[:default_workflow]
+  def default_workflows
+    @changes[:default_workflows]
   end
 
-  def default_workflow_changed?
-    @changes.key?(:default_workflow)
+  def default_workflows_changed?
+    @changes.key?(:default_workflows)
   end
 
   def permissions=(permissions)

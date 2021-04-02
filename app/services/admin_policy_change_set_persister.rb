@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-# Writes updates Cocina Models
-class AdminPolicyChangeSetPersister
+# Writes changes on an AdminPolicy to the to the dor-services-app API
+class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   # @param [Cocina::Models::AdminPolicy] model the orignal state of the model
   # @param [AdminPolicyChangeSet] change_set the values to update.
   # @return [Cocina::Models::AdminPolicy] the model with updates applied
@@ -59,7 +59,7 @@ class AdminPolicyChangeSetPersister
   attr_reader :model, :change_set
 
   delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
-           :default_rights, :title, :default_workflow, :permissions,
+           :default_rights, :title, :default_workflows, :permissions,
            :collection_radio, :collections_for_registration, :collection,
            :registered_by, to: :change_set
 
@@ -83,7 +83,8 @@ class AdminPolicyChangeSetPersister
     rights = CocinaAccess.from_form_value(default_rights)
     administrative = {
       referencesAgreement: agreement_object_id,
-      registrationWorkflow: [default_workflow],
+      registrationWorkflow: registration_workflow,
+      collectionsForRegistration: collection_ids,
       defaultAccess: rights.value!.merge(
         license: use_license,
         copyright: copyright_statement,
@@ -92,16 +93,28 @@ class AdminPolicyChangeSetPersister
       roles: roles
     }.compact
 
+    updated_administrative = updated.administrative.new(administrative)
+    updated.new(administrative: updated_administrative)
+  end
+
+  # Rails adds a hidden item with blank on the form so that we know they wanted to
+  # update the workflows, but selected none. We filter that out for persistence.
+  def registration_workflow
+    default_workflows.reject(&:blank?)
+  end
+
+  # Retrieves the list of existing collections from the form and makes a new collection
+  # if they've selected that.
+  # @returns [Array<String>] a list of collection druids for this AdminPolicy
+  def collection_ids
     # Get the ids of the existing collections from the form.
     collection_ids = collections_for_registration.values.map { |elem| elem.fetch(:id) }
     if collection_radio == 'create'
-      collection_ids << create_collection(updated.externalIdentifier)
+      collection_ids << create_collection(model.externalIdentifier)
     elsif collection[:collection].present? # guard against empty string
       collection_ids << collection[:collection]
     end
-    administrative[:collectionsForRegistration] = collection_ids
-    updated_administrative = updated.administrative.new(administrative)
-    updated.new(administrative: updated_administrative)
+    collection_ids
   end
 
   # Create a collection

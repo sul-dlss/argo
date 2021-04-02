@@ -122,8 +122,9 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :default_workflow, "Default workflow" %>
-    <%= f.select :default_workflow, options_for_select(workflow_options, @form.default_workflow), {}, class: 'form-control' %>
+    <%= f.label :default_workflows %>
+    <%= f.select :default_workflows, options_for_select(workflow_options, @form.default_workflows),
+                                    {}, multiple: true, class: 'form-control' %>
   </div>
   <div class="form-group">
     <% unless @form.persisted? %>

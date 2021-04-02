@@ -61,17 +61,17 @@ RSpec.describe ApoForm do
       end
     end
 
-    describe '#default_workflow' do
-      subject { instance.default_workflow }
+    describe '#default_workflows' do
+      subject { instance.default_workflows }
 
       let(:administrative) do
         {
           hasAdminPolicy: 'druid:xx666zz7777',
-          registrationWorkflow: ['digitizationWF']
+          registrationWorkflow: %w[digitizationWF goobiWF]
         }
       end
 
-      it { is_expected.to eq 'digitizationWF' }
+      it { is_expected.to eq %w[digitizationWF goobiWF] }
     end
 
     describe '#agreement_object_id' do
@@ -158,10 +158,10 @@ RSpec.describe ApoForm do
       end
     end
 
-    describe '#default_workflow' do
-      subject { instance.default_workflow }
+    describe '#default_workflows' do
+      subject { instance.default_workflows }
 
-      it { is_expected.to eq 'registrationWF' }
+      it { is_expected.to eq ['registrationWF'] }
     end
 
     describe '#use_license' do
