@@ -57,9 +57,9 @@ class ItemsController < ApplicationController
   def add_collection
     response_message = if params[:collection].present?
                          new_collections = Array(@cocina.structural.isMemberOf) + [params[:collection]]
-                         change_set = ItemChangeSet.new(collection_ids: new_collections)
-                         ItemChangeSetPersister.update(@cocina, change_set)
-
+                         change_set = ItemChangeSet.new(@cocina)
+                         change_set.validate(collection_ids: new_collections)
+                         change_set.save
                          reindex
                          'Collection added successfully'
                        else
@@ -86,8 +86,9 @@ class ItemsController < ApplicationController
 
   def remove_collection
     new_collections = @cocina.structural.isMemberOf - [params[:collection]]
-    change_set = ItemChangeSet.new(collection_ids: new_collections)
-    ItemChangeSetPersister.update(@cocina, change_set)
+    change_set = ItemChangeSet.new(@cocina)
+    change_set.validate(collection_ids: new_collections)
+    change_set.save
     reindex
 
     response_message = 'Collection successfully removed'
@@ -127,8 +128,9 @@ class ItemsController < ApplicationController
                          flash: { error: 'Invalid date' }
     end
 
-    change_set = ItemChangeSet.new { |change| change.embargo_release_date = params[:embargo_date] }
-    ItemChangeSetPersister.update(@cocina, change_set)
+    change_set = ItemChangeSet.new(@cocina)
+    change_set.validate(embargo_release_date: params[:embargo_date])
+    change_set.save
 
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
@@ -150,8 +152,9 @@ class ItemsController < ApplicationController
   end
 
   def source_id
-    change_set = ItemChangeSet.new(source_id: params[:new_id])
-    ItemChangeSetPersister.update(@cocina, change_set)
+    change_set = ItemChangeSet.new(@cocina)
+    change_set.validate(source_id: params[:new_id])
+    change_set.save
     reindex
 
     respond_to do |format|
@@ -249,8 +252,9 @@ class ItemsController < ApplicationController
 
     authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
 
-    change_set = ItemChangeSet.new(admin_policy_id: params[:new_apo_id])
-    ItemChangeSetPersister.update(@cocina, change_set)
+    change_set = ItemChangeSet.new(@cocina)
+    change_set.validate(admin_policy_id: params[:new_apo_id])
+    change_set.save
     reindex
 
     redirect_to solr_document_path(params[:id]), notice: 'Governing APO updated!'
