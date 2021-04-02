@@ -11,7 +11,11 @@ class AdminPolicyChangeSet # rubocop:disable Metrics/ClassLength
   attr_reader :model
 
   def save
-    @model = AdminPolicyChangeSetPersister.update(model, self)
+    @model = if new_record?
+               AdminPolicyChangeSetPersister.create(self)
+             else
+               AdminPolicyChangeSetPersister.update(model, self)
+             end
   end
 
   def new_record?

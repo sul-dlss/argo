@@ -9,6 +9,12 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
     new(model, change_set).update
   end
 
+  # @param [AdminPolicyChangeSet] change_set the values to update.
+  # @return [Cocina::Models::AdminPolicy] the model with updates applied
+  def self.create(change_set)
+    new(nil, change_set).create
+  end
+
   def initialize(model, change_set)
     @change_set = change_set
     @model = model || model_for_registration
@@ -28,22 +34,24 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   end
 
   def update
-    needs_accession_workflow = false
-
-    # We are forced to register first, so that we have a AdminPolicy to put the default collection into.
-    if new_record?
-      @model = Dor::Services::Client.objects.register(params: model)
-      needs_accession_workflow = true
-    end
-
     updated = sync
 
     # TODO: If update went through sdr-api, we wouldn't have to start accessioning separately.
     response = Dor::Services::Client.object(updated.externalIdentifier).update(params: updated)
     tag_registered_by(response.externalIdentifier)
 
+    response
+  end
+
+  def create
+    # We are forced to register first, so that we have a AdminPolicy to put the default collection into.
+    @model = Dor::Services::Client.objects.register(params: model)
+
+    response = update
+
     # Kick off the accessionWF after all updates are complete.
-    WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1') if needs_accession_workflow
+    WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1')
+
     response
   end
 

@@ -45,7 +45,7 @@ class ApoController < ApplicationController
 
   def update
     authorize! :manage_item, @cocina
-    change_set = AdminPolicyChangeSet.new
+    change_set = AdminPolicyChangeSet.new(model: @cocina)
     unless change_set.validate(params[:apo_form])
       @form = ApoForm.new(@cocina, search_service: search_service)
       respond_to do |format|
