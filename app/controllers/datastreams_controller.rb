@@ -13,7 +13,7 @@ class DatastreamsController < ApplicationController
 
   def show
     if params[:id] == 'full_dc'
-      @content = Nokogiri::XML(@object_client.metadata.dublin_core).prettify
+      @content = PrettyXml.print(@object_client.metadata.dublin_core)
     else
       raw_content = @object_client.metadata.datastream(params[:id])
       @content = Nokogiri::XML(raw_content, &:noblanks).to_s
