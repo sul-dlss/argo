@@ -138,7 +138,7 @@ RSpec.describe ApoForm do
       it 'is an array of the options' do
         expect(subject).to be_a Array
         expect(subject[0]).to be_a Array
-        expect(subject.size).to eq 11
+        expect(subject.size).to eq 12
       end
     end
   end
@@ -200,7 +200,7 @@ RSpec.describe ApoForm do
       it 'is an array of the options' do
         expect(subject).to be_a Array
         expect(subject[0]).to be_a Array
-        expect(subject.size).to eq 11
+        expect(subject.size).to eq 12
       end
     end
   end
