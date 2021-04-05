@@ -1,26 +1,20 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :ur_apo, class: 'Dor::AdminPolicyObject' do
+  factory :ur_apo, class: 'Cocina::Models::RequestAdminPolicy' do
     initialize_with do
-      Dor::AdminPolicyObject.new(pid: 'druid:hv992ry2431', label: 'Ur-APO',
-                                 # admin_policy_object_id: 'druid:hv992ry2431', doesn't work.
-                                 agreement_object_id: 'druid:hv992ry2431',
-                                 mods_title: 'Ur-APO').tap do |ur_apo|
-        ur_apo.add_relationship(:is_governed_by, 'info:fedora/druid:hv992ry2431')
-      end
+      nil
     end
-    to_create do |ur_apo|
-      ur_apo.save!
-
+    to_create do
       # Solves an odd bootstrapping problem, where the dor-indexing-app can only index cocina-models,
       # but cocina-model can't be built unless the AdminPolicy is found in Solr
-      conn = ActiveFedora::SolrService.instance.conn
+      blacklight_config = CatalogController.blacklight_config
+      conn = blacklight_config.repository_class.new(blacklight_config).connection
       conn.add(id: 'druid:hv992ry2431',
                objectType_ssim: ['adminPolicy'],
                has_model_ssim: ['info:fedora/afmodel:Dor_AdminPolicyObject'])
       conn.commit
-      ur_apo
+      SolrDocument.new(id: 'druid:hv992ry2431')
     end
   end
 
@@ -42,7 +36,7 @@ FactoryBot.define do
       Dor::Services::Client.objects.register(params: builder.cocina_model)
     end
 
-    admin_policy_id { FactoryBot.create_for_repository(:ur_apo).pid }
+    admin_policy_id { FactoryBot.create_for_repository(:ur_apo).id }
 
     type { Cocina::Models::Vocab.admin_policy }
   end
