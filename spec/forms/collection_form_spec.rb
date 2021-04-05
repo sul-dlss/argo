@@ -44,6 +44,21 @@ RSpec.describe CollectionForm do
       allow(instance).to receive(:sync)
     end
 
+    context 'when fields are missing' do
+      let(:params) do
+        {
+          collection_title: '',
+          collection_abstract: '',
+          collection_rights: 'dark'
+        }.with_indifferent_access
+      end
+
+      it "doesn't validate" do
+        expect(instance.validate(params.merge(apo_pid: apo_pid))).to be false
+        expect(instance.errors.full_messages).to eq ['missing collection_title or collection_catkey']
+      end
+    end
+
     context 'when metadata_source is label' do
       let(:params) do
         {
