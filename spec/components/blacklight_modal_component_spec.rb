@@ -5,9 +5,9 @@ require 'rails_helper'
 RSpec.describe BlacklightModalComponent, type: :component do
   it 'renders the bootstrap modal' do
     render_inline(described_class.new) do |component|
-      component.with(:header, 'header')
-      component.with(:body, 'body')
-      component.with(:footer, 'footer')
+      component.header { 'header' }
+      component.body { 'body' }
+      component.footer { 'footer' }
     end
     expect(page).to have_button('×')
     expect(page).to have_content('header')

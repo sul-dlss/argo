@@ -48,11 +48,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <%= render BlacklightModalComponent.new do |component| %>
-        <% component.with(:header, 'Confirm Delete') %>
-        <% component.with(:body) do %>
+        <% component.header { 'Confirm Delete' } %>
+        <% component.body do %>
           Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
         <% end %>
-        <% component.with(:footer) do %>
+        <% component.footer do %>
           <a href="#" id="confirm-delete-job" class="btn btn-success success">Delete</a>
         <% end %>
       <% end %>

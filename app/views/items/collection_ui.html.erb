@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Edit collections') %>
-  <% component.with(:body) { render 'collection_ui' } %>
+  <% component.header { 'Edit collections' } %>
+  <% component.body { render 'collection_ui' } %>
 <% end %>

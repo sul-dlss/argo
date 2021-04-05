@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Update tags or delete a tag') %>
-  <% component.with(:body) { render 'edit' } %>
+  <% component.header { 'Update tags or delete a tag' } %>
+  <% component.body { render 'edit' } %>
 <% end %>

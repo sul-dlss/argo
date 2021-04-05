@@ -1,6 +1,6 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'File Availability') %>
-  <% component.with(:body) do %>
+  <% component.header { 'File Availability' } %>
+  <% component.body do %>
     <% if @file.administrative.shelve %>
       <p>
         Stacks: <%= link_to params[:file], stacks_url_full_size(params[:item_id], params[:id]) %>

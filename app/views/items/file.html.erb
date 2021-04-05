@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Files') %>
-  <% component.with(:body) { render 'file' } %>
+  <% component.header { 'Files' } %>
+  <% component.body { render 'file' } %>
 <% end %>

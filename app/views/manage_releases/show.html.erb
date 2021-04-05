@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Manage release') %>
-  <% component.with(:body) { render 'show' } %>
+  <% component.header { 'Manage release' } %>
+  <% component.body { render 'show' } %>
 <% end %>
