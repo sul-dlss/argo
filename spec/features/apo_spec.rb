@@ -4,53 +4,17 @@ require 'rails_helper'
 
 RSpec.describe 'Create an apo', js: true do
   let(:user) { create(:user) }
-  let(:new_apo_druid) { 'druid:zy987wv6543' }
-  let(:new_collection_druid) { 'druid:zy333wv6543' }
-  let(:apo) { Dor::AdminPolicyObject.new(pid: new_apo_druid) }
-  let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
-  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
-  let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
-  let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
-  let(:object_client) do
-    instance_double(Dor::Services::Client::Object,
-                    find: cocina_model,
-                    version: version_client,
-                    events: events_client,
-                    administrative_tags: tags_client,
-                    metadata: metadata_client)
-  end
-  let(:cocina_model) do
-    instance_double(Cocina::Models::AdminPolicy,
-                    externalIdentifier: new_apo_druid,
-                    administrative: administrative,
-                    as_json: {})
-  end
-  let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
-
-  let(:created_apo) do
-    Cocina::Models::AdminPolicy.new(externalIdentifier: new_apo_druid,
-                                    type: Cocina::Models::Vocab.admin_policy,
-                                    label: '',
-                                    version: 1,
-                                    administrative: {
-                                      hasAdminPolicy: 'druid:hv992ry2431'
-                                    })
+  # An Agreement object must exist to populate the dropdown on the form
+  let(:agreement) { FactoryBot.create_for_repository(:agreement) }
+  let!(:preexisting_collection) do
+    FactoryBot.create_for_repository(:collection,
+                                     label: 'Another type of collection',
+                                     title: 'Another type of collection',
+                                     admin_policy_id: agreement.administrative.hasAdminPolicy)
   end
-
-  let(:created_collection) do
-    Cocina::Models::Collection.new(externalIdentifier: new_collection_druid,
-                                   type: Cocina::Models::Vocab.collection,
-                                   label: '',
-                                   version: 1,
-                                   access: {})
-  end
-  let(:blacklight_config) { CatalogController.blacklight_config }
-  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:docs) { [SolrDocument.new(id: new_collection_druid, label: 'New Testing Collection')] }
-  let(:search_service) { instance_double(Blacklight::SearchService) }
 
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
@@ -62,30 +26,7 @@ RSpec.describe 'Create an apo', js: true do
                                                milestones: [],
                                                workflow_routes: workflow_routes,
                                                workflow_status: nil)
-    allow(Dor::Services::Client.objects).to receive(:register)
-      .and_return(created_apo, created_collection)
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
 
-    # Stubbing out the registration process, because it's the dor-services-app that would have actually created it.
-    allow(Dor).to receive(:find).with(new_apo_druid).and_return(apo)
-    allow(apo).to receive(:save!)
-    allow(apo).to receive(:new_record?).and_return(false)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely).with(new_apo_druid) do |_key|
-      # Since the register was mocked, this wouldn't build the correct solr document.
-      # This will make one truer to what we need:
-      solr_conn.add(id: new_apo_druid,
-                    SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy')
-      solr_conn.commit
-    end
-
-    # Since registering the collection is stubbed out, we need to stub out the find too:
-    solr_conn.add(id: new_collection_druid,
-                  SolrDocument::FIELD_OBJECT_TYPE => 'collection',
-                  SolrDocument::FIELD_LABEL => 'New Testing Collection')
-
-    solr_conn.commit
-
-    allow(Dor).to receive(:find).with('druid:dd327rv8888', cast: true).and_call_original # The agreement
     sign_in user, groups: ['sdr:administrator-role']
   end
 
@@ -103,7 +44,7 @@ RSpec.describe 'Create an apo', js: true do
     select 'View', from: 'permissionRole'
     click_button 'Add'
 
-    page.select('Attribution Share Alike 3.0 Unported', from: 'use_license')
+    page.select('Attribution Share Alike 3.0 Unported', from: 'Default use license')
 
     choose 'Create a Collection'
     fill_in 'Collection Title', with: 'New Testing Collection'
@@ -112,13 +53,15 @@ RSpec.describe 'Create an apo', js: true do
     expect(page).to have_text 'created'
 
     click_on 'Edit APO'
-    expect(find_field('title').value).to eq('APO Title')
-    expect(find_field('copyright').value).to eq('Copyright statement')
-    expect(find_field('use').value).to eq('Use statement')
+    expect(find_field('Title').value).to eq('APO Title')
+    expect(find_field('Default Copyright statement').value).to eq('Copyright statement')
+    expect(find_field('Default Use and Reproduction statement').value).to eq('Use statement')
     expect(page).to have_selector('.permissionName', text: 'developers')
     expect(page).to have_selector('.permissionName', text: 'someone')
-    expect(find_field('use_license').value).to eq('by-sa')
-    expect(page).to have_link('New Testing Collection')
+    expect(find_field('Default use license').value).to eq 'https://creativecommons.org/licenses/by-sa/3.0/'
+    within_fieldset 'Default Collections' do
+      expect(page).to have_link('New Testing Collection')
+    end
 
     # Now change them
     fill_in 'Group name', with: 'dpg-staff'
@@ -131,17 +74,31 @@ RSpec.describe 'Create an apo', js: true do
     fill_in 'Title', with: 'New APO Title'
     fill_in 'Default Copyright statement', with: 'New copyright statement'
     fill_in 'Default Use and Reproduction statement', with: 'New use statement'
-    page.select('Attribution No Derivatives 3.0 Unported', from: 'use_license')
+    page.select('Attribution No Derivatives 3.0 Unported', from: 'Default use license')
     click_button 'Update APO'
 
     click_on 'Edit APO'
-    expect(find_field('title').value).to eq('New APO Title')
-    expect(find_field('copyright').value).to eq('New copyright statement')
-    expect(find_field('use').value).to eq('New use statement')
-
+    expect(find_field('Title').value).to eq('New APO Title')
+    expect(find_field('Default Copyright statement').value).to eq('New copyright statement')
+    expect(find_field('Default Use and Reproduction statement').value).to eq('New use statement')
+    within_fieldset 'Default Collections' do
+      expect(page).to have_link('New Testing Collection')
+    end
     expect(page).to have_selector('.permissionName', text: 'dpg-staff')
     expect(page).to have_selector('.permissionName', text: 'anyone')
 
-    expect(find_field('use_license').value).to eq('by-nd')
+    expect(find_field('Default use license').value).to eq('https://creativecommons.org/licenses/by-nd/3.0/')
+
+    choose 'Choose a Default Collection'
+    select preexisting_collection.externalIdentifier, from: 'apo_form_collection_collection'
+    click_button 'Update APO'
+
+    click_on 'Edit APO'
+
+    # Add testing for adding another default collection to this apo.
+    within_fieldset 'Default Collections' do
+      expect(page).to have_text 'New Testing Collection'
+      expect(page).to have_text 'Another type of collection'
+    end
   end
 end

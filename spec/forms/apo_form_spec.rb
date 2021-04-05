@@ -3,105 +3,51 @@
 require 'rails_helper'
 
 RSpec.describe ApoForm do
-  let(:fake_tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, create: true) }
   let(:search_service) { instance_double(Blacklight::SearchService) }
   let(:instance) { described_class.new(apo, search_service: search_service) }
-
-  before do
-    allow(instance).to receive(:tags_client).and_return(fake_tags_client)
+  let(:apo) do
+    Cocina::Models::AdminPolicy.new(
+      type: Cocina::Models::Vocab.admin_policy,
+      externalIdentifier: 'druid:zt570qh4444',
+      version: 1,
+      administrative: administrative,
+      label: 'My title',
+      description: { title: [{ value: 'Stored title' }] }
+    )
   end
+
+  let(:administrative) do
+    {
+      hasAdminPolicy: 'druid:xx666zz7777',
+      registrationWorkflow: ['registrationWF'],
+      defaultAccess: default_access
+    }
+  end
+  let(:default_access) { {} }
 
   context 'with a persisted model (update)' do
     let(:agreement_id) { 'druid:dd327rv8888' }
-    let(:apo) do
-      Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
-    end
-    let(:md_info) do
-      {
-        copyright: 'My copyright statement',
-        use: 'My use and reproduction statement',
-        title: +'My title',
-        agreement: agreement_id,
-        workflow: 'registrationWF',
-        default_object_rights: 'world',
-        use_license: 'by-nc'
-      }
-    end
-
-    before do
-      allow(apo).to receive(:new_record?).and_return(false)
-    end
-
-    describe '#sync' do
-      it 'sets clean APO metadata for defaultObjectRights' do
-        instance.validate(md_info)
-        instance.sync
-
-        expect(apo.mods_title).to           eq(md_info[:title])
-        expect(apo.agreement_object_id).to  eq(md_info[:agreement])
-        expect(apo.default_workflows).to    eq([md_info[:workflow]])
-        expect(apo.default_rights).to       eq(md_info[:default_object_rights])
-        expect(apo.use_license).to          eq(md_info[:use_license])
-        expect(apo.use_license_uri).to      eq('https://creativecommons.org/licenses/by-nc/3.0/')
-        expect(apo.use_license_human).to    eq('Attribution Non-Commercial 3.0 Unported')
-        expect(apo.copyright_statement).to  eq(md_info[:copyright])
-        expect(apo.use_statement).to        eq(md_info[:use])
-        default = apo.defaultObjectRights.ng_xml
-        expect(default.xpath('//copyright/human').text).to eq 'My copyright statement'
-        expect(default.xpath('//use/machine').text).to eq 'by-nc'
-        expect(default.xpath('//use/human[@type="useAndReproduction"]').text).to eq 'My use and reproduction statement'
-        expect(default.xpath('//access[@type="read"]/machine/world')).to be_present
-      end
-
-      it 'handles no use license' do
-        md_info[:use_license] = ' '
-        instance.validate(md_info)
-        instance.sync
-        expect(apo.use_license).to          be_blank
-        expect(apo.use_license_uri).to      be_nil
-        expect(apo.use_license_human).to    be_blank
-      end
-
-      it 'handles no copyright statement' do
-        md_info[:copyright] = ' '
-        instance.validate(md_info)
-        instance.sync
-        expect(apo.copyright_statement).to be_nil
-      end
-
-      it 'handles UTF8 copyright statement' do
-        md_info[:copyright] = 'Copyright © All Rights Reserved.'
-        instance.validate(md_info)
-        instance.sync
-        expect(apo.copyright_statement).to eq(md_info[:copyright])
-      end
-
-      context 'when the user provides no statement' do
-        it 'updates it to nil' do
-          md_info[:use] = ' '
-          instance.validate(md_info)
-          instance.sync
-          expect(apo.use_statement).to be_nil
-        end
-      end
-    end
-
-    describe '#validate' do
-      it 'errors out if no workflow' do
-        md_info[:workflow] = ' '
-        instance.validate(md_info)
-
-        expect { instance.sync }.to raise_error(ArgumentError)
-      end
-    end
 
     describe '#permissions' do
       subject { instance.permissions }
 
-      before do
-        allow(apo).to receive(:roles).and_return('dor-apo-manager' =>
-          ['workgroup:dlss:developers', 'workgroup:dlss:pmag-staff', 'workgroup:dlss:smpl-staff',
-           'workgroup:dlss:dpg-staff', 'workgroup:dlss:argo-access-spec', 'lmcrae'])
+      let(:administrative) do
+        {
+          hasAdminPolicy: 'druid:xx666zz7777',
+          registrationWorkflow: ['registrationWF'],
+          roles: [
+            {
+              members: [
+                { identifier: 'dlss:developers', type: 'workgroup' },
+                { identifier: 'dlss:pmag-staff', type: 'workgroup' },
+                { identifier: 'dlss:smpl-staff', type: 'workgroup' },
+                { identifier: 'dlss:dpg-staff', type: 'workgroup' },
+                { identifier: 'dlss:argo-access-spec', type: 'workgroup' }
+              ],
+              name: 'dor-apo-manager'
+            }
+          ]
+        }
       end
 
       it 'has the defaults' do
@@ -110,27 +56,33 @@ RSpec.describe ApoForm do
           { name: 'pmag-staff', type: 'group', access: 'manage' },
           { name: 'smpl-staff', type: 'group', access: 'manage' },
           { name: 'dpg-staff', type: 'group', access: 'manage' },
-          { name: 'argo-access-spec', type: 'group', access: 'manage' },
-          { name: 'lmcrae', type: 'person', access: 'manage' }
+          { name: 'argo-access-spec', type: 'group', access: 'manage' }
         ]
       end
     end
 
-    describe '#default_workflow' do
-      subject { instance.default_workflow }
+    describe '#default_workflows' do
+      subject { instance.default_workflows }
 
-      before do
-        apo.default_workflow = 'digitizationWF'
+      let(:administrative) do
+        {
+          hasAdminPolicy: 'druid:xx666zz7777',
+          registrationWorkflow: %w[digitizationWF goobiWF]
+        }
       end
 
-      it { is_expected.to eq 'digitizationWF' }
+      it { is_expected.to eq %w[digitizationWF goobiWF] }
     end
 
     describe '#agreement_object_id' do
       subject { instance.agreement_object_id }
 
-      before do
-        apo.agreement_object_id = 'druid:dd327rv8888'
+      let(:administrative) do
+        {
+          hasAdminPolicy: 'druid:xx666zz7777',
+          registrationWorkflow: ['digitizationWF'],
+          referencesAgreement: 'druid:dd327rv8888'
+        }
       end
 
       it { is_expected.to eq agreement_id }
@@ -139,15 +91,15 @@ RSpec.describe ApoForm do
     describe '#use_license' do
       subject { instance.use_license }
 
-      before do
-        apo.use_license = 'by-nc-sa'
-      end
+      let(:default_access) { { license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/' } }
 
-      it { is_expected.to eq 'by-nc-sa' }
+      it { is_expected.to eq 'https://creativecommons.org/licenses/by-nc-sa/3.0/' }
     end
 
     describe '#default_rights' do
       subject { instance.default_rights }
+
+      let(:default_access) { { access: 'world' } }
 
       it { is_expected.to eq 'world' }
     end
@@ -155,9 +107,7 @@ RSpec.describe ApoForm do
     describe '#use_statement' do
       subject { instance.use_statement }
 
-      before do
-        apo.use_statement = 'Rights are owned by Stanford University Libraries'
-      end
+      let(:default_access) { { useAndReproductionStatement: 'Rights are owned by Stanford University Libraries' } }
 
       it { is_expected.to eq 'Rights are owned by Stanford University Libraries' }
     end
@@ -165,21 +115,15 @@ RSpec.describe ApoForm do
     describe '#copyright_statement' do
       subject { instance.copyright_statement }
 
-      before do
-        apo.copyright_statement = 'Additional copyright info'
-      end
+      let(:default_access) { { copyright: 'Additional copyright info' } }
 
       it { is_expected.to eq 'Additional copyright info' }
     end
 
-    describe '#mods_title' do
-      subject { instance.mods_title }
+    describe '#title' do
+      subject { instance.title }
 
-      before do
-        apo.mods_title = 'Ampex'
-      end
-
-      it { is_expected.to eq 'Ampex' }
+      it { is_expected.to eq 'Stored title' }
     end
 
     describe '#to_param' do
@@ -200,7 +144,7 @@ RSpec.describe ApoForm do
   end
 
   context 'with an unsaved model' do
-    let(:apo) { Dor::AdminPolicyObject.new }
+    let(:apo) { nil }
 
     describe '#permissions' do
       subject { instance.permissions }
@@ -214,10 +158,10 @@ RSpec.describe ApoForm do
       end
     end
 
-    describe '#default_workflow' do
-      subject { instance.default_workflow }
+    describe '#default_workflows' do
+      subject { instance.default_workflows }
 
-      it { is_expected.to eq 'registrationWF' }
+      it { is_expected.to eq ['registrationWF'] }
     end
 
     describe '#use_license' do
@@ -235,23 +179,17 @@ RSpec.describe ApoForm do
     describe '#use_statement' do
       subject { instance.use_statement }
 
-      it { is_expected.to eq '' }
+      it { is_expected.to be_nil }
     end
 
     describe '#copyright_statement' do
       subject { instance.copyright_statement }
 
-      it { is_expected.to eq '' }
+      it { is_expected.to be_nil }
     end
 
-    describe '#mods_title' do
-      subject { instance.mods_title }
-
-      it { is_expected.to eq '' }
-    end
-
-    describe '#to_param' do
-      subject { instance.to_param }
+    describe '#title' do
+      subject { instance.title }
 
       it { is_expected.to be_nil }
     end
@@ -265,128 +203,11 @@ RSpec.describe ApoForm do
         expect(subject.size).to eq 11
       end
     end
-
-    describe '#save' do
-      let(:registered_model) do
-        Dor::AdminPolicyObject.new(pid: 'druid:zt570qh4444')
-      end
-      let(:agreement_id) { 'druid:dd327rv8888' }
-      let(:collection_form) { instance_double(CollectionForm, validate: true, model: created_collection) }
-      let(:collection_id) { 'druid:gh567vb7777' }
-
-      let(:coll_title) { 'col title' }
-
-      let(:base_params) do
-        { # These data mimic the APO registration form
-          'title' => +'New APO Title',
-          'agreement' => agreement_id,
-          permissions: {
-            '0' => { access: 'manage', name: 'developers', type: 'group' },
-            '1' => { access: 'manage', name: 'dpg-staff', type: 'group' },
-            '2' => { access: 'view', name: 'viewer-role', type: 'group' },
-            '3' => { access: 'view', name: 'forensics-staff', type: 'group' }
-          },
-          'collection_radio' => 'create',
-          'collection_title' => coll_title,
-          'collection_rights' => 'world',
-          'collection_abstract' => '',
-          'default_object_rights' => 'world',
-          'use' => '',
-          'copyright' => '',
-          'use_license' => 'by-nc',
-          'workflow' => 'accessionWF',
-          'register' => ''
-        }.with_indifferent_access
-      end
-
-      let(:workflow_client) { instance_double(Dor::Workflow::Client, status: true) }
-      let(:created_apo) do
-        Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:zt570qh4444',
-                                        type: Cocina::Models::Vocab.admin_policy,
-                                        label: '',
-                                        version: 1,
-                                        administrative: {
-                                          hasAdminPolicy: 'druid:hv992ry2431'
-                                        }).to_json
-      end
-
-      let(:created_collection) do
-        Cocina::Models::Collection.new(externalIdentifier: collection_id,
-                                       type: Cocina::Models::Vocab.collection,
-                                       label: '',
-                                       version: 1,
-                                       access: {})
-      end
-      let(:collection_req_body_hash) do
-        {
-          type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
-          label: coll_title,
-          version: 1,
-          access: { access: 'world' },
-          administrative: { hasAdminPolicy: 'druid:zt570qh4444' }
-        }
-      end
-
-      before do
-        allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-        expect(CollectionForm).to receive(:new).and_return(collection_form)
-        expect(collection_form).to receive(:save)
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely)
-
-        expect(Dor).to receive(:find).with(registered_model.pid).and_return(registered_model)
-        expect(registered_model).to receive(:new_record?).and_return(false)
-        expect(registered_model).to receive(:save)
-        expect(registered_model).to receive(:add_roleplayer).exactly(4).times
-
-        stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
-          .with(
-            body: '{"type":"http://cocina.sul.stanford.edu/models/admin_policy.jsonld",' \
-            '"label":"New APO Title","version":1,' \
-            '"administrative":{"defaultObjectRights":"\\u003c?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?\\u003e' \
-            '\\u003crightsMetadata\\u003e\\u003caccess type=\\"discover\\"\\u003e\\u003cmachine\\u003e' \
-            '\\u003cworld/\\u003e\\u003c/machine\\u003e' \
-            '\\u003c/access\\u003e\\u003caccess type=\\"read\\"\\u003e\\u003cmachine\\u003e\\u003cworld/\\u003e\\u003c/machine\\u003e' \
-            '\\u003c/access\\u003e\\u003cuse\\u003e\\u003chuman type=\\"useAndReproduction\\"/\\u003e\\u003chuman type=\\"creativeCommons\\"/' \
-            '\\u003e\\u003cmachine type=\\"creativeCommons\\" uri=\\"\\"/\\u003e\\u003chuman type=\\"openDataCommons\\"/' \
-            '\\u003e\\u003cmachine type=\\"openDataCommons\\" uri=\\"\\"/\\u003e\\u003c/use\\u003e\\u003ccopyright\\u003e\\u003chuman/' \
-            '\\u003e\\u003c/copyright\\u003e\\u003c/rightsMetadata\\u003e","hasAdminPolicy":"druid:hv992ry2431"}}'
-          )
-          .to_return(status: 200, body: created_apo, headers: {})
-
-        expect(workflow_client).to receive(:create_workflow_by_name).with(registered_model.pid, 'accessionWF', version: '1')
-        expect(registered_model).to receive(:"use_license=").with(params['use_license'])
-
-        # verify that the collection is also created
-        expect(registered_model).to receive(:add_default_collection).with(collection_id)
-      end
-
-      context 'with tags in the params' do
-        let(:params) { base_params.merge(tag: tags) }
-        let(:tags) { ['One : Two', 'Two : Three'] }
-
-        it 'hits the dor-services-app administrative tags endpoint to add tags' do
-          instance.validate(params)
-          instance.save
-          expect(fake_tags_client).to have_received(:create).once.with(tags: tags)
-        end
-      end
-
-      context 'without tags in the params' do
-        let(:params) { base_params }
-
-        it 'hits the registration service to register both an APO and a collection' do
-          instance.validate(params)
-          instance.save
-          expect(fake_tags_client).not_to have_received(:create)
-        end
-      end
-    end
   end
 
   describe '#default_collection_objects' do
     subject { instance.default_collection_objects }
 
-    let(:apo) { Dor::AdminPolicyObject.new }
     let(:search_service) { instance_double(Blacklight::SearchService, fetch: [nil, [doc1]]) }
     let(:doc1) { instance_double(SolrDocument) }
 

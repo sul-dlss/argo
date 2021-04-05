@@ -4,7 +4,6 @@ require 'rails_helper'
 
 RSpec.describe 'Viewing an Admin policy' do
   let(:apo_druid) { 'druid:zt570qh4444' }
-  let(:object) { Dor::AdminPolicyObject.new(pid: apo_druid) }
   let(:current_user) { create(:user) }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, version: version_client) }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: versions) }
@@ -32,8 +31,6 @@ RSpec.describe 'Viewing an Admin policy' do
     solr_conn.add(solr_doc)
     solr_conn.commit
     sign_in current_user, groups: ['sdr:administrator-role']
-    allow(object).to receive(:persisted?).and_return(true) # This allows to_param to function
-    allow(Dor).to receive(:find).and_return(object)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 

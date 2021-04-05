@@ -669,7 +669,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.1.0)
   ruby-prof
   rubyzip
-  sdr-client (~> 0.55.0)
+  sdr-client (~> 0.55.1)
   selenium-webdriver
   sidekiq (~> 6.0)
   simplecov
