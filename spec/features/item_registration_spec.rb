@@ -5,15 +5,6 @@ require 'rails_helper'
 RSpec.describe 'Item registration page', js: true do
   let(:user) { create(:user) }
   let(:ur_apo_id) { 'druid:hv992ry2431' }
-  let(:solr_doc) do
-    {
-      id: ur_apo_id,
-      apo_register_permissions_ssim: ['workgroup:dlss:developers'],
-      objectType_ssim: ['adminPolicy'],
-      sw_display_title_tesim: ['[Internal System Objects]']
-    }
-  end
-
   let(:blacklight_config) { CatalogController.blacklight_config }
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
@@ -32,9 +23,7 @@ RSpec.describe 'Item registration page', js: true do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-
-    solr_conn.add(solr_doc)
-    solr_conn.commit
+    reset_solr
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
   end
 

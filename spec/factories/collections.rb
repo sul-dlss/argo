@@ -20,7 +20,7 @@ FactoryBot.define do
       Dor::Services::Client.objects.register(params: builder.cocina_model)
     end
 
-    admin_policy_id { FactoryBot.create_for_repository(:ur_apo).pid }
+    admin_policy_id { 'druid:hv992ry2431' }
 
     type { Cocina::Models::Vocab.collection }
   end
