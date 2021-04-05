@@ -48,7 +48,7 @@ class CollectionsController < ApplicationController
   def collection_exists?(title:, catkey:)
     return false unless title || catkey
 
-    query = '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection"'
+    query = '_query_:"{!raw f=has_model_ssim}info:fedora/afmodel:Dor_Collection"'
     query += " AND title_ssi:\"#{title}\"" if title
     query += " AND identifier_ssim:\"catkey:#{params[:catkey]}\"" if catkey
 

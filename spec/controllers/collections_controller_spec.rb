@@ -85,7 +85,7 @@ RSpec.describe CollectionsController do
         }
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
-          q: '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND title_ssi:"foo"'
+          q: '_query_:"{!raw f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND title_ssi:"foo"'
         ))
       end
     end
@@ -110,7 +110,7 @@ RSpec.describe CollectionsController do
         }
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
-          q: '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND identifier_ssim:"catkey:123"'
+          q: '_query_:"{!raw f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND identifier_ssim:"catkey:123"'
         ))
       end
     end
@@ -136,7 +136,7 @@ RSpec.describe CollectionsController do
         }
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
-          q: '_query_:"{!raw+f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND title_ssi:"foo" AND identifier_ssim:"catkey:123"'
+          q: '_query_:"{!raw f=has_model_ssim}info:fedora/afmodel:Dor_Collection" AND title_ssi:"foo" AND identifier_ssim:"catkey:123"'
         ))
       end
     end
