@@ -21,8 +21,7 @@ RSpec.describe 'Set governing APO' do
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
-    solr_conn.delete_by_query('*:*')
-    solr_conn.commit
+    reset_solr
 
     new_apo
     item
