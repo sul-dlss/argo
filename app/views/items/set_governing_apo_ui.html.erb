@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Set governing APO') %>
-  <% component.with(:body) { render 'set_governing_apo_ui' } %>
+  <% component.header { 'Set governing APO' } %>
+  <% component.body { render 'set_governing_apo_ui' } %>
 <% end %>

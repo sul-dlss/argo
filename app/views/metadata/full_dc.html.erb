@@ -1,6 +1,6 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Dublin Core (derived from MODS)') %>
-  <% component.with(:body) do %>
+  <% component.header { 'Dublin Core (derived from MODS)' } %>
+  <% component.body do %>
     <div class="lightbox-head">
       <span class="section-head-link">
         <%= link_to 'View XML', item_datastream_path(params[:item_id], 'full_dc'), title: 'Dublin Core (derived from MODS)', data: { blacklight_modal: 'trigger' } %>

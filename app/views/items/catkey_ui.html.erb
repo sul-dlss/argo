@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Manage catkey') %>
-  <% component.with(:body) { render 'catkey_ui' } %>
+  <% component.header { 'Manage catkey' } %>
+  <% component.body { render 'catkey_ui' } %>
 <% end %>

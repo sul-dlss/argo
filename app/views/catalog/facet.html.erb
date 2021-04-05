@@ -4,14 +4,14 @@
 
 <div data-controller="facet-filter">
   <%= render BlacklightModalComponent.new do |component| %>
-    <% component.with(:header, facet_field_label(@facet.key)) %>
-    <% component.with(:body) do %>
+    <% component.header { facet_field_label(@facet.key) } %>
+    <% component.body do %>
       <%= render 'facet_index_navigation' if @facet.index_range && @display_facet.index? %>
       <div data-target="facet-filter.list">
         <%= render_facet_limit(@display_facet, layout: false) %>
       </div>
     <% end %>
-    <% component.with(:footer) do %>
+    <% component.footer do %>
       <div class="facet_pagination bottom row">
         <div class="col-sm-4">
           <input type="text" id="filterInput" data-action="keyup->facet-filter#filter" placeholder="Filter..." class="form-control form-control-sm">

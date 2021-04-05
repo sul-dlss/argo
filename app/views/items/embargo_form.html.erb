@@ -1,4 +1,4 @@
 <%= render BlacklightModalComponent.new do |component| %>
-  <% component.with(:header, 'Update embargo') %>
-  <% component.with(:body) { render 'embargo_form' } %>
+  <% component.header { 'Update embargo' } %>
+  <% component.body { render 'embargo_form' } %>
 <% end %>
