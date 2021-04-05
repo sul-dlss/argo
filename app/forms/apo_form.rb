@@ -83,6 +83,8 @@ class ApoForm
                   uri: 'http://opendatacommons.org/licenses/by/1.0/' },
     'odc-odbl' => { label: 'Open Data Commons Open Database License 1.0',
                     uri: 'http://opendatacommons.org/licenses/odbl/1.0/' },
+    'cc0' => { label: 'No Rights Reserved',
+               uri: 'https://creativecommons.org/publicdomain/zero/1.0/' },
     'by' => { label: 'Attribution 3.0 Unported',
               uri: 'https://creativecommons.org/licenses/by/3.0/' },
     'by-sa' => { label: 'Attribution Share Alike 3.0 Unported',
