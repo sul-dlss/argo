@@ -4,15 +4,26 @@
 # This is for the collection form and it's only used for create, not for update
 # as it registers a new object (of type collection) on each call to `#save`
 class CollectionForm
+  extend ActiveModel::Naming
+  extend ActiveModel::Translation
+
   def initialize
     @errors = ActiveModel::Errors.new(self)
+  end
+
+  # needed so that we can use ActiveModel::Errors
+  def self.model_name
+    Struct.new(:param_key, :route_key, :i18n_key, :human).new('collection_form', 'collection', 'collection', 'Collection')
   end
 
   # @param [HashWithIndifferentAccess] params the parameters from the form
   # @return [Boolean] true if the parameters are valid
   def validate(params)
     @params = params
-    @errors.push('missing collection_title or collection_catkey') unless params[:collection_title].present? || params[:collection_catkey].present?
+    unless params[:collection_title].present? || params[:collection_catkey].present?
+      @errors.add(:base, :title_or_catkey_blank,
+                  message: 'missing collection_title or collection_catkey')
+    end
     @errors.empty?
   end
 
@@ -23,7 +34,7 @@ class CollectionForm
 
   attr_reader :errors, :model, :params
 
-  delegate :model_name, :to_key, :to_model, :new_record?, to: :model
+  delegate :to_key, :to_model, :new_record?, to: :model
 
   private
 
