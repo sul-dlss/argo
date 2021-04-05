@@ -13,7 +13,7 @@ class ExternalLinksComponent < ViewComponent::Base
   end
 
   def dor_link
-    link_to 'Fedora UI', File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}"),
+    link_to 'Fedora UI', File.join(fedora_url_without_credentials, "objects/#{document.id}"),
             target: '_blank', rel: 'noopener', class: 'nav-link'
   end
 
@@ -24,7 +24,7 @@ class ExternalLinksComponent < ViewComponent::Base
   end
 
   def foxml_link
-    url = File.join(Dor::Config.fedora.safeurl, "objects/#{document.id}/export?context=archive")
+    url = File.join(fedora_url_without_credentials, "objects/#{document.id}/export?context=archive")
     link_to 'FoXML', url, target: '_blank', rel: 'noopener', class: 'nav-link'
   end
 
@@ -44,4 +44,12 @@ class ExternalLinksComponent < ViewComponent::Base
   private
 
   attr_reader :document
+
+  def fedora_url_without_credentials
+    fedora_uri = URI.parse(Settings.fedora_url)
+    fedora_uri.user = fedora_uri.password = nil
+    fedora_uri.to_s
+  rescue URI::InvalidURIError
+    nil
+  end
 end
