@@ -85,7 +85,7 @@ group :test, :development do
   gem 'http_logger', require: false # Change this to `true` to see all http requests logged
   gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rails-controller-testing'
-  gem 'rspec-rails', '~> 3.5'
+  gem 'rspec-rails', '~> 5.0'
   gem 'rubocop', require: false
   gem 'rubocop-rails'
   gem 'rubocop-rspec', '~> 2.1.0', require: false
