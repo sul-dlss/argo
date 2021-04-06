@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DRORightsForm do
+RSpec.describe DroRightsForm do
   let(:instance) { described_class.new(model, default_rights: 'world') }
   let(:model) { instance_double(Cocina::Models::DRO) }
 
