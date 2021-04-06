@@ -68,8 +68,8 @@ class VersionsController < ApplicationController
   def which_significance_changed(current_tag, previous_tag)
     return nil if current_tag.nil? || previous_tag.nil?
 
-    cur_version_tag = Dor::VersionTag.parse(current_tag)
-    prior_version_tag = Dor::VersionTag.parse(previous_tag)
+    cur_version_tag = VersionTag.parse(current_tag)
+    prior_version_tag = VersionTag.parse(previous_tag)
     return :major if cur_version_tag.major != prior_version_tag.major
     return :minor if cur_version_tag.minor != prior_version_tag.minor
     return :admin if cur_version_tag.admin != prior_version_tag.admin
