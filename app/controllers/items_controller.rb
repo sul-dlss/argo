@@ -222,10 +222,10 @@ class ItemsController < ApplicationController
   # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
     # Item may be a Collection or a DRO
-    form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
+    form_type = @cocina.collection? ? CollectionRightsForm : DroRightsForm
     form = form_type.new(@cocina)
     # The bulk form always uses `dro_rights_form` as the key
-    form_key = params[:bulk] ? DRORightsForm.model_name.param_key : form.model_name.param_key
+    form_key = params[:bulk] ? DroRightsForm.model_name.param_key : form.model_name.param_key
     form.validate(params[form_key])
     form.save
 
@@ -270,7 +270,7 @@ class ItemsController < ApplicationController
   def rights
     return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
 
-    form_type = @cocina.collection? ? CollectionRightsForm : DRORightsForm
+    form_type = @cocina.collection? ? CollectionRightsForm : DroRightsForm
     cocina_admin_policy = Dor::Services::Client.object(@cocina.administrative.hasAdminPolicy).find
 
     default_rights = RightsLabeler.label(cocina_admin_policy.administrative.defaultObjectRights)
