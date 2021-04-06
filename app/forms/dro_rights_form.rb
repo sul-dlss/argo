@@ -11,7 +11,7 @@ class DroRightsForm < AccessForm
 
   # Copy the settings to the model
   def sync
-    access_additions = CocinaDROAccess.from_form_value(rights)
+    access_additions = CocinaDroAccess.from_form_value(rights)
     updated_access = model.access.new(access_additions.value!)
 
     updated_structural = model.structural.new(structural_additions)
