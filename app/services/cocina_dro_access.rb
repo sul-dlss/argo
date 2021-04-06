@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # This transcodes the access from the item set rights form and registration form to Cocina DROAccess schema
-class CocinaDROAccess
+class CocinaDroAccess
   extend Dry::Monads[:maybe]
 
   # @param [String] rights the rights representation from the form (must be one of the keys in Dor::RightsMetadataDS::RIGHTS_TYPE_CODES, or 'default',
