@@ -24,21 +24,6 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
-    active-fedora (8.7.0)
-      active-triples (~> 0.4.0)
-      activesupport (>= 4.2.10)
-      deprecation
-      nom-xml (>= 0.5.1)
-      om (~> 3.1)
-      rdf-rdfxml (~> 1.1)
-      rsolr (>= 1.0.11, < 3)
-      rubydora (>= 1.8.0, < 3)
-    active-triples (0.4.1)
-      activemodel (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      deprecation (~> 0.1)
-      rdf (~> 1.1)
-      rdf-vocab (~> 0.8)
     activejob (5.2.5)
       activesupport (= 5.2.5)
       globalid (>= 0.3.6)
@@ -142,9 +127,8 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    daemons (1.3.1)
     deep_merge (1.2.1)
-    deprecation (0.99.0)
+    deprecation (1.1.0)
       activesupport
     devise (4.7.3)
       bcrypt (~> 3.0)
@@ -163,23 +147,6 @@ GEM
     docile (1.3.5)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dor-rights-auth (1.7.0)
-      nokogiri
-    dor-services (9.6.2)
-      active-fedora (>= 8.7.0, < 9)
-      activesupport (~> 5.1)
-      deprecation (~> 0)
-      dor-rights-auth (~> 1.0, >= 1.2.0)
-      json (>= 1.8.1)
-      nokogiri (~> 1.6)
-      om (~> 3.0)
-      rdf (~> 1.1, >= 1.1.7)
-      rest-client (>= 1.7, < 3)
-      rsolr (>= 1.0.3, < 3)
-      rubydora (~> 2.1)
-      solrizer (~> 3.0)
-      stanford-mods (>= 2.3.1)
-      stanford-mods-normalizer (~> 0.1)
     dor-services-client (6.32.0)
       activesupport (>= 4.2, < 7)
       cocina-models (~> 0.58.0)
@@ -266,15 +233,9 @@ GEM
     ffi (1.15.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    haml (5.2.1)
-      temple (>= 0.8.0)
-      tilt
     hashdiff (1.0.1)
     honeybadger (4.8.0)
-    hooks (0.4.1)
-      uber (~> 0.0.14)
     html_tokenizer (0.0.7)
-    htmlentities (4.3.4)
     http-accept (1.7.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -298,7 +259,6 @@ GEM
       activerecord
       kaminari-core (= 1.2.1)
     kaminari-core (1.2.1)
-    link_header (0.0.8)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -314,7 +274,6 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.0225)
     mini_mime (1.1.0)
-    mini_portile2 (2.5.0)
     minitest (5.14.4)
     moab-versioning (4.4.1)
       druid-tools (>= 1.0.0)
@@ -338,9 +297,6 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (6.15.0)
     nio4r (2.5.7)
-    nokogiri (1.11.2)
-      mini_portile2 (~> 2.5.0)
-      racc (~> 1.4)
     nokogiri (1.11.2-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.11.2-x86_64-linux)
@@ -352,11 +308,6 @@ GEM
       i18n
       nokogiri
     okcomputer (1.18.4)
-    om (3.2.0)
-      activemodel (>= 5.1, < 7)
-      activesupport
-      nokogiri (>= 1.4.2)
-      solrizer (~> 3.3)
     openapi3_parser (0.9.0)
       commonmarker (~> 0.17)
       psych (~> 3.1)
@@ -432,25 +383,6 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rdf (1.99.1)
-      link_header (~> 0.0, >= 0.0.8)
-    rdf-aggregate-repo (1.99.0)
-      rdf (~> 1.99)
-    rdf-rdfa (1.99.3)
-      haml (>= 4.0, < 6.0)
-      htmlentities (~> 4.3)
-      rdf (~> 1.99)
-      rdf-aggregate-repo (~> 1.1)
-      rdf-xsd (~> 1.1)
-    rdf-rdfxml (1.99.1)
-      htmlentities (~> 4.3)
-      rdf (~> 1.99)
-      rdf-rdfa (~> 1.99)
-      rdf-xsd (~> 1.99)
-    rdf-vocab (0.8.8)
-      rdf (~> 1.1, >= 1.1.10)
-    rdf-xsd (1.99.0)
-      rdf (~> 1.99)
     redis (4.2.5)
     regexp_parser (2.1.1)
     responders (2.4.1)
@@ -509,15 +441,6 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.4)
     ruby_dep (1.5.0)
-    rubydora (2.1.0)
-      activemodel (>= 4.2.10)
-      activesupport
-      deprecation
-      equivalent-xml
-      hooks (~> 0.3)
-      mime-types
-      nokogiri
-      rest-client
     rubyzip (2.3.0)
     sdr-client (0.55.1)
       activesupport
@@ -540,12 +463,6 @@ GEM
     simplecov_json_formatter (0.1.2)
     slop (3.6.0)
     smart_properties (1.15.0)
-    solrizer (3.4.1)
-      activesupport
-      daemons
-      nokogiri
-      stomp
-      xml-simple
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -564,17 +481,11 @@ GEM
     stanford-mods (2.6.3)
       activesupport
       mods (~> 2.2)
-    stanford-mods-normalizer (0.1.0)
-      nokogiri (~> 1.8)
-    stomp (1.4.10)
-    temple (0.8.2)
     thor (1.1.0)
     thread_safe (0.3.6)
-    tilt (2.0.10)
     ttfunk (1.4.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
-    uber (0.0.15)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
@@ -604,14 +515,12 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    xml-simple (1.1.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.4.2)
     zip_tricks (5.3.1)
 
 PLATFORMS
-  ruby
   x86_64-darwin-19
   x86_64-linux
 
@@ -630,7 +539,6 @@ DEPENDENCIES
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
-  dor-services (~> 9.6)
   dor-services-client (~> 6.30)
   dor-workflow-client (~> 3.19)
   dry-monads
