@@ -566,7 +566,6 @@ DEPENDENCIES
   rails (~> 5.2.1)
   rails-controller-testing
   rake
-  responders (~> 2.0)
   rest-client
   retries
   rsolr
