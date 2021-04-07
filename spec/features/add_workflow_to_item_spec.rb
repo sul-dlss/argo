@@ -27,15 +27,16 @@ RSpec.describe 'Add a workflow to an item' do
                     version: version_client)
   end
   let(:cocina_model) do
-    instance_double(Cocina::Models::DRO,
-                    externalIdentifier: item_id,
-                    version: 2,
-                    administrative: administrative,
-                    structural: structural,
-                    as_json: {})
+    Cocina::Models.build(
+      'label' => 'The model',
+      'version' => 2,
+      'type' => Cocina::Models::Vocab.object,
+      'externalIdentifier' => item_id,
+      'administrative' => { hasAdminPolicy: uber_apo_id },
+      'access' => {},
+      'structural' => {}
+    )
   end
-  let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
-  let(:structural) { instance_double(Cocina::Models::DROStructural, contains: []) }
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item_id) { 'druid:bg444xg6666' }
   let(:blacklight_config) { CatalogController.blacklight_config }
