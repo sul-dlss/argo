@@ -1,0 +1,12 @@
+<li class="resource">
+  <ul class="child-list">
+    <li class="external-file">
+      <span class="label">
+        External File
+      </span>
+      <%= filename %>
+      (from item '<%= link_to object_id, solr_document_path(object_id) %>',
+       resource '<%= resource_id %>')
+    </li>
+  </ul>
+</li>
