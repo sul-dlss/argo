@@ -17,7 +17,7 @@ class ItemChangeSetPersister
   def update
     updated = model
     updated = update_structural(updated) if collection_ids_changed?
-    updated = update_identification(updated) if source_id_changed? || catkey_changed?
+    updated = update_identification(updated) if source_id_changed? || catkey_changed? || barcode_changed?
     updated = updated_administrative(updated) if admin_policy_id_changed?
     updated = updated_access(updated) if access_changed?
     object_client.update(params: updated)
@@ -30,6 +30,7 @@ class ItemChangeSetPersister
   delegate :collection_ids_changed?, :source_id_changed?, :catkey_changed?, :admin_policy_id_changed?,
            :collection_ids, :source_id, :catkey, :admin_policy_id, :license, :license_changed?,
            :copyright_statement, :copyright_statement_changed?, :use_statement, :use_statement_changed?,
+           :barcode, :barcode_changed?,
            to: :change_set
 
   def object_client
@@ -65,14 +66,12 @@ class ItemChangeSetPersister
   end
 
   def update_identification(updated)
-    updated_identification = updated.identification
-    updated_identification = updated_identification.new(sourceId: source_id) if source_id_changed?
+    identification_props = updated.identification&.to_h || {}
+    identification_props[:sourceId] = source_id if source_id_changed?
+    identification_props[:barcode] = barcode if barcode_changed?
     if catkey_changed?
-      catalog_links = []
-      catalog_links << { catalog: 'symphony', catalogRecordId: catkey } if catkey
-      updated_identification = updated_identification.new(catalogLinks: catalog_links)
+      identification_props[:catalogLinks] = catkey ? [{ catalog: 'symphony', catalogRecordId: catkey }] : nil
     end
-
-    updated.new(identification: updated_identification)
+    updated.new(identification: identification_props.compact.presence)
   end
 end

@@ -36,10 +36,16 @@ RSpec.describe ItemChangeSetPersister do
           license: license_before,
           useAndReproductionStatement: use_statement_before
         },
+        identification: {
+          barcode: barcode_before,
+          catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+        },
         administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
     end
     let(:use_statement_before) { 'My First Use Statement' }
+    let(:barcode_before) { '36105014757517' }
+    let(:catkey_before) { '367268' }
 
     before do
       allow(instance).to receive(:object_client).and_return(fake_client)
@@ -47,19 +53,8 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed copyright statement' do
-      let(:change_set) do
-        instance_double(
-          ItemChangeSet,
-          copyright_statement: new_copyright_statement,
-          copyright_statement_changed?: true,
-          license_changed?: false,
-          use_statement_changed?: false,
-          collection_ids_changed?: false,
-          source_id_changed?: false,
-          catkey_changed?: false,
-          admin_policy_id_changed?: false
-        )
-      end
+      let(:change_set) { ItemChangeSet.new(copyright_statement: new_copyright_statement) }
+
       let(:new_copyright_statement) { 'A Changed Copyright Statement' }
 
       it 'invokes object client with item/DRO that has new copyright statement' do
@@ -74,19 +69,8 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed license' do
-      let(:change_set) do
-        instance_double(
-          ItemChangeSet,
-          copyright_statement_changed?: false,
-          license: new_license,
-          license_changed?: true,
-          use_statement_changed?: false,
-          collection_ids_changed?: false,
-          source_id_changed?: false,
-          catkey_changed?: false,
-          admin_policy_id_changed?: false
-        )
-      end
+      let(:change_set) { ItemChangeSet.new(license: new_license) }
+
       let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/' }
 
       it 'invokes object client with item/DRO that has new license' do
@@ -101,19 +85,8 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed use statement' do
-      let(:change_set) do
-        instance_double(
-          ItemChangeSet,
-          copyright_statement_changed?: false,
-          license_changed?: false,
-          use_statement: new_use_statement,
-          use_statement_changed?: true,
-          collection_ids_changed?: false,
-          source_id_changed?: false,
-          catkey_changed?: false,
-          admin_policy_id_changed?: false
-        )
-      end
+      let(:change_set) { ItemChangeSet.new(use_statement: new_use_statement) }
+
       let(:new_use_statement) { 'A Changed Use Statement' }
 
       it 'invokes object client with item/DRO that has new use statement' do
@@ -128,19 +101,8 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has one changed property and another nil' do
-      let(:change_set) do
-        instance_double(
-          ItemChangeSet,
-          copyright_statement_changed?: false,
-          license_changed?: false,
-          use_statement: new_use_statement,
-          use_statement_changed?: true,
-          collection_ids_changed?: false,
-          source_id_changed?: false,
-          catkey_changed?: false,
-          admin_policy_id_changed?: false
-        )
-      end
+      let(:change_set) { ItemChangeSet.new(use_statement: new_use_statement) }
+
       let(:model) do
         Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
@@ -168,18 +130,7 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has no changes' do
-      let(:change_set) do
-        instance_double(
-          ItemChangeSet,
-          copyright_statement_changed?: false,
-          license_changed?: false,
-          use_statement_changed?: false,
-          collection_ids_changed?: false,
-          source_id_changed?: false,
-          catkey_changed?: false,
-          admin_policy_id_changed?: false
-        )
-      end
+      let(:change_set) { ItemChangeSet.new }
 
       it 'invokes object client with item/DRO as before' do
         expect(fake_client).to have_received(:update).with(
@@ -187,6 +138,60 @@ RSpec.describe ItemChangeSetPersister do
             copyright: copyright_statement_before,
             license: license_before,
             useAndReproductionStatement: use_statement_before
+          )
+        )
+      end
+    end
+
+    context 'when change set has changed barcode' do
+      let(:change_set) { ItemChangeSet.new(barcode: new_barcode) }
+
+      let(:new_barcode) { '36105014757518' }
+
+      it 'invokes object client with item/DRO that has new barcode' do
+        expect(fake_client).to have_received(:update).with(
+          params: a_cocina_object_with_identification(
+            barcode: new_barcode,
+            catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+          )
+        )
+      end
+    end
+
+    context 'when change set has removed barcode' do
+      let(:change_set) { ItemChangeSet.new(barcode: nil) }
+
+      it 'invokes object client with item/DRO that has no barcode' do
+        expect(fake_client).to have_received(:update).with(
+          params: a_cocina_object_with_identification(
+            catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+          )
+        )
+      end
+    end
+
+    context 'when change set has changed catkey' do
+      let(:change_set) { ItemChangeSet.new(catkey: new_catkey) }
+
+      let(:new_catkey) { '367269' }
+
+      it 'invokes object client with item/DRO that has new catkey' do
+        expect(fake_client).to have_received(:update).with(
+          params: a_cocina_object_with_identification(
+            barcode: barcode_before,
+            catalogLinks: [{ catalog: 'symphony', catalogRecordId: new_catkey }]
+          )
+        )
+      end
+    end
+
+    context 'when change set has removed catkey' do
+      let(:change_set) { ItemChangeSet.new(catkey: nil) }
+
+      it 'invokes object client with item/DRO that has no catkey' do
+        expect(fake_client).to have_received(:update).with(
+          params: a_cocina_object_with_identification(
+            barcode: barcode_before
           )
         )
       end

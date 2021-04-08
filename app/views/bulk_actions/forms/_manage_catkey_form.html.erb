@@ -1,7 +1,0 @@
-<%= f.fields_for :manage_catkeys do |manage_catkeys_fields| %>
-  <div class='form-group'>
-    <%= manage_catkeys_fields.label :catkeys, 'List of catkeys*' %>
-    <%= manage_catkeys_fields.text_area :catkeys, class: 'form-control', rows: 10 %>
-    <span class='help-block'>* must be same length as list of druids and in same order to update ... add a blank line to delete existing catkey</span>
-  </div>
-<% end %>

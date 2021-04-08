@@ -10,6 +10,7 @@ class ItemChangeSet
     license
     source_id
     use_statement
+    barcode
   ].freeze
 
   def initialize(attributes = {})
@@ -34,5 +35,12 @@ class ItemChangeSet
   # Allows collaborators to ask if the change set includes *any* changes
   def changed?
     @changes.any?
+  end
+
+  def ==(other)
+    PROPERTIES.each do |property|
+      return false if public_send(property) != other.public_send(property)
+    end
+    true
   end
 end

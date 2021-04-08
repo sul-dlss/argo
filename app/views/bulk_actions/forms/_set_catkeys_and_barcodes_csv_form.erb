@@ -1,0 +1,13 @@
+<%= f.fields_for :set_catkeys_and_barcodes_csv do |catkey_and_barcode_fields| %>
+  <div class='form-group'>
+    <%= catkey_and_barcode_fields.label :csv_file, 'Upload a CSV file' %>
+    <p><small><em>Please note that each row should have headers for:
+    <ul>
+      <li>Druid (required)</li>
+      <li>Catkey (optional)</li>
+      <li>Barcode (optional)</li>
+    </ul>
+    </em></small></p>
+    <%= catkey_and_barcode_fields.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+  </div>
+<% end %>

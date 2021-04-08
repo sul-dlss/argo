@@ -21,7 +21,8 @@
                       ['Purge object', 'PurgeJob'],
                       ['Update governing APO', 'SetGoverningApoJob'],
                       ['Reindex', 'RemoteIndexingJob'],
-                      ['Manage Catkeys', 'ManageCatkeyJob'],
+                      ['Edit Catkeys and Barcodes', 'SetCatkeysAndBarcodesJob'],
+                      ['Edit Catkeys and Barcodes from CSV', 'SetCatkeysAndBarcodesCsvJob'],
                       ['Prepare objects', 'PrepareJob'],
                       ['Republish objects', 'RepublishJob'],
                       ['Close versions', 'CloseVersionJob'],
@@ -68,11 +69,19 @@
           </span>
         </div>
 
-        <div role='tabpanel' class='tab-pane' id='ManageCatkeyJob'>
+        <div role='tabpanel' class='tab-pane' id='SetCatkeysAndBarcodesJob'>
           <span class='help-block'>
-            Adds or updates catkeys associated with objects.  You need two lists: druids and catkeys, and they need to correspond 1:1 in the correct order.
+            Adds or updates catkeys and/or barcodes associated with objects.
           </span>
-          <%= render 'bulk_actions/forms/manage_catkey_form', f: f %>
+          <p>You must have a druid list and a catkey and/or a barcode list. Lists of catkeys/barcodes (if provided) must be the same length as the list of druids and in the same order. Use a blank line to indicate that a catkey/barcode should be deleted.</p>
+          <%= render 'bulk_actions/forms/set_catkeys_and_barcodes_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='SetCatkeysAndBarcodesCsvJob'>
+          <span class='help-block'>
+            Adds or updates catkeys and/or barcodes associated with objects.
+          </span>
+          <%= render 'bulk_actions/forms/set_catkeys_and_barcodes_csv_form', f: f %>
         </div>
 
         <div role='tabpanel' class='tab-pane' id='PrepareJob'>

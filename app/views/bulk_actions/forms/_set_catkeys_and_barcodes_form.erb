@@ -1,0 +1,12 @@
+<%= f.fields_for :set_catkeys_and_barcodes do |catkey_and_barcode_fields| %>
+  <div class="form-group">
+    <%= catkey_and_barcode_fields.check_box :use_catkeys_option %>
+    <%= catkey_and_barcode_fields.label :use_catkeys_option, 'Update catkeys', class: 'ml-2' %>
+    <%= catkey_and_barcode_fields.text_area :catkeys, class: 'form-control', rows: 10, placeholder: 'Check the box and leave this area blank to remove existing catkeys' %>
+  </div>
+  <div class="form-group">
+    <%= catkey_and_barcode_fields.check_box :use_barcodes_option %>
+    <%= catkey_and_barcode_fields.label :use_barcodes_option, 'Update barcodes', class: 'ml-2' %>
+    <%= catkey_and_barcode_fields.text_area :barcodes, class: 'form-control', rows: 10, placeholder: 'Check the box and leave this area blank to remove existing barcodes' %>
+  </div>
+<% end %>

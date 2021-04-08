@@ -57,7 +57,11 @@ class BulkActionsController < ApplicationController
       :pids,
       manage_release: %i[tag what who to],
       set_governing_apo: [:new_apo_id],
-      manage_catkeys: [:catkeys],
+      set_catkeys_and_barcodes: %i[
+        catkeys use_catkeys_option
+        barcodes use_barcodes_option
+      ],
+      set_catkeys_and_barcodes_csv: [:csv_file],
       prepare: %i[significance description],
       create_virtual_objects: [:csv_file],
       import_tags: [:csv_file],

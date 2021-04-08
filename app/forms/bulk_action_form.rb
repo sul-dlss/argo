@@ -3,7 +3,7 @@
 # This models the values set from the bulk action form
 class BulkActionForm < BaseForm
   VIRTUAL_PROPERTIES = %i[
-    manage_release set_governing_apo manage_catkeys prepare register_druids
+    manage_release set_governing_apo set_catkeys_and_barcodes set_catkeys_and_barcodes_csv prepare register_druids
     create_virtual_objects import_tags set_license_and_rights_statements
   ].freeze
 
@@ -30,16 +30,21 @@ class BulkActionForm < BaseForm
 
   delegate :action_type, :description, to: :model
 
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
   def csv_as_string
     csv_file = create_virtual_objects&.fetch(:csv_file) ||
                register_druids&.fetch(:csv_file) ||
-               import_tags&.fetch(:csv_file)
+               import_tags&.fetch(:csv_file) ||
+               set_catkeys_and_barcodes_csv&.fetch(:csv_file)
 
-    # Short-circuit if request is not related to creating virtual objects
+    # Short-circuit if no csv file
     return unless csv_file
 
     File.read(csv_file.path)
   end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
 
   def license_options
     [['-- No license --', '']] +
