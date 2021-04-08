@@ -2,8 +2,10 @@
 
 # This models the values set from the bulk action form
 class BulkActionForm < BaseForm
-  VIRTUAL_PROPERTIES = %i[manage_release set_governing_apo manage_catkeys
-                          prepare register_druids create_virtual_objects import_tags].freeze
+  VIRTUAL_PROPERTIES = %i[
+    manage_release set_governing_apo manage_catkeys prepare register_druids
+    create_virtual_objects import_tags set_license_and_rights_statements
+  ].freeze
 
   def initialize(model, groups:)
     super(model)
@@ -39,6 +41,11 @@ class BulkActionForm < BaseForm
     File.read(csv_file.path)
   end
 
+  def license_options
+    [['-- No license --', '']] +
+      options_for_use_license_type
+  end
+
   private
 
   # add druid: prefix to list of pids if it doesn't have it yet
@@ -47,5 +54,13 @@ class BulkActionForm < BaseForm
     return pids if pids.blank?
 
     pids.split.flatten.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" }.join("\n")
+  end
+
+  def options_for_use_license_type
+    Constants::LICENSE_OPTIONS.map do |_key, attributes|
+      next if attributes.key?(:deprecation_warning)
+
+      [attributes.fetch(:label), attributes.fetch(:uri)]
+    end.compact # the `#map` will produce `nil`s for deprecated entries; `#compact` will get rid of them
   end
 end

@@ -38,6 +38,19 @@ RSpec.describe 'bulk_actions/new.html.erb' do
     end
   end
 
+  describe 'Set License and Rights Statements Job form' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'input[type="checkbox"][value="1"][name="bulk_action[set_license_and_rights_statements][use_statement_option]"]'
+      expect(rendered).to have_css 'textarea[name="bulk_action[set_license_and_rights_statements][use_statement]"]'
+      expect(rendered).to have_css 'input[type="checkbox"][value="1"][name="bulk_action[set_license_and_rights_statements][copyright_statement_option]"]'
+      expect(rendered).to have_css 'textarea[name="bulk_action[set_license_and_rights_statements][copyright_statement]"]'
+      expect(rendered).to have_css 'input[type="checkbox"][value="1"][name="bulk_action[set_license_and_rights_statements][license_option]"]'
+      expect(rendered).to have_css 'select[name="bulk_action[set_license_and_rights_statements][license]"]'
+      expect(rendered).to have_css 'option[value=""]'
+      expect(rendered).to have_css 'option[value="https://creativecommons.org/licenses/by-sa/3.0/"]'
+    end
+  end
+
   describe 'Update governing APO Job form' do
     it 'has proper form input values' do
       expect(rendered).to have_css 'select option[value="SetGoverningApoJob"]'

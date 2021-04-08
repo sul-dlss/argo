@@ -61,7 +61,12 @@ class BulkActionsController < ApplicationController
       prepare: %i[significance description],
       create_virtual_objects: [:csv_file],
       import_tags: [:csv_file],
-      register_druids: [:csv_file]
+      register_druids: [:csv_file],
+      set_license_and_rights_statements: %i[
+        copyright_statement copyright_statement_option
+        license license_option
+        use_statement use_statement_option
+      ]
     )
   end
 end

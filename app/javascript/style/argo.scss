@@ -191,3 +191,12 @@ button.close {
     margin-bottom: 5px;
   }
 }
+
+.tab-pane {
+  @extend .mt-3;
+  @extend .mb-3;
+}
+
+.help-block {
+  font-weight: bold;
+}

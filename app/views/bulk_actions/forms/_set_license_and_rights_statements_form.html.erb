@@ -1,0 +1,34 @@
+<%= f.fields_for :set_license_and_rights_statements do |license_and_rights_statements| %>
+  <div class="form-group mb-0">
+    <%= license_and_rights_statements.check_box :use_statement_option %>
+    <%= license_and_rights_statements.label :use_statement_option, 'Update use and reproduction statement.', class: 'ml-2' %>
+
+    <%= link_to 'Sample use and reproduction statements.', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %>
+  </div>
+
+  <div class="form-group ml-4 mb-5">
+    <%= license_and_rights_statements.text_area :use_statement, class: 'form-control', rows: 2, placeholder: 'Check the box and leave this area blank to remove existing use and reproduction statements' %>
+  </div>
+
+  <div class="form-group mb-0">
+    <%= license_and_rights_statements.check_box :copyright_statement_option %>
+    <%= license_and_rights_statements.label :copyright_statement_option, 'Update copyright statement.', class: 'ml-2' %>
+
+   <%= link_to 'Sample copyright statements.', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %>
+  </div>
+
+  <div class="form-group ml-4 mb-5">
+    <%= license_and_rights_statements.text_area :copyright_statement, class: 'form-control', rows: 2, placeholder: 'Check the box and leave this area blank to remove existing copyright statements' %>
+  </div>
+
+  <div class="form-group mb-0">
+    <%= license_and_rights_statements.check_box :license_option %>
+    <%= license_and_rights_statements.label :license_option, 'Select new license.', class: 'ml-2' %>
+
+    Select 'No license' to remove existing licenses.
+  </div>
+
+  <div class="form-group ml-4 mb-5">
+    <%= license_and_rights_statements.select :license, @form.license_options, {}, class: 'form-control'%>
+  </div>
+<% end %>

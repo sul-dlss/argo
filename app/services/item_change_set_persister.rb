@@ -19,7 +19,8 @@ class ItemChangeSetPersister
     updated = update_structural(updated) if collection_ids_changed?
     updated = update_identification(updated) if source_id_changed? || catkey_changed?
     updated = updated_administrative(updated) if admin_policy_id_changed?
-    Dor::Services::Client.object(model.externalIdentifier).update(params: updated)
+    updated = updated_access(updated) if access_changed?
+    object_client.update(params: updated)
   end
 
   private
@@ -27,7 +28,13 @@ class ItemChangeSetPersister
   attr_reader :model, :change_set
 
   delegate :collection_ids_changed?, :source_id_changed?, :catkey_changed?, :admin_policy_id_changed?,
-           :collection_ids, :source_id, :catkey, :admin_policy_id, to: :change_set
+           :collection_ids, :source_id, :catkey, :admin_policy_id, :license, :license_changed?,
+           :copyright_statement, :copyright_statement_changed?, :use_statement, :use_statement_changed?,
+           to: :change_set
+
+  def object_client
+    Dor::Services::Client.object(model.externalIdentifier)
+  end
 
   def updated_administrative(updated)
     updated_administrative = updated.administrative.new(hasAdminPolicy: admin_policy_id)
@@ -41,6 +48,20 @@ class ItemChangeSetPersister
                            updated.structural.to_h.without(:isMemberOf) # clear collection membership
                          end
     updated.new(structural: updated_structural)
+  end
+
+  def access_changed?
+    copyright_statement_changed? || license_changed? || use_statement_changed?
+  end
+
+  def updated_access(updated)
+    access_properties = {
+      copyright: copyright_statement_changed? ? copyright_statement : updated.access.copyright,
+      license: license_changed? ? license : updated.access.license,
+      useAndReproductionStatement: use_statement_changed? ? use_statement : updated.access.useAndReproductionStatement
+    }.compact
+
+    updated.new(access: updated.access.new(access_properties))
   end
 
   def update_identification(updated)

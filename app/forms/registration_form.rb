@@ -6,7 +6,7 @@ class RegistrationForm
     @params = params
   end
 
-  # @raises [Cocina::Models::ValidationError]
+  # @raise [Cocina::Models::ValidationError]
   def cocina_model
     catalog_links = []
     if params[:other_id] != 'label:'
