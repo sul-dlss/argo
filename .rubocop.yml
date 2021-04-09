@@ -32,7 +32,6 @@ Metrics/BlockLength:
   Max: 25
   IgnoredMethods:
     - 'configure_blacklight'
-    - 'Dor.configure'
   Exclude:
     - 'config/routes.rb'
     - 'spec/**/*'

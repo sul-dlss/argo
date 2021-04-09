@@ -235,9 +235,6 @@ RSpec.describe ButtonsPresenter, type: :presenter do
   describe '#registered_only?' do
     subject { presenter.send(:registered_only?) }
 
-    let(:id_md) do
-      instance_double(Dor::IdentityMetadataDS)
-    end
     let(:item_id) { 'druid:kv840xx0000' }
 
     context 'when registered' do
