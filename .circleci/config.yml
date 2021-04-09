@@ -176,6 +176,7 @@ jobs:
       SETTINGS__TECH_MD_SERVICE__URL: http://techmd:3000
       SETTINGS__WORKFLOW_URL: http://workflow:3000
     executor: ruby_with_all_deps
+    parallelism: 4
     steps:
       - checkout
       - ruby/install-deps
