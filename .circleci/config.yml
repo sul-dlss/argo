@@ -6,7 +6,7 @@ orbs:
 
 references:
   default_ruby_version: &default_ruby_version 2.7.2-node-browsers
-  default_postgres_version: &default_postgres_version 9.5-alpine
+  default_postgres_version: &default_postgres_version 11-ram
   ruby_envs: &ruby_envs
     environment:
       BUNDLE_JOBS: 3
@@ -149,25 +149,11 @@ executors:
         name: redis
 
 workflows:
-  build_and_test:
+  test:
     jobs:
-      - build
-      - lint:
-          requires:
-            - build
-      - test:
-          requires:
-            - build
-            - lint
+      - test
+      - lint
 jobs:
-  build:
-    executor: default
-    steps:
-      - checkout
-      - ruby/install-deps
-      - node/install-packages:
-          cache-key: yarn.lock
-          pkg-manager: yarn
   lint:
     executor: default
     steps:
@@ -203,10 +189,7 @@ jobs:
       # Setup database
       - run:
           name: Database setup
-          command: bundle exec rails db:schema:load --trace
-      - run:
-          name: Set up database
-          command: bundle exec rake db:setup RAILS_ENV=test
+          command: bundle exec rails db:test:prepare
       - run:
           name: Create directories
           command: mkdir -p public/workspace tmp/preview
