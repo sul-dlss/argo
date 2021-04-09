@@ -76,7 +76,7 @@ services:
       - redis
 
   solr:
-    image: solr:7
+    image: solr:slim
     volumes:
       - ./solr_conf/conf/:/myconfig
     command: solr-create -c argo -d /myconfig
