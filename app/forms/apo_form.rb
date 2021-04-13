@@ -33,7 +33,6 @@ class ApoForm
   end
 
   def populate_from_model
-    @default_collections = model.administrative.collectionsForRegistration
     self.title = model.description.title.first.value
     self.agreement_object_id = model.administrative.referencesAgreement
     self.default_rights = model.administrative.defaultAccess&.access
@@ -59,7 +58,7 @@ class ApoForm
 
   # @return [Array<SolrDocument>]
   def default_collection_objects
-    @default_collection_objects ||= search_service.fetch(Array(@default_collections)).last
+    @default_collection_objects ||= search_service.fetch(default_collections, rows: default_collections.size).last
   end
 
   def to_param
@@ -75,6 +74,12 @@ class ApoForm
   end
 
   private
+
+  def default_collections
+    return [] unless model
+
+    Array(model.administrative.collectionsForRegistration)
+  end
 
   # return a list of lists, where the sublists are pairs, with the first element being the text to display
   # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated

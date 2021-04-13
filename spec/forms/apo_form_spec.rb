@@ -20,7 +20,10 @@ RSpec.describe ApoForm do
     {
       hasAdminPolicy: 'druid:xx666zz7777',
       registrationWorkflow: ['registrationWF'],
-      defaultAccess: default_access
+      defaultAccess: default_access,
+      collectionsForRegistration: %w[druid:xf330kz3480 druid:zn588xt6079 druid:zq557wp0848 druid:tw619vm5957
+                                     druid:ts734sd4095 druid:sx487cw2287 druid:pv392zr2847 druid:sh776dy9514
+                                     druid:dy736ft1835 druid:kj087tz6537 druid:qs995zb1355 druid:yk518vd0459]
     }
   end
   let(:default_access) { {} }
@@ -208,9 +211,18 @@ RSpec.describe ApoForm do
   describe '#default_collection_objects' do
     subject { instance.default_collection_objects }
 
-    let(:search_service) { instance_double(Blacklight::SearchService, fetch: [nil, [doc1]]) }
-    let(:doc1) { instance_double(SolrDocument) }
+    let(:default_collection_druids) { administrative[:collectionsForRegistration] }
+    let(:default_collection_objects) do
+      default_collection_druids.map { |druid| instance_double(SolrDocument, label: druid) }
+    end
+    let(:search_service_result) { [nil, default_collection_objects] }
+    let(:search_service) { instance_double(Blacklight::SearchService) }
 
-    it { is_expected.to eq [doc1] }
+    before do
+      allow(search_service).to receive(:fetch).with(default_collection_druids, rows: default_collection_druids.size)
+                                              .and_return(search_service_result)
+    end
+
+    it { is_expected.to eq default_collection_objects }
   end
 end
