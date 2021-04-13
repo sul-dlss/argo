@@ -140,6 +140,19 @@ docker-compose run --rm web yarn install
 docker-compose run --rm web bin/rake webpacker:compile
 ```
 
+## Creating fixture data
+
+To begin registering items in the Argo UI, there will need to be at least one agreement object and one APO object in the index. To create and index one of each of these objects, run the following commands:
+
+```
+$ docker-compose exec web bin/rails c
+> require_relative 'spec/support/create_strategy_repository_pattern'
+> require_relative 'spec/support/item_method_sender'
+> require_relative 'spec/support/apo_method_sender'
+> FactoryBot.create_for_repository(:agreement)
+> FactoryBot.create_for_repository(:apo, roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
+```
+
 ## Internals
 
 Argo uses Blacklight and ActiveFedora to expose the repository contents, and `dor-services` to enable editing and updating. Its key components include:
