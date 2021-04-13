@@ -58,7 +58,13 @@ class ApoForm
 
   # @return [Array<SolrDocument>]
   def default_collection_objects
-    @default_collection_objects ||= search_service.fetch(default_collections, rows: default_collections.size).last.sort_by(&:label)
+    @default_collection_objects ||=
+      search_service
+      .fetch(default_collections, rows: default_collections.size)
+      .last
+      .sort_by do |solr_doc|
+        solr_doc.label.downcase
+      end
   end
 
   def to_param
