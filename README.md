@@ -133,6 +133,17 @@ This will allow you to view rails output in real-time.  You can also add 'byebug
 
 If you run into errors related to the version of bundler when building the `web` container, that likely means you need to pull a newer copy of the base Ruby image specified in `Dockerfile`, e.g., `docker pull ruby:{MAJOR}.{MINOR}-stretch`.
 
+You may also need to rebuild your web container without using Docker's cache (which may
+have the older version of bundler in it).  This will ensure the web container
+has the latest version of the bundler gem installed.  You may then also need to update the
+bundler version in the Gemfile.lock to match.
+
+```
+gem update --system && gem install bundler # get the latest version of bundler locally
+bundle update --bundler  # update the Gemfile.lock to match this while not updating any gems
+docker-compose build --no-cache web # rebuild the docker container to match the latest bundler
+```
+
 Also, if you run into webpacker related issues, you may need to manually install yarn and compile webpacker in your Docker container (or local laptop if you running that way):
 
 ```
