@@ -223,6 +223,6 @@ RSpec.describe ApoForm do
                                               .and_return(search_service_result)
     end
 
-    it { is_expected.to eq default_collection_objects }
+    it { is_expected.to eq default_collection_objects.sort_by(&:label) }
   end
 end
