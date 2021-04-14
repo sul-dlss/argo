@@ -37,7 +37,7 @@ class ItemsController < ApplicationController
   end
 
   def set_collection
-    change_set = ItemChangeSet.new { |change| change.collection_ids = Array(params[:collection].presence) }
+    change_set = ItemChangeSet.new(collection_ids: Array(params[:collection].presence))
     ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
@@ -59,7 +59,7 @@ class ItemsController < ApplicationController
   def add_collection
     response_message = if params[:collection].present?
                          new_collections = Array(@cocina.structural.isMemberOf) + [params[:collection]]
-                         change_set = ItemChangeSet.new { |change| change.collection_ids = new_collections }
+                         change_set = ItemChangeSet.new(collection_ids: new_collections)
                          ItemChangeSetPersister.update(@cocina, change_set)
 
                          reindex
@@ -88,7 +88,7 @@ class ItemsController < ApplicationController
 
   def remove_collection
     new_collections = @cocina.structural.isMemberOf - [params[:collection]]
-    change_set = ItemChangeSet.new { |change| change.collection_ids = new_collections }
+    change_set = ItemChangeSet.new(collection_ids: new_collections)
     ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
@@ -138,7 +138,7 @@ class ItemsController < ApplicationController
   end
 
   def source_id
-    change_set = ItemChangeSet.new { |change| change.source_id = params[:new_id] }
+    change_set = ItemChangeSet.new(source_id: params[:new_id])
     ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
@@ -153,7 +153,7 @@ class ItemsController < ApplicationController
   end
 
   def catkey
-    change_set = ItemChangeSet.new { |change| change.catkey = params[:new_catkey].strip }
+    change_set = ItemChangeSet.new(catkey: params[:new_catkey].strip)
     ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 
@@ -252,7 +252,7 @@ class ItemsController < ApplicationController
 
     authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
 
-    change_set = ItemChangeSet.new { |change| change.admin_policy_id = params[:new_apo_id] }
+    change_set = ItemChangeSet.new(admin_policy_id: params[:new_apo_id])
     ItemChangeSetPersister.update(@cocina, change_set)
     reindex
 

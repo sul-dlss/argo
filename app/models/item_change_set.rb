@@ -12,9 +12,9 @@ class ItemChangeSet
     use_statement
   ].freeze
 
-  def initialize
-    @changes = {}
-    yield self
+  def initialize(attributes = {})
+    @changes = attributes.slice(*PROPERTIES)
+    yield self if block_given?
   end
 
   PROPERTIES.each do |property|
