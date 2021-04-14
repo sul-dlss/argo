@@ -7,7 +7,7 @@ class WorkflowUpdateButton < ApplicationComponent
     @process = process
   end
 
-  delegate :pid, :workflow_name, :repository, :name, to: :process
+  delegate :pid, :workflow_name, :name, to: :process
 
   def label
     "Set to #{next_status}"
