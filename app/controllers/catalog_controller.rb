@@ -243,6 +243,11 @@ class CatalogController < ApplicationController
     end
   end
 
+  # do not add the pids_only search param to the blacklight search history (used in bulk actions only)
+  def blacklisted_search_session_params
+    super << :pids_only
+  end
+
   # This overrides Blacklight to pass context to the search service
   # @return [Hash] a hash of context information to pass through to the search service
   def search_service_context
