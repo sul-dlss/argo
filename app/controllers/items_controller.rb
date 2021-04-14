@@ -111,6 +111,14 @@ class ItemsController < ApplicationController
     end
   end
 
+  def cocina
+    authorize! :view_metadata, @cocina
+
+    respond_to do |format|
+      format.json  { render json: @cocina }
+    end
+  end
+
   def embargo_update
     raise ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
 
