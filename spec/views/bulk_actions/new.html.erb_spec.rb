@@ -69,4 +69,19 @@ RSpec.describe 'bulk_actions/new.html.erb' do
       expect(rendered).to have_css 'select option[value="ExportTagsJob"]'
     end
   end
+
+  describe 'Set Catkeys and Barcodes Job form' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'input[type="checkbox"][value="1"][name="bulk_action[set_catkeys_and_barcodes][use_catkeys_option]"]'
+      expect(rendered).to have_css 'textarea[name="bulk_action[set_catkeys_and_barcodes][catkeys]"]'
+      expect(rendered).to have_css 'input[type="checkbox"][value="1"][name="bulk_action[set_catkeys_and_barcodes][use_barcodes_option]"]'
+      expect(rendered).to have_css 'textarea[name="bulk_action[set_catkeys_and_barcodes][barcodes]"]'
+    end
+  end
+
+  describe 'Set Catkeys and Barcodes CSV Job form' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'input[type="file"][name="bulk_action[set_catkeys_and_barcodes_csv][csv_file]"]'
+    end
+  end
 end

@@ -23,7 +23,7 @@ class BulkActionPersister
   attr_reader :bulk_action_form
 
   delegate :pids, :manage_release, :set_governing_apo,
-           :manage_catkeys, :groups, :prepare, :create_virtual_objects,
+           :set_catkeys_and_barcodes, :groups, :prepare, :create_virtual_objects,
            :import_tags, :set_license_and_rights_statements,
            to: :bulk_action_form
 
@@ -60,7 +60,7 @@ class BulkActionPersister
     {
       pids: pids.split,
       manage_release: manage_release,
-      manage_catkeys: manage_catkeys,
+      set_catkeys_and_barcodes: set_catkeys_and_barcodes,
       set_governing_apo: set_governing_apo,
       set_license_and_rights_statements: set_license_and_rights_statements,
       prepare: prepare,
