@@ -79,6 +79,19 @@ class ApoForm
     'none'
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
+  def default_object_rights
+    return default_rights if model.nil?
+    return "loc:#{model.administrative.defaultAccess.readLocation}" if default_rights == 'location-based'
+    return 'cdl-stanford-nd' if model.administrative&.defaultAccess&.controlledDigitalLending
+    return "#{default_rights}-nd" if model.administrative&.defaultAccess&.download == 'none' && default_rights.in?(%w[stanford world])
+
+    default_rights
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
+
   private
 
   def default_collections
