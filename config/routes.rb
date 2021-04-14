@@ -127,6 +127,7 @@ Rails.application.routes.draw do
     member do
       post 'refresh_metadata'
       get 'mods'
+      get 'cocina'
       post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'
       get 'source_id_ui'

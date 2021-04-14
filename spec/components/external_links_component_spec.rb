@@ -22,6 +22,7 @@ RSpec.describe ExternalLinksComponent, type: :component do
       expect(page).not_to have_link 'Searchworks'
       expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
       expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
+      expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/cocina.json'
     end
   end
 
@@ -38,6 +39,7 @@ RSpec.describe ExternalLinksComponent, type: :component do
 
         expect(page).to have_link 'Searchworks', href: 'http://searchworks.stanford.edu/view/123456'
         expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
+        expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445/cocina.json'
       end
     end
 
