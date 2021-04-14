@@ -1,7 +1,19 @@
 # frozen_string_literal: true
 
 # Represents a set of changes to an admin policy.
-class AdminPolicyChangeSet # rubocop:disable Metrics/ClassLength
+class AdminPolicyChangeSet
+  PROPERTIES = %i[
+    use_license
+    registered_by
+    agreement_object_id
+    use_statement
+    copyright_statement
+    default_rights
+    title
+    permissions
+    default_workflows
+  ].freeze
+
   def initialize(model: nil)
     @model = model
     @changes = {}
@@ -30,112 +42,18 @@ class AdminPolicyChangeSet # rubocop:disable Metrics/ClassLength
     title.present? && agreement_object_id.present?
   end
 
-  def use_license=(license)
-    @changes[:use_license] = license
-  end
+  PROPERTIES.each do |property|
+    define_method(property) do
+      @changes[property]
+    end
 
-  def use_license
-    @changes[:use_license]
-  end
+    define_method("#{property}_changed?") do
+      @changes.key?(property)
+    end
 
-  def use_license_changed?
-    @changes.key?(:use_license)
-  end
-
-  def registered_by=(user)
-    @changes[:registered_by] = user
-  end
-
-  def registered_by
-    @changes[:registered_by]
-  end
-
-  def registered_by_changed?
-    @changes.key?(:registered_by)
-  end
-
-  def agreement_object_id=(id)
-    @changes[:agreement_object_id] = id
-  end
-
-  def agreement_object_id
-    @changes[:agreement_object_id]
-  end
-
-  def agreement_object_id_changed?
-    @changes.key?(:agreement_object_id)
-  end
-
-  def use_statement=(statement)
-    @changes[:use_statement] = statement
-  end
-
-  def use_statement
-    @changes[:use_statement]
-  end
-
-  def use_statement_changed?
-    @changes.key?(:use_statement)
-  end
-
-  def copyright_statement=(statement)
-    @changes[:copyright_statement] = statement
-  end
-
-  def copyright_statement
-    @changes[:copyright_statement]
-  end
-
-  def copyright_statement_changed?
-    @changes.key?(:copyright_statement)
-  end
-
-  def default_rights=(rights)
-    @changes[:default_rights] = rights
-  end
-
-  def default_rights
-    @changes[:default_rights]
-  end
-
-  def default_rights_changed?
-    @changes.key?(:default_rights)
-  end
-
-  def title=(title)
-    @changes[:title] = title&.strip
-  end
-
-  def title
-    @changes[:title]
-  end
-
-  def title_changed?
-    @changes.key?(:title)
-  end
-
-  def default_workflows=(workflows)
-    @changes[:default_workflows] = workflows
-  end
-
-  def default_workflows
-    @changes[:default_workflows]
-  end
-
-  def default_workflows_changed?
-    @changes.key?(:default_workflows)
-  end
-
-  def permissions=(permissions)
-    @changes[:permissions] = permissions
-  end
-
-  def permissions
-    @changes[:permissions]
-  end
-
-  def permissions_changed?
-    @changes.key?(:permissions)
+    define_method("#{property}=") do |value|
+      @changes[property] = value
+    end
   end
 
   # Does the user want to create a new default collection
