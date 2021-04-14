@@ -23,8 +23,9 @@ class RegistrationForm
       },
       identification: {
         sourceId: params.require(:source_id),
-        catalogLinks: catalog_links
-      }
+        catalogLinks: catalog_links,
+        barcode: params[:barcode_id]
+      }.compact
     }
 
     access = CocinaDROAccess.from_form_value(params[:rights])
