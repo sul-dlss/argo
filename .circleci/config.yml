@@ -113,6 +113,7 @@ executors:
           SETTINGS__WORKFLOW_URL: http://workflow:3000
           SETTINGS__ENABLED_FEATURES__UPDATE_DESCRIPTIVE: 'true'
           SETTINGS__ENABLED_FEATURES__CREATE_UR_ADMIN_POLICY: 'true'
+          SETTINGS__VERSION_SERVICE__SYNC_WITH_PRESERVATION: 'false'
           REDIS_URL: redis://redis:6379/
       - image: suldlss/suri-rails:latest
         name: suri
