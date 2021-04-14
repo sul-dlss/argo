@@ -84,7 +84,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :items, only: [] do
+  resources :items, only: :show do
     resources 'files', only: %i[index], constraints: { id: /.*/ } do
       member do
         get 'preserved'
@@ -127,7 +127,6 @@ Rails.application.routes.draw do
     member do
       post 'refresh_metadata'
       get 'mods'
-      get 'cocina'
       post 'embargo', action: :embargo_update, as: 'embargo_update'
       get 'embargo_form'
       get 'source_id_ui'

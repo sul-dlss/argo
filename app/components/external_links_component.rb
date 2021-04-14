@@ -34,7 +34,7 @@ class ExternalLinksComponent < ViewComponent::Base
   end
 
   def cocina_link
-    link_to 'Cocina model', cocina_item_path(document, format: :json),
+    link_to 'Cocina model', item_path(document, format: :json),
             target: '_blank', rel: 'noopener', class: 'nav-link'
   end
 

@@ -111,7 +111,7 @@ class ItemsController < ApplicationController
     end
   end
 
-  def cocina
+  def show
     authorize! :view_metadata, @cocina
 
     respond_to do |format|
