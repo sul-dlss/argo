@@ -27,10 +27,15 @@ class ItemChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :collection_ids_changed?, :source_id_changed?, :catkey_changed?, :admin_policy_id_changed?,
-           :collection_ids, :source_id, :catkey, :admin_policy_id, :license, :license_changed?,
-           :copyright_statement, :copyright_statement_changed?, :use_statement, :use_statement_changed?,
+  delegate :admin_policy_id, :admin_policy_id_changed?,
            :barcode, :barcode_changed?,
+           :catkey, :catkey_changed?,
+           :collection_ids, :collection_ids_changed?,
+           :copyright_statement, :copyright_statement_changed?,
+           :embargo_release_date, :embargo_release_date_changed?,
+           :license, :license_changed?,
+           :source_id, :source_id_changed?,
+           :use_statement, :use_statement_changed?,
            to: :change_set
 
   def object_client
@@ -52,7 +57,7 @@ class ItemChangeSetPersister
   end
 
   def access_changed?
-    copyright_statement_changed? || license_changed? || use_statement_changed?
+    copyright_statement_changed? || license_changed? || use_statement_changed? || embargo_release_date_changed?
   end
 
   def updated_access(updated)
@@ -61,6 +66,8 @@ class ItemChangeSetPersister
       license: license_changed? ? license : updated.access.license,
       useAndReproductionStatement: use_statement_changed? ? use_statement : updated.access.useAndReproductionStatement
     }.compact
+
+    access_properties[:embargo] = updated.access.embargo.new(releaseDate: embargo_release_date) if embargo_release_date_changed?
 
     updated.new(access: updated.access.new(access_properties))
   end

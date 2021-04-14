@@ -121,13 +121,8 @@ class ItemsController < ApplicationController
                          flash: { error: 'Invalid date' }
     end
 
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-    existing_embargo = @cocina.access.embargo
-    updated_embargo = existing_embargo.new(releaseDate: params[:embargo_date])
-    updated_access = @cocina.access.new(embargo: updated_embargo)
-    updated_item = @cocina.new(access: updated_access)
-
-    object_client.update(params: updated_item)
+    change_set = ItemChangeSet.new { |change| change.embargo_release_date = params[:embargo_date] }
+    ItemChangeSetPersister.update(@cocina, change_set)
 
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }

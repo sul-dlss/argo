@@ -7,6 +7,7 @@ class ItemChangeSet
     catkey
     collection_ids
     copyright_statement
+    embargo_release_date
     license
     source_id
     use_statement
