@@ -81,8 +81,27 @@ RSpec.describe ItemsController, type: :controller do
   end
 
   describe '#embargo_update' do
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, embargo: embargo_service) }
-    let(:embargo_service) { instance_double(Dor::Services::Client::Embargo, update: true) }
+    let(:cocina) do
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => {
+                               'access' => 'world',
+                               'embargo' => {
+                                 'releaseDate' => '2040-05-05',
+                                 'access' => 'world'
+                               }
+                             },
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {
+                               'catalogLinks' => catalog_links
+                             }
+                           })
+    end
+    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true) }
 
     context "when they don't have manage access" do
       it 'returns 403' do
@@ -98,10 +117,9 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       it 'calls Dor::Services::Client::Embargo#update' do
-        expect(controller).to receive(:reindex)
         post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
         expect(response).to have_http_status(:found) # redirect to catalog page
-        expect(embargo_service).to have_received(:update)
+        expect(object_service).to have_received(:update)
       end
 
       it 'requires a date' do
@@ -109,13 +127,9 @@ RSpec.describe ItemsController, type: :controller do
       end
 
       context 'when the date is malformed' do
-        before do
-          allow(embargo_service).to receive(:update).and_raise(Dor::Services::Client::UnexpectedResponse, 'Error: ({"errors":[{"detail":"Invalid date"}]})')
-        end
-
         it 'shows the error' do
           post :embargo_update, params: { id: pid, embargo_date: 'not-a-date' }
-          expect(flash[:error]).to eq 'Unable to retrieve the cocina model: Invalid date'
+          expect(flash[:error]).to eq 'Invalid date'
         end
       end
     end

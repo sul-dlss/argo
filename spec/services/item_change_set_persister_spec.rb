@@ -100,9 +100,44 @@ RSpec.describe ItemChangeSetPersister do
       end
     end
 
+    context 'when change set has changed embargo_release_date' do
+      let(:change_set) do
+        ItemChangeSet.new { |change| change.embargo_release_date = new_embargo_release_date }
+      end
+      let(:new_embargo_release_date) { '2055-07-17' }
+      let(:model) do
+        Cocina::Models::DRO.new(
+          externalIdentifier: 'druid:bc123df4568',
+          label: 'test',
+          type: Cocina::Models::Vocab.object,
+          version: 1,
+          access: {
+            embargo: { releaseDate: '2040-04-04', access: 'world' },
+            copyright: copyright_statement_before,
+            license: license_before,
+            useAndReproductionStatement: use_statement_before
+          },
+          administrative: { hasAdminPolicy: 'druid:bc123df4569' }
+        )
+      end
+
+      it 'invokes object client with item/DRO that has new use statement' do
+        expect(fake_client).to have_received(:update).with(
+          params: a_cocina_object_with_access(
+            embargo: {
+              releaseDate: '2055-07-17',
+              access: 'world'
+            },
+            copyright: copyright_statement_before,
+            license: license_before,
+            useAndReproductionStatement: use_statement_before
+          )
+        )
+      end
+    end
+
     context 'when change set has one changed property and another nil' do
       let(:change_set) { ItemChangeSet.new(use_statement: new_use_statement) }
-
       let(:model) do
         Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',

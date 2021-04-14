@@ -122,10 +122,16 @@ class ItemsController < ApplicationController
   def embargo_update
     raise ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
 
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-    object_client.embargo.update(embargo_date: params[:embargo_date], requesting_user: current_user.to_s)
+    begin
+      params[:embargo_date].to_date
+    rescue Date::Error
+      return redirect_to solr_document_path(params[:id]),
+                         flash: { error: 'Invalid date' }
+    end
 
-    reindex
+    change_set = ItemChangeSet.new { |change| change.embargo_release_date = params[:embargo_date] }
+    ItemChangeSetPersister.update(@cocina, change_set)
+
     respond_to do |format|
       format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
     end
