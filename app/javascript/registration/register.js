@@ -43,6 +43,7 @@ export default function DorRegistration(initOpts) {
       data.id = rowid
 
       var params = {
+        authenticity_token: Rails.csrfToken(),
         'admin_policy' : apo,
         'project' : $t.projectName,
         'workflow_id' : $('#workflow_id').val(),
