@@ -21,6 +21,7 @@ import 'jquery-ui'
 import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
 import "controllers"
+import '@hotwired/turbo-rails'
 
 import Argo from 'argo'
 

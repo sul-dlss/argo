@@ -501,6 +501,8 @@ GEM
     thor (1.1.0)
     thread_safe (0.3.6)
     ttfunk (1.4.0)
+    turbo-rails (0.5.9)
+      rails (>= 6.0.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     unf (0.1.4)
@@ -601,6 +603,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4.2)
+  turbo-rails (~> 0.5.9)
   view_component (~> 2.0)
   web-console
   webdrivers
