@@ -115,7 +115,7 @@ class ItemsController < ApplicationController
     authorize! :view_metadata, @cocina
 
     respond_to do |format|
-      format.json  { render json: @cocina }
+      format.json { render json: @cocina }
     end
   end
 
