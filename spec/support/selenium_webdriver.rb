@@ -18,3 +18,4 @@ Capybara.register_driver :headless_chrome do |app|
 end
 
 Capybara.disable_animation = true
+Capybara.default_max_wait_time = 7

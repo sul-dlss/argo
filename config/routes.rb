@@ -23,6 +23,9 @@ Rails.application.routes.draw do
 
   resource :catalog, only: [:index], controller: 'catalog', path: '/catalog' do
     concerns :searchable
+    member do
+      get 'lazy_tag_facet'
+    end
   end
 
   resources :solr_documents, only: [:show], controller: 'catalog', path: '/view' do

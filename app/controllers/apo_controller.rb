@@ -29,7 +29,7 @@ class ApoController < ApplicationController
       @form = ApoForm.new(nil, search_service: search_service)
       respond_to do |format|
         format.json { render status: :bad_request, json: { errors: form.errors } }
-        format.html { render 'new' }
+        format.html { render 'new', status: :unprocessable_entity }
       end
       return
     end

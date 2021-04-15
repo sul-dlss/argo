@@ -55,6 +55,13 @@ export default class Argo {
 
         this.apoEditor()
         this.collapsableSections()
+        this.blacklight()
+    }
+
+    // Because blacklight doesn't yet support turbo, we need to manually initialize
+    // the features we care about.
+    blacklight() {
+      Blacklight.activate()
     }
 
     tagsAutocomplete() {
