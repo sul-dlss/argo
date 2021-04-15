@@ -35,7 +35,7 @@ class ApoForm
   def populate_from_model
     self.title = model.description.title.first.value
     self.agreement_object_id = model.administrative.referencesAgreement
-    self.default_rights = model.administrative.defaultAccess&.access
+    self.default_rights = default_object_rights
     self.use_statement = model.administrative.defaultAccess&.useAndReproductionStatement
     self.copyright_statement = model.administrative.defaultAccess&.copyright
     self.use_license = model.administrative.defaultAccess&.license
@@ -79,19 +79,6 @@ class ApoForm
     'none'
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/PerceivedComplexity
-  def default_object_rights
-    return default_rights if model.nil?
-    return "loc:#{model.administrative.defaultAccess.readLocation}" if default_rights == 'location-based'
-    return 'cdl-stanford-nd' if model.administrative&.defaultAccess&.controlledDigitalLending
-    return "#{default_rights}-nd" if model.administrative&.defaultAccess&.download == 'none' && default_rights.in?(%w[stanford world])
-
-    default_rights
-  end
-  # rubocop:enable Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
-
   private
 
   def default_collections
@@ -112,6 +99,24 @@ class ApoForm
         [attributes.fetch(:label), attributes.fetch(:uri)]
       end
     end.compact # the options block will produce nils for unused deprecated entries, compact will get rid of them
+  end
+
+  def default_object_rights
+    return default_rights if model.nil?
+
+    check_default_object_rights || default_rights
+  end
+
+  def check_default_object_rights
+    default_access = model.administrative&.defaultAccess
+
+    return if default_access.nil?
+
+    access = default_access.access
+
+    return "loc:#{default_access.readLocation}" if access == 'location-based'
+    return 'cdl-stanford-nd' if default_access.controlledDigitalLending
+    return "#{access}-nd" if default_access.download == 'none' && access.in?(%w[stanford world])
   end
 
   def manage_permissions

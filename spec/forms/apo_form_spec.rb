@@ -105,50 +105,6 @@ RSpec.describe ApoForm do
       let(:default_access) { { access: 'world' } }
 
       it { is_expected.to eq 'world' }
-    end
-
-    describe '#use_statement' do
-      subject { instance.use_statement }
-
-      let(:default_access) { { useAndReproductionStatement: 'Rights are owned by Stanford University Libraries' } }
-
-      it { is_expected.to eq 'Rights are owned by Stanford University Libraries' }
-    end
-
-    describe '#copyright_statement' do
-      subject { instance.copyright_statement }
-
-      let(:default_access) { { copyright: 'Additional copyright info' } }
-
-      it { is_expected.to eq 'Additional copyright info' }
-    end
-
-    describe '#title' do
-      subject { instance.title }
-
-      it { is_expected.to eq 'Stored title' }
-    end
-
-    describe '#to_param' do
-      subject { instance.to_param }
-
-      it { is_expected.to eq 'druid:zt570qh4444' }
-    end
-
-    describe '#license_options' do
-      subject { instance.license_options }
-
-      it 'is an array of the options' do
-        expect(subject).to be_a Array
-        expect(subject[0]).to be_a Array
-        expect(subject.size).to eq 12
-      end
-    end
-
-    describe '#default_object_rights' do
-      subject { instance.default_object_rights }
-
-      it { is_expected.to eq nil }
 
       describe 'stanford variation' do
         let(:administrative) do
@@ -189,6 +145,44 @@ RSpec.describe ApoForm do
         end
 
         it { is_expected.to eq 'cdl-stanford-nd' }
+      end
+    end
+
+    describe '#use_statement' do
+      subject { instance.use_statement }
+
+      let(:default_access) { { useAndReproductionStatement: 'Rights are owned by Stanford University Libraries' } }
+
+      it { is_expected.to eq 'Rights are owned by Stanford University Libraries' }
+    end
+
+    describe '#copyright_statement' do
+      subject { instance.copyright_statement }
+
+      let(:default_access) { { copyright: 'Additional copyright info' } }
+
+      it { is_expected.to eq 'Additional copyright info' }
+    end
+
+    describe '#title' do
+      subject { instance.title }
+
+      it { is_expected.to eq 'Stored title' }
+    end
+
+    describe '#to_param' do
+      subject { instance.to_param }
+
+      it { is_expected.to eq 'druid:zt570qh4444' }
+    end
+
+    describe '#license_options' do
+      subject { instance.license_options }
+
+      it 'is an array of the options' do
+        expect(subject).to be_a Array
+        expect(subject[0]).to be_a Array
+        expect(subject.size).to eq 12
       end
     end
   end
