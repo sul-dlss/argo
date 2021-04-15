@@ -144,6 +144,53 @@ RSpec.describe ApoForm do
         expect(subject.size).to eq 12
       end
     end
+
+    describe '#default_object_rights' do
+      subject { instance.default_object_rights }
+
+      it { is_expected.to eq nil }
+
+      describe 'stanford variation' do
+        let(:administrative) do
+          {
+            hasAdminPolicy: 'druid:xx666zz7777',
+            defaultAccess: {
+              access: 'stanford',
+              download: 'none'
+            }
+          }
+        end
+
+        it { is_expected.to eq 'stanford-nd' }
+      end
+
+      describe 'location based' do
+        let(:administrative) do
+          {
+            hasAdminPolicy: 'druid:xx666zz7777',
+            defaultAccess: {
+              access: 'location-based',
+              readLocation: 'ars'
+            }
+          }
+        end
+
+        it { is_expected.to eq 'loc:ars' }
+      end
+
+      describe 'controlled digital lending' do
+        let(:administrative) do
+          {
+            hasAdminPolicy: 'druid:xx666zz7777',
+            defaultAccess: {
+              controlledDigitalLending: true
+            }
+          }
+        end
+
+        it { is_expected.to eq 'cdl-stanford-nd' }
+      end
+    end
   end
 
   context 'with an unsaved model' do
