@@ -28,7 +28,7 @@ class ItemChangeSetPersister
   attr_reader :model, :change_set
 
   delegate :admin_policy_id, :barcode, :catkey, :collection_ids,
-           :copyright_statement, :embargo_release_date, :license, :source_id,
+           :copyright_statement, :embargo_release_date, :embargo_access, :license, :source_id,
            :use_statement, :changed?, to: :change_set
 
   def object_client
@@ -50,7 +50,11 @@ class ItemChangeSetPersister
   end
 
   def access_changed?
-    changed?(:copyright_statement) || changed?(:license) || changed?(:use_statement) || changed?(:embargo_release_date)
+    changed?(:copyright_statement) ||
+      changed?(:license) ||
+      changed?(:use_statement) ||
+      changed?(:embargo_release_date) ||
+      changed?(:embargo_access)
   end
 
   def updated_access(updated)
@@ -60,9 +64,19 @@ class ItemChangeSetPersister
       useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
     }.compact
 
-    access_properties[:embargo] = updated.access.embargo.new(releaseDate: embargo_release_date) if changed?(:embargo_release_date)
+    embargo_clazz = updated.access.embargo || Cocina::Models::Embargo
+    access_properties[:embargo] = embargo_clazz.new(embargo_props) if embargo_props.present?
 
     updated.new(access: updated.access.new(access_properties))
+  end
+
+  def embargo_props
+    @embargo_props ||= begin
+      new_embargo_props = {}
+      new_embargo_props[:releaseDate] = embargo_release_date if changed?(:embargo_release_date)
+      new_embargo_props.merge!(embargo_access) if changed?(:embargo_access)
+      new_embargo_props
+    end
   end
 
   def update_identification(updated)

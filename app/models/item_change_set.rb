@@ -7,6 +7,7 @@ class ItemChangeSet < ApplicationChangeSet
   property :collection_ids, virtual: true
   property :copyright_statement, virtual: true
   property :embargo_release_date, virtual: true
+  property :embargo_access, virtual: true
   property :license, virtual: true
   property :source_id, virtual: true
   property :use_statement, virtual: true

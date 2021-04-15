@@ -4,7 +4,7 @@
 class BulkActionForm < BaseForm
   VIRTUAL_PROPERTIES = %i[
     manage_release set_governing_apo set_catkeys_and_barcodes set_catkeys_and_barcodes_csv prepare register_druids
-    create_virtual_objects import_tags set_license_and_rights_statements
+    create_virtual_objects import_tags set_license_and_rights_statements manage_embargo
   ].freeze
 
   def initialize(model, groups:)
@@ -36,7 +36,8 @@ class BulkActionForm < BaseForm
     csv_file = create_virtual_objects&.fetch(:csv_file) ||
                register_druids&.fetch(:csv_file) ||
                import_tags&.fetch(:csv_file) ||
-               set_catkeys_and_barcodes_csv&.fetch(:csv_file)
+               set_catkeys_and_barcodes_csv&.fetch(:csv_file) ||
+               manage_embargo&.fetch(:csv_file)
 
     # Short-circuit if no csv file
     return unless csv_file

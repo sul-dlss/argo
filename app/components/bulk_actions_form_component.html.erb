@@ -132,6 +132,15 @@
           </div>
           <%= render 'bulk_actions/forms/set_license_and_rights_statements_form', f: f %>
         </div>
+
+        <div role='tabpanel' class='tab-pane' id='ManageEmbargoesJob'>
+          <div class="form-group">
+            <span class='help-block'>
+              Manage embargoes with a CSV
+            </span>
+          </div>
+          <%= render 'bulk_actions/forms/manage_embargo_form', f: f %>
+        </div>
       </div>
     </div>
 

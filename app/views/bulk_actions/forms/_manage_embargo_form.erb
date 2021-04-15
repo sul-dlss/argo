@@ -1,0 +1,20 @@
+<% f.fields_for :manage_embargo do |manage_embargo_fields| %>
+  <div class='form-group'>
+    <%= manage_embargo_fields.label :csv_file, 'Upload a CSV file' %>
+    <p><small><em>Please note that each row should have headers for:
+    <ul>
+      <li>Druid</li>
+      <li>Release_date (in YYYY-MM-DD format)</li>
+      <li>Rights</li>
+    </ul>
+    </em></small></p>
+    <p><small><em>Valid values for rights are:
+    <ul>
+      <% Constants::REGISTRATION_RIGHTS_OPTIONS.each do |label, value| %>
+        <li><%= value %> (<%= label %>)</li>
+      <% end %>
+    </ul>
+    </em></small></p>
+    <%= manage_embargo_fields.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+  </div>
+<% end %>

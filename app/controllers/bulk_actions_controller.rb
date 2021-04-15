@@ -70,7 +70,8 @@ class BulkActionsController < ApplicationController
         copyright_statement copyright_statement_option
         license license_option
         use_statement use_statement_option
-      ]
+      ],
+      manage_embargo: [:csv_file]
     )
   end
 end

@@ -18,7 +18,7 @@ export default class extends Controller {
 
   // Toggles visibility of common fields based on selected tab
   toggleCommonFieldVisibility(selectedTab) {
-    const tabsWithUncommonFields = ['CreateVirtualObjectsJob', 'ImportTagsJob', 'RegisterDruidsJob', 'SetCatkeysAndBarcodesCsvJob']
+    const tabsWithUncommonFields = ['CreateVirtualObjectsJob', 'ImportTagsJob', 'RegisterDruidsJob', 'SetCatkeysAndBarcodesCsvJob', 'ManageEmbargoesJob']
 
     // Hide common fields for tab IDs present in tabsWithUncommonFields
     this.commonFieldsTarget.hidden = tabsWithUncommonFields.includes(selectedTab)
