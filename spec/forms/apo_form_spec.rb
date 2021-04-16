@@ -105,6 +105,47 @@ RSpec.describe ApoForm do
       let(:default_access) { { access: 'world' } }
 
       it { is_expected.to eq 'world' }
+
+      describe 'stanford variation' do
+        let(:administrative) do
+          {
+            hasAdminPolicy: 'druid:xx666zz7777',
+            defaultAccess: {
+              access: 'stanford',
+              download: 'none'
+            }
+          }
+        end
+
+        it { is_expected.to eq 'stanford-nd' }
+      end
+
+      describe 'location based' do
+        let(:administrative) do
+          {
+            hasAdminPolicy: 'druid:xx666zz7777',
+            defaultAccess: {
+              access: 'location-based',
+              readLocation: 'ars'
+            }
+          }
+        end
+
+        it { is_expected.to eq 'loc:ars' }
+      end
+
+      describe 'controlled digital lending' do
+        let(:administrative) do
+          {
+            hasAdminPolicy: 'druid:xx666zz7777',
+            defaultAccess: {
+              controlledDigitalLending: true
+            }
+          }
+        end
+
+        it { is_expected.to eq 'cdl-stanford-nd' }
+      end
     end
 
     describe '#use_statement' do
