@@ -7,6 +7,8 @@ import JSONRenderer from 'controllers/json_renderer'
 import Tokens from 'controllers/tokens'
 import WorkflowGrid from 'controllers/workflow_grid_controller'
 import { Application } from 'stimulus'
+import BlacklightHierarchyController from 'blacklight-hierarchy/app/assets/javascripts/blacklight/hierarchy/blacklight_hierarchy_controller'
+
 require('@github/time-elements')
 
 function pathTo(path) {
@@ -49,6 +51,7 @@ export default class Argo {
         application.register("workflow-grid", WorkflowGrid)
         application.register("collection-editor", CollectionEditor)
         application.register("tokens", Tokens)
+        application.register("b-h-collapsible", BlacklightHierarchyController)
     }
 
     apoEditor() {
