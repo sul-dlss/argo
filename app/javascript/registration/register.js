@@ -1,4 +1,3 @@
-
 import pathTo from './pathTo'
 
 export default function DorRegistration(initOpts) {
@@ -55,6 +54,10 @@ export default function DorRegistration(initOpts) {
 
       if (data.source_id) {
         params.source_id = data.source_id;
+      }
+
+      if (data.barcode_id) {
+        params.barcode_id = data.barcode_id
       }
 
       params.other_id = $t.metadataSource + ':' + data.metadata_id;

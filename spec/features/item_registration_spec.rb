@@ -3,6 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Item registration page', js: true do
+  let(:barcode) { '6772719-1001' }
   let(:user) { create(:user) }
   let(:ur_apo_id) { 'druid:hv992ry2431' }
   let(:blacklight_config) { CatalogController.blacklight_config }
@@ -40,6 +41,11 @@ RSpec.describe 'Item registration page', js: true do
     # click the button to add a row for a new item
     find('button.action-add', text: 'Add Row').click
     find_all("tr.ui-widget-content[role='row']") # try to wait for the item entry row to show up, since it's added dynamically after clicking the add btn
+
+    # fill out the barcode field
+    find("td[aria-describedby='data_barcode_id']").click # the editable field isn't present till the table cell is clicked
+    find("td[aria-describedby='data_barcode_id'] input[name='barcode_id']") # wait for the editable field to show up in the table cell
+    fill_in 'barcode_id', with: barcode
 
     # fill out the source ID field
     find("td[aria-describedby='data_source_id']").click # the editable field isn't present till the table cell is clicked
@@ -80,7 +86,8 @@ RSpec.describe 'Item registration page', js: true do
       'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
       'rights' => 'default',
       'collection' => '',
-      'source_id' => 'source:id1'
+      'source_id' => 'source:id1',
+      'barcode_id' => barcode
     )
   end
 end

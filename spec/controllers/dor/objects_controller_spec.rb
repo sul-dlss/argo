@@ -41,6 +41,27 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       end
     end
 
+    context 'when barcode_id is provided' do
+      let(:submitted) do
+        {
+          admin_policy: 'druid:hv992ry2431',
+          workflow_id: 'registrationWF',
+          label: 'test parameters for registration',
+          tag: ['Process : Content Type : Book (ltr)',
+                'Registered By : jcoyne85'],
+          rights: 'default',
+          other_id: 'label:',
+          source_id: 'foo:bar',
+          barcode_id: '36105010362304'
+        }
+      end
+
+      it 'registers the object' do
+        post :create, params: submitted
+        expect(response).to be_created
+      end
+    end
+
     context 'when register is successful with default rights' do
       let(:submitted) do
         {

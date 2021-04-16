@@ -122,6 +122,7 @@ var gridContext = function() {
       this.stopEditing(true);
       $('#data').jqGrid('setColProp','source_id',{ editable: edit });
       $('#data').jqGrid('setColProp','metadata_id',{ editable: edit });
+      $('#data').jqGrid('setColProp','barcode_id',{ editable: edit });
       $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
       $('#data').jqGrid('setColProp','label',{ editable: edit });
 
@@ -175,7 +176,7 @@ var gridContext = function() {
       var gridData = $('#data').jqGrid('getRowData');
       for (var i = 0; i < gridData.length; i++) {
         var rowData = gridData[i];
-        text += [rowData.metadata_id, rowData.source_id, rowData.druid, rowData.label].join("\t") + "\n"
+        text += [rowData.barcode_id, rowData.metadata_id, rowData.source_id, rowData.druid, rowData.label].join("\t") + "\n"
       }
       $('#id_list').val(text);
     },
@@ -244,6 +245,7 @@ var gridContext = function() {
         }
         return val
       }
+
       var metadataIdFormatter = function(val,opts,rowObject) {
         var cell = $('#data tr#'+opts.rowId+' td:eq('+opts.pos+')')
         if (val.length>0 && val.indexOf(':')>=0) {
@@ -283,6 +285,7 @@ var gridContext = function() {
         cellsubmit: 'clientArray',
         colModel: [
           {label:' ',name:'status',index:'status',width:18,sortable:false,formatter: statusFormatter },
+          {label:'Barcode',name:'barcode_id',index:'barcode_id',width:150,editable:true},
           {label:'Catkey',name:'metadata_id',index:'metadata_id',width:150,editable:true,formatter:metadataIdFormatter},
           {label:'Source ID',name:'source_id',index:'source_id',width:150,editable:true,formatter:sourceIdFormatter},
           {label:'DRUID',name:'druid',index:'druid',width:150,editable:true,formatter:druidFormatter},
