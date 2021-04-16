@@ -1,4 +1,6 @@
-<%= form_with url: item_tags_path(item_id: @pid, update: 'true'), method: 'patch' do %>
+<%= form_with url: item_tags_path(item_id: @pid, update: 'true'),
+              method: 'patch',
+              local: true do %>
   <% @tags.each_with_index do |tag, count| %>
     <div class="form-group">
       <div class="input-group">
