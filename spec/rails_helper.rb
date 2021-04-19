@@ -19,7 +19,8 @@ WebMock.disable_net_connect!(allow_localhost: true,
                                'dor-indexing-app',
                                'dor-services-app',
                                'workflow',
-                               'techmd'
+                               'techmd',
+                               'sdr-api'
                              ])
 
 require 'simplecov'

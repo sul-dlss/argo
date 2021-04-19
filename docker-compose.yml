@@ -77,6 +77,28 @@ services:
       - suri
       - redis
 
+  sdr-api:
+    image: suldlss/sdr-api:latest
+    ports:
+      - 3006:3000
+    environment:
+      DATABASE_NAME: sdr
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
+      RAILS_LOG_TO_STDOUT: 'true'
+      USER_EMAIL: argo@dlss.sul.stanford.edu
+      USER_PASSWORD: notusedanywhere
+      SECRET_KEY_BASE: 769171f88c527d564fb65b4b7ef712d5ae9761a21e26a41cd7c88eb0af89c74f857b9be4089119f71cf806dfc8bf9d9d2f0df91c00b119c96f462b46ebf43b0f
+      SETTINGS__WORKFLOW__URL: http://workflow:3000
+      SETTINGS__DOR_SERVICES__URL: http://dor-services-app:3000/
+      # To generate the token: docker-compose run dor-services-app rake generate_token
+      SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
+    depends_on:
+      - db
+      - dor-services-app
+
   solr:
     image: solr:7
     volumes:

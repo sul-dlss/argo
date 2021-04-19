@@ -12,6 +12,7 @@ import 'modules/populate_druids'
 import 'modules/sharing'
 import TagsAutocomplete from 'modules/tags_autocomplete'
 import Form from 'modules/apo_form'
+import bsCustomFileInput from 'bs-custom-file-input'
 
 require('@github/time-elements')
 
@@ -56,6 +57,7 @@ export default class Argo {
         this.apoEditor()
         this.collapsableSections()
         this.blacklight()
+        bsCustomFileInput.init() // Used for the agreement registration form
     }
 
     // Because blacklight doesn't yet support turbo, we need to manually initialize

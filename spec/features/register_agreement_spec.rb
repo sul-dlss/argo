@@ -3,7 +3,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Register an Agreement', js: true do
+  include Dry::Monads[:result]
   let(:user) { create(:user) }
+  let(:conn) { instance_double(SdrClient::Connection) }
+  let(:blacklight_config) { CatalogController.blacklight_config }
+  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
     sign_in user, groups: ['sdr:administrator-role']
@@ -14,8 +18,7 @@ RSpec.describe 'Register an Agreement', js: true do
     visit new_agreement_path
     fill_in 'Title', with: 'Agreement Title'
     fill_in 'Source', with: "sauce:#{SecureRandom.alphanumeric(10)}"
-
-    attach_file 'Agreement file', 'spec/fixtures/crowdsourcing_bridget_1.xlsx', make_visible: true
+    attach_file 'Agreement File (1/2)', 'spec/fixtures/crowdsourcing_bridget_1.xlsx', make_visible: true
 
     click_button 'Create Agreement'
 
