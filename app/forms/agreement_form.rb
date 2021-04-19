@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class AgreementForm < Reform::Form
-  property :title
-  property :source_id
+  property :title, virtual: true
+  property :source_id, virtual: true
+  property :agreement_file, virtual: true
 
   validates :source_id, format: { with: /\A\w+:\w+\z/,
-    message: "must have a colon" }
+                                  message: 'must have a colon' }
 
   def persisted?
     false
@@ -13,11 +16,7 @@ class AgreementForm < Reform::Form
     []
   end
 
-  def setup_properties!(cocina_item)
-    # Since this is only for create, this is a no-op
-  end
-
-  def sync!(props)
+  def sync!(_props)
     @model = new_resource(title: title, source_id: source_id)
   end
 
