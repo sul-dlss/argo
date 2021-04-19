@@ -1,6 +1,6 @@
 <h1>Register Agreement</h1>
 <div class="row">
-  <%= form_for @form, local: true, html: { class: 'col-lg-8' } do |f| %>
+  <%= form_for @form, local: true, multipart: true, html: { class: 'col-lg-8 mb-5' } do |f| %>
     <% if @form.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@form.errors.count, "error") %> prohibited this <%= @form.model_name.human %> from being saved:</h2>
@@ -21,6 +21,11 @@
     <div class="form-group">
       <%= f.label :source_id %>
       <%= f.text_field :source_id, class: 'form-control' %>
+    </div>
+
+    <div class="custom-file mb-5">
+      <%= f.file_field :agreement_file, class: 'custom-file-input' %>
+      <%= f.label :agreement_file, class: 'custom-file-label' %>
     </div>
 
     <%= link_to 'Cancel', root_path, class: 'btn btn-link' %>
