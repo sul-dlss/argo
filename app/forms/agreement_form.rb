@@ -17,14 +17,16 @@ class AgreementForm < Reform::Form
   end
 
   def sync!(_props)
-    @model = new_resource(title: title, source_id: source_id)
+    @model = new_resource(title: title, source_id: source_id, filename: agreement_file.original_filename)
   end
 
   def save_model
-    @model = Dor::Services::Client.objects.register(params: model)
+    @model = Result.new(RegisterAgreement.register(model: model, uploaded_file: agreement_file))
   end
 
-  def new_resource(title:, source_id:)
+  class Result < Struct.new(:externalIdentifier); end
+
+  def new_resource(title:, source_id:, filename: )
     Cocina::Models.build_request(
       'type' => Cocina::Models::Vocab.agreement,
       'label' => title,
@@ -33,7 +35,20 @@ class AgreementForm < Reform::Form
       'description' => { 'title' => [{ 'value' => title }] },
       'administrative' => { 'hasAdminPolicy' => ApoConcern::UBER_APO_ID },
       'identification' => { 'sourceId' => source_id },
-      'structural' => {}
+      'structural' => {
+        'contains' => [
+          {
+            'type' => Cocina::Models::Vocab::Resources.file,
+            'label' => 'Agreement',
+            'version' => 1,
+            'structural' => {
+              'contains' => [
+                FileGenerator.generate(uploaded_file: agreement_file, label: 'Agreement file')
+              ]
+            }
+          }
+        ]
+      }
     )
   end
 end
