@@ -147,6 +147,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :agreements, only: %i[new create]
+
   resource :registration, only: :show do
     collection do
       get 'tracksheet'
