@@ -52,6 +52,7 @@
         <% if can? :create, Cocina::Models::AdminPolicy %>
           <%= link_to 'Register APO', new_apo_path, class: 'dropdown-item' %>
         <% end %>
+        <%= link_to 'Agreement', new_agreement_path, class: 'dropdown-item' %>
       </div>
     </li>
 
