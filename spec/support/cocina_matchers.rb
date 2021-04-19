@@ -3,6 +3,8 @@
 # Provides RSpec matchers for Cocina models
 RSpec::Matchers.define :a_cocina_object_with_types do |expected|
   match do |actual|
+    return false if expected[:without_order] && !match_no_orders?
+
     if expected[:content_type] && expected[:resource_types]
       match_cocina_type?(actual, expected) && match_contained_cocina_types?(actual, expected)
     elsif expected[:content_type] && expected[:viewing_direction]
@@ -14,6 +16,10 @@ RSpec::Matchers.define :a_cocina_object_with_types do |expected|
     else
       raise ArgumentError, 'must provide content_type and/or resource_types keyword args'
     end
+  end
+
+  def match_no_orders?
+    actual.structural.hasMemberOrders.blank?
   end
 
   def match_cocina_type?(actual, expected)

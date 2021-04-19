@@ -192,8 +192,12 @@ RSpec.describe ContentTypesController, type: :controller do
         patch :update, params: { item_id: pid, old_resource_type: 'document', new_resource_type: 'file', new_content_type: 'image' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
-          .with(params: a_cocina_object_with_types(resource_types: [Cocina::Models::Vocab::Resources.file, Cocina::Models::Vocab::Resources.image]))
-          .once
+          .with(
+            params: a_cocina_object_with_types(
+              resource_types: [Cocina::Models::Vocab::Resources.file, Cocina::Models::Vocab::Resources.image],
+              without_order: true
+            )
+          ).once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
 

@@ -68,7 +68,7 @@ class ContentTypesController < ApplicationController
 
   # If the new content type is a book, we need to set the viewing direction attribute in the cocina model
   def member_orders
-    return [nil] unless new_content_type.start_with?('book')
+    return [] unless new_content_type.start_with?('book')
 
     viewing_direction = if new_content_type == 'book (ltr)'
                           'left-to-right'
