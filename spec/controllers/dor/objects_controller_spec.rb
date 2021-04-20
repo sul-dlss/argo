@@ -82,9 +82,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 type: Cocina::Models::Vocab.document,
                                 label: '',
                                 version: 1,
-                                access: {
-                                  access: 'location-based'
-                                },
+                                access: {},
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
                                 }).to_json
@@ -132,8 +130,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'stanford',
-                                  download: 'stanford',
-                                  controlledDigitalLending: false
+                                  download: 'stanford'
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -145,7 +142,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"stanford","controlledDigitalLending":false,"download":"stanford"},' \
+            '"access":{"access":"stanford","download":"stanford","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
@@ -183,7 +180,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'location-based',
-                                  controlledDigitalLending: false
+                                  download: 'location-based',
+                                  readLocation: 'music'
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -195,7 +193,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"location-based","controlledDigitalLending":false,"download":"location-based","readLocation":"music"},' \
+            '"access":{"access":"location-based","download":"location-based","readLocation":"music","controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"hasMemberOrders":[{"viewingDirection":"left-to-right"}],' \
@@ -234,8 +232,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 version: 1,
                                 access: {
                                   access: 'world',
-                                  download: 'none',
-                                  controlledDigitalLending: false
+                                  download: 'none'
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -247,7 +244,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"world","controlledDigitalLending":false,"download":"none"},' \
+            '"access":{"access":"world","download":"none","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
@@ -284,9 +281,8 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 label: '',
                                 version: 1,
                                 access: {
-                                  access: 'world',
-                                  download: 'none',
-                                  controlledDigitalLending: false
+                                  access: 'dark',
+                                  download: 'none'
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -298,7 +294,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
-            '"access":{"access":"dark","controlledDigitalLending":false,"download":"none"},' \
+            '"access":{"access":"dark","download":"none","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
             '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
@@ -358,7 +354,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                 label: '',
                                 version: 1,
                                 access: {
-                                  access: 'citation-only',
+                                  access: 'stanford',
                                   download: 'none',
                                   controlledDigitalLending: true
                                 },
@@ -372,7 +368,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
           .with(
             body: '{"type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
         '"label":"test parameters for registration","version":1,' \
-        '"access":{"access":"citation-only","controlledDigitalLending":true,"download":"none"},' \
+        '"access":{"access":"stanford","download":"none","readLocation":null,"controlledDigitalLending":true},' \
         '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
         '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
         '"structural":{"hasMemberOrders":[{"viewingDirection":"left-to-right"}],' \

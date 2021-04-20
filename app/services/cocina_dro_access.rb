@@ -13,14 +13,16 @@ class CocinaDroAccess
 
     data = if rights == 'cdl-stanford-nd'
              {
-               access: 'citation-only',
+               access: 'stanford',
                download: 'none',
+               readLocation: nil,
                controlledDigitalLending: true
              }
            elsif rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
              {
                access: rights.delete_suffix('-nd'),
                download: 'none',
+               readLocation: nil,
                controlledDigitalLending: false
              }
            elsif rights.start_with?('loc:')
@@ -34,6 +36,7 @@ class CocinaDroAccess
              {
                access: rights,
                download: rights,
+               readLocation: nil,
                controlledDigitalLending: false
              }
            end

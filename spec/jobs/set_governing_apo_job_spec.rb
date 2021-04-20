@@ -70,9 +70,7 @@ RSpec.describe SetGoverningApoJob do
             'version' => 2,
             'type' => Cocina::Models::Vocab.object,
             'externalIdentifier' => pids[0],
-            'access' => {
-              'access' => 'world'
-            },
+            'access' => {},
             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
             'structural' => {},
             'identification' => {}
@@ -84,9 +82,7 @@ RSpec.describe SetGoverningApoJob do
             'version' => 3,
             'type' => Cocina::Models::Vocab.object,
             'externalIdentifier' => pids[2],
-            'access' => {
-              'access' => 'world'
-            },
+            'access' => {},
             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
             'structural' => {},
             'identification' => {}
@@ -136,9 +132,7 @@ RSpec.describe SetGoverningApoJob do
         'version' => 1,
         'type' => Cocina::Models::Vocab.object,
         'externalIdentifier' => pid,
-        'access' => {
-          'access' => 'world'
-        },
+        'access' => {},
         'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
         'structural' => {},
         'identification' => {}

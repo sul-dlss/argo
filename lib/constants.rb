@@ -39,15 +39,7 @@ module Constants
 
   COLLECTION_RIGHTS_OPTIONS = [
     %w[World world],
-    %w[Stanford stanford],
-    ['Location: Special Collections', 'loc:spec'],
-    ['Location: Music Library', 'loc:music'],
-    ['Location: Archive of Recorded Sound', 'loc:ars'],
-    ['Location: Art Library', 'loc:art'],
-    ['Location: Hoover Library', 'loc:hoover'],
-    ['Location: Media & Microtext', 'loc:m&m'],
-    ['Dark (Preserve Only)', 'dark'],
-    ['Citation Only', 'citation-only']
+    ['Dark (Preserve Only)', 'dark']
   ].freeze
 
   LICENSE_OPTIONS = {

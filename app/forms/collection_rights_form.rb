@@ -11,7 +11,7 @@ class CollectionRightsForm < AccessForm
 
   def sync
     access_additions = CocinaAccess.from_form_value(rights)
-    updated_access = model.access.new(access_additions.value!)
+    updated_access = model.access.new(access_additions.value!.except(:download, :readLocation, :controlledDigitalLending))
 
     @model = model.new(access: updated_access)
   end
@@ -24,13 +24,7 @@ class CollectionRightsForm < AccessForm
   end
 
   def derive_rights_from_cocina
-    if @model.access.readLocation
-      "loc:#{@model.access.readLocation}"
-    elsif @model.access.access == 'citation-only'
-      'none' # TODO: we could remove this if we switch to REGISTRATION_RIGHTS_OPTIONS from DEFAULT_RIGHTS_OPTIONS
-    else
-      @model.access.access
-    end
+    @model.access.access
   end
 
   def rights_list_for_apo

@@ -19,9 +19,7 @@ RSpec.describe 'Item catkey change' do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => druid,
-                           'access' => {
-                             'access' => 'world'
-                           },
+                           'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
                            'identification' => {}

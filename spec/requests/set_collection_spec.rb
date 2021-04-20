@@ -24,9 +24,7 @@ RSpec.describe 'Set the collection for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.object,
                                'externalIdentifier' => pid,
-                               'access' => {
-                                 'access' => 'world'
-                               },
+                               'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => {},
                                'identification' => {}
@@ -59,9 +57,7 @@ RSpec.describe 'Set the collection for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.object,
                                'externalIdentifier' => pid,
-                               'access' => {
-                                 'access' => 'world'
-                               },
+                               'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => { 'isMemberOf' => [collection_druid] },
                                'identification' => {}
@@ -94,9 +90,7 @@ RSpec.describe 'Set the collection for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.object,
                                'externalIdentifier' => pid,
-                               'access' => {
-                                 'access' => 'world'
-                               },
+                               'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => {
                                  'isMemberOf' => ['druid:xg999dg9393']

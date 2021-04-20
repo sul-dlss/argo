@@ -11,9 +11,7 @@ RSpec.describe VersionsController, type: :controller do
       'version' => 2,
       'type' => Cocina::Models::Vocab.object,
       'externalIdentifier' => pid,
-      'access' => {
-        'access' => 'world'
-      },
+      'access' => {},
       'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
       'structural' => {},
       'identification' => {}

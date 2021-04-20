@@ -47,9 +47,11 @@ RSpec.describe 'Show rights for an object' do
                                'externalIdentifier' => pid,
                                'access' => {
                                  'access' => 'world',
+                                 'download' => 'none',
                                  embargo: {
                                    releaseDate: '2021-02-11T00:00:00.000+00:00',
-                                   access: 'world'
+                                   access: 'world',
+                                   download: 'world'
                                  }
                                },
                                'administrative' => { hasAdminPolicy: apo_pid },
@@ -66,7 +68,7 @@ RSpec.describe 'Show rights for an object' do
                                            'label' => 'Page 1',
                                            'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
                                            'version' => 1,
-                                           'access' => { access: 'world' },
+                                           'access' => { access: 'world', download: 'none' },
                                            'administrative' => {
                                              'publish' => true,
                                              'shelve' => true,

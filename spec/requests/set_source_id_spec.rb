@@ -14,9 +14,7 @@ RSpec.describe 'Set source id for an object' do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.object,
                              'externalIdentifier' => pid,
-                             'access' => {
-                               'access' => 'world'
-                             },
+                             'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
                              'identification' => { sourceId: 'some:thing' }

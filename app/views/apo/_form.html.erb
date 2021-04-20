@@ -75,7 +75,7 @@
       <div class="form-group">
         <%= collection.label :collection_rights, "Collection Rights", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
-          <%= collection.select :collection_rights, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world'), {}, class: 'form-control' %>
+          <%= collection.select :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-control' %>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@
       <div class="form-group">
         <%= collection.label :collection_rights_catkey, "Collection Rights", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
-          <%= collection.select :collection_rights_catkey, options_for_select(Constants::DEFAULT_RIGHTS_OPTIONS, 'world'), {}, class: 'form-control' %>
+          <%= collection.select :collection_rights_catkey, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-control' %>
         </div>
       </div>
     </div>
