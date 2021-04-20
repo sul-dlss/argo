@@ -30,7 +30,7 @@ module Argo
     end
 
     # Configure action_dispatch to handle not found errors
-    config.action_dispatch.rescue_responses['ActiveFedora::ObjectNotFoundError'] = :not_found
+    config.action_dispatch.rescue_responses['Blacklight::Exceptions::RecordNotFound'] = :not_found
   end
 
   ARGO_VERSION = File.read(File.join(Rails.root, 'VERSION'))
