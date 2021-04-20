@@ -206,6 +206,8 @@ class CatalogController < ApplicationController
     _deprecated_response, @document = search_service.fetch(params[:id])
 
     @cocina = maybe_load_cocina(params[:id])
+    flash[:alert] = 'Warning: this object cannot currently be represented in the Cocina model.' if @cocina.instance_of?(NilModel)
+
     authorize! :view_metadata, @cocina
 
     object_client = Dor::Services::Client.object(params[:id])
