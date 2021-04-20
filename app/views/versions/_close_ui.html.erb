@@ -1,6 +1,8 @@
 <% if @cocina_object.instance_of?(NilModel) %>
-  <div class='alert alert-warning'>This object cannot currently be represented in the Cocina model and thus should
-    not be closed until it is made compliant.</div>
+  <div class='alert alert-warning'>
+    This object cannot currently be represented in the Cocina model and thus cannot be closed. Please check the object for possible metadata errors, such as a missing title or source id.
+    If you are unsure of what the issue is, you can ask for help on the #dlss-aaas Slack channel or email <a href="mailto:argo-feedback@lists.stanford.edu">argo-feedback@lists.stanford.edu</a>
+  </div>
 <% else %>
   <%= form_with(url: close_item_versions_path(@cocina_object.externalIdentifier), method: :post) do %>
     <div class='form-group'>
