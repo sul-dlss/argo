@@ -30,16 +30,16 @@ class Ability
 
     can %i[view_metadata view_content], [Cocina::Models::DRO, Cocina::Models::Collection, Cocina::Models::AdminPolicy] if current_user.viewer?
 
-    can :manage_item, Cocina::Models::AdminPolicy do |cocina|
-      can_manage_items? current_user.roles(cocina.externalIdentifier)
+    can :manage_item, Cocina::Models::AdminPolicy do |cocina_object|
+      can_manage_items? current_user.roles(cocina_object.externalIdentifier)
     end
 
-    can :manage_item, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina|
-      can_manage_items? current_user.roles(cocina.administrative.hasAdminPolicy)
+    can :manage_item, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
+      can_manage_items? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
-    can :manage_desc_metadata, Cocina::Models::AdminPolicy do |admin_policy|
-      can_edit_desc_metadata? current_user.roles(admin_policy.externalIdentifier)
+    can :manage_desc_metadata, Cocina::Models::AdminPolicy do |cocina_admin_policy|
+      can_edit_desc_metadata? current_user.roles(cocina_admin_policy.externalIdentifier)
     end
 
     can :manage_desc_metadata, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
@@ -51,12 +51,17 @@ class Ability
       can_manage_items?(current_user.roles(new_apo_id)) && can?(:manage_item, cocina_object)
     end
 
-    can :view_content, Cocina::Models::DRO do |dro|
-      can_view? current_user.roles(dro.administrative.hasAdminPolicy)
+    can :view_content, Cocina::Models::DRO do |cocina_item|
+      can_view? current_user.roles(cocina_item.administrative.hasAdminPolicy)
     end
 
-    can :view_metadata, [Cocina::Models::Collection, Cocina::Models::DRO, Cocina::Models::AdminPolicy] do |dro|
-      can_view? current_user.roles(dro.administrative.hasAdminPolicy)
+    can :view_metadata, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
+      can_view? current_user.roles(cocina_object.administrative.hasAdminPolicy)
+    end
+
+    can :view_metadata, Cocina::Models::AdminPolicy do |cocina_admin_policy|
+      can_view?(current_user.roles(cocina_admin_policy.externalIdentifier)) ||
+        can_view?(current_user.roles(cocina_admin_policy.administrative.hasAdminPolicy))
     end
   end
 
