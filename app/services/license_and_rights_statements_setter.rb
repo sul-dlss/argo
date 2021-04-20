@@ -46,7 +46,7 @@ class LicenseAndRightsStatementsSetter
 
     open_new_version! unless state_service.allows_modification?
 
-    change_set_persister_class.update(cocina_object, change_set)
+    change_set.save
   end
 
   private
@@ -71,10 +71,12 @@ class LicenseAndRightsStatementsSetter
   end
 
   def change_set
-    change_set_class.new do |change|
-      change.license = license unless license.nil?
-      change.copyright_statement = copyright_statement unless copyright_statement.nil?
-      change.use_statement = use_statement unless use_statement.nil?
+    args = {}
+    args[:license] = license unless license.nil?
+    args[:copyright_statement] = copyright_statement unless copyright_statement.nil?
+    args[:use_statement] = use_statement unless use_statement.nil?
+    change_set_class.new(cocina_object).tap do |change_set|
+      change_set.validate(args)
     end
   end
 
@@ -83,14 +85,6 @@ class LicenseAndRightsStatementsSetter
       ItemChangeSet
     elsif cocina_object.collection?
       CollectionChangeSet
-    end
-  end
-
-  def change_set_persister_class
-    if cocina_object.dro?
-      ItemChangeSetPersister
-    elsif cocina_object.collection?
-      CollectionChangeSetPersister
     end
   end
 
