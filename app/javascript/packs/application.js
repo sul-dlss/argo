@@ -20,6 +20,7 @@ require('jquery-ui/themes/base/all')
 import 'jquery-ui'
 import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
+import "controllers"
 
 import 'spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
 
