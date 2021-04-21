@@ -17,7 +17,7 @@ RSpec.describe 'Bulk Object Release' do
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     reload_page_until_timeout do
       page.has_css?('td', text: 'ReleaseObjectJob') &&
-        page.has_css?('td', text: 'Processing')
+        page.has_css?('td', text: 'Completed')
     end
   end
 end
