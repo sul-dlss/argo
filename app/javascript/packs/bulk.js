@@ -5,11 +5,12 @@
 function process_request(druids, action_url, req_type, req_params, success_string, success_handler_callback, error_handler_callback) {
 	cons = [];
 	$.each(druids, function(i, druid) {
-		var object_link = catalog_url(druid);
-		var url = action_url.replace('xxxxxxxxx', druid);
-		var req_obj = {url: url, type: req_type};
-		if(req_params != null) req_obj['data'] = req_params;
-		var xhr = $.ajax(req_obj);
+		const object_link = catalog_url(druid);
+		const url = action_url.replace('xxxxxxxxx', druid);
+		if(!req_params) req_params = {}
+		req_params.authenticity_token = Rails.csrfToken()
+		const req_obj = { url: url, type: req_type, data: req_params }
+		const xhr = $.ajax(req_obj);
 		cons.push(xhr);
 		xhr.done(function(response, status, xhr) {
 			success_handler(object_link, success_string, success_handler_callback);

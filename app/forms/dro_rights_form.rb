@@ -2,7 +2,7 @@
 
 # This represents the form in the modal on the item page that appears when you
 # click "Set rights" in the sidebar
-class DRORightsForm < AccessForm
+class DroRightsForm < AccessForm
   # @param [Cocina::Models::DRO] model
   # @param [String] default_rights the default rights that the APO has set. Used for labeling the select list of options
   def initialize(model, default_rights: nil)
@@ -11,7 +11,7 @@ class DRORightsForm < AccessForm
 
   # Copy the settings to the model
   def sync
-    access_additions = CocinaDROAccess.from_form_value(rights)
+    access_additions = CocinaDroAccess.from_form_value(rights)
     updated_access = model.access.new(access_additions.value!)
 
     updated_structural = model.structural.new(structural_additions)
