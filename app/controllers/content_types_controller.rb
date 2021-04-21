@@ -82,7 +82,7 @@ class ContentTypesController < ApplicationController
     @cocina_object.structural.new(
       hasMemberOrders: member_orders,
       contains: @cocina_object.structural.contains.map do |resource|
-        next resource unless resource.type == Constants::RESOURCE_TYPES[params[:old_resource_type]]
+        next resource unless resource.type == Constants::RESOURCE_TYPES[@old_resource_type]
 
         resource.new(type: Constants::RESOURCE_TYPES[params[:new_resource_type]])
       end
@@ -90,11 +90,11 @@ class ContentTypesController < ApplicationController
   end
 
   def resource_types_should_change?
-    Array(@cocina_object.structural.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
+    Array(@cocina_object.structural.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[@old_resource_type] }
   end
 
   def content_type_should_change?
-    @cocina_object.type == Constants::CONTENT_TYPES[params[:old_content_type]]
+    @cocina_object.type == Constants::CONTENT_TYPES[@old_content_type]
   end
 
   def valid_content_type?
