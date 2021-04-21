@@ -21,7 +21,7 @@ RSpec.describe 'Bulk Descriptive Metadata Download' do
 
   it 'Creates a new jobs' do
     visit new_bulk_action_path
-    select 'Download Descriptive Metadata'
+    select 'Download descriptive metadata'
 
     fill_in 'pids', with: 'druid:ab123gg7777'
     click_button 'Submit'

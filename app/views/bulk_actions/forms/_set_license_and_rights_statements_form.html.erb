@@ -1,4 +1,4 @@
-<%= f.fields_for :set_license_and_rights_statements do |license_and_rights_statements| %>
+<% f.fields_for :set_license_and_rights_statements do |license_and_rights_statements| %>
   <div class="form-group mb-0">
     <%= license_and_rights_statements.check_box :use_statement_option %>
     <%= license_and_rights_statements.label :use_statement_option, 'Update use and reproduction statement.', class: 'ml-2' %>

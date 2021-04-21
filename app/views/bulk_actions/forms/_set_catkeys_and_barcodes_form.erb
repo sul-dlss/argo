@@ -1,4 +1,4 @@
-<%= f.fields_for :set_catkeys_and_barcodes do |catkey_and_barcode_fields| %>
+<% f.fields_for :set_catkeys_and_barcodes do |catkey_and_barcode_fields| %>
   <div class="form-group">
     <%= catkey_and_barcode_fields.check_box :use_catkeys_option %>
     <%= catkey_and_barcode_fields.label :use_catkeys_option, 'Update catkeys', class: 'ml-2' %>

@@ -1,4 +1,4 @@
-<%= f.fields_for :prepare do |prepare_fields| %>
+<% f.fields_for :prepare do |prepare_fields| %>
   <div class='form-group'>
     <%= prepare_fields.label :significance, 'Change type' %>
     <%= prepare_fields.select :significance,
