@@ -1,29 +1,22 @@
-<%= form_with url: item_tags_path(item_id: @pid, update: 'true'),
+<%= form_with model: @form,
+              url: item_tags_path(item_id: @form),
               method: 'patch',
-              local: true do %>
-  <% @tags.each_with_index do |tag, count| %>
-    <div class="form-group">
-      <div class="input-group">
-        <input class="form-control tag" name="tag<%= count + 1 %>" id="tag<%= count + 1 %>" type="text" value="<%= tag %>">
-        <span class='input-group-btn'>
-          <%= link_to item_tags_path(item_id: @pid, del: 'true', tag: count + 1),
-                      method: 'patch',
-                      class: 'btn btn-secondary' do %>
-            <span class='icon-remove-sign text-danger'></span>
-          <% end %>
-        </span>
-      </div>
-    </div>
+              local: true,
+              data: { controller: 'nested-form', nested_form_selector_value: '.plain-container' } do |form| %>
+
+  <template data-nested-form-target='template'>
+    <%= form.fields_for :tags, TagsController::Tag.new, child_index: 'TEMPLATE_RECORD' do |tag_form| %>
+      <%= render 'row', form: tag_form %>
+    <% end %>
+  </template>
+
+  <%= form.fields_for :tags do |tag_form| %>
+    <%= render 'row', form: tag_form %>
   <% end %>
-  <button class='btn btn-primary'>Update</button>
-<% end %>
-<hr>
-<%= form_tag item_tags_path(item_id: @pid, add: 'true'), method: 'patch'  do %>
-  <div class='form-group'>
-    <label>Add a tag</label>
-    <input class="form-control" name="new_tag1" id="new_tag1" type="text" value="">
-    <input class="form-control" name="new_tag2" id="new_tag2" type="text" value="">
-    <input class="form-control" name="new_tag3" id="new_tag3" type="text" value="">
+
+  <div data-nested-form-target="add_item" class="mb-5">
+    <%= button_tag '+ Add another tag', type: 'button', class: "col-sm-2 btn btn-outline-primary",  data: { action: "nested-form#addAssociation" } %>
   </div>
-  <button class='btn btn-primary'>Add</button>
+
+  <button class='btn btn-primary'>Save</button>
 <% end %>

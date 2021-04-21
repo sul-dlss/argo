@@ -15,23 +15,9 @@ class TagsController < ApplicationController
 
     current_tags = tags_client.list
 
-    if params[:add]
-      tags = params.slice(:new_tag1, :new_tag2, :new_tag3).values.reject(&:empty?)
-      tags_client.create(tags: tags) if tags.any?
-    end
-
-    if params[:del]
-      tag_to_delete = current_tags[params[:tag].to_i - 1]
-      raise 'failed to delete' unless tags_client.destroy(tag: tag_to_delete)
-    end
-
-    if params[:update]
-      count = 1
-      current_tags.each do |tag|
-        tags_client.update(current: tag, new: params["tag#{count}".to_sym])
-        count += 1
-      end
-    end
+    @form = TagsForm.new(ModelProxy.new(id: params[:item_id], tags: current_tags.map { |name| Tag.new(name: name) }))
+    @form.validate(params[:tags])
+    @form.save
 
     reindex
     respond_to do |format|
@@ -40,9 +26,47 @@ class TagsController < ApplicationController
     end
   end
 
+  class ModelProxy
+    def initialize(id:, tags:)
+      @id = id
+      @tags = tags
+    end
+
+    attr_reader :tags
+
+    def to_param
+      @id
+    end
+
+    def persisted?
+      true
+    end
+  end
+
+  class Tag
+    attr_accessor :name, :id
+
+    def initialize(attrs = {})
+      self.name = attrs[:name]
+      self.id = attrs[:name]
+    end
+
+    # from https://github.com/rails/rails/blob/f95c0b7e96eb36bc3efc0c5beffbb9e84ea664e4/activerecord/lib/active_record/nested_attributes.rb#L382-L384
+    def _destroy; end
+
+    def persisted?
+      id.present?
+    end
+  end
+
   def edit
-    @pid = params[:item_id]
-    @tags = tags_client.list
+    tags = tags_client.list
+    @form = TagsForm.new(
+      ModelProxy.new(
+        id: params[:item_id],
+        tags: tags.map { |name| Tag.new(name: name, id: name) }
+      )
+    )
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
