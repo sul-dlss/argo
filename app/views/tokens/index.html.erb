@@ -1,9 +1,9 @@
 <div data-controller="tokens" data-tokens-url="<%= tokens_path %>" class="col-md-3 col-md-offset-1">
-  <div class="form-group" data-target="tokens.button">
+  <div class="form-group" data-tokens-target="button">
     <button data-action="click->tokens#fetchToken" class="btn btn-secondary">Generate new token</button>
   </div>
-  <div data-target="tokens.result" style="display: none" class="form-group">
+  <div data-tokens-target="result" style="display: none" class="form-group">
     <label for="token">Token</label>
-    <input id='token' data-target="tokens.output" class="form-control">
+    <input id='token' data-tokens-target="output" class="form-control">
   </div>
 </div>
