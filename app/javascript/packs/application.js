@@ -22,19 +22,6 @@ import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
 import "controllers"
 
-import 'spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
-
-import 'modules/apo_form'
-import 'modules/button_checker'
-import 'modules/datastream_edit'
-import 'modules/date_range_query'
-import ItemCollection from 'modules/item_collection'
-import 'modules/permission_add'
-import 'modules/permission_grant'
-import 'modules/permission_list'
-import 'modules/populate_druids'
-import 'modules/sharing'
-import TagsAutocomplete from 'modules/tags_autocomplete'
 import Argo from 'argo'
 
 import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
@@ -42,47 +29,4 @@ import 'modules/blacklight-override'
 
 // The Blacklight onLoad event works better than the regular onLoad event if
 // turbolinks is enabled.
-Blacklight.onLoad(function(){
-  new TagsAutocomplete().initialize()
-
-  $('#spreadsheet-upload-container').argoSpreadsheet()
-
-  // When the user clicks the 'MODS bulk loads' button, a lightbox is opened.
-  // The event 'loaded.blacklight.blacklight-modal' is fired just before this
-  // Blacklight lightbox is shown.
-  $('#blacklight-modal').on('loaded.blacklight.blacklight-modal', function(e){
-$('#spreadsheet-upload-container').argoSpreadsheet()
-  })
-})
-
-Blacklight.onLoad(function() {
-  $('a.disabled[data-check-url]').buttonChecker()
-})
-
-
-/*
-   Because we are in a modal dialog we need to use the 'loaded' event
-   to trigger the form validation setup.
- */
-Blacklight.onLoad(function() {
-  $('body').on('loaded.persistent-modal', function() {
-    $('#xmlEditForm').datastreamXmlEdit()
-  })
-})
-
-
-Blacklight.onLoad(function() {
-  $('[data-range-query]').dateRangeQuery()
-//  $('[data-datepicker]').datepicker()
-})
-
-Blacklight.onLoad(function() {
-  new ItemCollection().initialize()
-})
-
-
-Blacklight.onLoad(function() {
-  $('[data-populate-druids]').populateDruids()
-})
-
 Blacklight.onLoad(function() { new Argo().initialize() })

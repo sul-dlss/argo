@@ -1,3 +1,16 @@
+import 'spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
+
+import 'modules/apo_form'
+import 'modules/button_checker'
+import 'modules/datastream_edit'
+import 'modules/date_range_query'
+import ItemCollection from 'modules/item_collection'
+import 'modules/permission_add'
+import 'modules/permission_grant'
+import 'modules/permission_list'
+import 'modules/populate_druids'
+import 'modules/sharing'
+import TagsAutocomplete from 'modules/tags_autocomplete'
 import Form from 'modules/apo_form'
 
 require('@github/time-elements')
@@ -32,8 +45,57 @@ $(document).on('keyup', '#collection_catkey', function(e) {
 
 export default class Argo {
     initialize() {
+        this.tagsAutocomplete()
+        this.spreadsheet()
+        this.buttonChecker()
+        this.xmlEdit()
+        this.dateRangeQuery()
+        this.itemCollection()
+        this.populateDruids()
+
         this.apoEditor()
         this.collapsableSections()
+    }
+
+    tagsAutocomplete() {
+      new TagsAutocomplete().initialize()
+    }
+
+    spreadsheet() {
+      $('#spreadsheet-upload-container').argoSpreadsheet()
+
+      // When the user clicks the 'MODS bulk loads' button, a lightbox is opened.
+      // The event 'loaded.blacklight.blacklight-modal' is fired just before this
+      // Blacklight lightbox is shown.
+      $('#blacklight-modal').on('loaded.blacklight.blacklight-modal', function(e){
+          $('#spreadsheet-upload-container').argoSpreadsheet()
+      })
+    }
+
+    buttonChecker() {
+      $('a.disabled[data-check-url]').buttonChecker()
+    }
+
+    /*
+       Because we are in a modal dialog we need to use the 'loaded' event
+       to trigger the form validation setup.
+     */
+    xmlEdit() {
+      $('body').on('loaded.persistent-modal', function() {
+        $('#xmlEditForm').datastreamXmlEdit()
+      })
+    }
+
+    dateRangeQuery() {
+      $('[data-range-query]').dateRangeQuery()
+    }
+
+    itemCollection() {
+      new ItemCollection().initialize()
+    }
+
+    populateDruids() {
+      $('[data-populate-druids]').populateDruids()
     }
 
     apoEditor() {
