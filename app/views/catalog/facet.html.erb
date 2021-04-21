@@ -7,7 +7,7 @@
     <% component.header { facet_field_label(@facet.key) } %>
     <% component.body do %>
       <%= render 'facet_index_navigation' if @facet.index_range && @display_facet.index? %>
-      <div data-target="facet-filter.list">
+      <div data-facet-filter-target="list">
         <%= render_facet_limit(@display_facet, layout: false) %>
       </div>
     <% end %>

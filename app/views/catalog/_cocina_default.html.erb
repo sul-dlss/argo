@@ -2,8 +2,8 @@
   Cocina Model
 </h3>
 <div id="document-cocina-section" class="document-section" style="display:none" data-controller="json-renderer">
-  <script type="application/json" data-target="json-renderer.cocina">
+  <script type="application/json" data-json-renderer-target="cocina">
     <%= @cocina.to_json.html_safe %>
   </script>
-  <div class="detail" data-target="json-renderer.section"></div>
+  <div class="detail" data-json-renderer-target="section"></div>
 </div>
