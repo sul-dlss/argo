@@ -38,21 +38,12 @@ class ContentTypesController < ApplicationController
 
   def cocina_update_attributes
     {}.tap do |attributes|
-      attributes[:type] = Constants::CONTENT_TYPES[new_content_type] if content_type_should_change?
+      attributes[:type] = Constants::CONTENT_TYPES[new_content_type]
       attributes[:structural] = if resource_types_should_change?
                                   structural_with_resource_type_changes
                                 else
                                   @cocina_object.structural.new(hasMemberOrders: member_orders)
                                 end
-    end
-  end
-
-  def old_content_type
-    if @cocina_object.type == Cocina::Models::Vocab.book && @cocina_object.structural.hasMemberOrders&.first&.viewingDirection == 'right-to-left'
-      # if we have a book type, we need to also check the viewing direction
-      'book (rtl)'
-    else
-      Constants::CONTENT_TYPES.key(@cocina_object.type) || ''
     end
   end
 
@@ -93,10 +84,6 @@ class ContentTypesController < ApplicationController
     Array(@cocina_object.structural.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[params[:old_resource_type]] }
   end
 
-  def content_type_should_change?
-    @cocina_object.type == Constants::CONTENT_TYPES[params[:old_content_type]]
-  end
-
   def valid_content_type?
     Constants::CONTENT_TYPES.keys.include?(new_content_type)
   end
@@ -109,7 +96,6 @@ class ContentTypesController < ApplicationController
     raise 'missing druid' if params[:item_id].blank?
 
     @cocina_object = object_client.find
-    @old_content_type = old_content_type
     @old_resource_type = old_resource_type
   end
 end

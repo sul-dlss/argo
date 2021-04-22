@@ -33,7 +33,6 @@ function set_content_type(druids){
 	var params={
 		'new_content_type': document.getElementById('new_content_type').value,
 		'new_resource_type': document.getElementById('new_resource_type').value,
-		'old_content_type': document.getElementById('old_content_type').value,
 		'old_resource_type': document.getElementById('old_resource_type').value
 	}
 	process_patch(druids, set_content_type_url, params, "Updated");
