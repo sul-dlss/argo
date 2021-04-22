@@ -158,7 +158,6 @@ function get_tags() {
 
 function show_buttons() {
 	$('#updates').show(400);
-	$('.update_buttons').removeAttr("disabled");
 }
 
 function stop_all() {
