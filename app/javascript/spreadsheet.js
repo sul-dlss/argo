@@ -63,7 +63,7 @@
 
 // Confirmation modal dialog for when the user presses the delete button in the
 // spreadsheet bulk upload table.
-$(document).ready(function() {
+document.addEventListener("turbo:load", function() {
   // The form we want to submit has both ':' and '/' in its ID, which need to
   // be escaped
   function escapeCharacters(identifier) {

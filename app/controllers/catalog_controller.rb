@@ -61,7 +61,7 @@ class CatalogController < ApplicationController
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
     # to get the hierarchy.
     config.add_facet_field 'exploded_tag_ssim',                 label: 'Tag',                 limit: 9999,
-                                                                component: Blacklight::Hierarchy::FacetFieldListComponent,
+                                                                component: LazyTagFacetComponent,
                                                                 unless: ->(controller, _config, _response) { controller.params[:no_tags] }
     config.add_facet_field 'objectType_ssim',                   label: 'Object Type',         component: true, limit: 10
     config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE,    label: 'Content Type',        component: true, limit: 10
@@ -199,6 +199,14 @@ class CatalogController < ApplicationController
   def index
     @presenter = HomeTextPresenter.new(current_user)
     super
+  end
+
+  def lazy_tag_facet
+    (response,) = search_service.search_results
+    facet_config = facet_configuration_for_field('exploded_tag_ssim')
+    display_facet = response.aggregations[facet_config.field]
+    @facet_field_presenter = facet_config.presenter.new(facet_config, display_facet, view_context)
+    render partial: 'lazy_tag_facet'
   end
 
   def show

@@ -1,5 +1,5 @@
-<%= javascript_pack_tag 'bulk' %>
 <% content_for :head do %>
+<%= javascript_pack_tag 'bulk', 'data-turbo-track': 'reload' %>
 <script type="text/javascript">
 report_model = {
   total_rows: <%= @response['response']['numFound'] %>,

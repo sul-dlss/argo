@@ -1,7 +1,7 @@
 <% @title = 'Register DOR Objects' %>
 <% content_for :head do %>
-  <%= stylesheet_pack_tag 'registration' %>
-  <%= javascript_pack_tag 'registration' %>
+  <%= stylesheet_pack_tag 'registration', 'data-turbo-track': 'reload' %>
+  <%= javascript_pack_tag 'registration', 'data-turbo-track': 'reload' %>
 <% end %>
 
 <div id='properties' class="ui-widget" style="display: none">

@@ -21,12 +21,11 @@ import 'jquery-ui'
 import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
 import "controllers"
+import '@hotwired/turbo-rails'
 
 import Argo from 'argo'
 
 import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
 import 'modules/blacklight-override'
 
-// The Blacklight onLoad event works better than the regular onLoad event if
-// turbolinks is enabled.
-Blacklight.onLoad(function() { new Argo().initialize() })
+document.addEventListener("turbo:load", () => { new Argo().initialize() })

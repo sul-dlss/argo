@@ -268,7 +268,7 @@ function set_tags() {
 	upd_values_for_druids(tags_url, 'tags', row_processing_fn, "user supplied druids and tags.", is_invalid_row_fn, "invalid tags", get_upd_req_params_from_row_fn);
 }
 
-Blacklight.onLoad(()=>{
+document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
 	$('#prepare').on('click', () => $('#open').show(400))
