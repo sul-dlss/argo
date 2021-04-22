@@ -46,7 +46,7 @@ RSpec.describe FilesController, type: :controller do
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
         expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
         expect(response.headers['Content-Type']).to eq('application/octet-stream')
-        expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"preserved%2Bfile.txt\"; filename*=UTF-8''preserved+file.txt"
+        expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"preserved+file.txt\"; filename*=UTF-8''preserved+file.txt"
         expect(response.code).to eq('200')
         expect(Preservation::Client.objects).to have_received(:content)
           .with(druid: pid, filepath: mock_file_name, version: mock_version, on_data: Proc)
