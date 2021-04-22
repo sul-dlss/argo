@@ -35,7 +35,9 @@ RSpec.describe TagsController, type: :controller do
 
   describe '#update' do
     let(:pid) { 'druid:bc123df4567' }
-    let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
+    let(:object_client) do
+      instance_double(Dor::Services::Client::Object, find: cocina_model, administrative_tags: tags_client)
+    end
     let(:cocina_model) do
       Cocina::Models.build(
         'label' => 'My Item',
@@ -69,23 +71,37 @@ RSpec.describe TagsController, type: :controller do
 
       before do
         allow(controller).to receive(:authorize!).and_return(true)
-        allow(controller).to receive(:tags_client).and_return(tags_client)
       end
 
       it 'updates tags' do
-        post :update, params: { item_id: pid, update: 'true', tag1: 'Some : Thing : Else' }
+        post :update, params: { item_id: pid,
+                                tags: {
+                                  tags_attributes: {
+                                    '0' => { name: 'Some : Thing : Else', id: 'Some : Thing' }
+                                  }
+                                } }
         expect(tags_client).to have_received(:update).with(current: current_tag, new: 'Some : Thing : Else')
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       end
 
       it 'deletes tag' do
-        post :update, params: { item_id: pid, tag: '1', del: 'true' }
+        post :update, params: { item_id: pid,
+                                tags: {
+                                  tags_attributes: {
+                                    '0' => { name: 'Some : Thing', id: 'Some : Thing', _destroy: '1' }
+                                  }
+                                } }
         expect(tags_client).to have_received(:destroy).with(tag: current_tag)
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       end
 
       it 'adds a tag' do
-        post :update, params: { item_id: pid, new_tag1: 'New : Thing', add: 'true' }
+        post :update, params: { item_id: pid,
+                                tags: {
+                                  tags_attributes: {
+                                    '0' => { name: 'New : Thing', id: '', _destroy: '' }
+                                  }
+                                } }
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
         expect(tags_client).to have_received(:create).with(tags: ['New : Thing'])
       end

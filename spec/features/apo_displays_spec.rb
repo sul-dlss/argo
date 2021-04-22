@@ -94,7 +94,7 @@ RSpec.describe 'Viewing an Admin policy' do
 
       it 'renders the tag ui' do
         visit "/items/#{apo_druid}/tags/edit"
-        expect(page).to have_content('Update tags')
+        expect(page).to have_content('Save')
       end
     end
   end
