@@ -1,4 +1,4 @@
-<%= f.fields_for :set_governing_apo do |set_governing_apo_fields| %>
+<% f.fields_for :set_governing_apo do |set_governing_apo_fields| %>
   <div class='form-group'>
     <%= set_governing_apo_fields.label :new_apo_id, 'New governing APO' %>
     <%= set_governing_apo_fields.select(:new_apo_id, apo_list(current_user.groups), {}, class: 'form-control') %>

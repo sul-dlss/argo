@@ -1,0 +1,158 @@
+<div class='container'>
+  <h1>New Bulk Action</h1>
+
+  <%= form_for(@form, html: { 'data-controller' => 'bulk_actions' }) do |f| %>
+    <% if @form.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@form.errors.count, 'error') %> prohibited this bulk_action from being saved:</h2>
+
+        <ul>
+        <% @form.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class='form-group'>
+        <%= f.select(:action_type, action_types,
+                     {},
+                     class: 'form-control',
+                     data: { action: 'change->bulk_actions#showTab' }) %>
+
+      <div class='tab-content'>
+        <div role='tabpanel' class='tab-pane' id='DescmetadataDownloadJob'>
+          <span class='help-block'>
+            Download descriptive metadata for objects.
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane active' id='ReleaseObjectJob'>
+          <span class='help-block'>
+            Adds release tags to individual objects.
+          </span>
+          <%= render 'bulk_actions/forms/manage_release_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='SetGoverningApoJob'>
+          <span class='help-block'>
+            Moves the object to a new governing APO.
+          </span>
+          <%= render 'bulk_actions/forms/set_governing_apo_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='RemoteIndexingJob'>
+          <span class='help-block'>
+            Reindexes the DOR object to Solr
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='PurgeJob'>
+          <span class='help-block'>
+            Deletes unpublished DOR objects
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='SetCatkeysAndBarcodesJob'>
+          <span class='help-block'>
+            Adds or updates catkeys and/or barcodes associated with objects.
+          </span>
+          <p>You must have a druid list and a catkey and/or a barcode list. Lists of catkeys/barcodes (if provided) must be the same length as the list of druids and in the same order. Use a blank line to indicate that a catkey/barcode should be deleted.</p>
+          <%= render 'bulk_actions/forms/set_catkeys_and_barcodes_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='SetCatkeysAndBarcodesCsvJob'>
+          <span class='help-block'>
+            Adds or updates catkeys and/or barcodes associated with objects.
+          </span>
+          <%= render 'bulk_actions/forms/set_catkeys_and_barcodes_csv_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='PrepareJob'>
+          <span class='help-block'>
+            Open items not yet open for versioning.
+          </span>
+          <%= render 'bulk_actions/forms/prepare_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='RepublishJob'>
+          <span class='help-block'>
+            Republish DOR objects. You still need to use the normal versioning process to make sure your changes are preserved.
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='CloseVersionJob'>
+          <span class='help-block'>
+            Close a version of the items so the changes can be accessioned. The items will retain the version type (Major, Minor, or Admin) and version description as entered when the item was opened for versioning.
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='ChecksumReportJob'>
+          <span class='help-block'>
+            Download checksums of files in objects (as csv).
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='CreateVirtualObjectsJob'>
+          <div class="form-group">
+            <span class='help-block'>
+              Create one or more virtual objects.
+            </span>
+          </div>
+          <%= render 'bulk_actions/forms/create_virtual_objects_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='ExportTagsJob'>
+          <span class='help-block'>
+            Download tags as CSV (comma-separated values) for druids specified below
+          </span>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='ImportTagsJob'>
+          <span class='help-block'>
+            Upload tags as CSV (comma-separated values)
+          </span>
+          <%= render 'bulk_actions/forms/import_tags_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='RegisterDruidsJob'>
+          <div class="form-group">
+            <span class='help-block'>
+              Register druids
+            </span>
+          </div>
+          <%= render 'bulk_actions/forms/register_druids_form', f: f %>
+        </div>
+
+        <div role='tabpanel' class='tab-pane' id='SetLicenseAndRightsStatementsJob'>
+          <div class="form-group">
+            <span class='help-block'>
+              Edit license, copyright statement, and/or use &amp; reproduction statements
+            </span>
+          </div>
+          <%= render 'bulk_actions/forms/set_license_and_rights_statements_form', f: f %>
+        </div>
+      </div>
+    </div>
+
+    <div data-bulk_actions-target="commonFields" >
+      <button class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids) %>" data-target='#pids'>
+        Populate with previous search
+      </button>
+      <div class='form-group'>
+        <label>Druids to perform bulk action on</label>
+        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'></textarea>
+      </div>
+    </div>
+
+    <div class='form-group'>
+      <%= f.label :description, 'Describe this bulk action' %>
+      <%= f.text_area :description, class: 'form-control' %>
+    </div>
+    <div class=''>
+      <button type='submit' class='btn btn-primary'>Submit</button>
+    </div>
+  <% end %>
+
+  <%= link_to 'Back', bulk_actions_path %>
+</div>
