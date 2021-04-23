@@ -575,7 +575,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.13)
+  blacklight (~> 7.18)
   blacklight-hierarchy (~> 5.1)
   bootsnap (>= 1.4.2)
   byebug

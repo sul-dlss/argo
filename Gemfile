@@ -63,7 +63,7 @@ gem 'turbo-rails', '~> 0.5.9'
 gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all feature
 
 # Stanford related gems
-gem 'blacklight', '~> 7.13'
+gem 'blacklight', '~> 7.18'
 gem 'blacklight-hierarchy', '~> 5.1'
 gem 'dor-services-client', '~> 6.33'
 gem 'dor-workflow-client', '~> 3.19'

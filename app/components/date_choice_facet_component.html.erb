@@ -1,8 +1,8 @@
 <%= render(@layout.new(facet_field: @facet_field)) do |component| %>
-  <% component.with(:label) do %>
+  <% component.label do %>
     <%= @facet_field.label %>
   <% end %>
-  <% component.with(:body) do %>
+  <% component.body do %>
      <%= render Blacklight::FacetFieldListComponent.new(facet_field: @facet_field, layout: false) %>
 
     <div data-range-query data-range-path='<%= search_catalog_path %>'>
