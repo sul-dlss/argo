@@ -25,13 +25,13 @@ RSpec.describe Argo::Indexer do
 
     it 'raises a ReindexRemotelyError exception in cases of predictable failures' do
       expect(RestClient).to receive(:post).at_least(3).times.and_raise(RestClient::Exception.new(double))
-      expect(mock_default_logger).to receive(:error).with(/failed to reindex/)
+      expect(mock_default_logger).to receive(:error).at_least(:once).with(/failed to reindex/)
       expect { described_class.reindex_pid_remotely(mock_pid) }.to raise_error(Argo::Exceptions::ReindexError)
     end
 
     it 'raises a ReindexRemotelyError exception in cases of remote host is down' do
       expect(RestClient).to receive(:post).at_least(3).times.and_raise(Errno::ECONNREFUSED)
-      expect(mock_default_logger).to receive(:error).with(/failed to reindex/)
+      expect(mock_default_logger).to receive(:error).at_least(:once).with(/failed to reindex/)
       expect { described_class.reindex_pid_remotely(mock_pid) }.to raise_error(Argo::Exceptions::ReindexError)
     end
 
