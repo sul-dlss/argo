@@ -16,7 +16,7 @@ RSpec.describe Contents::FileComponent, type: :component do
   end
 
   let(:access) { instance_double(Cocina::Models::FileAccess, access: 'world') }
-  let(:admin) { instance_double(Cocina::Models::FileAdministrative, sdrPreserve: true, shelve: true) }
+  let(:admin) { instance_double(Cocina::Models::FileAdministrative, sdrPreserve: true, publish: true, shelve: true) }
 
   it 'renders the component' do
     expect(rendered.css('a[href="/items/druid:kb487gt5106/files?id=0220_MLK_Kids_Gadson_459-25.tif"]').to_html)
