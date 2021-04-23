@@ -22,7 +22,7 @@ module Contents
 
     def routing
       [].tap do |vals|
-        vals << 'publish' if access.access == 'world' # TODO: change this when publish is added to cocina
+        vals << 'publish' if administrative.publish
         vals << 'shelve' if administrative.shelve
         vals << 'preserve' if administrative.sdrPreserve
       end.join('/')
