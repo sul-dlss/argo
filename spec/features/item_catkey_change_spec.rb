@@ -6,27 +6,11 @@ RSpec.describe 'Item catkey change' do
   before do
     sign_in create(:user), groups: ['sdr:administrator-role']
     allow(StateService).to receive(:new).and_return(state_service)
-    allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-  end
-
-  let(:blacklight_config) { CatalogController.blacklight_config }
-  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
-  let(:druid) { 'druid:kv840xx0000' }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:cocina_model) do
-    Cocina::Models.build({
-                           'label' => 'My ETD',
-                           'version' => 1,
-                           'type' => Cocina::Models::Vocab.object,
-                           'externalIdentifier' => druid,
-                           'access' => {},
-                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {},
-                           'identification' => {}
-                         })
   end
 
   describe 'when modification is not allowed' do
+    let(:item) { FactoryBot.create_for_repository(:item) }
+    let(:druid) { item.externalIdentifier }
     let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     it 'cannot change the catkey' do
@@ -39,6 +23,24 @@ RSpec.describe 'Item catkey change' do
   end
 
   describe 'when modification is allowed' do
+    let(:blacklight_config) { CatalogController.blacklight_config }
+    let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
+    let(:druid) { 'druid:kv840xx0000' }
+    let(:cocina_model) do
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => druid,
+                             'access' => {
+                               'access' => 'world',
+                               'download' => 'world'
+                             },
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
+    end
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
@@ -57,6 +59,8 @@ RSpec.describe 'Item catkey change' do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, milestones: [], workflow_routes: workflow_routes) }
 
     before do
+      allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+
       # The indexer calls to the workflow service, so stub that out as it's unimportant to this test.
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
