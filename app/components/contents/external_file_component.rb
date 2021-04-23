@@ -10,7 +10,7 @@ module Contents
 
     attr_reader :resource_id, :filename
 
-    def object_id
+    def druid
       druid, = resource_id.split('_')
       "druid:#{druid}"
     end
