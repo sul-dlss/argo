@@ -13,8 +13,7 @@ class DroRightsForm < AccessForm
   def sync
     access_additions = CocinaDroAccess.from_form_value(rights)
     updated_access = model.access.new(access_additions.value!)
-
-    updated_structural = model.structural.new(structural_additions)
+    updated_structural = model.structural.new(structural_additions(access_additions.value!))
     @model = model.new(access: updated_access, structural: updated_structural)
   end
 
@@ -22,20 +21,25 @@ class DroRightsForm < AccessForm
 
   # @param structural [Cocina::Models::DROStructural] the DRO structural metadata to modify
   # @return [Hash<Symbol,String>] a hash representing a subset of the Structural subschema of the Cocina model
-  def structural_additions
+  def structural_additions(new_object_access)
     # Convert to hash so we can mutate it
-    model.structural.to_h.tap do |structure_hash|
-      if rights == 'dark' && model.structural&.contains&.any?
-        structure_hash[:contains].each do |fileset|
-          fileset[:structural][:contains].each do |file|
-            # Ensure files attached to dark objects are neither published nor shelved
-            file[:access].merge!(access: 'dark')
-            file[:administrative].merge!(publish: false)
-            file[:administrative].merge!(shelve: false)
-          end
+    structure_hash = model.structural.to_h
+    Array(structure_hash[:contains]).each do |fileset|
+      fileset[:structural][:contains].each do |file|
+        case rights
+        when 'dark'
+          # Ensure files attached to dark objects are neither published nor shelved
+          file[:access].merge!(access: 'dark', download: 'none', controlledDigitalLending: false, readLocation: nil)
+          file[:administrative].merge!(publish: false)
+          file[:administrative].merge!(shelve: false)
+        when 'citation-only'
+          file[:access].merge!(access: 'dark', download: 'none', controlledDigitalLending: false, readLocation: nil)
+        else
+          file[:access].merge!(new_object_access)
         end
       end
     end
+    structure_hash
   end
 
   # Used by AccessForm#validate

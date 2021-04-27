@@ -65,13 +65,13 @@ gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all fe
 # Stanford related gems
 gem 'blacklight', '~> 7.13'
 gem 'blacklight-hierarchy', '~> 5.1'
-gem 'dor-services-client', '~> 6.30'
+gem 'dor-services-client', '~> 6.33'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '~> 3.2'
 gem 'rsolr'
-gem 'sdr-client', '~> 0.55.1'
+gem 'sdr-client', '~> 0.56'
 
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'

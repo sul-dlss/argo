@@ -112,7 +112,7 @@ RSpec.describe ItemChangeSetPersister do
           type: Cocina::Models::Vocab.object,
           version: 1,
           access: {
-            embargo: { releaseDate: '2040-04-04', access: 'world' },
+            embargo: { releaseDate: '2040-04-04', access: 'world', download: 'world' },
             copyright: copyright_statement_before,
             license: license_before,
             useAndReproductionStatement: use_statement_before
@@ -126,8 +126,10 @@ RSpec.describe ItemChangeSetPersister do
           params: a_cocina_object_with_access(
             embargo: {
               releaseDate: '2055-07-17',
-              access: 'world'
+              access: 'world',
+              download: 'world'
             },
+            access: 'dark',
             copyright: copyright_statement_before,
             license: license_before,
             useAndReproductionStatement: use_statement_before

@@ -22,9 +22,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
       'version' => 2,
       'type' => Cocina::Models::Vocab.object,
       'externalIdentifier' => pids[0],
-      'access' => {
-        'access' => 'world'
-      },
+      'access' => {},
       'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
       'structural' => {},
       'identification' => {

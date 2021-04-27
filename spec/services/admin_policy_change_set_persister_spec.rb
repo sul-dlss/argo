@@ -73,6 +73,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
               access: 'world',
               controlledDigitalLending: false,
               download: 'world',
+              readLocation: nil,
               copyright: 'My copyright statement',
               license: 'https://creativecommons.org/licenses/by-nc/3.0/',
               useAndReproductionStatement: 'My use and reproduction statement'

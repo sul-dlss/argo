@@ -18,9 +18,7 @@ RSpec.describe ContentTypesController, type: :controller do
       'version' => 1,
       'type' => content_type,
       'externalIdentifier' => pid,
-      'access' => {
-        'access' => 'world'
-      },
+      'access' => {},
       'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
       'structural' => structural,
       'identification' => {}
@@ -32,9 +30,7 @@ RSpec.describe ContentTypesController, type: :controller do
       'version' => 1,
       'type' => content_type,
       'externalIdentifier' => pid,
-      'access' => {
-        'access' => 'world'
-      },
+      'access' => {},
       'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
       'structural' => structural_with_member_orders,
       'identification' => {}

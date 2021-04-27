@@ -23,9 +23,11 @@ RSpec.describe 'Set rights for an object' do
                                'externalIdentifier' => pid,
                                'access' => {
                                  'access' => 'world',
+                                 'download' => 'world',
                                  embargo: {
                                    releaseDate: '2021-02-11T00:00:00.000+00:00',
-                                   access: 'world'
+                                   access: 'world',
+                                   download: 'world'
                                  }
                                },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -42,7 +44,7 @@ RSpec.describe 'Set rights for an object' do
                                            'label' => 'Page 1',
                                            'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
                                            'version' => 1,
-                                           'access' => { access: 'world' },
+                                           'access' => { access: 'world', download: 'world' },
                                            'administrative' => {
                                              'publish' => true,
                                              'shelve' => true,
@@ -66,10 +68,12 @@ RSpec.describe 'Set rights for an object' do
               'access' => {
                 'access' => 'dark',
                 'download' => 'none',
+                'readLocation' => nil,
                 'controlledDigitalLending' => false,
                 embargo: {
                   releaseDate: '2021-02-11T00:00:00.000+00:00',
-                  access: 'world'
+                  access: 'world',
+                  download: 'world'
                 }
               },
               'structural' => {
@@ -86,7 +90,7 @@ RSpec.describe 'Set rights for an object' do
                           'label' => 'Page 1',
                           'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
                           'version' => 1,
-                          'access' => { access: 'dark' },
+                          'access' => { access: 'dark', download: 'none', readLocation: nil, controlledDigitalLending: false },
                           'administrative' => { 'shelve' => false },
                           'filename' => 'page1.txt'
                         }
@@ -115,11 +119,44 @@ RSpec.describe 'Set rights for an object' do
               'access' => {
                 'access' => 'stanford',
                 'download' => 'stanford',
+                'readLocation' => nil,
                 'controlledDigitalLending' => false,
                 'embargo' => {
                   'releaseDate' => '2021-02-11T00:00:00.000+00:00',
-                  'access' => 'world'
+                  'access' => 'world',
+                  'download' => 'world'
                 }
+              },
+              'structural' => {
+                'contains' => [
+                  {
+                    'externalIdentifier' => 'cc243mg0841_1',
+                    'label' => 'Fileset 1',
+                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    'version' => 1,
+                    'structural' => {
+                      'contains' => [
+                        { 'externalIdentifier' => 'cc243mg0841_1',
+                          'label' => 'Page 1',
+                          'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                          'version' => 1,
+                          'access' => {
+                            'access' => 'stanford',
+                            'download' => 'stanford',
+                            'readLocation' => nil,
+                            'controlledDigitalLending' => false
+                          },
+                          'administrative' => {
+                            'publish' => true,
+                            'shelve' => true,
+                            'sdrPreserve' => true
+                          },
+                          'hasMessageDigests' => [],
+                          'filename' => 'page1.txt' }
+                      ]
+                    }
+                  }
+                ]
               }
             }
           )
@@ -139,13 +176,46 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'citation-only',
+                'access' => 'stanford',
                 'download' => 'none',
+                'readLocation' => nil,
                 'controlledDigitalLending' => true,
                 'embargo' => {
                   'releaseDate' => '2021-02-11T00:00:00.000+00:00',
-                  'access' => 'world'
+                  'access' => 'world',
+                  'download' => 'world'
                 }
+              },
+              'structural' => {
+                'contains' => [
+                  {
+                    'externalIdentifier' => 'cc243mg0841_1',
+                    'label' => 'Fileset 1',
+                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    'version' => 1,
+                    'structural' => {
+                      'contains' => [
+                        { 'externalIdentifier' => 'cc243mg0841_1',
+                          'label' => 'Page 1',
+                          'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                          'version' => 1,
+                          'access' => {
+                            'access' => 'stanford',
+                            'download' => 'none',
+                            'readLocation' => nil,
+                            'controlledDigitalLending' => true
+                          },
+                          'administrative' => {
+                            'publish' => true,
+                            'shelve' => true,
+                            'sdrPreserve' => true
+                          },
+                          'hasMessageDigests' => [],
+                          'filename' => 'page1.txt' }
+                      ]
+                    }
+                  }
+                ]
               }
             }
           )
@@ -168,12 +238,13 @@ RSpec.describe 'Set rights for an object' do
                                  'type' => Cocina::Models::Vocab.object,
                                  'externalIdentifier' => pid,
                                  'access' => {
-                                   'access' => 'citation-only',
+                                   'access' => 'stanford',
                                    'download' => 'none',
                                    'controlledDigitalLending' => true,
                                    'embargo' => {
                                      releaseDate: '2021-02-11T00:00:00.000+00:00',
-                                     access: 'world'
+                                     access: 'world',
+                                     download: 'world'
                                    }
                                  },
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -190,7 +261,12 @@ RSpec.describe 'Set rights for an object' do
                                              'label' => 'Page 1',
                                              'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
                                              'version' => 1,
-                                             'access' => { access: 'world' },
+                                             'access' => {
+                                               'access' => 'world',
+                                               'download' => 'world',
+                                               'readLocation' => nil,
+                                               'controlledDigitalLending' => false
+                                             },
                                              'administrative' => {
                                                'publish' => true,
                                                'shelve' => true,
@@ -213,10 +289,12 @@ RSpec.describe 'Set rights for an object' do
               'access' => {
                 'access' => 'world',
                 'download' => 'world',
+                'readLocation' => nil,
                 'controlledDigitalLending' => false,
                 'embargo' => {
                   'releaseDate' => '2021-02-11T00:00:00.000+00:00',
-                  'access' => 'world'
+                  'access' => 'world',
+                  'download' => 'world'
                 }
               }
             }
@@ -225,6 +303,65 @@ RSpec.describe 'Set rights for an object' do
 
         it 'sets the access' do
           post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'world' } }
+          expect(response).to redirect_to(solr_document_path(pid))
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+        end
+      end
+
+      context 'when setting citation-only access' do
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              'access' => {
+                'access' => 'citation-only',
+                'download' => 'none',
+                'readLocation' => nil,
+                'controlledDigitalLending' => false,
+                'embargo' => {
+                  'releaseDate' => '2021-02-11T00:00:00.000+00:00',
+                  'access' => 'world',
+                  'download' => 'world'
+                }
+              },
+              'structural' => {
+                'contains' => [
+                  {
+                    'externalIdentifier' => 'cc243mg0841_1',
+                    'label' => 'Fileset 1',
+                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    'version' => 1,
+                    'structural' => {
+                      'contains' => [
+                        { 'externalIdentifier' => 'cc243mg0841_1',
+                          'label' => 'Page 1',
+                          'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                          'version' => 1,
+                          'access' => {
+                            'access' => 'dark',
+                            'download' => 'none',
+                            'readLocation' => nil,
+                            'controlledDigitalLending' => false
+                          },
+                          'administrative' => {
+                            'publish' => true,
+                            'shelve' => true,
+                            'sdrPreserve' => true
+                          },
+                          'hasMessageDigests' => [],
+                          'filename' => 'page1.txt' }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          )
+        end
+
+        it 'sets the access' do
+          post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'citation-only' } }
           expect(response).to redirect_to(solr_document_path(pid))
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
@@ -268,39 +405,19 @@ RSpec.describe 'Set rights for an object' do
         end
       end
 
-      context 'when setting an object to stanford-only' do
-        let(:updated_model) do
-          cocina_model.new(
-            {
-              'access' => {
-                'access' => 'stanford'
-              }
-            }
-          )
-        end
-
-        it 'sets the access' do
-          post "/items/#{pid}/set_rights", params: { collection_rights_form: { rights: 'stanford' } }
-          expect(response).to redirect_to(solr_document_path(pid))
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
-        end
-      end
-
       context 'when a bulk request' do
         let(:updated_model) do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'stanford'
+                'access' => 'dark'
               }
             }
           )
         end
 
         it 'sets the access' do
-          post "/items/#{pid}/set_rights", params: { bulk: true, dro_rights_form: { rights: 'stanford' } }
+          post "/items/#{pid}/set_rights", params: { bulk: true, dro_rights_form: { rights: 'dark' } }
           expect(response).to have_http_status(:ok)
           expect(object_client).to have_received(:update)
             .with(params: updated_model)

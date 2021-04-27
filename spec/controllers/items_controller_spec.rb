@@ -21,7 +21,7 @@ RSpec.describe ItemsController, type: :controller do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => pid,
-                           'access' => { 'access' => 'world' },
+                           'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
                            'identification' => {
@@ -88,10 +88,12 @@ RSpec.describe ItemsController, type: :controller do
                              'type' => Cocina::Models::Vocab.object,
                              'externalIdentifier' => pid,
                              'access' => {
-                               'access' => 'world',
+                               'access' => 'stanford',
+                               'download' => 'stanford',
                                'embargo' => {
                                  'releaseDate' => '2040-05-05',
-                                 'access' => 'world'
+                                 'access' => 'world',
+                                 'download' => 'world'
                                }
                              },
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -174,7 +176,7 @@ RSpec.describe ItemsController, type: :controller do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.object,
                              'externalIdentifier' => pid,
-                             'access' => { 'access' => 'world' },
+                             'access' => {},
                              'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                              'structural' => structural
                            })
@@ -194,7 +196,7 @@ RSpec.describe ItemsController, type: :controller do
                                  'version' => 1,
                                  'type' => Cocina::Models::Vocab.object,
                                  'externalIdentifier' => pid,
-                                 'access' => { 'access' => 'world' },
+                                 'access' => {},
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
                                })
@@ -220,7 +222,7 @@ RSpec.describe ItemsController, type: :controller do
                                  'version' => 1,
                                  'type' => Cocina::Models::Vocab.object,
                                  'externalIdentifier' => pid,
-                                 'access' => { 'access' => 'world' },
+                                 'access' => {},
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                  'structural' => { 'isMemberOf' => ['druid:bc555gh3434'] }
                                })
@@ -254,7 +256,7 @@ RSpec.describe ItemsController, type: :controller do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.object,
                              'externalIdentifier' => pid,
-                             'access' => { 'access' => 'world' },
+                             'access' => {},
                              'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                              'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
                            })
@@ -272,7 +274,7 @@ RSpec.describe ItemsController, type: :controller do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.object,
                                'externalIdentifier' => pid,
-                               'access' => { 'access' => 'world' },
+                               'access' => {},
                                'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
                                'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
                              })

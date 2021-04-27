@@ -20,7 +20,8 @@ RSpec.describe 'Item source id change' do
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => druid,
                            'access' => {
-                             'access' => 'world'
+                             'access' => 'world',
+                             'download' => 'world'
                            },
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
