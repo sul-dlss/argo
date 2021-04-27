@@ -9,7 +9,7 @@ class ApoForm
 
   DEFAULT_MANAGER_WORKGROUPS = %w[developer service-manager metadata-staff].freeze
 
-  attr_reader :model, :params, :default_collection_pid, :search_service
+  attr_reader :model, :params
 
   # needed so that the form routes to `/apo` rather than '/apo_form'
   def self.model_name
@@ -22,10 +22,8 @@ class ApoForm
   end
 
   # @param [Cocina::Models::AdminPolicy,NilClass] model the object to update or nil for a new item
-  # @param [Blacklight::SearchService] search_service a way to search solr
-  def initialize(model, search_service:)
+  def initialize(model)
     @model = model
-    @search_service = search_service
     self.default_rights = 'world'
     self.default_workflows = ['registrationWF']
     populate_from_model if model
@@ -56,17 +54,6 @@ class ApoForm
     manage_permissions + view_permissions
   end
 
-  # @return [Array<SolrDocument>]
-  def default_collection_objects
-    @default_collection_objects ||=
-      search_service
-      .fetch(default_collections, rows: default_collections.size)
-      .last
-      .sort_by do |solr_doc|
-        solr_doc.label.downcase
-      end
-  end
-
   def to_param
     model.externalIdentifier
   end
@@ -80,12 +67,6 @@ class ApoForm
   end
 
   private
-
-  def default_collections
-    return [] unless model
-
-    Array(model.administrative.collectionsForRegistration)
-  end
 
   # return a list of lists, where the sublists are pairs, with the first element being the text to display
   # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated

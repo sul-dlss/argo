@@ -11,16 +11,6 @@
   </div>
 
   <sharing data-permissions="<%= @form.permissions.to_json %>"></sharing>
-
-  <% if @form.default_collection_objects.present? %>
-    <fieldset>
-      <legend>Default Collections</legend>
-      <% @form.default_collection_objects.each_with_index do |solr_doc, index| %>
-        <%= hidden_field_tag "apo_form[collections_for_registration][#{index}][id]", solr_doc.id %>
-        <%= link_to solr_doc.label, solr_doc %> <%= link_to('(remove)', delete_collection_apo_path(collection: solr_doc.id, id: @form), confirm: 'You are about to leave the page, are you sure?') %><br>
-      <% end %>
-    </fieldset>
-  <% end %>
   <br>
 
   <div class="radio">
@@ -44,19 +34,9 @@
         Create a Collection from Symphony
       </label>
     </div>
-  <% else %>
-    <div class="radio">
-      <label>
-        <%= f.radio_button :collection_radio, 'select', data: { reveal: 'select-collection' } %>
-        Choose a Default Collection
-      </label>
-    </div>
   <% end %>
 
   <%= f.fields_for :collection do |collection| %>
-    <div id="select-collection" class="collection_div form-group" style="display:none">
-      <%= collection.select :collection, options_for_select(current_user.permitted_collections), {}, class: 'form-control' %>
-    </div>
     <div id="create-collection" class="collection_div" style="display:none">
       <div class="form-group">
         <%= collection.label :collection_title, "Collection Title", class: "col-sm-2 control-label" %>

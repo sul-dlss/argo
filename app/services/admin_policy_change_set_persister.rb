@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Writes changes on an AdminPolicy to the to the dor-services-app API
-class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
+class AdminPolicyChangeSetPersister
   # @param [Cocina::Models::AdminPolicy] model the orignal state of the model
   # @param [AdminPolicyChangeSet] change_set the values to update.
   # @return [Cocina::Models::AdminPolicy] the model with updates applied
@@ -36,11 +36,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   def update
     updated = sync
 
-    # TODO: If update went through sdr-api, we wouldn't have to start accessioning separately.
-    response = Dor::Services::Client.object(updated.externalIdentifier).update(params: updated)
-    tag_registered_by(response.externalIdentifier)
-
-    response
+    Dor::Services::Client.object(updated.externalIdentifier).update(params: updated)
   end
 
   def create
@@ -48,8 +44,10 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
     @model = Dor::Services::Client.objects.register(params: model)
 
     response = update
+    tag_registered_by(response.externalIdentifier)
 
     # Kick off the accessionWF after all updates are complete.
+    # TODO: If update went through sdr-api, we wouldn't have to start accessioning separately.
     WorkflowClientFactory.build.create_workflow_by_name(response.externalIdentifier, 'accessionWF', version: '1')
 
     response
@@ -68,7 +66,6 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
 
   delegate :use_license, :agreement_object_id, :use_statement, :copyright_statement,
            :default_rights, :title, :default_workflows, :permissions,
-           :collection_radio, :collections_for_registration, :collection,
            :registered_by, to: :change_set
 
   def tag_registered_by(pid)
@@ -92,7 +89,6 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
     administrative = {
       referencesAgreement: agreement_object_id,
       registrationWorkflow: registration_workflow,
-      collectionsForRegistration: collection_ids,
       defaultAccess: rights.value!.merge(
         license: use_license,
         copyright: copyright_statement,
@@ -109,30 +105,6 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   # update the workflows, but selected none. We filter that out for persistence.
   def registration_workflow
     default_workflows.reject(&:blank?)
-  end
-
-  # Retrieves the list of existing collections from the form and makes a new collection
-  # if they've selected that.
-  # @returns [Array<String>] a list of collection druids for this AdminPolicy
-  def collection_ids
-    # Get the ids of the existing collections from the form.
-    collection_ids = collections_for_registration.values.map { |elem| elem.fetch(:id) }
-    if collection_radio == 'create'
-      collection_ids << create_collection(model.externalIdentifier)
-    elsif collection[:collection].present? # guard against empty string
-      collection_ids << collection[:collection]
-    end
-    collection_ids
-  end
-
-  # Create a collection
-  # @param [String] apo_pid the identifier for this APO
-  # @return [String] the pid for the newly created collection
-  def create_collection(apo_pid)
-    form = CollectionForm.new
-    form.validate(collection.merge(apo_pid: apo_pid))
-    form.save
-    form.model.externalIdentifier
   end
 
   # Translate the value used on the form to the value used in Cocina

@@ -30,22 +30,23 @@ class RegistrationsController < ApplicationController
   # @return [Hash<String, String>] key represents collection druid, value represents collection title. entries sorted by title, except leading "None" option.
   def collection_list
     truncate_limit = (params[:truncate] || 60).to_i
-    collections = {}
-    registration_collection_ids_for_apo.each do |col_id|
-      col_druid = col_id.gsub(/^druid:/, '')
-      col_title_field = SolrDocument::FIELD_TITLE
+    col_title_field = SolrDocument::FIELD_TITLE
 
-      # grab the collection title from Solr, or fall back to DOR
-      solr_doc = SearchService.query("id:\"#{col_id}\"",
-                                     rows: 1,
-                                     fl: col_title_field)['response']['docs'].first
-      collections[col_id] = "#{short_label(solr_doc[col_title_field].first, truncate_limit)} (#{col_druid})"
+    # # grab the collection title from Solr, or fall back to DOR
+    docs = SearchService.query('*:*',
+                               fq: "is_governed_by_ssim:\"#{params[:apo_id]}\"",
+                               rows: 10_000,
+                               fl: col_title_field)['response']['docs']
+                        .map { |result| SolrDocument.new(result) }
+    collections = docs.sort_by(&:sw_title).map do |solr_doc|
+      [solr_doc.id, "#{short_label(solr_doc.sw_title.first, truncate_limit)} (#{solr_doc.druid})"]
     end
 
-    # before returning the list, sort by collection name, and add a "None" option at the top
-    collections = { '' => 'None' }.merge((collections.sort_by { |_k, col_title| col_title }).to_h)
+    # before returning the list add a "None" option at the top
+    collections.unshift ['', 'None']
+
     respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => collections }
+      format.json { render json: collections.to_h }
     end
   end
 
@@ -107,9 +108,5 @@ class RegistrationsController < ApplicationController
 
   def object_client
     Dor::Services::Client.object(apo_id)
-  end
-
-  def registration_collection_ids_for_apo
-    Array(object_client.find.administrative.collectionsForRegistration)
   end
 end
