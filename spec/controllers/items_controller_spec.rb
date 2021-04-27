@@ -384,10 +384,10 @@ RSpec.describe ItemsController, type: :controller do
           context "when the object doesn't allow modification" do
             let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
-            it 'returns a 400 with an error message' do
+            it 'redirects with an error message' do
               get :refresh_metadata, params: { id: pid }
-              expect(response).to have_http_status(:bad_request)
-              expect(response.body).to eq 'Object cannot be modified in its current state.'
+              expect(response).to redirect_to solr_document_path(pid)
+              expect(flash[:error]).to eq 'Object cannot be modified in its current state.'
             end
           end
         end

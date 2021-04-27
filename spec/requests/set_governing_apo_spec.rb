@@ -32,11 +32,10 @@ RSpec.describe 'Set APO for an object' do
     context 'object modification not allowed' do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
-      it 'returns a 400' do
+      it 'redirects with an error' do
         post "/items/#{pid}/set_governing_apo", params: { new_apo_id: new_apo_id }
 
-        expect(response).to have_http_status(:bad_request)
-        expect(response.body).to eq 'Object cannot be modified in its current state.'
+        expect(response).to redirect_to solr_document_path(pid)
       end
     end
 
