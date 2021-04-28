@@ -63,6 +63,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
   let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
 
+  let(:change_set1) { instance_double(ItemChangeSet, validate: true, model: item1, changed?: true) }
+  let(:change_set2) { instance_double(ItemChangeSet, validate: true, model: item2, changed?: false) }
+  let(:change_set3) { instance_double(ItemChangeSet, validate: true, model: item3, changed?: true) }
+
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
@@ -75,6 +79,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
 
     context 'when catkey and barcode selected' do
+      before do
+        allow(ItemChangeSet).to receive(:new).and_return(change_set1, change_set2, change_set3)
+      end
+
       it 'attempts to update the catkey/barcode for each druid with correct corresponding catkey/barcode' do
         params =
           {
@@ -87,11 +95,14 @@ RSpec.describe SetCatkeysAndBarcodesJob do
             }
           }
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(ItemChangeSet, buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(ItemChangeSet, buffer)
-        expect(subject).to receive(:update_catkey_and_barcode).with(ItemChangeSet, buffer)
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, buffer)
+        expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, buffer)
+        expect(subject).to receive(:update_catkey_and_barcode).with(change_set3, buffer)
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
+        expect(change_set1).to have_received(:validate).with(barcode: barcodes[0], catkey: catkeys[0])
+        expect(change_set2).to have_received(:validate).with(barcode: nil, catkey: nil)
+        expect(change_set3).to have_received(:validate).with(barcode: barcodes[2], catkey: catkeys[2])
       end
     end
 
