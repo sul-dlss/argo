@@ -22,7 +22,7 @@ RSpec.describe 'Register an Agreement', js: true do
 
     click_button 'Create Agreement'
 
-    expect(page).to have_text 'Agreement created'
+    expect(page).to have_text 'Agreement created', wait: 20
     expect(page).to have_text 'Agreement Title'
   end
 end
