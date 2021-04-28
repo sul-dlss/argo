@@ -10,7 +10,7 @@ RSpec.describe ModsulatorClient do
       described_class.normalize_mods(uploaded_filename: file_path, pretty_filename: 'foo', log: log_file)
     end
 
-    let(:file_path) { "#{::Rails.root}/spec/fixtures/crowdsourcing_bridget_1.xml" }
+    let(:file_path) { File.join(file_fixture_path, 'crowdsourcing_bridget_1.xml') }
 
     context 'when the modsulator returns a response' do
       before do
@@ -37,7 +37,7 @@ RSpec.describe ModsulatorClient do
       described_class.convert_spreadsheet_to_mods(uploaded_filename: file_path, pretty_filename: 'foo', log: log_file)
     end
 
-    let(:file_path) { "#{::Rails.root}/spec/fixtures/crowdsourcing_bridget_1.xlsx" }
+    let(:file_path) { File.join(file_fixture_path, 'crowdsourcing_bridget_1.xlsx') }
 
     before do
       stub_request(:post, Settings.modsulator_url).to_return(body: 'abc')

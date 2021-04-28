@@ -13,7 +13,6 @@ RSpec.describe ModsulatorJob, type: :job do
 
   let(:output_directory) { File.join(File.expand_path('../../tmp', __dir__), 'job_tests') }
   let(:job) { ModsulatorJob.new }
-  let(:fixtures_dir) { File.expand_path('../fixtures', __dir__) }
   let(:user) { build(:user, sunetid: 'foo') }
 
   describe 'update_metadata' do
@@ -59,7 +58,7 @@ RSpec.describe ModsulatorJob, type: :job do
   end
 
   describe 'save_metadata_xml' do
-    let(:xml_path) { File.join(fixtures_dir, 'crowdsourcing_bridget_1.xml') }
+    let(:xml_path) { file_fixture('crowdsourcing_bridget_1.xml') }
     let(:smx_path) { File.join(output_directory, 'smx.xml') }
     let(:log) { instance_double(File, puts: true) }
 
@@ -68,11 +67,11 @@ RSpec.describe ModsulatorJob, type: :job do
     end
 
     it 'writes an xml file correctly' do
-      job.save_metadata_xml(File.read(xml_path), smx_path, log)
+      job.save_metadata_xml(xml_path.read, smx_path, log)
       expect(log).to have_received(:puts).with(/^argo.bulk_metadata.bulk_log_xml_timestamp .*/)
       expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_xml_filename smx.xml')
       expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_record_count 20')
-      expect(File.read(smx_path)).to eq File.read(xml_path)
+      expect(File.read(smx_path)).to eq xml_path.read
     end
   end
 
@@ -84,9 +83,9 @@ RSpec.describe ModsulatorJob, type: :job do
 
   describe 'perform' do
     let(:test_spreadsheet_path) { File.join(output_directory, 'crowdsourcing_bridget_1.xlsx.20150101') }
-    let(:xlsx_path) { File.join(fixtures_dir, 'crowdsourcing_bridget_1.xlsx') }
-    let(:xml_path) { File.join(fixtures_dir, 'crowdsourcing_bridget_1.xml') }
-    let(:xml_data) { File.read(xml_path) }
+    let(:xlsx_path) { file_fixture('crowdsourcing_bridget_1.xlsx') }
+    let(:xml_path) { file_fixture('crowdsourcing_bridget_1.xml') }
+    let(:xml_data) { xml_path.read }
 
     it 'delivers remotely-converted data' do
       FileUtils.copy_file(xlsx_path, test_spreadsheet_path) # perform deletes upload file, so we copy fixture
