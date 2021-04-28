@@ -1,4 +1,6 @@
 <%= render BlacklightModalComponent.new do |component| %>
   <% component.header { 'Manage release' } %>
-  <% component.body { render 'show' } %>
+  <% component.body {
+    render ManageRelease::FormComponent.new(bulk_action: @bulk_action, document: @document)
+  } %>
 <% end %>
