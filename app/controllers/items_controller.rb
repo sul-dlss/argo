@@ -9,8 +9,6 @@ class ItemsController < ApplicationController
     purge_object
     source_id
     tags_bulk
-    embargo_update
-    embargo_form
   ]
 
   before_action :enforce_versioning, only: %i[
@@ -26,12 +24,6 @@ class ItemsController < ApplicationController
     detail = JSON.parse(md[1])['errors'].first['detail']
     redirect_to solr_document_path(params[:id]),
                 flash: { error: "Unable to retrieve the cocina model: #{detail.truncate(200)}" }
-  end
-
-  def embargo_form
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
   end
 
   def set_collection
@@ -116,25 +108,6 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       format.json { render json: @cocina }
-    end
-  end
-
-  def embargo_update
-    raise ArgumentError, 'Missing embargo_date parameter' unless params[:embargo_date].present?
-
-    begin
-      params[:embargo_date].to_date
-    rescue Date::Error
-      return redirect_to solr_document_path(params[:id]),
-                         flash: { error: 'Invalid date' }
-    end
-
-    change_set = ItemChangeSet.new(@cocina)
-    change_set.validate(embargo_release_date: params[:embargo_date])
-    change_set.save
-
-    respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:id]), notice: 'Embargo was successfully updated' }
     end
   end
 

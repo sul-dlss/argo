@@ -81,7 +81,7 @@ RSpec.describe 'Viewing an Admin policy' do
 
     context 'embargo form' do
       it 'renders the embargo update ui' do
-        visit "/items/#{apo_druid}/embargo_form"
+        visit "/items/#{apo_druid}/embargo/edit"
         expect(page).to have_content('Embargo')
       end
     end
