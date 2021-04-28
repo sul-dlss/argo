@@ -46,16 +46,19 @@ RSpec.describe ItemChangeSetPersister do
     let(:use_statement_before) { 'My First Use Statement' }
     let(:barcode_before) { '36105014757517' }
     let(:catkey_before) { '367268' }
+    let(:change_set) { ItemChangeSet.new(model) }
 
     before do
       allow(instance).to receive(:object_client).and_return(fake_client)
-      instance.update
     end
 
     context 'when change set has changed copyright statement' do
-      let(:change_set) { ItemChangeSet.new(copyright_statement: new_copyright_statement) }
-
       let(:new_copyright_statement) { 'A Changed Copyright Statement' }
+
+      before do
+        change_set.validate(copyright_statement: new_copyright_statement)
+        instance.update
+      end
 
       it 'invokes object client with item/DRO that has new copyright statement' do
         expect(fake_client).to have_received(:update).with(
@@ -69,9 +72,12 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed license' do
-      let(:change_set) { ItemChangeSet.new(license: new_license) }
-
       let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/' }
+
+      before do
+        change_set.validate(license: new_license)
+        instance.update
+      end
 
       it 'invokes object client with item/DRO that has new license' do
         expect(fake_client).to have_received(:update).with(
@@ -85,9 +91,12 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed use statement' do
-      let(:change_set) { ItemChangeSet.new(use_statement: new_use_statement) }
-
       let(:new_use_statement) { 'A Changed Use Statement' }
+
+      before do
+        change_set.validate(use_statement: new_use_statement)
+        instance.update
+      end
 
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
@@ -101,9 +110,6 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed embargo_release_date' do
-      let(:change_set) do
-        ItemChangeSet.new { |change| change.embargo_release_date = new_embargo_release_date }
-      end
       let(:new_embargo_release_date) { '2055-07-17' }
       let(:model) do
         Cocina::Models::DRO.new(
@@ -119,6 +125,11 @@ RSpec.describe ItemChangeSetPersister do
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
         )
+      end
+
+      before do
+        change_set.validate(embargo_release_date: new_embargo_release_date)
+        instance.update
       end
 
       it 'invokes object client with item/DRO that has new use statement' do
@@ -139,7 +150,6 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has one changed property and another nil' do
-      let(:change_set) { ItemChangeSet.new(use_statement: new_use_statement) }
       let(:model) do
         Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
@@ -156,6 +166,11 @@ RSpec.describe ItemChangeSetPersister do
       end
       let(:new_use_statement) { 'A Changed Use Statement' }
 
+      before do
+        change_set.validate(use_statement: new_use_statement)
+        instance.update
+      end
+
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
           params: a_cocina_object_with_access(
@@ -167,7 +182,9 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has no changes' do
-      let(:change_set) { ItemChangeSet.new }
+      before do
+        instance.update
+      end
 
       it 'invokes object client with item/DRO as before' do
         expect(fake_client).to have_received(:update).with(
@@ -181,9 +198,12 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed barcode' do
-      let(:change_set) { ItemChangeSet.new(barcode: new_barcode) }
-
       let(:new_barcode) { '36105014757518' }
+
+      before do
+        change_set.validate(barcode: new_barcode)
+        instance.update
+      end
 
       it 'invokes object client with item/DRO that has new barcode' do
         expect(fake_client).to have_received(:update).with(
@@ -196,7 +216,10 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has removed barcode' do
-      let(:change_set) { ItemChangeSet.new(barcode: nil) }
+      before do
+        change_set.validate(barcode: nil)
+        instance.update
+      end
 
       it 'invokes object client with item/DRO that has no barcode' do
         expect(fake_client).to have_received(:update).with(
@@ -208,9 +231,12 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed catkey' do
-      let(:change_set) { ItemChangeSet.new(catkey: new_catkey) }
-
       let(:new_catkey) { '367269' }
+
+      before do
+        change_set.validate(catkey: new_catkey)
+        instance.update
+      end
 
       it 'invokes object client with item/DRO that has new catkey' do
         expect(fake_client).to have_received(:update).with(
@@ -223,7 +249,10 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has removed catkey' do
-      let(:change_set) { ItemChangeSet.new(catkey: nil) }
+      before do
+        change_set.validate(catkey: nil)
+        instance.update
+      end
 
       it 'invokes object client with item/DRO that has no catkey' do
         expect(fake_client).to have_received(:update).with(

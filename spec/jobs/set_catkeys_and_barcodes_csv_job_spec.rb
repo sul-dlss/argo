@@ -73,10 +73,14 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2) }
+  let(:object_client3) { instance_double(Dor::Services::Client::Object, find: item3) }
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action_no_process_callback)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
   end
 
   describe '#perform' do
@@ -93,9 +97,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
           csv_file: csv_file
         }
       expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
-      expect(subject).to receive(:update_catkey_and_barcode).with(pids[0], ItemChangeSet.new(barcode: barcodes[0], catkey: catkeys[0]), buffer)
-      expect(subject).to receive(:update_catkey_and_barcode).with(pids[1], ItemChangeSet.new(barcode: nil, catkey: nil), buffer)
-      expect(subject).to receive(:update_catkey_and_barcode).with(pids[2], ItemChangeSet.new(barcode: barcodes[2], catkey: catkeys[2]), buffer)
+      expect(subject).to receive(:update_catkey_and_barcode).with(ItemChangeSet, buffer).exactly(3).times
       subject.perform(bulk_action_no_process_callback.id, params)
       expect(bulk_action_no_process_callback.druid_count_total).to eq pids.length
     end

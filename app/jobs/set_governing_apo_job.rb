@@ -35,9 +35,10 @@ class SetGoverningApoJob < GenericJob
     state_service = StateService.new(current_druid, version: cocina_item.version)
     check_can_set_governing_apo!(cocina_item, state_service)
     open_new_version(current_druid, cocina_item.version, 'Set new governing APO') unless state_service.allows_modification?
-    change_set = ItemChangeSet.new { |change| change.admin_policy_id = new_apo_id }
-    ItemChangeSetPersister.update(cocina_item, change_set)
 
+    change_set = ItemChangeSet.new(cocina_item)
+    change_set.validate(admin_policy_id: new_apo_id)
+    change_set.save
     Argo::Indexer.reindex_pid_remotely(current_druid)
 
     log.puts("#{Time.current} SetGoverningApoJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")

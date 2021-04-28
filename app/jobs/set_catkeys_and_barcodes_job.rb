@@ -22,11 +22,13 @@ class SetCatkeysAndBarcodesJob < GenericJob
       log.puts("#{Time.current} Starting SetCatkeysAndBarcodesJob for BulkAction #{bulk_action_id}")
       update_druid_count(count: update_pids.count)
       update_pids.each_with_index do |current_druid, i|
-        change_set = ItemChangeSet.new do |change|
-          change.catkey = catkeys[i] if catkeys
-          change.barcode = barcodes[i] if barcodes
-        end
-        update_catkey_and_barcode(current_druid, change_set, log) if change_set.changed?
+        cocina_object = Dor::Services::Client.object(current_druid).find
+        args = {}
+        args[:catkey] = catkeys[i] if catkeys
+        args[:barcode] = barcodes[i] if barcodes
+        change_set = ItemChangeSet.new(cocina_object)
+        change_set.validate(args)
+        update_catkey_and_barcode(change_set, log) if change_set.changed?
       end
       log.puts("#{Time.current} Finished SetCatkeysAndBarcodesJob for BulkAction #{bulk_action_id}")
     end
@@ -42,12 +44,12 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
   private
 
-  def update_catkey_and_barcode(current_druid, change_set, log)
-    log.puts("#{Time.current} Beginning SetCatkeysAndBarcodesJob for #{current_druid}")
-    cocina_object = Dor::Services::Client.object(current_druid).find
+  def update_catkey_and_barcode(change_set, log)
+    cocina_object = change_set.model
+    log.puts("#{Time.current} Beginning SetCatkeysAndBarcodesJob for #{cocina_object.externalIdentifier}")
 
     unless ability.can?(:manage_item, cocina_object)
-      log.puts("#{Time.current} Not authorized for #{current_druid}")
+      log.puts("#{Time.current} Not authorized for #{cocina_object.externalIdentifier}")
       bulk_action.increment(:druid_count_fail).save
       return
     end
@@ -55,9 +57,9 @@ class SetCatkeysAndBarcodesJob < GenericJob
     log_update(change_set, log)
 
     begin
-      state_service = StateService.new(current_druid, version: cocina_object.version)
+      state_service = StateService.new(cocina_object.externalIdentifier, version: cocina_object.version)
       open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(change_set)) unless state_service.allows_modification?
-      ItemChangeSetPersister.update(cocina_object, change_set)
+      change_set.save
 
       bulk_action.increment(:druid_count_success).save
       log.puts("#{Time.current} Catkey/barcode added/updated/removed successfully")
@@ -75,14 +77,14 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
   # rubocop:disable Style/GuardClause
   def log_update(change_set, log)
-    if change_set.catkey_changed?
+    if change_set.changed?(:catkey)
       if change_set.catkey
         log.puts("#{Time.current} Adding catkey of #{change_set.catkey}")
       else
         log.puts("#{Time.current} Removing catkey")
       end
     end
-    if change_set.barcode_changed?
+    if change_set.changed?(:barcode)
       if change_set.barcode
         log.puts("#{Time.current} Adding barcode of #{change_set.barcode}")
       else
@@ -94,14 +96,14 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
   def version_message(change_set)
     msgs = []
-    if change_set.catkey_changed?
+    if change_set.changed?(:catkey)
       msgs << if change_set.catkey
                 "Catkey updated to #{change_set.catkey}."
               else
                 'Catkey removed.'
               end
     end
-    if change_set.barcode_changed?
+    if change_set.changed?(:barcode)
       msgs << if change_set.barcode
                 "Barcode updated to #{change_set.barcode}."
               else

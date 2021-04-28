@@ -16,9 +16,9 @@ class ItemChangeSetPersister
 
   def update
     updated = model
-    updated = update_structural(updated) if collection_ids_changed?
-    updated = update_identification(updated) if source_id_changed? || catkey_changed? || barcode_changed?
-    updated = updated_administrative(updated) if admin_policy_id_changed?
+    updated = update_structural(updated) if changed?(:collection_ids)
+    updated = update_identification(updated) if changed?(:source_id) || changed?(:catkey) || changed?(:barcode)
+    updated = updated_administrative(updated) if changed?(:admin_policy_id)
     updated = updated_access(updated) if access_changed?
     object_client.update(params: updated)
   end
@@ -27,16 +27,9 @@ class ItemChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :admin_policy_id_changed?,
-           :barcode, :barcode_changed?,
-           :catkey, :catkey_changed?,
-           :collection_ids, :collection_ids_changed?,
-           :copyright_statement, :copyright_statement_changed?,
-           :embargo_release_date, :embargo_release_date_changed?,
-           :license, :license_changed?,
-           :source_id, :source_id_changed?,
-           :use_statement, :use_statement_changed?,
-           to: :change_set
+  delegate :admin_policy_id, :barcode, :catkey, :collection_ids,
+           :copyright_statement, :embargo_release_date, :license, :source_id,
+           :use_statement, :changed?, to: :change_set
 
   def object_client
     Dor::Services::Client.object(model.externalIdentifier)
@@ -57,26 +50,26 @@ class ItemChangeSetPersister
   end
 
   def access_changed?
-    copyright_statement_changed? || license_changed? || use_statement_changed? || embargo_release_date_changed?
+    changed?(:copyright_statement) || changed?(:license) || changed?(:use_statement) || changed?(:embargo_release_date)
   end
 
   def updated_access(updated)
     access_properties = {
-      copyright: copyright_statement_changed? ? copyright_statement : updated.access.copyright,
-      license: license_changed? ? license : updated.access.license,
-      useAndReproductionStatement: use_statement_changed? ? use_statement : updated.access.useAndReproductionStatement
+      copyright: changed?(:copyright_statement) ? copyright_statement : updated.access.copyright,
+      license: changed?(:license) ? license : updated.access.license,
+      useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
     }.compact
 
-    access_properties[:embargo] = updated.access.embargo.new(releaseDate: embargo_release_date) if embargo_release_date_changed?
+    access_properties[:embargo] = updated.access.embargo.new(releaseDate: embargo_release_date) if changed?(:embargo_release_date)
 
     updated.new(access: updated.access.new(access_properties))
   end
 
   def update_identification(updated)
     identification_props = updated.identification&.to_h || {}
-    identification_props[:sourceId] = source_id if source_id_changed?
-    identification_props[:barcode] = barcode if barcode_changed?
-    if catkey_changed?
+    identification_props[:sourceId] = source_id if changed?(:source_id)
+    identification_props[:barcode] = barcode if changed?(:barcode)
+    if changed?(:catkey)
       identification_props[:catalogLinks] = catkey ? [{ catalog: 'symphony', catalogRecordId: catkey }] : nil
     end
     updated.new(identification: identification_props.compact.presence)
