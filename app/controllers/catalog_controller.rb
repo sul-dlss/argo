@@ -228,12 +228,6 @@ class CatalogController < ApplicationController
                                                     versions: object_client.version.inventory)
 
     @datastreams = object_client.metadata.datastreams
-
-    @buttons_presenter = ButtonsPresenter.new(
-      manager: can?(:manage_item, @cocina),
-      solr_document: @document
-    )
-
     @techmd = TechmdService.techmd_for(druid: params[:id])
 
     respond_to do |format|

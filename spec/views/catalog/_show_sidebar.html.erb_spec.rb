@@ -14,7 +14,6 @@ RSpec.describe 'catalog/_show_sidebar.html.erb' do
     allow(view).to receive(:current_user).and_return(current_user)
     allow(controller).to receive(:current_user).and_return(current_user)
     @document = document
-    @buttons_presenter = instance_double(ButtonsPresenter, buttons: [])
   end
 
   it 'renders a list of links' do

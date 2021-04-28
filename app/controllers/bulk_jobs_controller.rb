@@ -12,11 +12,6 @@ class BulkJobsController < ApplicationController
 
     @document = find(params[:apo_id])
     @bulk_jobs = load_bulk_jobs(params[:apo_id])
-
-    @buttons_presenter = ButtonsPresenter.new(
-      manager: can?(:manage_item, @cocina),
-      solr_document: @document
-    )
   end
 
   # GET /apos/:apo_id/bulk_jobs/:time/log(.:format)

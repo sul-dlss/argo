@@ -1,0 +1,28 @@
+<div class='btn-group-vertical argo-show-btn-group' role='group' aria-label='Argo action buttons'>
+  <%= close_button %>
+  <%= open_button %>
+
+  <% if admin_policy? %>
+    <%= edit_apo %>
+    <%= create_collection %>
+  <% end %>
+
+  <%= reindex_button %>
+  <%= governing_apo_button %>
+  <%= add_workflow_button %>
+  <%= republish_button %>
+  <%= purge_button %>
+  <%= change_source_id %>
+  <%= edit_tags %>
+
+  <% if item? || collection? %>
+    <%= manage_catkey %>
+    <%= edit_collections %>
+  <% end %>
+
+  <%= content_type if item? %>
+  <%= rights unless admin_policy? %>
+  <%= refresh_metadata if symphony_record? %>
+  <%= manage_release %>
+  <%= update_embargo if embargoed? %>
+</div>
