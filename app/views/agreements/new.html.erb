@@ -1,0 +1,39 @@
+<h1>Register Agreement</h1>
+<div class="row">
+  <%= form_for @form, local: true, multipart: true, html: { class: 'col-lg-8 mb-5' } do |f| %>
+    <% if @form.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@form.errors.count, "error") %> prohibited this <%= @form.model_name.human %> from being saved:</h2>
+
+        <ul>
+          <% @form.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :title %>
+      <%= f.text_field :title, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :source_id %>
+      <%= f.text_field :source_id, class: 'form-control' %>
+    </div>
+
+    <div class="custom-file mb-5">
+      <%= f.file_field :agreement_file1, class: 'custom-file-input' %>
+      <%= f.label :agreement_file1, class: 'custom-file-label' %>
+    </div>
+
+    <div class="custom-file mb-5">
+      <%= f.file_field :agreement_file2, class: 'custom-file-input' %>
+      <%= f.label :agreement_file2, class: 'custom-file-label' %>
+    </div>
+
+    <%= link_to 'Cancel', root_path, class: 'btn btn-link' %>
+    <%= f.submit class: 'btn btn-primary' %>
+  <% end %>
+</div>
