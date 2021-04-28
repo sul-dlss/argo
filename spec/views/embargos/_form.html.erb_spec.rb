@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/_embargo_form.html.erb' do
+RSpec.describe 'embargos/_form.html.erb' do
   let(:current_user) { mock_user(admin?: true) }
 
   before do

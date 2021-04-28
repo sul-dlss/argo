@@ -80,63 +80,6 @@ RSpec.describe ItemsController, type: :controller do
     end
   end
 
-  describe '#embargo_update' do
-    let(:cocina) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::Vocab.object,
-                             'externalIdentifier' => pid,
-                             'access' => {
-                               'access' => 'stanford',
-                               'download' => 'stanford',
-                               'embargo' => {
-                                 'releaseDate' => '2040-05-05',
-                                 'access' => 'world',
-                                 'download' => 'world'
-                               }
-                             },
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             'identification' => {
-                               'catalogLinks' => catalog_links
-                             }
-                           })
-    end
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true) }
-
-    context "when they don't have manage access" do
-      it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
-        post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
-
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      it 'calls Dor::Services::Client::Embargo#update' do
-        post :embargo_update, params: { id: pid, embargo_date: '2100-01-01' }
-        expect(response).to have_http_status(:found) # redirect to catalog page
-        expect(object_service).to have_received(:update)
-      end
-
-      it 'requires a date' do
-        expect { post :embargo_update, params: { id: pid } }.to raise_error(ArgumentError)
-      end
-
-      context 'when the date is malformed' do
-        it 'shows the error' do
-          post :embargo_update, params: { id: pid, embargo_date: 'not-a-date' }
-          expect(flash[:error]).to eq 'Invalid date'
-        end
-      end
-    end
-  end
-
   describe '#tags_bulk' do
     let(:current_tag) { 'Some : Thing' }
     let(:fake_tags_client) do
