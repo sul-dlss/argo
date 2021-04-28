@@ -31,11 +31,11 @@ RSpec.describe 'Bulk jobs view' do
   end
 
   context 'on the form for creating a new bulk job', js: true do
-    let(:bulk_job_data_path) { File.expand_path('../fixtures/crowdsourcing_bridget_1.xml', __dir__) }
+    let(:bulk_job_data_path) { file_fixture('crowdsourcing_bridget_1.xml') }
 
     before do
       stub_request(:post, Settings.normalizer_url)
-        .to_return(status: 200, body: File.read(bulk_job_data_path), headers: {})
+        .to_return(status: 200, body: bulk_job_data_path.read, headers: {})
     end
 
     it 'click submit button opens bulk upload form' do
