@@ -4,8 +4,7 @@
 class CocinaDroAccess
   extend Dry::Monads[:maybe]
 
-  # @param [String] rights the rights representation from the form (must be one of the keys in Dor::RightsMetadataDS::RIGHTS_TYPE_CODES, or 'default',
-  # see the now de-coupled dor-services gem)
+  # @param [String] rights the rights representation from the form (must be one of the keys in Constants::REGISTRATION_RIGHTS_OPTIONS, or 'default')
   # @return [Maybe<Hash<Symbol,String>>] a hash representing a subset of the Access subschema of the Cocina model
   def self.from_form_value(rights)
     # Default only appears on the registration form, not the update form.
