@@ -18,7 +18,7 @@ RSpec.describe 'Register an Agreement', js: true do
     visit new_agreement_path
     fill_in 'Title', with: 'Agreement Title'
     fill_in 'Source', with: "sauce:#{SecureRandom.alphanumeric(10)}"
-    attach_file 'Agreement File (1/2)', 'spec/fixtures/crowdsourcing_bridget_1.xlsx', make_visible: true
+    attach_file 'Agreement File (1/2)', file_fixture('crowdsourcing_bridget_1.xlsx'), make_visible: true
 
     click_button 'Create Agreement'
 
