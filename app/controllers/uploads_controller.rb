@@ -23,7 +23,7 @@ class UploadsController < ApplicationController
                                 params[:filetypes],
                                 params[:note])
 
-    redirect_to apo_bulk_jobs_path(params[:apo_id])
+    redirect_to apo_bulk_jobs_path(params[:apo_id]), notice: 'Bulk processing started'
   end
 
   private
