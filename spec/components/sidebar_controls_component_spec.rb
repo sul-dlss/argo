@@ -94,10 +94,9 @@ RSpec.describe SidebarControlsComponent, type: :component do
         expect(rendered.css("a[href='/items/druid:zt570qh4444/workflows/new']").inner_text).to eq 'Add workflow'
         expect(rendered.css("a[href='/dor/republish/druid:zt570qh4444']").inner_text).to eq 'Republish'
         expect(rendered.css("a.disabled[data-confirm][data-method='delete'][href='/items/druid:zt570qh4444/purge']").inner_text).to eq 'Purge'
-        expect(rendered.css("a[href='/items/druid:zt570qh4444/source_id_ui']").inner_text).to eq 'Change source id'
         expect(rendered.css("a[href='/items/druid:zt570qh4444/tags/edit']").inner_text).to eq 'Edit tags'
         expect(rendered.css("a[href='/items/druid:zt570qh4444/manage_release']").inner_text).to eq 'Manage release'
-        expect(rendered.css('a').size).to eq 12
+        expect(rendered.css('a').size).to eq 11
       end
     end
   end
