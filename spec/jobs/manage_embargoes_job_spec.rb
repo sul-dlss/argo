@@ -104,15 +104,13 @@ RSpec.describe ManageEmbargoesJob do
         subject.perform(bulk_action_no_process_callback.id, params)
         expect(ItemChangeSet).to have_received(:new).with(item1)
         expect(change_set1).to have_received(:validate).with(embargo_release_date: DateTime.parse(release_dates[0]),
-                                                             embargo_access: { access: 'world', download: 'world', readLocation: nil,
-                                                                               controlledDigitalLending: false })
+                                                             embargo_access: 'world')
         expect(change_set1).to have_received(:save)
         expect(ItemChangeSet).to have_received(:new).with(item2)
         expect(change_set2).to have_received(:validate).with(embargo_release_date: DateTime.parse(release_dates[1]))
         expect(change_set2).to have_received(:save)
         expect(ItemChangeSet).to have_received(:new).with(item3)
-        expect(change_set3).to have_received(:validate).with(embargo_access: { access: 'stanford', download: 'none', readLocation: nil,
-                                                                               controlledDigitalLending: false })
+        expect(change_set3).to have_received(:validate).with(embargo_access: 'stanford-nd')
         expect(change_set3).to have_received(:save)
 
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
@@ -159,6 +157,7 @@ RSpec.describe ManageEmbargoesJob do
 
     context 'when bad right' do
       let(:rights) { ['world', '', 'stanford-nobody'] }
+      let(:change_set3) { instance_double(ItemChangeSet, validate: false, save: true) }
 
       it 'updates the embargo and logs the bad right' do
         subject.perform(bulk_action_no_process_callback.id, params)

@@ -8,7 +8,7 @@ class CollectionChangeSet < ApplicationChangeSet
   property :use_statement, virtual: true
 
   def self.model_name
-    Struct.new(:param_key, :route_key, :i18n_key, :name).new('collection', 'collection', 'collection', 'Collection')
+    ::ActiveModel::Name.new(nil, nil, 'Collection')
   end
 
   # When the object is initialized, copy the properties from the cocina model to the form:

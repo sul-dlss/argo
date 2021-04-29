@@ -47,12 +47,13 @@ RSpec.describe SidebarControlsComponent, type: :component do
         expect(rendered.css("a[href='/items/druid:kv840xx0000/content_type']").inner_text).to eq 'Set content type'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/rights']").inner_text).to eq 'Set rights'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/manage_release']").inner_text).to eq 'Manage release'
-        expect(rendered.css('a').size).to eq 14
+        expect(rendered.css("a[href='/items/druid:kv840xx0000/embargo/new']").inner_text).to eq 'Create embargo'
+        expect(rendered.css('a').size).to eq 15
       end
 
       it 'only includes the embargo update button if the user is an admin and the object is embargoed' do
         allow(doc).to receive(:embargoed?).and_return(true)
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/embargo/edit']").inner_text).to eq 'Update embargo'
+        expect(rendered.css("a[href='/items/druid:kv840xx0000/embargo/edit']").inner_text).to eq 'Manage embargo'
         expect(rendered.css('a').size).to eq 15
       end
 
@@ -69,7 +70,7 @@ RSpec.describe SidebarControlsComponent, type: :component do
 
         it 'includes the refresh descMetadata button' do
           expect(rendered.css("a[href='/items/druid:kv840xx0000/refresh_metadata']").inner_text).to eq 'Refresh descMetadata'
-          expect(rendered.css('a').size).to eq 15
+          expect(rendered.css('a').size).to eq 16
         end
       end
     end

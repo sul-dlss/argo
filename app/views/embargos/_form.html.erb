@@ -1,14 +1,15 @@
-<script>
-  $(function() {
-    $( "#embargo_date" ).datepicker({ dateFormat: 'yy-mm-dd' });
-  });
-</script>
 <div id='embargo_update'>
-  <%= form_tag item_embargo_path(@cocina.externalIdentifier), method: 'PATCH' do %>
+  <%= form_with model: @change_set, url: item_embargo_path(@change_set), class: 'col-md-4' do |f| %>
     <div class='form-group'>
-      <label for='embargo_date'>New date</label>
-      <input name="embargo_date" id="embargo_date" type="text">
+      <%= f.label :embargo_release_date %>
+      <%= f.text_field :embargo_release_date, type: 'date', class: 'form-control' %>
     </div>
-    <button id="submit_embargo" type="submit" class='btn btn-primary'>Update Embargo</button>
+
+    <div class="form-group">
+      <%= f.label :embargo_access %>
+      <%= f.select :embargo_access, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS, @change_set.embargo_access), {}, class: 'form-control' %>
+    </div>
+
+    <%= f.submit 'Save', class: 'btn btn-primary' %>
   <% end %>
 </div>

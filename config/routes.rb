@@ -128,7 +128,7 @@ Rails.application.routes.draw do
     resources :datastreams, only: %i[show edit update]
 
     resource :catkey, only: %i[edit update]
-    resource :embargo, only: %i[edit update]
+    resource :embargo, only: %i[new edit update]
 
     member do
       post 'refresh_metadata'

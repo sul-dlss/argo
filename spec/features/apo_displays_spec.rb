@@ -79,13 +79,6 @@ RSpec.describe 'Viewing an Admin policy' do
       end
     end
 
-    context 'embargo form' do
-      it 'renders the embargo update ui' do
-        visit "/items/#{apo_druid}/embargo/edit"
-        expect(page).to have_content('Embargo')
-      end
-    end
-
     context 'tag ui' do
       let(:tags_client) { instance_double(Dor::Services::Client::AdministrativeTags, list: []) }
       let(:object_client) do
