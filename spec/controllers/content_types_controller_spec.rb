@@ -87,63 +87,11 @@ RSpec.describe ContentTypesController, type: :controller do
   end
 
   describe '#show' do
-    context 'with no reading direction (memberOrder) set' do
-      context 'for an object with an image content type' do
-        let(:content_type) { Cocina::Models::Vocab.image }
+    let(:content_type) { Cocina::Models::Vocab.image }
 
-        it 'is successful' do
-          get :show, params: { item_id: pid }
-          expect(response).to be_successful
-          expect(controller.send(:old_content_type)).to eq 'image'
-        end
-      end
-
-      context 'for an object with a book content type' do
-        let(:content_type) { Cocina::Models::Vocab.book }
-
-        it 'is successful' do
-          get :show, params: { item_id: pid }
-          expect(response).to be_successful
-          expect(controller.send(:old_content_type)).to eq 'book (ltr)'
-        end
-      end
-    end
-
-    context 'with a specific reading direction (memberOrder) set' do
-      let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model_with_member_order, update: true) }
-
-      context 'for an object with an image content type and memberOrder of left-to-right' do
-        let(:content_type) { Cocina::Models::Vocab.image }
-        let(:reading_order) { 'left-to-right' }
-
-        it 'is successful' do
-          get :show, params: { item_id: pid }
-          expect(response).to be_successful
-          expect(controller.send(:old_content_type)).to eq 'image'
-        end
-      end
-
-      context 'for an object with a book content type and memberOrder of left-to-right' do
-        let(:content_type) { Cocina::Models::Vocab.book }
-        let(:reading_order) { 'left-to-right' }
-
-        it 'is successful' do
-          get :show, params: { item_id: pid }
-          expect(response).to be_successful
-          expect(controller.send(:old_content_type)).to eq 'book (ltr)'
-        end
-      end
-
-      context 'for an object with a book content type and memberOrder of right-to-left' do
-        let(:content_type) { Cocina::Models::Vocab.book }
-        let(:reading_order) { 'right-to-left' }
-
-        it 'is successful' do
-          get :show, params: { item_id: pid }
-          expect(response).to be_successful
-          expect(controller.send(:old_content_type)).to eq 'book (rtl)'
-        end
-      end
+    it 'is successful' do
+      get :show, params: { item_id: pid }
+      expect(response).to be_successful
     end
   end
 
@@ -158,7 +106,7 @@ RSpec.describe ContentTypesController, type: :controller do
 
     context 'with access' do
       it 'is successful at changing the content type to media' do
-        patch :update, params: { item_id: pid, old_content_type: 'image', new_content_type: 'media' }
+        patch :update, params: { item_id: pid, new_content_type: 'media' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.media, viewing_direction: nil))
@@ -167,7 +115,7 @@ RSpec.describe ContentTypesController, type: :controller do
       end
 
       it 'is successful at changing the content type to book (ltr)' do
-        patch :update, params: { item_id: pid, old_content_type: 'image', new_content_type: 'book (ltr)' }
+        patch :update, params: { item_id: pid, new_content_type: 'book (ltr)' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.book, viewing_direction: 'left-to-right'))
@@ -176,7 +124,7 @@ RSpec.describe ContentTypesController, type: :controller do
       end
 
       it 'is successful at changing the content type to book (rtl)' do
-        patch :update, params: { item_id: pid, old_content_type: 'image', new_content_type: 'book (rtl)' }
+        patch :update, params: { item_id: pid, new_content_type: 'book (rtl)' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.book, viewing_direction: 'right-to-left'))
@@ -198,7 +146,7 @@ RSpec.describe ContentTypesController, type: :controller do
       end
 
       it 'is successful when effectively a no-op' do
-        patch :update, params: { item_id: pid, old_content_type: 'media', new_content_type: 'image', old_resource_type: 'file', new_resource_type: 'document' }
+        patch :update, params: { item_id: pid, new_content_type: 'image', old_resource_type: 'file', new_resource_type: 'document' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(
@@ -218,7 +166,7 @@ RSpec.describe ContentTypesController, type: :controller do
           patch :update, params: { item_id: pid, new_content_type: 'media' }
           expect(response).to redirect_to solr_document_path(pid)
           expect(object_client).to have_received(:update)
-            .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.image))
+            .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.media))
         end
       end
 

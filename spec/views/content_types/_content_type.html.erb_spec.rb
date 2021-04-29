@@ -13,8 +13,6 @@ RSpec.describe 'content_types/_content_type.html.erb' do
   it 'renders the partial content' do
     assign(:cocina_object, cocina_object)
     render
-    expect(rendered).to have_css 'form .form-group label', text: 'Old content type'
-    expect(rendered).to have_css 'input[type="hidden"]#old_content_type', visible: false
     expect(rendered).to have_css 'form .form-group label', text: 'Old resource type'
     expect(rendered).to have_css 'select.form-control#old_resource_type'
     expect(rendered).to have_css 'form .form-group label', text: 'New content type'
