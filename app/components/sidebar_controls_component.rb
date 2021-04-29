@@ -47,9 +47,14 @@ class SidebarControlsComponent < ApplicationComponent
     render ActionButton.new(url: item_manage_release_path(pid), label: 'Manage release')
   end
 
-  # TODO: add a date picker and button to change the embargo date for those who should be able to.
-  def update_embargo
-    render ActionButton.new(url: embargo_form_item_path(pid), label: 'Update embargo')
+  def embargo
+    return unless item?
+
+    if embargoed?
+      render ActionButton.new(url: edit_item_embargo_path(pid), label: 'Manage embargo')
+    else
+      render ActionButton.new(url: new_item_embargo_path(pid), label: 'Create embargo')
+    end
   end
 
   def content_type

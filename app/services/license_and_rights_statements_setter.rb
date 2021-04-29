@@ -81,9 +81,10 @@ class LicenseAndRightsStatementsSetter
   end
 
   def change_set_class
-    if cocina_object.dro?
+    case cocina_object
+    when Cocina::Models::DRO
       ItemChangeSet
-    elsif cocina_object.collection?
+    when Cocina::Models::Collection
       CollectionChangeSet
     end
   end

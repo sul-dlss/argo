@@ -130,14 +130,19 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       before do
-        change_set.validate(embargo_release_date: new_embargo_release_date, embargo_access: { access: 'stanford', download: 'stanford' })
+        change_set.validate(embargo_release_date: new_embargo_release_date,
+                            embargo_access: 'stanford')
         instance.update
       end
 
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
           params: a_cocina_object_with_access(
-            embargo: { releaseDate: DateTime.parse('2055-07-17'), access: 'stanford', download: 'stanford' },
+            embargo: {
+              releaseDate: DateTime.parse('2055-07-17'),
+              access: 'stanford',
+              download: 'stanford'
+            },
             access: 'dark',
             download: 'none',
             copyright: copyright_statement_before,
@@ -168,7 +173,7 @@ RSpec.describe ItemChangeSetPersister do
       end
 
       before do
-        change_set.validate(embargo_release_date: new_embargo_release_date, embargo_access: { access: 'stanford', download: 'stanford' })
+        change_set.validate(embargo_release_date: new_embargo_release_date, embargo_access: 'stanford')
         instance.update
       end
 

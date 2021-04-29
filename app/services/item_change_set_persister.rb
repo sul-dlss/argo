@@ -74,9 +74,14 @@ class ItemChangeSetPersister
     @embargo_props ||= begin
       new_embargo_props = {}
       new_embargo_props[:releaseDate] = embargo_release_date if changed?(:embargo_release_date)
-      new_embargo_props.merge!(embargo_access) if changed?(:embargo_access)
+
+      new_embargo_props.merge!(embargo_rights) if changed?(:embargo_access)
       new_embargo_props
     end
+  end
+
+  def embargo_rights
+    CocinaDroAccess.from_form_value(embargo_access).value_or(nil) if embargo_access.present?
   end
 
   def update_identification(updated)

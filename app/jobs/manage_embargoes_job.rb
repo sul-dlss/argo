@@ -36,10 +36,6 @@ class ManageEmbargoesJob < GenericJob
     [druids, release_dates, rights]
   end
 
-  def valid_rights
-    @valid_rights ||= Constants::REGISTRATION_RIGHTS_OPTIONS.map { |_label, value| value }
-  end
-
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def update_embargo(current_druid, embargo_release_date_param, rights_param, log)
@@ -52,16 +48,6 @@ class ManageEmbargoesJob < GenericJob
       bulk_action.increment(:druid_count_fail).save
       return
     end
-
-    rights = if rights_param.present?
-               rights_result = CocinaDroAccess.from_form_value(rights_param)
-               if rights_result.to_result.failure? || valid_rights.exclude?(rights_param)
-                 log.puts("#{Time.current} #{rights_param} is not a valid right")
-                 bulk_action.increment(:druid_count_fail).save
-                 return
-               end
-               rights_result.value!
-             end
 
     cocina_object = Dor::Services::Client.object(current_druid).find
 
@@ -80,15 +66,17 @@ class ManageEmbargoesJob < GenericJob
 
       changes = {}
       changes[:embargo_release_date] = embargo_release_date if embargo_release_date
-      changes[:embargo_access] = rights if rights
+      changes[:embargo_access] = rights_param if rights_param
       unless changes.empty?
         change_set = ItemChangeSet.new(cocina_object)
-        change_set.validate(changes)
-        change_set.save
+        if change_set.validate(changes) && change_set.save
+          bulk_action.increment(:druid_count_success).save
+          log.puts("#{Time.current} Embargo set successfully")
+        else
+          log.puts("#{Time.current} #{rights_param} is not a valid right")
+          bulk_action.increment(:druid_count_fail).save
+        end
       end
-
-      bulk_action.increment(:druid_count_success).save
-      log.puts("#{Time.current} Embargo set successfully")
     rescue StandardError => e
       log.puts("#{Time.current} Embargo failed #{e.class} #{e.message}")
       bulk_action.increment(:druid_count_fail).save

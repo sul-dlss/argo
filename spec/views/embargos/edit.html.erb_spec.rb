@@ -2,9 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/embargo_form.html.erb' do
-  it 'renders the JS template' do
-    stub_template 'items/_embargo_form.html.erb' => 'stubbed_embargo_form'
+RSpec.describe 'embargos/edit.html.erb' do
+  it 'renders the template' do
+    stub_template 'embargos/_form.html.erb' => 'stubbed_embargo_form'
     render
     expect(rendered).to have_css '.modal-header h3.modal-title', text: 'Update embargo'
     expect(rendered).to have_css '.modal-body', text: 'stubbed_embargo_form'

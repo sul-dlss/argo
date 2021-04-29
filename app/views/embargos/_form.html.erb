@@ -1,0 +1,15 @@
+<div id='embargo_update'>
+  <%= form_with model: @change_set, url: item_embargo_path(@change_set), class: 'col-md-4' do |f| %>
+    <div class='form-group'>
+      <%= f.label :embargo_release_date %>
+      <%= f.text_field :embargo_release_date, type: 'date', class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :embargo_access %>
+      <%= f.select :embargo_access, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS, @change_set.embargo_access), {}, class: 'form-control' %>
+    </div>
+
+    <%= f.submit 'Save', class: 'btn btn-primary' %>
+  <% end %>
+</div>
