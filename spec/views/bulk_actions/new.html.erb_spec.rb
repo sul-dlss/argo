@@ -84,4 +84,10 @@ RSpec.describe 'bulk_actions/new.html.erb' do
       expect(rendered).to have_css 'input[type="file"][name="bulk_action[set_catkeys_and_barcodes_csv][csv_file]"]'
     end
   end
+
+  describe 'Manage Embargoes Job form' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'input[type="file"][name="bulk_action[manage_embargo][csv_file]"]'
+    end
+  end
 end

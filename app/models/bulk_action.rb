@@ -21,7 +21,8 @@ class BulkAction < ApplicationRecord
                      ExportTagsJob
                      ImportTagsJob
                      RegisterDruidsJob
-                     SetLicenseAndRightsStatementsJob]
+                     SetLicenseAndRightsStatementsJob
+                     ManageEmbargoesJob]
             }
 
   before_destroy :remove_output_directory

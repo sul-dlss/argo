@@ -38,6 +38,7 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Edit Catkeys and Barcodes from CSV', 'SetCatkeysAndBarcodesCsvJob'],
         ['Export tags to CSV', 'ExportTagsJob'],
         ['Import tags from CSV', 'ImportTagsJob'],
+        ['Manage embargo', 'ManageEmbargoesJob'],
         ['Register Druids', 'RegisterDruidsJob']
       ]],
       ['Generate reports', [
