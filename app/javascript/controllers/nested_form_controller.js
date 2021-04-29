@@ -17,4 +17,11 @@ export default class extends Controller {
     item.querySelector("input[name*='_destroy']").value = 1
     item.style.display = 'none'
   }
+
+  disableSubmit(event) {
+    const submitButton = event.currentTarget
+    submitButton.disabled = true
+    submitButton.innerText = 'Saving...'
+    submitButton.form.submit()
+  }
 }
