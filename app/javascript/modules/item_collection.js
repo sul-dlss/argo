@@ -26,7 +26,7 @@ export default class ItemCollection {
         evt.preventDefault();
       }); // end remove_collection.click
 
-      $(document).on('click', '#add_collection', function(evt) {
+      $(document).off('click', '#add_collection').on('click', '#add_collection', function(evt) {
         var form = $('#add_collection_form');
         $.ajax({
                 url: form.attr('action'),
