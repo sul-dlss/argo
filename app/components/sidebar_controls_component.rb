@@ -74,6 +74,8 @@ class SidebarControlsComponent < ApplicationComponent
   end
 
   def change_source_id
+    return unless item?
+
     render ActionButton.new(url: source_id_ui_item_path(id: pid),
                             label: 'Change source id')
   end
