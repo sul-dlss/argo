@@ -32,6 +32,7 @@ RSpec.describe UploadsController do
       expect(ModsulatorJob).to have_received(:perform_later)
         .with('abc123', String, String, user, user.groups, 'spreadsheet', 'test note')
       expect(response).to redirect_to apo_bulk_jobs_path(apo_id)
+      expect(flash[:notice]).to eq 'Bulk processing started'
     end
   end
 end
