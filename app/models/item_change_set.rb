@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Represents a set of changes to an item.
-class ItemChangeSet < Reform::Form
+class ItemChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
   property :catkey, virtual: true
   property :collection_ids, virtual: true
@@ -14,11 +14,6 @@ class ItemChangeSet < Reform::Form
 
   def self.model_name
     Struct.new(:param_key, :route_key, :i18n_key, :name).new('item', 'item', 'item', 'Item')
-  end
-
-  # needed for generating the update route
-  def to_key
-    Array(@cocina_item&.externalIdentifier)
   end
 
   # When the object is initialized, copy the properties from the cocina model to the form:

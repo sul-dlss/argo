@@ -1,0 +1,9 @@
+<%= form_with model: @change_set, url: item_catkey_path(@change_set), method: :patch do |f| %>
+  <div class="form-group">
+    <%= f.label :catkey %>
+    <%= f.text_field :catkey, class: 'form-control' %>
+    <p class='help-block'>
+    </p>
+  </div>
+  <button class="btn btn-primary">Update</button>
+<% end %>
