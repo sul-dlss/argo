@@ -59,7 +59,7 @@ RSpec.describe RegistrationForm do
       it 'raises a cocina validation error' do
         expect { cocina_model.identification.barcode }.to raise_error(
           Cocina::Models::ValidationError,
-          %r{#{barcode} isn't one of in #/components/schemas/Barcode}
+          %r{"#{barcode}" isn't one of in #/components/schemas/Barcode}
         )
       end
     end

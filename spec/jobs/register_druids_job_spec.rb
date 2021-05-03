@@ -47,7 +47,7 @@ RSpec.describe RegisterDruidsJob, type: :job do
 
       it 'registers the object' do
         expect(RegistrationService).not_to have_received(:register)
-        expect(fake_log).to have_received(:puts).with(/does not match value: druid:123, example: druid:bc123df4567/)
+        expect(fake_log).to have_received(:puts).with(/does not match value: "druid:123", example: druid:bc123df4567/)
         expect(bulk_action.druid_count_success).to eq 0
         expect(bulk_action.druid_count_fail).to eq 1
       end
