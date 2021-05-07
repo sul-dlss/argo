@@ -7,7 +7,7 @@ RSpec.describe ExternalLinksComponent, type: :component do
     instance_double(SolrDocument, id: 'druid:ab123cd3445',
                                   to_param: 'druid:ab123cd3445',
                                   druid: 'ab123cd3445',
-                                  catkey: catkey, released_to: released_to, dor_services_version: '9.0.0')
+                                  catkey: catkey, released_to: released_to)
   end
   let(:catkey) { nil }
 

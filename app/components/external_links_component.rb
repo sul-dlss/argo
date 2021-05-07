@@ -38,10 +38,6 @@ class ExternalLinksComponent < ViewComponent::Base
             target: '_blank', rel: 'noopener', class: 'nav-link'
   end
 
-  def index_info
-    "indexed by DOR Services v#{document.dor_services_version}"
-  end
-
   def released_to_searchworks?
     document.released_to.include?('Searchworks')
   end

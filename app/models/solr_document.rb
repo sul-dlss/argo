@@ -34,7 +34,6 @@ class SolrDocument
   attribute :current_version, Blacklight::Types::String, FIELD_CURRENT_VERSION
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
   attribute :embargo_release_date, Blacklight::Types::String, FIELD_EMBARGO_RELEASE_DATE
-  attribute :dor_services_version, Blacklight::Types::String, :dor_services_version_ssi
   attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
 
   attribute :registered_date, Blacklight::Types::Array, FIELD_REGISTERED_DATE
