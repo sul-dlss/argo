@@ -61,8 +61,6 @@ RSpec.describe CollectionsController do
                               apo_id: apo_id }
       expect(response).to be_redirect # redirects to catalog page
       expect(form).to have_received(:save)
-      expect(object_client).to have_received(:update).with(params: a_cocina_admin_policy_with_registration_collections([collection_id]))
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(apo_id)
     end
   end
 

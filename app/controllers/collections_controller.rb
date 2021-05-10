@@ -20,21 +20,6 @@ class CollectionsController < ApplicationController
 
     form.save
     collection_pid = form.model.externalIdentifier
-
-    cocina_admin_policy = object_client.find
-    collections = Array(cocina_admin_policy.administrative.collectionsForRegistration)
-    # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection` (from the now de-coupled dor-services gem)
-    # 1. If collection is already listed, remove it temporarily
-    collections.delete(collection_pid)
-    # 2. Move the collection PID to the front of the list of registration collections
-    collections.unshift(collection_pid)
-    updated_cocina_admin_policy = cocina_admin_policy.new(
-      administrative: cocina_admin_policy.administrative.new(
-        collectionsForRegistration: collections
-      )
-    )
-    object_client.update(params: updated_cocina_admin_policy)
-    Argo::Indexer.reindex_pid_remotely(params[:apo_id])
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_pid}"
   end
 

@@ -11,10 +11,8 @@ RSpec.describe RegistrationsController, type: :controller do
   end
   let(:cocina_admin_policy_administrative) do
     instance_double(Cocina::Models::AdminPolicyAdministrative,
-                    defaultObjectRights: content,
-                    collectionsForRegistration: collections)
+                    defaultObjectRights: content)
   end
-  let(:collections) { [] }
   let(:druid) { "druid:#{bare_druid}" }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_admin_policy) }
   let(:user) { create(:user) }
@@ -226,28 +224,21 @@ RSpec.describe RegistrationsController, type: :controller do
   describe '#collection_list' do
     let(:content) { '' }
 
-    it 'handles invalid parameters' do
-      expect { get 'collection_list' }.to raise_error(ArgumentError)
-    end
-
     context 'when there are no collections' do
-      let(:collections) { nil }
-
       it 'shows "None"' do
         get 'collection_list', params: { apo_id: druid, format: :json }
         data = JSON.parse(response.body)
-        expect(data).to include('' => 'None')
-        expect(data.length).to eq(1)
+        expect(data).to eq({ '' => 'None' })
       end
     end
 
     context 'when the collections are in solr' do
-      let(:collections) { ['druid:pb873ty1662'] }
       let(:solr_response) do
         { 'response' => { 'docs' => [solr_doc] } }
       end
       let(:solr_doc) do
         {
+          'id' => 'druid:pb873ty1662',
           'sw_display_title_tesim' => [
             'Annual report of the State Corporation Commission showing the condition ' \
             'of the incorporated state banks and other institutions operating in ' \

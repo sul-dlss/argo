@@ -20,7 +20,7 @@ class AdminPolicyChangeSet
     yield self if block_given?
   end
 
-  attr_reader :model
+  attr_reader :model, :collection_id
 
   def save
     @model = if new_record?
@@ -28,6 +28,7 @@ class AdminPolicyChangeSet
              else
                AdminPolicyChangeSetPersister.update(model, self)
              end
+    @collection_id = create_collection(model.externalIdentifier) if collection_radio == 'create'
   end
 
   def new_record?
@@ -40,6 +41,16 @@ class AdminPolicyChangeSet
     end
 
     title.present? && agreement_object_id.present?
+  end
+
+  # Create a collection
+  # @param [String] apo_pid the identifier for this APO
+  # @return [String] the pid for the newly created collection
+  def create_collection(apo_pid)
+    form = CollectionForm.new
+    form.validate(collection.merge(apo_pid: apo_pid))
+    form.save
+    form.model.externalIdentifier
   end
 
   PROPERTIES.each do |property|
@@ -63,14 +74,6 @@ class AdminPolicyChangeSet
 
   def collection_radio
     @changes[:collection_radio]
-  end
-
-  def collections_for_registration=(val)
-    @changes[:collections_for_registration] = val
-  end
-
-  def collections_for_registration
-    @changes[:collections_for_registration] || {}
   end
 
   # These attributes get passed to the CollectionForm

@@ -65,9 +65,6 @@ Rails.application.routes.draw do
     collection do
       get :spreadsheet_template
     end
-    member do
-      get  'delete_collection'
-    end
   end
 
   resources :apos, only: [] do

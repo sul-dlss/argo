@@ -3,8 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe ApoForm do
-  let(:search_service) { instance_double(Blacklight::SearchService) }
-  let(:instance) { described_class.new(apo, search_service: search_service) }
+  let(:instance) { described_class.new(apo) }
   let(:apo) do
     Cocina::Models::AdminPolicy.new(
       type: Cocina::Models::Vocab.admin_policy,
@@ -20,10 +19,7 @@ RSpec.describe ApoForm do
     {
       hasAdminPolicy: 'druid:xx666zz7777',
       registrationWorkflow: ['registrationWF'],
-      defaultAccess: default_access,
-      collectionsForRegistration: %w[druid:xf330kz3480 druid:zn588xt6079 druid:zq557wp0848 druid:tw619vm5957
-                                     druid:ts734sd4095 druid:sx487cw2287 druid:pv392zr2847 druid:sh776dy9514
-                                     druid:dy736ft1835 druid:kj087tz6537 druid:qs995zb1355 druid:yk518vd0459]
+      defaultAccess: default_access
     }
   end
   let(:default_access) { {} }
@@ -247,26 +243,5 @@ RSpec.describe ApoForm do
         expect(subject.size).to eq 12
       end
     end
-  end
-
-  describe '#default_collection_objects' do
-    subject { instance.default_collection_objects }
-
-    let(:default_collection_druids) { administrative[:collectionsForRegistration] }
-    let(:default_collection_objects) do
-      default_collection_druids.map do |druid|
-        label = druid[-1].to_i.even? ? druid : druid.upcase # introduce arbitrary mixed case to test sorting
-        instance_double(SolrDocument, label: label)
-      end
-    end
-    let(:search_service_result) { [nil, default_collection_objects] }
-    let(:search_service) { instance_double(Blacklight::SearchService) }
-
-    before do
-      allow(search_service).to receive(:fetch).with(default_collection_druids, rows: default_collection_druids.size)
-                                              .and_return(search_service_result)
-    end
-
-    it { is_expected.to eq(default_collection_objects.sort_by { |solr_doc| solr_doc.label.downcase }) }
   end
 end

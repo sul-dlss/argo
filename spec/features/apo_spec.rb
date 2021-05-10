@@ -7,16 +7,11 @@ RSpec.describe 'Create an apo', js: true do
   let(:workflows_response) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
   let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows_response) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
-  # An Agreement object must exist to populate the dropdown on the form
-  let(:agreement) { FactoryBot.create_for_repository(:agreement) }
-  let!(:preexisting_collection) do
-    FactoryBot.create_for_repository(:collection,
-                                     label: 'Another type of collection',
-                                     title: 'Another type of collection',
-                                     admin_policy_id: agreement.administrative.hasAdminPolicy)
-  end
 
   before do
+    # An Agreement object must exist to populate the dropdown on the form
+    FactoryBot.create_for_repository(:agreement)
+
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
 
     allow(workflow_client).to receive_messages(workflow_templates: ['accessionWF'],
@@ -59,9 +54,6 @@ RSpec.describe 'Create an apo', js: true do
     expect(page).to have_selector('.permissionName', text: 'developers')
     expect(page).to have_selector('.permissionName', text: 'someone')
     expect(find_field('Default use license').value).to eq 'https://creativecommons.org/licenses/by-sa/3.0/'
-    within_fieldset 'Default Collections' do
-      expect(page).to have_link('New Testing Collection')
-    end
 
     # Now change them
     fill_in 'Group name', with: 'dpg-staff'
@@ -81,24 +73,10 @@ RSpec.describe 'Create an apo', js: true do
     expect(find_field('Title').value).to eq('New APO Title')
     expect(find_field('Default Copyright statement').value).to eq('New copyright statement')
     expect(find_field('Default Use and Reproduction statement').value).to eq('New use statement')
-    within_fieldset 'Default Collections' do
-      expect(page).to have_link('New Testing Collection')
-    end
+
     expect(page).to have_selector('.permissionName', text: 'dpg-staff')
     expect(page).to have_selector('.permissionName', text: 'anyone')
 
     expect(find_field('Default use license').value).to eq('https://creativecommons.org/licenses/by-nd/3.0/')
-
-    choose 'Choose a Default Collection'
-    select preexisting_collection.externalIdentifier, from: 'apo_form_collection_collection'
-    click_button 'Update APO'
-
-    click_on 'Edit APO'
-
-    # Add testing for adding another default collection to this apo.
-    within_fieldset 'Default Collections' do
-      expect(page).to have_text 'New Testing Collection'
-      expect(page).to have_text 'Another type of collection'
-    end
   end
 end

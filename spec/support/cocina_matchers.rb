@@ -35,13 +35,6 @@ RSpec::Matchers.define :a_cocina_object_with_types do |expected|
   end
 end
 
-RSpec::Matchers.define :a_cocina_admin_policy_with_registration_collections do |expected|
-  match do |actual|
-    actual.type == Cocina::Models::Vocab.admin_policy &&
-      expected.all? { |collection_id| collection_id.in?(actual.administrative.collectionsForRegistration) }
-  end
-end
-
 # NOTE: each k/v pair in the hash passed to this matcher will need to be present in actual
 RSpec::Matchers.define :a_cocina_object_with_access do |expected|
   match do |actual|
