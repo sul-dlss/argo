@@ -47,7 +47,7 @@ RSpec.describe 'bulk_actions/new.html.erb' do
       expect(rendered).to have_css 'input[type="checkbox"][value="1"][name="bulk_action[set_license_and_rights_statements][license_option]"]'
       expect(rendered).to have_css 'select[name="bulk_action[set_license_and_rights_statements][license]"]'
       expect(rendered).to have_css 'option[value=""]'
-      expect(rendered).to have_css 'option[value="https://creativecommons.org/licenses/by-sa/3.0/"]'
+      expect(rendered).to have_css 'option[value="https://creativecommons.org/licenses/by-sa/3.0/legalcode"]'
     end
   end
 

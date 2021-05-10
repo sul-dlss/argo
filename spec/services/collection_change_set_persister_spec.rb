@@ -25,7 +25,7 @@ RSpec.describe CollectionChangeSetPersister do
       described_class.new(model, change_set)
     end
     let(:change_set) { CollectionChangeSet.new(model) }
-    let(:license_before) { 'http://opendatacommons.org/licenses/pddl/1.0/' }
+    let(:license_before) { 'https://opendatacommons.org/licenses/pddl/1-0/' }
     let(:model) do
       Cocina::Models::Collection.new(
         externalIdentifier: 'druid:bc123df4568',
@@ -70,7 +70,7 @@ RSpec.describe CollectionChangeSetPersister do
         instance.update
       end
 
-      let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/' }
+      let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode' }
 
       it 'invokes object client with collection that has new license' do
         expect(fake_client).to have_received(:update).with(
