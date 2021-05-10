@@ -32,7 +32,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
     let(:use_statement) { 'My use and reproduction statement' }
     let(:copyright_statement) { 'My copyright statement' }
     let(:agreement_object_id) { 'druid:dd327rv8888' }
-    let(:use_license) { 'https://creativecommons.org/licenses/by-nc/3.0/' }
+    let(:use_license) { 'https://creativecommons.org/licenses/by-nc/3.0/legalcode' }
     let(:default_workflows) { ['registrationWF'] }
 
     let(:change_set) do
@@ -75,7 +75,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
               download: 'world',
               readLocation: nil,
               copyright: 'My copyright statement',
-              license: 'https://creativecommons.org/licenses/by-nc/3.0/',
+              license: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode',
               useAndReproductionStatement: 'My use and reproduction statement'
             },
             collectionsForRegistration: ['druid:zj785yp4820'],

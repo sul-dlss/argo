@@ -24,7 +24,7 @@ RSpec.describe ItemChangeSetPersister do
     let(:instance) do
       described_class.new(model, change_set)
     end
-    let(:license_before) { 'http://opendatacommons.org/licenses/pddl/1.0/' }
+    let(:license_before) { 'https://opendatacommons.org/licenses/pddl/1-0/' }
     let(:model) do
       Cocina::Models::DRO.new(
         externalIdentifier: 'druid:bc123df4568',
@@ -72,7 +72,7 @@ RSpec.describe ItemChangeSetPersister do
     end
 
     context 'when change set has changed license' do
-      let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/' }
+      let(:new_license) { 'https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode' }
 
       before do
         change_set.validate(license: new_license)

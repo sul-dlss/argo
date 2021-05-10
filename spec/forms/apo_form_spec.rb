@@ -94,9 +94,9 @@ RSpec.describe ApoForm do
     describe '#use_license' do
       subject { instance.use_license }
 
-      let(:default_access) { { license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/' } }
+      let(:default_access) { { license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode' } }
 
-      it { is_expected.to eq 'https://creativecommons.org/licenses/by-nc-sa/3.0/' }
+      it { is_expected.to eq 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode' }
     end
 
     describe '#default_rights' do

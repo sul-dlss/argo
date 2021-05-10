@@ -58,7 +58,7 @@ RSpec.describe 'Create an apo', js: true do
     expect(find_field('Default Use and Reproduction statement').value).to eq('Use statement')
     expect(page).to have_selector('.permissionName', text: 'developers')
     expect(page).to have_selector('.permissionName', text: 'someone')
-    expect(find_field('Default use license').value).to eq 'https://creativecommons.org/licenses/by-sa/3.0/'
+    expect(find_field('Default use license').value).to eq 'https://creativecommons.org/licenses/by-sa/3.0/legalcode'
     within_fieldset 'Default Collections' do
       expect(page).to have_link('New Testing Collection')
     end
@@ -87,7 +87,7 @@ RSpec.describe 'Create an apo', js: true do
     expect(page).to have_selector('.permissionName', text: 'dpg-staff')
     expect(page).to have_selector('.permissionName', text: 'anyone')
 
-    expect(find_field('Default use license').value).to eq('https://creativecommons.org/licenses/by-nd/3.0/')
+    expect(find_field('Default use license').value).to eq('https://creativecommons.org/licenses/by-nd/3.0/legalcode')
 
     choose 'Choose a Default Collection'
     select preexisting_collection.externalIdentifier, from: 'apo_form_collection_collection'
