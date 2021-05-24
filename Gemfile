@@ -20,7 +20,7 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
-gem 'view_component', '~> 2.0'
+gem 'view_component', '~> 2.31.1' # lock this until BL 7.19.2 is released
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

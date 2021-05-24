@@ -549,7 +549,7 @@ GEM
       unf_ext
     unf_ext (0.0.7.7)
     unicode-display_width (2.0.0)
-    view_component (2.32.0)
+    view_component (2.31.1)
       activesupport (>= 5.0.0, < 7.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -647,7 +647,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4.2)
   turbo-rails (~> 0.5.9)
-  view_component (~> 2.0)
+  view_component (~> 2.31.1)
   web-console
   webdrivers
   webmock
@@ -655,4 +655,4 @@ DEPENDENCIES
   zip_tricks (= 5.3.1)
 
 BUNDLED WITH
-   2.2.16
+   2.2.17
