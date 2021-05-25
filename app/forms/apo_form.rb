@@ -92,8 +92,8 @@ class ApoForm
   # entries, unless the current value is a deprecated entry, in which case, include that entry with the
   # deprecation warning in a parenthetical.
   def options_for_use_license_type(current_value)
-    Constants::LICENSE_OPTIONS.map do |key, attributes|
-      if key == current_value && attributes.key?(:deprecation_warning)
+    Constants::LICENSE_OPTIONS.map do |attributes|
+      if attributes.fetch(:uri) == current_value && attributes.key?(:deprecation_warning)
         ["#{attributes.fetch(:label)} (#{attributes.fetch(:deprecation_warning)})", attributes.fetch(:uri)]
       elsif !attributes.key?(:deprecation_warning)
         [attributes.fetch(:label), attributes.fetch(:uri)]
