@@ -74,7 +74,7 @@ RSpec.describe 'Create an apo', js: true do
     fill_in 'Title', with: 'New APO Title'
     fill_in 'Default Copyright statement', with: 'New copyright statement'
     fill_in 'Default Use and Reproduction statement', with: 'New use statement'
-    page.select('Attribution No Derivatives 3.0 Unported', from: 'Default use license')
+    select 'Attribution No Derivatives 3.0 Unported', from: 'Default use license'
     click_button 'Update APO'
 
     click_on 'Edit APO'

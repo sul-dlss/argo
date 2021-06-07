@@ -24,33 +24,30 @@ module Constants
     ['Dark (Preserve Only)', 'dark']
   ].freeze
 
-  LICENSE_OPTIONS = {
-    'pddl' => { label: 'Open Data Commons Public Domain Dedication and License 1.0',
-                uri: 'https://opendatacommons.org/licenses/pddl/1-0/' },
-    'odc-by' => { label: 'Open Data Commons Attribution License 1.0',
-                  uri: 'https://opendatacommons.org/licenses/by/1-0/' },
-    'odc-odbl' => { label: 'Open Data Commons Open Database License 1.0',
-                    uri: 'https://opendatacommons.org/licenses/odbl/1-0/' },
-    'cc0' => { label: 'No Rights Reserved',
-               uri: 'https://creativecommons.org/publicdomain/zero/1.0/legalcode' },
-    'by' => { label: 'Attribution 3.0 Unported',
-              uri: 'https://creativecommons.org/licenses/by/3.0/legalcode' },
-    'by-sa' => { label: 'Attribution Share Alike 3.0 Unported',
-                 uri: 'https://creativecommons.org/licenses/by-sa/3.0/legalcode' },
-    'by_sa' => { label: 'Attribution Share Alike 3.0 Unported',
-                 uri: 'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
-                 deprecation_warning: 'license code "by_sa" was a typo in argo, prefer "by-sa"' },
-    'by-nd' => { label: 'Attribution No Derivatives 3.0 Unported',
-                 uri: 'https://creativecommons.org/licenses/by-nd/3.0/legalcode' },
-    'by-nc' => { label: 'Attribution Non-Commercial 3.0 Unported',
-                 uri: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode' },
-    'by-nc-sa' => { label: 'Attribution Non-Commercial Share Alike 3.0 Unported',
-                    uri: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode' },
-    'by-nc-nd' => { label: 'Attribution Non-Commercial, No Derivatives 3.0 Unported',
-                    uri: 'https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode' },
-    'pdm' => { label: 'Public Domain Mark 1.0',
-               uri: 'https://creativecommons.org/publicdomain/mark/1.0/' }
-  }.freeze
+  LICENSE_OPTIONS = [
+    { label: 'Open Data Commons Public Domain Dedication and License 1.0',
+      uri: 'https://opendatacommons.org/licenses/pddl/1-0/' },
+    { label: 'Open Data Commons Attribution License 1.0',
+      uri: 'https://opendatacommons.org/licenses/by/1-0/' },
+    { label: 'Open Data Commons Open Database License 1.0',
+      uri: 'https://opendatacommons.org/licenses/odbl/1-0/' },
+    { label: 'No Rights Reserved',
+      uri: 'https://creativecommons.org/publicdomain/zero/1.0/legalcode' },
+    { label: 'Attribution 3.0 Unported',
+      uri: 'https://creativecommons.org/licenses/by/3.0/legalcode' },
+    { label: 'Attribution Share Alike 3.0 Unported',
+      uri: 'https://creativecommons.org/licenses/by-sa/3.0/legalcode' },
+    { label: 'Attribution No Derivatives 3.0 Unported',
+      uri: 'https://creativecommons.org/licenses/by-nd/3.0/legalcode' },
+    { label: 'Attribution Non-Commercial 3.0 Unported',
+      uri: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode' },
+    { label: 'Attribution Non-Commercial Share Alike 3.0 Unported',
+      uri: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode' },
+    { label: 'Attribution Non-Commercial, No Derivatives 3.0 Unported',
+      uri: 'https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode' },
+    { label: 'Public Domain Mark 1.0',
+      uri: 'https://creativecommons.org/publicdomain/mark/1.0/' }
+  ].freeze
 
   CONTENT_TYPES = {
     'book (ltr)' => Cocina::Models::Vocab.book,
