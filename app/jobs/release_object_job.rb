@@ -47,27 +47,34 @@ class ReleaseObjectJob < GenericJob
     end
 
     log.puts("#{Time.current} Adding release tag for #{manage_release['to']}")
-    begin
-      Dor::Services::Client.object(current_druid).release_tags.create(
-        to: manage_release['to'],
-        who: manage_release['who'],
-        what: manage_release['what'],
-        release: string_to_boolean(manage_release['tag'])
-      )
-      log.puts("#{Time.current} Release tag added successfully")
-    rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
-      log.puts("#{Time.current} Release tag failed POST #{e.class} #{e.message}")
-      bulk_action.increment(:druid_count_fail).save
-      return
-    end
+
+    create_release_tag(bulk_action, cocina, log) &&
+      start_release_workflow(bulk_action, cocina, log)
+  end
+
+  def create_release_tag(bulk_action, cocina, log)
+    Dor::Services::Client.object(cocina.externalIdentifier).release_tags.create(
+      to: manage_release['to'],
+      who: manage_release['who'],
+      what: manage_release['what'],
+      release: string_to_boolean(manage_release['tag'])
+    )
+    log.puts("#{Time.current} Release tag added successfully")
+    true
+  rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
+    log.puts("#{Time.current} Release tag failed POST #{e.class} #{e.message}")
+    bulk_action.increment(:druid_count_fail).save
+    false
+  end
+
+  def start_release_workflow(bulk_action, cocina, log)
     log.puts("#{Time.current} Trying to start release workflow")
-    begin
-      WorkflowClientFactory.build.create_workflow_by_name(current_druid, 'releaseWF', version: cocina.version)
-      log.puts("#{Time.current} Workflow creation successful")
-      bulk_action.increment(:druid_count_success).save
-    rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::WorkflowException => e
-      log.puts("#{Time.current} Workflow creation failed POST #{e.class} #{e.message}")
-      bulk_action.increment(:druid_count_fail).save
-    end
+
+    WorkflowClientFactory.build.create_workflow_by_name(cocina.externalIdentifier, 'releaseWF', version: cocina.version)
+    log.puts("#{Time.current} Workflow creation successful")
+    bulk_action.increment(:druid_count_success).save
+  rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::WorkflowException => e
+    log.puts("#{Time.current} Workflow creation failed POST #{e.class} #{e.message}")
+    bulk_action.increment(:druid_count_fail).save
   end
 end
