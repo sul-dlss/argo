@@ -306,3 +306,25 @@ Rails/AttributeDefaultBlockValue: # (new in 2.9)
   Enabled: true
 Rails/WhereEquals: # (new in 2.9)
   Enabled: true
+Lint/EmptyInPattern: # (new in 1.16)
+  Enabled: true
+Style/InPatternThen: # (new in 1.16)
+  Enabled: true
+Style/MultilineInPatternThen: # (new in 1.16)
+  Enabled: true
+Style/QuotedSymbols: # (new in 1.16)
+  Enabled: true
+Rails/EnvironmentVariableAccess: # (new in 2.10)
+  Enabled: true
+Rails/TimeZoneAssignment: # (new in 2.10)
+  Enabled: true
+Rails/AddColumnIndex: # (new in 2.11)
+  Enabled: true
+Rails/EagerEvaluationLogMessage: # (new in 2.11)
+  Enabled: true
+Rails/ExpandedDateRange: # (new in 2.11)
+  Enabled: true
+Rails/I18nLocaleAssignment: # (new in 2.11)
+  Enabled: true
+Rails/UnusedIgnoredColumns: # (new in 2.11)
+  Enabled: true

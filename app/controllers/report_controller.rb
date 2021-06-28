@@ -59,7 +59,7 @@ class ReportController < CatalogController
 
   # an ajax call to reset workflow states for objects
   def reset
-    head 501 unless request.xhr?
+    head :not_implemented unless request.xhr?
 
     params.require(%i[reset_workflow reset_step])
 
