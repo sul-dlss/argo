@@ -53,18 +53,42 @@ class ReleaseObjectJob < GenericJob
   end
 
   def create_release_tag(bulk_action, cocina, log)
-    Dor::Services::Client.object(cocina.externalIdentifier).release_tags.create(
-      to: manage_release['to'],
-      who: manage_release['who'],
-      what: manage_release['what'],
-      release: string_to_boolean(manage_release['tag'])
-    )
+    object_client = Dor::Services::Client.object(cocina.externalIdentifier)
+    object_client.update(params: model_with_new_release_tag(cocina))
     log.puts("#{Time.current} Release tag added successfully")
     true
   rescue Faraday::TimeoutError, Faraday::ConnectionFailed, Dor::Services::Client::Error => e
     log.puts("#{Time.current} Release tag failed POST #{e.class} #{e.message}")
     bulk_action.increment(:druid_count_fail).save
     false
+  end
+
+  # Return a copy of the existing cocina model with a new tag appended
+  def model_with_new_release_tag(cocina)
+    cocina.new(
+      administrative: cocina.administrative.new(
+        releaseTags: Array(cocina.administrative.releaseTags) + [new_tag]
+      )
+    )
+  end
+
+  def new_tag
+    Cocina::Models::ReleaseTag.new(
+      to: manage_release['to'],
+      who: manage_release['who'],
+      what: manage_release['what'],
+      release: string_to_boolean(manage_release['tag']),
+      date: DateTime.now.utc.iso8601
+    )
+  end
+
+  def string_to_boolean(string)
+    case string
+    when 'true'
+      true
+    when 'false'
+      false
+    end
   end
 
   def start_release_workflow(bulk_action, cocina, log)

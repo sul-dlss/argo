@@ -22,12 +22,10 @@ RSpec.describe 'Collection manage release' do
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: cocina_model,
-                    release_tags: release_tags_client,
                     events: events_client,
                     metadata: metadata_client,
                     version: version_client)
   end
-  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
   let(:cocina_model) do
     Cocina::Models.build(
       'label' => 'The model',
