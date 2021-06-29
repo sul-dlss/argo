@@ -8,6 +8,9 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Make Zeitwerks happy.
+Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
+
 module Argo
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
