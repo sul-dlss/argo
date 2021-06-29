@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Make Zeitwerks happy.
-Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
-
 require_relative 'boot'
 
 require 'rails/all'
@@ -30,3 +27,6 @@ module Argo
     end
   end
 end
+
+# Make Zeitwerks happy.
+Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
