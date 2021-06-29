@@ -174,7 +174,8 @@ jobs:
     executor: default
     steps:
       - checkout
-      - ruby/install-deps
+      - ruby/install-deps:
+          key: gems-v2
       - run:
           name: Run linter
           command: bundle exec rubocop
@@ -195,7 +196,8 @@ jobs:
     executor: ruby_with_all_deps
     steps:
       - checkout
-      - ruby/install-deps
+      - ruby/install-deps:
+          key: gems-v2
       - node/install-packages:
           cache-key: yarn.lock
           pkg-manager: yarn
