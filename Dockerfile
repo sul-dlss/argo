@@ -16,7 +16,7 @@ RUN apk add --update --no-cache \
 WORKDIR /app
 
 RUN gem update --system && \
-  gem install bundler
+  gem install bundler:2.2.17
 
 COPY Gemfile Gemfile.lock ./
 RUN bundle config build.nokogiri --use-system-libraries && \

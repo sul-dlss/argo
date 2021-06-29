@@ -1,7 +1,5 @@
 'use strict';
 
-import 'jquery'
-
 (function ($) {
   // jQuery plugin with utility functions for spreadsheet bulk upload
   // submission
