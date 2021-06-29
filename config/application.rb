@@ -4,12 +4,12 @@ require_relative 'boot'
 
 require 'rails/all'
 
+# Make Zeitwerks happy.
+Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
-# Make Zeitwerks happy.
-Rails.autoloaders.main.ignore(Rails.root.join('app/packs'))
 
 module Argo
   class Application < Rails::Application
