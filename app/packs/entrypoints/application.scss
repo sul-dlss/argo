@@ -1,8 +1,8 @@
 //@import 'jquery-ui/themes/base/all.css';
 @import 'free-jqgrid/css/ui.jqgrid.css';
-@import 'variables';
+@import 'stylesheets/variables';
 @import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-overrides';
+@import 'stylesheets/bootstrap-overrides';
 // Override before importing Blacklight
 $logo-image: "../images/logo.png";
 @import 'blacklight-frontend/app/assets/stylesheets/blacklight/blacklight';
@@ -16,16 +16,16 @@ $logo-image: "../images/logo.png";
 
 @import 'blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy';
 
-@import "argo";
-@import "errors";
-@import "dialog";
-@import "document";
-@import "embargo";
-@import "icons";
-@import "profile";
-@import "search_results";
-@import "show";
-@import "impersonate_groups";
-@import "workflow_grid";
-@import "throbber";
-@import "tags-autocomplete";
+@import "stylesheets/argo";
+@import "stylesheets/errors";
+@import "stylesheets/dialog";
+@import "stylesheets/document";
+@import "stylesheets/embargo";
+@import "stylesheets/icons";
+@import "stylesheets/profile";
+@import "stylesheets/search_results";
+@import "stylesheets/show";
+@import "stylesheets/impersonate_groups";
+@import "stylesheets/workflow_grid";
+@import "stylesheets/throbber";
+@import "stylesheets/tags-autocomplete";

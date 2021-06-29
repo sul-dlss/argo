@@ -13,10 +13,10 @@ const imagePath = (name) => images(name, true)
 require('@rails/ujs').start()
 global.Rails = Rails
 
-import 'style/application.scss'
+import './application.scss'
 
 import 'jquery'
-require('jquery-ui/themes/base/all')
+require('jquery-ui/themes/base/all.css')
 import 'jquery-ui'
 import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
