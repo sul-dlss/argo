@@ -1,4 +1,4 @@
-import 'style/registration.scss'
+import 'stylesheets/registration.scss'
 
 import 'jquery'
 
