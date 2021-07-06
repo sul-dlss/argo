@@ -304,5 +304,22 @@ RSpec.describe ItemChangeSetPersister do
         )
       end
     end
+
+    context 'when change set has changed APO' do
+      before do
+        change_set.validate(admin_policy_id: new_apo)
+        instance.update
+      end
+
+      let(:new_apo) { 'druid:dc123df4569' }
+
+      it 'invokes object client with collection that has new APO' do
+        expect(fake_client).to have_received(:update).with(
+          params: a_cocina_object_with_administrative(
+            hasAdminPolicy: new_apo
+          )
+        )
+      end
+    end
   end
 end
