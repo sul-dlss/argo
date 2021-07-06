@@ -17,12 +17,10 @@ RSpec.describe 'Item manage release' do
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: cocina_model,
-                    release_tags: release_tags_client,
                     events: events_client,
                     metadata: metadata_client,
                     version: version_client)
   end
-  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
   let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
   let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
   let(:item) do

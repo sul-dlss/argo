@@ -29,9 +29,8 @@ RSpec.describe ReleaseObjectJob do
       'identification' => {}
     )
   end
-  let(:release_tags_client) { instance_double(Dor::Services::Client::ReleaseTags, create: true) }
-  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, release_tags: release_tags_client) }
-  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, release_tags: release_tags_client) }
+  let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, update: double) }
+  let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, update: double) }
 
   before do
     allow(Dor::Workflow::Client).to receive(:new).and_return(client)
@@ -51,8 +50,7 @@ RSpec.describe ReleaseObjectJob do
     let(:params) do
       {
         pids: pids,
-        manage_release: { 'to' => 'SEARCHWORKS' },
-        webauth: { 'privgroup' => 'dorstuff', 'login' => 'esnowden' }
+        manage_release: { 'to' => 'SEARCHWORKS', 'who' => 'bergeraj', 'what' => 'self', 'tag' => 'true' }
       }
     end
 
@@ -102,7 +100,8 @@ RSpec.describe ReleaseObjectJob do
           expect(subject).to receive(:bulk_action).and_return(bulk_action).at_least(:once)
           expect(subject.ability).to receive(:can?).and_return(true).exactly(pids.length).times
           # no stubbed release wf calls (they should never get called)
-          allow(release_tags_client).to receive(:create).and_raise Dor::Services::Client::UnexpectedResponse, ': 500 (Response from dor-services-app did not contain a body.'
+          allow(object_client1).to receive(:update).and_raise Dor::Services::Client::UnexpectedResponse, ': 500 (Response from dor-services-app did not contain a body.'
+          allow(object_client2).to receive(:update).and_raise Dor::Services::Client::UnexpectedResponse, ': 500 (Response from dor-services-app did not contain a body.'
         end
 
         it 'updates the total druid count' do

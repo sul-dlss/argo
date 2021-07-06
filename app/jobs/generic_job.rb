@@ -59,15 +59,6 @@ class GenericJob < ActiveJob::Base
     end
   end
 
-  def string_to_boolean(string)
-    case string
-    when 'true'
-      true
-    when 'false'
-      false
-    end
-  end
-
   def update_druid_count(count: pids.length)
     bulk_action.update(druid_count_total: count)
   end
