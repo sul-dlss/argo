@@ -94,7 +94,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             body: '{"type":"http://cocina.sul.stanford.edu/models/document.jsonld",' \
             '"label":"test parameters for registration","version":1,' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-            '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+            '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
@@ -144,7 +144,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"label":"test parameters for registration","version":1,' \
             '"access":{"access":"stanford","download":"stanford","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-            '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+            '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
@@ -195,7 +195,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"label":"test parameters for registration","version":1,' \
             '"access":{"access":"location-based","download":"location-based","readLocation":"music","controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-            '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+            '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
             '"structural":{"hasMemberOrders":[{"viewingDirection":"left-to-right"}],' \
             '"isMemberOf":["druid:hv992ry7777"]}}'
           )
@@ -246,7 +246,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"label":"test parameters for registration","version":1,' \
             '"access":{"access":"world","download":"none","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-            '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+            '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
@@ -296,7 +296,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
             '"label":"test parameters for registration","version":1,' \
             '"access":{"access":"dark","download":"none","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-            '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+            '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
             '"structural":{"isMemberOf":["druid:hv992ry7777"]}}'
           )
           .to_return(status: 200, body: json, headers: {})
@@ -370,7 +370,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
         '"label":"test parameters for registration","version":1,' \
         '"access":{"access":"stanford","download":"none","readLocation":null,"controlledDigitalLending":true},' \
         '"administrative":{"hasAdminPolicy":"druid:hv992ry2431"},' \
-        '"identification":{"sourceId":"foo:bar","catalogLinks":[]},' \
+        '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},' \
         '"structural":{"hasMemberOrders":[{"viewingDirection":"left-to-right"}],' \
         '"isMemberOf":["druid:hv992ry7777"]}}'
           )
