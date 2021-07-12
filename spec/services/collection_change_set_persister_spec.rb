@@ -36,7 +36,8 @@ RSpec.describe CollectionChangeSetPersister do
           copyright: copyright_statement_before,
           license: license_before,
           useAndReproductionStatement: use_statement_before
-        }
+        },
+        administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
     end
     let(:use_statement_before) { 'My First Use Statement' }
@@ -113,6 +114,23 @@ RSpec.describe CollectionChangeSetPersister do
             copyright: copyright_statement_before,
             license: license_before,
             useAndReproductionStatement: use_statement_before
+          )
+        )
+      end
+    end
+
+    context 'when change set has changed APO' do
+      before do
+        change_set.validate(admin_policy_id: new_apo)
+        instance.update
+      end
+
+      let(:new_apo) { 'druid:dc123df4569' }
+
+      it 'invokes object client with collection that has new APO' do
+        expect(fake_client).to have_received(:update).with(
+          params: a_cocina_object_with_administrative(
+            hasAdminPolicy: new_apo
           )
         )
       end

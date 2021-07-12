@@ -71,3 +71,16 @@ RSpec::Matchers.define :a_cocina_object_with_identification do |expected|
     end
   end
 end
+
+# NOTE: each k/v pair in the hash passed to this matcher will need to be present in actual
+RSpec::Matchers.define :a_cocina_object_with_administrative do |expected|
+  match do |actual|
+    expected.all? do |expected_key, expected_value|
+      # NOTE: there's no better method on Hash that I could find for this.
+      #        #include? and #member? only check keys, not k/v pairs
+      actual.administrative.to_h.any? do |actual_key, actual_value|
+        actual_key == expected_key && actual_value == expected_value
+      end
+    end
+  end
+end

@@ -69,5 +69,33 @@ RSpec.describe 'Set APO for an object' do
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
       end
     end
+
+    context 'when a collection' do
+      let(:cocina_model) do
+        Cocina::Models.build(
+          'label' => 'My ETD',
+          'version' => 1,
+          'type' => Cocina::Models::Vocab.collection,
+          'externalIdentifier' => pid,
+          'access' => {},
+          'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+          'identification' => {}
+        )
+      end
+
+      let(:updated_model) do
+        cocina_model.new('administrative' => { 'hasAdminPolicy' => new_apo_id })
+      end
+
+      it 'updates the governing APO' do
+        post "/items/#{pid}/set_governing_apo", params: { new_apo_id: new_apo_id }
+        expect(response).to redirect_to(solr_document_path(pid))
+        expect(flash[:notice]).to eq 'Governing APO updated!'
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+      end
+    end
   end
 end
