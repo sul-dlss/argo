@@ -99,11 +99,10 @@ group :development do
 end
 
 group :test do
+  gem 'apparition'
   gem 'capybara'
   gem 'rspec_junit_formatter' # needed for test coverage in CircleCI
-  gem 'selenium-webdriver' # for js testing
   gem 'simplecov'
-  gem 'webdrivers' # installs the chrome for selenium tests
   gem 'webmock', require: false
 end
 
