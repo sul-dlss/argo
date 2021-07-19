@@ -16,7 +16,7 @@ RSpec.describe 'Open and close a version' do
 
   it 'opens an object', js: true do
     visit solr_document_path item.externalIdentifier
-    12.times do
+    13.times do
       # Ensure every step of accessionWF is completed, this will allow us to open a new version.
       click_link 'accessionWF'
       click_button 'Set to completed', match: :first
