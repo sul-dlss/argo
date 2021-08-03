@@ -70,7 +70,7 @@ RSpec.describe ModsulatorJob, type: :job do
       job.save_metadata_xml(xml_path.read, smx_path, log)
       expect(log).to have_received(:puts).with(/^argo.bulk_metadata.bulk_log_xml_timestamp .*/)
       expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_xml_filename smx.xml')
-      expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_record_count 20')
+      expect(log).to have_received(:puts).with('argo.bulk_metadata.bulk_log_record_count 21')
       expect(File.read(smx_path)).to eq xml_path.read
     end
   end
@@ -106,6 +106,7 @@ RSpec.describe ModsulatorJob, type: :job do
       expect(File.read(output_filename)).to be_equivalent_to(xml_data).ignoring_attr_values('datetime', 'sourceFile')
       expect(File).to be_exist(File.join(output_directory, Settings.bulk_metadata.log))
       expect(File).not_to be_exist test_spreadsheet_path
+      expect(File.read("#{output_directory}/#{Settings.bulk_metadata.log}")).to include 'argo.bulk_metadata.bulk_log_invalid_druid druid:bogus'
     end
 
     it 'opens the log in append mode' do

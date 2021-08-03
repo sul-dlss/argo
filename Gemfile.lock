@@ -604,6 +604,7 @@ DEPENDENCIES
   dlss-capistrano (~> 3.1)
   dor-services-client (~> 7.0)
   dor-workflow-client (~> 3.19)
+  druid-tools
   dry-monads
   equivalent-xml (>= 0.6.0)
   erb_lint (~> 0.0.31)
@@ -657,4 +658,4 @@ DEPENDENCIES
   zip_tricks (= 5.3.1)
 
 BUNDLED WITH
-   2.2.17
+   2.2.23
