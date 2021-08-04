@@ -603,4 +603,35 @@
       </relatedItem>
     </mods>
   </xmlDoc>
+    <xmlDoc id="descMetadata" objectId="bogus">
+    <mods xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.5" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd">
+      <titleInfo>
+        <title>This is a bogus druid that will not work and will write to the log file</title>
+      </titleInfo>
+      <titleInfo>
+        <title>Philip Bliss Collection</title>
+        <subTitle>Nada</subTitle>
+      </titleInfo>
+      <typeOfResource>mixed material</typeOfResource>
+      <originInfo>
+        <place>
+          <placeTerm type="text">England</placeTerm>
+        </place>
+        <dateCreated keyDate="yes">second half of the 15th c.</dateCreated>
+      </originInfo>
+      <language>
+        <languageTerm type="text">Latin</languageTerm>
+      </language>
+      <physicalDescription>
+        <note displayLabel="Note">1 leaf.</note>
+      </physicalDescription>
+      <abstract>Leaf. Text includes an account of an adulterer named Aldhelm, who lived in Leicestershire about 1450.</abstract>
+      <note displayLabel="Hand Note">Secretary hand.</note>
+      <relatedItem type="isReferencedBy">
+        <titleInfo>
+          <title>Reported to: Bibliotheque Nationale pre-1600 manuscript census.</title>
+        </titleInfo>
+      </relatedItem>
+    </mods>
+  </xmlDoc>
 </xmlDocs>

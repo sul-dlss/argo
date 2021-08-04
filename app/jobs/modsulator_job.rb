@@ -84,6 +84,12 @@ class ModsulatorJob < ActiveJob::Base
     mods_list = root.xpath('//x:xmlDoc', 'x' => namespace.href)
     mods_list.each do |xmldoc_node|
       item_druid = "druid:#{xmldoc_node.attr('objectId')}"
+
+      unless DruidTools::Druid.valid? item_druid
+        log.puts("argo.bulk_metadata.bulk_log_invalid_druid #{item_druid}")
+        next
+      end
+
       begin
         object_client = Dor::Services::Client.object(item_druid)
         cocina = object_client.find
