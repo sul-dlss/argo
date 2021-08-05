@@ -12,6 +12,10 @@ class CatalogController < ApplicationController
     ## Class for converting Blacklight's url parameters to into request parameters for the search index
     config.search_builder_class = ::SearchBuilder
 
+    # this helps get around issues with a large URL being sent to solr over GET, e.g. see https://github.com/sul-dlss/argo/issues/321 and
+    #  https://github.com/projectblacklight/blacklight/issues/1324 and more recent issues in Aug 2021 with large solr queries being sent over GET
+    config.http_method = :post
+
     # common helper method since search results and reports share most of this config
     BlacklightConfigHelper.add_common_default_solr_params_to_config! config
     config.default_solr_params[:rows] = 10
