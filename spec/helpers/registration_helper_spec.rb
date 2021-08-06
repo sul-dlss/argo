@@ -4,10 +4,12 @@ require 'rails_helper'
 
 RSpec.describe RegistrationHelper do
   describe '#apo_list' do
-    let(:perm_keys) { ['sunetid:user', 'workgroup:dlss:mock-group1', 'workgroup:dlss:mock-group2'] }
+    let(:perm_keys) { ['sunetid:user', 'workgroup:dlss:mock-group1', 'workgroup:dlss:mock-group2', 'workgroup:dlss:mock-group2/administrator'] }
 
-    it 'runs the appropriate query for the given permission keys' do
-      q = perm_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
+    it 'runs the appropriate query for the given permission keys, filtering out groups ending with /administrator' do
+      q = 'apo_register_permissions_ssim:"sunetid:user" OR '\
+          'apo_register_permissions_ssim:"workgroup:dlss:mock-group1" OR '\
+          'apo_register_permissions_ssim:"workgroup:dlss:mock-group2"'
 
       expect(SearchService).to receive(:query).with(
         q,

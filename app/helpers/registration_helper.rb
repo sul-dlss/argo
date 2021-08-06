@@ -6,7 +6,7 @@ module RegistrationHelper
   def apo_list(permission_keys)
     return [] if permission_keys.blank?
 
-    q = permission_keys.map { |key| %(apo_register_permissions_ssim:"#{key}") }.join(' OR ')
+    q = permission_keys.filter_map { |key| %(apo_register_permissions_ssim:"#{key}") unless key.end_with?('/administrator') }.join(' OR ')
 
     result = SearchService.query(
       q,
