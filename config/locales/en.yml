@@ -44,6 +44,7 @@ en:
       bulk_log_validation_error:    	   'Error - generated MODS was invalid'
       bulk_log_invalid_column:     	     'Error - spreadsheet contains unrecognized column name'
       bulk_log_skipped_mods:	   	       'Skipped - input matches current MODS'
+      bulk_log_invalid_druid:	   	       'Skipped - invalid druid'
       bulk_log_skipped_accession:  	     'Skipped - item is currently being accessioned'
       bulk_log_skipped_not_accessioned:  'Skipped - item has not yet been accessioned'
       bulk_log_no_connection:      	     'Error - unable to connect to the MODSulator server'
