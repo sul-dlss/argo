@@ -13,6 +13,7 @@ class UserLog
                            'argo.bulk_metadata.bulk_log_validation_error',
                            'argo.bulk_metadata.bulk_log_invalid_column',
                            'argo.bulk_metadata.bulk_log_skipped_mods',
+                           'argo.bulk_metadata.bulk_log_invalid_druid',
                            'argo.bulk_metadata.bulk_log_skipped_accession',
                            'argo.bulk_metadata.bulk_log_skipped_not_accessioned',
                            'argo.bulk_metadata.bulk_log_no_connection',
@@ -26,6 +27,7 @@ class UserLog
   # List the subset of messages that indicate an error with the job
   ERROR_MESSAGES = Set.new ['argo.bulk_metadata.bulk_log_apo_fail',
                             'argo.bulk_metadata.bulk_log_not_exist',
+                            'argo.bulk_metadata.bulk_log_invalid_druid',
                             'argo.bulk_metadata.bulk_log_error_exception',
                             'argo.bulk_metadata.bulk_log_validation_error',
                             'argo.bulk_metadata.bulk_log_invalid_column',
