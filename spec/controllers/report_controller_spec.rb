@@ -111,7 +111,7 @@ RSpec.describe ReportController, type: :controller do
         get :download, params: { fields: 'druid,purl,source_id_ssim,tag_ssim' }
         expect(response).to have_http_status(:ok)
         data = CSV.parse(response.body)
-        expect(data.first).to eq(%w[Druid Purl Source\ Id Tags])
+        expect(data.first).to eq(['Druid', 'Purl', 'Source Id', 'Tags'])
         expect(Report).to have_received(:new).with(ActionController::Parameters, %w[druid purl source_id_ssim tag_ssim], Hash)
         expect(data.length).to be > 1
         expect(data[1].first).to eq('ab123gg7777') # first data row starts with pid
