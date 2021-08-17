@@ -23,7 +23,7 @@ RSpec.describe 'catalog/_contents_default.html.erb', type: :view do
           'title' => [
             { 'value' => 'image integration test miry low_explosive' }
           ],
-          'purl' => 'http://purl.stanford.edu/bg954kx8787',
+          'purl' => 'https://purl.stanford.edu/bg954kx8787',
           'access' => { 'digitalRepository' => [{ 'value' => 'Stanford Digital Repository' }] }
         },
         'identification' => {
