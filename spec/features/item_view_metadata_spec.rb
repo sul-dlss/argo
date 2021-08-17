@@ -83,7 +83,7 @@ RSpec.describe 'Item view', js: true do
                 "value": "image integration test miry low_explosive"
               }
             ],
-            "purl": "http://purl.stanford.edu/hj185xx2222",
+            "purl": "https://purl.stanford.edu/hj185xx2222",
             "access": {
               "digitalRepository": [
                 {
