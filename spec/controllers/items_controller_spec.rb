@@ -240,6 +240,25 @@ RSpec.describe ItemsController, type: :controller do
         expect(object_service).not_to have_received(:update)
       end
     end
+
+    context 'when the object is not in any collections' do
+      let(:cocina) do
+        Cocina::Models.build({
+                               'label' => 'My ETD',
+                               'version' => 1,
+                               'type' => Cocina::Models::Vocab.object,
+                               'externalIdentifier' => pid,
+                               'access' => {},
+                               'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                               'structural' => {}
+                             })
+      end
+
+      it 'does nothing and does not throw an exception' do
+        post 'remove_collection', params: { id: pid, collection: 'druid:1234' }
+        expect(object_service).not_to have_received(:update).with(params: cocina)
+      end
+    end
   end
 
   describe '#mods' do

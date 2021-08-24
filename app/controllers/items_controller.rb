@@ -78,7 +78,7 @@ class ItemsController < ApplicationController
   end
 
   def remove_collection
-    new_collections = @cocina.structural.isMemberOf - [params[:collection]]
+    new_collections = Array(@cocina.structural.isMemberOf) - [params[:collection]]
     change_set = ItemChangeSet.new(@cocina)
     change_set.validate(collection_ids: new_collections)
     change_set.save
