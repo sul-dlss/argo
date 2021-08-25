@@ -13,7 +13,7 @@ class BulkActionsController < ApplicationController
   # GET /bulk_actions/new
   def new
     @form = BulkActionForm.new(BulkAction.new, groups: current_user.groups)
-    @last_search = session[:search].present? ? searches_from_history.find(session[:search]['id']) : searches_from_history.first
+    @last_search = session[:search].present? ? searches_from_history.find(session[:search]['id']) : nil
   end
 
   # POST /bulk_actions
