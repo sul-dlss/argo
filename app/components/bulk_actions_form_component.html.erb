@@ -130,7 +130,7 @@
               Edit license, copyright statement, and/or use &amp; reproduction statements
             </span>
           </div>
-          <%= render 'bulk_actions/forms/set_license_and_rights_statements_form', f: f %>
+          <%= render 'bulk_actions/forms/set_license_and_rights_statements_form', f: f, license_options: @form.license_options %>
         </div>
 
         <div role='tabpanel' class='tab-pane' id='ManageEmbargoesJob'>
@@ -145,9 +145,12 @@
     </div>
 
     <div data-bulk_actions-target="commonFields" >
-      <button class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids) %>" data-target='#pids'>
-        Populate with previous search
-      </button>
+      <% if @last_search %>
+        <button class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids) %>" data-target='#pids'>
+          Populate with previous search
+        </button>
+        <small><%= @last_search.query_params.except('controller', 'action') %></small>
+      <% end %>
       <div class='form-group'>
         <label>Druids to perform bulk action on</label>
         <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'></textarea>

@@ -33,14 +33,9 @@ RSpec.describe BulkActionsController do
 
     describe 'assigns @last_search' do
       it 'with no session[:search]' do
-        first_search = Search.create
-        last_search = Search.create
-        searches = [last_search, first_search] # Ordered desc from Blacklight
-        expect(subject).to receive(:searches_from_history).and_return searches
         expect(request.session[:search]).to be_nil
         get :new
-        expect(assigns(:last_search)).to be_an Search
-        expect(assigns(:last_search)).to eq last_search
+        expect(assigns(:last_search)).to be_nil
       end
 
       it 'with last session[:search]' do
