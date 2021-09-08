@@ -17,13 +17,7 @@ RSpec.describe 'application and dependency monitoring' do
       stub_request(:get, "https://#{Settings.stacks.host}")
         .to_return(status: 200, body: '', headers: {})
 
-      stub_request(:get, Settings.stacks_file_url)
-        .to_return(status: 200, body: '', headers: {})
-
-      stub_request(:get, Settings.stacks_url)
-        .to_return(status: 200, body: '', headers: {})
-
-      stub_request(:get, Settings.modsulator_url)
+      stub_request(:get, "#{Settings.modsulator_url.split('v1').first}v1/about")
         .to_return(status: 200, body: '', headers: {})
 
       stub_request(:get, Settings.normalizer_url)
@@ -33,7 +27,6 @@ RSpec.describe 'application and dependency monitoring' do
     it 'checks dependencies' do
       visit '/status/all'
       expect(page).to have_text('dor_search_service_solr') # required check
-      expect(page).to have_text('stacks_file_url') # non-crucial check
     end
   end
 end

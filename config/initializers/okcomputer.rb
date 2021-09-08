@@ -42,41 +42,12 @@ OkComputer::Registry.register 'feature-tables-have-data', TablesHaveDataCheck.ne
 solr_url = Blacklight.connection_config.fetch(:url)
 OkComputer::Registry.register 'dor_search_service_solr', OkComputer::HttpCheck.new("#{solr_url}/admin/ping")
 
-# ------------------------------------------------------------------------------
-
-# NON-CRUCIAL (Optional) checks, avail at /status/<name-of-check>
-#   - at individual endpoint, HTTP response code reflects the actual result
-#   - in /status/all, these checks will display their result text, but will not affect HTTP response code
-OkComputer::Registry.register 'dor_services_url', OkComputer::HttpCheck.new(Settings.dor_services.url)
-OkComputer::Registry.register 'workflow_url', OkComputer::HttpCheck.new(Settings.workflow_url)
-
-# Stacks
-OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.stacks.local_workspace_root)
 OkComputer::Registry.register 'stacks_host', OkComputer::HttpCheck.new("https://#{Settings.stacks.host}")
-OkComputer::Registry.register 'stacks_file_url', OkComputer::HttpCheck.new(Settings.stacks_file_url)
-OkComputer::Registry.register 'stacks_thumbnail_url', OkComputer::HttpCheck.new(Settings.stacks_url)
+OkComputer::Registry.register 'stacks_local_workspace_root', OkComputer::DirectoryCheck.new(Settings.stacks.local_workspace_root)
 
-# Bulk Metadata - probably for bulk downloads
+# Bulk Metadata  services
 OkComputer::Registry.register 'bulk_metadata_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.directory)
 OkComputer::Registry.register 'bulk_metadata_tmp_dir', OkComputer::DirectoryCheck.new(Settings.bulk_metadata.temporary_directory)
-
-# Modsulator, etc - probably for bulk updates?
-OkComputer::Registry.register 'modsulator_url', OkComputer::HttpCheck.new(Settings.modsulator_url)
-OkComputer::Registry.register 'normalizer_url', OkComputer::HttpCheck.new(Settings.normalizer_url)
+modsulator_url = "#{Settings.modsulator_url.split('v1').first}v1/about"
+OkComputer::Registry.register 'modsulator_app', OkComputer::HttpCheck.new(modsulator_url)
 OkComputer::Registry.register 'spreadsheet_url', OkComputer::HttpCheck.new(Settings.spreadsheet_url)
-
-# purl_url is only used for links out and we decided not to include it here
-
-OkComputer.make_optional %w[
-  bulk_metadata_dir
-  bulk_metadata_tmp_dir
-  dor_services_url
-  modsulator_url
-  normalizer_url
-  spreadsheet_url
-  stacks_file_url
-  stacks_host
-  stacks_local_workspace_root
-  stacks_thumbnail_url
-  workflow_url
-]
