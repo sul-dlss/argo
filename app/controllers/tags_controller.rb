@@ -16,13 +16,16 @@ class TagsController < ApplicationController
     current_tags = tags_client.list
 
     @form = TagsForm.new(ModelProxy.new(id: params[:item_id], tags: current_tags.map { |name| Tag.new(name: name) }))
-    @form.validate(params[:tags])
-    @form.save
-
-    reindex
     respond_to do |format|
-      msg = "Tags for #{params[:item_id]} have been updated!"
-      format.any { redirect_to solr_document_path(params[:item_id]), notice: msg }
+      if @form.validate(params[:tags]) && @form.save
+        reindex
+        msg = "Tags for #{params[:item_id]} have been updated!"
+        format.html { redirect_to solr_document_path(params[:item_id], format: :html), notice: msg }
+      else
+        format.turbo_stream do
+          render turbo_stream: turbo_stream.replace('modal-frame', partial: 'edit'), status: :unprocessable_entity
+        end
+      end
     end
   end
 
@@ -67,10 +70,6 @@ class TagsController < ApplicationController
         tags: tags.map { |name| Tag.new(name: name, id: name) }
       )
     )
-
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
-    end
   end
 
   private

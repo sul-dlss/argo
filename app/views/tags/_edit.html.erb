@@ -1,22 +1,36 @@
-<%= form_with model: @form,
-              url: item_tags_path(item_id: @form),
-              method: 'patch',
-              local: true,
-              data: { controller: 'nested-form', nested_form_selector_value: '.plain-container' } do |form| %>
+<%= render EditModalComponent.new do |component| %>
+  <% component.header { 'Manage tags' } %>
+  <% component.body do %>
+    <%= form_with model: @form,
+                  url: item_tags_path(item_id: @form),
+                  method: 'patch',
+                  data: { controller: 'nested-form', nested_form_selector_value: '.plain-container' } do |form| %>
 
-  <template data-nested-form-target='template'>
-    <%= form.fields_for :tags, TagsController::Tag.new, child_index: 'TEMPLATE_RECORD' do |tag_form| %>
-      <%= render 'row', form: tag_form %>
+      <% if @form.errors.full_messages.present? %>
+        <div id="error_explanation">
+          <ul>
+          <% @form.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <template data-nested-form-target='template'>
+        <%= form.fields_for :tags, TagsController::Tag.new, child_index: 'TEMPLATE_RECORD' do |tag_form| %>
+          <%= render 'row', form: tag_form %>
+        <% end %>
+      </template>
+
+      <%= form.fields_for :tags do |tag_form| %>
+        <%= render 'row', form: tag_form %>
+      <% end %>
+
+      <div data-nested-form-target="add_item" class="mb-5">
+        <%= button_tag '+ Add another tag', type: 'button', class: "col-sm-2 btn btn-outline-primary",  data: { action: "nested-form#addAssociation" } %>
+      </div>
+
+      <button class='btn btn-primary'>Save</button>
     <% end %>
-  </template>
-
-  <%= form.fields_for :tags do |tag_form| %>
-    <%= render 'row', form: tag_form %>
   <% end %>
-
-  <div data-nested-form-target="add_item" class="mb-5">
-    <%= button_tag '+ Add another tag', type: 'button', class: "col-sm-2 btn btn-outline-primary",  data: { action: "nested-form#addAssociation" } %>
-  </div>
-
-  <button class='btn btn-primary' data-action="nested-form#disableSubmit">Save</button>
 <% end %>

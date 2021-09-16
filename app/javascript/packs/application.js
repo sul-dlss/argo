@@ -13,6 +13,8 @@ const imagePath = (name) => images(name, true)
 require('@rails/ujs').start()
 global.Rails = Rails
 
+import '@hotwired/turbo-rails'
+
 import 'style/application.scss'
 
 import 'jquery'
@@ -21,7 +23,6 @@ import 'jquery-ui'
 import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
 import "controllers"
-import '@hotwired/turbo-rails'
 
 import Argo from 'argo'
 

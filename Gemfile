@@ -60,7 +60,7 @@ gem 'rest-client'
 gem 'retries'
 gem 'ruby-prof'
 gem 'rubyzip'
-gem 'turbo-rails', '~> 0.5.9'
+gem 'turbo-rails', '~> 0.7.13'
 gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all feature
 
 # Stanford related gems
