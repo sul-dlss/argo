@@ -337,3 +337,5 @@ Naming/InclusiveLanguage: # (new in 1.18)
   Enabled: true
 Style/RedundantSelfAssignmentBranch: # (new in 1.19)
   Enabled: true
+Rails/RedundantTravelBack: # new in 2.12
+  Enabled: true
