@@ -120,3 +120,5 @@ group :production do
 end
 
 gem "jsbundling-rails", "~> 0.1.5"
+
+gem "cssbundling-rails", "~> 0.1.7"

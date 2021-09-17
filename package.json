@@ -13,6 +13,7 @@
     "jquery": "^3.4.1",
     "popper.js": "^1.15.0",
     "renderjson": "^1.4.0",
+    "sass": "^1.41.1",
     "stimulus": "^2.0.0"
   },
   "devDependencies": {
@@ -20,6 +21,7 @@
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --outdir=app/assets/builds"
+    "build": "esbuild app/javascript/*.* --bundle --outdir=app/assets/builds",
+      "build:css": "sass ./app/assets/stylesheets/application.scss ./app/assets/builds/application.css --no-source-map --load-path=node_modules"
   }
 }

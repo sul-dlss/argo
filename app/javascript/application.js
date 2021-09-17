@@ -6,9 +6,6 @@ const imagePath = (name) => images(name, true)
 require('@rails/ujs').start()
 global.Rails = Rails
 
-// import 'style/application.scss'
-// require('jquery-ui/themes/base/all')
-
 import 'jquery'
 import 'jquery-ui'
 import 'jquery-validation'
@@ -22,3 +19,4 @@ import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
 import './modules/blacklight-override'
 
 document.addEventListener("turbo:load", () => { new Argo().initialize() })
+import * as bootstrap from "bootstrap"

@@ -1,6 +1,7 @@
-@import 'free-jqgrid/css/ui.jqgrid.css';
+@import 'free-jqgrid/css/ui.jqgrid';
 @import 'variables';
 @import 'bootstrap/scss/bootstrap';
+@import 'test';
 @import 'bootstrap-overrides';
 // Override before importing Blacklight
 $logo-image: "../images/logo.png";
@@ -28,3 +29,4 @@ $logo-image: "../images/logo.png";
 @import "workflow_grid";
 @import "throbber";
 @import "tags-autocomplete";
+// @import '../../../node_modules/jquery-ui/themes/base/all';
