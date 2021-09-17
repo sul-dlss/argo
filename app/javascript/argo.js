@@ -1,18 +1,18 @@
-import 'spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
+import './spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
 
-import 'modules/apo_form'
-import 'modules/button_checker'
-import 'modules/date_range_query'
-import ItemCollection from 'modules/item_collection'
-import 'modules/permission_add'
-import 'modules/permission_grant'
-import 'modules/permission_list'
-import 'modules/populate_druids'
-import 'modules/sharing'
-import TagsAutocomplete from 'modules/tags_autocomplete'
+import './modules/button_checker'
+import './modules/datastream_edit'
+import './modules/date_range_query'
+import ItemCollection from './modules/item_collection'
+import './modules/permission_add'
+import './modules/permission_grant'
+import './modules/permission_list'
+import './modules/populate_druids'
+import './modules/sharing'
+import TagsAutocomplete from './modules/tags_autocomplete'
 import ProjectAutocomplete from 'modules/project_autocomplete'
 
-import Form from 'modules/apo_form'
+import Form from './modules/apo_form'
 import bsCustomFileInput from 'bs-custom-file-input'
 
 require('@github/time-elements')

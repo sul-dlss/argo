@@ -1,4 +1,4 @@
-import Sharing from 'modules/sharing'
+import Sharing from './sharing'
 
 export default class {
     /**

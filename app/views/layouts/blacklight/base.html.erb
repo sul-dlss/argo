@@ -11,7 +11,7 @@
     <title><%= render_page_title %></title>
     <%= opensearch_description_tag application_name, opensearch_catalog_url(format: 'xml') %>
     <%= favicon_pack_tag 'favicon.ico' %>
-    <%= javascript_pack_tag 'application', 'data-turbo-track': 'reload' %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= stylesheet_pack_tag 'application', 'data-turbo-track': 'reload' %>
 
     <%= csrf_meta_tags %>
