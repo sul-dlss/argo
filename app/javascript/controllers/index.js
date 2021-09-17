@@ -2,6 +2,7 @@ import { Application } from 'stimulus'
 import CollectionEditor from 'controllers/collection_editor'
 import BulkActions from 'controllers/bulk_actions'
 import BulkUpload from 'controllers/bulk_upload'
+import Button from 'controllers/button'
 import FacetFilter from 'controllers/facet_filter'
 import JSONRenderer from 'controllers/json_renderer'
 import Tokens from 'controllers/tokens'
@@ -12,6 +13,7 @@ import NestedFormController from 'controllers/nested_form_controller'
 const application = Application.start()
 application.register("bulk_actions", BulkActions)
 application.register("bulk_upload", BulkUpload)
+application.register("button", Button)
 application.register("facet-filter", FacetFilter)
 application.register('json-renderer', JSONRenderer)
 application.register("workflow-grid", WorkflowGrid)

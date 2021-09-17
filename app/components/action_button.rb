@@ -23,7 +23,8 @@ class ActionButton < ApplicationComponent
         # :confirm trumps :blacklight_modal, because :blacklight_modal would negate :confirm by firing the ajax request regardless of the user's decision
         data[:confirm] = confirm
       elsif !new_page
-        data[:blacklight_modal] = 'trigger'
+        data[:controller] = 'button'
+        data[:action] = 'click->button#open'
       end
       data[:check_url] = check_url if check_url
     end

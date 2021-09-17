@@ -11,6 +11,11 @@ class TagsForm < Reform::Form
     property :id # really just the previous value
     property :name
     property :_destroy, virtual: true
+    validates :name, format: { with: /.+( : .+)+/, message: "must include the pattern:
+
+[term] : [term]
+
+It's legal to have more than one colon in a hierarchy, but at least one colon is required." }
   end
 
   def save
