@@ -337,12 +337,12 @@ GEM
     netrc (0.11.0)
     newrelic_rpm (8.0.0)
     nio4r (2.5.8)
-    nokogiri (1.12.4)
+    nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    nokogiri (1.12.4-x86_64-darwin)
+    nokogiri (1.12.5-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.12.4-x86_64-linux)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     nokogiri-happymapper (0.8.1)
       nokogiri (~> 1.5)
@@ -616,7 +616,7 @@ DEPENDENCIES
   mods_display
   mysql2 (< 0.5.3)
   newrelic_rpm
-  nokogiri (~> 1.11)
+  nokogiri (~> 1.12)
   okcomputer
   prawn (~> 1)
   prawn-table
