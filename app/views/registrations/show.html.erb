@@ -32,34 +32,60 @@
   <div class="break"></div>
 </div>
 
-<div id='dialogs'>
-  <div id='invalid_dialog'>
-    <p>
-      The form contains errors. Please correct them before submitting.
-    </p>
-  </div>
-  <div id='specify'>
-    <p>
-      Please specify both an Admin Policy and a Metadata Source before continuing.
-    </p>
-  </div>
-  <div id='progress_dialog'>
-    <div id='progress'></div>
-  </div>
-  <div id='reset_dialog'>
-    <p>
-      Are you sure you want to clear the grid?
-    </p>
-  </div>
-  <div id='editing_dialog'>
-    <p>
-      You are still editing a cell. Please use tab or enter to finish editing before trying to register items.
-    </p>
-  </div>
-</div>
 
-</div>
 <div id='dynamic' class='row'>
   <table id='data'></table>
   <div id='pdata'></div><%= text_area_tag :id_list, '', class: 'full-width', id: :id_list, rows: 7 %>
+</div>
+
+<div class="modal" tabindex="-1" id="gridErrorModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Error</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Error</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" id="resetModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to clear the grid?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-action="reset" data-dismiss="modal">Ok</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" id="progressModal" data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Progress</h5>
+      </div>
+      <div class="modal-body">
+        <div id='progress'></div>
+      </div>
+    </div>
+  </div>
 </div>
