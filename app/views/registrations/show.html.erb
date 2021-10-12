@@ -1,8 +1,4 @@
 <% @title = 'Register DOR Objects' %>
-<% content_for :head do %>
-  <%= stylesheet_pack_tag 'registration', 'data-turbo-track': 'reload' %>
-  <%= javascript_pack_tag 'registration', 'data-turbo-track': 'reload' %>
-<% end %>
 
 <div id='properties' class="ui-widget" style="display: none">
   <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), 'data-rcparam': 'apoId' %></div>
@@ -33,7 +29,7 @@
 </div>
 
 
-<div id='dynamic' class='row'>
+<div id='dynamic' class='row' data-controller="grid">
   <table id='data'></table>
   <div id='pdata'></div><%= text_area_tag :id_list, '', class: 'full-width', id: :id_list, rows: 7 %>
 </div>

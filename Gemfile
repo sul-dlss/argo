@@ -8,8 +8,6 @@ gem 'rails', '~> 6.1.4'
 # Use Puma as the app server
 gem 'puma', '~> 4.3'
 
-gem 'webpacker', '~> 5.0'
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -19,6 +17,9 @@ gem 'jbuilder', '~> 2.5'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
+gem 'cssbundling-rails', '~> 0.1.7'
+gem 'jsbundling-rails', '~> 0.1.5'
 
 gem 'view_component', '~> 2.31.1' # lock this until BL 7.19.2 is released
 
@@ -118,7 +119,3 @@ group :production do
   # mysql 0.5.3 is not compatible with the version of MySQL we are using (5.1)
   gem 'mysql2', '< 0.5.3'
 end
-
-gem "jsbundling-rails", "~> 0.1.5"
-
-gem "cssbundling-rails", "~> 0.1.7"

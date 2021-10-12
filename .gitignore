@@ -7,12 +7,9 @@
 config/certs
 coverage/
 db/*.sqlite3
-dpg_pool
-gem_graph.png
 examples.txt
 
 /public/assets
-public/images/.dpg_pool
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
@@ -27,9 +24,6 @@ vendor/ruby/
 # The docker volume for the workflow database
 postgres-data
 
-/public/packs
-/public/packs-test
-/node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity

@@ -209,6 +209,9 @@ jobs:
           name: Database setup
           command: bundle exec rails db:test:prepare
       - run:
+          name: Build assets
+          command: bundle exec rails assets:precompile
+      - run:
           name: Create directories
           command: mkdir -p public/workspace tmp/preview
       - run:

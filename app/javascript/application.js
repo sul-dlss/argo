@@ -1,22 +1,31 @@
 // Entry point for the build script in your package.json
 
-const images = require.context('../images', true)
-const imagePath = (name) => images(name, true)
-
-require('@rails/ujs').start()
-global.Rails = Rails
-
 import 'jquery'
-import 'jquery-ui'
-import 'jquery-validation'
+// These are all jquery plugins that depend on jquery
+import './jquery.defaultText'
+import './jquery.textarea'
+import './spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
+import './modules/button_checker'
+import './modules/date_range_query'
+import './modules/populate_druids'
+
 import "bootstrap/dist/js/bootstrap"
+
+
+// rails-ujs is required for Blacklight (see https://github.com/projectblacklight/blacklight/pull/2490)
+import Rails from '@rails/ujs';
+Rails.start();
+global.Rails = Rails
+import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
+import './modules/blacklight-override'
 import "./controllers"
-import '@hotwired/turbo-rails'
 
 import Argo from './argo'
 
-import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
-import './modules/blacklight-override'
+document.addEventListener("turbo:load", async () => {
+  await import('https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.src.js')
 
-document.addEventListener("turbo:load", () => { new Argo().initialize() })
-import * as bootstrap from "bootstrap"
+  // Start argo after free-jqgrid has been loaded
+  new Argo().initialize()
+})
+import '@hotwired/turbo-rails'
