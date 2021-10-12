@@ -72,7 +72,7 @@ class RegistrationsController < ApplicationController
   end
 
   def autocomplete
-    facet_field = params[:field]
+    facet_field = 'project_tag_ssim'
     response = SearchService.query(
       '*:*',
       rows: 0,
@@ -83,9 +83,7 @@ class RegistrationsController < ApplicationController
       'json.nl': 'map'
     )
     result = response['facet_counts']['facet_fields'][facet_field].keys.sort
-    respond_to do |format|
-      format.any(:json, :xml) { render request.format.to_sym => result }
-    end
+    render json: result
   end
 
   private

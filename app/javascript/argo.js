@@ -10,6 +10,8 @@ import 'modules/permission_list'
 import 'modules/populate_druids'
 import 'modules/sharing'
 import TagsAutocomplete from 'modules/tags_autocomplete'
+import ProjectAutocomplete from 'modules/project_autocomplete'
+
 import Form from 'modules/apo_form'
 import bsCustomFileInput from 'bs-custom-file-input'
 
@@ -46,6 +48,8 @@ $(document).on('keyup', '#collection_catkey', function(e) {
 export default class Argo {
     initialize() {
         this.tagsAutocomplete()
+        this.projectAutocomplete()
+
         this.spreadsheet()
         this.buttonChecker()
         this.dateRangeQuery()
@@ -66,6 +70,10 @@ export default class Argo {
 
     tagsAutocomplete() {
       new TagsAutocomplete().initialize()
+    }
+
+    projectAutocomplete() {
+      new ProjectAutocomplete().initialize()
     }
 
     spreadsheet() {
