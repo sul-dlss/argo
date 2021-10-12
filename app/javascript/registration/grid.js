@@ -1,6 +1,5 @@
 import DorRegistration from './register'
 import pathTo from './pathTo'
-import 'jquery-ui/ui/widgets/progressbar'
 import 'jquery-ui/ui/widgets/controlgroup'
 import 'jquery-ui/ui/widgets/checkboxradio'
 import 'jquery-ui/ui/widgets/button'
@@ -41,11 +40,10 @@ var gridContext = function() {
           var numItems = $('#data').jqGrid('getDataIDs').length;
           progressStep = 100 / numItems;
           currentStep = 0;
-          $('#progress').progressbar('option','value',currentStep);
           $t.rc.progressDialog(numItems)
         } else {
           currentStep += progressStep;
-          $('#progress').progressbar('option','value', currentStep);
+          document.getElementById('register-progress').value = currentStep
           if (currentStep >= 99.999) { $('#progressModal').modal('hide') }
         }
       },
@@ -545,7 +543,6 @@ var gridContext = function() {
       });
 
 
-      $('#progress').progressbar();
       $('#id_list').tabby();
 
       return(this);
