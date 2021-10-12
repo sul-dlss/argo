@@ -20,7 +20,6 @@ import 'style/application.scss'
 import 'jquery'
 require('jquery-ui/themes/base/all')
 import 'jquery-ui'
-import 'jquery-validation'
 import "bootstrap/dist/js/bootstrap"
 import "controllers"
 
