@@ -2,7 +2,6 @@ import 'spreadsheet' // Note: this library is used to read/write spreadsheet doc
 
 import 'modules/apo_form'
 import 'modules/button_checker'
-import 'modules/datastream_edit'
 import 'modules/date_range_query'
 import ItemCollection from 'modules/item_collection'
 import 'modules/permission_add'
@@ -49,7 +48,6 @@ export default class Argo {
         this.tagsAutocomplete()
         this.spreadsheet()
         this.buttonChecker()
-        this.xmlEdit()
         this.dateRangeQuery()
         this.itemCollection()
         this.populateDruids()
@@ -83,16 +81,6 @@ export default class Argo {
 
     buttonChecker() {
       $('a.disabled[data-check-url]').buttonChecker()
-    }
-
-    /*
-       Because we are in a modal dialog we need to use the 'loaded' event
-       to trigger the form validation setup.
-     */
-    xmlEdit() {
-      $('body').on('loaded.persistent-modal', function() {
-        $('#xmlEditForm').datastreamXmlEdit()
-      })
     }
 
     dateRangeQuery() {
