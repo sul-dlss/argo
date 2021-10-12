@@ -1,7 +1,7 @@
 <%= form_for @form, url: { action: @form.persisted? ? 'update' : 'create'}, data: { behavior: 'apo-form' } do |f| %>
   <div class="form-group">
     <%= f.label :title %>
-    <%= f.text_field :title, class: 'form-control' %>
+    <%= f.text_field :title, class: 'form-control', required: true %>
     <span id="title-err-msg-elt" class="apo-register-error"></span>
   </div>
 
