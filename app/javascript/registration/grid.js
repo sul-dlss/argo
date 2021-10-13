@@ -1,6 +1,5 @@
 import DorRegistration from './register'
 import pathTo from './pathTo'
-import 'jquery-ui/ui/widgets/autocomplete'
 import 'jquery-ui/ui/widgets/dialog'
 import 'jquery-ui/ui/widgets/progressbar'
 
@@ -454,11 +453,6 @@ var gridContext = function() {
     },
 
     initializeDialogs: function() {
-      $('#project').autocomplete({
-        source: pathTo('/registration/suggest_project'),
-        minLength: 0,
-      });
-
       // Update Workflow and Form lists when APO changes
       $('#apo_id').change(function(e) {
         $.ajax({

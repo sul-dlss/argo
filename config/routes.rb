@@ -157,7 +157,7 @@ Rails.application.routes.draw do
       get 'collection_list'
       get 'workflow_list'
       get 'rights_list'
-      get 'suggest_project', action: 'autocomplete', field: 'project_tag_ssim'
+      get 'suggest_project', action: 'autocomplete'
     end
   end
 
