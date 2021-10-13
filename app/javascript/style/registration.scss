@@ -1,3 +1,48 @@
 @import 'registration/registration';
 @import 'registration/ui-override';
 @import 'jquery-ui-1.12.1.custom/jquery-ui.theme';
+
+.ui-controlgroup {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.ui-helper-hidden-accessible {
+	border: 0;
+	clip: rect(0 0 0 0);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+}
+
+.ui-button {
+	padding: .4em 1em;
+	display: inline-block;
+	position: relative;
+	line-height: normal;
+	margin-right: .1em;
+	cursor: pointer;
+	vertical-align: middle;
+	text-align: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	overflow: visible;
+}
+
+.ui-controlgroup > .ui-controlgroup-item {
+	float: left;
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active {
+	border: 1px solid #dc5541;
+	background: #fff 50% 50% repeat-x;
+	font-weight: 400;
+	color: #212121;
+}

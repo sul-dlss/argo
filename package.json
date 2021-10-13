@@ -10,7 +10,6 @@
     "bs-custom-file-input": "^1.3.4",
     "free-jqgrid": "^4.15.5",
     "jquery": "^3.4.1",
-    "jquery-ui": "^1.12.1",
     "popper.js": "^1.15.0",
     "renderjson": "^1.4.0",
     "stimulus": "^2.0.0"

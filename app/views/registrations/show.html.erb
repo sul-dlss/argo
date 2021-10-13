@@ -8,7 +8,7 @@
   <div class="property-item"><label for='apo_id'>Admin Policy</label><%= select_tag :apo_id, options_for_select(apo_list(@perm_keys)), 'data-rcparam': 'apoId' %></div>
   <div class="property-item"><label for='collection'>Collection</label><%= select_tag :collection, '', 'data-rcparam': 'collection' %></div>
 
-  <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS), 'data-tagname': 'Process : Rights' %></div>
+  <div class="property-item"><label for="rights">Rights</label><%= select_tag :rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS) %></div>
   <div class="property-item"><label for='workflow_id'>Initial Workflow</label><%= select_tag :workflow_id, '', 'data-rcparam': 'workflowId' %></div>
   <div class="property-item"><label for='content_type'>Content Type</label><%= select_tag :content_type, options_for_select(valid_content_types), class: 'tag-field', 'data-tagname': 'Process : Content Type' %></div>
   <div class="property-item break"><label for='project'>Project Name</label><%= text_field_tag :project, nil, data: { rcparam: 'projectName', project_autocomplete: true } %></div>
@@ -37,6 +37,52 @@
   <table id='data'></table>
   <div id='pdata'></div><%= text_area_tag :id_list, '', class: 'full-width', id: :id_list, rows: 7 %>
 </div>
+<template id="table-header">
+  <div id="icons" data-controller="registration">
+    <span class="button-group">
+      <button class="action-lock ui-button ui-corner-all ui-widget" data-action="click->registration#lock" data-registration-target="lockButton">
+        <span class="icon-lock"></span>
+        <span class="ui-button-icon-space"> </span>Lock
+      </button>
+      <button class="action-unlock ui-button ui-corner-all ui-widget enabled-grid-locked" hidden="true" data-action="click->registration#unlock" data-registration-target="unlockButton">
+        <span class="icon-unlock"></span>
+        <span class="ui-button-icon-space"> </span>Unlock
+      </button>
+    </span>
+    
+    <span class="button-group">
+      <button class="action-add ui-button ui-corner-all ui-widget" data-action="click->registration#addRow">
+        <span class="icon-plus"></span>
+        <span class="ui-button-icon-space"> </span>Add Row
+      </button>
+      <button class="action-delete ui-button ui-corner-all ui-widget" data-action="click->registration#deleteRows">
+        <span class="icon-minus"></span>
+        <span class="ui-button-icon-space"> </span>Delete Rows
+      </button>
+      <button class="action-clear ui-button ui-corner-all ui-widget" data-action="click->registration#resetDialog">
+        <span class="icon-refresh"></span>
+        <span class="ui-button-icon-space"> </span>Reset
+      </button>
+    </span>
+    
+    <span class="button-group">
+      <button class="action-register ui-button ui-corner-all ui-widget enabled-grid-locked" data-action="click->registration#register">
+        <span class="icon-register"></span><span class="ui-button-icon-space"> </span>Register
+      </button>
+      <button class="action-pdf ui-button ui-corner-all ui-widget enabled-grid-locked" data-action="click->registration#trackingSheet">
+        <span class="icon-tracking"></span>
+        <span class="ui-button-icon-space"> </span>Tracking Sheets
+      </button>
+    </span>
+    
+    <span class="button-group ui-controlgroup ui-controlgroup-horizontal ui-helper-clearfix" id="view-toggle" role="toolbar">
+      <input type="radio" id="grid-view" name="view" checked="checked" class="ui-checkboxradio ui-helper-hidden-accessible" data-action="click->registration#enableGridView">
+      <label for="grid-view" class="ui-button ui-widget ui-checkboxradio-radio-label ui-checkboxradio-checked ui-state-active ui-controlgroup-item ui-checkboxradio-label ui-corner-left" data-registration-target="gridShowLabel">Grid</label>
+      <input type="radio" id="text-view" name="view" class="ui-checkboxradio ui-helper-hidden-accessible" data-action="click->registration#enableTextView">
+      <label for="text-view" class="ui-button ui-widget ui-checkboxradio-radio-label ui-controlgroup-item ui-checkboxradio-label ui-corner-right" data-registration-target="textShowLabel">Text</label>
+    </span>
+  </div>
+</template>
 
 <div class="modal" tabindex="-1" id="gridErrorModal">
   <div class="modal-dialog">

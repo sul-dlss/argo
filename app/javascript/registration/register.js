@@ -2,55 +2,58 @@ import pathTo from './pathTo'
 
 export default function DorRegistration(initOpts) {
   var $t = {
-    defaultValues: {
-      projectName: '',
-      apoId: 'druid:hv992ry2431',   // TODO: uber APO druid must be pulled from config, not hardcoded
-      workflowId: null,
-      mdFormId: null,
-      metadataSource: 'Auto',
-      tagList: "",
-      collection: 'None'
-    },
-
-    setDefault : function(param) {
-      if (param == null) {
-        for (param in $t.defaultValues) { $t.setDefault(param) }
-      } else {
-        $t[param] = $t.defaultValues[param]
-      }
-    },
-
     getTrackingSheet : function(druids) {
-      var project = $t.projectName;
+      var project = $t.projectName();
       var sequence = 1;
       var query = $.param({ druid : druids, name : project, sequence : sequence });
       var url = pathTo("/registration/tracksheet?"+query);
       document.location.href = url;
     },
 
+    apoId : function() { 
+      return document.querySelector('[data-rcparam="apoId"]').value
+    },
+
+    projectName : function() { 
+      return document.querySelector('[data-rcparam="projectName"]').value
+    },
+
+    collection : function() { 
+      return document.querySelector('[data-rcparam="collection"]').value
+    },
+
+    workflowId : function() { 
+      return document.querySelector('[data-rcparam="workflowId"]').value
+    },
+
+    rights: function() {
+      return document.getElementById('rights').value
+    },
+
     register : function(rowid, progressFunction) {
-      var apo = $t.apoId;
       progressFunction = progressFunction || function() {}
 
-      // Grab list of tags from textarea, split, and reject blanks
-      var tags = $.grep($t.tagList.split('\n'), function(tag) { return tag.trim() == '' ? false : true })
-      var project = $t.projectName;
-      if ($t.mdFormId) {
-        tags.unshift('MDForm : '+$t.mdFormId);
-      }
+      // Grab list of tags from the form and rejects blanks
+      var tags = Array.from(document.querySelectorAll('#properties .tag-field')).map((elem) => {
+        var value = elem.value
+        if (elem.disabled || value == null || value.trim() == '')
+          return null
+
+        const prefix = elem.dataset.tagname
+        return prefix ? `${prefix} : ${value}` : value
+      }).filter(n => n)
 
       var data = $t.getData(rowid);
       data.id = rowid
 
       var params = {
-        authenticity_token: Rails.csrfToken(),
-        'admin_policy' : apo,
-        'project' : $t.projectName,
-        'workflow_id' : $('#workflow_id').val(),
+        'admin_policy' : this.apoId(),
+        'project' : this.projectName(),
+        'workflow_id' : this.workflowId(),
         'label' : data.label || ':auto',
         'tag' : tags,
-        'rights' : $('#rights').val(),
-        'collection' : collection.value
+        'rights' : this.rights(),
+        'collection' : this.collection()
       }
 
       if (data.source_id) {
@@ -60,7 +63,6 @@ export default function DorRegistration(initOpts) {
       if (data.barcode_id) {
         params.barcode_id = data.barcode_id
       }
-
       params.other_id = $t.metadataSource + ':' + data.metadata_id;
 
       if (data.druid) {
@@ -69,39 +71,40 @@ export default function DorRegistration(initOpts) {
 
       for (let x in params) { if (params[x] == null) { delete params[x] } }
 
-      var ajaxParams = {
-        type: 'POST',
-        url: pathTo('/dor/objects'),
-        data: params,
-        beforeSend: function(xhr) {
-          $t.setStatus(data, 'pending')
-        },
-        dataType: 'json',
-        success: function(response,status,xhr) {
-          if (response) {
-            data.druid = response['pid'].split(':')[1];
-            data.label = response['label'];
-            progressFunction(xhr);
-          }
-        },
-        error: function(xhr,status,errorThrown) {
-          if (xhr.status < 500) {
-            data.error = xhr.responseText;
-          } else {
-            data.error = xhr.statusText;
-          }
-          progressFunction(xhr);
-        },
-        complete: function(xhr,status) {
-            $t.setStatus(data, status);
-        },
-      }
       $t.setStatus(data, 'queued');
-      var xhr = $.ajax(ajaxParams);
+
+      // Grab the CSRF token from the meta tag (null-coalescing operator for the test environment)
+      const csrfToken = document.querySelector("[name='csrf-token']")?.content
+      fetch(pathTo('/dor/objects'), {
+        method: 'POST',
+        headers: {
+          "X-CSRF-Token": csrfToken,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      })
+      .then(response => {
+        if (!response.ok) {
+          data.error = response.statusText
+          console.error(response)
+          $t.setStatus(data, 'error');
+        } else {
+          response.json().then(json => {
+            console.log(json)
+            data.druid = json['pid'].split(':')[1];
+            data.label = json['label'];
+            $t.setStatus(data, 'success');
+          })
+        }
+        progressFunction()
+      })
+      .catch(error => {
+        console.error(error)
+      })
     },
 
     validate : function() {
-      if ($.isEmptyObject($t.apoId)) {
+      if (!$t.apoId()) {
         $t.displayRequirements('Please specify an Admin Policy before continuing.');
         return false
       }
@@ -156,13 +159,12 @@ export default function DorRegistration(initOpts) {
     },
 
     registerAll : function() {
-      var apo = $t.apoId;
       if (this.validate()) {
         var ids = $t.getDataIds();
         $t.progress(true);
         for (var i = 0; i < ids.length; i++) {
           var rowid = ids[i];
-          $t.register(rowid, function(xhr) {
+          $t.register(rowid, function() {
             $t.progress();
           });
         }

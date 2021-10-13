@@ -18,8 +18,6 @@ import '@hotwired/turbo-rails'
 import 'style/application.scss'
 
 import 'jquery'
-require('jquery-ui/themes/base/all')
-import 'jquery-ui'
 import "bootstrap/dist/js/bootstrap"
 import "controllers"
 
