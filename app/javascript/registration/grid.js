@@ -1,7 +1,9 @@
 import DorRegistration from './register'
 import pathTo from './pathTo'
-import 'jquery-ui/ui/widgets/dialog'
 import 'jquery-ui/ui/widgets/progressbar'
+import 'jquery-ui/ui/widgets/controlgroup'
+import 'jquery-ui/ui/widgets/checkboxradio'
+import 'jquery-ui/ui/widgets/button'
 
 var gridContext = function() {
   const view_path = '/view'
@@ -40,17 +42,37 @@ var gridContext = function() {
           progressStep = 100 / numItems;
           currentStep = 0;
           $('#progress').progressbar('option','value',currentStep);
-          $('#progress_dialog').dialog('option','title','Registering '+numItems+' items')
-          $('#progress_dialog').dialog('open');
+          $t.rc.progressDialog(numItems)
         } else {
           currentStep += progressStep;
-          $('#progress').progressbar('option','value',currentStep);
-          if (currentStep >= 99.999) { $('#progress_dialog').dialog('close'); }
+          $('#progress').progressbar('option','value', currentStep);
+          if (currentStep >= 99.999) { $('#progressModal').modal('hide') }
         }
       },
       displayRequirements : function(text) {
-        $('#specify p').html(text);
-        $('#specify').dialog('open');
+        document.querySelector('#gridErrorModal .modal-body p').innerHTML = text;
+
+        // Bootstrap 5 will be like this:
+        // var myModal = new bootstrap.Modal(document.getElementById('gridErrorModal'), {})
+        // myModal.show()
+
+        $('#gridErrorModal').modal({ show: true })
+      },
+      resetDialog : function() {
+        // Bootstrap 5 will be like this:
+        // var myModal = new bootstrap.Modal(document.getElementById('resetModal'), {})
+        // myModal.show()
+
+        $('#resetModal').modal({ show: true })
+        $('#resetModal [data-action="reset"]').on('click', () => $t.reset())
+      },
+      progressDialog : function(numItems) {
+        // Bootstrap 5 will be like this:
+        // var myModal = new bootstrap.Modal(document.getElementById('progressModal'), {})
+        // myModal.show()
+
+        document.querySelector('#progressModal .modal-title').innerHTML = `Registering ${numItems} items`;
+        $('#progressModal').modal({ show: true })
       }
     });
   };
@@ -333,16 +355,14 @@ var gridContext = function() {
         }
       });
 
-      this.addToolbarButton('arrowrefresh-1-w','clear','Reset').click(function() {
-        $('#reset_dialog').dialog('open');
-      });
+      this.addToolbarButton('arrowrefresh-1-w','clear','Reset').click(()=> $t.rc.resetDialog());
 
       $('#icons').append('<span class="button-group"></span>');
 
       this.addToolbarButton('transfer-e-w','register','Register').click(function() {
         var cells = $('#data').jqGrid('getGridParam','savedRow');
         if (cells.length > 0) {
-          $('#editing_dialog').dialog('open')
+          $t.rc.displayRequirements('You are still editing a cell. Please use tab or enter to finish editing before trying to register items.')
           return;
         }
         else{
@@ -350,7 +370,7 @@ var gridContext = function() {
             $t.toggleEditing(false);
             $t.rc.registerAll();
           } else {
-            $('#invalid_dialog').dialog('open')
+            $t.rc.displayRequirements('The form contains errors. Please correct them before submitting.')
           }
         }
       }).addClass('enabled-grid-locked');
@@ -524,54 +544,7 @@ var gridContext = function() {
 
       });
 
-      $('#specify').dialog({
-        autoOpen: false,
-        buttons: { "Ok": function() { $(this).dialog("close"); } },
-        modal: true,
-        height: 300,
-        title: 'Error',
-        resizable: false
-      });
 
-      $('#editing_dialog').dialog({
-        autoOpen: false,
-        buttons: { "Ok": function() { $(this).dialog("close"); } },
-        modal: true,
-        height: 260,
-        title: 'Error',
-        resizable: false
-      });
-
-      $('#invalid_dialog').dialog({
-        autoOpen: false,
-        buttons: { "Ok": function() { $(this).dialog("close"); } },
-        modal: true,
-        height: 140,
-        title: 'Error',
-        resizable: false
-      });
-
-      $('#reset_dialog').dialog({
-        autoOpen: false,
-        buttons: {
-          "Ok": function() {
-            $t.reset();
-            $(this).dialog("close");
-          },
-          "Cancel": function() { $(this).dialog("close"); }
-        },
-        modal: true,
-        height: 200,
-        title: 'Confirm',
-        resizable: false
-      });
-
-      $('#progress_dialog').dialog({
-        autoOpen: false,
-        height: 140,
-        title: 'Progress',
-        resizable: false
-      });
       $('#progress').progressbar();
       $('#id_list').tabby();
 
