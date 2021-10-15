@@ -22,6 +22,51 @@
   }
 }
 
+.icon-lock {
+  &::before {
+    content: '🔒';
+  }
+}
+
+.icon-unlock {
+  &::before {
+    content: '🔓';
+  }
+}
+
+.icon-minus {
+  &::before {
+    content: '-';
+  }
+}
+
+.icon-plus {
+  &::before {
+    content: '+';
+  }
+}
+
+.icon-refresh {
+  &::before {
+    content: '↻';
+  }
+}
+
+.icon-register {
+  &::before {
+    content: '⇄';
+  }
+}
+
+.icon-tracking {
+  &::before {
+    content: '🗒';
+  }
+}
+
+
+
+
 .registration-status {
   &.icon-exclamation-sign, &.icon-remove-sign {
     @extend .text-danger

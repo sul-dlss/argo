@@ -1,8 +1,5 @@
 import DorRegistration from './register'
 import pathTo from './pathTo'
-import 'jquery-ui/ui/widgets/controlgroup'
-import 'jquery-ui/ui/widgets/checkboxradio'
-import 'jquery-ui/ui/widgets/button'
 
 var gridContext = function() {
   const view_path = '/view'
@@ -21,60 +18,6 @@ var gridContext = function() {
     }
   };
 
-  var createRegistrationContext = function() {
-    var progressStep = 1;
-    var currentStep = 0;
-    return new DorRegistration({
-      setStatus : function(data, status) {
-        data.status = status;
-        return $('#data').jqGrid('setRowData', data.id, data);
-      },
-      getDataIds : function() {
-        return $('#data').jqGrid('getDataIDs');
-      },
-      getData : function(rowid) {
-        return $('#data').jqGrid('getRowData',rowid);
-      },
-      progress : function(init) {
-        if (init) {
-          var numItems = $('#data').jqGrid('getDataIDs').length;
-          progressStep = 100 / numItems;
-          currentStep = 0;
-          $t.rc.progressDialog(numItems)
-        } else {
-          currentStep += progressStep;
-          document.getElementById('register-progress').value = currentStep
-          if (currentStep >= 99.999) { $('#progressModal').modal('hide') }
-        }
-      },
-      displayRequirements : function(text) {
-        document.querySelector('#gridErrorModal .modal-body p').innerHTML = text;
-
-        // Bootstrap 5 will be like this:
-        // var myModal = new bootstrap.Modal(document.getElementById('gridErrorModal'), {})
-        // myModal.show()
-
-        $('#gridErrorModal').modal({ show: true })
-      },
-      resetDialog : function() {
-        // Bootstrap 5 will be like this:
-        // var myModal = new bootstrap.Modal(document.getElementById('resetModal'), {})
-        // myModal.show()
-
-        $('#resetModal').modal({ show: true })
-        $('#resetModal [data-action="reset"]').on('click', () => $t.reset())
-      },
-      progressDialog : function(numItems) {
-        // Bootstrap 5 will be like this:
-        // var myModal = new bootstrap.Modal(document.getElementById('progressModal'), {})
-        // myModal.show()
-
-        document.querySelector('#progressModal .modal-title').innerHTML = `Registering ${numItems} items`;
-        $('#progressModal').modal({ show: true })
-      }
-    });
-  };
-
   // Validates free-text tags fields and sets the .invalid class on elements
   // that aren't well formed tags
   let freeTagValidator = function(sender) {
@@ -86,7 +29,6 @@ var gridContext = function() {
   }
 
   var $t = {
-    rc: createRegistrationContext(),
     statusIcons: {},
 
     processValue: function(cellname, value) {
@@ -110,7 +52,7 @@ var gridContext = function() {
       // Make up for width calculation error in jqgrid header code.
       $('#t_data').width($('#gview_data .ui-jqgrid-titlebar').width());
       if ($('#id_list').css('display') != 'none') {
-        $t.resizeIdList();
+        this.resizeIdList();
       }
     },
 
@@ -122,105 +64,6 @@ var gridContext = function() {
         'width': $('#gbox_data .ui-jqgrid-bdiv').width() - 4,
         'height' : $('#gbox_data .ui-jqgrid-hdiv').height() + boxHeight - 4
       }, 0);
-    },
-
-    toggleText: function(textMode) {
-      if (textMode) {
-        $t.stopEditing(true);
-        $t.gridToText();
-        $t.resizeIdList();
-        $('#id_list').show();
-      } else {
-        $t.textToGrid();
-        $('#id_list').hide();
-      }
-      $('#icons button').button('option', 'disabled', textMode);
-    },
-
-    toggleEditing: function(edit) {
-      this.stopEditing(true);
-      $('#data').jqGrid('setColProp','source_id',{ editable: edit });
-      $('#data').jqGrid('setColProp','metadata_id',{ editable: edit });
-      $('#data').jqGrid('setColProp','barcode_id',{ editable: edit });
-      $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
-      $('#data').jqGrid('setColProp','label',{ editable: edit });
-
-      //$('#icons *').button('option', 'disabled', !edit);
-      //$('#icons .enabled-grid-locked').button('option', 'disabled', false);
-      $('.action-lock').toggle(edit);
-      $('.action-unlock').toggle(!edit);
-    },
-
-    stopEditing: function(autoSave) {
-      var cells = $('#data').jqGrid('getGridParam','savedRow');
-      if (cells.length > 0) {
-        var method = autoSave ? 'saveCell' : 'restoreCell';
-        $('#data').jqGrid(method,cells[0].id,cells[0].ic);
-      }
-    },
-
-    addRow: function(column_data) {
-      var newId = $('#data').data('nextId') || 0;
-      var newRow = { id: newId };
-      var columns = $('#data').jqGrid('getGridParam','colModel');
-
-      for (var i = 2; i < columns.length; i++) {
-        var value = $t.processValue(columns[i].name, column_data[i-2]);
-        newRow[columns[i].name] = value;
-      }
-      $('#data').jqGrid('addRowData',newId, newRow, 'last');
-      $('#data').jqGrid('setRowData',newId, newRow);
-      $('#data').data('nextId',newId+1);
-    },
-
-    addIdentifiers: function(identifiers) {
-      identifiers.map(function(newId) {
-        if (newId.trim() != '') {
-          var params = newId.split('\t');
-          $t.addRow(params);
-        }
-      })
-    },
-
-    textToGrid: function() {
-      $('#data').jqGrid('clearGridData');
-      $('#data').data('nextId',0);
-      var textData = $('#id_list').val().replace(/^\t*\n$/,'');
-      $t.addIdentifiers(textData.split('\n'));
-      $t.formatDruids();
-    },
-
-    gridToText: function() {
-      var text = '';
-      var gridData = $('#data').jqGrid('getRowData');
-      for (var i = 0; i < gridData.length; i++) {
-        var rowData = gridData[i];
-        text += [rowData.barcode_id, rowData.metadata_id, rowData.source_id, rowData.druid, rowData.label].join("\t") + "\n"
-      }
-      $('#id_list').val(text);
-    },
-
-    reset: function() {
-      $t.rc = createRegistrationContext();
-      $('#data').jqGrid('clearGridData');
-      $t.toggleEditing(true);
-      $.defaultText();
-    },
-
-    addToolbarButton: function(icon,action,title) {
-      var parent = $('#icons span[class="button-group"]:last');
-      if (parent.length == 0) {
-        parent = $('#icons');
-      }
-      var parent = parent.append('<button class="action-'+action+'">'+title+'</button>');
-      var button = $('.action-'+action,parent);
-      button.button({ icons : { primary: 'ui-icon-'+icon }, text : true });
-      return button;
-    },
-
-    allValid: function() {
-      var result = $('#properties .invalid').length == 0 && $('#data .invalid').length == 0
-      return result
     },
 
     formatDruids: function(index) {
@@ -323,148 +166,21 @@ var gridContext = function() {
       });
       $('#gbox_data').addClass('col-md-12');
       $(window).trigger('resize')
-      $('#t_data').html('<div id="icons"/>')
+
+      const template = document.getElementById('table-header')
+      const clone = template.content.cloneNode(true)
+      document.getElementById("t_data").appendChild(clone) 
+
       $('#properties').show().insertBefore($('#dynamic .ui-userdata'))
 
       return(this);
     },
 
-    initializeToolbar: function() {
-      $('#icons').append('<span class="button-group"></span>');
-
-      this.addToolbarButton('locked','lock','Lock').click(function() {
-        $t.toggleEditing(false);
-      });
-
-      this.addToolbarButton('unlocked','unlock','Unlock').click(function() {
-        $t.toggleEditing(true);
-      }).addClass('enabled-grid-locked').hide();
-
-      $('#icons').append('<span class="button-group"></span>');
-
-      this.addToolbarButton('plus','add','Add Row').click(function() {
-        $t.addRow([]);
-      });
-
-      this.addToolbarButton('minus','delete','Delete Rows').click(function() {
-        var selection = $('#data').jqGrid('getGridParam','selarrrow');
-        for (var i = selection.length-1; i >= 0; i--) {
-          $('#data').jqGrid('delRowData',selection[i]);
-        }
-      });
-
-      this.addToolbarButton('arrowrefresh-1-w','clear','Reset').click(()=> $t.rc.resetDialog());
-
-      $('#icons').append('<span class="button-group"></span>');
-
-      this.addToolbarButton('transfer-e-w','register','Register').click(function() {
-        var cells = $('#data').jqGrid('getGridParam','savedRow');
-        if (cells.length > 0) {
-          $t.rc.displayRequirements('You are still editing a cell. Please use tab or enter to finish editing before trying to register items.')
-          return;
-        }
-        else{
-          if ($t.allValid()) {
-            $t.toggleEditing(false);
-            $t.rc.registerAll();
-          } else {
-            $t.rc.displayRequirements('The form contains errors. Please correct them before submitting.')
-          }
-        }
-      }).addClass('enabled-grid-locked');
-
-      this.addToolbarButton('note','pdf','Tracking Sheets').click(function() {
-        $t.stopEditing(true);
-        $t.rc.getTrackingSheet($('#data').getCol('druid'));
-      }).addClass('enabled-grid-locked');
-
-      $('#icons').append('<span class="button-group" id="view-toggle"/>');
-      $('#view-toggle').append('<input type="radio" id="grid-view" name="view" checked="checked"/><label for="grid-view">Grid</label></span>');
-      $('#view-toggle').append('<input type="radio" id="text-view" name="view" /><label for="text-view">Text</label></span>');
-      $('#view-toggle').controlgroup();
-
-      $('#view-toggle input').checkboxradio({ icon: false }).change(function(e) {
-        $t.toggleText(e.target.id == 'text-view');
-      });
-
-      return(this);
-    },
-
-    setTags: function() {
-      var tags = $('#properties .tag-field').map(function(index,elem) {
-        var field = $(elem);
-        var value = field.val();
-        if (field.attr('disabled') || value == null || value.trim() == '') {
-          return null
-        } else {
-          var prefix = field.data('tagname')
-          if (prefix) {
-            return prefix + ' : ' + value
-          } else {
-            return value
-          }
-        }
-      })
-      tags = $.map(tags, function(e) { return e })
-      $t.rc.tagList = tags.join("\n").trim();
-    },
-
     initializeCallbacks: function() {
-      $('#properties input,#properties select').change(function(evt) {
-        var sender = $(evt.target)
-        var prop = sender.data('rcparam')
-        if (prop) {
-          $t.rc[prop] = sender.val();
-        }
-        return true
-      });
-
       document.querySelectorAll('input.free.tag-field').forEach(elem => {
         elem.addEventListener('blur', (event) => {
           freeTagValidator(event.target)
-          $t.setTags()
         })
-      })
-
-      $('#properties input.ui-autocomplete-input').blur(function(evt) {
-        $t.setTags();
-        $(evt.target).change();
-      })
-
-      $('#properties select.tag-field').change($t.setTags)
-
-      var disable = function(elem,bool) {
-        var target = $(elem)
-        if (target.attr('disabled') != bool) {
-          target.attr('disabled',bool)
-          if (bool) {
-            var param = target.data('rcparam');
-            if (param) { $t.rc.setDefault(param); }
-          } else {
-            target.change()
-          }
-        }
-        return(true)
-      }
-
-      $('#object_type').change(function(evt) {
-        var sender = evt.target
-        var valid_controls = {
-          'item'       : ["object_type", "apo_id", "rights", "id_source", "workflow_id", "content_type", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3", "tags_4", "tags_5", "tags_6", "tags_7", "collection"],
-          'set'        : ["object_type", "apo_id", "rights", "id_source", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3", "tags_4", "tags_5", "tags_6", "tags_7"],
-          'collection' : ["object_type", "apo_id", "rights", "id_source", "project", "registered_by", "tags_0", "tags_1", "tags_2", "tags_3", "tags_4", "tags_5", "tags_6", "tags_7"],
-          'adminPolicy': ["object_type", "registered_by"],
-          'workflow'   : ["object_type", "registered_by"]
-        }
-        var current_type = $('#object_type').val();
-        var enable = valid_controls[current_type];
-        $('#properties input,#properties select').each( function(index,elem) {
-          if (elem.id != sender.id) {
-            disable(elem, enable.indexOf(elem.id) == -1)
-          }
-        })
-        $t.setTags();
-        return true
       })
 
       return(this);
@@ -550,7 +266,7 @@ var gridContext = function() {
 
     initialize: function() {
       this.initializeContext().initializeDialogs().
-        initializeGrid().initializeToolbar().initializeCallbacks();
+        initializeGrid().initializeCallbacks();
     }
   };
   return($t);
