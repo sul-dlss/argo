@@ -143,9 +143,8 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cssbundling-rails (0.1.7)
+    cssbundling-rails (0.2.4)
       railties (>= 6.0.0)
-      sprockets-rails (>= 2.0.0)
     declarative (0.0.20)
     declarative-builder (0.2.0)
       trailblazer-option (~> 0.1.0)
@@ -284,9 +283,8 @@ GEM
     iso-639 (0.3.5)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
-    jsbundling-rails (0.1.5)
+    jsbundling-rails (0.1.9)
       railties (>= 6.0.0)
-      sprockets-rails (>= 2.0.0)
     json (2.5.1)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
@@ -595,7 +593,7 @@ DEPENDENCIES
   capybara
   coderay
   config
-  cssbundling-rails (~> 0.1.7)
+  cssbundling-rails (~> 0.2.4)
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
@@ -610,7 +608,7 @@ DEPENDENCIES
   honeybadger (~> 4.1)
   http_logger
   jbuilder (~> 2.5)
-  jsbundling-rails (~> 0.1.5)
+  jsbundling-rails (~> 0.1.9)
   listen (~> 3.2)
   lograge
   mods_display

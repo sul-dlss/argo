@@ -18,8 +18,8 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
-gem 'cssbundling-rails', '~> 0.1.7'
-gem 'jsbundling-rails', '~> 0.1.5'
+gem 'cssbundling-rails', '~> 0.2.4'
+gem 'jsbundling-rails', '~> 0.1.9'
 
 gem 'view_component', '~> 2.31.1' # lock this until BL 7.19.2 is released
 
