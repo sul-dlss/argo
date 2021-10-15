@@ -1,5 +1,5 @@
-import PermissionList from 'modules/permission_list'
-import PermissionAdd from 'modules/permission_add'
+import PermissionList from './permission_list'
+import PermissionAdd from './permission_add'
 
 export default class {
     /**

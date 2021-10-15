@@ -1,14 +1,15 @@
 import { Application } from 'stimulus'
-import CollectionEditor from 'controllers/collection_editor'
-import BulkActions from 'controllers/bulk_actions'
-import BulkUpload from 'controllers/bulk_upload'
-import Button from 'controllers/button'
-import FacetFilter from 'controllers/facet_filter'
-import JSONRenderer from 'controllers/json_renderer'
-import Tokens from 'controllers/tokens'
-import WorkflowGrid from 'controllers/workflow_grid_controller'
+import CollectionEditor from './collection_editor'
+import BulkActions from './bulk_actions'
+import BulkUpload from './bulk_upload'
+import Button from './button'
+import FacetFilter from './facet_filter'
+import JSONRenderer from './json_renderer'
+import Tokens from './tokens'
+import WorkflowGrid from './workflow_grid_controller'
 import BlacklightHierarchyController from 'blacklight-hierarchy/app/assets/javascripts/blacklight/hierarchy/blacklight_hierarchy_controller'
-import NestedFormController from 'controllers/nested_form_controller'
+import NestedFormController from './nested_form_controller'
+import RegistationController from './registration_controller'
 
 const application = Application.start()
 application.register("bulk_actions", BulkActions)
@@ -21,3 +22,4 @@ application.register("collection-editor", CollectionEditor)
 application.register("tokens", Tokens)
 application.register("b-h-collapsible", BlacklightHierarchyController)
 application.register("nested-form", NestedFormController)
+application.register("registration", RegistationController)

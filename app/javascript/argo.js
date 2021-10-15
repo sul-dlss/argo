@@ -1,19 +1,15 @@
-import 'spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
+import ItemCollection from './modules/item_collection'
+import './modules/permission_add'
+import './modules/permission_grant'
+import './modules/permission_list'
+import './modules/sharing'
+import TagsAutocomplete from './modules/tags_autocomplete'
+import ProjectAutocomplete from './modules/project_autocomplete'
 
-import 'modules/apo_form'
-import 'modules/button_checker'
-import 'modules/date_range_query'
-import ItemCollection from 'modules/item_collection'
-import 'modules/permission_add'
-import 'modules/permission_grant'
-import 'modules/permission_list'
-import 'modules/populate_druids'
-import 'modules/sharing'
-import TagsAutocomplete from 'modules/tags_autocomplete'
-import ProjectAutocomplete from 'modules/project_autocomplete'
-
-import Form from 'modules/apo_form'
+import Form from './modules/apo_form'
 import bsCustomFileInput from 'bs-custom-file-input'
+import {gridContext} from './registration/grid'
+import {initializeReport} from './modules/report'
 
 require('@github/time-elements')
 
@@ -58,6 +54,9 @@ export default class Argo {
 
         this.apoEditor()
         this.collapsableSections()
+        this.report()
+
+        this.registration()
         this.blacklight()
         bsCustomFileInput.init() // Used for the agreement registration form
     }
@@ -66,6 +65,16 @@ export default class Argo {
     // the features we care about.
     blacklight() {
       Blacklight.activate()
+    }
+
+    report() {
+      if (document.querySelector('[data-controller="report"]'))
+        initializeReport()
+    }
+
+    registration() {
+      if (document.querySelector('[data-controller="grid"]'))
+        gridContext().initialize()
     }
 
     tagsAutocomplete() {

@@ -1,7 +1,6 @@
-import DorRegistration from './register'
 import pathTo from './pathTo'
 
-var gridContext = function() {
+export function gridContext() {
   const view_path = '/view'
 
   var statusFormatter = function(val, opts, rowObj) {
@@ -267,12 +266,8 @@ var gridContext = function() {
     initialize: function() {
       this.initializeContext().initializeDialogs().
         initializeGrid().initializeCallbacks();
+      $('#properties input,#properties select').change();
     }
   };
   return($t);
-}();
-
-$(document).ready(function() {
-  gridContext.initialize();
-  $('#properties input,#properties select').change();
-});
+}

@@ -143,6 +143,9 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    cssbundling-rails (0.1.7)
+      railties (>= 6.0.0)
+      sprockets-rails (>= 2.0.0)
     declarative (0.0.20)
     declarative-builder (0.2.0)
       trailblazer-option (~> 0.1.0)
@@ -281,6 +284,9 @@ GEM
     iso-639 (0.3.5)
     jbuilder (2.11.2)
       activesupport (>= 5.0.0)
+    jsbundling-rails (0.1.5)
+      railties (>= 6.0.0)
+      sprockets-rails (>= 2.0.0)
     json (2.5.1)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
@@ -390,8 +396,6 @@ GEM
     rack (2.2.3)
     rack-mini-profiler (2.3.3)
       rack (>= 1.2.0)
-    rack-proxy (0.7.0)
-      rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (6.1.4.1)
@@ -506,7 +510,6 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
-    semantic_range (3.0.0)
     sidekiq (6.2.2)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
@@ -566,11 +569,6 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    webpacker (5.4.3)
-      activesupport (>= 5.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 5.2)
-      semantic_range (>= 2.3.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -597,6 +595,7 @@ DEPENDENCIES
   capybara
   coderay
   config
+  cssbundling-rails (~> 0.1.7)
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano (~> 3.1)
@@ -611,6 +610,7 @@ DEPENDENCIES
   honeybadger (~> 4.1)
   http_logger
   jbuilder (~> 2.5)
+  jsbundling-rails (~> 0.1.5)
   listen (~> 3.2)
   lograge
   mods_display
@@ -652,7 +652,6 @@ DEPENDENCIES
   web-console
   webdrivers
   webmock
-  webpacker (~> 5.0)
   zip_tricks (= 5.3.1)
 
 BUNDLED WITH

@@ -1,6 +1,3 @@
-import 'jquery'
-require('free-jqgrid')
-
 /*
  * decaffeinate suggestions:
  * DS102: Remove unnecessary code created because of implicit returns
@@ -9,7 +6,7 @@ require('free-jqgrid')
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-$(document).ready(function() {
+export function initializeReport() {
   const colModel = report_model.column_model;
   colModel[1]['formatter'] = (val, opts, row) => `<a href='${val}' target='_blank'>${val}</a>`;
 
@@ -82,4 +79,4 @@ $(document).ready(function() {
   });
 
   return resized();
-});
+}

@@ -64,15 +64,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     yarn install
     ```
 
-5. **Compile javascript**
-
-    ```
-    bin/rails webpacker:compile
-    ```
-
-    If you run into trouble with the docker containers complaining about webpacker, then ... figure out what to do to fix it and please update this document.  (There's a way to do it, something like `docker-compose run --container command`)
-
-6. **Run the tests (without rubocop)**
+5. **Run the tests (without rubocop)**
 
 ```
 bin/rake
@@ -81,21 +73,21 @@ bin/rake
 ## Run the servers
 
 ```
-docker-compose up -d
+docker compose up -d
 ```
 
-Note that docker-compose will spin up Argo and apply the administrator role to you.
+Note that docker compose will spin up Argo and apply the administrator role to you.
 
 If you want to use the rails console use:
 
 ```
-docker-compose run --rm web bin/rails console
+docker compose run --rm web bin/rails console
 ```
 
 If you want to run background jobs, which are necessary for spreadsheet bulk uploads and indexing to run:
 
 ```
-docker-compose run web sidekiq start
+docker compose run web sidekiq start
 ```
 
 Alternatively, you can also just immediately run any new jobs with interactive output visible
@@ -103,28 +95,28 @@ Alternatively, you can also just immediately run any new jobs with interactive o
 to stop execution in the middle of an activejob for inspection:
 
 ```
-docker-compose run web bin/rake jobs:workoff
+docker compose run web bin/rake jobs:workoff
 ```
 
 Note, if you update the Gemfile or Gemfile.lock, you will need to rebuild the web docker container.
 
 ```
-docker-compose build web
+docker compose build web
 ```
 
-## Debugging
+### Debugging
 
 It can be useful when debugging to see the local rails server output in realtime and pause with 'byebug'.  You can do
 this while running in the app in the web container.  First stop any existing web container (if running already):
 
 ```
-docker-compose stop web
+docker compose stop web
 ```
 
 Then start it in a mode that is interactive:
 
 ```
-docker-compose run --service-ports web
+docker compose run --service-ports web
 ```
 
 This will allow you to view rails output in real-time.  You can also add 'byebug' inline in your code to pause for inspection on the console.
@@ -144,19 +136,33 @@ bundle update --bundler  # update the Gemfile.lock to match this while not updat
 docker-compose build --no-cache web # rebuild the docker container to match the latest bundler
 ```
 
-Also, if you run into webpacker related issues, you may need to manually install yarn and compile webpacker in your Docker container (or local laptop if you running that way):
+Also, if you run into asset related issues, you may need to manually install yarn and compile assets in your Docker container (or local laptop if you running that way):
 
 ```
-docker-compose run --rm web yarn install
-docker-compose run --rm web bin/rake webpacker:compile
+docker compose run --rm web yarn install
+docker compose run --rm web bin/rails assets:precompile
 ```
+
+## Running locally
+
+First install foreman (foreman is not supposed to be in the Gemfile, See this [wiki article](https://github.com/ddollar/foreman/wiki/Don't-Bundle-Foreman) ):
+
+```
+gem install foreman
+```
+
+Then you can run
+```
+REMOTE_USER=blalbrit@stanford.edu ROLES=sdr:administrator-role bin/dev
+```
+This starts css/js bundling and the development server
 
 ## Creating fixture data
 
 To begin registering items in the Argo UI, there will need to be at least one agreement object and one APO object in the index. To create and index one of each of these objects, run the following command:
 
 ```shell
-$ docker-compose exec web bin/rails db:seed
+$ docker compose exec web bin/rails db:seed
 ```
 
 ## Internals

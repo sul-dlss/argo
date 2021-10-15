@@ -1,4 +1,4 @@
-import PermissionGrant from 'modules/permission_grant'
+import PermissionGrant from './permission_grant'
 
 export default class {
     /**

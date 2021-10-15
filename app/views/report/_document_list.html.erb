@@ -1,5 +1,4 @@
 <% content_for :head do %>
-  <%= javascript_pack_tag 'report', 'data-turbo-track': 'reload' %>
   <script type="text/javascript">
     report_model = {
       total_rows: <%= @response['response']['numFound'] %>,
@@ -10,7 +9,7 @@
   </script>
 <% end %>
 
-<div id="report_container">
+<div id="report_container" data-controller="report">
   <table id="report_grid"></table>
   <div id="preport_grid"></div>
 </div>
