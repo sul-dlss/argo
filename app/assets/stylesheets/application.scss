@@ -7,7 +7,7 @@
 
 // Here we override blacklight to wrap the $logo-image in a url()
 .navbar-logo {  // The main logo image for the Blacklight instance
-  background: transparent asset-url("logo.png") no-repeat top left;
+  background: transparent url("logo.png") no-repeat top left;
 }
 
 @import 'blacklight-hierarchy/app/assets/stylesheets/blacklight/hierarchy/hierarchy';

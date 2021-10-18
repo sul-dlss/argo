@@ -119,3 +119,5 @@ group :production do
   # mysql 0.5.3 is not compatible with the version of MySQL we are using (5.1)
   gem 'mysql2', '< 0.5.3'
 end
+
+gem 'sprockets-rails', github: 'jcoyne/sprockets-rails', branch: 'digested-assets'
