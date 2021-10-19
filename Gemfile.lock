@@ -1,3 +1,14 @@
+GIT
+  remote: https://github.com/sul-dlss/preservation-client.git
+  revision: 6187d0506963b9ddf98aa0183b9d1b09bce29e23
+  branch: moab-versioning
+  specs:
+    preservation-client (3.4.0)
+      activesupport (>= 4.2, < 7)
+      faraday (>= 0.15, < 2.0)
+      moab-versioning (= 5.0.0.beta1)
+      zeitwerk (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -173,12 +184,11 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dor-services-client (7.3.0)
+    dor-services-client (7.3.1)
       activesupport (>= 4.2, < 7)
       cocina-models (~> 0.62.0)
       deprecation
       faraday (>= 0.15, < 2)
-      moab-versioning (~> 4.0)
       zeitwerk (~> 2.1)
     dor-workflow-client (3.23.1)
       activesupport (>= 3.2.1, < 7)
@@ -319,7 +329,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.14.4)
-    moab-versioning (4.4.2)
+    moab-versioning (5.0.0.beta1)
       druid-tools (>= 1.0.0)
       json
       nokogiri
@@ -370,11 +380,6 @@ GEM
       ttfunk (~> 1.4.0)
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
-    preservation-client (3.4.0)
-      activesupport (>= 4.2, < 7)
-      faraday (>= 0.15, < 2.0)
-      moab-versioning (~> 4.3)
-      zeitwerk (~> 2.1)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -390,7 +395,7 @@ GEM
     public_suffix (4.0.6)
     puma (5.5.2)
       nio4r (~> 2.0)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (2.2.3)
     rack-mini-profiler (2.3.3)
       rack (>= 1.2.0)
@@ -619,7 +624,7 @@ DEPENDENCIES
   okcomputer
   prawn (~> 1)
   prawn-table
-  preservation-client (~> 3.2)
+  preservation-client!
   pry-byebug
   pry-rails
   pry-remote

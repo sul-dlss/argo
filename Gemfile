@@ -72,7 +72,7 @@ gem 'dor-workflow-client', '~> 3.19'
 gem 'druid-tools'
 gem 'mods_display'
 gem 'okcomputer' # monitors application and its dependencies
-gem 'preservation-client', '~> 3.2'
+gem 'preservation-client', github: 'sul-dlss/preservation-client', branch: 'moab-versioning'
 gem 'rsolr'
 gem 'sdr-client', '~> 0.60'
 
