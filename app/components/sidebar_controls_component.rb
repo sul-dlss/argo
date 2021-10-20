@@ -107,22 +107,6 @@ class SidebarControlsComponent < ApplicationComponent
     )
   end
 
-  def close_button
-    render ActionButton.new(
-      url: close_ui_item_versions_path(item_id: pid),
-      label: 'Close Version',
-      check_url: workflow_service_closeable_path(pid)
-    )
-  end
-
-  def open_button
-    render ActionButton.new(
-      url: open_ui_item_versions_path(item_id: pid),
-      label: 'Open for modification',
-      check_url: workflow_service_openable_path(pid)
-    )
-  end
-
   def reindex_button
     render ActionButton.new(
       url: dor_reindex_path(pid: pid),

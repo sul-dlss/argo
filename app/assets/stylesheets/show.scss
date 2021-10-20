@@ -13,7 +13,6 @@
     padding: 20px;
   }
 
-
   .button-header {
     font-size: 12pt;
     font-weight: bold;
@@ -30,4 +29,17 @@
   .blacklight-item {
     margin-top: 1rem;
   }
+
+  .open-close {
+    width: 2rem;
+    float: left;
+    .btn {
+      font-size: xx-large;
+    }
+  }
+
+  .document-title-heading {
+    margin-left: 2rem;
+  }
+
 }
