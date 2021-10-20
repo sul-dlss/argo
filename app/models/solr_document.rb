@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SolrDocument
+class SolrDocument # rubocop:disable Metrics/ClassLength
   include Blacklight::Solr::Document
   include ApoConcern
   include CollectionConcern
@@ -32,6 +32,10 @@ class SolrDocument
   FIELD_COPYRIGHT                 = 'copyright_ssim'
   FIELD_USE_STATEMENT             = 'use_statement_ssim'
   FIELD_LICENSE                   = 'use_license_machine_ssi'
+  FIELD_PROJECT_TAG               = 'project_tag_ssim'
+  FIELD_TAGS                      = 'tag_ssim'
+  FIELD_SOURCE_ID                 = 'source_id_ssim'
+  FIELD_BARCODE_ID                = 'barcode_id_ssim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
@@ -62,6 +66,10 @@ class SolrDocument
   attribute :copyright, Blacklight::Types::String, FIELD_COPYRIGHT
   attribute :use_statement, Blacklight::Types::String, FIELD_USE_STATEMENT
   attribute :license, Blacklight::Types::String, FIELD_LICENSE
+  attribute :project_tag, Blacklight::Types::String, FIELD_PROJECT_TAG
+  attribute :source_id, Blacklight::Types::String, FIELD_SOURCE_ID
+  attribute :barcode, Blacklight::Types::String, FIELD_BARCODE_ID
+  attribute :tags, Blacklight::Types::Array, FIELD_TAGS
 
   # self.unique_key = 'id'
 
