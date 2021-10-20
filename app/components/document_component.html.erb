@@ -8,8 +8,19 @@
   itemtype: @document.itemtype,
   class: 'document document-component' do %>
   <%= title %>
-  <%= render 'full_view_links_default', document: @document %>
-  <%= render 'show_thumbnail', document: @document %>
+  <%= render 'catalog/show_embargo_sidebar', document: @document %>
+
+  <div class="row">
+    <div class="col-md-3">
+      <%= render 'catalog/show_thumbnail', document: @document %>
+    </div>
+    <div class="col-md-9">
+      <%= render ExternalLinksComponent.new(document: @document) %>
+      <hr>
+      <%= render SidebarControlsComponent.new(solr_document: @document, manager: helpers.can?(:manage_item, @cocina)) %>
+    </div>
+  </div>
+
   <%= render Blacklight::DocumentMetadataComponent.new(
       fields: @presenter.field_presenters,
       show: true
