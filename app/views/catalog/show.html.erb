@@ -1,8 +1,19 @@
+<h1><%= document_presenter(@document).heading %></h1>
+<%= render 'catalog/show_embargo_sidebar', document: @document %>
+
+<div class="row">
+  <div class="col-md-3">
+    <%= render 'catalog/show_thumbnail', document: @document %>
+  </div>
+  <div class="col-md-9">
+    <%= render ExternalLinksComponent.new(document: @document) %>
+    <hr>
+    <%= render SidebarControlsComponent.new(solr_document: @document, manager: can?(:manage_item, @cocina)) %>
+  </div>
+</div>
+
 <%= render_document_main_content_partial %>
 
-<% content_for(:sidebar) do %>
-  <%= render_document_sidebar_partial @document %>
-<% end %>
 
 <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal menu" aria-hidden="true">
   <div class="modal-dialog modal-xl">
