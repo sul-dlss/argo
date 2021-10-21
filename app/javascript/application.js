@@ -28,4 +28,11 @@ document.addEventListener("turbo:load", async () => {
   // Start argo after free-jqgrid has been loaded
   new Argo().initialize()
 })
+
+ window.addEventListener('turbo:before-cache', function () {
+  // Close any lingering open modal windows
+  $('.modal').modal('hide');
+  $('.modal-backdrop').remove();
+});
+
 import '@hotwired/turbo-rails'
