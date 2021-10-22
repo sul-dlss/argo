@@ -20,11 +20,10 @@ class OverviewComponent < ApplicationComponent
   # so it's possible that the user will get this button even if there are no other APOs they're
   # allowed to move the object to.
   def governing_apo_button
-    render ActionButton.new(
-      url: set_governing_apo_ui_item_path(id: id),
-      label: 'Set governing APO',
-      disabled: !state_service.allows_modification?
-    )
+    link_to '✎', set_governing_apo_ui_item_path(id: id),
+            aria: { label: 'Set governing APO' },
+            data: { controller: 'button', action: 'click->button#open' },
+            class: ('disabled' unless allows_modification?).to_s
   end
 
   def state_service
@@ -32,4 +31,5 @@ class OverviewComponent < ApplicationComponent
   end
 
   delegate :id, :access_rights, :status, :copyright, :license, :use_statement, to: :@solr_document
+  delegate :allows_modification?, to: :state_service
 end
