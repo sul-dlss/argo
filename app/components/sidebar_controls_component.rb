@@ -57,10 +57,6 @@ class SidebarControlsComponent < ApplicationComponent
     end
   end
 
-  def content_type
-    render ActionButton.new(url: item_content_type_path(item_id: pid), label: 'Set content type')
-  end
-
   def edit_apo
     render ActionButton.new(
       url: edit_apo_path(pid), label: 'Edit APO', new_page: true

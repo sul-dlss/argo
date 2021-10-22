@@ -16,6 +16,7 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Change source id']")).to be_present
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
+      expect(rendered.css("a[aria-label='Set content type']")).to be_present
     end
   end
 
@@ -29,6 +30,7 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Change source id']")).not_to be_present
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
+      expect(rendered.css("a[aria-label='Set content type']")).not_to be_present
     end
   end
 
@@ -42,6 +44,7 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Change source id']")).not_to be_present
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).not_to be_present
+      expect(rendered.css("a[aria-label='Set content type']")).not_to be_present
     end
   end
 end

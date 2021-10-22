@@ -33,6 +33,12 @@ class DetailsComponent < ApplicationComponent
             data: { controller: 'button', action: 'click->button#open' }
   end
 
+  def edit_content_type
+    link_to '✎', item_content_type_path(item_id: id),
+            aria: { label: 'Set content type' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
   delegate :id, :object_type, :content_type, :source_id, :created_date,
            :released_to, :preservation_size, :catkey_id, :barcode, :item?, :collection?,
            to: :@solr_document
