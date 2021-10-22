@@ -1,6 +1,7 @@
 <%= form_tag set_governing_apo_item_path(@cocina.externalIdentifier) do %>
   <div class='form-group'>
-    <%= select_tag(:new_apo_id, options_for_select(apo_list(current_user.groups), @cocina.administrative.hasAdminPolicy)) %>
+    <%= label_tag :new_apo_id, 'New governing APO' %>
+    <%= select_tag(:new_apo_id, options_for_select(apo_list(current_user.groups), @cocina.administrative.hasAdminPolicy), class: 'form-control') %>
   </div>
   <button class='btn btn-primary'>
     Update
