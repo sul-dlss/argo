@@ -10,10 +10,6 @@
   <%= republish_button %>
   <%= purge_button %>
 
-  <% if item? || collection? %>
-    <%= edit_collections %>
-  <% end %>
-
   <%= content_type if item? %>
   <%= refresh_metadata if symphony_record? %>
   <%= manage_release %>

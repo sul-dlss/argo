@@ -20,6 +20,20 @@ RSpec.describe OverviewComponent, type: :component do
     it 'creates a edit buttons' do
       expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
       expect(rendered.css("a[aria-label='Set rights']")).to be_present
+      expect(rendered.css("a[aria-label='Edit collections']")).to be_present
+    end
+  end
+
+  context 'with a Collection' do
+    let(:doc) do
+      SolrDocument.new('id' => 'druid:kv840xx0000',
+                       SolrDocument::FIELD_OBJECT_TYPE => 'collection')
+    end
+
+    it 'creates a edit buttons' do
+      expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+      expect(rendered.css("a[aria-label='Set rights']")).to be_present
+      expect(rendered.css("a[aria-label='Edit collections']")).to be_present
     end
   end
 
@@ -32,6 +46,7 @@ RSpec.describe OverviewComponent, type: :component do
     it 'renders the appropriate buttons' do
       expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
       expect(rendered.css("a[aria-label='Set rights']")).not_to be_present
+      expect(rendered.css("a[aria-label='Edit collections']")).not_to be_present
     end
   end
 end

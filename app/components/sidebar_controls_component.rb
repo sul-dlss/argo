@@ -39,7 +39,7 @@ class SidebarControlsComponent < ApplicationComponent
     doc.catkey_id.present?
   end
 
-  delegate :admin_policy?, :item?, :collection?, :embargoed?, to: :doc
+  delegate :admin_policy?, :item?, :embargoed?, to: :doc
 
   private
 
@@ -59,10 +59,6 @@ class SidebarControlsComponent < ApplicationComponent
 
   def content_type
     render ActionButton.new(url: item_content_type_path(item_id: pid), label: 'Set content type')
-  end
-
-  def edit_collections
-    render ActionButton.new(url: collection_ui_item_path(id: pid), label: 'Edit collections')
   end
 
   def edit_apo

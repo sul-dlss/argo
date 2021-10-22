@@ -32,11 +32,17 @@ class OverviewComponent < ApplicationComponent
             data: { controller: 'button', action: 'click->button#open' }
   end
 
+  def edit_collections
+    link_to '✎', collection_ui_item_path(id: id),
+            aria: { label: 'Edit collections' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
   def state_service
     @state_service ||= StateService.new(id, version: @solr_document.current_version)
   end
 
   delegate :id, :access_rights, :status, :copyright, :license, :use_statement,
-           :admin_policy?, to: :@solr_document
+           :admin_policy?, :item?, :collection?, to: :@solr_document
   delegate :allows_modification?, to: :state_service
 end
