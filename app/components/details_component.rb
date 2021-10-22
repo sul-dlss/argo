@@ -21,6 +21,12 @@ class DetailsComponent < ApplicationComponent
             data: { controller: 'button', action: 'click->button#open' }
   end
 
+  def edit_tags
+    link_to '✎', edit_item_tags_path(item_id: id),
+            aria: { label: 'Edit tags' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
   delegate :id, :object_type, :content_type, :source_id, :created_date,
            :released_to, :preservation_size, :catkey_id, :barcode, :item?, to: :@solr_document
 

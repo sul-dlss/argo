@@ -73,11 +73,6 @@ class SidebarControlsComponent < ApplicationComponent
     render ActionButton.new(url: collection_ui_item_path(id: pid), label: 'Edit collections')
   end
 
-  def edit_tags
-    render ActionButton.new(url: edit_item_tags_path(item_id: pid),
-                            label: 'Edit tags')
-  end
-
   def edit_apo
     render ActionButton.new(
       url: edit_apo_path(pid), label: 'Edit APO', new_page: true

@@ -18,7 +18,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
   end
 
   it 'adds and edits tags' do
-    click_link 'Edit tags'
+    find("a[aria-label='Edit tags']").click
     within('#edit-modal') do
       click_button '+ Add another tag'
       fill_in currently_with: '', with: 'foo'
@@ -37,7 +37,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
       expect(page).to have_content second_new_tag
     end
 
-    click_link 'Edit tags'
+    find("a[aria-label='Edit tags']").click
     within('#edit-modal') do
       find(:xpath, "//input[@value='#{first_new_tag}']").fill_in(with: replacement_tag)
       click_button 'Save'
@@ -49,7 +49,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
     end
 
     # Remove tags
-    click_link 'Edit tags'
+    find("a[aria-label='Edit tags']").click
     within('#edit-modal') do
       find(:xpath, "//input[@value='#{replacement_tag}']/../..").first('button').click
       click_button 'Save'
@@ -60,7 +60,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
       expect(page).to have_content second_new_tag
     end
 
-    click_link 'Edit tags'
+    find("a[aria-label='Edit tags']").click
     within('#edit-modal') do
       find(:xpath, "//input[@value='#{second_new_tag}']/../..").first('button').click
       click_button 'Save'
