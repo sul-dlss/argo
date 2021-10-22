@@ -27,8 +27,15 @@ class DetailsComponent < ApplicationComponent
             data: { controller: 'button', action: 'click->button#open' }
   end
 
+  def manage_catkey
+    link_to '✎', edit_item_catkey_path(item_id: id),
+            aria: { label: 'Manage catkey' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
   delegate :id, :object_type, :content_type, :source_id, :created_date,
-           :released_to, :preservation_size, :catkey_id, :barcode, :item?, to: :@solr_document
+           :released_to, :preservation_size, :catkey_id, :barcode, :item?, :collection?,
+           to: :@solr_document
 
   delegate :blacklight_config, :search_state, :search_action_path, to: :helpers
 

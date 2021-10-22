@@ -61,10 +61,6 @@ class SidebarControlsComponent < ApplicationComponent
     render ActionButton.new(url: item_content_type_path(item_id: pid), label: 'Set content type')
   end
 
-  def manage_catkey
-    render ActionButton.new(url: edit_item_catkey_path(item_id: pid), label: 'Manage catkey')
-  end
-
   def edit_collections
     render ActionButton.new(url: collection_ui_item_path(id: pid), label: 'Edit collections')
   end
