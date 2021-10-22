@@ -73,13 +73,6 @@ class SidebarControlsComponent < ApplicationComponent
     render ActionButton.new(url: collection_ui_item_path(id: pid), label: 'Edit collections')
   end
 
-  def change_source_id
-    return unless item?
-
-    render ActionButton.new(url: source_id_ui_item_path(id: pid),
-                            label: 'Change source id')
-  end
-
   def edit_tags
     render ActionButton.new(url: edit_item_tags_path(item_id: pid),
                             label: 'Edit tags')
