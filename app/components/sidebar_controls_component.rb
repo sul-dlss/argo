@@ -141,18 +141,6 @@ class SidebarControlsComponent < ApplicationComponent
     )
   end
 
-  # NOTE: that the backend will also check can?(:manage_governing_apo, object, new_apo_id), but
-  # we can't do that here, since we don't yet know what APO the user might move the object to.
-  # so it's possible that the user will get this button even if there are no other APOs they're
-  # allowed to move the object to.
-  def governing_apo_button
-    render ActionButton.new(
-      url: set_governing_apo_ui_item_path(id: pid),
-      label: 'Set governing APO',
-      disabled: !state_service.allows_modification?
-    )
-  end
-
   def pid
     @pid ||= doc['id']
   end
