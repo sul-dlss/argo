@@ -19,6 +19,19 @@ RSpec.describe OverviewComponent, type: :component do
 
     it 'creates a edit buttons' do
       expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+      expect(rendered.css("a[aria-label='Set rights']")).to be_present
+    end
+  end
+
+  context 'with an AdminPolicy' do
+    let(:doc) do
+      SolrDocument.new('id' => 'druid:kv840xx0000',
+                       SolrDocument::FIELD_OBJECT_TYPE => 'adminPolicy')
+    end
+
+    it 'renders the appropriate buttons' do
+      expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+      expect(rendered.css("a[aria-label='Set rights']")).not_to be_present
     end
   end
 end

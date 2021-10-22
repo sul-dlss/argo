@@ -16,7 +16,6 @@
   <% end %>
 
   <%= content_type if item? %>
-  <%= rights unless admin_policy? %>
   <%= refresh_metadata if symphony_record? %>
   <%= manage_release %>
   <%= embargo %>

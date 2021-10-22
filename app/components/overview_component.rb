@@ -26,10 +26,17 @@ class OverviewComponent < ApplicationComponent
             class: ('disabled' unless allows_modification?).to_s
   end
 
+  def rights
+    link_to '✎', rights_item_path(id: id),
+            aria: { label: 'Set rights' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
   def state_service
     @state_service ||= StateService.new(id, version: @solr_document.current_version)
   end
 
-  delegate :id, :access_rights, :status, :copyright, :license, :use_statement, to: :@solr_document
+  delegate :id, :access_rights, :status, :copyright, :license, :use_statement,
+           :admin_policy?, to: :@solr_document
   delegate :allows_modification?, to: :state_service
 end

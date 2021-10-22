@@ -32,7 +32,7 @@
       <tr>
         <th class="col-3" scope="row">Access rights</th>
         <td>
-            <%= access_rights %>
+            <%= access_rights %> <%= rights unless admin_policy? %>
         </td>
       </tr>
 
