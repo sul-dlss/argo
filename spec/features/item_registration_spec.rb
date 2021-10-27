@@ -30,12 +30,11 @@ RSpec.describe 'Item registration page', js: true do
 
   it 'invokes item registration method with the expected values and relays errors properly' do
     visit registration_path
-    select '[Internal System Objects]', from: 'apo_id' # "uber APO"
+    select '[Internal System Objects]', from: 'Admin Policy' # "uber APO"
+    select 'goobiWF', from: 'Initial Workflow'
+    select 'Book (ltr)', from: 'Content Type'
 
-    find("option[value='goobiWF']")
-    select 'goobiWF', from: 'workflow_id'
-    select 'Book (ltr)', from: 'content_type'
-
+    fill_in 'Project Name', with: 'special division : project #4'
     fill_in 'tags_0', with: 'tag : test'
 
     # click the button to add a row for a new item
@@ -81,13 +80,14 @@ RSpec.describe 'Item registration page', js: true do
     expect(page).to have_css('span.icon-exclamation-sign', visible: true)
     expect(registration_params).to include(
       'admin_policy' => ur_apo_id,
-      'workflow_id' => 'goobiWF',
-      'label' => 'object title',
-      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
-      'rights' => 'default',
+      'barcode_id' => barcode,
       'collection' => '',
+      'label' => 'object title',
+      'project' => 'special division : project #4',
+      'rights' => 'default',
       'source_id' => 'source:id1',
-      'barcode_id' => barcode
+      'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
+      'workflow_id' => 'goobiWF'
     )
   end
 end

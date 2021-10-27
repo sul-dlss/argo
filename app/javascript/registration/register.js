@@ -14,8 +14,10 @@ export default function DorRegistration(initOpts) {
       return document.querySelector('[data-rcparam="apoId"]').value
     },
 
-    projectName : function() { 
-      return document.querySelector('[data-rcparam="projectName"]').value
+    projectName : function() {
+      // algolia autocomplete duplicates the field, so we need to check the name rather than
+      // the data-rcparam attribute.
+      return document.querySelector('[name="project"]').value
     },
 
     collection : function() { 
