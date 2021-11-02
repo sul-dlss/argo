@@ -79,10 +79,20 @@ binary-extensions@^2.0.0:
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
 
-blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.7.0:
+blacklight-frontend@>=7.1.0-alpha:
   version "7.20.0"
   resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.20.0.tgz#672028e66feedb4e10bee83cf1938fa810499c8c"
   integrity sha512-qjB4GuAjZhHH5sFY4YhJhkC15Dqpt/mER+M6w8TouukQJRKZXfsz9adkgH2vIYZGC/1C4u16GbmvJM6mCpVudw==
+  dependencies:
+    bloodhound-js "^1.2.3"
+    bootstrap ">=4.3.1 <6.0.0"
+    jquery "^3.5.1"
+    typeahead.js "^0.11.1"
+
+blacklight-frontend@^7.7.0:
+  version "7.20.1"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.20.1.tgz#48e1fb993eea9a463af02970d3216846bf0f3156"
+  integrity sha512-i4VIw1vlUp+vXFezlYOpngWMuD+jK7c869ygYHjNI/uvUf076OdA3E3kfdJ2LWBxWaJ5r7EG9+k2cvnWnJFXWQ==
   dependencies:
     bloodhound-js "^1.2.3"
     bootstrap ">=4.3.1 <6.0.0"
