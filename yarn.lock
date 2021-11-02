@@ -107,7 +107,7 @@ bloodhound-js@^1.2.3:
     storage2 "^0.1.0"
     superagent "^3.8.3"
 
-bootstrap@^4.3.1:
+bootstrap@^4.3.1, bootstrap@^4.6.1:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.6.1.tgz#bc25380c2c14192374e8dec07cf01b2742d222a2"
   integrity sha512-0dj+VgI9Ecom+rvvpNZ4MUZJz8dcX7WCX+eTID9+/8HgOkv3dsRzi8BGeZJCQU6flWQVYxwTQnEZFrmJSEO7og==
