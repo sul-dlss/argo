@@ -76,7 +76,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.19.2)
+    blacklight (7.20.0)
       deprecation
       globalid
       i18n (>= 1.7.0)
@@ -84,7 +84,7 @@ GEM
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7)
-      view_component (>= 2.28.0)
+      view_component (~> 2.42.0)
     blacklight-hierarchy (5.3.0)
       blacklight (~> 7.18)
       deprecation
@@ -552,8 +552,9 @@ GEM
       unf_ext
     unf_ext (0.0.8)
     unicode-display_width (2.1.0)
-    view_component (2.31.1)
-      activesupport (>= 5.0.0, < 7.0)
+    view_component (2.42.0)
+      activesupport (>= 5.0.0, < 8.0)
+      method_source (~> 1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.1.0)
@@ -585,7 +586,7 @@ PLATFORMS
 
 DEPENDENCIES
   barby
-  blacklight (~> 7.18)
+  blacklight (~> 7.20)
   blacklight-hierarchy (~> 5.1)
   bootsnap (>= 1.4.2)
   byebug
@@ -648,7 +649,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4.2)
   turbo-rails (~> 0.7.13)
-  view_component (~> 2.31.1)
+  view_component (~> 2.42)
   web-console
   webdrivers
   webmock
