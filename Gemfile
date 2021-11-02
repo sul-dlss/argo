@@ -21,7 +21,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'cssbundling-rails', '~> 0.2.4'
 gem 'jsbundling-rails', '~> 0.1.9'
 
-gem 'view_component', '~> 2.31.1' # lock this until BL 7.19.2 is released
+gem 'view_component', '~> 2.42'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -65,7 +65,7 @@ gem 'turbo-rails', '~> 0.7.13'
 gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all feature
 
 # Stanford related gems
-gem 'blacklight', '~> 7.18'
+gem 'blacklight', '~> 7.20'
 gem 'blacklight-hierarchy', '~> 5.1'
 gem 'dor-services-client', '~> 7.0'
 gem 'dor-workflow-client', '~> 3.19'
