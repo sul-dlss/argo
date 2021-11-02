@@ -543,7 +543,7 @@ GEM
     thor (1.1.0)
     trailblazer-option (0.1.1)
     ttfunk (1.4.0)
-    turbo-rails (0.7.15)
+    turbo-rails (7.1.1)
       rails (>= 6.0.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -648,7 +648,7 @@ DEPENDENCIES
   spring
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4.2)
-  turbo-rails (~> 0.7.13)
+  turbo-rails (~> 7.1)
   view_component (~> 2.42)
   web-console
   webdrivers
