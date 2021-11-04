@@ -2,7 +2,7 @@
   <% component.header { params[:id] } %>
   <% component.body do %>
     <% if can?(:manage_item, @cocina) %>
-      <%= form_tag item_datastream_path(@cocina.externalIdentifier, params[:id]), id: 'xmlEditForm', method: :patch do %>
+      <%= form_tag item_datastream_path(@cocina.externalIdentifier, params[:id]), data: { turbo: false }, id: 'xmlEditForm', method: :patch do %>
           <input type="hidden" name="id" value="<%= @cocina.externalIdentifier %>">
           <input name="dsid" id="datastream" type="hidden" value="<%= params[:id] %>">
           <div class="form-group">
