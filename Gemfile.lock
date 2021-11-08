@@ -76,7 +76,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.20.0)
+    blacklight (7.20.1)
       deprecation
       globalid
       i18n (>= 1.7.0)
@@ -84,7 +84,7 @@ GEM
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7)
-      view_component (~> 2.42.0)
+      view_component (~> 2.42)
     blacklight-hierarchy (5.3.0)
       blacklight (~> 7.18)
       deprecation
@@ -276,7 +276,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
-    http_logger (0.6.0)
+    http_logger (0.7.0)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
@@ -476,7 +476,7 @@ GEM
       rspec-expectations (~> 3.10)
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
-    rspec-support (3.10.2)
+    rspec-support (3.10.3)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (1.22.3)
@@ -488,7 +488,7 @@ GEM
       rubocop-ast (>= 1.12.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.12.0)
+    rubocop-ast (1.13.0)
       parser (>= 3.0.1.1)
     rubocop-rails (2.12.4)
       activesupport (>= 4.2.0)
@@ -510,7 +510,7 @@ GEM
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
-    sidekiq (6.2.2)
+    sidekiq (6.3.1)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -541,7 +541,7 @@ GEM
       activesupport
       mods (~> 2.2)
     thor (1.1.0)
-    trailblazer-option (0.1.1)
+    trailblazer-option (0.1.2)
     ttfunk (1.4.0)
     turbo-rails (0.8.3)
       rails (>= 6.0.0)
@@ -552,7 +552,7 @@ GEM
       unf_ext
     unf_ext (0.0.8)
     unicode-display_width (2.1.0)
-    view_component (2.42.0)
+    view_component (2.43.0)
       activesupport (>= 5.0.0, < 8.0)
       method_source (~> 1.0)
     warden (1.2.9)
