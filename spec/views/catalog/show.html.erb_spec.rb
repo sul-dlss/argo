@@ -23,7 +23,8 @@ RSpec.describe 'catalog/show.html.erb' do
   it 'assigns page title, truncating it' do
     expect(view).to receive(:document_presenter).and_return(document_presenter)
     expect(view).to receive(:render_document_sidebar_partial)
-    expect(view).to receive(:render_document_partials)
+    stub_template('catalog/_show_main_content.html.erb' => 'content')
+
     render
     expect(view.instance_variable_get(:@page_title))
       .to eq 'Long title that should be truncated at 50 chara... - Argo'
