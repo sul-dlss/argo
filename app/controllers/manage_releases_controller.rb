@@ -7,7 +7,7 @@ class ManageReleasesController < ApplicationController
   def show
     cocina = Repository.find(params[:item_id])
     authorize! :update, cocina
-    _, @document = search_service.fetch params[:item_id]
+    @document = search_service.fetch params[:item_id]
     @bulk_action = BulkAction.new
 
     respond_to do |format|

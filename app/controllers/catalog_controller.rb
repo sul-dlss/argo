@@ -232,7 +232,7 @@ class CatalogController < ApplicationController
 
   def show
     params[:id] = Druid.new(params[:id]).with_namespace
-    _deprecated_response, @document = search_service.fetch(params[:id])
+    @document = search_service.fetch(params[:id])
 
     @cocina = Repository.find(params[:id])
     flash[:alert] = "Warning: this object cannot currently be represented in the Cocina model." if @cocina.instance_of?(NilModel)
