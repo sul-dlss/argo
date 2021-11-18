@@ -59,19 +59,18 @@ class CatalogController < ApplicationController
     config.add_facet_field "exploded_tag_ssim", label: "Tag", limit: 9999,
       component: LazyTagFacetComponent,
       unless: ->(controller, _config, _response) { controller.params[:no_tags] }
-    config.add_facet_field "objectType_ssim", label: "Object Type", component: true, limit: 10
-    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: "Content Type", component: true, limit: 10
-    config.add_facet_field "content_file_mimetypes_ssim", label: "MIME Types", component: true, limit: 10, home: false
-    config.add_facet_field "content_file_roles_ssim", label: "File Role", component: true, limit: 10, home: false
-    config.add_facet_field "rights_descriptions_ssim", label: "Access Rights", component: true, limit: 1000, sort: "index", home: false
-    config.add_facet_field SolrDocument::FIELD_LICENSE, label: "License", component: true, limit: 10, home: false
-    config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: "Collection", component: true, limit: 10, more_limit: 9999, sort: "index"
-    config.add_facet_field "nonhydrus_apo_title_ssim", label: "Admin Policy", component: true, limit: 10, more_limit: 9999, sort: "index"
-    config.add_facet_field "hydrus_apo_title_ssim", label: "Hydrus Admin Policy", component: true, limit: 10, more_limit: 9999, sort: "index", home: false
-    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: "Version", component: true, limit: 10, home: false
-    config.add_facet_field "processing_status_text_ssi", label: "Processing Status", component: true, limit: 10, home: false
+    config.add_facet_field "objectType_ssim", label: "Object Type", limit: 10
+    config.add_facet_field SolrDocument::FIELD_CONTENT_TYPE, label: "Content Type", limit: 10
+    config.add_facet_field "content_file_mimetypes_ssim", label: "MIME Types", limit: 10, home: false
+    config.add_facet_field "content_file_roles_ssim", label: "File Role", limit: 10, home: false
+    config.add_facet_field "rights_descriptions_ssim", label: "Access Rights", limit: 1000, sort: "index", home: false
+    config.add_facet_field SolrDocument::FIELD_LICENSE, label: "License", limit: 10, home: false
+    config.add_facet_field SolrDocument::FIELD_COLLECTION_TITLE, label: "Collection", limit: 10, more_limit: 9999, sort: "index"
+    config.add_facet_field "nonhydrus_apo_title_ssim", label: "Admin Policy", limit: 10, more_limit: 9999, sort: "index"
+    config.add_facet_field "hydrus_apo_title_ssim", label: "Hydrus Admin Policy", limit: 10, more_limit: 9999, sort: "index", home: false
+    config.add_facet_field SolrDocument::FIELD_CURRENT_VERSION, label: "Version", limit: 10, home: false
+    config.add_facet_field "processing_status_text_ssi", label: "Processing Status", limit: 10, home: false
     config.add_facet_field "released_to_earthworks",
-      component: true,
       query: {
         week: {
           label: "Last week",
@@ -95,7 +94,6 @@ class CatalogController < ApplicationController
         }
       }
     config.add_facet_field "released_to_searchworks",
-      component: true,
       query: {
         week: {
           label: "Last week",
@@ -130,8 +128,7 @@ class CatalogController < ApplicationController
       limit: 9999,
       home: false
 
-    config.add_facet_field "metadata_source_ssi", label: "Metadata Source", home: false,
-      component: true
+    config.add_facet_field "metadata_source_ssi", label: "Metadata Source", home: false
 
     if Settings.enabled_features.multivalued_metadata_sources
       config.add_facet_field "metadata_source_ssim", label: "Metadata Source (Multi)", home: false,
@@ -142,16 +139,14 @@ class CatalogController < ApplicationController
     add_common_date_facet_fields_to_config! config
 
     config.add_facet_field SolrDocument::FIELD_CONSTITUENTS, label: "Virtual Objects", home: false,
-      component: true,
       query: {
         has_constituents: {label: "Virtual Objects", fq: "#{SolrDocument::FIELD_CONSTITUENTS}:*"}
       }
 
     # This will help us find records that need to be fixed before we can move to cocina.
-    config.add_facet_field "data_quality_ssim", label: "Data Quality", home: false, component: true
+    config.add_facet_field "data_quality_ssim", label: "Data Quality", home: false
 
     config.add_facet_field "empties", label: "Empty Fields", home: false,
-      component: true,
       query: {
         no_source_id: {label: "No Source ID", fq: "-source_id_ssim:*"},
         no_rights_characteristics: {label: "No Rights Characteristics", fq: "-rights_characteristics_ssim:*"},
@@ -173,14 +168,14 @@ class CatalogController < ApplicationController
         no_use_statement: {label: "No Use & Reproduction Statement", fq: "-#{SolrDocument::FIELD_USE_STATEMENT}:*"}
       }
 
-    config.add_facet_field "sw_format_ssim", label: "SW Resource Type", component: true, limit: 10, home: false
-    config.add_facet_field "sw_pub_date_facet_ssi", label: "SW Date", component: true, limit: 10, home: false
-    config.add_facet_field "topic_ssim", label: "SW Topic", component: true, limit: 10, home: false
-    config.add_facet_field "sw_subject_geographic_ssim", label: "SW Region", component: true, limit: 10, home: false
-    config.add_facet_field "sw_subject_temporal_ssim", label: "SW Era", component: true, limit: 10, home: false
-    config.add_facet_field "sw_genre_ssim", label: "SW Genre", component: true, limit: 10, home: false
-    config.add_facet_field "sw_language_ssim", label: "SW Language", component: true, limit: 10, home: false
-    config.add_facet_field "mods_typeOfResource_ssim", label: "MODS Resource Type", component: true, limit: 10, home: false
+    config.add_facet_field "sw_format_ssim", label: "SW Resource Type", limit: 10, home: false
+    config.add_facet_field "sw_pub_date_facet_ssi", label: "SW Date", limit: 10, home: false
+    config.add_facet_field "topic_ssim", label: "SW Topic", limit: 10, home: false
+    config.add_facet_field "sw_subject_geographic_ssim", label: "SW Region", limit: 10, home: false
+    config.add_facet_field "sw_subject_temporal_ssim", label: "SW Era", limit: 10, home: false
+    config.add_facet_field "sw_genre_ssim", label: "SW Genre", limit: 10, home: false
+    config.add_facet_field "sw_language_ssim", label: "SW Language", limit: 10, home: false
+    config.add_facet_field "mods_typeOfResource_ssim", label: "MODS Resource Type", limit: 10, home: false
     # Adding the facet field allows it to be queried (e.g., from value_helper)
     config.add_facet_field "is_governed_by_ssim", if: false
     config.add_facet_field "is_member_of_collection_ssim", if: false
