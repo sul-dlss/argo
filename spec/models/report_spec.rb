@@ -138,13 +138,16 @@ RSpec.describe Report, type: :model do
     end
 
     it 'returns druids and source ids' do
-      doc = SolrDocument.new(id: 'druid:qq613vj0238', source_id_ssim: 'sul:36105011952764')
+      doc = { id: 'druid:qq613vj0238', source_id_ssim: 'sul:36105011952764' }
       service = instance_double(Blacklight::SearchService)
       allow(Blacklight::SearchService).to receive(:new).and_return(service)
       allow(service).to receive(:search_results).and_return(
-        [{ 'response' => { 'numFound' => '1' } }, [doc]],
-        [{ 'response' => { 'numFound' => '1' } }, [doc]],
-        [{ 'response' => { 'numFound' => '1' } }, []]
+        Blacklight::Solr::Response.new({ 'response' => { 'numFound' => '1', 'docs' => [doc] } },
+                                       {}, blacklight_config: CatalogController.blacklight_config),
+        Blacklight::Solr::Response.new({ 'response' => { 'numFound' => '1', 'docs' => [doc] } },
+                                       {}, blacklight_config: CatalogController.blacklight_config),
+        Blacklight::Solr::Response.new({ 'response' => { 'numFound' => '1', 'docs' => [] } },
+                                       {}, blacklight_config: CatalogController.blacklight_config)
       )
 
       expect(described_class.new(
