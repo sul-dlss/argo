@@ -69,6 +69,13 @@ binary-extensions@^2.0.0:
     jquery "^3.5.1"
     typeahead.js "^0.11.1"
 
+blacklight-frontend@^8.0.0-beta.4:
+  version "8.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-8.0.0-beta.4.tgz#4c3c088336389cdb659b25032da64765c5a4ad36"
+  integrity sha512-5g9BMOYCCMVKhqkcY1BrqjCj4W7gm6tiPHCfq0++Zxd8K9EDn5hzk049KVUQcP++1vW1wzYp49odwMwUVcMdLA==
+  dependencies:
+    bootstrap ">=4.3.1 <6.0.0"
+
 blacklight-hierarchy@^6.0.2:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/blacklight-hierarchy/-/blacklight-hierarchy-6.1.2.tgz#55d12c167268345b4e7412d38314c51e0a1204eb"

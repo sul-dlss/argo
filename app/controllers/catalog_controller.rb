@@ -271,7 +271,7 @@ class CatalogController < ApplicationController
   end
 
   # do not add the druids_only search param to the blacklight search history (used in bulk actions only)
-  def blacklisted_search_session_params
+  def nonpersisted_search_session_params
     super << :druids_only
   end
 
