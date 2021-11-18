@@ -12,12 +12,12 @@ module CsvConcern
     @params[:page] = 1
     CSV.generate(force_quotes: true) do |csv|
       csv << @fields.map { |f| f[:label] } # header
-      until @document_list.empty?
+      until @response.documents.empty?
         report_data.each do |record|
           csv << @fields.map { |f| record[f[:field]].to_s }
         end
         @params[:page] += 1
-        (@response, @document_list) = search_results(params)
+        (@response,) = search_results(params)
       end
     end
   end

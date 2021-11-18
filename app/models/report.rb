@@ -188,16 +188,16 @@ class Report
               end
     @params = params
     @params[:page] ||= 1
-    (@response, @document_list) = search_results(@params)
+    (@response,) = search_results(@params)
     @num_found = @response['response']['numFound'].to_i
   end
 
   def pids(opts = {})
     params[:page] = 1
     params[:per_page] = 100
-    (@response, @document_list) = search_results(params)
+    (@response,) = search_results(params)
     pids = []
-    until @document_list.empty?
+    until @response.documents.empty?
       report_data.each do |rec|
         if opts[:source_id].present?
           pids << rec[:druid] + "\t" + rec[:source_id_ssim]
@@ -212,14 +212,14 @@ class Report
         end
       end
       params[:page] += 1
-      (@response, @document_list) = search_results(params)
+      (@response,) = search_results(params)
     end
 
     pids
   end
 
   def report_data
-    docs_to_records(@document_list)
+    docs_to_records(@response.documents)
   end
 
   private
