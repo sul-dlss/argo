@@ -80,9 +80,9 @@ binary-extensions@^2.0.0:
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
 
 blacklight-frontend@>=7.1.0-alpha, blacklight-frontend@^7.7.0:
-  version "7.20.1"
-  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.20.1.tgz#48e1fb993eea9a463af02970d3216846bf0f3156"
-  integrity sha512-i4VIw1vlUp+vXFezlYOpngWMuD+jK7c869ygYHjNI/uvUf076OdA3E3kfdJ2LWBxWaJ5r7EG9+k2cvnWnJFXWQ==
+  version "7.21.1"
+  resolved "https://registry.yarnpkg.com/blacklight-frontend/-/blacklight-frontend-7.21.1.tgz#7af64c1618bba493d03de9eef413810d31e00917"
+  integrity sha512-KrwzinCYMVZEr9inC/dbuKc1UsOoF8qD948Bwjr1hmHNwA0pEt7zysBBYJKSN5lVJJSYrFf68LxjuInsGEUHJQ==
   dependencies:
     bloodhound-js "^1.2.3"
     bootstrap ">=4.3.1 <6.0.0"
