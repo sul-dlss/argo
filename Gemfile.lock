@@ -76,7 +76,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.21.2)
+    blacklight (7.22.0)
       deprecation
       globalid
       i18n (>= 1.7.0)
@@ -548,7 +548,7 @@ GEM
       unf_ext
     unf_ext (0.0.8)
     unicode-display_width (2.1.0)
-    view_component (2.45.0)
+    view_component (2.46.0)
       activesupport (>= 5.0.0, < 8.0)
       method_source (~> 1.0)
     warden (1.2.9)

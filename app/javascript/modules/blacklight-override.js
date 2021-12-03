@@ -4,7 +4,7 @@ Blacklight.modal.onFailure = function(jqXHR, textStatus, errorThrown) {
   console.error('Server error:', this.url, jqXHR.status, errorThrown)
   var contents =  `<div class="modal-header">
             <div class="h5 modal-title">There was a problem with your request.</div>
-            <button type="button" class="blacklight-modal-close close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="blacklight-modal-close close" data-bs-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button></div>
             <div class="modal-body"><p>Expected a successful response from the server, but got an error</p>
