@@ -8,7 +8,7 @@ environment.plugins.prepend(
     jQuery: 'jquery',
     jquery: 'jquery',
     'window.jQuery': 'jquery',
-    Popper: ['popper.js', 'default'],
+    Popper: ['@popperjs/core', 'default'],
     Rails: ['@rails/ujs'],
     Bloodhound: 'bloodhound-js'
   })

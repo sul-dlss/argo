@@ -13,7 +13,7 @@
 
     <% if session[:groups].present? %>
       <li class='dropdown nav-item'>
-        <a href='#' class='dropdown-toggle impersonating nav-link' data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+        <a href='#' class='dropdown-toggle impersonating nav-link' data-bs-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
           Impersonating: <%= session[:groups].join(' ') %>
           <span class='caret'></span>
         </a>
@@ -32,7 +32,7 @@
     <li class="nav-item"><%= link_to 'All&nbsp;Workflows'.html_safe, report_workflow_grid_path, class: 'nav-link' %></li>
 
     <li class='nav-item dropdown'>
-      <a href='#' class='nav-link dropdown-toggle' id="bulkDropdown" data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+      <a href='#' class='nav-link dropdown-toggle' id="bulkDropdown" data-bs-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
         Bulk Edits
         <span class='caret'></span>
       </a>
@@ -43,7 +43,7 @@
     </li>
 
     <li class='nav-item dropdown'>
-      <a href='#' class='nav-link dropdown-toggle' id="registerDropdown" data-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
+      <a href='#' class='nav-link dropdown-toggle' id="registerDropdown" data-bs-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
         Register
         <span class='caret'></span>
       </a>

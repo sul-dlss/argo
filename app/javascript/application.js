@@ -8,8 +8,7 @@ import './spreadsheet' // Note: this library is used to read/write spreadsheet d
 import './modules/button_checker'
 import './modules/date_range_query'
 import './modules/populate_druids'
-
-import "bootstrap/dist/js/bootstrap"
+import bootstrap from  "bootstrap/dist/js/bootstrap"
 
 
 // rails-ujs is required for Blacklight (see https://github.com/projectblacklight/blacklight/pull/2490)
@@ -21,6 +20,11 @@ import './modules/blacklight-override'
 import "./controllers"
 
 import Argo from './argo'
+
+// Override Blacklight 7.22 until https://github.com/projectblacklight/blacklight/pull/2580 is merged
+Blacklight.modal.show = (el) => {
+  bootstrap.Modal.getOrCreateInstance(el || document.querySelector(Blacklight.modal.modalSelector)).show();
+}
 
 document.addEventListener("turbo:load", async () => {
   await import('https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.src.js')

@@ -5,20 +5,21 @@
 
 @import 'sul_variables';
 
+// define a palette
 $barley-corn: #b3995d;
 $floral-white: #f9f6ef;
 $tahuna-sands: #d2c295;
 $tea: #b6b1a9;
 $silver: #c5c5c5;
 
-$theme-colors: (
-  "primary": $blue,
-  "dark": $color-cardinal-red,
-  "success": $barley-corn
-);
+// Override the theme colors
+$primary: $blue;
+$dark: $color-cardinal-red;
+$success: $barley-corn;
 
-
+// Links
 $link-color: $bright-blue;
 $link-hover-color: $blue;
 
+// Navbar
 $navbar-dark-color: $white;

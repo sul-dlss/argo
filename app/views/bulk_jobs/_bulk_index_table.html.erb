@@ -33,7 +33,7 @@
           <% if(job.has_key?('dir')) %>
             <%= form_tag(apo_bulk_jobs_path(@document.id), method: :delete, id: "form-#{job['dir']}") do %>
               <%= hidden_field_tag('dir', job['dir']) %>
-              <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-toggle="modal" data-target="#confirm-delete-modal">Delete</button>
+              <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-bs-toggle="modal" data-bs-target="#confirm-delete-modal">Delete</button>
             <% end %>
           <% else %>
             error:  job log dir not found
