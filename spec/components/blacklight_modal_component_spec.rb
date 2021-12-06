@@ -9,7 +9,7 @@ RSpec.describe BlacklightModalComponent, type: :component do
       component.body { 'body' }
       component.footer { 'footer' }
     end
-    expect(page).to have_button('×')
+    expect(page).to have_css('.btn-close')
     expect(page).to have_content('header')
     expect(page).to have_content('body')
     expect(page).to have_content('footer')
