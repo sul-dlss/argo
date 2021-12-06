@@ -157,12 +157,9 @@ RSpec.describe ReportController, type: :controller do
         allow(Report).to receive(:new).and_return(report)
       end
 
-      it 'sets instance variables and calls update workflow service' do
+      it 'calls update workflow service' do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
-        expect(assigns(:workflow)).to eq workflow
-        expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w[xb482ww9999])
-        expect(response).to have_http_status(:ok)
+        expect(response).to redirect_to(report_workflow_grid_path)
         expect(workflow_client).to have_received(:update_status)
           .with(druid: 'druid:xb482ww9999', workflow: workflow, process: step, status: 'waiting')
       end
@@ -176,12 +173,9 @@ RSpec.describe ReportController, type: :controller do
         allow(Report).to receive(:new).and_return(report)
       end
 
-      it 'sets instance variables and calls update workflow service' do
+      it 'calls update workflow service' do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
-        expect(assigns(:workflow)).to eq workflow
-        expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w[xb482ww9999])
-        expect(response).to have_http_status(:ok)
+        expect(response).to redirect_to(report_workflow_grid_path)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', cocina_model)
         expect(workflow_client).to have_received(:update_status)
           .with(druid: 'druid:xb482ww9999', workflow: workflow, process: step, status: 'waiting')
@@ -198,10 +192,7 @@ RSpec.describe ReportController, type: :controller do
 
       it 'does not call update workflow service' do
         post :reset, xhr: true, params: { reset_workflow: workflow, reset_step: step, q: 'Cephalopods' } # has single match
-        expect(assigns(:workflow)).to eq workflow
-        expect(assigns(:step)).to eq step
-        expect(assigns(:ids)).to eq(%w[xb482ww9999])
-        expect(response).to have_http_status(:ok)
+        expect(response).to redirect_to(report_workflow_grid_path)
         expect(controller.current_ability).to have_received(:can_update_workflow?).with('waiting', cocina_model)
         expect(workflow_client).not_to have_received(:update_status)
       end

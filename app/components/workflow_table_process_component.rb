@@ -69,7 +69,7 @@ class WorkflowTableProcessComponent < ApplicationComponent
                                reset_step: process
                              )
     # rubocop:disable Rails/OutputSafety
-    raw ' | ' + link_to('reset', report_reset_path(new_params), remote: true, method: :post)
+    raw ' | ' + button_to('reset', report_reset_path(new_params), class: 'btn btn-link')
     # rubocop:enable Rails/OutputSafety
   end
 

@@ -57,27 +57,27 @@ class ReportController < CatalogController
     self.response_body = Report.new(params, fields, current_user: current_user).to_csv
   end
 
-  # an ajax call to reset workflow states for objects
+  # reset workflow states for objects
   def reset
-    head :not_implemented unless request.xhr?
-
     params.require(%i[reset_workflow reset_step])
 
-    @workflow = params[:reset_workflow]
-    @step = params[:reset_step]
-    @ids = Report.new(params, current_user: current_user).pids
-    @ids.each do |pid|
+    workflow = params[:reset_workflow]
+    step = params[:reset_step]
+    ids = Report.new(params, current_user: current_user).pids
+    ids.each do |pid|
       druid = "druid:#{pid}"
       cocina = Dor::Services::Client.object(druid).find
       next unless current_ability.can_update_workflow?('waiting', cocina)
 
       WorkflowClientFactory.build.update_status(
         druid: druid,
-        workflow: @workflow,
-        process: @step,
+        workflow: workflow,
+        process: step,
         status: 'waiting'
       )
     end
+    message = "#{ids.size} objects were reset back to waiting for #{workflow}:#{step}.  It may take a few seconds to update."
+    redirect_back(fallback_location: report_workflow_grid_path, notice: message)
   end
 
   # This draws the full page that supports the workflow grid
