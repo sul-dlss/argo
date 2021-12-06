@@ -19,6 +19,6 @@ RSpec.describe DownloadAllButtonComponent, type: :component do
   context 'with a large file' do
     let(:document) { instance_double(SolrDocument, preservation_size: 1_000_000_000) }
 
-    it { is_expected.to have_selector 'a[data-confirm="This will be a large download. Are you sure?"]' }
+    it { is_expected.to have_selector 'a[data-turbo-confirm="This will be a large download. Are you sure?"]' }
   end
 end

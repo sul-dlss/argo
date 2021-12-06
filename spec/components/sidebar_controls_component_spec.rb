@@ -39,7 +39,7 @@ RSpec.describe SidebarControlsComponent, type: :component do
         expect(rendered.css("a[href='/items/druid:kv840xx0000/set_governing_apo_ui']").inner_text).to eq 'Set governing APO'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/workflows/new']").inner_text).to eq 'Add workflow'
         expect(rendered.css("a[href='/dor/republish/druid:kv840xx0000']").inner_text).to eq 'Republish'
-        expect(rendered.css("a.disabled[data-confirm][data-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
+        expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/source_id_ui']").inner_text).to eq 'Change source id'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/catkey/edit']").inner_text).to eq 'Manage catkey'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/tags/edit']").inner_text).to eq 'Edit tags'
@@ -94,7 +94,7 @@ RSpec.describe SidebarControlsComponent, type: :component do
         expect(rendered.css("a[href='/items/druid:zt570qh4444/set_governing_apo_ui']").inner_text).to eq 'Set governing APO'
         expect(rendered.css("a[href='/items/druid:zt570qh4444/workflows/new']").inner_text).to eq 'Add workflow'
         expect(rendered.css("a[href='/dor/republish/druid:zt570qh4444']").inner_text).to eq 'Republish'
-        expect(rendered.css("a.disabled[data-confirm][data-method='delete'][href='/items/druid:zt570qh4444/purge']").inner_text).to eq 'Purge'
+        expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:zt570qh4444/purge']").inner_text).to eq 'Purge'
         expect(rendered.css("a[href='/items/druid:zt570qh4444/tags/edit']").inner_text).to eq 'Edit tags'
         expect(rendered.css("a[href='/items/druid:zt570qh4444/manage_release']").inner_text).to eq 'Manage release'
         expect(rendered.css('a').size).to eq 11
