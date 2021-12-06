@@ -9,16 +9,13 @@ import './modules/button_checker'
 import './modules/date_range_query'
 import './modules/populate_druids'
 import bootstrap from  "bootstrap/dist/js/bootstrap"
+global.bootstrap = bootstrap // Required for Blacklight 7 so it can manage the modals
+
 import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
 import './modules/blacklight-override'
 import "./controllers"
 
 import Argo from './argo'
-
-// Override Blacklight 7.22 until https://github.com/projectblacklight/blacklight/pull/2580 is merged
-Blacklight.modal.show = (el) => {
-  bootstrap.Modal.getOrCreateInstance(el || document.querySelector(Blacklight.modal.modalSelector)).show();
-}
 
 document.addEventListener("turbo:load", async () => {
   await import('https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.15.5/jquery.jqgrid.src.js')
