@@ -18,6 +18,14 @@
   }
 }
 
-.errors a {
-  @extend .text-danger;
+// reset button
+.errors {
+  form {
+    display: inline-block;
+  }
+
+  .btn {
+    @extend .p-0;
+    @extend .text-danger;
+  }
 }

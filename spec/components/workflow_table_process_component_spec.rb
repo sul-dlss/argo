@@ -58,7 +58,7 @@ RSpec.describe WorkflowTableProcessComponent, type: :component do
         let(:body) { render_inline(component) }
 
         it 'has a link' do
-          expect(body.css('a[data-remote="true"][rel="nofollow"][data-method="post"]', text: 'reset')).to be_present
+          expect(body.css('.btn.btn-link', text: 'reset')).to be_present
         end
       end
     end
