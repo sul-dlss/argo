@@ -85,7 +85,7 @@ GEM
       ostruct (>= 0.3.2)
       rails (>= 5.1, < 7)
       view_component (~> 2.42)
-    blacklight-hierarchy (5.3.0)
+    blacklight-hierarchy (5.4.0)
       blacklight (~> 7.18)
       deprecation
       rails (>= 5.1, < 7)
