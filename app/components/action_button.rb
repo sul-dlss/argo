@@ -21,12 +21,13 @@ class ActionButton < ApplicationComponent
     {}.tap do |data|
       if confirm
         # :confirm trumps :blacklight_modal, because :blacklight_modal would negate :confirm by firing the ajax request regardless of the user's decision
-        data[:confirm] = confirm
+        data[:turbo_confirm] = confirm
       elsif !new_page
         data[:controller] = 'button'
         data[:action] = 'click->button#open'
       end
       data[:check_url] = check_url if check_url
+      data[:turbo_method] = method if method
     end
   end
 

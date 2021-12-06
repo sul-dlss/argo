@@ -11,7 +11,7 @@ class DownloadAllButtonComponent < ViewComponent::Base
     options = { onclick: 'event.stopPropagation()' }
     return options if !document.preservation_size || document.preservation_size < 1_000_000_000
 
-    options.merge(data: { confirm: 'This will be a large download. Are you sure?' })
+    options.merge(data: { turbo_confirm: 'This will be a large download. Are you sure?' })
   end
 
   attr_reader :document
