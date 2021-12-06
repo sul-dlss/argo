@@ -9,12 +9,6 @@ import './modules/button_checker'
 import './modules/date_range_query'
 import './modules/populate_druids'
 import bootstrap from  "bootstrap/dist/js/bootstrap"
-
-
-// rails-ujs is required for Blacklight (see https://github.com/projectblacklight/blacklight/pull/2490)
-import Rails from '@rails/ujs';
-Rails.start();
-global.Rails = Rails
 import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight'
 import './modules/blacklight-override'
 import "./controllers"

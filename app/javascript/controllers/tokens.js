@@ -4,12 +4,12 @@ export default class extends Controller {
   static targets = [ "output", "result", "button" ]
 
   fetchToken(event) {
-    const csrfToken = Rails.csrfToken()
+    const headers = {}
+    headers[Blacklight.csrfParam()] = Blacklight.csrfToken()
+
     fetch(this.data.get("url"), {
       method: 'POST',
-      headers: {
-        "X-CSRF-Token": csrfToken,
-      }
+      headers
     }).then(response => response.text())
       .then(token => {
         this.buttonTarget.style.display = "none"

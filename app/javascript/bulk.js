@@ -8,7 +8,7 @@ function process_request(druids, action_url, req_type, req_params, success_strin
 		const object_link = catalog_url(druid);
 		const url = action_url.replace('xxxxxxxxx', druid);
 		if(!req_params) req_params = {}
-		req_params.authenticity_token = Rails.csrfToken()
+		req_params.authenticity_token = Blacklight.csrfToken()
 		const req_obj = { url: url, type: req_type, data: req_params }
 		const xhr = $.ajax(req_obj);
 		cons.push(xhr);
