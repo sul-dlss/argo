@@ -4,7 +4,7 @@
   <%= render_document_sidebar_partial @document %>
 <% end %>
 
-<div id="spreadsheet-start-header" class="row spreadsheet-header">
+<div class="row mt-3">
     <div class="col-md-8 header-column"><strong>Datastream spreadsheet bulk upload for APO <%= @document.id %></strong></div>
     <div class="col-md-3 header-column spreadsheet-column"><%= link_to 'Download blank spreadsheet', spreadsheet_template_apo_index_path %></div>
 </div>
@@ -13,7 +13,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-11">"<%= @document.sw_title %>"</div>
 </div>
-<div class="row spreadsheet-row">
+<div class="row mt-3">
     <div class="col-md-12">
       <%= link_to('Submit new file ...', new_apo_upload_path(@document.id), class: 'button btn btn-primary', data: { blacklight_modal: 'trigger', ajax_modal_title: 'MODS Bulk Loads' }) %>
     </div>

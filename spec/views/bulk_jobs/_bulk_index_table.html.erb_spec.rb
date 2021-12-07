@@ -81,16 +81,16 @@ RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
 
   it 'prints error placeholders for each row with no log info' do
     render
-    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: 'error:  job log dir not found', count: 3
-    expect(rendered).to have_css 'div#bulk-upload-table table tr', text: 'error:  job log dir not found', count: 1
+    expect(rendered).to have_css 'table tr td', text: 'error:  job log dir not found', count: 3
+    expect(rendered).to have_css 'table tr', text: 'error:  job log dir not found', count: 1
   end
 
   it 'shows the status' do
     render
-    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Anot started\z/, count: 1
-    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Acompleted\z/, count: 1
-    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Ain progress\z/, count: 1
-    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Acompleted [(]with system errors[)]\z/, count: 1
-    expect(rendered).to have_css 'div#bulk-upload-table table tr td', text: /\Ain progress [(]with system errors[)]\z/, count: 1
+    expect(rendered).to have_css 'table tr td', text: /\Anot started\z/, count: 1
+    expect(rendered).to have_css 'table tr td', text: /\Acompleted\z/, count: 1
+    expect(rendered).to have_css 'table tr td', text: /\Ain progress\z/, count: 1
+    expect(rendered).to have_css 'table tr td', text: /\Acompleted [(]with system errors[)]\z/, count: 1
+    expect(rendered).to have_css 'table tr td', text: /\Ain progress [(]with system errors[)]\z/, count: 1
   end
 end
