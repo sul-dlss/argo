@@ -12,12 +12,6 @@ RSpec.describe 'uploads/new.html.erb', type: :view do
     expect(rendered).to have_css('strong', text: 'Submit MODS descriptive metadata for bulk processing')
   end
 
-  it 'has the correct overall structure' do
-    expect(rendered).to have_css('div#bulk-upload-form')
-    expect(rendered).to have_css('div#spreadsheet-upload-container form div#bulk-upload-form')
-    expect(rendered).to have_css('div.row.spreadsheet-row', count: 5)
-  end
-
   it 'has Browse, Submit and Cancel buttons' do
     expect(rendered).to have_css('input#spreadsheet_file')
     expect(rendered).to have_css('button#spreadsheet_submit')

@@ -1,13 +1,13 @@
 <div data-blacklight-modal="container">
   <div id="spreadsheet-upload-container">
   <%= form_tag(apo_uploads_path(params[:apo_id]), multipart: true, data: { controller: 'bulk-upload' }) do %>
-    <div id="bulk-upload-form" class="container-fluid">
-      <div class="row spreadsheet-row">
+    <div class="container-fluid">
+      <div class="row mt-3">
         <div class="col-md-12">
             <strong>Submit MODS descriptive metadata for bulk processing</strong>
         </div>
       </div>
-      <div class="row spreadsheet-row">
+      <div class="row mt-3">
         <div class="col-md-2 spreadsheet-file-action-column">
           <%= label_tag :spreadsheet_file do %>
             <strong>1. Select</strong>
@@ -18,49 +18,48 @@
         </div>
       </div>
 
-      <div class="row spreadsheet-row">
+      <div class="row mt-3">
     <div class="col-md-2"><strong>2. Action</strong></div>
     <div class="col-md-8">
-        <div class="radio spreadsheet-radio">
-      <label>
+      <div class="form-check">
+        <label>
           <input type="radio" name="filetypes" id="filetypes_1" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="spreadsheet">
           Spreadsheet input; load into objects
-      </label>
-        </div>
-        <div class="radio">
-      <label>
+        </label>
+      </div>
+      <div class="form-check">
+        <label>
           <input type="radio" name="filetypes" id="filetypes_2" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="xml">
           Spreadsheet input; convert to MODS, do not load
-      </label>
-        </div>
-        <div class="radio">
-      <label>
+        </label>
+      </div>
+      <div class="form-check">
+        <label>
           <input type="radio" name="filetypes" id="convert_only" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="xml_only">
           MODS XML input; load into objects
-      </label>
+        </label>
+      </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-2">
+          <label for="note_text" class="control-label"><strong>3. Note</strong></label>
         </div>
-    </div>
+        <div class="col-md-10">
+          <input type="text" class="form-control" id="note_text" data-bulk-upload-target="note" name="note">
+        </div>
       </div>
-      <div class="row spreadsheet-row">
-    <div class="col-md-2">
-        <label for="note_text" class="control-label"><strong>3. Note</strong></label>
-    </div>
-    <div class="col-md-10">
-        <input type="text" class="form-control" id="note_text" data-bulk-upload-target="note" name="note">
-    </div>
-      </div>
-          <div class="row spreadsheet-row spreadsheet-bottom-row">
+      <div class="row mt-3 pb-2">
         <div class="col-md-2">
             <button type="submit" id="spreadsheet_submit" data-bulk-upload-target="submit" class="btn btn-primary">Submit</button>
         </div>
-    <div class="col-md-2">
+        <div class="col-md-2">
             <button type="button" id="spreadsheet_cancel" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
         </div>
-    <div class="col-md-6">
-        <span id="bulk-spreadsheet-warning"></span>
-    </div>
-          </div>
+        <div class="col-md-6">
+          <span id="bulk-spreadsheet-warning"></span>
+        </div>
       </div>
-  <% end %>
     </div>
+  <% end %>
+  </div>
 </div>
