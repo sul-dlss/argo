@@ -46,7 +46,6 @@ export default class Argo {
         this.tagsAutocomplete()
         this.projectAutocomplete()
 
-        this.spreadsheet()
         this.buttonChecker()
         this.dateRangeQuery()
         this.itemCollection()
@@ -83,17 +82,6 @@ export default class Argo {
 
     projectAutocomplete() {
       new ProjectAutocomplete().initialize()
-    }
-
-    spreadsheet() {
-      $('#spreadsheet-upload-container').argoSpreadsheet()
-
-      // When the user clicks the 'MODS bulk loads' button, a lightbox is opened.
-      // The event 'loaded.blacklight.blacklight-modal' is fired just before this
-      // Blacklight lightbox is shown.
-      $('#blacklight-modal').on('loaded.blacklight.blacklight-modal', function(e){
-          $('#spreadsheet-upload-container').argoSpreadsheet()
-      })
     }
 
     buttonChecker() {

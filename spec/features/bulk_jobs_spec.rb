@@ -38,27 +38,18 @@ RSpec.describe 'Bulk jobs view' do
         .to_return(status: 200, body: bulk_job_data_path.read, headers: {})
     end
 
-    it 'click submit button opens bulk upload form' do
-      visit new_apo_upload_path(apo_id: apo_id)
-      expect(page).to have_css('div#spreadsheet-upload-container form div#bulk-upload-form')
-      expect(page).to have_css('input#spreadsheet_file')
-    end
+    it 'prevents choices from being made until the file is uploaded' do
+      visit apo_bulk_jobs_path(apo_id)
+      click_link 'Submit new file ...'
 
-    it 'bulk upload form buttons are disabled upon first page visit' do
-      visit new_apo_upload_path(apo_id: apo_id)
       expect(find('input#filetypes_1')).to be_disabled
       expect(find('input#filetypes_2')).to be_disabled
       expect(find('input#convert_only')).to be_disabled
       expect(find('input#note_text')).to be_disabled
       expect(find('button#spreadsheet_submit')).to be_disabled
       expect(find('button#spreadsheet_cancel')).not_to be_disabled
-    end
 
-    it 'selecting a file to upload and selecting one of the radio buttons enables the submit button' do
-      visit new_apo_upload_path(apo_id: apo_id)
-      expect(page).to have_css('#spreadsheet_file')
-      expect(find('input#filetypes_1')).to be_disabled
-
+      # selecting a file to upload and selecting one of the radio buttons enables the submit button
       attach_file('spreadsheet_file', bulk_job_data_path)
 
       # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
@@ -84,8 +75,9 @@ RSpec.describe 'Bulk jobs view' do
     end
 
     it 'uploading a file with an invalid extension displays a warning' do
-      visit new_apo_upload_path(apo_id: apo_id)
-      expect(page).to have_css('#spreadsheet_file')
+      visit apo_bulk_jobs_path(apo_id)
+      click_link 'Submit new file ...'
+
       attach_file('spreadsheet_file', File.absolute_path(__FILE__))
 
       # Manually trigger update event on file submit field, since Capybara/Poltergeist doesn't seem to do it
