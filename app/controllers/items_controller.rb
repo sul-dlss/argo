@@ -165,7 +165,7 @@ class ItemsController < ApplicationController
 
     PurgeService.purge(druid: params[:id])
 
-    redirect_to '/', notice: "#{params[:id]} has been purged!"
+    redirect_to '/', status: :see_other, notice: "#{params[:id]} has been purged!"
   end
 
   def refresh_metadata
