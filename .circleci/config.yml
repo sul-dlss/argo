@@ -2,10 +2,10 @@ version: 2.1
 
 orbs:
   ruby: circleci/ruby@1.2.0
-  node: circleci/node@4.9.0
+  node: circleci/node@2.1.1
 
 references:
-  default_ruby_version: &default_ruby_version 2.7.3-browsers
+  default_ruby_version: &default_ruby_version 2.7-browsers
   default_postgres_version: &default_postgres_version 11-ram
   ruby_envs: &ruby_envs
     environment:
@@ -198,8 +198,9 @@ jobs:
       - checkout
       - ruby/install-deps:
           key: gems-v2
-      - node/install:
-          install-yarn: true
+      - node/install-packages:
+          cache-key: yarn.lock
+          pkg-manager: yarn
       # Check DB status
       - run:
           name: Wait for DB
