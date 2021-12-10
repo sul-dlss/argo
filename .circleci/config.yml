@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.2.0
   node: circleci/node@2.1.1
+  browser-tools: circleci/browser-tools@1.1
 
 references:
   default_ruby_version: &default_ruby_version 2.7-browsers
@@ -195,6 +196,7 @@ jobs:
       SETTINGS__WORKFLOW_URL: http://workflow:3000
     executor: ruby_with_all_deps
     steps:
+      - browser-tools/install-browser-tools
       - checkout
       - ruby/install-deps:
           key: gems-v2
