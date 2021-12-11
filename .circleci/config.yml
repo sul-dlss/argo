@@ -1,17 +1,17 @@
 version: 2.1
 
 orbs:
-  ruby: circleci/ruby@1.1.2
+  ruby: circleci/ruby@1.2.0
   node: circleci/node@2.1.1
+  browser-tools: circleci/browser-tools@1.1
 
 references:
-  default_ruby_version: &default_ruby_version 2.7.3-node-browsers
+  default_ruby_version: &default_ruby_version 2.7-browsers
   default_postgres_version: &default_postgres_version 11-ram
   ruby_envs: &ruby_envs
     environment:
       BUNDLE_JOBS: 3
       BUNDLE_RETRY: 3
-      BUNDLE_PATH: vendor/bundle
       PGHOST: 127.0.0.1
       PGPASSWORD: sekret
   postgres_envs: &postgres_envs
@@ -59,16 +59,16 @@ executors:
   default:
     parameters:
       ruby_tag:
-        description: "The `circleci/ruby` Docker image version tag."
+        description: "The `cimg/ruby` Docker image version tag."
         type: string
         default: *default_ruby_version
     docker:
-      - image: circleci/ruby:<< parameters.ruby_tag >>
+      - image: cimg/ruby:<< parameters.ruby_tag >>
         <<: *ruby_envs
   ruby_with_all_deps:
     parameters:
       ruby_tag:
-        description: "The `circleci/ruby` Docker image version tag."
+        description: "The `cimg/ruby` Docker image version tag."
         type: string
         default: *default_ruby_version
       postgres_tag:
@@ -76,7 +76,7 @@ executors:
         type: string
         default: *default_postgres_version
     docker:
-      - image: circleci/ruby:<< parameters.ruby_tag >>
+      - image: cimg/ruby:<< parameters.ruby_tag >>
         <<: *ruby_envs
       - image: circleci/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
@@ -175,7 +175,8 @@ jobs:
     executor: default
     steps:
       - checkout
-      - ruby/install-deps
+      - ruby/install-deps:
+          key: gems-v2
       - run:
           name: Run linter
           command: bundle exec rubocop
@@ -195,8 +196,10 @@ jobs:
       SETTINGS__WORKFLOW_URL: http://workflow:3000
     executor: ruby_with_all_deps
     steps:
+      - browser-tools/install-browser-tools
       - checkout
-      - ruby/install-deps
+      - ruby/install-deps:
+          key: gems-v2
       - node/install-packages:
           cache-key: yarn.lock
           pkg-manager: yarn
