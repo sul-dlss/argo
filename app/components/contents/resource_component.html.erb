@@ -1,9 +1,23 @@
 <li class="resource">
-  <span class="label">Resource (<%= resource_counter %>)</span> <%= type %>
-  <% if label %>
-    <br><span class="label">Label</span> <%= label %>
-  <% end %>
-  <ul class="child-list">
+  <dl class="dl-horizontal">
+    <dt>Resource (<%= resource_counter %>)</dt>
+    <dd><%= type %></dd>
+    <% if label %>
+      <dt>Label</dt>
+      <dd><%= label %></dd>
+    <% end %>
+  </dl>
+  <table class="resource-files table">
+    <thead>
+      <tr>
+        <th>File name</th>
+        <th>Type</th>
+        <th>Size</th>
+        <th>Publish</th>
+        <th>Shelve</th>
+        <th>Preserve</th>
+      </tr>
+
     <%= render Contents::FileComponent.with_collection(files, object_id: object_id, viewable: viewable?) %>
-  </ul>
+  </table>
 </li>

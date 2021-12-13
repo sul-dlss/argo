@@ -10,6 +10,7 @@ module ItemsHelper
     super.tap do |presenter|
       # rubocop:disable Rails/HelperInstanceVariable
       presenter.techmd = @techmd if presenter.respond_to? :techmd
+      presenter.cocina = @cocina if presenter.respond_to? :cocina
       # rubocop:enable Rails/HelperInstanceVariable
     end
   end

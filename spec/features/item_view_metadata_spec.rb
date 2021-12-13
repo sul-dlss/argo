@@ -249,7 +249,7 @@ RSpec.describe 'Item view', js: true do
 
     context 'when the file is on stacks' do
       let(:filename) { 'M1090_S15_B02_F01_0126.jp2' }
-      let(:solr_doc) { { id: item_id } }
+      let(:solr_doc) { { id: item_id, SolrDocument::FIELD_OBJECT_TYPE => 'item' } }
 
       before do
         page.driver.browser.download_path = '.'

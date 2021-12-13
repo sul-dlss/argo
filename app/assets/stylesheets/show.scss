@@ -42,4 +42,44 @@
     margin-left: 2rem;
   }
 
+  /* content metadata section */
+  .resource-list {
+    list-style-type: none;
+    padding: 0;
+
+    .resource {
+      background-color: $gray-200;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      .dl-horizontal {
+        dt {
+          clear: left;
+          float: left;
+          width: 7rem;
+        }
+        dd {
+          margin-left: 8rem;
+        }
+
+        dt:after {
+          content: ":";
+        }
+
+        dd:before,
+        dd:after, {
+          display: table;
+          content: " ";
+        }
+
+        dd:after {
+          clear: both;
+        }
+      }
+      .resource-files {
+        background-color: $body-bg;
+        margin-left: 3rem;
+        width: 90%
+      }
+    }
+  }
 }

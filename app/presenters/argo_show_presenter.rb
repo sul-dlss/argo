@@ -9,5 +9,5 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
     CitationPresenter.new(@document).render
   end
 
-  attr_accessor :techmd
+  attr_accessor :techmd, :cocina
 end
