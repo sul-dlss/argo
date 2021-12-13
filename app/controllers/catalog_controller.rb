@@ -29,6 +29,7 @@ class CatalogController < ApplicationController
     config.index.display_type_field = SolrDocument::FIELD_CONTENT_TYPE
 
     config.show.display_type_field = 'objectType_ssim'
+    config.show.html_title_field = SolrDocument::FIELD_TITLE
 
     config.index.thumbnail_method = :render_thumbnail_helper
 

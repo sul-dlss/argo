@@ -269,7 +269,7 @@ RSpec.describe 'Item view', js: true do
     end
 
     context 'when the title has an ampersand in it' do
-      let(:solr_doc) { { id: item_id, obj_label_tesim: 'Road & Track' } }
+      let(:solr_doc) { { id: item_id, SolrDocument::FIELD_TITLE => 'Road & Track' } }
 
       let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
 

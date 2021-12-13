@@ -1,8 +1,3 @@
-<% @page_title = t('blacklight.search.show.title',
-  document_title: truncate(strip_tags(document_presenter(@document).html_title).html_safe, length: 50), application_name: application_name).html_safe %>
-
-<% content_for(:head) { render_link_rel_alternates } %>
-
 <%= render_document_main_content_partial %>
 
 <% content_for(:sidebar) do %>
