@@ -1,5 +1,7 @@
 <%# workflow update requires id, workflow, process, and status parameters %>
-<%= form_tag item_workflow_path(pid, workflow_name), method: 'put' do %>
+<%= form_tag item_workflow_path(pid, workflow_name),
+             method: 'put',
+             data: { turbo_confirm: confirm } do %>
   <%= hidden_field_tag('process', name) %>
   <%= hidden_field_tag('repo', repository) %>
   <div class="input-group">
@@ -9,8 +11,7 @@
                    class: 'form-control custom-select') %>
     <span class="input-group-append">
         <%= button_tag('Save', type: 'submit',
-                               class: 'btn btn-secondary',
-                               data: { turbo_confirm: confirm }) %>
+                               class: 'btn btn-secondary') %>
     </span>
   </div>
 <% end %>
