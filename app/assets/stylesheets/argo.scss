@@ -114,6 +114,9 @@ legend {
 .bulk-buttons-row {
   margin-top: 16px;
   margin-bottom: 16px;
+  .btn {
+    margin-top: 0.5em;
+  }
 }
 
 #column_selector {
