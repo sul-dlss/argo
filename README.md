@@ -153,7 +153,7 @@ gem install foreman
 
 Then you can run
 ```
-REMOTE_USER=blalbrit@stanford.edu ROLES=sdr:administrator-role bin/dev
+bin/dev
 ```
 This starts css/js bundling and the development server
 

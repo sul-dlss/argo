@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-foreman start -f Procfile.dev
+# Provide some default values that allow the user to login.
+# In a production like environment these are provided by the webserver/Shibboleth/LDAP
+REMOTE_USER="${REMOTE_USER:=blalbrit@stanford.edu}"
+ROLES="${ROLES:=sdr:administrator-role}"
+
+REMOTE_USER=$REMOTE_USER ROLES=$ROLES foreman start -f Procfile.dev
