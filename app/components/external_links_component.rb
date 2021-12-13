@@ -20,7 +20,7 @@ class ExternalLinksComponent < ViewComponent::Base
   def searchworks_link
     id = document.catkey.presence || document.druid
     url = Kernel.format(Settings.searchworks_url, id: id)
-    link_to 'Searchworks', url, target: '_blank', rel: 'noopener', class: 'nav-link'
+    link_to 'SearchWorks', url, target: '_blank', rel: 'noopener', class: 'nav-link'
   end
 
   def foxml_link

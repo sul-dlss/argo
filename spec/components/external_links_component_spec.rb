@@ -19,14 +19,14 @@ RSpec.describe ExternalLinksComponent, type: :component do
     it 'links to purl and the Solr document' do
       render_inline(described_class.new(document: document))
 
-      expect(page).not_to have_link 'Searchworks'
+      expect(page).not_to have_link 'SearchWorks'
       expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
       expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
       expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
     end
   end
 
-  context 'when released to Searchworks' do
+  context 'when released to SearchWorks' do
     let(:released_to) do
       ['Searchworks']
     end
@@ -37,7 +37,7 @@ RSpec.describe ExternalLinksComponent, type: :component do
       it 'links to searchworks with the catkey and links to purl' do
         render_inline(described_class.new(document: document))
 
-        expect(page).to have_link 'Searchworks', href: 'http://searchworks.stanford.edu/view/123456'
+        expect(page).to have_link 'SearchWorks', href: 'http://searchworks.stanford.edu/view/123456'
         expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
         expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
       end
@@ -49,7 +49,7 @@ RSpec.describe ExternalLinksComponent, type: :component do
       it 'links to searchworks using a druid' do
         render_inline(described_class.new(document: document))
 
-        expect(page).to have_link 'Searchworks', href: 'http://searchworks.stanford.edu/view/ab123cd3445'
+        expect(page).to have_link 'SearchWorks', href: 'http://searchworks.stanford.edu/view/ab123cd3445'
       end
     end
   end
