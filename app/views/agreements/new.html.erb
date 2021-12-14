@@ -13,24 +13,24 @@
       </div>
     <% end %>
 
-    <div class="form-group">
+    <div class="mb-3">
       <%= f.label :title %>
       <%= f.text_field :title, class: 'form-control' %>
     </div>
 
-    <div class="form-group">
+    <div class="mb-3">
       <%= f.label :source_id %>
       <%= f.text_field :source_id, class: 'form-control' %>
     </div>
 
-    <div class="custom-file mb-5">
-      <%= f.file_field :agreement_file1, class: 'custom-file-input' %>
-      <%= f.label :agreement_file1, class: 'custom-file-label' %>
+    <div class="mb-3">
+      <%= f.label :agreement_file1, class: 'form-label' %>
+      <%= f.file_field :agreement_file1, class: 'form-control' %>
     </div>
 
-    <div class="custom-file mb-5">
-      <%= f.file_field :agreement_file2, class: 'custom-file-input' %>
-      <%= f.label :agreement_file2, class: 'custom-file-label' %>
+    <div class="mb-3">
+      <%= f.label :agreement_file2, class: 'form-label' %>
+      <%= f.file_field :agreement_file2, class: 'form-control' %>
     </div>
 
     <%= link_to 'Cancel', root_path, class: 'btn btn-link' %>
