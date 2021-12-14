@@ -39,7 +39,7 @@ RSpec.describe 'Date range form', js: true do
 
     before do
       visit root_path(query_params.merge(all: true))
-      find('[data-target="#facet-object_modified_date"]').click
+      click_button 'Last Modified'
     end
 
     it 'navigates to date range search' do
