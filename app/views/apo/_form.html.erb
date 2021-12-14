@@ -1,4 +1,5 @@
-<%= form_for @form, url: { action: @form.persisted? ? 'update' : 'create'}, data: { behavior: 'apo-form' } do |f| %>
+<%= form_for @form, url: { action: @form.persisted? ? 'update' : 'create'},
+             data: { controller: 'apo-form', action: 'submit->apo-form#submit' } do |f| %>
   <div class="mb-3">
     <%= f.label :title %>
     <%= f.text_field :title, class: 'form-control', required: true %>
@@ -24,8 +25,8 @@
   <br>
 
   <div class="form-check">
-    <label>
-      <%= f.radio_button :collection_radio, 'none', checked: true, class: 'form-check-input' %>
+    <label class="form-check-label">
+      <%= f.radio_button :collection_radio, 'none', checked: true, class: 'form-check-input', data: { action: 'apo-form#hideCollection' } %>
       Don't add a Collection
     </label>
   </div>
@@ -33,31 +34,31 @@
   <% unless @form.persisted? %>
     <div class="form-check">
       <label class="form-check-label">
-        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { reveal: 'create-collection' } %>
+        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { action: 'apo-form#revealCreateCollection' } %>
         Create a Collection
       </label>
     </div>
 
     <div class="form-check">
       <label class="form-check-label">
-        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { reveal: 'create-collection-catkey' } %>
+        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { action: 'apo-form#revealCreateCollectionCatkey' } %>
         Create a Collection from Symphony
       </label>
     </div>
   <% else %>
     <div class="form-check">
       <label class="form-check-label">
-        <%= f.radio_button :collection_radio, 'select', class: 'form-check-input', data: { reveal: 'select-collection' } %>
+        <%= f.radio_button :collection_radio, 'select', class: 'form-check-input', data: { action: 'apo-form#revealSelectCollection' } %>
         Choose a Default Collection
       </label>
     </div>
   <% end %>
 
   <%= f.fields_for :collection do |collection| %>
-    <div id="select-collection" class="collection_div mb-3" style="display:none">
+    <div id="select-collection" data-apo-form-target="selectCollectionFields" hidden class="mb-3">
       <%= collection.select :collection, options_for_select(current_user.permitted_collections), {}, class: 'form-select' %>
     </div>
-    <div id="create-collection" class="collection_div" style="display:none">
+    <div id="create-collection" data-apo-form-target="createCollectionFields" hidden>
       <div class="mb-3">
         <%= collection.label :collection_title, "Collection Title", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
@@ -80,7 +81,7 @@
       </div>
     </div>
 
-    <div id="create-collection-catkey" class="collection_div" style="display:none">
+    <div id="create-collection-catkey" data-apo-form-target="catkeyFields" hidden>
       <div class="mb-3">
         <%= collection.label :collection_catkey, "Collection Catkey", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">

@@ -49,8 +49,8 @@ class ApoController < ApplicationController
     unless change_set.validate(params[:apo_form])
       @form = ApoForm.new(@cocina, search_service: search_service)
       respond_to do |format|
-        format.json { render status: :bad_request, json: { errors: @form.errors } }
-        format.html { render 'edit' }
+        format.json { render status: :unprocessable_entity, json: { errors: @form.errors } }
+        format.html { render 'edit', status: :unprocessable_entity }
       end
       return
     end

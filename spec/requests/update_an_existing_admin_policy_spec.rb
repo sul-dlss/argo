@@ -34,7 +34,7 @@ RSpec.describe 'Update an existing Admin Policy' do
 
     it 'redraws the form' do
       patch "/apo/#{pid}", params: { apo_form: { title: '' } }
-      expect(response).to be_successful
+      expect(response).to have_http_status(:unprocessable_entity)
     end
   end
 
