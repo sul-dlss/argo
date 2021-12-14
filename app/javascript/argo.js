@@ -7,7 +7,6 @@ import TagsAutocomplete from './modules/tags_autocomplete'
 import ProjectAutocomplete from './modules/project_autocomplete'
 
 import Form from './modules/apo_form'
-import bsCustomFileInput from 'bs-custom-file-input'
 import {gridContext} from './registration/grid'
 import {initializeReport} from './modules/report'
 
@@ -57,7 +56,6 @@ export default class Argo {
 
         this.registration()
         this.blacklight()
-        bsCustomFileInput.init() // Used for the agreement registration form
     }
 
     // Because blacklight doesn't yet support turbo, we need to manually initialize
