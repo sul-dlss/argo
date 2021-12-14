@@ -1,7 +1,6 @@
 // Entry point for the build script in your package.json
 
 import 'jquery'
-import './spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
 import './modules/button_checker'
 import './modules/date_range_query'
 import './modules/populate_druids'

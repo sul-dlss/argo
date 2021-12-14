@@ -63,11 +63,7 @@ RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
 
   it 'has a delete button for each row with log info' do
     render
-    expect(rendered).to have_css 'button.job-delete-button', text: 'Delete', count: 4
-    bulk_jobs[1..4].each do |job|
-      expect(rendered).to have_css 'button.job-delete-button', text: 'Delete'
-      expect(rendered).to have_xpath "//button[@id='#{job['dir']}']", text: 'Delete' # id att has chars that cause problems in have_css call
-    end
+    expect(rendered).to have_css 'button[data-action="bulk-upload-jobs#openModal"]', text: 'Delete', count: 4
   end
 
   it 'has links to log info and XML for each row with log info' do

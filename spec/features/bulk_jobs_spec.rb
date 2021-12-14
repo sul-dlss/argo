@@ -70,7 +70,9 @@ RSpec.describe 'Bulk jobs view' do
       expect(page).to have_button('Delete')
       click_button('Delete', match: :first)
       expect(page).to have_content('Are you sure you want to delete the job directory and the files it contains?')
-      click_link('Delete')
+      within '.modal-dialog' do
+        click_button('Delete')
+      end
       expect(page).to have_content(/Bulk job for APO.+deleted\./)
     end
 
