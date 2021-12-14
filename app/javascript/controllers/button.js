@@ -1,6 +1,22 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
+  static values = {
+    checkUrl: String
+  }
+
+  connect() {
+    if (this.checkUrlValue) {
+      // If this URL returns "true", then remove the disabled class
+      fetch(this.checkUrlValue)
+        .then(response => response.json())
+        .then(res => {
+          if (res)
+            this.element.classList.remove("disabled")
+        })
+    }
+  }
+
   open(event) {
     event.preventDefault()
     const href = this.element.getAttribute('href')

@@ -45,7 +45,6 @@ export default class Argo {
         this.tagsAutocomplete()
         this.projectAutocomplete()
 
-        this.buttonChecker()
         this.itemCollection()
 
         this.apoEditor()
@@ -78,10 +77,6 @@ export default class Argo {
 
     projectAutocomplete() {
       new ProjectAutocomplete().initialize()
-    }
-
-    buttonChecker() {
-      $('a.disabled[data-check-url]').buttonChecker()
     }
 
     itemCollection() {
