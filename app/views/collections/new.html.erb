@@ -21,8 +21,8 @@
             <label for="collection_title">
               Collection Title
             </label>
-            <%= text_field_tag 'collection_title', nil, class: 'form-control' %>
-            <span id="collection_title_warning" class="alert alert-warning" style="display: none">Collection with this title already exists.</span>
+            <%= text_field_tag 'collection_title', nil, class: 'form-control', data: { action: 'collection-editor#checkTitle' } %>
+            <div data-collection-editor-target="titleWarning" class="mt-2 alert alert-warning" hidden>Collection with this title already exists.</div>
           </div>
           <div class="mb-3">
             <label for="collection_abstract">
@@ -42,8 +42,8 @@
             <label for="collection_catkey">
               Collection Catkey
             </label>
-            <%= text_field_tag 'collection_catkey', nil, class: 'form-control' %>
-            <span id="collection_catkey_warning" class="alert alert-warning" style="display: none">Collection with this catkey already exists.</span>
+            <%= text_field_tag 'collection_catkey', nil, class: 'form-control', data: { action: 'collection-editor#checkCatkey' } %>
+            <span data-collection-editor-target="catkeyWarning" class="mt-2 alert alert-warning" hidden>Collection with this catkey already exists.</span>
           </div>
           <div class="mb-3">
             <label for="collection_rights_catkey">

@@ -27,12 +27,12 @@ RSpec.describe Argo::DateFieldQueries do
       end
 
       it 'does not affect non-date queries' do
-        blacklight_params = { 'f' => { title_ssi: ['hello'] } }
-        solr_params = { fq: ['{!term f=title_ssi}hello'] }
+        blacklight_params = { 'f' => { obj_label_tesim: ['hello'] } }
+        solr_params = { fq: ['{!term f=obj_label_tesim}hello'] }
         expect(subject).to receive(:blacklight_params)
           .twice.and_return(blacklight_params)
         subject.add_date_field_queries(solr_params)
-        expect(solr_params).to eq fq: ['{!term f=title_ssi}hello']
+        expect(solr_params).to eq fq: ['{!term f=obj_label_tesim}hello']
       end
     end
   end
