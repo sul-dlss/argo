@@ -256,14 +256,30 @@ export function gridContext() {
 
       });
 
-
-      $('#id_list').tabby();
-
       return(this);
     },
 
+    // Prevent the tab key from moving to the next input when pasting into the
+    // "Text" section of the registration.
+    allowTabsInTextarea: function() {
+      document.getElementById('id_list').addEventListener('keydown', function(e) {
+        if (e.key == 'Tab') {
+          e.preventDefault();
+          const start = this.selectionStart;
+          const end = this.selectionEnd;
+
+          // set textarea value to: text before caret + tab + text after caret
+          this.value = `${this.value.substring(0, start)}\t${this.value.substring(end)}`
+
+          // put caret at right position again
+          this.selectionStart = this.selectionEnd = start + 1
+        }
+      })
+
+      return(this);
+    },
     initialize: function() {
-      this.initializeContext().initializeDialogs().
+      this.initializeContext().initializeDialogs().allowTabsInTextarea().
         initializeGrid().initializeCallbacks();
       $('#properties input,#properties select').change();
     }
