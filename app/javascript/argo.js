@@ -48,7 +48,6 @@ export default class Argo {
         this.buttonChecker()
         this.dateRangeQuery()
         this.itemCollection()
-        this.populateDruids()
 
         this.apoEditor()
         this.collapsableSections()
@@ -92,10 +91,6 @@ export default class Argo {
 
     itemCollection() {
       new ItemCollection().initialize()
-    }
-
-    populateDruids() {
-      $('[data-populate-druids]').populateDruids()
     }
 
     apoEditor() {
