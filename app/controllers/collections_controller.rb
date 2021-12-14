@@ -48,8 +48,8 @@ class CollectionsController < ApplicationController
   def collection_exists?(title:, catkey:)
     return false unless title || catkey
 
-    query = '_query_:"{!raw f=has_model_ssim}info:fedora/afmodel:Dor_Collection"'
-    query += " AND title_ssi:\"#{title}\"" if title
+    query = "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\""
+    query += " AND #{SolrDocument::FIELD_LABEL}:\"#{title}\"" if title
     query += " AND identifier_ssim:\"catkey:#{params[:catkey]}\"" if catkey
 
     blacklight_config = CatalogController.blacklight_config
