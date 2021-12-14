@@ -28,11 +28,9 @@ export default class extends Controller {
     }
 
     resetDialog() {
-        // Bootstrap 5 will be like this:
-        // var myModal = new bootstrap.Modal(document.getElementById('resetModal'), {})
-        // myModal.show()
+        const modalElement = document.getElementById('resetModal')
+        bootstrap.Modal.getOrCreateInstance(modalElement).show()
 
-        $('#resetModal').modal({ show: true })
         $('#resetModal [data-action="reset"]').on('click', () => this.reset())
     }
 
