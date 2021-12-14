@@ -22,8 +22,8 @@
   </div>
   <div class='panel-body'>
     <%= form_tag add_collection_item_path(@cocina.externalIdentifier), id: 'add_collection_form' do %>
-      <div class='form-group'>
-        <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-control' %>
+      <div class='mb-3'>
+        <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-select' %>
       </div>
       <button id='add_collection' class='btn btn-primary'>Add Collection</button>
     <% end %>

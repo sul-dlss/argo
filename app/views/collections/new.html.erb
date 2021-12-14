@@ -6,7 +6,7 @@
       <%= form_tag apo_collections_path(@cocina.externalIdentifier), id: 'collection_form',
                                                                      role: 'form',
                                                                      data: { behavior: 'collection-form' } do %>
-        <div class="form-group" style="padding-left:20px">
+        <div class="mb-3" style="padding-left:20px">
           <label class="radio">
             <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-collection', action: 'change->collection-editor#toggle' } %>
             Create a Collection from Title/Abstract
@@ -17,47 +17,47 @@
           </label>
         </div>
         <div id="create-collection" class="collection_div">
-          <div class="form-group">
+          <div class="mb-3">
             <label for="collection_title">
               Collection Title
             </label>
             <%= text_field_tag 'collection_title', nil, class: 'form-control' %>
             <span id="collection_title_warning" class="alert alert-warning" style="display: none">Collection with this title already exists.</span>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label for="collection_abstract">
               Collection Abstract
             </label>
             <%= text_area_tag 'collection_abstract', nil, class: 'form-control' %>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label for="collection_rights">
               Collection Object Visibility
             </label>
-            <%= select_tag :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
+            <%= select_tag :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
           </div>
         </div>
         <div id="create-collection-catkey" class="collection_div" style="display:none">
-          <div class="form-group">
+          <div class="mb-3">
             <label for="collection_catkey">
               Collection Catkey
             </label>
             <%= text_field_tag 'collection_catkey', nil, class: 'form-control' %>
             <span id="collection_catkey_warning" class="alert alert-warning" style="display: none">Collection with this catkey already exists.</span>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <label for="collection_rights_catkey">
               Collection Object Visibility
             </label>
-            <%= select_tag :collection_rights_catkey, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-control' %>
+            <%= select_tag :collection_rights_catkey, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
           </div>
         </div>
-        <div class="form-group">
+        <div class="mb-3">
           <%= button_tag 'register', id: 'register', class: 'btn btn-secondary' do 'Register Collection' end %>
         </div>
 
         <% if !request.xhr? %>
-          <div class="form-group">
+          <div class="mb-3">
             <%= button_to 'Cancel', solr_document_path(@cocina.externalIdentifier), method: :get, class: 'btn btn-secondary' %>
           </div>
         <% end %>

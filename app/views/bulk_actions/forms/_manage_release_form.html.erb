@@ -1,5 +1,5 @@
 <% f.fields_for :manage_release do |manage_release_fields| %>
-  <div class='form-group'>
+  <div class='mb-3'>
     <div class='radio'>
       <label class='checkbox-inline'>
         <%= manage_release_fields.radio_button(:tag, true, checked: true) %>
@@ -11,9 +11,9 @@
       </label>
     </div>
   </div>
-  <div class='form-group'>
+  <div class='mb-3'>
     <label for='bulk_action_manage_release_to'>to</label>
-    <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-control' %>
+    <%= manage_release_fields.select :to, Constants::RELEASE_TARGETS, {}, class: 'form-select' %>
   </div>
   <%= manage_release_fields.hidden_field('what', value: 'self') %>
   <%= manage_release_fields.hidden_field('who', value: current_user.sunetid) %>

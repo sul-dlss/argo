@@ -1,12 +1,12 @@
 <% f.fields_for :prepare do |prepare_fields| %>
-  <div class='form-group'>
+  <div class='mb-3'>
     <%= prepare_fields.label :significance, 'Change type' %>
     <%= prepare_fields.select :significance,
                               [['Major', 'major'], ['Minor', 'minor'], ['Admin', 'admin']],
-                              class: 'form-control' %>
+                              class: 'form-select' %>
   </div>
 
-  <div class='form-group'>
+  <div class='mb-3'>
     <%= prepare_fields.label :description, 'Describe this version' %>
     <%= prepare_fields.text_area :description, class: 'form-control' %>
   </div>

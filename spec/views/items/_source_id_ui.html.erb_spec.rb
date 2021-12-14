@@ -14,7 +14,7 @@ RSpec.describe 'items/_source_id_ui.html.erb' do
   it 'renders the partial content' do
     render
     expect(rendered)
-      .to have_css 'form .form-group input.form-control[value="source id"]'
+      .to have_css 'form input.form-control[value="source id"]'
     expect(rendered).to have_css 'p.help-block'
     expect(rendered).to have_css 'button.btn.btn-primary', text: 'Update'
   end

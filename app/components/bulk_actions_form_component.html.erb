@@ -14,10 +14,10 @@
       </div>
     <% end %>
 
-    <div class='form-group'>
+    <div class='mb-3'>
         <%= f.select(:action_type, action_types,
                      {},
-                     class: 'form-control',
+                     class: 'form-select',
                      data: { action: 'change->bulk_actions#showTab' }) %>
 
       <div class='tab-content'>
@@ -94,7 +94,7 @@
         </div>
 
         <div role='tabpanel' class='tab-pane' id='CreateVirtualObjectsJob'>
-          <div class="form-group">
+          <div class="mb-3">
             <span class='help-block'>
               Create one or more virtual objects.
             </span>
@@ -116,7 +116,7 @@
         </div>
 
         <div role='tabpanel' class='tab-pane' id='RegisterDruidsJob'>
-          <div class="form-group">
+          <div class="mb-3">
             <span class='help-block'>
               Register druids
             </span>
@@ -125,7 +125,7 @@
         </div>
 
         <div role='tabpanel' class='tab-pane' id='SetLicenseAndRightsStatementsJob'>
-          <div class="form-group">
+          <div class="mb-3">
             <span class='help-block'>
               Edit license, copyright statement, and/or use &amp; reproduction statements
             </span>
@@ -134,7 +134,7 @@
         </div>
 
         <div role='tabpanel' class='tab-pane' id='ManageEmbargoesJob'>
-          <div class="form-group">
+          <div class="mb-3">
             <span class='help-block'>
               Manage embargoes with a CSV
             </span>
@@ -151,13 +151,13 @@
         </button>
         <small><%= @last_search.query_params.except('controller', 'action') %></small>
       <% end %>
-      <div class='form-group'>
+      <div class='mb-3'>
         <label>Druids to perform bulk action on</label>
         <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'></textarea>
       </div>
     </div>
 
-    <div class='form-group'>
+    <div class='mb-3'>
       <%= f.label :description, 'Describe this bulk action' %>
       <%= f.text_area :description, class: 'form-control' %>
     </div>

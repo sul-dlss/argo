@@ -1,15 +1,15 @@
 <%= form_for(@bulk_action) do |f| %>
   <%= f.hidden_field(:action_type, value: 'ReleaseObjectJob') %>
   <%= f.hidden_field('pids', value: @document.id) %>
-  <div class='form-group'>
+  <div class='mb-3'>
     <label>Manage release to discovery applications for <%= @document.object_type %> <%= @document.id %></label>
   </div>
   <h2><%= @document.title %></h2>
-  <div class='form-group'>
+  <div class='mb-3'>
     <label>Released for:</label> <%= @document.released_to.to_sentence %>
   </div>
   <%= child_form(f) %>
-  <div class='form-group'>
+  <div class='mb-3'>
     <button type='submit' class='btn btn-primary'>Submit</button>
   </div>
 <% end %>

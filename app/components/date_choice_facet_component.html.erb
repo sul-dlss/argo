@@ -6,11 +6,11 @@
      <%= render Blacklight::FacetFieldListComponent.new(facet_field: @facet_field, layout: false) %>
 
     <div data-range-query data-range-path='<%= search_catalog_path %>'>
-      <div class='form-group'>
+      <div class='mb-3'>
         <label for="<%= @facet_field.key %>_after_datepicker">From:</label>
         <input maxlength="10" size="10" id="<%= @facet_field.key %>_after_datepicker" type="text" data-datepicker data-range-after>
       </div>
-      <div class='form-group'>
+      <div class='mb-3'>
         <label for="<%= @facet_field.key %>_before_datepicker">Through:</label>
         <input maxlength="10" size="10" id="<%= @facet_field.key %>_before_datepicker" type="text" data-datepicker data-range-before>
       </div>

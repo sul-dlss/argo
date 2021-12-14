@@ -98,7 +98,7 @@ RSpec.describe 'Set embargo for an object' do
         get "/items/#{pid}/embargo/edit"
 
         expect(response).to have_http_status(:ok)
-        expect(rendered).to have_css 'form .form-group label', text: 'Enter the date when this embargo ends'
+        expect(rendered).to have_css 'form label', text: 'Enter the date when this embargo ends'
         expect(rendered)
           .to have_css 'input.btn.btn-primary[value="Save"]'
       end
@@ -132,7 +132,7 @@ RSpec.describe 'Set embargo for an object' do
         get "/items/#{pid}/embargo/new"
 
         expect(response).to have_http_status(:ok)
-        expect(rendered).to have_css 'form .form-group label', text: 'Enter the date when this embargo ends'
+        expect(rendered).to have_css 'form label', text: 'Enter the date when this embargo ends'
         expect(rendered)
           .to have_css 'input.btn.btn-primary[value="Save"]'
       end
