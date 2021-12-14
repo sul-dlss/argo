@@ -89,7 +89,6 @@ export function gridContext() {
         error:   'registration-status icon-exclamation-sign',
         abort: 'registration-status icon-remove-sign'
       };
-      $.defaultText({ css: 'default-text' });
       $(window).bind('resize', function(e) {
         $t.resizeGrid();
       });
@@ -168,7 +167,7 @@ export function gridContext() {
 
       const template = document.getElementById('table-header')
       const clone = template.content.cloneNode(true)
-      document.getElementById("t_data").appendChild(clone) 
+      document.getElementById("t_data").appendChild(clone)
 
       $('#properties').show().insertBefore($('#dynamic .ui-userdata'))
 

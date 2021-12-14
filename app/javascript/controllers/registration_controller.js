@@ -112,7 +112,7 @@ export default class extends Controller {
           }
         })
       }
-  
+
       textToGrid() {
         $('#data').jqGrid('clearGridData');
         $('#data').data('nextId',0);
@@ -120,7 +120,7 @@ export default class extends Controller {
         this.addIdentifiers(textData.split('\n'));
         this.formatDruids();
       }
-  
+
       gridToText() {
         var text = '';
         var gridData = $('#data').jqGrid('getRowData');
@@ -139,7 +139,6 @@ export default class extends Controller {
         this.rc = this.createRegistrationContext()
         $('#data').jqGrid('clearGridData');
         this.toggleEditing(true);
-        $.defaultText();
     }
 
     createRegistrationContext() {
@@ -170,18 +169,18 @@ export default class extends Controller {
           },
           displayRequirements : function(text) {
             document.querySelector('#gridErrorModal .modal-body p').innerHTML = text;
-    
+
             // Bootstrap 5 will be like this:
             // var myModal = new bootstrap.Modal(document.getElementById('gridErrorModal'), {})
             // myModal.show()
-    
+
             $('#gridErrorModal').modal({ show: true })
           },
           progressDialog : function(numItems) {
             // Bootstrap 5 will be like this:
             // var myModal = new bootstrap.Modal(document.getElementById('progressModal'), {})
             // myModal.show()
-    
+
             document.querySelector('#progressModal .modal-title').innerHTML = `Registering ${numItems} items`;
             $('#progressModal').modal({ show: true })
           }
@@ -221,11 +220,11 @@ export default class extends Controller {
         $('#data').jqGrid('setColProp','barcode_id',{ editable: edit });
         $('#data').jqGrid('setColProp','druid',{ editable: edit }); //, formatter: edit ? null : druidFormatter });
         $('#data').jqGrid('setColProp','label',{ editable: edit });
-  
+
         this.lockButtonTarget.hidden = !edit
         this.unlockButtonTarget.hidden = edit
       }
-  
+
       stopEditing(autoSave) {
         var cells = $('#data').jqGrid('getGridParam','savedRow');
         if (cells.length > 0) {
