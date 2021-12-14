@@ -2,7 +2,6 @@
 
 import 'jquery'
 import './modules/button_checker'
-import './modules/date_range_query'
 import bootstrap from  "bootstrap/dist/js/bootstrap"
 global.bootstrap = bootstrap // Required for Blacklight 7 so it can manage the modals
 

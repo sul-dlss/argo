@@ -46,7 +46,6 @@ export default class Argo {
         this.projectAutocomplete()
 
         this.buttonChecker()
-        this.dateRangeQuery()
         this.itemCollection()
 
         this.apoEditor()
@@ -83,10 +82,6 @@ export default class Argo {
 
     buttonChecker() {
       $('a.disabled[data-check-url]').buttonChecker()
-    }
-
-    dateRangeQuery() {
-      $('[data-range-query]').dateRangeQuery()
     }
 
     itemCollection() {

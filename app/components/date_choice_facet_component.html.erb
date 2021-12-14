@@ -5,19 +5,21 @@
   <% component.body do %>
      <%= render Blacklight::FacetFieldListComponent.new(facet_field: @facet_field, layout: false) %>
 
-    <div data-range-query data-range-path='<%= search_catalog_path %>'>
+    <div data-controller="date-choice">
       <div class='mb-3'>
         <label for="<%= @facet_field.key %>_after_datepicker">From:</label>
-        <input maxlength="10" size="10" id="<%= @facet_field.key %>_after_datepicker" type="text" data-datepicker data-range-after>
+        <input maxlength="10" size="10" id="<%= @facet_field.key %>_after_datepicker" type="text"
+               data-date-choice-target="afterDate" data-action="change->date-choice#updateQuery">
       </div>
       <div class='mb-3'>
         <label for="<%= @facet_field.key %>_before_datepicker">Through:</label>
-        <input maxlength="10" size="10" id="<%= @facet_field.key %>_before_datepicker" type="text" data-datepicker data-range-before>
+        <input maxlength="10" size="10" id="<%= @facet_field.key %>_before_datepicker" type="text"
+               data-date-choice-target="beforeDate" data-action="change->date-choice#updateQuery">
       </div>
       <div>
         <%= form_tag search_catalog_path, method: :get do %>
           <%= render Blacklight::HiddenSearchStateComponent.new(params: search_params) %>
-          <%= hidden_field_tag "f[#{solr_field_name}][]", '[* TO *]', data: { range_value: '' } %>
+          <%= hidden_field_tag "f[#{solr_field_name}][]", '[* TO *]', data: { date_choice_target: "queryField" } %>
           <%= submit_tag('submit', class: 'btn btn-primary') %>
         <% end %>
       </div>
