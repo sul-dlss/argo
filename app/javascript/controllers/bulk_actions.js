@@ -1,7 +1,10 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = [ "commonFields" ]
+  static targets = [ "commonFields", "pids" ]
+  static values = {
+    populateUrl: String
+  }
 
   // Shows the correct data tab based on the selected value of the dropdown
   showTab(event) {
@@ -22,5 +25,20 @@ export default class extends Controller {
 
     // Hide common fields for tab IDs present in tabsWithUncommonFields
     this.commonFieldsTarget.hidden = tabsWithUncommonFields.includes(selectedTab)
+  }
+
+  populateDruids(e) {
+    e.preventDefault()
+
+    fetch(this.populateUrlValue, {
+          headers: {
+            'Accept': 'application/json'
+          }
+    })
+    .then(resp => resp.json())
+    .then((data) => {
+      const docs = data.data.map(item => item.id).join("\n")
+      this.pidsTarget.value = docs
+    })
   }
 }

@@ -4,7 +4,6 @@ import 'jquery'
 import './spreadsheet' // Note: this library is used to read/write spreadsheet documents, not display
 import './modules/button_checker'
 import './modules/date_range_query'
-import './modules/populate_druids'
 import bootstrap from  "bootstrap/dist/js/bootstrap"
 global.bootstrap = bootstrap // Required for Blacklight 7 so it can manage the modals
 

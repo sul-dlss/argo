@@ -12,7 +12,7 @@ import NestedFormController from './nested_form_controller'
 import RegistationController from './registration_controller'
 
 const application = Application.start()
-application.register("bulk_actions", BulkActions)
+application.register("bulk-actions", BulkActions)
 application.register("bulk-upload", BulkUpload)
 application.register("button", Button)
 application.register("facet-filter", FacetFilter)

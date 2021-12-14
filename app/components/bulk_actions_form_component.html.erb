@@ -1,7 +1,11 @@
 <div class='container'>
   <h1>New Bulk Action</h1>
 
-  <%= form_for(@form, html: { 'data-controller' => 'bulk_actions' }) do |f| %>
+  <%= form_for(@form,
+               data: {
+                 controller: 'bulk-actions',
+                 bulk_actions_populate_url_value: search_catalog_path(search_of_pids)
+               }) do |f| %>
     <% if @form.errors.any? %>
       <div id="error_explanation">
         <h2><%= pluralize(@form.errors.count, 'error') %> prohibited this bulk_action from being saved:</h2>
@@ -18,7 +22,7 @@
         <%= f.select(:action_type, action_types,
                      {},
                      class: 'form-select',
-                     data: { action: 'change->bulk_actions#showTab' }) %>
+                     data: { action: 'change->bulk-actions#showTab' }) %>
 
       <div class='tab-content'>
         <div role='tabpanel' class='tab-pane' id='DescmetadataDownloadJob'>
@@ -144,16 +148,16 @@
       </div>
     </div>
 
-    <div data-bulk_actions-target="commonFields" >
+    <div data-bulk-actions-target="commonFields" >
       <% if @last_search %>
-        <button class='btn btn-primary' data-populate-druids="<%= search_catalog_path(search_of_pids) %>" data-target='#pids'>
+        <button class='btn btn-primary' data-action="click->bulk-actions#populateDruids">
           Populate with previous search
         </button>
         <small><%= @last_search.query_params.except('controller', 'action') %></small>
       <% end %>
       <div class='mb-3'>
         <label>Druids to perform bulk action on</label>
-        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10'></textarea>
+        <textarea id='pids' name='bulk_action[pids]' class='form-control' rows='10' data-bulk-actions-target="pids"></textarea>
       </div>
     </div>
 
