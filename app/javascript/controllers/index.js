@@ -10,6 +10,7 @@ import WorkflowGrid from './workflow_grid_controller'
 import BlacklightHierarchyController from 'blacklight-hierarchy/app/assets/javascripts/blacklight/hierarchy/blacklight_hierarchy_controller'
 import NestedFormController from './nested_form_controller'
 import RegistationController from './registration_controller'
+import BulkUploadJobsController from './bulk_upload_jobs_controller'
 
 const application = Application.start()
 application.register("bulk-actions", BulkActions)
@@ -23,3 +24,4 @@ application.register("tokens", Tokens)
 application.register("b-h-collapsible", BlacklightHierarchyController)
 application.register("nested-form", NestedFormController)
 application.register("registration", RegistationController)
+application.register("bulk-upload-jobs", BulkUploadJobsController)

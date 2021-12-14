@@ -30,9 +30,9 @@
       <% end %>
       <td>
         <% if(job.has_key?('dir')) %>
-          <%= form_tag(apo_bulk_jobs_path(@document.id), method: :delete, id: "form-#{job['dir']}") do %>
+          <%= form_tag(apo_bulk_jobs_path(@document.id), method: :delete, data: { controller: "bulk-upload-jobs" }) do %>
             <%= hidden_field_tag('dir', job['dir']) %>
-            <button type="button" id="<%= job['dir'] %>" class="btn btn-primary job-delete-button" data-bs-toggle="modal" data-bs-target="#confirm-delete-modal">Delete</button>
+            <button type="button" class="btn btn-primary" data-action="bulk-upload-jobs#openModal">Delete</button>
           <% end %>
         <% else %>
           error:  job log dir not found
@@ -51,7 +51,6 @@
           Are you sure you want to delete the job directory and the files it contains? Note that this will not stop a currently running job.
         <% end %>
         <% component.footer do %>
-          <a href="#" id="confirm-delete-job" class="btn btn-success success">Delete</a>
         <% end %>
       <% end %>
     </div>
