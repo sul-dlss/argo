@@ -11,6 +11,7 @@ import BlacklightHierarchyController from 'blacklight-hierarchy/app/assets/javas
 import NestedFormController from './nested_form_controller'
 import RegistationController from './registration_controller'
 import BulkUploadJobsController from './bulk_upload_jobs_controller'
+import DateChoiceController from './date_choice_controller'
 
 const application = Application.start()
 application.register("bulk-actions", BulkActions)
@@ -25,3 +26,4 @@ application.register("b-h-collapsible", BlacklightHierarchyController)
 application.register("nested-form", NestedFormController)
 application.register("registration", RegistationController)
 application.register("bulk-upload-jobs", BulkUploadJobsController)
+application.register("date-choice", DateChoiceController)
