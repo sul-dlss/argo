@@ -1,13 +1,13 @@
 <%= form_for @form, url: { action: @form.persisted? ? 'update' : 'create'}, data: { behavior: 'apo-form' } do |f| %>
-  <div class="form-group">
+  <div class="mb-3">
     <%= f.label :title %>
     <%= f.text_field :title, class: 'form-control', required: true %>
     <span id="title-err-msg-elt" class="apo-register-error"></span>
   </div>
 
-  <div class="form-group">
+  <div class="mb-3">
     <label>Agreement</label>
-    <%= f.select :agreement_object_id, options_for_select(agreement_options, @form.agreement_object_id), {}, class: 'form-control' %>
+    <%= f.select :agreement_object_id, options_for_select(agreement_options, @form.agreement_object_id), {}, class: 'form-select' %>
   </div>
 
   <sharing data-permissions="<%= @form.permissions.to_json %>"></sharing>
@@ -54,79 +54,79 @@
   <% end %>
 
   <%= f.fields_for :collection do |collection| %>
-    <div id="select-collection" class="collection_div form-group" style="display:none">
-      <%= collection.select :collection, options_for_select(current_user.permitted_collections), {}, class: 'form-control' %>
+    <div id="select-collection" class="collection_div mb-3" style="display:none">
+      <%= collection.select :collection, options_for_select(current_user.permitted_collections), {}, class: 'form-select' %>
     </div>
     <div id="create-collection" class="collection_div" style="display:none">
-      <div class="form-group">
+      <div class="mb-3">
         <%= collection.label :collection_title, "Collection Title", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
           <%= collection.text_field :collection_title, class: 'form-control' %>
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="mb-3">
         <%= collection.label :collection_abstract, "Collection Abstract", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
           <%= collection.text_area :collection_abstract, class: 'form-control' %>
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="mb-3">
         <%= collection.label :collection_rights, "Collection Rights", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
-          <%= collection.select :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-control' %>
+          <%= collection.select :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-select' %>
         </div>
       </div>
     </div>
 
     <div id="create-collection-catkey" class="collection_div" style="display:none">
-      <div class="form-group">
+      <div class="mb-3">
         <%= collection.label :collection_catkey, "Collection Catkey", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
           <%= collection.text_field :collection_catkey, class: 'form-control' %>
         </div>
       </div>
-      <div class="form-group">
+      <div class="mb-3">
         <%= collection.label :collection_rights_catkey, "Collection Rights", class: "col-sm-2 control-label" %>
         <div class="col-sm-10">
-          <%= collection.select :collection_rights_catkey, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-control' %>
+          <%= collection.select :collection_rights_catkey, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), {}, class: 'form-select' %>
         </div>
       </div>
     </div>
   <% end %>
 
-  <div class="form-group" style="clear: both; border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
+  <div class="mb-3" style="clear: both; border-top: 1px solid #CCC;padding: 8px 0px 12px;margin-top: 10px;width:95%">
     <label style="font-size:1.2em">Object defaults</label>
     <p>The following defaults will apply to all newly registered objects.</p>
   </div>
 
-  <div class="form-group">
+  <div class="mb-3">
     <%= f.label :default_rights, "Default Object Rights" %>
-    <%= f.select :default_rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS, @form.default_rights), {}, class: 'form-control' %>
+    <%= f.select :default_rights, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS, @form.default_rights), {}, class: 'form-select' %>
   </div>
-  <div class="form-group">
+  <div class="mb-3">
     <%= f.label :use_statement, "Default Use and Reproduction statement" %>
     <p>See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Use and Reproduction statements.</p>
     <%= f.text_area :use_statement, class: "form-control", rows:"2" %>
   </div>
 
-  <div class="form-group">
+  <div class="mb-3">
     <%= f.label :copyright_statement, "Default Copyright statement" %>
     <p>See <%= link_to 'here', 'https://consul.stanford.edu/display/APO/Sample+Access+Condition+statements', target: '_blank', rel: 'noopener' %> for sample Copyright statements.</p>
     <%= f.text_area :copyright_statement, class: "form-control", rows:"2" %>
   </div>
-  <div class="form-group">
+  <div class="mb-3">
     <%= f.label :use_license, "Default use license" %>
-    <%= f.select :use_license, options_for_select(@form.license_options, @form.use_license), {}, class: 'form-control' %>
+    <%= f.select :use_license, options_for_select(@form.license_options, @form.use_license), {}, class: 'form-select' %>
   </div>
 
-  <div class="form-group">
+  <div class="mb-3">
     <%= f.label :default_workflows %>
     <%= f.select :default_workflows, options_for_select(workflow_options, @form.default_workflows),
-                                    {}, multiple: true, class: 'form-control' %>
+                                    {}, multiple: true, class: 'form-select' %>
   </div>
-  <div class="form-group">
+  <div class="mb-3">
     <% unless @form.persisted? %>
       <%= submit_tag 'Register APO', class: 'btn btn-primary' %>
       <%= link_to 'Cancel', '/', class: 'btn btn-secondary' %>

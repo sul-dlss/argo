@@ -9,7 +9,7 @@ export default class {
 
     rootElement() {
       var elem = document.createElement('fieldset')
-      elem.className = 'form-group row'
+      elem.className = 'mb-3 row'
       return elem
     }
 
@@ -21,7 +21,7 @@ export default class {
       div.className = "col-sm-9 row"
       div.innerHTML = `<div class="col-lg-6"><input id="permissionName" class="form-control" placeholder="Group name"></div>
           <div class="col-lg-5">
-            <select id="permissionRole" class="form-control"><option value="manage">Manage</option><option value="view">View</option></select>
+            <select id="permissionRole" class="form-select"><option value="manage">Manage</option><option value="view">View</option></select>
           </div>
           <div class="col-lg-1">
             <button class="btn btn-secondary">Add</button>

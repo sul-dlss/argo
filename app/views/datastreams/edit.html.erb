@@ -5,10 +5,10 @@
       <%= form_tag item_datastream_path(@cocina.externalIdentifier, params[:id]), data: { turbo: false }, id: 'xmlEditForm', method: :patch do %>
           <input type="hidden" name="id" value="<%= @cocina.externalIdentifier %>">
           <input name="dsid" id="datastream" type="hidden" value="<%= params[:id] %>">
-          <div class="form-group">
+          <div class="mb-3">
             <textarea name="content" id="content" class='form-control'><%= @content %></textarea>
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <button type="submit" id="update" class="btn btn-primary">Update Datastream</button>
           </div>
       <% end %>

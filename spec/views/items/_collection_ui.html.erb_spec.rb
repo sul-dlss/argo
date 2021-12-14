@@ -24,7 +24,7 @@ RSpec.describe 'items/_collection_ui.html.erb' do
     expect(rendered).to have_css '.panel-body .list-group li.list-group-item', text: 'But catz are nice too' # the descMetadata title_info should display
     expect(rendered).to have_css '.panel-body .list-group li.list-group-item a span.icon-remove-sign.text-danger'
     expect(rendered).to have_css '.panel .panel-heading h3.panel-title', text: 'Add a collection'
-    expect(rendered).to have_css '.panel-body form .form-group select.form-control option', text: 'Catz are our legacy'
+    expect(rendered).to have_css '.panel-body form select option', text: 'Catz are our legacy'
     expect(rendered).to have_css '.panel-body form button.btn.btn-primary', text: 'Add Collection'
   end
 end

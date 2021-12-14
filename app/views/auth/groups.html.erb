@@ -16,7 +16,7 @@
     </div>
     <div>
       <%= form_tag(auth_remember_impersonated_groups_path) do %>
-        <div class='form-group'>
+        <div class='mb-3'>
           <%= label_tag :groups, 'Enter a group or a comma separated list of groups to impersonate' %>
           <%= text_field_tag :groups, nil, class: 'form-control' %>
         </div>

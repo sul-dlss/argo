@@ -11,13 +11,13 @@ RSpec.describe 'items/_rights.html.erb' do
 
   it 'renders the partial content' do
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'World'
+      .to have_css 'select option', text: 'World'
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'Dark (Preserve Only)'
+      .to have_css 'select option', text: 'Dark (Preserve Only)'
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'Stanford'
+      .to have_css 'select option', text: 'Stanford'
     expect(rendered)
-      .to have_css '.form-group select.form-control option', text: 'Citation Only'
+      .to have_css 'select option', text: 'Citation Only'
     expect(rendered).to have_css 'button.btn.btn-primary', text: 'Update'
   end
 end
