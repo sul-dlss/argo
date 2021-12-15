@@ -1,7 +1,7 @@
 import ItemCollection from './modules/item_collection'
 import TagsAutocomplete from './modules/tags_autocomplete'
 import ProjectAutocomplete from './modules/project_autocomplete'
-import Form from './modules/apo_form'
+
 import {gridContext} from './registration/grid'
 import {initializeReport} from './modules/report'
 
@@ -14,7 +14,6 @@ export default class Argo {
 
         this.itemCollection()
 
-        this.apoEditor()
         this.collapsableSections()
         this.report()
 
@@ -48,13 +47,6 @@ export default class Argo {
 
     itemCollection() {
       new ItemCollection().initialize()
-    }
-
-    apoEditor() {
-        var element = $("[data-behavior='apo-form']")
-        if (element.length > 0) {
-            new Form(element).init();
-        }
     }
 
     // Collapse sections on the item show pages when the cheverons are clicked
