@@ -1,0 +1,24 @@
+<%= content_tag @component,
+  id: @id,
+  data: {
+    'document-id': @document.id.to_s.parameterize,
+    'document-counter': @counter,
+  },
+  itemscope: true,
+  itemtype: @document.itemtype,
+  class: classes.flatten.join(' ') do %>
+
+  <%= helpers.render_document_heading @document, tag: :h1 %>
+  <%= render 'full_view_links_default', document: @document %>
+  <%= render 'show_thumbnail', document: @document %>
+  <%= render Blacklight::DocumentMetadataComponent.new(
+      fields: @presenter.field_presenters,
+      show: true
+    ) %>
+  <%= render 'datastreams_default', document: @document %>
+  <%= render 'events_default', document: @document %>
+  <%= render 'cocina_default', document: @document %>
+  <%= render 'history_default', document: @document %>
+  <%= render 'contents_default', document: @document %>
+  <%= render 'techmd_default', document: @document %>
+<% end %>

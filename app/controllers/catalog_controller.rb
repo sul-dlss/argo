@@ -198,7 +198,7 @@ class CatalogController < ApplicationController
     # Configure document actions framework
     config.index.document_actions.delete(:bookmark)
 
-    config.show.partials = %w[show_header full_view_links show_thumbnail show datastreams events cocina history contents techmd]
+    config.show.document_component = DocumentComponent
   end
 
   def index
