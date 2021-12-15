@@ -1,9 +1,16 @@
-<h3 id="document-cocina-head" class="section-head collapsible-section collapsed">
-  Cocina Model
-</h3>
-<div id="document-cocina-section" class="document-section" style="display:none" data-controller="json-renderer">
-  <script type="application/json" data-json-renderer-target="cocina">
-    <%= @cocina.to_json.html_safe %>
-  </script>
-  <div class="detail" data-json-renderer-target="section"></div>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="document-cocina-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#document-cocina-section" aria-expanded="false" aria-controls="document-cocina-section">
+      Cocina Model
+    </button>
+  </h2>
+  <div id="document-cocina-section" class="accordion-collapse collapse" aria-labelledby="document-cocina-heading">
+    <div class="accordion-body" data-controller="json-renderer">
+
+      <script type="application/json" data-json-renderer-target="cocina">
+        <%= @cocina.to_json.html_safe %>
+      </script>
+      <div class="detail" data-json-renderer-target="section"></div>
+    </div>
+  </div>
 </div>

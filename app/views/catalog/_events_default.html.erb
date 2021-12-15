@@ -1,15 +1,22 @@
-<h3 id="document-events-head" class="section-head collapsible-section collapsed">
-  Events
-</h3>
-<div id="document-events-section" class="document-section"  style="display:none">
-  <table class="detail">
-    <thead>
-      <tr><th>When</th><th>Event type</th><th>Data</th></tr>
-    </thead>
-    <tbody>
-    <% @events.each do |event| %>
-      <tr><td><time-ago datetime="<%= event.timestamp %>"><%= event.timestamp %></time-ago></td><td><%= event.event_type %></td><td><pre><%= JSON.pretty_generate(event.data) %></pre></td></tr>
-    <% end %>
-    </tbody>
-  </table>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="document-events-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#document-events-section" aria-expanded="false" aria-controls="document-events-section">
+      Events
+    </button>
+  </h2>
+  <div id="document-events-section" class="accordion-collapse collapse" aria-labelledby="document-events-heading">
+    <div class="accordion-body">
+
+      <table class="detail">
+        <thead>
+          <tr><th>When</th><th>Event type</th><th>Data</th></tr>
+        </thead>
+        <tbody>
+        <% @events.each do |event| %>
+          <tr><td><time-ago datetime="<%= event.timestamp %>"><%= event.timestamp %></time-ago></td><td><%= event.event_type %></td><td><pre><%= JSON.pretty_generate(event.data) %></pre></td></tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
