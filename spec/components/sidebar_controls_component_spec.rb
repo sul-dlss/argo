@@ -33,8 +33,8 @@ RSpec.describe SidebarControlsComponent, type: :component do
       let(:catkey) { nil }
 
       it 'creates a hash with the needed button info for an admin' do
-        expect(rendered.css("a.disabled[href='/items/druid:kv840xx0000/versions/close_ui'][data-check-url]").inner_text).to eq 'Close Version'
-        expect(rendered.css("a.disabled[href='/items/druid:kv840xx0000/versions/open_ui'][data-check-url]").inner_text).to eq 'Open for modification'
+        expect(rendered.css("a.disabled[href='/items/druid:kv840xx0000/versions/close_ui'][data-button-check-url-value]").inner_text).to eq 'Close Version'
+        expect(rendered.css("a.disabled[href='/items/druid:kv840xx0000/versions/open_ui'][data-button-check-url-value]").inner_text).to eq 'Open for modification'
         expect(rendered.css("a[href='/dor/reindex/druid:kv840xx0000']").inner_text).to eq 'Reindex'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/set_governing_apo_ui']").inner_text).to eq 'Set governing APO'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/workflows/new']").inner_text).to eq 'Add workflow'
@@ -86,8 +86,8 @@ RSpec.describe SidebarControlsComponent, type: :component do
       end
 
       it 'renders the appropriate default buttons for an apo' do
-        expect(rendered.css("a.disabled[href='/items/druid:zt570qh4444/versions/close_ui'][data-check-url]").inner_text).to eq 'Close Version'
-        expect(rendered.css("a.disabled[href='/items/druid:zt570qh4444/versions/open_ui'][data-check-url]").inner_text).to eq 'Open for modification'
+        expect(rendered.css("a.disabled[href='/items/druid:zt570qh4444/versions/close_ui'][data-button-check-url-value]").inner_text).to eq 'Close Version'
+        expect(rendered.css("a.disabled[href='/items/druid:zt570qh4444/versions/open_ui'][data-button-check-url-value]").inner_text).to eq 'Open for modification'
         expect(rendered.css("a[href='/apo/druid:zt570qh4444/edit']").inner_text).to eq 'Edit APO'
         expect(rendered.css("a[href='/apo/druid:zt570qh4444/collections/new']").inner_text).to eq 'Create Collection'
         expect(rendered.css("a[href='/dor/reindex/druid:zt570qh4444']").inner_text).to eq 'Reindex'

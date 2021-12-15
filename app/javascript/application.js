@@ -1,7 +1,6 @@
 // Entry point for the build script in your package.json
 
 import 'jquery'
-import './modules/button_checker'
 import bootstrap from  "bootstrap/dist/js/bootstrap"
 global.bootstrap = bootstrap // Required for Blacklight 7 so it can manage the modals
 
