@@ -23,31 +23,31 @@
   <% end %>
   <br>
 
-  <div class="radio">
+  <div class="form-check">
     <label>
-      <%= f.radio_button :collection_radio, 'none', checked: true %>
+      <%= f.radio_button :collection_radio, 'none', checked: true, class: 'form-check-input' %>
       Don't add a Collection
     </label>
   </div>
 
   <% unless @form.persisted? %>
-    <div class="radio">
-      <label>
-        <%= f.radio_button :collection_radio, 'create', data: { reveal: 'create-collection' } %>
+    <div class="form-check">
+      <label class="form-check-label">
+        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { reveal: 'create-collection' } %>
         Create a Collection
       </label>
     </div>
 
-    <div class="radio">
-      <label>
-        <%= f.radio_button :collection_radio, 'create', data: { reveal: 'create-collection-catkey' } %>
+    <div class="form-check">
+      <label class="form-check-label">
+        <%= f.radio_button :collection_radio, 'create', class: 'form-check-input', data: { reveal: 'create-collection-catkey' } %>
         Create a Collection from Symphony
       </label>
     </div>
   <% else %>
-    <div class="radio">
-      <label>
-        <%= f.radio_button :collection_radio, 'select', data: { reveal: 'select-collection' } %>
+    <div class="form-check">
+      <label class="form-check-label">
+        <%= f.radio_button :collection_radio, 'select', class: 'form-check-input', data: { reveal: 'select-collection' } %>
         Choose a Default Collection
       </label>
     </div>

@@ -1,12 +1,14 @@
 <% f.fields_for :manage_release do |manage_release_fields| %>
   <div class='mb-3'>
-    <div class='radio'>
-      <label class='checkbox-inline'>
-        <%= manage_release_fields.radio_button(:tag, true, checked: true) %>
+    <div class='form-check'>
+      <label class='form-check-label'>
+        <%= manage_release_fields.radio_button :tag, true, checked: true, class: 'form-check-input' %>
         Release this object*
       </label>
-      <label class='checkbox-inline'>
-        <%= manage_release_fields.radio_button(:tag, false) %>
+    </div>
+    <div class='form-check'>
+      <label class='form-check-label'>
+        <%= manage_release_fields.radio_button :tag, false, class: 'form-check-input'  %>
         Do not release this object*
       </label>
     </div>

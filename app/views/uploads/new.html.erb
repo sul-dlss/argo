@@ -13,29 +13,29 @@
             <strong>1. Select</strong>
           <% end %>
         </div>
-        <div class="col-md-4 spreadsheet-file-upload-column">
-          <%= file_field_tag :spreadsheet_file, data: { action: 'change->bulk-upload#fileChanged', bulk_upload_target: "file"  } %>
+        <div class="col-md-9 spreadsheet-file-upload-column">
+          <%= file_field_tag :spreadsheet_file, data: { action: 'change->bulk-upload#fileChanged', bulk_upload_target: "file"  }, class: "form-control" %>
         </div>
       </div>
 
       <div class="row mt-3">
     <div class="col-md-2"><strong>2. Action</strong></div>
-    <div class="col-md-8">
+    <div class="col-md-10">
       <div class="form-check">
-        <label>
-          <input type="radio" name="filetypes" id="filetypes_1" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="spreadsheet">
+        <label class="form-check-label">
+          <input type="radio" name="filetypes" id="filetypes_1" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="spreadsheet" class="form-check-input">
           Spreadsheet input; load into objects
         </label>
       </div>
       <div class="form-check">
-        <label>
-          <input type="radio" name="filetypes" id="filetypes_2" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="xml">
+        <label class="form-check-label">
+          <input type="radio" name="filetypes" id="filetypes_2" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="xml" class="form-check-input">
           Spreadsheet input; convert to MODS, do not load
         </label>
       </div>
       <div class="form-check">
-        <label>
-          <input type="radio" name="filetypes" id="convert_only" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="xml_only">
+        <label class="form-check-label">
+          <input type="radio" name="filetypes" id="convert_only" data-bulk-upload-target="radio" data-action="change->bulk-upload#enableSubmit" value="xml_only" class="form-check-input">
           MODS XML input; load into objects
         </label>
       </div>

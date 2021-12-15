@@ -7,15 +7,21 @@
                                                                      role: 'form',
                                                                      data: { behavior: 'collection-form' } do %>
         <div class="mb-3" style="padding-left:20px">
-          <label class="radio">
-            <%= radio_button_tag 'collection_radio', 'create', true, data: { reveal: 'create-collection', action: 'change->collection-editor#toggle' } %>
-            Create a Collection from Title/Abstract
-          </label>
-          <label class="radio">
-            <%= radio_button_tag 'collection_radio', 'create', false, data: { reveal: 'create-collection-catkey', action: 'change->collection-editor#toggle' } %>
-            Create a Collection from Symphony
-          </label>
+          <div class="form-check">
+            <label class="form-check-label" for="from-title">
+              Create a Collection from Title/Abstract
+            </label>
+            <%= radio_button_tag 'collection_radio', 'create', true, id: 'from-title', class: 'form-check-input', data: { reveal: 'create-collection', action: 'change->collection-editor#toggle' } %>
+          </div>
+
+          <div class="form-check">
+            <label class="form-check-label" for="from-symphony">
+              Create a Collection from Symphony
+            </label>
+            <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-symphony', class: 'form-check-input', data: { reveal: 'create-collection-catkey', action: 'change->collection-editor#toggle' } %>
+          </div>
         </div>
+
         <div id="create-collection" class="collection_div">
           <div class="mb-3">
             <label for="collection_title">
