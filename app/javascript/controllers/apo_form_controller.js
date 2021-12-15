@@ -4,7 +4,7 @@ import Sharing from '../modules/sharing'
 // This handles the "Register APO" as well as "Edit APO" forms
 // This controller should be on a <form> node
 export default class extends Controller {
-  static targets = [ "selectCollectionFields", "createCollectionFields", "catkeyFields",  ]
+  static targets = [ "selectCollectionFields", "createCollectionFields", "catkeyFields" ]
 
   connect() {
     this.sharing = new Sharing(this.element.querySelector('sharing'))
