@@ -125,7 +125,12 @@ RSpec.describe ItemsController, type: :controller do
                            })
     end
     let(:structural) { { 'isMemberOf' => ['druid:gg333xx4444'] } }
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_collection, update: true) }
+    let(:object_service) do
+      instance_double(Dor::Services::Client::Object,
+                      find: cocina_collection,
+                      update: true,
+                      collections: [])
+    end
 
     context 'when they have manage access' do
       before do
@@ -204,7 +209,13 @@ RSpec.describe ItemsController, type: :controller do
                              'structural' => { 'isMemberOf' => ['druid:gg333xx4444', 'druid:bc555gh3434'] }
                            })
     end
-    let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina, update: true) }
+
+    let(:object_service) do
+      instance_double(Dor::Services::Client::Object,
+                      find: cocina,
+                      update: true,
+                      collections: [])
+    end
 
     context 'when they have manage access' do
       before do

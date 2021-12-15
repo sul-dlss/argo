@@ -1,31 +1,35 @@
-<div id='collection_message' class='alert-info'></div>
+<%= turbo_frame_tag 'collection-management' do %>
+  <% if response_message %>
+    <div class="alert alert-info"><%= response_message %></div>
+  <% end %>
+  
+  <% unless @collection_list.empty? %>
+    <div class='panel panel-default'>
+      <div class='panel-heading'>
+        <h3 class="panel-title">Remove existing collections</h3>
+      </div>
+      <div class='panel-body'>
+        <ul class='list-group'>
+          <% @collection_list.each do |collection| %>
+            <%= render 'collection_ui_line_item', collection_label: collection.label,
+                                                  collection_id: collection.externalIdentifier,
+                                                  item_id: @cocina.externalIdentifier %>
+          <% end %>
+      </div>
+    </div>
+  <% end %>
 
-<% unless @collection_list.empty? %>
   <div class='panel panel-default'>
     <div class='panel-heading'>
-      <h3 class="panel-title">Remove existing collections</h3>
+      <h3 class="panel-title">Add a collection</h3>
     </div>
     <div class='panel-body'>
-      <ul id='collection_list' class='list-group'>
-        <% @collection_list.each do |collection| %>
-          <%= render 'collection_ui_line_item', collection_label: collection.label,
-                                                collection_id: collection.externalIdentifier,
-                                                item_id: @cocina.externalIdentifier %>
-        <% end %>
+      <%= form_tag add_collection_item_path(@cocina.externalIdentifier) do %>
+        <div class='mb-3'>
+          <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-select' %>
+        </div>
+        <button class='btn btn-primary'>Add Collection</button>
+      <% end %>
     </div>
   </div>
 <% end %>
-
-<div class='panel panel-default'>
-  <div class='panel-heading'>
-    <h3 class="panel-title">Add a collection</h3>
-  </div>
-  <div class='panel-body'>
-    <%= form_tag add_collection_item_path(@cocina.externalIdentifier), id: 'add_collection_form' do %>
-      <div class='mb-3'>
-        <%= select_tag :collection, options_for_select(current_user.permitted_collections), class: 'form-select' %>
-      </div>
-      <button id='add_collection' class='btn btn-primary'>Add Collection</button>
-    <% end %>
-  </div>
-</div>

@@ -1,4 +1,3 @@
-import ItemCollection from './modules/item_collection'
 import TagsAutocomplete from './modules/tags_autocomplete'
 import ProjectAutocomplete from './modules/project_autocomplete'
 
@@ -11,8 +10,6 @@ export default class Argo {
     initialize() {
         this.tagsAutocomplete()
         this.projectAutocomplete()
-
-        this.itemCollection()
 
         this.collapsableSections()
         this.report()
@@ -43,10 +40,6 @@ export default class Argo {
 
     projectAutocomplete() {
       new ProjectAutocomplete().initialize()
-    }
-
-    itemCollection() {
-      new ItemCollection().initialize()
     }
 
     // Collapse sections on the item show pages when the cheverons are clicked
