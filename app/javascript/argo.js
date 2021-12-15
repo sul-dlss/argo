@@ -1,11 +1,6 @@
 import ItemCollection from './modules/item_collection'
-import './modules/permission_add'
-import './modules/permission_grant'
-import './modules/permission_list'
-import './modules/sharing'
 import TagsAutocomplete from './modules/tags_autocomplete'
 import ProjectAutocomplete from './modules/project_autocomplete'
-
 import Form from './modules/apo_form'
 import {gridContext} from './registration/grid'
 import {initializeReport} from './modules/report'
