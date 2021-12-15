@@ -19,7 +19,7 @@ RSpec.describe 'items/_collection_ui.html.erb' do
   end
 
   it 'renders the partial content' do
-    render
+    render 'items/collection_ui', response_message: nil
     expect(rendered).to have_css '.panel .panel-heading h3.panel-title', text: 'Remove existing collections'
     expect(rendered).to have_css '.panel-body .list-group li.list-group-item', text: 'But catz are nice too' # the descMetadata title_info should display
     expect(rendered).to have_css '.panel-body .list-group li.list-group-item a span.icon-remove-sign.text-danger'

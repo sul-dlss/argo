@@ -58,23 +58,10 @@ class ItemsController < ApplicationController
                        else
                          'No collection selected'
                        end
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: response_message }
-      else
-        format.json do
-          collection = Dor::Services::Client.object(params[:collection]).find
-          new_collection_html = render_to_string('items/_collection_ui_line_item', formats: [:html], layout: false,
-                                                                                   locals: {
-                                                                                     collection_label: collection.label,
-                                                                                     collection_id: collection.externalIdentifier,
-                                                                                     item_id: @cocina.externalIdentifier
-                                                                                   })
-          render status: :ok, plain: { message: response_message, new_collection_html: new_collection_html }.to_json
-        end
-        format.html { redirect_to solr_document_path(params[:id]), notice: response_message }
-      end
-    end
+
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    @collection_list = object_client.collections
+    render partial: 'collection_ui', locals: { response_message: response_message }
   end
 
   def remove_collection
@@ -84,15 +71,9 @@ class ItemsController < ApplicationController
     change_set.save
     reindex
 
-    response_message = 'Collection successfully removed'
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: response_message }
-      else
-        format.json { render status: :ok, plain: { message: response_message, druid: params[:collection].gsub('druid:', '') }.to_json }
-        format.any  { redirect_to solr_document_path(params[:id]), notice: response_message }
-      end
-    end
+    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
+    @collection_list = object_client.collections
+    render partial: 'collection_ui', locals: { response_message: 'Collection successfully removed' }
   end
 
   def mods

@@ -1,6 +1,6 @@
-<li id='collection_<%= collection_id.gsub('druid:', '') %>' class='list-group-item'>
+<li class='list-group-item'>
   <%= collection_label %>
   <%= link_to remove_collection_item_path(id: item_id, collection: collection_id) do %>
-    <span id='remove_collection' data-pid='<%= item_id %>' class='icon-remove-sign text-danger'></span>
+    <span class='icon-remove-sign text-danger'></span>
   <% end %>
 </li>
