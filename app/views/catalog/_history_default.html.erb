@@ -1,39 +1,44 @@
-<h3 id="document-history-head" class="section-head collapsible-section">
-  <span class="section-head-link"></span>
-  History
-</h3>
-<div id="document-history-section" class="row">
-  <div class="col-sm-6">
-    <dl class="defList">
-      <dt>Lifecycle</dt>
-      <dt>
-        <%= link_to '(xml)', history_item_workflows_path(document), data: { blacklight_modal: 'trigger' } %>
-      </dt>
-      <dd style="width:30em;">
-        <%= render 'catalog/show_milestones', document: document %>
-      </dd>
-    </dl>
-  </div>
-
-  <div class="col-sm-6">
-    <dl class="defList">
-      <dt>Workflows</dt>
-      <dd>
-        <%= render 'catalog/show_workflows', document_id: document.id, workflows: @workflows %>
-      </dd>
-    </dl>
-  </div>
-
-  <% if @cocina.administrative.respond_to? :releaseTags %>
-    <% if @cocina.administrative.releaseTags.present? %>
-      <div class="col-sm-12">
-        <dl>
-          <dt>Releases</dt>
-          <dd>
-            <%= render 'show_releases', release_tags: @cocina.administrative.releaseTags %>
+<div class="accordion-item">
+  <h2 class="accordion-header" id="document-history-heading">
+    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#document-history-section" aria-expanded="true" aria-controls="document-history-section">
+      History
+    </button>
+  </h2>
+  <div id="document-history-section" class="accordion-collapse collapse show" aria-labelledby="document-history-heading">
+    <div class="accordion-body row">
+      <div class="col-sm-6">
+        <dl class="defList">
+          <dt>Lifecycle</dt>
+          <dt>
+            <%= link_to '(xml)', history_item_workflows_path(document), data: { blacklight_modal: 'trigger' } %>
+          </dt>
+          <dd style="width:30em;">
+            <%= render 'catalog/show_milestones', document: document %>
           </dd>
         </dl>
       </div>
-    <% end %>
-  <% end %>
+
+      <div class="col-sm-6">
+        <dl class="defList">
+          <dt>Workflows</dt>
+          <dd>
+            <%= render 'catalog/show_workflows', document_id: document.id, workflows: @workflows %>
+          </dd>
+        </dl>
+      </div>
+
+      <% if @cocina.administrative.respond_to? :releaseTags %>
+        <% if @cocina.administrative.releaseTags.present? %>
+          <div class="col-sm-12">
+            <dl>
+              <dt>Releases</dt>
+              <dd>
+                <%= render 'show_releases', release_tags: @cocina.administrative.releaseTags %>
+              </dd>
+            </dl>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
 </div>

@@ -8,4 +8,6 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
   def heading
     CitationPresenter.new(@document).render
   end
+
+  attr_accessor :techmd
 end

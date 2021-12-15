@@ -10,10 +10,7 @@ export default class Argo {
     initialize() {
         this.tagsAutocomplete()
         this.projectAutocomplete()
-
-        this.collapsableSections()
         this.report()
-
         this.registration()
         this.blacklight()
     }
@@ -40,16 +37,5 @@ export default class Argo {
 
     projectAutocomplete() {
       new ProjectAutocomplete().initialize()
-    }
-
-    // Collapse sections on the item show pages when the cheverons are clicked
-    collapsableSections() {
-      $('.collapsible-section').click(function(e) {
-          // Do not want a click on the "MODS bulk loads" button on the APO show page to cause collapse
-          if(e.target.id !== 'bulk-button') {
-              $(this).next('div').slideToggle()
-              $(this).toggleClass('collapsed')
-          }
-      })
     }
 }

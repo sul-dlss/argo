@@ -15,10 +15,12 @@
       fields: @presenter.field_presenters,
       show: true
     ) %>
-  <%= render 'datastreams_default', document: @document %>
-  <%= render 'events_default', document: @document %>
-  <%= render 'cocina_default', document: @document %>
-  <%= render 'history_default', document: @document %>
-  <%= render 'contents_default', document: @document %>
-  <%= render 'techmd_default', document: @document %>
+  <div class="accordion">
+    <%= render 'datastreams_default', document: @document %>
+    <%= render 'events_default', document: @document %>
+    <%= render 'cocina_default', document: @document %>
+    <%= render 'history_default', document: @document %>
+    <%= render 'contents_default', document: @document %>
+    <%= render TechmdComponent.new(result: @presenter.techmd) %>
+  </div>
 <% end %>

@@ -9,11 +9,6 @@ div.document {
     margin-bottom: 1em;
   }
 
-  #document-sections h4 {
-    font-size: 120%;
-    color: #2A306C;
-  }
-
   &.has-thumbnail {
     min-height: 124px;
   }
@@ -39,41 +34,80 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-h3.section-head {
-  display: block;
-  clear: both;
-  width: 100%;
-  padding: 2px 15px;
-  color: #2A306C;
-  background-color: #D4E0E0;
-
-  &.collapsible-section.collapsed::after {
+.blacklight-item {
+  .accordion-item {
+    margin-bottom: 1rem;
+  }
+  .accordion-button {
+    color: #2A306C;
+    background-color: #D4E0E0;
+    font-size: 1.7rem;
+    font-weight: 500;
+    padding: 0.3rem 0.7rem;
+  }
+  .accordion-button.collapsed::after {
+    transform: rotate(-90deg);
+  }
+  .accordion-button:not(.collapsed)::after {
     transform: rotate(0deg);
-    transition: transform 0.1s ease, -webkit-transform 0.1s ease;
   }
 
-  &.collapsible-section::after {
-    /* symbol for "opening" panels */
-    content: "❯";
-    float: right;
-    color: grey;
-    font-size: 0.8em;
-    line-height: normal;
-    margin-top: 3px;
-    transform: rotate(90deg);
+  .section-head-link {
+    font-weight: normal;
+    margin-top: 14px;
+    padding-right: 16px;
+    position: absolute;
+    right: 40px;
+    z-index: 5;
   }
-}
 
-.section-head-link {
-  padding-right: 16px;
-  font-weight: normal;
-  position: absolute;
-  right: 40px;
-}
+  #bulk-button {
+    font-size: 11px;
+  }
 
-#bulk-button {
-  margin-top: -4px;
-  font-size: 11px;
+
+  #document-contents-section {
+    .resource-list, .child-list {
+      list-style-type: none;
+    }
+
+    .label {
+      color: gray;
+
+      &:after {
+        content: ":";
+      }
+    }
+  }
+
+  #document-techmd-section {
+    .file-list, .metadata-list {
+      list-style-type: none;
+    }
+
+    .label {
+      color: gray;
+
+      &:after {
+        content: ":";
+      }
+    }
+  }
+
+  // For events and datastreams
+  table.detail {
+    thead {
+      border-bottom: 1px solid;
+    }
+
+    th, td {
+      font-weight: normal;
+      text-align: left;
+      padding: 0em 2em 0.25em 0em;
+      border: none;
+      vertical-align: top;
+    }
+  }
 }
 
 .errortext {
@@ -86,46 +120,4 @@ h3.section-head {
 
 .clear {
   clear: both;
-}
-
-.contents-section {
-  .resource-list, .child-list {
-    list-style-type: none;
-  }
-
-  .label {
-    color: gray;
-
-    &:after {
-      content: ":";
-    }
-  }
-}
-
-.techmd-section {
-  .file-list, .metadata-list {
-    list-style-type: none;
-  }
-
-  .label {
-    color: gray;
-
-    &:after {
-      content: ":";
-    }
-  }
-}
-
-table.detail {
-  thead {
-    border-bottom: 1px solid;
-  }
-
-  th, td {
-    font-weight: normal;
-    text-align: left;
-    padding: 0em 2em 0.25em 0em;
-    border: none;
-    vertical-align: top;
-  }
 }
