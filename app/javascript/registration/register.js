@@ -1,16 +1,14 @@
-import pathTo from './pathTo'
-
 export default function DorRegistration(initOpts) {
   var $t = {
     getTrackingSheet : function(druids) {
       var project = $t.projectName();
       var sequence = 1;
       var query = $.param({ druid : druids, name : project, sequence : sequence });
-      var url = pathTo("/registration/tracksheet?"+query);
+      var url = "/registration/tracksheet?"+query
       document.location.href = url;
     },
 
-    apoId : function() { 
+    apoId : function() {
       return document.querySelector('[data-rcparam="apoId"]').value
     },
 
@@ -20,11 +18,11 @@ export default function DorRegistration(initOpts) {
       return document.querySelector('[name="project"]').value
     },
 
-    collection : function() { 
+    collection : function() {
       return document.querySelector('[data-rcparam="collection"]').value
     },
 
-    workflowId : function() { 
+    workflowId : function() {
       return document.querySelector('[data-rcparam="workflowId"]').value
     },
 
@@ -77,7 +75,7 @@ export default function DorRegistration(initOpts) {
 
       // Grab the CSRF token from the meta tag (null-coalescing operator for the test environment)
       const csrfToken = document.querySelector("[name='csrf-token']")?.content
-      fetch(pathTo('/dor/objects'), {
+      fetch('/dor/objects', {
         method: 'POST',
         headers: {
           "X-CSRF-Token": csrfToken,

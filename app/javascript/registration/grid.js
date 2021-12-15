@@ -1,5 +1,3 @@
-import pathTo from './pathTo'
-
 export function gridContext() {
   const view_path = '/view'
 
@@ -189,7 +187,7 @@ export function gridContext() {
       $('#apo_id').change(function(e) {
         $.ajax({
           type: 'GET',
-          url: pathTo('/registration/workflow_list'),
+          url: '/registration/workflow_list',
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) {
@@ -202,7 +200,7 @@ export function gridContext() {
 
         $.ajax({
           type: 'GET',
-          url: pathTo('/registration/collection_list'),
+          url: '/registration/collection_list',
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) {
@@ -229,7 +227,7 @@ export function gridContext() {
 
         $.ajax({
           type: 'GET',
-          url: pathTo('/registration/rights_list'),
+          url: '/registration/rights_list',
           dataType: 'json',
           data: { apo_id: $('#apo_id').val() },
           success: function(response,status,xhr) {
