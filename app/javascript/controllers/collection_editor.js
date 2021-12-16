@@ -1,14 +1,16 @@
 import { Controller } from 'stimulus'
 
 export default class extends Controller {
-  static targets = [ "titleWarning", "catkeyWarning" ]
+  static targets = [ "titleWarning", "catkeyWarning", "createCollectionFields", "catkeyFields" ]
 
-  toggle(event) {
-    $('.collection_div').hide()
-    var reveal
-    if (reveal = $(event.target).data('reveal')) {
-      $(`#${reveal}`).show();
-    }
+  revealCreateCollection() {
+    this.createCollectionFieldsTarget.hidden = false
+    this.catkeyFieldsTarget.hidden = true
+  }
+
+  revealCreateCollectionCatkey() {
+    this.createCollectionFieldsTarget.hidden = true
+    this.catkeyFieldsTarget.hidden = false
   }
 
   checkTitle(event) {

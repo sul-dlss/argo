@@ -3,26 +3,28 @@
   <% component.body do %>
     <div data-controller="collection-editor">
       <h4>APO &mdash; <%= @cocina.label %></h4>
-      <%= form_tag apo_collections_path(@cocina.externalIdentifier), id: 'collection_form',
-                                                                     role: 'form',
-                                                                     data: { behavior: 'collection-form' } do %>
+      <%= form_tag apo_collections_path(@cocina.externalIdentifier) do %>
         <div class="mb-3" style="padding-left:20px">
           <div class="form-check">
             <label class="form-check-label" for="from-title">
               Create a Collection from Title/Abstract
             </label>
-            <%= radio_button_tag 'collection_radio', 'create', true, id: 'from-title', class: 'form-check-input', data: { reveal: 'create-collection', action: 'change->collection-editor#toggle' } %>
+            <%= radio_button_tag 'collection_radio', 'create', true, id: 'from-title',
+                  class: 'form-check-input',
+                  data: { action: 'change->collection-editor#revealCreateCollection' } %>
           </div>
 
           <div class="form-check">
             <label class="form-check-label" for="from-symphony">
               Create a Collection from Symphony
             </label>
-            <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-symphony', class: 'form-check-input', data: { reveal: 'create-collection-catkey', action: 'change->collection-editor#toggle' } %>
+            <%= radio_button_tag 'collection_radio', 'create', false, id: 'from-symphony',
+                  class: 'form-check-input',
+                  data: { action: 'change->collection-editor#revealCreateCollectionCatkey' } %>
           </div>
         </div>
 
-        <div id="create-collection" class="collection_div">
+        <div data-collection-editor-target="createCollectionFields">
           <div class="mb-3">
             <label for="collection_title">
               Collection Title
@@ -43,7 +45,8 @@
             <%= select_tag :collection_rights, options_for_select(Constants::COLLECTION_RIGHTS_OPTIONS, 'world'), class: 'form-select' %>
           </div>
         </div>
-        <div id="create-collection-catkey" class="collection_div" style="display:none">
+
+        <div data-collection-editor-target="catkeyFields" hidden>
           <div class="mb-3">
             <label for="collection_catkey">
               Collection Catkey
