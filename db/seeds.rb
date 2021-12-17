@@ -6,5 +6,11 @@
 require_relative '../spec/support/create_strategy_repository_pattern'
 require_relative '../spec/support/item_method_sender'
 require_relative '../spec/support/apo_method_sender'
-FactoryBot.create_for_repository(:agreement)
-FactoryBot.create_for_repository(:apo, roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
+require_relative '../spec/support/reset_solr'
+
+puts 'This will clear the Solr repo. Are you sure? [y/n]:' # rubocop:disable Rails/Output
+if gets.chomp == 'y'
+  ResetSolr.reset_solr
+  FactoryBot.create_for_repository(:agreement)
+  FactoryBot.create_for_repository(:apo, roles: [{ name: 'dor-apo-manager', members: [{ identifier: 'sdr:administrator-role', type: 'workgroup' }] }])
+end
