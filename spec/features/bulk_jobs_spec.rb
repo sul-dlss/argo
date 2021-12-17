@@ -17,16 +17,19 @@ RSpec.describe 'Bulk jobs view' do
   let(:cocina_model) { instance_double(Cocina::Models::AdminPolicy) }
   let(:apo_id) { 'druid:hv992yv2222' }
 
-  context 'on the page with the list of bulk jobs' do
+  context 'on the page with the list of bulk jobs', js: true do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: [], active_lifecycle: []) }
 
     before do
+      Capybara.enable_aria_label = true
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     end
 
     it 'the submit button exists' do
       visit apo_bulk_jobs_path(apo_id)
       expect(page).to have_link 'Submit new file ...', href: new_apo_upload_path(apo_id: 'druid:hv992yv2222')
+      click_link 'Status information'
+      expect(page).to have_content 'All spreadsheet rows converted to MODS'
     end
   end
 

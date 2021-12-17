@@ -1,7 +1,8 @@
 <table class="table table-hover my-3">
   <tr>
     <th>When</th><th>Who</th><th>File Name</th><th>Note</th>
-    <th>Status <%= link_to status_help_apo_bulk_jobs_path, data: { blacklight_modal: 'trigger', ajax_modal_title: 'Status Information' } do %>
+    <th>Status <%= link_to status_help_apo_bulk_jobs_path, aria: { label: 'Status information' },
+      data: { blacklight_modal: 'trigger', ajax_modal_title: 'Status Information' } do %>
       <span class="icon-question-sign" aria-hidden="true"></span>
     <% end %></th>
     <th>Druids</th><th>Success</th><th /><th />
