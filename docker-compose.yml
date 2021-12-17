@@ -124,6 +124,7 @@ services:
       DATABASE_PASSWORD: sekret
       DATABASE_HOSTNAME: db
       DATABASE_PORT: 5432
+      RAILS_LOG_TO_STDOUT: 'true'
 
   db:
     image: postgres:11 # aligns the pg version with what is supported by dor-services-app
