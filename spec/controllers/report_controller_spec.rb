@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ReportController, type: :controller do
   before do
-    reset_solr
+    ResetSolr.reset_solr
     solr_conn.add(id: 'druid:xb482ww9999',
                   objectType_ssim: 'item',
                   obj_label_tesim: 'Report about stuff')

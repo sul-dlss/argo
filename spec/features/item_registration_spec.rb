@@ -24,7 +24,7 @@ RSpec.describe 'Item registration page', js: true do
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    reset_solr
+    ResetSolr.reset_solr
     sign_in user, groups: ['sdr:administrator-role', 'dlss:developers']
   end
 
