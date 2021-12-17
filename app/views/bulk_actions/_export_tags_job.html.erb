@@ -1,3 +1,0 @@
-<% if bulk_action.has_report?(Settings.export_tags_job.csv_filename) %>
-  <%= link_to('Download Exported Tags (CSV)', file_bulk_action_path(bulk_action.id, filename: Settings.export_tags_job.csv_filename, mime_type: 'text/csv'), download: true) %>
-<% end %>
