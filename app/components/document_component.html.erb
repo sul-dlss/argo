@@ -7,7 +7,7 @@
   itemscope: true,
   itemtype: @document.itemtype,
   class: 'document document-component' do %>
-  <%= helpers.render_document_heading @document, tag: :h1 %>
+  <%= title %>
   <%= render 'full_view_links_default', document: @document %>
   <%= render 'show_thumbnail', document: @document %>
   <%= render Blacklight::DocumentMetadataComponent.new(
