@@ -9,16 +9,16 @@ RSpec.describe 'Set APO for an object' do
     let(:new_apo_id) { 'druid:ab123cd4567' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) do
-      Cocina::Models.build(
-        'label' => 'My ETD',
-        'version' => 1,
-        'type' => Cocina::Models::Vocab.object,
-        'externalIdentifier' => pid,
-        'access' => {},
-        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405', partOfProject: 'EEMS' },
-        'structural' => {},
-        'identification' => {}
-      )
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405', partOfProject: 'EEMS' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
     end
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
@@ -72,15 +72,15 @@ RSpec.describe 'Set APO for an object' do
 
     context 'when a collection' do
       let(:cocina_model) do
-        Cocina::Models.build(
-          'label' => 'My ETD',
-          'version' => 1,
-          'type' => Cocina::Models::Vocab.collection,
-          'externalIdentifier' => pid,
-          'access' => {},
-          'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-          'identification' => {}
-        )
+        Cocina::Models.build({
+                               'label' => 'My ETD',
+                               'version' => 1,
+                               'type' => Cocina::Models::Vocab.collection,
+                               'externalIdentifier' => pid,
+                               'access' => {},
+                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                               'identification' => {}
+                             })
       end
 
       let(:updated_model) do

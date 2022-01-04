@@ -17,37 +17,37 @@ RSpec.describe ManageEmbargoesJob do
   let(:rights) { ['world', '', 'stanford-nd'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    Cocina::Models.build(
-      'label' => 'My Item1',
-      'version' => 2,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => druids[0],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item1',
+                           'version' => 2,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => druids[0],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {}
+                         })
   end
   let(:item2) do
-    Cocina::Models.build(
-      'label' => 'My Item2',
-      'version' => 3,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => druids[1],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item2',
+                           'version' => 3,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => druids[1],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {}
+                         })
   end
   let(:item3) do
-    Cocina::Models.build(
-      'label' => 'My Item3',
-      'version' => 3,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => druids[2],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item3',
+                           'version' => 3,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => druids[2],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {}
+                         })
   end
 
   let(:csv_file) do

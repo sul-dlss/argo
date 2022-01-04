@@ -50,7 +50,7 @@ module TemplatesTracker
   end
 
   module Ext
-    def initialize(*)
+    def initialize(*, **)
       super
       TemplatesTracker.track(@identifier)
     end

@@ -14,28 +14,28 @@ RSpec.describe PurgeJob, type: :job do
   end
 
   let(:cocina1) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 2,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[0],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 2,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pids[0],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
   let(:cocina2) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 3,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[1],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 3,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pids[1],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1) }

@@ -2,7 +2,7 @@
 
 # Parse and compare version tags
 class VersionTag
-  VALID_PATTERN = /(\d+)\.(\d+)\.(\d+)/.freeze
+  VALID_PATTERN = /(\d+)\.(\d+)\.(\d+)/
 
   # @param [String] raw_tag the value of the tag attribute from a Version node
   def self.parse(raw_tag)

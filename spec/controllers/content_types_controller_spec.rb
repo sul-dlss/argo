@@ -13,28 +13,28 @@ RSpec.describe ContentTypesController, type: :controller do
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:content_type) { Cocina::Models::Vocab.image }
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 1,
-      'type' => content_type,
-      'externalIdentifier' => pid,
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => structural,
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 1,
+                           'type' => content_type,
+                           'externalIdentifier' => pid,
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => structural,
+                           'identification' => {}
+                         })
   end
   let(:cocina_model_with_member_order) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 1,
-      'type' => content_type,
-      'externalIdentifier' => pid,
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => structural_with_member_orders,
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 1,
+                           'type' => content_type,
+                           'externalIdentifier' => pid,
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => structural_with_member_orders,
+                           'identification' => {}
+                         })
   end
   let(:contains) do
     [

@@ -15,16 +15,16 @@ RSpec.describe 'Draw the manage release form' do
   let(:pid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'The item',
-      'version' => 1,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pid,
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'The item',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pid,
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
 
   before do

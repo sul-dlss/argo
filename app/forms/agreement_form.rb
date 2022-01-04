@@ -31,27 +31,27 @@ class AgreementForm < Reform::Form
   Result = Struct.new(:externalIdentifier)
 
   def new_resource(title:, source_id:)
-    Cocina::Models.build_request(
-      'type' => Cocina::Models::Vocab.agreement,
-      'label' => title,
-      'version' => 1,
-      'access' => { 'access' => 'dark' },
-      'description' => { 'title' => [{ 'value' => title }] },
-      'administrative' => { 'hasAdminPolicy' => ApoConcern::UBER_APO_ID },
-      'identification' => { 'sourceId' => source_id },
-      'structural' => {
-        'contains' => [
-          {
-            'type' => Cocina::Models::Vocab::Resources.file,
-            'label' => 'Agreement',
-            'version' => 1,
-            'structural' => {
-              'contains' => agreement_files.map { |file| file_structure(file) }
-            }
-          }
-        ]
-      }
-    )
+    Cocina::Models.build_request({
+                                   'type' => Cocina::Models::Vocab.agreement,
+                                   'label' => title,
+                                   'version' => 1,
+                                   'access' => { 'access' => 'dark' },
+                                   'description' => { 'title' => [{ 'value' => title }] },
+                                   'administrative' => { 'hasAdminPolicy' => ApoConcern::UBER_APO_ID },
+                                   'identification' => { 'sourceId' => source_id },
+                                   'structural' => {
+                                     'contains' => [
+                                       {
+                                         'type' => Cocina::Models::Vocab::Resources.file,
+                                         'label' => 'Agreement',
+                                         'version' => 1,
+                                         'structural' => {
+                                           'contains' => agreement_files.map { |file| file_structure(file) }
+                                         }
+                                       }
+                                     ]
+                                   }
+                                 })
   end
 
   def agreement_files

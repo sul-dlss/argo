@@ -27,14 +27,14 @@ RSpec.describe 'Collection manage release' do
                     version: version_client)
   end
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'The model',
-      'version' => 2,
-      'type' => Cocina::Models::Vocab.collection,
-      'externalIdentifier' => collection_id,
-      'administrative' => { hasAdminPolicy: uber_apo_id },
-      'access' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'The model',
+                           'version' => 2,
+                           'type' => Cocina::Models::Vocab.collection,
+                           'externalIdentifier' => collection_id,
+                           'administrative' => { hasAdminPolicy: uber_apo_id },
+                           'access' => {}
+                         })
   end
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:collection_id) { 'druid:gg232vv1111' }

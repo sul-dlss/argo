@@ -12,28 +12,28 @@ RSpec.describe CloseVersionJob, type: :job do
            log_name: 'foo.txt')
   end
   let(:item1) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 1,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[0],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pids[0],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
   let(:item2) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 1,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[1],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pids[1],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1, version: version_client) }
   let(:object_client2) { instance_double(Dor::Services::Client::Object, find: item2, version: version_client) }

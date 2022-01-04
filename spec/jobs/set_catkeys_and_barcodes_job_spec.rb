@@ -17,46 +17,46 @@ RSpec.describe SetCatkeysAndBarcodesJob do
   let(:barcodes) { ['36105014757517', '', '36105014757518'] }
   let(:buffer) { StringIO.new }
   let(:item1) do
-    Cocina::Models.build(
-      'label' => 'My Item1',
-      'version' => 2,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[0],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {
-        barcode: '36105014757519',
-        catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }]
-      }
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item1',
+                           'version' => 2,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pids[0],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {
+                             barcode: '36105014757519',
+                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }]
+                           }
+                         })
   end
   let(:item2) do
-    Cocina::Models.build(
-      'label' => 'My Item2',
-      'version' => 3,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[1],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {
-        barcode: '36105014757510',
-        catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }]
-      }
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item2',
+                           'version' => 3,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pids[1],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {
+                             barcode: '36105014757510',
+                             catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12347' }]
+                           }
+                         })
   end
   let(:item3) do
-    Cocina::Models.build(
-      'label' => 'My Item3',
-      'version' => 3,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pids[2],
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item3',
+                           'version' => 3,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pids[2],
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
 
   let(:object_client1) { instance_double(Dor::Services::Client::Object, find: item1) }
@@ -133,19 +133,19 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     let(:client) { double(Dor::Services::Client) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: item1, update: true) }
     let(:item1) do
-      Cocina::Models.build(
-        'label' => 'My Item',
-        'version' => 3,
-        'type' => Cocina::Models::Vocab.object,
-        'externalIdentifier' => pids[0],
-        'access' => {},
-        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-        'structural' => {},
-        'identification' => {
-          barcode: '36105014757519',
-          catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }]
-        }
-      )
+      Cocina::Models.build({
+                             'label' => 'My Item',
+                             'version' => 3,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pids[0],
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {
+                               barcode: '36105014757519',
+                               catalogLinks: [{ catalog: 'symphony', catalogRecordId: '12346' }]
+                             }
+                           })
     end
 
     let(:updated_model) do
