@@ -1,0 +1,3 @@
+<% if bulk_action.has_report?(Settings.checksum_report_job.csv_filename) %>
+  <%= link_to('Download Checksum Report', file_bulk_action_path(bulk_action.id, filename: Settings.checksum_report_job.csv_filename), download: true) %>
+<% end %>
