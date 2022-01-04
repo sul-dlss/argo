@@ -10,16 +10,16 @@ RSpec.describe 'Item registration page', js: true do
   let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'The APO',
-      'version' => 1,
-      'type' => Cocina::Models::Vocab.admin_policy,
-      'externalIdentifier' => ur_apo_id,
-      'administrative' => {
-        hasAdminPolicy: ur_apo_id,
-        registrationWorkflow: %w[dpgImageWF goobiWF]
-      }
-    )
+    Cocina::Models.build({
+                           'label' => 'The APO',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.admin_policy,
+                           'externalIdentifier' => ur_apo_id,
+                           'administrative' => {
+                             hasAdminPolicy: ur_apo_id,
+                             registrationWorkflow: %w[dpgImageWF goobiWF]
+                           }
+                         })
   end
 
   before do

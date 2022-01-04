@@ -27,15 +27,15 @@ RSpec.describe 'Add a workflow to an item' do
                     version: version_client)
   end
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'The model',
-      'version' => 2,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => item_id,
-      'administrative' => { hasAdminPolicy: uber_apo_id },
-      'access' => {},
-      'structural' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'The model',
+                           'version' => 2,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => item_id,
+                           'administrative' => { hasAdminPolicy: uber_apo_id },
+                           'access' => {},
+                           'structural' => {}
+                         })
   end
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:item_id) { 'druid:bg444xg6666' }

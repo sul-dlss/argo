@@ -13,13 +13,13 @@ RSpec.describe ApoController, type: :controller do
   let(:pid) { 'druid:zt570qh4444' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'The APO',
-      'version' => 1,
-      'type' => Cocina::Models::Vocab.admin_policy,
-      'externalIdentifier' => pid,
-      'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
-    )
+    Cocina::Models.build({
+                           'label' => 'The APO',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.admin_policy,
+                           'externalIdentifier' => pid,
+                           'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+                         })
   end
 
   let(:collection_id) { 'druid:bq377wp9578' }
@@ -34,29 +34,29 @@ RSpec.describe ApoController, type: :controller do
   describe '#delete_collection' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) do
-      Cocina::Models.build(
-        'label' => 'The APO',
-        'version' => 1,
-        'type' => Cocina::Models::Vocab.admin_policy,
-        'externalIdentifier' => pid,
-        'administrative' => {
-          hasAdminPolicy: 'druid:hv992ry2431',
-          collectionsForRegistration: ['druid:1', collection_id]
-        }
-      )
+      Cocina::Models.build({
+                             'label' => 'The APO',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'externalIdentifier' => pid,
+                             'administrative' => {
+                               hasAdminPolicy: 'druid:hv992ry2431',
+                               collectionsForRegistration: ['druid:1', collection_id]
+                             }
+                           })
     end
 
     let(:expected) do
-      Cocina::Models.build(
-        'label' => 'The APO',
-        'version' => 1,
-        'type' => Cocina::Models::Vocab.admin_policy,
-        'externalIdentifier' => pid,
-        'administrative' => {
-          hasAdminPolicy: 'druid:hv992ry2431',
-          collectionsForRegistration: ['druid:1'] # only one collection now
-        }
-      )
+      Cocina::Models.build({
+                             'label' => 'The APO',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'externalIdentifier' => pid,
+                             'administrative' => {
+                               hasAdminPolicy: 'druid:hv992ry2431',
+                               collectionsForRegistration: ['druid:1'] # only one collection now
+                             }
+                           })
     end
 
     it 'calls remove_default_collection' do

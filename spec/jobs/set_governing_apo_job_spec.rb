@@ -65,28 +65,28 @@ RSpec.describe SetGoverningApoJob do
 
       context 'when an individual update fails' do
         let(:cocina1) do
-          Cocina::Models.build(
-            'label' => 'My Item',
-            'version' => 2,
-            'type' => Cocina::Models::Vocab.object,
-            'externalIdentifier' => pids[0],
-            'access' => {},
-            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-            'structural' => {},
-            'identification' => {}
-          )
+          Cocina::Models.build({
+                                 'label' => 'My Item',
+                                 'version' => 2,
+                                 'type' => Cocina::Models::Vocab.object,
+                                 'externalIdentifier' => pids[0],
+                                 'access' => {},
+                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                                 'structural' => {},
+                                 'identification' => {}
+                               })
         end
         let(:cocina3) do
-          Cocina::Models.build(
-            'label' => 'My Item',
-            'version' => 3,
-            'type' => Cocina::Models::Vocab.object,
-            'externalIdentifier' => pids[2],
-            'access' => {},
-            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-            'structural' => {},
-            'identification' => {}
-          )
+          Cocina::Models.build({
+                                 'label' => 'My Item',
+                                 'version' => 3,
+                                 'type' => Cocina::Models::Vocab.object,
+                                 'externalIdentifier' => pids[2],
+                                 'access' => {},
+                                 'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                                 'structural' => {},
+                                 'identification' => {}
+                               })
         end
 
         let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
@@ -127,16 +127,16 @@ RSpec.describe SetGoverningApoJob do
     let(:pid) { 'druid:bc123df4567' }
     let(:ability) { double(Ability) }
     let(:obj) do
-      Cocina::Models.build(
-        'label' => 'My Item',
-        'version' => 1,
-        'type' => Cocina::Models::Vocab.object,
-        'externalIdentifier' => pid,
-        'access' => {},
-        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-        'structural' => {},
-        'identification' => {}
-      )
+      Cocina::Models.build({
+                             'label' => 'My Item',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
     end
 
     before do

@@ -8,16 +8,16 @@ RSpec.describe WorkflowsController, type: :controller do
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
   let(:cocina) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 2,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pid,
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 2,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pid,
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
 
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina) }

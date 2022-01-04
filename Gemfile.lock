@@ -170,7 +170,7 @@ GEM
     docile (1.4.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    dor-services-client (7.4.0)
+    dor-services-client (7.5.0)
       activesupport (>= 4.2, < 8)
       cocina-models (~> 0.62.0)
       deprecation
@@ -352,7 +352,7 @@ GEM
       i18n
       nokogiri
     okcomputer (1.18.4)
-    openapi3_parser (0.9.0)
+    openapi3_parser (0.9.1)
       commonmarker (~> 0.17)
       psych (~> 3.1)
     openapi_parser (0.15.0)
@@ -571,7 +571,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.3)
     zip_tricks (5.3.1)
 
 PLATFORMS

@@ -4,14 +4,14 @@ FactoryBot.define do
   factory :apo, class: 'Cocina::Models::RequestAdminPolicy' do
     initialize_with do |*_args|
       ApoMethodSender.new(
-        Cocina::Models.build_request(
-          'type' => type,
-          'label' => 'test apo',
-          'version' => 1,
-          'administrative' => {
-            'hasAdminPolicy' => admin_policy_id
-          }
-        )
+        Cocina::Models.build_request({
+                                       'type' => type,
+                                       'label' => 'test apo',
+                                       'version' => 1,
+                                       'administrative' => {
+                                         'hasAdminPolicy' => admin_policy_id
+                                       }
+                                     })
       )
     end
 

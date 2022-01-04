@@ -6,16 +6,16 @@ RSpec.describe VersionsController, type: :controller do
   let(:pid) { 'druid:bc123df4567' }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'My Item',
-      'version' => 2,
-      'type' => Cocina::Models::Vocab.object,
-      'externalIdentifier' => pid,
-      'access' => {},
-      'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-      'structural' => {},
-      'identification' => {}
-    )
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 2,
+                           'type' => Cocina::Models::Vocab.object,
+                           'externalIdentifier' => pid,
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
   end
 
   before do

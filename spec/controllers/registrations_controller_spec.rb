@@ -274,16 +274,16 @@ RSpec.describe RegistrationsController, type: :controller do
   describe '#workflow_list' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) do
-      Cocina::Models.build(
-        'label' => 'The APO',
-        'version' => 1,
-        'type' => Cocina::Models::Vocab.admin_policy,
-        'externalIdentifier' => apo_id,
-        'administrative' => {
-          hasAdminPolicy: 'druid:hv992ry2431',
-          registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF']
-        }
-      )
+      Cocina::Models.build({
+                             'label' => 'The APO',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'externalIdentifier' => apo_id,
+                             'administrative' => {
+                               hasAdminPolicy: 'druid:hv992ry2431',
+                               registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF']
+                             }
+                           })
     end
     let(:apo_id) { 'druid:zt570tx3016' }
 

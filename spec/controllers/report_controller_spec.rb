@@ -126,16 +126,16 @@ RSpec.describe ReportController, type: :controller do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:pid) { 'druid:xb482bw3979' }
     let(:cocina_model) do
-      Cocina::Models.build(
-        'label' => 'My ETD',
-        'version' => 1,
-        'type' => Cocina::Models::Vocab.object,
-        'externalIdentifier' => pid,
-        'access' => {},
-        'administrative' => { hasAdminPolicy: 'druid:cg532dg5405', partOfProject: 'EEMS' },
-        'structural' => {},
-        'identification' => {}
-      )
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405', partOfProject: 'EEMS' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
     end
 
     before do

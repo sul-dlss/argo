@@ -14,13 +14,13 @@ RSpec.describe 'Viewing an Admin policy' do
     ]
   end
   let(:cocina_model) do
-    Cocina::Models.build(
-      'label' => 'The APO',
-      'version' => 1,
-      'type' => Cocina::Models::Vocab.admin_policy,
-      'externalIdentifier' => apo_druid,
-      'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
-    )
+    Cocina::Models.build({
+                           'label' => 'The APO',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.admin_policy,
+                           'externalIdentifier' => apo_druid,
+                           'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+                         })
   end
 
   let(:solr_doc) { { id: apo_druid } }
