@@ -46,6 +46,7 @@ gem 'config'
 gem 'dry-monads'
 gem 'equivalent-xml', '>= 0.6.0' # For ignoring_attr_values() with arguments
 gem 'faraday'
+gem 'faraday-multipart'
 gem 'honeybadger', '~> 4.1'
 gem 'lograge'
 gem 'sidekiq', '~> 6.0'
@@ -71,12 +72,12 @@ gem 'openapi_parser', '< 1.0'
 # Stanford related gems
 gem 'blacklight', '~> 7.20'
 gem 'blacklight-hierarchy', '~> 5.1'
-gem 'dor-services-client', '~> 7.10'
-gem 'dor-workflow-client', '~> 3.19'
+gem 'dor-services-client', '~> 8.0'
+gem 'dor-workflow-client', '~> 4.0'
 gem 'druid-tools'
 gem 'mods_display', '~> 1.0.0.alpha1'
 gem 'okcomputer' # monitors application and its dependencies
-gem 'preservation-client', '~> 3.2'
+gem 'preservation-client', '~> 4.0'
 gem 'rsolr'
 gem 'sdr-client', '~> 0.60'
 

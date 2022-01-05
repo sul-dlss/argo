@@ -52,13 +52,13 @@ class ModsulatorClient
   # @return   [String]   XML, either generated from a given spreadsheet, or a normalized version of a given XML file.
   def call_remote_modsulator(url, content_type)
     response_xml = nil
-    payload = Faraday::UploadIO.new(uploaded_filename, content_type)
+    payload = Faraday::Multipart::FilePart.new(uploaded_filename, content_type)
 
     connection = Faraday.new(url: url) do |faraday|
       faraday.use Faraday::Response::RaiseError
       faraday.request :multipart
       faraday.request :url_encoded
-      faraday.adapter :net_http # A MUST for file upload to work with UploadIO
+      faraday.adapter :net_http # A MUST for file upload to work with Faraday::Multipart::FilePart
     end
 
     response_xml = connection.post do |req|
