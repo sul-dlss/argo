@@ -231,6 +231,7 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 			return;
 		}
 		var params = get_upd_req_params_from_row_fn(upd_info);
+		params.authenticity_token = Blacklight.csrfToken()
 		var url = upd_req_url.replace('xxxxxxxxx', upd_info['druid']);
 		var xhr = $.ajax({url: url, type: 'POST', data: params});
 		cons.push(xhr);
