@@ -46,8 +46,9 @@ module ValueHelper
   # of Blacklight is updated.
   # @see #link_to_admin_policy
   # @return [String]
-  def links_to_collections(args)
-    links_to_collections_with_objs(args, with_objs: false)
+  def links_to_collections(**args)
+    args[:with_objs] = false
+    links_to_collections_with_objs(**args)
   end
 
   ##
@@ -55,7 +56,8 @@ module ValueHelper
   # of Blacklight is updated.
   # @see #link_to_admin_policy
   # @return [String]
-  def links_to_collections_with_objs(args, with_objs: true)
+  def links_to_collections_with_objs(**args)
+    with_objs = args.fetch(:with_objs, true)
     facet_config = facet_configuration_for_field('is_member_of_collection_ssim')
 
     args[:value].map.with_index do |val, i|
