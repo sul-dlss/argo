@@ -29,7 +29,7 @@ RSpec.describe ValueHelper do
     end
 
     it 'creates a link to the admin policies catalog path' do
-      expect(helper.link_to_admin_policy(args))
+      expect(helper.link_to_admin_policy(**args))
         .to have_css 'a[href="/view/druid:yolo"]', text: 'Y.O.L.O.'
     end
   end
@@ -44,7 +44,7 @@ RSpec.describe ValueHelper do
     end
 
     it 'creates a link to the admin policies catalog path with objects' do
-      expect(helper.link_to_admin_policy_with_objs(args))
+      expect(helper.link_to_admin_policy_with_objs(**args))
         .to eq('<a href="/view/druid:yolo">Y.O.L.O.</a> (<a href="/search_action_path">All objects with this APO</a>)')
       expect(helper).to have_received(:search_action_path).with('f' => { 'is_governed_by_ssim' => ['info:fedora/druid:yolo'] })
     end
@@ -59,11 +59,11 @@ RSpec.describe ValueHelper do
     end
 
     it 'creates multiple links delimited by a line break' do
-      expect(helper.links_to_collections(args))
+      expect(helper.links_to_collections(**args))
         .to have_css 'a[href="/view/druid:supercool"]', text: 'Super Cool'
-      expect(helper.links_to_collections(args))
+      expect(helper.links_to_collections(**args))
         .to have_css 'a[href="/view/druid:extracool"]', text: 'Extra Cool'
-      expect(helper.links_to_collections(args)).to have_css 'br'
+      expect(helper.links_to_collections(**args)).to have_css 'br'
     end
   end
 
@@ -76,7 +76,7 @@ RSpec.describe ValueHelper do
     end
 
     it 'creates link with objs' do
-      expect(helper.links_to_collections_with_objs(args))
+      expect(helper.links_to_collections_with_objs(**args))
         .to eq('<a href="/view/druid:supercool">Super Cool</a> (<a href="/search_action_path">All objects in this collection</a>)')
       expect(helper).to have_received(:search_action_path).with('f' => { 'is_member_of_collection_ssim' => ['info:fedora/druid:supercool'] })
     end
@@ -91,7 +91,7 @@ RSpec.describe ValueHelper do
     let(:args) { { document: document, field: 'wf_error_ssim' } }
 
     it 'returns a formatted wf error message' do
-      expect(helper.value_for_wf_error(args)).to eq 'technical-metadata : 401 Unauthorized'
+      expect(helper.value_for_wf_error(**args)).to eq 'technical-metadata : 401 Unauthorized'
     end
   end
 end
