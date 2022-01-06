@@ -50,7 +50,7 @@ class RegistrationCsvConverter
     }
 
     structural = {}
-    structural[:isMemberOf] = row['Collection'] if row['Collection']
+    structural[:isMemberOf] = [row['Collection']] if row['Collection']
     model_params[:structural] = structural
     model_params[:access] = access(row['Rights']) if row.fetch('Rights') != 'default'
     model_params[:administrative][:partOfProject] = row['Project Name'] if row['Project Name'].present?
