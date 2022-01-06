@@ -23,9 +23,9 @@ RSpec.describe RegisterDruidsJob, type: :job do
 
   let(:csv_string) do
     <<~CSV
-      APO,Rights,Initial Workflow,Content Type,Source ID,Label,Tags,Tags
-      druid:bc123df4567,world,accessionWF,book,foo:123,My new object,csv : test,Project : two
-      druid:dj123qx4567,world,accessionWF,book,foo:123,A label
+      APO,Collection,Rights,Initial Workflow,Content Type,Source ID,Label,Tags,Tags
+      druid:bc123df4567,druid:bk024qs1808,world,accessionWF,book,foo:123,My new object,csv : test,Project : two
+      druid:dj123qx4567,druid:bk024qs1808,world,accessionWF,book,foo:123,A label
     CSV
   end
 
