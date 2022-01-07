@@ -52,7 +52,7 @@ class RegistrationCsvConverter
     structural = {}
     structural[:isMemberOf] = [row['Collection']] if row['Collection']
     model_params[:structural] = structural
-    model_params[:access] = access(row['Rights']) if row.fetch('Rights') != 'default'
+    model_params[:access] = CocinaDroAccess.from_form_value(row['Rights']).value_or(nil)
     model_params[:administrative][:partOfProject] = row['Project Name'] if row['Project Name'].present?
 
     tags = []
@@ -84,28 +84,6 @@ class RegistrationCsvConverter
       Cocina::Models::Vocab.book
     else
       Cocina::Models::Vocab.object
-    end
-  end
-
-  # @param [String] the rights representation from the form
-  # @return [Hash<Symbol,String>] a hash representing the Access subschema of the Cocina model
-  def access(rights)
-    if rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
-      {
-        access: rights.delete_suffix('-nd'),
-        download: 'none'
-      }
-    elsif rights.start_with?('loc:')
-      {
-        access: 'location-based',
-        readLocation: rights.delete_prefix('loc:'),
-        download: 'location-based'
-      }
-    else
-      {
-        access: rights,
-        download: rights
-      }
     end
   end
 end
