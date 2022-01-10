@@ -39,7 +39,11 @@ class RegistrationsController < ApplicationController
       solr_doc = SearchService.query("id:\"#{col_id}\"",
                                      rows: 1,
                                      fl: col_title_field)['response']['docs'].first
-      collections[col_id] = "#{short_label(solr_doc[col_title_field].first, truncate_limit)} (#{col_druid})"
+      if solr_doc
+        collections[col_id] = "#{short_label(solr_doc[col_title_field].first, truncate_limit)} (#{col_druid})"
+      else
+        Honeybadger.notify("The APO #{apo_id} asserts that #{col_id} is a collection for registration, but we don't find that collection in solr")
+      end
     end
 
     # before returning the list, sort by collection name, and add a "None" option at the top
