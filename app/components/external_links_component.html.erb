@@ -1,5 +1,8 @@
-<h3 class="start-open">View in new window</h3>
-<ul class='nav flex-column'>
+<h3 class="button-header">View in new window</h3>
+<ul class="nav flex">
+  <li class="nav-item">
+    <%= link_to 'MODS', descriptive_item_metadata_path(@document.id), class: 'external-link-button', data: { blacklight_modal: 'trigger' } %>
+  </li>
   <li class="nav-item"><%= purl_link %></li>
   <% if released_to_searchworks? %>
     <li class="nav-item"><%= searchworks_link %></li>
@@ -8,4 +11,7 @@
   <li class="nav-item"><%= foxml_link %></li>
   <li class="nav-item"><%= solr_link %></li>
   <li class="nav-item"><%= cocina_link %></li>
+  <li class="nav-item">
+    <%= link_to 'Dublin Core', full_dc_item_metadata_path(@document.id), title: 'Dublin Core (derived from MODS)', class: 'external-link-button', data: { blacklight_modal: 'trigger' } %>
+  </li>
 </ul>

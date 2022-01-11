@@ -1,7 +1,0 @@
-<nav class="show_sidebar">
-  <%= render ExternalLinksComponent.new(document: @document) %>
-  <hr>
-  <%= render SidebarControlsComponent.new(solr_document: @document, manager: can?(:manage_item, @cocina)) %>
-</nav>
-
-<%= render 'catalog/show_embargo_sidebar', document: @document %>
