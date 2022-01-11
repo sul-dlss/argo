@@ -323,9 +323,10 @@ GEM
       iso-639
       nokogiri (>= 1.6.6)
       nom-xml (~> 1.0)
-    mods_display (0.10.1)
+    mods_display (1.0.0.alpha4)
       i18n
       stanford-mods (~> 2.1)
+      view_component
     msgpack (1.4.2)
     multipart-post (2.1.1)
     mysql2 (0.5.3)
@@ -597,7 +598,7 @@ DEPENDENCIES
   jsbundling-rails (~> 0.1.9)
   listen (~> 3.2)
   lograge
-  mods_display
+  mods_display (~> 1.0.0.alpha1)
   mysql2 (~> 0.5)
   newrelic_rpm
   nokogiri (~> 1.12)
