@@ -13,6 +13,7 @@ import RegistationController from './registration_controller'
 import BulkUploadJobsController from './bulk_upload_jobs_controller'
 import DateChoiceController from './date_choice_controller'
 import ApoFormController from './apo_form_controller'
+import OpenCloseController from './open_close_controller'
 
 const application = Application.start()
 application.register("bulk-actions", BulkActions)
@@ -29,3 +30,4 @@ application.register("registration", RegistationController)
 application.register("bulk-upload-jobs", BulkUploadJobsController)
 application.register("date-choice", DateChoiceController)
 application.register("apo-form", ApoFormController)
+application.register("open-close", OpenCloseController)
