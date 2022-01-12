@@ -115,6 +115,5 @@ group :deployment do
 end
 
 group :production do
-  # mysql 0.5.3 is not compatible with the version of MySQL we are using (5.1)
-  gem 'mysql2', '< 0.5.3'
+  gem 'mysql2', '~> 0.5'
 end
