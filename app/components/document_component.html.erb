@@ -22,6 +22,12 @@
     </div>
   </div>
 
+  <div class="row" style="margin-top: 3rem">
+    <div class="col-md-6">
+      <%= render OverviewComponent.new(solr_document: @document) %>
+    </div>
+  </div>
+
   <%= render Blacklight::DocumentMetadataComponent.new(
       fields: @presenter.field_presenters,
       show: true

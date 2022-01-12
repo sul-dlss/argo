@@ -27,6 +27,11 @@ class SolrDocument
   FIELD_PUBLISHER                 = 'originInfo_publisher_tesim'
   FIELD_CREATED_DATE              = 'originInfo_date_created_tesim'
   FIELD_CURRENT_VERSION           = 'current_version_isi'
+  FIELD_STATUS                    = 'status_ssi'
+  FIELD_ACCESS_RIGHTS             = 'rights_descriptions_ssim'
+  FIELD_COPYRIGHT                 = 'copyright_ssim'
+  FIELD_USE_STATEMENT             = 'use_statement_ssim'
+  FIELD_LICENSE                   = 'use_license_machine_ssi'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
@@ -52,6 +57,11 @@ class SolrDocument
   attribute :place, Blacklight::Types::String, FIELD_PLACE
   attribute :publisher, Blacklight::Types::String, FIELD_PUBLISHER
   attribute :created_date, Blacklight::Types::String, FIELD_CREATED_DATE
+  attribute :status, Blacklight::Types::String, FIELD_STATUS
+  attribute :access_rights, Blacklight::Types::String, FIELD_ACCESS_RIGHTS
+  attribute :copyright, Blacklight::Types::String, FIELD_COPYRIGHT
+  attribute :use_statement, Blacklight::Types::String, FIELD_USE_STATEMENT
+  attribute :license, Blacklight::Types::String, FIELD_LICENSE
 
   # self.unique_key = 'id'
 

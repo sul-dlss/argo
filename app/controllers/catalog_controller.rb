@@ -58,9 +58,9 @@ class CatalogController < ApplicationController
     config.add_show_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :preserved_size_human
     config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_facet: true
     config.add_show_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released to'
-    config.add_show_field 'status_ssi',                      label: 'Status'
+    config.add_show_field SolrDocument::FIELD_STATUS,        label: 'Status'
     config.add_show_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
-    config.add_show_field 'rights_descriptions_ssim',        label: 'Access Rights'
+    config.add_show_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights'
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
@@ -73,7 +73,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'content_file_mimetypes_ssim',       label: 'MIME Types',          component: true, limit: 10, home: false
     config.add_facet_field 'content_file_roles_ssim',           label: 'File Role',           component: true, limit: 10, home: false
     config.add_facet_field 'rights_descriptions_ssim',          label: 'Access Rights',       component: true, limit: 1000, sort: 'index', home: false
-    config.add_facet_field 'use_license_machine_ssi',           label: 'License',             component: true, limit: 10, home: false
+    config.add_facet_field SolrDocument::FIELD_LICENSE,         label: 'License',             component: true, limit: 10, home: false
     config.add_facet_field 'nonhydrus_collection_title_ssim',   label: 'Collection',          component: true, limit: 10, more_limit: 9999, sort: 'index'
     config.add_facet_field 'hydrus_collection_title_ssim',      label: 'Hydrus Collection',   component: true, limit: 10, more_limit: 9999, sort: 'index', home: false
     config.add_facet_field 'nonhydrus_apo_title_ssim',          label: 'Admin Policy',        component: true, limit: 10, more_limit: 9999, sort: 'index'
@@ -140,7 +140,7 @@ class CatalogController < ApplicationController
                                         no_object_title: { label: 'No Object Title', fq: "-#{SolrDocument::FIELD_TITLE}:*" },
                                         no_is_governed_by: { label: 'No APO', fq: "-#{SolrDocument::FIELD_APO_ID}:*" },
                                         no_collection_title: { label: 'No Collection Title', fq: "-#{SolrDocument::FIELD_COLLECTION_TITLE}:*" },
-                                        no_copyright: { label: 'No Copyright', fq: '-copyright_ssim:*' },
+                                        no_copyright: { label: 'No Copyright', fq: "-#{SolrDocument::FIELD_COPYRIGHT}:*" },
                                         no_license: { label: 'No License', fq: '-use_license_machine_ssi:*' },
                                         no_sw_author_ssim: { label: 'No SW Author', fq: '-sw_author_ssim:*' },
                                         # TODO: mods extent (?)
@@ -153,7 +153,7 @@ class CatalogController < ApplicationController
                                         no_sw_subject_temporal: { label: 'No SW Era', fq: '-sw_subject_temporal_ssim:*' },
                                         no_sw_subject_geographic: { label: 'No SW Region', fq: '-sw_subject_geographic_ssim:*' },
                                         no_sw_format: { label: 'No SW Resource Type', fq: '-sw_format_ssim:*' },
-                                        no_use_statement: { label: 'No Use & Reproduction Statement', fq: '-use_statement_ssim:*' }
+                                        no_use_statement: { label: 'No Use & Reproduction Statement', fq: "-#{SolrDocument::FIELD_USE_STATEMENT}:*" }
                                       }
 
     config.add_facet_field 'sw_format_ssim',             label: 'SW Resource Type',     component: true, limit: 10, home: false
