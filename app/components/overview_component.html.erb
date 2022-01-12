@@ -11,14 +11,14 @@
       <tr>
         <th class="col-3" scope="row">Admin policy</th>
         <td>
-            <%= admin_policy %>
+            <%= admin_policy %> <%= governing_apo_button %>
         </td>
       </tr>
 
       <tr>
         <th class="col-3" scope="row">Collection</th>
         <td>
-            <%= collection %>
+            <%= collection %> <%= edit_collections if item? || collection? %>
         </td>
       </tr>
 
@@ -32,7 +32,7 @@
       <tr>
         <th class="col-3" scope="row">Access rights</th>
         <td>
-            <%= access_rights %>
+            <%= access_rights %> <%= rights unless admin_policy? %>
         </td>
       </tr>
 

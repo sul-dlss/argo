@@ -11,7 +11,7 @@
       <tr>
         <th class="col-3" scope="row">Content type</th>
         <td>
-            <%= content_type %>
+            <%= content_type %> <%= edit_content_type if item? %>
         </td>
       </tr>
 
@@ -25,7 +25,7 @@
       <tr>
         <th class="col-3" scope="row">Source IDs</th>
         <td>
-            <%= source_id %>
+            <%= source_id %>  <%= change_source_id %>
         </td>
       </tr>
 
@@ -53,7 +53,7 @@
       <tr>
         <th class="col-3" scope="row">Catkey</th>
         <td>
-            <%= catkey_id %>
+            <%= catkey_id %> <%= manage_catkey if item? || collection? %>
         </td>
       </tr>
 
@@ -67,7 +67,7 @@
       <tr>
         <th class="col-3" scope="row">Tags</th>
         <td>
-            <%= tags %>
+            <%= tags %> <%= edit_tags %>
         </td>
       </tr>
     </tbody>

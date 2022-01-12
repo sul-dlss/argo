@@ -39,7 +39,7 @@ class SidebarControlsComponent < ApplicationComponent
     doc.catkey_id.present?
   end
 
-  delegate :admin_policy?, :item?, :collection?, :embargoed?, to: :doc
+  delegate :admin_policy?, :item?, :embargoed?, to: :doc
 
   private
 
@@ -55,34 +55,6 @@ class SidebarControlsComponent < ApplicationComponent
     else
       render ActionButton.new(url: new_item_embargo_path(pid), label: 'Create embargo')
     end
-  end
-
-  def content_type
-    render ActionButton.new(url: item_content_type_path(item_id: pid), label: 'Set content type')
-  end
-
-  def rights
-    render ActionButton.new(url: rights_item_path(id: pid), label: 'Set rights')
-  end
-
-  def manage_catkey
-    render ActionButton.new(url: edit_item_catkey_path(item_id: pid), label: 'Manage catkey')
-  end
-
-  def edit_collections
-    render ActionButton.new(url: collection_ui_item_path(id: pid), label: 'Edit collections')
-  end
-
-  def change_source_id
-    return unless item?
-
-    render ActionButton.new(url: source_id_ui_item_path(id: pid),
-                            label: 'Change source id')
-  end
-
-  def edit_tags
-    render ActionButton.new(url: edit_item_tags_path(item_id: pid),
-                            label: 'Edit tags')
   end
 
   def edit_apo
@@ -138,18 +110,6 @@ class SidebarControlsComponent < ApplicationComponent
       method: 'delete',
       confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
       disabled: !registered_only?
-    )
-  end
-
-  # NOTE: that the backend will also check can?(:manage_governing_apo, object, new_apo_id), but
-  # we can't do that here, since we don't yet know what APO the user might move the object to.
-  # so it's possible that the user will get this button even if there are no other APOs they're
-  # allowed to move the object to.
-  def governing_apo_button
-    render ActionButton.new(
-      url: set_governing_apo_ui_item_path(id: pid),
-      label: 'Set governing APO',
-      disabled: !state_service.allows_modification?
     )
   end
 

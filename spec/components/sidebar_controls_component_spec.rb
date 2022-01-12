@@ -34,25 +34,18 @@ RSpec.describe SidebarControlsComponent, type: :component do
 
       it 'creates a hash with the needed button info for an admin' do
         expect(rendered.css("a[href='/dor/reindex/druid:kv840xx0000']").inner_text).to eq 'Reindex'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/set_governing_apo_ui']").inner_text).to eq 'Set governing APO'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/workflows/new']").inner_text).to eq 'Add workflow'
         expect(rendered.css("a[href='/dor/republish/druid:kv840xx0000']").inner_text).to eq 'Republish'
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/source_id_ui']").inner_text).to eq 'Change source id'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/catkey/edit']").inner_text).to eq 'Manage catkey'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/tags/edit']").inner_text).to eq 'Edit tags'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/collection_ui']").inner_text).to eq 'Edit collections'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/content_type']").inner_text).to eq 'Set content type'
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/rights']").inner_text).to eq 'Set rights'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/manage_release']").inner_text).to eq 'Manage release'
         expect(rendered.css("a[href='/items/druid:kv840xx0000/embargo/new']").inner_text).to eq 'Create embargo'
-        expect(rendered.css('a').size).to eq 13
+        expect(rendered.css('a').size).to eq 6
       end
 
       it 'only includes the embargo update button if the user is an admin and the object is embargoed' do
         allow(doc).to receive(:embargoed?).and_return(true)
         expect(rendered.css("a[href='/items/druid:kv840xx0000/embargo/edit']").inner_text).to eq 'Manage embargo'
-        expect(rendered.css('a').size).to eq 13
+        expect(rendered.css('a').size).to eq 6
       end
 
       context "with a user that can't manage the object" do
@@ -68,7 +61,7 @@ RSpec.describe SidebarControlsComponent, type: :component do
 
         it 'includes the refresh descMetadata button' do
           expect(rendered.css("a[href='/items/druid:kv840xx0000/refresh_metadata']").inner_text).to eq 'Refresh descMetadata'
-          expect(rendered.css('a').size).to eq 14
+          expect(rendered.css('a').size).to eq 7
         end
       end
     end
@@ -87,13 +80,11 @@ RSpec.describe SidebarControlsComponent, type: :component do
         expect(rendered.css("a[href='/apo/druid:zt570qh4444/edit']").inner_text).to eq 'Edit APO'
         expect(rendered.css("a[href='/apo/druid:zt570qh4444/collections/new']").inner_text).to eq 'Create Collection'
         expect(rendered.css("a[href='/dor/reindex/druid:zt570qh4444']").inner_text).to eq 'Reindex'
-        expect(rendered.css("a[href='/items/druid:zt570qh4444/set_governing_apo_ui']").inner_text).to eq 'Set governing APO'
         expect(rendered.css("a[href='/items/druid:zt570qh4444/workflows/new']").inner_text).to eq 'Add workflow'
         expect(rendered.css("a[href='/dor/republish/druid:zt570qh4444']").inner_text).to eq 'Republish'
         expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:zt570qh4444/purge']").inner_text).to eq 'Purge'
-        expect(rendered.css("a[href='/items/druid:zt570qh4444/tags/edit']").inner_text).to eq 'Edit tags'
         expect(rendered.css("a[href='/items/druid:zt570qh4444/manage_release']").inner_text).to eq 'Manage release'
-        expect(rendered.css('a').size).to eq 9
+        expect(rendered.css('a').size).to eq 7
       end
     end
   end

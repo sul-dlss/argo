@@ -33,7 +33,7 @@ RSpec.describe 'Set governing APO' do
   context 'when modification is allowed' do
     it 'is successful' do
       visit solr_document_path item_id
-      click_link 'Set governing APO'
+      find("a[aria-label='Set governing APO']").click
 
       select 'Stanford University Libraries - Special Collections', from: 'new_apo_id', match: :first
       expect(Argo::Indexer).to receive(:reindex_pid_remotely)

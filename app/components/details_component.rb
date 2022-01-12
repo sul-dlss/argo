@@ -13,8 +13,35 @@ class DetailsComponent < ApplicationComponent
     render_field('tag_ssim')
   end
 
-  delegate :object_type, :content_type, :source_id, :created_date,
-           :released_to, :preservation_size, :catkey_id, :barcode, to: :@solr_document
+  def change_source_id
+    return unless item?
+
+    link_to '✎', source_id_ui_item_path(id: id),
+            aria: { label: 'Change source id' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
+  def edit_tags
+    link_to '✎', edit_item_tags_path(item_id: id),
+            aria: { label: 'Edit tags' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
+  def manage_catkey
+    link_to '✎', edit_item_catkey_path(item_id: id),
+            aria: { label: 'Manage catkey' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
+  def edit_content_type
+    link_to '✎', item_content_type_path(item_id: id),
+            aria: { label: 'Set content type' },
+            data: { controller: 'button', action: 'click->button#open' }
+  end
+
+  delegate :id, :object_type, :content_type, :source_id, :created_date,
+           :released_to, :preservation_size, :catkey_id, :barcode, :item?, :collection?,
+           to: :@solr_document
 
   delegate :blacklight_config, :search_state, :search_action_path, to: :helpers
 
