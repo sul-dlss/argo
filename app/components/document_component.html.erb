@@ -18,7 +18,7 @@
     <div class="col-md-9">
       <%= render ExternalLinksComponent.new(document: @document) %>
       <hr>
-      <%= render SidebarControlsComponent.new(solr_document: @document, manager: helpers.can?(:manage_item, @cocina)) %>
+      <%= render SidebarControlsComponent.new(solr_document: @document, manager: helpers.can?(:manage_item, @presenter.cocina)) %>
     </div>
   </div>
 
@@ -31,7 +31,7 @@
     <%= render 'events_default', document: @document %>
     <%= render 'cocina_default', document: @document %>
     <%= render 'history_default', document: @document %>
-    <%= render 'contents_default', document: @document %>
+    <%= render ContentsComponent.new(cocina: @presenter.cocina, document: @document) %>
     <%= render TechmdComponent.new(result: @presenter.techmd) %>
   </div>
 <% end %>

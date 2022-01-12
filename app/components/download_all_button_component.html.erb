@@ -1,5 +1,3 @@
-<span class="section-head-link">
-  <small>
-    <%= link_to 'Download all files', download_item_files_path(document), link_options %>
-  </small>
-</span>
+<%= link_to download_item_files_path(document), link_options do %>
+  <span class="bi-download"></span> Download all files
+<% end %>

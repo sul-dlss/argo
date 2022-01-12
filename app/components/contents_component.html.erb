@@ -1,0 +1,15 @@
+<div class="accordion-item">
+  <h2 class="accordion-header" id="document-contents-heading">
+    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#document-contents-section" aria-expanded="true" aria-controls="document-contents-section">
+      Content (<%= pluralize @cocina.structural.contains&.size || 0, 'Resource' %>)
+    </button>
+  </h2>
+  <div id="document-contents-section" class="accordion-collapse collapse show" aria-labelledby="document-contents-heading">
+    <div class="accordion-body">
+      <div class="mb-3">
+        <%= render DownloadAllButtonComponent.new(document: @document) %>
+      </div>
+      <%= render Contents::StructuralComponent.new(structural: @cocina.structural, object_id: @cocina.externalIdentifier, viewable: can?(:view_content, @cocina)) %>
+    </div>
+  </div>
+</div>

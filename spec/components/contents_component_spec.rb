@@ -2,7 +2,13 @@
 
 require 'rails_helper'
 
-RSpec.describe 'catalog/_contents_default.html.erb', type: :view do
+RSpec.describe ContentsComponent, type: :component do
+  let(:component) do
+    described_class.new(document: solr_doc, cocina: cocina)
+  end
+
+  let(:rendered) { render_inline(component) }
+
   context 'with files' do
     let(:solr_doc) do
       SolrDocument.new(id: 'druid:bb000zn0114')
@@ -89,15 +95,17 @@ RSpec.describe 'catalog/_contents_default.html.erb', type: :view do
       }
     end
 
+    let(:cocina) do
+      Cocina::Models.build(attrs)
+    end
+
     before do
-      @cocina = Cocina::Models.build(attrs)
-      allow(view).to receive(:can?).and_return(true)
+      allow(controller).to receive(:can?).and_return(true)
     end
 
     it 'shows multiple external files' do
-      render 'catalog/contents_default', document: solr_doc
-      expect(rendered).to have_link('image.jpg', href: '/items/druid:bg954kx8787/files?id=image.jpg')
-      expect(rendered).to have_link('image.jp2', href: '/items/druid:bg954kx8787/files?id=image.jp2')
+      expect(rendered.css('a[href="/items/druid:bg954kx8787/files?id=image.jpg"]').to_html).to include('image.jpg')
+      expect(rendered.css('a[href="/items/druid:bg954kx8787/files?id=image.jp2"]').to_html).to include('image.jp2')
     end
   end
 end

@@ -26,6 +26,7 @@ RSpec.describe 'Consistent titles' do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     end
 
+    let(:pid) { 'druid:hj185xx2222' }
     let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
     let(:all_workflows) { instance_double(Dor::Workflow::Response::Workflows, workflows: []) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: all_workflows) }
@@ -45,11 +46,21 @@ RSpec.describe 'Consistent titles' do
                       metadata: metadata_client,
                       version: version_client)
     end
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-    let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+    let(:cocina_model) do
+      Cocina::Models.build({
+                             'label' => 'My Item',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.book,
+                             'externalIdentifier' => pid,
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
+    end
 
     it 'displays the title' do
-      visit solr_document_path 'druid:hj185xx2222'
+      visit solr_document_path pid
       expect(page).to have_css 'h1', text: title
     end
   end

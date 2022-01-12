@@ -25,8 +25,19 @@ RSpec.describe 'Enable buttons' do
                     metadata: metadata_client,
                     version: version_client)
   end
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-  let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
+
+  let(:cocina_model) do
+    Cocina::Models.build({
+                           'label' => 'My Item',
+                           'version' => 1,
+                           'type' => Cocina::Models::Vocab.book,
+                           'externalIdentifier' => item_id,
+                           'access' => {},
+                           'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                           'structural' => {},
+                           'identification' => {}
+                         })
+  end
 
   it 'buttons are disabled/invisibile by default that check their value' do
     visit solr_document_path item_id

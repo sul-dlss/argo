@@ -16,13 +16,11 @@ RSpec.describe 'Item manage release' do
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
-                    find: cocina_model,
+                    find: item,
                     events: events_client,
                     metadata: metadata_client,
                     version: version_client)
   end
-  let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-  let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: []) }
   let(:item) do
     FactoryBot.create_for_repository(:item)
   end
