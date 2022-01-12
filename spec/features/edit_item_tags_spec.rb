@@ -32,7 +32,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
       click_button 'Save'
     end
     expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
-    within('dd.blacklight-tag_ssim') do
+    within_table('Details') do
       expect(page).to have_content first_new_tag
       expect(page).to have_content second_new_tag
     end
@@ -43,7 +43,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
       click_button 'Save'
     end
     expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
-    within('dd.blacklight-tag_ssim') do
+    within_table('Details') do
       expect(page).to have_content replacement_tag
       expect(page).to have_content second_new_tag
     end
@@ -55,7 +55,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
       click_button 'Save'
     end
     expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
-    within('dd.blacklight-tag_ssim') do
+    within_table('Details') do
       expect(page).not_to have_content replacement_tag
       expect(page).to have_content second_new_tag
     end
@@ -66,7 +66,7 @@ RSpec.describe 'Edit administrative tags for a single item', js: true do
       click_button 'Save'
     end
     expect(page).to have_content "Tags for #{item.externalIdentifier} have been updated!"
-    within('dd.blacklight-tag_ssim') do
+    within_table('Details') do
       expect(page).not_to have_content replacement_tag
       expect(page).not_to have_content second_new_tag
     end

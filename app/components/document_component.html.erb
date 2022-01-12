@@ -26,12 +26,11 @@
     <div class="col-md-6">
       <%= render OverviewComponent.new(solr_document: @document) %>
     </div>
+    <div class="col-md-6">
+      <%= render DetailsComponent.new(solr_document: @document) %>
+    </div>
   </div>
 
-  <%= render Blacklight::DocumentMetadataComponent.new(
-      fields: @presenter.field_presenters,
-      show: true
-    ) %>
   <div class="accordion">
     <%= render 'datastreams_default', document: @document %>
     <%= render 'events_default', document: @document %>
