@@ -44,7 +44,7 @@ RSpec.describe RemoteIndexingJob do
       it 'increments the failure and success counts, keeps running even if an individual update fails, and logs status of each update' do
         timeout_err = Argo::Exceptions::ReindexError.new('Timed out connecting to server')
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[0])
-        expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[1]).and_raise(RestClient::Exception)
+        expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[1]).and_raise(StandardError)
         expect(Argo::Indexer).to receive(:reindex_pid_remotely).with(pids[2]).and_raise(timeout_err)
 
         subject.perform(bulk_action.id, params)
@@ -53,7 +53,7 @@ RSpec.describe RemoteIndexingJob do
 
         bulk_action_id = bulk_action.id
         expect(log_buffer.string).to include "RemoteIndexingJob: Successfully reindexed #{pids[0]} (bulk_action.id=#{bulk_action_id})"
-        expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action_id}): RestClient::Exception"
+        expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action_id}): StandardError"
         expect(log_buffer.string).to include "RemoteIndexingJob: Unexpected error for #{pids[2]} (bulk_action.id=#{bulk_action_id}): #{timeout_err}"
       end
     end

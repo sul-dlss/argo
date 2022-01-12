@@ -7,19 +7,19 @@ module Argo
     # @raise [Exceptions::ReindexError] on failure
     def self.reindex_pid_remotely(pid)
       pid = "druid:#{pid}" unless pid =~ /^druid:/
+      response = nil
       realtime = Benchmark.realtime do
-        with_retries(max_tries: 3, rescue: [RestClient::Exception, Errno::ECONNREFUSED]) do
-          RestClient.post("#{Settings.dor_indexing_url}/reindex/#{pid}", '')
+        with_retries(max_tries: 3, rescue: [Errno::ECONNREFUSED]) do
+          response = Faraday.post("#{Settings.dor_indexing_url}/reindex/#{pid}", '')
         end
       end
+      raise "Unsuccessful: #{response.status}" unless response.success?
+
       Rails.logger.info "successfully updated index for #{pid} in #{format('%.3f', realtime)}s"
-    rescue RestClient::Exception, Errno::ECONNREFUSED => e
+    rescue StandardError => e
       msg = "failed to reindex #{pid}: #{e}"
       Rails.logger.error msg
       raise Exceptions::ReindexError, msg
-    rescue StandardError => e
-      Rails.logger.error "failed to reindex #{pid}: #{e}"
-      raise
     end
   end
 end
