@@ -13,6 +13,7 @@ class OpenCloseComponent < ApplicationComponent
             hidden: true,
             data: {
               controller: 'open-close',
+              action: 'click->open-close#open',
               open_close_url_value: workflow_service_closeable_path(id)
             }
   end
@@ -24,6 +25,7 @@ class OpenCloseComponent < ApplicationComponent
             hidden: true,
             data: {
               controller: 'open-close',
+              action: 'click->open-close#open',
               open_close_url_value: workflow_service_openable_path(id)
             }
   end
