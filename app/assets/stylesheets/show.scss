@@ -24,6 +24,12 @@
     width: $button-width;
     @extend .btn;
     @extend .btn-outline-primary;
+
+    &.disabled {
+      color: $btn-link-disabled-color;
+      border-color: $btn-link-disabled-color;
+      opacity: $btn-disabled-opacity;
+    }
   }
 
   .blacklight-item {

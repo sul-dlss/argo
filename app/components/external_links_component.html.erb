@@ -4,9 +4,7 @@
     <%= link_to 'MODS', descriptive_item_metadata_path(@document.id), class: 'external-link-button', data: { blacklight_modal: 'trigger' } %>
   </li>
   <li class="nav-item"><%= purl_link %></li>
-  <% if released_to_searchworks? %>
-    <li class="nav-item"><%= searchworks_link %></li>
-  <% end %>
+  <li class="nav-item"><%= searchworks_link %></li>
   <li class="nav-item"><%= dor_link %></li>
   <li class="nav-item"><%= foxml_link %></li>
   <li class="nav-item"><%= solr_link %></li>
