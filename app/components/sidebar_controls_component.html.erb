@@ -1,4 +1,4 @@
-<div class='argo-show-btn-group'>
+<div class="argo-show-btn-group">
   <h3 class="button-header">Actions</h3>
   <% if admin_policy? %>
     <%= edit_apo %>
@@ -11,5 +11,5 @@
   <%= purge_button %>
   <%= refresh_metadata if symphony_record? %>
   <%= manage_release %>
-  <%= embargo %>
+  <%= create_embargo %>
 </div>
