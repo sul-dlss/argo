@@ -6,10 +6,15 @@
   </h2>
   <div id="document-cocina-section" class="accordion-collapse collapse" aria-labelledby="document-cocina-heading">
     <div class="accordion-body" data-controller="json-renderer">
+      <div>
+        <a class="btn btn-secondary " data-action="json-renderer#expand">Expand</a>
+        <a class="btn btn-secondary " data-action="json-renderer#collapse">Collapse</a>
+      </div>
 
       <script type="application/json" data-json-renderer-target="cocina">
         <%= @cocina.to_json.html_safe %>
       </script>
+
       <div class="detail" data-json-renderer-target="section"></div>
     </div>
   </div>
