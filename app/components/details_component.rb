@@ -48,10 +48,22 @@ class DetailsComponent < ApplicationComponent
   end
 
   delegate :id, :object_type, :content_type, :source_id, :created_date,
-           :released_to, :preservation_size, :catkey_id, :barcode, :item?, :collection?,
+           :preservation_size, :catkey_id, :item?, :collection?,
            to: :@solr_document
 
   delegate :blacklight_config, :search_state, :search_action_path, to: :helpers
+
+  def catkey
+    @solr_document.catkey_id || 'None assigned'
+  end
+
+  def barcode
+    @solr_document.barcode || 'Not recorded'
+  end
+
+  def released_to
+    @solr_document.released_to.presence&.to_sentence || 'Not released'
+  end
 
   private
 

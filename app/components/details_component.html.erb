@@ -36,33 +36,35 @@
         </td>
       </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Released to</th>
-        <td>
-            <%= released_to.to_sentence %>
-        </td>
-      </tr>
+      <% if item? || collection? %>
+        <tr>
+          <th class="col-3" scope="row">Released to</th>
+          <td>
+              <%= released_to %>
+          </td>
+        </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Preservation size</th>
-        <td>
-            <%= number_to_human_size(preservation_size) %>
-        </td>
-      </tr>
+        <tr>
+          <th class="col-3" scope="row">Preservation size</th>
+          <td>
+              <%= number_to_human_size(preservation_size) %>
+          </td>
+        </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Catkey</th>
-        <td>
-            <%= catkey_id %> <%= manage_catkey if item? || collection? %>
-        </td>
-      </tr>
+        <tr>
+          <th class="col-3" scope="row">Catkey</th>
+          <td>
+              <%= catkey %> <%= manage_catkey %>
+          </td>
+        </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Barcode</th>
-        <td>
-            <%= barcode %>
-        </td>
-      </tr>
+        <tr>
+          <th class="col-3" scope="row">Barcode</th>
+          <td>
+              <%= barcode %>
+          </td>
+        </tr>
+      <% end %>
 
       <tr>
         <th class="col-3" scope="row">Tags</th>

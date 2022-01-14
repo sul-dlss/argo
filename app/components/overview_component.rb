@@ -12,6 +12,8 @@ class OverviewComponent < ApplicationComponent
   end
 
   def collection
+    return 'None selected' unless @solr_document.collection_ids
+
     helpers.links_to_collections_with_objs(document: @solr_document, value: Array(@solr_document.collection_ids))
   end
 
@@ -48,7 +50,19 @@ class OverviewComponent < ApplicationComponent
     @state_service ||= StateService.new(id, version: @solr_document.current_version)
   end
 
-  delegate :id, :access_rights, :status, :copyright, :license, :use_statement,
+  def copyright
+    @solr_document.copyright || 'Not entered'
+  end
+
+  def license
+    @solr_document.license || 'No license'
+  end
+
+  def use_statement
+    @solr_document.use_statement || 'Not entered'
+  end
+
+  delegate :id, :access_rights, :status,
            :admin_policy?, :item?, :collection?, to: :@solr_document
   delegate :allows_modification?, to: :state_service
 end
