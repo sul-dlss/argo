@@ -12,9 +12,11 @@ class ShowEmbargoComponent < ApplicationComponent
   end
 
   def edit_embargo
-    link_to '✎', edit_item_embargo_path(id),
+    link_to edit_item_embargo_path(id),
             class: 'text-white',
             aria: { label: 'Manage embargo' },
-            data: { controller: 'button', action: 'click->button#open' }
+            data: { controller: 'button', action: 'click->button#open' } do
+      tag.span class: 'bi-pencil'
+    end
   end
 end
