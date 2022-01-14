@@ -42,12 +42,6 @@ RSpec.describe SidebarControlsComponent, type: :component do
         expect(rendered.css('a').size).to eq 6
       end
 
-      it 'only includes the embargo update button if the user is an admin and the object is embargoed' do
-        allow(doc).to receive(:embargoed?).and_return(true)
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/embargo/edit']").inner_text).to eq 'Manage embargo'
-        expect(rendered.css('a').size).to eq 6
-      end
-
       context "with a user that can't manage the object" do
         let(:manager) { false }
 
