@@ -42,7 +42,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   attribute :catkey, Blacklight::Types::String, FIELD_CATKEY_ID
   attribute :current_version, Blacklight::Types::String, FIELD_CURRENT_VERSION
   attribute :embargo_status, Blacklight::Types::String, FIELD_EMBARGO_STATUS
-  attribute :embargo_release_date, Blacklight::Types::String, FIELD_EMBARGO_RELEASE_DATE
+  attribute :embargo_release_date, Blacklight::Types::Date, FIELD_EMBARGO_RELEASE_DATE
   attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
 
   attribute :registered_date, Blacklight::Types::Array, FIELD_REGISTERED_DATE
