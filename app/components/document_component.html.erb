@@ -9,7 +9,7 @@
   class: 'document document-component' do %>
   <%= title component: DocumentTitleComponent %>
 
-  <%= render 'catalog/show_embargo_sidebar', document: @document %>
+  <%= render ShowEmbargoComponent.new(solr_document: @document) %>
 
   <div class="row">
     <div class="col-md-3">

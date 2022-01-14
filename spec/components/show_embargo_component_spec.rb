@@ -2,10 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe 'catalog/_show_embargo_sidebar.html.erb' do
-  before do
-    assign(:document, document)
+RSpec.describe ShowEmbargoComponent, type: :component do
+  let(:component) do
+    described_class.new(solr_document: document)
   end
+
+  let(:rendered) { render_inline(component) }
 
   context 'embargoed with release date' do
     let(:document) do
@@ -17,10 +19,7 @@ RSpec.describe 'catalog/_show_embargo_sidebar.html.erb' do
     end
 
     it 'displays release date' do
-      render
-      expect(rendered).to have_css '.panel-heading h3', text: 'Embargo'
-      expect(rendered).to have_css '.panel-body', text: 'This item is ' \
-        'embargoed until 2259.02.24'
+      expect(rendered.to_html).to include 'Embargoed until February 24, 2259'
     end
   end
 
@@ -33,8 +32,7 @@ RSpec.describe 'catalog/_show_embargo_sidebar.html.erb' do
     end
 
     it 'does not render anything' do
-      render
-      expect(rendered.strip).to eq ''
+      expect(rendered.to_html).to eq ''
     end
   end
 
@@ -48,8 +46,7 @@ RSpec.describe 'catalog/_show_embargo_sidebar.html.erb' do
     end
 
     it 'does not render anything' do
-      render
-      expect(rendered.strip).to eq ''
+      expect(rendered.to_html).to eq ''
     end
   end
 end

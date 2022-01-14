@@ -121,7 +121,7 @@ RSpec.describe SolrDocument, type: :model do
     it 'returns embargo status' do
       expect(document).to be_embargoed
       expect(document.embargo_status).to eq 'embargoed'
-      expect(document.embargo_release_date).to eq '24/02/2259'
+      expect(document.embargo_release_date).to eq Date.parse('2259-02-24')
     end
   end
 
