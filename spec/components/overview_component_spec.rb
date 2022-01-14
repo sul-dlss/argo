@@ -21,6 +21,9 @@ RSpec.describe OverviewComponent, type: :component do
       expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
       expect(rendered.css("a[aria-label='Set rights']")).to be_present
       expect(rendered.css("a[aria-label='Edit collections']")).to be_present
+
+      expect(rendered.to_html).to include 'Not entered'
+      expect(rendered.to_html).to include 'No license'
     end
   end
 

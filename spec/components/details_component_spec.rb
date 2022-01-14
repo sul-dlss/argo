@@ -14,6 +14,9 @@ RSpec.describe DetailsComponent, type: :component do
 
     it 'creates a edit buttons' do
       expect(rendered.css("a[aria-label='Change source id']")).to be_present
+      expect(rendered.to_html).to include 'Not released'
+      expect(rendered.to_html).to include 'Not recorded'
+      expect(rendered.to_html).to include 'None assigned'
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
       expect(rendered.css("a[aria-label='Set content type']")).to be_present
