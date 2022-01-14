@@ -108,7 +108,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   # Rails adds a hidden item with blank on the form so that we know they wanted to
   # update the workflows, but selected none. We filter that out for persistence.
   def registration_workflow
-    default_workflows.reject(&:blank?)
+    default_workflows.compact_blank
   end
 
   # Retrieves the list of existing collections from the form and makes a new collection

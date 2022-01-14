@@ -112,7 +112,7 @@ RSpec.describe ApplyModsMetadata do
     context 'the object is in the opened state' do
       let(:status_code) { 9 }
 
-      it 'does not update the version ' do
+      it 'does not update the version' do
         expect(action).not_to receive(:commit_new_version)
 
         action.send(:version_object)

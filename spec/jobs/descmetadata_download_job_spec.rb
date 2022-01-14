@@ -140,7 +140,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
         Zip::File.open(output_zip_filename) do |open_file|
           expect(open_file.glob('*').map(&:name)).to eq ["#{pid_list.first}.xml"]
         end
-        expect(File.open(bulk_action.log_name).read).to match(/Not authorized for #{pid_list.second}/)
+        expect(File.read(bulk_action.log_name)).to match(/Not authorized for #{pid_list.second}/)
       end
     end
   end

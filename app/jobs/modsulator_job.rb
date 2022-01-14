@@ -154,7 +154,7 @@ class ModsulatorJob < ActiveJob::Base
   def save_metadata_xml(xml, output_filename, log_file)
     return if xml.nil?
 
-    File.open(output_filename, 'w') { |f| f.write(xml) }
+    File.write(output_filename, xml)
     log_file.puts("argo.bulk_metadata.bulk_log_xml_timestamp #{Time.zone.now.strftime(TIME_FORMAT)}")
     log_file.puts("argo.bulk_metadata.bulk_log_xml_filename #{File.basename(output_filename)}")
     log_file.puts("argo.bulk_metadata.bulk_log_record_count #{xml.scan('<xmlDoc id').size}")
