@@ -200,13 +200,13 @@ class Report
     until @response.documents.empty?
       report_data.each do |rec|
         if opts[:source_id].present?
-          pids << rec[:druid] + "\t" + rec[:source_id_ssim]
+          pids << (rec[:druid] + "\t" + rec[:source_id_ssim])
         elsif opts[:tags].present?
           tags = ''
           rec[:tag_ssim]&.split(';')&.each do |tag|
             tags += "\t" + tag
           end
-          pids << rec[:druid] + tags
+          pids << (rec[:druid] + tags)
         else
           pids << rec[:druid]
         end
@@ -248,7 +248,7 @@ class Report
   def docs_to_records(docs, fields = REPORT_FIELDS)
     result = []
     docs.each_with_index do |doc, index|
-      row = fields.collect do |spec|
+      row = fields.to_h do |spec|
         val =
           begin
             spec.key?(:proc) ? spec[:proc].call(doc) : doc[spec[:field].to_s]
@@ -257,7 +257,7 @@ class Report
           end
         val = val.join(';') if val.is_a?(Array)
         [spec[:field].to_sym, val.to_s]
-      end.to_h
+      end
       row[:id] = index + 1
       result << row
     end

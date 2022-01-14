@@ -40,7 +40,7 @@ namespace :argo do
       (index + 1).upto(2) { |i| version[i] = '0' }
     end
     version = version.join('.')
-    File.open(version_file, 'w') { |f| f.write(version) }
+    File.write(version_file, version)
     warn "Version bumped to #{version}"
   end
 

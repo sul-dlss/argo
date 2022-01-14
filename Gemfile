@@ -89,9 +89,9 @@ group :test, :development do
   gem 'pry-remote' # allows you to attach remote session to pry
   gem 'rails-controller-testing'
   gem 'rspec-rails', '~> 5.0'
-  gem 'rubocop', require: false
-  gem 'rubocop-rails'
-  gem 'rubocop-rspec', '~> 2.1.0', require: false
+  gem 'rubocop', '~> 1.24', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', '~> 2.1', require: false
   gem 'sqlite3', '~> 1.4.2'
 end
 

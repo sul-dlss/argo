@@ -21,7 +21,7 @@ class ChecksumReportJob < GenericJob
         raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, Cocina::Models::DRO)
 
         csv_report = Preservation::Client.objects.checksums(druids: pids)
-        File.open(report_filename, 'w') { |file| file.write(csv_report) }
+        File.write(report_filename, csv_report)
         bulk_action.update(druid_count_success: pids.length) # this whole job is run in one call, so it either all succeeds or fails
       rescue StandardError => e
         bulk_action.update(druid_count_fail: pids.length)

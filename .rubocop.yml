@@ -339,3 +339,51 @@ Style/RedundantSelfAssignmentBranch: # (new in 1.19)
   Enabled: true
 Rails/RedundantTravelBack: # new in 2.12
   Enabled: true
+
+Gemspec/RequireMFA: # new in 1.23
+  Enabled: true
+Lint/AmbiguousOperatorPrecedence: # new in 1.21
+  Enabled: true
+Lint/IncompatibleIoSelectWithFiberScheduler: # new in 1.21
+  Enabled: true
+Lint/RequireRelativeSelfPath: # new in 1.22
+  Enabled: true
+Lint/UselessRuby2Keywords: # new in 1.23
+  Enabled: true
+Naming/BlockForwarding: # new in 1.24
+  Enabled: true
+Security/IoMethods: # new in 1.22
+  Enabled: true
+Style/FileRead: # new in 1.24
+  Enabled: true
+Style/FileWrite: # new in 1.24
+  Enabled: true
+Style/MapToHash: # new in 1.24
+  Enabled: true
+Style/NumberedParameters: # new in 1.22
+  Enabled: true
+Style/NumberedParametersLimit: # new in 1.22
+  Enabled: true
+Style/OpenStructUse: # new in 1.23
+  Enabled: true
+Style/SelectByRegexp: # new in 1.22
+  Enabled: true
+Rails/CompactBlank: # new in 2.13
+  Enabled: true
+Rails/DurationArithmetic: # new in 2.13
+  Enabled: true
+Rails/RedundantPresenceValidationOnBelongsTo: # new in 2.13
+  Enabled: true
+Rails/RootJoinChain: # new in 2.13
+  Enabled: true
+
+RSpec/ExcessiveDocstringSpacing: # new in 2.5
+  Enabled: true
+RSpec/IdenticalEqualityAssertion: # new in 2.4
+  Enabled: true
+RSpec/SubjectDeclaration: # new in 2.5
+  Enabled: true
+RSpec/FactoryBot/SyntaxMethods: # new in 2.7
+  Enabled: true
+RSpec/Rails/AvoidSetupHook: # new in 2.4
+  Enabled: true
