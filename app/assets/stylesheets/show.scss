@@ -1,5 +1,6 @@
 .show-document {
   $button-width: 11rem;
+  $external-link-button-width: 9rem;
 
   .argo-show-btn-group {
     .btn {
@@ -21,7 +22,7 @@
   .external-link-button {
     margin-right: .5rem;
     margin-bottom: .5rem;
-    width: $button-width;
+    width: $external-link-button-width;
     @extend .btn;
     @extend .btn-outline-primary;
 

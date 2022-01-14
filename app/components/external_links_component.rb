@@ -25,11 +25,6 @@ class ExternalLinksComponent < ViewComponent::Base
     link_to 'SearchWorks', url, target: '_blank', rel: 'noopener', class: 'external-link-button'
   end
 
-  def foxml_link
-    url = File.join(fedora_url_without_credentials, "objects/#{document.id}/export?context=archive")
-    link_to 'FoXML', url, target: '_blank', rel: 'noopener', class: 'external-link-button'
-  end
-
   def solr_link
     link_to 'Solr document', solr_document_path(document, format: :json),
             target: '_blank', rel: 'noopener', class: 'external-link-button'
@@ -38,6 +33,19 @@ class ExternalLinksComponent < ViewComponent::Base
   def cocina_link
     link_to 'Cocina model', item_path(document, format: :json),
             target: '_blank', rel: 'noopener', class: 'external-link-button'
+  end
+
+  def dublin_core_link
+    link_to 'Dublin Core', full_dc_item_metadata_path(document.id),
+            title: 'Dublin Core (derived from MODS)',
+            class: 'external-link-button',
+            data: { blacklight_modal: 'trigger' }
+  end
+
+  def mods_link
+    link_to 'MODS', descriptive_item_metadata_path(document.id),
+            class: 'external-link-button',
+            data: { blacklight_modal: 'trigger' }
   end
 
   def released_to_searchworks?
