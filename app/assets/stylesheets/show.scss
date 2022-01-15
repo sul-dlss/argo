@@ -2,6 +2,21 @@
   $button-width: 11rem;
   $external-link-button-width: 9rem;
 
+  .object-type {
+    width: 10rem;
+    height: 2.4rem;
+
+    &.object-type-apo {
+      background-color: $sky-light;
+    }
+    &.object-type-collection {
+      background-color: $fog;
+    }
+    &.object-type-item {
+      background-color: $illuminating-light;
+    }
+  }
+
   .argo-show-btn-group {
     .btn {
       width: $button-width;
