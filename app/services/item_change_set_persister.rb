@@ -28,7 +28,7 @@ class ItemChangeSetPersister
   attr_reader :model, :change_set
 
   delegate :admin_policy_id, :barcode, :catkey, :collection_ids,
-           :copyright_statement, :embargo_release_date, :embargo_access, :license, :source_id,
+           :copyright, :embargo_release_date, :embargo_access, :license, :source_id,
            :use_statement, :changed?, to: :change_set
 
   def object_client
@@ -50,7 +50,7 @@ class ItemChangeSetPersister
   end
 
   def access_changed?
-    changed?(:copyright_statement) ||
+    changed?(:copyright) ||
       changed?(:license) ||
       changed?(:use_statement) ||
       changed?(:embargo_release_date) ||
@@ -59,7 +59,7 @@ class ItemChangeSetPersister
 
   def updated_access(updated)
     access_properties = {
-      copyright: changed?(:copyright_statement) ? copyright_statement : updated.access.copyright,
+      copyright: changed?(:copyright) ? copyright : updated.access.copyright,
       license: changed?(:license) ? license : updated.access.license,
       useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
     }.compact

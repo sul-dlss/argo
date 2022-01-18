@@ -4,7 +4,7 @@
 class CollectionChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
   property :catkey, virtual: true
-  property :copyright_statement, virtual: true
+  property :copyright, virtual: true
   property :license, virtual: true
   property :use_statement, virtual: true
 

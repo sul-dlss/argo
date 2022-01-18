@@ -56,7 +56,7 @@ RSpec.describe ItemChangeSetPersister do
       let(:new_copyright_statement) { 'A Changed Copyright Statement' }
 
       before do
-        change_set.validate(copyright_statement: new_copyright_statement)
+        change_set.validate(copyright: new_copyright_statement)
         instance.update
       end
 

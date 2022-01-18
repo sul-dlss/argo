@@ -23,7 +23,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
 
   describe '#set' do
     let(:allows_modification) { true }
-    let(:instance_args) { { copyright_statement: copyright_statement } }
+    let(:instance_args) { { copyright: copyright_statement } }
     let(:cocina_object) do
       Cocina::Models::DRO.new(
         externalIdentifier: 'druid:bc123df4568',
