@@ -1,15 +1,18 @@
 <div class="argo-show-btn-group">
   <h3 class="button-header">Actions</h3>
   <% if admin_policy? %>
+    <%= reindex_button %>
     <%= edit_apo %>
+    <%= add_workflow_button %>
     <%= create_collection %>
+    <%= purge_button %>
+  <% else %>
+    <%= reindex_button %>
+    <%= add_workflow_button %>
+    <%= republish_button %>
+    <%= purge_button %>
+    <%= refresh_metadata if symphony_record? %>
+    <%= manage_release %>
+    <%= create_embargo %>
   <% end %>
-
-  <%= reindex_button %>
-  <%= add_workflow_button %>
-  <%= republish_button %>
-  <%= purge_button %>
-  <%= refresh_metadata if symphony_record? %>
-  <%= manage_release %>
-  <%= create_embargo %>
 </div>
