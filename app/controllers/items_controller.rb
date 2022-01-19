@@ -208,7 +208,7 @@ class ItemsController < ApplicationController
 
     authorize! :manage_governing_apo, @cocina, params[:new_apo_id]
 
-    change_set = @cocina.is_a?(Cocina::Models::Collection) ? CollectionChangeSet.new(@cocina) : ItemChangeSet.new(@cocina)
+    change_set = build_change_set
     change_set.validate(admin_policy_id: params[:new_apo_id])
     change_set.save
     reindex
@@ -231,7 +231,7 @@ class ItemsController < ApplicationController
 
   # save the copyright form
   def update
-    change_set = ItemChangeSet.new(@cocina)
+    change_set = build_change_set
     change_set.validate(copyright: params[:item][:copyright])
     change_set.save
     reindex
@@ -291,6 +291,10 @@ class ItemsController < ApplicationController
 
   def authorize_manage!
     authorize! :manage_item, @cocina
+  end
+
+  def build_change_set
+    @cocina.collection? ? CollectionChangeSet.new(@cocina) : ItemChangeSet.new(@cocina)
   end
 end
 # rubocop:enable Metrics/ClassLength
