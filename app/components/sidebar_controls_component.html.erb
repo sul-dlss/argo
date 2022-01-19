@@ -9,7 +9,25 @@
   <% else %>
     <%= reindex_button %>
     <%= add_workflow_button %>
-    <%= republish_button %>
+    <div class="dropdown d-inline-block">
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        Manage PURL
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><%= link_to 'Publish', item_publish_path(doc), class: "dropdown-item disabled",
+                        data: {
+                          turbo_method: 'post',
+                          controller: 'button',
+                          button_check_url_value: workflow_service_published_path(pid)
+                        } %></li>
+        <li><%= link_to 'Unpublish', item_publish_path(doc), class: "dropdown-item disabled",
+                        data: {
+                          turbo_method: 'delete',
+                          controller: 'button',
+                          button_check_url_value: workflow_service_published_path(pid)
+                        } %></li>
+      </ul>
+    </div>
     <%= purge_button %>
     <%= refresh_metadata if symphony_record? %>
     <%= manage_release %>

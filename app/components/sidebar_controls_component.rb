@@ -89,15 +89,6 @@ class SidebarControlsComponent < ApplicationComponent
     )
   end
 
-  def republish_button
-    render ActionButton.new(
-      url: dor_republish_path(pid: pid),
-      label: 'Republish',
-      check_url: workflow_service_published_path(pid),
-      new_page: true
-    )
-  end
-
   def purge_button
     render ActionButton.new(
       url: purge_item_path(id: pid),

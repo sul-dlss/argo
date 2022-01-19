@@ -43,7 +43,8 @@ RSpec.describe 'Enable buttons' do
     visit solr_document_path item_id
     expect(page).to have_css 'a[title="Close Version"]', visible: :hidden
     expect(page).to have_css 'a[title="Open for modification"]', visible: :hidden
-    expect(page).to have_css 'a.disabled', text: 'Republish'
+    expect(page).to have_css 'a.disabled', text: 'Publish'
+    expect(page).to have_css 'a.disabled', text: 'Unpublish'
   end
 
   it 'buttons are enabled if their services return true', js: true do
