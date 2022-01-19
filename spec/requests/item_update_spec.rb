@@ -5,7 +5,6 @@ require 'rails_helper'
 RSpec.describe 'Set the copyright for an object' do
   let(:user) { create(:user) }
   let(:pid) { 'druid:bc123df4567' }
-  let(:collection_druid) { 'druid:tv123cg4444' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
 
   before do

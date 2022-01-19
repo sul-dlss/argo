@@ -8,6 +8,9 @@
     <div class="accordion-body">
       <div class="mb-3">
         <%= render DownloadAllButtonComponent.new(document: @document) %>
+        <%= link_to item_structure_path(@document, format: :csv), download: true, class: 'float-end' do %>
+          <span class="bi-download"></span> Download CSV
+        <% end %>
       </div>
       <%= render Contents::StructuralComponent.new(structural: @cocina.structural, object_id: @cocina.externalIdentifier, viewable: can?(:view_content, @cocina)) %>
     </div>
