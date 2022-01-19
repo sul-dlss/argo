@@ -109,6 +109,10 @@ class SidebarControlsComponent < ApplicationComponent
     )
   end
 
+  def upload_mods
+    link_to 'Upload MODS', apo_bulk_jobs_path(doc), class: 'btn btn-primary'
+  end
+
   def pid
     @pid ||= doc['id']
   end

@@ -75,11 +75,12 @@ RSpec.describe SidebarControlsComponent, type: :component do
       expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:zt570qh4444'
       expect(page).to have_link 'Add workflow', href: '/items/druid:zt570qh4444/workflows/new'
       expect(page).to have_link 'Purge', href: '/items/druid:zt570qh4444/purge'
+      expect(page).to have_link 'Upload MODS', href: '/apos/druid:zt570qh4444/bulk_jobs'
       expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete']").inner_text).to eq 'Purge'
       expect(page).not_to have_link 'Republish'
       expect(page).not_to have_link 'Manage release'
 
-      expect(rendered.css('a').size).to eq 5
+      expect(rendered.css('a').size).to eq 6
     end
   end
 
