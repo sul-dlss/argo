@@ -8,19 +8,21 @@
         </td>
       </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Admin policy</th>
-        <td>
-            <%= admin_policy %> <%= governing_apo_button %>
-        </td>
-      </tr>
+      <% unless admin_policy? %>
+        <tr>
+          <th class="col-3" scope="row">Admin policy</th>
+          <td>
+              <%= admin_policy %> <%= governing_apo_button %>
+          </td>
+        </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Collection</th>
-        <td>
-            <%= collection %> <%= edit_collections if item? || collection? %>
-        </td>
-      </tr>
+        <tr>
+          <th class="col-3" scope="row">Collection</th>
+          <td>
+              <%= collection %> <%= edit_collections if item? || collection? %>
+          </td>
+        </tr>
+      <% end %>
 
       <tr>
         <th class="col-3" scope="row">Status</th>
@@ -36,30 +38,32 @@
         </td>
       </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Copyright</th>
-        <td>
-          <turbo-frame id="edit_copyright">
-            <%= copyright %>
-            <%= link_to edit_copyright_item_path(id: id), aria: { label: 'Edit copyright' } do %>
-              <span class="bi-pencil"></span>
-            <% end %>
-          </turbo-frame>
-        </td>
-      </tr>
+      <% unless admin_policy? %>
+        <tr>
+          <th class="col-3" scope="row">Copyright</th>
+          <td>
+            <turbo-frame id="edit_copyright">
+              <%= copyright %>
+              <%= link_to edit_copyright_item_path(id: id), aria: { label: 'Edit copyright' } do %>
+                <span class="bi-pencil"></span>
+              <% end %>
+            </turbo-frame>
+          </td>
+        </tr>
 
-      <tr>
-        <th class="col-3" scope="row">License</th>
-        <td>
-            <%= license %>
-        </td>
-      </tr>
+        <tr>
+          <th class="col-3" scope="row">License</th>
+          <td>
+              <%= license %>
+          </td>
+        </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Use and reproduction</th>
-        <td>
-            <%= use_statement %>
-        </td>
-      </tr>
+        <tr>
+          <th class="col-3" scope="row">Use and reproduction</th>
+          <td>
+              <%= use_statement %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>

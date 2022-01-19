@@ -47,7 +47,7 @@ RSpec.describe OverviewComponent, type: :component do
     end
 
     it 'renders the appropriate buttons' do
-      expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+      expect(rendered.css("a[aria-label='Set governing APO']")).not_to be_present
       expect(rendered.css("a[aria-label='Set rights']")).not_to be_present
       expect(rendered.css("a[aria-label='Edit collections']")).not_to be_present
     end
