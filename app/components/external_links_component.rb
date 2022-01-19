@@ -7,6 +7,8 @@ class ExternalLinksComponent < ViewComponent::Base
     @document = document
   end
 
+  delegate :admin_policy?, to: :@document
+
   def purl_link
     link_to 'PURL', File.join(Settings.purl_url, document.druid),
             target: '_blank', rel: 'noopener', class: 'external-link-button'
