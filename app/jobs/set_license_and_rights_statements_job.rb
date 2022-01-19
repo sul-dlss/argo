@@ -20,7 +20,7 @@ class SetLicenseAndRightsStatementsJob < GenericJob
       update_druid_count
 
       args = { ability: ability }.tap do |argument_hash|
-        argument_hash[:copyright_statement] = dig_from_params_if_option_set(params, :copyright_statement)
+        argument_hash[:copyright] = dig_from_params_if_option_set(params, :copyright_statement)
         argument_hash[:license] = dig_from_params_if_option_set(params, :license)
         argument_hash[:use_statement] = dig_from_params_if_option_set(params, :use_statement)
       end.compact

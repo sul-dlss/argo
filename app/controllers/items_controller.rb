@@ -9,6 +9,7 @@ class ItemsController < ApplicationController
     purge_object
     source_id
     tags_bulk
+    update
   ]
 
   before_action :enforce_versioning, only: %i[
@@ -221,6 +222,20 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html { render layout: !request.xhr? }
     end
+  end
+
+  # Draw form for copyright
+  def edit_copyright
+    @change_set = ItemChangeSet.new(@cocina)
+  end
+
+  # save the copyright form
+  def update
+    change_set = ItemChangeSet.new(@cocina)
+    change_set.validate(copyright: params[:item][:copyright])
+    change_set.save
+    reindex
+    redirect_to solr_document_path(params[:id]), status: :see_other
   end
 
   def rights

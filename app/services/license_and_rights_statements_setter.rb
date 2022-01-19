@@ -4,7 +4,7 @@
 class LicenseAndRightsStatementsSetter
   # @param [Ability] ability ability representing current user and perms
   # @param [String] druid a druid identifier
-  # @param [String] copyright_statement copyright statement text
+  # @param [String] copyright copyright statement text
   # @param [String] license license code # TODO: Replace with URI
   # @param [String] use_statement use statement text
   # @raise [Dor::Services::Client::UnexpectedResponse] when dor-services-app barfs for some reason
@@ -12,10 +12,10 @@ class LicenseAndRightsStatementsSetter
   # @raise [RuntimeError] when given identifer does not correspond to an item or collection, when given
   #                       ability lacks manage_item permission, or when an underlying exception is raised
   # @return [Cocina::Models::Collection,Cocina::Models::DRO] the cocina object with updates applied
-  def self.set(ability:, druid:, copyright_statement: nil, license: nil, use_statement: nil)
+  def self.set(ability:, druid:, copyright: nil, license: nil, use_statement: nil)
     new(ability: ability,
         druid: druid,
-        copyright_statement: copyright_statement,
+        copyright: copyright,
         license: license,
         use_statement: use_statement)
       .set
@@ -23,13 +23,13 @@ class LicenseAndRightsStatementsSetter
 
   # @param [Ability] ability ability representing current user and perms
   # @param [String] druid a druid identifier
-  # @param [String] copyright_statement copyright statement text
+  # @param [String] copyright copyright statement text
   # @param [String] license license code # TODO: Replace with URI
   # @param [String] use_statement use statement text
-  def initialize(ability:, druid:, copyright_statement: nil, license: nil, use_statement: nil)
+  def initialize(ability:, druid:, copyright: nil, license: nil, use_statement: nil)
     @ability = ability
     @druid = druid
-    @copyright_statement = copyright_statement
+    @copyright = copyright
     @license = license
     @use_statement = use_statement
   end
@@ -51,7 +51,7 @@ class LicenseAndRightsStatementsSetter
 
   private
 
-  attr_reader :ability, :druid, :copyright_statement, :license, :use_statement
+  attr_reader :ability, :druid, :copyright, :license, :use_statement
 
   def open_new_version!
     raise "unable to open new version for #{druid}" unless openable?
@@ -73,7 +73,7 @@ class LicenseAndRightsStatementsSetter
   def change_set
     args = {}
     args[:license] = license unless license.nil?
-    args[:copyright_statement] = copyright_statement unless copyright_statement.nil?
+    args[:copyright] = copyright unless copyright.nil?
     args[:use_statement] = use_statement unless use_statement.nil?
     change_set_class.new(cocina_object).tap do |change_set|
       change_set.validate(args)

@@ -26,16 +26,16 @@ class CollectionChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :license, :copyright_statement, :use_statement, :catkey, :changed?, to: :change_set
+  delegate :admin_policy_id, :license, :copyright, :use_statement, :catkey, :changed?, to: :change_set
 
   def access_changed?
-    changed?(:copyright_statement) || changed?(:license) || changed?(:use_statement)
+    changed?(:copyright) || changed?(:license) || changed?(:use_statement)
   end
 
   def updated_access(updated)
     updated.new(
       access: updated.access.new(
-        copyright: changed?(:copyright_statement) ? copyright_statement : updated.access.copyright,
+        copyright: changed?(:copyright) ? copyright : updated.access.copyright,
         license: changed?(:license) ? license : updated.access.license,
         useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
       )

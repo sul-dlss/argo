@@ -5,7 +5,7 @@ class ItemChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
   property :catkey, virtual: true
   property :collection_ids, virtual: true
-  property :copyright_statement, virtual: true
+  property :copyright, virtual: true
   property :embargo_release_date, virtual: true
   property :embargo_access, virtual: true
   property :license, virtual: true
@@ -27,6 +27,7 @@ class ItemChangeSet < ApplicationChangeSet
 
     self.catkey = model.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
     self.barcode = model.identification.barcode
+    self.copyright = model.access.copyright
     setup_embargo_properties! if model.access.embargo
   end
 

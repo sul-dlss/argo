@@ -39,7 +39,12 @@
       <tr>
         <th class="col-3" scope="row">Copyright</th>
         <td>
+          <turbo-frame id="edit_copyright">
             <%= copyright %>
+            <%= link_to edit_copyright_item_path(id: id), aria: { label: 'Edit copyright' } do %>
+              <span class="bi-pencil"></span>
+            <% end %>
+          </turbo-frame>
         </td>
       </tr>
 

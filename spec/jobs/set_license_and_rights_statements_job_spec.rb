@@ -86,7 +86,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
         .with(
           ability: instance_of(Ability),
           druid: /druid:\d+/,
-          copyright_statement: copyright_statement,
+          copyright: copyright_statement,
           use_statement: use_statement
         )
         .exactly(pids.size)

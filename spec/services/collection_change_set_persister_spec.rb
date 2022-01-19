@@ -48,7 +48,7 @@ RSpec.describe CollectionChangeSetPersister do
 
     context 'when change set has changed copyright statement' do
       before do
-        change_set.validate(copyright_statement: new_copyright_statement)
+        change_set.validate(copyright: new_copyright_statement)
         instance.update
       end
 
