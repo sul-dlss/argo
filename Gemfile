@@ -66,7 +66,7 @@ gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all fe
 # Stanford related gems
 gem 'blacklight', '~> 7.20'
 gem 'blacklight-hierarchy', '~> 5.1'
-gem 'dor-services-client', '~> 7.0'
+gem 'dor-services-client', '~> 7.6'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'druid-tools'
 gem 'mods_display'

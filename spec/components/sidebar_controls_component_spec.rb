@@ -32,13 +32,14 @@ RSpec.describe SidebarControlsComponent, type: :component do
     let(:catkey) { nil }
 
     it 'creates a hash with the needed button info for an admin' do
-      expect(rendered.css("a[href='/dor/reindex/druid:kv840xx0000']").inner_text).to eq 'Reindex'
-      expect(rendered.css("a[href='/items/druid:kv840xx0000/workflows/new']").inner_text).to eq 'Add workflow'
-      expect(rendered.css("a[href='/dor/republish/druid:kv840xx0000']").inner_text).to eq 'Republish'
+      expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
+      expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
+      expect(page).to have_link 'Publish', href: '/items/druid:kv840xx0000/publish'
+      expect(page).to have_link 'Unpublish', href: '/items/druid:kv840xx0000/publish'
       expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
-      expect(rendered.css("a[href='/items/druid:kv840xx0000/manage_release']").inner_text).to eq 'Manage release'
-      expect(rendered.css("a[href='/items/druid:kv840xx0000/embargo/new']").inner_text).to eq 'Create embargo'
-      expect(rendered.css('a').size).to eq 6
+      expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
+      expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
+      expect(rendered.css('a').size).to eq 7
     end
 
     context "with a user that can't manage the object" do
@@ -54,7 +55,7 @@ RSpec.describe SidebarControlsComponent, type: :component do
 
       it 'includes the refresh descMetadata button' do
         expect(rendered.css("a[href='/items/druid:kv840xx0000/refresh_metadata']").inner_text).to eq 'Refresh descMetadata'
-        expect(rendered.css('a').size).to eq 7
+        expect(rendered.css('a').size).to eq 8
       end
     end
   end

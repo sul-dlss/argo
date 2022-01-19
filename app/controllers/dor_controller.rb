@@ -20,12 +20,4 @@ class DorController < ApplicationController
       fallback_location: proc { solr_document_path(params[:pid]) }
     )
   end
-
-  # dispatches to the dor-services-app to republish
-  def republish
-    Dor::Services::Client.object(params[:pid]).publish
-    redirect_to solr_document_path(params[:pid]),
-                notice: 'Republished! You still need to use the normal versioning ' \
-                        'process to make sure your changes are preserved.'
-  end
 end

@@ -98,6 +98,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :publish, only: %i[create destroy]
     resource :content_type, only: %i[show update]
 
     resources :workflows, only: %i[new create show update] do
@@ -179,8 +180,7 @@ Rails.application.routes.draw do
   end
 
   namespace :dor do
-    match 'republish/:pid', action: :republish, as: 'republish', via: %i[get post]
-    match 'reindex/:pid',   action: :reindex, as: 'reindex', via: %i[get post]
+    match 'reindex/:pid', action: :reindex, as: 'reindex', via: %i[get post]
     resources :objects, only: :create # we only implement create for object registration
   end
 

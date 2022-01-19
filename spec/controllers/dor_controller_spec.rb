@@ -38,18 +38,4 @@ RSpec.describe DorController, type: :controller do
       end
     end
   end
-
-  describe 'republish' do
-    before do
-      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
-    end
-
-    let(:object_service) { instance_double(Dor::Services::Client::Object, publish: true) }
-
-    it 'republishes' do
-      get :republish, params: { pid: druid }
-      expect(object_service).to have_received(:publish)
-      expect(response).to have_http_status(:found)
-    end
-  end
 end
