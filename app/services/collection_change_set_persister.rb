@@ -33,13 +33,13 @@ class CollectionChangeSetPersister
   end
 
   def updated_access(updated)
-    updated.new(
-      access: updated.access.new(
-        copyright: changed?(:copyright) ? copyright : updated.access.copyright,
-        license: changed?(:license) ? license : updated.access.license,
-        useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
-      )
-    )
+    access_properties = {
+      copyright: changed?(:copyright) ? copyright : updated.access.copyright,
+      license: changed?(:license) ? license : updated.access.license,
+      useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
+    }.compact
+
+    updated.new(access: updated.access.new(access_properties))
   end
 
   def update_identification(updated)

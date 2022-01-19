@@ -18,36 +18,71 @@ RSpec.describe 'Set the copyright for an object' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    let(:cocina_model) do
-      Cocina::Models.build({
-                             'label' => 'My ETD',
-                             'version' => 1,
-                             'type' => Cocina::Models::Vocab.object,
-                             'externalIdentifier' => pid,
-                             'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                             'structural' => {},
-                             'identification' => {}
-                           })
-    end
+    context 'with an item' do
+      let(:cocina_model) do
+        Cocina::Models.build({
+                               'label' => 'My ETD',
+                               'version' => 1,
+                               'type' => Cocina::Models::Vocab.object,
+                               'externalIdentifier' => pid,
+                               'access' => {},
+                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                               'structural' => {},
+                               'identification' => {}
+                             })
+      end
 
-    let(:updated_model) do
-      cocina_model.new(
-        {
-          'access' => {
-            'copyright' => 'in public domain'
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'copyright' => 'in public domain'
+            }
           }
-        }
-      )
+        )
+      end
+
+      it 'sets the new copyright' do
+        patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
+      end
     end
 
-    it 'sets the new collection' do
-      patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
+    context 'with a collection' do
+      let(:cocina_model) do
+        Cocina::Models.build({
+                               'label' => 'My ETD',
+                               'version' => 1,
+                               'type' => Cocina::Models::Vocab.collection,
+                               'externalIdentifier' => pid,
+                               'access' => {},
+                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                               'identification' => {}
+                             })
+      end
 
-      expect(object_client).to have_received(:update)
-        .with(params: updated_model)
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-      expect(response.code).to eq('303')
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'copyright' => 'in public domain'
+            }
+          }
+        )
+      end
+
+      it 'sets the new copyright' do
+        patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
+      end
     end
   end
 end
