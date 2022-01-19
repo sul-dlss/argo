@@ -36,7 +36,7 @@
         </td>
       </tr>
 
-      <% if item? || collection? %>
+      <% unless admin_policy? %>
         <tr>
           <th class="col-3" scope="row">Released to</th>
           <td>
@@ -61,7 +61,12 @@
         <tr>
           <th class="col-3" scope="row">Barcode</th>
           <td>
+            <turbo-frame id="edit_barcode">
               <%= barcode %>
+              <%= link_to edit_barcode_item_path(id: id), aria: { label: 'Edit barcode' } do %>
+                <span class="bi-pencil"></span>
+              <% end %>
+            </turbo-frame>
           </td>
         </tr>
       <% end %>
