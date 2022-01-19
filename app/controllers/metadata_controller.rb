@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 class MetadataController < ApplicationController
-  include ModsDisplay::ControllerExtension
-
   def descriptive
     xml = metadata_service.descriptive
-    @mods_display = ModsDisplayObject.new(xml)
+    @mods_display = ModsDisplay::Record.new(xml).mods_display_html
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }

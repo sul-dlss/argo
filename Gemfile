@@ -69,7 +69,7 @@ gem 'blacklight-hierarchy', '~> 5.1'
 gem 'dor-services-client', '~> 7.6'
 gem 'dor-workflow-client', '~> 3.19'
 gem 'druid-tools'
-gem 'mods_display'
+gem 'mods_display', '~> 1.0.0.alpha1'
 gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '~> 3.2'
 gem 'rsolr'
