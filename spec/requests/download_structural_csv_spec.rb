@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Set the copyright for an object' do
+RSpec.describe 'Download the structural CSV' do
   let(:user) { create(:user) }
   let(:pid) { 'druid:bc123df4567' }
-  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
@@ -14,6 +14,7 @@ RSpec.describe 'Set the copyright for an object' do
 
   context 'when they have manage access' do
     before do
+      allow(StructureSerializer).to receive(:as_csv).and_return('one,two,three')
       sign_in user, groups: ['sdr:administrator-role']
     end
 
@@ -30,23 +31,11 @@ RSpec.describe 'Set the copyright for an object' do
                            })
     end
 
-    let(:updated_model) do
-      cocina_model.new(
-        {
-          'access' => {
-            'copyright' => 'in public domain'
-          }
-        }
-      )
-    end
+    it 'returns the csv' do
+      get "/items/#{pid}/structure.csv"
 
-    it 'sets the new collection' do
-      patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
-
-      expect(object_client).to have_received(:update)
-        .with(params: updated_model)
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-      expect(response.code).to eq('303')
+      expect(response).to be_successful
+      expect(response.body).to eq 'one,two,three'
     end
   end
 end

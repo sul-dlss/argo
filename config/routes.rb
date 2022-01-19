@@ -100,6 +100,7 @@ Rails.application.routes.draw do
 
     resource :publish, only: %i[create destroy]
     resource :content_type, only: %i[show update]
+    resource :structure, only: %i[show update]
 
     resources :workflows, only: %i[new create show update] do
       collection do
