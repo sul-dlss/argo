@@ -55,7 +55,10 @@ class OverviewComponent < ApplicationComponent
   end
 
   def license
-    @solr_document.license || 'No license'
+    return 'No license' unless @solr_document.license
+
+    value = Constants::LICENSE_OPTIONS.find { |attribute| attribute.fetch(:code) == @solr_document.license }
+    value.fetch(:label)
   end
 
   def use_statement
