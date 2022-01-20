@@ -197,7 +197,8 @@ jobs:
       TT: 1 # track templates
     executor: ruby_with_all_deps
     steps:
-      - browser-tools/install-browser-tools
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps:
           key: gems-v2
