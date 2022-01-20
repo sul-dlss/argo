@@ -139,6 +139,7 @@ Rails.application.routes.draw do
       match 'tags_bulk', via: %i[get post]
       get 'collection_ui'
       get 'edit_copyright'
+      get 'edit_use_statement'
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
       post 'collection/add',     action: :add_collection,    as: 'add_collection'
       post 'collection/set',     action: :set_collection,    as: 'set_collection'

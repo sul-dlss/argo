@@ -61,7 +61,12 @@
         <tr>
           <th class="col-3" scope="row">Use and reproduction</th>
           <td>
+            <turbo-frame id="edit_use_statement">
               <%= use_statement %>
+              <%= link_to edit_use_statement_item_path(id: id), aria: { label: 'Edit use and reproduction' } do %>
+                <span class="bi-pencil"></span>
+              <% end %>
+            </turbo-frame>
           </td>
         </tr>
       <% end %>
