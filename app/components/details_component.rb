@@ -48,7 +48,7 @@ class DetailsComponent < ApplicationComponent
   end
 
   delegate :id, :object_type, :content_type, :source_id, :registered_date,
-           :preservation_size, :catkey_id, :item?, :collection?,
+           :preservation_size, :catkey_id, :item?, :collection?, :admin_policy?,
            to: :@solr_document
 
   delegate :blacklight_config, :search_state, :search_action_path, to: :helpers

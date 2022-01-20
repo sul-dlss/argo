@@ -26,7 +26,7 @@ class CollectionChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :license, :copyright, :use_statement, :catkey, :changed?, to: :change_set
+  delegate :admin_policy_id, :license, :barcode, :copyright, :use_statement, :catkey, :changed?, to: :change_set
 
   def access_changed?
     changed?(:copyright) || changed?(:license) || changed?(:use_statement)
