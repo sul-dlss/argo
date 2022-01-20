@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Set the copyright for an object' do
+RSpec.describe 'Set the properties for an object' do
   let(:user) { create(:user) }
   let(:pid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
@@ -31,23 +31,46 @@ RSpec.describe 'Set the copyright for an object' do
                              })
       end
 
-      let(:updated_model) do
-        cocina_model.new(
-          {
-            'access' => {
-              'copyright' => 'in public domain'
+      context 'when copyright is passed' do
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              'access' => {
+                'copyright' => 'in public domain'
+              }
             }
-          }
-        )
+          )
+        end
+
+        it 'sets the new copyright' do
+          patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
+
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+          expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+          expect(response.code).to eq('303')
+        end
       end
 
-      it 'sets the new copyright' do
-        patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
+      context 'when use_statement is passed' do
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              'access' => {
+                'useAndReproductionStatement' => 'call before using'
+              }
+            }
+          )
+        end
 
-        expect(object_client).to have_received(:update)
-          .with(params: updated_model)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-        expect(response.code).to eq('303')
+        it 'sets the new use and reproduction statement' do
+          patch "/items/#{pid}", params: { item: { use_statement: 'call before using' } }
+
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+          expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+          expect(response.code).to eq('303')
+        end
       end
     end
 

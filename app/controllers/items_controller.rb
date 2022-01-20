@@ -229,10 +229,16 @@ class ItemsController < ApplicationController
     @change_set = ItemChangeSet.new(@cocina)
   end
 
+  # Draw form for use and reproduction statement
+  def edit_use_statement
+    @change_set = ItemChangeSet.new(@cocina)
+  end
+
   # save the copyright form
   def update
     change_set = build_change_set
-    change_set.validate(copyright: params[:item][:copyright])
+    attributes = params.require(:item).permit(:copyright, :use_statement)
+    change_set.validate(**attributes)
     change_set.save
     reindex
     redirect_to solr_document_path(params[:id]), status: :see_other
