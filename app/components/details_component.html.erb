@@ -22,12 +22,14 @@
         </td>
       </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Source IDs</th>
-        <td>
-            <%= source_id %>  <%= change_source_id %>
-        </td>
-      </tr>
+      <% if item? %>
+        <tr>
+          <th class="col-3" scope="row">Source IDs</th>
+          <td>
+              <%= source_id %>  <%= change_source_id %>
+          </td>
+        </tr>
+      <% end %>
 
       <tr>
         <th class="col-3" scope="row">Created</th>
@@ -57,7 +59,9 @@
               <%= catkey %> <%= manage_catkey %>
           </td>
         </tr>
+      <% end %>
 
+      <% if item? %>
         <tr>
           <th class="col-3" scope="row">Barcode</th>
           <td>
