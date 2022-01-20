@@ -138,6 +138,7 @@ Rails.application.routes.draw do
       get 'source_id_ui'
       match 'tags_bulk', via: %i[get post]
       get 'collection_ui'
+      get 'edit_barcode'
       get 'edit_copyright'
       get 'edit_use_statement'
       get 'edit_license'
