@@ -234,10 +234,15 @@ class ItemsController < ApplicationController
     @change_set = ItemChangeSet.new(@cocina)
   end
 
+  # Draw form for setting license
+  def edit_license
+    @change_set = ItemChangeSet.new(@cocina)
+  end
+
   # save the copyright form
   def update
     change_set = build_change_set
-    attributes = params.require(:item).permit(:copyright, :use_statement)
+    attributes = params.require(:item).permit(:copyright, :use_statement, :license)
     change_set.validate(**attributes)
     change_set.save
     reindex

@@ -28,6 +28,9 @@ class ItemChangeSet < ApplicationChangeSet
     self.catkey = model.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
     self.barcode = model.identification.barcode
     self.copyright = model.access.copyright
+    self.use_statement = model.access.useAndReproductionStatement
+    self.license = model.access.license
+
     setup_embargo_properties! if model.access.embargo
   end
 

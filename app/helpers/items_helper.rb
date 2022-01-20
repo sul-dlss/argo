@@ -14,4 +14,8 @@ module ItemsHelper
       # rubocop:enable Rails/HelperInstanceVariable
     end
   end
+
+  def license_options
+    Constants::LICENSE_OPTIONS.map { |attributes| [attributes.fetch(:label), attributes.fetch(:uri)] }
+  end
 end
