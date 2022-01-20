@@ -68,45 +68,47 @@ RSpec.describe AdminPolicyChangeSetPersister do
 
       it 'sets clean APO metadata for defaultObjectRights' do
         expect(result.to_h).to eq(
-          administrative: {
-            defaultAccess: {
-              access: 'world',
-              controlledDigitalLending: false,
-              download: 'world',
-              readLocation: nil,
-              copyright: 'My copyright statement',
-              license: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode',
-              useAndReproductionStatement: 'My use and reproduction statement'
-            },
-            collectionsForRegistration: ['druid:zj785yp4820'],
-            defaultObjectRights: default_object_rights,
-            hasAdminPolicy: 'druid:xx666zz7777',
-            referencesAgreement: 'druid:dd327rv8888',
-            registrationWorkflow: ['registrationWF'],
-            roles: [
-              {
-                members: [
-                  { identifier: 'sdr:developer', type: 'workgroup' },
-                  { identifier: 'sdr:service-manager', type: 'workgroup' },
-                  { identifier: 'sdr:metadata-staff', type: 'workgroup' }
-                ],
-                name: 'dor-apo-manager'
+          Cocina::Models::AdminPolicy.new(
+            administrative: {
+              defaultAccess: {
+                access: 'world',
+                controlledDigitalLending: false,
+                download: 'world',
+                readLocation: nil,
+                copyright: 'My copyright statement',
+                license: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode',
+                useAndReproductionStatement: 'My use and reproduction statement'
               },
-              {
-                members: [
-                  { identifier: 'sdr:justins', type: 'workgroup' }
-                ],
-                name: 'dor-apo-viewer'
-              }
-            ]
-          },
-          description: {
-            title: [{ value: 'My title' }]
-          },
-          externalIdentifier: 'druid:zt570qh4444',
-          label: 'My title',
-          type: 'http://cocina.sul.stanford.edu/models/admin_policy.jsonld',
-          version: 1
+              collectionsForRegistration: ['druid:zj785yp4820'],
+              defaultObjectRights: default_object_rights,
+              hasAdminPolicy: 'druid:xx666zz7777',
+              referencesAgreement: 'druid:dd327rv8888',
+              registrationWorkflow: ['registrationWF'],
+              roles: [
+                {
+                  members: [
+                    { identifier: 'sdr:developer', type: 'workgroup' },
+                    { identifier: 'sdr:service-manager', type: 'workgroup' },
+                    { identifier: 'sdr:metadata-staff', type: 'workgroup' }
+                  ],
+                  name: 'dor-apo-manager'
+                },
+                {
+                  members: [
+                    { identifier: 'sdr:justins', type: 'workgroup' }
+                  ],
+                  name: 'dor-apo-viewer'
+                }
+              ]
+            },
+            description: {
+              title: [{ value: 'My title' }]
+            },
+            externalIdentifier: 'druid:zt570qh4444',
+            label: 'My title',
+            type: 'http://cocina.sul.stanford.edu/models/admin_policy.jsonld',
+            version: 1
+          ).to_h
         )
       end
     end

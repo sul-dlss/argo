@@ -22,7 +22,7 @@ class CollectionsController < ApplicationController
     collection_pid = form.model.externalIdentifier
 
     cocina_admin_policy = object_client.find
-    collections = Array(cocina_admin_policy.administrative.collectionsForRegistration)
+    collections = Array(cocina_admin_policy.administrative.collectionsForRegistration).dup
     # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection` (from the now de-coupled dor-services gem)
     # 1. If collection is already listed, remove it temporarily
     collections.delete(collection_pid)
