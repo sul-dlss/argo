@@ -12,18 +12,32 @@ RSpec.describe OverviewComponent, type: :component do
   end
 
   context 'with a DRO' do
-    let(:doc) do
-      SolrDocument.new('id' => 'druid:kv840xx0000',
-                       SolrDocument::FIELD_OBJECT_TYPE => 'item')
+    context 'without a license set' do
+      let(:doc) do
+        SolrDocument.new('id' => 'druid:kv840xx0000',
+                         SolrDocument::FIELD_OBJECT_TYPE => 'item')
+      end
+
+      it 'creates a edit buttons' do
+        expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+        expect(rendered.css("a[aria-label='Set rights']")).to be_present
+        expect(rendered.css("a[aria-label='Edit collections']")).to be_present
+
+        expect(rendered.to_html).to include 'Not entered'
+        expect(rendered.to_html).to include 'No license'
+      end
     end
 
-    it 'creates a edit buttons' do
-      expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
-      expect(rendered.css("a[aria-label='Set rights']")).to be_present
-      expect(rendered.css("a[aria-label='Edit collections']")).to be_present
+    context 'with a license set' do
+      let(:doc) do
+        SolrDocument.new('id' => 'druid:kv840xx0000',
+                         SolrDocument::FIELD_OBJECT_TYPE => 'item',
+                         'use_license_machine_ssi' => 'CC-BY-NC-SA-4.0')
+      end
 
-      expect(rendered.to_html).to include 'Not entered'
-      expect(rendered.to_html).to include 'No license'
+      it 'shows the full license text' do
+        expect(rendered.to_html).to include 'Attribution-NonCommercial Share Alike 4.0 International'
+      end
     end
   end
 
