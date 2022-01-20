@@ -47,7 +47,7 @@ class DetailsComponent < ApplicationComponent
             end
   end
 
-  delegate :id, :object_type, :content_type, :source_id, :created_date,
+  delegate :id, :object_type, :content_type, :source_id, :registered_date,
            :preservation_size, :catkey_id, :item?, :collection?,
            to: :@solr_document
 
