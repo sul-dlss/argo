@@ -45,7 +45,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   attribute :embargo_release_date, Blacklight::Types::Date, FIELD_EMBARGO_RELEASE_DATE
   attribute :first_shelved_image, Blacklight::Types::String, :first_shelved_image_ss
 
-  attribute :registered_date, Blacklight::Types::Array, FIELD_REGISTERED_DATE
+  attribute :registered_date, Blacklight::Types::Date, FIELD_REGISTERED_DATE
   attribute :accessioned_date, Blacklight::Types::Array, FIELD_LAST_ACCESSIONED_DATE
   attribute :published_date, Blacklight::Types::Array, FIELD_LAST_PUBLISHED_DATE
   attribute :submitted_date, Blacklight::Types::Array, FIELD_LAST_SUBMITTED_DATE

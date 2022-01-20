@@ -178,7 +178,7 @@ RSpec.describe SolrDocument, type: :model do
     end
 
     it 'returns date' do
-      expect(document.registered_date).to match_array(single_date)
+      expect(document.registered_date).to eq Date.parse('2012-04-05T01:00:04.148Z')
     end
   end
 
