@@ -3,7 +3,6 @@
 # Represents a set of changes to a collection
 class CollectionChangeSet < ApplicationChangeSet
   property :admin_policy_id, virtual: true
-  property :barcode, virtual: true
   property :catkey, virtual: true
   property :copyright, virtual: true
   property :license, virtual: true

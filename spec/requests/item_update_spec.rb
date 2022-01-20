@@ -31,6 +31,27 @@ RSpec.describe 'Set the properties for an object' do
                              })
       end
 
+      context 'when barcode is passed' do
+        let(:updated_model) do
+          cocina_model.new(
+            {
+              'identification' => {
+                'barcode' => '36105010362304'
+              }
+            }
+          )
+        end
+
+        it 'sets the new barcode' do
+          patch "/items/#{pid}", params: { item: { barcode: '36105010362304' } }
+
+          expect(object_client).to have_received(:update)
+            .with(params: updated_model)
+          expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+          expect(response.code).to eq('303')
+        end
+      end
+
       context 'when copyright is passed' do
         let(:updated_model) do
           cocina_model.new(

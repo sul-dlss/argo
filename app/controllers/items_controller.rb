@@ -224,6 +224,11 @@ class ItemsController < ApplicationController
     end
   end
 
+  # Draw form for barcode
+  def edit_barcode
+    @change_set = ItemChangeSet.new(@cocina)
+  end
+
   # Draw form for copyright
   def edit_copyright
     @change_set = ItemChangeSet.new(@cocina)
@@ -242,7 +247,7 @@ class ItemsController < ApplicationController
   # save the copyright form
   def update
     change_set = build_change_set
-    attributes = params.require(:item).permit(:copyright, :use_statement, :license)
+    attributes = params.require(:item).permit(:barcode, :copyright, :use_statement, :license)
     change_set.validate(**attributes)
     change_set.save
     reindex
