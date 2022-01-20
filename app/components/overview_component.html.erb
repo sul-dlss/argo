@@ -54,7 +54,12 @@
         <tr>
           <th class="col-3" scope="row">License</th>
           <td>
-              <%= license %>
+              <turbo-frame id="edit_license">
+                <%= license %>
+                <%= link_to edit_license_item_path(id: id), aria: { label: 'Edit license' } do %>
+                  <span class="bi-pencil"></span>
+                <% end %>
+              </turbo-frame>
           </td>
         </tr>
 

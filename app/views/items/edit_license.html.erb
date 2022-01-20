@@ -1,0 +1,12 @@
+<%= turbo_frame_tag 'edit_license' do %>
+  <%= form_with model: @change_set do |f| %>
+    <div class="mb-3">
+      <%= f.label :license, class: 'visually-hidden' %>
+      <%= f.select :license, license_options, {}, class: 'form-select' %>
+    </div>
+    <div class="float-end">
+      <%= link_to 'Cancel', solr_document_path(params[:id]), target: '_top' %>
+      <%= f.submit 'Save', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% end %>
