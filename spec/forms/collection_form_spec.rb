@@ -70,7 +70,7 @@ RSpec.describe CollectionForm do
 
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
-          .with(body: JSON.generate(expected_body_hash))
+          .with(body: Cocina::Models::RequestCollection.new(expected_body_hash).to_json)
           .to_return(status: 200, body: created_collection, headers: {})
       end
 
@@ -97,7 +97,7 @@ RSpec.describe CollectionForm do
         expected_body_hash.delete(:description)
         expected_body_hash[:label] = ':auto'
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
-          .with(body: JSON.generate(expected_body_hash))
+          .with(body: Cocina::Models::RequestCollection.new(expected_body_hash).to_json)
           .to_return(status: 200, body: created_collection, headers: {})
       end
 
