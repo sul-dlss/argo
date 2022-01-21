@@ -1,0 +1,2 @@
+resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
+Item 1,http://cocina.sul.stanford.edu/models/resources/image.jsonld,1,chocolate_cake.jpg,chocolate_cake.jpg,yes,yes,yes,world,world,image/jpeg,
