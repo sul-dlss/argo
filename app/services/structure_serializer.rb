@@ -6,7 +6,7 @@ class StructureSerializer
 
     CSV.generate(headers: true) do |csv|
       csv << attributes
-      structural.contains.each.with_index(1) do |resource, n|
+      Array(structural.contains).each.with_index(1) do |resource, n|
         resource.structural.contains.each do |file|
           csv << [resource.label, resource.type, n, file.filename, file.label,
                   to_yes_no(file.administrative.publish), to_yes_no(file.administrative.shelve),
