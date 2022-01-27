@@ -196,7 +196,7 @@ class ItemsController < ApplicationController
     render status: :bad_request, plain: 'Invalid new rights setting.'
   end
 
-  # set the rightsMetadata to the AdminPolicies' defaultObjectRights
+  # set the object's access to its' admin policy's defaultAccess
   def apply_apo_defaults
     Dor::Services::Client.object(@cocina.externalIdentifier).apply_admin_policy_defaults
     reindex
