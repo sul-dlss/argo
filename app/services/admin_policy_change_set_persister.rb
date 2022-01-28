@@ -25,7 +25,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
       label: title,
       version: 1,
       type: Cocina::Models::Vocab.admin_policy,
-      administrative: { hasAdminPolicy: SolrDocument::UBER_APO_ID }
+      administrative: { hasAdminPolicy: SolrDocument::UBER_APO_ID, hasAgreement: agreement_object_id }
     )
   end
 
@@ -82,7 +82,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   end
 
   def updated_description(updated)
-    description = { title: [{ value: title }] }
+    description = { title: [{ value: title }], purl: model.description.purl }
     updated_description = updated.description.new(description)
     updated.new(description: updated_description)
   end
@@ -90,7 +90,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   def updated_administrative(updated)
     rights = CocinaDroAccess.from_form_value(default_rights)
     administrative = {
-      referencesAgreement: agreement_object_id,
+      hasAgreement: agreement_object_id,
       registrationWorkflow: registration_workflow,
       collectionsForRegistration: collection_ids,
       defaultAccess: rights.value!.merge(

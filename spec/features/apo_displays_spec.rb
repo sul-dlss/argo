@@ -19,7 +19,7 @@ RSpec.describe 'Viewing an Admin policy' do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.admin_policy,
                            'externalIdentifier' => apo_druid,
-                           'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+                           'administrative' => { hasAdminPolicy: 'druid:hv992ry2431', hasAgreement: 'druid:hp308wm0436' }
                          })
   end
 

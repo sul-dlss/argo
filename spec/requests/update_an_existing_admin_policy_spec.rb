@@ -15,10 +15,12 @@ RSpec.describe 'Update an existing Admin Policy' do
                            'type' => Cocina::Models::Vocab.admin_policy,
                            'externalIdentifier' => pid,
                            'description' => {
-                             'title' => [{ value: 'My APO' }]
+                             'title' => [{ value: 'My APO' }],
+                             'purl' => 'https://purl.stanford.edu/bc123df4567'
                            },
                            administrative: {
                              hasAdminPolicy: 'druid:cg532dg5405',
+                             hasAgreement: 'druid:hp308wm0436',
                              registrationWorkflow: ['registrationWF']
                            }
                          })

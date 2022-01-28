@@ -18,6 +18,6 @@ RSpec.describe 'View Cocina model' do
   it 'return json' do
     get "/items/#{item.externalIdentifier}.json"
     expect(response).to be_successful
-    expect(response.body).to include '{"type":"http://cocina.sul.stanford.edu/models/object.jsonld",'
+    expect(response.body).to include '"type":"http://cocina.sul.stanford.edu/models/object.jsonld",'
   end
 end

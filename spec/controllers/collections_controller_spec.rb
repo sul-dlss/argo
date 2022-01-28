@@ -21,7 +21,7 @@ RSpec.describe CollectionsController do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.admin_policy,
                              'externalIdentifier' => apo_id,
-                             'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+                             'administrative' => { hasAdminPolicy: 'druid:hv992ry2431', hasAgreement: 'druid:hp308wm0436' }
                            })
     end
 
@@ -44,7 +44,7 @@ RSpec.describe CollectionsController do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.admin_policy,
                              'externalIdentifier' => apo_id,
-                             'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+                             'administrative' => { hasAdminPolicy: 'druid:hv992ry2431', hasAgreement: 'druid:hp308wm0436' }
                            })
     end
 

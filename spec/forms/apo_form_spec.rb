@@ -12,13 +12,14 @@ RSpec.describe ApoForm do
       version: 1,
       administrative: administrative,
       label: 'My title',
-      description: { title: [{ value: 'Stored title' }] }
+      description: { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/zt570qh4444' }
     )
   end
 
   let(:administrative) do
     {
       hasAdminPolicy: 'druid:xx666zz7777',
+      hasAgreement: 'druid:hp308wm0436',
       registrationWorkflow: ['registrationWF'],
       defaultAccess: default_access,
       collectionsForRegistration: %w[druid:xf330kz3480 druid:zn588xt6079 druid:zq557wp0848 druid:tw619vm5957
@@ -37,6 +38,7 @@ RSpec.describe ApoForm do
       let(:administrative) do
         {
           hasAdminPolicy: 'druid:xx666zz7777',
+          hasAgreement: 'druid:hp308wm0436',
           registrationWorkflow: ['registrationWF'],
           roles: [
             {
@@ -70,6 +72,7 @@ RSpec.describe ApoForm do
       let(:administrative) do
         {
           hasAdminPolicy: 'druid:xx666zz7777',
+          hasAgreement: 'druid:hp308wm0436',
           registrationWorkflow: %w[digitizationWF goobiWF]
         }
       end
@@ -84,7 +87,7 @@ RSpec.describe ApoForm do
         {
           hasAdminPolicy: 'druid:xx666zz7777',
           registrationWorkflow: ['digitizationWF'],
-          referencesAgreement: 'druid:dd327rv8888'
+          hasAgreement: 'druid:dd327rv8888'
         }
       end
 
@@ -110,6 +113,7 @@ RSpec.describe ApoForm do
         let(:administrative) do
           {
             hasAdminPolicy: 'druid:xx666zz7777',
+            hasAgreement: 'druid:hp308wm0436',
             defaultAccess: {
               access: 'stanford',
               download: 'none'
@@ -124,6 +128,7 @@ RSpec.describe ApoForm do
         let(:administrative) do
           {
             hasAdminPolicy: 'druid:xx666zz7777',
+            hasAgreement: 'druid:hp308wm0436',
             defaultAccess: {
               access: 'location-based',
               readLocation: 'ars'
@@ -138,6 +143,7 @@ RSpec.describe ApoForm do
         let(:administrative) do
           {
             hasAdminPolicy: 'druid:xx666zz7777',
+            hasAgreement: 'druid:hp308wm0436',
             defaultAccess: {
               controlledDigitalLending: true
             }

@@ -110,7 +110,8 @@ RSpec.describe LicenseAndRightsStatementsSetter do
           type: Cocina::Models::Vocab.admin_policy,
           version: 1,
           administrative: {
-            hasAdminPolicy: 'druid:bc123df4570'
+            hasAdminPolicy: 'druid:bc123df4570',
+            hasAgreement: 'druid:hp308wm0436'
           }
         )
       end
