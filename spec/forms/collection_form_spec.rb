@@ -15,7 +15,8 @@ RSpec.describe CollectionForm do
     let(:description) do
       {
         title: [{ value: title, status: 'primary' }],
-        note: [{ value: abstract, type: 'summary' }]
+        note: [{ value: abstract, type: 'summary' }],
+        purl: 'https://purl.stanford.edu/zz666yy9999'
       }
     end
     let(:expected_body_hash) do
@@ -68,9 +69,26 @@ RSpec.describe CollectionForm do
         }.with_indifferent_access
       end
 
+      let(:request_description) do
+        {
+          title: [{ value: title, status: 'primary' }],
+          note: [{ value: abstract, type: 'summary' }]
+        }
+      end
+      let(:expected_request_body_hash) do
+        {
+          type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
+          label: title,
+          version: 1,
+          access: { access: 'dark' },
+          administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
+          description: request_description
+        }
+      end
+
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
-          .with(body: Cocina::Models::RequestCollection.new(expected_body_hash).to_json)
+          .with(body: Cocina::Models::RequestCollection.new(expected_request_body_hash).to_json)
           .to_return(status: 200, body: created_collection, headers: {})
       end
 

@@ -281,6 +281,7 @@ RSpec.describe RegistrationsController, type: :controller do
                              'externalIdentifier' => apo_id,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
+                               hasAgreement: 'druid:hp308wm0436',
                                registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF']
                              }
                            })

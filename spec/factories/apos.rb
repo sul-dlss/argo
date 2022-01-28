@@ -9,7 +9,8 @@ FactoryBot.define do
                                        'label' => 'test apo',
                                        'version' => 1,
                                        'administrative' => {
-                                         'hasAdminPolicy' => admin_policy_id
+                                         'hasAdminPolicy' => admin_policy_id,
+                                         'hasAgreement' => agreement_id
                                        }
                                      })
       )
@@ -20,6 +21,8 @@ FactoryBot.define do
     end
 
     admin_policy_id { 'druid:hv992ry2431' }
+
+    agreement_id { 'druid:hp308wm0436' }
 
     type { Cocina::Models::Vocab.admin_policy }
   end
