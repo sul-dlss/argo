@@ -8,12 +8,14 @@
         </td>
       </tr>
 
-      <tr>
-        <th class="col-3" scope="row">Content type</th>
-        <td>
-            <%= content_type %> <%= edit_content_type if item? %>
-        </td>
-      </tr>
+      <% if item? %>
+        <tr>
+          <th class="col-3" scope="row">Content type</th>
+          <td>
+              <%= content_type %> <%= edit_content_type %>
+          </td>
+        </tr>
+      <% end %>
 
       <tr>
         <th class="col-3" scope="row">Project</th>
@@ -45,14 +47,18 @@
               <%= released_to %>
           </td>
         </tr>
+      <% end %>
 
+      <% if item? %>
         <tr>
           <th class="col-3" scope="row">Preservation size</th>
           <td>
               <%= number_to_human_size(preservation_size) %>
           </td>
         </tr>
+      <% end %>
 
+      <% unless admin_policy? %>
         <tr>
           <th class="col-3" scope="row">Catkey</th>
           <td>
