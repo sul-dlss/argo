@@ -23,7 +23,8 @@ RSpec.describe Ability do
                                     type: Cocina::Models::Vocab.admin_policy,
                                     version: 1,
                                     administrative: {
-                                      hasAdminPolicy: apo_id
+                                      hasAdminPolicy: apo_id,
+                                      hasAgreement: 'druid:hp308wm0436'
                                     })
   end
 

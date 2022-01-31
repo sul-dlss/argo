@@ -19,13 +19,15 @@ RSpec.describe AdminPolicyChangeSetPersister do
         label: 'My title',
         type: Cocina::Models::Vocab.admin_policy,
         description: {
-          title: [{ value: 'Exsiting title' }]
+          title: [{ value: 'Exsiting title' }],
+          purl: 'https://purl.stanford.edu/zt570qh4444'
         }
       )
     end
     let(:administrative) do
       {
-        hasAdminPolicy: 'druid:xx666zz7777'
+        hasAdminPolicy: 'druid:xx666zz7777',
+        hasAgreement: 'druid:hp308wm0436'
       }
     end
 
@@ -82,7 +84,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
               collectionsForRegistration: ['druid:zj785yp4820'],
               defaultObjectRights: default_object_rights,
               hasAdminPolicy: 'druid:xx666zz7777',
-              referencesAgreement: 'druid:dd327rv8888',
+              hasAgreement: 'druid:dd327rv8888',
               registrationWorkflow: ['registrationWF'],
               roles: [
                 {
@@ -102,7 +104,8 @@ RSpec.describe AdminPolicyChangeSetPersister do
               ]
             },
             description: {
-              title: [{ value: 'My title' }]
+              title: [{ value: 'My title' }],
+              purl: 'https://purl.stanford.edu/zt570qh4444'
             },
             externalIdentifier: 'druid:zt570qh4444',
             label: 'My title',

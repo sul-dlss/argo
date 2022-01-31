@@ -126,7 +126,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (4.1.0)
-    cocina-models (0.63.1)
+    cocina-models (0.64.0)
       activesupport
       dry-struct (~> 1.0)
       dry-types (~> 1.1)
@@ -168,9 +168,9 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (7.7.1)
+    dor-services-client (7.8.0)
       activesupport (>= 4.2, < 8)
-      cocina-models (~> 0.63.1)
+      cocina-models (~> 0.64.0)
       deprecation
       faraday (>= 0.15, < 2)
       zeitwerk (~> 2.1)
@@ -272,7 +272,7 @@ GEM
     honeybadger (4.10.0)
     html_tokenizer (0.0.7)
     http_logger (0.7.0)
-    i18n (1.8.11)
+    i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     ice_nine (0.11.2)
     iso-639 (0.3.5)
@@ -487,9 +487,9 @@ GEM
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sdr-client (0.64.1)
+    sdr-client (0.65.0)
       activesupport
-      cocina-models (~> 0.63.1)
+      cocina-models (~> 0.64.0)
       dry-monads
       faraday (>= 0.16)
     selenium-webdriver (4.1.0)
@@ -559,7 +559,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.5.3)
+    zeitwerk (2.5.4)
     zip_tricks (5.3.1)
 
 PLATFORMS

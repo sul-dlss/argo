@@ -18,7 +18,7 @@ RSpec.describe ApoController, type: :controller do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.admin_policy,
                            'externalIdentifier' => pid,
-                           'administrative' => { hasAdminPolicy: 'druid:hv992ry2431' }
+                           'administrative' => { hasAdminPolicy: 'druid:hv992ry2431', hasAgreement: 'druid:hp308wm0436' }
                          })
   end
 
@@ -41,6 +41,7 @@ RSpec.describe ApoController, type: :controller do
                              'externalIdentifier' => pid,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
+                               hasAgreement: 'druid:hp308wm0436',
                                collectionsForRegistration: ['druid:1', collection_id]
                              }
                            })
@@ -54,6 +55,7 @@ RSpec.describe ApoController, type: :controller do
                              'externalIdentifier' => pid,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
+                               hasAgreement: 'druid:hp308wm0436',
                                collectionsForRegistration: ['druid:1'] # only one collection now
                              }
                            })

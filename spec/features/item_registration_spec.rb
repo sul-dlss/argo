@@ -17,6 +17,7 @@ RSpec.describe 'Item registration page', js: true do
                            'externalIdentifier' => ur_apo_id,
                            'administrative' => {
                              hasAdminPolicy: ur_apo_id,
+                             hasAgreement: 'druid:hp308wm0436',
                              registrationWorkflow: %w[dpgImageWF goobiWF]
                            }
                          })

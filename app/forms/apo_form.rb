@@ -34,7 +34,7 @@ class ApoForm
 
   def populate_from_model
     self.title = model.description.title.first.value
-    self.agreement_object_id = model.administrative.referencesAgreement
+    self.agreement_object_id = model.administrative.hasAgreement
     self.default_rights = default_object_rights
     self.use_statement = model.administrative.defaultAccess&.useAndReproductionStatement
     self.copyright_statement = model.administrative.defaultAccess&.copyright

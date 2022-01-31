@@ -409,6 +409,7 @@ Style/StringConcatenation:
     - 'app/models/user.rb'
     - 'app/search_builders/argo/access_controls_enforcement.rb'
     - 'spec/jobs/modsulator_job_spec.rb'
+    - 'spec/controllers/dor/objects_controller_spec.rb'
 
 # Offense count: 343
 # Cop supports --auto-correct.

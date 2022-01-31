@@ -46,6 +46,8 @@ RSpec.describe 'Create an apo', js: true do
 
     page.select('Attribution Share Alike 3.0 Unported', from: 'Default use license')
 
+    page.select('accessionWF', from: 'apo_form_default_workflows')
+
     choose 'Create a Collection'
     fill_in 'Collection Title', with: 'New Testing Collection'
 
@@ -87,6 +89,7 @@ RSpec.describe 'Create an apo', js: true do
     expect(page).to have_selector('.permissionName', text: 'dpg-staff')
     expect(page).to have_selector('.permissionName', text: 'anyone')
 
+    # This is flaky. The models value is correct, so it something to do with the rendering.
     expect(find_field('Default use license').value).to eq('https://creativecommons.org/licenses/by-nd/3.0/legalcode')
 
     choose 'Choose a Default Collection'

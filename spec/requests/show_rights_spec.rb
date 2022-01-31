@@ -23,6 +23,7 @@ RSpec.describe 'Show rights for an object' do
                              'externalIdentifier' => apo_pid,
                              'administrative' => {
                                'hasAdminPolicy' => apo_pid,
+                               'hasAgreement' => 'druid:hp308wm0436',
                                'defaultObjectRights' => world_access
                              }
                            })
