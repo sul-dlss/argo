@@ -6,6 +6,7 @@ RSpec.describe OverviewComponent, type: :component do
   let(:component) { described_class.new(solr_document: doc) }
   let(:rendered) { render_inline(component) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:edit_collection_button) { rendered.css("a[aria-label='Edit collections']") }
 
   before do
     allow(StateService).to receive(:new).and_return(state_service)
@@ -21,7 +22,7 @@ RSpec.describe OverviewComponent, type: :component do
       it 'creates a edit buttons' do
         expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
         expect(rendered.css("a[aria-label='Set rights']")).to be_present
-        expect(rendered.css("a[aria-label='Edit collections']")).to be_present
+        expect(edit_collection_button).to be_present
 
         expect(rendered.to_html).to include 'Not entered'
         expect(rendered.to_html).to include 'No license'
@@ -50,7 +51,7 @@ RSpec.describe OverviewComponent, type: :component do
     it 'creates a edit buttons' do
       expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
       expect(rendered.css("a[aria-label='Set rights']")).to be_present
-      expect(rendered.css("a[aria-label='Edit collections']")).to be_present
+      expect(edit_collection_button).not_to be_present
     end
   end
 
@@ -63,7 +64,7 @@ RSpec.describe OverviewComponent, type: :component do
     it 'renders the appropriate buttons' do
       expect(rendered.css("a[aria-label='Set governing APO']")).not_to be_present
       expect(rendered.css("a[aria-label='Set rights']")).not_to be_present
-      expect(rendered.css("a[aria-label='Edit collections']")).not_to be_present
+      expect(edit_collection_button).not_to be_present
     end
   end
 end

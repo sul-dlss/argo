@@ -10,6 +10,7 @@ RSpec.describe DetailsComponent, type: :component do
                      SolrDocument::FIELD_REGISTERED_DATE => ['2012-04-05T01:00:04.148Z'],
                      SolrDocument::FIELD_OBJECT_TYPE => object_type)
   end
+  let(:content_type_button) { rendered.css("a[aria-label='Set content type']") }
 
   context 'with a DRO' do
     let(:object_type) { 'item' }
@@ -21,7 +22,8 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.to_html).to include 'None assigned'
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
-      expect(rendered.css("a[aria-label='Set content type']")).to be_present
+      expect(content_type_button).to be_present
+      expect(rendered.to_html).to include 'Preservation size'
     end
   end
 
@@ -32,7 +34,8 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Change source id']")).not_to be_present
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
-      expect(rendered.css("a[aria-label='Set content type']")).not_to be_present
+      expect(content_type_button).not_to be_present
+      expect(rendered.to_html).not_to include 'Preservation size'
     end
   end
 
@@ -43,7 +46,7 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Change source id']")).not_to be_present
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).not_to be_present
-      expect(rendered.css("a[aria-label='Set content type']")).not_to be_present
+      expect(content_type_button).not_to be_present
     end
   end
 end
