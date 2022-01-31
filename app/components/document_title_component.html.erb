@@ -1,5 +1,5 @@
 <header class="documentHeader row">
-  <%= render OpenCloseComponent.new(solr_document: @document) if helpers.can?(:manage_item, @cocina) %>
+  <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:manage_item, @cocina) %>
 
   <%= content_tag @as, class: @classes do %>
     <%= title -%>

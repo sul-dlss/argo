@@ -4,15 +4,13 @@ require 'rails_helper'
 
 RSpec.describe OpenCloseComponent, type: :component do
   let(:component) do
-    described_class.new(solr_document: doc)
+    described_class.new(id: item_id)
   end
 
   let(:rendered) { render_inline(component) }
   let(:item_id) { 'druid:kv840xx0000' }
-  let(:doc) { SolrDocument.new('id' => item_id) }
 
-  it 'draws the open and close button' do
-    expect(rendered.css("a[href='/items/druid:kv840xx0000/versions/close_ui'][data-controller='open-close']").attribute('title').value).to eq 'Close Version'
-    expect(rendered.css("a[href='/items/druid:kv840xx0000/versions/open_ui'][data-controller='open-close']").attribute('title').value).to eq 'Open for modification'
+  it 'renders an eager loading turbo frame' do
+    expect(rendered.css('turbo-frame').attribute('src').value).to eq '/workflow_service/druid:kv840xx0000/lock'
   end
 end
