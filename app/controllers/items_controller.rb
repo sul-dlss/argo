@@ -14,10 +14,12 @@ class ItemsController < ApplicationController
 
   before_action :enforce_versioning, only: %i[
     add_collection set_collection remove_collection
+    edit_copyright edit_license edit_use_statement
     source_id
     refresh_metadata
     set_rights
     set_governing_apo
+    update
   ]
 
   rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
