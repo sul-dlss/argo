@@ -1,4 +1,3 @@
 <div class="open-close">
-  <%= close_button %>
-  <%= open_button %>
+  <turbo-frame id='lock' src="<%= lock_workflow_service_path(id) %>"></turbo-frame>
 </div>

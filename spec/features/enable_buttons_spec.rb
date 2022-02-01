@@ -17,7 +17,7 @@ RSpec.describe 'Enable buttons' do
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
   let(:metadata_client) { instance_double(Dor::Services::Client::Metadata, datastreams: []) }
-  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: []) }
+  let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, inventory: [], current: 1) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object,
                     find: cocina_model,
@@ -39,21 +39,10 @@ RSpec.describe 'Enable buttons' do
                          })
   end
 
-  it 'buttons are disabled/invisibile by default that check their value' do
-    visit solr_document_path item_id
-    expect(page).to have_css 'a[title="Close Version"]', visible: :hidden
-    expect(page).to have_css 'a[title="Open for modification"]', visible: :hidden
-    expect(page).to have_css 'a.disabled', text: 'Publish'
-    expect(page).to have_css 'a.disabled', text: 'Unpublish'
-  end
-
   it 'buttons are enabled if their services return true', js: true do
-    allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_close_version).and_return(true)
-    allow_any_instance_of(WorkflowServiceController).to receive(:check_if_can_open_version).and_return(true)
-    allow_any_instance_of(WorkflowServiceController).to receive(:check_if_published).and_return(true)
+    allow_any_instance_of(Dor::Workflow::Client).to receive(:active_lifecycle).and_return(true, false)
     visit solr_document_path item_id
     expect(page).to have_css 'a[title="Close Version"]'
-    expect(page).to have_css 'a[title="Open for modification"]'
     expect(page).not_to have_css 'a.disabled', text: 'Republish'
   end
 end

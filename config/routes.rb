@@ -188,26 +188,10 @@ Rails.application.routes.draw do
     resources :objects, only: :create # we only implement create for object registration
   end
 
-  namespace :workflow_service do
-    get '/:pid/closeable',
-        action: 'closeable',
-        as: 'closeable',
-        defaults: { format: :json }
-    get '/:pid/openable',
-        action: 'openable',
-        as: 'openable',
-        defaults: { format: :json }
-    get '/:pid/published',
-        action: 'published',
-        as: 'published',
-        defaults: { format: :json }
-    get '/:pid/submitted',
-        action: 'submitted',
-        as: 'submitted',
-        defaults: { format: :json }
-    get '/:pid/accessioned',
-        action: 'accessioned',
-        as: 'accessioned',
-        defaults: { format: :json }
+  resources :workflow_service, only: [] do
+    member do
+      get :lock
+      get :published
+    end
   end
 end
