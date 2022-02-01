@@ -19,6 +19,6 @@ module ItemsHelper
   end
 
   def license_options
-    Constants::LICENSE_OPTIONS.map { |attributes| [attributes.fetch(:label), attributes.fetch(:uri)] }
+    [['none', '']] + Constants::LICENSE_OPTIONS.map { |attributes| [attributes.fetch(:label), attributes.fetch(:uri)] }
   end
 end

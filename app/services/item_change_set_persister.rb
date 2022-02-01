@@ -14,6 +14,7 @@ class ItemChangeSetPersister
     @change_set = change_set
   end
 
+  # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
   def update
     updated = model
     updated = update_structural(updated) if changed?(:collection_ids)
@@ -58,15 +59,15 @@ class ItemChangeSetPersister
   end
 
   def updated_access(updated)
-    access_properties = {
-      copyright: changed?(:copyright) ? copyright : updated.access.copyright,
-      license: changed?(:license) ? license : updated.access.license,
-      useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
-    }.compact
+    access_properties = {}
+    access_properties[:copyright] = copyright.presence if changed?(:copyright)
+    access_properties[:license] = license.presence if changed?(:license)
+
+    # useAndReproductionStatement is not nullable
+    access_properties[:useAndReproductionStatement] = use_statement if changed?(:use_statement) && use_statement.present?
 
     embargo_clazz = updated.access.embargo || Cocina::Models::Embargo
     access_properties[:embargo] = embargo_clazz.new(embargo_props) if embargo_props.present?
-
     updated.new(access: updated.access.new(access_properties))
   end
 
