@@ -76,7 +76,6 @@ RSpec.describe 'Item source id change' do
       expect(page).to have_css '.alert.alert-info', text: 'Source Id for ' \
         "#{druid} has been updated!"
       expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-      expect(state_service).to have_received(:allows_modification?).exactly(3).times
     end
   end
 end

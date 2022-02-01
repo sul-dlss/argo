@@ -46,8 +46,10 @@
           <td>
             <turbo-frame id="edit_copyright">
               <%= copyright %>
-              <%= link_to edit_copyright_item_path(id: id), aria: { label: 'Edit copyright' } do %>
-                <span class="bi-pencil"></span>
+              <% if allows_modification? %>
+                <%= link_to edit_copyright_item_path(id: id), aria: { label: 'Edit copyright' } do %>
+                  <span class="bi-pencil"></span>
+                <% end %>
               <% end %>
             </turbo-frame>
           </td>
@@ -56,12 +58,14 @@
         <tr>
           <th class="col-3" scope="row">License</th>
           <td>
-              <turbo-frame id="edit_license">
-                <%= license %>
+            <turbo-frame id="edit_license">
+              <%= license %>
+              <% if allows_modification? %>
                 <%= link_to edit_license_item_path(id: id), aria: { label: 'Edit license' } do %>
                   <span class="bi-pencil"></span>
                 <% end %>
-              </turbo-frame>
+              <% end %>
+            </turbo-frame>
           </td>
         </tr>
 
@@ -70,8 +74,10 @@
           <td>
             <turbo-frame id="edit_use_statement">
               <%= use_statement %>
-              <%= link_to edit_use_statement_item_path(id: id), aria: { label: 'Edit use and reproduction' } do %>
-                <span class="bi-pencil"></span>
+              <% if allows_modification? %>
+                <%= link_to edit_use_statement_item_path(id: id), aria: { label: 'Edit use and reproduction' } do %>
+                  <span class="bi-pencil"></span>
+                <% end %>
               <% end %>
             </turbo-frame>
           </td>

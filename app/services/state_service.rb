@@ -9,8 +9,10 @@ class StateService
   end
 
   def allows_modification?
-    !client.lifecycle(druid: pid, milestone_name: 'submitted') ||
-      client.active_lifecycle(druid: pid, milestone_name: 'opened', version: version)
+    return @allows_modification unless @allows_modification.nil?
+
+    @allows_modification = !client.lifecycle(druid: pid, milestone_name: 'submitted') ||
+                           client.active_lifecycle(druid: pid, milestone_name: 'opened', version: version)
   end
 
   private
