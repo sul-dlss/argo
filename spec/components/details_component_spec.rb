@@ -24,6 +24,7 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
       expect(content_type_button).to be_present
       expect(rendered.to_html).to include 'Preservation size'
+      expect(rendered.to_html).to include 'Content type'
     end
   end
 
@@ -36,6 +37,7 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
       expect(content_type_button).not_to be_present
       expect(rendered.to_html).not_to include 'Preservation size'
+      expect(rendered.to_html).not_to include 'Content type'
     end
   end
 
@@ -47,6 +49,7 @@ RSpec.describe DetailsComponent, type: :component do
       expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       expect(rendered.css("a[aria-label='Manage catkey']")).not_to be_present
       expect(content_type_button).not_to be_present
+      expect(rendered.to_html).not_to include 'Content type'
     end
   end
 end
