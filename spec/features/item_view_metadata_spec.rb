@@ -47,10 +47,7 @@ RSpec.describe 'Item view', js: true do
 
     it 'shows the page' do
       visit solr_document_path item_id
-      within_table('Overview') do
-        expect(page).to have_css 'th', text: 'DRUID'
-        expect(page).to have_css 'td', text: item_id
-      end
+      expect(page).to have_content 'Warning: this object cannot currently be represented in the Cocina model.'
     end
   end
 

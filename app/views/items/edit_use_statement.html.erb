@@ -1,11 +1,11 @@
-<%= turbo_frame_tag 'edit_use_statement' do %>
+<%= turbo_frame_tag 'use_statement' do %>
   <%= form_with model: @change_set do |f| %>
     <div class="mb-3">
       <%= f.label :use_statement, class: 'visually-hidden' %>
       <%= f.text_field :use_statement, class: 'form-control' %>
     </div>
     <div class="float-end">
-      <%= link_to 'Cancel', solr_document_path(params[:id]), target: '_top' %>
+      <%= link_to 'Cancel', show_use_statement_item_path(params[:id]) %>
       <%= f.submit 'Save', class: 'btn btn-primary' %>
     </div>
   <% end %>

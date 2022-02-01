@@ -32,15 +32,27 @@ RSpec.describe 'Release history' do
   end
 
   context 'for an item' do
-    let(:cocina_model) { instance_double(Cocina::Models::DRO, administrative: administrative, as_json: {}) }
-    let(:administrative) { instance_double(Cocina::Models::Administrative, releaseTags: [tag]) }
-    let(:tag) do
-      instance_double(Cocina::Models::ReleaseTag,
-                      release: 'true',
-                      what: 'self',
-                      to: 'Searchworks',
-                      who: 'pjreed',
-                      date: '2017-10-20T15:42:15Z')
+    let(:cocina_model) do
+      Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
+                              type: Cocina::Models::Vocab.document,
+                              label: '',
+                              version: 1,
+                              access: {},
+                              administrative: {
+                                hasAdminPolicy: 'druid:hv992ry2431',
+                                releaseTags: [
+                                  {
+                                    release: true,
+                                    what: 'self',
+                                    to: 'Searchworks',
+                                    who: 'pjreed',
+                                    date: '2017-10-20T15:42:15Z'
+                                  }
+                                ]
+                              },
+                              structural: {
+                                contains: []
+                              })
     end
     let(:id) { 'druid:qv778ht9999' }
 

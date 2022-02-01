@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class DetailsComponent < ApplicationComponent
-  def initialize(solr_document:)
-    @solr_document = solr_document
+  # @param [ArgoShowPresenter] presenter
+  def initialize(presenter:)
+    @presenter = presenter
+    @solr_document = presenter.document
   end
 
   def project_tag
@@ -55,10 +57,6 @@ class DetailsComponent < ApplicationComponent
 
   def catkey
     @solr_document.catkey_id || 'None assigned'
-  end
-
-  def barcode
-    @solr_document.barcode || 'Not recorded'
   end
 
   def released_to

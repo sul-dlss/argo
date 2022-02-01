@@ -71,12 +71,7 @@
         <tr>
           <th class="col-3" scope="row">Barcode</th>
           <td>
-            <turbo-frame id="edit_barcode">
-              <%= barcode %>
-              <%= link_to edit_barcode_item_path(id: id), aria: { label: 'Edit barcode' } do %>
-                <span class="bi-pencil"></span>
-              <% end %>
-            </turbo-frame>
+            <%= render Show::BarcodeComponent.new(change_set: @presenter.change_set) %>
           </td>
         </tr>
       <% end %>
