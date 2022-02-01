@@ -10,7 +10,7 @@ class DetailsComponent < ApplicationComponent
   end
 
   def tags
-    render_field('tag_ssim')
+    render_field 'tag_ssim'
   end
 
   def change_source_id

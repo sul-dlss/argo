@@ -46,21 +46,8 @@ class CatalogController < ApplicationController
     config.add_index_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
     config.add_index_field 'rights_descriptions_ssim',        label: 'Access Rights'
 
-    config.add_show_field 'id',                              label: 'DRUID'
-    config.add_show_field SolrDocument::FIELD_OBJECT_TYPE,   label: 'Object Type'
-    config.add_show_field SolrDocument::FIELD_CONTENT_TYPE,  label: 'Content Type'
-    config.add_show_field SolrDocument::FIELD_APO_ID,        label: 'Admin Policy',      helper_method: :link_to_admin_policy_with_objs
-    config.add_show_field SolrDocument::FIELD_COLLECTION_ID, label: 'Collection',        helper_method: :links_to_collections_with_objs
     config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
-    config.add_show_field 'source_id_ssim',                  label: 'Source'
-    config.add_show_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
-    config.add_show_field 'originInfo_date_created_tesim',   label: 'Created'
-    config.add_show_field 'preserved_size_dbtsi',            label: 'Preservation Size', helper_method: :preserved_size_human
     config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_facet: true
-    config.add_show_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released to'
-    config.add_show_field SolrDocument::FIELD_STATUS,        label: 'Status'
-    config.add_show_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
-    config.add_show_field SolrDocument::FIELD_ACCESS_RIGHTS, label: 'Access Rights'
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim

@@ -3,12 +3,6 @@
 module ValueHelper
   # TODO: dynamically generate these methods so we don't hardcode Solr field identifiers
 
-  ##
-  # @return [String]
-  def preserved_size_human(args)
-    number_to_human_size(args[:document].preservation_size)
-  end
-
   def value_for_wf_error(args)
     _wf, step, message = args[:document].fetch(args[:field], ['::']).first.split(':', 3)
     step + ' : ' + message
