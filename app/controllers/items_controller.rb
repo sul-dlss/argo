@@ -202,7 +202,9 @@ class ItemsController < ApplicationController
   def apply_apo_defaults
     Dor::Services::Client.object(@cocina.externalIdentifier).apply_admin_policy_defaults
     reindex
-    render status: :ok, plain: 'Defaults applied.'
+    render status: :ok, plain: 'APO defaults applied.'
+  rescue Dor::Services::Client::UnexpectedResponse => e
+    render status: :bad_request, plain: "APO defaults could not be applied: #{e.message}"
   end
 
   def set_governing_apo
