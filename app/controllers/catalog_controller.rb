@@ -43,8 +43,8 @@ class CatalogController < ApplicationController
     config.add_index_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released to'
     config.add_index_field 'status_ssi',                      label: 'Status'
-    config.add_index_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
-    config.add_index_field 'rights_descriptions_ssim',        label: 'Access Rights'
+    config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
+    config.add_index_field 'rights_descriptions_ssim', label: 'Access Rights'
 
     config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
     config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_facet: true
@@ -207,6 +207,10 @@ class CatalogController < ApplicationController
 
     @cocina = maybe_load_cocina(params[:id])
     flash[:alert] = 'Warning: this object cannot currently be represented in the Cocina model.' if @cocina.instance_of?(NilModel)
+    if @document[SolrDocument::FIELD_WORKFLOW_ERRORS]
+      flash[:error] =
+        "Error: #{helpers.value_for_wf_error(document: @document, field: SolrDocument::FIELD_WORKFLOW_ERRORS)}"
+    end
 
     authorize! :view_metadata, @cocina
 

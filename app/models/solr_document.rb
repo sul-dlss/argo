@@ -37,6 +37,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   FIELD_TAGS                      = 'tag_ssim'
   FIELD_SOURCE_ID                 = 'source_id_ssim'
   FIELD_BARCODE_ID                = 'barcode_id_ssim'
+  FIELD_WORKFLOW_ERRORS           = 'wf_error_ssim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
