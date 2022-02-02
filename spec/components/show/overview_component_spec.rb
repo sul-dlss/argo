@@ -23,6 +23,7 @@ RSpec.describe Show::OverviewComponent, type: :component do
   let(:edit_copyright_button) { rendered.css("a[aria-label='Edit copyright']") }
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }
   let(:edit_use_statement_button) { rendered.css("a[aria-label='Edit use and reproduction']") }
+  let(:edit_governing_apo_button) { rendered.css("a[aria-label='Set governing APO']") }
 
   context 'with a DRO' do
     let(:doc) do
@@ -63,7 +64,7 @@ RSpec.describe Show::OverviewComponent, type: :component do
 
     context 'when allows_modification is true' do
       it 'creates a edit buttons' do
-        expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+        expect(edit_governing_apo_button).to be_present
         expect(rendered.css("a[aria-label='Set rights']")).to be_present
 
         expect(edit_collection_button).to be_present
@@ -77,7 +78,7 @@ RSpec.describe Show::OverviewComponent, type: :component do
       let(:allows_modification) { false }
 
       it 'creates some edit buttons' do
-        expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+        expect(edit_governing_apo_button).not_to be_present
         expect(rendered.css("a[aria-label='Set rights']")).to be_present
 
         expect(edit_collection_button).to be_present
@@ -95,7 +96,7 @@ RSpec.describe Show::OverviewComponent, type: :component do
     end
 
     it 'creates a edit buttons' do
-      expect(rendered.css("a[aria-label='Set governing APO']")).to be_present
+      expect(edit_governing_apo_button).to be_present
       expect(rendered.css("a[aria-label='Set rights']")).to be_present
       expect(edit_collection_button).not_to be_present
     end
@@ -108,7 +109,7 @@ RSpec.describe Show::OverviewComponent, type: :component do
     end
 
     it 'renders the appropriate buttons' do
-      expect(rendered.css("a[aria-label='Set governing APO']")).not_to be_present
+      expect(edit_governing_apo_button).not_to be_present
       expect(rendered.css("a[aria-label='Set rights']")).not_to be_present
       expect(edit_collection_button).not_to be_present
     end

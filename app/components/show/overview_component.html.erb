@@ -12,7 +12,7 @@
         <tr>
           <th class="col-3" scope="row">Admin policy</th>
           <td>
-              <%= admin_policy %> <%= governing_apo_button %>
+            <%= render Show::GovernedByComponent.new(document: @solr_document, state_service: state_service) %>
           </td>
         </tr>
       <% end %>
