@@ -41,7 +41,7 @@ class Report
                     SolrDocument::FIELD_LABEL,
                     SolrDocument::FIELD_PLACE,
                     SolrDocument::FIELD_PUBLISHER,
-                    SolrDocument::FIELD_CREATED_DATE],
+                    SolrDocument::FIELD_MODS_CREATED_DATE],
       sort: false, default: true, width: 100, download_default: false
     },
     {

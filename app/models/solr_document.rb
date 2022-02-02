@@ -10,6 +10,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   FIELD_EMBARGO_STATUS            = :embargo_status_ssim
   FIELD_EMBARGO_RELEASE_DATE      = :embargo_release_dtsim
   FIELD_CATKEY_ID                 = :catkey_id_ssim
+  FIELD_CREATED_DATE              = :created_at_dttsi
   FIELD_REGISTERED_DATE           = :registered_dttsim
   FIELD_LAST_ACCESSIONED_DATE     = :accessioned_latest_dttsi
   FIELD_EARLIEST_ACCESSIONED_DATE = :accessioned_earliest_dttsi
@@ -25,7 +26,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   FIELD_LABEL                     = 'obj_label_tesim'
   FIELD_PLACE                     = 'originInfo_place_placeTerm_tesim'
   FIELD_PUBLISHER                 = 'originInfo_publisher_tesim'
-  FIELD_CREATED_DATE              = 'originInfo_date_created_tesim'
+  FIELD_MODS_CREATED_DATE         = 'originInfo_date_created_tesim'
   FIELD_CURRENT_VERSION           = 'current_version_isi'
   FIELD_STATUS                    = 'status_ssi'
   FIELD_ACCESS_RIGHTS             = 'rights_descriptions_ssim'
@@ -51,6 +52,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   attribute :submitted_date, Blacklight::Types::Array, FIELD_LAST_SUBMITTED_DATE
   attribute :deposited_date, Blacklight::Types::Array, FIELD_LAST_DEPOSITED_DATE
   attribute :modified_date, Blacklight::Types::Array, FIELD_LAST_MODIFIED_DATE
+  attribute :created_date, Blacklight::Types::Date, FIELD_CREATED_DATE
   attribute :opened_date, Blacklight::Types::Array, FIELD_LAST_OPENED_DATE
   attribute :preservation_size, Blacklight::Types::String, FIELD_PRESERVATION_SIZE
   attribute :released_to, Blacklight::Types::Array, FIELD_RELEASED_TO
@@ -60,7 +62,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   attribute :author, Blacklight::Types::String, FIELD_AUTHOR
   attribute :place, Blacklight::Types::String, FIELD_PLACE
   attribute :publisher, Blacklight::Types::String, FIELD_PUBLISHER
-  attribute :created_date, Blacklight::Types::String, FIELD_CREATED_DATE
+  attribute :mods_created_date, Blacklight::Types::String, FIELD_MODS_CREATED_DATE
   attribute :status, Blacklight::Types::String, FIELD_STATUS
   attribute :access_rights, Blacklight::Types::String, FIELD_ACCESS_RIGHTS
   attribute :copyright, Blacklight::Types::String, FIELD_COPYRIGHT

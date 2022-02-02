@@ -9,10 +9,10 @@ class CitationPresenter
     result = ''
     result += "#{author} " if author.present?
     result += "<em>#{title}</em>" if title.present?
-    origin_info = [publisher, place, created_date].compact.join(', ')
+    origin_info = [publisher, place, mods_created_date].compact.join(', ')
     result += ": #{origin_info}" if origin_info.present?
     result.html_safe
   end
 
-  delegate :author, :title, :publisher, :place, :created_date, to: :@document
+  delegate :author, :title, :publisher, :place, :mods_created_date, to: :@document
 end
