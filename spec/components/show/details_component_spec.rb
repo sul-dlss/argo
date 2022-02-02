@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe DetailsComponent, type: :component do
+RSpec.describe Show::DetailsComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, change_set: change_set, cocina: cocina) }
   let(:cocina) { instance_double(Cocina::Models::DRO) }
