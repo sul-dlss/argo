@@ -48,6 +48,7 @@ class CatalogController < ApplicationController
 
     config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
     config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_facet: true
+    config.add_show_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim
@@ -207,10 +208,6 @@ class CatalogController < ApplicationController
 
     @cocina = maybe_load_cocina(params[:id])
     flash[:alert] = 'Warning: this object cannot currently be represented in the Cocina model.' if @cocina.instance_of?(NilModel)
-    if @document[SolrDocument::FIELD_WORKFLOW_ERRORS]
-      flash[:error] =
-        "Error: #{helpers.value_for_wf_error(document: @document, field: SolrDocument::FIELD_WORKFLOW_ERRORS)}"
-    end
 
     authorize! :view_metadata, @cocina
 
