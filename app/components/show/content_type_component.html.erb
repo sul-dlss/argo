@@ -1,0 +1,9 @@
+<%= content_type %>
+
+<% if allows_modification? %>
+  <%= link_to item_content_type_path(item_id: id),
+        aria: { label: 'Set content type' },
+        data: { controller: 'button', action: 'click->button#open' } do %>
+    <span class="bi-pencil"></span>
+  <% end %>
+<% end %>

@@ -12,7 +12,7 @@
         <tr>
           <th class="col-3" scope="row">Content type</th>
           <td>
-              <%= content_type %> <%= edit_content_type %>
+            <%= render Show::ContentTypeComponent.new(document: @solr_document, state_service: state_service) %>
           </td>
         </tr>
       <% end %>

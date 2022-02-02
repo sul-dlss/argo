@@ -46,17 +46,10 @@ module Show
               end
     end
 
-    def edit_content_type
-      link_to item_content_type_path(item_id: id),
-              aria: { label: 'Set content type' },
-              data: { controller: 'button', action: 'click->button#open' } do
-                tag.span class: 'bi-pencil'
-              end
-    end
-
-    delegate :id, :object_type, :content_type, :source_id, :created_date,
+    delegate :id, :object_type, :source_id, :created_date,
              :preservation_size, :catkey_id, :item?, :collection?, :admin_policy?,
              to: :@solr_document
+    delegate :state_service, to: :@presenter
 
     delegate :blacklight_config, :search_state, :search_action_path, to: :helpers
 
