@@ -9,16 +9,7 @@ class WorkflowServiceController < ApplicationController
     version = Dor::Services::Client.object(params[:id]).version.current
     opened = active_lifecycle('opened', druid: params[:id], version: version)
     submitted = active_lifecycle('submitted', druid: params[:id], version: version)
-    template = if !active_assembly_wf? && opened && !submitted
-                 # This item is closeable, display a working unlock button
-                 'unlock'
-               elsif accessioned? && !submitted && !opened
-                 # This item is openable, display lock and action possible.
-                 'lock'
-               else
-                 # This item is registered, display unlock, but no action
-                 'none'
-               end
+    template = find_template(opened, submitted)
 
     render template, locals: { id: params[:id] }
   end
@@ -31,6 +22,24 @@ class WorkflowServiceController < ApplicationController
   end
 
   private
+
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
+  def find_template(opened, submitted)
+    # This item is closeable, display a working unlock button
+    return 'unlock' if !active_assembly_wf? && opened && !submitted
+
+    # This item is openable, display lock and action possible.
+    return 'lock' if accessioned? && !submitted && !opened
+
+    # This item is being accessioned, display lock but no action
+    return 'lock_inactive' if submitted || opened
+
+    # This item is registered, display unlock, but no action
+    'unlock_inactive'
+  end
+  # rubocop:enable Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity
 
   def get_lifecycle(task)
     workflow_client.lifecycle(druid: params[:id], milestone_name: task)
