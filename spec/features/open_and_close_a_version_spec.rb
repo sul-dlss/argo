@@ -24,7 +24,7 @@ RSpec.describe 'Open and close a version' do
 
     sleep 1 # Give time for a reindex to occur.
     visit solr_document_path item.externalIdentifier
-    click_link 'Open for modification'
+    click_link 'Unlock to make changes to this object'
     select 'Minor', from: 'Type'
     fill_in 'Version description', with: 'Test a change'
 
