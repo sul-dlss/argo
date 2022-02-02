@@ -17,6 +17,14 @@ module Contents
     delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, to: :file
     delegate :publish, :shelve, :sdrPreserve, to: :administrative
 
+    def view_access
+      access.access.capitalize
+    end
+
+    def download_access
+      access.download.capitalize
+    end
+
     def link_attrs
       { item_id: object_id, id: filename }
     end
