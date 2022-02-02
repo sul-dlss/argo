@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe SidebarControlsComponent, type: :component do
+RSpec.describe Show::ControlsComponent, type: :component do
   let(:component) do
     described_class.new(manager: manager,
                         solr_document: doc)
