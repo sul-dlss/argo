@@ -28,7 +28,7 @@
         <tr>
           <th class="col-3" scope="row">Source IDs</th>
           <td>
-              <%= source_id %>  <%= change_source_id %>
+            <%= render Show::SourceIdComponent.new(document: @solr_document, state_service: state_service) %>
           </td>
         </tr>
       <% end %>

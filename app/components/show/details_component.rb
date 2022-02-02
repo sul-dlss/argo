@@ -20,16 +20,6 @@ module Show
       render_field 'tag_ssim'
     end
 
-    def change_source_id
-      return unless item?
-
-      link_to source_id_ui_item_path(id: id),
-              aria: { label: 'Change source id' },
-              data: { controller: 'button', action: 'click->button#open' } do
-                tag.span class: 'bi-pencil'
-              end
-    end
-
     def edit_tags
       link_to edit_item_tags_path(item_id: id),
               aria: { label: 'Edit tags' },
@@ -46,7 +36,7 @@ module Show
               end
     end
 
-    delegate :id, :object_type, :source_id, :created_date,
+    delegate :id, :object_type, :created_date,
              :preservation_size, :catkey_id, :item?, :collection?, :admin_policy?,
              to: :@solr_document
     delegate :state_service, to: :@presenter

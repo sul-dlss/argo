@@ -17,13 +17,14 @@ RSpec.describe Show::DetailsComponent, type: :component do
                      SolrDocument::FIELD_OBJECT_TYPE => object_type)
   end
   let(:content_type_button) { rendered.css("a[aria-label='Set content type']") }
+  let(:source_id_button) { rendered.css("a[aria-label='Change source id']") }
 
   context 'with a DRO' do
     let(:object_type) { 'item' }
 
     context 'when allows_modification is true' do
       it 'creates a edit buttons' do
-        expect(rendered.css("a[aria-label='Change source id']")).to be_present
+        expect(source_id_button).to be_present
         expect(rendered.to_html).to include 'Not released'
         expect(rendered.to_html).to include 'Not recorded'
         expect(rendered.to_html).to include 'None assigned'
@@ -39,7 +40,7 @@ RSpec.describe Show::DetailsComponent, type: :component do
       let(:allows_modification) { false }
 
       it 'creates only the tag edit buttons' do
-        expect(rendered.css("a[aria-label='Change source id']")).to be_present
+        expect(source_id_button).not_to be_present
         expect(rendered.css("a[aria-label='Edit tags']")).to be_present
         expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
         expect(content_type_button).not_to be_present
@@ -52,7 +53,7 @@ RSpec.describe Show::DetailsComponent, type: :component do
 
     context 'when allows_modification is true' do
       it 'creates a edit buttons' do
-        expect(rendered.css("a[aria-label='Change source id']")).not_to be_present
+        expect(source_id_button).not_to be_present
         expect(rendered.css("a[aria-label='Edit tags']")).to be_present
         expect(rendered.css("a[aria-label='Manage catkey']")).to be_present
         expect(content_type_button).not_to be_present
@@ -67,7 +68,7 @@ RSpec.describe Show::DetailsComponent, type: :component do
 
     context 'when allows_modification is true' do
       it 'renders the appropriate buttons' do
-        expect(rendered.css("a[aria-label='Change source id']")).not_to be_present
+        expect(source_id_button).not_to be_present
         expect(rendered.css("a[aria-label='Edit tags']")).to be_present
         expect(rendered.css("a[aria-label='Manage catkey']")).not_to be_present
         expect(content_type_button).not_to be_present
