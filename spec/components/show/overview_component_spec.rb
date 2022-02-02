@@ -80,8 +80,7 @@ RSpec.describe Show::OverviewComponent, type: :component do
       it 'creates some edit buttons' do
         expect(edit_governing_apo_button).not_to be_present
         expect(rendered.css("a[aria-label='Set rights']")).to be_present
-
-        expect(edit_collection_button).to be_present
+        expect(edit_collection_button).not_to be_present
         expect(edit_copyright_button).not_to be_present
         expect(edit_license_button).not_to be_present
         expect(edit_use_statement_button).not_to be_present
