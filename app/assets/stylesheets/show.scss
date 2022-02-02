@@ -2,6 +2,11 @@
   $button-width: 11rem;
   $external-link-button-width: 9rem;
 
+  .document-header {
+    border-bottom: 1px solid $gray-300;
+
+  }
+
   .object-type {
     width: 11rem;
     height: 2.4rem;

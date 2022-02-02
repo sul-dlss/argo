@@ -4,7 +4,9 @@ require 'rails_helper'
 
 RSpec.describe DetailsComponent, type: :component do
   let(:component) { described_class.new(presenter: presenter) }
-  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, change_set: change_set) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, change_set: change_set, cocina: cocina) }
+  let(:cocina) { instance_double(Cocina::Models::DRO) }
+
   let(:change_set) { instance_double(ItemChangeSet, barcode: nil, id: doc.id) }
   let(:rendered) { render_inline(component) }
   let(:doc) do

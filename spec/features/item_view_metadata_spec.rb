@@ -39,7 +39,7 @@ RSpec.describe 'Item view', js: true do
                       events: events_client,
                       metadata: metadata_client)
     end
-    let(:solr_doc) { { id: item_id } }
+    let(:solr_doc) { { id: item_id, SolrDocument::FIELD_OBJECT_TYPE => 'item' } }
 
     before do
       allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse)
@@ -267,7 +267,7 @@ RSpec.describe 'Item view', js: true do
     end
 
     context 'when the title has an ampersand in it' do
-      let(:solr_doc) { { id: item_id, SolrDocument::FIELD_TITLE => 'Road & Track' } }
+      let(:solr_doc) { { id: item_id, SolrDocument::FIELD_TITLE => 'Road & Track', SolrDocument::FIELD_OBJECT_TYPE => 'item' } }
 
       let(:dro_struct) { instance_double(Cocina::Models::DROStructural, contains: []) }
 

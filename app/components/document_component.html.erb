@@ -9,34 +9,5 @@
   class: 'document document-component' do %>
   <%= title component: DocumentTitleComponent %>
 
-  <%= render ShowEmbargoComponent.new(solr_document: @document) %>
-
-  <div class="row">
-    <div class="col-md-3">
-      <%= render 'catalog/show_thumbnail', document: @document %>
-    </div>
-    <div class="col-md-9">
-      <%= render ExternalLinksComponent.new(document: @document) %>
-      <hr>
-      <%= render Show::ControlsComponent.new(solr_document: @document, manager: helpers.can?(:manage_item, @presenter.cocina)) %>
-    </div>
-  </div>
-
-  <div class="row" style="margin-top: 3rem">
-    <div class="col-md-6">
-      <%= render OverviewComponent.new(presenter: @presenter) %>
-    </div>
-    <div class="col-md-6">
-      <%= render DetailsComponent.new(presenter: @presenter) %>
-    </div>
-  </div>
-
-  <div class="accordion">
-    <%= render 'datastreams_default', document: @document %>
-    <%= render 'events_default', document: @document %>
-    <%= render 'cocina_default', document: @document %>
-    <%= render 'history_default', document: @document %>
-    <%= render ContentsComponent.new(cocina: @presenter.cocina, document: @document) %>
-    <%= render TechmdComponent.new(result: @presenter.techmd) %>
-  </div>
+  <%= render child_component %>
 <% end %>

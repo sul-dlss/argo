@@ -1,11 +1,11 @@
-<header class="documentHeader row">
+<header class="document-header row mb-5 pb-3">
   <%= render OpenCloseComponent.new(id: @document.id) if helpers.can?(:manage_item, @cocina) %>
 
   <%= content_tag @as, class: @classes do %>
     <%= title -%>
   <% end %>
 
-  <div class="object-type object-type-<%= object_type %> fw-bold text-center text-uppercase rounded-pill fs-4 float-end">
+  <div class="object-type object-type-<%= object_type %> fw-bold text-center text-uppercase rounded-pill fs-4 mt-2 float-end">
     <%= object_type %>
   </div>
 </header>

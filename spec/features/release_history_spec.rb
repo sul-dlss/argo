@@ -57,7 +57,7 @@ RSpec.describe 'Release history' do
     let(:id) { 'druid:qv778ht9999' }
 
     before do
-      solr_conn.add(id: id)
+      solr_conn.add(id: id, SolrDocument::FIELD_OBJECT_TYPE => 'item')
       solr_conn.commit
     end
 
