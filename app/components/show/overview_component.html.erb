@@ -36,7 +36,7 @@
       <tr>
         <th class="col-3" scope="row">Access rights</th>
         <td>
-            <%= access_rights %> <%= rights unless admin_policy? %>
+          <%= render Show::AccessRightsComponent.new(document: @solr_document, state_service: state_service) %>
         </td>
       </tr>
 
