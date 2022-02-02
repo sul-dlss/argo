@@ -19,6 +19,7 @@ RSpec.describe Show::DetailsComponent, type: :component do
   let(:content_type_button) { rendered.css("a[aria-label='Set content type']") }
   let(:source_id_button) { rendered.css("a[aria-label='Change source id']") }
   let(:catkey_button) { rendered.css("a[aria-label='Manage catkey']") }
+  let(:barcode_button) { rendered.css("a[aria-label='Edit barcode']") }
 
   context 'with a DRO' do
     let(:object_type) { 'item' }
@@ -29,11 +30,12 @@ RSpec.describe Show::DetailsComponent, type: :component do
         expect(rendered.to_html).to include 'Not released'
         expect(rendered.to_html).to include 'Not recorded'
         expect(rendered.to_html).to include 'None assigned'
-        expect(rendered.css("a[aria-label='Edit tags']")).to be_present
         expect(catkey_button).to be_present
         expect(content_type_button).to be_present
+        expect(barcode_button).to be_present
         expect(rendered.to_html).to include 'Preservation size'
         expect(rendered.to_html).to include 'Content type'
+        expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       end
     end
 
@@ -42,9 +44,10 @@ RSpec.describe Show::DetailsComponent, type: :component do
 
       it 'creates only the tag edit buttons' do
         expect(source_id_button).not_to be_present
-        expect(rendered.css("a[aria-label='Edit tags']")).to be_present
         expect(catkey_button).not_to be_present
         expect(content_type_button).not_to be_present
+        expect(barcode_button).not_to be_present
+        expect(rendered.css("a[aria-label='Edit tags']")).to be_present
       end
     end
   end
