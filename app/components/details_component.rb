@@ -7,6 +7,10 @@ class DetailsComponent < ApplicationComponent
     @solr_document = presenter.document
   end
 
+  def render?
+    !@presenter.cocina.is_a? NilModel
+  end
+
   def project_tag
     render_field 'project_tag_ssim'
   end

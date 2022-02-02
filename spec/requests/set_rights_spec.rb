@@ -451,7 +451,7 @@ RSpec.describe 'Set rights for an object' do
       end
       let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
       let(:service) { instance_double(Blacklight::SearchService, fetch: [nil, doc]) }
-      let(:doc) { SolrDocument.new id: pid }
+      let(:doc) { SolrDocument.new id: pid, SolrDocument::FIELD_OBJECT_TYPE => 'item' }
       let(:error) do
         '{"errors":[{"status":"422","title":"Unexpected Cocina::Mapper.build error",' \
         '"detail":"#/components/schemas/SourceId pattern ^.+:.+$ does not match value: bad_source_id:, ' \

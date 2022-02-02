@@ -1,0 +1,37 @@
+<%= render ShowEmbargoComponent.new(solr_document: document) %>
+
+<div class="row">
+  <div class="col-md-3">
+    <% if document.thumbnail_url %>
+      <%= image_tag document.thumbnail_url, style: 'max-width:240px; max-height:240px;' %>
+    <% else %>
+      <svg style="text-anchor: middle" width="240" height="240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Responsive image" focusable="false">
+        <title>Placeholder</title>
+        <rect width="100%" height="100%" fill="#868e96"></rect>
+        <text x="50%" y="50%" fill="#dee2e6" dy=".3em"><%= document.label %></text>
+      </svg>
+    <% end %>
+  </div>
+  <div class="col-md-9">
+    <%= render ExternalLinksComponent.new(document: document) %>
+    <%= render Show::ControlsComponent.new(solr_document: document, manager: helpers.can?(:manage_item, presenter.cocina)) %>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-md-6">
+    <%= render OverviewComponent.new(presenter: presenter) %>
+  </div>
+  <div class="col-md-6">
+    <%= render DetailsComponent.new(presenter: presenter) %>
+  </div>
+</div>
+
+<div class="accordion">
+  <%= render 'datastreams_default', document: document %>
+  <%= render 'events_default', document: document %>
+  <%= render 'cocina_default', document: document %>
+  <%= render 'history_default', document: document %>
+  <%= render ContentsComponent.new(cocina: cocina, document: document) %>
+  <%= render TechmdComponent.new(result: techmd) %>
+</div>
