@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Set the properties for an object' do
+RSpec.describe 'Set the properties for an item' do
   let(:user) { create(:user) }
   let(:pid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
@@ -17,118 +17,41 @@ RSpec.describe 'Set the properties for an object' do
       sign_in user, groups: ['sdr:administrator-role']
     end
 
-    context 'with an item' do
-      let(:cocina_model) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::Vocab.object,
-                               'externalIdentifier' => pid,
-                               'access' => {},
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'structural' => {},
-                               'identification' => {}
-                             })
+    let(:cocina_model) do
+      Cocina::Models.build({
+                             'label' => 'My ETD',
+                             'version' => 1,
+                             'type' => Cocina::Models::Vocab.object,
+                             'externalIdentifier' => pid,
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             'identification' => {}
+                           })
+    end
+
+    context 'when barcode is passed' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'identification' => {
+              'barcode' => '36105010362304'
+            }
+          }
+        )
       end
 
-      context 'when barcode is passed' do
-        let(:updated_model) do
-          cocina_model.new(
-            {
-              'identification' => {
-                'barcode' => '36105010362304'
-              }
-            }
-          )
-        end
+      it 'sets the new barcode' do
+        patch "/items/#{pid}", params: { item: { barcode: '36105010362304' } }
 
-        it 'sets the new barcode' do
-          patch "/items/#{pid}", params: { item: { barcode: '36105010362304' } }
-
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-          expect(response.code).to eq('303')
-        end
-      end
-
-      context 'when copyright is passed' do
-        let(:updated_model) do
-          cocina_model.new(
-            {
-              'access' => {
-                'copyright' => 'in public domain'
-              }
-            }
-          )
-        end
-
-        it 'sets the new copyright' do
-          patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
-
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-          expect(response.code).to eq('303')
-        end
-      end
-
-      context 'when use_statement is passed' do
-        let(:updated_model) do
-          cocina_model.new(
-            {
-              'access' => {
-                'useAndReproductionStatement' => 'call before using'
-              }
-            }
-          )
-        end
-
-        it 'sets the new use and reproduction statement' do
-          patch "/items/#{pid}", params: { item: { use_statement: 'call before using' } }
-
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-          expect(response.code).to eq('303')
-        end
-      end
-
-      context 'when license is passed' do
-        let(:updated_model) do
-          cocina_model.new(
-            {
-              'access' => {
-                'license' => 'https://creativecommons.org/licenses/by/4.0/legalcode'
-              }
-            }
-          )
-        end
-
-        it 'sets the new license statement' do
-          patch "/items/#{pid}", params: { item: { license: 'https://creativecommons.org/licenses/by/4.0/legalcode' } }
-
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-          expect(response.code).to eq('303')
-        end
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
       end
     end
 
-    context 'with a collection' do
-      let(:cocina_model) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::Vocab.collection,
-                               'externalIdentifier' => pid,
-                               'access' => {},
-                               'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                               'identification' => {}
-                             })
-      end
-
+    context 'when copyright is passed' do
       let(:updated_model) do
         cocina_model.new(
           {
@@ -141,6 +64,48 @@ RSpec.describe 'Set the properties for an object' do
 
       it 'sets the new copyright' do
         patch "/items/#{pid}", params: { item: { copyright: 'in public domain' } }
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
+      end
+    end
+
+    context 'when use_statement is passed' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'useAndReproductionStatement' => 'call before using'
+            }
+          }
+        )
+      end
+
+      it 'sets the new use and reproduction statement' do
+        patch "/items/#{pid}", params: { item: { use_statement: 'call before using' } }
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
+      end
+    end
+
+    context 'when license is passed' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'license' => 'https://creativecommons.org/licenses/by/4.0/legalcode'
+            }
+          }
+        )
+      end
+
+      it 'sets the new license statement' do
+        patch "/items/#{pid}", params: { item: { license: 'https://creativecommons.org/licenses/by/4.0/legalcode' } }
 
         expect(object_client).to have_received(:update)
           .with(params: updated_model)

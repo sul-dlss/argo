@@ -56,8 +56,10 @@ Rails.application.routes.draw do
     get 'workflow_grid'
   end
 
-  namespace :collections do
-    get :exists
+  resources :collections, only: :update do
+    collection do
+      get :exists
+    end
   end
 
   resources :apo, only: %i[new update create edit] do
