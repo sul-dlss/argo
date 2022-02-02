@@ -12,6 +12,10 @@ class CollectionChangeSet < ApplicationChangeSet
     ::ActiveModel::Name.new(nil, nil, 'Collection')
   end
 
+  def id
+    model.externalIdentifier
+  end
+
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
     return unless model.identification

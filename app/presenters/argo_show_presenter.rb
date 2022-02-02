@@ -9,5 +9,15 @@ class ArgoShowPresenter < Blacklight::ShowPresenter
     CitationPresenter.new(@document).render
   end
 
-  attr_accessor :techmd, :cocina
+  def change_set
+    cocina.collection? ? CollectionChangeSet.new(cocina) : ItemChangeSet.new(cocina)
+  end
+
+  def id
+    cocina.externalIdentifier
+  end
+
+  delegate :allows_modification?, to: :state_service
+
+  attr_accessor :techmd, :cocina, :state_service
 end

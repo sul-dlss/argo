@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
 class OverviewComponent < ApplicationComponent
-  def initialize(solr_document:)
-    @solr_document = solr_document
+  # @param [ArgoShowPresenter] presenter
+  def initialize(presenter:)
+    @presenter = presenter
+    @solr_document = presenter.document
+  end
+
+  def render?
+    !@presenter.cocina.is_a? NilModel
   end
 
   def admin_policy
@@ -46,26 +52,8 @@ class OverviewComponent < ApplicationComponent
             end
   end
 
-  def state_service
-    @state_service ||= StateService.new(id, version: @solr_document.current_version)
-  end
-
-  def copyright
-    @solr_document.copyright || 'Not entered'
-  end
-
-  def license
-    return 'No license' unless @solr_document.license
-
-    value = Constants::LICENSE_OPTIONS.find { |attribute| attribute.fetch(:code) == @solr_document.license }
-    value.fetch(:label)
-  end
-
-  def use_statement
-    @solr_document.use_statement || 'Not entered'
-  end
-
   delegate :id, :access_rights, :status,
            :admin_policy?, :item?, :collection?, to: :@solr_document
+  delegate :state_service, to: :@presenter
   delegate :allows_modification?, to: :state_service
 end

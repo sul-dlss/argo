@@ -3,7 +3,19 @@
 require 'rails_helper'
 
 RSpec.describe OverviewComponent, type: :component do
-  let(:component) { described_class.new(solr_document: doc) }
+  let(:component) { described_class.new(presenter: presenter) }
+  let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, change_set: change_set, state_service: state_service) }
+  let(:change_set) { ItemChangeSet.new(cocina) }
+  let(:cocina) do
+    Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
+                            type: Cocina::Models::Vocab.document,
+                            label: '',
+                            version: 1,
+                            access: {},
+                            administrative: {
+                              hasAdminPolicy: 'druid:hv992ry2431'
+                            })
+  end
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
@@ -11,10 +23,6 @@ RSpec.describe OverviewComponent, type: :component do
   let(:edit_copyright_button) { rendered.css("a[aria-label='Edit copyright']") }
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }
   let(:edit_use_statement_button) { rendered.css("a[aria-label='Edit use and reproduction']") }
-
-  before do
-    allow(StateService).to receive(:new).and_return(state_service)
-  end
 
   context 'with a DRO' do
     let(:doc) do
@@ -30,6 +38,18 @@ RSpec.describe OverviewComponent, type: :component do
     end
 
     context 'with a license set' do
+      let(:cocina) do
+        Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
+                                type: Cocina::Models::Vocab.document,
+                                label: '',
+                                version: 1,
+                                access: {
+                                  license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode'
+                                },
+                                administrative: {
+                                  hasAdminPolicy: 'druid:hv992ry2431'
+                                })
+      end
       let(:doc) do
         SolrDocument.new('id' => 'druid:kv840xx0000',
                          SolrDocument::FIELD_OBJECT_TYPE => 'item',

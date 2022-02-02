@@ -137,4 +137,8 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   def title
     (sw_title.presence || [label]).join(' -- ')
   end
+
+  def inspect
+    "#<#{self.class.name}:#{object_id} @id=#{id}>"
+  end
 end

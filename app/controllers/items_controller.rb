@@ -7,6 +7,7 @@ class ItemsController < ApplicationController
     add_collection set_collection remove_collection
     mods
     purge_object
+    show_barcode show_copyright show_license show_use_statement
     source_id
     tags_bulk
     update
@@ -231,9 +232,21 @@ class ItemsController < ApplicationController
     @change_set = ItemChangeSet.new(@cocina)
   end
 
+  def show_barcode
+    change_set = ItemChangeSet.new(@cocina)
+    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    render Show::BarcodeComponent.new(change_set: change_set, state_service: state_service)
+  end
+
   # Draw form for copyright
   def edit_copyright
     @change_set = ItemChangeSet.new(@cocina)
+  end
+
+  def show_copyright
+    change_set = ItemChangeSet.new(@cocina)
+    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    render Show::CopyrightComponent.new(change_set: change_set, state_service: state_service)
   end
 
   # Draw form for use and reproduction statement
@@ -241,9 +254,21 @@ class ItemsController < ApplicationController
     @change_set = ItemChangeSet.new(@cocina)
   end
 
+  def show_use_statement
+    change_set = ItemChangeSet.new(@cocina)
+    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    render Show::UseStatementComponent.new(change_set: change_set, state_service: state_service)
+  end
+
   # Draw form for setting license
   def edit_license
     @change_set = ItemChangeSet.new(@cocina)
+  end
+
+  def show_license
+    change_set = ItemChangeSet.new(@cocina)
+    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    render Show::LicenseComponent.new(change_set: change_set, state_service: state_service)
   end
 
   # save the copyright form

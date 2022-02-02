@@ -1,11 +1,11 @@
-<%= turbo_frame_tag 'edit_copyright' do %>
+<%= turbo_frame_tag 'copyright' do %>
   <%= form_with model: @change_set do |f| %>
     <div class="mb-3">
       <%= f.label :copyright, class: 'visually-hidden' %>
       <%= f.text_field :copyright, class: 'form-control' %>
     </div>
     <div class="float-end">
-      <%= link_to 'Cancel', solr_document_path(params[:id]), target: '_top' %>
+      <%= link_to 'Cancel', show_copyright_item_path(params[:id]) %>
       <%= f.submit 'Save', class: 'btn btn-primary' %>
     </div>
   <% end %>

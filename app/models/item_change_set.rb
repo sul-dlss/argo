@@ -21,12 +21,17 @@ class ItemChangeSet < ApplicationChangeSet
     ::ActiveModel::Name.new(nil, nil, 'Item')
   end
 
+  def id
+    model.externalIdentifier
+  end
+
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
-    return unless model.identification
+    if model.identification
+      self.catkey = model.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
+      self.barcode = model.identification.barcode
+    end
 
-    self.catkey = model.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
-    self.barcode = model.identification.barcode
     self.copyright = model.access.copyright
     self.use_statement = model.access.useAndReproductionStatement
     self.license = model.access.license

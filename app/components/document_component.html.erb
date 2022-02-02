@@ -24,10 +24,10 @@
 
   <div class="row" style="margin-top: 3rem">
     <div class="col-md-6">
-      <%= render OverviewComponent.new(solr_document: @document) %>
+      <%= render OverviewComponent.new(presenter: @presenter) %>
     </div>
     <div class="col-md-6">
-      <%= render DetailsComponent.new(solr_document: @document) %>
+      <%= render DetailsComponent.new(presenter: @presenter) %>
     </div>
   </div>
 
