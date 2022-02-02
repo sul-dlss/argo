@@ -240,7 +240,7 @@ class ItemsController < ApplicationController
 
   # Draw form for copyright
   def edit_copyright
-    @change_set = ItemChangeSet.new(@cocina)
+    @change_set = build_change_set
   end
 
   def show_copyright
@@ -251,7 +251,7 @@ class ItemsController < ApplicationController
 
   # Draw form for use and reproduction statement
   def edit_use_statement
-    @change_set = ItemChangeSet.new(@cocina)
+    @change_set = build_change_set
   end
 
   def show_use_statement
@@ -262,7 +262,7 @@ class ItemsController < ApplicationController
 
   # Draw form for setting license
   def edit_license
-    @change_set = ItemChangeSet.new(@cocina)
+    @change_set = build_change_set
   end
 
   def show_license
@@ -271,9 +271,9 @@ class ItemsController < ApplicationController
     render Show::LicenseComponent.new(change_set: change_set, state_service: state_service)
   end
 
-  # save the copyright form
+  # save the form
   def update
-    change_set = build_change_set
+    change_set = ItemChangeSet.new(@cocina)
     attributes = params.require(:item).permit(:barcode, :copyright, :use_statement, :license)
     change_set.validate(**attributes)
     change_set.save

@@ -38,6 +38,21 @@ class CollectionsController < ApplicationController
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_pid}"
   end
 
+  # save the form
+  def update
+    @cocina = maybe_load_cocina(params[:id])
+    authorize! :manage_item, @cocina
+    return unless enforce_versioning
+
+    change_set = CollectionChangeSet.new(@cocina)
+    attributes = params.require(:collection).permit(:copyright, :use_statement, :license)
+    change_set.validate(**attributes)
+    change_set.save
+    Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
+
+    redirect_to solr_document_path(params[:id]), status: :see_other
+  end
+
   def exists
     resp = collection_exists?(title: params[:title].presence, catkey: params[:catkey].presence)
     render json: resp.to_json, layout: false
