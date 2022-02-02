@@ -28,24 +28,12 @@ module Show
               end
     end
 
-    def manage_catkey
-      link_to edit_item_catkey_path(item_id: id),
-              aria: { label: 'Manage catkey' },
-              data: { controller: 'button', action: 'click->button#open' } do
-                tag.span class: 'bi-pencil'
-              end
-    end
-
     delegate :id, :object_type, :created_date,
-             :preservation_size, :catkey_id, :item?, :collection?, :admin_policy?,
+             :preservation_size, :item?, :collection?, :admin_policy?,
              to: :@solr_document
     delegate :state_service, to: :@presenter
 
     delegate :blacklight_config, :search_state, :search_action_path, to: :helpers
-
-    def catkey
-      @solr_document.catkey_id || 'None assigned'
-    end
 
     def released_to
       @solr_document.released_to.presence&.to_sentence || 'Not released'
