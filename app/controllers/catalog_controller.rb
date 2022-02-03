@@ -43,11 +43,12 @@ class CatalogController < ApplicationController
     config.add_index_field 'identifier_tesim',                label: 'IDs', helper_method: :value_for_identifier_tesim
     config.add_index_field SolrDocument::FIELD_RELEASED_TO,   label: 'Released to'
     config.add_index_field 'status_ssi',                      label: 'Status'
-    config.add_index_field 'wf_error_ssim',                   label: 'Error', helper_method: :value_for_wf_error
-    config.add_index_field 'rights_descriptions_ssim',        label: 'Access Rights'
+    config.add_index_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
+    config.add_index_field 'rights_descriptions_ssim', label: 'Access Rights'
 
     config.add_show_field 'project_tag_ssim',                label: 'Project',           link_to_facet: true
     config.add_show_field 'tag_ssim',                        label: 'Tags',              link_to_facet: true
+    config.add_show_field SolrDocument::FIELD_WORKFLOW_ERRORS, label: 'Error', helper_method: :value_for_wf_error
 
     # exploded_tag_ssim indexes all tag prefixes (see IdentityMetadataDS#to_solr for a more exact
     # description), whereas tag_ssim only indexes whole tags.  we want to facet on exploded_tag_ssim

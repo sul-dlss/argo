@@ -85,10 +85,10 @@ RSpec.describe ValueHelper do
   describe '#value_for_wf_error' do
     let(:document_attributes) do
       {
-        'wf_error_ssim' => ['accessionWF:technical-metadata:401 Unauthorized']
+        SolrDocument::FIELD_WORKFLOW_ERRORS => ['accessionWF:technical-metadata:401 Unauthorized']
       }
     end
-    let(:args) { { document: document, field: 'wf_error_ssim' } }
+    let(:args) { { document: document, field: SolrDocument::FIELD_WORKFLOW_ERRORS } }
 
     it 'returns a formatted wf error message' do
       expect(helper.value_for_wf_error(**args)).to eq 'technical-metadata : 401 Unauthorized'
