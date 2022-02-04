@@ -65,7 +65,7 @@ class StructureUpdater
     # Which files go in which filesets
     files_by_fileset = csv.each_with_object({}) do |row, hash|
       hash[row['sequence']] ||= []
-      fileset_attributes[row['sequence']] = { label: row['resource_label'], type: row['resource_type'] }
+      fileset_attributes[row['sequence']] = { label: row['resource_label'], type: type(row['resource_type']) }
       hash[row['sequence']] << update_file(existing_files_by_filename[row['filename']], row)
     end
 
@@ -78,5 +78,10 @@ class StructureUpdater
     end
 
     Success(model.structural.new(contains: contains))
+  end
+
+  # Change the short resource type into a url
+  def type(resource_type)
+    Cocina::Models::Vocab::Resources.public_send(resource_type)
   end
 end
