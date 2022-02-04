@@ -48,7 +48,7 @@ RSpec.describe ApplyModsMetadata do
       instance_double(Dor::Services::Client::Object, metadata: metadata_client)
     end
     let(:metadata_client) do
-      instance_double(Dor::Services::Client::Metadata, legacy_update: true)
+      instance_double(Dor::Services::Client::Metadata, update_mods: nil)
     end
 
     before do
@@ -64,7 +64,7 @@ RSpec.describe ApplyModsMetadata do
 
       it 'saves the metadata' do
         apply
-        expect(metadata_client).to have_received(:legacy_update)
+        expect(metadata_client).to have_received(:update_mods)
         expect(action).not_to have_received(:log_error!)
       end
     end
@@ -76,7 +76,7 @@ RSpec.describe ApplyModsMetadata do
 
       it 'saves the metadata' do
         apply
-        expect(metadata_client).not_to have_received(:legacy_update)
+        expect(metadata_client).not_to have_received(:update_mods)
       end
     end
   end

@@ -79,12 +79,7 @@ class ApplyModsMetadata
 
   def update_metadata
     object_client = Dor::Services::Client.object(cocina.externalIdentifier)
-    object_client.metadata.legacy_update(
-      descriptive: {
-        updated: Time.zone.now,
-        content: mods
-      }
-    )
+    object_client.metadata.update_mods(mods)
   end
 
   # Open a new version for the given object.
