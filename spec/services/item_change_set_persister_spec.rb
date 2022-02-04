@@ -266,6 +266,7 @@ RSpec.describe ItemChangeSetPersister do
       it 'invokes object client with item/DRO that has no barcode' do
         expect(fake_client).to have_received(:update).with(
           params: a_cocina_object_with_identification(
+            barcode: nil,
             catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
           )
         )
@@ -302,6 +303,7 @@ RSpec.describe ItemChangeSetPersister do
       it 'invokes object client with item/DRO that has no catkey' do
         expect(fake_client).to have_received(:update).with(
           params: a_cocina_object_with_identification(
+            catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: catkey_before }],
             barcode: barcode_before
           )
         )

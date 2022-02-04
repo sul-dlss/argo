@@ -87,8 +87,8 @@ class ItemChangeSetPersister
   def update_identification(updated)
     identification_props = updated.identification&.to_h || {}
     identification_props[:sourceId] = source_id if changed?(:source_id)
-    identification_props[:barcode] = barcode if changed?(:barcode)
+    identification_props[:barcode] = barcode.presence if changed?(:barcode)
     identification_props[:catalogLinks] = Catkey.serialize(model, catkey) if changed?(:catkey)
-    updated.new(identification: identification_props.compact.presence)
+    updated.new(identification: identification_props.presence)
   end
 end
