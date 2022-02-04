@@ -26,8 +26,14 @@ class ItemsController < ApplicationController
   rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
     md = /\((.*)\)/.match exception.message
     detail = JSON.parse(md[1])['errors'].first['detail']
-    redirect_to solr_document_path(params[:id]),
-                flash: { error: "Unable to retrieve the cocina model: #{detail.truncate(200)}" }
+    message = "Unable to retrieve the cocina model: #{detail.truncate(200)}"
+    logger.error "Error connecting to DSA: #{detail}"
+    if turbo_frame_request?
+      render 'error', locals: { message: message }
+    else
+      redirect_to solr_document_path(params[:id]),
+                  flash: { error: message }
+    end
   end
 
   def set_collection
@@ -278,7 +284,7 @@ class ItemsController < ApplicationController
     change_set = ItemChangeSet.new(@cocina)
     attributes = params.require(:item).permit(:barcode, :copyright, :use_statement, :license)
     change_set.validate(**attributes)
-    change_set.save
+    change_set.save # may raise Dor::Services::Client::BadRequestError
     reindex
     redirect_to solr_document_path(params[:id]), status: :see_other
   end

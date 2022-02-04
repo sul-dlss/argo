@@ -113,5 +113,15 @@ RSpec.describe 'Set the properties for an item' do
         expect(response.code).to eq('303')
       end
     end
+
+    context 'when there is an error' do
+      it 'draws the error' do
+        allow(object_client).to receive(:update).and_raise(Dor::Services::Client::BadRequestError, '({"errors":[{"detail":"broken"}]})')
+        patch "/items/#{pid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include '<turbo-frame id="barcode">Unable to retrieve the cocina model: broken</turbo-frame>'
+      end
+    end
   end
 end
