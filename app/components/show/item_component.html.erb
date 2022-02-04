@@ -34,6 +34,6 @@
   <%= render 'events_default', document: document %>
   <%= render 'cocina_default', document: document %>
   <%= render 'history_default', document: document %>
-  <%= render ContentsComponent.new(cocina: cocina, document: document) %>
+  <%= render ContentsComponent.new(cocina: cocina, document: document, state_service: state_service) %>
   <%= render TechmdComponent.new(result: techmd) %>
 </div>
