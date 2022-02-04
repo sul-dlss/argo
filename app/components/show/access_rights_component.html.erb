@@ -1,0 +1,8 @@
+<%= access_rights %>
+<% if allows_modification? && !admin_policy? %>
+  <%= link_to rights_item_path(id: id),
+              aria: { label: 'Set rights' },
+              data: { controller: 'button', action: 'click->button#open' } do %>
+    <span class="bi-pencil"></span>
+  <% end %>
+<% end %>

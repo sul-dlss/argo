@@ -1,0 +1,9 @@
+<%= catkey %>
+
+<% if allows_modification? %>
+  <%= link_to edit_item_catkey_path(item_id: id),
+              aria: { label: 'Manage catkey' },
+              data: { controller: 'button', action: 'click->button#open' } do %>
+    <span class="bi-pencil"></span>
+  <% end %>
+<% end %>
