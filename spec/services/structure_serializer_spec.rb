@@ -248,10 +248,10 @@ RSpec.describe StructureSerializer do
     it 'serializes to CSV' do
       expect(csv).to eq <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Image 1,http://cocina.sul.stanford.edu/models/resources/image.jsonld,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,no,yes,world,world,image/tiff,
-        Image 1,http://cocina.sul.stanford.edu/models/resources/image.jsonld,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/jp2,
-        Image 2,http://cocina.sul.stanford.edu/models/resources/image.jsonld,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,no,no,yes,world,world,image/tiff,
-        Image 2,http://cocina.sul.stanford.edu/models/resources/image.jsonld,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,image/jp2,
+        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,no,no,yes,world,world,image/tiff,
+        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,no,world,world,image/jp2,
+        Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,no,no,yes,world,world,image/tiff,
+        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,no,world,world,image/jp2,
       CSV
     end
   end

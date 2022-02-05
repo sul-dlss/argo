@@ -203,10 +203,10 @@ RSpec.describe StructureUpdater do
     let(:csv) do
       <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Image 1,http://cocina.sul.stanford.edu/models/resources/image.jsonld,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/one,
-        Image 1,http://cocina.sul.stanford.edu/models/resources/image.jsonld,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/two,transcription
-        Image 2,http://cocina.sul.stanford.edu/models/resources/image.jsonld,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/three,
-        Image 2,http://cocina.sul.stanford.edu/models/resources/image.jsonld,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/four,
+        Image 1,image,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/one,
+        Image 1,image,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/two,transcription
+        Image 2,image,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/three,
+        Image 2,image,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/four,
       CSV
     end
 
@@ -239,10 +239,10 @@ RSpec.describe StructureUpdater do
     let(:csv) do
       <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Picture 1,http://cocina.sul.stanford.edu/models/resources/object.jsonld,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 1,http://cocina.sul.stanford.edu/models/resources/object.jsonld,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/jp2,
-        Picture 2,http://cocina.sul.stanford.edu/models/resources/page.jsonld,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/tiff,
-        Picture 2,http://cocina.sul.stanford.edu/models/resources/page.jsonld,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
+        Picture 1,object,1,bb045jk9908_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,stanford,none,image/tiff,
+        Picture 1,object,1,bb045jk9908_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/jp2,
+        Picture 2,page,2,bb045jk9908_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,stanford,none,image/tiff,
+        Picture 2,page,2,bb045jk9908_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
       CSV
     end
 
@@ -264,10 +264,10 @@ RSpec.describe StructureUpdater do
     let(:csv) do
       <<~CSV
         resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
-        Image 1,http://cocina.sul.stanford.edu/models/resources/image.jsonld,1,bb045jk_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,world,world,image/tiff,
-        Image 1,http://cocina.sul.stanford.edu/models/resources/image.jsonld,1,bb045jk_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/jp2,
-        Image 2,http://cocina.sul.stanford.edu/models/resources/image.jsonld,2,bb045jk_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,world,world,image/tiff,
-        Image 2,http://cocina.sul.stanford.edu/models/resources/image.jsonld,2,bb045jk_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
+        Image 1,image,1,bb045jk_0001.tiff,bb045jk9908_0001.tiff,yes,yes,yes,world,world,image/tiff,
+        Image 1,image,1,bb045jk_0001.jp2,bb045jk9908_0001.jp2,yes,yes,yes,world,world,image/jp2,
+        Image 2,image,2,bb045jk_0002.tiff,bb045jk9908_0002.tiff,yes,yes,yes,world,world,image/tiff,
+        Image 2,image,2,bb045jk_0002.jp2,bb045jk9908_0002.jp2,yes,yes,yes,world,world,image/jp2,
       CSV
     end
 
