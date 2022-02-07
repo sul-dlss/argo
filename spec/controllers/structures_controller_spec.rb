@@ -41,7 +41,7 @@ RSpec.describe StructuresController do
         put :update, params: { item_id: pid, csv: file }
         expect(StructureUpdater).to have_received(:from_csv)
         expect(object_client).to have_received(:update)
-        expect(response).to have_http_status :see_other
+        expect(response).to have_http_status :redirect
       end
     end
 
@@ -54,7 +54,8 @@ RSpec.describe StructuresController do
         put :update, params: { item_id: pid, csv: file }
         expect(StructureUpdater).not_to have_received(:from_csv)
         expect(object_client).not_to have_received(:update)
-        expect(response).to have_http_status :not_acceptable
+        expect(response).to have_http_status :redirect
+        expect(flash[:error]).to eq 'Updates not allowed on this object.'
       end
     end
   end

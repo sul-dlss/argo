@@ -3,9 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe ContentsComponent, type: :component do
-  let(:component) do
-    described_class.new(document: solr_doc, cocina: cocina, state_service: state_service)
-  end
+  let(:presenter) { instance_double(ArgoShowPresenter, document: solr_doc, cocina: cocina, state_service: state_service) }
+  let(:component) { described_class.new(presenter: presenter) }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
   let(:rendered) { render_inline(component) }

@@ -29,7 +29,7 @@ class StructuresController < ApplicationController
         redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: status.failure.join('\n') }
       end
     else
-      redirect_to solr_document_path(@cocina.externalIdentifier), status: :not_acceptable, flash: { error: 'Updates not allowed on this object.' }
+      redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Updates not allowed on this object.' }
     end
   end
 

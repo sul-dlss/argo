@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class ContentsComponent < ApplicationComponent
-  def initialize(cocina:, document:, state_service:)
-    @cocina = cocina
-    @document = document
-    @state_service = state_service
+  def initialize(presenter:)
+    @document = presenter.document
+    @cocina = presenter.cocina
+    @state_service = presenter.state_service
   end
 
   def render?
