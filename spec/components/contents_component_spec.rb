@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe ContentsComponent, type: :component do
-  let(:component) do
-    described_class.new(document: solr_doc, cocina: cocina)
-  end
+  let(:presenter) { instance_double(ArgoShowPresenter, document: solr_doc, cocina: cocina, state_service: state_service) }
+  let(:component) { described_class.new(presenter: presenter) }
+  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
   let(:rendered) { render_inline(component) }
 
@@ -103,9 +103,25 @@ RSpec.describe ContentsComponent, type: :component do
       allow(controller).to receive(:can?).and_return(true)
     end
 
-    it 'shows multiple external files' do
-      expect(rendered.css('a[href="/items/druid:bg954kx8787/files?id=image.jpg"]').to_html).to include('image.jpg')
-      expect(rendered.css('a[href="/items/druid:bg954kx8787/files?id=image.jp2"]').to_html).to include('image.jp2')
+    context 'with unlocked object' do
+      let(:allows_modification) { true }
+
+      it 'shows multiple external files' do
+        expect(rendered.css('a[href="/items/druid:bg954kx8787/files?id=image.jpg"]').to_html).to include('image.jpg')
+        expect(rendered.css('a[href="/items/druid:bg954kx8787/files?id=image.jp2"]').to_html).to include('image.jp2')
+      end
+
+      it 'shows Upload CSV button' do
+        expect(rendered.css('.bi-upload')).to be_present
+      end
+    end
+
+    context 'with locked object' do
+      let(:allows_modification) { false }
+
+      it 'hides Upload CSV button' do
+        expect(rendered.css('.bi-upload')).not_to be_present
+      end
     end
   end
 end
