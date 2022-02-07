@@ -20,7 +20,7 @@ class CollectionChangeSet < ApplicationChangeSet
   def setup_properties!(_options)
     return unless model.identification
 
-    self.catkey = model.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
+    self.catkey = Catkey.deserialize(model)
   end
 
   def save_model

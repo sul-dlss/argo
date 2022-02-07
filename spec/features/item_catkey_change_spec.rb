@@ -72,7 +72,7 @@ RSpec.describe 'Item catkey change' do
 
     it 'changes the catkey' do
       visit edit_item_catkey_path druid
-      fill_in 'Catkey', with: '12345'
+      fill_in 'Catkey', with: '12345, 99912'
       click_button 'Update'
       expect(page).to have_css '.alert.alert-info', text: 'Catkey for ' \
         "#{druid} has been updated!"
