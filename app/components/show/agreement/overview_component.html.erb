@@ -1,0 +1,39 @@
+<table class="table table-sm mb-5 caption-header">
+    <caption>Overview</caption>
+    <tbody>
+      <tr>
+        <th class="col-3" scope="row">DRUID</th>
+        <td>
+            <%= id %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Admin policy</th>
+        <td>
+          <%= render Show::GovernedByComponent.new(document: @solr_document, state_service: state_service) %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Collection</th>
+        <td>
+          <%= render Show::IsMemberOfComponent.new(document: @solr_document, state_service: state_service) %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Status</th>
+        <td>
+            <%= status %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Access rights</th>
+        <td>
+          <%= render Show::AccessRightsComponent.new(document: @solr_document, state_service: state_service) %>
+        </td>
+      </tr>
+    </tbody>
+  </table>

@@ -1,0 +1,60 @@
+<table class="table table-sm mb-5 caption-header">
+    <caption>Details</caption>
+    <tbody>
+      <tr>
+        <th class="col-3" scope="row">Object type</th>
+        <td>
+            <%= object_type %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Content type</th>
+        <td>
+          <%= render Show::ContentTypeComponent.new(document: @solr_document, state_service: state_service) %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Project</th>
+        <td>
+            <%= project_tag %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Source IDs</th>
+        <td>
+          <%= render Show::SourceIdComponent.new(document: @solr_document, state_service: state_service) %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Created</th>
+        <td>
+            <%= l created_date, format: :long if created_date %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Released to</th>
+        <td>
+            <%= released_to %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Preservation size</th>
+        <td>
+            <%= number_to_human_size(preservation_size) %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Tags</th>
+        <td>
+            <%= tags %> <%= edit_tags %>
+        </td>
+      </tr>
+    </tbody>
+  </table>

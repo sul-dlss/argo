@@ -40,7 +40,7 @@
         </td>
       </tr>
 
-      <% unless admin_policy? %>
+      <% if item? || collection? %>
         <tr>
           <th class="col-3" scope="row">Copyright</th>
           <td>
