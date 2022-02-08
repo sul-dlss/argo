@@ -1,0 +1,46 @@
+<table class="table table-sm mb-5 caption-header">
+    <caption>Details</caption>
+    <tbody>
+      <tr>
+        <th class="col-3" scope="row">Object type</th>
+        <td>
+            <%= object_type %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Project</th>
+        <td>
+            <%= project_tag %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Created</th>
+        <td>
+            <%= l created_date, format: :long if created_date %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Released to</th>
+        <td>
+            <%= released_to %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Catkey</th>
+        <td>
+          <%= render Show::CatkeyComponent.new(change_set: @presenter.change_set, state_service: state_service) %>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Tags</th>
+        <td>
+            <%= tags %> <%= edit_tags %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
