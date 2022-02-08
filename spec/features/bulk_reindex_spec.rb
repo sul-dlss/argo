@@ -7,6 +7,7 @@ RSpec.describe 'Bulk Reindex of DOR Objects' do
 
   before do
     sign_in current_user
+    allow(RemoteIndexingJob).to receive(:perform_later)
   end
 
   it 'Creates a new job' do
@@ -15,9 +16,8 @@ RSpec.describe 'Bulk Reindex of DOR Objects' do
     fill_in 'pids', with: 'druid:ab123gg7777'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
-    reload_page_until_timeout do
-      page.has_css?('td', text: 'RemoteIndexingJob') &&
-        page.has_css?('td', text: 'Processing')
-    end
+    page.has_css?('td', text: 'RemoteIndexingJob') &&
+      page.has_css?('td', text: 'Scheduled Action')
+    expect(RemoteIndexingJob).to have_received(:perform_later)
   end
 end
