@@ -12,6 +12,8 @@
 <div class="row mt-5">
   <div class="col-md-6">
     <%= render Show::OverviewComponent.new(presenter: presenter) %>
+
+    <%= render Show::Apo::DefaultObjectRightsComponent.new(presenter: presenter) %>
   </div>
   <div class="col-md-6">
     <%= render Show::DetailsComponent.new(presenter: presenter) %>
