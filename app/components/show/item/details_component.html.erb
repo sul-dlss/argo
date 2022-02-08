@@ -18,7 +18,7 @@
       <tr>
         <th class="col-3" scope="row">Project</th>
         <td>
-            <%= project_tag %>
+          <%= render Show::ProjectTagComponent.new(document: @presenter.document) %>
         </td>
       </tr>
 
@@ -67,7 +67,7 @@
       <tr>
         <th class="col-3" scope="row">Tags</th>
         <td>
-            <%= tags %> <%= edit_tags %>
+          <%= render Show::TagsComponent.new(document: @presenter.document) %>
         </td>
       </tr>
     </tbody>
