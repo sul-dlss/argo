@@ -284,7 +284,10 @@ RSpec.describe ItemChangeSetPersister do
         expect(fake_client).to have_received(:update).with(
           params: a_cocina_object_with_identification(
             barcode: barcode_before,
-            catalogLinks: [{ catalog: 'symphony', catalogRecordId: new_catkey }]
+            catalogLinks: [
+              { catalog: 'previous symphony', catalogRecordId: catkey_before },
+              { catalog: 'symphony', catalogRecordId: new_catkey }
+            ]
           )
         )
       end
