@@ -28,7 +28,7 @@ class ItemChangeSet < ApplicationChangeSet
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
     if model.identification
-      self.catkey = model.identification.catalogLinks&.find { |link| link.catalog == 'symphony' }&.catalogRecordId
+      self.catkey = Catkey.deserialize(model)
       self.barcode = model.identification.barcode
     end
 

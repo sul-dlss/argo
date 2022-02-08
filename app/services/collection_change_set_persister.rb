@@ -44,9 +44,7 @@ class CollectionChangeSetPersister
 
   def update_identification(updated)
     identification_props = updated.identification&.to_h || {}
-    if changed?(:catkey)
-      identification_props[:catalogLinks] = catkey ? [{ catalog: 'symphony', catalogRecordId: catkey }] : nil
-    end
+    identification_props[:catalogLinks] = Catkey.serialize(catkey) if changed?(:catkey)
     updated.new(identification: identification_props.compact.presence)
   end
 

@@ -7,7 +7,7 @@ RSpec.describe Show::DetailsComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, change_set: change_set, cocina: cocina, state_service: state_service) }
   let(:cocina) { instance_double(Cocina::Models::DRO) }
 
-  let(:change_set) { instance_double(ItemChangeSet, barcode: nil, id: doc.id) }
+  let(:change_set) { instance_double(ItemChangeSet, barcode: nil, id: doc.id, catkey: '') }
   let(:rendered) { render_inline(component) }
   let(:allows_modification) { true }
   let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
