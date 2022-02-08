@@ -153,7 +153,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
         {
           'identification' => {
             'barcode' => barcode,
-            'catalogLinks' => [{ catalog: 'symphony', catalogRecordId: catkey }]
+            'catalogLinks' => [
+              { catalog: 'previous symphony', catalogRecordId: '12346' },
+              { catalog: 'symphony', catalogRecordId: catkey }
+            ]
           }
         }
       )
@@ -226,7 +229,15 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:catkey) { nil }
       let(:barcode) { nil }
 
-      let(:updated_model) { item1.new(identification: nil) }
+      let(:updated_model) do
+        item1.new(
+          {
+            'identification' => {
+              'catalogLinks' => [{ catalog: 'previous symphony', catalogRecordId: '12346' }]
+            }
+          }
+        )
+      end
 
       it 'removes catkey and barcode' do
         expect(subject).to receive(:open_new_version).with(pid, 3, 'Catkey removed. Barcode removed.')
