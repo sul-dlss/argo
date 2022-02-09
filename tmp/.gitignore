@@ -1,4 +1,10 @@
 # Ignore everything in this directory
-*
+/*
+
 # Except this file
-!.gitignore
+!/.gitignore
+
+# And the pids directory needed for Argo to start
+!/pids
+/pids/*
+!/pids/.gitkeep
