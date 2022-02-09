@@ -72,7 +72,6 @@ solrizer_url: 'http://solr:8983/solr/argo'
 spreadsheet_url: 'https://modsulator-app-stage.stanford.edu/v1/spreadsheet'
 stacks_file_url: 'https://stacks-test.stanford.edu/file'
 stacks_url: 'https://stacks-test.stanford.edu/image'
-status_indexer_url: 'https://dor-indexing-app:3000/dor/queue_size.json'
 workflow_url: 'http://localhost:3001'
 
 # Workflow
