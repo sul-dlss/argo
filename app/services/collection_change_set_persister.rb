@@ -16,7 +16,7 @@ class CollectionChangeSetPersister
 
   def update
     updated = model
-    updated = update_identification(updated) if changed?(:source_id) || changed?(:catkey) || changed?(:barcode)
+    updated = update_identification(updated) if changed?(:source_id) || changed?(:catkey)
     updated = updated_access(updated) if access_changed?
     updated = updated_administrative(updated) if changed?(:admin_policy_id)
     object_client.update(params: updated)

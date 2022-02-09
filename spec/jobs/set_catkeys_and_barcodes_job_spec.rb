@@ -232,8 +232,9 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:updated_model) do
         item1.new(
           {
-            'identification' => {
-              'catalogLinks' => [{ catalog: 'previous symphony', catalogRecordId: '12346' }]
+            identification: {
+              barcode: nil,
+              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: '12346' }]
             }
           }
         )
