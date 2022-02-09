@@ -8,15 +8,15 @@ RSpec.describe VirtualObjectsCreator do
   let(:virtual_objects) do
     [
       {
-        parent_id: 'druid:one123',
-        child_ids: [
+        virtual_object_id: 'druid:one123',
+        constituent_ids: [
           'druid:two234',
           'druid:thr345'
         ]
       },
       {
-        parent_id: 'druid:fou456',
-        child_ids: [
+        virtual_object_id: 'druid:fou456',
+        constituent_ids: [
           'druid:fiv567',
           'druid:six678',
           'druid:sev789'
@@ -97,8 +97,8 @@ RSpec.describe VirtualObjectsCreator do
       it 'returns an array of error strings' do
         expect(creator.create).to eq(
           [
-            'Problem children for druid:one123: druid:thr345',
-            'Problem children for druid:fou456: druid:six678 and druid:sev789'
+            'Problematic objects for druid:one123: druid:thr345',
+            'Problematic objects for druid:fou456: druid:six678 and druid:sev789'
           ]
         )
       end
