@@ -42,10 +42,10 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
 2. **Start up the docker services needed for testing**
 
-    Once everything has been successfully pulled, start up the docker services needed for testing
+    Once everything has been successfully pulled, start up the docker services needed for testing (all but the web container)
 
     ```
-    docker-compose up -d dor-services-app dor-indexing-app techmd
+    docker-compose up -d sdr-api techmd
     ```
 
     You should do the following to make sure all the services are up:
