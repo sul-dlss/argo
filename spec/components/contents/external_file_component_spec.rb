@@ -3,18 +3,15 @@
 require 'rails_helper'
 
 RSpec.describe Contents::ExternalFileComponent, type: :component do
-  let(:component) { described_class.new(external_file: id) }
+  let(:component) { described_class.new(druid: id) }
   let(:rendered) { render_inline(component) }
-  let(:id) { 'kg748gk9672_1/1642a.jp2' }
+  let(:id) { 'druid:bf746ns6287' }
 
   it 'renders the component' do
     expect(rendered.css('li').to_html)
-      .to include '1642a.jp2'
+      .to include 'druid:bf746ns6287'
 
     expect(rendered.css('li a').to_html)
-      .to eq '<a href="/view/druid:kg748gk9672">druid:kg748gk9672</a>'
-
-    expect(rendered.css('li').to_html)
-      .to include "resource 'kg748gk9672_1'"
+      .to eq '<a href="/view/druid:bf746ns6287">druid:bf746ns6287</a>'
   end
 end
