@@ -14,9 +14,9 @@ class CreateVirtualObjectsJob < GenericJob
   end
 
   NOT_COMBINABLE_MESSAGE = 'Creating some or all virtual objects failed because some objects are not combinable'
-  NOT_FOUND_MESSAGE = 'Could not create virtual objects because the following parent druids were not found'
+  NOT_FOUND_MESSAGE = 'Could not create virtual objects because the following virtual object druids were not found'
   SUCCESS_MESSAGE = 'Successfully created virtual objects'
-  UNAUTHORIZED_MESSAGE = 'Could not create virtual objects because user lacks ability to manage the following parent druids'
+  UNAUTHORIZED_MESSAGE = 'Could not create virtual objects because user lacks ability to manage the following virtual object druids'
 
   ##
   # A job that creates virtual objects
@@ -34,7 +34,7 @@ class CreateVirtualObjectsJob < GenericJob
       update_druid_count(count: virtual_objects.length)
 
       # NOTE: `ability` is defined in this job's superclass, `GenericJob`
-      not_found_druids, unauthorized_druids = ProblematicDruidFinder.find(druids: parent_ids_from(virtual_objects), ability: ability)
+      not_found_druids, unauthorized_druids = ProblematicDruidFinder.find(druids: virtual_object_ids_from(virtual_objects), ability: ability)
       problematic_druids = not_found_druids + unauthorized_druids
 
       if problematic_druids.any?
@@ -42,15 +42,15 @@ class CreateVirtualObjectsJob < GenericJob
         log.puts("#{Time.current} #{NOT_FOUND_MESSAGE}: #{not_found_druids.to_sentence}") if not_found_druids.any?
         bulk_action.increment!(:druid_count_fail, problematic_druids.length)
 
-        # Short-circuit if all parent druids were problematic
+        # Short-circuit if all virtual object druids were problematic
         if problematic_druids.length == virtual_objects.length
           log.puts("#{Time.current} No virtual objects could be created. See other log entries for more detail.")
           log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
           return
         end
 
-        # Only *some* parent druids were problematic, so remove them from the list of objects to be operated upon
-        virtual_objects.reject! { |virtual_object| problematic_druids.include?(virtual_object[:parent_id]) }
+        # Only *some* virtual object druids were problematic, so remove them from the list of objects to be operated upon
+        virtual_objects.reject! { |virtual_object| problematic_druids.include?(virtual_object[:virtual_object_id]) }
       end
 
       errors = VirtualObjectsCreator.create(virtual_objects: virtual_objects)
@@ -59,7 +59,7 @@ class CreateVirtualObjectsJob < GenericJob
       ActiveRecord::Base.clear_active_connections!
       if errors.empty?
         bulk_action.increment!(:druid_count_success, virtual_objects.length)
-        log.puts("#{Time.current} #{SUCCESS_MESSAGE}: #{parent_ids_from(virtual_objects).to_sentence}")
+        log.puts("#{Time.current} #{SUCCESS_MESSAGE}: #{virtual_object_ids_from(virtual_objects).to_sentence}")
       else
         bulk_action.increment!(:druid_count_success, virtual_objects.length - errors.length)
         bulk_action.increment!(:druid_count_fail, errors.length)
@@ -72,7 +72,7 @@ class CreateVirtualObjectsJob < GenericJob
 
   private
 
-  def parent_ids_from(virtual_objects)
-    virtual_objects.map { |hash| hash[:parent_id] }
+  def virtual_object_ids_from(virtual_objects)
+    virtual_objects.map { |hash| hash[:virtual_object_id] }
   end
 end

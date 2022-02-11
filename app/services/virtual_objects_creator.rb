@@ -29,7 +29,7 @@ class VirtualObjectsCreator
     Honeybadger.notify("WARN: Argo virtual object job errors from #{background_result_url}: #{job_output[:errors].inspect}")
 
     job_output[:errors].map do |error|
-      "Problem children for #{error.keys.first}: #{error.values.flatten.to_sentence}"
+      "Problematic objects for #{error.keys.first}: #{error.values.flatten.to_sentence}"
     end
   end
 

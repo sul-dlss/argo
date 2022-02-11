@@ -33,12 +33,12 @@ RSpec.describe VirtualObjectsCsvConverter do
       expect(subject.convert).to eq(
         [
           {
-            parent_id: 'druid:parent1',
-            child_ids: %w[druid:child1 druid:child2]
+            virtual_object_id: 'druid:parent1',
+            constituent_ids: %w[druid:child1 druid:child2]
           },
           {
-            parent_id: 'druid:parent2',
-            child_ids: %w[druid:child3 druid:child4 druid:child5]
+            virtual_object_id: 'druid:parent2',
+            constituent_ids: %w[druid:child3 druid:child4 druid:child5]
           }
         ]
       )
@@ -51,12 +51,12 @@ RSpec.describe VirtualObjectsCsvConverter do
         expect(subject.convert).to eq(
           [
             {
-              parent_id: 'druid:parent1',
-              child_ids: %w[druid:child1 druid:child2]
+              virtual_object_id: 'druid:parent1',
+              constituent_ids: %w[druid:child1 druid:child2]
             },
             {
-              parent_id: 'druid:parent2',
-              child_ids: %w[druid:child3 druid:child4 druid:child5]
+              virtual_object_id: 'druid:parent2',
+              constituent_ids: %w[druid:child3 druid:child4 druid:child5]
             }
           ]
         )
@@ -70,12 +70,12 @@ RSpec.describe VirtualObjectsCsvConverter do
         expect(subject.convert).to eq(
           [
             {
-              parent_id: 'druid:parent1',
-              child_ids: %w[druid:child1 druid:child2]
+              virtual_object_id: 'druid:parent1',
+              constituent_ids: %w[druid:child1 druid:child2]
             },
             {
-              parent_id: 'druid:parent2',
-              child_ids: %w[druid:child3 druid:child4 druid:child5]
+              virtual_object_id: 'druid:parent2',
+              constituent_ids: %w[druid:child3 druid:child4 druid:child5]
             }
           ]
         )
@@ -89,8 +89,8 @@ RSpec.describe VirtualObjectsCsvConverter do
         expect(subject.convert).to eq(
           [
             {
-              parent_id: 'druid:parent1',
-              child_ids: %w[druid:child1 druid:child2]
+              virtual_object_id: 'druid:parent1',
+              constituent_ids: %w[druid:child1 druid:child2]
             }
           ]
         )
