@@ -8,6 +8,8 @@ RSpec.describe StateService do
 
     before do
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
+      allow(workflow_client).to receive(:workflow_status).with(druid: pid, process: 'accessioning-initiate', workflow: 'assemblyWF').and_return(false)
+      allow(workflow_client).to receive(:lifecycle).with(druid: pid, milestone_name: 'accessioned').and_return(false)
     end
 
     let(:pid) { 'ab12cd3456' }
@@ -18,24 +20,26 @@ RSpec.describe StateService do
 
       context "if the object hasn't been submitted" do
         before do
-          allow(workflow_client).to receive(:lifecycle).and_return(false)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'submitted', version: 4).and_return(false)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'opened', version: 4).and_return(false)
         end
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted', version: 4)
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'opened', version: 4).twice
         end
       end
 
       context 'if there is an open version' do
         before do
-          allow(workflow_client).to receive(:lifecycle).and_return(true)
-          allow(workflow_client).to receive(:active_lifecycle).and_return(true)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'submitted', version: 4).and_return(false)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'opened', version: 4).and_return(true)
         end
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted', version: 4)
           expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'opened', version: 4)
         end
       end
@@ -46,24 +50,26 @@ RSpec.describe StateService do
 
       context "if the object hasn't been submitted" do
         before do
-          allow(workflow_client).to receive(:lifecycle).and_return(false)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'submitted', version: 3).and_return(false)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'opened', version: 3).and_return(false)
         end
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted', version: 3)
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'opened', version: 3).twice
         end
       end
 
       context 'if there is an open version' do
         before do
-          allow(workflow_client).to receive(:lifecycle).and_return(true)
-          allow(workflow_client).to receive(:active_lifecycle).and_return(true)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'submitted', version: 3).and_return(false)
+          allow(workflow_client).to receive(:active_lifecycle).with(druid: pid, milestone_name: 'opened', version: 3).and_return(true)
         end
 
         it 'returns true' do
           expect(allows_modification?).to be true
-          expect(workflow_client).to have_received(:lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted')
+          expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'submitted', version: 3)
           expect(workflow_client).to have_received(:active_lifecycle).with(druid: 'ab12cd3456', milestone_name: 'opened', version: 3)
         end
       end
