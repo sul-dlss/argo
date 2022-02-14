@@ -48,7 +48,7 @@ class DatastreamsController < ApplicationController
     end
 
     respond_to do |format|
-      format.any { redirect_to solr_document_path(params[:item_id]), notice: msg, flash: { error: truncate_flash(error_msg) } }
+      format.any { redirect_to solr_document_path(params[:item_id]), notice: msg, flash: { error: error_msg&.truncate(254) } }
     end
   end
 
@@ -83,9 +83,5 @@ class DatastreamsController < ApplicationController
     @response, @document = search_service.fetch pid # this does the authorization
     @cocina = maybe_load_cocina(pid)
     @object_client = Dor::Services::Client.object(pid)
-  end
-
-  def truncate_flash(flash)
-    flash.length > 254 ? flash[0, 254] : flash
   end
 end
