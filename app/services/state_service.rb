@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 class StateService
-  # having version is preferred as without it, a call to
-  # Dor::Services client will be made to retrieve it.
-  def initialize(pid, version: nil)
+  def initialize(pid, version:)
     @pid = pid
-    @version = version || Dor::Services::Client.object(pid).version.current
+    @version = version
   end
 
   def allows_modification?

@@ -8,6 +8,8 @@ RSpec.describe 'Enable buttons' do
     solr_conn.add(id: item_id, objectType_ssim: 'item')
     solr_conn.commit
     allow(StateService).to receive(:new).and_return(state_service)
+    allow(state_service).to receive(:published?).and_return(true)
+    allow(state_service).to receive(:object_state).and_return(:unlock)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
@@ -39,8 +41,7 @@ RSpec.describe 'Enable buttons' do
                          })
   end
 
-  it 'buttons are enabled if their services return true', js: true do
-    allow_any_instance_of(Dor::Workflow::Client).to receive(:active_lifecycle).and_return(true, false)
+  it 'buttons are enabled if the state services return unlock', js: true do
     visit solr_document_path item_id
     expect(page).to have_css 'a[title="Close Version"]'
     expect(page).not_to have_css 'a.disabled', text: 'Republish'

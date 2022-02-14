@@ -24,6 +24,8 @@ RSpec.describe 'Consistent titles' do
     before do
       allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+      allow(version_client).to receive(:current).and_return(1)
+      allow(workflow_client).to receive(:workflow_status).and_return(false)
     end
 
     let(:pid) { 'druid:hj185xx2222' }
