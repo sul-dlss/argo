@@ -58,6 +58,42 @@ RSpec.describe SolrDocument, type: :model do
     end
   end
 
+  describe '#constituents' do
+    context 'when field present' do
+      let(:constituents) { ['druid:item1', 'druid:item2'] }
+      let(:document_attributes) do
+        {
+          SolrDocument::FIELD_CONSTITUENTS => constituents,
+          SolrDocument::FIELD_OBJECT_TYPE => ['item']
+        }
+      end
+
+      it 'returns the constituents' do
+        expect(document.constituents).to eq(constituents)
+      end
+
+      it 'knows it is a virtual object' do
+        expect(document).to be_virtual_object
+      end
+    end
+
+    context 'when field not present' do
+      let(:document_attributes) do
+        {
+          SolrDocument::FIELD_OBJECT_TYPE => ['item']
+        }
+      end
+
+      it 'returns nil' do
+        expect(document.constituents).to be_empty
+      end
+
+      it 'knows it is not a virtual object' do
+        expect(document).not_to be_virtual_object
+      end
+    end
+  end
+
   describe '#title' do
     subject(:title) { document.title }
 
