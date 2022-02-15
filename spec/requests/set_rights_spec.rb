@@ -461,6 +461,7 @@ RSpec.describe 'Set rights for an object' do
       before do
         allow(Blacklight::SearchService).to receive(:new).and_return(service)
         allow(object_client).to receive(:find).and_raise(Dor::Services::Client::UnexpectedResponse, "Error (#{error})")
+        allow(version_client).to receive(:current).and_return(1)
       end
 
       it 'redirects to the show page with an error' do

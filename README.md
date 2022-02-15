@@ -161,8 +161,8 @@ This starts css/js bundling and the development server
 
 To begin registering items in the Argo UI, there will need to be at least one agreement object and one APO object in the index. To create and index one of each of these objects, run the following command:
 
-```shell
-$ docker compose exec web bin/rails db:seed
+```
+docker compose exec web bin/rails db:seed
 ```
 
 ## Internals
