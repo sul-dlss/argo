@@ -64,6 +64,11 @@ gem 'rubyzip'
 gem 'turbo-rails', '~> 0.8.2'
 gem 'zip_tricks', '5.3.1' # 5.3.1 is required as 5.4+ breaks the download all feature
 
+# openapi_parser is an indirect dependency that's being pinned for now, because 1.0 introduces
+# stricter date-time format parsing, which breaks the test suite
+# see https://app.circleci.com/pipelines/github/sul-dlss/argo/3007/workflows/17473c95-b882-4d9b-a167-7ac16849573b/jobs/6771
+gem 'openapi_parser', '< 1.0'
+
 # Stanford related gems
 gem 'blacklight', '~> 7.20'
 gem 'blacklight-hierarchy', '~> 5.1'
