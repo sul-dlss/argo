@@ -9,7 +9,7 @@
     <%= purge_button %>
   <% else %>
     <%= reindex_button %>
-    <%= add_workflow_button %>
+    <%= manage_release %>
     <div class="dropdown d-inline-block">
       <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
         Manage PURL
@@ -29,9 +29,9 @@
                         } %></li>
       </ul>
     </div>
+    <%= add_workflow_button %>
     <%= purge_button %>
     <%= refresh_metadata if symphony_record? %>
-    <%= manage_release %>
     <%= create_embargo %>
   <% end %>
 </div>
