@@ -85,7 +85,8 @@ apo:
 sdr_api:
   email: argo@dlss.sul.stanford.edu
   password: notusedanywhere
-  url: https://sdr-api-stage.stanford.edu
+  url: http://localhost:3006
+
 
 # These workflows are inactive, and the workflow-server doesn't know about them
 # so we don't draw them on the workflow grid
