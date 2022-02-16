@@ -10,7 +10,7 @@ class AgreementsController < ApplicationController
     if @form.validate(params[:agreement]) && @form.save
       redirect_to solr_document_path(@form.model.externalIdentifier), notice: 'Agreement created.'
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 end
