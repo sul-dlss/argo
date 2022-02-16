@@ -283,10 +283,14 @@ class ItemsController < ApplicationController
   def update
     change_set = ItemChangeSet.new(@cocina)
     attributes = params.require(:item).permit(:barcode, :copyright, :use_statement, :license)
-    change_set.validate(**attributes)
-    change_set.save # may raise Dor::Services::Client::BadRequestError
-    reindex
-    redirect_to solr_document_path(params[:id]), status: :see_other
+    if change_set.validate(**attributes)
+      change_set.save # may raise Dor::Services::Client::BadRequestError
+      reindex
+      redirect_to solr_document_path(params[:id]), status: :see_other
+    else
+      logger.error "Errors: #{change_set.errors.full_messages.join}"
+      render 'error', locals: { message: message }
+    end
   end
 
   def rights

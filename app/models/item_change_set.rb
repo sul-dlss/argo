@@ -14,7 +14,8 @@ class ItemChangeSet < ApplicationChangeSet
   property :barcode, virtual: true
 
   validates :embargo_access, inclusion: {
-    in: Constants::REGISTRATION_RIGHTS_OPTIONS.map(&:second)
+    in: Constants::REGISTRATION_RIGHTS_OPTIONS.map(&:second),
+    allow_blank: true
   }
 
   def self.model_name
@@ -51,6 +52,7 @@ class ItemChangeSet < ApplicationChangeSet
                           end
   end
 
+  # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
   def save_model
     ItemChangeSetPersister.update(model, self)
   end
