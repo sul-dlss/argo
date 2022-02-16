@@ -18,9 +18,10 @@ class CollectionChangeSet < ApplicationChangeSet
 
   # When the object is initialized, copy the properties from the cocina model to the form:
   def setup_properties!(_options)
-    return unless model.identification
-
-    self.catkey = Catkey.deserialize(model)
+    self.catkey = Catkey.deserialize(model) if model.identification
+    self.copyright = model.access.copyright
+    self.use_statement = model.access.useAndReproductionStatement
+    self.license = model.access.license
   end
 
   def save_model

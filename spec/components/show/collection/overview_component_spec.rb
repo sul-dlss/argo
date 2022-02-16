@@ -11,7 +11,12 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
                                    type: Cocina::Models::Vocab.collection,
                                    label: '',
                                    version: 1,
-                                   access: {},
+                                   access: {
+                                     access: 'world',
+                                     copyright: 'This collection is in the Public Domain.',
+                                     useAndReproductionStatement: 'Must be used underwater',
+                                     license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode'
+                                   },
                                    administrative: {
                                      hasAdminPolicy: 'druid:hv992ry2431'
                                    })
@@ -29,6 +34,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
   context 'with a Collection' do
     let(:doc) do
       SolrDocument.new('id' => 'druid:kv840xx0000',
+                       SolrDocument::FIELD_ACCESS_RIGHTS => 'world',
                        SolrDocument::FIELD_OBJECT_TYPE => 'collection')
     end
 
@@ -38,6 +44,13 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
       expect(edit_copyright_button).to be_present
       expect(edit_license_button).to be_present
       expect(edit_use_statement_button).to be_present
+    end
+
+    it 'shows the values' do
+      expect(rendered.to_html).to include 'world'
+      expect(rendered.to_html).to include 'This collection is in the Public Domain.'
+      expect(rendered.to_html).to include 'Must be used underwater'
+      expect(rendered.to_html).to include 'Attribution Non-Commercial Share Alike 3.0 Unported'
     end
   end
 end
