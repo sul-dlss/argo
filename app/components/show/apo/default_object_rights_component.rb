@@ -9,10 +9,6 @@ module Show
         @default_access = @presenter.cocina.administrative.defaultAccess
       end
 
-      def access_rights
-        @default_access.access
-      end
-
       def copyright
         @default_access.copyright || 'None'
       end
