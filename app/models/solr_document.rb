@@ -30,6 +30,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   FIELD_CURRENT_VERSION           = 'current_version_isi'
   FIELD_STATUS                    = 'status_ssi'
   FIELD_ACCESS_RIGHTS             = 'rights_descriptions_ssim'
+  FIELD_DEFAULT_ACCESS_RIGHTS     = 'default_rights_descriptions_ssim'
   FIELD_COPYRIGHT                 = 'copyright_ssim'
   FIELD_USE_STATEMENT             = 'use_statement_ssim'
   FIELD_LICENSE                   = 'use_license_machine_ssi'
@@ -66,6 +67,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   attribute :mods_created_date, Blacklight::Types::String, FIELD_MODS_CREATED_DATE
   attribute :status, Blacklight::Types::String, FIELD_STATUS
   attribute :access_rights, Blacklight::Types::String, FIELD_ACCESS_RIGHTS
+  attribute :default_access_rights, Blacklight::Types::String, FIELD_DEFAULT_ACCESS_RIGHTS
   attribute :copyright, Blacklight::Types::String, FIELD_COPYRIGHT
   attribute :use_statement, Blacklight::Types::String, FIELD_USE_STATEMENT
   attribute :license, Blacklight::Types::String, FIELD_LICENSE
