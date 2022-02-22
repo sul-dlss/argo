@@ -116,7 +116,7 @@ end
 group :deployment do
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
-  gem 'dlss-capistrano', '~> 3.1'
+  gem 'dlss-capistrano', require: false
 end
 
 group :production do
