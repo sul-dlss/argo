@@ -181,13 +181,7 @@ class ItemsController < ApplicationController
 
     Dor::Services::Client.object(@cocina.externalIdentifier).refresh_metadata
 
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: 'Refreshed.' }
-      else
-        format.any { redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from catkey: #{catkey}" }
-      end
-    end
+    redirect_to solr_document_path(params[:id]), notice: "Metadata for #{@cocina.externalIdentifier} successfully refreshed from catkey: #{catkey}"
   rescue Dor::Services::Client::UnexpectedResponse => e
     user_begin = 'An error occurred while attempting to refresh metadata'
     user_end = 'Please try again or contact the #dlss-infrastructure Slack channel for assistance.'

@@ -15,6 +15,7 @@ class BulkAction < ApplicationRecord
                      SetCatkeysAndBarcodesJob
                      SetCatkeysAndBarcodesCsvJob
                      PrepareJob
+                     RefreshModsJob
                      RepublishJob
                      CloseVersionJob
                      ChecksumReportJob

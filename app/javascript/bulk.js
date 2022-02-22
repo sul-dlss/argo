@@ -104,10 +104,6 @@ function apply_apo_defaults(druids) {
 	process_post(druids, apo_apply_defaults_url, {}, 'Defaults_applied.')
 }
 
-function refresh_metadata(druids){
-	process_post(druids, refresh_metadata_url, {}, "Updated.");
-}
-
 function get_druids() {
 	var log = document.getElementById('pids');
 	$('#pid_list').show(400);
@@ -266,7 +262,6 @@ document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
 	$('#prepare').on('click', () => $('#open').show(400))
-	$('#refresh-mods-button').on('click', () => $('#refresh_metadata').show(400))
 	$('#show_source_id').on('click', () => {
 		$('#source_id').show(400)
 	  get_source_ids()
@@ -295,11 +290,6 @@ document.addEventListener("turbo:load", () => {
 	$('#confirm-set-content-type-button').on('click', () => {
 		fetch_druids(set_content_type)
 		$('#content_type').hide(400)
-	})
-
-	$('#confirm-refresh-metadata-button').on('click', () => {
-		fetch_druids(refresh_metadata)
-		$('#refresh_metadata').hide(400)
 	})
 
   $('#set_tags').on('click', () => {
