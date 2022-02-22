@@ -115,14 +115,22 @@
     border: 1px solid $silver-sand;
   }
 
-  .caption-header > caption {
-    caption-side: top;
+  .header {
     font-weight: 700;
     font-size: large;
     line-height: 1.5;
-    @extend .table-light;
-    background-color: $silver-sand;
-    color: $black;
     padding: 0.25rem;
+  }
+
+  .table-light {
+    --bs-table-bg: #{$table-border-color};
+    @extend .header;
+  }
+
+  .caption-header > caption {
+    caption-side: top;
+    @extend .header;
+    background-color: $silver-sand;
+    color: $body-color;
   }
 }

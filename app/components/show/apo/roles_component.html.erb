@@ -1,0 +1,13 @@
+<table class="table table-sm mb-5">
+    <thead class="table-light">
+      <tr>
+        <th>Group name</th>
+        <th>Role</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= render Show::Apo::GrantComponent.with_collection(permissions) %>
+    </tbody>
+  </table>
