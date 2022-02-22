@@ -2,6 +2,8 @@
 
 # Manages HTTP interactions for creating collections
 class CollectionsController < ApplicationController
+  include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
+
   def new
     @cocina = maybe_load_cocina(params[:apo_id])
     authorize! :manage_item, @cocina
@@ -58,7 +60,30 @@ class CollectionsController < ApplicationController
     render json: resp.to_json, layout: false
   end
 
+  # render the count of collections
+  def count
+    query = "_query_:\"{!raw f=#{CollectionConcern::FIELD_COLLECTION_ID}}info:fedora/#{params[:id]}\""
+    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+
+    path_for_facet = link_to_collection
+
+    render partial: 'count', locals: { count: result.dig('response', 'numFound'), path_for_facet: path_for_facet }
+  end
+
+  def search_action_path(*args)
+    search_catalog_path(*args)
+  end
+
   private
+
+  def link_to_collection
+    facet_config = facet_configuration_for_field(CollectionConcern::FIELD_COLLECTION_ID)
+    search_state = Blacklight::SearchState.new({}, blacklight_config)
+    Blacklight::FacetItemPresenter.new("info:fedora/#{params[:id]}",
+                                       facet_config,
+                                       self,
+                                       CollectionConcern::FIELD_COLLECTION_ID, search_state).href
+  end
 
   def collection_exists?(title:, catkey:)
     return false unless title || catkey
@@ -67,10 +92,12 @@ class CollectionsController < ApplicationController
     query += " AND #{SolrDocument::FIELD_LABEL}:\"#{title}\"" if title
     query += " AND identifier_ssim:\"catkey:#{params[:catkey]}\"" if catkey
 
-    blacklight_config = CatalogController.blacklight_config
-    conn = blacklight_config.repository_class.new(blacklight_config).connection
-    result = conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
     result.dig('response', 'numFound').to_i.positive?
+  end
+
+  def solr_conn
+    @solr_conn ||= blacklight_config.repository_class.new(blacklight_config).connection
   end
 
   def object_client

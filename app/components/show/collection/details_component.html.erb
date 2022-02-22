@@ -30,6 +30,13 @@
       </tr>
 
       <tr>
+        <th class="col-3" scope="row"># of items</th>
+        <td>
+            <turbo-frame id="collection-member-count" src="<%= count_collection_path(id) %>"></turbo-frame>
+        </td>
+      </tr>
+
+      <tr>
         <th class="col-3" scope="row">Catkey</th>
         <td>
           <%= render Show::CatkeyComponent.new(change_set: @presenter.change_set, state_service: state_service) %>
