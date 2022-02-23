@@ -57,6 +57,9 @@ Rails.application.routes.draw do
   end
 
   resources :collections, only: :update do
+    member do
+      get :count
+    end
     collection do
       get :exists
     end
