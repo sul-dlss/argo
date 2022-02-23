@@ -5,7 +5,7 @@
     <%= render Show::Item::ThumbnailComponent.new(document: document) %>
   </div>
   <div class="col-md-9">
-    <%= render ExternalLinksComponent.new(document: document) %>
+    <%= render Show::ExternalLinksComponent.new(document: document) %>
     <%= render Show::ControlsComponent.new(solr_document: document, manager: helpers.can?(:manage_item, presenter.cocina)) %>
   </div>
 </div>

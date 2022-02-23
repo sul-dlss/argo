@@ -8,7 +8,7 @@ module Show
       @document = document
     end
 
-    delegate :admin_policy?, to: :@document
+    delegate :publishable?, to: :@document
 
     def purl_link
       link_to 'PURL', File.join(Settings.purl_url, document.druid),

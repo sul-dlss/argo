@@ -101,8 +101,17 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
     embargo_status == 'embargoed'
   end
 
+  # @return [boolean] true if NOT an adminPolicy or an agreement
+  def publishable?
+    item? || collection?
+  end
+
   def admin_policy?
     object_type == 'adminPolicy'
+  end
+
+  def agreement?
+    object_type == 'agreement'
   end
 
   def item?
