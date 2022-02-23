@@ -5,9 +5,6 @@ require 'rails_helper'
 RSpec.describe 'Register an Agreement', js: true do
   include Dry::Monads[:result]
   let(:user) { create(:user) }
-  let(:conn) { instance_double(SdrClient::Connection) }
-  let(:blacklight_config) { CatalogController.blacklight_config }
-  let(:solr_conn) { blacklight_config.repository_class.new(blacklight_config).connection }
 
   before do
     sign_in user, groups: ['sdr:administrator-role']
