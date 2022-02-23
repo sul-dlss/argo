@@ -26,6 +26,38 @@ RSpec.describe SolrDocument, type: :model do
     end
   end
 
+  describe '#publishable?' do
+    subject { document.publishable? }
+
+    let(:document_attributes) do
+      { SolrDocument::FIELD_OBJECT_TYPE => [type] }
+    end
+
+    context 'when item' do
+      let(:type) { 'item' }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when collection' do
+      let(:type) { 'collection' }
+
+      it { is_expected.to be true }
+    end
+
+    context 'when agreement' do
+      let(:type) { 'agreement' }
+
+      it { is_expected.to be false }
+    end
+
+    context 'when adminPolicy' do
+      let(:type) { 'adminPolicy' }
+
+      it { is_expected.to be false }
+    end
+  end
+
   describe '#title' do
     subject(:title) { document.title }
 

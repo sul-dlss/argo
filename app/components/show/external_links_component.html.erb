@@ -1,14 +1,16 @@
 <section class="mb-3">
   <h3 class="button-header">View in new window</h3>
   <ul class="nav flex">
-    <li class="nav-item"><%= mods_link %></li>
-    <% unless admin_policy? %>
+    <% if publishable? %>
+      <li class="nav-item"><%= mods_link %></li>
       <li class="nav-item"><%= purl_link %></li>
       <li class="nav-item"><%= searchworks_link %></li>
     <% end %>
     <li class="nav-item"><%= cocina_link %></li>
     <li class="nav-item"><%= solr_link %></li>
-    <li class="nav-item"><%= dublin_core_link %></li>
+    <% if publishable? %>
+      <li class="nav-item"><%= dublin_core_link %></li>
+    <% end %>
     <li class="nav-item"><%= dor_link %></li>
   </ul>
 </section>

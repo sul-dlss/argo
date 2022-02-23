@@ -2,33 +2,36 @@
 
 require 'rails_helper'
 
-RSpec.describe ExternalLinksComponent, type: :component do
+RSpec.describe Show::ExternalLinksComponent, type: :component do
   before do
     render_inline(described_class.new(document: document))
   end
 
-  context 'for a admin policy' do
+  context 'for a non-publishable item (adminPolicy)' do
     let(:document) do
       instance_double(SolrDocument, id: 'druid:ab123cd3445',
                                     to_param: 'druid:ab123cd3445',
                                     druid: 'ab123cd3445',
-                                    admin_policy?: true)
+                                    publishable?: false)
     end
 
     it 'links to Solr and Cocina' do
       expect(page).not_to have_link 'SearchWorks'
+      expect(page).not_to have_link 'MODS'
       expect(page).not_to have_link 'PURL'
+      expect(page).not_to have_link 'Dublin Core'
+
       expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
       expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
     end
   end
 
-  context 'for a DRO' do
+  context 'for a publishable item (DRO)' do
     let(:document) do
       instance_double(SolrDocument, id: 'druid:ab123cd3445',
                                     to_param: 'druid:ab123cd3445',
                                     druid: 'ab123cd3445',
-                                    admin_policy?: false,
+                                    publishable?: true,
                                     catkey: catkey, released_to: released_to)
     end
     let(:catkey) { nil }
@@ -43,6 +46,8 @@ RSpec.describe ExternalLinksComponent, type: :component do
         expect(page).to have_link 'PURL', href: 'https://sul-purl-stage.stanford.edu/ab123cd3445'
         expect(page).to have_link 'Solr document', href: '/view/druid:ab123cd3445.json'
         expect(page).to have_link 'Cocina model', href: '/items/druid:ab123cd3445.json'
+        expect(page).to have_link 'PURL'
+        expect(page).to have_link 'Dublin Core'
       end
     end
 
