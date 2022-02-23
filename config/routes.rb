@@ -68,7 +68,9 @@ Rails.application.routes.draw do
       get :spreadsheet_template
     end
     member do
-      get  'delete_collection'
+      get 'delete_collection'
+      get 'count_collections'
+      get 'count_items'
     end
   end
 
