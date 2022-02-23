@@ -162,7 +162,7 @@ GEM
     disposable (0.6.2)
       declarative (>= 0.0.9, < 1.0.0)
       representable (>= 3.1.1, < 3.2.0)
-    dlss-capistrano (3.11.1)
+    dlss-capistrano (4.0.0)
       capistrano (~> 3.0)
       capistrano-bundle_audit (>= 0.3.0)
       capistrano-one_time_key
@@ -583,7 +583,7 @@ DEPENDENCIES
   cssbundling-rails (~> 0.2.4)
   devise
   devise-remote-user (~> 1.0)
-  dlss-capistrano (~> 3.1)
+  dlss-capistrano
   dor-services-client (~> 7.10)
   dor-workflow-client (~> 3.19)
   druid-tools
