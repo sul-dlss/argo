@@ -33,23 +33,47 @@ RSpec.describe 'Set the properties for a collection' do
                            })
     end
 
-    let(:updated_model) do
-      cocina_model.new(
-        {
-          'access' => {
-            'copyright' => 'in public domain'
+    context 'when copyright is passed' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            'access' => {
+              'copyright' => 'in public domain'
+            }
           }
-        }
-      )
+        )
+      end
+
+      it 'sets the new copyright' do
+        patch "/collections/#{pid}", params: { collection: { copyright: 'in public domain' } }
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
+      end
     end
 
-    it 'sets the new copyright' do
-      patch "/collections/#{pid}", params: { collection: { copyright: 'in public domain' } }
+    context 'when project is passed' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            administrative: {
+              partOfProject: 'pegasus',
+              hasAdminPolicy: 'druid:cg532dg5405'
+            }
+          }
+        )
+      end
 
-      expect(object_client).to have_received(:update)
-        .with(params: updated_model)
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
-      expect(response.code).to eq('303')
+      it 'sets the new project' do
+        patch "/collections/#{pid}", params: { collection: { project: 'pegasus' } }
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
+      end
     end
   end
 end

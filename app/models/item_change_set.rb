@@ -12,6 +12,7 @@ class ItemChangeSet < ApplicationChangeSet
   property :source_id, virtual: true
   property :use_statement, virtual: true
   property :barcode, virtual: true
+  property :project, virtual: true
 
   validates :embargo_access, inclusion: {
     in: Constants::REGISTRATION_RIGHTS_OPTIONS.map(&:second),
@@ -36,6 +37,7 @@ class ItemChangeSet < ApplicationChangeSet
     self.copyright = model.access.copyright
     self.use_statement = model.access.useAndReproductionStatement
     self.license = model.access.license
+    self.project = model.administrative.partOfProject
 
     setup_embargo_properties! if model.access.embargo
   end

@@ -1,0 +1,12 @@
+<%= turbo_frame_tag 'project' do %>
+  <%= form_with model: @change_set do |f| %>
+    <div class="mb-3">
+      <%= f.label :project, class: 'visually-hidden' %>
+      <%= f.text_field :project, class: 'form-control' %>
+    </div>
+    <div class="float-end">
+      <%= link_to 'Cancel', show_project_item_path(params[:id]) %>
+      <%= f.submit 'Save', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% end %>

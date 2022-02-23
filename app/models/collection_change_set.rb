@@ -7,6 +7,7 @@ class CollectionChangeSet < ApplicationChangeSet
   property :copyright, virtual: true
   property :license, virtual: true
   property :use_statement, virtual: true
+  property :project, virtual: true
 
   def self.model_name
     ::ActiveModel::Name.new(nil, nil, 'Collection')
@@ -22,6 +23,7 @@ class CollectionChangeSet < ApplicationChangeSet
     self.copyright = model.access.copyright
     self.use_statement = model.access.useAndReproductionStatement
     self.license = model.access.license
+    self.project = model.administrative&.partOfProject
   end
 
   def save_model

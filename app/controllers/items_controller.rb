@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
     add_collection set_collection remove_collection
     mods
     purge_object
-    show_barcode show_copyright show_license show_use_statement
+    show_barcode show_copyright show_license show_use_statement show_project
     source_id
     tags_bulk
     update
@@ -20,7 +20,6 @@ class ItemsController < ApplicationController
     refresh_metadata
     set_rights
     set_governing_apo
-    update
   ]
 
   rescue_from Dor::Services::Client::UnexpectedResponse do |exception|
@@ -301,10 +300,24 @@ class ItemsController < ApplicationController
     render Show::LicenseComponent.new(change_set: change_set, state_service: state_service)
   end
 
+  # Draw form for setting project
+  def edit_project
+    @change_set = build_change_set
+  end
+
+  def show_project
+    change_set = ItemChangeSet.new(@cocina)
+    render Show::ProjectTagComponent.new(change_set: change_set)
+  end
+
   # save the form
   def update
     change_set = ItemChangeSet.new(@cocina)
-    attributes = params.require(:item).permit(:barcode, :copyright, :use_statement, :license)
+    attributes = params.require(:item).permit(:barcode, :copyright, :use_statement, :license, :project)
+
+    # Editing project does not require versioning.
+    return if attributes.except(:project).present? && !enforce_versioning
+
     if change_set.validate(**attributes)
       change_set.save # may raise Dor::Services::Client::BadRequestError
       reindex

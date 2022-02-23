@@ -44,10 +44,13 @@ class CollectionsController < ApplicationController
   def update
     @cocina = maybe_load_cocina(params[:id])
     authorize! :manage_item, @cocina
-    return unless enforce_versioning
+
+    attributes = params.require(:collection).permit(:copyright, :use_statement, :license, :project)
+
+    # Editing project does not require versioning.
+    return if attributes.except(:project).present? && !enforce_versioning
 
     change_set = CollectionChangeSet.new(@cocina)
-    attributes = params.require(:collection).permit(:copyright, :use_statement, :license)
     change_set.validate(**attributes)
     change_set.save
     Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)

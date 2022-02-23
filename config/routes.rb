@@ -154,6 +154,8 @@ Rails.application.routes.draw do
       get 'show_use_statement'
       get 'edit_license'
       get 'show_license'
+      get 'edit_project'
+      get 'show_project'
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
       post 'collection/add',     action: :add_collection,    as: 'add_collection'
       post 'collection/set',     action: :set_collection,    as: 'set_collection'

@@ -118,7 +118,29 @@ RSpec.describe 'Set the properties for an item' do
       end
     end
 
-    context 'when there is an error building the Cocina' do
+    context 'when project is passed' do
+      let(:updated_model) do
+        cocina_model.new(
+          {
+            administrative: {
+              partOfProject: 'pegasus',
+              hasAdminPolicy: 'druid:cg532dg5405'
+            }
+          }
+        )
+      end
+
+      it 'sets the new project' do
+        patch "/items/#{pid}", params: { item: { project: 'pegasus' } }
+
+        expect(object_client).to have_received(:update)
+          .with(params: updated_model)
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(response.code).to eq('303')
+      end
+    end
+
+    context 'when there is an error' do
       it 'draws the error' do
         patch "/items/#{pid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
 

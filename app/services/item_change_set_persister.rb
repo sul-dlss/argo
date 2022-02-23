@@ -19,7 +19,7 @@ class ItemChangeSetPersister
     updated = model
     updated = update_structural(updated) if changed?(:collection_ids)
     updated = update_identification(updated) if changed?(:source_id) || changed?(:catkey) || changed?(:barcode)
-    updated = updated_administrative(updated) if changed?(:admin_policy_id)
+    updated = updated_administrative(updated) if administrative_changed?
     updated = updated_access(updated) if access_changed?
     object_client.update(params: updated)
   end
@@ -28,7 +28,7 @@ class ItemChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :barcode, :catkey, :collection_ids,
+  delegate :admin_policy_id, :project, :barcode, :catkey, :collection_ids,
            :copyright, :embargo_release_date, :embargo_access, :license, :source_id,
            :use_statement, :changed?, to: :change_set
 
@@ -37,7 +37,11 @@ class ItemChangeSetPersister
   end
 
   def updated_administrative(updated)
-    updated_administrative = updated.administrative.new(hasAdminPolicy: admin_policy_id)
+    properties = {}
+    properties[:hasAdminPolicy] = admin_policy_id if changed?(:admin_policy_id)
+    properties[:partOfProject] = project.presence if changed?(:project)
+
+    updated_administrative = updated.administrative.new(properties)
     updated.new(administrative: updated_administrative)
   end
 
@@ -56,6 +60,10 @@ class ItemChangeSetPersister
       changed?(:use_statement) ||
       changed?(:embargo_release_date) ||
       changed?(:embargo_access)
+  end
+
+  def administrative_changed?
+    changed?(:admin_policy_id) || changed?(:project)
   end
 
   def updated_access(updated)

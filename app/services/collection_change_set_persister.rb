@@ -18,7 +18,7 @@ class CollectionChangeSetPersister
     updated = model
     updated = update_identification(updated) if changed?(:source_id) || changed?(:catkey)
     updated = updated_access(updated) if access_changed?
-    updated = updated_administrative(updated) if changed?(:admin_policy_id)
+    updated = updated_administrative(updated) if administrative_changed?
     object_client.update(params: updated)
   end
 
@@ -26,10 +26,14 @@ class CollectionChangeSetPersister
 
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :license, :copyright, :use_statement, :catkey, :changed?, to: :change_set
+  delegate :admin_policy_id, :project, :license, :copyright, :use_statement, :catkey, :changed?, to: :change_set
 
   def access_changed?
     changed?(:copyright) || changed?(:license) || changed?(:use_statement)
+  end
+
+  def administrative_changed?
+    changed?(:admin_policy_id) || changed?(:project)
   end
 
   def updated_access(updated)
@@ -49,7 +53,11 @@ class CollectionChangeSetPersister
   end
 
   def updated_administrative(updated)
-    updated_administrative = updated.administrative.new(hasAdminPolicy: admin_policy_id)
+    properties = {}
+    properties[:hasAdminPolicy] = admin_policy_id if changed?(:admin_policy_id)
+    properties[:partOfProject] = project if changed?(:project)
+
+    updated_administrative = updated.administrative.new(properties)
     updated.new(administrative: updated_administrative)
   end
 
