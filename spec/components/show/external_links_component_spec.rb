@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe ExternalLinksComponent, type: :component do
+RSpec.describe Show::ExternalLinksComponent, type: :component do
   before do
     render_inline(described_class.new(document: document))
   end
