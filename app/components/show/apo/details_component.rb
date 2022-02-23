@@ -9,8 +9,7 @@ module Show
         @solr_document = presenter.document
       end
 
-      delegate :object_type, :created_date, to: :@solr_document
-      delegate :state_service, to: :@presenter
+      delegate :created_date, :id, to: :@solr_document
     end
   end
 end

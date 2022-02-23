@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ApoController < ApplicationController
+  include Blacklight::FacetsHelperBehavior # for facet_configuration_for_field
+
   before_action :create_obj, except: %i[
     new
     create
@@ -78,11 +80,50 @@ class ApoController < ApplicationController
     )
   end
 
+  # Displays the turbo-frame that has a link to collections governed by this APO
+  def count_collections
+    query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}info:fedora/#{params[:id]}\" AND " \
+            "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}collection\""
+    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+
+    path_for_search = link_to_members_with_type('collection')
+
+    render partial: 'count_collections', locals: { count: result.dig('response', 'numFound'), path_for_search: path_for_search }
+  end
+
+  # Displays the turbo-frame that has a link to items governed by this APO
+  def count_items
+    query = "_query_:\"{!raw f=#{ApoConcern::FIELD_APO_ID}}info:fedora/#{params[:id]}\" AND " \
+            "_query_:\"{!raw f=#{SolrDocument::FIELD_OBJECT_TYPE}}item\""
+    result = solr_conn.get('select', params: { q: query, qt: 'standard', rows: 0 })
+
+    path_for_search = link_to_members_with_type('item')
+
+    render partial: 'count_items', locals: { count: result.dig('response', 'numFound'), path_for_search: path_for_search }
+  end
+
+  def search_action_path(*args)
+    search_catalog_path(*args)
+  end
+
   private
 
   def search_service
     @search_service ||= Blacklight::SearchService.new(config: CatalogController.blacklight_config,
                                                       current_user: current_user)
+  end
+
+  def link_to_members_with_type(type)
+    facet_config = facet_configuration_for_field(ApoConcern::FIELD_APO_ID)
+    search_state = Blacklight::SearchState.new({ f: { SolrDocument::FIELD_OBJECT_TYPE => [type] } }, blacklight_config)
+    Blacklight::FacetItemPresenter.new("info:fedora/#{params[:id]}",
+                                       facet_config,
+                                       self,
+                                       ApoConcern::FIELD_APO_ID, search_state).href
+  end
+
+  def solr_conn
+    @solr_conn ||= blacklight_config.repository_class.new(blacklight_config).connection
   end
 
   def create_obj

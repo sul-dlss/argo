@@ -2,24 +2,24 @@
     <caption>Details</caption>
     <tbody>
       <tr>
-        <th class="col-3" scope="row">Object type</th>
-        <td>
-            <%= object_type %>
-        </td>
-      </tr>
-
-      <tr>
-        <th class="col-3" scope="row">Project</th>
-        <td>
-          <%= render Show::ProjectTagComponent.new(document: @presenter.document) %>
-        </td>
-      </tr>
-
-      <tr>
         <th class="col-3" scope="row">Created</th>
         <td>
             <%= l created_date, format: :long if created_date %>
         </td>
+      </tr>
+
+      <tr>
+         <th class="col-3" scope="row"># of collections</th>
+         <td>
+             <turbo-frame id="apo-collection-count" src="<%= count_collections_apo_path(id) %>"></turbo-frame>
+         </td>
+      </tr>
+
+      <tr>
+         <th class="col-3" scope="row"># of items</th>
+         <td>
+             <turbo-frame id="apo-item-count" src="<%= count_items_apo_path(id) %>"></turbo-frame>
+         </td>
       </tr>
 
       <tr>
