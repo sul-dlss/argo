@@ -76,7 +76,8 @@ class BulkActionsController < ApplicationController
         current_resource_type
         new_content_type new_resource_type
       ],
-      set_collection: [:new_collection_id]
+      set_collection: [:new_collection_id],
+      set_rights: [:rights]
     )
   end
 end

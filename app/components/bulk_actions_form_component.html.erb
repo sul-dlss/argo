@@ -180,6 +180,15 @@
           <%= render 'bulk_actions/forms/set_content_type_form', f: f %>
         </div>
 
+        <div role="tabpanel" class="tab-pane" id="SetRightsJob">
+          <div class="mb-3">
+            <span class="help-block">
+              Edit rights
+            </span>
+          </div>
+          <%= render 'bulk_actions/forms/set_rights_form', f: f, rights_options: @form.rights_options %>
+        </div>
+
         <div role='tabpanel' class='tab-pane' id='ManageEmbargoesJob'>
           <div class="mb-3">
             <span class='help-block'>

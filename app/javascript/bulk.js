@@ -77,11 +77,6 @@ function fetch_druids(fun) {
 	}
 }
 
-function set_rights(druids){
-	var params = { 'dro_rights_form[rights]': document.getElementById('rights_select').value }
-	process_post(druids, set_rights_url, params, "Updated");
-}
-
 function get_druids() {
 	var log = document.getElementById('pids');
 	$('#pid_list').show(400);
@@ -137,12 +132,5 @@ function error_handler(xhr, status, err, object_link, index, after) {
 document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
-	$('#set-object-rights-button').on('click', () => $('#rights').show(400))
-
-	$('#rights_button').on('click', () => {
-			fetch_druids(set_rights)
-			$('#rights').hide(400)
-	})
-
 	$('#stop').on('click', () => stop_all())
 })
