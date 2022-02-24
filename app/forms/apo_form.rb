@@ -35,7 +35,7 @@ class ApoForm
   def populate_from_model
     self.title = model.description.title.first.value
     self.agreement_object_id = model.administrative.hasAgreement
-    self.default_rights = default_object_rights
+    self.default_rights = default_access
     self.use_statement = model.administrative.defaultAccess&.useAndReproductionStatement
     self.copyright_statement = model.administrative.defaultAccess&.copyright
     self.use_license = model.administrative.defaultAccess&.license
@@ -101,22 +101,17 @@ class ApoForm
     end.compact # the options block will produce nils for unused deprecated entries, compact will get rid of them
   end
 
-  def default_object_rights
-    return default_rights if model.nil?
-
-    check_default_object_rights || default_rights
-  end
-
-  def check_default_object_rights
-    default_access = model.administrative&.defaultAccess
-
-    return if default_access.nil?
+  def default_access
+    default_access = model&.administrative&.defaultAccess
+    return default_rights if default_access.nil?
+    return 'cdl-stanford-nd' if default_access.controlledDigitalLending
 
     access = default_access.access
-
+    return default_rights if access.nil?
     return "loc:#{default_access.readLocation}" if access == 'location-based'
-    return 'cdl-stanford-nd' if default_access.controlledDigitalLending
     return "#{access}-nd" if default_access.download == 'none' && access.in?(%w[stanford world])
+
+    access
   end
 
   def manage_permissions
