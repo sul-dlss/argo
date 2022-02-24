@@ -24,7 +24,8 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Manage release', 'ReleaseObjectJob'],
         %w[Reindex RemoteIndexingJob],
         ['Republish objects', 'RepublishJob'],
-        ['Purge object', 'PurgeJob']
+        ['Purge object', 'PurgeJob'],
+        ['Add workflow', 'AddWorkflowJob']
       ]],
       ['Modify objects (via form)', [
         ['Open new object versions', 'PrepareJob'],

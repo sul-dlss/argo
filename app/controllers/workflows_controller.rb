@@ -81,12 +81,7 @@ class WorkflowsController < ApplicationController
     Argo::Indexer.reindex_pid_remotely(cocina_object.externalIdentifier)
 
     msg = "Added #{wf_name}"
-
-    if params[:bulk]
-      render plain: msg
-    else
-      redirect_to solr_document_path(cocina_object.externalIdentifier), notice: msg
-    end
+    redirect_to solr_document_path(cocina_object.externalIdentifier), notice: msg
   end
 
   def history

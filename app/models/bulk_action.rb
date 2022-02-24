@@ -5,7 +5,8 @@ class BulkAction < ApplicationRecord
   belongs_to :user
   validates :action_type,
             inclusion: {
-              in: %w[GenericJob
+              in: %w[AddWorkflowJob
+                     GenericJob
                      DescmetadataDownloadJob
                      ReleaseObjectJob
                      RemoteIndexingJob
