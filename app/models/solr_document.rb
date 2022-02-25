@@ -66,7 +66,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   attribute :publisher, Blacklight::Types::String, FIELD_PUBLISHER
   attribute :mods_created_date, Blacklight::Types::String, FIELD_MODS_CREATED_DATE
   attribute :status, Blacklight::Types::String, FIELD_STATUS
-  attribute :access_rights, Blacklight::Types::String, FIELD_ACCESS_RIGHTS
+  attribute :access_rights, Blacklight::Types::Array, FIELD_ACCESS_RIGHTS
   attribute :default_access_rights, Blacklight::Types::String, FIELD_DEFAULT_ACCESS_RIGHTS
   attribute :copyright, Blacklight::Types::String, FIELD_COPYRIGHT
   attribute :use_statement, Blacklight::Types::String, FIELD_USE_STATEMENT
