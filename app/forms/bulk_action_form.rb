@@ -5,7 +5,8 @@ class BulkActionForm < BaseForm
   VIRTUAL_PROPERTIES = %i[
     add_workflow manage_release set_governing_apo
     set_catkeys_and_barcodes set_catkeys_and_barcodes_csv
-    prepare register_druids create_virtual_objects import_tags
+    set_source_ids_csv prepare register_druids
+    create_virtual_objects import_tags
     set_license_and_rights_statements manage_embargo
   ].freeze
 
@@ -39,7 +40,8 @@ class BulkActionForm < BaseForm
                register_druids&.fetch(:csv_file) ||
                import_tags&.fetch(:csv_file) ||
                set_catkeys_and_barcodes_csv&.fetch(:csv_file) ||
-               manage_embargo&.fetch(:csv_file)
+               manage_embargo&.fetch(:csv_file) ||
+               set_source_ids_csv&.fetch(:csv_file)
 
     # Short-circuit if no csv file
     return unless csv_file

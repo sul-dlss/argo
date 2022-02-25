@@ -85,6 +85,13 @@
           <%= render 'bulk_actions/forms/set_catkeys_and_barcodes_csv_form', f: f %>
         </div>
 
+        <div role="tabpanel" class="tab-pane" id="SetSourceIdsCsvJob">
+          <span class="help-block">
+            Adds or updates source IDs associated with objects.
+          </span>
+          <%= render 'bulk_actions/forms/set_source_ids_csv_form', f: f %>
+        </div>
+
         <div role='tabpanel' class='tab-pane' id='PrepareJob'>
           <span class='help-block'>
             Open items not yet open for versioning.

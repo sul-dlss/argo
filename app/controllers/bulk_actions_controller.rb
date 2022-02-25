@@ -63,6 +63,7 @@ class BulkActionsController < ApplicationController
         barcodes use_barcodes_option
       ],
       set_catkeys_and_barcodes_csv: [:csv_file],
+      set_source_ids_csv: [:csv_file],
       prepare: %i[significance description],
       create_virtual_objects: [:csv_file],
       import_tags: [:csv_file],

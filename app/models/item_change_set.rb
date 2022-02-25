@@ -13,6 +13,7 @@ class ItemChangeSet < ApplicationChangeSet
   property :use_statement, virtual: true
   property :barcode, virtual: true
 
+  validates :source_id, presence: true, if: -> { changed?(:source_id) }
   validates :embargo_access, inclusion: {
     in: Constants::REGISTRATION_RIGHTS_OPTIONS.map(&:second),
     allow_blank: true
@@ -31,6 +32,7 @@ class ItemChangeSet < ApplicationChangeSet
     if model.identification
       self.catkey = Catkey.deserialize(model)
       self.barcode = model.identification.barcode
+      self.source_id = model.identification.sourceId
     end
 
     self.copyright = model.access.copyright

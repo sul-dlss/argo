@@ -3,6 +3,7 @@
 # Encapsulates all version-related functionality
 class VersionService
   class << self
+    # @returns [String] the current version
     def open(identifier:, **options)
       new(identifier: identifier).open(**options)
     end
