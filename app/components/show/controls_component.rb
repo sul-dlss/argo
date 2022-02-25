@@ -40,7 +40,7 @@ module Show
       doc.catkey_id.present?
     end
 
-    delegate :admin_policy?, :item?, :embargoed?, to: :doc
+    delegate :admin_policy?, :agreement?, :item?, :embargoed?, to: :doc
 
     private
 

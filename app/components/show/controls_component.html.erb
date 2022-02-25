@@ -9,7 +9,9 @@
     <%= purge_button %>
   <% else %>
     <%= reindex_button %>
-    <%= manage_release %>
+    <% unless agreement? %>
+      <%= manage_release %>
+    <% end %>
     <div class="dropdown d-inline-block">
       <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
         Manage PURL
