@@ -197,14 +197,6 @@ RSpec.describe ContentTypesController, type: :controller do
           expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
         end
       end
-
-      context 'when a batch process' do
-        it 'is successful' do
-          patch :update, params: { item_id: pid, new_content_type: 'media', bulk: true }
-          expect(response).to be_successful
-          expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
-        end
-      end
     end
 
     context 'without access' do

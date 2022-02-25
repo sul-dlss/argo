@@ -8,6 +8,7 @@ class BulkActionForm < BaseForm
     set_source_ids_csv prepare register_druids
     create_virtual_objects import_tags
     set_license_and_rights_statements manage_embargo
+    set_content_type
   ].freeze
 
   def initialize(model, groups:)

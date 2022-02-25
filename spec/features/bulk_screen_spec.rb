@@ -39,7 +39,6 @@ RSpec.describe 'Bulk actions view', js: true do
     end
 
     expect(page).to have_button('Set object rights', disabled: false)
-    expect(page).to have_button('Set content type', disabled: false)
     expect(page).to have_button('Set collection', disabled: false)
   end
 end

@@ -163,6 +163,15 @@
           <%= render 'bulk_actions/forms/set_license_and_rights_statements_form', f: f, license_options: @form.license_options %>
         </div>
 
+        <div role='tabpanel', class='tab-pane', id='SetContentTypeJob'>
+          <div class="mb-3">
+            <span class='help-block'>
+              Set content type
+            </span>
+          </div>
+          <%= render 'bulk_actions/forms/set_content_type_form', f: f %> 
+        </div>
+
         <div role='tabpanel' class='tab-pane' id='ManageEmbargoesJob'>
           <div class="mb-3">
             <span class='help-block'>

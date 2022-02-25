@@ -29,15 +29,6 @@ function process_patch(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'PATCH', req_params, success_string, show_buttons, show_buttons);
 }
 
-function set_content_type(druids){
-	var params={
-		'new_content_type': document.getElementById('new_content_type').value,
-		'new_resource_type': document.getElementById('new_resource_type').value,
-		'old_resource_type': document.getElementById('old_resource_type').value
-	}
-	process_patch(druids, set_content_type_url, params, "Updated");
-}
-
 function fetch_pids_txt() {
 	return document.getElementById('pids').value.trim();
 }
@@ -240,7 +231,6 @@ document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
 	$('#set-object-rights-button').on('click', () => $('#rights').show(400))
-	$('#set-content-type-button').on('click', () => $('#content_type').show(400))
 	$('#set-collection-button').on('click', () => $('#set_collection').show(400))
 
   $('#show_tags').on('click', () => {
@@ -251,11 +241,6 @@ document.addEventListener("turbo:load", () => {
 	$('#confirm-set-collection-button').on('click', () => {
 		fetch_druids(set_collection)
 		$('#set_collection').hide(400)
-	})
-
-	$('#confirm-set-content-type-button').on('click', () => {
-		fetch_druids(set_content_type)
-		$('#content_type').hide(400)
 	})
 
   $('#set_tags').on('click', () => {
