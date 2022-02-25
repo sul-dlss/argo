@@ -17,10 +17,10 @@ bulk_metadata:
 
 checksum_report_job:
   csv_filename: 'checksum_report.csv'
-
 export_tags_job:
   csv_filename: 'tags.csv'
-
+export_structural_job:
+  csv_filename: 'structural_metadata.csv'
 register_druids_job:
   csv_filename: 'registration_report.csv'
 
