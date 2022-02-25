@@ -114,10 +114,19 @@ RSpec.describe 'Set the properties for an item' do
       end
     end
 
-    context 'when there is an error' do
+    context 'when there is an error building the Cocina' do
+      it 'draws the error' do
+        patch "/items/#{pid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include '<turbo-frame id="barcode">Error building Cocina: &quot;invalid&quot; isn&#39;t one of in #/components/schemas/Barcode</turbo-frame>'
+      end
+    end
+
+    context 'when there is an error retrieving the Cocina' do
       it 'draws the error' do
         allow(object_client).to receive(:update).and_raise(Dor::Services::Client::BadRequestError, '({"errors":[{"detail":"broken"}]})')
-        patch "/items/#{pid}", params: { item: { barcode: 'invalid' } }, headers: { 'Turbo-Frame' => 'barcode' }
+        patch "/items/#{pid}", params: { item: { barcode: '36105010362304' } }, headers: { 'Turbo-Frame' => 'barcode' }
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include '<turbo-frame id="barcode">Unable to retrieve the cocina model: broken</turbo-frame>'

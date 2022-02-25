@@ -11,7 +11,7 @@ RSpec.describe RegistrationsController, type: :controller do
   end
   let(:cocina_admin_policy_administrative) do
     instance_double(Cocina::Models::AdminPolicyAdministrative,
-                    defaultObjectRights: content,
+                    defaultAccess: default_access,
                     collectionsForRegistration: collections)
   end
   let(:collections) { [] }
@@ -27,29 +27,8 @@ RSpec.describe RegistrationsController, type: :controller do
 
   describe 'rights_list' do
     context 'when Stanford is the read group and discover is world' do
-      let(:content) do
-        <<-XML
-          <?xml version="1.0"?>
-          <rightsMetadata>
-            <copyright>
-              <human type="copyright">This work is in the Public Domain.</human>
-            </copyright>
-            <access type="discover">
-              <machine>
-                <world/>
-              </machine>
-            </access>
-            <access type="read">
-              <machine>
-                <group>Stanford</group>
-              </machine>
-            </access>
-            <use>
-              <human type="creativecommons">Attribution Share Alike license</human>
-              <machine type="creativecommons">by-sa</machine>
-            </use>
-          </rightsMetadata>
-        XML
+      let(:default_access) do
+        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'stanford')
       end
 
       it 'shows Stanford as the default' do
@@ -59,29 +38,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     context 'when the read group is not Stanford' do
-      let(:content) do
-        <<-XML
-          <?xml version="1.0"?>
-          <rightsMetadata>
-            <copyright>
-              <human type="copyright">This work is in the Public Domain.</human>
-            </copyright>
-            <access type="discover">
-              <machine>
-                <world/>
-              </machine>
-            </access>
-            <access type="read">
-              <machine>
-                <group>Berkeley</group>
-              </machine>
-            </access>
-            <use>
-              <human type="creativecommons">Attribution Share Alike license</human>
-              <machine type="creativecommons">by-sa</machine>
-            </use>
-          </rightsMetadata>
-        XML
+      let(:default_access) do
+        Cocina::Models::AdminPolicyDefaultAccess.new
       end
 
       it 'does not show Stanford as the default' do
@@ -91,29 +49,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     context 'when discover and read are both world' do
-      let(:content) do
-        <<-XML
-          <?xml version="1.0"?>
-          <rightsMetadata>
-            <copyright>
-              <human type="copyright">This work is in the Public Domain.</human>
-            </copyright>
-            <access type="discover">
-              <machine>
-                <world/>
-              </machine>
-            </access>
-            <access type="read">
-              <machine>
-                <world/>
-              </machine>
-            </access>
-            <use>
-              <human type="creativecommons">Attribution Share Alike license</human>
-              <machine type="creativecommons">by-sa</machine>
-            </use>
-          </rightsMetadata>
-        XML
+      let(:default_access) do
+        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'world')
       end
 
       it 'shows World as the default' do
@@ -123,29 +60,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     context 'when discover and read are both none' do
-      let(:content) do
-        <<-XML
-          <?xml version="1.0"?>
-          <rightsMetadata>
-            <copyright>
-              <human type="copyright">This work is in the Public Domain.</human>
-            </copyright>
-            <access type="discover">
-              <machine>
-                <none/>
-              </machine>
-            </access>
-            <access type="read">
-              <machine>
-                <none/>
-              </machine>
-            </access>
-            <use>
-              <human type="creativecommons">Attribution Share Alike license</human>
-              <machine type="creativecommons">by-sa</machine>
-            </use>
-          </rightsMetadata>
-        XML
+      let(:default_access) do
+        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'dark')
       end
 
       it 'shows Dark as the default' do
@@ -155,29 +71,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     context 'when discover is world and read is none' do
-      let(:content) do
-        <<-XML
-          <?xml version="1.0"?>
-          <rightsMetadata>
-            <copyright>
-              <human type="copyright">This work is in the Public Domain.</human>
-            </copyright>
-            <access type="discover">
-              <machine>
-                <world/>
-              </machine>
-            </access>
-            <access type="read">
-              <machine>
-                <none/>
-              </machine>
-            </access>
-            <use>
-              <human type="creativecommons">Attribution Share Alike license</human>
-              <machine type="creativecommons">by-sa</machine>
-            </use>
-          </rightsMetadata>
-        XML
+      let(:default_access) do
+        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'citation-only')
       end
 
       it 'shows Citation Only as the default' do
@@ -186,8 +81,10 @@ RSpec.describe RegistrationsController, type: :controller do
       end
     end
 
-    context 'when there is no xml' do
-      let(:content) { '' }
+    context 'when there is no default_access' do
+      let(:default_access) do
+        nil
+      end
 
       it 'shows no default' do
         get 'rights_list', params: { apo_id: bare_druid, format: :xml }
@@ -204,7 +101,7 @@ RSpec.describe RegistrationsController, type: :controller do
       allow(TrackSheet).to receive(:new).with([bare_druid]).and_return(track_sheet)
     end
 
-    let(:content) { '' }
+    let(:default_access) { '' }
     let(:bare_druid) { 'xb482ww9999' }
     let(:track_sheet) { instance_double(TrackSheet, generate_tracking_pdf: doc) }
     let(:doc) { instance_double(Prawn::Document, render: '') }
@@ -224,7 +121,7 @@ RSpec.describe RegistrationsController, type: :controller do
   end
 
   describe '#collection_list' do
-    let(:content) { '' }
+    let(:default_access) { '' }
 
     it 'handles invalid parameters' do
       expect { get 'collection_list' }.to raise_error(ArgumentError)

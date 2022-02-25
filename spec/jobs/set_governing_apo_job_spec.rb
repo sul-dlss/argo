@@ -10,7 +10,7 @@ RSpec.describe SetGoverningApoJob do
     )
   end
 
-  let(:new_apo_id) { 'druid:aa111bb2222' }
+  let(:new_apo_id) { 'druid:bc111bb2222' }
   let(:webauth) { { 'privgroup' => 'dorstuff', 'login' => 'someuser' } }
 
   before do

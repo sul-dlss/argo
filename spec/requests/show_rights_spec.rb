@@ -8,13 +8,6 @@ RSpec.describe 'Show rights for an object' do
     let(:pid) { 'druid:cc243mg0841' }
     let(:apo_pid) { 'druid:cg532dg5405' }
 
-    let(:world_access) do
-      <<~XML
-        <rightsMetadata>
-        </rightsMetadata>
-      XML
-    end
-
     let(:apo) do
       Cocina::Models.build({
                              'label' => 'My APO',
@@ -23,8 +16,7 @@ RSpec.describe 'Show rights for an object' do
                              'externalIdentifier' => apo_pid,
                              'administrative' => {
                                'hasAdminPolicy' => apo_pid,
-                               'hasAgreement' => 'druid:hp308wm0436',
-                               'defaultObjectRights' => world_access
+                               'hasAgreement' => 'druid:hp308wm0436'
                              }
                            })
     end

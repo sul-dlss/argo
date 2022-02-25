@@ -55,7 +55,7 @@ class RegistrationsController < ApplicationController
 
   def rights_list
     cocina_admin_policy = object_client.find
-    default_opt = RightsLabeler.label(cocina_admin_policy.administrative.defaultObjectRights)
+    default_opt = RightsLabeler.label(cocina_admin_policy.administrative.defaultAccess)
 
     # iterate through the default version of the rights list.  if we found a default option
     # selection, label it in the UI text and key it as 'default' (instead of its own name).  if

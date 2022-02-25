@@ -55,20 +55,10 @@ RSpec.describe AdminPolicyChangeSetPersister do
                       collection: {})
     end
 
-    let(:default_object_rights) do
-      '<?xml version="1.0" encoding="UTF-8"?><rightsMetadata>' \
-      '<access type="discover"><machine><world/></machine></access>' \
-      '<access type="read"><machine><world/></machine></access>' \
-      '<use><human type="useAndReproduction"/><human type="creativeCommons"/>' \
-      '<machine type="creativeCommons" uri=""/><human type="openDataCommons"/>' \
-      '<machine type="openDataCommons" uri=""/></use>' \
-      '<copyright><human/></copyright></rightsMetadata>'
-    end
-
     describe '#sync' do
       subject(:result) { instance.sync }
 
-      it 'sets clean APO metadata for defaultObjectRights' do
+      it 'sets clean APO metadata for defaultAccess' do
         expect(result.to_h).to eq(
           Cocina::Models::AdminPolicy.new(
             administrative: {
@@ -82,7 +72,6 @@ RSpec.describe AdminPolicyChangeSetPersister do
                 useAndReproductionStatement: 'My use and reproduction statement'
               },
               collectionsForRegistration: ['druid:zj785yp4820'],
-              defaultObjectRights: default_object_rights,
               hasAdminPolicy: 'druid:xx666zz7777',
               hasAgreement: 'druid:dd327rv8888',
               registrationWorkflow: ['registrationWF'],

@@ -7,7 +7,7 @@ RSpec.describe StructuresController do
   let(:pid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
   let(:state_service) { instance_double(StateService) }
-  let(:successful_update) { double(success?: true, value!: nil) }
+  let(:successful_update) { double(success?: true, value!: Cocina::Models::DROStructural.new) }
   let(:file) { fixture_file_upload('structure-upload.csv') }
   let(:cocina_model) do
     Cocina::Models.build({

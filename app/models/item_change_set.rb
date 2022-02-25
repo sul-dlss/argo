@@ -53,6 +53,7 @@ class ItemChangeSet < ApplicationChangeSet
   end
 
   # @raises [Dor::Services::Client::BadRequestError] when the server doesn't accept the request
+  # @raises [Cocina::Models::ValidationError] when given invalid Cocina values or structures
   def save_model
     ItemChangeSetPersister.update(model, self)
   end

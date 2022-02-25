@@ -6,7 +6,7 @@ RSpec.describe 'Set APO for an object' do
   context 'when they have manage access' do
     let(:user) { create(:user) }
     let(:pid) { 'druid:dc243mg0841' }
-    let(:new_apo_id) { 'druid:ab123cd4567' }
+    let(:new_apo_id) { 'druid:bc123cd4567' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) do
       Cocina::Models.build({
