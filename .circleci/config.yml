@@ -177,9 +177,7 @@ jobs:
       - checkout
       - ruby/install-deps:
           key: gems-v2
-      - run:
-          name: Run linter
-          command: bundle exec rubocop
+      - ruby/rubocop-check
   test:
     environment:
       TZ: "America/Los_Angeles"
@@ -212,13 +210,10 @@ jobs:
       # Setup database
       - run:
           name: Database setup
-          command: bundle exec rails db:test:prepare
+          command: bin/rails db:test:prepare
       - run:
           name: Build assets
-          command: bundle exec rails assets:precompile
-      - run:
-          name: Create directories
-          command: mkdir -p public/workspace tmp/preview
+          command: bin/rails assets:precompile
       - run:
           name: Wait for fedora
           command: 'dockerize -wait tcp://fcrepo:8080/fedora/describe -timeout 1m'
