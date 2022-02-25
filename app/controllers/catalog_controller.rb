@@ -114,6 +114,12 @@ class CatalogController < ApplicationController
     # common method since search results and reports all do the same configuration
     add_common_date_facet_fields_to_config! config
 
+    config.add_facet_field SolrDocument::FIELD_CONSTITUENTS, label: 'Virtual Objects', home: false,
+                                                             component: true,
+                                                             query: {
+                                                               has_constituents: { label: 'Virtual Objects', fq: "#{SolrDocument::FIELD_CONSTITUENTS}:*" }
+                                                             }
+
     # This will help us find records that need to be fixed before we can move to cocina.
     config.add_facet_field 'data_quality_ssim', label: 'Data Quality', home: false, component: true
 

@@ -8,7 +8,7 @@
   }
 
   .object-type {
-    width: 11rem;
+    width: 15rem;
     height: 2.4rem;
 
     &.object-type-apo {
@@ -19,6 +19,9 @@
     }
     &.object-type-item {
       background-color: $illuminating-light;
+    }
+    &.object-type-virtual-object {
+      background-color: $bay-light;
     }
   }
 

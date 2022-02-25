@@ -39,6 +39,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   FIELD_SOURCE_ID                 = 'source_id_ssim'
   FIELD_BARCODE_ID                = 'barcode_id_ssim'
   FIELD_WORKFLOW_ERRORS           = 'wf_error_ssim'
+  FIELD_CONSTITUENTS              = 'has_constituents_ssim'
 
   attribute :object_type, Blacklight::Types::String, FIELD_OBJECT_TYPE
   attribute :content_type, Blacklight::Types::String, FIELD_CONTENT_TYPE
@@ -75,6 +76,7 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
   attribute :source_id, Blacklight::Types::String, FIELD_SOURCE_ID
   attribute :barcode, Blacklight::Types::String, FIELD_BARCODE_ID
   attribute :tags, Blacklight::Types::Array, FIELD_TAGS
+  attribute :constituents, Blacklight::Types::Array, FIELD_CONSTITUENTS
 
   # self.unique_key = 'id'
 
@@ -116,6 +118,12 @@ class SolrDocument # rubocop:disable Metrics/ClassLength
 
   def item?
     object_type == 'item'
+  end
+
+  def virtual_object?
+    return false unless item?
+
+    constituents&.any?
   end
 
   def collection?
