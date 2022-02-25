@@ -36,6 +36,17 @@ class ItemsController < ApplicationController
     end
   end
 
+  rescue_from Cocina::Models::ValidationError do |exception|
+    message = "Error building Cocina: #{exception.message.truncate(200)}"
+    logger.error(message)
+    if turbo_frame_request?
+      render 'error', locals: { message: message }
+    else
+      redirect_to solr_document_path(params[:id]),
+                  flash: { error: message }
+    end
+  end
+
   def set_collection
     change_set = ItemChangeSet.new(@cocina)
     change_set.validate(collection_ids: Array(params[:collection].presence))
@@ -299,7 +310,7 @@ class ItemsController < ApplicationController
     form_type = @cocina.collection? ? CollectionRightsForm : DroRightsForm
     cocina_admin_policy = Dor::Services::Client.object(@cocina.administrative.hasAdminPolicy).find
 
-    default_rights = RightsLabeler.label(cocina_admin_policy.administrative.defaultObjectRights)
+    default_rights = RightsLabeler.label(cocina_admin_policy.administrative.defaultAccess)
     @form = form_type.new(@cocina, default_rights: default_rights)
 
     respond_to do |format|
