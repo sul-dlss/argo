@@ -62,9 +62,7 @@ class ItemChangeSetPersister
     access_properties = {}
     access_properties[:copyright] = copyright.presence if changed?(:copyright)
     access_properties[:license] = license.presence if changed?(:license)
-
-    # useAndReproductionStatement is not nullable
-    access_properties[:useAndReproductionStatement] = use_statement if changed?(:use_statement) && use_statement.present?
+    access_properties[:useAndReproductionStatement] = use_statement if changed?(:use_statement)
 
     embargo_clazz = updated.access.embargo || Cocina::Models::Embargo
     access_properties[:embargo] = embargo_clazz.new(embargo_props) if embargo_props.present?
