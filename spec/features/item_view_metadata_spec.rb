@@ -186,6 +186,7 @@ RSpec.describe 'Item view', js: true do
           SolrDocument::FIELD_OBJECT_TYPE => 'item',
           content_type_ssim: 'image',
           status_ssi: 'v1 Unknown Status',
+          rights_descriptions_ssim: %w[world dark],
           SolrDocument::FIELD_APO_ID => 'info:fedora/druid:ww057qx5555',
           SolrDocument::FIELD_APO_TITLE => 'Stanford University Libraries - Special Collections',
           project_tag_ssim: 'Fuller Slides',
@@ -210,6 +211,8 @@ RSpec.describe 'Item view', js: true do
           expect(page).to have_css 'th', text: 'Admin policy'
           expect(page).to have_css 'td a', text: 'Stanford University Libraries - Special Collections'
           expect(page).to have_css 'th', text: 'Status'
+          expect(page).to have_css 'th', text: 'Access rights'
+          expect(page).to have_css 'td', text: 'world and dark'
           expect(page).to have_css 'td', text: 'v1 Unknown Status'
         end
 

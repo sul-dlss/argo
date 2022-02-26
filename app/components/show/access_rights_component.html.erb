@@ -1,4 +1,4 @@
-<%= access_rights %>
+<%= access_rights.to_sentence %>
 <% if allows_modification? && !admin_policy? %>
   <%= link_to rights_item_path(id: id),
               aria: { label: 'Set rights' },
