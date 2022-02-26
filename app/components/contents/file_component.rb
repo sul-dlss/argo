@@ -14,7 +14,7 @@ module Contents
       @viewable
     end
 
-    delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, to: :file
+    delegate :access, :administrative, :filename, :hasMimeType, :size, :externalIdentifier, :use, to: :file
     delegate :publish, :shelve, :sdrPreserve, to: :administrative
 
     def view_access
@@ -23,6 +23,12 @@ module Contents
 
     def download_access
       access.download.capitalize
+    end
+
+    def role
+      return 'No role' if use.blank?
+
+      use.capitalize
     end
 
     def link_attrs
