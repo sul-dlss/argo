@@ -12,12 +12,8 @@ class DatastreamsController < ApplicationController
   end
 
   def show
-    if params[:id] == 'full_dc'
-      @content = PrettyXml.print(@object_client.metadata.dublin_core)
-    else
-      raw_content = @object_client.metadata.datastream(params[:id])
-      @content = Nokogiri::XML(raw_content, &:noblanks).to_s
-    end
+    raw_content = @object_client.metadata.datastream(params[:id])
+    @content = Nokogiri::XML(raw_content, &:noblanks).to_s
 
     raise ActionController::RoutingError, 'Not Found' if @content.nil?
 

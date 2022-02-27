@@ -3,7 +3,7 @@
   <% component.body do %>
     <div class="lightbox-head">
       <span class="section-head-link">
-        <%= link_to 'View XML', item_datastream_path(params[:item_id], 'full_dc'), title: 'Dublin Core (derived from MODS)', data: { blacklight_modal: 'trigger' } %>
+        <%= link_to 'View XML', full_dc_xml_item_metadata_path(params[:item_id]), title: 'Dublin Core (derived from MODS)', data: { blacklight_modal: 'trigger' } %>
       </span>
       <%= params[:item_id] %>
     </div>
