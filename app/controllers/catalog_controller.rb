@@ -219,8 +219,6 @@ class CatalogController < ApplicationController
     @milestones_presenter = MilestonesPresenter.new(milestones:,
                                                     versions: object_client.version.inventory)
 
-    @datastreams = object_client.metadata.datastreams
-
     # If you have this token, it indicates you have view_metadata access to the object
     @verified_token_with_expiration = Argo.verifier.generate(
       { key: params[:id] },

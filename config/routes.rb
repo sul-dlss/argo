@@ -175,8 +175,6 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :datastreams, only: %i[show edit update]
-
     resource :catkey, only: %i[edit update]
     resource :embargo, only: %i[new edit update]
 

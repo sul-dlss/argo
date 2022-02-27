@@ -285,15 +285,6 @@ RSpec.describe 'Item view', js: true do
               click_button 'View less'
             end
 
-            click_button 'Datastreams' # Open the datastream accordion
-            click_link 'descMetadata' # Open the datastream modal
-            within '.code' do
-              expect(page).to have_content '<title>Slides, IA 11, Geodesic Domes, Double Skin "Growth" House, N.C. State, 1953</title>'
-            end
-            within '.modal-header' do
-              click_button # close the modal
-            end
-
             within '.resource-list' do
               click_link 'M1090_S15_B02_F01_0126.jp2'
             end

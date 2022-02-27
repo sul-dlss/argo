@@ -128,7 +128,7 @@ class ApplyModsMetadata
   # Checks whether or not a DOR object's status is OK for a descMetadata update. Basically, the only times we are
   # not OK to update is if the object is currently being accessioned and if the object has status unknown.
   #
-  # @return [Boolean] true if the object's status allows us to update the descMetadata datastream, false otherwise
+  # @return [Boolean] true if the object's status allows us to update the descripitive metadata, false otherwise
   def status_ok?
     [1, 6, 7, 8, 9].include?(status)
   end

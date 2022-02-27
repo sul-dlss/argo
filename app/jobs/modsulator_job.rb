@@ -14,7 +14,7 @@ class ModsulatorJob < ActiveJob::Base
   # @param  [String]  uploaded_filename  Full path to the temporary uploaded file. Deleted upon completion.
   # @param  [String]  output_directory   Where to store output (log, generated XML etc.).
   # @param  [User]    user               Acting user
-  # @param  [String]  filetype           One of 'xml, 'spreadsheet', or 'xml_only'. If not 'xml', the input is to be loaded into the datastream.
+  # @param  [String]  filetype           One of 'xml, 'spreadsheet', or 'xml_only'. If not 'xml', the input is to be loaded as MODS.
   # @param  [String]  note               An optional note that the user entered to go with the job.
   # @return [Void]
   def perform(apo_id, uploaded_filename, output_directory, user, groups, filetype = 'spreadsheet', note = '')
