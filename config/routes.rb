@@ -130,6 +130,7 @@ Rails.application.routes.draw do
     resources :metadata, only: [] do
       collection do
         get 'full_dc'
+        get 'full_dc_xml'
         get 'descriptive'
       end
     end

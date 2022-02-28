@@ -12,6 +12,11 @@ class MetadataController < ApplicationController
 
   Field = Struct.new(:name, :value)
 
+  def full_dc_xml
+    @content = PrettyXml.print(metadata_service.dublin_core)
+    render layout: !request.xhr?
+  end
+
   def full_dc
     dc_xml = Nokogiri::XML(metadata_service.dublin_core)
     nodes = dc_xml.xpath('/oai_dc:dc/*', oai_dc: 'http://www.openarchives.org/OAI/2.0/oai_dc/')
