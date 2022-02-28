@@ -5,13 +5,12 @@
 <% end %>
 
 <div class="row mt-3">
-    <div class="col-md-8 header-column"><strong>Datastream spreadsheet bulk upload for APO <%= @document.id %></strong></div>
-    <div class="col-md-3 header-column spreadsheet-column"><%= link_to 'Download blank spreadsheet', spreadsheet_template_apo_index_path %></div>
+    <div class="col-md-8"><strong>Spreadsheet bulk upload for APO <%= @document.id %></strong></div>
+    <div class="col-md-3"><%= link_to 'Download blank spreadsheet', spreadsheet_template_apo_index_path %></div>
 </div>
 
 <div class="row">
-    <div class="col-md-1"></div>
-    <div class="col-md-11">"<%= @document.sw_title %>"</div>
+    <div class="col-md-8">"<%= @document.sw_title.to_sentence %>"</div>
 </div>
 <div class="row mt-3">
     <div class="col-md-12">
