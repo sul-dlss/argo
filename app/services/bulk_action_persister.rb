@@ -25,6 +25,7 @@ class BulkActionPersister
   delegate :pids, :add_workflow, :manage_release, :set_governing_apo,
            :set_catkeys_and_barcodes, :groups, :prepare, :create_virtual_objects,
            :import_tags, :set_license_and_rights_statements, :set_content_type,
+           :set_collection,
            to: :bulk_action_form
 
   delegate :id, :file, :output_directory, to: :bulk_action
@@ -62,6 +63,7 @@ class BulkActionPersister
       add_workflow: add_workflow,
       manage_release: manage_release,
       set_catkeys_and_barcodes: set_catkeys_and_barcodes,
+      set_collection: set_collection,
       set_governing_apo: set_governing_apo,
       set_license_and_rights_statements: set_license_and_rights_statements,
       set_content_type: set_content_type,
