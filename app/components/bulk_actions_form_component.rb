@@ -21,6 +21,7 @@ class BulkActionsFormComponent < ApplicationComponent
   def action_types
     grouped_options_for_select [
       ['Perform actions', [
+        ['Apply APO defaults  ', 'ApplyApoDefaultsJob'],
         ['Manage release', 'ReleaseObjectJob'],
         %w[Reindex RemoteIndexingJob],
         ['Republish objects', 'RepublishJob'],

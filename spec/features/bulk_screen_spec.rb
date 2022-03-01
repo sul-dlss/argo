@@ -42,7 +42,6 @@ RSpec.describe 'Bulk actions view', js: true do
     expect(page).to have_button('Set object rights', disabled: false)
     expect(page).to have_button('Set content type', disabled: false)
     expect(page).to have_button('Set collection', disabled: false)
-    expect(page).to have_button('Apply APO defaults', disabled: false)
 
     fill_in 'pids', with: 'druid:zt570qh4444' # just one druid
     click_button 'Set source Id'
