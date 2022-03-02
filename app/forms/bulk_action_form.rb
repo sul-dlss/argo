@@ -63,11 +63,10 @@ class BulkActionForm < BaseForm
   end
 
   def options_for_use_license_type
-    # We use `#filter_map` here to remove nils from the options block (for unused deprecated licenses)
-    Constants::LICENSE_OPTIONS.filter_map do |attributes|
+    Constants::LICENSE_OPTIONS.map do |attributes|
       next if attributes.key?(:deprecation_warning)
 
       [attributes.fetch(:label), attributes.fetch(:uri)]
-    end
+    end.compact # the `#map` will produce `nil`s for deprecated entries; `#compact` will get rid of them
   end
 end

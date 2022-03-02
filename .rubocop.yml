@@ -26,6 +26,8 @@ Rails:
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
 
+# Offense count: 166
+# Configuration parameters: CountComments, IgnoredMethods.
 Metrics/BlockLength:
   Max: 25
   IgnoredMethods:
@@ -35,10 +37,6 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'lib/**/*.rake'
     - 'app/jobs/create_virtual_objects_job.rb'
-
-Metrics/ModuleLength:
-  Exclude:
-    - 'lib/constants.rb'
 
 Naming/PredicateName:
   ForbiddenPrefixes:
