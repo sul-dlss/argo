@@ -47,7 +47,7 @@ RSpec.describe CatalogController, type: :controller do
         SolrDocument::FIELD_EMBARGO_RELEASE_DATE
       ].map(&:to_s)
       config.facet_fields.each do |field|
-        expect(field[1].if).to eq false if raw_fields.include?(field[0])
+        expect(field[1].if).to be false if raw_fields.include?(field[0])
       end
     end
 

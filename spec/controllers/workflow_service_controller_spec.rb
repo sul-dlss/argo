@@ -31,7 +31,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
 
       it 'returns true' do
         get :published, params: { id: pid, format: :json }
-        expect(assigns(:status)).to eq true
+        expect(assigns(:status)).to be true
         expect(response.body).to eq 'true'
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
 
       it 'returns false' do
         get :published, params: { id: pid, format: :json }
-        expect(assigns(:status)).to eq false
+        expect(assigns(:status)).to be false
         expect(response.body).to eq 'false'
       end
     end

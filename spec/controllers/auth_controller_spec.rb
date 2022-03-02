@@ -21,7 +21,7 @@ RSpec.describe AuthController, type: :controller do
         expect(session[:groups]).to eq(impersonated_groups_str.split(','))
 
         post :forget_impersonated_groups
-        expect(session[:groups]).to eq(nil)
+        expect(session[:groups]).to be_nil
       end
     end
 

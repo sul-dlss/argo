@@ -33,7 +33,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
       it 'shows Stanford as the default' do
         get 'rights_list', params: { apo_id: bare_druid, format: :xml }
-        expect(response.body.include?('Stanford (APO default)')).to eq(true)
+        expect(response.body.include?('Stanford (APO default)')).to be(true)
       end
     end
 
@@ -44,7 +44,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
       it 'does not show Stanford as the default' do
         get 'rights_list', params: { apo_id: bare_druid, format: :xml }
-        expect(response.body.include?('Stanford (APO default)')).to eq(false)
+        expect(response.body.include?('Stanford (APO default)')).to be(false)
       end
     end
 
@@ -55,7 +55,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
       it 'shows World as the default' do
         get 'rights_list', params: { apo_id: bare_druid, format: :xml }
-        expect(response.body.include?('World (APO default)')).to eq(true)
+        expect(response.body.include?('World (APO default)')).to be(true)
       end
     end
 
@@ -66,7 +66,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
       it 'shows Dark as the default' do
         get 'rights_list', params: { apo_id: bare_druid, format: :xml }
-        expect(response.body.include?('Dark (Preserve Only) (APO default)')).to eq(true)
+        expect(response.body.include?('Dark (Preserve Only) (APO default)')).to be(true)
       end
     end
 
@@ -77,7 +77,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
       it 'shows Citation Only as the default' do
         get 'rights_list', params: { apo_id: bare_druid, format: :xml }
-        expect(response.body.include?('Citation Only (APO default)')).to eq(true)
+        expect(response.body.include?('Citation Only (APO default)')).to be(true)
       end
     end
 
@@ -88,10 +88,10 @@ RSpec.describe RegistrationsController, type: :controller do
 
       it 'shows no default' do
         get 'rights_list', params: { apo_id: bare_druid, format: :xml }
-        expect(response.body.include?('World (APO default)')).to eq(false)
-        expect(response.body.include?('Stanford (APO default)')).to eq(false)
-        expect(response.body.include?('Citation Only (APO default)')).to eq(false)
-        expect(response.body.include?('Dark (Preserve Only) (APO default)')).to eq(false)
+        expect(response.body.include?('World (APO default)')).to be(false)
+        expect(response.body.include?('Stanford (APO default)')).to be(false)
+        expect(response.body.include?('Citation Only (APO default)')).to be(false)
+        expect(response.body.include?('Dark (Preserve Only) (APO default)')).to be(false)
       end
     end
   end
