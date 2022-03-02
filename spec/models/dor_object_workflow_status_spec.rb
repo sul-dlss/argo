@@ -21,7 +21,7 @@ RSpec.describe DorObjectWorkflowStatus do
                                  .and_return(false)
       end
 
-      it { expect(subject.can_open_version?).to eq false }
+      it { expect(subject.can_open_version?).to be false }
     end
 
     context 'when accessioned and submitted' do
@@ -32,7 +32,7 @@ RSpec.describe DorObjectWorkflowStatus do
           .with(druid: pid, milestone_name: 'submitted', version: 1).and_return(true)
       end
 
-      it { expect(subject.can_open_version?).to eq false }
+      it { expect(subject.can_open_version?).to be false }
     end
 
     context 'when accessioned, not submitted, and opened' do
@@ -48,7 +48,7 @@ RSpec.describe DorObjectWorkflowStatus do
                                         .and_return(true)
       end
 
-      it { expect(subject.can_open_version?).to eq false }
+      it { expect(subject.can_open_version?).to be false }
     end
 
     context 'when accessioned, not submitted, and not opened' do
@@ -64,7 +64,7 @@ RSpec.describe DorObjectWorkflowStatus do
                                         .and_return(false)
       end
 
-      it { expect(subject.can_open_version?).to eq true }
+      it { expect(subject.can_open_version?).to be true }
     end
   end
 end

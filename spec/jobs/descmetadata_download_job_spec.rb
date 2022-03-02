@@ -166,7 +166,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
 
       it 'returns nil' do
         result = download_job.query_dor(pid_list.first, log)
-        expect(result).to eq(nil)
+        expect(result).to be_nil
       end
     end
   end

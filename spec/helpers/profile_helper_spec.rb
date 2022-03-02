@@ -7,7 +7,7 @@ RSpec.describe ProfileHelper, type: :helper do
     context 'when using ProfileController' do
       it 'returns false' do
         allow(helper).to receive_messages(params: { 'controller' => 'profile' })
-        expect(helper.show_pagination?).to eq false
+        expect(helper.show_pagination?).to be false
       end
     end
   end

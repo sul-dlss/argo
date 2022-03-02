@@ -63,8 +63,8 @@ RSpec.describe FilesController, type: :controller do
         it 'returns 404 with error information' do
           get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
           expect(response.headers['Content-Type']).to eq('application/octet-stream')
-          expect(response.headers['Last-Modified']).to eq nil
-          expect(response.headers['Content-Disposition']).to eq nil
+          expect(response.headers['Last-Modified']).to be_nil
+          expect(response.headers['Content-Disposition']).to be_nil
           expect(response.code).to eq('404')
           expect(response.body).to eq("Preserved file not found: #{errmsg}")
         end
