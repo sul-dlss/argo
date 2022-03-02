@@ -40,29 +40,41 @@ module Show
       doc.catkey_id.present?
     end
 
-    delegate :admin_policy?, :agreement?, :item?, :embargoed?, to: :doc
+    delegate :admin_policy?, :agreement?, :item?, :collection?, :embargoed?, to: :doc
 
     private
 
     def manage_release
-      render ActionButton.new(url: item_manage_release_path(pid), label: 'Manage release')
+      render ActionButton.new(url: item_manage_release_path(pid), label: 'Manage release', open_modal: true)
+    end
+
+    def apply_apo_defaults
+      return unless item? || collection?
+
+      render ActionButton.new(
+        url: apply_apo_defaults_item_path(id: pid),
+        method: 'post',
+        label: 'Apply APO defaults',
+        disabled: !state_service.allows_modification?
+      )
     end
 
     def create_embargo
       return if !item? || embargoed?
 
-      render ActionButton.new(url: new_item_embargo_path(pid), label: 'Create embargo')
+      render ActionButton.new(url: new_item_embargo_path(pid), label: 'Create embargo', open_modal: true)
     end
 
     def edit_apo
       render ActionButton.new(
-        url: edit_apo_path(pid), label: 'Edit APO', new_page: true
+        url: edit_apo_path(pid), label: 'Edit APO'
       )
     end
 
     def create_collection
       render ActionButton.new(
-        url: new_apo_collection_path(apo_id: pid), label: 'Create Collection'
+        url: new_apo_collection_path(apo_id: pid), label: 'Create Collection',
+        open_modal: true
       )
     end
 
@@ -71,7 +83,6 @@ module Show
         url: refresh_metadata_item_path(id: pid),
         method: 'post',
         label: 'Refresh descMetadata',
-        new_page: true,
         disabled: !state_service.allows_modification?
       )
     end
@@ -79,14 +90,13 @@ module Show
     def reindex_button
       render ActionButton.new(
         url: dor_reindex_path(pid: pid),
-        label: 'Reindex',
-        new_page: true
+        label: 'Reindex'
       )
     end
 
     def add_workflow_button
       render ActionButton.new(
-        url: new_item_workflow_path(item_id: pid), label: 'Add workflow'
+        url: new_item_workflow_path(item_id: pid), label: 'Add workflow', open_modal: true
       )
     end
 
@@ -94,7 +104,6 @@ module Show
       render ActionButton.new(
         url: purge_item_path(id: pid),
         label: 'Purge',
-        new_page: true,
         method: 'delete',
         confirm: 'This object will be permanently purged from DOR. This action cannot be undone. Are you sure?',
         disabled: !registered_only?
