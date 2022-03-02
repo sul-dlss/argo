@@ -92,13 +92,14 @@ class ApoForm
   # entries, unless the current value is a deprecated entry, in which case, include that entry with the
   # deprecation warning in a parenthetical.
   def options_for_use_license_type(current_value)
-    Constants::LICENSE_OPTIONS.map do |attributes|
+    # We use `#filter_map` here to remove nils from the options block (for unused deprecated licenses)
+    Constants::LICENSE_OPTIONS.filter_map do |attributes|
       if attributes.fetch(:uri) == current_value && attributes.key?(:deprecation_warning)
         ["#{attributes.fetch(:label)} (#{attributes.fetch(:deprecation_warning)})", attributes.fetch(:uri)]
       elsif !attributes.key?(:deprecation_warning)
         [attributes.fetch(:label), attributes.fetch(:uri)]
       end
-    end.compact # the options block will produce nils for unused deprecated entries, compact will get rid of them
+    end
   end
 
   def default_access
