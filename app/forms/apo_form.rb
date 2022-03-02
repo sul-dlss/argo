@@ -88,18 +88,17 @@ class ApoForm
   end
 
   # return a list of lists, where the sublists are pairs, with the first element being the text to display
-  # in the selectbox, and the second being the value to submit for the entry. include only non-deprecated
+  # in the selectbox, and the second being the value to submit for the entry.  include only non-deprecated
   # entries, unless the current value is a deprecated entry, in which case, include that entry with the
   # deprecation warning in a parenthetical.
   def options_for_use_license_type(current_value)
-    # We use `#filter_map` here to remove nils from the options block (for unused deprecated licenses)
-    Constants::LICENSE_OPTIONS.filter_map do |attributes|
+    Constants::LICENSE_OPTIONS.map do |attributes|
       if attributes.fetch(:uri) == current_value && attributes.key?(:deprecation_warning)
         ["#{attributes.fetch(:label)} (#{attributes.fetch(:deprecation_warning)})", attributes.fetch(:uri)]
       elsif !attributes.key?(:deprecation_warning)
         [attributes.fetch(:label), attributes.fetch(:uri)]
       end
-    end
+    end.compact # the options block will produce nils for unused deprecated entries, compact will get rid of them
   end
 
   def default_access

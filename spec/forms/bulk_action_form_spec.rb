@@ -47,8 +47,8 @@ RSpec.describe BulkActionForm do
       # A subset of licenses from Constants::LICENSE_OPTIONS
       expect(form.license_options).to include(
         ['-- No license --', ''],
-        ['CC Attribution 4.0 International', 'https://creativecommons.org/licenses/by/4.0/legalcode'],
-        ['CC Attribution-NonCommercial 4.0 International', 'https://creativecommons.org/licenses/by-nc/4.0/legalcode']
+        ['Open Data Commons Public Domain Dedication and License 1.0', 'https://opendatacommons.org/licenses/pddl/1-0/'],
+        ['Attribution 3.0 Unported', 'https://creativecommons.org/licenses/by/3.0/legalcode']
       )
       expect(BulkActionPersister).to have_received(:persist).once
     end
