@@ -228,7 +228,12 @@ class ItemsController < ApplicationController
       end
     end
   rescue Dor::Services::Client::UnexpectedResponse => e
-    render status: :bad_request, plain: "APO defaults could not be applied: #{e.message}"
+    error_message = "APO defaults could not be applied: #{e.message}"
+    if params[:bulk]
+      render status: :bad_request, plain: error_message
+    else
+      format.any { redirect_to solr_document_path(params[:id]), flash: { error: error_message } }
+    end
   end
 
   def set_governing_apo
