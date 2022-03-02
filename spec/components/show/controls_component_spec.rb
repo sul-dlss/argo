@@ -39,7 +39,8 @@ RSpec.describe Show::ControlsComponent, type: :component do
       expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
       expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
       expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
-      expect(rendered.css('a').size).to eq 7
+      expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq 'Apply APO defaults'
+      expect(rendered.css('a').size).to eq 8
     end
 
     context "with a user that can't manage the object" do
@@ -53,9 +54,9 @@ RSpec.describe Show::ControlsComponent, type: :component do
     context 'when the item has a catkey' do
       let(:catkey) { 'catkey:1234567' }
 
-      it 'includes the refresh descMetadata button' do
+      it 'includes the refresh descMetadata button and the correct count of actions' do
         expect(rendered.css("a[href='/items/druid:kv840xx0000/refresh_metadata']").inner_text).to eq 'Refresh descMetadata'
-        expect(rendered.css('a').size).to eq 8
+        expect(rendered.css('a').size).to eq 9
       end
     end
   end
@@ -78,6 +79,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
       expect(page).to have_link 'Purge', href: '/items/druid:zt570qh4444/purge'
       expect(page).to have_link 'Upload MODS', href: '/apos/druid:zt570qh4444/bulk_jobs'
       expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete']").inner_text).to eq 'Purge'
+      expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:zt570qh4444/apply_apo_defaults']").size).to eq 0 # no apply APO defaults for APOs
       expect(page).not_to have_link 'Republish'
       expect(page).not_to have_link 'Manage release'
 
