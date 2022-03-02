@@ -15,7 +15,7 @@ RSpec.describe ItemsHelper, type: :helper do
     it 'is a list with url and label' do
       expect(options).to include(
         [
-          'Attribution-ShareAlike 4.0 International',
+          'CC Attribution-ShareAlike 4.0 International',
           'https://creativecommons.org/licenses/by-sa/4.0/legalcode'
         ]
       )
