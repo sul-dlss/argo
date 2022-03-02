@@ -519,7 +519,7 @@ GEM
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
     unicode-display_width (2.1.0)
-    view_component (2.49.0)
+    view_component (2.49.1)
       activesupport (>= 5.0.0, < 8.0)
       method_source (~> 1.0)
     warden (1.2.9)
@@ -617,7 +617,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   sqlite3 (~> 1.4.2)
   turbo-rails (~> 1.0)
-  view_component (~> 2.42)
+  view_component (~> 2.49)
   web-console
   webdrivers
   webmock
