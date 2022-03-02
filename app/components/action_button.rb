@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Draws a red button on the item detail page
+# Draws button on the item detail page
 class ActionButton < ApplicationComponent
   # @param [Hash] properties the button properties
   def initialize(label:, url:, method: nil, confirm: nil, open_modal: false, check_url: nil, disabled: nil)
