@@ -27,26 +27,39 @@ RSpec.describe 'Apply APO defaults' do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  context 'when request succeeds' do
-    it 'applies the defaults' do
-      post '/items/druid:123/apply_apo_defaults'
-      expect(object_client).to have_received(:apply_admin_policy_defaults).once
-      expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
-      expect(response).to be_successful
+  context 'for bulk action requests' do
+    context 'when request succeeds' do
+      it 'applies the defaults' do
+        post "/items/#{pid}/apply_apo_defaults?bulk=true"
+        expect(object_client).to have_received(:apply_admin_policy_defaults).once
+        expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely).with(pid) # bulk actions do NOT reindex
+        expect(response).to be_successful
+      end
+    end
+
+    context 'when request errors' do
+      before do
+        allow(object_client).to receive(:apply_admin_policy_defaults).and_raise(Dor::Services::Client::UnexpectedResponse)
+      end
+
+      it 'renders an error message' do
+        post "/items/#{pid}/apply_apo_defaults?bulk=true"
+        expect(object_client).to have_received(:apply_admin_policy_defaults).once
+        expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
+        expect(response).not_to be_successful
+        expect(response).to have_http_status(:bad_request)
+      end
     end
   end
 
-  context 'when request errors' do
-    before do
-      allow(object_client).to receive(:apply_admin_policy_defaults).and_raise(Dor::Services::Client::UnexpectedResponse)
-    end
-
-    it 'renders an error message' do
-      post '/items/druid:123/apply_apo_defaults'
-      expect(object_client).to have_received(:apply_admin_policy_defaults).once
-      expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
-      expect(response).not_to be_successful
-      expect(response).to have_http_status(:bad_request)
+  context 'for action button requests' do
+    context 'when request succeeds' do
+      it 'applies the defaults and redirects' do
+        post "/items/#{pid}/apply_apo_defaults"
+        expect(object_client).to have_received(:apply_admin_policy_defaults).once
+        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+        expect(response).to redirect_to(solr_document_path(pid))
+      end
     end
   end
 end
