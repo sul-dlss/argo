@@ -12,7 +12,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   let(:governing_apo_id) { 'druid:hv992yv2222' }
   let(:manager) { true }
   let(:rendered) { render_inline(component) }
-  let(:state_service) { instance_double(StateService, allows_modification?: true) }
+  let(:state_service) { instance_double(StateService, allows_modification?: allows_modification) }
 
   before do
     allow(StateService).to receive(:new).and_return(state_service)
@@ -31,38 +31,64 @@ RSpec.describe Show::ControlsComponent, type: :component do
     end
     let(:catkey) { nil }
 
-    it 'creates a hash with the needed button info for an admin' do
-      expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
-      expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
-      expect(page).to have_link 'Publish', href: '/items/druid:kv840xx0000/publish'
-      expect(page).to have_link 'Unpublish', href: '/items/druid:kv840xx0000/publish'
-      expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
-      expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
-      expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
-      expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq 'Apply APO defaults'
-      expect(rendered.css('a').size).to eq 8
-    end
+    context 'when the object is unlocked' do
+      let(:allows_modification) { true }
 
-    context "with a user that can't manage the object" do
-      let(:manager) { false }
+      it 'creates a hash with the needed button info for an admin' do
+        expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
+        expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
+        expect(page).to have_link 'Publish', href: '/items/druid:kv840xx0000/publish'
+        expect(page).to have_link 'Unpublish', href: '/items/druid:kv840xx0000/publish'
+        expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
+        expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
+        expect(page).to have_link 'Create embargo', href: '/items/druid:kv840xx0000/embargo/new'
+        expect(rendered.css("a[data-turbo-method='post'][href='/items/druid:kv840xx0000/apply_apo_defaults']").inner_text).to eq 'Apply APO defaults'
+        expect(rendered.css('a').size).to eq 8
+        expect(rendered.css('a.disabled').size).to eq 3 # purge, publish/unpublish are disabled
+      end
 
-      it 'does not generate errors given an object that has no associated APO' do
-        expect(rendered.css('a').to_html).to eq ''
+      context "with a user that can't manage the object" do
+        let(:manager) { false }
+
+        it 'does not generate errors given an object that has no associated APO' do
+          expect(rendered.css('a').to_html).to eq ''
+        end
+      end
+
+      context 'when the item has a catkey' do
+        let(:catkey) { 'catkey:1234567' }
+
+        it 'includes the refresh descMetadata button and the correct count of actions' do
+          expect(rendered.css("a[href='/items/druid:kv840xx0000/refresh_metadata']").inner_text).to eq 'Refresh descMetadata'
+          expect(rendered.css('a').size).to eq 9
+        end
       end
     end
 
-    context 'when the item has a catkey' do
-      let(:catkey) { 'catkey:1234567' }
+    context 'when the object is locked' do
+      let(:allows_modification) { false }
 
-      it 'includes the refresh descMetadata button and the correct count of actions' do
-        expect(rendered.css("a[href='/items/druid:kv840xx0000/refresh_metadata']").inner_text).to eq 'Refresh descMetadata'
-        expect(rendered.css('a').size).to eq 9
+      it 'the embargo and apply APO buttons are disabled' do
+        expect(page).to have_link 'Reindex', href: '/dor/reindex/druid:kv840xx0000'
+        expect(page).to have_link 'Add workflow', href: '/items/druid:kv840xx0000/workflows/new'
+        expect(page).to have_link 'Publish', href: '/items/druid:kv840xx0000/publish'
+        expect(page).to have_link 'Unpublish', href: '/items/druid:kv840xx0000/publish'
+        expect(rendered.css("a.disabled[data-turbo-confirm][data-turbo-method='delete'][href='/items/druid:kv840xx0000/purge']").inner_text).to eq 'Purge'
+        expect(page).to have_link 'Manage release', href: '/items/druid:kv840xx0000/manage_release'
+
+        # these buttons are disabled since object is locked
+        expect(page).to have_css 'a.disabled', text: 'Create embargo'
+        expect(page).to have_css 'a.disabled', text: 'Apply APO defaults'
+
+        expect(rendered.css('a').size).to eq 8
+        expect(rendered.css('a.disabled').size).to eq 5 # create embargo, apply APO defaults, purge, publish/unpublish are disabled
       end
     end
   end
 
   context 'when the object is an AdminPolicy the user can manage' do
     let(:view_apo_id) { 'druid:zt570qh4444' }
+    let(:allows_modification) { true }
 
     let(:doc) do
       SolrDocument.new('id' => view_apo_id,
@@ -90,6 +116,7 @@ RSpec.describe Show::ControlsComponent, type: :component do
   describe '#registered_only?' do
     subject { component.send(:registered_only?) }
 
+    let(:allows_modification) { true }
     let(:item_id) { 'druid:kv840xx0000' }
 
     context 'when registered' do
