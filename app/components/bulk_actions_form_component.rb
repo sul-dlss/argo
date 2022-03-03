@@ -34,7 +34,8 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Edit Catkeys and Barcodes', 'SetCatkeysAndBarcodesJob'],
         ['Edit License and Rights Statements', 'SetLicenseAndRightsStatementsJob'],
         ['Refresh MODS', 'RefreshModsJob'],
-        ['Set Content Type', 'SetContentTypeJob']
+        ['Set Content Type', 'SetContentTypeJob'],
+        ['Set Collection', 'SetCollectionJob']
       ]],
       ['Modify objects (via CSV)', [
         ['Create virtual object(s)', 'CreateVirtualObjectsJob'],
