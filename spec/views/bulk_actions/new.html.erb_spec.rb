@@ -8,12 +8,21 @@ RSpec.describe 'bulk_actions/new.html.erb' do
   let(:query_params) { { q: 'testing' } }
   let(:blacklight_config) { Blacklight::Configuration.new }
   let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }
+  let(:current_user) { double(sunetid: 'esnowden', groups: user_groups) }
+  let(:collections) do
+    [
+      ['None', ''],
+      ['Dummy Collection 1', 'druid:123'],
+      ['Dummy Collection 2', 'druid:456']
+    ]
+  end
 
   before do
     @form = BulkActionForm.new(create(:bulk_action), groups: user_groups)
-    allow(view).to receive(:current_user).and_return(double(sunetid: 'esnowden', groups: user_groups))
+    allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:apo_list).with(user_groups).and_return(apo_list)
     allow(view).to receive(:search_state).and_return(search_state)
+    allow(current_user).to receive(:permitted_collections).and_return(collections)
     render
   end
 
@@ -91,6 +100,15 @@ RSpec.describe 'bulk_actions/new.html.erb' do
   describe 'Manage Embargoes Job form' do
     it 'has proper form input values' do
       expect(rendered).to have_css 'input[type="file"][name="bulk_action[manage_embargo][csv_file]"]'
+    end
+  end
+
+  describe 'Set Collection Job form' do
+    it 'has proper form input values' do
+      expect(rendered).to have_css 'select option[value="SetCollectionJob"]'
+      expect(rendered).to have_css 'select[name="bulk_action[set_collection][new_collection_id]"]'
+      expect(rendered).to have_css 'select[name="bulk_action[set_collection][new_collection_id]"] option[value="druid:123"]'
+      expect(rendered).to have_css 'select[name="bulk_action[set_collection][new_collection_id]"] option[value="druid:456"]'
     end
   end
 end
