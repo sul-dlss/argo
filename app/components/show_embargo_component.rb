@@ -1,17 +1,21 @@
 # frozen_string_literal: true
 
 class ShowEmbargoComponent < ApplicationComponent
-  def initialize(solr_document:)
-    @solr_document = solr_document
+  def initialize(presenter:)
+    @solr_document = presenter.document
+    @state_service = presenter.state_service
   end
 
   delegate :id, :embargoed?, :embargo_release_date, to: :@solr_document
+  delegate :allows_modification?, to: :@state_service
 
   def render?
     embargoed? && embargo_release_date.present?
   end
 
   def edit_embargo
+    return unless allows_modification?
+
     link_to edit_item_embargo_path(id),
             class: 'text-white',
             aria: { label: 'Manage embargo' },

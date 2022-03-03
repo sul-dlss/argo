@@ -62,7 +62,7 @@ module Show
     def create_embargo
       return if !item? || embargoed?
 
-      render ActionButton.new(url: new_item_embargo_path(pid), label: 'Create embargo', open_modal: true)
+      render ActionButton.new(url: new_item_embargo_path(pid), label: 'Create embargo', open_modal: true, disabled: !state_service.allows_modification?)
     end
 
     def edit_apo
