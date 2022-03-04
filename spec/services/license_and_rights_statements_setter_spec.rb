@@ -30,6 +30,10 @@ RSpec.describe LicenseAndRightsStatementsSetter do
         label: 'test',
         type: Cocina::Models::Vocab.object,
         version: 1,
+        description: {
+          title: [{ value: 'test' }],
+          purl: 'https://purl.stanford.edu/bc123df4567'
+        },
         access: {},
         administrative: { hasAdminPolicy: 'druid:bc123df4569' }
       )
@@ -90,6 +94,10 @@ RSpec.describe LicenseAndRightsStatementsSetter do
             externalIdentifier: 'druid:bc123df4568',
             label: 'test',
             type: Cocina::Models::Vocab.collection,
+            description: {
+              title: [{ value: 'test' }],
+              purl: 'https://purl.stanford.edu/bc123df4567'
+            },
             version: 1,
             access: {}
           )
@@ -111,7 +119,8 @@ RSpec.describe LicenseAndRightsStatementsSetter do
           version: 1,
           administrative: {
             hasAdminPolicy: 'druid:bc123df4570',
-            hasAgreement: 'druid:hp308wm0436'
+            hasAgreement: 'druid:hp308wm0436',
+            defaultAccess: { access: 'world', download: 'world' }
           }
         )
       end

@@ -21,6 +21,10 @@ RSpec.describe 'Set rights for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.object,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {
                                  'access' => 'world',
                                  'download' => 'world',
@@ -237,6 +241,10 @@ RSpec.describe 'Set rights for an object' do
                                  'version' => 1,
                                  'type' => Cocina::Models::Vocab.object,
                                  'externalIdentifier' => pid,
+                                 'description' => {
+                                   'title' => [{ 'value' => 'My ETD' }],
+                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 },
                                  'access' => {
                                    'access' => 'stanford',
                                    'download' => 'none',
@@ -377,6 +385,10 @@ RSpec.describe 'Set rights for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.collection,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {
                                  'access' => 'world'
                                },
@@ -433,6 +445,10 @@ RSpec.describe 'Set rights for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.collection,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {
                                  'access' => 'world'
                                },

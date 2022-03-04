@@ -18,7 +18,8 @@ RSpec.describe 'Item registration page', js: true do
                            'administrative' => {
                              hasAdminPolicy: ur_apo_id,
                              hasAgreement: 'druid:hp308wm0436',
-                             registrationWorkflow: %w[dpgImageWF goobiWF]
+                             registrationWorkflow: %w[dpgImageWF goobiWF],
+                             defaultAccess: { access: 'world', download: 'world' }
                            }
                          })
   end
@@ -85,7 +86,7 @@ RSpec.describe 'Item registration page', js: true do
       'collection' => '',
       'label' => 'object title',
       'project' => 'special division : project #4',
-      'rights' => 'world',
+      'rights' => 'default',
       'source_id' => 'source:id1',
       'tag' => ['Process : Content Type : Book (ltr)', 'tag : test', "Registered By : #{user.sunetid}"],
       'workflow_id' => 'goobiWF'

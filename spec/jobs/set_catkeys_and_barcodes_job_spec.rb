@@ -22,6 +22,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'version' => 2,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => pids[0],
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item1' }],
+                             'purl' => "https://purl.stanford.edu/#{pids[0].delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
@@ -37,6 +41,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'version' => 3,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => pids[1],
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item2' }],
+                             'purl' => "https://purl.stanford.edu/#{pids[1].delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
@@ -52,6 +60,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                            'version' => 3,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => pids[2],
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item3' }],
+                             'purl' => "https://purl.stanford.edu/#{pids[2].delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
@@ -138,6 +150,10 @@ RSpec.describe SetCatkeysAndBarcodesJob do
                              'version' => 3,
                              'type' => Cocina::Models::Vocab.object,
                              'externalIdentifier' => pids[0],
+                             'description' => {
+                               'title' => [{ 'value' => 'My Item1' }],
+                               'purl' => "https://purl.stanford.edu/#{pids[0].delete_prefix('druid:')}"
+                             },
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},

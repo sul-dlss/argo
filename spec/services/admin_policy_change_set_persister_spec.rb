@@ -27,7 +27,8 @@ RSpec.describe AdminPolicyChangeSetPersister do
     let(:administrative) do
       {
         hasAdminPolicy: 'druid:xx666zz7777',
-        hasAgreement: 'druid:hp308wm0436'
+        hasAgreement: 'druid:hp308wm0436',
+        defaultAccess: { access: 'world', download: 'world' }
       }
     end
 

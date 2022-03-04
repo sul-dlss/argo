@@ -11,6 +11,10 @@ RSpec.describe ItemChangeSet do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => pid,
+                           'description' => {
+                             'title' => [{ 'value' => 'My ETD' }],
+                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},
@@ -31,6 +35,10 @@ RSpec.describe ItemChangeSet do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.object,
                              'externalIdentifier' => pid,
+                             'description' => {
+                               'title' => [{ 'value' => 'My ETD' }],
+                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             },
                              'access' => {
                                'access' => 'stanford',
                                'download' => 'stanford',

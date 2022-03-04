@@ -25,7 +25,11 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
       label: title,
       version: 1,
       type: Cocina::Models::Vocab.admin_policy,
-      administrative: { hasAdminPolicy: SolrDocument::UBER_APO_ID, hasAgreement: agreement_object_id }
+      administrative: {
+        hasAdminPolicy: SolrDocument::UBER_APO_ID,
+        hasAgreement: agreement_object_id,
+        defaultAccess: { access: 'world', download: 'world' }
+      }
     )
   end
 

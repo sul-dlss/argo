@@ -21,7 +21,8 @@ RSpec.describe 'Update an existing Admin Policy' do
                            administrative: {
                              hasAdminPolicy: 'druid:cg532dg5405',
                              hasAgreement: 'druid:hp308wm0436',
-                             registrationWorkflow: ['registrationWF']
+                             registrationWorkflow: ['registrationWF'],
+                             defaultAccess: { access: 'world', download: 'world' }
                            }
                          })
   end

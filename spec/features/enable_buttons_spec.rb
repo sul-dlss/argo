@@ -34,6 +34,10 @@ RSpec.describe 'Enable buttons' do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.book,
                            'externalIdentifier' => item_id,
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item' }],
+                             'purl' => "https://purl.stanford.edu/#{item_id.delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},

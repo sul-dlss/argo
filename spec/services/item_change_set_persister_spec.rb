@@ -31,6 +31,10 @@ RSpec.describe ItemChangeSetPersister do
         label: 'test',
         type: Cocina::Models::Vocab.object,
         version: 1,
+        description: {
+          title: [{ value: 'test' }],
+          purl: 'https://purl.stanford.edu/bc123df4568'
+        },
         access: {
           copyright: copyright_statement_before,
           license: license_before,
@@ -117,6 +121,10 @@ RSpec.describe ItemChangeSetPersister do
           label: 'test',
           type: Cocina::Models::Vocab.object,
           version: 1,
+          description: {
+            title: [{ value: 'test' }],
+            purl: 'https://purl.stanford.edu/bc123df4568'
+          },
           access: {
             embargo: { releaseDate: '2040-04-04', access: 'world', download: 'world' },
             copyright: copyright_statement_before,
@@ -161,6 +169,10 @@ RSpec.describe ItemChangeSetPersister do
           label: 'test',
           type: Cocina::Models::Vocab.object,
           version: 1,
+          description: {
+            title: [{ value: 'test' }],
+            purl: 'https://purl.stanford.edu/bc123df4568'
+          },
           access: {
             copyright: copyright_statement_before,
             license: license_before,
@@ -198,6 +210,10 @@ RSpec.describe ItemChangeSetPersister do
           label: 'test',
           type: Cocina::Models::Vocab.object,
           version: 1,
+          description: {
+            title: [{ value: 'test' }],
+            purl: 'https://purl.stanford.edu/bc123df4568'
+          },
           access: {
             # NOTE: missing copyright here
             license: license_before,

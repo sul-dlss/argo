@@ -32,6 +32,10 @@ RSpec.describe CollectionChangeSetPersister do
         label: 'test',
         type: Cocina::Models::Vocab.collection,
         version: 1,
+        description: {
+          title: [{ value: 'test' }],
+          purl: 'https://purl.stanford.edu/bc123df4568'
+        },
         access: {
           copyright: copyright_statement_before,
           license: license_before,

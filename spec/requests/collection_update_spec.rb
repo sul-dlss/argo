@@ -22,6 +22,10 @@ RSpec.describe 'Set the properties for a collection' do
                              'label' => 'My ETD',
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.collection,
+                             'description' => {
+                               'title' => [{ 'value' => 'My ETD' }],
+                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             },
                              'externalIdentifier' => pid,
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },

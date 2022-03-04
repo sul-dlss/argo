@@ -22,6 +22,7 @@ RSpec.describe Show::Apo::RolesComponent, type: :component do
     {
       hasAdminPolicy: 'druid:xx666zz7777',
       hasAgreement: 'druid:hp308wm0436',
+      defaultAccess: { access: 'world', download: 'world' },
       roles: [
         {
           members: [

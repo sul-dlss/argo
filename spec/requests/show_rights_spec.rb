@@ -16,7 +16,8 @@ RSpec.describe 'Show rights for an object' do
                              'externalIdentifier' => apo_pid,
                              'administrative' => {
                                'hasAdminPolicy' => apo_pid,
-                               'hasAgreement' => 'druid:hp308wm0436'
+                               'hasAgreement' => 'druid:hp308wm0436',
+                               'defaultAccess' => { 'access' => 'world', 'download' => 'world' }
                              }
                            })
     end
@@ -38,6 +39,10 @@ RSpec.describe 'Show rights for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.object,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {
                                  'access' => 'world',
                                  'download' => 'none',
@@ -91,6 +96,10 @@ RSpec.describe 'Show rights for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.collection,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {
                                  'access' => 'world'
                                },
@@ -112,6 +121,10 @@ RSpec.describe 'Show rights for an object' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.collection,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {
                                  'access' => 'world'
                                },

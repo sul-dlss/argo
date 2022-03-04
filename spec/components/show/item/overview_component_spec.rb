@@ -9,8 +9,12 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   let(:cocina) do
     Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                             type: Cocina::Models::Vocab.document,
-                            label: '',
+                            label: 'my dro',
                             version: 1,
+                            description: {
+                              title: [{ value: 'my dro' }],
+                              purl: 'https://purl.stanford.edu/bc234fg5678'
+                            },
                             access: {},
                             administrative: {
                               hasAdminPolicy: 'druid:hv992ry2431'
@@ -42,8 +46,12 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
     let(:cocina) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::Vocab.document,
-                              label: '',
+                              label: 'my dro',
                               version: 1,
+                              description: {
+                                title: [{ value: 'my dro' }],
+                                purl: 'https://purl.stanford.edu/bc234fg5678'
+                              },
                               access: {
                                 license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode'
                               },
