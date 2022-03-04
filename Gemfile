@@ -80,6 +80,7 @@ gem 'okcomputer' # monitors application and its dependencies
 gem 'preservation-client', '~> 4.0'
 gem 'rsolr'
 gem 'sdr-client', '~> 0.60'
+gem 'tcramer', '~> 1.0'
 
 gem 'devise'
 gem 'devise-remote-user', '~> 1.0'
