@@ -24,6 +24,9 @@ export_structural_job:
 register_druids_job:
   csv_filename: 'registration_report.csv'
 
+descriptive_metadata_export_job:
+  csv_filename: 'descriptive.csv'
+
 hidden_datastreams:
   - 'workflows'
 

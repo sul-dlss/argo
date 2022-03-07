@@ -2,6 +2,7 @@
 
 require 'zip'
 
+# Download metadata as a zip of xml files.
 class DescmetadataDownloadJob < GenericJob
   MAX_TRIES = 3
   SLEEP_SECONDS = 3

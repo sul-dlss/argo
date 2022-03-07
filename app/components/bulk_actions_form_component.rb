@@ -46,7 +46,8 @@ class BulkActionsFormComponent < ApplicationComponent
       ]],
       ['Generate reports', [
         ['Download checksum report', new_checksum_report_job_path],
-        ['Download descriptive metadata (as MODS)', new_descriptive_download_job_path]
+        ['Download descriptive metadata spreadsheet', new_descriptive_metadata_export_job_path],
+        ['Download descriptive metadata (as MODS)', new_download_mods_job_path]
       ]]
     ]
   end
