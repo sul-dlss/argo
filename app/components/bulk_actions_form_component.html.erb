@@ -56,6 +56,13 @@
             Deletes unpublished DOR objects
           </span>
         </div>
+        
+        <div role='tabpanel' class='tab-pane' id='AddWorkflowJob'>
+          <span class='help-block'>
+            Starts a workflow for individual objects.
+          </span>
+          <%= render 'bulk_actions/forms/add_workflow_form', f: f %>
+        </div>
 
         <div role='tabpanel' class='tab-pane' id='SetCatkeysAndBarcodesJob'>
           <span class='help-block'>

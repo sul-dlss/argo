@@ -16,7 +16,6 @@ set_content_type_url='<%= item_content_type_url(item_id: 'druid:xxxxxxxxx', bulk
 set_rights_url='<%= set_rights_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 set_collection_url='<%= set_collection_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 apo_apply_defaults_url='<%= apply_apo_defaults_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
-add_workflow_url = '<%= item_workflows_path('druid:xxxxxxxxx', bulk: 'true') %>'
 refresh_metadata_url='<%= refresh_metadata_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 source_id_url='<%=  source_id_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 tags_url='<%= tags_bulk_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
@@ -73,7 +72,6 @@ ul li{
       </div>
       <div class="col-sm-2">
         <button class="btn btn-danger btn-block" id="apply-apo-defaults-button">Apply APO defaults</button>
-        <button class="btn btn-danger btn-block" id="add-workflow-button">Add a workflow</button>
       </div>
     </div>
     <strong>Options that do not require versioning</strong>
@@ -121,12 +119,6 @@ ul li{
     <%= select_tag :new_resource_type, options_for_select(new_resource_types) %><br>
     <button class="btn btn-primary" id="confirm-set-content-type-button">Set content types</button>
   </p>
-</div>
-
-<div class="bulk_operation" id="add_workflow" name="add_workflow">
-  <h1>Add a workflow to the items.</h1>
-  <%= select_tag :wf, options_for_select(workflow_options, Settings.apo.default_workflow_option) %>
-  <button class="btn btn-primary" id="confirm-add-workflow-button">Add workflow</button><br>
 </div>
 
 <div class="bulk_operation" id="refresh_metadata" name="refresh_metadata">

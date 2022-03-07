@@ -22,7 +22,7 @@ class BulkActionPersister
 
   attr_reader :bulk_action_form
 
-  delegate :pids, :manage_release, :set_governing_apo,
+  delegate :pids, :add_workflow, :manage_release, :set_governing_apo,
            :set_catkeys_and_barcodes, :groups, :prepare, :create_virtual_objects,
            :import_tags, :set_license_and_rights_statements,
            to: :bulk_action_form
@@ -59,6 +59,7 @@ class BulkActionPersister
   def job_params
     {
       pids: pids.split,
+      add_workflow: add_workflow,
       manage_release: manage_release,
       set_catkeys_and_barcodes: set_catkeys_and_barcodes,
       set_governing_apo: set_governing_apo,

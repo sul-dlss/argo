@@ -3,8 +3,10 @@
 # This models the values set from the bulk action form
 class BulkActionForm < BaseForm
   VIRTUAL_PROPERTIES = %i[
-    manage_release set_governing_apo set_catkeys_and_barcodes set_catkeys_and_barcodes_csv prepare register_druids
-    create_virtual_objects import_tags set_license_and_rights_statements manage_embargo
+    add_workflow manage_release set_governing_apo
+    set_catkeys_and_barcodes set_catkeys_and_barcodes_csv
+    prepare register_druids create_virtual_objects import_tags
+    set_license_and_rights_statements manage_embargo
   ].freeze
 
   def initialize(model, groups:)

@@ -25,7 +25,7 @@ class BulkActionsController < ApplicationController
       flash[:notice] = 'Bulk action was successfully created.'
       redirect_to action: :index
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -55,6 +55,7 @@ class BulkActionsController < ApplicationController
       :action_type,
       :description,
       :pids,
+      add_workflow: %i[workflow],
       manage_release: %i[tag what who to],
       set_governing_apo: [:new_apo_id],
       set_catkeys_and_barcodes: %i[

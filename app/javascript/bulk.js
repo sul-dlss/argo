@@ -104,12 +104,6 @@ function apply_apo_defaults(druids) {
 	process_post(druids, apo_apply_defaults_url, {}, 'Defaults_applied.')
 }
 
-function add_workflow(druids){
-	var params = { 'wf': document.getElementById('wf').value }
-	process_post(druids, add_workflow_url, params, 'Workflow Added');
-}
-
-
 function refresh_metadata(druids){
 	process_post(druids, refresh_metadata_url, {}, "Updated.");
 }
@@ -282,7 +276,6 @@ document.addEventListener("turbo:load", () => {
 	$('#set-collection-button').on('click', () => $('#set_collection').show(400))
 
 	$('#apply-apo-defaults-button').on('click', () => $('#apply_apo_defaults').show(400))
-	$('#add-workflow-button').on('click', () => $('#add_workflow').show(400))
 	$('#close-versions-button').on('click', () => $('#close').show(400))
   $('#show_tags').on('click', () => {
 		$('#tag').show(400)
@@ -302,11 +295,6 @@ document.addEventListener("turbo:load", () => {
 	$('#confirm-set-content-type-button').on('click', () => {
 		fetch_druids(set_content_type)
 		$('#content_type').hide(400)
-	})
-
-	$('#confirm-add-workflow-button').on('click', () => {
-		fetch_druids(add_workflow)
-		$('#add_workflow').hide(400)
 	})
 
 	$('#confirm-refresh-metadata-button').on('click', () => {
