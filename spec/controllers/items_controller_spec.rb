@@ -352,20 +352,12 @@ RSpec.describe ItemsController, type: :controller do
             allow(Dor::Services::Client).to receive(:object).and_return(object_service)
           end
 
-          it 'redirects with a notice if there is a catkey and the operation is not part of a bulk update' do
+          it 'redirects with a notice if there is a catkey' do
             get :refresh_metadata, params: { id: pid }
             expect(object_service).to have_received(:refresh_metadata)
 
             expect(response).to redirect_to(solr_document_path(pid))
             expect(flash[:notice]).to eq "Metadata for #{pid} successfully refreshed from catkey: 12345"
-          end
-
-          it 'returns a 200 with a plaintext message if the operation is part of a bulk update' do
-            get :refresh_metadata, params: { id: pid, bulk: true }
-            expect(object_service).to have_received(:refresh_metadata)
-
-            expect(response).to have_http_status(:ok)
-            expect(response.body).to eq 'Refreshed.'
           end
         end
 

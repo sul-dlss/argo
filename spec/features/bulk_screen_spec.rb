@@ -38,7 +38,6 @@ RSpec.describe 'Bulk actions view', js: true do
       expect(page).to have_content 'druid:zt570qh4444'
     end
 
-    expect(page).to have_button('Refresh MODS', disabled: false)
     expect(page).to have_button('Set source Id', disabled: false)
     expect(page).to have_button('Set object rights', disabled: false)
     expect(page).to have_button('Set content type', disabled: false)

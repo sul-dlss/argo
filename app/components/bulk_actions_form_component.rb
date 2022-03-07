@@ -32,7 +32,8 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Close versions', 'CloseVersionJob'],
         ['Update governing APO', 'SetGoverningApoJob'],
         ['Edit Catkeys and Barcodes', 'SetCatkeysAndBarcodesJob'],
-        ['Edit License and Rights Statements', 'SetLicenseAndRightsStatementsJob']
+        ['Edit License and Rights Statements', 'SetLicenseAndRightsStatementsJob'],
+        ['Refresh MODS', 'RefreshModsJob']
       ]],
       ['Modify objects (via CSV)', [
         ['Create virtual object(s)', 'CreateVirtualObjectsJob'],
