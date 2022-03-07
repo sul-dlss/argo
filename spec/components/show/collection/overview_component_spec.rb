@@ -9,8 +9,12 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
   let(:cocina) do
     Cocina::Models::Collection.new(externalIdentifier: 'druid:bc234fg5678',
                                    type: Cocina::Models::Vocab.collection,
-                                   label: '',
+                                   label: 'my collection',
                                    version: 1,
+                                   description: {
+                                     title: [{ value: 'my collection' }],
+                                     purl: 'https://purl.stanford.edu/bc234fg5678'
+                                   },
                                    access: {
                                      access: 'world',
                                      copyright: 'This collection is in the Public Domain.',

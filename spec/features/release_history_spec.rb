@@ -37,8 +37,12 @@ RSpec.describe 'Release history' do
     let(:cocina_model) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                               type: Cocina::Models::Vocab.document,
-                              label: '',
+                              label: 'Test DRO',
                               version: 1,
+                              description: {
+                                title: [{ value: 'Test DRO' }],
+                                purl: 'https://purl.stanford.edu/bc234fg5678'
+                              },
                               access: {},
                               administrative: {
                                 hasAdminPolicy: 'druid:hv992ry2431',

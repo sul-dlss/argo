@@ -32,6 +32,10 @@ RSpec.describe 'Collection manage release' do
                            'version' => 2,
                            'type' => Cocina::Models::Vocab.collection,
                            'externalIdentifier' => collection_id,
+                           'description' => {
+                             'title' => [{ 'value' => 'The model' }],
+                             'purl' => "https://purl.stanford.edu/#{collection_id.delete_prefix('druid:')}"
+                           },
                            'administrative' => { hasAdminPolicy: uber_apo_id },
                            'access' => {}
                          })

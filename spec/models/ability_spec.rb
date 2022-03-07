@@ -11,6 +11,10 @@ RSpec.describe Ability do
                             label: 'test',
                             type: Cocina::Models::Vocab.object,
                             version: 1,
+                            description: {
+                              title: [{ value: 'test' }],
+                              purl: "https://purl.stanford.edu/#{new_cocina_object_id.delete_prefix('druid:')}"
+                            },
                             access: {},
                             administrative: {
                               hasAdminPolicy: apo_id
@@ -24,7 +28,8 @@ RSpec.describe Ability do
                                     version: 1,
                                     administrative: {
                                       hasAdminPolicy: apo_id,
-                                      hasAgreement: 'druid:hp308wm0436'
+                                      hasAgreement: 'druid:hp308wm0436',
+                                      defaultAccess: { access: 'world', download: 'world' }
                                     })
   end
 
@@ -33,6 +38,10 @@ RSpec.describe Ability do
                                    label: 'test',
                                    type: Cocina::Models::Vocab.collection,
                                    version: 1,
+                                   description: {
+                                     title: [{ value: 'test' }],
+                                     purl: "https://purl.stanford.edu/#{new_cocina_object_id.delete_prefix('druid:')}"
+                                   },
                                    access: {},
                                    administrative: {
                                      hasAdminPolicy: apo_id

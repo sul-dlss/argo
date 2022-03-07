@@ -15,6 +15,10 @@ RSpec.describe StructuresController do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => pid,
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item' }],
+                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},

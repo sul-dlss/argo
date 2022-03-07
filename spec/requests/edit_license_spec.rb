@@ -24,6 +24,10 @@ RSpec.describe 'Edit license' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.object,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'structural' => {},
@@ -45,6 +49,10 @@ RSpec.describe 'Edit license' do
                                'version' => 1,
                                'type' => Cocina::Models::Vocab.collection,
                                'externalIdentifier' => pid,
+                               'description' => {
+                                 'title' => [{ 'value' => 'My ETD' }],
+                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               },
                                'access' => {},
                                'identification' => {
                                  'catalogLinks' => [

@@ -32,6 +32,10 @@ RSpec.describe 'Add a workflow to an item' do
                            'version' => 2,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => item_id,
+                           'description' => {
+                             'title' => [{ 'value' => 'The model' }],
+                             'purl' => "https://purl.stanford.edu/#{item_id.delete_prefix('druid:')}"
+                           },
                            'administrative' => { hasAdminPolicy: uber_apo_id },
                            'access' => {},
                            'structural' => {}

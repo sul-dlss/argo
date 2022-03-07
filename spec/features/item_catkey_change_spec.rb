@@ -32,6 +32,10 @@ RSpec.describe 'Item catkey change' do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.object,
                              'externalIdentifier' => druid,
+                             'description' => {
+                               'title' => [{ 'value' => 'My ETD' }],
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+                             },
                              'access' => {
                                'access' => 'world',
                                'download' => 'world'

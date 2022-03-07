@@ -11,6 +11,10 @@ RSpec.describe 'Download item files' do
       externalIdentifier: 'druid:rn653dy9317',
       label: 'M1090_S15_B01_F07_0106',
       version: 4,
+      description: {
+        title: [{ value: 'M1090_S15_B01_F07_0106' }],
+        purl: 'https://purl.stanford.edu/rn653dy9317'
+      },
       access: {
         access: 'location-based',
         copyright: '© The Estate of R. Buckminster Fuller.',

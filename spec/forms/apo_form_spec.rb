@@ -51,7 +51,8 @@ RSpec.describe ApoForm do
               ],
               name: 'dor-apo-manager'
             }
-          ]
+          ],
+          defaultAccess: { access: 'world', download: 'world' }
         }
       end
 
@@ -73,7 +74,8 @@ RSpec.describe ApoForm do
         {
           hasAdminPolicy: 'druid:xx666zz7777',
           hasAgreement: 'druid:hp308wm0436',
-          registrationWorkflow: %w[digitizationWF goobiWF]
+          registrationWorkflow: %w[digitizationWF goobiWF],
+          defaultAccess: { access: 'world', download: 'world' }
         }
       end
 
@@ -87,7 +89,8 @@ RSpec.describe ApoForm do
         {
           hasAdminPolicy: 'druid:xx666zz7777',
           registrationWorkflow: ['digitizationWF'],
-          hasAgreement: 'druid:dd327rv8888'
+          hasAgreement: 'druid:dd327rv8888',
+          defaultAccess: { access: 'world', download: 'world' }
         }
       end
 

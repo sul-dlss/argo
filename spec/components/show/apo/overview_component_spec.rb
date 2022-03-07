@@ -12,7 +12,8 @@ RSpec.describe Show::Apo::OverviewComponent, type: :component do
                                     version: 1,
                                     administrative: {
                                       hasAdminPolicy: 'druid:hv992ry2431',
-                                      hasAgreement: 'druid:hp308wm0436'
+                                      hasAgreement: 'druid:hp308wm0436',
+                                      defaultAccess: { access: 'world', download: 'world' }
                                     })
   end
   let(:rendered) { render_inline(component) }

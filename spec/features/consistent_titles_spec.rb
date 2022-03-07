@@ -54,6 +54,10 @@ RSpec.describe 'Consistent titles' do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.book,
                              'externalIdentifier' => pid,
+                             'description' => {
+                               'title' => [{ 'value' => 'My Item' }],
+                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             },
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},

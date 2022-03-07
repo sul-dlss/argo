@@ -179,7 +179,8 @@ RSpec.describe RegistrationsController, type: :controller do
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
                                hasAgreement: 'druid:hp308wm0436',
-                               registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF']
+                               registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'],
+                               defaultAccess: { access: 'world', download: 'world' }
                              }
                            })
     end

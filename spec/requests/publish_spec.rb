@@ -11,6 +11,10 @@ RSpec.describe 'Publishing', type: :request do
                            'version' => 1,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => druid,
+                           'description' => {
+                             'title' => [{ 'value' => 'The item' }],
+                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {},

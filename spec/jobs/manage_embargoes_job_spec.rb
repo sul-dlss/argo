@@ -22,6 +22,10 @@ RSpec.describe ManageEmbargoesJob do
                            'version' => 2,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => druids[0],
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item1' }],
+                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {}
@@ -33,6 +37,10 @@ RSpec.describe ManageEmbargoesJob do
                            'version' => 3,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => druids[1],
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item2' }],
+                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {}
@@ -44,6 +52,10 @@ RSpec.describe ManageEmbargoesJob do
                            'version' => 3,
                            'type' => Cocina::Models::Vocab.object,
                            'externalIdentifier' => druids[2],
+                           'description' => {
+                             'title' => [{ 'value' => 'My Item3' }],
+                             'purl' => "https://purl.stanford.edu/#{druids[2].delete_prefix('druid:')}"
+                           },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'structural' => {}

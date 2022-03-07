@@ -1,4 +1,4 @@
 <ul class="resource-list">
-  <%= render Contents::ResourceComponent.with_collection(structural.contains, object_id: object_id, viewable: viewable?) %>
-  <%= render Contents::ExternalFileComponent.with_collection(structural.hasMemberOrders&.first&.members) %>
+  <%= render Contents::ResourceComponent.with_collection(structural&.contains, object_id: object_id, viewable: viewable?) %>
+  <%= render Contents::ExternalFileComponent.with_collection(structural&.hasMemberOrders&.first&.members) %>
 </ul>

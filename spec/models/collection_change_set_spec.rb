@@ -13,6 +13,10 @@ RSpec.describe CollectionChangeSet do
                              'version' => 1,
                              'type' => Cocina::Models::Vocab.collection,
                              'externalIdentifier' => pid,
+                             'description' => {
+                               'title' => [{ 'value' => 'My Collection' }],
+                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             },
                              'access' => {
                                access: 'world',
                                copyright: 'This collection is in the Public Domain.',

@@ -10,7 +10,11 @@ FactoryBot.define do
                                        'version' => 1,
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id,
-                                         'hasAgreement' => agreement_id
+                                         'hasAgreement' => agreement_id,
+                                         'defaultAccess' => {
+                                           'access' => 'world',
+                                           'download' => 'world'
+                                         }
                                        }
                                      })
       )

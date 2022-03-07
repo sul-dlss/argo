@@ -80,8 +80,12 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                                 type: Cocina::Models::Vocab.document,
-                                label: '',
+                                label: 'Test DRO',
                                 version: 1,
+                                description: {
+                                  title: [{ value: 'Test DRO' }],
+                                  purl: 'https://purl.stanford.edu/bc234fg5678'
+                                },
                                 access: {},
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -126,8 +130,12 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                                 type: Cocina::Models::Vocab.image,
-                                label: '',
+                                label: 'Test DRO',
                                 version: 1,
+                                description: {
+                                  title: [{ value: 'Test DRO' }],
+                                  purl: 'https://purl.stanford.edu/bc234fg5678'
+                                },
                                 access: {
                                   access: 'stanford',
                                   download: 'stanford'
@@ -176,8 +184,12 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                                 type: Cocina::Models::Vocab.book,
-                                label: '',
+                                label: 'Test DRO',
                                 version: 1,
+                                description: {
+                                  title: [{ value: 'Test DRO' }],
+                                  purl: 'https://purl.stanford.edu/bc234fg5678'
+                                },
                                 access: {
                                   access: 'location-based',
                                   download: 'location-based',
@@ -228,8 +240,12 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                                 type: Cocina::Models::Vocab.image,
-                                label: '',
+                                label: 'Test DRO',
                                 version: 1,
+                                description: {
+                                  title: [{ value: 'Test DRO' }],
+                                  purl: 'https://purl.stanford.edu/bc234fg5678'
+                                },
                                 access: {
                                   access: 'world',
                                   download: 'none'
@@ -278,8 +294,12 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                                 type: Cocina::Models::Vocab.image,
-                                label: '',
+                                label: 'Test DRO',
                                 version: 1,
+                                description: {
+                                  title: [{ value: 'Test DRO' }],
+                                  purl: 'https://purl.stanford.edu/bc234fg5678'
+                                },
                                 access: {
                                   access: 'dark',
                                   download: 'none'
@@ -351,8 +371,12 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
                                 type: Cocina::Models::Vocab.book,
-                                label: '',
+                                label: 'Test DRO',
                                 version: 1,
+                                description: {
+                                  title: [{ value: 'Test DRO' }],
+                                  purl: 'https://purl.stanford.edu/bc234fg5678'
+                                },
                                 access: {
                                   access: 'stanford',
                                   download: 'none',
