@@ -21,5 +21,12 @@
           <%= render Show::AccessRightsComponent.new(document: @solr_document, state_service: state_service) %>
         </td>
       </tr>
+
+      <tr>
+        <th class="col-3" scope="row">Registration workflow</th>
+        <td>
+          <%= registration_workflow %>
+        </td>
+      </tr>      
     </tbody>
   </table>
