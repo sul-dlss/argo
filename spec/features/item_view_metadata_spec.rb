@@ -62,7 +62,7 @@ RSpec.describe 'Item view', js: true do
     let(:attrs) do
       <<~JSON
         {
-          "type": "http://cocina.sul.stanford.edu/models/image.jsonld",
+          "type": "#{Cocina::Models::Vocab.image}",
           "externalIdentifier": "druid:hj185xx2222",
           "label": "image integration test miry low_explosive",
           "version": 3,
@@ -95,14 +95,14 @@ RSpec.describe 'Item view', js: true do
           "structural": {
             "contains": [
               {
-                "type": "http://cocina.sul.stanford.edu/models/resources/file.jsonld",
+                "type": "#{Cocina::Models::Vocab::Resources.file}",
                 "externalIdentifier": "hj185xx2222_1",
                 "label": "Image 1",
                 "version": 3,
                 "structural": {
                   "contains": [
                     {
-                      "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                      "type": "#{Cocina::Models::Vocab.file}",
                       "externalIdentifier": "druid:hj185xx2222/image.jpg",
                       "label": "image.jpg",
                       "filename": "image.jpg",
@@ -134,7 +134,7 @@ RSpec.describe 'Item view', js: true do
                       }
                     },
                     {
-                      "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                      "type": "#{Cocina::Models::Vocab.file}",
                       "externalIdentifier": "druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2",
                       "label": "M1090_S15_B02_F01_0126.jp2",
                       "filename": "M1090_S15_B02_F01_0126.jp2",

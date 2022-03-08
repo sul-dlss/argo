@@ -99,7 +99,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
             },
             externalIdentifier: 'druid:zt570qh4444',
             label: 'My title',
-            type: 'http://cocina.sul.stanford.edu/models/admin_policy.jsonld',
+            type: Cocina::Models::Vocab.admin_policy,
             version: 1
           ).to_h
         )

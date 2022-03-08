@@ -40,13 +40,13 @@ RSpec.describe 'Set rights for an object' do
                                    {
                                      'externalIdentifier' => 'cc243mg0841_1',
                                      'label' => 'Fileset 1',
-                                     'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                                     'type' => Cocina::Models::Vocab::Resources.file,
                                      'version' => 1,
                                      'structural' => {
                                        'contains' => [
                                          { 'externalIdentifier' => 'cc243mg0841_1',
                                            'label' => 'Page 1',
-                                           'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                                           'type' => Cocina::Models::Vocab.file,
                                            'version' => 1,
                                            'access' => { access: 'world', download: 'world' },
                                            'administrative' => {
@@ -85,14 +85,14 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    'type' => Cocina::Models::Vocab::Resources.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         {
                           'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                          'type' => Cocina::Models::Vocab.file,
                           'version' => 1,
                           'access' => { access: 'dark', download: 'none', readLocation: nil, controlledDigitalLending: false },
                           'administrative' => { 'shelve' => false },
@@ -136,13 +136,13 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    'type' => Cocina::Models::Vocab::Resources.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         { 'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                          'type' => Cocina::Models::Vocab.file,
                           'version' => 1,
                           'access' => {
                             'access' => 'stanford',
@@ -195,13 +195,13 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    'type' => Cocina::Models::Vocab::Resources.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         { 'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                          'type' => Cocina::Models::Vocab.file,
                           'version' => 1,
                           'access' => {
                             'access' => 'stanford',
@@ -261,13 +261,13 @@ RSpec.describe 'Set rights for an object' do
                                      {
                                        'externalIdentifier' => 'cc243mg0841_1',
                                        'label' => 'Fileset 1',
-                                       'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                                       'type' => Cocina::Models::Vocab::Resources.file,
                                        'version' => 1,
                                        'structural' => {
                                          'contains' => [
                                            { 'externalIdentifier' => 'cc243mg0841_1',
                                              'label' => 'Page 1',
-                                             'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                                             'type' => Cocina::Models::Vocab.file,
                                              'version' => 1,
                                              'access' => {
                                                'access' => 'world',
@@ -338,13 +338,13 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                    'type' => Cocina::Models::Vocab::Resources.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         { 'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                          'type' => Cocina::Models::Vocab.file,
                           'version' => 1,
                           'access' => {
                             'access' => 'dark',

@@ -21,7 +21,7 @@ RSpec.describe CollectionForm do
     end
     let(:expected_body_hash) do
       {
-        type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
+        type: Cocina::Models::Vocab.collection,
         label: title,
         version: 1,
         access: { access: 'dark' },
@@ -77,7 +77,7 @@ RSpec.describe CollectionForm do
       end
       let(:expected_request_body_hash) do
         {
-          type: 'http://cocina.sul.stanford.edu/models/collection.jsonld',
+          type: Cocina::Models::Vocab.collection,
           label: title,
           version: 1,
           access: { access: 'dark' },
