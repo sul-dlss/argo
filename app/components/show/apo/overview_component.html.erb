@@ -18,7 +18,7 @@
       <tr>
         <th class="col-3" scope="row">Access rights</th>
         <td>
-          <%= render Show::AccessRightsComponent.new(document: @solr_document, state_service: state_service) %>
+          <%= @solr_document.access_rights.to_sentence %>
         </td>
       </tr>
 
@@ -27,6 +27,6 @@
         <td>
           <%= registration_workflow %>
         </td>
-      </tr>      
+      </tr>
     </tbody>
   </table>

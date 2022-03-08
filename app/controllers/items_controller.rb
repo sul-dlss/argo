@@ -14,9 +14,9 @@ class ItemsController < ApplicationController
   before_action :enforce_versioning, only: %i[
     add_collection remove_collection
     edit_copyright edit_license edit_use_statement
+    edit_rights
     source_id
     refresh_metadata
-    set_rights
     set_governing_apo
     update
   ]
@@ -25,6 +25,7 @@ class ItemsController < ApplicationController
     md = /\((.*)\)/.match exception.message
     detail = JSON.parse(md[1])['errors'].first['detail']
     message = "Unable to retrieve the cocina model: #{detail.truncate(200)}"
+    Honeybadger.notify(exception)
     logger.error "Error connecting to DSA: #{detail}"
     if turbo_frame_request?
       render 'error', locals: { message: message }
@@ -36,6 +37,7 @@ class ItemsController < ApplicationController
 
   rescue_from Cocina::Models::ValidationError do |exception|
     message = "Error building Cocina: #{exception.message.truncate(200)}"
+    Honeybadger.notify(exception)
     logger.error(message)
     if turbo_frame_request?
       render 'error', locals: { message: message }
@@ -120,18 +122,6 @@ class ItemsController < ApplicationController
     redirect_to solr_document_path(params[:id]), flash: { error: "#{user_begin}: #{e.message}. #{user_end}" }
   end
 
-  def set_rights
-    # Item may be a Collection or a DRO
-    form_type = @cocina.collection? ? CollectionRightsForm : DroRightsForm
-    form = form_type.new(@cocina)
-    form_key = form.model_name.param_key
-    form.validate(params[form_key])
-    form.save
-    redirect_to solr_document_path(params[:id]), notice: 'Rights updated!'
-  rescue ArgumentError
-    render status: :bad_request, plain: 'Invalid new rights setting.'
-  end
-
   # set the object's access to its admin policy's accessTemplate
   def apply_apo_defaults
     Dor::Services::Client.object(@cocina.externalIdentifier).apply_admin_policy_defaults
@@ -210,8 +200,7 @@ class ItemsController < ApplicationController
   # save the form
   def update
     change_set = ItemChangeSet.new(@cocina)
-    attributes = params.require(:item).permit(:barcode, :copyright, :use_statement, :license)
-    if change_set.validate(**attributes)
+    if change_set.validate(**item_params)
       change_set.save # may raise Dor::Services::Client::BadRequestError
       reindex
       redirect_to solr_document_path(params[:id]), status: :see_other
@@ -222,17 +211,24 @@ class ItemsController < ApplicationController
     end
   end
 
-  def rights
-    return redirect_to solr_document_path(params[:id]), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
+  def edit_rights
+    @change_set = build_change_set
+    if @cocina.collection?
+      render partial: 'edit_collection_rights'
+    else
+      render partial: 'edit_dro_rights'
+    end
+  end
 
-    form_type = @cocina.collection? ? CollectionRightsForm : DroRightsForm
-    cocina_admin_policy = Dor::Services::Client.object(@cocina.administrative.hasAdminPolicy).find
-
-    default_rights = RightsLabeler.label(cocina_admin_policy.administrative.accessTemplate)
-    @form = form_type.new(@cocina, default_rights: default_rights)
-
-    respond_to do |format|
-      format.html { render layout: !request.xhr? }
+  def show_rights
+    @change_set = build_change_set
+    state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
+    if @cocina.collection?
+      change_set = CollectionChangeSet.new(@cocina)
+      render Show::Collection::AccessRightsComponent.new(change_set: change_set, state_service: state_service)
+    else
+      change_set = ItemChangeSet.new(@cocina)
+      render Show::Item::AccessRightsComponent.new(change_set: change_set, state_service: state_service)
     end
   end
 
@@ -249,6 +245,12 @@ class ItemsController < ApplicationController
   end
 
   private
+
+  def item_params
+    params.require(:item)
+          .permit(:barcode, :copyright, :use_statement, :license,
+                  :view_access, :download_access, :access_location, :controlled_digital_lending)
+  end
 
   def load_cocina
     raise 'missing druid' unless params[:id]

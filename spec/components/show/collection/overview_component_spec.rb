@@ -34,7 +34,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
   let(:edit_license_button) { rendered.css("a[aria-label='Edit license']") }
   let(:edit_use_statement_button) { rendered.css("a[aria-label='Edit use and reproduction']") }
   let(:edit_governing_apo_button) { rendered.css("a[aria-label='Set governing APO']") }
-  let(:edit_rights_button) { rendered.css("a[aria-label='Set rights']") }
+  let(:edit_rights_button) { rendered.css("a[aria-label='Edit rights']") }
 
   context 'with a Collection' do
     let(:doc) do
@@ -52,7 +52,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
     end
 
     it 'shows the values' do
-      expect(rendered.to_html).to include 'world'
+      expect(rendered.to_html).to include 'World'
       expect(rendered.to_html).to include 'This collection is in the Public Domain.'
       expect(rendered.to_html).to include 'Must be used underwater'
       expect(rendered.to_html).to include 'Attribution Non-Commercial Share Alike 3.0 Unported'

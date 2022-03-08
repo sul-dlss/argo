@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Show::AccessRightsComponent, type: :component do
+RSpec.describe Show::Collection::AccessRightsComponent, type: :component do
   pending "add some examples to (or delete) #{__FILE__}"
 
   # it "renders something useful" do

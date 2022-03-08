@@ -242,7 +242,7 @@ RSpec.describe 'Item view', js: true do
               expect(page).to have_css 'td a', text: 'Stanford University Libraries - Special Collections'
               expect(page).to have_css 'th', text: 'Status'
               expect(page).to have_css 'th', text: 'Access rights'
-              expect(page).to have_css 'td', text: 'world and dark'
+              expect(page).to have_css 'td', text: 'View: World, Download: World'
               expect(page).to have_css 'td', text: 'v1 Unknown Status'
             end
 

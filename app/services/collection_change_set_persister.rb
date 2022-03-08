@@ -24,22 +24,32 @@ class CollectionChangeSetPersister
 
   private
 
+  # The map between the change set fields and the Cocina field names
+  ACCESS_FIELDS = {
+    copyright: :copyright,
+    license: :license,
+    use_statement: :useAndReproductionStatement,
+    view_access: :access
+  }.freeze
+
   attr_reader :model, :change_set
 
-  delegate :admin_policy_id, :license, :copyright, :use_statement, :catkey, :changed?, to: :change_set
+  delegate :admin_policy_id, :catkey, *ACCESS_FIELDS.keys, :changed?, to: :change_set
 
   def access_changed?
-    changed?(:copyright) || changed?(:license) || changed?(:use_statement)
+    ACCESS_FIELDS.keys.any? { |field| changed?(field) }
   end
 
   def updated_access(updated)
-    access_properties = {
-      copyright: changed?(:copyright) ? copyright : updated.access.copyright,
-      license: changed?(:license) ? license : updated.access.license,
-      useAndReproductionStatement: changed?(:use_statement) ? use_statement : updated.access.useAndReproductionStatement
-    }.compact
+    updated.new(access: updated.access.new(updated_access_properties))
+  end
 
-    updated.new(access: updated.access.new(access_properties))
+  def updated_access_properties
+    {}.tap do |access_properties|
+      ACCESS_FIELDS.each do |field, cocina_field|
+        access_properties[cocina_field] = public_send(field).presence if changed?(field)
+      end
+    end
   end
 
   def update_identification(updated)
