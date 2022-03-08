@@ -33,7 +33,8 @@ class SetGoverningApoJob < GenericJob
   def set_governing_apo_and_index_safely(current_druid, log)
     cocina_item = Dor::Services::Client.object(current_druid).find
     state_service = StateService.new(current_druid, version: cocina_item.version)
-    check_can_set_governing_apo!(cocina_item, state_service)
+    raise "user not authorized to move #{current_druid} to #{new_apo_id}" unless ability.can?(:manage_governing_apo, cocina_item, new_apo_id)
+
     open_new_version(current_druid, cocina_item.version, 'Set new governing APO') unless state_service.allows_modification?
 
     change_set = ItemChangeSet.new(cocina_item)
@@ -46,10 +47,5 @@ class SetGoverningApoJob < GenericJob
   rescue StandardError => e
     log.puts("#{Time.current} SetGoverningApoJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e} #{e.backtrace}")
     bulk_action.increment(:druid_count_fail).save
-  end
-
-  def check_can_set_governing_apo!(cocina, state_service)
-    raise "#{cocina.externalIdentifier} is not open for modification" unless state_service.allows_modification?
-    raise "user not authorized to move #{cocina.externalIdentifier} to #{new_apo_id}" unless ability.can?(:manage_governing_apo, cocina, new_apo_id)
   end
 end
