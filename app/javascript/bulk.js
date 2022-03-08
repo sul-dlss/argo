@@ -261,7 +261,6 @@ function set_tags() {
 document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
-	$('#prepare').on('click', () => $('#open').show(400))
 	$('#show_source_id').on('click', () => {
 		$('#source_id').show(400)
 	  get_source_ids()
@@ -271,7 +270,6 @@ document.addEventListener("turbo:load", () => {
 	$('#set-collection-button').on('click', () => $('#set_collection').show(400))
 
 	$('#apply-apo-defaults-button').on('click', () => $('#apply_apo_defaults').show(400))
-	$('#close-versions-button').on('click', () => $('#close').show(400))
   $('#show_tags').on('click', () => {
 		$('#tag').show(400)
 		get_tags()
