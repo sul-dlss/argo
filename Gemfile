@@ -120,6 +120,7 @@ group :test do
 end
 
 group :deployment do
+  gem 'capistrano-maintenance', '~> 1.2', require: false
   gem 'capistrano-passenger'
   gem 'capistrano-rails'
   gem 'dlss-capistrano', require: false
