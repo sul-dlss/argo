@@ -22,7 +22,7 @@ class FileGenerator
 
   def request_file_attributes
     {
-      type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+      type: Cocina::Models::Vocab.file,
       version: 1,
       label: label,
       filename: uploaded_file.original_filename,

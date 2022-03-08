@@ -10,7 +10,7 @@ RSpec.describe StructureUpdater do
   let(:json) do
     <<~JSON
       {
-        "type": "http://cocina.sul.stanford.edu/models/image.jsonld",
+        "type": "#{Cocina::Models::Vocab.image}",
         "externalIdentifier": "druid:qr773tm1060",
         "label": "dood",
         "version": 1,
@@ -42,14 +42,14 @@ RSpec.describe StructureUpdater do
         "structural": {
           "contains": [
             {
-              "type": "http://cocina.sul.stanford.edu/models/resources/image.jsonld",
+              "type": "#{Cocina::Models::Vocab::Resources.image}",
               "externalIdentifier": "http://cocina.sul.stanford.edu/fileSet/e43590ae-abf9-4a5c-88f2-a8627969dc23",
               "label": "Image 1",
               "version": 1,
               "structural": {
                 "contains": [
                   {
-                    "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                    "type": "#{Cocina::Models::Vocab.file}",
                     "externalIdentifier": "http://cocina.sul.stanford.edu/file/de24d694-2fe8-41a5-9113-ae6adf4506fd",
                     "label": "bb045jk9908_0001.tiff",
                     "filename": "bb045jk9908_0001.tiff",
@@ -81,7 +81,7 @@ RSpec.describe StructureUpdater do
                     }
                   },
                   {
-                    "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                    "type": "#{Cocina::Models::Vocab.file}",
                     "externalIdentifier": "http://cocina.sul.stanford.edu/file/92db9253-19b7-4092-b472-6e73f3c2251e",
                     "label": "bb045jk9908_0001.jp2",
                     "filename": "bb045jk9908_0001.jp2",
@@ -116,14 +116,14 @@ RSpec.describe StructureUpdater do
               }
             },
             {
-              "type": "http://cocina.sul.stanford.edu/models/resources/image.jsonld",
+              "type": "#{Cocina::Models::Vocab::Resources.image}",
               "externalIdentifier": "http://cocina.sul.stanford.edu/fileSet/a45774e4-ac26-425a-b40e-f5e247135843",
               "label": "Image 2",
               "version": 1,
               "structural": {
                 "contains": [
                   {
-                    "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                    "type": "#{Cocina::Models::Vocab.file}",
                     "externalIdentifier": "http://cocina.sul.stanford.edu/file/86de37bc-b930-49ac-936b-15e8db7af88e",
                     "label": "bb045jk9908_0002.tiff",
                     "filename": "bb045jk9908_0002.tiff",
@@ -155,7 +155,7 @@ RSpec.describe StructureUpdater do
                     }
                   },
                   {
-                    "type": "http://cocina.sul.stanford.edu/models/file.jsonld",
+                    "type": "#{Cocina::Models::Vocab.file}",
                     "externalIdentifier": "http://cocina.sul.stanford.edu/file/55d78b7f-b043-4880-8542-b85f2c3b0414",
                     "label": "bb045jk9908_0002.jp2",
                     "filename": "bb045jk9908_0002.jp2",
@@ -249,8 +249,8 @@ RSpec.describe StructureUpdater do
     it 'updates the fileset' do
       new_filesets = result.value!.contains
       expect(new_filesets.map(&:type)).to eq [
-        'http://cocina.sul.stanford.edu/models/resources/object.jsonld',
-        'http://cocina.sul.stanford.edu/models/resources/page.jsonld'
+        Cocina::Models::Vocab::Resources.object,
+        Cocina::Models::Vocab::Resources.page
       ]
 
       expect(new_filesets.map(&:label)).to eq [

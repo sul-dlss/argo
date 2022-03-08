@@ -7,7 +7,7 @@ RSpec.describe 'Download item files' do
   let(:cocina_model) { Cocina::Models.build(cocina_params.stringify_keys) }
   let(:cocina_params) do
     {
-      type: 'http://cocina.sul.stanford.edu/models/image.jsonld',
+      type: Cocina::Models::Vocab.image,
       externalIdentifier: 'druid:rn653dy9317',
       label: 'M1090_S15_B01_F07_0106',
       version: 4,
@@ -30,14 +30,14 @@ RSpec.describe 'Download item files' do
       structural: {
         contains: [
           {
-            type: 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+            type: Cocina::Models::Vocab::Resources.file,
             externalIdentifier: 'rn653dy9317_106',
             label: 'M1090_S15_B01_F07_0106',
             version: 4,
             structural: {
               contains: [
                 {
-                  type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                  type: Cocina::Models::Vocab.file,
                   externalIdentifier: 'druid:rn653dy9317/M1090_S15_B01_F07_0106.jp2',
                   label: 'M1090_S15_B01_F07_0106.jp2',
                   filename: 'M1090_S15_B01_F07_0106.jp2',
@@ -69,7 +69,7 @@ RSpec.describe 'Download item files' do
                   }
                 },
                 {
-                  type: 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                  type: Cocina::Models::Vocab.file,
                   externalIdentifier: 'druid:rn653dy9317/M1090_S15_B01_F07_0106.tif',
                   label: 'M1090_S15_B01_F07_0106.tif',
                   filename: 'M1090_S15_B01_F07_0106.tif',

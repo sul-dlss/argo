@@ -95,7 +95,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"http://cocina.sul.stanford.edu/models/document.jsonld",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.document + '",' \
             '"label":"test parameters for registration","version":1,"administrative":' \
             '{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
             '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
@@ -148,7 +148,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.image + '",' \
             '"label":"test parameters for registration","version":1,"access":{"access":' \
             '"stanford","download":"stanford","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
@@ -203,7 +203,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.book + '",' \
             '"label":"test parameters for registration","version":1,"access":' \
             '{"access":"location-based","download":"location-based","readLocation":' \
             '"music","controlledDigitalLending":false},"administrative":{"hasAdminPolicy":' \
@@ -258,7 +258,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.image + '",' \
             '"label":"test parameters for registration","version":1,"access":{"access":' \
             '"world","download":"none","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
@@ -312,7 +312,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"http://cocina.sul.stanford.edu/models/image.jsonld",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.image + '",' \
             '"label":"test parameters for registration","version":1,"access":{"access":"dark",' \
             '"download":"none","readLocation":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},' \
@@ -390,7 +390,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"http://cocina.sul.stanford.edu/models/book.jsonld",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.book + '",' \
             '"label":"test parameters for registration","version":1,"access":' \
             '{"access":"stanford","download":"none","readLocation":null,"controlledDigitalLending":true},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \

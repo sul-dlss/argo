@@ -16,7 +16,7 @@ RSpec.describe ContentsComponent, type: :component do
 
     let(:attrs) do
       {
-        'type' => 'http://cocina.sul.stanford.edu/models/image.jsonld',
+        'type' => Cocina::Models::Vocab.image,
         'externalIdentifier' => 'druid:bg954kx8787',
         'label' => 'image integration test miry low_explosive',
         'version' => 3,
@@ -38,14 +38,14 @@ RSpec.describe ContentsComponent, type: :component do
         'structural' => {
           'contains' => [
             {
-              'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+              'type' => Cocina::Models::Vocab::Resources.file,
               'externalIdentifier' => 'bg954kx8787_1',
               'label' => 'Image 1',
               'version' => 3,
               'structural' => {
                 'contains' => [
                   {
-                    'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                    'type' => Cocina::Models::Vocab.file,
                     'externalIdentifier' => 'druid:bg954kx8787/image.jpg',
                     'label' => 'image.jpg',
                     'filename' => 'image.jpg',
@@ -66,7 +66,7 @@ RSpec.describe ContentsComponent, type: :component do
                     'administrative' => { 'sdrPreserve' => true, 'shelve' => false, 'publish' => false },
                     'presentation' => { 'height' => 700, 'width' => 500 }
                   }, {
-                    'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                    'type' => Cocina::Models::Vocab.file,
                     'externalIdentifier' => 'druid:bg954kx8787/image.jp2',
                     'label' => 'image.jp2',
                     'filename' => 'image.jp2',

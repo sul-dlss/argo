@@ -58,13 +58,13 @@ RSpec.describe 'Show rights for an object' do
                                    {
                                      'externalIdentifier' => 'cc243mg0841_1',
                                      'label' => 'Fileset 1',
-                                     'type' => 'http://cocina.sul.stanford.edu/models/resources/file.jsonld',
+                                     'type' => Cocina::Models::Vocab::Resources.file,
                                      'version' => 1,
                                      'structural' => {
                                        'contains' => [
                                          { 'externalIdentifier' => 'cc243mg0841_1',
                                            'label' => 'Page 1',
-                                           'type' => 'http://cocina.sul.stanford.edu/models/file.jsonld',
+                                           'type' => Cocina::Models::Vocab.file,
                                            'version' => 1,
                                            'access' => { access: 'world', download: 'none' },
                                            'administrative' => {
