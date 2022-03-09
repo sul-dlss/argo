@@ -22,6 +22,7 @@ class BulkAction < ApplicationRecord
                      CreateVirtualObjectsJob
                      ExportTagsJob
                      ImportTagsJob
+                     ExportStructuralJob
                      RegisterDruidsJob
                      SetLicenseAndRightsStatementsJob
                      ManageEmbargoesJob]
