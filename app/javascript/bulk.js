@@ -25,10 +25,6 @@ function process_post(druids, action_url, req_params, success_string) {
 	process_request(druids, action_url, 'POST', req_params, success_string, show_buttons, show_buttons);
 }
 
-function process_patch(druids, action_url, req_params, success_string) {
-	process_request(druids, action_url, 'PATCH', req_params, success_string, show_buttons, show_buttons);
-}
-
 function fetch_pids_txt() {
 	return document.getElementById('pids').value.trim();
 }

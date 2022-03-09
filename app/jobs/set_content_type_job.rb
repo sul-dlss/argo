@@ -38,6 +38,13 @@ class SetContentTypeJob < GenericJob
     object_client = Dor::Services::Client.object(current_druid)
     cocina_object = object_client.find
 
+    # collections, APOs, and agreements do not have content types
+    if [Cocina::Models::ObjectType.collection, Cocina::Models::ObjectType.admin_policy].include? cocina_object.type
+      log_buffer.puts "#{Time.current} #{self.class}: Could not update content type for #{current_druid}: object is a #{cocina_object.type}"
+      bulk_action.increment(:druid_count_fail).save
+      return
+    end
+
     return unless verify_access(cocina_object, log_buffer)
 
     # use dor services client to pass a hash for structural metadata and update the cocina object
