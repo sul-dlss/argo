@@ -8,15 +8,19 @@ RSpec.describe 'Upload the structural CSV' do
   let(:user) { create(:user) }
   let(:pid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
+  let(:state_service) { instance_double(StateService) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
+    allow(StateService).to receive(:new).and_return(state_service, allows_modification?: modifiable)
     allow(Argo::Indexer).to receive(:reindex_pid_remotely)
   end
 
   context 'when they have manage access' do
     before do
       allow(StructureUpdater).to receive(:from_csv).and_return(Success(cocina_model.structural))
+      allow(state_service).to receive(:allows_modification?).and_return(modifiable)
+
       sign_in user, groups: ['sdr:administrator-role']
     end
 
@@ -38,10 +42,24 @@ RSpec.describe 'Upload the structural CSV' do
     end
     let(:file) { fixture_file_upload('structure-upload.csv') }
 
-    it 'updates the structure' do
-      put "/items/#{pid}/structure", params: { csv: file }
-      expect(object_client).to have_received(:update)
-      expect(response).to have_http_status(:see_other)
+    context 'when object is unlocked' do
+      let(:modifiable) { true }
+
+      it 'updates the structure' do
+        put "/items/#{pid}/structure", params: { csv: file }
+        expect(object_client).to have_received(:update)
+        expect(response).to have_http_status(:see_other)
+      end
+    end
+
+    context 'when object is locked' do
+      let(:modifiable) { false }
+
+      it 'updates the structure' do
+        put "/items/#{pid}/structure", params: { csv: file }
+        expect(object_client).not_to have_received(:update)
+        expect(response).to have_http_status(:found)
+      end
     end
   end
 end
