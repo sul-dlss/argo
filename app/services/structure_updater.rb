@@ -4,6 +4,7 @@
 # So an upload CSV that lists a file not already present should be rejected.
 # At present, the CSV update only supports changing settings,
 # changing the order of resources, or removing content.
+# You can remove all content by leaving the file blank (except header).
 class StructureUpdater
   include Dry::Monads[:result]
 
@@ -21,7 +22,7 @@ class StructureUpdater
   attr_reader :model, :csv, :errors
 
   # @return [Bool] true if there are no problems
-  def validate
+  def valid?
     @errors = []
     # 1. Ensure all files in the csv are present in the existing object
     csv.each.with_index(2) do |row, index|
@@ -59,7 +60,7 @@ class StructureUpdater
 
   # @return [Maybe] success if there are no problems
   def from_csv
-    return Failure(errors) unless validate
+    return Failure(errors) unless valid?
 
     fileset_attributes = {}
     # Which files go in which filesets

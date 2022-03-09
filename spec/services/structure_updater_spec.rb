@@ -260,6 +260,19 @@ RSpec.describe StructureUpdater do
     end
   end
 
+  context 'with a blank csv file with just a header row' do
+    let(:csv) do
+      <<~CSV
+        resource_label,resource_type,sequence,filename,file_label,publish,shelve,preserve,rights_access,rights_download,mimetype,role
+      CSV
+    end
+
+    it 'validates and clears the fileset' do
+      new_filesets = result.value!.contains
+      expect(new_filesets).to eq []
+    end
+  end
+
   context 'with invalid csv' do
     let(:csv) do
       <<~CSV
