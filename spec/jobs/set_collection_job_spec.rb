@@ -38,7 +38,7 @@ RSpec.describe SetCollectionJob do
       Cocina::Models.build({
                              'label' => 'My First Item',
                              'version' => 2,
-                             'type' => Cocina::Models::Vocab.object,
+                             'type' => Cocina::Models::ObjectType.object,
                              'externalIdentifier' => pids[0],
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -54,7 +54,7 @@ RSpec.describe SetCollectionJob do
       Cocina::Models.build({
                              'label' => 'My Second Item',
                              'version' => 2,
-                             'type' => Cocina::Models::Vocab.object,
+                             'type' => Cocina::Models::ObjectType.object,
                              'externalIdentifier' => pids[1],
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
