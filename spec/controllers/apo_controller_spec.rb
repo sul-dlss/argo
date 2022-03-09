@@ -16,12 +16,12 @@ RSpec.describe ApoController, type: :controller do
     Cocina::Models.build({
                            'label' => 'The APO',
                            'version' => 1,
-                           'type' => Cocina::Models::Vocab.admin_policy,
+                           'type' => Cocina::Models::ObjectType.admin_policy,
                            'externalIdentifier' => pid,
                            'administrative' => {
                              hasAdminPolicy: 'druid:hv992ry2431',
                              hasAgreement: 'druid:hp308wm0436',
-                             defaultAccess: { access: 'world', download: 'world' }
+                             accessTemplate: { view: 'world', download: 'world' }
                            }
                          })
   end
@@ -29,7 +29,7 @@ RSpec.describe ApoController, type: :controller do
   let(:collection_id) { 'druid:bq377wp9578' }
   let(:collection) do
     Cocina::Models::Collection.new(externalIdentifier: collection_id,
-                                   type: Cocina::Models::Vocab.collection,
+                                   type: Cocina::Models::ObjectType.collection,
                                    label: '',
                                    version: 1,
                                    access: {})
@@ -41,13 +41,13 @@ RSpec.describe ApoController, type: :controller do
       Cocina::Models.build({
                              'label' => 'The APO',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'type' => Cocina::Models::ObjectType.admin_policy,
                              'externalIdentifier' => pid,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
                                hasAgreement: 'druid:hp308wm0436',
                                collectionsForRegistration: ['druid:1', collection_id],
-                               defaultAccess: { access: 'world', download: 'world' }
+                               accessTemplate: { view: 'world', download: 'world' }
                              }
                            })
     end
@@ -56,13 +56,13 @@ RSpec.describe ApoController, type: :controller do
       Cocina::Models.build({
                              'label' => 'The APO',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'type' => Cocina::Models::ObjectType.admin_policy,
                              'externalIdentifier' => pid,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
                                hasAgreement: 'druid:hp308wm0436',
                                collectionsForRegistration: ['druid:1'], # only one collection now
-                               defaultAccess: { access: 'world', download: 'world' }
+                               accessTemplate: { view: 'world', download: 'world' }
                              }
                            })
     end

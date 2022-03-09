@@ -210,7 +210,7 @@ class ItemsController < ApplicationController
     render status: :bad_request, plain: 'Invalid new rights setting.'
   end
 
-  # set the object's access to its admin policy's defaultAccess
+  # set the object's access to its admin policy's accessTemplate
   def apply_apo_defaults
     Dor::Services::Client.object(@cocina.externalIdentifier).apply_admin_policy_defaults
     reindex
@@ -315,7 +315,7 @@ class ItemsController < ApplicationController
     form_type = @cocina.collection? ? CollectionRightsForm : DroRightsForm
     cocina_admin_policy = Dor::Services::Client.object(@cocina.administrative.hasAdminPolicy).find
 
-    default_rights = RightsLabeler.label(cocina_admin_policy.administrative.defaultAccess)
+    default_rights = RightsLabeler.label(cocina_admin_policy.administrative.accessTemplate)
     @form = form_type.new(@cocina, default_rights: default_rights)
 
     respond_to do |format|

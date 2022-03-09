@@ -22,7 +22,7 @@ class FileGenerator
 
   def request_file_attributes
     {
-      type: Cocina::Models::Vocab.file,
+      type: Cocina::Models::ObjectType.file,
       version: 1,
       label: label,
       filename: uploaded_file.original_filename,
@@ -66,7 +66,7 @@ class FileGenerator
   end
 
   def access
-    { access: 'dark', download: 'none' }
+    { view: 'dark', download: 'none' }
   end
 
   def file_path(key)

@@ -9,7 +9,7 @@ RSpec.describe 'Unpublishing', type: :request do
     Cocina::Models.build({
                            'label' => 'The item',
                            'version' => 1,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ 'value' => 'The item' }],

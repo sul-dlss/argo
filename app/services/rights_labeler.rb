@@ -2,31 +2,31 @@
 
 # Parses rights XML to produce a label
 class RightsLabeler
-  # @param [Cocina::Models::AdminPolicyDefaultAccess] default_access admin policy default access instance
+  # @param [Cocina::Models::AdminPolicyAccessTemplate] default_access admin policy default access instance
   # @return [String] a label expressing the rights of the object
   def self.label(default_access)
     new(default_access).label
   end
 
-  # @param [Cocina::Models::AdminPolicyDefaultAccess] default_access admin policy default access instance
+  # @param [Cocina::Models::AdminPolicyAccessTemplate] default_access admin policy default access instance
   def initialize(default_access)
     @default_access = default_access
   end
 
   # @return [String] a label expressing the rights of the object
   def label
-    return '' if default_access.nil? || default_access.access.nil?
+    return '' unless default_access&.view
 
-    if default_access&.controlledDigitalLending
+    if default_access.controlledDigitalLending
       'cdl-stanford-nd'
-    elsif default_access&.access == 'stanford'
-      default_access&.download == 'none' ? 'stanford-nd' : 'stanford'
-    elsif default_access&.access == 'world'
-      default_access&.download == 'none' ? 'world-nd' : 'world'
-    elsif default_access&.access == 'location-based' && default_access&.readLocation&.present?
-      "loc:#{default_access.readLocation}"
+    elsif default_access.view == 'stanford'
+      default_access.download == 'none' ? 'stanford-nd' : 'stanford'
+    elsif default_access.view == 'world'
+      default_access.download == 'none' ? 'world-nd' : 'world'
+    elsif default_access.view == 'location-based' && default_access.location.present?
+      "loc:#{default_access.location}"
     else # this covers both citation-only and dark
-      default_access.access
+      default_access.view
     end
   end
 

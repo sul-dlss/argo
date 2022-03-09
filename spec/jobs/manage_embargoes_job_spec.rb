@@ -20,7 +20,7 @@ RSpec.describe ManageEmbargoesJob do
     Cocina::Models.build({
                            'label' => 'My Item1',
                            'version' => 2,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => druids[0],
                            'description' => {
                              'title' => [{ 'value' => 'My Item1' }],
@@ -35,7 +35,7 @@ RSpec.describe ManageEmbargoesJob do
     Cocina::Models.build({
                            'label' => 'My Item2',
                            'version' => 3,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => druids[1],
                            'description' => {
                              'title' => [{ 'value' => 'My Item2' }],
@@ -50,7 +50,7 @@ RSpec.describe ManageEmbargoesJob do
     Cocina::Models.build({
                            'label' => 'My Item3',
                            'version' => 3,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => druids[2],
                            'description' => {
                              'title' => [{ 'value' => 'My Item3' }],

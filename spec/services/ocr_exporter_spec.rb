@@ -17,13 +17,13 @@ RSpec.describe OCRExporter do
     {
       externalIdentifier: 'fs1',
       label: 'fs1',
-      type: Cocina::Models::Vocab::Resources.file,
+      type: Cocina::Models::FileSetType.file,
       version: 1,
       structural: {
         contains: [
           {
             externalIdentifier: 'fs1/fs1-gb-jp2.zip',
-            type: Cocina::Models::Vocab.file,
+            type: Cocina::Models::ObjectType.file,
             version: 1,
             hasMimeType: 'application/zip',
             label: 'fs1-gb-jp2.zip',
@@ -35,13 +35,13 @@ RSpec.describe OCRExporter do
   end
   let(:fs2) do
     {
-      externalIdentifier: 'fs2', label: 'fs2', type: Cocina::Models::Vocab::Resources.file,
+      externalIdentifier: 'fs2', label: 'fs2', type: Cocina::Models::FileSetType.file,
       version: 1,
       structural: {
         contains: [
           {
             externalIdentifier: 'fs2/fs2-gb-txt.zip',
-            type: Cocina::Models::Vocab.file,
+            type: Cocina::Models::ObjectType.file,
             version: 1,
             hasMimeType: 'application/zip',
             label: 'fs2-gb-txt.zip',
@@ -55,13 +55,13 @@ RSpec.describe OCRExporter do
     {
       externalIdentifier: 'fs3',
       label: 'fs3',
-      type: Cocina::Models::Vocab::Resources.file,
+      type: Cocina::Models::FileSetType.file,
       version: 1,
       structural: {
         contains: [
           {
             externalIdentifier: 'fs3/fs3-gb-jp2.zip',
-            type: Cocina::Models::Vocab.file,
+            type: Cocina::Models::ObjectType.file,
             version: 1,
             hasMimeType: 'application/zip',
             label: 'fs3-gb-jp2.zip',
@@ -75,13 +75,13 @@ RSpec.describe OCRExporter do
     {
       externalIdentifier: 'fs4',
       label: 'fs4',
-      type: Cocina::Models::Vocab::Resources.file,
+      type: Cocina::Models::FileSetType.file,
       version: 1,
       structural: {
         contains: [
           {
             externalIdentifier: 'fs4/fs4-gb-txt.zip',
-            type: Cocina::Models::Vocab.file,
+            type: Cocina::Models::ObjectType.file,
             version: 1,
             hasMimeType: 'application/zip',
             label: 'fs4-gb-txt.zip',

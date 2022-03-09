@@ -46,13 +46,13 @@ class AccessForm
   attr_reader :model
 
   def derive_rights_from_cocina
-    rights = if @model.access.readLocation
-               "loc:#{@model.access.readLocation}"
+    rights = if @model.access.location
+               "loc:#{@model.access.location}"
              else
-               @model.access.access
+               @model.access.view
              end
 
-    rights += '-nd' if @model.access.download == 'none' && !%w[citation-only dark].include?(@model.access.access)
+    rights += '-nd' if @model.access.download == 'none' && !%w[citation-only dark].include?(@model.access.view)
     rights
   end
 end

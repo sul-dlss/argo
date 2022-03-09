@@ -8,7 +8,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
   let(:change_set) { CollectionChangeSet.new(cocina) }
   let(:cocina) do
     Cocina::Models::Collection.new(externalIdentifier: 'druid:bc234fg5678',
-                                   type: Cocina::Models::Vocab.collection,
+                                   type: Cocina::Models::ObjectType.collection,
                                    label: 'my collection',
                                    version: 1,
                                    description: {
@@ -16,7 +16,7 @@ RSpec.describe Show::Collection::OverviewComponent, type: :component do
                                      purl: 'https://purl.stanford.edu/bc234fg5678'
                                    },
                                    access: {
-                                     access: 'world',
+                                     view: 'world',
                                      copyright: 'This collection is in the Public Domain.',
                                      useAndReproductionStatement: 'Must be used underwater',
                                      license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode'

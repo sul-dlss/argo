@@ -7,13 +7,13 @@ RSpec.describe Show::Apo::OverviewComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina, state_service: state_service) }
   let(:cocina) do
     Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:bc234fg5678',
-                                    type: Cocina::Models::Vocab.admin_policy,
+                                    type: Cocina::Models::ObjectType.admin_policy,
                                     label: '',
                                     version: 1,
                                     administrative: {
                                       hasAdminPolicy: 'druid:hv992ry2431',
                                       hasAgreement: 'druid:hp308wm0436',
-                                      defaultAccess: { access: 'world', download: 'world' },
+                                      accessTemplate: { view: 'world', download: 'world' },
                                       registrationWorkflow: %w[registrationWF goobiWF]
                                     })
   end
@@ -39,13 +39,13 @@ RSpec.describe Show::Apo::OverviewComponent, type: :component do
   context 'when the APO has no registration workflow' do
     let(:cocina) do
       Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:bc234fg5678',
-                                      type: Cocina::Models::Vocab.admin_policy,
+                                      type: Cocina::Models::ObjectType.admin_policy,
                                       label: '',
                                       version: 1,
                                       administrative: {
                                         hasAdminPolicy: 'druid:hv992ry2431',
                                         hasAgreement: 'druid:hp308wm0436',
-                                        defaultAccess: { access: 'world', download: 'world' },
+                                        accessTemplate: { view: 'world', download: 'world' },
                                         registrationWorkflow: []
                                       })
     end

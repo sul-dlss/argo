@@ -11,7 +11,7 @@ class CollectionRightsForm < AccessForm
 
   def sync
     access_additions = CocinaAccess.from_form_value(rights)
-    updated_access = model.access.new(access_additions.value!.except(:download, :readLocation, :controlledDigitalLending))
+    updated_access = model.access.new(access_additions.value!.except(:download, :location, :controlledDigitalLending))
 
     @model = model.new(access: updated_access)
   end
@@ -24,7 +24,7 @@ class CollectionRightsForm < AccessForm
   end
 
   def derive_rights_from_cocina
-    @model.access.access
+    @model.access.view
   end
 
   def rights_list_for_apo

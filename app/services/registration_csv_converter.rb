@@ -69,21 +69,21 @@ class RegistrationCsvConverter
   def dro_type(content_type)
     case content_type
     when 'Image'
-      Cocina::Models::Vocab.image
+      Cocina::Models::ObjectType.image
     when '3D'
-      Cocina::Models::Vocab.three_dimensional
+      Cocina::Models::ObjectType.three_dimensional
     when 'Map'
-      Cocina::Models::Vocab.map
+      Cocina::Models::ObjectType.map
     when 'Media'
-      Cocina::Models::Vocab.media
+      Cocina::Models::ObjectType.media
     when 'Document'
-      Cocina::Models::Vocab.document
+      Cocina::Models::ObjectType.document
     when /^Manuscript/
-      Cocina::Models::Vocab.manuscript
+      Cocina::Models::ObjectType.manuscript
     when 'Book (ltr)', 'Book (rtl)'
-      Cocina::Models::Vocab.book
+      Cocina::Models::ObjectType.book
     else
-      Cocina::Models::Vocab.object
+      Cocina::Models::ObjectType.object
     end
   end
 end

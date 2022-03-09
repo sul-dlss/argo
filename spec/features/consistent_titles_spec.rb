@@ -52,7 +52,7 @@ RSpec.describe 'Consistent titles' do
       Cocina::Models.build({
                              'label' => 'My Item',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.book,
+                             'type' => Cocina::Models::ObjectType.book,
                              'externalIdentifier' => pid,
                              'description' => {
                                'title' => [{ 'value' => 'My Item' }],

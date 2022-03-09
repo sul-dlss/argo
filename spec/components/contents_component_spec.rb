@@ -16,14 +16,13 @@ RSpec.describe ContentsComponent, type: :component do
 
     let(:attrs) do
       {
-        'type' => Cocina::Models::Vocab.image,
+        'type' => Cocina::Models::ObjectType.image,
         'externalIdentifier' => 'druid:bg954kx8787',
         'label' => 'image integration test miry low_explosive',
         'version' => 3,
-        'access' => { 'access' => 'world', 'download' => 'world' },
+        'access' => { 'view' => 'world', 'download' => 'world' },
         'administrative' => {
-          'hasAdminPolicy' => 'druid:qc410yz8746',
-          'partOfProject' => 'Integration Test - Image via Preassembly'
+          'hasAdminPolicy' => 'druid:qc410yz8746'
         },
         'description' => {
           'title' => [
@@ -38,14 +37,14 @@ RSpec.describe ContentsComponent, type: :component do
         'structural' => {
           'contains' => [
             {
-              'type' => Cocina::Models::Vocab::Resources.file,
+              'type' => Cocina::Models::FileSetType.file,
               'externalIdentifier' => 'bg954kx8787_1',
               'label' => 'Image 1',
               'version' => 3,
               'structural' => {
                 'contains' => [
                   {
-                    'type' => Cocina::Models::Vocab.file,
+                    'type' => Cocina::Models::ObjectType.file,
                     'externalIdentifier' => 'druid:bg954kx8787/image.jpg',
                     'label' => 'image.jpg',
                     'filename' => 'image.jpg',
@@ -62,11 +61,11 @@ RSpec.describe ContentsComponent, type: :component do
                         'digest' => '3e9498107f73ff827e718d5c743f8813'
                       }
                     ],
-                    'access' => { 'access' => 'dark', 'download' => 'none' },
+                    'access' => { 'view' => 'dark', 'download' => 'none' },
                     'administrative' => { 'sdrPreserve' => true, 'shelve' => false, 'publish' => false },
                     'presentation' => { 'height' => 700, 'width' => 500 }
                   }, {
-                    'type' => Cocina::Models::Vocab.file,
+                    'type' => Cocina::Models::ObjectType.file,
                     'externalIdentifier' => 'druid:bg954kx8787/image.jp2',
                     'label' => 'image.jp2',
                     'filename' => 'image.jp2',
@@ -81,7 +80,7 @@ RSpec.describe ContentsComponent, type: :component do
                         'digest' => '45f7262c456d2ee14570881416a7432e'
                       }
                     ],
-                    'access' => { 'access' => 'world', 'download' => 'world' },
+                    'access' => { 'view' => 'world', 'download' => 'world' },
                     'administrative' => { 'sdrPreserve' => false, 'shelve' => true, 'publish' => true },
                     'presentation' => { 'height' => 700, 'width' => 500 }
                   }

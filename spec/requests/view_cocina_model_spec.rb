@@ -18,6 +18,6 @@ RSpec.describe 'View Cocina model' do
   it 'return json' do
     get "/items/#{item.externalIdentifier}.json"
     expect(response).to be_successful
-    expect(response.body).to include "\"type\":\"#{Cocina::Models::Vocab.object}\","
+    expect(response.body).to include "\"type\":\"#{Cocina::Models::ObjectType.object}\","
   end
 end

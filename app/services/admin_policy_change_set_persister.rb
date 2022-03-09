@@ -24,11 +24,11 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
     Cocina::Models::RequestAdminPolicy.new(
       label: title,
       version: 1,
-      type: Cocina::Models::Vocab.admin_policy,
+      type: Cocina::Models::ObjectType.admin_policy,
       administrative: {
         hasAdminPolicy: SolrDocument::UBER_APO_ID,
         hasAgreement: agreement_object_id,
-        defaultAccess: { access: 'world', download: 'world' }
+        accessTemplate: { view: 'world', download: 'world' }
       }
     )
   end
@@ -97,7 +97,7 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
       hasAgreement: agreement_object_id,
       registrationWorkflow: registration_workflow,
       collectionsForRegistration: collection_ids,
-      defaultAccess: rights.value!.merge(
+      accessTemplate: rights.value!.merge(
         license: use_license,
         copyright: copyright_statement,
         useAndReproductionStatement: use_statement

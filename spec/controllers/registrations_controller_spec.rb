@@ -11,7 +11,7 @@ RSpec.describe RegistrationsController, type: :controller do
   end
   let(:cocina_admin_policy_administrative) do
     instance_double(Cocina::Models::AdminPolicyAdministrative,
-                    defaultAccess: default_access,
+                    accessTemplate: default_access,
                     collectionsForRegistration: collections)
   end
   let(:collections) { [] }
@@ -28,7 +28,7 @@ RSpec.describe RegistrationsController, type: :controller do
   describe 'rights_list' do
     context 'when Stanford is the read group and discover is world' do
       let(:default_access) do
-        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'stanford')
+        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'stanford')
       end
 
       it 'shows Stanford as the default' do
@@ -39,7 +39,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
     context 'when the read group is not Stanford' do
       let(:default_access) do
-        Cocina::Models::AdminPolicyDefaultAccess.new
+        Cocina::Models::AdminPolicyAccessTemplate.new
       end
 
       it 'does not show Stanford as the default' do
@@ -50,7 +50,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
     context 'when discover and read are both world' do
       let(:default_access) do
-        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'world')
+        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'world')
       end
 
       it 'shows World as the default' do
@@ -61,7 +61,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
     context 'when discover and read are both none' do
       let(:default_access) do
-        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'dark')
+        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'dark')
       end
 
       it 'shows Dark as the default' do
@@ -72,7 +72,7 @@ RSpec.describe RegistrationsController, type: :controller do
 
     context 'when discover is world and read is none' do
       let(:default_access) do
-        Cocina::Models::AdminPolicyDefaultAccess.new(access: 'citation-only')
+        Cocina::Models::AdminPolicyAccessTemplate.new(view: 'citation-only')
       end
 
       it 'shows Citation Only as the default' do
@@ -174,13 +174,13 @@ RSpec.describe RegistrationsController, type: :controller do
       Cocina::Models.build({
                              'label' => 'The APO',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'type' => Cocina::Models::ObjectType.admin_policy,
                              'externalIdentifier' => apo_id,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
                                hasAgreement: 'druid:hp308wm0436',
                                registrationWorkflow: ['digitizationWF', 'dpgImageWF', Settings.apo.default_workflow_option, 'goobiWF'],
-                               defaultAccess: { access: 'world', download: 'world' }
+                               accessTemplate: { view: 'world', download: 'world' }
                              }
                            })
     end

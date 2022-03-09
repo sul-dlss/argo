@@ -21,17 +21,17 @@ RSpec.describe CollectionForm do
     end
     let(:expected_body_hash) do
       {
-        type: Cocina::Models::Vocab.collection,
+        type: Cocina::Models::ObjectType.collection,
         label: title,
         version: 1,
-        access: { access: 'dark' },
+        access: { view: 'dark' },
         administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
         description: description
       }
     end
     let(:created_collection) do
       Cocina::Models::Collection.new(externalIdentifier: collection_id,
-                                     type: Cocina::Models::Vocab.collection,
+                                     type: Cocina::Models::ObjectType.collection,
                                      label: '',
                                      version: 1,
                                      access: {},
@@ -77,10 +77,10 @@ RSpec.describe CollectionForm do
       end
       let(:expected_request_body_hash) do
         {
-          type: Cocina::Models::Vocab.collection,
+          type: Cocina::Models::ObjectType.collection,
           label: title,
           version: 1,
-          access: { access: 'dark' },
+          access: { view: 'dark' },
           administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
           description: request_description
         }

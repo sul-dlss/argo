@@ -19,18 +19,18 @@ RSpec.describe 'Set rights for an object' do
         Cocina::Models.build({
                                'label' => 'My ETD',
                                'version' => 1,
-                               'type' => Cocina::Models::Vocab.object,
+                               'type' => Cocina::Models::ObjectType.object,
                                'externalIdentifier' => pid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
                                  'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                },
                                'access' => {
-                                 'access' => 'world',
+                                 'view' => 'world',
                                  'download' => 'world',
                                  embargo: {
                                    releaseDate: '2021-02-11T00:00:00.000+00:00',
-                                   access: 'world',
+                                   view: 'world',
                                    download: 'world'
                                  }
                                },
@@ -40,15 +40,15 @@ RSpec.describe 'Set rights for an object' do
                                    {
                                      'externalIdentifier' => 'cc243mg0841_1',
                                      'label' => 'Fileset 1',
-                                     'type' => Cocina::Models::Vocab::Resources.file,
+                                     'type' => Cocina::Models::FileSetType.file,
                                      'version' => 1,
                                      'structural' => {
                                        'contains' => [
                                          { 'externalIdentifier' => 'cc243mg0841_1',
                                            'label' => 'Page 1',
-                                           'type' => Cocina::Models::Vocab.file,
+                                           'type' => Cocina::Models::ObjectType.file,
                                            'version' => 1,
-                                           'access' => { access: 'world', download: 'world' },
+                                           'access' => { view: 'world', download: 'world' },
                                            'administrative' => {
                                              'publish' => true,
                                              'shelve' => true,
@@ -70,13 +70,13 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'dark',
+                'view' => 'dark',
                 'download' => 'none',
-                'readLocation' => nil,
+                'location' => nil,
                 'controlledDigitalLending' => false,
                 embargo: {
                   releaseDate: '2021-02-11T00:00:00.000+00:00',
-                  access: 'world',
+                  view: 'world',
                   download: 'world'
                 }
               },
@@ -85,16 +85,16 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => Cocina::Models::Vocab::Resources.file,
+                    'type' => Cocina::Models::FileSetType.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         {
                           'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => Cocina::Models::Vocab.file,
+                          'type' => Cocina::Models::ObjectType.file,
                           'version' => 1,
-                          'access' => { access: 'dark', download: 'none', readLocation: nil, controlledDigitalLending: false },
+                          'access' => { view: 'dark', download: 'none', location: nil, controlledDigitalLending: false },
                           'administrative' => { 'shelve' => false },
                           'filename' => 'page1.txt'
                         }
@@ -121,13 +121,13 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'stanford',
+                'view' => 'stanford',
                 'download' => 'stanford',
-                'readLocation' => nil,
+                'location' => nil,
                 'controlledDigitalLending' => false,
                 'embargo' => {
                   'releaseDate' => '2021-02-11T00:00:00.000+00:00',
-                  'access' => 'world',
+                  'view' => 'world',
                   'download' => 'world'
                 }
               },
@@ -136,18 +136,18 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => Cocina::Models::Vocab::Resources.file,
+                    'type' => Cocina::Models::FileSetType.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         { 'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => Cocina::Models::Vocab.file,
+                          'type' => Cocina::Models::ObjectType.file,
                           'version' => 1,
                           'access' => {
-                            'access' => 'stanford',
+                            'view' => 'stanford',
                             'download' => 'stanford',
-                            'readLocation' => nil,
+                            'location' => nil,
                             'controlledDigitalLending' => false
                           },
                           'administrative' => {
@@ -180,13 +180,13 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'stanford',
+                'view' => 'stanford',
                 'download' => 'none',
-                'readLocation' => nil,
+                'location' => nil,
                 'controlledDigitalLending' => true,
                 'embargo' => {
                   'releaseDate' => '2021-02-11T00:00:00.000+00:00',
-                  'access' => 'world',
+                  'view' => 'world',
                   'download' => 'world'
                 }
               },
@@ -195,18 +195,18 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => Cocina::Models::Vocab::Resources.file,
+                    'type' => Cocina::Models::FileSetType.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         { 'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => Cocina::Models::Vocab.file,
+                          'type' => Cocina::Models::ObjectType.file,
                           'version' => 1,
                           'access' => {
-                            'access' => 'stanford',
+                            'view' => 'stanford',
                             'download' => 'none',
-                            'readLocation' => nil,
+                            'location' => nil,
                             'controlledDigitalLending' => true
                           },
                           'administrative' => {
@@ -239,19 +239,19 @@ RSpec.describe 'Set rights for an object' do
           Cocina::Models.build({
                                  'label' => 'My ETD',
                                  'version' => 1,
-                                 'type' => Cocina::Models::Vocab.object,
+                                 'type' => Cocina::Models::ObjectType.object,
                                  'externalIdentifier' => pid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
                                    'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                  },
                                  'access' => {
-                                   'access' => 'stanford',
+                                   'view' => 'stanford',
                                    'download' => 'none',
                                    'controlledDigitalLending' => true,
                                    'embargo' => {
                                      releaseDate: '2021-02-11T00:00:00.000+00:00',
-                                     access: 'world',
+                                     view: 'world',
                                      download: 'world'
                                    }
                                  },
@@ -261,18 +261,18 @@ RSpec.describe 'Set rights for an object' do
                                      {
                                        'externalIdentifier' => 'cc243mg0841_1',
                                        'label' => 'Fileset 1',
-                                       'type' => Cocina::Models::Vocab::Resources.file,
+                                       'type' => Cocina::Models::FileSetType.file,
                                        'version' => 1,
                                        'structural' => {
                                          'contains' => [
                                            { 'externalIdentifier' => 'cc243mg0841_1',
                                              'label' => 'Page 1',
-                                             'type' => Cocina::Models::Vocab.file,
+                                             'type' => Cocina::Models::ObjectType.file,
                                              'version' => 1,
                                              'access' => {
-                                               'access' => 'world',
+                                               'view' => 'world',
                                                'download' => 'world',
-                                               'readLocation' => nil,
+                                               'location' => nil,
                                                'controlledDigitalLending' => false
                                              },
                                              'administrative' => {
@@ -295,13 +295,13 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'world',
+                'view' => 'world',
                 'download' => 'world',
-                'readLocation' => nil,
+                'location' => nil,
                 'controlledDigitalLending' => false,
                 'embargo' => {
                   'releaseDate' => '2021-02-11T00:00:00.000+00:00',
-                  'access' => 'world',
+                  'view' => 'world',
                   'download' => 'world'
                 }
               }
@@ -323,13 +323,13 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'citation-only',
+                'view' => 'citation-only',
                 'download' => 'none',
-                'readLocation' => nil,
+                'location' => nil,
                 'controlledDigitalLending' => false,
                 'embargo' => {
                   'releaseDate' => '2021-02-11T00:00:00.000+00:00',
-                  'access' => 'world',
+                  'view' => 'world',
                   'download' => 'world'
                 }
               },
@@ -338,18 +338,18 @@ RSpec.describe 'Set rights for an object' do
                   {
                     'externalIdentifier' => 'cc243mg0841_1',
                     'label' => 'Fileset 1',
-                    'type' => Cocina::Models::Vocab::Resources.file,
+                    'type' => Cocina::Models::FileSetType.file,
                     'version' => 1,
                     'structural' => {
                       'contains' => [
                         { 'externalIdentifier' => 'cc243mg0841_1',
                           'label' => 'Page 1',
-                          'type' => Cocina::Models::Vocab.file,
+                          'type' => Cocina::Models::ObjectType.file,
                           'version' => 1,
                           'access' => {
-                            'access' => 'dark',
+                            'view' => 'dark',
                             'download' => 'none',
-                            'readLocation' => nil,
+                            'location' => nil,
                             'controlledDigitalLending' => false
                           },
                           'administrative' => {
@@ -383,14 +383,14 @@ RSpec.describe 'Set rights for an object' do
         Cocina::Models.build({
                                'label' => 'My ETD',
                                'version' => 1,
-                               'type' => Cocina::Models::Vocab.collection,
+                               'type' => Cocina::Models::ObjectType.collection,
                                'externalIdentifier' => pid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
                                  'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                },
                                'access' => {
-                                 'access' => 'world'
+                                 'view' => 'world'
                                },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'identification' => {}
@@ -402,7 +402,7 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'dark'
+                'view' => 'dark'
               }
             }
           )
@@ -422,7 +422,7 @@ RSpec.describe 'Set rights for an object' do
           cocina_model.new(
             {
               'access' => {
-                'access' => 'dark'
+                'view' => 'dark'
               }
             }
           )
@@ -443,14 +443,14 @@ RSpec.describe 'Set rights for an object' do
         Cocina::Models.build({
                                'label' => 'My ETD',
                                'version' => 1,
-                               'type' => Cocina::Models::Vocab.collection,
+                               'type' => Cocina::Models::ObjectType.collection,
                                'externalIdentifier' => pid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
                                  'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                },
                                'access' => {
-                                 'access' => 'world'
+                                 'view' => 'world'
                                },
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                                'identification' => {}

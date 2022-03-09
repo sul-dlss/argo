@@ -18,7 +18,7 @@ RSpec.describe 'Draw the manage release form' do
     Cocina::Models.build({
                            'label' => 'The item',
                            'version' => 1,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pid,
                            'description' => {
                              'title' => [{ 'value' => 'The item' }],

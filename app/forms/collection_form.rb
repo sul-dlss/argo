@@ -50,7 +50,7 @@ class CollectionForm
     reg_params = {
       label: params[:collection_title].presence || ':auto',
       version: 1,
-      type: Cocina::Models::Vocab.collection,
+      type: Cocina::Models::ObjectType.collection,
       administrative: {
         hasAdminPolicy: params[:apo_pid]
       }

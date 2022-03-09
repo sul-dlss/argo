@@ -7,7 +7,7 @@ RSpec.describe ApoForm do
   let(:instance) { described_class.new(apo, search_service: search_service) }
   let(:apo) do
     Cocina::Models::AdminPolicy.new(
-      type: Cocina::Models::Vocab.admin_policy,
+      type: Cocina::Models::ObjectType.admin_policy,
       externalIdentifier: 'druid:zt570qh4444',
       version: 1,
       administrative: administrative,
@@ -21,7 +21,7 @@ RSpec.describe ApoForm do
       hasAdminPolicy: 'druid:xx666zz7777',
       hasAgreement: 'druid:hp308wm0436',
       registrationWorkflow: ['registrationWF'],
-      defaultAccess: default_access,
+      accessTemplate: default_access,
       collectionsForRegistration: %w[druid:xf330kz3480 druid:zn588xt6079 druid:zq557wp0848 druid:tw619vm5957
                                      druid:ts734sd4095 druid:sx487cw2287 druid:pv392zr2847 druid:sh776dy9514
                                      druid:dy736ft1835 druid:kj087tz6537 druid:qs995zb1355 druid:yk518vd0459]
@@ -52,7 +52,7 @@ RSpec.describe ApoForm do
               name: 'dor-apo-manager'
             }
           ],
-          defaultAccess: { access: 'world', download: 'world' }
+          accessTemplate: { view: 'world', download: 'world' }
         }
       end
 
@@ -75,7 +75,7 @@ RSpec.describe ApoForm do
           hasAdminPolicy: 'druid:xx666zz7777',
           hasAgreement: 'druid:hp308wm0436',
           registrationWorkflow: %w[digitizationWF goobiWF],
-          defaultAccess: { access: 'world', download: 'world' }
+          accessTemplate: { view: 'world', download: 'world' }
         }
       end
 
@@ -90,7 +90,7 @@ RSpec.describe ApoForm do
           hasAdminPolicy: 'druid:xx666zz7777',
           registrationWorkflow: ['digitizationWF'],
           hasAgreement: 'druid:dd327rv8888',
-          defaultAccess: { access: 'world', download: 'world' }
+          accessTemplate: { view: 'world', download: 'world' }
         }
       end
 
@@ -108,7 +108,7 @@ RSpec.describe ApoForm do
     describe '#default_rights' do
       subject { instance.default_rights }
 
-      let(:default_access) { { access: 'world' } }
+      let(:default_access) { { view: 'world' } }
 
       it { is_expected.to eq 'world' }
 
@@ -117,8 +117,8 @@ RSpec.describe ApoForm do
           {
             hasAdminPolicy: 'druid:xx666zz7777',
             hasAgreement: 'druid:hp308wm0436',
-            defaultAccess: {
-              access: 'stanford',
+            accessTemplate: {
+              view: 'stanford',
               download: 'none'
             }
           }
@@ -132,9 +132,9 @@ RSpec.describe ApoForm do
           {
             hasAdminPolicy: 'druid:xx666zz7777',
             hasAgreement: 'druid:hp308wm0436',
-            defaultAccess: {
-              access: 'location-based',
-              readLocation: 'ars'
+            accessTemplate: {
+              view: 'location-based',
+              location: 'ars'
             }
           }
         end
@@ -147,7 +147,7 @@ RSpec.describe ApoForm do
           {
             hasAdminPolicy: 'druid:xx666zz7777',
             hasAgreement: 'druid:hp308wm0436',
-            defaultAccess: {
+            accessTemplate: {
               controlledDigitalLending: true
             }
           }

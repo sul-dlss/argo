@@ -21,7 +21,7 @@ RSpec.describe 'Set the properties for a collection' do
       Cocina::Models.build({
                              'label' => 'My ETD',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.collection,
+                             'type' => Cocina::Models::ObjectType.collection,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
                                'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"

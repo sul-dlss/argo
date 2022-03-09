@@ -32,17 +32,17 @@ class AgreementForm < Reform::Form
 
   def new_resource(title:, source_id:)
     Cocina::Models.build_request({
-                                   'type' => Cocina::Models::Vocab.agreement,
+                                   'type' => Cocina::Models::ObjectType.agreement,
                                    'label' => title,
                                    'version' => 1,
-                                   'access' => { 'access' => 'dark' },
+                                   'access' => { 'view' => 'dark' },
                                    'description' => { 'title' => [{ 'value' => title }] },
                                    'administrative' => { 'hasAdminPolicy' => ApoConcern::UBER_APO_ID },
                                    'identification' => { 'sourceId' => source_id },
                                    'structural' => {
                                      'contains' => [
                                        {
-                                         'type' => Cocina::Models::Vocab::Resources.file,
+                                         'type' => Cocina::Models::FileSetType.file,
                                          'label' => 'Agreement',
                                          'version' => 1,
                                          'structural' => {

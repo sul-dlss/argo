@@ -8,7 +8,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   let(:change_set) { ItemChangeSet.new(cocina) }
   let(:cocina) do
     Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                            type: Cocina::Models::Vocab.document,
+                            type: Cocina::Models::ObjectType.document,
                             label: 'my dro',
                             version: 1,
                             description: {
@@ -45,7 +45,7 @@ RSpec.describe Show::Item::OverviewComponent, type: :component do
   context 'with a license set' do
     let(:cocina) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::Vocab.document,
+                              type: Cocina::Models::ObjectType.document,
                               label: 'my dro',
                               version: 1,
                               description: {

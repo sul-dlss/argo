@@ -28,7 +28,7 @@ RSpec.describe 'Upload the structural CSV' do
       Cocina::Models.build({
                              'label' => 'My ETD',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.object,
+                             'type' => Cocina::Models::ObjectType.object,
                              'externalIdentifier' => pid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],

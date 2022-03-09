@@ -12,16 +12,16 @@ class CocinaAccess
 
     data = if rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
              {
-               access: rights.delete_suffix('-nd')
+               view: rights.delete_suffix('-nd')
              }
            elsif rights.start_with?('loc:')
              {
-               access: 'location-based',
-               readLocation: rights.delete_prefix('loc:')
+               view: 'location-based',
+               location: rights.delete_prefix('loc:')
              }
            else
              {
-               access: rights
+               view: rights
              }
            end
     Some(data)

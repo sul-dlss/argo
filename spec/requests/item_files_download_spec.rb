@@ -7,7 +7,7 @@ RSpec.describe 'Download item files' do
   let(:cocina_model) { Cocina::Models.build(cocina_params.stringify_keys) }
   let(:cocina_params) do
     {
-      type: Cocina::Models::Vocab.image,
+      type: Cocina::Models::ObjectType.image,
       externalIdentifier: 'druid:rn653dy9317',
       label: 'M1090_S15_B01_F07_0106',
       version: 4,
@@ -16,10 +16,10 @@ RSpec.describe 'Download item files' do
         purl: 'https://purl.stanford.edu/rn653dy9317'
       },
       access: {
-        access: 'location-based',
+        view: 'location-based',
         copyright: '© The Estate of R. Buckminster Fuller.',
         download: 'location-based',
-        readLocation: 'spec'
+        location: 'spec'
       },
       administrative: {
         hasAdminPolicy: 'druid:rd845kr7465'
@@ -30,14 +30,14 @@ RSpec.describe 'Download item files' do
       structural: {
         contains: [
           {
-            type: Cocina::Models::Vocab::Resources.file,
+            type: Cocina::Models::FileSetType.file,
             externalIdentifier: 'rn653dy9317_106',
             label: 'M1090_S15_B01_F07_0106',
             version: 4,
             structural: {
               contains: [
                 {
-                  type: Cocina::Models::Vocab.file,
+                  type: Cocina::Models::ObjectType.file,
                   externalIdentifier: 'druid:rn653dy9317/M1090_S15_B01_F07_0106.jp2',
                   label: 'M1090_S15_B01_F07_0106.jp2',
                   filename: 'M1090_S15_B01_F07_0106.jp2',
@@ -55,7 +55,7 @@ RSpec.describe 'Download item files' do
                     }
                   ],
                   access: {
-                    access: 'world',
+                    view: 'world',
                     download: 'world'
                   },
                   administrative: {
@@ -69,7 +69,7 @@ RSpec.describe 'Download item files' do
                   }
                 },
                 {
-                  type: Cocina::Models::Vocab.file,
+                  type: Cocina::Models::ObjectType.file,
                   externalIdentifier: 'druid:rn653dy9317/M1090_S15_B01_F07_0106.tif',
                   label: 'M1090_S15_B01_F07_0106.tif',
                   filename: 'M1090_S15_B01_F07_0106.tif',
@@ -87,7 +87,7 @@ RSpec.describe 'Download item files' do
                     }
                   ],
                   access: {
-                    access: 'dark',
+                    view: 'dark',
                     download: 'none'
                   },
                   administrative: {

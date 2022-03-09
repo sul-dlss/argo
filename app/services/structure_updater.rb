@@ -49,7 +49,7 @@ class StructureUpdater
         sdrPreserve: row['preserve'] == 'yes'
       ),
       access: existing_file.access.new(
-        access: row['rights_access'],
+        view: row['rights_access'],
         download: row['rights_download']
       )
     }
@@ -82,6 +82,6 @@ class StructureUpdater
 
   # Change the short resource type into a url
   def type(resource_type)
-    Cocina::Models::Vocab::Resources.public_send(resource_type)
+    Cocina::Models::FileSetType.public_send(resource_type)
   end
 end

@@ -11,7 +11,7 @@ RSpec.describe ContentTypesController, type: :controller do
   let(:pid) { 'druid:bc123df4567' }
   let(:user) { create :user }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
-  let(:content_type) { Cocina::Models::Vocab.image }
+  let(:content_type) { Cocina::Models::ObjectType.image }
   let(:cocina_model) do
     Cocina::Models.build({
                            'label' => 'My Item',
@@ -48,14 +48,14 @@ RSpec.describe ContentTypesController, type: :controller do
     [
       Cocina::Models::FileSet.new(
         externalIdentifier: 'bc123df4567_2',
-        type: Cocina::Models::Vocab::Resources.document,
+        type: Cocina::Models::FileSetType.document,
         label: 'document files',
         version: 1,
         structural: Cocina::Models::FileSetStructural.new(
           contains: [
             Cocina::Models::File.new(
               externalIdentifier: 'bc123df4567.pdf',
-              type: Cocina::Models::Vocab.file,
+              type: Cocina::Models::ObjectType.file,
               label: 'the PDF',
               filename: 'bc123df4567.pdf',
               version: 1
@@ -65,14 +65,14 @@ RSpec.describe ContentTypesController, type: :controller do
       ),
       Cocina::Models::FileSet.new(
         externalIdentifier: 'bc123df4567_2',
-        type: Cocina::Models::Vocab::Resources.image,
+        type: Cocina::Models::FileSetType.image,
         label: 'image files',
         version: 1,
         structural: Cocina::Models::FileSetStructural.new(
           contains: [
             Cocina::Models::File.new(
               externalIdentifier: 'bc123df4567.png',
-              type: Cocina::Models::Vocab.file,
+              type: Cocina::Models::ObjectType.file,
               label: 'the PNG',
               filename: 'bc123df4567.png',
               version: 1
@@ -95,7 +95,7 @@ RSpec.describe ContentTypesController, type: :controller do
   end
 
   describe '#show' do
-    let(:content_type) { Cocina::Models::Vocab.image }
+    let(:content_type) { Cocina::Models::ObjectType.image }
 
     it 'is successful' do
       get :show, params: { item_id: pid }
@@ -117,7 +117,7 @@ RSpec.describe ContentTypesController, type: :controller do
         patch :update, params: { item_id: pid, new_content_type: 'media' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
-          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.media, viewing_direction: nil))
+          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.media, viewing_direction: nil))
           .once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
@@ -126,7 +126,7 @@ RSpec.describe ContentTypesController, type: :controller do
         patch :update, params: { item_id: pid, new_content_type: 'book (ltr)' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
-          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.book, viewing_direction: 'left-to-right'))
+          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right'))
           .once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
@@ -135,7 +135,7 @@ RSpec.describe ContentTypesController, type: :controller do
         patch :update, params: { item_id: pid, new_content_type: 'book (rtl)' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
-          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.book, viewing_direction: 'right-to-left'))
+          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left'))
           .once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
@@ -146,7 +146,7 @@ RSpec.describe ContentTypesController, type: :controller do
         expect(object_client).to have_received(:update)
           .with(
             params: a_cocina_object_with_types(
-              resource_types: [Cocina::Models::Vocab::Resources.file, Cocina::Models::Vocab::Resources.image],
+              resource_types: [Cocina::Models::FileSetType.file, Cocina::Models::FileSetType.image],
               without_order: true
             )
           ).once
@@ -159,8 +159,8 @@ RSpec.describe ContentTypesController, type: :controller do
         expect(object_client).to have_received(:update)
           .with(
             params: a_cocina_object_with_types(
-              content_type: Cocina::Models::Vocab.image,
-              resource_types: [Cocina::Models::Vocab::Resources.document, Cocina::Models::Vocab::Resources.image]
+              content_type: Cocina::Models::ObjectType.image,
+              resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
             )
           )
           .once
@@ -174,7 +174,7 @@ RSpec.describe ContentTypesController, type: :controller do
           patch :update, params: { item_id: pid, new_content_type: 'media' }
           expect(response).to redirect_to solr_document_path(pid)
           expect(object_client).to have_received(:update)
-            .with(params: a_cocina_object_with_types(content_type: Cocina::Models::Vocab.media))
+            .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.media))
         end
       end
 

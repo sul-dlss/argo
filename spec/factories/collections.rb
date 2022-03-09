@@ -22,6 +22,6 @@ FactoryBot.define do
 
     admin_policy_id { 'druid:hv992ry2431' }
 
-    type { Cocina::Models::Vocab.collection }
+    type { Cocina::Models::ObjectType.collection }
   end
 end

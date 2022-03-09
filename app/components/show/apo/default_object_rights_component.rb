@@ -6,7 +6,7 @@ module Show
       # @param [ArgoShowPresenter] presenter
       def initialize(presenter:)
         @presenter = presenter
-        @default_access = @presenter.cocina.administrative.defaultAccess
+        @default_access = @presenter.cocina.administrative.accessTemplate
       end
 
       def access_rights

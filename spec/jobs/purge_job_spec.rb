@@ -17,7 +17,7 @@ RSpec.describe PurgeJob, type: :job do
     Cocina::Models.build({
                            'label' => 'My Item',
                            'version' => 2,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pids[0],
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
@@ -33,7 +33,7 @@ RSpec.describe PurgeJob, type: :job do
     Cocina::Models.build({
                            'label' => 'My Item',
                            'version' => 3,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pids[1],
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],

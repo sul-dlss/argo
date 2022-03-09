@@ -9,7 +9,7 @@ RSpec.describe Ability do
   let(:dro) do
     Cocina::Models::DRO.new(externalIdentifier: new_cocina_object_id,
                             label: 'test',
-                            type: Cocina::Models::Vocab.object,
+                            type: Cocina::Models::ObjectType.object,
                             version: 1,
                             description: {
                               title: [{ value: 'test' }],
@@ -24,19 +24,19 @@ RSpec.describe Ability do
   let(:admin_policy) do
     Cocina::Models::AdminPolicy.new(externalIdentifier: new_cocina_object_id,
                                     label: 'test',
-                                    type: Cocina::Models::Vocab.admin_policy,
+                                    type: Cocina::Models::ObjectType.admin_policy,
                                     version: 1,
                                     administrative: {
                                       hasAdminPolicy: apo_id,
                                       hasAgreement: 'druid:hp308wm0436',
-                                      defaultAccess: { access: 'world', download: 'world' }
+                                      accessTemplate: { view: 'world', download: 'world' }
                                     })
   end
 
   let(:collection) do
     Cocina::Models::Collection.new(externalIdentifier: new_cocina_object_id,
                                    label: 'test',
-                                   type: Cocina::Models::Vocab.collection,
+                                   type: Cocina::Models::ObjectType.collection,
                                    version: 1,
                                    description: {
                                      title: [{ value: 'test' }],

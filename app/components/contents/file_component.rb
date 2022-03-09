@@ -18,7 +18,7 @@ module Contents
     delegate :publish, :shelve, :sdrPreserve, to: :administrative
 
     def view_access
-      access.access.capitalize
+      access.view.capitalize
     end
 
     def download_access

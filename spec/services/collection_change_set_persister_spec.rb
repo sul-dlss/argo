@@ -30,7 +30,7 @@ RSpec.describe CollectionChangeSetPersister do
       Cocina::Models::Collection.new(
         externalIdentifier: 'druid:bc123df4568',
         label: 'test',
-        type: Cocina::Models::Vocab.collection,
+        type: Cocina::Models::ObjectType.collection,
         version: 1,
         description: {
           title: [{ value: 'test' }],

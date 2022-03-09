@@ -12,7 +12,7 @@ RSpec.describe 'Update an existing Admin Policy' do
     Cocina::Models.build({
                            'label' => 'The item',
                            'version' => 1,
-                           'type' => Cocina::Models::Vocab.admin_policy,
+                           'type' => Cocina::Models::ObjectType.admin_policy,
                            'externalIdentifier' => pid,
                            'description' => {
                              'title' => [{ value: 'My APO' }],
@@ -22,7 +22,7 @@ RSpec.describe 'Update an existing Admin Policy' do
                              hasAdminPolicy: 'druid:cg532dg5405',
                              hasAgreement: 'druid:hp308wm0436',
                              registrationWorkflow: ['registrationWF'],
-                             defaultAccess: { access: 'world', download: 'world' }
+                             accessTemplate: { view: 'world', download: 'world' }
                            }
                          })
   end

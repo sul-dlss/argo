@@ -29,11 +29,11 @@ class DroRightsForm < AccessForm
         case rights
         when 'dark'
           # Ensure files attached to dark objects are neither published nor shelved
-          file[:access].merge!(access: 'dark', download: 'none', controlledDigitalLending: false, readLocation: nil)
+          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
           file[:administrative].merge!(publish: false)
           file[:administrative].merge!(shelve: false)
         when 'citation-only'
-          file[:access].merge!(access: 'dark', download: 'none', controlledDigitalLending: false, readLocation: nil)
+          file[:access].merge!(view: 'dark', download: 'none', controlledDigitalLending: false, location: nil)
         else
           file[:access].merge!(new_object_access)
         end

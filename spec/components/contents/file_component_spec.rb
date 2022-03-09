@@ -8,7 +8,7 @@ RSpec.describe Contents::FileComponent, type: :component do
   let(:file) do
     instance_double(Cocina::Models::File,
                     filename: '0220_MLK_Kids_Gadson_459-25.tif',
-                    externalIdentifier: 'http://cocina.sul.stanford.edu/file/b7cdfa7a-6e1f-484b-bbb0-f9a46c40dbb4',
+                    externalIdentifier: 'https://cocina.sul.stanford.edu/file/b7cdfa7a-6e1f-484b-bbb0-f9a46c40dbb4',
                     hasMimeType: 'image/tiff',
                     size: 99,
                     access: access,
@@ -16,7 +16,7 @@ RSpec.describe Contents::FileComponent, type: :component do
                     use: use)
   end
 
-  let(:access) { instance_double(Cocina::Models::FileAccess, access: 'world', download: 'stanford') }
+  let(:access) { instance_double(Cocina::Models::FileAccess, view: 'world', download: 'stanford') }
   let(:admin) { instance_double(Cocina::Models::FileAdministrative, sdrPreserve: true, publish: true, shelve: true) }
   let(:use) { 'transcription' }
 
