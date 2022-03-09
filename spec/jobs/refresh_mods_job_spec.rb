@@ -16,7 +16,7 @@ RSpec.describe RefreshModsJob, type: :job do
     Cocina::Models.build({
                            'label' => 'My Item',
                            'version' => 2,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pids[0],
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -29,7 +29,7 @@ RSpec.describe RefreshModsJob, type: :job do
     Cocina::Models.build({
                            'label' => 'My Item',
                            'version' => 3,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pids[1],
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },

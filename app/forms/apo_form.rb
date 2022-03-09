@@ -36,9 +36,9 @@ class ApoForm
     self.title = model.description.title.first.value
     self.agreement_object_id = model.administrative.hasAgreement
     self.default_rights = default_access
-    self.use_statement = model.administrative.defaultAccess&.useAndReproductionStatement
-    self.copyright_statement = model.administrative.defaultAccess&.copyright
-    self.use_license = model.administrative.defaultAccess&.license
+    self.use_statement = model.administrative.accessTemplate&.useAndReproductionStatement
+    self.copyright_statement = model.administrative.accessTemplate&.copyright
+    self.use_license = model.administrative.accessTemplate&.license
     self.default_workflows = model.administrative.registrationWorkflow
   end
 
@@ -103,16 +103,16 @@ class ApoForm
   end
 
   def default_access
-    default_access = model&.administrative&.defaultAccess
+    default_access = model&.administrative&.accessTemplate
     return default_rights if default_access.nil?
     return 'cdl-stanford-nd' if default_access.controlledDigitalLending
 
-    access = default_access.access
-    return default_rights if access.nil?
-    return "loc:#{default_access.readLocation}" if access == 'location-based'
-    return "#{access}-nd" if default_access.download == 'none' && access.in?(%w[stanford world])
+    view = default_access.view
+    return default_rights unless view
+    return "loc:#{default_access.location}" if view == 'location-based'
+    return "#{view}-nd" if default_access.download == 'none' && view.in?(%w[stanford world])
 
-    access
+    view
   end
 
   def manage_permissions

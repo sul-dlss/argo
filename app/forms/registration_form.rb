@@ -57,25 +57,25 @@ class RegistrationForm
   def dro_type
     case content_type_tag
     when 'Image'
-      Cocina::Models::Vocab.image
+      Cocina::Models::ObjectType.image
     when '3D'
-      Cocina::Models::Vocab.three_dimensional
+      Cocina::Models::ObjectType.three_dimensional
     when 'Map'
-      Cocina::Models::Vocab.map
+      Cocina::Models::ObjectType.map
     when 'Media'
-      Cocina::Models::Vocab.media
+      Cocina::Models::ObjectType.media
     when 'Document'
-      Cocina::Models::Vocab.document
+      Cocina::Models::ObjectType.document
     when /^Manuscript/
-      Cocina::Models::Vocab.manuscript
+      Cocina::Models::ObjectType.manuscript
     when 'Book (ltr)', 'Book (rtl)'
-      Cocina::Models::Vocab.book
+      Cocina::Models::ObjectType.book
     when 'Webarchive-seed'
-      Cocina::Models::Vocab.webarchive_seed
+      Cocina::Models::ObjectType.webarchive_seed
     when 'Geo'
-      Cocina::Models::Vocab.geo
+      Cocina::Models::ObjectType.geo
     else
-      Cocina::Models::Vocab.object
+      Cocina::Models::ObjectType.object
     end
   end
 

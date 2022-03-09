@@ -17,7 +17,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
         version: 1,
         administrative: administrative,
         label: 'My title',
-        type: Cocina::Models::Vocab.admin_policy,
+        type: Cocina::Models::ObjectType.admin_policy,
         description: {
           title: [{ value: 'Exsiting title' }],
           purl: 'https://purl.stanford.edu/zt570qh4444'
@@ -28,7 +28,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
       {
         hasAdminPolicy: 'druid:xx666zz7777',
         hasAgreement: 'druid:hp308wm0436',
-        defaultAccess: { access: 'world', download: 'world' }
+        accessTemplate: { view: 'world', download: 'world' }
       }
     end
 
@@ -59,15 +59,15 @@ RSpec.describe AdminPolicyChangeSetPersister do
     describe '#sync' do
       subject(:result) { instance.sync }
 
-      it 'sets clean APO metadata for defaultAccess' do
+      it 'sets clean APO metadata for accessTemplate' do
         expect(result.to_h).to eq(
           Cocina::Models::AdminPolicy.new(
             administrative: {
-              defaultAccess: {
-                access: 'world',
+              accessTemplate: {
+                view: 'world',
                 controlledDigitalLending: false,
                 download: 'world',
-                readLocation: nil,
+                location: nil,
                 copyright: 'My copyright statement',
                 license: 'https://creativecommons.org/licenses/by-nc/3.0/legalcode',
                 useAndReproductionStatement: 'My use and reproduction statement'
@@ -99,7 +99,7 @@ RSpec.describe AdminPolicyChangeSetPersister do
             },
             externalIdentifier: 'druid:zt570qh4444',
             label: 'My title',
-            type: Cocina::Models::Vocab.admin_policy,
+            type: Cocina::Models::ObjectType.admin_policy,
             version: 1
           ).to_h
         )

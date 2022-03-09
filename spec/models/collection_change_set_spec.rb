@@ -11,14 +11,14 @@ RSpec.describe CollectionChangeSet do
       Cocina::Models.build({
                              'label' => 'My Collection',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.collection,
+                             'type' => Cocina::Models::ObjectType.collection,
                              'externalIdentifier' => pid,
                              'description' => {
                                'title' => [{ 'value' => 'My Collection' }],
                                'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                              },
                              'access' => {
-                               access: 'world',
+                               view: 'world',
                                copyright: 'This collection is in the Public Domain.',
                                useAndReproductionStatement: 'Must be used underwater',
                                license: 'https://creativecommons.org/licenses/by-nc-sa/3.0/legalcode'

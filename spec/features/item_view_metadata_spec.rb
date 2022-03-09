@@ -62,17 +62,16 @@ RSpec.describe 'Item view', js: true do
     let(:attrs) do
       <<~JSON
         {
-          "type": "#{Cocina::Models::Vocab.image}",
+          "type": "#{Cocina::Models::ObjectType.image}",
           "externalIdentifier": "druid:hj185xx2222",
           "label": "image integration test miry low_explosive",
           "version": 3,
           "access": {
-            "access": "world",
+            "view": "world",
             "download": "world"
           },
           "administrative": {
-            "hasAdminPolicy": "druid:qc410yz8746",
-            "partOfProject": "Integration Test - Image via Preassembly"
+            "hasAdminPolicy": "druid:qc410yz8746"
           },
           "description": {
             "title": [
@@ -95,14 +94,14 @@ RSpec.describe 'Item view', js: true do
           "structural": {
             "contains": [
               {
-                "type": "#{Cocina::Models::Vocab::Resources.file}",
+                "type": "#{Cocina::Models::FileSetType.file}",
                 "externalIdentifier": "hj185xx2222_1",
                 "label": "Image 1",
                 "version": 3,
                 "structural": {
                   "contains": [
                     {
-                      "type": "#{Cocina::Models::Vocab.file}",
+                      "type": "#{Cocina::Models::ObjectType.file}",
                       "externalIdentifier": "druid:hj185xx2222/image.jpg",
                       "label": "image.jpg",
                       "filename": "image.jpg",
@@ -120,7 +119,7 @@ RSpec.describe 'Item view', js: true do
                         }
                       ],
                       "access": {
-                        "access": "dark",
+                        "view": "dark",
                         "download": "none"
                       },
                       "administrative": {
@@ -134,7 +133,7 @@ RSpec.describe 'Item view', js: true do
                       }
                     },
                     {
-                      "type": "#{Cocina::Models::Vocab.file}",
+                      "type": "#{Cocina::Models::ObjectType.file}",
                       "externalIdentifier": "druid:hj185xx2222/M1090_S15_B02_F01_0126.jp2",
                       "label": "M1090_S15_B02_F01_0126.jp2",
                       "filename": "M1090_S15_B02_F01_0126.jp2",
@@ -152,7 +151,7 @@ RSpec.describe 'Item view', js: true do
                         }
                       ],
                       "access": {
-                        "access": "world",
+                        "view": "world",
                         "download": "world"
                       },
                       "administrative": {

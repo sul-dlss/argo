@@ -36,7 +36,7 @@ RSpec.describe 'Set catkey' do
           Cocina::Models.build({
                                  'label' => 'My ETD',
                                  'version' => 1,
-                                 'type' => Cocina::Models::Vocab.object,
+                                 'type' => Cocina::Models::ObjectType.object,
                                  'externalIdentifier' => pid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
@@ -61,7 +61,7 @@ RSpec.describe 'Set catkey' do
           Cocina::Models.build({
                                  'label' => 'My ETD',
                                  'version' => 1,
-                                 'type' => Cocina::Models::Vocab.collection,
+                                 'type' => Cocina::Models::ObjectType.collection,
                                  'externalIdentifier' => pid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
@@ -84,7 +84,7 @@ RSpec.describe 'Set catkey' do
           Cocina::Models.build({
                                  'label' => 'My ETD',
                                  'version' => 1,
-                                 'type' => Cocina::Models::Vocab.collection,
+                                 'type' => Cocina::Models::ObjectType.collection,
                                  'externalIdentifier' => pid, 'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
                                    'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
@@ -131,7 +131,7 @@ RSpec.describe 'Set catkey' do
           Cocina::Models.build({
                                  'label' => 'My ETD',
                                  'version' => 1,
-                                 'type' => Cocina::Models::Vocab.object,
+                                 'type' => Cocina::Models::ObjectType.object,
                                  'externalIdentifier' => pid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
@@ -158,14 +158,14 @@ RSpec.describe 'Set catkey' do
           Cocina::Models.build({
                                  'label' => 'My ETD',
                                  'version' => 1,
-                                 'type' => Cocina::Models::Vocab.collection,
+                                 'type' => Cocina::Models::ObjectType.collection,
                                  'externalIdentifier' => pid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
                                    'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                  },
                                  'access' => {
-                                   'access' => 'world'
+                                   'view' => 'world'
                                  },
                                  'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' }
                                })

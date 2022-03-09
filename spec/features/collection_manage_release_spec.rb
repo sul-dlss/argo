@@ -30,7 +30,7 @@ RSpec.describe 'Collection manage release' do
     Cocina::Models.build({
                            'label' => 'The model',
                            'version' => 2,
-                           'type' => Cocina::Models::Vocab.collection,
+                           'type' => Cocina::Models::ObjectType.collection,
                            'externalIdentifier' => collection_id,
                            'description' => {
                              'title' => [{ 'value' => 'The model' }],

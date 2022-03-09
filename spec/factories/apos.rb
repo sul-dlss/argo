@@ -11,8 +11,8 @@ FactoryBot.define do
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id,
                                          'hasAgreement' => agreement_id,
-                                         'defaultAccess' => {
-                                           'access' => 'world',
+                                         'accessTemplate' => {
+                                           'view' => 'world',
                                            'download' => 'world'
                                          }
                                        }
@@ -28,6 +28,6 @@ FactoryBot.define do
 
     agreement_id { 'druid:hp308wm0436' }
 
-    type { Cocina::Models::Vocab.admin_policy }
+    type { Cocina::Models::ObjectType.admin_policy }
   end
 end

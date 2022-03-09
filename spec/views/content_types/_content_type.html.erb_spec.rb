@@ -6,7 +6,7 @@ RSpec.describe 'content_types/_content_type.html.erb' do
   let(:cocina_object) do
     instance_double(Cocina::Models::DRO,
                     externalIdentifier: 'druid:abc123',
-                    type: Cocina::Models::Vocab.book,
+                    type: Cocina::Models::ObjectType.book,
                     structural: {})
   end
 

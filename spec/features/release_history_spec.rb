@@ -36,7 +36,7 @@ RSpec.describe 'Release history' do
   context 'for an item' do
     let(:cocina_model) do
       Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                              type: Cocina::Models::Vocab.document,
+                              type: Cocina::Models::ObjectType.document,
                               label: 'Test DRO',
                               version: 1,
                               description: {

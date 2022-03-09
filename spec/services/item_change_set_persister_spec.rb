@@ -29,7 +29,7 @@ RSpec.describe ItemChangeSetPersister do
       Cocina::Models::DRO.new(
         externalIdentifier: 'druid:bc123df4568',
         label: 'test',
-        type: Cocina::Models::Vocab.object,
+        type: Cocina::Models::ObjectType.object,
         version: 1,
         description: {
           title: [{ value: 'test' }],
@@ -119,18 +119,18 @@ RSpec.describe ItemChangeSetPersister do
         Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
           label: 'test',
-          type: Cocina::Models::Vocab.object,
+          type: Cocina::Models::ObjectType.object,
           version: 1,
           description: {
             title: [{ value: 'test' }],
             purl: 'https://purl.stanford.edu/bc123df4568'
           },
           access: {
-            embargo: { releaseDate: '2040-04-04', access: 'world', download: 'world' },
+            embargo: { releaseDate: '2040-04-04', view: 'world', download: 'world' },
             copyright: copyright_statement_before,
             license: license_before,
             useAndReproductionStatement: use_statement_before,
-            access: 'dark',
+            view: 'dark',
             download: 'none'
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
@@ -148,10 +148,10 @@ RSpec.describe ItemChangeSetPersister do
           params: a_cocina_object_with_access(
             embargo: {
               releaseDate: DateTime.parse('2055-07-17'),
-              access: 'stanford',
+              view: 'stanford',
               download: 'stanford'
             },
-            access: 'dark',
+            view: 'dark',
             download: 'none',
             copyright: copyright_statement_before,
             license: license_before,
@@ -167,7 +167,7 @@ RSpec.describe ItemChangeSetPersister do
         Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
           label: 'test',
-          type: Cocina::Models::Vocab.object,
+          type: Cocina::Models::ObjectType.object,
           version: 1,
           description: {
             title: [{ value: 'test' }],
@@ -177,7 +177,7 @@ RSpec.describe ItemChangeSetPersister do
             copyright: copyright_statement_before,
             license: license_before,
             useAndReproductionStatement: use_statement_before,
-            access: 'dark',
+            view: 'dark',
             download: 'none'
           },
           administrative: { hasAdminPolicy: 'druid:bc123df4569' }
@@ -192,8 +192,8 @@ RSpec.describe ItemChangeSetPersister do
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
           params: a_cocina_object_with_access(
-            embargo: { releaseDate: DateTime.parse('2055-07-17'), access: 'stanford', download: 'stanford' },
-            access: 'dark',
+            embargo: { releaseDate: DateTime.parse('2055-07-17'), view: 'stanford', download: 'stanford' },
+            view: 'dark',
             download: 'none',
             copyright: copyright_statement_before,
             license: license_before,
@@ -208,7 +208,7 @@ RSpec.describe ItemChangeSetPersister do
         Cocina::Models::DRO.new(
           externalIdentifier: 'druid:bc123df4568',
           label: 'test',
-          type: Cocina::Models::Vocab.object,
+          type: Cocina::Models::ObjectType.object,
           version: 1,
           description: {
             title: [{ value: 'test' }],

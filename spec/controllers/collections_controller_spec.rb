@@ -19,12 +19,12 @@ RSpec.describe CollectionsController do
       Cocina::Models.build({
                              'label' => 'The APO',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'type' => Cocina::Models::ObjectType.admin_policy,
                              'externalIdentifier' => apo_id,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
                                hasAgreement: 'druid:hp308wm0436',
-                               defaultAccess: { access: 'world', download: 'world' }
+                               accessTemplate: { view: 'world', download: 'world' }
                              }
                            })
     end
@@ -46,12 +46,12 @@ RSpec.describe CollectionsController do
       Cocina::Models.build({
                              'label' => 'The APO',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'type' => Cocina::Models::ObjectType.admin_policy,
                              'externalIdentifier' => apo_id,
                              'administrative' => {
                                hasAdminPolicy: 'druid:hv992ry2431',
                                hasAgreement: 'druid:hp308wm0436',
-                               defaultAccess: { access: 'world', download: 'world' }
+                               accessTemplate: { view: 'world', download: 'world' }
                              }
                            })
     end

@@ -20,7 +20,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
     Cocina::Models.build({
                            'label' => 'My Item1',
                            'version' => 2,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pids[0],
                            'description' => {
                              'title' => [{ 'value' => 'My Item1' }],
@@ -39,7 +39,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
     Cocina::Models.build({
                            'label' => 'My Item2',
                            'version' => 3,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pids[1],
                            'description' => {
                              'title' => [{ 'value' => 'My Item2' }],
@@ -58,7 +58,7 @@ RSpec.describe SetCatkeysAndBarcodesCsvJob do
     Cocina::Models.build({
                            'label' => 'My Item3',
                            'version' => 3,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pids[2],
                            'description' => {
                              'title' => [{ 'value' => 'My Item3' }],

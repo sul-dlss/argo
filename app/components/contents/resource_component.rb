@@ -16,7 +16,7 @@ module Contents
     end
 
     def type
-      resource.type.delete_prefix('http://cocina.sul.stanford.edu/models/resources/').delete_suffix('.jsonld')
+      resource.type.delete_prefix('https://cocina.sul.stanford.edu/models/resources/')
     end
 
     delegate :label, to: :resource

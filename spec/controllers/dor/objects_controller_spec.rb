@@ -79,7 +79,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                                type: Cocina::Models::Vocab.document,
+                                type: Cocina::Models::ObjectType.document,
                                 label: 'Test DRO',
                                 version: 1,
                                 description: {
@@ -95,7 +95,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.document + '",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::ObjectType.document + '",' \
             '"label":"test parameters for registration","version":1,"administrative":' \
             '{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
             '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
@@ -129,7 +129,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                                type: Cocina::Models::Vocab.image,
+                                type: Cocina::Models::ObjectType.image,
                                 label: 'Test DRO',
                                 version: 1,
                                 description: {
@@ -137,7 +137,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                   purl: 'https://purl.stanford.edu/bc234fg5678'
                                 },
                                 access: {
-                                  access: 'stanford',
+                                  view: 'stanford',
                                   download: 'stanford'
                                 },
                                 administrative: {
@@ -148,9 +148,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.image + '",' \
-            '"label":"test parameters for registration","version":1,"access":{"access":' \
-            '"stanford","download":"stanford","readLocation":null,"controlledDigitalLending":false},' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::ObjectType.image + '",' \
+            '"label":"test parameters for registration","version":1,"access":{"view":' \
+            '"stanford","download":"stanford","location":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
             '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
             '"isMemberOf":["druid:hv992ry7777"]}}'
@@ -183,7 +183,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                                type: Cocina::Models::Vocab.book,
+                                type: Cocina::Models::ObjectType.book,
                                 label: 'Test DRO',
                                 version: 1,
                                 description: {
@@ -191,9 +191,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                   purl: 'https://purl.stanford.edu/bc234fg5678'
                                 },
                                 access: {
-                                  access: 'location-based',
+                                  view: 'location-based',
                                   download: 'location-based',
-                                  readLocation: 'music'
+                                  location: 'music'
                                 },
                                 administrative: {
                                   hasAdminPolicy: 'druid:hv992ry2431'
@@ -203,9 +203,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.book + '",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::ObjectType.book + '",' \
             '"label":"test parameters for registration","version":1,"access":' \
-            '{"access":"location-based","download":"location-based","readLocation":' \
+            '{"view":"location-based","download":"location-based","location":' \
             '"music","controlledDigitalLending":false},"administrative":{"hasAdminPolicy":' \
             '"druid:hv992ry2431","releaseTags":[]},"identification":{"catalogLinks":[],' \
             '"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[{"members":[],' \
@@ -239,7 +239,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                                type: Cocina::Models::Vocab.image,
+                                type: Cocina::Models::ObjectType.image,
                                 label: 'Test DRO',
                                 version: 1,
                                 description: {
@@ -247,7 +247,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                   purl: 'https://purl.stanford.edu/bc234fg5678'
                                 },
                                 access: {
-                                  access: 'world',
+                                  view: 'world',
                                   download: 'none'
                                 },
                                 administrative: {
@@ -258,9 +258,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.image + '",' \
-            '"label":"test parameters for registration","version":1,"access":{"access":' \
-            '"world","download":"none","readLocation":null,"controlledDigitalLending":false},' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::ObjectType.image + '",' \
+            '"label":"test parameters for registration","version":1,"access":{"view":' \
+            '"world","download":"none","location":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
             '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":[],' \
             '"isMemberOf":["druid:hv992ry7777"]}}'
@@ -293,7 +293,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                                type: Cocina::Models::Vocab.image,
+                                type: Cocina::Models::ObjectType.image,
                                 label: 'Test DRO',
                                 version: 1,
                                 description: {
@@ -301,7 +301,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                   purl: 'https://purl.stanford.edu/bc234fg5678'
                                 },
                                 access: {
-                                  access: 'dark',
+                                  view: 'dark',
                                   download: 'none'
                                 },
                                 administrative: {
@@ -312,9 +312,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.image + '",' \
-            '"label":"test parameters for registration","version":1,"access":{"access":"dark",' \
-            '"download":"none","readLocation":null,"controlledDigitalLending":false},' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::ObjectType.image + '",' \
+            '"label":"test parameters for registration","version":1,"access":{"view":"dark",' \
+            '"download":"none","location":null,"controlledDigitalLending":false},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},' \
             '"identification":{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],' \
             '"hasMemberOrders":[],"isMemberOf":["druid:hv992ry7777"]}}'
@@ -370,7 +370,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
 
       let(:json) do
         Cocina::Models::DRO.new(externalIdentifier: 'druid:bc234fg5678',
-                                type: Cocina::Models::Vocab.book,
+                                type: Cocina::Models::ObjectType.book,
                                 label: 'Test DRO',
                                 version: 1,
                                 description: {
@@ -378,7 +378,7 @@ RSpec.describe Dor::ObjectsController, type: :controller do
                                   purl: 'https://purl.stanford.edu/bc234fg5678'
                                 },
                                 access: {
-                                  access: 'stanford',
+                                  view: 'stanford',
                                   download: 'none',
                                   controlledDigitalLending: true
                                 },
@@ -390,9 +390,9 @@ RSpec.describe Dor::ObjectsController, type: :controller do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(
-            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::Vocab.book + '",' \
+            body: '{"cocinaVersion":"' + Cocina::Models::VERSION + '","type":"' + Cocina::Models::ObjectType.book + '",' \
             '"label":"test parameters for registration","version":1,"access":' \
-            '{"access":"stanford","download":"none","readLocation":null,"controlledDigitalLending":true},' \
+            '{"view":"stanford","download":"none","location":null,"controlledDigitalLending":true},' \
             '"administrative":{"hasAdminPolicy":"druid:hv992ry2431","releaseTags":[]},"identification":' \
             '{"catalogLinks":[],"sourceId":"foo:bar"},"structural":{"contains":[],"hasMemberOrders":' \
             '[{"members":[],"viewingDirection":"left-to-right"}],"isMemberOf":["druid:hv992ry7777"]}}'

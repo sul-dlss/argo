@@ -30,7 +30,7 @@ RSpec.describe 'Add a workflow to an item' do
     Cocina::Models.build({
                            'label' => 'The model',
                            'version' => 2,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => item_id,
                            'description' => {
                              'title' => [{ 'value' => 'The model' }],

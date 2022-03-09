@@ -12,12 +12,12 @@ RSpec.describe 'Show rights for an object' do
       Cocina::Models.build({
                              'label' => 'My APO',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.admin_policy,
+                             'type' => Cocina::Models::ObjectType.admin_policy,
                              'externalIdentifier' => apo_pid,
                              'administrative' => {
                                'hasAdminPolicy' => apo_pid,
                                'hasAgreement' => 'druid:hp308wm0436',
-                               'defaultAccess' => { 'access' => 'world', 'download' => 'world' }
+                               'accessTemplate' => { 'view' => 'world', 'download' => 'world' }
                              }
                            })
     end
@@ -37,18 +37,18 @@ RSpec.describe 'Show rights for an object' do
         Cocina::Models.build({
                                'label' => 'My ETD',
                                'version' => 1,
-                               'type' => Cocina::Models::Vocab.object,
+                               'type' => Cocina::Models::ObjectType.object,
                                'externalIdentifier' => pid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
                                  'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                },
                                'access' => {
-                                 'access' => 'world',
+                                 'view' => 'world',
                                  'download' => 'none',
                                  embargo: {
                                    releaseDate: '2021-02-11T00:00:00.000+00:00',
-                                   access: 'world',
+                                   view: 'world',
                                    download: 'world'
                                  }
                                },
@@ -58,15 +58,15 @@ RSpec.describe 'Show rights for an object' do
                                    {
                                      'externalIdentifier' => 'cc243mg0841_1',
                                      'label' => 'Fileset 1',
-                                     'type' => Cocina::Models::Vocab::Resources.file,
+                                     'type' => Cocina::Models::FileSetType.file,
                                      'version' => 1,
                                      'structural' => {
                                        'contains' => [
                                          { 'externalIdentifier' => 'cc243mg0841_1',
                                            'label' => 'Page 1',
-                                           'type' => Cocina::Models::Vocab.file,
+                                           'type' => Cocina::Models::ObjectType.file,
                                            'version' => 1,
-                                           'access' => { access: 'world', download: 'none' },
+                                           'access' => { view: 'world', download: 'none' },
                                            'administrative' => {
                                              'publish' => true,
                                              'shelve' => true,
@@ -94,14 +94,14 @@ RSpec.describe 'Show rights for an object' do
         Cocina::Models.build({
                                'label' => 'My ETD',
                                'version' => 1,
-                               'type' => Cocina::Models::Vocab.collection,
+                               'type' => Cocina::Models::ObjectType.collection,
                                'externalIdentifier' => pid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
                                  'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                },
                                'access' => {
-                                 'access' => 'world'
+                                 'view' => 'world'
                                },
                                'administrative' => { hasAdminPolicy: apo_pid },
                                'identification' => {}
@@ -119,14 +119,14 @@ RSpec.describe 'Show rights for an object' do
         Cocina::Models.build({
                                'label' => 'My ETD',
                                'version' => 1,
-                               'type' => Cocina::Models::Vocab.collection,
+                               'type' => Cocina::Models::ObjectType.collection,
                                'externalIdentifier' => pid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
                                  'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                                },
                                'access' => {
-                                 'access' => 'world'
+                                 'view' => 'world'
                                },
                                'administrative' => { hasAdminPolicy: apo_pid },
                                'identification' => {}

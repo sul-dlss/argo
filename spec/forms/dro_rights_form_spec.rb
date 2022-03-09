@@ -33,9 +33,9 @@ RSpec.describe DroRightsForm do
 
     let(:model) { instance_double(Cocina::Models::DRO, access: cocina_access) }
     let(:cocina_access) do
-      instance_double(Cocina::Models::DROAccess, access: access, download: download, readLocation: read_location)
+      instance_double(Cocina::Models::DROAccess, view: view, download: download, location: read_location)
     end
-    let(:access) { 'world' }
+    let(:view) { 'world' }
     let(:download) { true }
     let(:read_location) { nil }
 
@@ -50,21 +50,21 @@ RSpec.describe DroRightsForm do
     end
 
     context 'with location access' do
-      let(:access) { 'location-based' }
+      let(:view) { 'location-based' }
       let(:read_location) { 'music' }
 
       it { is_expected.to eq 'loc:music' }
     end
 
     context 'with citation only' do
-      let(:access) { 'citation-only' }
+      let(:view) { 'citation-only' }
       let(:download) { 'none' }
 
       it { is_expected.to eq 'citation-only' }
     end
 
     context 'with dark' do
-      let(:access) { 'dark' }
+      let(:view) { 'dark' }
       let(:download) { 'none' }
 
       it { is_expected.to eq 'dark' }

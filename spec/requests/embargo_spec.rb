@@ -14,18 +14,18 @@ RSpec.describe 'Set embargo for an object' do
     Cocina::Models.build({
                            'label' => 'My ETD',
                            'version' => 1,
-                           'type' => Cocina::Models::Vocab.object,
+                           'type' => Cocina::Models::ObjectType.object,
                            'externalIdentifier' => pid,
                            'description' => {
                              'title' => [{ 'value' => 'My ETD' }],
                              'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                            },
                            'access' => {
-                             'access' => 'stanford',
+                             'view' => 'stanford',
                              'download' => 'stanford',
                              'embargo' => {
                                'releaseDate' => '2040-05-05',
-                               'access' => 'world',
+                               'view' => 'world',
                                'download' => 'world'
                              }
                            },

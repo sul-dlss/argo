@@ -32,7 +32,7 @@ RSpec.describe 'Enable buttons' do
     Cocina::Models.build({
                            'label' => 'My Item',
                            'version' => 1,
-                           'type' => Cocina::Models::Vocab.book,
+                           'type' => Cocina::Models::ObjectType.book,
                            'externalIdentifier' => item_id,
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],

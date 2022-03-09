@@ -10,12 +10,12 @@ RSpec.describe StructureUpdater do
   let(:json) do
     <<~JSON
       {
-        "type": "#{Cocina::Models::Vocab.image}",
+        "type": "#{Cocina::Models::ObjectType.image}",
         "externalIdentifier": "druid:qr773tm1060",
         "label": "dood",
         "version": 1,
         "access": {
-          "access": "world",
+          "view": "world",
           "download": "world"
         },
         "administrative": {
@@ -42,15 +42,15 @@ RSpec.describe StructureUpdater do
         "structural": {
           "contains": [
             {
-              "type": "#{Cocina::Models::Vocab::Resources.image}",
-              "externalIdentifier": "http://cocina.sul.stanford.edu/fileSet/e43590ae-abf9-4a5c-88f2-a8627969dc23",
+              "type": "#{Cocina::Models::FileSetType.image}",
+              "externalIdentifier": "https://cocina.sul.stanford.edu/fileSet/e43590ae-abf9-4a5c-88f2-a8627969dc23",
               "label": "Image 1",
               "version": 1,
               "structural": {
                 "contains": [
                   {
-                    "type": "#{Cocina::Models::Vocab.file}",
-                    "externalIdentifier": "http://cocina.sul.stanford.edu/file/de24d694-2fe8-41a5-9113-ae6adf4506fd",
+                    "type": "#{Cocina::Models::ObjectType.file}",
+                    "externalIdentifier": "https://cocina.sul.stanford.edu/file/de24d694-2fe8-41a5-9113-ae6adf4506fd",
                     "label": "bb045jk9908_0001.tiff",
                     "filename": "bb045jk9908_0001.tiff",
                     "size": 22454748,
@@ -67,7 +67,7 @@ RSpec.describe StructureUpdater do
                       }
                     ],
                     "access": {
-                      "access": "world",
+                      "view": "world",
                       "download": "world"
                     },
                     "administrative": {
@@ -81,8 +81,8 @@ RSpec.describe StructureUpdater do
                     }
                   },
                   {
-                    "type": "#{Cocina::Models::Vocab.file}",
-                    "externalIdentifier": "http://cocina.sul.stanford.edu/file/92db9253-19b7-4092-b472-6e73f3c2251e",
+                    "type": "#{Cocina::Models::ObjectType.file}",
+                    "externalIdentifier": "https://cocina.sul.stanford.edu/file/92db9253-19b7-4092-b472-6e73f3c2251e",
                     "label": "bb045jk9908_0001.jp2",
                     "filename": "bb045jk9908_0001.jp2",
                     "size": 4379498,
@@ -99,7 +99,7 @@ RSpec.describe StructureUpdater do
                       }
                     ],
                     "access": {
-                      "access": "world",
+                      "view": "world",
                       "download": "world"
                     },
                     "administrative": {
@@ -116,15 +116,15 @@ RSpec.describe StructureUpdater do
               }
             },
             {
-              "type": "#{Cocina::Models::Vocab::Resources.image}",
-              "externalIdentifier": "http://cocina.sul.stanford.edu/fileSet/a45774e4-ac26-425a-b40e-f5e247135843",
+              "type": "#{Cocina::Models::FileSetType.image}",
+              "externalIdentifier": "https://cocina.sul.stanford.edu/fileSet/a45774e4-ac26-425a-b40e-f5e247135843",
               "label": "Image 2",
               "version": 1,
               "structural": {
                 "contains": [
                   {
-                    "type": "#{Cocina::Models::Vocab.file}",
-                    "externalIdentifier": "http://cocina.sul.stanford.edu/file/86de37bc-b930-49ac-936b-15e8db7af88e",
+                    "type": "#{Cocina::Models::ObjectType.file}",
+                    "externalIdentifier": "https://cocina.sul.stanford.edu/file/86de37bc-b930-49ac-936b-15e8db7af88e",
                     "label": "bb045jk9908_0002.tiff",
                     "filename": "bb045jk9908_0002.tiff",
                     "size": 19962338,
@@ -141,7 +141,7 @@ RSpec.describe StructureUpdater do
                       }
                     ],
                     "access": {
-                      "access": "world",
+                      "view": "world",
                       "download": "world"
                     },
                     "administrative": {
@@ -155,8 +155,8 @@ RSpec.describe StructureUpdater do
                     }
                   },
                   {
-                    "type": "#{Cocina::Models::Vocab.file}",
-                    "externalIdentifier": "http://cocina.sul.stanford.edu/file/55d78b7f-b043-4880-8542-b85f2c3b0414",
+                    "type": "#{Cocina::Models::ObjectType.file}",
+                    "externalIdentifier": "https://cocina.sul.stanford.edu/file/55d78b7f-b043-4880-8542-b85f2c3b0414",
                     "label": "bb045jk9908_0002.jp2",
                     "filename": "bb045jk9908_0002.jp2",
                     "size": 4391262,
@@ -173,7 +173,7 @@ RSpec.describe StructureUpdater do
                       }
                     ],
                     "access": {
-                      "access": "world",
+                      "view": "world",
                       "download": "world"
                     },
                     "administrative": {
@@ -225,7 +225,7 @@ RSpec.describe StructureUpdater do
       new_file_mime = new_files.map(&:hasMimeType)
       expect(new_file_mime).to eq ['image/one', 'image/two', 'image/three', 'image/four']
 
-      access = new_files.map { |file| [file.access.access, file.access.download] }
+      access = new_files.map { |file| [file.access.view, file.access.download] }
       expect(access).to eq [
         %w[stanford none], %w[world world], %w[stanford none], %w[world world]
       ]
@@ -249,8 +249,8 @@ RSpec.describe StructureUpdater do
     it 'updates the fileset' do
       new_filesets = result.value!.contains
       expect(new_filesets.map(&:type)).to eq [
-        Cocina::Models::Vocab::Resources.object,
-        Cocina::Models::Vocab::Resources.page
+        Cocina::Models::FileSetType.object,
+        Cocina::Models::FileSetType.page
       ]
 
       expect(new_filesets.map(&:label)).to eq [

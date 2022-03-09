@@ -25,10 +25,10 @@ FactoryBot.define do
 
     admin_policy_id { 'druid:hv992ry2431' }
     label { 'test object' }
-    type { Cocina::Models::Vocab.object }
+    type { Cocina::Models::ObjectType.object }
 
     factory :agreement do
-      type { Cocina::Models::Vocab.agreement }
+      type { Cocina::Models::ObjectType.agreement }
     end
   end
 end

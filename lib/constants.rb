@@ -116,27 +116,27 @@ module Constants
   ].freeze
 
   CONTENT_TYPES = {
-    'book (ltr)' => Cocina::Models::Vocab.book,
-    'book (rtl)' => Cocina::Models::Vocab.book,
-    'file' => Cocina::Models::Vocab.object,
-    'image' => Cocina::Models::Vocab.image,
-    'map' => Cocina::Models::Vocab.map,
-    'media' => Cocina::Models::Vocab.media,
-    '3d' => Cocina::Models::Vocab.three_dimensional,
-    'document' => Cocina::Models::Vocab.document,
-    'geo' => Cocina::Models::Vocab.geo,
-    'webarchive-seed' => Cocina::Models::Vocab.webarchive_seed
+    'book (ltr)' => Cocina::Models::ObjectType.book,
+    'book (rtl)' => Cocina::Models::ObjectType.book,
+    'file' => Cocina::Models::ObjectType.object,
+    'image' => Cocina::Models::ObjectType.image,
+    'map' => Cocina::Models::ObjectType.map,
+    'media' => Cocina::Models::ObjectType.media,
+    '3d' => Cocina::Models::ObjectType.three_dimensional,
+    'document' => Cocina::Models::ObjectType.document,
+    'geo' => Cocina::Models::ObjectType.geo,
+    'webarchive-seed' => Cocina::Models::ObjectType.webarchive_seed
   }.freeze
 
   RESOURCE_TYPES = {
-    'image' => Cocina::Models::Vocab::Resources.image,
-    'page' => Cocina::Models::Vocab::Resources.page,
-    'file' => Cocina::Models::Vocab::Resources.file,
-    'audio' => Cocina::Models::Vocab::Resources.audio,
-    'video' => Cocina::Models::Vocab::Resources.video,
-    'document' => Cocina::Models::Vocab::Resources.document,
-    '3d' => Cocina::Models::Vocab::Resources.three_dimensional,
-    'object' => Cocina::Models::Vocab::Resources.object
+    'image' => Cocina::Models::FileSetType.image,
+    'page' => Cocina::Models::FileSetType.page,
+    'file' => Cocina::Models::FileSetType.file,
+    'audio' => Cocina::Models::FileSetType.audio,
+    'video' => Cocina::Models::FileSetType.video,
+    'document' => Cocina::Models::FileSetType.document,
+    '3d' => Cocina::Models::FileSetType.three_dimensional,
+    'object' => Cocina::Models::FileSetType.object
   }.freeze
 
   RELEASE_TARGETS = [

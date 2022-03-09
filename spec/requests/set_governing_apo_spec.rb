@@ -12,14 +12,14 @@ RSpec.describe 'Set APO for an object' do
       Cocina::Models.build({
                              'label' => 'My ETD',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.object,
+                             'type' => Cocina::Models::ObjectType.object,
                              'externalIdentifier' => pid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
                                'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
                              },
                              'access' => {},
-                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405', partOfProject: 'EEMS' },
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
                              'identification' => {}
                            })
@@ -60,7 +60,7 @@ RSpec.describe 'Set APO for an object' do
 
     context 'user authorized to manage governing APOs' do
       let(:updated_model) do
-        cocina_model.new('administrative' => { 'hasAdminPolicy' => new_apo_id, 'partOfProject' => 'EEMS' })
+        cocina_model.new('administrative' => { 'hasAdminPolicy' => new_apo_id })
       end
 
       it 'updates the governing APO' do
@@ -79,7 +79,7 @@ RSpec.describe 'Set APO for an object' do
         Cocina::Models.build({
                                'label' => 'My ETD',
                                'version' => 1,
-                               'type' => Cocina::Models::Vocab.collection,
+                               'type' => Cocina::Models::ObjectType.collection,
                                'externalIdentifier' => pid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],

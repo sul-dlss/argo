@@ -28,7 +28,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
       Cocina::Models::DRO.new(
         externalIdentifier: 'druid:bc123df4568',
         label: 'test',
-        type: Cocina::Models::Vocab.object,
+        type: Cocina::Models::ObjectType.object,
         version: 1,
         description: {
           title: [{ value: 'test' }],
@@ -93,7 +93,7 @@ RSpec.describe LicenseAndRightsStatementsSetter do
           Cocina::Models::Collection.new(
             externalIdentifier: 'druid:bc123df4568',
             label: 'test',
-            type: Cocina::Models::Vocab.collection,
+            type: Cocina::Models::ObjectType.collection,
             description: {
               title: [{ value: 'test' }],
               purl: 'https://purl.stanford.edu/bc123df4567'
@@ -115,12 +115,12 @@ RSpec.describe LicenseAndRightsStatementsSetter do
         Cocina::Models::AdminPolicy.new(
           externalIdentifier: 'druid:bc123df4570',
           label: 'test',
-          type: Cocina::Models::Vocab.admin_policy,
+          type: Cocina::Models::ObjectType.admin_policy,
           version: 1,
           administrative: {
             hasAdminPolicy: 'druid:bc123df4570',
             hasAgreement: 'druid:hp308wm0436',
-            defaultAccess: { access: 'world', download: 'world' }
+            accessTemplate: { view: 'world', download: 'world' }
           }
         )
       end

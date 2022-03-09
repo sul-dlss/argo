@@ -30,14 +30,14 @@ RSpec.describe 'Item catkey change' do
       Cocina::Models.build({
                              'label' => 'My ETD',
                              'version' => 1,
-                             'type' => Cocina::Models::Vocab.object,
+                             'type' => Cocina::Models::ObjectType.object,
                              'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
                                'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {
-                               'access' => 'world',
+                               'view' => 'world',
                                'download' => 'world'
                              },
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },

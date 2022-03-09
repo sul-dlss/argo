@@ -7,16 +7,16 @@ RSpec.describe Show::Apo::DefaultObjectRightsComponent, type: :component do
   let(:presenter) { instance_double(ArgoShowPresenter, document: doc, cocina: cocina) }
   let(:cocina) do
     Cocina::Models::AdminPolicy.new(externalIdentifier: 'druid:bb663yf7144',
-                                    type: Cocina::Models::Vocab.admin_policy,
+                                    type: Cocina::Models::ObjectType.admin_policy,
                                     label: 'An APO',
                                     version: 1,
                                     administrative: {
                                       hasAdminPolicy: 'druid:hv992ry2431',
                                       hasAgreement: 'druid:hp308wm0436',
-                                      defaultAccess: {
-                                        access: 'location-based',
+                                      accessTemplate: {
+                                        view: 'location-based',
                                         download: 'location-based',
-                                        readLocation: 'spec',
+                                        location: 'spec',
                                         useAndReproductionStatement: 'Use and reproduction statement.',
                                         copyright: 'This is the copyright.',
                                         license: 'A license goes here.'

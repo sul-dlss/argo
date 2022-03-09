@@ -10,7 +10,7 @@ class StructureSerializer
         resource.structural.contains.each do |file|
           csv << [resource.label, type(resource), n, file.filename, file.label,
                   to_yes_no(file.administrative.publish), to_yes_no(file.administrative.shelve),
-                  to_yes_no(file.administrative.sdrPreserve), file.access.access,
+                  to_yes_no(file.administrative.sdrPreserve), file.access.view,
                   file.access.download, file.hasMimeType, file.use]
         end
       end
@@ -24,7 +24,7 @@ class StructureSerializer
 
   # Provide a shortname version of the resource type
   def self.type(resource)
-    resource.type.delete_prefix('http://cocina.sul.stanford.edu/models/resources/').delete_suffix('.jsonld')
+    resource.type.delete_prefix('https://cocina.sul.stanford.edu/models/resources/')
   end
   private_class_method :type
 end

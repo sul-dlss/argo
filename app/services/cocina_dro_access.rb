@@ -12,30 +12,30 @@ class CocinaDroAccess
 
     data = if rights == 'cdl-stanford-nd'
              {
-               access: 'stanford',
+               view: 'stanford',
                download: 'none',
-               readLocation: nil,
+               location: nil,
                controlledDigitalLending: true
              }
            elsif rights.end_with?('-nd') || %w[dark citation-only].include?(rights)
              {
-               access: rights.delete_suffix('-nd'),
+               view: rights.delete_suffix('-nd'),
                download: 'none',
-               readLocation: nil,
+               location: nil,
                controlledDigitalLending: false
              }
            elsif rights.start_with?('loc:')
              {
-               access: 'location-based',
-               readLocation: rights.delete_prefix('loc:'),
+               view: 'location-based',
+               location: rights.delete_prefix('loc:'),
                download: 'location-based',
                controlledDigitalLending: false
              }
            else
              {
-               access: rights,
+               view: rights,
                download: rights,
-               readLocation: nil,
+               location: nil,
                controlledDigitalLending: false
              }
            end

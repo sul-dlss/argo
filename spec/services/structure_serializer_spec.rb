@@ -15,12 +15,12 @@ RSpec.describe StructureSerializer do
     let(:json) do
       <<~JSON
         {
-          "type": "#{Cocina::Models::Vocab.image}",
+          "type": "#{Cocina::Models::ObjectType.image}",
           "externalIdentifier": "druid:qr773tm1060",
           "label": "dood",
           "version": 1,
           "access": {
-            "access": "world",
+            "view": "world",
             "download": "world"
           },
           "administrative": {
@@ -60,12 +60,12 @@ RSpec.describe StructureSerializer do
     let(:json) do
       <<~JSON
         {
-          "type": "#{Cocina::Models::Vocab.image}",
+          "type": "#{Cocina::Models::ObjectType.image}",
           "externalIdentifier": "druid:qr773tm1060",
           "label": "dood",
           "version": 1,
           "access": {
-            "access": "world",
+            "view": "world",
             "download": "world"
           },
           "administrative": {
@@ -92,15 +92,15 @@ RSpec.describe StructureSerializer do
           "structural": {
             "contains": [
               {
-                "type": "#{Cocina::Models::Vocab::Resources.image}",
-                "externalIdentifier": "http://cocina.sul.stanford.edu/fileSet/e43590ae-abf9-4a5c-88f2-a8627969dc23",
+                "type": "#{Cocina::Models::FileSetType.image}",
+                "externalIdentifier": "https://cocina.sul.stanford.edu/fileSet/e43590ae-abf9-4a5c-88f2-a8627969dc23",
                 "label": "Image 1",
                 "version": 1,
                 "structural": {
                   "contains": [
                     {
-                      "type": "#{Cocina::Models::Vocab.file}",
-                      "externalIdentifier": "http://cocina.sul.stanford.edu/file/de24d694-2fe8-41a5-9113-ae6adf4506fd",
+                      "type": "#{Cocina::Models::ObjectType.file}",
+                      "externalIdentifier": "https://cocina.sul.stanford.edu/file/de24d694-2fe8-41a5-9113-ae6adf4506fd",
                       "label": "bb045jk9908_0001.tiff",
                       "filename": "bb045jk9908_0001.tiff",
                       "size": 22454748,
@@ -117,7 +117,7 @@ RSpec.describe StructureSerializer do
                         }
                       ],
                       "access": {
-                        "access": "world",
+                        "view": "world",
                         "download": "world"
                       },
                       "administrative": {
@@ -131,8 +131,8 @@ RSpec.describe StructureSerializer do
                       }
                     },
                     {
-                      "type": "#{Cocina::Models::Vocab.file}",
-                      "externalIdentifier": "http://cocina.sul.stanford.edu/file/92db9253-19b7-4092-b472-6e73f3c2251e",
+                      "type": "#{Cocina::Models::ObjectType.file}",
+                      "externalIdentifier": "https://cocina.sul.stanford.edu/file/92db9253-19b7-4092-b472-6e73f3c2251e",
                       "label": "bb045jk9908_0001.jp2",
                       "filename": "bb045jk9908_0001.jp2",
                       "size": 4379498,
@@ -149,7 +149,7 @@ RSpec.describe StructureSerializer do
                         }
                       ],
                       "access": {
-                        "access": "world",
+                        "view": "world",
                         "download": "world"
                       },
                       "administrative": {
@@ -166,15 +166,15 @@ RSpec.describe StructureSerializer do
                 }
               },
               {
-                "type": "#{Cocina::Models::Vocab::Resources.image}",
-                "externalIdentifier": "http://cocina.sul.stanford.edu/fileSet/a45774e4-ac26-425a-b40e-f5e247135843",
+                "type": "#{Cocina::Models::FileSetType.image}",
+                "externalIdentifier": "https://cocina.sul.stanford.edu/fileSet/a45774e4-ac26-425a-b40e-f5e247135843",
                 "label": "Image 2",
                 "version": 1,
                 "structural": {
                   "contains": [
                     {
-                      "type": "#{Cocina::Models::Vocab.file}",
-                      "externalIdentifier": "http://cocina.sul.stanford.edu/file/86de37bc-b930-49ac-936b-15e8db7af88e",
+                      "type": "#{Cocina::Models::ObjectType.file}",
+                      "externalIdentifier": "https://cocina.sul.stanford.edu/file/86de37bc-b930-49ac-936b-15e8db7af88e",
                       "label": "bb045jk9908_0002.tiff",
                       "filename": "bb045jk9908_0002.tiff",
                       "size": 19962338,
@@ -191,7 +191,7 @@ RSpec.describe StructureSerializer do
                         }
                       ],
                       "access": {
-                        "access": "world",
+                        "view": "world",
                         "download": "world"
                       },
                       "administrative": {
@@ -205,8 +205,8 @@ RSpec.describe StructureSerializer do
                       }
                     },
                     {
-                      "type": "#{Cocina::Models::Vocab.file}",
-                      "externalIdentifier": "http://cocina.sul.stanford.edu/file/55d78b7f-b043-4880-8542-b85f2c3b0414",
+                      "type": "#{Cocina::Models::ObjectType.file}",
+                      "externalIdentifier": "https://cocina.sul.stanford.edu/file/55d78b7f-b043-4880-8542-b85f2c3b0414",
                       "label": "bb045jk9908_0002.jp2",
                       "filename": "bb045jk9908_0002.jp2",
                       "size": 4391262,
@@ -223,7 +223,7 @@ RSpec.describe StructureSerializer do
                         }
                       ],
                       "access": {
-                        "access": "world",
+                        "view": "world",
                         "download": "world"
                       },
                       "administrative": {

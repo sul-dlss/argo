@@ -9,7 +9,7 @@ RSpec.describe Show::Apo::RolesComponent, type: :component do
 
   let(:apo) do
     Cocina::Models::AdminPolicy.new(
-      type: Cocina::Models::Vocab.admin_policy,
+      type: Cocina::Models::ObjectType.admin_policy,
       externalIdentifier: 'druid:zt570qh4444',
       version: 1,
       administrative: administrative,
@@ -22,7 +22,7 @@ RSpec.describe Show::Apo::RolesComponent, type: :component do
     {
       hasAdminPolicy: 'druid:xx666zz7777',
       hasAgreement: 'druid:hp308wm0436',
-      defaultAccess: { access: 'world', download: 'world' },
+      accessTemplate: { view: 'world', download: 'world' },
       roles: [
         {
           members: [

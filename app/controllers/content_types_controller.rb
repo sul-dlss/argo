@@ -48,7 +48,7 @@ class ContentTypesController < ApplicationController
   end
 
   def old_resource_type
-    return '' if [Cocina::Models::Vocab.collection, Cocina::Models::Vocab.admin_policy].include? @cocina_object.type
+    return '' if [Cocina::Models::ObjectType.collection, Cocina::Models::ObjectType.admin_policy].include? @cocina_object.type
 
     Constants::RESOURCE_TYPES.key(@cocina_object.structural.contains&.first&.type) || ''
   end

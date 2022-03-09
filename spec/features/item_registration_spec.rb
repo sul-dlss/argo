@@ -13,13 +13,13 @@ RSpec.describe 'Item registration page', js: true do
     Cocina::Models.build({
                            'label' => 'The APO',
                            'version' => 1,
-                           'type' => Cocina::Models::Vocab.admin_policy,
+                           'type' => Cocina::Models::ObjectType.admin_policy,
                            'externalIdentifier' => ur_apo_id,
                            'administrative' => {
                              hasAdminPolicy: ur_apo_id,
                              hasAgreement: 'druid:hp308wm0436',
                              registrationWorkflow: %w[dpgImageWF goobiWF],
-                             defaultAccess: { access: 'world', download: 'world' }
+                             accessTemplate: { view: 'world', download: 'world' }
                            }
                          })
   end

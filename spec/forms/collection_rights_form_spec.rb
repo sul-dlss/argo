@@ -27,14 +27,14 @@ RSpec.describe CollectionRightsForm do
 
     let(:model) { instance_double(Cocina::Models::Collection, access: cocina_access) }
     let(:cocina_access) do
-      instance_double(Cocina::Models::Access, access: access)
+      instance_double(Cocina::Models::Access, view: view)
     end
-    let(:access) { 'world' }
+    let(:view) { 'world' }
 
     it { is_expected.to eq 'world' }
 
     context 'with dark' do
-      let(:access) { 'dark' }
+      let(:view) { 'dark' }
 
       it { is_expected.to eq 'dark' }
     end
