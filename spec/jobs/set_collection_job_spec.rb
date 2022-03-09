@@ -43,7 +43,11 @@ RSpec.describe SetCollectionJob do
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
-                             'identification' => {}
+                             'identification' => {},
+                             'description' => {
+                               'title' => [{ 'value' => 'Cocina Object 1' }],
+                               'purl' => 'https://purl.standford.edu/cc111dd2222'
+                             }
                            })
     end
     let(:cocina2) do
@@ -55,7 +59,11 @@ RSpec.describe SetCollectionJob do
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
-                             'identification' => {}
+                             'identification' => {},
+                             'description' => {
+                               'title' => [{ 'value' => 'Cocina object 2' }],
+                               'purl' => 'https://purl.standford.edu/dd111ff2222'
+                             }
                            })
     end
     let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
