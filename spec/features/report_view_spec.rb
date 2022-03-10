@@ -41,14 +41,14 @@ RSpec.describe 'Report view' do
 
     let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
 
-    it 'returns a page with no get druids from previous search link' do
+    it 'shows page without the "get druids from search" button when no search params are available' do
       visit '/report/bulk'
       expect(page).to have_content('Bulk update operations')
       expect(page).not_to have_css('.btn-primary', text: 'Get druids from search') # no previous search params, so no get druids button
       expect(page).to have_css('.btn-primary', text: 'Paste a druid list')
     end
 
-    it 'returns a page with a get druids from previous search link' do
+    it 'shows page with the "get druids from search" button when search params are available' do
       visit '/report/bulk?q=search'
       expect(page).to have_content('Bulk update operations')
       expect(page).to have_css('.btn-primary', text: 'Get druids from search')

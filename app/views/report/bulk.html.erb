@@ -43,7 +43,7 @@ ul li{
 
 <h1>Bulk update operations</h1>
 
-<% unless search_params.blank? %>
+<% if search_state.has_constraints? %>
   <button class="btn btn-primary" id="get_druids" name="get_druids">Get druids from search</button>
 <% end %>
 <button class="btn btn-primary" id="paste-druids-button">Paste a druid list</button>

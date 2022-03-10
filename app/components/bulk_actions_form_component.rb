@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 class BulkActionsFormComponent < ApplicationComponent
-  attr_reader :search_params
-
-  def initialize(form:, search_params:)
+  def initialize(form:)
     @form = form
-    @search_params = search_params
   end
 
   ##
@@ -15,9 +12,9 @@ class BulkActionsFormComponent < ApplicationComponent
   # @param [Blacklight::Search, nil]
   # @return [Hash]
   def search_of_pids
-    return '' if search_params.blank?
+    return '' unless search_state.has_constraints?
 
-    search_params.merge('pids_only' => true)
+    search_state.params_for_search('pids_only' => true)
   end
 
   def action_types

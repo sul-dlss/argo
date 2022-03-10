@@ -168,7 +168,7 @@
     </div>
 
     <div data-bulk-actions-target="commonFields" >
-     <% unless search_params.blank? %>
+     <% if search_state.has_constraints? %>
         <button class='btn btn-primary' data-action="click->bulk-actions#populateDruids">
           Populate with previous search
         </button>

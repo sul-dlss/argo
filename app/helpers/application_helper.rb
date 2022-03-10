@@ -5,10 +5,6 @@ module ApplicationHelper
     'Argo'
   end
 
-  def search_params
-    params.except(:controller, :action).permit!
-  end
-
   def location_to_send_search_form
     return report_path if report_view?
     return report_workflow_grid_path if workflow_grid_view?

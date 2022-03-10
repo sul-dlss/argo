@@ -3,26 +3,18 @@
 require 'rails_helper'
 
 RSpec.describe BulkActionsFormComponent, type: :component do
-  subject(:instance) { described_class.new(form: bulk_action_form, search_params: search_params) }
+  subject(:instance) { described_class.new(form: bulk_action_form) }
 
   let(:bulk_action_form) { BulkActionForm.new(build(:bulk_action), groups: []) }
+  let(:blacklight_config) { Blacklight::Configuration.new }
+  let(:search_state) { Blacklight::SearchState.new(search_params, blacklight_config) }
 
-  before { allow(controller).to receive(:current_user).and_return(build(:user)) }
+  before do
+    allow(controller).to receive(:current_user).and_return(build(:user))
+    allow(subject).to receive(:search_state).and_return(search_state)
+  end
 
   describe '#search_of_pids' do
-    context "when last search isn't present" do
-      let(:search_params) { {} }
-
-      it 'returns an empty string' do
-        expect(instance.search_of_pids).to eq ''
-      end
-
-      it 'does not render a populate from previous search button' do
-        render_inline(subject)
-        expect(page).not_to have_button 'Populate with previous search'
-      end
-    end
-
     context 'when last search is nil' do
       let(:search_params) { nil }
 
