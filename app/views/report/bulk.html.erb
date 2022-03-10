@@ -40,7 +40,9 @@ ul li{
 
 <h1>Bulk update operations</h1>
 
-<button class="btn btn-primary" id="get_druids" name="get_druids">Get druids from search</button>
+<% if search_state.has_constraints? %>
+  <button class="btn btn-primary" id="get_druids" name="get_druids">Get druids from search</button>
+<% end %>
 <button class="btn btn-primary" id="paste-druids-button">Paste a druid list</button>
 
 <div id="pid_list" name="pid_list" style="display:none;" class="bulk_operation">

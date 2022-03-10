@@ -5,12 +5,15 @@ require 'rails_helper'
 RSpec.describe 'bulk_actions/new.html.erb' do
   let(:user_groups) { %w[dlss-developers top-secret-clearance] }
   let(:apo_list) { [['APO 1', 'druid:123'], ['APO 2', 'druid:234']] }
+  let(:query_params) { { q: 'testing' } }
+  let(:blacklight_config) { Blacklight::Configuration.new }
+  let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }
 
   before do
     @form = BulkActionForm.new(create(:bulk_action), groups: user_groups)
     allow(view).to receive(:current_user).and_return(double(sunetid: 'esnowden', groups: user_groups))
     allow(view).to receive(:apo_list).with(user_groups).and_return(apo_list)
-
+    allow(view).to receive(:search_state).and_return(search_state)
     render
   end
 

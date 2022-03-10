@@ -1,4 +1,3 @@
 <div id='bulk-update-button' class='btn-group'>
-  <% cleaned_params = params.except(:controller, :action).permit! %>
-  <%= link_to 'Bulk Update', send(:report_bulk_url, cleaned_params), class: 'btn btn-outline-secondary', type: 'button', id: 'bulk_update_view' %>
+  <%= link_to 'Bulk Update', report_bulk_url(search_state.to_h), class: 'btn btn-outline-secondary', type: 'button', id: 'bulk_update_view' %>
 </div>

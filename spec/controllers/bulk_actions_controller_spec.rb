@@ -31,23 +31,6 @@ RSpec.describe BulkActionsController do
       expect(assigns(:form)).not_to be_nil
     end
 
-    describe 'assigns @last_search' do
-      it 'with no session[:search]' do
-        expect(request.session[:search]).to be_nil
-        get :new
-        expect(assigns(:last_search)).to be_nil
-      end
-
-      it 'with last session[:search]' do
-        Search.create
-        request.session[:search] = { 'id' => 1 }
-        all_searches = Search.all
-        expect(all_searches).to receive(:find).with(1)
-        expect(subject).to receive(:searches_from_history).and_return all_searches
-        get :new
-      end
-    end
-
     it 'has a 200 status code' do
       get :new
       expect(response.status).to eq 200
