@@ -112,7 +112,7 @@ function get_druids() {
 
 // create a callback function that will request a list of druids based on the current search, but which
 // will also filter the list of druids on the list the user entered in the pids list text area, so that
-// unwanted druids can get filtered out of search results.  useful for, e.g., get_source_ids and get_tags.
+// unwanted druids can get filtered out of search results.  useful for, e.g., get_tags.
 function get_filtered_druid_each_callback(log) {
 	var pids_txt = fetch_pids_txt();
 	var selected_druids = (pids_txt.length > 5) ? extract_pids_list(pids_txt) : null; //in case the user entered druids on which to filter
@@ -125,13 +125,6 @@ function get_filtered_druid_each_callback(log) {
 	};
 
 	return druid_each_callback;
-}
-
-function get_source_ids() {
-	var log = document.getElementById('source_ids');
-	var druid_each_callback = get_filtered_druid_each_callback(log);
-	var req_url = report_model['data_url']+'&source_id=true';
-	get_druids_req(log, null, druid_each_callback, null, null, req_url);
 }
 
 function get_tags() {
@@ -230,17 +223,6 @@ function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, 
 	});
 }
 
-function source_id() {
-	var row_processing_fn = function(row_str) {
-		parts = row_str.split("\t", 2);
-		row_result = {'druid': parts[0], 'upd_data': parts[1]};
-		return row_result;
-	};
-	var is_invalid_row_fn = function(row_obj) { return (row_obj['upd_data']==null || row_obj['upd_data'].length<=1 || row_obj['upd_data'].indexOf(':')<1); };
-	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'new_id': row_obj['upd_data'] }; };
-	upd_values_for_druids(source_id_url, 'source_ids', row_processing_fn, "user supplied druids and source ids.", is_invalid_row_fn, "invalid source id", get_upd_req_params_from_row_fn);
-}
-
 function set_tags() {
 	var row_processing_fn = function(row_str) {
 		parts = row_str.split("\t");
@@ -257,10 +239,6 @@ function set_tags() {
 document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
-	$('#show_source_id').on('click', () => {
-		$('#source_id').show(400)
-	  get_source_ids()
-	})
 	$('#set-object-rights-button').on('click', () => $('#rights').show(400))
 	$('#set-content-type-button').on('click', () => $('#content_type').show(400))
 	$('#set-collection-button').on('click', () => $('#set_collection').show(400))
@@ -283,11 +261,6 @@ document.addEventListener("turbo:load", () => {
   $('#set_tags').on('click', () => {
 		set_tags()
 		$('#tag').hide(400)
-	})
-
-	$('#set_source_id').on('click', () => {
-		source_id()
-		$('#source_id').hide(400)
 	})
 
 	$('#rights_button').on('click', () => {

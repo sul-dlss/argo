@@ -39,6 +39,7 @@ class BulkActionsFormComponent < ApplicationComponent
       ['Modify objects (via CSV)', [
         ['Create virtual object(s)', 'CreateVirtualObjectsJob'],
         ['Edit Catkeys and Barcodes from CSV', 'SetCatkeysAndBarcodesCsvJob'],
+        ['Edit Source ID from CSV', 'SetSourceIdsCsvJob'],
         ['Export tags to CSV', 'ExportTagsJob'],
         ['Import tags from CSV', 'ImportTagsJob'],
         ['Export structural metadata to CSV', 'ExportStructuralJob'],

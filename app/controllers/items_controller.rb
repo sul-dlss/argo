@@ -132,15 +132,7 @@ class ItemsController < ApplicationController
     change_set.validate(source_id: params[:new_id])
     change_set.save
     reindex
-
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: 'Updated source id.' }
-      else
-        msg = "Source Id for #{params[:id]} has been updated!"
-        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-      end
-    end
+    redirect_to solr_document_path(params[:id]), notice: "Source Id for #{params[:id]} has been updated!"
   end
 
   def tags_bulk
@@ -304,7 +296,8 @@ class ItemsController < ApplicationController
       reindex
       redirect_to solr_document_path(params[:id]), status: :see_other
     else
-      logger.error "Errors: #{change_set.errors.full_messages.join}"
+      message = change_set.errors.full_messages.to_sentence
+      logger.error "Errors: #{message}"
       render 'error', locals: { message: message }
     end
   end

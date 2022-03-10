@@ -26,6 +26,7 @@ class BulkAction < ApplicationRecord
                      ExportStructuralJob
                      RegisterDruidsJob
                      SetLicenseAndRightsStatementsJob
+                     SetSourceIdsCsvJob
                      ManageEmbargoesJob]
             }
 

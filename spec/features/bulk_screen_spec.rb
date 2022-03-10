@@ -38,16 +38,8 @@ RSpec.describe 'Bulk actions view', js: true do
       expect(page).to have_content 'druid:zt570qh4444'
     end
 
-    expect(page).to have_button('Set source Id', disabled: false)
     expect(page).to have_button('Set object rights', disabled: false)
     expect(page).to have_button('Set content type', disabled: false)
     expect(page).to have_button('Set collection', disabled: false)
-
-    fill_in 'pids', with: 'druid:zt570qh4444' # just one druid
-    click_button 'Set source Id'
-    fill_in 'source_ids', with: 'druid:cx969bz4046	test:SOURCE_ID_1234'
-    click_button 'Update source ids'
-
-    expect(page).to have_content 'Done!'
   end
 end
