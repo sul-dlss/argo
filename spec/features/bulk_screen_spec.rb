@@ -25,8 +25,8 @@ RSpec.describe 'Bulk actions view', js: true do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
-  it 'basic page renders ok' do
-    visit report_bulk_path
+  it 'basic page renders ok with get druids from search page' do
+    visit report_bulk_path({ q: 'druid:zt570qh4444' })
 
     expect(page).to have_css('h1', text: 'Bulk update operations')
     expect(page).to have_button 'Paste a druid list', disabled: false
