@@ -4,7 +4,7 @@
 class ItemsController < ApplicationController
   before_action :load_cocina
   before_action :authorize_manage!, only: %i[
-    add_collection set_collection remove_collection
+    add_collection remove_collection
     mods
     purge_object
     show_barcode show_copyright show_license show_use_statement
@@ -13,7 +13,7 @@ class ItemsController < ApplicationController
   ]
 
   before_action :enforce_versioning, only: %i[
-    add_collection set_collection remove_collection
+    add_collection remove_collection
     edit_copyright edit_license edit_use_statement
     source_id
     refresh_metadata
@@ -43,27 +43,6 @@ class ItemsController < ApplicationController
     else
       redirect_to solr_document_path(params[:id]),
                   flash: { error: message }
-    end
-  end
-
-  def set_collection
-    change_set = ItemChangeSet.new(@cocina)
-    change_set.validate(collection_ids: Array(params[:collection].presence))
-    change_set.save
-    reindex
-
-    response_message = if params[:collection].present?
-                         'Collection successfully set.'
-                       else
-                         'Collection(s) successfully removed.' # no collection selected from drop-down, so don't bother adding a new one
-                       end
-
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: response_message }
-      else
-        format.html { redirect_to solr_document_path(params[:id]), notice: response_message }
-      end
     end
   end
 

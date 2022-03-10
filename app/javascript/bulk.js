@@ -138,22 +138,6 @@ document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
 	$('#set-object-rights-button').on('click', () => $('#rights').show(400))
-	$('#set-content-type-button').on('click', () => $('#content_type').show(400))
-	
-	$('#show_tags').on('click', () => {
-		$('#tag').show(400)
-		get_tags()
-	})
-
-	$('#confirm-set-content-type-button').on('click', () => {
-		fetch_druids(set_content_type)
-		$('#content_type').hide(400)
-	})
-
-  $('#set_tags').on('click', () => {
-		set_tags()
-		$('#tag').hide(400)
-	})
 
 	$('#rights_button').on('click', () => {
 			fetch_druids(set_rights)

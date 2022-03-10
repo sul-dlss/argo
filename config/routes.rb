@@ -155,7 +155,6 @@ Rails.application.routes.draw do
       get 'show_license'
       get 'collection/delete',   action: :remove_collection, as: 'remove_collection'
       post 'collection/add',     action: :add_collection,    as: 'add_collection'
-      post 'collection/set',     action: :set_collection,    as: 'set_collection'
       delete 'purge', action: :purge_object
       get  'rights'
       post 'set_rights'

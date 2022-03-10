@@ -8,7 +8,7 @@ RSpec.describe 'bulk_actions/new.html.erb' do
   let(:query_params) { { q: 'testing' } }
   let(:blacklight_config) { Blacklight::Configuration.new }
   let(:search_state) { Blacklight::SearchState.new(query_params, blacklight_config) }
-  let(:current_user) { double(sunetid: 'esnowden', groups: user_groups) }
+  let(:current_user) { double(sunetid: 'esnowden', groups: user_groups, permitted_collections: collections) }
   let(:collections) do
     [
       ['None', ''],
@@ -22,7 +22,6 @@ RSpec.describe 'bulk_actions/new.html.erb' do
     allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:apo_list).with(user_groups).and_return(apo_list)
     allow(view).to receive(:search_state).and_return(search_state)
-    allow(current_user).to receive(:permitted_collections).and_return(collections)
     render
   end
 
