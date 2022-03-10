@@ -28,7 +28,8 @@ class BulkAction < ApplicationRecord
                      SetLicenseAndRightsStatementsJob
                      SetSourceIdsCsvJob
                      SetContentTypeJob
-                     ManageEmbargoesJob]
+                     ManageEmbargoesJob
+                     SetCollectionJob]
             }
 
   before_destroy :remove_output_directory

@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe SetCollectionJob do
+  subject(:job) { described_class.new }
+
   let(:pids) { ['druid:cc111dd2222', 'druid:dd111ff2222'] }
   let(:new_collection_id) { 'druid:bc111bb2222' }
   let(:groups) { [] }
@@ -75,19 +77,33 @@ RSpec.describe SetCollectionJob do
         allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
         allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
         allow(StateService).to receive(:new).and_return(state_service)
+        allow(subject).to receive(:check_can_set_collection!).with(cocina1, state_service).and_return true
+        allow(subject).to receive(:check_can_set_collection!).with(cocina2, state_service).and_return true
       end
 
-      context 'when the objects can be updated' do
-        before do
-          allow(subject).to receive(:check_can_set_collection!).with(cocina1, state_service).and_return true
-          allow(subject).to receive(:check_can_set_collection!).with(cocina2, state_service).and_return true
+      context 'when the objects can be modified' do
+        context 'when the version is open' do
+          it 'sets the new collection on an object' do
+            subject.perform(bulk_action.id, params)
+            expect(bulk_action.druid_count_total).to eq(pids.length)
+            expect(bulk_action.druid_count_fail).to eq(0)
+            expect(bulk_action.druid_count_success).to eq(pids.length)
+          end
         end
 
-        it 'sets the new collection on an object' do
-          subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq(pids.length)
-          expect(bulk_action.druid_count_fail).to eq(0)
-          expect(bulk_action.druid_count_success).to eq(pids.length)
+        context 'when the version is closed' do
+          let(:state_service) { instance_double(StateService, allows_modification?: false) }
+
+          before do
+            allow(job).to receive(:open_new_version).and_return('3')
+          end
+
+          it 'opens a new version sets the new collection on an object' do
+            subject.perform(bulk_action.id, params)
+            expect(bulk_action.druid_count_total).to eq(pids.length)
+            expect(bulk_action.druid_count_fail).to eq(0)
+            expect(bulk_action.druid_count_success).to eq(pids.length)
+          end
         end
       end
 

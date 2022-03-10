@@ -31,17 +31,20 @@ class SetCollectionJob < GenericJob
   private
 
   def set_collection_and_index_safely(current_druid, log)
-    cocina_item = Dor::Services::Client.object(current_druid).find
-    state_service = StateService.new(current_druid, version: cocina_item.version)
-    check_can_set_collection!(cocina_item, state_service)
-    open_new_version(current_druid, cocina_item.version, 'Set collection') unless state_service.allows_modification?
+    cocina_object = Dor::Services::Client.object(current_druid).find
+    state_service = StateService.new(current_druid, version: cocina_object.version)
+    check_can_set_collection!(cocina_object, state_service)
+    unless state_service.allows_modification?
+      new_version = open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(new_collection_ids))
+      cocina_object = cocina_object.new(version: new_version.to_i)
+    end
 
-    change_set = ItemChangeSet.new(cocina_item)
+    change_set = ItemChangeSet.new(cocina_object)
     change_set.validate(collection_ids: new_collection_ids)
     change_set.save
-    Argo::Indexer.reindex_pid_remotely(current_druid)
+    Argo::Indexer.reindex_pid_remotely(cocina_object.externalIdentifier)
 
-    log.puts("#{Time.current} SetCollectionJob: Successfully updated #{current_druid} (bulk_action.id=#{bulk_action.id})")
+    log.puts("#{Time.current} SetCollectionJob: Successfully updated #{cocina_object.externalIdentifier} (bulk_action.id=#{bulk_action.id})")
     bulk_action.increment(:druid_count_success).save
   rescue StandardError => e
     log.puts("#{Time.current} SetCollectionJob: Unexpected error for #{current_druid} (bulk_action.id=#{bulk_action.id}): #{e} #{e.backtrace}")
@@ -54,5 +57,9 @@ class SetCollectionJob < GenericJob
     new_collection_ids.each do |new_collection_id|
       raise "user not authorized to move #{cocina.externalIdentifier} to #{new_collection_ids}" unless ability.can?(:manage_item, cocina, new_collection_id)
     end
+  end
+
+  def version_message(collection_ids)
+    collection_ids ? "Added to collections #{collection_ids.join(',')}." : 'Removed collection membership.'
   end
 end

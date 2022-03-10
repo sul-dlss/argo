@@ -13,7 +13,7 @@ function catalog_url(element)
   return url;
 }
 set_rights_url='<%= set_rights_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
-set_collection_url='<%= set_collection_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
+tags_url='<%= tags_bulk_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 </script>
 
 <style>
@@ -62,7 +62,7 @@ ul li{
         <button class="btn btn-primary btn-block" id="set-object-rights-button">Set object rights</button>
       </div>
       <div class="col-sm-2">
-        <button class="btn btn-primary btn-block" id="set-collection-button">Set collection</button>
+        <button class="btn btn-primary btn-block" id="set-content-type-button">Set content type</button>
       </div>
     </div>
   </div>
