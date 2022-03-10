@@ -20,7 +20,6 @@ class BulkActionsController < ApplicationController
   def create
     # Since the groups aren't persisted, we need to pass them here.
     @form = BulkActionForm.new(BulkAction.new(user: current_user), groups: current_user.groups)
-
     if @form.validate(bulk_action_params) && @form.save
       flash[:notice] = 'Bulk action was successfully created.'
       redirect_to action: :index
@@ -73,7 +72,11 @@ class BulkActionsController < ApplicationController
         license license_option
         use_statement use_statement_option
       ],
-      manage_embargo: [:csv_file]
+      manage_embargo: [:csv_file],
+      set_content_type: %i[
+        current_resource_type
+        new_content_type new_resource_type
+      ]
     )
   end
 end

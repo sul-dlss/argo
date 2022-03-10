@@ -1,0 +1,26 @@
+<% f.fields_for :set_content_type do |set_content_type_fields| %>
+  <div class='mb-3'>
+    
+    <p>The suggested mappings for content type to resource type are:</p>
+    <ul>
+      <li>File: file</li>
+      <li>Image: image</li>
+      <li>Book: page</li>
+      <li>Map: image</li>
+      <li>Document: document</li>
+    </ul>
+    
+    <% current_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys
+      new_content_types = [['none', '']] + Constants::CONTENT_TYPES.keys
+      new_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys %>
+
+    <%= set_content_type_fields.label :current_resource_type, 'Current resource type' %>
+    <%= set_content_type_fields.select :current_resource_type, current_resource_types, {}, class: 'form-select' %>
+   
+    <%= set_content_type_fields.label :new_content_type, 'New content type' %>
+    <%= set_content_type_fields.select :new_content_type, new_content_types, {}, class: 'form-select' %>
+     
+    <%= set_content_type_fields.label :new_resource_type, 'New resource type' %>
+    <%= set_content_type_fields.select :new_resource_type, new_resource_types, {}, class: 'form-select' %>
+  </div>
+<% end %>

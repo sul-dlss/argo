@@ -19,15 +19,9 @@ class ContentTypesController < ApplicationController
     return render_error('Invalid new content type.') unless valid_content_type?
 
     object_client.update(params: @cocina_object.new(cocina_update_attributes))
-    Argo::Indexer.reindex_pid_remotely(@cocina_object.externalIdentifier) unless params[:bulk]
+    Argo::Indexer.reindex_pid_remotely(@cocina_object.externalIdentifier)
 
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render plain: 'Content type updated.' }
-      else
-        format.any { redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!' }
-      end
-    end
+    redirect_to solr_document_path(params[:item_id]), notice: 'Content type updated!'
   end
 
   private
