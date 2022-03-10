@@ -144,7 +144,6 @@ Rails.application.routes.draw do
       post 'refresh_metadata'
       get 'mods'
       get 'source_id_ui'
-      match 'tags_bulk', via: %i[get post]
       get 'collection_ui'
       get 'edit_barcode'
       get 'show_barcode'
