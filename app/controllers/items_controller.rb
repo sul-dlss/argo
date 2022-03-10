@@ -9,7 +9,6 @@ class ItemsController < ApplicationController
     purge_object
     show_barcode show_copyright show_license show_use_statement
     source_id
-    tags_bulk
     update
   ]
 
@@ -133,22 +132,6 @@ class ItemsController < ApplicationController
     change_set.save
     reindex
     redirect_to solr_document_path(params[:id]), notice: "Source Id for #{params[:id]} has been updated!"
-  end
-
-  def tags_bulk
-    tags = params[:tags].split(/\t/)
-    # Destroy all current tags and replace with new ones
-    tags_client.replace(tags: tags)
-    reindex
-
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: "#{tags.size} Tags updated." }
-      else
-        msg = "#{tags.size} tags for #{params[:id]} have been updated!"
-        format.any { redirect_to solr_document_path(params[:id]), notice: msg }
-      end
-    end
   end
 
   def purge_object

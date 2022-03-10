@@ -97,30 +97,6 @@ function get_druids() {
 	get_druids_req(log, wait_msg, druid_each_callback, preprocessing_callback);
 }
 
-// create a callback function that will request a list of druids based on the current search, but which
-// will also filter the list of druids on the list the user entered in the pids list text area, so that
-// unwanted druids can get filtered out of search results.  useful for, e.g., get_tags.
-function get_filtered_druid_each_callback(log) {
-	var pids_txt = fetch_pids_txt();
-	var selected_druids = (pids_txt.length > 5) ? extract_pids_list(pids_txt) : null; //in case the user entered druids on which to filter
-	var druid_each_callback = function(i, s) {
-		var cur_druid_only = s.trim().replace(/\s.*/g, ''); //trim and get just pre-whitespace chars for comparison to user entered druids
-		if (selected_druids == null || $.inArray(cur_druid_only, selected_druids) >= 0) {
-			report_model['druids'].push(s);
-			log.innerHTML = log.innerHTML + 'druid:' + s + "\n";
-		}
-	};
-
-	return druid_each_callback;
-}
-
-function get_tags() {
-	var log = document.getElementById('tags');
-	var druid_each_callback = get_filtered_druid_each_callback(log);
-	var req_url = report_model['data_url']+'&tags=true';
-	get_druids_req(log, null, druid_each_callback, null, null, req_url);
-}
-
 function show_buttons() {
 	$('#updates').show(400);
 }
@@ -163,85 +139,15 @@ function error_handler(xhr, status, err, object_link, index, after) {
 
 }
 
-function upd_values_for_druids(upd_req_url, upd_textarea_id, row_processing_fn, custom_wait_msg, is_invalid_row_fn, invalid_row_err_msg, get_upd_req_params_from_row_fn) {
-	cons = [];
-	var log = document.getElementById('log');
-	log.style.display = "block";
-
-	var druid_upd_txt = document.getElementById(upd_textarea_id).value;
-	var druid_upd_lines = extract_pids_list(druid_upd_txt);
-	job_count = [];
-	for (i=druid_upd_lines.length; i>0; i--) {
-		job_count.push(i);
-	}
-
-	var druid_upd_rows = [];
-	for (i=0; i<druid_upd_lines.length; i++) {
-		dr = druid_upd_lines[i];
-    if (upd_textarea_id !== "tags") // Using this with tag strings breaks tag validation
-		  dr = dr.replace(/ : /g,':');		row_result = row_processing_fn(dr);
-		druid_upd_rows.push(row_result);
-	}
-	log.innerHTML = "Using " + druid_upd_lines.length + " " + custom_wait_msg + "<br/>\n";
-
-	$.each(druid_upd_rows, function(i, upd_info) {
-		//get rid of blank lines
-		if(upd_info['druid'] == null || upd_info['druid'].length < 2) {
-			return;
-		}
-		var object_link = catalog_url(upd_info['druid']);
-
-		//skip bad rows
-		if(is_invalid_row_fn(upd_info)) {
-			log.innerHTML = "<span class=\"text-danger\"> "+job_count.pop()+" "+object_link+" : "+invalid_row_err_msg+" '"+upd_info['upd_data']+"'</span><br/>\n"+log.innerHTML;
-			return;
-		}
-		var params = get_upd_req_params_from_row_fn(upd_info);
-		params.authenticity_token = Blacklight.csrfToken()
-		var url = upd_req_url.replace('xxxxxxxxx', upd_info['druid']);
-		var xhr = $.ajax({url: url, type: 'POST', data: params});
-		cons.push(xhr);
-		xhr.done(function(response, status, xhr) {
-			success_handler(object_link, 'Updated	');
-		});
-		xhr.fail(function(xhr, status, err) {
-			error_handler(xhr, status, err, object_link, job_count.pop());
-		});
-	});
-}
-
-function set_tags() {
-	var row_processing_fn = function(row_str) {
-		parts = row_str.split("\t");
-		druid = parts.shift();
-		tags = parts.join("\t");
-		row_result = {'druid': druid, 'upd_data': tags};
-		return row_result;
-	};
-	var is_invalid_row_fn = function(row_obj) { return (row_obj['upd_data']==null || row_obj['upd_data'].length<=1 || row_obj['upd_data'].indexOf(':')<1); };
-	var get_upd_req_params_from_row_fn = function(row_obj) { return { 'tags': row_obj['upd_data'] }; };
-	upd_values_for_druids(tags_url, 'tags', row_processing_fn, "user supplied druids and tags.", is_invalid_row_fn, "invalid tags", get_upd_req_params_from_row_fn);
-}
-
 document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
 	$('#set-object-rights-button').on('click', () => $('#rights').show(400))
 	$('#set-collection-button').on('click', () => $('#set_collection').show(400))
 
-  $('#show_tags').on('click', () => {
-		$('#tag').show(400)
-		get_tags()
-	})
-
 	$('#confirm-set-collection-button').on('click', () => {
 		fetch_druids(set_collection)
 		$('#set_collection').hide(400)
-	})
-
-  $('#set_tags').on('click', () => {
-		set_tags()
-		$('#tag').hide(400)
 	})
 
 	$('#rights_button').on('click', () => {

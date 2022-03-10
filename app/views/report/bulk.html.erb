@@ -14,7 +14,6 @@ function catalog_url(element)
 }
 set_rights_url='<%= set_rights_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 set_collection_url='<%= set_collection_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
-tags_url='<%= tags_bulk_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 </script>
 
 <style>
@@ -64,12 +63,6 @@ ul li{
         <button class="btn btn-primary btn-block" id="set-collection-button">Set collection</button>
       </div>
     </div>
-    <strong>Options that do not require versioning</strong>
-    <div class="row bulk-buttons-row">
-      <div class="col-sm-2">
-        <button class="btn btn-primary btn-block" id="show_tags" name="show_tags">Tags</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -103,18 +96,6 @@ ul li{
     <%= select_tag :new_resource_type, options_for_select(new_resource_types) %><br>
     <button class="btn btn-primary" id="confirm-set-content-type-button">Set content types</button>
   </p>
-</div>
-
-<div class="bulk_operation" id="tag">
-  <h1>Change tags</h1>
-
-  <div class="mb-3">
-    <label for="tags"><p>This needs a list of pids and tags, with a tab between the pid and each tag.<br>E.g.:
-    <code>druid:bc088fn5010&lt;tab&gt;Project : Something&lt;tab&gt;Process : Content Type : Book</code></p>
-    This formatting is easier to perform by using Excel or a text editor, and then copying the result to this text area.</label>
-    <textarea id="tags" name="tags" class="form-control" rows="8"></textarea><br>
-  </div>
-  <span class="btn btn-primary" id="set_tags" name="set_tags">Update tags</span>
 </div>
 
 <div class="bulk_operation" id="rights" name="rights">
