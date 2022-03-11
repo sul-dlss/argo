@@ -81,6 +81,17 @@ RSpec.describe SetCollectionJob do
         allow(subject).to receive(:check_can_set_collection!).with(cocina2, state_service).and_return true
       end
 
+      context 'when no collections are selected' do
+        let(:new_collection_id) { '' }
+
+        it 'removes the collection successfully' do
+          subject.perform(bulk_action.id, params)
+          expect(bulk_action.druid_count_total).to eq(pids.length)
+          expect(bulk_action.druid_count_fail).to eq(0)
+          expect(bulk_action.druid_count_success).to eq(pids.length)
+        end
+      end
+
       context 'when the objects can be modified' do
         context 'when the version is open' do
           it 'sets the new collection on an object' do
