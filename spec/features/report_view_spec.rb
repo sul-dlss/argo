@@ -33,26 +33,4 @@ RSpec.describe 'Report view' do
       expect(page).to have_selector('input[name="selected_columns"]:checked', count: 5) # count the default
     end
   end
-
-  context 'bulk' do
-    before do
-      allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-    end
-
-    let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
-
-    it 'shows page without the "get druids from search" button when no search params are available' do
-      visit '/report/bulk'
-      expect(page).to have_content('Bulk update operations')
-      expect(page).not_to have_css('.btn-primary', text: 'Get druids from search') # no previous search params, so no get druids button
-      expect(page).to have_css('.btn-primary', text: 'Paste a druid list')
-    end
-
-    it 'shows page with the "get druids from search" button when search params are available' do
-      visit '/report/bulk?q=search'
-      expect(page).to have_content('Bulk update operations')
-      expect(page).to have_css('.btn-primary', text: 'Get druids from search')
-      expect(page).to have_css('.btn-primary', text: 'Paste a druid list')
-    end
-  end
 end

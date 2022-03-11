@@ -3,11 +3,6 @@
 class DorController < ApplicationController
   # dispatches the reindexing request to the remote reindexing service
   def reindex
-    if params[:bulk]
-      render status: :forbidden, plain: 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
-      return
-    end
-
     begin
       Argo::Indexer.reindex_pid_remotely params[:pid]
       flash[:notice] = "Successfully updated index for #{params[:pid]}"

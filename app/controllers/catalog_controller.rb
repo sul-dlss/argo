@@ -181,7 +181,6 @@ class CatalogController < ApplicationController
       }
     }
 
-    config.add_results_collection_tool(:bulk_update_view_button)
     config.add_results_collection_tool(:bulk_action_button)
     config.add_results_collection_tool(:sort_widget)
     config.add_results_collection_tool(:per_page_widget)

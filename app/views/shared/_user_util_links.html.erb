@@ -31,15 +31,8 @@
 
     <li class="nav-item"><%= link_to 'All&nbsp;Workflows'.html_safe, report_workflow_grid_path, class: 'nav-link' %></li>
 
-    <li class='nav-item dropdown'>
-      <a href='#' class='nav-link dropdown-toggle' id="bulkDropdown" data-bs-toggle='dropdown' role='button' aria-haspopup='true' aria-expanded='false'>
-        Bulk Edits
-        <span class='caret'></span>
-      </a>
-      <div class="dropdown-menu" aria-labelledby="bulkDropdown">
-          <%= link_to 'Bulk Update (synchronous)', report_bulk_path, class: 'dropdown-item' %>
-          <%= link_to 'Bulk Actions (asynchronous)', bulk_actions_path, class: 'dropdown-item' %>
-      </div>
+    <li class='nav-item'>
+      <%= link_to 'Bulk Edits', bulk_actions_path, class: 'nav-link' %>
     </li>
 
     <li class='nav-item dropdown'>

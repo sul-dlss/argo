@@ -159,20 +159,10 @@ class ItemsController < ApplicationController
   def apply_apo_defaults
     Dor::Services::Client.object(@cocina.externalIdentifier).apply_admin_policy_defaults
     reindex
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: 'APO defaults applied.' }
-      else
-        format.any { redirect_to solr_document_path(params[:id]), notice: 'APO defaults applied!' }
-      end
-    end
+    redirect_to solr_document_path(params[:id]), notice: 'APO defaults applied!'
   rescue Dor::Services::Client::UnexpectedResponse => e
     error_message = "APO defaults could not be applied: #{e.message}"
-    if params[:bulk]
-      render status: :bad_request, plain: error_message
-    else
-      format.any { redirect_to solr_document_path(params[:id]), flash: { error: error_message } }
-    end
+    redirect_to solr_document_path(params[:id]), flash: { error: error_message }
   end
 
   def set_governing_apo
@@ -295,11 +285,6 @@ class ItemsController < ApplicationController
   end
 
   def reindex
-    # Skip reindexing all bulk operations *except* bulk tag operations which do
-    # require immediate reindexing since they do not touch Fedora (and thus do
-    # not send messages to Solr)
-    return if params[:bulk] && params[:tags].nil?
-
     Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
   end
 

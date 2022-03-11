@@ -9,10 +9,6 @@ class ReportController < CatalogController
     raise exception
   end
 
-  def bulk
-    (@response, _deprecated_document_list) = search_service.search_results
-  end
-
   def data
     params[:sord] ||= 'asc'
     rows_per_page = params[:rows] ? params.delete(:rows).to_i : 10

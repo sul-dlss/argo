@@ -45,14 +45,8 @@ class WorkflowsController < ApplicationController
                                               workflow: params[:id],
                                               process: params[:process],
                                               status: params[:status])
-    respond_to do |format|
-      if params[:bulk].present?
-        render status: :ok, plain: 'Updated!'
-      else
-        msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:item_id]}"
-        format.any { redirect_to solr_document_path(params[:item_id]), notice: msg }
-      end
-    end
+    msg = "Updated #{params[:process]} status to '#{params[:status]}' in #{params[:item_id]}"
+    redirect_to solr_document_path(params[:item_id]), notice: msg
   end
 
   # add a workflow to an object if the workflow is not present in the active table
