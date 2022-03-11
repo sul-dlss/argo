@@ -7,7 +7,7 @@ orbs:
 
 references:
   default_ruby_version: &default_ruby_version 3.0-browsers
-  default_postgres_version: &default_postgres_version 11-ram
+  default_postgres_version: &default_postgres_version '11.13'
   ruby_envs: &ruby_envs
     environment:
       BUNDLE_JOBS: 3
@@ -72,13 +72,13 @@ executors:
         type: string
         default: *default_ruby_version
       postgres_tag:
-        description: "The `circleci/postgres` Docker image version tag."
+        description: "The `cimg/postgres` Docker image version tag."
         type: string
         default: *default_postgres_version
     docker:
       - image: cimg/ruby:<< parameters.ruby_tag >>
         <<: *ruby_envs
-      - image: circleci/postgres:<< parameters.postgres_tag >>
+      - image: cimg/postgres:<< parameters.postgres_tag >>
         <<: *postgres_envs
       - image: solr:7
         command: bin/solr -cloud -noprompt -f
@@ -162,7 +162,7 @@ executors:
           SETTINGS__DOR_SERVICES__TOKEN: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJGb28ifQ.-BVfLTW9Q1_ZQEsGv4tuzGLs5rESN7LgdtEwUltnKv4
           SETTINGS__ENABLE_STOMP: false
           SETTINGS__REDIS__HOSTNAME: redis
-      - image: circleci/redis
+      - image: cimg/redis:6.2
         name: redis
 
 workflows:
