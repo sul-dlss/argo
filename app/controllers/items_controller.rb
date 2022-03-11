@@ -143,23 +143,14 @@ class ItemsController < ApplicationController
     redirect_to solr_document_path(params[:id]), flash: { error: "#{user_begin}: #{e.message}. #{user_end}" }
   end
 
-  # This is called from the item page and from the bulk (synchronous) update page
   def set_rights
     # Item may be a Collection or a DRO
     form_type = @cocina.collection? ? CollectionRightsForm : DroRightsForm
     form = form_type.new(@cocina)
-    # The bulk form always uses `dro_rights_form` as the key
-    form_key = params[:bulk] ? DroRightsForm.model_name.param_key : form.model_name.param_key
+    form_key = form.model_name.param_key
     form.validate(params[form_key])
     form.save
-
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: 'Rights updated.' }
-      else
-        format.any { redirect_to solr_document_path(params[:id]), notice: 'Rights updated!' }
-      end
-    end
+    redirect_to solr_document_path(params[:id]), notice: 'Rights updated!'
   rescue ArgumentError
     render status: :bad_request, plain: 'Invalid new rights setting.'
   end

@@ -37,7 +37,5 @@ RSpec.describe 'Bulk actions view', js: true do
       # Test that the textarea was populated from a search
       expect(page).to have_content 'druid:zt570qh4444'
     end
-
-    expect(page).to have_button('Set object rights', disabled: false)
   end
 end

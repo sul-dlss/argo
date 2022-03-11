@@ -416,26 +416,6 @@ RSpec.describe 'Set rights for an object' do
           expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
         end
       end
-
-      context 'when a bulk request' do
-        let(:updated_model) do
-          cocina_model.new(
-            {
-              'access' => {
-                'view' => 'dark'
-              }
-            }
-          )
-        end
-
-        it 'sets the access' do
-          post "/items/#{pid}/set_rights", params: { bulk: true, dro_rights_form: { rights: 'dark' } }
-          expect(response).to have_http_status(:ok)
-          expect(object_client).to have_received(:update)
-            .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
-        end
-      end
     end
 
     context "when the cocina model isn't found" do

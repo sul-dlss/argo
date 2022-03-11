@@ -35,7 +35,8 @@ class BulkActionsFormComponent < ApplicationComponent
         ['Edit License and Rights Statements', 'SetLicenseAndRightsStatementsJob'],
         ['Refresh MODS', 'RefreshModsJob'],
         ['Set Content Type', 'SetContentTypeJob'],
-        ['Set Collection', 'SetCollectionJob']
+        ['Set Collection', 'SetCollectionJob'],
+        ['Set object rights', 'SetRightsJob']
       ]],
       ['Modify objects (via CSV)', [
         ['Create virtual object(s)', 'CreateVirtualObjectsJob'],

@@ -12,7 +12,6 @@ function catalog_url(element)
   url=url.replace(/xxxxxxxxx/g,element);
   return url;
 }
-set_rights_url='<%= set_rights_item_path(id: 'druid:xxxxxxxxx', bulk: 'true') %>'
 </script>
 
 <style>
@@ -51,17 +50,6 @@ ul li{
     <label for="pids">Bulk actions will be performed on this list of druids. Modify the list or paste a list of druids here to operate on them instead.</label>
     <textarea id="pids" name="pids" class="form-control" rows="8"></textarea>
   </div>
-
-  <div id="buttons">
-    <div class="row">
-      <div class="col-sm-12"><strong>Options that require versioning</strong></div>
-    </div>
-    <div class="row bulk-buttons-row">
-      <div class="col-sm-2">
-        <button class="btn btn-primary btn-block" id="set-object-rights-button">Set object rights</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <br>
@@ -86,12 +74,6 @@ ul li{
     <%= select_tag :new_resource_type, options_for_select(new_resource_types) %><br>
     <button class="btn btn-primary" id="confirm-set-content-type-button">Set content types</button>
   </p>
-</div>
-
-<div class="bulk_operation" id="rights" name="rights">
-  <h1>Set object rights</h1>
-  <%= select_tag :rights_select, options_for_select(Constants::REGISTRATION_RIGHTS_OPTIONS) %>
-  <button class="btn btn-primary" id="rights_button" name="rights_button">Set rights</button>
 </div>
 <button class="btn btn-primary stop_button" id="stop" style="display:none" name="stop">Stop</button>
 
