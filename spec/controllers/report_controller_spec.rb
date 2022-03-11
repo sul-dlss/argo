@@ -91,14 +91,6 @@ RSpec.describe ReportController, type: :controller do
       end
     end
 
-    describe '#bulk' do
-      it 'renders the correct template' do
-        get :bulk
-        expect(response).to have_http_status(:ok)
-        expect(response).to render_template('bulk')
-      end
-    end
-
     describe '#download' do
       before do
         allow(Report).to receive(:new).and_return(report)

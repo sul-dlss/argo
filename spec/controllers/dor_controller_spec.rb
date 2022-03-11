@@ -28,14 +28,5 @@ RSpec.describe DorController, type: :controller do
         expect(response).to redirect_to(solr_document_path(druid))
       end
     end
-
-    context 'from bulk update' do
-      it 'returns a 403 for requests from the old bulk update mechanism' do
-        expect(Argo::Indexer).not_to receive(:reindex_pid_remotely)
-        get :reindex, params: { pid: druid, bulk: 'true' }
-        expect(response.body).to eq 'the old bulk update mechanism is deprecated.  please use the new bulk actions framework going forward.'
-        expect(response).to have_http_status(:forbidden)
-      end
-    end
   end
 end

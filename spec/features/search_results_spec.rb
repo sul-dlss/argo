@@ -26,9 +26,6 @@ RSpec.describe 'Search results' do
         expect(page).to have_css '.catalog_startOverLink', text: 'Start Over'
       end
       within '.search-widgets' do
-        within '#bulk-update-button' do
-          expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Update'
-        end
         expect(page).to have_css 'a.btn.btn-outline-secondary', text: 'Bulk Action'
         within '#sort-dropdown' do
           expect(page).to have_css 'button', text: 'Sort by Druid'

@@ -25,14 +25,8 @@ class CatkeysController < ApplicationController
     change_set.save
     Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
 
-    respond_to do |format|
-      if params[:bulk]
-        format.html { render status: :ok, plain: 'Updated catkey' }
-      else
-        msg = "Catkey for #{@cocina.externalIdentifier} has been updated!"
-        format.any { redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg }
-      end
-    end
+    msg = "Catkey for #{@cocina.externalIdentifier} has been updated!"
+    redirect_to solr_document_path(@cocina.externalIdentifier), notice: msg
   end
 
   private
