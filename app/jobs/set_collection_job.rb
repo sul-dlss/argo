@@ -54,8 +54,8 @@ class SetCollectionJob < GenericJob
   def check_can_set_collection!(cocina, state_service)
     raise "#{cocina.externalIdentifier} is not open for modification" unless state_service.allows_modification?
 
-    new_collection_ids.each do |new_collection_ids|
-      raise "user not authorized to move #{cocina.externalIdentifier} to #{new_collection_ids}" unless ability.can?(:manage_item, cocina, new_collection_ids)
+    new_collection_ids.each do |new_collection_id|
+      raise "user not authorized to move #{cocina.externalIdentifier} to #{new_collection_id}" unless ability.can?(:manage_item, cocina, new_collection_id)
     end
   end
 
