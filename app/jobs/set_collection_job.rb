@@ -21,10 +21,10 @@ class SetCollectionJob < GenericJob
       pids.each do |current_druid|
         log.puts("#{Time.current} SetCollectionJob: Starting update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
         set_collection_and_index_safely(current_druid, log)
-        log.puts("#{Time.current} SetGoverningApoJob: Finished update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
+        log.puts("#{Time.current} SetCollectionJob: Finished update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
       end
 
-      log.puts("#{Time.current} Finished SetGoverningApoJob for BulkAction #{bulk_action_id}")
+      log.puts("#{Time.current} Finished SetCollectionJob for BulkAction #{bulk_action_id}")
     end
   end
 
