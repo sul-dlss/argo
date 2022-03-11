@@ -7,9 +7,9 @@ class SetContentTypeJob < GenericJob
     super
 
     # types are the label for content types, e.g. book (ltr)
-    @current_resource_type = params[:set_content_type][:current_resource_type]
-    @new_content_type = params[:set_content_type][:new_content_type]
-    @new_resource_type = params[:set_content_type][:new_resource_type]
+    @current_resource_type = params[:current_resource_type]
+    @new_content_type = params[:new_content_type]
+    @new_resource_type = params[:new_resource_type]
 
     with_bulk_action_log do |log_buffer|
       raise StandardError, 'Must provide values for types.' if @current_resource_type.blank? && @new_resource_type.blank? && @new_content_type.blank?

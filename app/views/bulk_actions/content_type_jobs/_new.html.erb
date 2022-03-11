@@ -1,0 +1,33 @@
+<%= form_with url: content_type_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <span class='help-block'>
+    Set content type
+  </span>
+
+  <div class='mb-3'>
+
+    <p>The suggested mappings for content type to resource type are:</p>
+    <ul>
+      <li>File: file</li>
+      <li>Image: image</li>
+      <li>Book: page</li>
+      <li>Map: image</li>
+      <li>Document: document</li>
+    </ul>
+
+    <% current_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys
+      new_content_types = [['none', '']] + Constants::CONTENT_TYPES.keys
+      new_resource_types = [['none', '']] + Constants::RESOURCE_TYPES.keys %>
+
+    <%= f.label :current_resource_type, 'Current resource type' %>
+    <%= f.select :current_resource_type, current_resource_types, {}, class: 'form-select' %>
+
+    <%= f.label :new_content_type, 'New content type' %>
+    <%= f.select :new_content_type, new_content_types, {}, class: 'form-select' %>
+
+    <%= f.label :new_resource_type, 'New resource type' %>
+    <%= f.select :new_resource_type, new_resource_types, {}, class: 'form-select' %>
+  </div>
+
+  <%= render 'bulk_actions/druids', f: f %>
+  <%= render 'bulk_actions/common_fields', f: f %>
+<% end %>

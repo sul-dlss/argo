@@ -1,0 +1,18 @@
+<%= form_with url: catkey_and_barcode_csv_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <span class='help-block'>
+    Adds or updates catkeys and/or barcodes associated with objects.
+  </span>
+  <div class='mb-3'>
+    <%= f.label :csv_file, 'Upload a CSV file' %>
+    <p><small><em>Please note that each row should have headers for:
+    <ul>
+      <li>Druid (required)</li>
+      <li>Catkey (optional)</li>
+      <li>Barcode (optional)</li>
+    </ul>
+    </em></small></p>
+    <%= f.file_field :csv_file, class: 'form-control', accept: '.csv' %>
+  </div>
+
+  <%= render 'bulk_actions/common_fields', f: f %>
+<% end %>

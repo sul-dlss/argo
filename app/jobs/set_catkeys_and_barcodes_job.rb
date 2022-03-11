@@ -70,7 +70,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
 
   def dig_from_params_if_option_set(params, key)
     # This will preserve the blank lines as nils, which indicate that a catkey/barcode should be removed.
-    params.dig(:set_catkeys_and_barcodes, key).split("\n").map(&:strip).map(&:presence) if params.dig(:set_catkeys_and_barcodes, "use_#{key}_option".to_sym) == '1'
+    params.fetch(key).split("\n").map(&:strip).map(&:presence) if params["use_#{key}_option"] == '1'
   end
 
   # rubocop:disable Style/GuardClause

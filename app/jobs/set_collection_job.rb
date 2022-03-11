@@ -8,11 +8,11 @@ class SetCollectionJob < GenericJob
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [Array] :pids required list of pids
-  # @option params [Hash] :set_collection
+  # @option params [String] :new_collection_id
   def perform(bulk_action_id, params)
     super
 
-    @new_collection_ids = Array(params[:set_collection]['new_collection_id'].presence)
+    @new_collection_ids = Array(params['new_collection_id'].presence)
 
     with_bulk_action_log do |log|
       update_druid_count

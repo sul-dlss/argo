@@ -6,9 +6,42 @@ Rails.application.routes.draw do
 
   get '/is_it_working' => 'ok_computer/ok_computer#show', defaults: { check: 'default' }
 
-  resources :bulk_actions, except: %i[edit show update] do
+  resources :bulk_actions, only: %i[index new destroy] do
     member do
       get :file
+    end
+    scope module: 'bulk_actions' do
+      collection do
+        # In the order they appear in the dropdown
+        resource :manage_release_job, only: %i[new create]
+        resource :reindex_job, only: %i[new create]
+        resource :republish_job, only: %i[new create]
+        resource :purge_job, only: %i[new create]
+        resource :add_workflow_job, only: %i[new create]
+
+        resource :prepare_job, only: %i[new create]
+        resource :close_version_job, only: %i[new create]
+        resource :governing_apo_job, only: %i[new create]
+        resource :apply_apo_defaults_job, only: %i[new create]
+        resource :rights_job, only: %i[new create]
+        resource :license_and_rights_statement_job, only: %i[new create]
+        resource :catkey_and_barcode_job, only: %i[new create]
+        resource :refresh_mods_job, only: %i[new create]
+        resource :content_type_job, only: %i[new create]
+        resource :collection_job, only: %i[new create]
+
+        resource :virtual_object_job, only: %i[new create]
+        resource :catkey_and_barcode_csv_job, only: %i[new create]
+        resource :source_id_csv_job, only: %i[new create]
+        resource :export_tag_job, only: %i[new create]
+        resource :import_tag_job, only: %i[new create]
+        resource :export_structural_job, only: %i[new create]
+        resource :manage_embargo_job, only: %i[new create]
+        resource :register_druid_job, only: %i[new create]
+
+        resource :descriptive_download_job, only: %i[new create]
+        resource :checksum_report_job, only: %i[new create]
+      end
     end
   end
 

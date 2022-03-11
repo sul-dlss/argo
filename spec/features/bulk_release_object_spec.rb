@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Bulk Object Release' do
+RSpec.describe 'Bulk Object Release', js: true do
   let(:current_user) { create(:user) }
 
   before do
@@ -12,7 +12,7 @@ RSpec.describe 'Bulk Object Release' do
   it 'Creates a new jobs' do
     visit new_bulk_action_path
     select 'Manage release'
-    fill_in 'pids', with: 'druid:ab123gg7777'
+    fill_in 'Druids to perform bulk action on', with: 'druid:ab123gg7777'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     reload_page_until_timeout do

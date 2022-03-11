@@ -22,9 +22,9 @@ RSpec.describe SetGoverningApoJob do
     let(:params) do
       {
         pids: pids,
-        set_governing_apo: { 'new_apo_id' => new_apo_id },
+        new_apo_id: new_apo_id,
         webauth: webauth
-      }
+      }.with_indifferent_access
     end
 
     let(:buffer) { StringIO.new }

@@ -44,6 +44,6 @@ class SetLicenseAndRightsStatementsJob < GenericJob
   private
 
   def dig_from_params_if_option_set(params, key)
-    params.dig(:set_license_and_rights_statements, key) if params.dig(:set_license_and_rights_statements, "#{key}_option".to_sym) == '1'
+    params.fetch(key) if params["#{key}_option"] == '1'
   end
 end

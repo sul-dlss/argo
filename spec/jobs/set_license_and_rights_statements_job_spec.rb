@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
-  # subject(:job) { described_class.new }
-
   let(:bulk_action) { create(:bulk_action) }
   let(:groups) { [] }
   let(:pids) { ['druid:123', 'druid:456'] }
@@ -21,15 +19,13 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
         pids: pids,
         groups: groups,
         user: user,
-        set_license_and_rights_statements: {
-          copyright_statement_option: '0',
-          copyright_statement: '',
-          license_option: '1',
-          license: license_uri,
-          use_statement_option: '0',
-          use_statement: ''
-        }
-      }
+        copyright_statement_option: '0',
+        copyright_statement: '',
+        license_option: '1',
+        license: license_uri,
+        use_statement_option: '0',
+        use_statement: ''
+      }.with_indifferent_access
     end
 
     before do
@@ -60,15 +56,13 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
         pids: pids,
         groups: groups,
         user: user,
-        set_license_and_rights_statements: {
-          copyright_statement_option: '1',
-          copyright_statement: copyright_statement,
-          license_option: '0',
-          license: '',
-          use_statement_option: '1',
-          use_statement: use_statement
-        }
-      }
+        copyright_statement_option: '1',
+        copyright_statement: copyright_statement,
+        license_option: '0',
+        license: '',
+        use_statement_option: '1',
+        use_statement: use_statement
+      }.with_indifferent_access
     end
     let(:use_statement) { 'new use statement' }
 

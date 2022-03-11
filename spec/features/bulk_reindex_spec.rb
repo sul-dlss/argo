@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'Bulk Reindex of DOR Objects' do
+RSpec.describe 'Bulk Reindex of DOR Objects', js: true do
   let(:current_user) { create(:user) }
 
   before do
@@ -13,7 +13,7 @@ RSpec.describe 'Bulk Reindex of DOR Objects' do
   it 'Creates a new job' do
     visit new_bulk_action_path
     select 'Reindex'
-    fill_in 'pids', with: 'druid:ab123gg7777'
+    fill_in 'Druids to perform bulk action on', with: 'druid:ab123gg7777'
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
     page.has_css?('td', text: 'RemoteIndexingJob') &&

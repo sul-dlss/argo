@@ -1,0 +1,13 @@
+<%= form_with url: add_workflow_job_path, class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <span class='help-block'>
+    Starts a workflow for individual objects.
+  </span>
+
+  <div class='mt-2 mb-3'>
+    <%= f.label :workflow %>
+    <%= f.select :workflow, workflow_options, {}, class: 'form-select' %>
+  </div>
+
+  <%= render 'bulk_actions/druids', f: f %>
+  <%= render 'bulk_actions/common_fields', f: f %>
+<% end %>

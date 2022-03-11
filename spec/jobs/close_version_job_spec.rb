@@ -7,10 +7,8 @@ RSpec.describe CloseVersionJob, type: :job do
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, close: true) }
-  let(:bulk_action) do
-    create(:bulk_action,
-           log_name: 'foo.txt')
-  end
+  let(:bulk_action) { create(:bulk_action) }
+
   let(:item1) do
     Cocina::Models.build({
                            'label' => 'My Item',
@@ -53,7 +51,7 @@ RSpec.describe CloseVersionJob, type: :job do
   end
 
   after do
-    FileUtils.rm('foo.txt')
+    FileUtils.rm(bulk_action.log_name)
   end
 
   context 'with manage ability' do

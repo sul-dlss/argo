@@ -93,20 +93,20 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     context 'when catkey and barcode selected' do
       before do
         allow(ItemChangeSet).to receive(:new).and_return(change_set1, change_set2, change_set3)
+        allow(BulkJobLog).to receive(:open).and_yield(buffer)
+      end
+
+      let(:params) do
+        {
+          pids: pids,
+          catkeys: catkeys.join("\n"),
+          barcodes: barcodes.join("\n"),
+          use_catkeys_option: '1',
+          use_barcodes_option: '1'
+        }.with_indifferent_access
       end
 
       it 'attempts to update the catkey/barcode for each druid with correct corresponding catkey/barcode' do
-        params =
-          {
-            pids: pids,
-            set_catkeys_and_barcodes: {
-              catkeys: catkeys.join("\n"),
-              barcodes: barcodes.join("\n"),
-              use_catkeys_option: '1',
-              use_barcodes_option: '1'
-            }
-          }
-        allow(BulkJobLog).to receive(:open).and_yield(buffer)
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, buffer)
         expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, buffer)
@@ -120,17 +120,17 @@ RSpec.describe SetCatkeysAndBarcodesJob do
     end
 
     context 'when catkey and barcode not selected' do
+      let(:params) do
+        {
+          pids: pids,
+          catkeys: catkeys.join("\n"),
+          barcodes: barcodes.join("\n"),
+          use_catkeys_option: '0',
+          use_barcodes_option: '0'
+        }.with_indifferent_access
+      end
+
       it 'does not attempts to update the catkey/barcode for each druid' do
-        params =
-          {
-            pids: pids,
-            set_catkeys_and_barcodes: {
-              catkeys: catkeys.join("\n"),
-              barcodes: barcodes.join("\n"),
-              use_catkeys_option: '0',
-              use_barcodes_option: '0'
-            }
-          }
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         expect(subject).not_to receive(:update_catkey_and_barcode)
         subject.perform(bulk_action_no_process_callback.id, params)

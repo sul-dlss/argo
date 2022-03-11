@@ -1,0 +1,8 @@
+<%= form_with url: descriptive_download_job_path , class: 'new_bulk_action', data: { turbo_frame: '_top' } do |f| %>
+  <span class='help-block'>
+    Download descriptive metadata for objects.
+  </span>
+
+  <%= render 'bulk_actions/druids', f: f %>
+  <%= render 'bulk_actions/common_fields', f: f %>
+<% end %>

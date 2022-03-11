@@ -14,11 +14,9 @@ RSpec.describe SetContentTypeJob, type: :job do
   let(:params) do
     {
       pids: [pids[0]],
-      set_content_type: {
-        current_resource_type: 'image',
-        new_content_type: 'book (ltr)',
-        new_resource_type: 'page'
-      }
+      current_resource_type: 'image',
+      new_content_type: 'book (ltr)',
+      new_resource_type: 'page'
     }
   end
   let(:user) { bulk_action.user }
@@ -121,11 +119,9 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:params) do
       {
         pids: [pids[1]],
-        set_content_type: {
-          current_resource_type: 'file',
-          new_content_type: 'map',
-          new_resource_type: 'image'
-        }
+        current_resource_type: 'file',
+        new_content_type: 'map',
+        new_resource_type: 'image'
       }
     end
 
@@ -145,11 +141,9 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:params) do
       {
         pids: [pids[0]],
-        set_content_type: {
-          current_resource_type: 'page',
-          new_content_type: 'book (rtl)',
-          new_resource_type: 'page'
-        }
+        current_resource_type: 'page',
+        new_content_type: 'book (rtl)',
+        new_resource_type: 'page'
       }
     end
 
@@ -169,11 +163,9 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:params) do
       {
         pids: [pids[0]],
-        set_content_type: {
-          current_resource_type: '',
-          new_content_type: '',
-          new_resource_type: 'page'
-        }
+        current_resource_type: '',
+        new_content_type: '',
+        new_resource_type: 'page'
       }
     end
 
@@ -188,11 +180,9 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:params) do
       {
         pids: [pids[0]],
-        set_content_type: {
-          current_resource_type: '',
-          new_content_type: '',
-          new_resource_type: ''
-        }
+        current_resource_type: '',
+        new_content_type: '',
+        new_resource_type: ''
       }
     end
 
@@ -208,11 +198,9 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:params) do
       {
         pids: [pids[0]],
-        set_content_type: {
-          current_resource_type: '',
-          new_content_type: 'map',
-          new_resource_type: ''
-        }
+        current_resource_type: '',
+        new_content_type: 'map',
+        new_resource_type: ''
       }
     end
 
@@ -249,11 +237,9 @@ RSpec.describe SetContentTypeJob, type: :job do
     let(:params) do
       {
         pids: ['druid:ff123gg4567'],
-        set_content_type: {
-          current_resource_type: '',
-          new_content_type: 'media',
-          new_resource_type: ''
-        }
+        current_resource_type: '',
+        new_content_type: 'media',
+        new_resource_type: ''
       }
     end
 

@@ -11,15 +11,14 @@ class ReleaseObjectJob < GenericJob
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [Array] :pids required list of pids
-  # @option params [Hash] :manage_release required Hash of release options
-  # @option manage_release [String] :to required release to target
-  # @option manage_release [String] :who required username of releaser
-  # @option manage_release [String] :what required type of release (self, collection)
-  # @option manage_release [String] :tag required (true, false)
+  # @option params [String] :to required release to target
+  # @option params [String] :who required username of releaser
+  # @option params [String] :what required type of release (self, collection)
+  # @option params [String] :tag required (true, false)
   # @option params [Array] :groups the groups the user belonged to when the started the job. Required for permissions check
   def perform(bulk_action_id, params)
     super
-    @manage_release = params[:manage_release]
+    @manage_release = params
     with_bulk_action_log do |log|
       update_druid_count
 

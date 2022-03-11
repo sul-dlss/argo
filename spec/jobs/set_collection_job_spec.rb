@@ -33,8 +33,8 @@ RSpec.describe SetCollectionJob do
         pids: pids,
         groups: groups,
         user: user,
-        set_collection: { 'new_collection_id' => new_collection_id }
-      }
+        new_collection_id: new_collection_id
+      }.with_indifferent_access
     end
     let(:cocina1) do
       Cocina::Models.build({
