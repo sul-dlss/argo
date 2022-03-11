@@ -82,11 +82,6 @@ function set_rights(druids){
 	process_post(druids, set_rights_url, params, "Updated");
 }
 
-function set_collection(druids){
-	var collection_id = document.getElementById('set_collection_select').value;
-	process_post(druids, set_collection_url, {collection: collection_id}, "Collection set");
-}
-
 function get_druids() {
 	var log = document.getElementById('pids');
 	$('#pid_list').show(400);
@@ -143,12 +138,6 @@ document.addEventListener("turbo:load", () => {
   $('#get_druids').on('click', get_druids)
 	$('#paste-druids-button').on('click', () => $('#pid_list').show(400))
 	$('#set-object-rights-button').on('click', () => $('#rights').show(400))
-	$('#set-collection-button').on('click', () => $('#set_collection').show(400))
-
-	$('#confirm-set-collection-button').on('click', () => {
-		fetch_druids(set_collection)
-		$('#set_collection').hide(400)
-	})
 
 	$('#rights_button').on('click', () => {
 			fetch_druids(set_rights)

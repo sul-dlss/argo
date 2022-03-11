@@ -75,7 +75,8 @@ class BulkActionsController < ApplicationController
       set_content_type: %i[
         current_resource_type
         new_content_type new_resource_type
-      ]
+      ],
+      set_collection: [:new_collection_id]
     )
   end
 end

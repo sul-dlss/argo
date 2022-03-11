@@ -1,0 +1,6 @@
+<% f.fields_for :set_collection do |set_collection_fields| %>
+  <div class='mb-3'>
+    <%= set_collection_fields.label :new_collection_id, 'Collection:' %>
+    <%= set_collection_fields.select(:new_collection_id, options_for_select(current_user.permitted_collections), {}, class: 'form-select') %>
+  </div>
+<% end %>
