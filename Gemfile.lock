@@ -262,7 +262,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    jsbundling-rails (0.1.9)
+    jsbundling-rails (1.0.2)
       railties (>= 6.0.0)
     json (2.6.1)
     kaminari (1.2.2)
@@ -320,10 +320,6 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.3)
       mini_portile2 (~> 2.8.0)
-      racc (~> 1.4)
-    nokogiri (1.13.3-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.13.3-x86_64-linux)
       racc (~> 1.4)
     nokogiri-happymapper (0.9.0)
       nokogiri (~> 1.5)
@@ -579,7 +575,7 @@ DEPENDENCIES
   honeybadger (~> 4.1)
   http_logger
   jbuilder (~> 2.5)
-  jsbundling-rails (~> 0.1.9)
+  jsbundling-rails (~> 1.0)
   listen (~> 3.2)
   lograge
   mods_display (~> 1.0.0.alpha1)

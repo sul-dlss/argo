@@ -19,7 +19,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'cssbundling-rails', '~> 0.2.4'
-gem 'jsbundling-rails', '~> 0.1.9'
+gem 'jsbundling-rails', '~> 1.0'
 
 gem 'view_component', '~> 2.49'
 
