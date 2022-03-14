@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/_rights.html.erb' do
+RSpec.describe 'items/_rights' do
   before do
     @cocina = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:abc123')
     @form = instance_double(AccessForm, model_name: instance_double(ActiveModel::Name, param_key: 'pid'), rights_list: Constants::REGISTRATION_RIGHTS_OPTIONS)

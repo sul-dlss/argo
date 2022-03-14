@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/set_governing_apo_ui.html.erb' do
+RSpec.describe 'items/set_governing_apo_ui' do
   it 'renders the JS template' do
     stub_template 'items/_set_governing_apo_ui.html.erb' => 'stubbed_set_governing_apo_ui'
     render

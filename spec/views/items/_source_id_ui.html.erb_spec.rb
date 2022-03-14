@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/_source_id_ui.html.erb' do
+RSpec.describe 'items/_source_id_ui' do
   let(:identification) do
     instance_double(Cocina::Models::Identification, sourceId: 'source id')
   end

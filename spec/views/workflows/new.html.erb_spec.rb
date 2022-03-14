@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'workflows/new.html.erb' do
+RSpec.describe 'workflows/new' do
   it 'renders the JS template' do
     stub_template 'workflows/_new.html.erb' => 'stubbed_add_workflow'
     controller.request.path_parameters[:id] = 'test'

@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'uploads/new.html.erb', type: :view do
+RSpec.describe 'uploads/new', type: :view do
   before do
     params[:apo_id] = 'druid:hv992yv2222'
     render

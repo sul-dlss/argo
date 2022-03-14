@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'datastreams/show.html.erb' do
+RSpec.describe 'datastreams/show' do
   before do
     params[:id] = dsid
     params[:item_id] = pid

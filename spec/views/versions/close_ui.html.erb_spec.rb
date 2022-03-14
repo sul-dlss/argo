@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'versions/close_ui.html.erb' do
+RSpec.describe 'versions/close_ui' do
   it 'renders the JS template' do
     stub_template 'versions/_close_ui.html.erb' => 'stubbed_closed_version'
     render

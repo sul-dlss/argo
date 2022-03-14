@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'auth/groups.html.erb' do
+RSpec.describe 'auth/groups' do
   before do
     allow(view).to receive(:current_user).and_return(user)
     allow(controller).to receive(:current_user).and_return(user)

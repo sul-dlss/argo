@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'catalog/_home_text.html.erb' do
+RSpec.describe 'catalog/_home_text' do
   before do
     @presenter = presenter
     render

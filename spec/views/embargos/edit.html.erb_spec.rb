@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'embargos/edit.html.erb' do
+RSpec.describe 'embargos/edit' do
   it 'renders the template' do
     stub_template 'embargos/_form.html.erb' => 'stubbed_embargo_form'
     render

@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/rights.html.erb' do
-  it 'renders the JS template' do
+RSpec.describe 'items/rights' do
+  it 'renders the template' do
     stub_template 'items/_rights.html.erb' => 'stubbed_rights'
     render
     expect(rendered)

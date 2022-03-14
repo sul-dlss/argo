@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'bulk_jobs/_bulk_index_table.html.erb' do
+RSpec.describe 'bulk_jobs/_bulk_index_table' do
   let(:bulk_jobs) do
     [
       {}, # job log dir not found (status is 'not started')
