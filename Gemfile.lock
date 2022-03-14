@@ -144,7 +144,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
-    cssbundling-rails (0.2.8)
+    cssbundling-rails (1.1.0)
       railties (>= 6.0.0)
     declarative (0.0.20)
     deep_merge (1.2.2)
@@ -559,7 +559,7 @@ DEPENDENCIES
   capybara
   coderay
   config
-  cssbundling-rails (~> 0.2.4)
+  cssbundling-rails (~> 1.1)
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
