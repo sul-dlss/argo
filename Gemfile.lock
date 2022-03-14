@@ -76,7 +76,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blacklight (7.23.0.1)
+    blacklight (7.24.0)
       deprecation
       globalid
       i18n (>= 1.7.0)
