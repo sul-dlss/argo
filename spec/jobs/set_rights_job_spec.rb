@@ -205,9 +205,11 @@ RSpec.describe SetRightsJob, type: :job do
       subject.perform(bulk_action.id, params)
       expect(object_client1).to have_received(:update)
         .with(
-          params: a_cocina_object_with_access(
-            view: 'world',
-            download: 'world'
+          params: cocina_object_with(
+            access: {
+              view: 'world',
+              download: 'world'
+            }
           )
         )
       expect(object_client2).not_to have_received(:update)
@@ -230,17 +232,21 @@ RSpec.describe SetRightsJob, type: :job do
 
       expect(object_client1).to have_received(:update)
         .with(
-          params: a_cocina_object_with_access(
-            view: 'world',
-            download: 'world'
+          params: cocina_object_with(
+            access: {
+              view: 'world',
+              download: 'world'
+            }
           )
         )
 
       expect(object_client2).to have_received(:update)
         .with(
-          params: a_cocina_object_with_access(
-            view: 'world',
-            download: 'world'
+          params: cocina_object_with(
+            access: {
+              view: 'world',
+              download: 'world'
+            }
           )
         )
 

@@ -66,10 +66,12 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new copyright statement' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: new_copyright_statement,
-            license: license_before,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              copyright: new_copyright_statement,
+              license: license_before,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -85,10 +87,12 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new license' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: copyright_statement_before,
-            license: new_license,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              copyright: copyright_statement_before,
+              license: new_license,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -104,10 +108,12 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: copyright_statement_before,
-            license: license_before,
-            useAndReproductionStatement: new_use_statement
+          params: cocina_object_with(
+            access: {
+              copyright: copyright_statement_before,
+              license: license_before,
+              useAndReproductionStatement: new_use_statement
+            }
           )
         )
       end
@@ -145,17 +151,19 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            embargo: {
-              releaseDate: DateTime.parse('2055-07-17'),
-              view: 'stanford',
-              download: 'stanford'
-            },
-            view: 'dark',
-            download: 'none',
-            copyright: copyright_statement_before,
-            license: license_before,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              embargo: {
+                releaseDate: DateTime.parse('2055-07-17'),
+                view: 'stanford',
+                download: 'stanford'
+              },
+              view: 'dark',
+              download: 'none',
+              copyright: copyright_statement_before,
+              license: license_before,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -191,13 +199,15 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            embargo: { releaseDate: DateTime.parse('2055-07-17'), view: 'stanford', download: 'stanford' },
-            view: 'dark',
-            download: 'none',
-            copyright: copyright_statement_before,
-            license: license_before,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              embargo: { releaseDate: DateTime.parse('2055-07-17'), view: 'stanford', download: 'stanford' },
+              view: 'dark',
+              download: 'none',
+              copyright: copyright_statement_before,
+              license: license_before,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -231,9 +241,11 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new use statement' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            license: license_before,
-            useAndReproductionStatement: new_use_statement
+          params: cocina_object_with(
+            access: {
+              license: license_before,
+              useAndReproductionStatement: new_use_statement
+            }
           )
         )
       end
@@ -246,10 +258,12 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO as before' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: copyright_statement_before,
-            license: license_before,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              copyright: copyright_statement_before,
+              license: license_before,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -265,9 +279,11 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new barcode' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_identification(
-            barcode: new_barcode,
-            catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+          params: cocina_object_with(
+            identification: {
+              barcode: new_barcode,
+              catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+            }
           )
         )
       end
@@ -281,9 +297,11 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has no barcode' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_identification(
-            barcode: nil,
-            catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+          params: cocina_object_with(
+            identification: {
+              barcode: nil,
+              catalogLinks: [{ catalog: 'symphony', catalogRecordId: catkey_before }]
+            }
           )
         )
       end
@@ -299,12 +317,14 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has new catkey' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_identification(
-            barcode: barcode_before,
-            catalogLinks: [
-              { catalog: 'previous symphony', catalogRecordId: catkey_before },
-              { catalog: 'symphony', catalogRecordId: new_catkey }
-            ]
+          params: cocina_object_with(
+            identification: {
+              barcode: barcode_before,
+              catalogLinks: [
+                { catalog: 'previous symphony', catalogRecordId: catkey_before },
+                { catalog: 'symphony', catalogRecordId: new_catkey }
+              ]
+            }
           )
         )
       end
@@ -318,9 +338,11 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with item/DRO that has no catkey' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_identification(
-            catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: catkey_before }],
-            barcode: barcode_before
+          params: cocina_object_with(
+            identification: {
+              catalogLinks: [{ catalog: 'previous symphony', catalogRecordId: catkey_before }],
+              barcode: barcode_before
+            }
           )
         )
       end
@@ -336,8 +358,10 @@ RSpec.describe ItemChangeSetPersister do
 
       it 'invokes object client with collection that has new APO' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_administrative(
-            hasAdminPolicy: new_apo
+          params: cocina_object_with(
+            administrative: {
+              hasAdminPolicy: new_apo
+            }
           )
         )
       end

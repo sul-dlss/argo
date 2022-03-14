@@ -105,7 +105,7 @@ RSpec.describe SetContentTypeJob, type: :job do
       subject.perform(bulk_action.id, params)
       expect(object_client1).to have_received(:update)
         .with(
-          params: a_cocina_object_with_types(
+          params: cocina_object_with_types(
             resource_types: [Cocina::Models::FileSetType.page, Cocina::Models::FileSetType.image]
           )
         )
@@ -129,7 +129,7 @@ RSpec.describe SetContentTypeJob, type: :job do
       subject.perform(bulk_action.id, params)
       expect(object_client2).to have_received(:update)
         .with(
-          params: a_cocina_object_with_types(
+          params: cocina_object_with_types(
             content_type: Cocina::Models::ObjectType.map,
             resource_types: [Cocina::Models::FileSetType.page, Cocina::Models::FileSetType.image]
           )
@@ -153,7 +153,7 @@ RSpec.describe SetContentTypeJob, type: :job do
       subject.perform(bulk_action.id, params)
       expect(object_client1).to have_received(:update)
         .with(
-          params: a_cocina_object_with_types(
+          params: cocina_object_with_types(
             content_type: Cocina::Models::ObjectType.book,
             viewing_direction: 'right-to-left'
           )
@@ -215,7 +215,7 @@ RSpec.describe SetContentTypeJob, type: :job do
     it 'changes the content type only' do
       subject.perform(bulk_action.id, params)
       expect(object_client1).to have_received(:update)
-        .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.map))
+        .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.map))
     end
   end
 

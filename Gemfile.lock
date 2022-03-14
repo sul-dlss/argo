@@ -591,6 +591,7 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails
   capybara
+  cocina-models (~> 0.69)
   coderay
   config
   cssbundling-rails (~> 1.1)
