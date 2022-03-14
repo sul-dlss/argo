@@ -32,6 +32,7 @@ Metrics/BlockLength:
     - 'configure_blacklight'
   Exclude:
     - 'config/routes.rb'
+    - 'db/schema.rb'
     - 'spec/**/*'
     - 'lib/**/*.rake'
     - 'app/jobs/create_virtual_objects_job.rb'
