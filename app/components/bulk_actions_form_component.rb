@@ -20,37 +20,37 @@ class BulkActionsFormComponent < ApplicationComponent
   def action_types
     grouped_options_for_select [
       ['Perform actions', [
-        ['Apply APO defaults  ', 'ApplyApoDefaultsJob'],
         ['Manage release', 'ReleaseObjectJob'],
         %w[Reindex RemoteIndexingJob],
         ['Republish objects', 'RepublishJob'],
-        ['Purge object', 'PurgeJob'],
+        %w[Purge PurgeJob],
         ['Add workflow', 'AddWorkflowJob']
       ]],
       ['Modify objects (via form)', [
         ['Open new object versions', 'PrepareJob'],
-        ['Close versions', 'CloseVersionJob'],
+        ['Close objects', 'CloseVersionJob'],
         ['Update governing APO', 'SetGoverningApoJob'],
-        ['Edit Catkeys and Barcodes', 'SetCatkeysAndBarcodesJob'],
-        ['Edit License and Rights Statements', 'SetLicenseAndRightsStatementsJob'],
-        ['Refresh MODS', 'RefreshModsJob'],
-        ['Set Content Type', 'SetContentTypeJob'],
-        ['Set Collection', 'SetCollectionJob'],
-        ['Set object rights', 'SetRightsJob']
+        ['Apply APO defaults', 'ApplyApoDefaultsJob'],
+        ['Set object rights', 'SetRightsJob'],
+        ['Edit license and rights statements', 'SetLicenseAndRightsStatementsJob'],
+        ['Edit catkeys and barcodes', 'SetCatkeysAndBarcodesJob'],
+        ['Refresh MODS from catkey', 'RefreshModsJob'],
+        ['Set content type', 'SetContentTypeJob'],
+        ['Set collection', 'SetCollectionJob']
       ]],
       ['Modify objects (via CSV)', [
         ['Create virtual object(s)', 'CreateVirtualObjectsJob'],
-        ['Edit Catkeys and Barcodes from CSV', 'SetCatkeysAndBarcodesCsvJob'],
-        ['Edit Source ID from CSV', 'SetSourceIdsCsvJob'],
+        ['Edit catkeys and barcodes from CSV', 'SetCatkeysAndBarcodesCsvJob'],
+        ['Change source id', 'SetSourceIdsCsvJob'],
         ['Export tags to CSV', 'ExportTagsJob'],
         ['Import tags from CSV', 'ImportTagsJob'],
-        ['Export structural metadata to CSV', 'ExportStructuralJob'],
+        ['Export structural metadata', 'ExportStructuralJob'],
         ['Manage embargo', 'ManageEmbargoesJob'],
-        ['Register Druids', 'RegisterDruidsJob']
+        ['Register druids', 'RegisterDruidsJob']
       ]],
       ['Generate reports', [
-        ['Download descriptive metadata', 'DescmetadataDownloadJob'],
-        ['Checksum report', 'ChecksumReportJob']
+        ['Download checksum report', 'ChecksumReportJob'],
+        ['Download descriptive metadata (as MODS)', 'DescmetadataDownloadJob']
       ]]
     ]
   end

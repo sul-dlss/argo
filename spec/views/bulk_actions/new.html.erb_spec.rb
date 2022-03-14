@@ -27,7 +27,7 @@ RSpec.describe 'bulk_actions/new.html.erb' do
 
   it 'form by default has action_type selected' do
     expect(rendered)
-      .to have_css 'select option:first-child[value="DescmetadataDownloadJob"]'
+      .to have_css 'select option:first-child[value="ChecksumReportJob"]'
   end
 
   describe 'common form fields' do
