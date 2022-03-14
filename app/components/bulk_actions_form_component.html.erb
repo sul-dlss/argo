@@ -31,13 +31,14 @@
           </span>
         </div>
 
-        <div role='tabpanel' class='tab-pane active' id='ApplyApoDefaultsJob'>
+        <div role='tabpanel' class='tab-pane' id='ApplyApoDefaultsJob'>
           <span class='help-block'>
             Overwrite object metadata with the defaults from the APO.
           </span>
         </div>
 
-        <div role='tabpanel' class='tab-pane' id='ReleaseObjectJob'>
+        <%# This tab is active when the page loads because it's the top-most action in the dropdown %>
+        <div role='tabpanel' class='tab-pane active' id='ReleaseObjectJob'>
           <span class='help-block'>
             Adds release tags to individual objects.
           </span>
