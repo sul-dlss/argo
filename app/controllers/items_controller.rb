@@ -91,20 +91,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  # Given two instances of VersionTag, find the most significant difference
-  # between the two (return nil if either one is nil or if they're the same)
-  # @param [String] cur_version_tag   current version tag
-  # @param [String] prior_version_tag prior version tag
-  # @return [Symbol] :major, :minor, :admin or nil
-  def which_significance_changed(cur_version_tag, prior_version_tag)
-    return nil if cur_version_tag.nil? || prior_version_tag.nil?
-    return :major if cur_version_tag.major != prior_version_tag.major
-    return :minor if cur_version_tag.minor != prior_version_tag.minor
-    return :admin if cur_version_tag.admin != prior_version_tag.admin
-
-    nil
-  end
-
   def source_id
     change_set = ItemChangeSet.new(@cocina)
     change_set.validate(source_id: params[:new_id])
