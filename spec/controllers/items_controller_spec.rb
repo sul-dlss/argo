@@ -267,32 +267,4 @@ RSpec.describe ItemsController, type: :controller do
       end
     end
   end
-
-  describe '#mods' do
-    context 'when they have manage access' do
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      let(:object_service) do
-        instance_double(Dor::Services::Client::Object, find: cocina, metadata: metadata_service)
-      end
-      let(:metadata_service) { instance_double(Dor::Services::Client::Metadata, mods: xml) }
-      let(:xml) { '<somexml>stuff</somexml>' }
-
-      it 'returns the mods xml for a GET' do
-        @request.env['HTTP_ACCEPT'] = 'application/xml'
-        get 'mods', params: { id: pid }
-        expect(response.body).to eq(xml)
-      end
-    end
-
-    context "when they don't have manage access" do
-      it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
-        get 'mods', params: { id: pid }
-        expect(response.code).to eq('403')
-      end
-    end
-  end
 end
