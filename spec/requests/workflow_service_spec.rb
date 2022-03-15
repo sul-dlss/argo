@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkflowServiceController, type: :controller do
+RSpec.describe 'WorkflowServiceController', type: :request do
   before do
     sign_in(create(:user))
     allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
@@ -34,7 +34,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
       before { allow(state_service).to receive(:published?).and_return(true) }
 
       it 'returns true' do
-        get :published, params: { id: pid, format: :json }
+        get "/workflow_service/#{pid}/published"
+
         expect(assigns(:status)).to be true
         expect(response.body).to eq 'true'
       end
@@ -44,7 +45,8 @@ RSpec.describe WorkflowServiceController, type: :controller do
       before { allow(state_service).to receive(:published?).and_return(false) }
 
       it 'returns false' do
-        get :published, params: { id: pid, format: :json }
+        get "/workflow_service/#{pid}/published"
+
         expect(assigns(:status)).to be false
         expect(response.body).to eq 'false'
       end
@@ -56,7 +58,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
       before { allow(state_service).to receive(:object_state).and_return(:lock) }
 
       it 'returns true' do
-        get :lock, params: { id: pid }
+        get "/workflow_service/#{pid}/lock"
         expect(response).to render_template('lock')
       end
     end
@@ -65,7 +67,7 @@ RSpec.describe WorkflowServiceController, type: :controller do
       before { allow(state_service).to receive(:object_state).and_return(:unlock) }
 
       it 'returns false' do
-        get :lock, params: { id: pid }
+        get "/workflow_service/#{pid}/lock"
         expect(response).to render_template('unlock')
       end
     end
