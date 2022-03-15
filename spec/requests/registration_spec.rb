@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationsController, type: :controller do
+RSpec.describe 'Registration', type: :request do
   let(:bare_druid) { 'bc123df4567' }
   let(:cocina_admin_policy) do
     instance_double(Cocina::Models::AdminPolicy,
@@ -18,6 +18,7 @@ RSpec.describe RegistrationsController, type: :controller do
   let(:druid) { "druid:#{bare_druid}" }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_admin_policy) }
   let(:user) { create(:user) }
+  let(:headers) { { 'ACCEPT' => 'application/json' } }
 
   before do
     sign_in user
@@ -32,7 +33,7 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it 'shows Stanford as the default' do
-        get 'rights_list', params: { apo_id: bare_druid, format: :xml }
+        get "/registration/rights_list?apo_id=#{bare_druid}", headers: headers
         expect(response.body.include?('Stanford (APO default)')).to be(true)
       end
     end
@@ -43,7 +44,7 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it 'does not show Stanford as the default' do
-        get 'rights_list', params: { apo_id: bare_druid, format: :xml }
+        get "/registration/rights_list?apo_id=#{bare_druid}", headers: headers
         expect(response.body.include?('Stanford (APO default)')).to be(false)
       end
     end
@@ -54,7 +55,8 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it 'shows World as the default' do
-        get 'rights_list', params: { apo_id: bare_druid, format: :xml }
+        get "/registration/rights_list?apo_id=#{bare_druid}", headers: headers
+
         expect(response.body.include?('World (APO default)')).to be(true)
       end
     end
@@ -65,7 +67,8 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it 'shows Dark as the default' do
-        get 'rights_list', params: { apo_id: bare_druid, format: :xml }
+        get "/registration/rights_list?apo_id=#{bare_druid}", headers: headers
+
         expect(response.body.include?('Dark (Preserve Only) (APO default)')).to be(true)
       end
     end
@@ -76,7 +79,8 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it 'shows Citation Only as the default' do
-        get 'rights_list', params: { apo_id: bare_druid, format: :xml }
+        get "/registration/rights_list?apo_id=#{bare_druid}", headers: headers
+
         expect(response.body.include?('Citation Only (APO default)')).to be(true)
       end
     end
@@ -87,7 +91,8 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it 'shows no default' do
-        get 'rights_list', params: { apo_id: bare_druid, format: :xml }
+        get "/registration/rights_list?apo_id=#{bare_druid}", headers: headers
+
         expect(response.body.include?('World (APO default)')).to be(false)
         expect(response.body.include?('Stanford (APO default)')).to be(false)
         expect(response.body.include?('Citation Only (APO default)')).to be(false)
@@ -107,7 +112,8 @@ RSpec.describe RegistrationsController, type: :controller do
     let(:doc) { instance_double(Prawn::Document, render: '') }
 
     it 'generates a tracking sheet with the right default name' do
-      get 'tracksheet', params: { druid: bare_druid }
+      get "/registration/tracksheet?druid=#{bare_druid}", headers: headers
+
       expect(response.headers['Content-Type']).to eq('pdf; charset=utf-8')
       expect(response.headers['content-disposition']).to eq('attachment; filename=tracksheet-1.pdf')
     end
@@ -115,7 +121,8 @@ RSpec.describe RegistrationsController, type: :controller do
     it 'generates a tracking sheet with the specified name (and sequence number)' do
       test_name = 'test_name'
       test_seq_no = 7
-      get 'tracksheet', params: { druid: bare_druid, name: test_name, sequence: test_seq_no }
+      get "/registration/tracksheet?druid=#{bare_druid}&name=#{test_name}&sequence=#{test_seq_no}", headers: headers
+
       expect(response.headers['content-disposition']).to eq("attachment; filename=#{test_name}-#{test_seq_no}.pdf")
     end
   end
@@ -124,14 +131,15 @@ RSpec.describe RegistrationsController, type: :controller do
     let(:default_access) { '' }
 
     it 'handles invalid parameters' do
-      expect { get 'collection_list' }.to raise_error(ArgumentError)
+      expect { get '/registration/collection_list', headers: headers }.to raise_error(ArgumentError)
     end
 
     context 'when there are no collections' do
       let(:collections) { nil }
 
       it 'shows "None"' do
-        get 'collection_list', params: { apo_id: druid, format: :json }
+        get "/registration/collection_list?apo_id=#{druid}", headers: headers
+
         data = JSON.parse(response.body)
         expect(data).to include('' => 'None')
         expect(data.length).to eq(1)
@@ -158,7 +166,8 @@ RSpec.describe RegistrationsController, type: :controller do
       end
 
       it 'alpha-sorts the collection list by title, except for the "None" entry, which should come first' do
-        get 'collection_list', params: { apo_id: druid, format: :json }
+        get "/registration/collection_list?apo_id=#{druid}", headers: headers
+
         data = JSON.parse(response.body)
         expect(data).to eq(
           '' => 'None',
@@ -191,7 +200,8 @@ RSpec.describe RegistrationsController, type: :controller do
     end
 
     it 'handles an APO with multiple workflows, putting the default workflow first always' do
-      get 'workflow_list', params: { apo_id: apo_id, format: :json }
+      get "/registration/workflow_list?apo_id=#{apo_id}", headers: headers
+
       data = JSON.parse(response.body)
       expect(data).to eq [Settings.apo.default_workflow_option, 'digitizationWF', 'dpgImageWF', 'goobiWF']
     end
