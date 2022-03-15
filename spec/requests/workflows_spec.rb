@@ -2,10 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe WorkflowsController, type: :controller do
+RSpec.describe 'WorkflowsController', type: :request do
   let(:pid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
+
+  let(:rendered) do
+    Capybara::Node::Simple.new(response.body)
+  end
 
   let(:cocina) do
     Cocina::Models.build({
@@ -42,14 +46,14 @@ RSpec.describe WorkflowsController, type: :controller do
 
       before do
         allow(Argo::Indexer).to receive(:reindex_pid_remotely)
-        allow(controller).to receive(:authorize!).and_return(true)
       end
 
       context 'when the workflow is not active' do
         let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
 
         it 'initializes the new workflow' do
-          post :create, params: { item_id: pid, wf: 'accessionWF' }
+          post "/items/#{pid}/workflows", params: { wf: 'accessionWF' }
+
           expect(workflow_client).to have_received(:create_workflow_by_name)
             .with(pid, 'accessionWF', version: 2)
         end
@@ -59,7 +63,8 @@ RSpec.describe WorkflowsController, type: :controller do
         let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: true) }
 
         it 'does not initialize the workflow' do
-          post :create, params: { item_id: pid, wf: 'accessionWF' }
+          post "/items/#{pid}/workflows", params: { wf: 'accessionWF' }
+
           expect(workflow_client).not_to have_received(:create_workflow_by_name)
         end
       end
@@ -67,8 +72,10 @@ RSpec.describe WorkflowsController, type: :controller do
   end
 
   describe '#new' do
+    let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: ['accessionWF']) }
+
     it 'renders the template with no layout' do
-      get :new, params: { item_id: pid }
+      get "/items/#{pid}/workflows/new"
       expect(response).to render_template(layout: false)
     end
   end
@@ -102,24 +109,34 @@ RSpec.describe WorkflowsController, type: :controller do
     end
 
     context 'when the user wants a table view' do
-      let(:presenter) { instance_double(WorkflowPresenter) }
-      let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow) }
+      let(:process) do
+        instance_double(Dor::Workflow::Response::Process,
+                        name: 'start-accession',
+                        status: 'waiting',
+                        datetime: Time.zone.now,
+                        elapsed: 10,
+                        attempts: 1,
+                        lifecycle: nil,
+                        note: nil)
+      end
+      let(:wf_response) do
+        instance_double(Dor::Workflow::Response::Workflow,
+                        pid: pid,
+                        workflow_name: 'accessionWF',
+                        empty?: false,
+                        process_for_recent_version: process)
+      end
 
       it 'fetches the workflow on valid parameters' do
-        allow(WorkflowPresenter).to receive(:new).and_return(presenter)
-        allow(WorkflowStatus).to receive(:new).and_return(workflow_status)
+        get "/items/#{pid}/workflows/accessionWF"
 
-        get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', format: :html }
         expect(response).to have_http_status(:ok)
-        expect(WorkflowStatus).to have_received(:new)
-          .with(workflow_steps: workflow_steps.map { |item| item['name'] }, workflow: wf_response)
-        expect(WorkflowPresenter).to have_received(:new).with(view: Object, workflow_status: workflow_status, cocina_object: cocina)
-        expect(assigns[:presenter]).to eq presenter
+        expect(rendered.find_css('.detail > tbody > tr').size).to eq workflow_steps.count
       end
     end
 
     context 'when the user wants to see the xml' do
-      let(:presenter) { instance_double(WorkflowXmlPresenter) }
+      let(:presenter) { instance_double(WorkflowXmlPresenter, pretty_xml: '<xml/>') }
       let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, xml: 'xml') }
 
       before do
@@ -127,16 +144,17 @@ RSpec.describe WorkflowsController, type: :controller do
       end
 
       it 'fetches the workflow on valid parameters' do
-        get :show, params: { item_id: pid, id: 'accessionWF', repo: 'dor', raw: true, format: :html }
+        get "/items/#{pid}/workflows/accessionWF?raw=true"
+
         expect(response).to have_http_status(:ok)
         expect(WorkflowXmlPresenter).to have_received(:new).with(xml: 'xml')
-        expect(assigns[:presenter]).to eq presenter
+        expect(response.body).to include ' &lt;xml/&gt;'
       end
     end
   end
 
   describe '#history' do
-    let(:xml) { instance_double(String) }
+    let(:xml) { '<xml/>' }
     let(:workflows) { instance_double(Dor::Workflow::Response::Workflows, xml: xml) }
     let(:workflow_routes) { instance_double(Dor::Workflow::Client::WorkflowRoutes, all_workflows: workflows) }
     let(:workflow_client) do
@@ -144,7 +162,7 @@ RSpec.describe WorkflowsController, type: :controller do
     end
 
     it 'fetches the workflow history' do
-      get :history, params: { item_id: pid, format: :html }
+      get "/items/#{pid}/workflows/history"
       expect(response).to have_http_status(:ok)
       expect(assigns[:history_xml]).to eq xml
     end
@@ -158,16 +176,16 @@ RSpec.describe WorkflowsController, type: :controller do
     end
 
     it 'requires various workflow parameters' do
-      expect { post :update, params: { item_id: pid, repo: 'dor', id: 'accessionWF' } }.to raise_error(ActionController::ParameterMissing)
+      expect { put "/items/#{pid}/workflows/accessionWF" }.to raise_error(ActionController::ParameterMissing)
     end
 
     context 'when the user is an administrator' do
       before do
-        allow(controller.current_user).to receive(:admin?).and_return(true)
+        sign_in build(:user), groups: ['sdr:administrator-role']
       end
 
       it 'changes the status' do
-        post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'completed' }
+        put "/items/#{pid}/workflows/accessionWF", params: { process: 'publish', status: 'completed' }
         expect(subject).to redirect_to(solr_document_path(pid))
         expect(workflow_client).to have_received(:workflow_status).with(druid: pid, workflow: 'accessionWF', process: 'publish')
         expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'completed')
@@ -176,37 +194,13 @@ RSpec.describe WorkflowsController, type: :controller do
 
     context 'when the user is not an administrator' do
       before do
-        allow(controller.current_user).to receive(:admin?).and_return(false)
+        sign_in build(:user), groups: []
       end
 
       context 'when they are changing an item they do not manage' do
         it 'is forbidden' do
-          post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'waiting' }
-          expect(response.status).to eq 403
-          expect(workflow_client).not_to have_received(:update_status)
-        end
-      end
+          put "/items/#{pid}/workflows/accessionWF", params: { process: 'publish', status: 'waiting' }
 
-      context 'when they are changing an item they manage to waiting' do
-        before do
-          allow(controller.current_ability).to receive(:can_manage_items?).and_return(true)
-        end
-
-        it 'changes the status' do
-          post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'waiting' }
-          expect(subject).to redirect_to(solr_document_path(pid))
-          expect(workflow_client).to have_received(:workflow_status).with(druid: pid, workflow: 'accessionWF', process: 'publish')
-          expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'waiting')
-        end
-      end
-
-      context 'when they are changing an item they manage to completed' do
-        before do
-          allow(controller.current_ability).to receive(:can_manage_items?).and_return(true)
-        end
-
-        it 'is forbidden' do
-          post :update, params: { item_id: pid, id: 'accessionWF', repo: 'dor', process: 'publish', status: 'completed' }
           expect(response.status).to eq 403
           expect(workflow_client).not_to have_received(:update_status)
         end
