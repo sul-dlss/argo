@@ -60,10 +60,12 @@ RSpec.describe CollectionChangeSetPersister do
 
       it 'invokes object client with collection that has new copyright statement' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: new_copyright_statement,
-            license: license_before,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              copyright: new_copyright_statement,
+              license: license_before,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -79,10 +81,12 @@ RSpec.describe CollectionChangeSetPersister do
 
       it 'invokes object client with collection that has new license' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: copyright_statement_before,
-            license: new_license,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              copyright: copyright_statement_before,
+              license: new_license,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -98,10 +102,12 @@ RSpec.describe CollectionChangeSetPersister do
 
       it 'invokes object client with collection that has new use statement' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: copyright_statement_before,
-            license: license_before,
-            useAndReproductionStatement: new_use_statement
+          params: cocina_object_with(
+            access: {
+              copyright: copyright_statement_before,
+              license: license_before,
+              useAndReproductionStatement: new_use_statement
+            }
           )
         )
       end
@@ -114,10 +120,12 @@ RSpec.describe CollectionChangeSetPersister do
 
       it 'invokes object client with collection as before' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_access(
-            copyright: copyright_statement_before,
-            license: license_before,
-            useAndReproductionStatement: use_statement_before
+          params: cocina_object_with(
+            access: {
+              copyright: copyright_statement_before,
+              license: license_before,
+              useAndReproductionStatement: use_statement_before
+            }
           )
         )
       end
@@ -133,8 +141,10 @@ RSpec.describe CollectionChangeSetPersister do
 
       it 'invokes object client with collection that has new APO' do
         expect(fake_client).to have_received(:update).with(
-          params: a_cocina_object_with_administrative(
-            hasAdminPolicy: new_apo
+          params: cocina_object_with(
+            administrative: {
+              hasAdminPolicy: new_apo
+            }
           )
         )
       end

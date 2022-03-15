@@ -117,7 +117,7 @@ RSpec.describe ContentTypesController, type: :controller do
         patch :update, params: { item_id: pid, new_content_type: 'media' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
-          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.media, viewing_direction: nil))
+          .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.media, viewing_direction: nil))
           .once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
@@ -126,7 +126,7 @@ RSpec.describe ContentTypesController, type: :controller do
         patch :update, params: { item_id: pid, new_content_type: 'book (ltr)' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
-          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right'))
+          .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right'))
           .once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
@@ -135,7 +135,7 @@ RSpec.describe ContentTypesController, type: :controller do
         patch :update, params: { item_id: pid, new_content_type: 'book (rtl)' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
-          .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left'))
+          .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left'))
           .once
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely).once
       end
@@ -145,7 +145,7 @@ RSpec.describe ContentTypesController, type: :controller do
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(
-            params: a_cocina_object_with_types(
+            params: cocina_object_with_types(
               resource_types: [Cocina::Models::FileSetType.file, Cocina::Models::FileSetType.image],
               without_order: true
             )
@@ -158,7 +158,7 @@ RSpec.describe ContentTypesController, type: :controller do
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(
-            params: a_cocina_object_with_types(
+            params: cocina_object_with_types(
               content_type: Cocina::Models::ObjectType.image,
               resource_types: [Cocina::Models::FileSetType.document, Cocina::Models::FileSetType.image]
             )
@@ -174,7 +174,7 @@ RSpec.describe ContentTypesController, type: :controller do
           patch :update, params: { item_id: pid, new_content_type: 'media' }
           expect(response).to redirect_to solr_document_path(pid)
           expect(object_client).to have_received(:update)
-            .with(params: a_cocina_object_with_types(content_type: Cocina::Models::ObjectType.media))
+            .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.media))
         end
       end
 
