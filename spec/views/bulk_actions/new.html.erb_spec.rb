@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'bulk_actions/new.html.erb' do
+RSpec.describe 'bulk_actions/new' do
   let(:user_groups) { %w[dlss-developers top-secret-clearance] }
   let(:apo_list) { [['APO 1', 'druid:123'], ['APO 2', 'druid:234']] }
   let(:query_params) { { q: 'testing' } }

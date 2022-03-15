@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'files/index.html.erb' do
+RSpec.describe 'files/index' do
   let(:admin) { instance_double(Cocina::Models::FileAdministrative, shelve: true, sdrPreserve: true) }
 
   before do

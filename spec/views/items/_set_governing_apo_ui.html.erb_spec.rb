@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/_set_governing_apo_ui.html.erb' do
+RSpec.describe 'items/_set_governing_apo_ui' do
   let(:administrative) { instance_double(Cocina::Models::Administrative, hasAdminPolicy: 'druid:123') }
   let(:groups) { ['dlss-developers'] }
   let(:current_user) { double(User, groups: groups) }

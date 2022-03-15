@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/file.html.erb' do
-  it 'renders the JS template' do
+RSpec.describe 'items/file' do
+  it 'renders the template' do
     stub_template 'items/_file.html.erb' => 'stubbed_file'
     render
     expect(rendered).to have_css '.modal-header h3.modal-title', text: 'Files'

@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'items/collection_ui.html.erb' do
-  it 'renders the JS template' do
+RSpec.describe 'items/collection_ui' do
+  it 'renders the template' do
     stub_template 'items/_collection_ui.html.erb' => 'stubbed_collection_ui'
     render
     expect(rendered)

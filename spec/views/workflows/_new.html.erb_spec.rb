@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'workflows/_new.html.erb' do
+RSpec.describe 'workflows/_new' do
   before do
     allow(view).to receive(:workflow_options).and_return([%w[assemblyWF assemblyWF], %w[registrationWF registrationWF]])
   end

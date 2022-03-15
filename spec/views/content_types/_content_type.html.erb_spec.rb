@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'content_types/_content_type.html.erb' do
+RSpec.describe 'content_types/_content_type' do
   let(:cocina_object) do
     instance_double(Cocina::Models::DRO,
                     externalIdentifier: 'druid:abc123',

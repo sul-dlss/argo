@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe 'workflows/show.html.erb' do
-  it 'renders the JS template' do
+RSpec.describe 'workflows/show' do
+  it 'renders the template' do
     stub_template 'workflows/_show.html.erb' => 'stubbed_workflow_view'
     render
     expect(rendered)

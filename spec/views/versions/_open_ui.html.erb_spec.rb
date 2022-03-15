@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'versions/_open_ui.html.erb' do
+RSpec.describe 'versions/_open_ui' do
   before do
     @cocina_object = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:abc123')
   end

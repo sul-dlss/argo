@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'versions/_close_ui.html.erb' do
+RSpec.describe 'versions/_close_ui' do
   before do
     @cocina_object = instance_double(Cocina::Models::DRO, externalIdentifier: 'druid:abc123')
     assign(:significance_selected, major: false, minor: true, admin: nil)

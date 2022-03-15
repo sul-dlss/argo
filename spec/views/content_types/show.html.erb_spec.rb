@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'content_types/show.html.erb' do
+RSpec.describe 'content_types/show' do
   it 'renders the template' do
     stub_template 'content_types/_content_type.html.erb' => 'stubbed_content_type'
     render

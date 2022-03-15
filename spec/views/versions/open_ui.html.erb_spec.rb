@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'versions/open_ui.html.erb' do
+RSpec.describe 'versions/open_ui' do
   it 'renders the JS template' do
     stub_template 'versions/_open_ui.html.erb' => 'stubbed_open_version_ui'
     render

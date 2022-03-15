@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe 'workflows/history.html.erb' do
+RSpec.describe 'workflows/history' do
   it 'renders the HS template' do
     stub_template 'workflows/_history.html.erb' => 'stubbed_wf_history_view'
     render
