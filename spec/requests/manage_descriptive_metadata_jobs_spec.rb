@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-RSpec.describe BulkJobsController do
-  describe '#show' do
+RSpec.describe 'Manage bulk descriptive metadata jobs for an APO' do
+  describe 'listing the jobs' do
     # These parameters correspond to the directory:
     #   spec/fixtures/bulk_upload/workspace/druid:bc682xk5613/2016_04_21_16_56_40_824/
     let(:apo_id) { 'druid:bc682xk5613' }
@@ -16,7 +16,7 @@ RSpec.describe BulkJobsController do
 
     context 'when the format is html' do
       it 'is successful' do
-        get :show, params: { apo_id: apo_id, time: time }
+        get "/apos/#{apo_id}/bulk_jobs/#{time}/log"
         expect(response).to be_successful
         expect(assigns[:user_log]).to be_kind_of UserLog
       end
@@ -24,20 +24,21 @@ RSpec.describe BulkJobsController do
 
     context 'when the format is xml' do
       it 'is successful' do
-        get :show, params: { apo_id: apo_id, time: time, format: 'xml' }
+        get "/apos/#{apo_id}/bulk_jobs/#{time}/log.xml"
         expect(response).to be_successful
       end
     end
 
     context 'when the format is csv' do
       it 'is successful' do
-        get :show, params: { apo_id: apo_id, time: time, format: 'csv' }
+        get "/apos/#{apo_id}/bulk_jobs/#{time}/log.csv"
         expect(response).to be_successful
       end
     end
   end
 
   describe '#load_bulk_jobs' do
+    let(:controller) { BulkJobsController.new }
     let(:sorted_bulk_job_info) { controller.send(:load_bulk_jobs, 'druid:bc682xk5613') }
 
     it 'loads the expected number of records' do
