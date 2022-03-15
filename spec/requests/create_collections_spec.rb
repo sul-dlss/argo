@@ -2,10 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe CollectionsController do
+RSpec.describe 'Create collections' do
   before do
-    allow(controller).to receive(:authorize!).with(:manage_item, Cocina::Models::AdminPolicy).and_return(true)
-    sign_in user
+    sign_in user, groups: ['sdr:administrator-role']
   end
 
   let(:apo_id) { 'druid:zt570qh4444' }
@@ -13,7 +12,7 @@ RSpec.describe CollectionsController do
   let(:user) { create(:user) }
   let(:collection) { instance_double(Cocina::Models::Collection, externalIdentifier: collection_id) }
 
-  describe '#new' do
+  describe 'show the form' do
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
     let(:cocina_model) do
       Cocina::Models.build({
@@ -34,12 +33,12 @@ RSpec.describe CollectionsController do
     end
 
     it 'is successful' do
-      get :new, params: { apo_id: apo_id }
+      get "/apo/#{apo_id}/collections/new"
       expect(response).to be_successful
     end
   end
 
-  describe '#create' do
+  describe 'save the form' do
     let(:form) { instance_double(CollectionForm, validate: true, save: true, model: collection) }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
     let(:cocina_model) do
@@ -63,10 +62,9 @@ RSpec.describe CollectionsController do
     end
 
     it 'creates a collection using the form' do
-      post :create, params: { 'label' => ':auto',
-                              'collection_catkey' => '1234567',
-                              'collection_rights_catkey' => 'dark',
-                              apo_id: apo_id }
+      post "/apo/#{apo_id}/collections", params: { 'label' => ':auto',
+                                                   'collection_catkey' => '1234567',
+                                                   'collection_rights_catkey' => 'dark' }
       expect(response).to be_redirect # redirects to catalog page
       expect(form).to have_received(:save)
       expect(object_client).to have_received(:update).with(params: cocina_admin_policy_with_registration_collections([collection_id]))
@@ -74,7 +72,7 @@ RSpec.describe CollectionsController do
     end
   end
 
-  describe '#exists' do
+  describe "check that it's not a duplicate" do
     let(:title) { 'foo' }
     let(:catkey) { '123' }
     let(:repo) { instance_double(Blacklight::Solr::Repository, connection: solr_client) }
@@ -88,9 +86,7 @@ RSpec.describe CollectionsController do
       let(:result) { { 'response' => { 'numFound' => 1 } } }
 
       it 'returns true' do
-        post :exists, params: {
-          'title' => title
-        }
+        get "/collections/exists?title=#{title}"
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
           q: '_query_:"{!raw f=objectType_ssim}collection" AND obj_label_tesim:"foo"'
@@ -102,9 +98,7 @@ RSpec.describe CollectionsController do
       let(:result) { { 'response' => { 'numFound' => 0 } } }
 
       it 'returns false' do
-        post :exists, params: {
-          'title' => title
-        }
+        get "/collections/exists?title=#{title}"
         expect(response.body).to eq('false')
       end
     end
@@ -113,9 +107,7 @@ RSpec.describe CollectionsController do
       let(:result) { { 'response' => { 'numFound' => 1 } } }
 
       it 'returns true' do
-        post :exists, params: {
-          'catkey' => catkey
-        }
+        get "/collections/exists?catkey=#{catkey}"
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
           q: '_query_:"{!raw f=objectType_ssim}collection" AND identifier_ssim:"catkey:123"'
@@ -127,9 +119,7 @@ RSpec.describe CollectionsController do
       let(:result) { { 'response' => { 'numFound' => 0 } } }
 
       it 'returns false' do
-        post :exists, params: {
-          'catkey' => catkey
-        }
+        get "/collections/exists?catkey=#{catkey}"
         expect(response.body).to eq('false')
       end
     end
@@ -138,10 +128,7 @@ RSpec.describe CollectionsController do
       let(:result) { { 'response' => { 'numFound' => 1 } } }
 
       it 'returns true if collection with title and catkey exists' do
-        post :exists, params: {
-          'title' => title,
-          'catkey' => catkey
-        }
+        get "/collections/exists?catkey=#{catkey}&title=#{title}"
         expect(response.body).to eq('true')
         expect(solr_client).to have_received(:get).with('select', params: a_hash_including(
           q: '_query_:"{!raw f=objectType_ssim}collection" AND obj_label_tesim:"foo" AND identifier_ssim:"catkey:123"'
