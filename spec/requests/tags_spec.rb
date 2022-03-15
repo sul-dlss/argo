@@ -2,11 +2,11 @@
 
 require 'rails_helper'
 
-RSpec.describe TagsController, type: :controller do
+RSpec.describe 'Tags', type: :request do
   let(:user) { create(:user) }
 
   before do
-    sign_in user
+    sign_in user, groups: ['sdr:administrator-role']
   end
 
   describe '#search' do
@@ -17,7 +17,7 @@ RSpec.describe TagsController, type: :controller do
     end
 
     it 'returns results' do
-      get :search, params: { q: 'foo' }
+      get '/tags/search?q=foo'
       expect(response.body).to eq '["foo : bar : baz"]'
     end
 
@@ -27,7 +27,7 @@ RSpec.describe TagsController, type: :controller do
       end
 
       it 'returns results' do
-        expect { get :search, params: { q: 'foo' } }.to raise_error Dor::Services::Client::ConnectionFailed
+        get '/tags/search?q=foo'
         expect(response.body).to eq '[]'
       end
     end
@@ -56,7 +56,6 @@ RSpec.describe TagsController, type: :controller do
     end
 
     before do
-      sign_in user
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
       allow(Argo::Indexer).to receive(:reindex_pid_remotely)
     end
@@ -71,39 +70,38 @@ RSpec.describe TagsController, type: :controller do
                         create: true)
       end
 
-      before do
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
       it 'updates tags' do
-        post :update, params: { item_id: pid,
-                                tags: {
-                                  tags_attributes: {
-                                    '0' => { name: 'Some : Thing : Else', id: 'Some : Thing' }
-                                  }
-                                } }
+        patch "/items/#{pid}/tags", params: {
+          tags: {
+            tags_attributes: {
+              '0' => { name: 'Some : Thing : Else', id: 'Some : Thing' }
+            }
+          }
+        }
         expect(tags_client).to have_received(:update).with(current: current_tag, new: 'Some : Thing : Else')
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       end
 
       it 'deletes tag' do
-        post :update, params: { item_id: pid,
-                                tags: {
-                                  tags_attributes: {
-                                    '0' => { name: 'Some : Thing', id: 'Some : Thing', _destroy: '1' }
-                                  }
-                                } }
+        patch "/items/#{pid}/tags", params: {
+          tags: {
+            tags_attributes: {
+              '0' => { name: 'Some : Thing : Else', id: 'Some : Thing', _destroy: '1' }
+            }
+          }
+        }
         expect(tags_client).to have_received(:destroy).with(tag: current_tag)
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
       end
 
       it 'adds a tag' do
-        post :update, params: { item_id: pid,
-                                tags: {
-                                  tags_attributes: {
-                                    '0' => { name: 'New : Thing', id: '', _destroy: '' }
-                                  }
-                                } }
+        patch "/items/#{pid}/tags", params: {
+          tags: {
+            tags_attributes: {
+              '0' => { name: 'New : Thing', id: '', _destroy: '' }
+            }
+          }
+        }
         expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
         expect(tags_client).to have_received(:create).with(tags: ['New : Thing'])
       end
