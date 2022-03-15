@@ -141,7 +141,6 @@ Rails.application.routes.draw do
 
     member do
       post 'refresh_metadata'
-      get 'mods'
       get 'source_id_ui'
       get 'collection_ui'
       get 'edit_barcode'

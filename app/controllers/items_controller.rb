@@ -5,7 +5,6 @@ class ItemsController < ApplicationController
   before_action :load_cocina
   before_action :authorize_manage!, only: %i[
     add_collection remove_collection
-    mods
     purge_object
     show_barcode show_copyright show_license show_use_statement
     source_id
@@ -73,14 +72,6 @@ class ItemsController < ApplicationController
     object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
     @collection_list = object_client.collections
     render partial: 'collection_ui', locals: { response_message: 'Collection successfully removed' }
-  end
-
-  def mods
-    object_client = Dor::Services::Client.object(@cocina.externalIdentifier)
-
-    respond_to do |format|
-      format.xml  { render xml: object_client.metadata.mods }
-    end
   end
 
   def show
