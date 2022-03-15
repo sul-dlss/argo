@@ -5,8 +5,8 @@ class TagsController < ApplicationController
   def search
     render json: Dor::Services::Client.administrative_tags.search(q: params[:q])
   rescue Dor::Services::Client::ConnectionFailed
+    Honeybadger.notify('connection to DSA to search for tags failed', q: params[:q])
     render json: []
-    raise
   end
 
   def update
