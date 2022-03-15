@@ -35,55 +35,6 @@ RSpec.describe ItemsController, type: :controller do
   end
   let(:catalog_links) { [{ catalog: 'symphony', catalogRecordId: '12345' }] }
 
-  describe '#purge_object' do
-    context "when they don't have manage access" do
-      it 'returns 403' do
-        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
-        post 'purge_object', params: { id: pid }
-        expect(response.code).to eq('403')
-      end
-    end
-
-    context 'when they have manage access' do
-      let(:client) do
-        instance_double(Dor::Workflow::Client,
-                        delete_all_workflows: nil,
-                        lifecycle: false)
-      end
-
-      before do
-        allow(Dor::Workflow::Client).to receive(:new).and_return(client)
-        allow(controller).to receive(:authorize!).and_return(true)
-      end
-
-      context 'when the object has not been submitted' do
-        before do
-          allow(WorkflowService).to receive(:submitted?).with(druid: pid).and_return(false)
-          allow(PurgeService).to receive(:purge)
-        end
-
-        it 'deletes the object' do
-          delete 'purge_object', params: { id: pid }
-          expect(response).to redirect_to root_path
-          expect(flash[:notice]).to eq "#{pid} has been purged!"
-          expect(PurgeService).to have_received(:purge)
-        end
-      end
-
-      context 'when the object has been submitted' do
-        before do
-          allow(WorkflowService).to receive(:submitted?).with(druid: pid).and_return(true)
-        end
-
-        it 'blocks purge' do
-          delete 'purge_object', params: { id: pid }
-          expect(response.code).to eq('400')
-          expect(response.body).to eq('Cannot purge an object after it is submitted.')
-        end
-      end
-    end
-  end
-
   describe '#add_collection' do
     let(:cocina_collection) do
       Cocina::Models.build({
