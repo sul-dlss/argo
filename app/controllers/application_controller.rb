@@ -42,14 +42,6 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def development_only!
-    if Rails.env.development? || ENV['DOR_SERVICES_DEBUG_MODE']
-      yield
-    else
-      render plain: 'Not Found', status: :not_found
-    end
-  end
-
   def enforce_versioning
     return redirect_to solr_document_path(@cocina.externalIdentifier), flash: { error: 'Unable to retrieve the cocina model' } if @cocina.is_a? NilModel
 
