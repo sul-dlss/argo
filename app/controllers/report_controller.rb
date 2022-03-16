@@ -30,19 +30,6 @@ class ReportController < CatalogController
 
   def content_types; end
 
-  def pids
-    respond_to do |format|
-      format.json do
-        render json: {
-          druids: Report.new(params, current_user: current_user).pids(
-            source_id: params[:source_id].present?,
-            tags: params[:tags].present?
-          )
-        }
-      end
-    end
-  end
-
   def download
     fields = params['fields'].present? ? params.delete('fields').split(/\s*,\s*/) : nil
     params[:per_page] = 10

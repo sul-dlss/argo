@@ -73,24 +73,6 @@ RSpec.describe ReportController, type: :controller do
       end
     end
 
-    describe '#pids' do
-      before do
-        allow(Report).to receive(:new).and_return(report)
-      end
-
-      let(:report) { instance_double(Report, pids: pids) }
-      let(:pids) { %w[ab123gg7777 qh056qq6868] }
-
-      it 'returns json' do
-        get :pids, params: { format: :json }
-        expect(response).to have_http_status(:ok)
-        pids = JSON.parse(response.body)['druids']
-        expect(pids).to be_a(Array)
-        expect(pids.length).to be > 1
-        expect(pids.first).to eq('ab123gg7777')
-      end
-    end
-
     describe '#download' do
       before do
         allow(Report).to receive(:new).and_return(report)
