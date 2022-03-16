@@ -2,17 +2,14 @@
 
 require 'rails_helper'
 
-RSpec.describe ItemsController, type: :controller do
+RSpec.describe 'Collection membership', type: :request do
   before do
-    allow_any_instance_of(User).to receive(:roles).and_return([])
-    sign_in user
     allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
     allow(Argo::Indexer).to receive(:reindex_pid_remotely)
     allow(StateService).to receive(:new).and_return(state_service)
   end
 
   let(:pid) { 'druid:bc123df4567' }
-  let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
   let(:cocina) do
@@ -35,7 +32,7 @@ RSpec.describe ItemsController, type: :controller do
   end
   let(:catalog_links) { [{ catalog: 'symphony', catalogRecordId: '12345' }] }
 
-  describe '#add_collection' do
+  describe 'adding a new collection' do
     let(:cocina_collection) do
       Cocina::Models.build({
                              'label' => 'My ETD',
@@ -61,7 +58,7 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'when they have manage access' do
       before do
-        allow(controller).to receive(:authorize!).and_return(true)
+        sign_in create(:user), groups: ['sdr:administrator-role']
       end
 
       context 'when collections already exist' do
@@ -82,13 +79,13 @@ RSpec.describe ItemsController, type: :controller do
         end
 
         it 'adds a collection' do
-          post 'add_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
+          post "/items/#{pid}/collection/add?collection=druid:bc555gh3434"
           expect(object_service).to have_received(:update).with(params: expected)
         end
 
         context 'when no collection parameter is supplied' do
           it 'does not add a collection' do
-            post 'add_collection', params: { id: pid, collection: '' }
+            post "/items/#{pid}/collection/add?collection="
             expect(object_service).not_to have_received(:update)
           end
         end
@@ -113,7 +110,7 @@ RSpec.describe ItemsController, type: :controller do
         let(:structural) { {} }
 
         it 'adds a collection' do
-          post 'add_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
+          post "/items/#{pid}/collection/add?collection=druid:bc555gh3434"
           expect(object_service).to have_received(:update).with(params: expected)
         end
       end
@@ -121,18 +118,18 @@ RSpec.describe ItemsController, type: :controller do
 
     context "when they don't have manage access" do
       before do
-        allow(controller).to receive(:authorize!).with(:manage_item, cocina_collection).and_raise(CanCan::AccessDenied)
+        sign_in create(:user), groups: []
       end
 
       it 'returns 403' do
-        post 'add_collection', params: { id: pid, collection: 'druid:1234' }
+        post "/items/#{pid}/collection/add?collection=druid:bc555gh3434"
         expect(response.code).to eq('403')
         expect(object_service).not_to have_received(:update)
       end
     end
   end
 
-  describe '#remove_collection' do
+  describe 'removing a collection' do
     let(:cocina) do
       Cocina::Models.build({
                              'label' => 'My ETD',
@@ -158,63 +155,67 @@ RSpec.describe ItemsController, type: :controller do
 
     context 'when they have manage access' do
       before do
-        allow(controller).to receive(:authorize!).and_return(true)
+        sign_in create(:user), groups: ['sdr:administrator-role']
       end
 
-      let(:expected) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => pid,
-                               'description' => {
-                                 'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                               'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
-                             })
+      context 'when the item is a member of the collection' do
+        let(:expected) do
+          Cocina::Models.build({
+                                 'label' => 'My ETD',
+                                 'version' => 1,
+                                 'type' => Cocina::Models::ObjectType.object,
+                                 'externalIdentifier' => pid,
+                                 'description' => {
+                                   'title' => [{ 'value' => 'My ETD' }],
+                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 },
+                                 'access' => {},
+                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                                 'structural' => { 'isMemberOf' => ['druid:gg333xx4444'] }
+                               })
+        end
+
+        it 'removes a collection' do
+          get "/items/#{pid}/collection/delete?collection=druid:bc555gh3434"
+
+          expect(object_service).to have_received(:update).with(params: expected)
+        end
       end
 
-      it 'removes a collection' do
-        post 'remove_collection', params: { id: pid, collection: 'druid:bc555gh3434' }
-        expect(object_service).to have_received(:update).with(params: expected)
+      context 'when the object is not in any collections' do
+        let(:cocina) do
+          Cocina::Models.build({
+                                 'label' => 'My ETD',
+                                 'version' => 1,
+                                 'type' => Cocina::Models::ObjectType.object,
+                                 'externalIdentifier' => pid,
+                                 'description' => {
+                                   'title' => [{ 'value' => 'My ETD' }],
+                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 },
+                                 'access' => {},
+                                 'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
+                                 'structural' => {}
+                               })
+        end
+
+        it 'does an update with no changes' do
+          get "/items/#{pid}/collection/delete?collection=druid:bc555gh3434"
+          expect(object_service).to have_received(:update).with(params: cocina)
+        end
       end
     end
 
     context "when they don't have manage access" do
       before do
-        allow(controller).to receive(:authorize!).with(:manage_item, cocina).and_raise(CanCan::AccessDenied)
+        sign_in create(:user), groups: []
       end
 
       it 'returns 403' do
-        post 'remove_collection', params: { id: pid, collection: 'druid:1234' }
+        get "/items/#{pid}/collection/delete?collection=druid:bc555gh3434"
+
         expect(response.code).to eq('403')
         expect(object_service).not_to have_received(:update)
-      end
-    end
-
-    context 'when the object is not in any collections' do
-      let(:cocina) do
-        Cocina::Models.build({
-                               'label' => 'My ETD',
-                               'version' => 1,
-                               'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => pid,
-                               'description' => {
-                                 'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
-                               },
-                               'access' => {},
-                               'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
-                               'structural' => {}
-                             })
-      end
-
-      it 'does nothing and does not throw an exception' do
-        post 'remove_collection', params: { id: pid, collection: 'druid:1234' }
-        expect(object_service).not_to have_received(:update).with(params: cocina)
       end
     end
   end
