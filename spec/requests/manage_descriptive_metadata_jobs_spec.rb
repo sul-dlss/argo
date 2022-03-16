@@ -18,7 +18,7 @@ RSpec.describe 'Manage bulk descriptive metadata jobs for an APO' do
       it 'is successful' do
         get "/apos/#{apo_id}/bulk_jobs/#{time}/log"
         expect(response).to be_successful
-        expect(assigns[:user_log]).to be_kind_of UserLog
+        expect(response.body).to include '2016-04-21'
       end
     end
 

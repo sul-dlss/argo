@@ -12,11 +12,12 @@ RSpec.describe 'BulkActionsController' do
   end
 
   describe 'GET index' do
-    it 'assigns @bulk_actions from current_user' do
-      create(:bulk_action, user_id: current_user.id + 1) # Not current_user's
-      b_action = create(:bulk_action, user: current_user)
+    it 'lists the BulkActions from current_user' do
+      create(:bulk_action, user_id: current_user.id + 1, description: 'not mine') # Not current_user's
+      create(:bulk_action, user: current_user, description: 'Belongs to me')
       get '/bulk_actions'
-      expect(assigns(:bulk_actions)).to eq [b_action]
+      expect(response.body).to include 'Belongs to me'
+      expect(response.body).not_to include 'not mine'
     end
 
     it 'has a 200 status code' do
@@ -26,11 +27,6 @@ RSpec.describe 'BulkActionsController' do
   end
 
   describe 'GET new' do
-    it 'assigns @form' do
-      get '/bulk_actions/new'
-      expect(assigns(:form)).not_to be_nil
-    end
-
     it 'has a 200 status code' do
       get '/bulk_actions/new'
       expect(response.status).to eq 200
@@ -59,7 +55,7 @@ RSpec.describe 'BulkActionsController' do
 
         it 'renders new' do
           post '/bulk_actions', params: { bulk_action: { action_type: 'GenericJob' } }
-          expect(response).to render_template('new')
+          expect(response.body).to include 'New Bulk Action'
         end
       end
     end

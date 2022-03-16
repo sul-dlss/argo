@@ -13,7 +13,7 @@ RSpec.describe 'The workflow grid', type: :request do
     it 'works' do
       get '/report/workflow_grid'
       expect(response).to have_http_status(:ok)
-      expect(response).to render_template('workflow_grid')
+      expect(response.body).to include 'workflow-grid'
     end
   end
 end

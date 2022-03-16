@@ -76,7 +76,7 @@ RSpec.describe 'WorkflowsController', type: :request do
 
     it 'renders the template with no layout' do
       get "/items/#{pid}/workflows/new"
-      expect(response).to render_template(layout: false)
+      expect(response.body).to start_with('<turbo-frame')
     end
   end
 
@@ -164,7 +164,7 @@ RSpec.describe 'WorkflowsController', type: :request do
     it 'fetches the workflow history' do
       get "/items/#{pid}/workflows/history"
       expect(response).to have_http_status(:ok)
-      expect(assigns[:history_xml]).to eq xml
+      expect(response.body).to include '<span style="color:#070;font-weight:bold">&lt;xml</span><span style="color:#070;font-weight:bold">/&gt;</span>'
     end
   end
 

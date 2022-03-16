@@ -36,7 +36,6 @@ RSpec.describe 'WorkflowServiceController', type: :request do
       it 'returns true' do
         get "/workflow_service/#{pid}/published"
 
-        expect(assigns(:status)).to be true
         expect(response.body).to eq 'true'
       end
     end
@@ -47,7 +46,6 @@ RSpec.describe 'WorkflowServiceController', type: :request do
       it 'returns false' do
         get "/workflow_service/#{pid}/published"
 
-        expect(assigns(:status)).to be false
         expect(response.body).to eq 'false'
       end
     end
@@ -57,18 +55,18 @@ RSpec.describe 'WorkflowServiceController', type: :request do
     context 'when locked' do
       before { allow(state_service).to receive(:object_state).and_return(:lock) }
 
-      it 'returns true' do
+      it 'returns the lock' do
         get "/workflow_service/#{pid}/lock"
-        expect(response).to render_template('lock')
+        expect(response.body).to include 'Unlock to make changes to this object'
       end
     end
 
     context 'when unlocked' do
       before { allow(state_service).to receive(:object_state).and_return(:unlock) }
 
-      it 'returns false' do
+      it 'returns the unlock' do
         get "/workflow_service/#{pid}/lock"
-        expect(response).to render_template('unlock')
+        expect(response.body).to include 'Close Version'
       end
     end
   end
