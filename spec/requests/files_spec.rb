@@ -2,8 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe FilesController, type: :controller do
+RSpec.describe 'Files', type: :request do
   let(:pid) { 'druid:bc123df4567' }
+  let(:user) { create(:user) }
   let(:cocina_model) do
     instance_double(Cocina::Models::DRO, externalIdentifier: pid, structural: structural)
   end
@@ -17,32 +18,62 @@ RSpec.describe FilesController, type: :controller do
     instance_double(Cocina::Models::FileSetStructural, contains: [file])
   end
   let(:file) do
-    instance_double(Cocina::Models::File, filename: 'M1090_S15_B01_F07_0106.jp2')
+    Cocina::Models::File.new(
+      type: Cocina::Models::ObjectType.file,
+      externalIdentifier: 'druid:rn653dy9317/M1090_S15_B01_F07_0106.jp2',
+      label: 'M1090_S15_B01_F07_0106.jp2',
+      filename: 'M1090_S15_B01_F07_0106.jp2',
+      size: 3_305_991,
+      version: 4,
+      hasMimeType: 'image/jp2',
+      hasMessageDigests: [
+        {
+          type: 'sha1',
+          digest: 'fd28e74b3139b04a0e5c5c3d3263598f629f8967'
+        },
+        {
+          type: 'md5',
+          digest: '244cbb3960407f59ac77a916870e0502'
+        }
+      ],
+      access: {
+        view: 'world',
+        download: 'world'
+      },
+      administrative: {
+        publish: true,
+        sdrPreserve: true,
+        shelve: true
+      },
+      presentation: {
+        height: 3426,
+        width: 5102
+      }
+    )
   end
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow_any_instance_of(User).to receive(:roles).and_return([])
     sign_in user
   end
 
-  let(:user) { create(:user) }
-
-  describe '#preserved' do
+  describe 'download from preservation' do
     context 'when they have manage access' do
       let(:mock_file_name) { 'preserved file.txt' }
       let(:mock_version) { '2' }
       let(:mock_content) { 'preserved file content' }
 
       before do
-        allow(controller).to receive(:authorize!).and_return(true)
+        sign_in user, groups: ['sdr:administrator-role']
+
         allow(Preservation::Client.objects).to receive(:content)
       end
 
       it 'returns a response with the preserved file content as the body and the right headers' do
         last_modified_lower_bound = Time.now.utc.rfc2822
-        get :preserved, params: { id: mock_file_name, version: mock_version, item_id: pid }
+        get "/items/#{pid}/files/preserved%20file.txt/preserved?version=#{mock_version}"
+
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
         expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
         expect(response.headers['Content-Type']).to eq('application/octet-stream')
@@ -61,7 +92,8 @@ RSpec.describe FilesController, type: :controller do
         end
 
         it 'returns 404 with error information' do
-          get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
+          get "/items/#{pid}/files/not_there.txt/preserved?version=#{mock_version}"
+
           expect(response.headers['Content-Type']).to eq('application/octet-stream')
           expect(response.headers['Last-Modified']).to be_nil
           expect(response.headers['Content-Disposition']).to be_nil
@@ -81,7 +113,8 @@ RSpec.describe FilesController, type: :controller do
         end
 
         it 'renders an HTTP 500 message' do
-          get :preserved, params: { id: 'not_there.txt', version: mock_version, item_id: pid }
+          get "/items/#{pid}/files/not_there.txt/preserved?version=#{mock_version}"
+
           expect(Rails.logger).to have_received(:error)
             .with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\): #{errmsg}/).once
           expect(Honeybadger).to have_received(:notify).with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\): #{errmsg}/).once
@@ -92,7 +125,7 @@ RSpec.describe FilesController, type: :controller do
     end
   end
 
-  describe '#index' do
+  describe 'show locations of files' do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: true) }
 
     before do
@@ -100,7 +133,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'requires an id parameter' do
-      expect { get :index, params: { item_id: pid } }.to raise_error(ArgumentError)
+      expect { get "/items/#{pid}/files" }.to raise_error(ArgumentError)
     end
 
     context 'when the files are in preservation' do
@@ -109,7 +142,7 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'is successful' do
-        get :index, params: { item_id: pid, id: 'M1090_S15_B01_F07_0106.jp2' }
+        get "/items/#{pid}/files?id=M1090_S15_B01_F07_0106.jp2"
         expect(response).to have_http_status(:ok)
         expect(assigns(:has_been_accessioned)).to be true
         expect(assigns(:last_accessioned_version)).to eq '7'
@@ -123,7 +156,8 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'renders an HTTP 422 message' do
-        get :index, params: { item_id: pid, id: 'bar.tif' }
+        get "/items/#{pid}/files?id=bar.tif"
+
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to eq "Preservation has not yet received #{pid}"
       end
@@ -137,7 +171,8 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'renders an HTTP 500 message' do
-        get :index, params: { item_id: pid, id: 'bar.tif' }
+        get "/items/#{pid}/files?id=bar.tif"
+
         expect(Rails.logger).to have_received(:error).with(/something is busted/).once
         expect(Honeybadger).to have_received(:notify).with(/something is busted/).once
         expect(response).to have_http_status(:internal_server_error)
