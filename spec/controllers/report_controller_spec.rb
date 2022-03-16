@@ -22,14 +22,6 @@ RSpec.describe ReportController, type: :controller do
       allow(controller.current_user).to receive(:admin?).and_return(true)
     end
 
-    describe '#workflow_grid' do
-      it 'works' do
-        get :workflow_grid
-        expect(response).to have_http_status(:ok)
-        expect(response).to render_template('workflow_grid')
-      end
-    end
-
     describe '#data' do
       before do
         allow(Report).to receive(:new).and_return(report)
