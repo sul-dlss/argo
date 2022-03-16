@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe UploadsController do
+RSpec.describe 'Upload a spreadsheet for modsulator' do
   let(:user) { create(:user) }
   let(:apo_id) { 'abc123' }
 
@@ -10,14 +10,14 @@ RSpec.describe UploadsController do
     sign_in user
   end
 
-  describe '#new' do
+  describe 'draw the upload form' do
     it 'is successful' do
-      get :new, params: { apo_id: apo_id }
+      get "/apos/#{apo_id}/uploads/new"
       expect(response).to be_successful
     end
   end
 
-  describe '#create' do
+  describe 'save the upload' do
     let(:file) { fixture_file_upload('crowdsourcing_bridget_1.xlsx') }
 
     before do
@@ -25,10 +25,11 @@ RSpec.describe UploadsController do
     end
 
     it 'is successful' do
-      post :create, params: { apo_id: apo_id,
-                              spreadsheet_file: file,
-                              filetypes: 'spreadsheet',
-                              note: 'test note' }
+      post "/apos/#{apo_id}/uploads", params: {
+        spreadsheet_file: file,
+        filetypes: 'spreadsheet',
+        note: 'test note'
+      }
       expect(ModsulatorJob).to have_received(:perform_later)
         .with('abc123', String, String, user, user.groups, 'spreadsheet', 'test note')
       expect(response).to redirect_to apo_bulk_jobs_path(apo_id)
