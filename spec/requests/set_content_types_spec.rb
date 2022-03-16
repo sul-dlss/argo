@@ -2,10 +2,9 @@
 
 require 'rails_helper'
 
-RSpec.describe ContentTypesController, type: :controller do
+RSpec.describe 'Set content type for an item', type: :request do
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    sign_in(user)
   end
 
   let(:pid) { 'druid:bc123df4567' }
@@ -94,18 +93,21 @@ RSpec.describe ContentTypesController, type: :controller do
     )
   end
 
-  describe '#show' do
+  describe 'show the form' do
+    before do
+      sign_in user, groups: []
+    end
+
     let(:content_type) { Cocina::Models::ObjectType.image }
 
     it 'is successful' do
-      get :show, params: { item_id: pid }
+      get "/items/#{pid}/content_type"
       expect(response).to be_successful
     end
   end
 
-  describe '#update' do
+  describe 'save the updated value' do
     before do
-      allow(controller).to receive(:authorize!).and_return(true)
       allow(StateService).to receive(:new).and_return(state_service)
       allow(Argo::Indexer).to receive(:reindex_pid_remotely)
     end
@@ -113,8 +115,12 @@ RSpec.describe ContentTypesController, type: :controller do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     context 'with access' do
+      before do
+        sign_in user, groups: ['sdr:administrator-role']
+      end
+
       it 'is successful at changing the content type to media' do
-        patch :update, params: { item_id: pid, new_content_type: 'media' }
+        patch "/items/#{pid}/content_type", params: { new_content_type: 'media' }
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.media, viewing_direction: nil))
@@ -123,7 +129,8 @@ RSpec.describe ContentTypesController, type: :controller do
       end
 
       it 'is successful at changing the content type to book (ltr)' do
-        patch :update, params: { item_id: pid, new_content_type: 'book (ltr)' }
+        patch "/items/#{pid}/content_type", params: { new_content_type: 'book (ltr)' }
+
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'left-to-right'))
@@ -132,7 +139,8 @@ RSpec.describe ContentTypesController, type: :controller do
       end
 
       it 'is successful at changing the content type to book (rtl)' do
-        patch :update, params: { item_id: pid, new_content_type: 'book (rtl)' }
+        patch "/items/#{pid}/content_type", params: { new_content_type: 'book (rtl)' }
+
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.book, viewing_direction: 'right-to-left'))
@@ -141,7 +149,8 @@ RSpec.describe ContentTypesController, type: :controller do
       end
 
       it 'is successful at changing the resource type' do
-        patch :update, params: { item_id: pid, old_resource_type: 'document', new_resource_type: 'file', new_content_type: 'image' }
+        patch "/items/#{pid}/content_type", params: { old_resource_type: 'document', new_resource_type: 'file', new_content_type: 'image' }
+
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(
@@ -154,7 +163,8 @@ RSpec.describe ContentTypesController, type: :controller do
       end
 
       it 'is successful when effectively a no-op' do
-        patch :update, params: { item_id: pid, new_content_type: 'image', old_resource_type: 'file', new_resource_type: 'document' }
+        patch "/items/#{pid}/content_type", params: { new_content_type: 'image', old_resource_type: 'file', new_resource_type: 'document' }
+
         expect(response).to redirect_to solr_document_path(pid)
         expect(object_client).to have_received(:update)
           .with(
@@ -171,7 +181,8 @@ RSpec.describe ContentTypesController, type: :controller do
         let(:structural) { Cocina::Models::DROStructural.new({}) }
 
         it 'changes the content type only' do
-          patch :update, params: { item_id: pid, new_content_type: 'media' }
+          patch "/items/#{pid}/content_type", params: { new_content_type: 'media' }
+
           expect(response).to redirect_to solr_document_path(pid)
           expect(object_client).to have_received(:update)
             .with(params: cocina_object_with_types(content_type: Cocina::Models::ObjectType.media))
@@ -182,7 +193,8 @@ RSpec.describe ContentTypesController, type: :controller do
         let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
         it 'is forbidden' do
-          patch :update, params: { item_id: pid, new_content_type: 'media' }
+          patch "/items/#{pid}/content_type", params: { new_content_type: 'media' }
+
           expect(response).to be_forbidden
           expect(response.body).to eq('Object cannot be modified in its current state.')
           expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
@@ -191,7 +203,8 @@ RSpec.describe ContentTypesController, type: :controller do
 
       context 'with an invalid content_type' do
         it 'is forbidden' do
-          patch :update, params: { item_id: pid, new_content_type: 'frog' }
+          patch "/items/#{pid}/content_type", params: { new_content_type: 'frog' }
+
           expect(response).to be_forbidden
           expect(response.body).to eq('Invalid new content type.')
           expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
@@ -201,11 +214,12 @@ RSpec.describe ContentTypesController, type: :controller do
 
     context 'without access' do
       before do
-        allow(controller).to receive(:authorize!).and_raise(CanCan::AccessDenied)
+        sign_in user, groups: []
       end
 
       it 'is forbidden' do
-        patch :update, params: { item_id: pid, new_content_type: 'media' }
+        patch "/items/#{pid}/content_type", params: { new_content_type: 'media' }
+
         expect(response).to be_forbidden
         expect(response.body).to eq('forbidden')
         expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
