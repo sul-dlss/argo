@@ -144,9 +144,7 @@ RSpec.describe 'Files', type: :request do
       it 'is successful' do
         get "/items/#{pid}/files?id=M1090_S15_B01_F07_0106.jp2"
         expect(response).to have_http_status(:ok)
-        expect(assigns(:has_been_accessioned)).to be true
-        expect(assigns(:last_accessioned_version)).to eq '7'
-        expect(assigns(:file)).to eq file
+        expect(response.body).to include '/items/druid:bc123df4567/files/M1090_S15_B01_F07_0106.jp2/preserved?version=7'
       end
     end
 
