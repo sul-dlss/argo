@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe BulkActionsController do
+RSpec.describe 'BulkActionsController' do
   let(:current_user) do
     create(:user)
   end
@@ -15,44 +15,38 @@ RSpec.describe BulkActionsController do
     it 'assigns @bulk_actions from current_user' do
       create(:bulk_action, user_id: current_user.id + 1) # Not current_user's
       b_action = create(:bulk_action, user: current_user)
-      get :index
+      get '/bulk_actions'
       expect(assigns(:bulk_actions)).to eq [b_action]
     end
 
     it 'has a 200 status code' do
-      get :index
+      get '/bulk_actions'
       expect(response.status).to eq 200
     end
   end
 
   describe 'GET new' do
     it 'assigns @form' do
-      get :new
+      get '/bulk_actions/new'
       expect(assigns(:form)).not_to be_nil
     end
 
     it 'has a 200 status code' do
-      get :new
+      get '/bulk_actions/new'
       expect(response.status).to eq 200
     end
   end
 
   describe 'POST create' do
     context 'with correct parameters' do
-      let(:groups) { [User::ADMIN_GROUPS.first, 'sunetid:person9'] }
-
-      before do
-        allow_any_instance_of(User).to receive(:groups).and_return(groups)
-      end
-
       it 'creates a new BulkAction' do
         expect do
-          post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
+          post '/bulk_actions', params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         end.to change(BulkAction, :count).by(1)
       end
 
       it 'has a 302 status code' do
-        post :create, params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
+        post '/bulk_actions', params: { bulk_action: { action_type: 'GenericJob', pids: '' } }
         expect(response.status).to eq 302
       end
 
@@ -64,7 +58,7 @@ RSpec.describe BulkActionsController do
         end
 
         it 'renders new' do
-          post :create, params: { bulk_action: { action_type: 'GenericJob' } }
+          post '/bulk_actions', params: { bulk_action: { action_type: 'GenericJob' } }
           expect(response).to render_template('new')
         end
       end
@@ -72,7 +66,7 @@ RSpec.describe BulkActionsController do
 
     context 'without current parameters' do
       it 'requires bulk_action parameter' do
-        expect { post :create }.to raise_error ActionController::ParameterMissing
+        expect { post '/bulk_actions' }.to raise_error ActionController::ParameterMissing
       end
     end
   end
@@ -81,14 +75,14 @@ RSpec.describe BulkActionsController do
     it 'assigns and deletes current_users BulkAction by id param' do
       b_action = create(:bulk_action, user: current_user)
       expect do
-        delete :destroy, params: { id: b_action.id }
+        delete "/bulk_actions/#{b_action.id}"
       end.to change(BulkAction, :count).by(-1)
     end
 
     it 'does not delete other users bulk actions' do
       b_action = create(:bulk_action, user_id: current_user.id + 1)
       expect do
-        delete :destroy, params: { id: b_action.id }
+        delete "/bulk_actions/#{b_action.id}"
       end.not_to change(BulkAction, :count)
       expect(response.status).to eq 404
     end
@@ -109,7 +103,8 @@ RSpec.describe BulkActionsController do
     end
 
     it 'sends through a BulkActions file' do
-      get :file, params: { id: bulk_action.id, filename: 'test.log' }
+      get "/bulk_actions/#{bulk_action.id}/file?filename=test.log"
+
       expect(response.status).to eq 200
     end
 
@@ -117,8 +112,8 @@ RSpec.describe BulkActionsController do
       let(:user_id) { current_user.id + 1 }
 
       it 'does not send file for other users files' do
-        expect(controller).not_to receive(:send_file)
-        get :file, params: { id: bulk_action.id, filename: 'not_my_log.log' }
+        get "/bulk_actions/#{bulk_action.id}/file?filename=not_my_log.log"
+
         expect(response.status).to eq 404
       end
     end
