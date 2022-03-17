@@ -44,7 +44,7 @@ class ItemChangeSet < ApplicationChangeSet
 
   def setup_embargo_properties!
     embargo = model.access.embargo
-    self.embargo_release_date = embargo.releaseDate.to_date.to_s(:default)
+    self.embargo_release_date = embargo.releaseDate.to_date.to_fs(:default)
     self.embargo_access = if embargo.view == 'location-based'
                             "loc:#{embargo.location}"
                           elsif embargo.download == 'none' && embargo.view.in?(%w[stanford world])
