@@ -24,7 +24,7 @@ class Dor::ObjectsController < ApplicationController
   end
 
   def munge_parameters
-    case request.content_type
+    case request.media_type
     when 'application/xml', 'text/xml'
       merge_params(Hash.from_xml(request.body.read))
     when 'application/json', 'text/json'
