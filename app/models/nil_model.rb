@@ -28,6 +28,10 @@ class NilModel
     false
   end
 
+  def to_h
+    {}
+  end
+
   # This stands in for the administrative metadata
   class NilAdministrative
     # rubocop:disable Naming/MethodName
