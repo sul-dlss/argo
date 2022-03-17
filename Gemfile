@@ -20,7 +20,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 gem 'cssbundling-rails', '~> 1.1'
 gem 'jsbundling-rails', '~> 1.0'
-gem 'sprockets-rails'
+gem 'propshaft'
 
 gem 'view_component', '~> 2.52'
 
