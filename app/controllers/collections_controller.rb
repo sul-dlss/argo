@@ -24,6 +24,7 @@ class CollectionsController < ApplicationController
     collection_pid = form.model.externalIdentifier
 
     cocina_admin_policy = object_client.find
+    Rails.logger.info("Lock before: #{cocina_admin_policy.lock}")
     collections = Array(cocina_admin_policy.administrative.collectionsForRegistration).dup
     # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection` (from the now de-coupled dor-services gem)
     # 1. If collection is already listed, remove it temporarily
@@ -35,6 +36,7 @@ class CollectionsController < ApplicationController
         collectionsForRegistration: collections
       )
     )
+    Rails.logger.info("Lock before: #{updated_cocina_admin_policy.lock}")
     object_client.update(params: updated_cocina_admin_policy)
     Argo::Indexer.reindex_pid_remotely(params[:apo_id])
     redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_pid}"
