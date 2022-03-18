@@ -24,42 +24,42 @@ class Ability
 
     if current_user.manager?
       can %i[manage_item manage_desc_metadata manage_governing_apo view_content view_metadata],
-          [NilModel, Cocina::Models::DRO, Cocina::Models::Collection]
-      can :create, Cocina::Models::AdminPolicy
+          [NilModel] + ALL_COCINA_TYPES
+      can :create, ADMIN_POLICY_COCINA_TYPES
     end
 
-    can %i[view_metadata view_content], [Cocina::Models::DRO, Cocina::Models::Collection, Cocina::Models::AdminPolicy] if current_user.viewer?
+    can %i[view_metadata view_content], ALL_COCINA_TYPES if current_user.viewer?
 
-    can :manage_item, Cocina::Models::AdminPolicy do |cocina_object|
+    can :manage_item, ADMIN_POLICY_COCINA_TYPES do |cocina_object|
       can_manage_items? current_user.roles(cocina_object.externalIdentifier)
     end
 
-    can :manage_item, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
+    can :manage_item, COLLECTION_COCINA_TYPES + DRO_COCINA_TYPES do |cocina_object|
       can_manage_items? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
-    can :manage_desc_metadata, Cocina::Models::AdminPolicy do |cocina_admin_policy|
+    can :manage_desc_metadata, ADMIN_POLICY_COCINA_TYPES do |cocina_admin_policy|
       can_edit_desc_metadata? current_user.roles(cocina_admin_policy.externalIdentifier)
     end
 
-    can :manage_desc_metadata, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
+    can :manage_desc_metadata, COLLECTION_COCINA_TYPES + DRO_COCINA_TYPES do |cocina_object|
       can_edit_desc_metadata? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
-    can :manage_governing_apo, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object, new_apo_id|
+    can :manage_governing_apo, COLLECTION_COCINA_TYPES + DRO_COCINA_TYPES do |cocina_object, new_apo_id|
       # user must have management privileges on both the target APO and the APO currently governing the item
       can_manage_items?(current_user.roles(new_apo_id)) && can?(:manage_item, cocina_object)
     end
 
-    can :view_content, Cocina::Models::DRO do |cocina_item|
+    can :view_content, DRO_COCINA_TYPES do |cocina_item|
       can_view? current_user.roles(cocina_item.administrative.hasAdminPolicy)
     end
 
-    can :view_metadata, [Cocina::Models::Collection, Cocina::Models::DRO] do |cocina_object|
+    can :view_metadata, COLLECTION_COCINA_TYPES + DRO_COCINA_TYPES do |cocina_object|
       can_view? current_user.roles(cocina_object.administrative.hasAdminPolicy)
     end
 
-    can :view_metadata, Cocina::Models::AdminPolicy do |cocina_admin_policy|
+    can :view_metadata, ADMIN_POLICY_COCINA_TYPES do |cocina_admin_policy|
       can_view?(current_user.roles(cocina_admin_policy.externalIdentifier)) ||
         can_view?(current_user.roles(cocina_admin_policy.administrative.hasAdminPolicy))
     end
@@ -77,6 +77,11 @@ class Ability
   GROUPS_WHICH_MANAGE_ITEMS = %w[dor-administrator sdr-administrator dor-apo-manager dor-apo-depositor].freeze
   GROUPS_WHICH_EDIT_DESC_METADATA = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-apo-metadata]).freeze
   GROUPS_WHICH_VIEW = (GROUPS_WHICH_MANAGE_ITEMS + %w[dor-viewer sdr-viewer]).freeze
+
+  ADMIN_POLICY_COCINA_TYPES = [Cocina::Models::AdminPolicy, Cocina::Models::AdminPolicyWithMetadata].freeze
+  COLLECTION_COCINA_TYPES = [Cocina::Models::Collection, Cocina::Models::CollectionWithMetadata].freeze
+  DRO_COCINA_TYPES = [Cocina::Models::DRO, Cocina::Models::DROWithMetadata].freeze
+  ALL_COCINA_TYPES = ADMIN_POLICY_COCINA_TYPES + COLLECTION_COCINA_TYPES + DRO_COCINA_TYPES
 
   def can_manage_items?(roles)
     intersect roles, GROUPS_WHICH_MANAGE_ITEMS

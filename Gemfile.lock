@@ -1,3 +1,30 @@
+GIT
+  remote: https://github.com/sul-dlss/cocina-models.git
+  revision: 81536c65944036cb7302591076ead82bbe3462e0
+  branch: optimistic_locking
+  specs:
+    cocina-models (0.69.2)
+      activesupport
+      dry-struct (~> 1.0)
+      dry-types (~> 1.1)
+      openapi3_parser
+      openapi_parser (>= 0.11.1, < 1.0)
+      super_diff
+      thor
+      zeitwerk (~> 2.1)
+
+GIT
+  remote: https://github.com/sul-dlss/dor-services-client.git
+  revision: 9787b812cc5985380ca274193d63b961537b02c1
+  branch: etags_with_metadata
+  specs:
+    dor-services-client (8.3.0)
+      activesupport (>= 4.2, < 8)
+      deprecation
+      faraday (~> 2.0)
+      faraday-retry
+      zeitwerk (~> 2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -133,15 +160,6 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (4.1.0)
-    cocina-models (0.69.2)
-      activesupport
-      dry-struct (~> 1.0)
-      dry-types (~> 1.1)
-      openapi3_parser
-      openapi_parser (>= 0.11.1, < 1.0)
-      super_diff
-      thor
-      zeitwerk (~> 2.1)
     coderay (1.1.3)
     commonmarker (0.23.4)
     concurrent-ruby (1.1.9)
@@ -177,13 +195,6 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-services-client (8.3.0)
-      activesupport (>= 4.2, < 8)
-      cocina-models (~> 0.69.0)
-      deprecation
-      faraday (~> 2.0)
-      faraday-retry
-      zeitwerk (~> 2.1)
     dor-workflow-client (4.0.0)
       activesupport (>= 3.2.1, < 8)
       deprecation (>= 0.99.0)
@@ -587,14 +598,14 @@ DEPENDENCIES
   capistrano-passenger
   capistrano-rails
   capybara
-  cocina-models (~> 0.69)
+  cocina-models!
   coderay
   config
   cssbundling-rails (~> 1.1)
   devise
   devise-remote-user (~> 1.0)
   dlss-capistrano
-  dor-services-client (~> 8.0)
+  dor-services-client!
   dor-workflow-client (~> 4.0)
   druid-tools
   dry-monads

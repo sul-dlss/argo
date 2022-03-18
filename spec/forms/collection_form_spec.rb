@@ -6,6 +6,14 @@ RSpec.describe CollectionForm do
   let(:apo_pid) { 'druid:zt570qh4444' }
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:collection_id) { 'druid:gg232vv1111' }
+  let(:response_headers) do
+    {
+      'Last-Modified' => 'Wed, 04 Mar 2021 18:58:00 GMT',
+      'X-Created-At' => 'Wed, 02 Jan 2021 12:58:00 GMT',
+      'X-Served-By' => 'Awesome webserver',
+      'ETag' => 'W/"e541d8cd98f00b204e9800998ecf8427f"'
+    }
+  end
 
   context 'when creating collection' do
     let(:instance) { described_class.new }
@@ -89,7 +97,7 @@ RSpec.describe CollectionForm do
       before do
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(body: Cocina::Models::RequestCollection.new(expected_request_body_hash).to_json)
-          .to_return(status: 200, body: created_collection, headers: {})
+          .to_return(status: 201, body: created_collection, headers: response_headers)
       end
 
       it 'creates a collection from title/abstract by registering the collection, without adding the abstract to descMetadata' do
@@ -116,7 +124,7 @@ RSpec.describe CollectionForm do
         expected_body_hash[:label] = ':auto'
         stub_request(:post, "#{Settings.dor_services.url}/v1/objects")
           .with(body: Cocina::Models::RequestCollection.new(expected_body_hash).to_json)
-          .to_return(status: 200, body: created_collection, headers: {})
+          .to_return(status: 201, body: created_collection, headers: response_headers)
       end
 
       it 'creates a collection from catkey by registering the collection, without adding the abstract to descMetadata' do

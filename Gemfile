@@ -73,7 +73,9 @@ gem 'openapi_parser', '< 1.0'
 # Stanford related gems
 gem 'blacklight', '~> 7.20'
 gem 'blacklight-hierarchy', '~> 6.0'
-gem 'dor-services-client', '~> 8.0'
+# gem 'dor-services-client', '~> 8.0'
+gem 'cocina-models', github: 'sul-dlss/cocina-models', branch: 'optimistic_locking'
+gem 'dor-services-client', github: 'sul-dlss/dor-services-client', branch: 'etags_with_metadata'
 gem 'dor-workflow-client', '~> 4.0'
 gem 'druid-tools'
 gem 'mods_display', '~> 1.0.0.alpha1'
@@ -108,7 +110,7 @@ end
 group :test do
   gem 'capybara'
   # We only need the RSpec matchers from cocina-models in Argo, so don't worry about pinning to patch level
-  gem 'cocina-models', '~> 0.69'
+  # gem 'cocina-models', '~> 0.69'
   gem 'rspec_junit_formatter' # needed for test coverage in CircleCI
   gem 'selenium-webdriver' # for js testing
   gem 'simplecov'

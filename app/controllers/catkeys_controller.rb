@@ -33,9 +33,9 @@ class CatkeysController < ApplicationController
 
   def change_set_class
     case @cocina
-    when Cocina::Models::DRO
+    when Cocina::Models::DRO, Cocina::Models::DROWithMetadata
       ItemChangeSet
-    when Cocina::Models::Collection
+    when Cocina::Models::Collection, Cocina::Models::CollectionWithMetadata
       CollectionChangeSet
     end
   end
