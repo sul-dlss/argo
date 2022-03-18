@@ -6,7 +6,7 @@ orbs:
   browser-tools: circleci/browser-tools@1.1
 
 references:
-  default_ruby_version: &default_ruby_version 3.0-browsers
+  default_ruby_version: &default_ruby_version 3.1-browsers
   default_postgres_version: &default_postgres_version '11.13'
   ruby_envs: &ruby_envs
     environment:
