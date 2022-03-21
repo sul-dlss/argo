@@ -397,3 +397,19 @@ RSpec/BeNil: # new in 2.9.0
   Enabled: true
 Style/NestedFileDirname: # new in 1.26
   Enabled: true
+Rails/ActionControllerTestCase: # new in 2.14
+  Enabled: true
+Rails/DeprecatedActiveModelErrorsMethods: # new in 2.14
+  Enabled: true
+Rails/DuplicateAssociation: # new in 2.14
+  Enabled: true
+Rails/DuplicateScope: # new in 2.14
+  Enabled: true
+Rails/I18nLazyLookup: # new in 2.14
+  Enabled: true
+Rails/I18nLocaleTexts: # new in 2.14
+  Enabled: false
+Rails/MigrationClassName: # new in 2.14
+  Enabled: true
+Rails/TransactionExitStatement: # new in 2.14
+  Enabled: true
