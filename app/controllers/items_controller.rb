@@ -191,7 +191,7 @@ class ItemsController < ApplicationController
   end
 
   def show_use_statement
-    change_set = ItemChangeSet.new(@cocina)
+    change_set = build_change_set
     state_service = StateService.new(@cocina.externalIdentifier, version: @cocina.version)
     render Show::UseStatementComponent.new(change_set: change_set, state_service: state_service)
   end
