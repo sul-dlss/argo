@@ -64,7 +64,7 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
     bin/rails test:prepare
     ```
 
-5. **Run the tests (without rubocop)**
+5. **Run rubocop and the tests**
 
     ```
     bin/rake
