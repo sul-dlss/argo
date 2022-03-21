@@ -106,6 +106,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
               use_barcodes_option: '1'
             }
           }
+        allow(BulkJobLog).to receive(:open).and_yield(buffer)
         expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
         expect(subject).to receive(:update_catkey_and_barcode).with(change_set1, buffer)
         expect(subject).not_to receive(:update_catkey_and_barcode).with(change_set2, buffer)

@@ -29,8 +29,6 @@ class CreateVirtualObjectsJob < GenericJob
     virtual_objects = VirtualObjectsCsvConverter.convert(csv_string: params[:csv_file])
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
-
       update_druid_count(count: virtual_objects.length)
 
       # NOTE: `ability` is defined in this job's superclass, `GenericJob`
@@ -65,8 +63,6 @@ class CreateVirtualObjectsJob < GenericJob
         bulk_action.increment!(:druid_count_fail, errors.length)
         log.puts("#{Time.current} #{NOT_COMBINABLE_MESSAGE}: #{errors.join('; ')}")
       end
-
-      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 

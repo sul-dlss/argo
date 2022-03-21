@@ -14,7 +14,7 @@ RSpec.describe RemoteIndexingJob do
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(subject).to receive(:with_bulk_action_log).and_yield(log_buffer)
+    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
   end
 
   describe '#perform' do

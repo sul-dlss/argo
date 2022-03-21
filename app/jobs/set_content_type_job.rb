@@ -12,7 +12,6 @@ class SetContentTypeJob < GenericJob
     @new_resource_type = params[:set_content_type][:new_resource_type]
 
     with_bulk_action_log do |log_buffer|
-      log_buffer.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       raise StandardError, 'Must provide values for types.' if @current_resource_type.blank? && @new_resource_type.blank? && @new_content_type.blank?
       raise StandardError, 'Must provide a new content type when changing resource type.' if @new_content_type.blank? && @new_resource_type.present?
 
@@ -22,8 +21,6 @@ class SetContentTypeJob < GenericJob
         log_buffer.puts("#{Time.current} #{self.class}: Attempting #{current_druid} (bulk_action.id=#{bulk_action_id})")
         set_content_type(current_druid, log_buffer)
       end
-
-      log_buffer.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     rescue StandardError => e
       log_buffer.puts "#{Time.current} #{self.class}: Error with form values provided: #{e.message}"
     end

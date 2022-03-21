@@ -18,13 +18,11 @@ class PrepareJob < GenericJob
     description = params[:prepare]['description']
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each do |current_druid|
         open_object(current_druid, significance, description, @current_user.to_s, log)
       end
-      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 

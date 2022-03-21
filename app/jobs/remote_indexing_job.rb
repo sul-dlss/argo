@@ -7,15 +7,12 @@ class RemoteIndexingJob < GenericJob
     super
 
     with_bulk_action_log do |log_buffer|
-      log_buffer.puts("#{Time.current} Starting RemoteIndexingJob for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each do |current_druid|
         log_buffer.puts("#{Time.current} RemoteIndexingJob: Attempting to index #{current_druid} (bulk_action.id=#{bulk_action_id})")
         reindex_druid_safely(current_druid, log_buffer)
       end
-
-      log_buffer.puts("#{Time.current} Finished RemoteIndexingJob for BulkAction #{bulk_action_id}")
     end
   end
 

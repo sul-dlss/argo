@@ -15,7 +15,6 @@ class ChecksumReportJob < GenericJob
     report_filename = generate_report_filename(bulk_action.output_directory)
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       update_druid_count
       begin
         raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, Cocina::Models::DRO)
@@ -31,7 +30,6 @@ class ChecksumReportJob < GenericJob
         Honeybadger.context(bulk_action_id: bulk_action_id, params: params)
         Honeybadger.notify(message) # this is so the devs see it ASAP
       end
-      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 

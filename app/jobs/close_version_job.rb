@@ -13,13 +13,11 @@ class CloseVersionJob < GenericJob
   def perform(bulk_action_id, params)
     super
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each do |current_druid|
         close_object(current_druid, log)
       end
-      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 

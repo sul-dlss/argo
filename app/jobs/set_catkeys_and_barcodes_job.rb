@@ -19,7 +19,6 @@ class SetCatkeysAndBarcodesJob < GenericJob
     update_pids, catkeys, barcodes = params_from(params)
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting SetCatkeysAndBarcodesJob for BulkAction #{bulk_action_id}")
       update_druid_count(count: update_pids.count)
       update_pids.each_with_index do |current_druid, i|
         cocina_object = Dor::Services::Client.object(current_druid).find
@@ -30,7 +29,6 @@ class SetCatkeysAndBarcodesJob < GenericJob
         change_set.validate(args)
         update_catkey_and_barcode(change_set, log) if change_set.changed?
       end
-      log.puts("#{Time.current} Finished SetCatkeysAndBarcodesJob for BulkAction #{bulk_action_id}")
     end
   end
 

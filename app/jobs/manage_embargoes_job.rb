@@ -13,12 +13,10 @@ class ManageEmbargoesJob < GenericJob
 
     with_bulk_action_log do |log|
       update_pids, embargo_release_dates, rights = params_from_csv(params)
-      log.puts("#{Time.current} Starting ManageEmbargoesJob for BulkAction #{bulk_action_id}")
       update_druid_count(count: update_pids.count)
       update_pids.each_with_index do |current_druid, i|
         update_embargo(current_druid, embargo_release_dates[i], rights[i], log) unless current_druid.nil?
       end
-      log.puts("#{Time.current} Finished ManageEmbargoesJob for BulkAction #{bulk_action_id}")
     end
   end
 

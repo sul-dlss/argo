@@ -13,7 +13,6 @@ class SetRightsJob < GenericJob
     @new_rights = params[:set_rights][:rights]
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting SetRightsJob for BulkAction #{bulk_action_id}")
       raise StandardError, 'Must provide rights' if @new_rights.blank?
 
       update_druid_count
@@ -22,7 +21,6 @@ class SetRightsJob < GenericJob
         log.puts("#{Time.current} #{self.class}: Attempting #{druid} (bulk_action.id=#{bulk_action_id})")
         set_rights(druid, log)
       end
-      log.puts("#{Time.current} Finished SetRightsJob for BulkAction #{bulk_action_id}")
     end
   end
 

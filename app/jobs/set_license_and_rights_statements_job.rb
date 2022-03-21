@@ -16,7 +16,6 @@ class SetLicenseAndRightsStatementsJob < GenericJob
     super
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting #{self.class} BulkAction #{bulk_action_id}")
       update_druid_count
 
       args = { ability: ability }.tap do |argument_hash|
@@ -39,8 +38,6 @@ class SetLicenseAndRightsStatementsJob < GenericJob
                              service_args: args
                            })
       end
-
-      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 

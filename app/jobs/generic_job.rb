@@ -46,8 +46,14 @@ class GenericJob < ActiveJob::Base
   #   # do some stuff
   #   log_buf.puts 'another thing about the state of this bulk action'
   # end
-  def with_bulk_action_log(&block)
-    BulkJobLog.open(bulk_action.log_name, &block)
+  def with_bulk_action_log
+    BulkJobLog.open(bulk_action.log_name) do |log|
+      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action.id}")
+
+      yield log
+
+      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action.id}")
+    end
   end
 
   def ability

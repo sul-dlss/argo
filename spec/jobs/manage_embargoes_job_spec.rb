@@ -93,7 +93,7 @@ RSpec.describe ManageEmbargoesJob do
     allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
     allow(StateService).to receive(:new).and_return(state_service)
     allow(subject.ability).to receive(:can?).and_return(true)
-    allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+    allow(BulkJobLog).to receive(:open).and_yield(buffer)
     allow(subject).to receive(:open_new_version)
     allow(ItemChangeSet).to receive(:new).and_return(change_set1, change_set2, change_set3)
   end

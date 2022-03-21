@@ -16,8 +16,6 @@ class RegisterDruidsJob < GenericJob
     report_filename = generate_report_filename(bulk_action.output_directory)
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
-
       update_druid_count(count: results.length)
       CSV.open(report_filename, 'wb') do |report|
         report << ['Druid', 'Source Id', 'Label']
@@ -27,8 +25,6 @@ class RegisterDruidsJob < GenericJob
                               ->(error) { log_error(error, bulk_action: bulk_action, log: log) })
         end
       end
-
-      log.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 

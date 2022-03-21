@@ -15,7 +15,7 @@ RSpec.describe ExportTagsJob, type: :job do
 
   before do
     allow(job).to receive(:bulk_action).and_return(bulk_action)
-    allow(job).to receive(:with_bulk_action_log).and_yield(log_buffer)
+    allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
   end
