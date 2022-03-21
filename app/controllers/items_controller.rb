@@ -250,11 +250,6 @@ class ItemsController < ApplicationController
 
   private
 
-  # NOTE: temporarily added to revert argo#2008; remove once argo#2007 is resolved
-  def tags_client
-    Dor::Services::Client.object(@cocina.externalIdentifier).administrative_tags
-  end
-
   def load_cocina
     raise 'missing druid' unless params[:id]
 
