@@ -58,17 +58,17 @@ CI runs a series of steps;  this the sequence to do it locally, along with some 
 
     You will need to have Google Chrome browser installed, as the tests use chrome for a headless browser.
 
-4. **Update javascript dependencies**
+4. **Prepare rails for testing**
 
     ```
-    yarn install
+    bin/rails test:prepare
     ```
 
 5. **Run the tests (without rubocop)**
 
-```
-bin/rake
-```
+    ```
+    bin/rake
+    ```
 
 ## Run the servers
 
