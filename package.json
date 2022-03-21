@@ -12,7 +12,7 @@
     "jquery": "^3.4.1",
     "renderjson": "^1.4.0",
     "sass": "^1.41.1",
-    "stimulus": "^2.0.0"
+    "stimulus": "^3.0.0"
   },
   "devDependencies": {},
   "license": "Apache-2.0",
