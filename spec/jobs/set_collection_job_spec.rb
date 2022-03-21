@@ -122,7 +122,7 @@ RSpec.describe SetCollectionJob do
         let(:buffer) { StringIO.new }
 
         before do
-          allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+          allow(BulkJobLog).to receive(:open).and_yield(buffer)
           allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_raise(Dor::Services::Client::NotFoundResponse)
           allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
         end

@@ -31,7 +31,7 @@ RSpec.describe SetGoverningApoJob do
     let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
     before do
-      allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+      allow(BulkJobLog).to receive(:open).and_yield(buffer)
       allow(StateService).to receive(:new).and_return(state_service)
     end
 

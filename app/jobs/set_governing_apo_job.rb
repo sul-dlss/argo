@@ -15,7 +15,6 @@ class SetGoverningApoJob < GenericJob
     @new_apo_id = params[:set_governing_apo]['new_apo_id']
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting SetGoverningApoJob for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each do |current_druid|
@@ -23,8 +22,6 @@ class SetGoverningApoJob < GenericJob
         set_governing_apo_and_index_safely(current_druid, log)
         log.puts("#{Time.current} SetGoverningApoJob: Finished update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
       end
-
-      log.puts("#{Time.current} Finished SetGoverningApoJob for BulkAction #{bulk_action_id}")
     end
   end
 

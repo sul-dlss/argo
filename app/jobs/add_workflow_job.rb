@@ -15,11 +15,9 @@ class AddWorkflowJob < GenericJob
     super
     @workflow_name = params.fetch(:add_workflow).fetch(:workflow)
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting AddWorkflowJob for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each { |current_druid| start_workflow(current_druid, log) }
-      log.puts("#{Time.current} Finished AddWorkflowJob for BulkAction #{bulk_action_id}")
     end
   end
 

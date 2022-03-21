@@ -21,11 +21,9 @@ class ReleaseObjectJob < GenericJob
     super
     @manage_release = params[:manage_release]
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting ReleaseObjectJob for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each { |current_druid| release_object(current_druid, log) }
-      log.puts("#{Time.current} Finished ReleaseObjectJob for BulkAction #{bulk_action_id}")
     end
   end
 

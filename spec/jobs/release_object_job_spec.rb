@@ -44,7 +44,7 @@ RSpec.describe ReleaseObjectJob do
     allow(Dor::Workflow::Client).to receive(:new).and_return(client)
 
     # Stub out the file, and send it to a string buffer instead
-    allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+    allow(BulkJobLog).to receive(:open).and_yield(buffer)
   end
 
   describe '#perform' do
@@ -126,7 +126,7 @@ RSpec.describe ReleaseObjectJob do
         it 'logs information to the logfile' do
           # Stub out the file, and send it to a string buffer instead
           buffer = StringIO.new
-          expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+          expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
           pids.each do |pid|
             expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
@@ -159,7 +159,7 @@ RSpec.describe ReleaseObjectJob do
         it 'logs information to the logfile' do
           # Stub out the file, and send it to a string buffer instead
           buffer = StringIO.new
-          expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+          expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
           pids.each do |pid|
             expect(buffer.string).to include "Beginning ReleaseObjectJob for #{pid}"
@@ -184,7 +184,7 @@ RSpec.describe ReleaseObjectJob do
 
         it 'logs druid info to logfile' do
           buffer = StringIO.new
-          expect(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+          expect(BulkJobLog).to receive(:open).and_yield(buffer)
           subject.perform(bulk_action.id, params)
           expect(buffer.string).to include 'Starting ReleaseObjectJob for BulkAction'
           pids.each do |pid|

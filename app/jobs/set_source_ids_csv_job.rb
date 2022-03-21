@@ -15,7 +15,6 @@ class SetSourceIdsCsvJob < GenericJob
     update_pids, source_ids = params_from(params)
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       update_druid_count(count: update_pids.count)
       update_pids.each_with_index do |current_druid, i|
         update_one(current_druid, source_ids[i], log)
@@ -23,7 +22,6 @@ class SetSourceIdsCsvJob < GenericJob
         log.puts("#{Time.current} Unexpected error setting source_id for #{current_druid}: #{e.message}")
         bulk_action.increment(:druid_count_fail).save
       end
-      log.puts("#{Time.current} Finished SetCatkeysAndBarcodesJob for BulkAction #{bulk_action_id}")
     end
   end
 

@@ -181,7 +181,7 @@ RSpec.describe SetRightsJob, type: :job do
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(subject).to receive(:with_bulk_action_log).and_yield(buffer)
+    allow(BulkJobLog).to receive(:open).and_yield(buffer)
     allow(subject.ability).to receive(:can?).and_return(true)
     allow(StateService).to receive(:new).and_return(state_service)
     allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)

@@ -7,15 +7,12 @@ class RepublishJob < GenericJob
     super
 
     with_bulk_action_log do |log_buffer|
-      log_buffer.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each do |current_druid|
         log_buffer.puts("#{Time.current} #{self.class}: Attempting to republish #{current_druid} (bulk_action.id=#{bulk_action_id})")
         republish(current_druid, log_buffer)
       end
-
-      log_buffer.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 

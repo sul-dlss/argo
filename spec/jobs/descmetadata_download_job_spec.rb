@@ -103,7 +103,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
         allow(bulk_action).to receive(:increment).with(:druid_count_fail)
         allow(bulk_action).to receive_message_chain(:increment, :save)
         allow(download_job).to receive(:bulk_action).and_return(bulk_action)
-        allow(download_job).to receive(:with_bulk_action_log).and_yield(log)
+        allow(BulkJobLog).to receive(:open).and_yield(log)
       end
 
       it 'tries again and logs messages' do
@@ -149,7 +149,7 @@ RSpec.describe DescmetadataDownloadJob, type: :job do
     let(:log) { double('log', puts: nil, flush: nil) }
 
     before do
-      allow(download_job).to receive(:with_bulk_action_log).and_yield(log)
+      allow(BulkJobLog).to receive(:open).and_yield(log)
     end
 
     it 'does not log anything upon success' do

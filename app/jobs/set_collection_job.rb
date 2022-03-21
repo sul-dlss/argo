@@ -15,7 +15,6 @@ class SetCollectionJob < GenericJob
     @new_collection_ids = Array(params[:set_collection]['new_collection_id'].presence)
 
     with_bulk_action_log do |log|
-      log.puts("#{Time.current} Starting SetCollectionJob for BulkAction #{bulk_action_id}")
       update_druid_count
 
       pids.each do |current_druid|
@@ -23,8 +22,6 @@ class SetCollectionJob < GenericJob
         set_collection_and_index_safely(current_druid, log)
         log.puts("#{Time.current} SetCollectionJob: Finished update for #{current_druid} (bulk_action.id=#{bulk_action_id})")
       end
-
-      log.puts("#{Time.current} Finished SetCollectionJob for BulkAction #{bulk_action_id}")
     end
   end
 

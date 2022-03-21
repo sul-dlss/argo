@@ -10,8 +10,6 @@ class ImportTagsJob < GenericJob
     super
 
     with_bulk_action_log do |log_buffer|
-      log_buffer.puts("#{Time.current} Starting #{self.class} for BulkAction #{bulk_action_id}")
-
       druids_with_tags = ImportTagsCsvConverter.convert(csv_string: params[:csv_file])
 
       # NOTE: We use this instead of `update_druid_count` because import
@@ -22,8 +20,6 @@ class ImportTagsJob < GenericJob
         log_buffer.puts("#{Time.current} #{self.class}: Importing tags for #{druid} (bulk_action.id=#{bulk_action_id})")
         import_tags(druid, log_buffer, tags)
       end
-
-      log_buffer.puts("#{Time.current} Finished #{self.class} for BulkAction #{bulk_action_id}")
     end
   end
 
