@@ -35,6 +35,8 @@ RSpec.describe CollectionForm do
                                      label: '',
                                      version: 1,
                                      access: {},
+                                     identification: {},
+                                     administrative: { hasAdminPolicy: 'druid:zt570qh4444' },
                                      description: description).to_json
     end
     let(:workflow_client) { instance_double(Dor::Workflow::Client, create_workflow_by_name: true) }

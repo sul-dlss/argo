@@ -28,7 +28,8 @@ RSpec.describe ManageEmbargoesJob do
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {}
+                           'structural' => {},
+                           'identification' => {}
                          })
   end
   let(:item2) do
@@ -43,7 +44,8 @@ RSpec.describe ManageEmbargoesJob do
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {}
+                           'structural' => {},
+                           'identification' => {}
                          })
   end
   let(:item3) do
@@ -58,7 +60,8 @@ RSpec.describe ManageEmbargoesJob do
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {}
+                           'structural' => {},
+                           'identification' => {}
                          })
   end
 

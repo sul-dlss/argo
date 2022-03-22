@@ -25,7 +25,8 @@ RSpec.describe 'WorkflowServiceController', type: :request do
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
-                           'structural' => {}
+                           'structural' => {},
+                           'identification' => {}
                          })
   end
 

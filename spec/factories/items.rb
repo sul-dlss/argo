@@ -14,7 +14,8 @@ FactoryBot.define do
                                        'administrative' => {
                                          'hasAdminPolicy' => admin_policy_id
                                        },
-                                       'access' => {}
+                                       'access' => {},
+                                       'structural' => {}
                                      })
       )
     end

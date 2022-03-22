@@ -38,7 +38,8 @@ RSpec.describe 'Add a workflow to an item' do
                            },
                            'administrative' => { hasAdminPolicy: uber_apo_id },
                            'access' => {},
-                           'structural' => {}
+                           'structural' => {},
+                           'identification' => {}
                          })
   end
   let(:uber_apo_id) { 'druid:hv992ry2431' }
