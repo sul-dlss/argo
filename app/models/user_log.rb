@@ -65,11 +65,12 @@ class UserLog
 
         # Ignore lines that don't conform to the format
         current_hash = {}
-        if split_line.length == 2
+        case split_line.length
+        when 2
           druids_loaded += 1 if split_line[0] == 'argo.bulk_metadata.bulk_log_job_save_success'
           current_hash[split_line[0]] = split_line[1]
           log_items.push(current_hash)
-        elsif split_line.length == 1
+        when 1
           current_hash[log_line.strip] = nil
           log_items.push(current_hash)
         end
