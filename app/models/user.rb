@@ -42,7 +42,7 @@ class User < ApplicationRecord
   # (2) groups actually contains the sunetid, so it is just looking at different solr fields
   # NOTE: includes legacy roles that have to be translated
   # @param [String] admin_policy_id Object identifier of an Admin Policy
-  # @return [Array<String>] set of roles permitted for PID
+  # @return [Array<String>] set of roles permitted for DRUID
   def roles(admin_policy_id)
     return [] if admin_policy_id.blank?
 

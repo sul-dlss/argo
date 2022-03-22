@@ -5,12 +5,12 @@ require 'rails_helper'
 RSpec.describe 'Set rights for an object' do
   context 'when they have manage access' do
     let(:user) { create(:user) }
-    let(:pid) { 'druid:cc243mg0841' }
+    let(:druid) { 'druid:cc243mg0841' }
     let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
     end
 
@@ -20,10 +20,10 @@ RSpec.describe 'Set rights for an object' do
                                'label' => 'My ETD',
                                'version' => 1,
                                'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => pid,
+                               'externalIdentifier' => druid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {
                                  'view' => 'world',
@@ -108,11 +108,11 @@ RSpec.describe 'Set rights for an object' do
         end
 
         it 'sets the access and propagates changes to content metadata' do
-          post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'dark' } }
-          expect(response).to redirect_to(solr_document_path(pid))
+          post "/items/#{druid}/set_rights", params: { dro_rights_form: { rights: 'dark' } }
+          expect(response).to redirect_to(solr_document_path(druid))
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
@@ -167,11 +167,11 @@ RSpec.describe 'Set rights for an object' do
         end
 
         it 'sets the access and does not change content metadata' do
-          post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'stanford' } }
-          expect(response).to redirect_to(solr_document_path(pid))
+          post "/items/#{druid}/set_rights", params: { dro_rights_form: { rights: 'stanford' } }
+          expect(response).to redirect_to(solr_document_path(druid))
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
@@ -226,11 +226,11 @@ RSpec.describe 'Set rights for an object' do
         end
 
         it 'sets the access' do
-          post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'cdl-stanford-nd' } }
-          expect(response).to redirect_to(solr_document_path(pid))
+          post "/items/#{druid}/set_rights", params: { dro_rights_form: { rights: 'cdl-stanford-nd' } }
+          expect(response).to redirect_to(solr_document_path(druid))
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
@@ -240,10 +240,10 @@ RSpec.describe 'Set rights for an object' do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {
                                    'view' => 'stanford',
@@ -310,11 +310,11 @@ RSpec.describe 'Set rights for an object' do
         end
 
         it 'sets the access' do
-          post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'world' } }
-          expect(response).to redirect_to(solr_document_path(pid))
+          post "/items/#{druid}/set_rights", params: { dro_rights_form: { rights: 'world' } }
+          expect(response).to redirect_to(solr_document_path(druid))
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
 
@@ -369,11 +369,11 @@ RSpec.describe 'Set rights for an object' do
         end
 
         it 'sets the access' do
-          post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'citation-only' } }
-          expect(response).to redirect_to(solr_document_path(pid))
+          post "/items/#{druid}/set_rights", params: { dro_rights_form: { rights: 'citation-only' } }
+          expect(response).to redirect_to(solr_document_path(druid))
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
     end
@@ -384,10 +384,10 @@ RSpec.describe 'Set rights for an object' do
                                'label' => 'My ETD',
                                'version' => 1,
                                'type' => Cocina::Models::ObjectType.collection,
-                               'externalIdentifier' => pid,
+                               'externalIdentifier' => druid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {
                                  'view' => 'world'
@@ -409,11 +409,11 @@ RSpec.describe 'Set rights for an object' do
         end
 
         it 'sets the access' do
-          post "/items/#{pid}/set_rights", params: { collection_rights_form: { rights: 'dark' } }
-          expect(response).to redirect_to(solr_document_path(pid))
+          post "/items/#{druid}/set_rights", params: { collection_rights_form: { rights: 'dark' } }
+          expect(response).to redirect_to(solr_document_path(druid))
           expect(object_client).to have_received(:update)
             .with(params: updated_model)
-          expect(Argo::Indexer).to have_received(:reindex_pid_remotely).with(pid)
+          expect(Argo::Indexer).to have_received(:reindex_druid_remotely).with(druid)
         end
       end
     end
@@ -424,10 +424,10 @@ RSpec.describe 'Set rights for an object' do
                                'label' => 'My ETD',
                                'version' => 1,
                                'type' => Cocina::Models::ObjectType.collection,
-                               'externalIdentifier' => pid,
+                               'externalIdentifier' => druid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {
                                  'view' => 'world'
@@ -447,7 +447,7 @@ RSpec.describe 'Set rights for an object' do
       end
       let(:events_client) { instance_double(Dor::Services::Client::Events, list: []) }
       let(:service) { instance_double(Blacklight::SearchService, fetch: [nil, doc]) }
-      let(:doc) { SolrDocument.new id: pid, SolrDocument::FIELD_OBJECT_TYPE => 'item' }
+      let(:doc) { SolrDocument.new id: druid, SolrDocument::FIELD_OBJECT_TYPE => 'item' }
       let(:error) do
         '{"errors":[{"status":"422","title":"Unexpected Cocina::Mapper.build error",' \
         '"detail":"#/components/schemas/SourceId pattern ^.+:.+$ does not match value: bad_source_id:, ' \
@@ -461,8 +461,8 @@ RSpec.describe 'Set rights for an object' do
       end
 
       it 'redirects to the show page with an error' do
-        post "/items/#{pid}/set_rights", params: { dro_rights_form: { rights: 'dark' } }
-        expect(response).to redirect_to(solr_document_path(pid))
+        post "/items/#{druid}/set_rights", params: { dro_rights_form: { rights: 'dark' } }
+        expect(response).to redirect_to(solr_document_path(druid))
         follow_redirect!
         expect(response.body).to include 'Unable to retrieve the cocina model'
       end

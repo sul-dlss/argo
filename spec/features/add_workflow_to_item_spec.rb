@@ -54,7 +54,7 @@ RSpec.describe 'Add a workflow to an item' do
     allow(workflow_client).to receive(:workflow_status).with(druid: 'druid:bg444xg6666', process: 'accessioning-initiate', workflow: 'assemblyWF').and_return(true)
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   it 'redirect and display on show page' do

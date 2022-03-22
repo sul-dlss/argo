@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CollectionForm do
-  let(:apo_pid) { 'druid:zt570qh4444' }
+  let(:apo_druid) { 'druid:zt570qh4444' }
   let(:uber_apo_id) { 'druid:hv992ry2431' }
   let(:collection_id) { 'druid:gg232vv1111' }
 
@@ -57,7 +57,7 @@ RSpec.describe CollectionForm do
       end
 
       it "doesn't validate" do
-        expect(instance.validate(params.merge(apo_pid: apo_pid))).to be false
+        expect(instance.validate(params.merge(apo_druid: apo_druid))).to be false
         expect(instance.errors.full_messages).to eq ['missing collection_title or collection_catkey']
       end
     end
@@ -96,7 +96,7 @@ RSpec.describe CollectionForm do
       end
 
       it 'creates a collection from title/abstract by registering the collection, without adding the abstract to descMetadata' do
-        instance.validate(params.merge(apo_pid: apo_pid))
+        instance.validate(params.merge(apo_druid: apo_druid))
         instance.save
 
         expect(instance).to have_received(:register_model)
@@ -123,7 +123,7 @@ RSpec.describe CollectionForm do
       end
 
       it 'creates a collection from catkey by registering the collection, without adding the abstract to descMetadata' do
-        instance.validate(params.merge(apo_pid: apo_pid))
+        instance.validate(params.merge(apo_druid: apo_druid))
         instance.save
 
         expect(instance).to have_received(:register_model)

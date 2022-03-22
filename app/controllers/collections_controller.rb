@@ -18,26 +18,26 @@ class CollectionsController < ApplicationController
     authorize! :manage_item, cocina
 
     form = CollectionForm.new
-    return render 'new' unless form.validate(params.merge(apo_pid: params[:apo_id]))
+    return render 'new' unless form.validate(params.merge(apo_druid: params[:apo_id]))
 
     form.save
-    collection_pid = form.model.externalIdentifier
+    collection_druid = form.model.externalIdentifier
 
     cocina_admin_policy = object_client.find
     collections = Array(cocina_admin_policy.administrative.collectionsForRegistration).dup
     # The following two steps mimic the behavior of `Dor::AdministrativeMetadataDS#add_default_collection` (from the now de-coupled dor-services gem)
     # 1. If collection is already listed, remove it temporarily
-    collections.delete(collection_pid)
-    # 2. Move the collection PID to the front of the list of registration collections
-    collections.unshift(collection_pid)
+    collections.delete(collection_druid)
+    # 2. Move the collection DRUID to the front of the list of registration collections
+    collections.unshift(collection_druid)
     updated_cocina_admin_policy = cocina_admin_policy.new(
       administrative: cocina_admin_policy.administrative.new(
         collectionsForRegistration: collections
       )
     )
     object_client.update(params: updated_cocina_admin_policy)
-    Argo::Indexer.reindex_pid_remotely(params[:apo_id])
-    redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_pid}"
+    Argo::Indexer.reindex_druid_remotely(params[:apo_id])
+    redirect_to solr_document_path(params[:apo_id]), notice: "Created collection #{collection_druid}"
   end
 
   # save the form
@@ -50,7 +50,7 @@ class CollectionsController < ApplicationController
     attributes = params.require(:collection).permit(:copyright, :use_statement, :license)
     change_set.validate(**attributes)
     change_set.save
-    Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
 
     redirect_to solr_document_path(params[:id]), status: :see_other
   end

@@ -84,7 +84,7 @@ RSpec.describe ManageEmbargoesJob do
 
   let(:params) do
     {
-      pids: druids,
+      druids: druids,
       csv_file: csv_file
     }
   end

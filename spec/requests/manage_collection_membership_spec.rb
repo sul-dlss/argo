@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'Collection membership', type: :request do
   before do
-    allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     allow(StateService).to receive(:new).and_return(state_service)
   end
 
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
   let(:cocina) do
@@ -17,10 +17,10 @@ RSpec.describe 'Collection membership', type: :request do
                            'label' => 'My ETD',
                            'version' => 1,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ 'value' => 'My ETD' }],
-                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -38,10 +38,10 @@ RSpec.describe 'Collection membership', type: :request do
                              'label' => 'My ETD',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {},
                              'identification' => {},
@@ -68,10 +68,10 @@ RSpec.describe 'Collection membership', type: :request do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'administrative' => { 'hasAdminPolicy' => 'druid:cg532dg5405' },
@@ -81,13 +81,13 @@ RSpec.describe 'Collection membership', type: :request do
         end
 
         it 'adds a collection' do
-          post "/items/#{pid}/collection/add?collection=druid:bc555gh3434"
+          post "/items/#{druid}/collection/add?collection=druid:bc555gh3434"
           expect(object_service).to have_received(:update).with(params: expected)
         end
 
         context 'when no collection parameter is supplied' do
           it 'does not add a collection' do
-            post "/items/#{pid}/collection/add?collection="
+            post "/items/#{druid}/collection/add?collection="
             expect(object_service).not_to have_received(:update)
           end
         end
@@ -99,10 +99,10 @@ RSpec.describe 'Collection membership', type: :request do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'identification' => {},
@@ -113,7 +113,7 @@ RSpec.describe 'Collection membership', type: :request do
         let(:structural) { {} }
 
         it 'adds a collection' do
-          post "/items/#{pid}/collection/add?collection=druid:bc555gh3434"
+          post "/items/#{druid}/collection/add?collection=druid:bc555gh3434"
           expect(object_service).to have_received(:update).with(params: expected)
         end
       end
@@ -125,7 +125,7 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       it 'returns 403' do
-        post "/items/#{pid}/collection/add?collection=druid:bc555gh3434"
+        post "/items/#{druid}/collection/add?collection=druid:bc555gh3434"
         expect(response.code).to eq('403')
         expect(object_service).not_to have_received(:update)
       end
@@ -138,10 +138,10 @@ RSpec.describe 'Collection membership', type: :request do
                              'label' => 'My ETD',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {},
                              'identification' => {},
@@ -168,10 +168,10 @@ RSpec.describe 'Collection membership', type: :request do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'identification' => {},
@@ -181,7 +181,7 @@ RSpec.describe 'Collection membership', type: :request do
         end
 
         it 'removes a collection' do
-          get "/items/#{pid}/collection/delete?collection=druid:bc555gh3434"
+          get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"
 
           expect(object_service).to have_received(:update).with(params: expected)
         end
@@ -193,10 +193,10 @@ RSpec.describe 'Collection membership', type: :request do
                                  'label' => 'My ETD',
                                  'version' => 1,
                                  'type' => Cocina::Models::ObjectType.object,
-                                 'externalIdentifier' => pid,
+                                 'externalIdentifier' => druid,
                                  'description' => {
                                    'title' => [{ 'value' => 'My ETD' }],
-                                   'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                   'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                  },
                                  'access' => {},
                                  'identification' => {},
@@ -206,7 +206,7 @@ RSpec.describe 'Collection membership', type: :request do
         end
 
         it 'does an update with no changes' do
-          get "/items/#{pid}/collection/delete?collection=druid:bc555gh3434"
+          get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"
           expect(object_service).to have_received(:update).with(params: cocina)
         end
       end
@@ -218,7 +218,7 @@ RSpec.describe 'Collection membership', type: :request do
       end
 
       it 'returns 403' do
-        get "/items/#{pid}/collection/delete?collection=druid:bc555gh3434"
+        get "/items/#{druid}/collection/delete?collection=druid:bc555gh3434"
 
         expect(response.code).to eq('403')
         expect(object_service).not_to have_received(:update)

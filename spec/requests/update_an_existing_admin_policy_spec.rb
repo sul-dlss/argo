@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Update an existing Admin Policy' do
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:object_client) do
     instance_double(Dor::Services::Client::Object, find: cocina_model)
@@ -13,7 +13,7 @@ RSpec.describe 'Update an existing Admin Policy' do
                            'label' => 'The item',
                            'version' => 1,
                            'type' => Cocina::Models::ObjectType.admin_policy,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ value: 'My APO' }],
                              'purl' => 'https://purl.stanford.edu/bc123df4567'
@@ -36,7 +36,7 @@ RSpec.describe 'Update an existing Admin Policy' do
     let(:workflow_service) { instance_double(Dor::Workflow::Client, workflow_templates: []) }
 
     it 'redraws the form' do
-      patch "/apo/#{pid}", params: { apo_form: { title: '' } }
+      patch "/apo/#{druid}", params: { apo_form: { title: '' } }
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
@@ -71,12 +71,12 @@ RSpec.describe 'Update an existing Admin Policy' do
       let(:rights) { 'cdl-stanford-nd' }
 
       it 'updates the record and does not re-register' do
-        patch "/apo/#{pid}", params: params
+        patch "/apo/#{druid}", params: params
         expect(object_client).to have_received(:update)
         expect(objects_client).not_to have_received(:register)
         expect(workflow_service).not_to have_received(:create_workflow_by_name)
 
-        expect(response).to redirect_to solr_document_path(pid)
+        expect(response).to redirect_to solr_document_path(druid)
       end
     end
 
@@ -84,12 +84,12 @@ RSpec.describe 'Update an existing Admin Policy' do
       let(:rights) { 'citation-only' }
 
       it 'updates the record and does not re-register' do
-        patch "/apo/#{pid}", params: params
+        patch "/apo/#{druid}", params: params
         expect(object_client).to have_received(:update)
         expect(objects_client).not_to have_received(:register)
         expect(workflow_service).not_to have_received(:create_workflow_by_name)
 
-        expect(response).to redirect_to solr_document_path(pid)
+        expect(response).to redirect_to solr_document_path(druid)
       end
     end
   end

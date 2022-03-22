@@ -21,13 +21,13 @@
                         data: {
                           turbo_method: 'post',
                           controller: 'button',
-                          button_check_url_value: published_workflow_service_path(pid)
+                          button_check_url_value: published_workflow_service_path(druid)
                         } %></li>
         <li><%= link_to 'Unpublish', item_publish_path(doc), class: "dropdown-item disabled",
                         data: {
                           turbo_method: 'delete',
                           controller: 'button',
-                          button_check_url_value: published_workflow_service_path(pid)
+                          button_check_url_value: published_workflow_service_path(druid)
                         } %></li>
       </ul>
     </div>

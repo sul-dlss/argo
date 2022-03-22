@@ -4,12 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'Download the structural CSV' do
   let(:user) { create(:user) }
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do
@@ -23,10 +23,10 @@ RSpec.describe 'Download the structural CSV' do
                              'label' => 'My ETD',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -36,7 +36,7 @@ RSpec.describe 'Download the structural CSV' do
     end
 
     it 'returns the csv' do
-      get "/items/#{pid}/structure.csv"
+      get "/items/#{druid}/structure.csv"
 
       expect(response).to be_successful
       expect(response.body).to eq 'one,two,three'

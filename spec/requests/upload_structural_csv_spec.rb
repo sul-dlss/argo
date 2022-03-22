@@ -6,14 +6,14 @@ RSpec.describe 'Upload the structural CSV' do
   include Dry::Monads[:result]
 
   let(:user) { create(:user) }
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model, update: true) }
   let(:state_service) { instance_double(StateService) }
 
   before do
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
     allow(StateService).to receive(:new).and_return(state_service, allows_modification?: modifiable)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when they have manage access' do
@@ -29,10 +29,10 @@ RSpec.describe 'Upload the structural CSV' do
                              'label' => 'My ETD',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pid,
+                             'externalIdentifier' => druid,
                              'description' => {
                                'title' => [{ 'value' => 'My ETD' }],
-                               'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                               'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                              },
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -46,7 +46,7 @@ RSpec.describe 'Upload the structural CSV' do
       let(:modifiable) { true }
 
       it 'updates the structure' do
-        put "/items/#{pid}/structure", params: { csv: file }
+        put "/items/#{druid}/structure", params: { csv: file }
         expect(object_client).to have_received(:update)
         expect(response).to have_http_status(:see_other)
       end
@@ -56,7 +56,7 @@ RSpec.describe 'Upload the structural CSV' do
       let(:modifiable) { false }
 
       it 'updates the structure' do
-        put "/items/#{pid}/structure", params: { csv: file }
+        put "/items/#{druid}/structure", params: { csv: file }
         expect(object_client).not_to have_received(:update)
         expect(response).to have_http_status(:found)
       end

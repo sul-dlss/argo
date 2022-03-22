@@ -4,21 +4,21 @@ require 'rails_helper'
 
 RSpec.describe 'Set embargo for an object' do
   before do
-    allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_service)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_service)
   end
 
   let(:user) { create(:user) }
   let(:object_service) { instance_double(Dor::Services::Client::Object, find: cocina) }
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:cocina) do
     Cocina::Models.build({
                            'label' => 'My ETD',
                            'version' => 1,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ 'value' => 'My ETD' }],
-                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                            },
                            'access' => {
                              'view' => 'stanford',
@@ -44,7 +44,7 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'returns 403' do
-        patch "/items/#{pid}/embargo", params: { item: { embargo_release_date: '2100-01-01' } }
+        patch "/items/#{druid}/embargo", params: { item: { embargo_release_date: '2100-01-01' } }
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -52,23 +52,23 @@ RSpec.describe 'Set embargo for an object' do
     context 'when they have manage access' do
       before do
         sign_in user, groups: ['sdr:administrator-role']
-        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       end
 
       it 'calls Dor::Services::Client::Embargo#update' do
-        patch "/items/#{pid}/embargo", params: { item: { embargo_release_date: '2100-01-01' } }
+        patch "/items/#{druid}/embargo", params: { item: { embargo_release_date: '2100-01-01' } }
         expect(response).to have_http_status(:found) # redirect to catalog page
         expect(object_service).to have_received(:update)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
       end
 
       it 'requires a date' do
-        expect { patch "/items/#{pid}/embargo", params: {} }.to raise_error(ActionController::ParameterMissing)
+        expect { patch "/items/#{druid}/embargo", params: {} }.to raise_error(ActionController::ParameterMissing)
       end
 
       context 'when the date is malformed' do
         it 'shows the error' do
-          patch "/items/#{pid}/embargo", params: { item: { embargo_release_date: 'not-a-date' } }
+          patch "/items/#{druid}/embargo", params: { item: { embargo_release_date: 'not-a-date' } }
           expect(flash[:error]).to eq 'Invalid date'
         end
       end
@@ -84,7 +84,7 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'returns 403' do
-        get "/items/#{pid}/embargo/edit"
+        get "/items/#{druid}/embargo/edit"
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -99,7 +99,7 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'renders the form' do
-        get "/items/#{pid}/embargo/edit"
+        get "/items/#{druid}/embargo/edit"
 
         expect(response).to have_http_status(:ok)
         expect(rendered).to have_css 'form label', text: 'Enter the date when this embargo ends'
@@ -118,7 +118,7 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'returns 403' do
-        get "/items/#{pid}/embargo/new"
+        get "/items/#{druid}/embargo/new"
         expect(response).to have_http_status(:forbidden)
       end
     end
@@ -133,7 +133,7 @@ RSpec.describe 'Set embargo for an object' do
       end
 
       it 'renders the form' do
-        get "/items/#{pid}/embargo/new"
+        get "/items/#{druid}/embargo/new"
 
         expect(response).to have_http_status(:ok)
         expect(rendered).to have_css 'form label', text: 'Enter the date when this embargo ends'

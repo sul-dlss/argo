@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe PurgeJob, type: :job do
-  let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222'] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:client) { instance_double(Dor::Workflow::Client, lifecycle: submitted) }
@@ -15,10 +15,10 @@ RSpec.describe PurgeJob, type: :job do
                            'label' => 'My Item',
                            'version' => 2,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[0],
+                           'externalIdentifier' => druids[0],
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{pids[0].delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -31,10 +31,10 @@ RSpec.describe PurgeJob, type: :job do
                            'label' => 'My Item',
                            'version' => 3,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[1],
+                           'externalIdentifier' => druids[1],
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{pids[1].delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druids[1].delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -49,12 +49,12 @@ RSpec.describe PurgeJob, type: :job do
   before do
     allow(WorkflowClientFactory).to receive(:build).and_return(client)
     allow(Ability).to receive(:new).and_return(ability)
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(PurgeService).to receive(:purge)
 
     described_class.perform_now(bulk_action.id,
-                                pids: pids,
+                                druids: druids,
                                 groups: groups,
                                 user: user)
   end
@@ -78,8 +78,8 @@ RSpec.describe PurgeJob, type: :job do
       let(:submitted) { false }
 
       it 'purges objects' do
-        expect(PurgeService).to have_received(:purge).with(druid: pids[0])
-        expect(PurgeService).to have_received(:purge).with(druid: pids[1])
+        expect(PurgeService).to have_received(:purge).with(druid: druids[0])
+        expect(PurgeService).to have_received(:purge).with(druid: druids[1])
       end
     end
   end

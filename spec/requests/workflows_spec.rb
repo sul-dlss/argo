@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'WorkflowsController', type: :request do
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:workflow_client) { instance_double(Dor::Workflow::Client) }
 
@@ -16,10 +16,10 @@ RSpec.describe 'WorkflowsController', type: :request do
                            'label' => 'My Item',
                            'version' => 2,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -33,7 +33,7 @@ RSpec.describe 'WorkflowsController', type: :request do
   before do
     sign_in user
     allow(Dor::Workflow::Client).to receive(:new).and_return(workflow_client)
-    allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
   end
 
   describe '#create' do
@@ -45,17 +45,17 @@ RSpec.describe 'WorkflowsController', type: :request do
       end
 
       before do
-        allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+        allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       end
 
       context 'when the workflow is not active' do
         let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: false) }
 
         it 'initializes the new workflow' do
-          post "/items/#{pid}/workflows", params: { wf: 'accessionWF' }
+          post "/items/#{druid}/workflows", params: { wf: 'accessionWF' }
 
           expect(workflow_client).to have_received(:create_workflow_by_name)
-            .with(pid, 'accessionWF', version: 2)
+            .with(druid, 'accessionWF', version: 2)
         end
       end
 
@@ -63,7 +63,7 @@ RSpec.describe 'WorkflowsController', type: :request do
         let(:wf_response) { instance_double(Dor::Workflow::Response::Workflow, active_for?: true) }
 
         it 'does not initialize the workflow' do
-          post "/items/#{pid}/workflows", params: { wf: 'accessionWF' }
+          post "/items/#{druid}/workflows", params: { wf: 'accessionWF' }
 
           expect(workflow_client).not_to have_received(:create_workflow_by_name)
         end
@@ -75,7 +75,7 @@ RSpec.describe 'WorkflowsController', type: :request do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, workflow_templates: ['accessionWF']) }
 
     it 'renders the template with no layout' do
-      get "/items/#{pid}/workflows/new"
+      get "/items/#{druid}/workflows/new"
       expect(response.body).to start_with('<turbo-frame')
     end
   end
@@ -121,14 +121,14 @@ RSpec.describe 'WorkflowsController', type: :request do
       end
       let(:wf_response) do
         instance_double(Dor::Workflow::Response::Workflow,
-                        pid: pid,
+                        pid: druid,
                         workflow_name: 'accessionWF',
                         empty?: false,
                         process_for_recent_version: process)
       end
 
       it 'fetches the workflow on valid parameters' do
-        get "/items/#{pid}/workflows/accessionWF"
+        get "/items/#{druid}/workflows/accessionWF"
 
         expect(response).to have_http_status(:ok)
         expect(rendered.find_css('.detail > tbody > tr').size).to eq workflow_steps.count
@@ -144,7 +144,7 @@ RSpec.describe 'WorkflowsController', type: :request do
       end
 
       it 'fetches the workflow on valid parameters' do
-        get "/items/#{pid}/workflows/accessionWF?raw=true"
+        get "/items/#{druid}/workflows/accessionWF?raw=true"
 
         expect(response).to have_http_status(:ok)
         expect(WorkflowXmlPresenter).to have_received(:new).with(xml: 'xml')
@@ -162,7 +162,7 @@ RSpec.describe 'WorkflowsController', type: :request do
     end
 
     it 'fetches the workflow history' do
-      get "/items/#{pid}/workflows/history"
+      get "/items/#{druid}/workflows/history"
       expect(response).to have_http_status(:ok)
       expect(response.body).to include '<span style="color:#070;font-weight:bold">&lt;xml</span><span style="color:#070;font-weight:bold">/&gt;</span>'
     end
@@ -176,7 +176,7 @@ RSpec.describe 'WorkflowsController', type: :request do
     end
 
     it 'requires various workflow parameters' do
-      expect { put "/items/#{pid}/workflows/accessionWF" }.to raise_error(ActionController::ParameterMissing)
+      expect { put "/items/#{druid}/workflows/accessionWF" }.to raise_error(ActionController::ParameterMissing)
     end
 
     context 'when the user is an administrator' do
@@ -185,10 +185,10 @@ RSpec.describe 'WorkflowsController', type: :request do
       end
 
       it 'changes the status' do
-        put "/items/#{pid}/workflows/accessionWF", params: { process: 'publish', status: 'completed' }
-        expect(subject).to redirect_to(solr_document_path(pid))
-        expect(workflow_client).to have_received(:workflow_status).with(druid: pid, workflow: 'accessionWF', process: 'publish')
-        expect(workflow_client).to have_received(:update_status).with(druid: pid, workflow: 'accessionWF', process: 'publish', status: 'completed')
+        put "/items/#{druid}/workflows/accessionWF", params: { process: 'publish', status: 'completed' }
+        expect(subject).to redirect_to(solr_document_path(druid))
+        expect(workflow_client).to have_received(:workflow_status).with(druid: druid, workflow: 'accessionWF', process: 'publish')
+        expect(workflow_client).to have_received(:update_status).with(druid: druid, workflow: 'accessionWF', process: 'publish', status: 'completed')
       end
     end
 
@@ -199,7 +199,7 @@ RSpec.describe 'WorkflowsController', type: :request do
 
       context 'when they are changing an item they do not manage' do
         it 'is forbidden' do
-          put "/items/#{pid}/workflows/accessionWF", params: { process: 'publish', status: 'waiting' }
+          put "/items/#{druid}/workflows/accessionWF", params: { process: 'publish', status: 'waiting' }
 
           expect(response.status).to eq 403
           expect(workflow_client).not_to have_received(:update_status)

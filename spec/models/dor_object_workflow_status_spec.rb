@@ -3,9 +3,9 @@
 require 'rails_helper'
 
 RSpec.describe DorObjectWorkflowStatus do
-  subject { described_class.new(pid, version: 1) }
+  subject { described_class.new(druid, version: 1) }
 
-  let(:pid) { 'druid:abc123def4567' }
+  let(:druid) { 'druid:abc123def4567' }
 
   describe '#can_open_version?' do
     let(:workflow_client) { instance_double(Dor::Workflow::Client, lifecycle: true, active_lifecycle: true) }
@@ -17,7 +17,7 @@ RSpec.describe DorObjectWorkflowStatus do
     context 'when not accessioned' do
       before do
         expect(workflow_client)
-          .to receive(:lifecycle).with(druid: pid, milestone_name: 'accessioned')
+          .to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
                                  .and_return(false)
       end
 
@@ -27,9 +27,9 @@ RSpec.describe DorObjectWorkflowStatus do
     context 'when accessioned and submitted' do
       before do
         expect(workflow_client).to receive(:lifecycle)
-          .with(druid: pid, milestone_name: 'accessioned').and_return(true)
+          .with(druid: druid, milestone_name: 'accessioned').and_return(true)
         expect(workflow_client).to receive(:active_lifecycle)
-          .with(druid: pid, milestone_name: 'submitted', version: 1).and_return(true)
+          .with(druid: druid, milestone_name: 'submitted', version: 1).and_return(true)
       end
 
       it { expect(subject.can_open_version?).to be false }
@@ -38,13 +38,13 @@ RSpec.describe DorObjectWorkflowStatus do
     context 'when accessioned, not submitted, and opened' do
       before do
         expect(workflow_client)
-          .to receive(:lifecycle).with(druid: pid, milestone_name: 'accessioned')
+          .to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
                                  .and_return(true)
         expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: pid, milestone_name: 'submitted', version: 1)
+          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
                                         .and_return(false)
         expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: pid, milestone_name: 'opened', version: 1)
+          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
                                         .and_return(true)
       end
 
@@ -54,13 +54,13 @@ RSpec.describe DorObjectWorkflowStatus do
     context 'when accessioned, not submitted, and not opened' do
       before do
         expect(workflow_client)
-          .to receive(:lifecycle).with(druid: pid, milestone_name: 'accessioned')
+          .to receive(:lifecycle).with(druid: druid, milestone_name: 'accessioned')
                                  .and_return(true)
         expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: pid, milestone_name: 'submitted', version: 1)
+          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'submitted', version: 1)
                                         .and_return(false)
         expect(workflow_client)
-          .to receive(:active_lifecycle).with(druid: pid, milestone_name: 'opened', version: 1)
+          .to receive(:active_lifecycle).with(druid: druid, milestone_name: 'opened', version: 1)
                                         .and_return(false)
       end
 

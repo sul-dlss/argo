@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Update a datastream' do
   before do
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
     allow(Dor::Services::Client).to receive(:object).and_return(object_client)
   end
 
@@ -14,10 +14,10 @@ RSpec.describe 'Update a datastream' do
                            'label' => 'My Item',
                            'version' => 1,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pid,
+                           'externalIdentifier' => druid,
                            'description' => {
                              'title' => [{ 'value' => 'My Item' }],
-                             'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                             'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                            },
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -25,7 +25,7 @@ RSpec.describe 'Update a datastream' do
                            'identification' => {}
                          })
   end
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:state_service) { instance_double(StateService, allows_modification?: true) }
   let(:xml) { '<contentMetadata/>' }
@@ -37,9 +37,9 @@ RSpec.describe 'Update a datastream' do
     end
 
     it 'prevents access' do
-      patch "/items/#{pid}/datastreams/contentMetadata", params: { content: xml }
+      patch "/items/#{druid}/datastreams/contentMetadata", params: { content: xml }
       expect(response).to have_http_status(:forbidden)
-      expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
+      expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
     end
   end
 
@@ -57,21 +57,21 @@ RSpec.describe 'Update a datastream' do
       end
 
       it 'updates the datastream' do
-        patch "/items/#{pid}/datastreams/contentMetadata", params: { content: xml }
-        expect(response).to redirect_to "/view/#{pid}"
+        patch "/items/#{druid}/datastreams/contentMetadata", params: { content: xml }
+        expect(response).to redirect_to "/view/#{druid}"
         expect(metadata_client).to have_received(:legacy_update)
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely)
       end
     end
 
     it 'errors on empty xml' do
-      expect { patch "/items/#{pid}/datastreams/contentMetadata", params: { content: ' ' } }.to raise_error(ArgumentError)
+      expect { patch "/items/#{druid}/datastreams/contentMetadata", params: { content: ' ' } }.to raise_error(ArgumentError)
     end
 
     it 'does not update the datastream with malformed xml' do
-      patch "/items/#{pid}/datastreams/contentMetadata", params: { content: '<this>isnt well formed.' }
-      expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
-      expect(response).to redirect_to "/view/#{pid}"
+      patch "/items/#{druid}/datastreams/contentMetadata", params: { content: '<this>isnt well formed.' }
+      expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
+      expect(response).to redirect_to "/view/#{druid}"
     end
 
     context 'for a datastream that fails validation' do
@@ -87,9 +87,9 @@ RSpec.describe 'Update a datastream' do
       end
 
       it 'does not update the datastream' do
-        patch "/items/#{pid}/datastreams/contentMetadata", params: { content: xml }
-        expect(response).to redirect_to "/view/#{pid}"
-        expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
+        patch "/items/#{druid}/datastreams/contentMetadata", params: { content: xml }
+        expect(response).to redirect_to "/view/#{druid}"
+        expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
       end
     end
   end

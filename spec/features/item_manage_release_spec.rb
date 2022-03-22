@@ -35,9 +35,9 @@ RSpec.describe 'Item manage release' do
     expect(page).to have_css 'label', text: "Manage release to discovery applications for item #{item.externalIdentifier}"
     click_button 'Submit'
     expect(page).to have_css 'h1', text: 'Bulk Actions'
-    reload_page_until_timeout do
-      page.has_css?('td', text: 'ReleaseObjectJob') &&
-        page.has_css?('td', text: 'Completed')
+    reload_page_until_timeout(timeout: 3) do
+      page.has_css?('td', text: 'ReleaseObjectJob', wait: 1) &&
+        page.has_css?('td', text: 'Completed', wait: 1)
     end
   end
 end

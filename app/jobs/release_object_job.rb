@@ -10,7 +10,7 @@ class ReleaseObjectJob < GenericJob
   # services app and then kicks off release WF.
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array] :pids required list of pids
+  # @option params [Array] :druids required list of druids
   # @option params [String] :to required release to target
   # @option params [String] :who required username of releaser
   # @option params [String] :what required type of release (self, collection)
@@ -22,7 +22,7 @@ class ReleaseObjectJob < GenericJob
     with_bulk_action_log do |log|
       update_druid_count
 
-      pids.each { |current_druid| release_object(current_druid, log) }
+      druids.each { |current_druid| release_object(current_druid, log) }
     end
   end
 

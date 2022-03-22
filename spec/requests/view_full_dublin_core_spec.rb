@@ -15,15 +15,15 @@ RSpec.describe 'View the full dublin core' do
         </oai_dc:dc>
       XML
     end
-    let(:pid) { 'druid:999' }
+    let(:druid) { 'druid:999' }
 
     before do
       sign_in user
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
     end
 
     it 'draws the page' do
-      get "/items/#{pid}/metadata/full_dc"
+      get "/items/#{druid}/metadata/full_dc"
       expect(response).to be_successful
       rendered = Capybara::Node::Simple.new(response.body)
       expect(rendered)
@@ -42,15 +42,15 @@ RSpec.describe 'View the full dublin core' do
         </oai_dc:dc>
       XML
     end
-    let(:pid) { 'druid:999' }
+    let(:druid) { 'druid:999' }
 
     before do
       sign_in user
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
     end
 
     it 'draws the page' do
-      get "/items/#{pid}/metadata/full_dc_xml"
+      get "/items/#{druid}/metadata/full_dc_xml"
       expect(response).to be_successful
       rendered = Capybara::Node::Simple.new(response.body)
       expect(rendered)

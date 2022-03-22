@@ -6,7 +6,7 @@ RSpec.describe SetSourceIdsCsvJob do
   subject(:job) { described_class.new }
 
   let(:bulk_action) { create(:bulk_action, action_type: 'SetSourceIdsCsvJob') }
-  let(:pids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
+  let(:druids) { %w[druid:bb111cc2222 druid:cc111dd2222 druid:dd111ff2222] }
 
   let(:source_ids) do
     [
@@ -21,7 +21,7 @@ RSpec.describe SetSourceIdsCsvJob do
                            'label' => 'My Item1',
                            'version' => 2,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[0],
+                           'externalIdentifier' => druids[0],
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/bb111cc2222' },
@@ -36,7 +36,7 @@ RSpec.describe SetSourceIdsCsvJob do
                            'label' => 'My Item2',
                            'version' => 3,
                            'type' => Cocina::Models::ObjectType.object,
-                           'externalIdentifier' => pids[1],
+                           'externalIdentifier' => druids[1],
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/cc111dd2222' },
@@ -51,7 +51,7 @@ RSpec.describe SetSourceIdsCsvJob do
                            'label' => 'My Item3',
                            'version' => 3,
                            'type' => Cocina::Models::ObjectType.collection,
-                           'externalIdentifier' => pids[2],
+                           'externalIdentifier' => druids[2],
                            'access' => {},
                            'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                            'description' => { title: [{ value: 'Stored title' }], purl: 'https://purl.stanford.edu/dd111ff2222' },
@@ -62,9 +62,9 @@ RSpec.describe SetSourceIdsCsvJob do
   let(:csv_file) do
     [
       'druid,source_id',
-      [pids[0], source_ids[0]].join(','),
-      [pids[1], source_ids[1]].join(','),
-      [pids[2], source_ids[2]].join(',')
+      [druids[0], source_ids[0]].join(','),
+      [druids[1], source_ids[1]].join(','),
+      [druids[2], source_ids[2]].join(',')
     ].join("\n")
   end
 
@@ -78,9 +78,9 @@ RSpec.describe SetSourceIdsCsvJob do
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(Ability).to receive(:new).and_return(ability)
     allow(StateService).to receive(:new).and_return(state_service)
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
-    allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
   end
 
   describe '#perform' do
@@ -99,11 +99,11 @@ RSpec.describe SetSourceIdsCsvJob do
         end
 
         it 'logs messages and creates a file' do
-          expect(log_buffer.string).to include "Beginning set source_id for #{pids[0]}"
+          expect(log_buffer.string).to include "Beginning set source_id for #{druids[0]}"
           expect(log_buffer.string).to include "Source can't be blank"
-          expect(log_buffer.string).to include "Beginning set source_id for #{pids[2]}"
+          expect(log_buffer.string).to include "Beginning set source_id for #{druids[2]}"
 
-          expect(bulk_action.druid_count_total).to eq pids.length
+          expect(bulk_action.druid_count_total).to eq druids.length
           expect(bulk_action.druid_count_success).to eq 2
           expect(bulk_action.druid_count_fail).to eq 1
         end
@@ -121,11 +121,11 @@ RSpec.describe SetSourceIdsCsvJob do
         end
 
         it 'logs messages and creates a file' do
-          expect(log_buffer.string).to include "Beginning set source_id for #{pids[0]}"
+          expect(log_buffer.string).to include "Beginning set source_id for #{druids[0]}"
           expect(log_buffer.string).to include "Source can't be blank"
-          expect(log_buffer.string).to include "Beginning set source_id for #{pids[2]}"
+          expect(log_buffer.string).to include "Beginning set source_id for #{druids[2]}"
 
-          expect(bulk_action.druid_count_total).to eq pids.length
+          expect(bulk_action.druid_count_total).to eq druids.length
           expect(bulk_action.druid_count_success).to eq 2
           expect(bulk_action.druid_count_fail).to eq 1
         end
@@ -143,11 +143,11 @@ RSpec.describe SetSourceIdsCsvJob do
         end
 
         it 'records all failures and creates an empty file' do
-          expect(bulk_action.druid_count_total).to eq pids.length
+          expect(bulk_action.druid_count_total).to eq druids.length
           expect(bulk_action.druid_count_success).to be_zero
-          expect(bulk_action.druid_count_fail).to eq pids.length
-          expect(log_buffer.string).to include "Unexpected error setting source_id for #{pids[0]}: ruh roh"
-          expect(log_buffer.string).to include "Unexpected error setting source_id for #{pids[1]}: ruh roh"
+          expect(bulk_action.druid_count_fail).to eq druids.length
+          expect(log_buffer.string).to include "Unexpected error setting source_id for #{druids[0]}: ruh roh"
+          expect(log_buffer.string).to include "Unexpected error setting source_id for #{druids[1]}: ruh roh"
         end
       end
     end
@@ -163,11 +163,11 @@ RSpec.describe SetSourceIdsCsvJob do
       end
 
       it 'records all failures and creates an empty file' do
-        expect(bulk_action.druid_count_total).to eq pids.length
+        expect(bulk_action.druid_count_total).to eq druids.length
         expect(bulk_action.druid_count_success).to be_zero
-        expect(bulk_action.druid_count_fail).to eq pids.length
-        expect(log_buffer.string).to include "Not authorized for #{pids[0]}"
-        expect(log_buffer.string).to include "Not authorized for #{pids[1]}"
+        expect(bulk_action.druid_count_fail).to eq druids.length
+        expect(log_buffer.string).to include "Not authorized for #{druids[0]}"
+        expect(log_buffer.string).to include "Not authorized for #{druids[1]}"
       end
     end
   end

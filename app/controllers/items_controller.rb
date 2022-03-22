@@ -257,7 +257,7 @@ class ItemsController < ApplicationController
   end
 
   def reindex
-    Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
   end
 
   # ---

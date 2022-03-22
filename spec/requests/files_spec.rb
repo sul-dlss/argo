@@ -3,10 +3,10 @@
 require 'rails_helper'
 
 RSpec.describe 'Files', type: :request do
-  let(:pid) { 'druid:bc123df4567' }
+  let(:druid) { 'druid:bc123df4567' }
   let(:user) { create(:user) }
   let(:cocina_model) do
-    instance_double(Cocina::Models::DRO, externalIdentifier: pid, structural: structural)
+    instance_double(Cocina::Models::DRO, externalIdentifier: druid, structural: structural)
   end
   let(:file_set) do
     instance_double(Cocina::Models::FileSet, structural: fs_structural)
@@ -72,7 +72,7 @@ RSpec.describe 'Files', type: :request do
 
       it 'returns a response with the preserved file content as the body and the right headers' do
         last_modified_lower_bound = Time.now.utc.rfc2822
-        get "/items/#{pid}/files/preserved%20file.txt/preserved?version=#{mock_version}"
+        get "/items/#{druid}/files/preserved%20file.txt/preserved?version=#{mock_version}"
 
         expect(response.headers['Last-Modified']).to be <= Time.now.utc.rfc2822
         expect(response.headers['Last-Modified']).to be >= last_modified_lower_bound
@@ -80,7 +80,7 @@ RSpec.describe 'Files', type: :request do
         expect(response.headers['Content-Disposition']).to eq "attachment; filename=\"preserved+file.txt\"; filename*=UTF-8''preserved+file.txt"
         expect(response.code).to eq('200')
         expect(Preservation::Client.objects).to have_received(:content)
-          .with(druid: pid, filepath: mock_file_name, version: mock_version, on_data: Proc)
+          .with(druid: druid, filepath: mock_file_name, version: mock_version, on_data: Proc)
       end
 
       context 'when file not found in preservation' do
@@ -92,7 +92,7 @@ RSpec.describe 'Files', type: :request do
         end
 
         it 'returns 404 with error information' do
-          get "/items/#{pid}/files/not_there.txt/preserved?version=#{mock_version}"
+          get "/items/#{druid}/files/not_there.txt/preserved?version=#{mock_version}"
 
           expect(response.headers['Content-Type']).to eq('application/octet-stream')
           expect(response.headers['Last-Modified']).to be_nil
@@ -113,13 +113,15 @@ RSpec.describe 'Files', type: :request do
         end
 
         it 'renders an HTTP 500 message' do
-          get "/items/#{pid}/files/not_there.txt/preserved?version=#{mock_version}"
+          get "/items/#{druid}/files/not_there.txt/preserved?version=#{mock_version}"
 
           expect(Rails.logger).to have_received(:error)
-            .with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\): #{errmsg}/).once
-          expect(Honeybadger).to have_received(:notify).with(/Preservation client error getting content of not_there.txt for #{pid} \(version #{mock_version}\): #{errmsg}/).once
+            .with(/Preservation client error getting content of not_there.txt for #{druid} \(version #{mock_version}\): #{errmsg}/).once
+          expect(Honeybadger).to have_received(:notify).with(
+            /Preservation client error getting content of not_there.txt for #{druid} \(version #{mock_version}\): #{errmsg}/
+          ).once
           expect(response).to have_http_status(:internal_server_error)
-          expect(response.body).to eq "Preservation client error getting content of not_there.txt for #{pid} (version #{mock_version}): #{errmsg}"
+          expect(response.body).to eq "Preservation client error getting content of not_there.txt for #{druid} (version #{mock_version}): #{errmsg}"
         end
       end
     end
@@ -133,16 +135,16 @@ RSpec.describe 'Files', type: :request do
     end
 
     it 'requires an id parameter' do
-      expect { get "/items/#{pid}/files" }.to raise_error(ArgumentError)
+      expect { get "/items/#{druid}/files" }.to raise_error(ArgumentError)
     end
 
     context 'when the files are in preservation' do
       before do
-        allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_return('7')
+        allow(Preservation::Client.objects).to receive(:current_version).with(druid).and_return('7')
       end
 
       it 'is successful' do
-        get "/items/#{pid}/files?id=M1090_S15_B01_F07_0106.jp2"
+        get "/items/#{druid}/files?id=M1090_S15_B01_F07_0106.jp2"
         expect(response).to have_http_status(:ok)
         expect(response.body).to include '/items/druid:bc123df4567/files/M1090_S15_B01_F07_0106.jp2/preserved?version=7'
       end
@@ -150,31 +152,31 @@ RSpec.describe 'Files', type: :request do
 
     context 'when files are not in preservation' do
       before do
-        allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_raise(Preservation::Client::NotFoundError)
+        allow(Preservation::Client.objects).to receive(:current_version).with(druid).and_raise(Preservation::Client::NotFoundError)
       end
 
       it 'renders an HTTP 422 message' do
-        get "/items/#{pid}/files?id=bar.tif"
+        get "/items/#{druid}/files?id=bar.tif"
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.body).to eq "Preservation has not yet received #{pid}"
+        expect(response.body).to eq "Preservation has not yet received #{druid}"
       end
     end
 
     context 'when preservation-client raises an error other than NotFoundError' do
       before do
-        allow(Preservation::Client.objects).to receive(:current_version).with(pid).and_raise(Preservation::Client::UnexpectedResponseError, 'something is busted')
+        allow(Preservation::Client.objects).to receive(:current_version).with(druid).and_raise(Preservation::Client::UnexpectedResponseError, 'something is busted')
         allow(Rails.logger).to receive(:error)
         allow(Honeybadger).to receive(:notify)
       end
 
       it 'renders an HTTP 500 message' do
-        get "/items/#{pid}/files?id=bar.tif"
+        get "/items/#{druid}/files?id=bar.tif"
 
         expect(Rails.logger).to have_received(:error).with(/something is busted/).once
         expect(Honeybadger).to have_received(:notify).with(/something is busted/).once
         expect(response).to have_http_status(:internal_server_error)
-        expect(response.body).to eq "Preservation client error getting current version of #{pid}: something is busted"
+        expect(response.body).to eq "Preservation client error getting current version of #{druid}: something is busted"
       end
     end
   end

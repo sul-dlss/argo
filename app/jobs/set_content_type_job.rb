@@ -17,7 +17,7 @@ class SetContentTypeJob < GenericJob
 
       update_druid_count
 
-      pids.each do |current_druid|
+      druids.each do |current_druid|
         log_buffer.puts("#{Time.current} #{self.class}: Attempting #{current_druid} (bulk_action.id=#{bulk_action_id})")
         set_content_type(current_druid, log_buffer)
       end
@@ -50,7 +50,7 @@ class SetContentTypeJob < GenericJob
       raise StandardError, 'Object cannot be modified in its current state.' unless state_service.allows_modification?
 
       object_client.update(params: cocina_object.new(cocina_update_attributes(cocina_object)))
-      Argo::Indexer.reindex_pid_remotely(cocina_object.externalIdentifier)
+      Argo::Indexer.reindex_druid_remotely(cocina_object.externalIdentifier)
       log_buffer.puts("#{Time.current} #{self.class}: Successfully updated content type of #{current_druid} (bulk_action.id=#{bulk_action.id})")
       bulk_action.increment(:druid_count_success).save
     rescue StandardError => e

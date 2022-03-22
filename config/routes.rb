@@ -224,7 +224,7 @@ Rails.application.routes.draw do
   end
 
   namespace :dor do
-    match 'reindex/:pid', action: :reindex, as: 'reindex', via: %i[get post]
+    match 'reindex/:druid', action: :reindex, as: 'reindex', via: %i[get post]
     resources :objects, only: :create # we only implement create for object registration
   end
 

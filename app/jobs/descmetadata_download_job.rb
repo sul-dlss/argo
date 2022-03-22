@@ -8,7 +8,7 @@ class DescmetadataDownloadJob < GenericJob
 
   # @param [Integer] bulk_action_id ActiveRecord identifier of the BulkAction object that originated this job.
   # @param [Hash] params Custom params for this job
-  # requires `:pids` (an Array of pids)
+  # requires `:druids` (an Array of druids)
   def perform(bulk_action_id, params)
     super
     with_bulk_action_log do |log|
@@ -20,7 +20,7 @@ class DescmetadataDownloadJob < GenericJob
         start_log(log, bulk_action.user_id, '', bulk_action.description)
         update_druid_count
         ::Zip::File.open(zip_filename, Zip::File::CREATE) do |zip_file|
-          pids.each_with_index do |current_druid, index|
+          druids.each_with_index do |current_druid, index|
             process_druid(current_druid, log, zip_file)
             # Commit every 250 to limit memory usage.
             zip_file.commit if index % 250 == 0

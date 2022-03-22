@@ -77,7 +77,7 @@ RSpec.describe 'Reports from a search', type: :request do
       expect(data.first).to eq(['Druid', 'Purl', 'Source Id', 'Tags'])
       expect(Report).to have_received(:new).with(ActionController::Parameters, %w[druid purl source_id_ssim tag_ssim], Hash)
       expect(data.length).to be > 1
-      expect(data[1].first).to eq('ab123gg7777') # first data row starts with pid
+      expect(data[1].first).to eq('ab123gg7777') # first data row starts with druid
     end
   end
 end

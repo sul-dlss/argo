@@ -30,7 +30,7 @@ class EmbargosController < ApplicationController
     change_set = change_set_class.new(@cocina)
     change_set.validate(update_params)
     change_set.save
-    Argo::Indexer.reindex_pid_remotely(@cocina.externalIdentifier)
+    Argo::Indexer.reindex_druid_remotely(@cocina.externalIdentifier)
 
     respond_to do |format|
       format.any { redirect_to solr_document_path(@cocina.externalIdentifier), notice: 'Embargo was successfully updated' }

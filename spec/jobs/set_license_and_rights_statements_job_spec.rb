@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
   let(:bulk_action) { create(:bulk_action) }
   let(:groups) { [] }
-  let(:pids) { ['druid:123', 'druid:456'] }
+  let(:druids) { ['druid:123', 'druid:456'] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
 
   before do
@@ -16,7 +16,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
     let(:license_uri) { 'http://my.license.example.com/' }
     let(:params) do
       {
-        pids: pids,
+        druids: druids,
         groups: groups,
         user: user,
         copyright_statement_option: '0',
@@ -34,7 +34,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
     end
 
     it 'increments the success counter' do
-      expect(bulk_action.druid_count_success).to eq(pids.size)
+      expect(bulk_action.druid_count_success).to eq(druids.size)
     end
 
     it 'invokes the license setter as expected' do
@@ -44,7 +44,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
           druid: /druid:\d+/,
           license: license_uri
         )
-        .exactly(pids.size)
+        .exactly(druids.size)
         .times
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
     let(:copyright_statement) { 'new copyright statement' }
     let(:params) do
       {
-        pids: pids,
+        druids: druids,
         groups: groups,
         user: user,
         copyright_statement_option: '1',
@@ -72,7 +72,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
     end
 
     it 'increments the failure counter' do
-      expect(bulk_action.druid_count_fail).to eq(pids.size)
+      expect(bulk_action.druid_count_fail).to eq(druids.size)
     end
 
     it 'invokes the license setter as expected' do
@@ -83,7 +83,7 @@ RSpec.describe SetLicenseAndRightsStatementsJob, type: :job do
           copyright: copyright_statement,
           use_statement: use_statement
         )
-        .exactly(pids.size)
+        .exactly(druids.size)
         .times
     end
   end

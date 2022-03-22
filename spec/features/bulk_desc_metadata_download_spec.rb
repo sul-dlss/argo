@@ -16,7 +16,7 @@ RSpec.describe 'Bulk Descriptive Metadata Download', js: true do
     click_link 'New Bulk Action'
     expect(page).to have_css 'h1', text: 'New Bulk Action'
     expect(page).to have_button 'Populate with previous search'
-    expect(page).to have_css 'div[data-bulk-actions-populate-url-value="/catalog?pids_only=true&q=stanford"]'
+    expect(page).to have_css 'div[data-bulk-actions-populate-url-value="/catalog?druids_only=true&q=stanford"]'
   end
 
   it 'Creates a new jobs' do

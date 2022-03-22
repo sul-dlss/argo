@@ -10,7 +10,7 @@ class WorkflowStepStatusSelector < ApplicationComponent
     @process = process
   end
 
-  delegate :pid, :workflow_name, :repository, :name, to: :process
+  delegate :workflow_name, :repository, :name, to: :process
 
   # This is the message displayed in a confirm dialog when you submit the form.
   def confirm
@@ -18,6 +18,10 @@ class WorkflowStepStatusSelector < ApplicationComponent
   end
 
   private
+
+  def druid
+    process.pid
+  end
 
   attr_reader :process
 end

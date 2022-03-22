@@ -55,7 +55,7 @@ RSpec.describe GenericJob do
       instance_double(User,
                       admin?: true)
     end
-    let(:pid) { 'druid:123abc' }
+    let(:druid) { 'druid:123abc' }
     let(:version) { 1 }
     let(:workflow) { double('workflow') }
     let(:log) { double('log') }
@@ -69,10 +69,10 @@ RSpec.describe GenericJob do
 
     it 'opens a new version if the workflow status allows' do
       expect(DorObjectWorkflowStatus).to receive(:new)
-        .with(pid, version: version).and_return(workflow)
+        .with(druid, version: version).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(true)
 
-      subject.send(:open_new_version, pid, version, 'Set new governing APO')
+      subject.send(:open_new_version, druid, version, 'Set new governing APO')
 
       expect(version_client).to have_received(:open).with(
         significance: 'minor',
@@ -83,9 +83,9 @@ RSpec.describe GenericJob do
 
     it 'does not open a new version if rejected by the workflow status' do
       expect(DorObjectWorkflowStatus).to receive(:new)
-        .with(pid, version: version).and_return(workflow)
+        .with(druid, version: version).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(false)
-      expect { subject.send(:open_new_version, pid, version, 'Message') }.to raise_error(/Unable to open new version/)
+      expect { subject.send(:open_new_version, druid, version, 'Message') }.to raise_error(/Unable to open new version/)
 
       expect(version_client).not_to have_received(:open)
     end

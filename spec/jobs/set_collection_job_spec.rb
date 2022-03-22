@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe SetCollectionJob do
   subject(:job) { described_class.new }
 
-  let(:pids) { ['druid:cc111dd2222', 'druid:dd111ff2222'] }
+  let(:druids) { ['druid:cc111dd2222', 'druid:dd111ff2222'] }
   let(:new_collection_id) { 'druid:bc111bb2222' }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'amcollie') }
@@ -20,7 +20,7 @@ RSpec.describe SetCollectionJob do
 
   before do
     allow(subject).to receive(:bulk_action).and_return(bulk_action)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   after do
@@ -30,7 +30,7 @@ RSpec.describe SetCollectionJob do
   describe '#perform_now' do
     let(:params) do
       {
-        pids: pids,
+        druids: druids,
         groups: groups,
         user: user,
         new_collection_id: new_collection_id
@@ -41,7 +41,7 @@ RSpec.describe SetCollectionJob do
                              'label' => 'My First Item',
                              'version' => 2,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pids[0],
+                             'externalIdentifier' => druids[0],
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
@@ -57,7 +57,7 @@ RSpec.describe SetCollectionJob do
                              'label' => 'My Second Item',
                              'version' => 2,
                              'type' => Cocina::Models::ObjectType.object,
-                             'externalIdentifier' => pids[1],
+                             'externalIdentifier' => druids[1],
                              'access' => {},
                              'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
                              'structural' => {},
@@ -74,8 +74,8 @@ RSpec.describe SetCollectionJob do
 
     context 'with authorization' do
       before do
-        allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-        allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+        allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+        allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
         allow(StateService).to receive(:new).and_return(state_service)
         allow(subject).to receive(:check_can_set_collection!).with(cocina1, state_service).and_return true
         allow(subject).to receive(:check_can_set_collection!).with(cocina2, state_service).and_return true
@@ -86,9 +86,9 @@ RSpec.describe SetCollectionJob do
 
         it 'removes the collection successfully' do
           subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq(pids.length)
+          expect(bulk_action.druid_count_total).to eq(druids.length)
           expect(bulk_action.druid_count_fail).to eq(0)
-          expect(bulk_action.druid_count_success).to eq(pids.length)
+          expect(bulk_action.druid_count_success).to eq(druids.length)
         end
       end
 
@@ -96,9 +96,9 @@ RSpec.describe SetCollectionJob do
         context 'when the version is open' do
           it 'sets the new collection on an object' do
             subject.perform(bulk_action.id, params)
-            expect(bulk_action.druid_count_total).to eq(pids.length)
+            expect(bulk_action.druid_count_total).to eq(druids.length)
             expect(bulk_action.druid_count_fail).to eq(0)
-            expect(bulk_action.druid_count_success).to eq(pids.length)
+            expect(bulk_action.druid_count_success).to eq(druids.length)
           end
         end
 
@@ -111,9 +111,9 @@ RSpec.describe SetCollectionJob do
 
           it 'opens a new version sets the new collection on an object' do
             subject.perform(bulk_action.id, params)
-            expect(bulk_action.druid_count_total).to eq(pids.length)
+            expect(bulk_action.druid_count_total).to eq(druids.length)
             expect(bulk_action.druid_count_fail).to eq(0)
-            expect(bulk_action.druid_count_success).to eq(pids.length)
+            expect(bulk_action.druid_count_success).to eq(druids.length)
           end
         end
       end
@@ -123,16 +123,16 @@ RSpec.describe SetCollectionJob do
 
         before do
           allow(BulkJobLog).to receive(:open).and_yield(buffer)
-          allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_raise(Dor::Services::Client::NotFoundResponse)
-          allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
+          allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_raise(Dor::Services::Client::NotFoundResponse)
+          allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
         end
 
         it 'sets the new collection on an object' do
           subject.perform(bulk_action.id, params)
-          expect(bulk_action.druid_count_total).to eq(pids.length)
-          expect(bulk_action.druid_count_fail).to eq(pids.length)
-          expect(buffer.string).to include "SetCollectionJob: Unexpected error for #{pids[0]} (bulk_action.id=#{bulk_action.id}): Dor::Services::Client::NotFoundResponse"
-          expect(buffer.string).to include "SetCollectionJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action.id}): Dor::Services::Client::NotFoundResponse"
+          expect(bulk_action.druid_count_total).to eq(druids.length)
+          expect(bulk_action.druid_count_fail).to eq(druids.length)
+          expect(buffer.string).to include "SetCollectionJob: Unexpected error for #{druids[0]} (bulk_action.id=#{bulk_action.id}): Dor::Services::Client::NotFoundResponse"
+          expect(buffer.string).to include "SetCollectionJob: Unexpected error for #{druids[1]} (bulk_action.id=#{bulk_action.id}): Dor::Services::Client::NotFoundResponse"
         end
       end
     end
@@ -145,8 +145,8 @@ RSpec.describe SetCollectionJob do
 
       it 'does not set the new collection on an object and increments failure count' do
         subject.perform(bulk_action.id, params)
-        expect(bulk_action.druid_count_total).to eq(pids.length)
-        expect(bulk_action.druid_count_fail).to eq(pids.length)
+        expect(bulk_action.druid_count_total).to eq(druids.length)
+        expect(bulk_action.druid_count_fail).to eq(druids.length)
         expect(bulk_action.druid_count_success).to eq(0)
       end
     end

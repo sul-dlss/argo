@@ -7,11 +7,11 @@ class RegistrationService
   def self.register(model:, workflow:, tags:)
     response = Dor::Services::Client.objects.register(params: model)
 
-    pid = response.externalIdentifier
+    druid = response.externalIdentifier
 
-    WorkflowClientFactory.build.create_workflow_by_name(pid, workflow, version: '1')
+    WorkflowClientFactory.build.create_workflow_by_name(druid, workflow, version: '1')
 
-    Dor::Services::Client.object(pid).administrative_tags.create(tags: tags) unless tags.empty?
+    Dor::Services::Client.object(druid).administrative_tags.create(tags: tags) unless tags.empty?
     Success(response)
   rescue Cocina::Models::ValidationError, Dor::Services::Client::UnexpectedResponse => e
     Failure(e.message)

@@ -18,10 +18,10 @@ RSpec.describe SetGoverningApoJob do
   end
 
   describe '#perform' do
-    let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ff2222'] }
+    let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2222', 'druid:dd111ff2222'] }
     let(:params) do
       {
-        pids: pids,
+        druids: druids,
         new_apo_id: new_apo_id,
         webauth: webauth
       }.with_indifferent_access
@@ -37,11 +37,11 @@ RSpec.describe SetGoverningApoJob do
 
     context 'when the user can modify all items' do
       it 'updates the total druid count, attempts to update the APO for each druid, and commits to solr' do
-        pids.each do |pid|
-          expect(subject).to receive(:set_governing_apo_and_index_safely).with(pid, buffer)
+        druids.each do |druid|
+          expect(subject).to receive(:set_governing_apo_and_index_safely).with(druid, buffer)
         end
         subject.perform(bulk_action.id, params)
-        expect(bulk_action.druid_count_total).to eq pids.length
+        expect(bulk_action.druid_count_total).to eq druids.length
       end
 
       it 'logs info about progress' do
@@ -51,9 +51,9 @@ RSpec.describe SetGoverningApoJob do
 
         bulk_action_id = bulk_action.id
         expect(buffer.string).to include "Starting SetGoverningApoJob for BulkAction #{bulk_action_id}"
-        pids.each do |pid|
-          expect(buffer.string).to include "SetGoverningApoJob: Starting update for #{pid} (bulk_action.id=#{bulk_action_id})"
-          expect(buffer.string).to include "SetGoverningApoJob: Finished update for #{pid} (bulk_action.id=#{bulk_action_id})"
+        druids.each do |druid|
+          expect(buffer.string).to include "SetGoverningApoJob: Starting update for #{druid} (bulk_action.id=#{bulk_action_id})"
+          expect(buffer.string).to include "SetGoverningApoJob: Finished update for #{druid} (bulk_action.id=#{bulk_action_id})"
         end
         expect(buffer.string).to include "Finished SetGoverningApoJob for BulkAction #{bulk_action_id}"
       end
@@ -65,10 +65,10 @@ RSpec.describe SetGoverningApoJob do
                                'label' => 'My Item',
                                'version' => 2,
                                'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => pids[0],
+                               'externalIdentifier' => druids[0],
                                'description' => {
                                  'title' => [{ 'value' => 'My Item' }],
-                                 'purl' => "https://purl.stanford.edu/#{pids[0].delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druids[0].delete_prefix('druid:')}"
                                },
                                'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -81,10 +81,10 @@ RSpec.describe SetGoverningApoJob do
                                'label' => 'My Item',
                                'version' => 3,
                                'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => pids[2],
+                               'externalIdentifier' => druids[2],
                                'description' => {
                                  'title' => [{ 'value' => 'My Item' }],
-                                 'purl' => "https://purl.stanford.edu/#{pids[2].delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druids[2].delete_prefix('druid:')}"
                                },
                                'access' => {},
                                'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
@@ -97,9 +97,9 @@ RSpec.describe SetGoverningApoJob do
       let(:object_client3) { instance_double(Dor::Services::Client::Object, find: cocina3) }
 
       before do
-        allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-        allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
-        allow(Dor::Services::Client).to receive(:object).with(pids[2]).and_return(object_client3)
+        allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+        allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
+        allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
         allow(subject.ability).to receive(:can?).and_return(true, false)
       end
 
@@ -115,10 +115,10 @@ RSpec.describe SetGoverningApoJob do
         expect(bulk_action.druid_count_fail).to eq 2
 
         bulk_action_id = bulk_action.id
-        expect(buffer.string).to include "SetGoverningApoJob: Successfully updated #{pids[0]} (bulk_action.id=#{bulk_action_id})"
-        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[1]} (bulk_action.id=#{bulk_action_id}): " \
+        expect(buffer.string).to include "SetGoverningApoJob: Successfully updated #{druids[0]} (bulk_action.id=#{bulk_action_id})"
+        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{druids[1]} (bulk_action.id=#{bulk_action_id}): " \
                                          'Dor::Services::Client::NotFoundResponse'
-        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{pids[2]} (bulk_action.id=#{bulk_action_id}): " \
+        expect(buffer.string).to include "SetGoverningApoJob: Unexpected error for #{druids[2]} (bulk_action.id=#{bulk_action_id}): " \
                                          'user not authorized to move druid:dd111ff2222 to druid:bc111bb2222'
       end
     end

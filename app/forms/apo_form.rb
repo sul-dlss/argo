@@ -9,7 +9,7 @@ class ApoForm
 
   DEFAULT_MANAGER_WORKGROUPS = %w[developer service-manager metadata-staff].freeze
 
-  attr_reader :model, :params, :default_collection_pid, :search_service
+  attr_reader :model, :params, :default_collection_druid, :search_service
 
   # needed so that the form routes to `/apo` rather than '/apo_form'
   def self.model_name

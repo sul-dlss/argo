@@ -66,7 +66,7 @@ export default function DorRegistration(initOpts) {
       params.other_id = $t.metadataSource + ':' + data.metadata_id;
 
       if (data.druid) {
-        params.pid = 'druid:' + data.druid;
+        params.druid = 'druid:' + data.druid;
       }
 
       for (let x in params) { if (params[x] == null) { delete params[x] } }
@@ -91,7 +91,7 @@ export default function DorRegistration(initOpts) {
         } else {
           response.json().then(json => {
             console.log(json)
-            data.druid = json['pid'].split(':')[1];
+            data.druid = json['druid'].split(':')[1];
             data.label = json['label'];
             $t.setStatus(data, 'success');
           })

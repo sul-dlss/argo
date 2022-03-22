@@ -4,10 +4,10 @@
 # Job to run checksum report
 class ChecksumReportJob < GenericJob
   ##
-  # A job that, given list of pids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
+  # A job that, given list of druids of objects, runs a checksum report using a presevation_catalog API endpoint and returns a CSV file to the user
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array]  :pids required list of pids
+  # @option params [Array]  :druids required list of druids
   # @option params [Array]  :groups the groups the user belonged to when the started the job. Required for because groups are not persisted with the user.
   # @option params [Array]  :user the user
   def perform(bulk_action_id, params)
@@ -19,11 +19,11 @@ class ChecksumReportJob < GenericJob
       begin
         raise "#{Time.current} ChecksumReportJob not authorized to view all content}" unless ability.can?(:view_content, Cocina::Models::DRO)
 
-        csv_report = Preservation::Client.objects.checksums(druids: pids)
+        csv_report = Preservation::Client.objects.checksums(druids: druids)
         File.write(report_filename, csv_report)
-        bulk_action.update(druid_count_success: pids.length) # this whole job is run in one call, so it either all succeeds or fails
+        bulk_action.update(druid_count_success: druids.length) # this whole job is run in one call, so it either all succeeds or fails
       rescue StandardError => e
-        bulk_action.update(druid_count_fail: pids.length)
+        bulk_action.update(druid_count_fail: druids.length)
         message = exception_message_for(e)
         log.puts(message) # this one goes to the user via the bulk action log
         logger.error(message) # this is for later archaeological digs

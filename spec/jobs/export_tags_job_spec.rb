@@ -25,7 +25,7 @@ RSpec.describe ExportTagsJob, type: :job do
   end
 
   describe '#perform_now' do
-    let(:pids) { [druid1, druid2] }
+    let(:druids) { [druid1, druid2] }
     let(:druid1) { 'druid:bc123df4567' }
     let(:tags1) { ['Project : Testing 1'] }
     let(:druid2) { 'druid:bd123fg5678' }
@@ -36,19 +36,19 @@ RSpec.describe ExportTagsJob, type: :job do
     context 'when happy path' do
       before do
         job.perform(bulk_action.id,
-                    pids: pids,
+                    druids: druids,
                     groups: groups,
                     user: user)
       end
 
-      it 'collaborates with the tags client for each pid' do
+      it 'collaborates with the tags client for each druid' do
         expect(tags_client1).to have_received(:list).once
         expect(tags_client2).to have_received(:list).once
       end
 
       it 'records zero failures and all successes' do
-        expect(bulk_action.druid_count_total).to eq(pids.length)
-        expect(bulk_action.druid_count_success).to eq(pids.length)
+        expect(bulk_action.druid_count_total).to eq(druids.length)
+        expect(bulk_action.druid_count_success).to eq(druids.length)
         expect(bulk_action.druid_count_fail).to eq(0)
       end
 
@@ -68,20 +68,20 @@ RSpec.describe ExportTagsJob, type: :job do
         allow(tags_client1).to receive(:list).and_raise(StandardError, 'ruh roh')
         allow(tags_client2).to receive(:list).and_raise(StandardError, 'ruh roh')
         job.perform(bulk_action.id,
-                    pids: pids,
+                    druids: druids,
                     groups: groups,
                     user: user)
       end
 
-      it 'collaborates with the tags client for each pid' do
+      it 'collaborates with the tags client for each druid' do
         expect(tags_client1).to have_received(:list).once
         expect(tags_client2).to have_received(:list).once
       end
 
       it 'records all failures and zero successes' do
-        expect(bulk_action.druid_count_total).to eq(pids.length)
+        expect(bulk_action.druid_count_total).to eq(druids.length)
         expect(bulk_action.druid_count_success).to eq(0)
-        expect(bulk_action.druid_count_fail).to eq(pids.length)
+        expect(bulk_action.druid_count_fail).to eq(druids.length)
       end
 
       it 'logs messages for each druid in the list' do

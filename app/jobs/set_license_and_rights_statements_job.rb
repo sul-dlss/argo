@@ -5,7 +5,7 @@
 class SetLicenseAndRightsStatementsJob < GenericJob
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
-  # @option params [Array] :pids required list of identifiers
+  # @option params [Array] :druids required list of identifiers
   # @option params [String] :copyright_statement the new copyright statement
   # @option params [String] :copyright_statement_option option to update the copyright statement
   # @option params [String] :license the new license value as a URI
@@ -24,7 +24,7 @@ class SetLicenseAndRightsStatementsJob < GenericJob
         argument_hash[:use_statement] = dig_from_params_if_option_set(params, :use_statement)
       end.compact
 
-      pids.each do |druid|
+      druids.each do |druid|
         LicenseAndRightsStatementsSetter.set(**args.merge(druid: druid))
         bulk_action.increment(:druid_count_success).save
         log.puts("#{Time.current} License/copyright/use statement(s) updated successfully")

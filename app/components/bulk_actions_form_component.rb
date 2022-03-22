@@ -2,15 +2,15 @@
 
 class BulkActionsFormComponent < ApplicationComponent
   ##
-  # Add a pids_only=true parameter to create a "search of pids" to an existing
+  # Add a druids_only=true parameter to create a "search of druids" to an existing
   # Blacklight::Search
   # This is used by the "Populate with previous search" feature of bulk actions
   # @param [Blacklight::Search, nil]
   # @return [Hash]
-  def search_of_pids
+  def search_of_druids
     return '' unless search_state.has_constraints?
 
-    search_state.params_for_search('pids_only' => true)
+    search_state.params_for_search('druids_only' => true)
   end
 
   def action_types

@@ -9,7 +9,7 @@ class ApplyApoDefaultsJob < GenericJob
     with_bulk_action_log do |log_buffer|
       update_druid_count
 
-      pids.each do |current_druid|
+      druids.each do |current_druid|
         apply_default(current_druid, log_buffer)
       end
     end

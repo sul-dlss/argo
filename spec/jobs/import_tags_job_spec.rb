@@ -17,7 +17,7 @@ RSpec.describe ImportTagsJob, type: :job do
     allow(BulkJobLog).to receive(:open).and_yield(log_buffer)
     allow(Dor::Services::Client).to receive(:object).with(druid1).and_return(object_client1)
     allow(Dor::Services::Client).to receive(:object).with(druid2).and_return(object_client2)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   describe '#perform_now' do
@@ -32,7 +32,7 @@ RSpec.describe ImportTagsJob, type: :job do
         job.perform(bulk_action.id, csv_file: csv_string)
       end
 
-      it 'collaborates with the tags client for each pid' do
+      it 'collaborates with the tags client for each druid' do
         expect(tags_client1).to have_received(:list).once
         expect(tags_client1).to have_received(:destroy).once
         expect(tags_client2).to have_received(:replace).with(tags: tags2).once
@@ -51,7 +51,7 @@ RSpec.describe ImportTagsJob, type: :job do
       end
 
       it 'invokes the indexer for each object touched' do
-        expect(Argo::Indexer).to have_received(:reindex_pid_remotely).twice
+        expect(Argo::Indexer).to have_received(:reindex_druid_remotely).twice
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe ImportTagsJob, type: :job do
         job.perform(bulk_action.id, csv_file: csv_string)
       end
 
-      it 'collaborates with the tags client for each pid' do
+      it 'collaborates with the tags client for each druid' do
         expect(tags_client1).to have_received(:list).once
         expect(tags_client1).not_to have_received(:destroy)
         expect(tags_client2).to have_received(:replace).with(tags: tags2).once
@@ -80,7 +80,7 @@ RSpec.describe ImportTagsJob, type: :job do
       end
 
       it 'fails to invoke the indexer' do
-        expect(Argo::Indexer).not_to have_received(:reindex_pid_remotely)
+        expect(Argo::Indexer).not_to have_received(:reindex_druid_remotely)
       end
     end
   end

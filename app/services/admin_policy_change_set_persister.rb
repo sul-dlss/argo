@@ -75,14 +75,14 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
            :collection_radio, :collections_for_registration, :collection,
            :registered_by, to: :change_set
 
-  def tag_registered_by(pid)
+  def tag_registered_by(druid)
     return unless registered_by
 
-    tags_client(pid).create(tags: ["Registered By : #{registered_by}"])
+    tags_client(druid).create(tags: ["Registered By : #{registered_by}"])
   end
 
-  def tags_client(pid)
-    Dor::Services::Client.object(pid).administrative_tags
+  def tags_client(druid)
+    Dor::Services::Client.object(druid).administrative_tags
   end
 
   def updated_description(updated)
@@ -130,11 +130,11 @@ class AdminPolicyChangeSetPersister # rubocop:disable Metrics/ClassLength
   end
 
   # Create a collection
-  # @param [String] apo_pid the identifier for this APO
-  # @return [String] the pid for the newly created collection
-  def create_collection(apo_pid)
+  # @param [String] apo_druid the identifier for this APO
+  # @return [String] the druid for the newly created collection
+  def create_collection(apo_druid)
     form = CollectionForm.new
-    form.validate(collection.merge(apo_pid: apo_pid))
+    form.validate(collection.merge(apo_druid: apo_druid))
     form.save
     form.model.externalIdentifier
   end

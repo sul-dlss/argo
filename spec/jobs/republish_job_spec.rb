@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe RepublishJob, type: :job do
-  let(:pids) { ['druid:123', 'druid:456'] }
+  let(:druids) { ['druid:123', 'druid:456'] }
   let(:groups) { [] }
   let(:user) { instance_double(User, to_s: 'jcoyne85') }
   let(:bulk_action) { create(:bulk_action) }
@@ -12,12 +12,12 @@ RSpec.describe RepublishJob, type: :job do
   let(:client2) { instance_double(Dor::Services::Client::Object, publish: true) }
 
   before do
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(client2)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(client2)
     allow(Dor::Workflow::Client).to receive(:new).and_return(client)
 
     described_class.perform_now(bulk_action.id,
-                                pids: pids,
+                                druids: druids,
                                 groups: groups,
                                 user: user)
   end

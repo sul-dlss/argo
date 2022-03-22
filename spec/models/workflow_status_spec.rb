@@ -29,8 +29,8 @@ RSpec.describe WorkflowStatus do
     ]
   end
 
-  describe '#pid' do
-    subject { workflow_status.pid }
+  describe '#druid' do
+    subject { workflow_status.druid }
 
     let(:xml) do
       '<?xml version="1.0" encoding="UTF-8"?>

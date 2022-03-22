@@ -12,9 +12,9 @@ class ManageEmbargoesJob < GenericJob
     super
 
     with_bulk_action_log do |log|
-      update_pids, embargo_release_dates, rights = params_from_csv(params)
-      update_druid_count(count: update_pids.count)
-      update_pids.each_with_index do |current_druid, i|
+      update_druids, embargo_release_dates, rights = params_from_csv(params)
+      update_druid_count(count: update_druids.count)
+      update_druids.each_with_index do |current_druid, i|
         update_embargo(current_druid, embargo_release_dates[i], rights[i], log) unless current_druid.nil?
       end
     end

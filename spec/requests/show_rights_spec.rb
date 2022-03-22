@@ -5,17 +5,17 @@ require 'rails_helper'
 RSpec.describe 'Show rights for an object' do
   context 'when they have manage access' do
     let(:user) { create(:user) }
-    let(:pid) { 'druid:cc243mg0841' }
-    let(:apo_pid) { 'druid:cg532dg5405' }
+    let(:druid) { 'druid:cc243mg0841' }
+    let(:apo_druid) { 'druid:cg532dg5405' }
 
     let(:apo) do
       Cocina::Models.build({
                              'label' => 'My APO',
                              'version' => 1,
                              'type' => Cocina::Models::ObjectType.admin_policy,
-                             'externalIdentifier' => apo_pid,
+                             'externalIdentifier' => apo_druid,
                              'administrative' => {
-                               'hasAdminPolicy' => apo_pid,
+                               'hasAdminPolicy' => apo_druid,
                                'hasAgreement' => 'druid:hp308wm0436',
                                'accessTemplate' => { 'view' => 'world', 'download' => 'world' }
                              }
@@ -25,10 +25,10 @@ RSpec.describe 'Show rights for an object' do
     let(:apo_client) { instance_double(Dor::Services::Client::Object, find: apo) }
 
     before do
-      allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
-      allow(Dor::Services::Client).to receive(:object).with(apo_pid).and_return(apo_client)
+      allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
+      allow(Dor::Services::Client).to receive(:object).with(apo_druid).and_return(apo_client)
 
-      allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+      allow(Argo::Indexer).to receive(:reindex_druid_remotely)
       sign_in user, groups: ['sdr:administrator-role']
     end
 
@@ -38,10 +38,10 @@ RSpec.describe 'Show rights for an object' do
                                'label' => 'My ETD',
                                'version' => 1,
                                'type' => Cocina::Models::ObjectType.object,
-                               'externalIdentifier' => pid,
+                               'externalIdentifier' => druid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {
                                  'view' => 'world',
@@ -52,7 +52,7 @@ RSpec.describe 'Show rights for an object' do
                                    download: 'world'
                                  }
                                },
-                               'administrative' => { hasAdminPolicy: apo_pid },
+                               'administrative' => { hasAdminPolicy: apo_druid },
                                'structural' => {
                                  'contains' => [
                                    {
@@ -84,7 +84,7 @@ RSpec.describe 'Show rights for an object' do
       end
 
       it 'draws the page' do
-        get "/items/#{pid}/rights"
+        get "/items/#{druid}/rights"
         expect(response).to be_successful
       end
     end
@@ -95,21 +95,21 @@ RSpec.describe 'Show rights for an object' do
                                'label' => 'My ETD',
                                'version' => 1,
                                'type' => Cocina::Models::ObjectType.collection,
-                               'externalIdentifier' => pid,
+                               'externalIdentifier' => druid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {
                                  'view' => 'world'
                                },
-                               'administrative' => { hasAdminPolicy: apo_pid },
+                               'administrative' => { hasAdminPolicy: apo_druid },
                                'identification' => {}
                              })
       end
 
       it 'draws the page' do
-        get "/items/#{pid}/rights"
+        get "/items/#{druid}/rights"
         expect(response).to be_successful
       end
     end
@@ -120,15 +120,15 @@ RSpec.describe 'Show rights for an object' do
                                'label' => 'My ETD',
                                'version' => 1,
                                'type' => Cocina::Models::ObjectType.collection,
-                               'externalIdentifier' => pid,
+                               'externalIdentifier' => druid,
                                'description' => {
                                  'title' => [{ 'value' => 'My ETD' }],
-                                 'purl' => "https://purl.stanford.edu/#{pid.delete_prefix('druid:')}"
+                                 'purl' => "https://purl.stanford.edu/#{druid.delete_prefix('druid:')}"
                                },
                                'access' => {
                                  'view' => 'world'
                                },
-                               'administrative' => { hasAdminPolicy: apo_pid },
+                               'administrative' => { hasAdminPolicy: apo_druid },
                                'identification' => {}
                              })
       end
@@ -139,7 +139,7 @@ RSpec.describe 'Show rights for an object' do
       end
 
       it 'shows the error' do
-        get "/items/#{pid}/rights"
+        get "/items/#{druid}/rights"
         expect(flash[:error]).to eq 'Unable to retrieve the cocina model'
       end
     end

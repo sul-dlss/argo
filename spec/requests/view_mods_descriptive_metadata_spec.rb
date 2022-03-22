@@ -21,15 +21,15 @@ RSpec.describe 'View MODS descriptive metadata' do
       </mods>
     XML
   end
-  let(:pid) { 'druid:999' }
+  let(:druid) { 'druid:999' }
 
   before do
     sign_in user
-    allow(Dor::Services::Client).to receive(:object).with(pid).and_return(object_client)
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
   end
 
   it 'draws the page' do
-    get "/items/#{pid}/metadata/descriptive"
+    get "/items/#{druid}/metadata/descriptive"
     expect(response).to be_successful
     expect(response.body).to include 'PROVINCIæ BOREALIS AMERICÆ NON ITA PRIDEM DETECTÆ AVT MAGIS AB EVROPÆIS EXCVLTÆ.'
   end

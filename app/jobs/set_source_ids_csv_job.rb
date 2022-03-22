@@ -4,7 +4,7 @@
 # Job to update/add source IDs to objects
 class SetSourceIdsCsvJob < GenericJob
   ##
-  # A job that allows a user to specify a list of pids and a list of catkeys to be associated with these pids
+  # A job that allows a user to specify a list of druids and a list of catkeys to be associated with these druids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [String] :csv_file The file that contains the list of druids and catkeys
@@ -12,11 +12,11 @@ class SetSourceIdsCsvJob < GenericJob
     super
 
     # source_ids are nil if not selected for use.
-    update_pids, source_ids = params_from(params)
+    update_druids, source_ids = params_from(params)
 
     with_bulk_action_log do |log|
-      update_druid_count(count: update_pids.count)
-      update_pids.each_with_index do |current_druid, i|
+      update_druid_count(count: update_druids.count)
+      update_druids.each_with_index do |current_druid, i|
         update_one(current_druid, source_ids[i], log)
       rescue StandardError => e
         log.puts("#{Time.current} Unexpected error setting source_id for #{current_druid}: #{e.message}")
@@ -53,13 +53,13 @@ class SetSourceIdsCsvJob < GenericJob
   end
 
   def params_from(params)
-    update_pids = []
+    update_druids = []
     source_ids = []
     CSV.parse(params[:csv_file], headers: true).each do |row|
-      update_pids << row['druid']
+      update_druids << row['druid']
       source_ids << row['source_id']
     end
-    [update_pids, source_ids]
+    [update_druids, source_ids]
   end
 
   def update_source_ids(change_set, log)

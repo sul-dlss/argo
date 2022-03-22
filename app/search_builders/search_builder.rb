@@ -9,7 +9,7 @@ class SearchBuilder < Blacklight::SearchBuilder
 
   self.default_processor_chain += %i[
     add_access_controls_to_solr_params
-    pids_only
+    druids_only
     add_date_field_queries
     add_profile_queries
   ]

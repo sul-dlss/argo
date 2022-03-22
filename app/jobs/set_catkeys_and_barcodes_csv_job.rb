@@ -4,7 +4,7 @@
 # Job to update/add catkey/barcodes to objects
 class SetCatkeysAndBarcodesCsvJob < SetCatkeysAndBarcodesJob
   ##
-  # A job that allows a user to specify a list of pids and a list of catkeys to be associated with these pids
+  # A job that allows a user to specify a list of druids and a list of catkeys to be associated with these druids
   # @param [Integer] bulk_action_id GlobalID for a BulkAction object
   # @param [Hash] params additional parameters that an Argo job may need
   # @option params [String] :csv_file CSV string
@@ -12,11 +12,11 @@ class SetCatkeysAndBarcodesCsvJob < SetCatkeysAndBarcodesJob
   protected
 
   def params_from(params)
-    update_pids = []
+    update_druids = []
     catkeys = nil
     barcodes = nil
     CSV.parse(params[:csv_file], headers: true).each do |row|
-      update_pids << row['Druid']
+      update_druids << row['Druid']
       if row.header?('Catkey')
         catkeys ||= []
         catkeys << row['Catkey'].presence
@@ -26,6 +26,6 @@ class SetCatkeysAndBarcodesCsvJob < SetCatkeysAndBarcodesJob
         barcodes << row['Barcode'].presence
       end
     end
-    [update_pids, catkeys, barcodes]
+    [update_druids, catkeys, barcodes]
   end
 end

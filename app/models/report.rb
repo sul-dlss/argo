@@ -192,30 +192,30 @@ class Report
     @num_found = @response['response']['numFound'].to_i
   end
 
-  def pids(opts = {})
+  def druids(opts = {})
     params[:page] = 1
     params[:per_page] = 100
     (@response,) = search_results(params)
-    pids = []
+    druids = []
     until @response.documents.empty?
       report_data.each do |rec|
         if opts[:source_id].present?
-          pids << (rec[:druid] + "\t" + rec[:source_id_ssim])
+          druids << (rec[:druid] + "\t" + rec[:source_id_ssim])
         elsif opts[:tags].present?
           tags = ''
           rec[:tag_ssim]&.split(';')&.each do |tag|
             tags += "\t" + tag
           end
-          pids << (rec[:druid] + tags)
+          druids << (rec[:druid] + tags)
         else
-          pids << rec[:druid]
+          druids << rec[:druid]
         end
       end
       params[:page] += 1
       (@response,) = search_results(params)
     end
 
-    pids
+    druids
   end
 
   def report_data

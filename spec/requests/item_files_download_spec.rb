@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Download item files' do
-  let(:pid) { cocina_model.externalIdentifier }
+  let(:druid) { cocina_model.externalIdentifier }
   let(:cocina_model) { Cocina::Models.build(cocina_params.stringify_keys) }
   let(:cocina_params) do
     {
@@ -111,7 +111,7 @@ RSpec.describe 'Download item files' do
     }
   end
   let(:object_client) { instance_double(Dor::Services::Client::Object, find: cocina_model) }
-  let(:bare_druid) { pid.delete_prefix('druid:') }
+  let(:bare_druid) { druid.delete_prefix('druid:') }
   let(:user) { create(:user) }
 
   before do
@@ -121,7 +121,7 @@ RSpec.describe 'Download item files' do
 
   context 'when unauthorized' do
     it 'returns HTTP forbidden' do
-      get download_item_files_path(pid)
+      get download_item_files_path(druid)
       expect(response).to be_forbidden
     end
   end
@@ -138,7 +138,7 @@ RSpec.describe 'Download item files' do
     end
 
     it 'sets content-disposition header' do
-      get download_item_files_path(pid)
+      get download_item_files_path(druid)
       expect(response.headers.to_h).to include(
         'Content-Disposition' => "attachment; filename=#{bare_druid}.zip",
         'Content-Type' => 'application/zip'
@@ -146,17 +146,17 @@ RSpec.describe 'Download item files' do
     end
 
     it 'zips files set for preservation' do
-      get download_item_files_path(pid)
+      get download_item_files_path(druid)
       expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.jp2').once
       expect(fake_zip).to have_received(:write_deflated_file).with('M1090_S15_B01_F07_0106.tif').once
       expect(Preservation::Client.objects).to have_received(:content).with(
-        druid: pid,
+        druid: druid,
         filepath: 'M1090_S15_B01_F07_0106.jp2',
         version: 4,
         on_data: Proc
       )
       expect(Preservation::Client.objects).to have_received(:content).with(
-        druid: pid,
+        druid: druid,
         filepath: 'M1090_S15_B01_F07_0106.tif',
         version: 4,
         on_data: Proc
@@ -171,9 +171,9 @@ RSpec.describe 'Download item files' do
       end
 
       it 'closes the zip sink and raises' do
-        get download_item_files_path(pid)
+        get download_item_files_path(druid)
         expect(response).to have_http_status(:internal_server_error)
-        expect(response.body).to eq("Could not zip M1090_S15_B01_F07_0106.jp2 (#{pid}) for download: uh oh")
+        expect(response.body).to eq("Could not zip M1090_S15_B01_F07_0106.jp2 (#{druid}) for download: uh oh")
         expect(Rails.logger).to have_received(:error).twice
         expect(Honeybadger).to have_received(:notify).twice
         expect(fake_sink).to have_received(:close).twice

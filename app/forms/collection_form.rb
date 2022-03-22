@@ -52,7 +52,7 @@ class CollectionForm
       version: 1,
       type: Cocina::Models::ObjectType.collection,
       administrative: {
-        hasAdminPolicy: params[:apo_pid]
+        hasAdminPolicy: params[:apo_druid]
       },
       identification: {}
     }

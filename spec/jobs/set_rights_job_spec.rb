@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe SetRightsJob, type: :job do
-  let(:pids) { ['druid:bb111cc2222', 'druid:cc111dd2233'] }
+  let(:druids) { ['druid:bb111cc2222', 'druid:cc111dd2233'] }
   let(:groups) { [] }
 
   let(:bulk_action) do
@@ -23,9 +23,9 @@ RSpec.describe SetRightsJob, type: :job do
         type: Cocina::Models::ObjectType.book,
         description: {
           title: [{ value: 'Stanford Item' }],
-          purl: "https://purl.stanford.edu/#{pids[0]}"
+          purl: "https://purl.stanford.edu/#{druids[0]}"
         },
-        externalIdentifier: pids[0],
+        externalIdentifier: druids[0],
         access: {
           view: 'stanford',
           download: 'stanford'
@@ -102,9 +102,9 @@ RSpec.describe SetRightsJob, type: :job do
         type: Cocina::Models::ObjectType.image,
         description: {
           title: [{ value: 'World Item' }],
-          purl: "https://purl.stanford.edu/#{pids[1]}"
+          purl: "https://purl.stanford.edu/#{druids[1]}"
         },
-        externalIdentifier: pids[1],
+        externalIdentifier: druids[1],
         access: {
           view: 'world',
           download: 'world'
@@ -184,17 +184,17 @@ RSpec.describe SetRightsJob, type: :job do
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
     allow(subject.ability).to receive(:can?).and_return(true)
     allow(StateService).to receive(:new).and_return(state_service)
-    allow(Dor::Services::Client).to receive(:object).with(pids[0]).and_return(object_client1)
-    allow(Dor::Services::Client).to receive(:object).with(pids[1]).and_return(object_client2)
+    allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
+    allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
     allow(object_client1).to receive(:update)
     allow(object_client2).to receive(:update)
-    allow(Argo::Indexer).to receive(:reindex_pid_remotely)
+    allow(Argo::Indexer).to receive(:reindex_druid_remotely)
   end
 
   context 'when updating one object' do
     let(:params) do
       {
-        pids: [pids[0]],
+        druids: [druids[0]],
         rights: 'world'
       }
     end
@@ -211,14 +211,14 @@ RSpec.describe SetRightsJob, type: :job do
           )
         )
       expect(object_client2).not_to have_received(:update)
-      expect(buffer.string).to include "Successfully updated rights of #{pids[0]} (bulk_action.id=#{bulk_action.id})"
+      expect(buffer.string).to include "Successfully updated rights of #{druids[0]} (bulk_action.id=#{bulk_action.id})"
     end
   end
 
   context 'when updating two objects' do
     let(:params) do
       {
-        pids: pids,
+        druids: druids,
         rights: 'world'
       }
     end
@@ -246,8 +246,8 @@ RSpec.describe SetRightsJob, type: :job do
           )
         )
 
-      expect(buffer.string).to include "Successfully updated rights of #{pids[0]} (bulk_action.id=#{bulk_action.id})"
-      expect(buffer.string).to include "Successfully updated rights of #{pids[1]} (bulk_action.id=#{bulk_action.id})"
+      expect(buffer.string).to include "Successfully updated rights of #{druids[0]} (bulk_action.id=#{bulk_action.id})"
+      expect(buffer.string).to include "Successfully updated rights of #{druids[1]} (bulk_action.id=#{bulk_action.id})"
     end
   end
 end

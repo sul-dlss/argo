@@ -245,9 +245,9 @@ class CatalogController < ApplicationController
     end
   end
 
-  # do not add the pids_only search param to the blacklight search history (used in bulk actions only)
+  # do not add the druids_only search param to the blacklight search history (used in bulk actions only)
   def blacklisted_search_session_params # rubocop:disable Naming/InclusiveLanguage overrides a method from blacklight
-    super << :pids_only
+    super << :druids_only
   end
 
   # This overrides Blacklight to pass context to the search service

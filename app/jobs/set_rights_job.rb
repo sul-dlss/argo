@@ -17,7 +17,7 @@ class SetRightsJob < GenericJob
 
       update_druid_count
 
-      pids.each do |druid|
+      druids.each do |druid|
         log.puts("#{Time.current} #{self.class}: Attempting #{druid} (bulk_action.id=#{bulk_action_id})")
         set_rights(druid, log)
       end

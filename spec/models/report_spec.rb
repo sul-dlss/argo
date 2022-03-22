@@ -118,10 +118,10 @@ RSpec.describe Report, type: :model do
     end
   end
 
-  describe '#pids' do
+  describe '#druids' do
     context 'with no attributes' do
       subject(:report) do
-        described_class.new({ q: 'report' }, %w[druid], current_user: user).pids
+        described_class.new({ q: 'report' }, %w[druid], current_user: user).druids
       end
 
       before do
@@ -153,12 +153,12 @@ RSpec.describe Report, type: :model do
       expect(described_class.new(
         { q: 'report' }, %w[druid source_id_ssim],
         current_user: user
-      ).pids(source_id: true)).to include "qq613vj0238\tsul:36105011952764"
+      ).druids(source_id: true)).to include "qq613vj0238\tsul:36105011952764"
     end
 
     context 'with tags: true' do
       subject(:report) do
-        described_class.new({ q: 'report' }, %w[druid tag_ssim], current_user: user).pids(tags: true)
+        described_class.new({ q: 'report' }, %w[druid tag_ssim], current_user: user).druids(tags: true)
       end
 
       before do

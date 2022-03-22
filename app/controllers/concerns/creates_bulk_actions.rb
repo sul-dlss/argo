@@ -29,13 +29,13 @@ module CreatesBulkActions
 
   # NOTE: It's important that this is a HashWithIndifferentAccess, because the jobs are expecting that interface
   def job_params
-    { pids: identifiers, groups: current_user.groups }.with_indifferent_access
+    { druids: identifiers, groups: current_user.groups }.with_indifferent_access
   end
 
   # add druid: prefix to list of druids if it doesn't have it yet
   def identifiers
     return [] if params[:druids].blank?
 
-    params[:druids].split.map { |pid| pid.start_with?('druid:') ? pid : "druid:#{pid}" }
+    params[:druids].split.map { |druid| druid.start_with?('druid:') ? druid : "druid:#{druid}" }
   end
 end

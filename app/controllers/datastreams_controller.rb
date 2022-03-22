@@ -71,13 +71,13 @@ class DatastreamsController < ApplicationController
         content: content
       }
     )
-    Argo::Indexer.reindex_pid_remotely(druid)
+    Argo::Indexer.reindex_druid_remotely(druid)
   end
 
   def show_aspect
-    pid = params[:item_id].include?('druid') ? params[:item_id] : "druid:#{params[:item_id]}"
-    @response, @document = search_service.fetch pid # this does the authorization
-    @cocina = maybe_load_cocina(pid)
-    @object_client = Dor::Services::Client.object(pid)
+    druid = params[:item_id].include?('druid') ? params[:item_id] : "druid:#{params[:item_id]}"
+    @response, @document = search_service.fetch druid # this does the authorization
+    @cocina = maybe_load_cocina(druid)
+    @object_client = Dor::Services::Client.object(druid)
   end
 end

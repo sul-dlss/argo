@@ -11,10 +11,14 @@ class DatastreamRow < ApplicationComponent
 
   attr_reader :datastream
 
-  delegate :label, :dsid, :pid, :versionId, to: :datastream
+  delegate :label, :dsid, :versionId, to: :datastream
 
   def link_to_identifier
-    link_to dsid, item_datastream_path(pid, dsid), title: dsid, data: { blacklight_modal: 'trigger' }
+    link_to dsid, item_datastream_path(druid, dsid), title: dsid, data: { blacklight_modal: 'trigger' }
+  end
+
+  def druid
+    datastream.pid
   end
 
   def size
