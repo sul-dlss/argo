@@ -21,7 +21,7 @@ class BulkActionsController < ApplicationController
     @form = BulkActionForm.new(BulkAction.new(user: current_user), groups: current_user.groups)
     if @form.validate(bulk_action_params) && @form.save
       flash[:notice] = 'Bulk action was successfully created.'
-      redirect_to action: :index
+      redirect_to action: :index, params: search_state.params_for_search
     else
       render :new, status: :unprocessable_entity
     end

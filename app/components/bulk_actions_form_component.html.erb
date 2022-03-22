@@ -2,6 +2,7 @@
   <h1>New Bulk Action</h1>
 
   <%= form_for(@form,
+               url: bulk_actions_path(search_state.params_for_search),
                data: {
                  controller: 'bulk-actions',
                  bulk_actions_populate_url_value: search_catalog_path(search_of_pids)
