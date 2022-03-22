@@ -16,7 +16,7 @@ class ExportStructuralJob < GenericJob
         pids.each do |druid|
           rows_for_file = item_to_rows(druid, log_buffer)
           rows_for_file.each do |row|
-            csv << [druid, *row]
+            csv << [druid.delete_prefix('druid:'), *row]
           end
         end
       end
