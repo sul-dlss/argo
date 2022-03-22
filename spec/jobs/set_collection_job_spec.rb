@@ -39,8 +39,40 @@ RSpec.describe SetCollectionJob do
     let(:cocina1) do
       build(:dro, id: druids[0])
     end
+    let(:cocina1v3) do
+      Cocina::Models.build({
+                             'label' => 'My First Item',
+                             'version' => 3,
+                             'type' => Cocina::Models::ObjectType.object,
+                             'externalIdentifier' => druids[0],
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             identification: { sourceId: 'sul:1234' },
+                             'description' => {
+                               'title' => [{ 'value' => 'Cocina Object 1' }],
+                               'purl' => 'https://purl.standford.edu/cc111dd2222'
+                             }
+                           })
+    end
     let(:cocina2) do
       build(:dro, id: druids[1])
+    end
+    let(:cocina2v3) do
+      Cocina::Models.build({
+                             'label' => 'My Second Item',
+                             'version' => 3,
+                             'type' => Cocina::Models::ObjectType.object,
+                             'externalIdentifier' => druids[1],
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             identification: { sourceId: 'sul:1234' },
+                             'description' => {
+                               'title' => [{ 'value' => 'Cocina object 2' }],
+                               'purl' => 'https://purl.standford.edu/dd111ff2222'
+                             }
+                           })
     end
     let(:object_client1) { instance_double(Dor::Services::Client::Object, find: cocina1, update: true) }
     let(:object_client2) { instance_double(Dor::Services::Client::Object, find: cocina2, update: true) }
@@ -51,7 +83,8 @@ RSpec.describe SetCollectionJob do
         allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
         allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_return(object_client2)
         allow(StateService).to receive(:new).and_return(state_service)
-        allow(subject.ability).to receive(:can?).and_return true
+        allow(subject.ability).to receive(:can?).with(:manage_item, cocina1).and_return true
+        allow(subject.ability).to receive(:can?).with(:manage_item, cocina2).and_return true
       end
 
       context 'when no collections are selected' do
@@ -77,9 +110,11 @@ RSpec.describe SetCollectionJob do
 
         context 'when the version is closed' do
           let(:state_service) { instance_double(StateService, allows_modification?: false) }
+          let(:version_description) { 'Added to collections druid:bc111bb2222.' }
 
           before do
-            allow(job).to receive(:open_new_version).and_return('3')
+            allow(job).to receive(:open_new_version).with(cocina1, version_description).and_return(cocina1v3)
+            allow(job).to receive(:open_new_version).with(cocina2, version_description).and_return(cocina2v3)
           end
 
           it 'opens a new version sets the new collection on an object' do

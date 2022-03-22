@@ -55,8 +55,7 @@ class SetCatkeysAndBarcodesJob < GenericJob
     log_update(change_set, log)
 
     begin
-      state_service = StateService.new(cocina_object)
-      open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(change_set)) unless state_service.allows_modification?
+      open_new_version(cocina_object, version_message(change_set))
       change_set.save
 
       bulk_action.increment(:druid_count_success).save

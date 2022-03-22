@@ -55,16 +55,34 @@ RSpec.describe GenericJob do
       instance_double(User,
                       admin?: true)
     end
-    let(:druid) { 'druid:123abc' }
-    let(:version) { 1 }
+    let(:druid) { 'druid:cc111dd2222' }
+    let(:version) { 2 }
     let(:workflow) { double('workflow') }
     let(:log) { double('log') }
     let(:webauth) { OpenStruct.new('privgroup' => 'dorstuff', 'login' => 'someuser') }
     let(:client) { instance_double(Dor::Services::Client::Object, version: version_client) }
-    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: true) }
+    let(:version_client) { instance_double(Dor::Services::Client::ObjectVersion, open: 3) }
+    let(:cocina1) do
+      Cocina::Models.build({
+                             'label' => 'My First Item',
+                             'version' => 2,
+                             'type' => Cocina::Models::ObjectType.object,
+                             'externalIdentifier' => druid,
+                             'access' => {},
+                             'administrative' => { hasAdminPolicy: 'druid:cg532dg5405' },
+                             'structural' => {},
+                             identification: { sourceId: 'sul:1234' },
+                             'description' => {
+                               'title' => [{ 'value' => 'Cocina Object 1' }],
+                               'purl' => 'https://purl.standford.edu/cc111dd2222'
+                             }
+                           })
+    end
+    let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
     before do
       allow(Dor::Services::Client).to receive(:object).and_return(client)
+      allow(StateService).to receive(:new).and_return(state_service)
     end
 
     it 'opens a new version if the workflow status allows' do
@@ -72,7 +90,7 @@ RSpec.describe GenericJob do
         .with(druid, version: version).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(true)
 
-      subject.send(:open_new_version, druid, version, 'Set new governing APO')
+      subject.send(:open_new_version, cocina1, 'Set new governing APO')
 
       expect(version_client).to have_received(:open).with(
         significance: 'minor',
@@ -85,7 +103,7 @@ RSpec.describe GenericJob do
       expect(DorObjectWorkflowStatus).to receive(:new)
         .with(druid, version: version).and_return(workflow)
       expect(workflow).to receive(:can_open_version?).and_return(false)
-      expect { subject.send(:open_new_version, druid, version, 'Message') }.to raise_error(/Unable to open new version/)
+      expect { subject.send(:open_new_version, cocina1, 'Message') }.to raise_error(/Unable to open new version/)
 
       expect(version_client).not_to have_received(:open)
     end

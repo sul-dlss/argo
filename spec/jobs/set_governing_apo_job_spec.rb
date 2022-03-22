@@ -85,6 +85,7 @@ RSpec.describe SetGoverningApoJob do
         allow(Dor::Services::Client).to receive(:object).with(druids[0]).and_return(object_client1)
         allow(Dor::Services::Client).to receive(:object).with(druids[1]).and_raise(Dor::Services::Client::NotFoundResponse)
         allow(Dor::Services::Client).to receive(:object).with(druids[2]).and_return(object_client3)
+        allow(DorObjectWorkflowStatus).to receive(:new).and_return(instance_double(DorObjectWorkflowStatus, can_open_version?: true))
         allow(subject.ability).to receive(:can?).and_return(true, false)
       end
 

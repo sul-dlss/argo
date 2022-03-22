@@ -109,14 +109,17 @@ class GenericJob < ApplicationJob
     bulk_action.update(druid_count_total: count)
   end
 
-  # @returns [String] the current version
-  def open_new_version(druid, version, description)
-    wf_status = DorObjectWorkflowStatus.new(druid, version: version)
-    raise "#{Time.current} Unable to open new version for #{druid} (bulk_action.id=#{bulk_action.id})" unless wf_status.can_open_version?
+  # @returns [Cocina::Model::DRO] as the original object if it is open, or a new object with updated version
+  def open_new_version(cocina_object, description)
+    state_service = StateService.new(cocina_object)
+    return cocina_object if state_service.allows_modification?
 
-    VersionService.open(identifier: druid,
-                        significance: 'minor',
-                        description: description,
-                        opening_user_name: bulk_action.user.to_s)
+    wf_status = DorObjectWorkflowStatus.new(cocina_object.externalIdentifier, version: cocina_object.version)
+    raise "#{Time.current} Unable to open new version for #{cocina_object.externalIdentifier} (bulk_action.id=#{bulk_action.id})" unless wf_status.can_open_version?
+
+    cocina_object.new(version: VersionService.open(identifier: cocina_object.externalIdentifier,
+                                                   significance: 'minor',
+                                                   description: description,
+                                                   opening_user_name: bulk_action.user.to_s).to_i)
   end
 end

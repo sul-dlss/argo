@@ -17,11 +17,7 @@ class SetCollectionJob < GenericJob
     with_items(params[:druids], name: 'Set collection') do |cocina_object, success, _failure|
       next failure.call('Not authorized') unless ability.can?(:manage_item, cocina_object)
 
-      state_service = StateService.new(cocina_object)
-      unless state_service.allows_modification?
-        new_version = open_new_version(cocina_object.externalIdentifier, cocina_object.version, version_message(new_collection_ids))
-        cocina_object = cocina_object.new(version: new_version.to_i)
-      end
+      cocina_object = open_new_version(cocina_object, version_message(new_collection_ids))
 
       change_set = ItemChangeSet.new(cocina_object)
       change_set.validate(collection_ids: new_collection_ids)

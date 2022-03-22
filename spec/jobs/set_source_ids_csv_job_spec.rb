@@ -80,7 +80,8 @@ RSpec.describe SetSourceIdsCsvJob do
         let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
         before do
-          allow(job).to receive(:open_new_version).and_return('3')
+          allow(DorObjectWorkflowStatus).to receive(:new).and_return(instance_double(DorObjectWorkflowStatus, can_open_version?: true))
+          allow(VersionService).to receive(:open).and_return('3')
           job.perform(bulk_action.id,
                       csv_file: csv_file,
                       groups: groups,

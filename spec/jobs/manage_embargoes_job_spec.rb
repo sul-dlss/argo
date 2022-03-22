@@ -58,8 +58,11 @@ RSpec.describe ManageEmbargoesJob do
     allow(StateService).to receive(:new).and_return(state_service)
     allow(subject.ability).to receive(:can?).and_return(true)
     allow(BulkJobLog).to receive(:open).and_yield(buffer)
-    allow(subject).to receive(:open_new_version)
+    allow(VersionService).to receive(:open)
     allow(ItemChangeSet).to receive(:new).and_return(change_set1, change_set2, change_set3)
+    allow(DorObjectWorkflowStatus).to receive(:new).with(druids[0], version: item1.version).and_return(instance_double(DorObjectWorkflowStatus, can_open_version?: true))
+    allow(DorObjectWorkflowStatus).to receive(:new).with(druids[1], version: item2.version).and_return(instance_double(DorObjectWorkflowStatus, can_open_version?: true))
+    allow(DorObjectWorkflowStatus).to receive(:new).with(druids[2], version: item3.version).and_return(instance_double(DorObjectWorkflowStatus, can_open_version?: true))
   end
 
   describe '#perform' do
@@ -90,7 +93,8 @@ RSpec.describe ManageEmbargoesJob do
         expect(change_set3).to have_received(:save)
 
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
-        expect(subject).not_to have_received(:open_new_version)
+        expect(VersionService).not_to have_received(:open)
+        expect(DorObjectWorkflowStatus).not_to have_received(:new)
       end
     end
 
@@ -103,7 +107,7 @@ RSpec.describe ManageEmbargoesJob do
         expect(change_set2).to have_received(:save)
         expect(change_set3).to have_received(:save)
         expect(bulk_action_no_process_callback.druid_count_total).to eq druids.length
-        expect(subject).to have_received(:open_new_version).exactly(3).times
+        expect(VersionService).to have_received(:open).exactly(3).times
       end
     end
 

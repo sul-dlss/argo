@@ -180,7 +180,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:state_service) { instance_double(StateService, allows_modification?: false) }
 
       it 'updates catkey and barcode and versions objects' do
-        expect(subject).to receive(:open_new_version).with(druid, 3, "Catkey updated to #{catkeys[0]}. Barcode updated to #{barcode}.")
+        expect(subject).to receive(:open_new_version).with(item1, "Catkey updated to #{catkeys[0]}. Barcode updated to #{barcode}.").and_return(updated_model)
         subject.send(:update_catkey_and_barcode, change_set, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
@@ -191,7 +191,8 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       let(:state_service) { instance_double(StateService, allows_modification?: true) }
 
       it 'updates catkey and barcode and does not version objects if not needed' do
-        expect(subject).not_to receive(:open_new_version).with(druid, 3, "Catkey updated to #{catkeys[0]}. Barcode updated to #{barcode}.")
+        expect(DorObjectWorkflowStatus).not_to receive(:new)
+        expect(VersionService).not_to receive(:open)
         subject.send(:update_catkey_and_barcode, change_set, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
@@ -216,7 +217,7 @@ RSpec.describe SetCatkeysAndBarcodesJob do
       end
 
       it 'removes catkey and barcode' do
-        expect(subject).to receive(:open_new_version).with(druid, 3, 'Catkey removed. Barcode removed.')
+        expect(subject).to receive(:open_new_version).with(item1, 'Catkey removed. Barcode removed.').and_return(updated_model)
         subject.send(:update_catkey_and_barcode, change_set, buffer)
         expect(object_client).to have_received(:update)
           .with(params: updated_model)
