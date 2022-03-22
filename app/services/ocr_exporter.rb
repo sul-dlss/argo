@@ -36,7 +36,7 @@ class OCRExporter
   attr_reader :filename, :directory, :finder
 
   def filenames(object)
-    object.structural.contains.flat_map do |file_set|
+    Array(object.structural&.contains).flat_map do |file_set|
       file_set.structural.contains.filter { |file| file.filename.match?(/-gb-txt.zip/) }.map(&:filename)
     end
   end

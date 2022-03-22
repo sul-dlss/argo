@@ -12,7 +12,7 @@ class FilesController < ApplicationController
     raise ArgumentError, 'Missing file parameter' if filename.blank?
 
     @has_been_accessioned = WorkflowClientFactory.build.lifecycle(druid: params[:item_id], milestone_name: 'accessioned')
-    files = @cocina_model.structural.contains.map { |fs| fs.structural.contains }.flatten
+    files = Array(@cocina_model.structural&.contains).map { |fs| fs.structural.contains }.flatten
     @file = files.find { |file| file.filename == params[:id] }
 
     if @has_been_accessioned
@@ -90,7 +90,7 @@ class FilesController < ApplicationController
   private
 
   def preserved_files(cocina_model)
-    resources = Array(cocina_model.structural.contains)
+    resources = Array(cocina_model.structural&.contains)
     resources.flat_map do |resource|
       resource.structural.contains.select do |file|
         file.administrative.sdrPreserve

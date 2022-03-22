@@ -30,7 +30,7 @@ class ExportStructuralJob < GenericJob
     result = []
     log_buffer.puts("#{Time.current} #{self.class}: Loading #{druid}")
     item = Dor::Services::Client.object(druid).find
-    if !item.dro? || item.structural.contains.empty?
+    if !item.dro? || Array(item.structural&.contains).empty?
       log_failure("Object #{druid} has no structural metadata to export", log_buffer)
       return []
     end

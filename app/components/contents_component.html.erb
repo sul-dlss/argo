@@ -1,7 +1,7 @@
 <div class="accordion-item">
   <h2 class="accordion-header" id="document-contents-heading">
     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#document-contents-section" aria-expanded="true" aria-controls="document-contents-section">
-      Content (<%= pluralize @cocina.structural&.contains&.size || 0, 'Resource' %>)
+      Content (<%= pluralize Array(@cocina.structural&.contains).size, 'Resource' %>)
     </button>
   </h2>
   <div id="document-contents-section" class="accordion-collapse collapse show" aria-labelledby="document-contents-heading">
