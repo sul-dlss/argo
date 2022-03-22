@@ -338,12 +338,6 @@ Rails/SkipsModelValidations:
     - 'app/models/bulk_action.rb'
 
 # Offense count: 1
-# Cop supports --auto-correct-all.
-Style/CaseLikeIf:
-  Exclude:
-    - 'app/models/user_log.rb'
-
-# Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: nested, compact
