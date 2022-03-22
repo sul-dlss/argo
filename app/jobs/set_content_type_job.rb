@@ -93,7 +93,7 @@ class SetContentTypeJob < GenericJob
   def structural_with_resource_type_changes(cocina_object)
     cocina_object.structural.new(
       hasMemberOrders: member_orders,
-      contains: cocina_object.structural.contains.map do |resource|
+      contains: Array(cocina_object.structural&.contains).map do |resource|
         next resource unless resource.type == Constants::RESOURCE_TYPES[@current_resource_type]
 
         resource.new(type: Constants::RESOURCE_TYPES[@new_resource_type])
@@ -102,6 +102,6 @@ class SetContentTypeJob < GenericJob
   end
 
   def resource_types_should_change?(cocina_object)
-    Array(cocina_object.structural.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[@current_resource_type] }
+    Array(cocina_object.structural&.contains).map(&:type).any? { |resource_type| resource_type == Constants::RESOURCE_TYPES[@current_resource_type] }
   end
 end

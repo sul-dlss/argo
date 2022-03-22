@@ -32,7 +32,7 @@ class StructureUpdater
   end
 
   def existing_files_by_filename
-    @existing_files_by_filename ||= Array(model.structural.contains).each_with_object({}) do |file_set, hash|
+    @existing_files_by_filename ||= Array(model.structural&.contains).each_with_object({}) do |file_set, hash|
       file_set.structural.contains.each do |file|
         hash[file.filename] = file
       end
